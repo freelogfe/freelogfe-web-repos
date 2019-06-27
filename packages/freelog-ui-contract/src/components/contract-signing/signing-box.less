@@ -1,0 +1,268 @@
+.rcb-wrapper{
+  position: relative;
+}
+
+.rcb-name {
+  display: inline-block;
+  //width: 108px;
+  padding-right: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.rcb-value {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #222;
+}
+
+.rcb-id-box, .rcb-type-box, .rcb-intro-box {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.rcb-id-box {
+  width: 460px;
+}
+
+.rcb-intro-box {
+  display: flex;
+  width: 100%;
+  .rcb-value {
+    flex: 1;
+  }
+}
+
+.rcb-tab-box {
+  position: relative;
+  margin-top: 20px;
+
+  ul{
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-right: 30px;
+    margin-bottom: 10px;
+
+    &.disabled::after{
+      display: block;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, .7);
+    }
+  }
+
+  .rcb-tab-item {
+    display: inline-block;
+    margin: 0 12px;
+    line-height: 32px;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+
+    &.active {
+      border-bottom: 3px solid #4396F0; color: #222;
+    }
+  }
+
+  .rcb-contract-record{
+    position: absolute;
+    top: 14px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    padding-bottom: 6px;
+
+    background-image: url(../../assets/img/normal-record.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    &:hover{
+      background-image: url(../../assets/img/hover:click-record.png);
+    }
+
+    &.opened{
+      border-bottom: 3px solid #4396F0;
+    }
+  }
+
+  .rcb-contract-record.disabled{
+    background-image: url(../../assets/img/disable-record.png);
+    pointer-events: none;
+  }
+}
+
+
+.rcb-tp-contract-record{
+  box-sizing: border-box;
+  overflow: auto;
+  position: absolute;
+  top: 5px;
+  left: -3px;
+  bottom: 0;
+  right: -3px;
+  padding: 0 20px;
+  border-radius: 4px;
+  border: 1px solid #efefef;
+  background: #fff;
+  color: #222;
+  z-index: 10;
+
+  .rcb-tp-cr-header {
+    background-color: #F3F5F5;
+    padding: 15px 20px 15px 50px;
+    margin: 0 -20px 20px -20px;
+
+    .rcb-tp-cr-btn {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      width: 20px;
+      height: 20px;
+      padding-bottom: 6px;
+
+      background-image: url(../../assets/img/normal-record.png);
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    .rcb-tp-cr-close{
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #333;
+      font-size: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  }
+
+  &.opened{
+    display: block;
+  }
+
+  table{
+    width: 100%;
+
+    thead{
+      border-bottom: 1px solid #CECECE;
+    }
+
+    th{
+      padding-bottom: 10px;
+    }
+
+    td{
+      padding: 20px 0;
+    }
+
+    tbody{
+      tr{
+        border-bottom: 1px solid #eee;
+      }
+    }
+  }
+
+  .rcb-tp-cr-end{
+    margin: 20px auto;
+    text-align: center;
+  }
+}
+
+.rcb-tab-pane {
+  position: relative;
+  overflow-y: scroll;
+  /*height: 282px;*/
+  /*padding-bottom: 46px;*/
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.20);
+  border-radius: 4px;
+
+
+  .rcb-tp-status-bar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    min-height: 70px;
+    padding: 12px 20px 8px 20px;
+    background-color: #F3F5F5;
+    color: #333;
+    font-size: 12px;
+
+    .rcb-tp-sb-default, .rcb-tp-sb-set-default {
+      float: right;
+    }
+    .rcb-tp-sb-default {
+      position: relative;
+      color: #333;
+      outline: none;
+
+      &::before{
+        content: ' ';
+        position: absolute;
+        top: 50%;
+        left: -14px;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        background-color: #4396F0;
+        transform: translateY(-50%);
+      }
+    }
+    .rcb-tp-sb-set-default {
+      border: 1px solid #4396F0;
+      background: #fff;
+      color: #4396F0;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 30px;
+      border-radius: 20px;
+      padding: 0 20px;
+    }
+  }
+}
+
+.rcb-tp-contract-content {
+  overflow: auto;
+  height: 285px;
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.4;
+
+  .policy-text{
+    color: #999; white-space: pre-wrap;
+  }
+}
+
+.rcb-footer {
+  text-align: center;
+
+  .btn-normal {
+    min-width: 160px;
+    padding: 10px 2px;
+    font-size: 14px;
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #4396F0;
+    color: #fff;
+  }
+}
+
+
+.contract-record-enter-active, .contract-record-leave-active {
+  transition: all .5s ease;
+}
+
+.contract-record-enter, .contract-record-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}

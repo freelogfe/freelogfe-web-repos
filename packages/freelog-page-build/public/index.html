@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!--允许全屏模式浏览-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--safari顶端的状态条的样式 灰色半透明-->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!--告诉设备忽略将页面中的数字识别为电话号码-->
+  <meta name="format-detection" content="telephone=no, address=no">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+<body>
+<noscript>
+  <strong>We're sorry but awesome-vue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div id="wrapper">
+  <div id="js-page-container"></div>
+  <div id="app-auth"></div>
+  <footer class="app-footer">
+    <ul class="freelog-info">
+      <li><a href="javascript:;">关于freelog</a></li>
+      <li><a href="javascript:;">帮助中心</a></li>
+      <li><a href="http://www.miibeian.gov.cn">粤ICP备17085716号-1</a></li>
+      <li><b>Copyright© 2018 飞致 freelog.com版权所有</b></li>
+    </ul>
+  </footer>
+</div>
+<script type="text/javascript" src="<%= htmlWebpackPlugin.options.commonLibUrl %>"></script>
+<!-- built files will be auto injected -->
+</body>
+</html>

@@ -1,0 +1,13 @@
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.js-widget {
+  position: absolute;
+}
+
+.no-widget-error-tip {
+  color: #E6A23C;
+  padding: 5px;
+}

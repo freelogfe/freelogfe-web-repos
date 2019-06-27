@@ -1,0 +1,38 @@
+{
+  "name": "@freelog/freelog-ui-contract",
+  "version": "0.0.14",
+  "description": "freelog components",
+  "scripts": {
+    "publish": "npm publish --access=public",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "./src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:freelogfe/freelogfe-repos.git"
+  },
+  "author": "Wwzh",
+  "license": "MIT",
+  "dependencies": {
+    "@freelog/resource-policy-lang": "0.0.33"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-plugin-pwa": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/eslint-config-airbnb": "^3.0.5",
+    "element-ui": "^2.4.8",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "vue-loader": "^14.2.3",
+    "vue-template-compiler": "^2.5.17",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
+    "font-awesome": "^4.7.0",
+    "axios": "^0.18.0",
+    "vuex": "^3.0.1"
+  }
+}
