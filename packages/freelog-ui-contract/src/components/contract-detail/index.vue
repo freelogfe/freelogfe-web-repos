@@ -27,8 +27,7 @@
 </template>
 
 <script>
-  import { beautifyPolicy } from '@freelog/resource-policy-lang/lib/policyBeautify'
-  import { HighlightGenerator } from '@freelog/resource-policy-lang/lib/presentablePolicyHighlight'
+  import { beautifyPolicy, highlightPolicy } from '@freelog/freelog-policy-lang'
   import {
     LicenseEvent,
     TransactionEvent,
@@ -76,7 +75,7 @@
         return beautifyPolicy(this.policyText || '')
       },
       contractDetail() {
-        return HighlightGenerator(this.policyText || '')
+        return highlightPolicy(this.policyText || '')
       },
     },
     methods: {

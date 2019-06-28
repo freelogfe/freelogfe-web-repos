@@ -1,7 +1,8 @@
 {
-  "name": "root",
+  "name": "freelogfe-repos",
   "private": true,
   "devDependencies": {
     "lerna": "^3.4.3"
-  }
+  },
+  "dependencies": {}
 }

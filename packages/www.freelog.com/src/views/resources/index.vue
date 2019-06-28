@@ -34,10 +34,10 @@
                 :label="$t(`resources.tableColumn[0]`)">
           <template slot-scope="scope">
             <div>
-              <p class="resource-name">{{ scope.row.resourceInfo.resourceName }}</p>
+              <p class="resource-name">{{ scope.row.presentableInfo.presentableName }}</p>
               <div>
                 <span class="resource-status" :class="['status-'+scope.row.status]">{{ resolveStatus(scope.row.status) }}</span>
-                <span class="resource-type">{{scope.row.resourceInfo.resourceType}}</span>
+                <span class="resource-type">{{scope.row.presentableInfo.releaseInfo.resourceType}}</span>
               </div>
             </div>
           </template>
@@ -90,9 +90,10 @@ export default {
         'cell-class-name': 'res-row-cell'
       },
       paginationConfig: {
-        target: '/v1/getMyResources.json',
+        target: 'v1/getMyContracts.json',
         params: {
-
+          identityType: 2,
+          contractType: 3
         }
       }
     }
@@ -117,14 +118,14 @@ export default {
   methods: {
     rowClickHandler(row) {
       const {
-        targetId, resourceId, partyTwo
+        presentableId, partyTwo, presentableInfo: { releaseInfo: { releaseId } }
       } = row
 
       this.$router.push({
-        path: '/user/resources/detail/',
+        path: '/user/contracts/detail/',
         query: {
-          resourceId,
-          presentableId: targetId,
+          releaseId,
+          presentableId,
           partyTwo
         }
       })

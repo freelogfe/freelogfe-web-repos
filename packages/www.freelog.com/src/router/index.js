@@ -148,12 +148,12 @@ export default {
         meta: { title: '我的关注' },
         component: MyCollectionsView
       }, {
-        path: 'resources',
+        path: 'contracts',
         meta: { title: '我的资源' },
         component: MyResourcesView
       },
       {
-        path: 'resources/detail',
+        path: 'contracts/detail',
         meta: { title: '资源详情' },
         component: ResourceContractDetailView
       }]

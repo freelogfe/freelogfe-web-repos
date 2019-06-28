@@ -33,12 +33,12 @@ export function getContractState(contract) {
 
 // 获取含有默认合同的policy序号
 export function getHasDefaultContractPolicyIndex(presentable, resourceIdContractsMap) {
-  const { resourceId, policy } = presentable
+  const { resourceId, policies } = presentable
   var index = 0, defaultContract = null
   const contractMap = resourceIdContractsMap[resourceId]
   if(contractMap) {
-    for(let i = 0; i < policy.length; i++) {
-      let segmentId = policy[i].segmentId
+    for(let i = 0; i < policies.length; i++) {
+      let segmentId = policies[i].segmentId
       let contract = contractMap[segmentId]
       if(contract && contract.isDefault === 1) {
         index = i

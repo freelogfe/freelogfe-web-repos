@@ -19,7 +19,7 @@
                 :label="$t('collections.tableColumn[0]')">
           <template slot-scope="scope">
             <div>
-              <p class="resource-name">{{ scope.row.resourceName }}</p>
+              <p class="resource-name">{{ scope.row.releaseName }}</p>
               <div>
                 <!--<span class="resource-status" :class="['status-'+scope.row.status]">{{ resolveStatus(scope.row.status) }}</span>-->
                 <span class="resource-type">{{scope.row.resourceType}}</span>
@@ -32,7 +32,7 @@
                 width="200">
           <template slot-scope="scope">
             <div class="node-domain">
-              {{scope.row.userName}}
+              {{scope.row.authorName}}
             </div>
           </template>
         </el-table-column>
@@ -62,7 +62,7 @@ export default {
         'cell-class-name': 'res-row-cell'
       },
       paginationConfig: {
-        target: '/v1/resources/collections',
+        target: 'v1/collections/releases',
         params: {}
       }
     }

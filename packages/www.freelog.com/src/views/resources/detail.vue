@@ -1,6 +1,6 @@
 <template>
   <div class="resource-contract-detail-view">
-    <account-layout ref="layout" :title="$t('resources.detail.title')" :showFooter="false" return-name="/user/resources">
+    <account-layout ref="layout" :title="$t('resources.detail.title')" :showFooter="false" return-name="/user/contracts">
 
       <contract-signing-single
               style="width: 100%"
@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { ContractSigningSingle } from '@freelog/freelog-ui-contract'
 import { mapGetters } from 'vuex'
 import AccountLayout from '@/views/layout/account.vue'
 
@@ -30,7 +29,7 @@ export default {
   props: {
   },
 
-  components: { AccountLayout, ContractSigningSingle },
+  components: { AccountLayout },
 
   mounted() {
     const { presentableId } = this.$route.query

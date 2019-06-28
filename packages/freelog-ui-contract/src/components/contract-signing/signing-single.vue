@@ -66,7 +66,7 @@
       // 获取该资源的所有合同
       getContracts() {
         const { presentableId } = this.presentable
-        return this.$axios.get(`/v1/contracts/contractRecords?targetIds=${presentableId}&partyTwo=${this.userId}`)
+        return this.$axios.get(`/v1/contracts/list?targetIds=${presentableId}&partyTwo=${this.userId}&contractType=3`)
           .then(res => {
             if(res.data.errcode === 0) {
               return res.data.data
@@ -76,12 +76,12 @@
           })
           .then(contracts => {
             this.contracts = contracts
-            this.presentable.policy = this.presentable.policy.filter(p => p.status === 1)
+            this.presentable.policies = this.presentable.policies.filter(p => p.status === 1)
             this.resolveContracts()
             this.resolveDefaultContractState()
             this.isRenderResoureContract = true
           })
-          .catch((e) => this.$message.error(e))
+          .catch(this.$message.error)
       },
       resolveContracts (){
         var map = {}
@@ -92,10 +92,10 @@
           map[contract.segmentId] = contract
         })
 
-        this.presentable.policy.forEach(p => {
+        this.presentable.policies.forEach(p => {
           p.contract = map[p.segmentId] || null
         })
-        this.$set(this.presentable, this.presentable.policy)
+        this.$set(this.presentable, this.presentable.policies)
       },
       resolveDefaultContractState() {
         const { type, tagName } = getContractState.call(this, this.defaultContract)

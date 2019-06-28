@@ -1,4 +1,4 @@
-import { cookieStore } from '../../../lib/cookieStore'
+import { cookieStore } from '@freelog/freelog-common-lib/src/storage'
 
 export function getUserInfo() {
   const authInfo = cookieStore.get('authInfo')

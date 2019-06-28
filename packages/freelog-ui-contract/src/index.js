@@ -8,3 +8,11 @@ export {
   ContractDetail,
   ContractSigningDialog
 }
+
+export default {
+  install(Vue) {
+    Vue.component(ContractSigningSingle.name, ContractSigningSingle)
+    Vue.component(ContractDetail.name, ContractDetail)
+    Vue.component(ContractSigningDialog.name, ContractSigningDialog)
+  }
+}

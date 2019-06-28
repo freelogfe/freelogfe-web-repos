@@ -18,7 +18,7 @@ export default {
     cancelBtnText: '取 消',
   },
   userAsideNav: {
-    title: ['我的关注','我的资源','我的账户','资料与账号']
+    title: ['我的关注','我的合同','我的账户','资料与账号']
   },
   navTop: ['退出','我的freelog'],
   pagination: {
@@ -178,7 +178,7 @@ export default {
     },
   },
   collections: {
-    tableColumn: ['资源|类型','资源作者','更新时间'],
+    tableColumn: ['发行|类型','发行作者','更新时间'],
     contractStatus: {
       inactive: '不可用',
       active: '可用',

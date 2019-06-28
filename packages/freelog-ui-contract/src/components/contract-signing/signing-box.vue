@@ -145,7 +145,7 @@
         return this.presentable.presentableId
       },
       resourceType() {
-        return this.presentable.resourceInfo.resourceType
+        return this.presentable.releaseInfo.resourceType
       },
       // 节点资源名称
       presentableName() {
@@ -165,7 +165,7 @@
     methods: {
       init() {
 
-        this.policyList = this.presentable.policy.map((p, index) => {
+        this.policyList = this.presentable.policies.map((p, index) => {
           p.resourceId = this.resourceId
           if(this.defaultContract && p.contract && p.contract.contractId === this.defaultContract.contractId) {
             this.actPolicyIndex = index
@@ -291,7 +291,7 @@
         }
       },
       getContractRecords() {
-        this.$axios.get(`/v1/contracts/terminateContracts?partyTwo=${this.userId}&targetId=${this.presentableId}`)
+        this.$axios.get(`/v1/contracts/terminatedContracts?partyTwo=${this.userId}&targetId=${this.presentableId}&identityType=2`)
           .then(res => res.data)
           .then(res => {
             if(res.errcode === 0) {

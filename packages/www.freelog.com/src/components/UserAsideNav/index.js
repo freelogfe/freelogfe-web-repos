@@ -11,8 +11,8 @@ export default {
           link: 'collections'
         },
         {
-          name: 'my-resources',
-          link: 'resources'
+          name: 'my-contracts',
+          link: 'contracts'
         },
         {
           name: 'my-accounts',

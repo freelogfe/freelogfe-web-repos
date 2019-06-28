@@ -18,7 +18,7 @@ export default {
     cancelBtnText: 'cancel',
   },
   userAsideNav: {
-    title: ['My focus','My resources','My Account','Information & Account']
+    title: ['My focus','My contract','My account','Information & Account']
   },
   navTop: ['exit','My freelog'],
   pagination: {
@@ -178,7 +178,7 @@ export default {
     },
   },
   collections: {
-    tableColumn: ['Resource|Type','Resource author','Update time'],
+    tableColumn: ['Release|Type','Release author','Update time'],
     contractStatus: {
       inactive: 'inactive',
       active: 'active',

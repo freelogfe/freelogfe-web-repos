@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "deploy": "rm -rf package-lock.json && npm install && freelog-ci deploy",
     "dev": "lerna link && webpack-dev-server --config ./config/webpack.dev.js",
@@ -13,8 +14,12 @@
     "build:test": "npm run build -- --env=test"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:freelogfe/freelogfe-repos.git"
+  },
+  "author": "Wwzh",
+  "license": "MIT",
   "dependencies": {
     "@freelog/freelog-common-lib": "^0.1.0",
     "@freelog/freelog-ui-contract": "^0.0.14",
