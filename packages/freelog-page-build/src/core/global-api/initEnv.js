@@ -37,7 +37,7 @@ function _isTestFreelog(mainDomain) {
 }
 
 function getQiOrigin() {
-  return window.location.origin.replace(/^https?:\/\/(\w+)\./, function(...args) {
+  return window.location.origin.replace(/^https?:\/\/([\w-]+)\./, function(...args) {
     return args[0].replace(args[1], 'qi')
   })
 }

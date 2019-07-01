@@ -21,7 +21,7 @@ module.exports = merge(baseConfig, {
     chunkFilename: '[name].[chunkhash].js',
     crossOriginLoading: 'anonymous',
     path: path.resolve(__dirname, '../dist'),
-    publicPath: `${staticDomain}/`,
+    publicPath: `${staticDomain}/pagebuild/`,
   },
 
   module: {
