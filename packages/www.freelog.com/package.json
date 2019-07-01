@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "rm -rf package-lock.json && npm install && freelog-ci deploy",
+    "deploy": "freelog-ci deploy",
     "dev": "lerna link && webpack-dev-server --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
     "build:analyze": "webpack --config ./config/webpack.analyze.js",
@@ -21,9 +21,9 @@
   "author": "Wwzh",
   "license": "MIT",
   "dependencies": {
-    "@freelog/freelog-common-lib": "^0.1.0",
-    "@freelog/freelog-policy-lang": "^0.1.0",
-    "@freelog/freelog-ui-contract": "^0.0.14",
+    "@freelog/freelog-common-lib": "0.1.0",
+    "@freelog/freelog-policy-lang": "0.1.0",
+    "@freelog/freelog-ui-contract": "0.0.14",
     "core-js": "^2.6.5",
     "cropperjs": "^1.5.1",
     "font-awesome": "^4.7.0",

@@ -5,7 +5,7 @@ const userHome = require('user-home')
 
 const ossConfig = require(path.join(userHome, '.freelog', 'oss-config.json')) // 避免泄漏oss keys
 
-const targetPath = 'www/'
+const targetPath = 'pagebuild/'
 module.exports = {
   // aliyun oss 配置
   oss: ossConfig,

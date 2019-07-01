@@ -5,9 +5,13 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "deploy": "freelog-ci deploy",
     "dev": "lerna link && webpack-dev-server --config ./config/webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config ./config/webpack.prod.js",
-    "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js"
+    "build": "webpack --config ./config/webpack.prod.js",
+    "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
+    "build:prod": "npm run build -- --env=prod",
+    "build:beta": "npm run build -- --env=beta",
+    "build:test": "npm run build -- --env=test"
   },
   "keywords": [],
   "author": "wwzh",
@@ -20,6 +24,7 @@
     "@babel/core": "^7.4.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.3",
+    "@freelog/freelog-ci": "0.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
