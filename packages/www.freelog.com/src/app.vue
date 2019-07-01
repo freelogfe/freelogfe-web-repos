@@ -34,13 +34,7 @@
   }
 </script>
 
-<style lang="less" scoped type="text/less">
-  @import "app.less";
-</style>
-
 <style lang="less" type="text/less">
   @import "./styles/global.less";
-  i {
-    font-style: normal;
-  }
+  @import "app.less";
 </style>

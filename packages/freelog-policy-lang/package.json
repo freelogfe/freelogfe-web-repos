@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@freelog/resource-policy-lang": "0.0.33"
+    "@freelog/resource-policy-lang": "0.0.34"
   }
 }

@@ -16,8 +16,7 @@
   "author": "Wwzh",
   "license": "MIT",
   "dependencies": {
-    "@freelog/freelog-policy-lang": "^0.1.0",
-    "@freelog/resource-policy-lang": "0.0.33"
+    "@freelog/freelog-policy-lang": "^0.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",

@@ -38,9 +38,9 @@ module.exports = merge(baseConfig, {
     rules: [{
       test: /\.(less|css)$/,
       use: [
-        'style-loader',
-        'vue-style-loader',
-        // MiniCssExtractPlugin.loader,
+        // 'style-loader',
+        // 'vue-style-loader',
+        MiniCssExtractPlugin.loader,
         'css-loader',
         'less-loader',
       ]
