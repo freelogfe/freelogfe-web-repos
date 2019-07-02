@@ -1,0 +1,166 @@
+@import '../../../styles/variables.less';
+#resource-detail {
+  width: @main-content-width-990; margin: auto; padding: 40px 0;
+
+  .res-detail-bd-row {
+    margin-bottom: 35px;
+    .header {
+      margin-bottom: 8px;
+      h2 { font-size: 16px; font-weight: 600; line-height: 20px; color: #666; }
+    }
+    .body {
+      padding: 20px; border-radius: 4px;
+      background-color: #fff;
+    }
+  }
+
+  .res-detail-release-history {
+    li {
+      font-size: 14px; color: #333;
+      &:not(:first-child) { margin-top: 15px; }
+      span {
+        padding: 0 5px; color: #999;
+        &.r-l-name{ padding: 0; border-width: 0; margin-right: 20px; color: #333; }
+        &.r-l-version {
+          border-right: 1px solid #999;
+        }
+      }
+    }
+  }
+
+  .res-detail-release-info {
+    .body{ position: relative; padding: 20px 30px; }
+    h3 {
+      margin-bottom: 5px;
+      font-size: 14px; font-weight: 400; color: #666;
+      &.rdr-i-name {
+        position: relative;
+        &:before{
+          content: '*';
+          position: absolute; left: -10px; top: 2px;
+          font-size: 12px; color: #F15E5E;
+        }
+      }
+    }
+    .rdr-i-name__input {
+      width: 590px; margin-bottom: 25px;
+    }
+
+    .resource-thumbnail-input {
+      width: 200px; height: 150px;
+      box-shadow: 0 0 3px rgba(0,0, 0, .3);
+
+      .resource-default-preview{
+        display: block; width: 100%;
+      }
+
+      .r-t-update-preview-image {
+        position: absolute; top: 50%; left: 50%; z-index: 10;
+        padding: 5px; border-radius: 50%; background-color: rgba(0, 0, 0, .6); color: #fff;
+        transform: translate(-50%, -50%);
+      }
+
+      .thumbnail-tip {
+        color: #333333;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .el-icon-plus {
+        font-size: 20px;
+        color: #fff;
+      }
+
+      .el-icon-circle-close {
+        float: right;
+        color: #CCCCCC;
+        font-size: 18px;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    .resource-thumbnail-input-tip {
+      position: absolute; left: 260px; bottom: 20px;
+      color: #AFAFAF;
+      li { list-style-type: disc; }
+    }
+  }
+
+  .res-detail-dependencies {
+    .rdd-h-info {
+      margin-left: 20px; color: #C7C7C7;
+      font-size: 14px; font-weight: 400;
+      .el-icon-info { margin-right: 5px; }
+    }
+    .operation-box {
+      display: inline-block; cursor: pointer;
+      position: relative;
+      padding: 0 10px 0 30px; font-weight: 500;
+      .el-icon-circle-plus-outline {
+        position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+        font-size: 24px; color: #666;
+      }
+      &:hover {
+        font-weight: 600;
+        .el-icon-circle-plus-outline { font-weight: 500; color: #333; cursor: pointer; }
+      }
+    }
+
+    .res-dependencies-list {
+      &.hasBtn { margin-top: 15px; }
+      li {
+        font-size: 14px; color: #333;
+
+        &:not(:first-child) { margin-top: 15px; }
+        span {
+          padding: 0 5px; color: #999;
+          &.r-d-l-name{ padding: 0; border-width: 0; margin-right: 20px; color: #333; }
+          &.r-d-l-type, &.r-d-l-version {
+            border-right: 1px solid #999;
+          }
+        }
+        i {
+          margin-right: 10px;
+          &.el-icon-remove{ color: #F4584F; }
+          &.el-icon-lock { color: #666; }
+        }
+      }
+    }
+  }
+
+  .res-detail-desc {
+    .rich-editor-wrapper{ margin: 0; padding: 0; }
+  }
+
+  .res-detail-meta {
+    .add-btn {
+      position: relative; display: inline-block;
+      height: 34px; line-height: 34px; padding: 0 10px 0 32px; border-radius: 18px;
+      background: #ECECEC; color: #666; cursor: pointer;
+      i {
+        position: absolute; left: 10px; top: 50%; transform: translateY(-50%); z-index: 5;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .res-detail-footer {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
+    background-color: #fff; box-shadow:0px -2px 5px 0px rgba(0,0,0,0.1);
+    .body {
+      width: @main-content-width-990; margin: auto; padding: 15px 0;
+      text-align: right;
+      .el-button {
+        padding: 7px 20px; margin-left: 20px;
+        font-weight: 400;
+        &.rdf-button--cancel { border-color: #fff; }
+        &.rdf-button--release {
+          margin-left: 35px; border-color: #409EFF;
+          background-color: #fff; color: #409EFF;
+        }
+      }
+    }
+  }
+}

@@ -3,17 +3,17 @@
 import '../style/loading.less'
 import '@freelog/freelog-common-lib/lib/freelog-common.css'
 
-import App from './app.vue'
-import cn from '../../lib/i18n/locales/cn'
-import en from '../../lib/i18n/locales/en'
-import { Vue, initI18n } from '@freelog/freelog-common-lib'
+import { Vue } from '@freelog/freelog-common-lib'
 import contractUIPlugin from '@freelog/freelog-ui-contract'
+import App from './app.vue'
+import i18n from '@/lib/i18n/index'
 
 Vue.use(contractUIPlugin)
 
+Vue.config.devtools = true
 new Vue({
   el: '#app-auth',
-  i18n: initI18n({ cn, en }),
+  i18n,
   methods: {},
   render: h => h(App)
 })

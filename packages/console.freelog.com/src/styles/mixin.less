@@ -1,0 +1,18 @@
+@theme-color: #324157;
+@sidebar-width: 150px;
+@header-height: 60px;
+
+.clearfix() {
+  &:after {
+    content: ' ';
+    clear: both;
+    display: block;
+  }
+}
+
+
+.text-ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

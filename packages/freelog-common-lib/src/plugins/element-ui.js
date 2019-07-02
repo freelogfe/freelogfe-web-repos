@@ -36,10 +36,15 @@
 //   }
 // }
 
-import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import ElementUI from 'element-ui'
+import enLocale from 'element-ui/lib/locale/lang/en'
+import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+
 export default {
   install: function(Vue) {
-    Vue.use(ElementUI)
+    const isCN = window.FreelogApp.Env.leaguage === 'zh-CN'
+    Vue.use(ElementUI, { locale: isCN ? zhLocale : enLocale })
   }
 }
+

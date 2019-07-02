@@ -1,6 +1,12 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": ["@babel/env"],
   "plugins": [
-    "@babel/plugin-syntax-dynamic-import"
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/transform-arrow-functions",
+    "@babel/plugin-transform-runtime",
+    ["@babel/transform-async-to-generator", {
+      "module": "bluebird",
+      "method": "coroutine"
+    }]
   ]
 }

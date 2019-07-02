@@ -13,5 +13,10 @@ const plugins = [
   expire
 ]
 
+const sessionStorages = [
+  require('store/storages/sessionStorage')
+]
+
+export const sessionStore = engine.createStore(sessionStorages, plugins)
 export const cookieStore = engine.createStore(storages, plugins)
 export default store

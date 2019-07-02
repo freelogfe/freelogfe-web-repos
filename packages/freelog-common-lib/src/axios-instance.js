@@ -10,7 +10,7 @@ const instance = axios.create({
 })
 
 function getBaseURL() {
-  return window.location.origin.replace(/https?:\/\/(\w+)\.(test)?freelog\.com/, function(...args){
+  return window.location.origin.replace(/https?:\/\/([\w-]+)\.(test)?freelog\.com/, function(...args){
     return args[0].replace(args[1], 'qi')
   })
 }
@@ -27,7 +27,6 @@ instance.interceptors.response.use(
 
     if ([28, 30].indexOf(data.errcode) > -1 && window.location.pathname !== loginPath) {
       // 跳登录
-      return null
     }
     return response
   },
@@ -39,3 +38,4 @@ instance.interceptors.response.use(
 
 
 export default instance
+

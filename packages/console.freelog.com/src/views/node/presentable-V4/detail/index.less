@@ -1,0 +1,29 @@
+@import '../../../../styles/variables.less';
+.presentable-detail-wrapper {
+  .presentable-content-panels {
+    width: @main-content-width-1190;
+    margin: auto;
+  }
+
+  .policy-manager-wrap {
+    margin: 30px 168px 0;
+  }
+
+  .contract-manager-wrap {
+    padding-top: 25px;
+
+    .empty-contract-tip {
+      text-align: center;
+      font-size: 20px;
+      color: #666;
+    }
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .presentable-detail-wrapper {
+    .presentable-content-panels {
+      width: @main-content-width-990;
+    }
+  }
+}

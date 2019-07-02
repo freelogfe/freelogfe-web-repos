@@ -6,7 +6,7 @@ import { compile } from '@freelog/resource-policy-lang'
 import HighlightGenerator from './src/HighlightGenerator'
 import BeautifyGenerator from './src/BeautifyGenerator'
 
-export const policyComple = compile
+export const compilePolicy = compile
 export function highlightPolicy (segmentText){
   const parser = getParser(segmentText)
 

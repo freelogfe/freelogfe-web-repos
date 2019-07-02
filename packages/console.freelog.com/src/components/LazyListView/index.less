@@ -1,0 +1,34 @@
+.fl-lazy-list-view {
+  width: 100%;
+  height: 100%;
+  &::scroll-bar {
+    width: 0;
+  }
+
+  .load-more-gif {
+    width: 100%;
+    min-height: 100px;
+    text-align: center;
+    background: #FAFBFB;
+    border-top: none;
+    color: #333333;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .show-up {
+    animation: showUp .3s;
+  }
+}
+
+@keyframes showUp {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

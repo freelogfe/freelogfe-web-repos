@@ -1,6 +1,5 @@
-
+import i18n from '@/lib/i18n/index'
 export const validateLoginName = function (rule, value, callback) {
-  console.log('---', this.$i18n)
   if (value) {
     if (!EMAIL_REG.test(value) && !PHONE_REG.test(value)) {
       callback(new Error(i18n.t('login.validateErrors[0]')))

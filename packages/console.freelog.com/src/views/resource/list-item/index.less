@@ -1,0 +1,125 @@
+@import "../../../styles/mixin";
+
+.resource-item-info {
+  //margin-top: 10px;
+  padding: 10px;
+
+  &:hover {
+    background-color: #F5F5F5;
+    border-radius: 4px;
+  }
+
+  .rt-actions {
+    float: right;
+  }
+
+  .res-type {
+    display: none; position: relative; top: -2px;
+    font-size: 12px;
+    height: 16px;
+  }
+
+  .simple-res-view {
+    width: 100%;
+    cursor: pointer;
+    .res-desc {
+      .text-ellipsis;
+      vertical-align: sub;
+      max-width: 80%;
+      display: inline-block;
+    }
+  }
+
+  &.resource-item-theme-type-search {
+    .res-intro-ft {
+      .res-type {
+        display: inline-block;
+        background-color: #EEEEEE;
+        border-radius: 4px;
+        padding: 4px 10px;
+      }
+    }
+  }
+
+  &.resource-item-theme-type-list {
+    .res-intro-bd {
+      .res-type {
+        display: inline-block;
+      }
+    }
+  }
+
+  .resource-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .res-preview-img {
+      width: 60px;
+      height: 45px;
+      display: inline-block;
+      margin-right: 10px;
+      float: left;
+    }
+
+    &.resource-state-2 {
+      .res-name,
+      .res-preview-img {
+        cursor: pointer;
+      }
+    }
+    .res-intro-detail {
+      flex: 1;
+    }
+
+    .res-id {
+      margin-top: 5px;
+      color: #999999;
+      font-size: 12px;
+    }
+
+    .res-act-btn {
+      margin-left: 100px;
+    }
+
+    .res-nav-btn {
+      color: #409EFF;
+      font-size: 14px;
+      margin-right: 40px;
+      cursor: pointer;
+      &:hover {
+        color: #66b1ff;
+      }
+    }
+  }
+
+  .res-intro-bd {
+    margin-bottom: 6px; padding-right: 40px;
+    font-size: 13px;
+  }
+
+  .res-type {
+    margin-left: 15px;
+    color: white;
+    background-color: #CCCCCC;
+    border-radius: 12px;
+    padding: 2px 8px;
+    display: inline-block;
+    line-height: 14px;
+  }
+
+  .res-name {
+    color: #222222;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .res-intro-ft {
+    color: #999;
+    font-size: 12px;
+  }
+
+  .res-author {
+    margin-right: 12px;
+  }
+}

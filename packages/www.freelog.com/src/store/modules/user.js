@@ -1,4 +1,4 @@
-import { axios, storage, cookieStore } from '@freelog/freelog-common-lib'
+import { axiosInstance, storage, cookieStore } from '@freelog/freelog-common-lib'
 
 const types = {
   LOAD_CURRENT_USER: 'loadCurrentUserInfo',
@@ -44,9 +44,9 @@ const user = {
     [types.LOAD_CURRENT_USER]({ commit }, userId) {
       let promise
       if (userId) {
-        promise = axios.get(`/v1/userinfos/${userId}`)
+        promise = axiosInstance.get(`/v1/userinfos/${userId}`)
       } else {
-        promise = axios.get('/v1/userinfos/current')
+        promise = axiosInstance.get('/v1/userinfos/current')
       }
       return promise.then((res) => {
         if (res.data.errcode === 0) {
@@ -99,7 +99,7 @@ const user = {
       })
     },
     [types.USER_LOGIN]({ commit }, data) {
-      return axios.post('/v1/passport/login', data).then((res) => {
+      return axiosInstance.post('/v1/passport/login', data).then((res) => {
         if (res.data.ret === 0 && res.data.errcode === 0) {
           commit(types.CHANGE_SESSION, res.data.data)
           return res.data.data

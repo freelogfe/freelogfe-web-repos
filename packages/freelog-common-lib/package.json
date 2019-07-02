@@ -2,9 +2,9 @@
   "name": "@freelog/freelog-common-lib",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/index.43c0ff9e05d338e76fe6.js",
+  "main": "lib/index.3621af05cf66c687e012.js",
   "scripts": {
-    "build": "webpack --config ./config/webpack.base.js && node resetPkgJson.js",
+    "build": "rm -rf ./lib/** && webpack --config ./config/webpack.base.js && node resetPkgJson.js",
     "build:test": "npm run build -- --env=test",
     "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
     "deploy": "freelog-ci deploy",

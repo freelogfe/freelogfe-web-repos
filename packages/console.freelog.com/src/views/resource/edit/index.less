@@ -1,0 +1,72 @@
+@import "../../../styles/variables";
+.resource-detail-edit-wrap {
+  margin: auto;
+  position: relative;
+  //padding-left: 50px;
+  .res-info-inputs-content {
+    padding-top: 40px;
+  }
+
+  .schemes-manager-content {
+    background-color: white;
+    min-height: 100vh;
+  }
+
+  &.resource-preview-mode {
+    .res-info-inputs-content {
+      max-height: 0;
+      padding-top: 0;
+    }
+
+    .res-detail-intro-content {
+      max-height: 120px;
+    }
+    
+    .schemes-manager-content {
+      display: block;
+    }
+  }
+
+  &.resource-edit-mode {
+    .res-info-inputs-content {
+      max-height: 5000px;
+    }
+
+    .res-detail-intro-content {
+      max-height: 40px;
+      line-height: 40px;
+      margin-bottom: 20px;
+    }
+
+    .schemes-manager-content {
+      display: none;
+    }
+  }
+
+  .res-detail-intro-content,
+  .res-info-inputs-content {
+    transition: max-height .5s;
+    overflow: hidden;
+  }
+
+  .btm-wrap {
+    padding-bottom: 20px;
+    .ft-btn {
+      padding: 10px 30px;
+      font-size: 14px;
+    }
+
+    .rt-side {
+      float: right;
+    }
+  }
+
+  .update-res-file {
+    width: 500px;
+    margin: 0 auto;
+  }
+
+  .upload-container {
+    padding-top: 30px; text-align: center;
+  }
+}
