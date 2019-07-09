@@ -62,7 +62,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'plubic/css/pagebuild.css'
+      filename: 'pagebuild/plubic/css/pagebuild.css'
     }),
     new VueLoaderPlugin(),
   ],

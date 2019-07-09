@@ -1,7 +1,7 @@
 
-import ContractSigningSingle from './components/contract-signing/signing-single'
-import ContractSigningDialog from './components/contract-signing/contract-signing-dialog'
-import ContractDetail from './components/contract-detail/index'
+import ContractSigningSingle from './components/contract-signing/signing-single.vue'
+import ContractSigningDialog from './components/contract-signing/contract-signing-dialog.vue'
+import ContractDetail from './components/contract-detail/index.vue'
 
 export {
   ContractSigningSingle,

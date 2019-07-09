@@ -1,8 +1,9 @@
-import {isSafeUrl} from '@/lib/security'
+import {isSafeUrl} from '../../utils'
+import { LOGIN_PATH } from '../../constant'
 import {validateLoginName, EMAIL_REG, PHONE_REG} from '../login/validator'
 
 export default {
-  name: 'signup',
+  name: 'f-signup',
 
   data() {
     const validatePassword = (rule, value, callback) => {
@@ -60,7 +61,8 @@ export default {
       logining: false,
       readonly: true,
       sending: false,
-      waitingTimer: 0
+      waitingTimer: 0,
+      loginLink: LOGIN_PATH
     }
   },
 

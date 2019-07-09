@@ -1,4 +1,5 @@
 import { axiosInstance, storage, cookieStore } from '@freelog/freelog-common-lib'
+import { USER_SESSION, COOKIE_AUTH_INFO } from '@freelog/freelog-ui-login'
 
 const types = {
   LOAD_CURRENT_USER: 'loadCurrentUserInfo',
@@ -18,14 +19,14 @@ function resolveAvatarUrl(userId) {
 
 const user = {
   state: {
-    session: null // storage.get('user_session')
+    session: null // storage.get(USER_SESSION)
   },
 
   mutations: {
     [types.CHANGE_SESSION](state, data) {
       data.avatarUrl = resolveAvatarUrl(data.userId)
       state.session = data
-      storage.set('user_session', state.session)
+      storage.set(USER_SESSION, state.session)
     },
     [types.CHANGE_AVATAR](state, data) {
       if (typeof data === 'undefined') {
@@ -36,7 +37,7 @@ const user = {
     },
     [types.LOGOUT](state) {
       state.session = null
-      storage.remove('user_session')
+      storage.remove(USER_SESSION)
     }
   },
 
@@ -79,7 +80,7 @@ const user = {
       commit(types.LOGOUT)
     },
     [types.CHECK_USER_SESSION]({ getters }) {
-      const authInfo = cookieStore.get('authInfo')
+      const authInfo = cookieStore.get(COOKIE_AUTH_INFO)
       return new Promise((resolve) => {
         if (!authInfo) {
           resolve(false)
@@ -98,15 +99,15 @@ const user = {
         }
       })
     },
-    [types.USER_LOGIN]({ commit }, data) {
-      return axiosInstance.post('/v1/passport/login', data).then((res) => {
-        if (res.data.ret === 0 && res.data.errcode === 0) {
-          commit(types.CHANGE_SESSION, res.data.data)
-          return res.data.data
-        }
-        return Promise.reject(res.data.msg)
-      })
-    }
+    // [types.USER_LOGIN]({ commit }, data) {
+    //   return axiosInstance.post('/v1/passport/login', data).then((res) => {
+    //     if (res.data.ret === 0 && res.data.errcode === 0) {
+    //       commit(types.CHANGE_SESSION, res.data.data)
+    //       return res.data.data
+    //     }
+    //     return Promise.reject(res.data.msg)
+    //   })
+    // }
   }
 }
 

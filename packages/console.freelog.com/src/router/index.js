@@ -143,6 +143,7 @@ function listenWindowVisibility() {
         } else {
             type = this[hidden] ? 'hidden' : 'visible'
         }
+        console.log('type --', type)
 
         if (type === 'visible') {
             isChecked = false

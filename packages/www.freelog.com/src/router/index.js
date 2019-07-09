@@ -1,3 +1,6 @@
+
+import Router from 'vue-router'
+import { Vue } from '@freelog/freelog-common-lib'
 import UserLayout from '@/views/layout/user.vue'
 import MyResourcesView from '@/views/resources/index.vue'
 import MyAccountsView from '@/views/accounts/index.vue'
@@ -12,11 +15,9 @@ import AccountTransferView from '@/views/accounts/transfer.vue'
 import AccountListManagerView from '@/views/accounts/list.vue'
 import AddPayAccountView from '@/views/accounts/add-pay-account.vue'
 import ResourceContractDetailView from '@/views/resources/detail.vue'
-import LoginView from '@/views/login/index.vue'
-import SignupView from '@/views/signup/index.vue'
-import RsetPasswordView from '@/views/reset-password/index.vue'
 import ErrorView from '@/views/error/index.vue'
 
+Vue.use(Router)
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
     return savedPosition
@@ -33,7 +34,7 @@ const scrollBehavior = (to, from, savedPosition) => {
   return position
 }
 
-export default {
+const routerConfig = {
   mode: 'history',
   scrollBehavior,
   base: '/',
@@ -41,30 +42,6 @@ export default {
     {
       path: '/',
       redirect: '/user/accounts'
-    },
-    {
-      path: '/login',
-      meta: {
-        title: '登录',
-        theme: 'transparent'
-      },
-      component: LoginView
-    },
-    {
-      path: '/signup',
-      meta: {
-        title: '注册',
-        theme: 'transparent'
-      },
-      component: SignupView
-    },
-    {
-      path: '/reset_pw',
-      meta: {
-        title: '重置密码',
-        theme: 'transparent'
-      },
-      component: RsetPasswordView
     },
     {
       path: '/user',
@@ -158,15 +135,6 @@ export default {
         component: ResourceContractDetailView
       }]
     },
-    {
-      path: '/*',
-      meta: {
-        requiresAuth: false,
-        title: 'not found',
-        error: true
-      },
-      component: ErrorView,
-    }
     // {
     //   path: '/about',
     //   name: 'about',
@@ -177,3 +145,22 @@ export default {
     // },
   ]
 }
+const notFoundRouteConfig = {
+  path: '/*',
+  meta: {
+    requiresAuth: false,
+    title: 'not found',
+    error: true
+  },
+  component: ErrorView,
+}
+const router = new Router(routerConfig)
+export function registerNotFoundRouete() {
+  // 延迟执行挂载404页面路由
+  setTimeout(() => {
+    router.addRoutes([notFoundRouteConfig])
+  }, 0)
+}
+
+export default router
+

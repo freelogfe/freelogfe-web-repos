@@ -28,7 +28,7 @@
                   :placeholder="$t('resetPassword.inputPasswordTip')"></el-input>
       </el-form-item>
       <el-form-item>
-        <router-link to="/login" class="user-op">{{$t('resetPassword.backToLogin')}}<i class="el-icon-d-arrow-right"></i></router-link>
+        <router-link :to="loginLink" class="user-op">{{$t('resetPassword.backToLogin')}}<i class="el-icon-d-arrow-right"></i></router-link>
       </el-form-item>
       <el-form-item class="login-btns">
         <el-button type="primary"

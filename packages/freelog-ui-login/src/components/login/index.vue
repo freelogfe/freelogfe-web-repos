@@ -26,7 +26,7 @@
       <el-form-item>
         <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox>
         <span class="user-ops">
-          <router-link to="/reset_pw" class="user-op">{{$t('login.resetPW')}}</router-link> | <router-link class="user-op" :to="signUpLink">{{$t('login.signup')}}</router-link>
+          <router-link :to="resetPwLink" class="user-op">{{$t('login.resetPW')}}</router-link> | <router-link class="user-op" :to="signUpLink">{{$t('login.signup')}}</router-link>
         </span>
       </el-form-item>
       <el-form-item class="login-btns">
@@ -42,10 +42,14 @@
 </template>
 
 <script>
-import { isSafeUrl } from '@/lib/security'
+import { isSafeUrl, setItemForStorage } from '../../utils'
+import { SIGN_PATH, RESET_PASSWORD_PATH, LOGIN_NAME, USER_SESSION } from '../../constant'
+import FToast from '../toast/index.vue'
 
 export default {
-  name: 'freelog-ui-login',
+  name: 'f-login',
+
+  components: { FToast },
 
   data() {
     const $i18n = this.$i18n
@@ -80,29 +84,33 @@ export default {
         loginName,
         password: '',
       },
-      signUpLink: '/signup',
       rules,
       error: null,
       loading: false,
       rememberUser: false
     }
   },
-  mounted() {
-    const redirect = this.$route.query.redirect
-    if (isSafeUrl(redirect)) {
-      this.signUpLink += `?redirect=${redirect}`
+
+  computed: {
+    resetPwLink() {
+      return `${RESET_PASSWORD_PATH}`
+    },
+    signUpLink() {
+      if(this.$route) {
+        const redirect = this.$route.query.redirect
+        if (isSafeUrl(redirect)) {
+          return `${SIGN_PATH}?redirect=${this.$route.query.redirect}`
+        }
+      }
+      return `${SIGN_PATH}`
     }
   },
 
+  mounted() {
+
+  },
+
   methods: {
-    redirect() {
-      const redirect = this.$route.query.redirect
-      if (isSafeUrl(redirect)) {
-        window.location.replace(redirect)
-      } else {
-        this.$router.replace('/')
-      }
-    },
     submit(ref) {
       const self = this
       this.$refs[ref].validate((valid) => {
@@ -110,45 +118,60 @@ export default {
           return
         }
 
-        this.error = null
-        this.loading = true
-
         const data = Object.assign(this.model, {
           isRememer: this.rememberUser ? 1 : 0
         })
 
-        this.$store.dispatch('userLogin', data)
-          .then(() => {
-            window.localStorage.setItem('loginName', data.loginName)
-            const redirect = this.$route.query.redirect
-            if (isSafeUrl(redirect)) {
-              window.location.replace(redirect)
-            } else {
-              self.$router.replace('/')
+        this.fetchLogin(data)
+          .then(userInfo => {
+            this.afterLogin(userInfo)
+          })
+      })
+    },
+    fetchLogin(data) {
+      this.error = null
+      this.loading = true
+      return this.$axios.post('/v1/passport/login', data)
+          .then((res) => {
+            this.loading = false
+            if (res.data.ret === 0 && res.data.errcode === 0) {
+              return Promise.resolve(res.data.data)
             }
-            self.loading = false
+            return Promise.reject(res.data.msg)
           })
           .catch((err) => {
             console.log(err)
-            const $i18n = self.$i18n
+            this.$emit('after-login-fail')
+            const $i18n = this.$i18n
             if (typeof err === 'string') {
-              self.error = { title: '', message: err }
+              this.error = { title: '', message: err }
             } else {
-              self.error = { title: $i18n.t('login.errorTitle'), message: err.response.errorMsg || $i18n.t('login.errors[0]') }
+              this.error = { title: $i18n.t('login.errorTitle'), message: err.response.errorMsg || $i18n.t('login.errors[0]') }
               switch (err.response && err.response.status) {
                 case 401:
-                  self.error.message = $i18n.t('login.errors[1]')
+                  this.error.message = $i18n.t('login.errors[1]')
                   break
                 case 500:
-                  self.error.message = $i18n.t('login.errors[2]')
+                  this.error.message = $i18n.t('login.errors[2]')
                   break
                 default:
-                  self.error.message = $i18n.t('login.errors[3]')
+                  this.error.message = $i18n.t('login.errors[3]')
               }
             }
-            self.loading = false
+            this.loading = false
           })
-      })
+    },
+    afterLogin(userInfo) {
+      this.$emit('after-login-success')
+      const win = window
+      setItemForStorage(USER_SESSION, userInfo)
+      setItemForStorage(LOGIN_NAME, userInfo.loginName)
+      const redirect = this.$route.query.redirect
+      if (isSafeUrl(redirect)) {
+        window.location.replace(redirect)
+      } else {
+        window.location.replace('/')
+      }
     }
   }
 }
@@ -156,14 +179,11 @@ export default {
 
 <style lang="less" scoped>
   .login-section {
-    -webkit-border-radius: 5px;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin: 180px auto;
     width: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;
+    background-clip: padding-box;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
     height: auto;

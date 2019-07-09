@@ -1,4 +1,4 @@
-import { ElemnetUI } from '@freelog/freelog-common-lib'
+import { ElementUI } from '@freelog/freelog-common-lib'
 
 function showErrorMessage(err) {
   if (!err) {
@@ -18,8 +18,8 @@ function showErrorMessage(err) {
     msg = err.toString()
   }
 
-  if(ElemnetUI.Message) {
-    ElemnetUI.Message.error(msg)
+  if(ElementUI.Message) {
+    ElementUI.Message.error(msg)
   }else {
     console.error(msg)
   }

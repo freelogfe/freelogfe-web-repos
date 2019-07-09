@@ -80,6 +80,7 @@ export default {
       }
 
       function onchange(evt) {
+        console.log('window - onchange !!!')
         const v = 'visible'
         const h = 'hidden'
         const evtMap = {

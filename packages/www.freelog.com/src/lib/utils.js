@@ -35,36 +35,17 @@ function gotoCacheScrollTop() {
   }
 }
 
-function gotoLogin(redirect) {
-  cacheScrollTop()
-
-  const loginPath = '/login'
-  if (window.location.pathname === loginPath) {
-    return
-  }
-
-  let loginUrl = `//www.${window.FreelogApp.Env.mainDomain}${loginPath}`
-  if (isSafeUrl(redirect)) {
-    loginUrl += `?redirect=${encodeURIComponent(redirect)}`
-  }
-
-  window.location.href = loginUrl
-}
-
-
 function resolveNodeDomain(domain) {
   return `${domain}.${host}`
 }
 
 
 export {
-  gotoLogin,
   gotoCacheScrollTop,
   resolveNodeDomain
 }
 
 export default {
-  gotoLogin,
   gotoCacheScrollTop
 }
 

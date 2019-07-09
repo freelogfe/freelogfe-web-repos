@@ -1,8 +1,9 @@
-import { isSafeUrl } from '@/lib/security'
+import { isSafeUrl } from '../../utils'
+import { LOGIN_PATH } from '../../constant'
 import {EMAIL_REG, PHONE_REG, validateLoginName} from '../login/validator'
 
 export default {
-  name: 'reset-password',
+  name: 'f-reset-password',
 
   data() {
     // form validate rules
@@ -27,7 +28,8 @@ export default {
       loading: false,
       sending: false,
       waitingTimer: 0,
-      readonly: true
+      readonly: true,
+      loginLink: LOGIN_PATH
     }
   },
 

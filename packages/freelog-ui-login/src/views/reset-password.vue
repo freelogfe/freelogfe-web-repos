@@ -1,0 +1,24 @@
+<template>
+  <div class="reset-password">
+    <reset-password></reset-password>
+  </div>
+</template>
+
+<script>
+import ResetPassword from "../components/signup/index.vue";
+export default {
+  name: "reset-password-page",
+  components: { ResetPassword }
+};
+</script>
+
+<style lang="less" scoped>
+.reset-password {
+  margin-top: 160px;
+  text-align: center;
+  .login-section {
+    display: inline-block;
+  }
+}
+</style>
+
