@@ -405,6 +405,11 @@ export default {
       this.$router.back()
     },
     handleSave() {
+
+      if (this.resourceDetail.resourceInfo.aliasName && /[\\/:*?"<>|]/.test(this.resourceDetail.resourceInfo.aliasName)) {
+        return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+      }
+
       return this.updateResourceDetail()
         .then(res => {
           if(res.errcode === 0) {
