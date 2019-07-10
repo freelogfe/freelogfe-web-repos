@@ -211,6 +211,10 @@ export default {
                 return this.$message.error('请输入资源名称');
             }
 
+            if (/[\\/:*?"<>|]/.test(this.resourceName)) {
+                return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+            }
+
             if (this.metaValidError) {
                 return this.$message.error('meta JSON格式有误');
             }

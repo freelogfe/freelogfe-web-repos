@@ -324,9 +324,9 @@ export default {
         imageUploadSuccessHandler(imageUrl) {
             // this.uploaderStates.thumbnail.isUploading = false;
             // if (res.errcode === 0) {
-                this.formData.previewImage = imageUrl;
-                // this.uploaderStates.thumbnail.isUploaded = true;
-                // this.uploaderStates.thumbnail.percentage = 100;
+            this.formData.previewImage = imageUrl;
+            // this.uploaderStates.thumbnail.isUploaded = true;
+            // this.uploaderStates.thumbnail.percentage = 100;
             // } else {
             //     this.uploaderStates.thumbnail.percentage = 0;
             //     this.$error.showErrorMessage(res.msg);
@@ -413,6 +413,10 @@ export default {
         },
         validate() {
             return new Promise((resolve, reject) => {
+                if (this.formData.resourceName && /[\\/:*?"<>|]/.test(this.formData.resourceName)) {
+                    reject();
+                    return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+                }
                 const reourceUploader = this.uploaderStates.resource;
                 this.$refs.createForm.validate((valid, err) => {
                     if (valid) {
@@ -519,7 +523,7 @@ export default {
         },
         nextHandler() {
             return new Promise((resolve, reject) => {
-                console.log('asdfasdfasdfdsf');
+                // console.log('asdfasdfasdfdsf');
                 this.validate()
                     .then(() => {
                         const data = this.packUploadData();
