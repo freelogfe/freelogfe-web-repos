@@ -139,7 +139,7 @@
 
                 <div class="mock-list__mocks_non-empty__create">
                     <router-link
-                        :to="'/mock/create?bucketName=' + activatedBucket.bucketName"
+                        :to="'/mock/create/' + activatedBucket.bucketName"
                         class="nav-link ls-nav-link"
                     >
                         <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">创建mock资源
@@ -218,7 +218,7 @@
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item>
                                                 <router-link
-                                                    :to="'/mock/create?mockResourceId=' + scope.row.mockResourceId"
+                                                    :to="'/mock/update/' + scope.row.mockResourceId"
                                                 >
                                                     <a
                                                         style="display: block; width: 100%; height: 100%; color: #333;"

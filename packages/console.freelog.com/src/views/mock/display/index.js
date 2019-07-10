@@ -169,6 +169,12 @@ export default {
             window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/resources/mocks/${mockResourceId}/download`;
         },
         /**
+         *
+         */
+        buildFormalResources() {
+            this.$axios.post(`/v1/resources/mocks/{mockResourceId}/convert`);
+        },
+        /**
          * 向 API 发起请求，根据 mockID 删除一个 mock
          * @param mockResourceId
          */
