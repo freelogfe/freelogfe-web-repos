@@ -181,12 +181,12 @@ export default {
             // console.log(row, 'RRRRRWWWWWWW');
 
             if (row.systemMeta.dependencyInfo && row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
-                return this.$message.error('依赖不可用，无法生成正式资源');
+                return this.$message.error('资源依赖存在无效发行：模拟资资源。');
             }
 
             const res = await this.$axios.get(`/v1/resources/${row.sha1}`);
             if (res.data.data) {
-                return this.$message.error('资源已存在，无法创建');
+                return this.$message.error('该资源已存在，不能重复创建。');
             }
 
             this.tmpNeedBuildResource = row;
@@ -203,6 +203,10 @@ export default {
                     const res1 = await this.$axios.post(`/v1/resources/mocks/${row.mockResourceId}/convert`, params);
 
                     if (res1.data.errcode !== 0) {
+                        this.$message({
+                            type: 'error',
+                            message: res1.data.msg,
+                        });
                         return;
                     }
                     this.$message({
