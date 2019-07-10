@@ -25,12 +25,12 @@ module.exports = {
     branch: 'daily',
     env: 'test',
     bucket: 'test-frcdn',
+    cmd: `npm run build:test`,
     path: targetPath
   }, {
     branch: 'master',
     env: 'test',
     bucket: 'test-frcdn',
-    // cmd: `npm run build:test`,
     path: targetPath
   }],
   after() {
