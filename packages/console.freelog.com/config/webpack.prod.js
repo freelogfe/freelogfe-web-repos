@@ -18,10 +18,10 @@ module.exports = merge(baseConfig, {
 
   output: {
     filename: '[name].[contenthash].js',
-    chunkFilename: '[name].[chunkhash].js',
+    chunkFilename: 'public/js/[name].[chunkhash].js',
     crossOriginLoading: 'anonymous',
     path: path.resolve(__dirname, '../dist'),
-    publicPath: `${staticDomain}/www/`,
+    publicPath: `${staticDomain}/console/`,
   },
 
   module: {
