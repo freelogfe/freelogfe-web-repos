@@ -66,10 +66,15 @@
           </div>
         </div>
         <div class="resource-thumbnail-input-tip">
-          <ul>
-            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M</li>
-            <li>建议尺寸为800X600</li>
-          </ul>
+<!--          <ul>-->
+<!--&lt;!&ndash;            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M</li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li>建议尺寸为800X600</li>&ndash;&gt;-->
+<!--            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</li>-->
+<!--          </ul>-->
+            <div style="display: flex; padding-left: 20px; font-size: 13px; color: #afafaf;">
+                <span>*&nbsp;</span>
+                <div>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</div>
+            </div>
         </div>
       </div>
     </div>
@@ -98,9 +103,9 @@
             <span class="r-d-l-updatedate">{{dependency.updateDate | fmtDate}}</span>
           </li>
         </ul>
-        <div class="res-detail-bd-row-placeholder" v-if="dependencies.length === 0">
-          暂无依赖
-        </div>
+<!--        <div class="res-detail-bd-row-placeholder" v-if="dependencies.length === 0">-->
+<!--          暂无依赖-->
+<!--        </div>-->
       </div>
     </div>
     <div class="res-detail-bd-row res-detail-desc ql-snow" ref="resDesc">
@@ -144,7 +149,7 @@
                top="10vh"
                center
                :visible.sync="isShowReleaseDenpDialog">
-      <release-search :tabLayout="['my-release', 'search', 'favor']" :historicalReleases="releasesList" @add="releaseSearchHandler"></release-search>
+      <release-search :tabLayout="['search', 'my-release', 'favor']" :historicalReleases="releasesList" @add="releaseSearchHandler"></release-search>
     </el-dialog>
 
     <el-dialog width="750px"
