@@ -180,7 +180,7 @@ export default {
         async buildFormalResourcesConfirm(row) {
             // console.log(row, 'RRRRRWWWWWWW');
 
-            if (row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
+            if (row.systemMeta.dependencyInfo && row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
                 return this.$message.error('依赖不可用，无法生成正式资源');
             }
 
