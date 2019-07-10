@@ -5,7 +5,7 @@ const userHome = require('user-home')
 
 const ossConfig = require(path.join(userHome, '.freelog', 'oss-config.json')) // 避免泄漏oss keys
 
-const targetPath = 'pagebuild/'
+const targetPath = 'console/'
 module.exports = {
   // aliyun oss 配置
   oss: ossConfig,
@@ -25,6 +25,7 @@ module.exports = {
     branch: 'daily',
     env: 'test',
     bucket: 'test-frcdn',
+    cmd: `npm run build:test`,
     path: targetPath
   }, {
     branch: 'master',

@@ -178,7 +178,7 @@ export default {
          * 生成正式资源
          */
         async buildFormalResourcesConfirm(row) {
-            console.log(row, 'RRRRRWWWWWWW');
+            // console.log(row, 'RRRRRWWWWWWW');
 
             if (row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
                 return this.$message.error('依赖不可用，无法生成正式资源');
