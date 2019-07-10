@@ -235,6 +235,7 @@
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
+                                                    @click="buildFormalResourcesConfirm(scope.row)"
                                                     style="display: block; width: 100%; height: 100%; color: #333;"
                                                 >生成正式资源</a>
                                             </el-dropdown-item>

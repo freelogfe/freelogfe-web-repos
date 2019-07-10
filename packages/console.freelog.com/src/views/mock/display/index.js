@@ -38,6 +38,9 @@ export default {
             // deleteMockDialogShow: false,
             // 要删除的mock ID
             deleteMockID: '',
+
+            // 临时储存需要生成的资源信息
+            tmpNeedBuildResource: null,
         };
     },
     computed: {
@@ -157,6 +160,8 @@ export default {
                 previewImages: i.previewImages,
                 size: humanizeSize(i.systemMeta.fileSize),
                 date: i.createDate.split('T')[0],
+                sha1: i.sha1,
+                systemMeta: i.systemMeta,
             }));
             // console.log(this.mockTableData, 'this.mockTableDatathis.mockTableData');
             this.mockTotalItem = data.data.totalItem;
@@ -168,12 +173,68 @@ export default {
         downloadAMockByAPI(mockResourceId) {
             window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/resources/mocks/${mockResourceId}/download`;
         },
+
         /**
-         *
+         * 生成正式资源
          */
-        buildFormalResources() {
-            this.$axios.post(`/v1/resources/mocks/{mockResourceId}/convert`);
+        async buildFormalResourcesConfirm(row) {
+            console.log(row, 'RRRRRWWWWWWW');
+
+            if (row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
+                return this.$message.error('依赖不可用，无法生成正式资源');
+            }
+
+            const res = await this.$axios.get(`/v1/resources/${row.sha1}`);
+            if (res.data.data) {
+                return this.$message.error('资源已存在，无法创建');
+            }
+
+            this.tmpNeedBuildResource = row;
+
+            this.$confirm('确认是否生成正式资源', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(async () => {
+                    const params = {
+                        resourceAliasName: row.name,
+                    };
+                    const res1 = await this.$axios.post(`/v1/resources/mocks/${row.mockResourceId}/convert`, params);
+
+                    if (res1.data.errcode !== 0) {
+                        return;
+                    }
+                    this.$message({
+                        type: 'success',
+                        message: '生成正式资源成功'
+                    });
+                    this.$router.push(`/resource/detail/${res1.data.data.resourceId}`);
+                    // console.log(res1, 'res1res1res1res1res1');
+
+                })
+                .catch(() => {
+                    // this.$message({
+                    //     type: 'info',
+                    //     message: '已取消删除'
+                    // });
+                });
         },
+        /**
+         * 正式生成正式资源
+         */
+        // async buildFormalResources() {
+        //     const params = {
+        //         resourceAliasName: row.name,
+        //     };
+        //     const res1 = await this.$axios.post(`/v1/resources/mocks/${row.mockResourceId}/convert`, params);
+        //
+        //     if (res1.data.errcode === 0) {
+        //
+        //     }
+        // },
+
+
         /**
          * 向 API 发起请求，根据 mockID 删除一个 mock
          * @param mockResourceId
