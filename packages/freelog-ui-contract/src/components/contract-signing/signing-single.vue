@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contractSigning.json"></i18n>
 <template>
   <div class="ss-content">
     <template v-if="type ==='single'">
@@ -24,7 +25,7 @@
   import { getUserInfo } from "../../utils.js"
 
   export default {
-    name: 'contract-signing-single',
+    name: 'f-contract-signing-single',
     components: {
       resourceContract,
     },

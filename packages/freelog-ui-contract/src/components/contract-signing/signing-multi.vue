@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contractSigning.json"></i18n>
 <template>
   <div v-if="isRender">
     <div class="cutoff-line"></div>

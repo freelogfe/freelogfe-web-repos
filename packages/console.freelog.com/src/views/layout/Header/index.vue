@@ -40,7 +40,7 @@
           </el-popover>
         </li>
         <li class="nav-right-menu-item my-profile" v-else>
-          <router-link to="/user/login" class="nav-link">
+          <router-link :to="loginLink" class="nav-link">
             {{ $t('common.login')}}/{{ $t('common.register')}}
           </router-link>
         </li>

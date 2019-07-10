@@ -53,22 +53,21 @@ function registerRouter(options) {
 	options.router.addRoutes([{
 		path: LOGIN_PATH,
 		component: LoginPage,
-		meta: { requireAuth: false }
+		meta: { requiresAuth: false }
 	},
 	{
 		path: SIGN_PATH,
 		component: SignupPage,
-		meta: { requireAuth: false }
+		meta: { requiresAuth: false }
 	},
 	{
 		path: RESET_PASSWORD_PATH,
 		component: RsetPasswordPage,
-		meta: { requireAuth: false }
+		meta: { requiresAuth: false }
 	}])
 
 	if (options.isAuthenticationBeforeRoute) {
 		options.router.beforeEach((to, from, next) => {
-		
 			const meta = to.meta || { requiresAuth: true, requireAuth: true }
 			meta['requiresAuth'] = typeof meta['requiresAuth'] === 'undefined' ? true : meta['requiresAuth']
 			meta['requireAuth'] = typeof meta['requireAuth'] === 'undefined' ? true : meta['requireAuth']

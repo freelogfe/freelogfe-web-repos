@@ -139,7 +139,7 @@
         .rew-v-list {
           display: none;
           position: absolute; top: 34px; left: 0; z-index: 20;
-          width: 420px; border-radius:4px;
+          width: 430px; border-radius:4px;
           background: #fff; box-shadow:0px 4px 7px 0px rgba(0,0,0,0.3);
         }
         .rew-v-l-item {

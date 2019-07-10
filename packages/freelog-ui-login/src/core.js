@@ -12,11 +12,12 @@ export default function initCode(options) {
 
 function goToPath(path) {
 	return new Promise(resolve => {
-		if(router !== null) {
-			router.replace({ path })
-		}else {
-			window.location.replace(path)
-		}
+		window.location.replace(path)
+		// if(router !== null) {
+		// 	router.replace({ path })
+		// }else {
+		// 	window.location.replace(path)
+		// }
 		resolve()
 	})
 }
@@ -88,6 +89,8 @@ function parseJWT(jwtStr) {
 export function getUserInfo() {
 	const authInfo = getAuthInfoByCookie()
 	if(authInfo === null || !authInfo.userId) {
+		// 删除用户信息的缓存：防止用户授权过时，仍能拿到用户信息
+		window.localStorage.removeItem(USER_SESSION)
 		return Promise.resolve(null)
 	}
 
@@ -125,16 +128,10 @@ export function getUserInfo() {
 export function checkLoginStatus() {
 	const checkPromise = getUserInfo()
 		.then(userInfo => {
-			if(userInfo === null) return 0			// 未登录
-			
-			const lastCheckedUserInfo = getItemFromStorage(LAST_CHECKED_USER_INFO)
-			setItemForStorage(LAST_CHECKED_USER_INFO, userInfo)
-		
-			// 如果两者用户ID不同，则说明已经切换用户
-			if(userInfo.userId !== lastCheckedUserInfo.userId) {
-				return 2		// 已登录：新用户
-			}else {
-				return 1		// 已登录：原本用户
+			if(userInfo === null) {
+				return 0			// 未登录
+			} else {
+				return 1			// 已登录
 			}
 		})
 	return checkPromise
@@ -142,29 +139,27 @@ export function checkLoginStatus() {
 
 // 身份认证并执行对应操作
 export function runAuthenticationHandler() {
-	return checkLoginStatus()
-			.then(loginStatus => {
-				console.log('loginStatus --', loginStatus)
-				switch(loginStatus) {
-					case 0: {
-						//  去登录
-						if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) === -1) {
-							goToLoginPage()
-						}
-						break
-					}
-					// 当值为2时，则表示当前窗口已切换了新用户
-					case 2: {
+	const authInfo = getAuthInfoByCookie()
+	return getUserInfo()
+			.then(userInfo => {
+				if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) !== -1) return 
+				if(userInfo === null) {	
+					//  去登录
+					goToLoginPage()
+				} else {		
+					const lastCheckedUserInfo = getItemFromStorage(LAST_CHECKED_USER_INFO)
+					console.log('已登录', lastCheckedUserInfo)
+				
+					// 如果两者用户ID不同，则说明已经切换用户：新用户
+					if(lastCheckedUserInfo && authInfo.userId !== userInfo.userId && userInfo.userId !== lastCheckedUserInfo.userId) {
+						setItemForStorage(LAST_CHECKED_USER_INFO, userInfo)		
 						// 跳首页
 						Toast({
-							msg: '已切换用户，即将跳转至首页！',
+							msg: '您已切换用户，即将跳转至首页！',
 							afterCountDown() {
 								goToHomePage()
 							}
 						})
-						break
-					}
-					default: {
 					}
 				}
 			})

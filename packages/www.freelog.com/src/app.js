@@ -1,9 +1,8 @@
 import '@freelog/freelog-common-lib/lib/freelog-common.css'
 
 import { Vue } from '@freelog/freelog-common-lib'
-
 import initEnv from '@freelog/freelog-common-lib/src/initEnv'
-import contractUIPlugin from '@freelog/freelog-ui-contract/src/index'
+import contractUIPlugin from '@freelog/freelog-ui-contract'
 import initLogin from '@freelog/freelog-ui-login'
 
 import App from './app.vue'

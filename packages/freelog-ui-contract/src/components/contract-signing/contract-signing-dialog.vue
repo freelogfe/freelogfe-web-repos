@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contractSigning.json"></i18n>
 <template>
   <el-dialog
           :close-on-click-modal="false"
@@ -24,7 +25,7 @@
   import ContractSigningMulti from './signing-multi.vue'
 
   export default {
-    name: 'contract-signing-dialog',
+    name: 'f-contract-signing-dialog',
     components: { ContractSigningMulti },
     props: {
       visible: {

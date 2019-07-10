@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/reset-password.json"></i18n>
 <template>
   <section class="login-section">
     <header class="login-header">
@@ -57,7 +58,6 @@ export default ResetView
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
     width: 400px;
     min-height: 300px;
     padding: 35px 35px 15px 35px;

@@ -90,7 +90,7 @@ export default {
         'cell-class-name': 'res-row-cell'
       },
       paginationConfig: {
-        target: 'v1/getMyContracts.json',
+        target: 'v1/myContracts.json',
         params: {
           identityType: 2,
           contractType: 3

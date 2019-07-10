@@ -42,6 +42,11 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
       },
+      {
+        resourceQuery: /blockType=i18n/,
+        type: 'javascript/auto',
+        loader: '@kazupon/vue-i18n-loader'
+      },
       /* config.module.rule('fonts') */
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,

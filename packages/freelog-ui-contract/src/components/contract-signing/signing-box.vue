@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contractSigning.json"></i18n>
 <template>
   <div class="ss-main-content resource-contract-box">
     <div class="rcb-id-box">

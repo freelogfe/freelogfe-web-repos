@@ -6,7 +6,6 @@
 
 import { axiosInstance } from '@freelog/freelog-common-lib'
 import store from '@/store'
-import { gotoLogin } from './utils'
 import i18n from './i18n'
 
 axiosInstance.interceptors.request.use(
@@ -20,33 +19,22 @@ axiosInstance.interceptors.request.use(
   err => Promise.reject(err)
 )
 
-
 axiosInstance.interceptors.response.use(
   (response) => {
     let errorMsg
     const data = response.data
-
-    if ([28, 30].indexOf(data.errcode) > -1) {
-      // 清除已过期cookie
-      store.dispatch('userLogout').then(() => {
-        gotoLogin(window.location.href)
-      })
-      // replace执行存在延迟
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(response)
-        }, 5e2)
-      })
-    } else if (response.status === 200 && (!data.ret || data.ret === 0)) {
-      response.getData = () => {
-        if (('errcode' in data) && data.errcode !== 0) {
-          throw new Error(data)
+    switch(response.status) {
+      case 200: {
+        if(!data.ret || data.ret === 0) {
+          response.getData = () => {
+            if (('errcode' in data) && data.errcode !== 0) {
+              throw new Error(data)
+            }
+            return data.data || data
+          }
         }
-        return data.data || data
+        return response
       }
-      return response
-    }
-    switch (response.status) {
       case 401:
         errorMsg = i18n.t('axios.unAuthError')
         break

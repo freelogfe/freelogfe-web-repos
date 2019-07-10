@@ -1,9 +1,10 @@
+<i18n src="../../../i18n-locales/license.json"></i18n>
 <template>
   <div class="license-event-wrap">
     <el-form label-position="left" class="small-el-form" :label-width="formLabelWidth" :model="contractDetail">
       <el-form-item :label="$('license.label')" class="no-margin-bottom">
         <div class="license-window">
-          <pre class="license-format" v-for="license in licenses">
+          <pre class="license-format" v-for="(license, index) in licenses" :key="'license'+index">
             {{license}}
           </pre>
         </div>
@@ -13,8 +14,8 @@
       </el-form-item>
 
         <div class="center">
-          <el-button @click="doneHandler">{{$('common.cancelBtnText')}}</el-button>
-          <el-button type="primary" :disabled="!accepted" @click="signHandler">{{$('common.sureBtnText')}}</el-button>
+          <el-button @click="doneHandler">{{$('license.cancelBtnText')}}</el-button>
+          <el-button type="primary" :disabled="!accepted" @click="signHandler">{{$('license.sureBtnText')}}</el-button>
         </div>
     </el-form>
   </div>
