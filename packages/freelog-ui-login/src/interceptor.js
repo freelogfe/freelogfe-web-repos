@@ -19,6 +19,6 @@ export default function addAxiosInterceptorHandler(options) {
 			} 
 			return response
 		},
-		(err) => Promise.reject,
+		(err) => Promise.reject(err),
 	)
 }

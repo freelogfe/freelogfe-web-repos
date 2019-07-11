@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contractSigning.json"></i18n>
 <template>
   <div class="rcb-remark" >
     <div class="rcb-r-left">

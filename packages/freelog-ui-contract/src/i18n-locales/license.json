@@ -1,0 +1,24 @@
+{
+  "en": {
+    "license": {
+      "label": "license",
+      "checkboxText": "Accept the agreement",
+      "msgs": [
+        "Protocol format is incorrect，Please contact the contract author。",
+        "Execution succeed"
+      ]
+    }
+  },
+  "zh-CN": {
+    "license": {
+      "cancelBtnText": "取 消",
+      "sureBtnText": "确 定",
+      "label": "协议",
+      "checkboxText": "接受协议",
+      "msgs": [
+        "协议格式不正确，请联系合约作者。",
+        "执行成功"
+      ]
+    }
+  }
+}

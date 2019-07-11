@@ -2,11 +2,11 @@
   <div class="resource-contract-detail-view">
     <account-layout ref="layout" :title="$t('resources.detail.title')" :showFooter="false" return-name="/user/contracts">
 
-      <contract-signing-single
+      <f-contract-signing-single
               style="width: 100%"
               v-if="isRenderContract"
               :presentable="presentable"
-      ></contract-signing-single>
+      ></f-contract-signing-single>
     </account-layout>
 
   </div>

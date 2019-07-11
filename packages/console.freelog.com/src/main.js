@@ -1,19 +1,29 @@
 import '@freelog/freelog-common-lib/lib/freelog-common.css'
-import { Vue, initI18n } from '@freelog/freelog-common-lib'
+
 import {sync} from 'vuex-router-sync'
 import VueLazyload from 'vue-lazyload'
 
+import { Vue } from '@freelog/freelog-common-lib'
+import initEnv from '@freelog/freelog-common-lib/src/initEnv'
+import initLogin from '@freelog/freelog-ui-login'
+import contractUIPlugin from '@freelog/freelog-ui-contract/src/index'
+
 import App from './App.vue'
-import router from './router'
+import router, { registerNotFoundRouete } from './router'
 import store from './store'
 import plugins from './plugins'
 import i18n from './lib/i18n/index'
-
-import initEnv from '@freelog/freelog-common-lib/src/initEnv'
+import './lib/index'
 
 sync(store, router, {moduleName: 'route'})
 
 initEnv()
+/* eslint-disable no-new */
+initLogin({ Vue, router })
+// 404页面路由是通配符的路由，须放在最后
+registerNotFoundRouete()
+
+Vue.use(contractUIPlugin)
 Vue.use(plugins)
 Vue.use(VueLazyload, {
   lazyComponent: true,
@@ -22,7 +32,6 @@ Vue.use(VueLazyload, {
 
 Vue.config.devtools = true,
 Vue.config.productionTip = false
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

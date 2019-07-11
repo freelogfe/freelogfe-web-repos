@@ -1,3 +1,4 @@
+<i18n src="../../i18n-locales/contract-detail.json"></i18n>
 <template>
   <div class="contract-detail-content-wrapper" >
     <template v-if="contract && (contract.status === 2 || contract.status === 4)">
@@ -36,7 +37,7 @@
   } from '../contract-events/index'
 
   export default {
-    name: 'contract-detail',
+    name: 'f-contract-detail',
     props: {
       contract: {
         // type: Object,
@@ -117,7 +118,7 @@
             const { componentName } = eventComponentMap[params.type]
             this.targetContractEvent = params
             this.eventComponent = componentName
-            this.dialogTitle = this.$t(`contractSigning.eventTitles['${params.type}']`)
+            this.dialogTitle = this.$t(`eventTitles['${params.type}']`)
             this.showEventExecDialog = true
             break
           }

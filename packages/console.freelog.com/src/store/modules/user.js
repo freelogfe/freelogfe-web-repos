@@ -1,6 +1,7 @@
 import {axios} from '@/lib/index'
-import {cookieStore, sessionStore} from '@/lib'
+import {cookieStore, sessionStore, storage} from '@/lib'
 import {UserService, OtherService} from '../../services'
+import { USER_SESSION, COOKIE_AUTH_INFO } from '@freelog/freelog-ui-login'
 
 const types = {
   GET_CURRENT_USER: 'getCurrentUser',
@@ -19,7 +20,7 @@ function resolveAvatarUrl(userId) {
 }
 
 function getUserInfoFromCookie() {
-  var authInfo = cookieStore.get('authInfo') || ''
+  var authInfo = cookieStore.get(COOKIE_AUTH_INFO) || ''
   var userInfo = {}
   if (authInfo) {
     try {
@@ -42,21 +43,21 @@ function getUserInfoFromCookie() {
 
 const user = {
   state: {
-    session: {user: getUserInfoFromCookie(), token: null},
+    session: {user: storage.get(USER_SESSION), token: null},
   },
 
   mutations: {
     [types.CHANGE_SESSION](state, data) {
       Object.assign(state.session, data)
-      sessionStore.set('user_session', state.session)
+      sessionStore.set(USER_SESSION, state.session)
     },
     [types.DELETE_SESSION](state) {
       state.session = {user: {}, token: null}
-      sessionStore.remove('user_session')
+      sessionStore.remove(USER_SESSION)
     },
     [types.CHANGE_AVATAR](state, avatarUrl) {
       state.session.user.avatarUrl = avatarUrl
-      sessionStore.remove('user_session')
+      sessionStore.remove(USER_SESSION)
     }
   },
 

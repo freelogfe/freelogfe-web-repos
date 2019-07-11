@@ -90,19 +90,20 @@
         }
 
         this.source = axios.CancelToken.source()
-
         if (this.pagination.params) {
           Object.assign(params, this.pagination.params)
         }
-
+        
         return this.$axios.get(this.pagination.target, {
           params,
           cancelToken: this.source.token
         }).then((res) => {
-          if (res.data.ret === 0 && res.data.errcode === 0) {
-            return res.data.data
+          if(res.data) {
+            if (res.data.ret === 0 && res.data.errcode === 0) {
+              return res.data.data
+            }
+            throw new Error(res.data.msg)
           }
-          throw new Error(res.data.msg)
         })
       },
       update(data) {
@@ -115,7 +116,7 @@
         this.currentPage = 1
         if (this.loading && this.source) {
           this.loading = false
-          this.source.cancel('')
+          this.source.cancel('cancel')
         }
         this.load()
       },
@@ -130,7 +131,7 @@
             window.sessionStorage.setItem(`${this.$route.fullPath}_current_page`, this.currentPage)
           })
           .catch((err) => {
-            if (err.toString() !== 'Cancel') {
+            if (!err.message || err.message !== 'cancel') {
               this.$error.showErrorMessage(err)
             }
             this.loading = false

@@ -54,12 +54,12 @@ export default {
         case 'transaction': {
         }
         case 'escrowExceed': {
-          return this.$i18n.t('contractSigning.transaction.accountLabels[0]')
+          return this.$i18n.t('transaction.accountLabels[0]')
         }
         case 'escrowConfiscated': {
         }
         case 'escrowConfiscated': {
-          return this.$i18n.t('contractSigning.transaction.accountLabels[1]')
+          return this.$i18n.t('transaction.accountLabels[1]')
         }
       }
     },
@@ -106,34 +106,34 @@ export default {
       switch (this.params.payType) {
         // 交易
         case 'transaction':
-          statusMsg = this.$i18n.t('contractSigning.transaction.payResultMsgs[0]');
+          statusMsg = this.$i18n.t('transaction.payResultMsgs[0]');
           break;
         // 保证金支付
         case 'escrowExceed':
-          statusMsg = this.$i18n.t('contractSigning.transaction.payResultMsgs[1]');
+          statusMsg = this.$i18n.t('transaction.payResultMsgs[1]');
           break;
         // 保证金没收
         case 'escrowConfiscated':
-          statusMsg = this.$i18n.t('contractSigning.transaction.payResultMsgs[2]');
+          statusMsg = this.$i18n.t('transaction.payResultMsgs[2]');
           break;
         // 保证金赎回
         case 'escrowConfiscated':
-          statusMsg = this.$i18n.t('contractSigning.transaction.payResultMsgs[3]');
+          statusMsg = this.$i18n.t('transaction.payResultMsgs[3]');
           break;
       }
 
       switch (result.status) {
         case 1:
-          this.$message.success(statusMsg + this.$i18n.t('contractSigning.transaction.payResultMsgs[4]'))
+          this.$message.success(statusMsg + this.$i18n.t('transaction.payResultMsgs[4]'))
           break
         case 2:
-          this.$message.success(statusMsg + this.$i18n.t('contractSigning.transaction.payResultMsgs[5]'))
+          this.$message.success(statusMsg + this.$i18n.t('transaction.payResultMsgs[5]'))
           break
         case 3:
-          this.$message.success(statusMsg + this.$i18n.t('contractSigning.transaction.payResultMsgs[6]'))
+          this.$message.success(statusMsg + this.$i18n.t('transaction.payResultMsgs[6]'))
           break
         default:
-          this.$message.info(this.$i18n.t('contractSigning.transaction.payResultMsgs[7]'))
+          this.$message.info(this.$i18n.t('transaction.payResultMsgs[7]'))
       }
     },
     // 支付完成（即支付成功） 处理
@@ -152,13 +152,13 @@ export default {
       let msg
       switch (order.status) {
         case 1:
-          msg = this.$i18n.t('contractSigning.transaction.orderStatus[0]')
+          msg = this.$i18n.t('transaction.orderStatus[0]')
           break
         case 2:
-          msg = this.$i18n.t('contractSigning.transaction.orderStatus[1]')
+          msg = this.$i18n.t('transaction.orderStatus[1]')
           break
         case 3:
-          msg = this.$i18n.t('contractSigning.transaction.orderStatus[2]')
+          msg = this.$i18n.t('transaction.orderStatus[2]')
           break
       }
 

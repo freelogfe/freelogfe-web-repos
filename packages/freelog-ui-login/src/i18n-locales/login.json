@@ -1,0 +1,62 @@
+{
+  "en": {
+    "login": {
+      "title": "Login",
+      "usernamePlaceholder": "Please enter user name",
+      "passwordPlaceholder": "Please enter your password",
+      "rememberUser": "remember me",
+      "resetPW": "Forgot password?",
+      "signup": "Register",
+      "loginStatus": [
+        "Log in...",
+        "Log in"
+      ],
+      "validateErrors": [
+        "The account format is incorrect，Please enter your mobile number or email address",
+        "Account cannot be empty"
+      ],
+      "ruleMessages": [
+        "please enter the account",
+        "Please enter your password",
+        "At least 6 characters in length"
+      ],
+      "errorTitle": "An error occurred",
+      "errors": [
+        "An exception has occurred. Please try again later!",
+        "wrong user name or password！",
+        "Server internal exception, please try again later！",
+        "Application exception, please try again later！"
+      ]
+    }
+  },
+  "zh-CN": {
+    "login": {
+      "title": "用户登录",
+      "usernamePlaceholder": "请输入用户名",
+      "passwordPlaceholder": "请输入密码",
+      "rememberUser": "记住我",
+      "resetPW": "忘记密码",
+      "signup": "注册新用户",
+      "loginStatus": [
+        "登录中...",
+        "登录"
+      ],
+      "validateErrors": [
+        "账号格式有误，输入正确的手机号或邮箱",
+        "账号不能为空"
+      ],
+      "ruleMessages": [
+        "请输入账号",
+        "请输入密码",
+        "长度至少6个字符"
+      ],
+      "errorTitle": "发生错误",
+      "errors": [
+        "出现异常，请稍后再试！",
+        "用户名或密码错误！",
+        "服务器内部异常，请稍后再试！",
+        "应用异常，请稍后再试！"
+      ]
+    }
+  }
+}

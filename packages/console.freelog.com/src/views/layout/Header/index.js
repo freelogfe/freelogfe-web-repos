@@ -1,6 +1,6 @@
 import {mapGetters} from 'vuex'
 import SearchInput from '@/components/SearchInput/index.vue'
-import {gotoLogin} from '../../../lib/utils'
+import { logout, LOGIN_PATH } from '@freelog/freelog-ui-login'
 
 export default {
   name: 'fl-header',
@@ -9,7 +9,8 @@ export default {
     return {
       isSideBarOpen: true,
       domainPostfix: /\.test/.test(window.location.host) ? '.testfreelog.com' : '.freelog.com',
-      avatarUrl: ''
+      avatarUrl: '',
+      loginLink: LOGIN_PATH
     }
   },
   computed: {
@@ -28,7 +29,7 @@ export default {
   },
 
   created() {
-    // this.listenWindowVisibility()
+    
   },
   mounted() {
     if (this.session && this.session.user && this.session.user.userId) {
@@ -56,50 +57,6 @@ export default {
     errorImageHandler() {
       this.avatarUrl = '' //失败展示昵称
     },
-    listenWindowVisibility() {
-      const self = this
-      let hidden = 'hidden'
-      const doc = document
-
-      if (hidden in doc) {
-        doc.addEventListener('visibilitychange', onchange)
-      } else if ('mozHidden' in doc) {
-        hidden = 'mozHidden'
-        doc.addEventListener('mozvisibilitychange', onchange)
-      } else if ('webkitHidden' in doc) {
-        hidden = 'webkitHidden'
-        doc.addEventListener('webkitvisibilitychange', onchange)
-      } else if ('msHidden' in doc) {
-        hidden = 'msHidden'
-        doc.addEventListener('msvisibilitychange', onchange)
-      } else {
-        const events = ['onpageshow', 'onpagehide', 'onfocus', 'onblur']
-        events.forEach((name) => {
-          window[name] = onchange()
-        })
-      }
-
-      function onchange(evt) {
-        console.log('window - onchange !!!')
-        const v = 'visible'
-        const h = 'hidden'
-        const evtMap = {
-          focus: v, focusin: v, pageshow: v, blur: h, focusout: h, pagehide: h
-        }
-        let type
-
-        evt = evt || window.event
-        if (evt.type in evtMap) {
-          type = evtMap[evt.type]
-        } else {
-          type = this[hidden] ? 'hidden' : 'visible'
-        }
-
-        if (type === 'visible') {
-          self.syncUserSession()
-        }
-      }
-    },
     syncUserSession() {
       this.$store.dispatch('checkUserSession')
         .then((valid) => {
@@ -111,11 +68,7 @@ export default {
         })
     },
     logout() {
-      this.$store.dispatch('userLogout')
-        .then(() => {
-          gotoLogin(window.location.href)
-        })
-        .catch(this.$error.showErrorMessage)
+      logout().catch(this.$error.showErrorMessage)
     },
     searchHandler(qs) {
       this.$router.push({path: '/', query: {q: qs}})

@@ -1,0 +1,20 @@
+{
+  "en": {
+    "eventTitles": {
+      "transactionEvent": "Payment",
+      "signingEvent": "Agreement signing",
+      "escrowExceedAmount": "Payment deposit",
+      "escrowConfiscated": "Confiscation of deposit",
+      "escrowRefunded": "Redemption deposit"
+    }
+  },
+  "zh-CN": {
+    "eventTitles": {
+      "transactionEvent": "支付",
+      "signingEvent": "协议签署",
+      "escrowExceedAmount": "保证金支付",
+      "escrowConfiscated": "保证金没收",
+      "escrowRefunded": "保证金赎回"
+    }
+  }
+}

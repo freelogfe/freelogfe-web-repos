@@ -1,4 +1,4 @@
-import { ElemnetUI } from '@freelog/freelog-common-lib'
+import { ElementUI } from '@freelog/freelog-common-lib'
 
 export default (Vue) => {
   const Error = {
@@ -22,7 +22,7 @@ export default (Vue) => {
       } else {
         msg = err.toString()
       }
-      ElemnetUI.Message.error(msg)
+      ElementUI.Message.error(msg)
     }
   }
   Object.defineProperties(Vue.prototype, {
