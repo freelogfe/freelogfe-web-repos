@@ -152,6 +152,11 @@ export default {
          */
         addDep(dep) {
             // console.log(dep, 'debpdebpdebpdebpdebpdebp');
+            //
+            if (this.depList.some(i => dep.releaseId === i.id)) {
+                return this.$message.error('不能重复添加依赖资源');
+            }
+
             this.visibleDepDialog = false;
             this.depList.push({
                 id: dep.releaseId,
