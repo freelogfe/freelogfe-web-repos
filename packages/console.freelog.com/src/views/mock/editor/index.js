@@ -217,7 +217,7 @@ export default {
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
             if (/[\\/:*?"<>|\s]/.test(this.resourceName)) {
-                return this.$message.error(`不能包含空格和以下字符：\\ / : * ? " < > |`);
+                return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
