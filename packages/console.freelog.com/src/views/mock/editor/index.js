@@ -215,9 +215,9 @@ export default {
             if (!this.resourceName) {
                 return this.$message.error('请输入资源名称');
             }
-
-            if (/[\\/:*?"<>|]/.test(this.resourceName)) {
-                return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+            //不能包含空格和以下字符：\ / : * ? " < > |
+            if (/[\\/:*?"<>|\s]/.test(this.resourceName)) {
+                return this.$message.error(`不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
