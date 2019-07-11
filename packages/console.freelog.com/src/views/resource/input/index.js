@@ -413,10 +413,13 @@ export default {
         },
         validate() {
             return new Promise((resolve, reject) => {
-                if (this.formData.resourceName && /[\\/:*?"<>|]/.test(this.formData.resourceName)) {
+                if (this.formData.resourceName && /[\\/:*?"<>|\s]/.test(this.formData.resourceName)) {
                     reject();
-                    return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+                    return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
                 }
+                // if (/[\\/:*?"<>|\s]/.test(this.resourceName)) {
+                //     return this.$message.error(`不能包含空格和以下字符：\\ / : * ? " < > |`);
+                // }
                 const reourceUploader = this.uploaderStates.resource;
                 this.$refs.createForm.validate((valid, err) => {
                     if (valid) {

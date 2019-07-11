@@ -406,8 +406,11 @@ export default {
     },
     handleSave() {
 
-      if (this.resourceDetail.resourceInfo.aliasName && /[\\/:*?"<>|]/.test(this.resourceDetail.resourceInfo.aliasName)) {
-        return this.$message.error(`资源的名称不能包含空格和以下字符：\ / : * ? " < > |`);
+        // if (/[\\/:*?"<>|\s]/.test(this.resourceName)) {
+        //     return this.$message.error(`不能包含空格和以下字符：\\ / : * ? " < > |`);
+        // }
+      if (this.resourceDetail.resourceInfo.aliasName && /[\\/:*?"<>|\s]/.test(this.resourceDetail.resourceInfo.aliasName)) {
+        return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
       }
 
       return this.updateResourceDetail()
