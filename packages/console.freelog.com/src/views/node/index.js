@@ -4,8 +4,9 @@ const nodeDetail = resolve => require.ensure([], () => resolve(require('./detail
 const presentableList = resolve => require.ensure([], () => resolve(require('./presentables-V4/index.vue')), 'presentable')
 
 const nodePreview = resolve => require.ensure([], () => resolve(require('./preview/index.vue')), 'node')
-
 const presentableDetail = resolve => require.ensure([], () => resolve(require('./presentable-V4/detail/index.vue')), 'presentable')
+
+const nodeManager = resolve => require.ensure([], () => resolve(require('./manager/index.vue')), 'node');
 
 export default {
   nodeCreator,
@@ -13,5 +14,7 @@ export default {
   nodeDetail,
   presentableList,
   nodePreview,
-  presentableDetail
+  presentableDetail,
+
+  nodeManager,
 }
