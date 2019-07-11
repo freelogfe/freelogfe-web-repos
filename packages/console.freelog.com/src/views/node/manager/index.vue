@@ -121,7 +121,6 @@
                     <template slot-scope="scope">
                         <el-popover
                             placement="top-start"
-                            title="标题"
                             width="400"
                             trigger="hover"
                             content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
