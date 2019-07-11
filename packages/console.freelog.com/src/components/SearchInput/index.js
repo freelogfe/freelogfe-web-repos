@@ -7,6 +7,10 @@ export default {
     }
   },
   props: {
+    showInputImmediately: {
+      type: Boolean,
+      default: false
+    },
     width: {
       type: String,
       default() {
@@ -15,19 +19,26 @@ export default {
     }
   },
   mounted() {
+    this.showInput = this.showInputImmediately
   },
   methods: {
     showInputHandler() {
-      this.showInput = true
+      if(!this.showInputImmediately) {
+        this.showInput = true
+      }
       this.$nextTick(() => {
         this.$refs.input.focus()
       })
     },
     hideInputHandler() {
-      this.showInput = false
+      if(!this.showInputImmediately) {
+        this.showInput = false
+      }
     },
     searchHandler() {
-      this.showInput = true
+      if(!this.showInputImmediately) {
+        this.showInput = true
+      }
       this.$emit('search', this.input)
     }
   }

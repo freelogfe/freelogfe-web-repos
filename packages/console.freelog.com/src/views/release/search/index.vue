@@ -316,6 +316,10 @@
   }
 
   .releases-search-wrapper {
+    .el-tabs__content {
+      overflow: auto;
+      min-height: 260px; height: 360px;  
+    }
     .search-input-area {
       margin: 20px 0;
     }

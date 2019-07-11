@@ -1,0 +1,44 @@
+.resource-list {
+  .r-l-item-name-box {
+    display: flex; align-items: center;
+    .r-l-item__img {
+      min-width: 45px; height: 35px;
+    }
+    .r-l-item-name {
+      padding-left: 10px; 
+      font-weight: 600;
+    }
+  }
+  
+  .r-l-item-name, 
+  .r-l-item-type, 
+  .r-l-item-updateDate{
+    font-size: 14px; line-height: 20px; color: #000;
+  }
+
+  .r-l-item-name, .r-l-item-release-row1{
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  .r-l-item-release-row1 {
+    color: #409EFF; font-weight:600;
+  }
+
+  .r-l-item-no-release {
+    color: #999;
+  }
+
+  .r-l-item-release-row2 {
+    cursor: pointer;
+    font-size: 12px; color: #666; line-height: 17px;
+  }
+
+  .r-l-item-createDate {
+    font-size: 12px; line-height: 17px; color: #BFBFBF;
+  }
+  
+  .r-l-item-release-btn, .r-l-item-download-btn, .r-l-item-detail-btn {
+    padding: 4px 10px; margin-right: 10px;
+  }
+  
+}

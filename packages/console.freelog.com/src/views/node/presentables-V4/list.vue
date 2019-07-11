@@ -75,8 +75,8 @@
             </router-link>
           </div>
         </template>
-      </el-table-column>
-      <slot name="append"></slot>
+        </el-table-column>
+        <slot name="append"></slot>
     </template>
     <template slot="empty">
       <slot name="empty"></slot>

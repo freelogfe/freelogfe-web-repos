@@ -1,36 +1,107 @@
 <template>
   <section class="my-resources">
-    <h3 class="title">{{$t('resource.myResources')}}</h3>
-    <div class="body-content">
-      <el-tabs tab-position="top" v-model="curTabName">
-        <el-tab-pane :label="$t('resourceListView.myListTitle')" name="self">
-          <lazy-component>
-            <resource-items type="self" :query="selfQueryInput"></resource-items>
-          </lazy-component>
-        </el-tab-pane>
-        <!--<el-tab-pane :label="$t('resourceListView.favorListTitle')" name="favor">-->
-          <!--<lazy-component>-->
-            <!--<resource-items type="favor" :query="favorQueryInput"></resource-items>-->
-          <!--</lazy-component>-->
-        <!--</el-tab-pane>-->
-      </el-tabs>
+    <div class="m-r-header clearfix">
+      <router-link to="/resource/create">
+        <el-button size="medium" type="primary" class="m-r-create-btn">创建资源</el-button>
+      </router-link>
       <div class="right-tool-bar-wrap">
-        <ul class="tool-bars">
-          <li class="tool-item">
-            <search-input @search="searchHandler"></search-input>
-          </li>
-        </ul>
+        <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
     </div>
+    
+    <resource-items-list :query="selfQueryInput" @release="showReleaseDialog"></resource-items-list>
+
+    <el-dialog width="750px"
+               top="10vh"
+               center
+               :visible.sync="isShowReleaseSearchDialog">
+      <release-search :tabLayout="['my-release']" :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []" @add="releaseSearchHandler"></release-search>
+      <div class="" slot="footer">
+        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">创建新发行</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
 <script>
-import ResourceList from './index'
+import SearchInput from '@/components/SearchInput/index.vue'
+import CONFIG from '@/config/index'
+import ResourceItemsList from './list.vue'
+import ReleaseSearch from '@/views/release/search/index.vue'
 
-export default ResourceList
+const { RESOURCE_STATUS } = CONFIG
+
+export default {
+  name: 'resource-list',
+  data() {
+    return {
+      resourceList: [],
+      RESOURCE_STATUS,
+      selfQueryInput: '',
+      isShowReleaseSearchDialog: false,
+      targetReleaseResource: null
+    }
+  },
+  components: {
+    ResourceItemsList,
+    SearchInput,
+    ReleaseSearch
+  },
+
+  mounted() {
+
+  },
+  methods: {
+    searchHandler(query) {
+      this.$message.warning('todo')
+    },
+    showReleaseDialog(resource) {
+      this.isShowReleaseSearchDialog = true
+      this.targetReleaseResource = resource
+    },
+    releaseSearchHandler(release) {
+      this.$router.push(`/release/add?releaseId=${release.releaseId}&resourceId=${this.targetReleaseResource.resourceId}`)
+    },
+    // 创建一个全新的发行
+    createNewRelease() {
+      // 跳转 发行中间页
+      this.$router.push(`/release/create?resourceId=${this.targetReleaseResource.resourceId}`)
+    },
+  }
+}
+
 </script>
 
 <style lang="less" scoped>
-  @import "index.less";
+  @import '../../../styles/variables.less';
+  .my-resources {
+    width: @main-content-width-1190;
+    margin: auto;
+    padding-top: 50px;
+    padding-left: 50px;
+    .el-dialog__header{ padding: 0; }
+  }
+  .m-r-header {
+    margin-bottom: 40px;
+    .m-r-create-btn {
+      width:160px; border-radius: 2px;
+    }
+    .right-tool-bar-wrap {
+      float: right;
+    }
+  }
+  @media screen and (max-width: 1250px){
+    .my-resources {
+      width: @main-content-width-990;
+    }
+  }
 </style>
+<style lang="less">
+  .my-resources {
+    .el-dialog__header{ 
+      padding: 0; 
+      .el-dialog__headerbtn { z-index: 100; }
+    }
+  }
+</style>
+

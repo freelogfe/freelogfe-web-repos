@@ -1,0 +1,55 @@
+.release-list {
+  .r-l-item-name-box {
+    display: flex; align-items: center;
+    .r-l-item__img {
+      min-width: 45px; height: 35px;
+    }
+    .r-l-item-name {
+      padding-left: 10px; 
+      font-weight: 600;
+    }
+  }
+  
+  .r-l-item-name, 
+  .r-l-item-type, 
+  .r-l-item-policy-row1,
+  .r-l-item-no-policy,
+  .r-l-item-updateDate, 
+  .r-l-item-online,
+  .r-l-item-offline {
+    font-size: 14px; line-height: 20px; color: #000;
+  }
+
+  .r-l-item-name, .r-l-item-policy-row1{
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  .r-l-item-policy-row1 {
+    color: #409EFF; font-weight:600;
+  }
+
+  .r-l-item-no-policy {
+    color: #999;
+  }
+
+  .r-l-item-policy-row2 {
+    font-size: 12px; color: #666; line-height: 17px;
+  }
+
+  .r-l-item-createDate {
+    font-size: 12px; line-height: 17px; color: #BFBFBF;
+  }
+
+  .r-l-item-offline {
+    color: #BFBFBF;
+  }
+
+  .el-icon-warning {
+    font-size: 16px; color: #FFC210;
+  }
+  
+  .r-l-item-edit-btn, .r-l-item-detail-btn, .r-l-item-cancel-favor-btn {
+    padding: 4px 10px; margin-right: 10px;
+  }
+
+}

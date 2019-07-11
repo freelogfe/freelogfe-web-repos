@@ -46,6 +46,14 @@
           </router-link>
         </el-tooltip>
       </li>
+      <li class="ls-item">
+        <el-tooltip effect="dark" :content="$t('routes.myCollections')" placement="right" :disabled="!isMini">
+          <router-link to="/release/collections" class="nav-link ls-nav-link">
+            <i class="el-icon-files"></i>
+            <span>{{$t('routes.myCollections')}}</span>
+          </router-link>
+        </el-tooltip>
+      </li>
       <li class="ls-item ls-submenu">
         <a href="javascript:;" class="nav-link ls-nav-link">
           <i class="el-icon-document"></i>

@@ -1,36 +1,95 @@
 <template>
-  <section class="my-resources">
-    <h3 class="title">{{$t('release.myReleases')}}</h3>
-    <div class="body-content">
-      <el-tabs tab-position="top" v-model="curTabName">
-        <el-tab-pane :label="$t('resourceListView.myListTitle')" name="self">
-          <lazy-component>
-            <release-items-list type="self" :query="selfQueryInput"></release-items-list>
-          </lazy-component>
-        </el-tab-pane>
-        <!--<el-tab-pane :label="$t('resourceListView.favorListTitle')" name="favor">-->
-          <!--<lazy-component>-->
-            <!--<release-list type="favor" :query="favorQueryInput"></release-list>-->
-          <!--</lazy-component>-->
-        <!--</el-tab-pane>-->
-      </el-tabs>
+  <section class="my-releases">
+    <div class="m-r-header clearfix">
+      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">创建发行</el-button>
       <div class="right-tool-bar-wrap">
-        <ul class="tool-bars">
-          <li class="tool-item">
-            <search-input @search="searchHandler"></search-input>
-          </li>
-        </ul>
+        <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
     </div>
+    
+    <release-items-list type="myReleases" :query="selfQueryInput"></release-items-list>
+
+    <el-dialog
+            class="my-r-search-dialog"
+            center
+            title="我的资源"
+            width="640px"
+            :visible.sync="resourceDialogVisible"
+    >
+      <resource-search @select-resource="createNewRelease"></resource-search>
+    </el-dialog>
   </section>
 </template>
 
 <script>
-import ResourceList from './index'
 
-export default ResourceList
+import ResourceSearch from '@/views/resource/search/search.vue'
+import SearchInput from '@/components/SearchInput/index.vue'
+import ReleaseItemsList from './list.vue'
+
+export default {
+  name: 'release-list',
+  data() {
+    return {
+      resourceList: [],
+      curTabName: 'self',
+      selfQueryInput: '',
+      favorQueryInput: '',
+      resourceDialogVisible: false
+    }
+  },
+  components: {
+    ReleaseItemsList,
+    SearchInput,
+    ResourceSearch
+  },
+
+  methods: {
+    searchHandler(query) {
+      this.$message.warning('todo')
+    },
+    createNewRelease(resource) {
+      this.$router.push(`/release/create?resourceId=${resource.resourceId}`)
+    }
+  },
+
+  mounted() {
+  },
+}
 </script>
 
 <style lang="less" scoped>
-  @import "index.less";
+  @import '../../../styles/variables.less';
+  .my-releases {
+    width: @main-content-width-1190;
+    margin: auto;
+    padding-top: 50px;
+    padding-left: 50px;
+  }
+  .m-r-header {
+    margin-bottom: 40px;
+    .m-r-create-btn {
+      width:160px; border-radius: 2px;
+    }
+    .right-tool-bar-wrap {
+      float: right;
+    }
+  }
+  @media screen and (max-width: 1250px){
+    .my-releases {
+      width: @main-content-width-990;
+    }
+  }
 </style>
+
+<style lang="less">
+.my-r-search-dialog {
+  .el-dialog__body {
+    overflow: auto;
+    height: 300px; margin: 0 20px; padding: 20px 50px 0; border-top: 1px solid #D8D8D8;
+
+    .el-input__inner { padding-left: 30px; }
+  }
+}
+</style>
+

@@ -215,6 +215,7 @@ export default {
     updateResource: 'Update Resource',
     myResources: 'My Resources',
     myReleases: 'My Releases',
+    myCollections: 'My Collections',
     resourceDetail: 'Resource Detail',
     createResourcePolicyTpl: 'Create Resource Policy Template',
     resourcePolicyTplDetail: 'Resource Policy Template Detail',

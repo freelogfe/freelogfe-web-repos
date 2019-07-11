@@ -65,5 +65,14 @@ export default {
       },
       component: Views.releaseList
     },
+    {
+      path: 'collections',
+      meta: {
+        requiresAuth: true,
+        title: i18n.t('routes.myCollections'),
+        type: 'release'
+      },
+      component: Views.releaseCollections
+    },
   ]
 }

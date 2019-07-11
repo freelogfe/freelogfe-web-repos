@@ -1,6 +1,6 @@
 <template>
   <div class="fl-search-input-wrap">
-    <el-input size="small" v-model="input"
+    <el-input size="medium" v-model="input"
               v-if="showInput"
               ref="input"
               placeholder=""

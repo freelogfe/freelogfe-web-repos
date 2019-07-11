@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import ReleaseEditorLayout from './layout.vue'
 import ReleaseEditorContract from '@/views/release/contract/index.vue'
+import ResourceSearch from '@/views/resource/search/search.vue'
 import LazyListView from '@/components/LazyListView/index.vue'
 
 import SchemeManage from '../scheme/index.vue'
@@ -9,7 +10,7 @@ import { versionDescendingOrder } from '@/lib/utils.js'
 export default {
   name: 'release-detail',
   components: {
-    ReleaseEditorLayout, SchemeManage, ReleaseEditorContract, LazyListView
+    ReleaseEditorLayout, SchemeManage, ReleaseEditorContract, LazyListView, ResourceSearch
   },
   data() {
     return {
@@ -119,43 +120,6 @@ export default {
       // }else {
       //   this.$message({ type: 'warning', message: '发行没策略，不能新增版本' })
       // }
-    },
-    clearSearchInputHandler() {
-
-    },
-    // 资源搜索
-    searchDataHandler(page) {
-      const pageSize = 10
-
-      // if (!this.searchInput) {
-      //   return Promise.resolve({ canLoadMore: false })
-      // }
-      // 空输入时，即查询所有属于我的资源
-      return this.$services.ResourceService.get({
-        params: Object.assign({
-          keywords: encodeURIComponent(this.searchInput),
-          page,
-          pageSize,
-          isSelf: 1,
-          projection: this.resourceProjection
-        }, this.searchScope)
-      }).then((res) => {
-        const data = res.getData() || {}
-        if (res.data.errcode === 0) {
-          this.searchResources = this.searchResources.concat(data.dataList)
-          if (data.dataList.length < pageSize) {
-            data.canLoadMore = false
-          }
-        } else {
-          data.canLoadMore = false
-        }
-        return data
-      })
-    },
-    searchHandler() {
-      this.activeName = 'search'
-      this.searchResources = []
-      this.$refs.searchView.refresh()
     },
     addNewVersion(resource) {
       if(resource.resourceType === this.release.resourceType) {

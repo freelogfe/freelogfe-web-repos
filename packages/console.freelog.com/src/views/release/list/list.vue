@@ -1,185 +1,174 @@
 <template>
-  <div class="resource-items">
-    <lazy-list-view :list="releases" :height="itemHeight" :fetch="fetchData">
-      <template slot-scope="scope" v-if="scope.data.isFavor !== false">
-        <el-button v-if="type === 'favor'"
-                   @click="delFavorResourceHandler(scope.data)"
-                   type="primary" plain round
-                   class="del-favor-resource-btn">{{$t('resourceDetailView.deleteFavorText')}}
-        </el-button>
-        <release-item-info :release="scope.data"
-                       :type="type"
-                       class="my-res-item"
-                       :navTo="gotoDetailHandler"></release-item-info>
+  <div class="release-list">
+    <f-pagination class="release-list-table"
+              :config="tableConfig"
+              :formatHandler="formatHandler"
+              ref="listRef"
+              :pagination="paginationConfig">
+      <template slot="list">
+        <el-table-column label="发行名称">
+          <template slot-scope="scope">
+            <div class="r-l-item-name-box">
+              <img 
+                class="r-l-item__img" 
+                :class="{'resource-default-preview':!previewImage}" 
+                :src="scope.row.previewImage" />
+              <div class="r-l-item-name" :title="scope.row.releaseName">{{scope.row.releaseName}}</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="发行类型" width="140">
+          <template slot-scope="scope">
+            <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="最新版本" width="120">
+          <template slot-scope="scope">
+            <div> {{scope.row.latestVersion.version}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="策略" width="160">
+          <template slot-scope="scope">
+            <div v-if="scope.row.policies.length"> 
+              <div class="r-l-item-policy-row1">{{scope.row.policies[0].policyName}}</div>
+              <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
+            </div>
+            <div class="r-l-item-no-policy" v-else>暂无策略</div> 
+          </template>
+        </el-table-column>
+        <el-table-column prop="updateDate" sortable label="更新时间" width="180">
+          <template slot-scope="scope">
+            <div class="r-l-item-updateDate">{{scope.row.updateDate | fmtDate}}</div>
+            <div class="r-l-item-createDate">加入时间 {{scope.row.createDate | fmtDate }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="全部状态" width="130">
+          <template slot-scope="scope">
+              <div class="r-l-item-online" v-if="scope.row.isOnline">已上线</div>
+              <div class="r-l-item-offline" v-else>
+                未上线 
+                <el-tooltip  content="Bottom center" placement="top" effect="light">
+                  <i class="el-icon-warning"></i>
+                </el-tooltip>
+              </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="170">
+          <template slot-scope="scope">
+            <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'">
+              <el-button class="r-l-item-edit-btn" size="mini">编辑</el-button>
+            </router-link>
+            <el-button 
+              v-if="type === 'myCollections'"
+              class="r-l-item-cancel-favor-btn" 
+              type="danger" 
+              size="mini" 
+              @click="cancelCollection">取消收藏</el-button>
+            <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
+              <el-button class="r-l-item-detail-btn" size="mini">详情</el-button>
+            </router-link>
+          </template>
+        </el-table-column>
       </template>
-      <div slot="empty" class="empty-resource-tip">
-        {{isSelf? $t('resourceListView.noResources') : $t('resourceListView.noFavorResources')}}
-      </div>
-    </lazy-list-view>
+    </f-pagination>
   </div>
 </template>
 
 <script>
-  import LazyListView from '@/components/LazyListView/index.vue'
-  import ReleaseItemInfo from '../list-item/index.vue'
+  import FPagination from '@/components/Pagination/index.vue'
 
   export default {
     name: 'release-items-list',
 
-    data() {
-      return {
-        search: '',
-        releases: [],
-        loader: null
-      }
-    },
+    components: { FPagination },
 
     props: {
       type: {
         type: String,
-        default() {
-          return 'self'
-        }
+        default: 'myReleases'
       },
       query: String
     },
 
-    computed: {
-      isSelf() {
-        return this.type === 'self'
-      },
-      itemHeight(){
-        return this.type === 'self' ? 90: 60
+    data() {
+      return {
+        search: '',
+        loader: null,
+        tableConfig: {
+          rowClassName: 'release-row',
+          'cell-class-name': 'rel-row-cell',
+          'show-header': true
+        },
+        paginationConfig: {
+          reloadCount: 0,
+          target: '/v1/releases',
+          params: {
+            isSelf: 1
+          }
+        },
       }
     },
 
     watch: {
-      type() {
-        this.initView()
-      },
       query() {
         this.initView()
       }
     },
-    components: { ReleaseItemInfo, LazyListView },
     mounted() {
       this.initView()
     },
 
     methods: {
-      gotoDetailHandler(resource) {
-        if (resource.status === 2 || this.type !== 'self') {
-          this.$router.push({path: `/release/detail/${resource.resourceId}`})
-        }
-      },
       initView() {
-        switch (this.type) {
-          case 'favor':
-            this.loader = this.getFavorReleasesLoader()
+        switch(this.type) {
+          case 'myReleases': {
+            this.paginationConfig.target = '/v1/releases'
             break
-          case 'self':
-            this.loader = this.getSelfReleasesLoader()
+          }
+          case 'myCollections': {
+            this.paginationConfig.target = '/v1/releases'
+            // this.paginationConfig.target = '/v1/collections/releases'
             break
-          case 'all':
-          default:
-            break
+          }
+          default: {}
         }
       },
-      fetchData(page) {
-        const pageSize = 10
-
-        if (!this.loader) {
-          return Promise.resolve({
-            canLoadMore: false,
-            dataList: []
-          })
+      formatHandler(list) {
+        if (!list || !list.length) {
+          return []
         }
-        return this.loader({page}).then((data) => {
-          // this.releases = this.releases.concat(data.dataList)
-
-          if (data.dataList.length < pageSize) {
-            data.canLoadMore = false
-          } else {
-            data.canLoadMore = true
-          }
-          data.dataList.sort((r1,r2) => +new Date(r2.updateDate) - (+new Date(r1.updateDate)))
-          return data
-        })
-      },
-      getSelfReleasesLoader() {
-        return this.createReleaseLoader(param => this.$services.ReleaseService.get(param || {}).then(res => res.getData()))
-      },
-      getFavorReleasesLoader() {
-        return this.createReleaseLoader(param => {
-          return this.$services.collections.get(param || {}).then(res => res.getData()).then(data=>{
-            if (data && data.dataList) {
-              data.dataList.forEach(resource=>{
-                resource.isFavor = true
-              })
-            }
-            return data
-          })
-        })
-      },
-      createReleaseLoader(loader) {
-        return (param) => {
-          param = param || {
-            pageSize: 10,
-            page: 1,
-          }
-          if (typeof param === 'object') {
-            param = {
-              params: Object.assign({
-                pageSize: 10,
-                page: 1,
-                isSelf: 1
-              }, param)
+        list = list.map(release => {
+          const { releaseId, policies, previewImages, latestVersion } = release
+          let isOnline = false
+          for(let i = 0; i < policies.length; i++) {
+            if(policies[i].status === 1) {
+              isOnline = true
+              break
             }
           }
-          return loader(param)
-        }
-      },
-      delFavorResourceHandler(release) {
-        return this.$services.collections.delete(release.releaseId).then((res) => {
-          if (res.data.errcode === 0) {
-            this.$message.success(this.$t('resourceDetailView.deleteFavorSuccessText'))
-            release.isFavor = false
-          } else {
-            this.$error.showErrorMessage(res)
-          }
+          release.isOnline = isOnline
+          release._toDetailLink = release.releaseId ? `/release/detail/${releaseId}?version=${latestVersion.version}` : ''
+          release._toMangeDetailLink = `/release/edit/${releaseId}`
+          release.previewImage = previewImages && previewImages[0] || ''
+          return release
         })
+
+        return list
       },
-      // getAllResourcesLoader(param) {
-      //   param = {
-      //     pageSize: 1e2
-      //   }
-      //   if (typeof param === 'object') {
-      //     param = {
-      //       params: param
-      //     }
-      //   }
-      //   return this.$services.resource.get(param || {}).then(res => res.getData())
-      // }
+      cancelCollection(release) {
+        this.$services.collections.delete(release.releaseId)
+          .then(res => res.data)
+          .then(res => {
+            if(res.errcode === 0) {
+              this.$message({ type: 'success', message: '取消成功！' })
+              this.paginationConfig.reloadCount = this.paginationConfig.reloadCount + 1
+            }
+          })
+      }
     }
   }
 </script>
 
 <style lang="less" scoped>
-  .resource-items {
-    .empty-resource-tip {
-      font-size: 20px;
-      color: #999;
-    }
-
-    .del-favor-resource-btn {
-      float: right;
-      margin-top: 8px;
-      margin-right: 10px;
-    }
-
-    .my-res-item {
-      border-bottom: 1px solid #E9E9E9;
-      /*padding-bottom: 10px;*/
-    }
-  }
+  @import "./list.less";
 </style>

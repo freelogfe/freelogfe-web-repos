@@ -64,28 +64,7 @@
             width="640px"
             :visible.sync="resourceDialogVisible"
     >
-      <el-input
-              class="r-e-w-search-input"
-              v-model="searchInput"
-              clearable
-              ref="searchInputRef"
-              @clear="clearSearchInputHandler"
-              @keyup.native.enter="searchHandler"
-              :placeholder="$t('search.resourcePlaceholder')"
-      ></el-input>
-      <lazy-list-view :list="searchResources"
-                      ref="searchView"
-                      class="r-e-w-s-resource-list"
-                      :height="60" :fetch="searchDataHandler">
-        <template slot-scope="scope">
-          <div class="r-e-w-s-r-item">
-            <span class="r-e-w-s-r-name">{{scope.data.aliasName}}</span>
-            <span class="r-e-w-s-r-type">{{scope.data.resourceType}}</span>
-            <span class="r-e-w-s-r-date">{{scope.data.createDate | fmtDate}}</span>
-            <span class="r-e-w-s-r-select-btn" @click="addNewVersion(scope.data)">选择</span>
-          </div>
-        </template>
-      </lazy-list-view>
+      <resource-search @select-resource="addNewVersion"></resource-search>
     </el-dialog>
   </div>
 </template>
@@ -179,22 +158,6 @@
           background-color: #F5F5F5; color: #1287ff;
         }
         &.disabled { opacity: .7; cursor: not-allowed; pointer-events: none; }
-      }
-    }
-
-
-    .r-e-w-search-dialog {
-
-      .r-e-w-search-input { margin-bottom: 20px; }
-
-      .r-e-w-s-r-item { margin: 15px 0; }
-      span { display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-      .r-e-w-s-r-name { width: 220px; color: #333; }
-      .r-e-w-s-r-type, .r-e-w-s-r-date { width: 90px; font-size: 12px; color: #999; }
-      .r-e-w-s-r-select-btn {
-        float: right; cursor: pointer;
-        padding: 2px 10px; border-radius: 13px;
-        font-size: 12px; background-color: #409EFF; color: #fff;
       }
     }
   }

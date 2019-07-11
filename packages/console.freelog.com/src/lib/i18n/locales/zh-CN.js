@@ -79,7 +79,7 @@ export default {
     },
 
     release: {
-        myReleases: '我的发行库',
+        myReleases: '我的发行',
     },
 
     node: {
@@ -221,6 +221,7 @@ export default {
         updateResource: '更新资源',
         myResources: '我的资源',
         myReleases: '我的发行',
+        myCollections: '我的收藏',
         resourceDetail: '资源详情',
         createResourcePolicyTpl: '创建资源策略模板',
         resourcePolicyTplDetail: '资源策略模板详情',

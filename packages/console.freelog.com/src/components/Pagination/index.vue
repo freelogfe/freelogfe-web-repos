@@ -10,15 +10,16 @@
     <slot name="empty" v-if="tableProps.data.length === 0"></slot>
     <div class="fl-pg-ft clearfix" v-if="showFooter">
       <slot name="footer"></slot>
-      <div class="fl-pg-info">
-        <el-button style="margin-right: 10px" type="text" v-if="hasPrev" @click="gotoFirstPageHandler">&lt;&lt; {{$t('components.pagination.first')}}
-        </el-button>
-        <el-button type="text" v-if="hasPrev" @click="loadPrevHandler">&lt; {{$t('components.pagination.previous')}}</el-button>
-        <span class="fl-pg-num">
-          <span v-if="to>0 && to > from">{{$t('components.pagination.fromto', {from, to})}}</span>{{$t('components.pagination.total', {total})}}</span>
-        <el-button style="margin-right: 10px" type="text" v-if="hasNext" @click="loadNextHandler">{{$t('components.pagination.next')}} &gt;</el-button>
-        <el-button type="text" v-if="hasNext" @click="gotoLastPageHandler">{{$t('components.pagination.last')}} &gt;&gt;</el-button>
-      </div>
+      <el-pagination
+        class="fl-pg-info"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 50]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -29,18 +30,6 @@
 
   export default {
     name: 'fl-pagination',
-    data() {
-      return {
-        total: 8,
-        tableProps: {
-          data: []
-        },
-        currentPage: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_current_page`)) || 1,
-        pageSize: 10,
-        loading: false
-      }
-    },
-
     props: {
       pagination: {
         type: Object,
@@ -56,14 +45,23 @@
         default: () => {
         }
       },
-
       formatHandler: Function,
       showFooter: {
         type: Boolean,
         'default': true
       }
     },
-
+    data() {
+      return {
+        total: 8,
+        tableProps: {
+          data: []
+        },
+        currentPage: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_current_page`)) || 1,
+        pageSize: 10,
+        loading: false
+      }
+    },
     watch: {
       pagination: {
         deep: true,
@@ -72,13 +70,8 @@
         }
       }
     },
-
-    mounted() {
-      Object.assign(this.tableProps, this.config)
-      this.pageSize = this.pagination.pageSize || 10
-      this.load()
-    },
     methods: {
+      
       loadData() {
         if (!this.pagination.target) {
           throw new Error('need pagination target param')
@@ -137,38 +130,19 @@
             this.loading = false
           })
       },
-      loadNextHandler() {
-        this.currentPage += 1
+      handleSizeChange(val) {
+        this.pageSize = val
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
         this.load()
       },
-      loadPrevHandler() {
-        this.currentPage -= 1
-        this.load()
-      },
-      gotoLastPageHandler() {
-        this.currentPage = Math.ceil(this.total / this.pageSize)
-        this.load()
-      },
-      gotoFirstPageHandler() {
-        this.currentPage = 1
-        this.load()
-      }
     },
-
-    computed: {
-      hasNext() {
-        return (this.currentPage * this.pageSize < this.total)
-      },
-      hasPrev() {
-        return this.currentPage > 1
-      },
-      from() {
-        return ((this.currentPage - 1) * this.pageSize) + 1
-      },
-      to() {
-        return (this.from + this.tableProps.data.length) - 1
-      }
-    }
+    mounted() {
+      Object.assign(this.tableProps, this.config)
+      this.pageSize = this.pagination.pageSize || 10
+      this.load()
+    },
   }
 </script>
 
