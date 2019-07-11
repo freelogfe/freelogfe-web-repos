@@ -119,10 +119,23 @@
                     <!--                        <span style="line-height: 40px;">策略</span>-->
                     <!--                    </template>-->
                     <template slot-scope="scope">
-                        <div>
-                            <div style="color: #409eff; font-size: 14px;">收费策略1</div>
-                            <div style="font-size: 12px;">等3个策略…</div>
-                        </div>
+                        <el-popover
+                            placement="top-start"
+                            title="标题"
+                            width="400"
+                            trigger="hover"
+                            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+                            <el-tabs>
+                                <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+                                <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+                                <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+                                <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+                            </el-tabs>
+                            <div slot="reference">
+                                <div style="color: #409eff; font-size: 14px;">收费策略1</div>
+                                <div style="font-size: 12px;">等3个策略…</div>
+                            </div>
+                        </el-popover>
                     </template>
                 </el-table-column>
                 <el-table-column
