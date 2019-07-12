@@ -47,7 +47,7 @@ export default {
     redirect: '/',
     children: [
         {
-            path: 'manager',
+            path: 'manager/:nodeId',
             hidden: true,
             meta: {
                 hideSidebar: true,
