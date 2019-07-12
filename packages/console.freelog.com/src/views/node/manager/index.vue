@@ -37,8 +37,8 @@
 
                 <el-input
                     style="width: 400px;"
-                    placeholder="请选择日期"
                     v-model="filterSearch"
+                    debounce="1000"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                     <i slot="suffix" class="el-input__icon el-icon-circle-close"></i>
@@ -98,10 +98,15 @@
                     <template slot="header" slot-scope="scope">
                         <el-dropdown style="height: 32px">
                             <div>
-                                全部类型 <i class="el-icon-caret-bottom"></i>
+                                {{selectedType}} <i class="el-icon-caret-bottom"></i>
                             </div>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="item in allTypes">{{item}}</el-dropdown-item>
+                                <el-dropdown-item v-for="item in allTypes">
+                                    <a
+                                        @click="onChangeType(item)"
+                                        style="display: block; width: 100%; height: 100%;"
+                                    >{{item}}</a>
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
@@ -181,10 +186,15 @@
                     <template slot="header" slot-scope="scope">
                         <el-dropdown style="height: 32px">
                             <div>
-                                全部类型 <i class="el-icon-caret-bottom"></i>
+                                {{selectedState}} <i class="el-icon-caret-bottom"></i>
                             </div>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-for="item in allState">{{item}}</el-dropdown-item>
+                                <el-dropdown-item v-for="item in allState">
+                                    <a
+                                        @click="onChangeState(item)"
+                                        style="display: block; width: 100%; height: 100%;"
+                                    >{{item}}</a>
+                                </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
@@ -246,11 +256,13 @@
                 <!--                @current-change="onCurrentPageChange"-->
                 <!--                @size-change="onPageSizeChange"-->
                 <el-pagination
-                    :current-page="1"
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    @current-change="onChangeCurrentPage"
+                    @size-change="onChangePageSize"
                     :page-sizes="[10, 20, 30, 40, 50]"
-                    :page-size="20"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="1000"
+                    :total="totalQuantity"
                 >
                 </el-pagination>
             </div>
