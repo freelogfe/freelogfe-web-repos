@@ -130,9 +130,14 @@
                                 <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
                                 <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
                             </el-tabs>
-                            <div slot="reference">
-                                <div style="color: #409eff; font-size: 14px;">收费策略1</div>
-                                <div style="font-size: 12px;">等3个策略…</div>
+                            <div style="display: flex; align-items: center;" class="" slot="reference">
+                                <div style="padding-right: 10px;">
+                                    <div style="color: #409eff; font-size: 14px;">收费策略1</div>
+                                    <div style="font-size: 12px;">等3个策略…</div>
+                                </div>
+                                <a style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; display: flex; align-items: center; justify-content: center;">
+                                    <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
+                                </a>
                             </div>
                         </el-popover>
                     </template>
