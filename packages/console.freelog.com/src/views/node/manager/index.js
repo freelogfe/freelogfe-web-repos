@@ -172,6 +172,13 @@ export default {
                 this.handleTableData();
             }, 300);
 
-        }
+        },
+        pageSize() {
+            this.currentPage = 1;
+            this.handleTableData();
+        },
+        currentPage(){
+            this.handleTableData();
+        },
     },
 }
