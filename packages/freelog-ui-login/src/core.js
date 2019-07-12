@@ -1,13 +1,15 @@
-import { LAST_CHECKED_USER_INFO, COOKIE_AUTH_INFO, USER_SESSION, LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
+import { MESSAGE_TO_NEW_USER, COOKIE_AUTH_INFO, USER_SESSION, LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
 import { getItemFromStorage, setItemForStorage } from './utils'
 
 import Toast from './components/toast/toast'
 
+var lastCheckedUserInfo = null
 var axiosInstance = null
 var router = null
 export default function initCode(options) {
 	axiosInstance = options.axiosInstance || options.Vue.axios
 	router = options.router
+	lastCheckedUserInfo = getAuthInfoByCookie()
 }
 
 function goToPath(path) {
@@ -104,7 +106,7 @@ export function getUserInfo() {
 		userSession = null
 	}
 
-	if(userSession !== null) {
+	if(userSession !== null && authInfo.userId === userSession.userId) {
 		return Promise.resolve(userSession)
 	}else {
 		let promise
@@ -147,15 +149,14 @@ export function runAuthenticationHandler() {
 					//  去登录
 					goToLoginPage()
 				} else {		
-					const lastCheckedUserInfo = getItemFromStorage(LAST_CHECKED_USER_INFO)
-					console.log('已登录', lastCheckedUserInfo)
+					console.log('已登录 last -', lastCheckedUserInfo.userId, 'auth -', authInfo.userId, 'userInfo -', userInfo.userId)
 				
 					// 如果两者用户ID不同，则说明已经切换用户：新用户
-					if(lastCheckedUserInfo && authInfo.userId !== userInfo.userId && userInfo.userId !== lastCheckedUserInfo.userId) {
-						setItemForStorage(LAST_CHECKED_USER_INFO, userInfo)		
+					if(lastCheckedUserInfo && userInfo.userId !== lastCheckedUserInfo.userId) {
+						lastCheckedUserInfo = userInfo
 						// 跳首页
 						Toast({
-							msg: '您已切换用户，即将跳转至首页！',
+							msg: MESSAGE_TO_NEW_USER,
 							afterCountDown() {
 								goToHomePage()
 							}

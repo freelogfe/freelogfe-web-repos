@@ -8,13 +8,15 @@
       <template slot="list">
         <el-table-column label="发行名称">
           <template slot-scope="scope">
-            <div class="r-l-item-name-box">
-              <img 
-                class="r-l-item__img" 
-                :class="{'resource-default-preview':!previewImage}" 
-                :src="scope.row.previewImage" />
-              <div class="r-l-item-name" :title="scope.row.releaseName">{{scope.row.releaseName}}</div>
-            </div>
+            <router-link :to="scope.row._toDetailLink">
+              <div class="r-l-item-name-box">
+                <img 
+                  class="r-l-item__img" 
+                  :class="{'resource-default-preview':!previewImage}" 
+                  :src="scope.row.previewImage" />
+                <div class="r-l-item-name" :title="scope.row.releaseName">{{scope.row.releaseName}}</div>
+              </div>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="发行类型" width="140">
@@ -46,13 +48,13 @@
             <div class="r-l-item-no-policy" v-else>暂无策略</div> 
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" sortable label="更新时间" width="180" v-if="type ==='myReleases' ">
+        <el-table-column prop="updateDate" label="更新时间" width="180" v-if="type ==='myReleases' ">
           <template slot-scope="scope">
             <div class="r-l-item-date-row1">{{scope.row.updateDate | fmtDate}}</div>
             <div class="r-l-item-date-row2">加入时间 {{scope.row.createDate | fmtDate }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="collectionDate" sortable label="收藏时间" width="180" v-else>
+        <el-table-column prop="collectionDate" label="收藏时间" width="180" v-else>
           <template slot-scope="scope">
             <div class="r-l-item-date-row1">{{scope.row.collectionDate | fmtDate}}</div>
             <div class="r-l-item-date-row2">更新时间 {{scope.row.updateDate | fmtDate }}</div>
@@ -79,10 +81,10 @@
               class="r-l-item-cancel-favor-btn" 
               type="danger" 
               size="mini" 
-              @click="cancelCollection">取消收藏</el-button>
-            <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
+              @click="cancelCollection(scope.row)">取消收藏</el-button>
+            <!-- <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
               <el-button class="r-l-item-detail-btn" size="mini">详情</el-button>
-            </router-link>
+            </router-link> -->
           </template>
         </el-table-column>
       </template>
