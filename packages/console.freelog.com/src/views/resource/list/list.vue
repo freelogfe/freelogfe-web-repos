@@ -8,13 +8,15 @@
       <template slot="list">
         <el-table-column label="资源名称">
           <template slot-scope="scope">
-            <div class="r-l-item-name-box">
-              <img 
-                class="r-l-item__img" 
-                :class="{'resource-default-preview':!previewImage}" 
-                :src="scope.row.previewImage" />
-              <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
-            </div>
+            <router-link :to="scope.row._toDetailLink">
+              <div class="r-l-item-name-box">
+                <img 
+                  class="r-l-item__img" 
+                  :class="{'resource-default-preview':!previewImage}" 
+                  :src="scope.row.previewImage" />
+                <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
+              </div>
+            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="资源类型" width="140">
@@ -32,11 +34,11 @@
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="发行状态" width="200">
+        <el-table-column label="历史发行" width="200">
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
               {{scope.row.releaseStatus === 'fetching' ? 
-              '状态查询中...' : scope.row.releaseList.length ? '' : '暂无发行'}}
+              '查询中...' : scope.row.releaseList.length ? '' : '暂无发行'}}
             </div>
             <div style="position: relative;" v-if="scope.row.releaseList.length">
               <div class="r-l-item-release-row1">{{scope.row.releaseList[0].releaseName}}</div>
@@ -55,7 +57,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" sortable label="更新时间" width="180">
+        <el-table-column prop="updateDate" label="更新时间" width="180">
           <template slot-scope="scope">
             <div class="r-l-item-updateDate">{{scope.row.updateDate | fmtDate}}</div>
             <div class="r-l-item-createDate">加入时间 {{scope.row.createDate | fmtDate }}</div>
@@ -65,7 +67,7 @@
           <template slot-scope="scope">
             <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">发行</el-button>
             <router-link :to="scope.row._toDetailLink">
-              <el-button class="r-l-item-detail-btn" size="mini">详情</el-button>
+              <el-button class="r-l-item-detail-btn" size="mini">编辑</el-button>
             </router-link>
             <a :href="scope.row._downloadLink">
               <el-button class="r-l-item-download-btn" size="mini">下载源文件</el-button>
@@ -152,15 +154,13 @@
           resource.previewImage = previewImages && previewImages[0] || ''
           resource.releaseStatus = 'fetching'
           resource.releaseList = []
+          this.fetchReleaseList(resourceId) 
+            .then(() => {
+              resource.releaseStatus = 'done'
+              resource.releaseList = this.resourceMapReleases[resource.resourceId]
+            })
           return resource
         })
-        this.batchFetchReleaseList(list)
-          .then(() => {
-  list.forEach(resource => {
-                resource.releaseStatus = 'done'
-                resource.releaseList = this.resourceMapReleases[resource.resourceId]
-              })
-          })
 
         return list
       },
