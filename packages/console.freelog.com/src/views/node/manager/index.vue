@@ -56,34 +56,38 @@
                     label="发行"
                     width="180"
                 >
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                        <span style="line-height: 40px;">发行</span>-->
-                    <!--                    </template>-->
                     <template slot-scope="scope">
                         <div style="display: flex; align-items: center;">
-                            <img
-                                style="width: 40px; height: 30px;"
-                                src="//static.testfreelog.com/console/public/img/resource.jpg"
-                            />
-                            <div style="padding-left: 10px;">
-                                <div style="color: #000; font-size: 14px; font-weight: 600; line-height: 20px;">数据库应用
+                            <div
+                                style="width: 40px; height: 30px; flex-shrink: 0;"
+                                class="resource-default-preview"
+                            >
+                                <img
+                                    style="width: 100%; height: 100%;"
+                                    v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
+                                    :src="scope.row.releaseInfo.previewImages[0]"
+                                />
+                            </div>
+                            <div style="padding-left: 10px; overflow: hidden; flex-shrink: 1;">
+                                <div class="text-overflow-ellipsis"
+                                     style="color: #000; font-size: 14px; font-weight: 600; line-height: 20px; width: 100%;">
+                                    {{scope.row.releaseInfo.releaseName}}
                                 </div>
-                                <div style="line-height: 17px; color: #999; font-size: 12px;">v1.0.1</div>
+                                <div style="line-height: 17px; color: #999; font-size: 12px;">
+                                    {{scope.row.releaseInfo.version}}
+                                </div>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="title"
+                    prop="presentableName"
                     label="发行标题"
                     width="180"
                 >
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                        <span style="line-height: 40px;">发行标题</span>-->
-                    <!--                    </template>-->
                     <template slot-scope="scope">
-                        <div style="color: #000; font-size: 14px;">
-                            发行标题xxx
+                        <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
+                            {{scope.row.presentableName}}
                         </div>
                     </template>
                 </el-table-column>
@@ -97,45 +101,56 @@
                                 全部类型 <i class="el-icon-caret-bottom"></i>
                             </div>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item>黄金糕</el-dropdown-item>
-                                <el-dropdown-item>狮子头</el-dropdown-item>
-                                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                                <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                                <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                                <el-dropdown-item v-for="item in allTypes">{{item}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
                     <template slot-scope="scope">
                         <div style="color: #000; font-size: 14px;">
-                            image
+                            {{scope.row.releaseInfo.resourceType}}
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="policy"
+                    prop="policies"
                     label="策略"
                 >
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                        <span style="line-height: 40px;">策略</span>-->
-                    <!--                    </template>-->
                     <template slot-scope="scope">
                         <el-popover
-                            placement="top-start"
+                            placement="bottom-start"
                             width="400"
                             trigger="hover"
-                            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+                            :disabled="scope.row.policies.length === 0"
+                        >
                             <el-tabs>
-                                <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-                                <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-                                <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-                                <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+                                <el-tab-pane
+                                    v-for="item in scope.row.policies"
+                                    :label="item.policyName"
+                                    v-html="spaceReplaceNbsp(item.policyText)"
+                                ></el-tab-pane>
+                                <!--                                <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>-->
+                                <!--                                <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>-->
+                                <!--                                <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>-->
                             </el-tabs>
-                            <div style="display: flex; align-items: center;" class="" slot="reference">
-                                <div style="padding-right: 10px;">
-                                    <div style="color: #409eff; font-size: 14px;">收费策略1</div>
-                                    <div style="font-size: 12px;">等3个策略…</div>
+                            <div
+                                style="display: flex; align-items: center;"
+                                class="table-policies"
+                                slot="reference"
+                            >
+                                <div
+                                    style="padding-right: 10px; text-align: left;"
+                                >
+                                    <div v-if="scope.row.policies.length > 0" style="color: #409eff; font-size: 14px;">
+                                        {{scope.row.policies[0].policyName}}
+                                    </div>
+                                    <div v-if="scope.row.policies.length === 0" style="color: #999; font-size: 14px;">
+                                        暂无策略
+                                    </div>
+                                    <div v-if="scope.row.policies.length > 1" style="font-size: 12px;">
+                                        等{{scope.row.policies.length}}个策略…
+                                    </div>
                                 </div>
-                                <a style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; display: flex; align-items: center; justify-content: center;">
+                                <a style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; justify-content: center; cursor: pointer;">
                                     <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
                                 </a>
                             </div>
@@ -151,8 +166,11 @@
                     <!--                    </template>-->
                     <template slot-scope="scope">
                         <div>
-                            <div style="font-size: 14px; color: #000;">2019.04.14</div>
-                            <div style="color: #bfbfbf; font-size: 12px;">加入时间 2019.04.14</div>
+                            <div style="font-size: 14px; color: #000;">{{dateStringToFormat(scope.row.updateDate)}}
+                            </div>
+                            <div style="color: #bfbfbf; font-size: 12px;">加入时间
+                                {{dateStringToFormat(scope.row.createDate)}}
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -166,28 +184,26 @@
                                 全部类型 <i class="el-icon-caret-bottom"></i>
                             </div>
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item>黄金糕</el-dropdown-item>
-                                <el-dropdown-item>狮子头</el-dropdown-item>
-                                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                                <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                                <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                                <el-dropdown-item v-for="item in allState">{{item}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </template>
 
                     <template slot-scope="scope">
-                        <div style="font-size: 14px; color: #000;">
-                            已上线
+                        <div style="font-size: 14px; display: flex; align-items: center;">
+                            <span v-if="scope.row.isOnline === 1" style="color: #000;">已上线</span>
+                            <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">未上线</span>
+                            <i v-if="!scope.row.isAuth" class="el-icon-warning"
+                               style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                            ></i>
                         </div>
+
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="operation"
                     label="操作"
                 >
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                        <div style="line-height: 40px;">操作</div>-->
-                    <!--                    </template>-->
 
                     <template slot-scope="scope">
                         <el-dropdown>
@@ -250,12 +266,13 @@
 
 <style lang="less">
     .node-manager {
-        /*.noborder-select {*/
-        /*    .el-input__inner {*/
-        /*        border: none;*/
-        /*    }*/
 
-        /*}*/
+        .text-overflow-ellipsis {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
 
         .el-table--border td:first-child .cell, .el-table--border th:first-child .cell, .el-table .cell, .el-table th div {
             padding-left: 0;
@@ -263,6 +280,19 @@
 
         .cell {
             color: #666;
+        }
+
+        .table-policies {
+            & > a {
+                display: none;
+            }
+
+            &:hover {
+                & > a {
+                    display: flex;
+                }
+            }
+
         }
     }
 

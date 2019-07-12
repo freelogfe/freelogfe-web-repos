@@ -31,17 +31,63 @@ export default {
         /**
          * 处理表格数据
          */
-        handleTableData() {
-            this.tableData = [
-                {
-                    title: '发行标题xxx',
-                    type: 'image',
-                    policy: '',
-                    updateTime: '2019.04.14',
-                    state: '已上线',
-                }
-            ];
+        async handleTableData() {
 
+            const params = {
+                nodeId: this.$route.params.nodeId,
+                page: 1,
+                pageSize: 10,
+                resourceType: undefined,
+                isOnline: 2,
+                keywords: this.filterSearch || undefined,
+            };
+
+            const res = await this.$axios.get(`/v1/presentables`, {
+                params,
+            });
+            // console.log(res.data.data.dataList, 'resresres');
+            this.tableData = res.data.data.dataList.map(i => ({
+                presentableId: i.presentableId,
+                presentableName: i.presentableName,
+                releaseInfo: i.releaseInfo,
+                policies: i.policies,
+                updateDate: i.updateDate,
+                createDate: i.createDate,
+                isOnline: i.isOnline,
+                isAuth: true,
+            }));
+
+            const params1 = {
+                presentableIds: this.tableData.map(i => (i.presentableId)).join(','),
+            };
+            const res1 = await this.$axios.get('/v1/auths/presentables/batchNodeAndReleaseSideAuth', {
+                params: params1,
+            });
+
+            // const authResult = res1.data.data.authResult.isAuth;
+
+            // console.log(res1, 'res1res1res1');
+
+            for (let i = 0; i < this.tableData.length; i++) {
+                this.tableData[i].isAuth = res1.data.data[i].authResult.isAuth;
+            }
         },
+
+        /**
+         * 格式化策略
+         * @param str
+         */
+        spaceReplaceNbsp(str) {
+            return str.replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+        },
+        /**
+         * 将 Date 字符串转换为标准格式
+         */
+        dateStringToFormat(dataStr) {
+            // console.log(dataStr, 'dataStrdataStrdataStr');
+            const data = new Date(dataStr);
+            // console.log(data.getFullYear(), data.getMonth(), data.getDate(), '@!%@#$!@#$@#$');
+            return [data.getFullYear(), data.getMonth() + 1, data.getDate()].join('.');
+        }
     }
 }
