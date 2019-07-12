@@ -10,7 +10,13 @@
                     style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
                     href="//photos.freelog.com"
                 >{{nodeInfo.origin}}</a>
-                <el-button style="padding: 3px 6px;" type="primary" plain size="mini">copy</el-button>
+                <clipboard
+                    :value="nodeInfo.origin"
+                    style="display: inline-block;"
+                    @copyDone="$message.success('复制成功')"
+                >
+                    <el-button style="padding: 3px 6px;" type="primary" plain size="mini">copy</el-button>
+                </clipboard>
             </div>
 
             <div style="height: 79px;"></div>

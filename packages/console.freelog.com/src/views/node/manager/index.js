@@ -1,7 +1,12 @@
+import clipboard from '@/components/clipboard/index.vue';
+
 let searchInputDelay = null;
 
 export default {
     name: "index",
+    components: {
+        clipboard,
+    },
     data() {
         return {
             // 根 div 样式对象
