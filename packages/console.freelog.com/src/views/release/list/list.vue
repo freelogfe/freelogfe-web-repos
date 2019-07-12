@@ -18,6 +18,16 @@
           </template>
         </el-table-column>
         <el-table-column label="发行类型" width="140">
+          <template slot="header" slot-scope="scope">
+            <el-select class="r-l-types-select" v-model="selectedType" placeholder="类型" size="mini">
+              <el-option
+                v-for="item in resourceTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
           <template slot-scope="scope">
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
           </template>
@@ -36,10 +46,16 @@
             <div class="r-l-item-no-policy" v-else>暂无策略</div> 
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" sortable label="更新时间" width="180">
+        <el-table-column prop="updateDate" sortable label="更新时间" width="180" v-if="type ==='myReleases' ">
           <template slot-scope="scope">
-            <div class="r-l-item-updateDate">{{scope.row.updateDate | fmtDate}}</div>
-            <div class="r-l-item-createDate">加入时间 {{scope.row.createDate | fmtDate }}</div>
+            <div class="r-l-item-date-row1">{{scope.row.updateDate | fmtDate}}</div>
+            <div class="r-l-item-date-row2">加入时间 {{scope.row.createDate | fmtDate }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="collectionDate" sortable label="收藏时间" width="180" v-else>
+          <template slot-scope="scope">
+            <div class="r-l-item-date-row1">{{scope.row.collectionDate | fmtDate}}</div>
+            <div class="r-l-item-date-row2">更新时间 {{scope.row.updateDate | fmtDate }}</div>
           </template>
         </el-table-column>
         <el-table-column label="全部状态" width="130">
@@ -47,7 +63,7 @@
               <div class="r-l-item-online" v-if="scope.row.isOnline">已上线</div>
               <div class="r-l-item-offline" v-else>
                 未上线 
-                <el-tooltip  content="Bottom center" placement="top" effect="light">
+                <el-tooltip :content="scope.row.policies.length > 0 ? '策略已下架' : '暂无策略' " placement="top">
                   <i class="el-icon-warning"></i>
                 </el-tooltip>
               </div>
@@ -76,6 +92,7 @@
 
 <script>
   import FPagination from '@/components/Pagination/index.vue'
+  import { RESOURCE_TYPES } from '@/config/resource'
 
   export default {
     name: 'release-items-list',
@@ -103,13 +120,32 @@
           reloadCount: 0,
           target: '/v1/releases',
           params: {
-            isSelf: 1
+            isSelf: 1,
+            resourceType: undefined
           }
         },
+        selectedType: 'all'
+      }
+    },
+
+    computed: {
+      resourceTypes() {
+        const arr = [{ label: '全部类型', value: 'all' }]
+        for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
+          arr.push({ label, value })
+        }
+        return arr
       }
     },
 
     watch: {
+      selectedType() {
+        if(this.selectedType === 'all') {
+          this.paginationConfig.params.resourceType = undefined
+        }else {
+          this.paginationConfig.params.resourceType = this.selectedType
+        }
+      },
       query() {
         this.initView()
       }
@@ -126,8 +162,7 @@
             break
           }
           case 'myCollections': {
-            this.paginationConfig.target = '/v1/releases'
-            // this.paginationConfig.target = '/v1/collections/releases'
+            this.paginationConfig.target = '/v1/collections/releases'
             break
           }
           default: {}
@@ -138,7 +173,7 @@
           return []
         }
         list = list.map(release => {
-          const { releaseId, policies, previewImages, latestVersion } = release
+          const { releaseId, policies = [], previewImages, latestVersion } = release
           let isOnline = false
           for(let i = 0; i < policies.length; i++) {
             if(policies[i].status === 1) {
@@ -146,10 +181,15 @@
               break
             }
           }
+          release.policies = policies
           release.isOnline = isOnline
           release._toDetailLink = release.releaseId ? `/release/detail/${releaseId}?version=${latestVersion.version}` : ''
           release._toMangeDetailLink = `/release/edit/${releaseId}`
           release.previewImage = previewImages && previewImages[0] || ''
+          if(this.type === 'myCollections') {
+            release.updateDate = release.releaseUpdateDate
+            release.createDate = release.latestVersion.createDate
+          }
           return release
         })
 
@@ -172,3 +212,17 @@
 <style lang="less" scoped>
   @import "./list.less";
 </style>
+
+<style lang="less">
+.release-list-table {
+  .r-l-types-select {
+    display: block; width: 120px; padding: 0;
+    .el-input { line-height: 28px; padding: 0; }
+    .el-input__inner { 
+      padding-left: 0; padding-right: 22px; border: none; 
+      font-size: 14px;
+    }
+  }
+}
+</style>
+

@@ -18,6 +18,16 @@
           </template>
         </el-table-column>
         <el-table-column label="资源类型" width="140">
+          <template slot="header" slot-scope="scope">
+            <el-select class="r-l-types-select" v-model="selectedType" placeholder="类型" size="mini">
+              <el-option
+                v-for="item in resourceTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
           <template slot-scope="scope">
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
           </template>
@@ -31,7 +41,7 @@
             <div style="position: relative;" v-if="scope.row.releaseList.length">
               <div class="r-l-item-release-row1">{{scope.row.releaseList[0].releaseName}}</div>
               <template  v-if="scope.row.releaseList.length > 1">
-                <el-popover placement="bottom" width="370" trigger="click">
+                <el-popover placement="bottom-start" width="370" trigger="hover">
                   <div class="r-l-item-release-floatbox">
                     <div class="release-item" v-for="(r, index) in scope.row.releaseList" :key="'r'+index">
                       <span class="name" @click="goToReleaseDetail(r)">{{r.releaseName}}</span>
@@ -42,7 +52,6 @@
                 <div class="r-l-item-release-row2" slot="reference">等{{scope.row.releaseList.length}}个发行...</div>
                 </el-popover>
               </template>
-              
             </div>
           </template>
         </el-table-column>
@@ -70,11 +79,16 @@
 
 <script>
   import FPagination from '@/components/Pagination/index.vue'
+  import { RESOURCE_TYPES } from '@/config/resource'
 
   export default {
     name: 'resource-items-list',
 
     components: { FPagination },
+
+    props: {
+      query: String
+    },
 
     data() {
       return {
@@ -88,18 +102,33 @@
         paginationConfig: {
           target: `/v1/resources`,
           params: {
-            isSelf: 1
+            isSelf: 1,
+            resourceType: undefined
           }
         },
         resourceMapReleases: {},
+        selectedType: 'all'
       }
     },
 
-    props: {
-      query: String
+    computed: {
+      resourceTypes() {
+        const arr = [{ label: '全部类型', value: 'all' }]
+        for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
+          arr.push({ label, value })
+        }
+        return arr
+      }
     },
 
     watch: {
+      selectedType() {
+        if(this.selectedType === 'all') {
+          this.paginationConfig.params.resourceType = undefined
+        }else {
+          this.paginationConfig.params.resourceType = this.selectedType
+        }
+      },
       query() {
         this.initView()
       }
@@ -183,6 +212,16 @@
         }
         &.version { width: 70px; }
         &.date { width: 90px; }
+      }
+    }
+  }
+  .resource-list-table {
+    .r-l-types-select {
+      display: block; width: 120px; padding: 0;
+      .el-input { line-height: 28px; padding: 0; }
+      .el-input__inner { 
+        padding-left: 0; padding-right: 22px; border: none; 
+        font-size: 14px;
       }
     }
   }

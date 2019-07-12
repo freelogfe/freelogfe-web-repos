@@ -4,7 +4,7 @@
             ref="table"
             @row-click="rowClickHandler"
             v-bind="tableProps"
-            style="width: 100%" v-show="tableProps.data.length">
+            style="width: 100%">
       <slot name="list"></slot>
     </el-table>
     <slot name="empty" v-if="tableProps.data.length === 0"></slot>
