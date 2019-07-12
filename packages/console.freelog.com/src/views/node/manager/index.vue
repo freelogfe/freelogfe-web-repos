@@ -3,21 +3,35 @@
 
         <div :style="styleObject" style="width: 280px; flex-shrink: 0; background-color: #fafbfb;">
             <div style="height: 30px;"></div>
-            <div style="color: #333; font-size: 20px; font-weight: 600; padding: 0 20px;">照片节点1</div>
+            <div style="color: #333; font-size: 20px; font-weight: 600; padding: 0 20px;">{{nodeInfo.name}}</div>
             <div style="height: 10px;"></div>
             <div style="padding: 0 20px;">
                 <a
                     style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
                     href="//photos.freelog.com"
-                >photos.freelog.com</a>
+                >{{nodeInfo.origin}}</a>
                 <el-button style="padding: 3px 6px;" type="primary" plain size="mini">copy</el-button>
             </div>
 
             <div style="height: 79px;"></div>
 
-            <div style="border-top: 1px solid #ebebeb;">
-                <a style="line-height: 54px; color: #409eff; background-color: #fff; border-right: 3px solid #409eff; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点发行列表</a>
-                <a style="line-height: 54px; color: #333; background-color: transparent; border-right: none; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点页面样式</a>
+            <div style="border-top: 1px solid #ebebeb; cursor: pointer;">
+                <a
+                    @click="switchIsPageStyle(false)"
+                    :style="{
+                        backgroundColor: !isPageStyle ? '#fff':'transparent',
+                        borderRight: !isPageStyle ? '3px solid #409eff': 'none',
+                        color: !isPageStyle ? '#409eff': '#333',
+                    }"
+                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点发行列表</a>
+                <a
+                    @click="switchIsPageStyle(true)"
+                    :style="{
+                        backgroundColor: isPageStyle ? '#fff':'transparent',
+                        borderRight: isPageStyle ? '3px solid #409eff': 'none',
+                        color: isPageStyle ? '#409eff': '#333',
+                    }"
+                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点页面样式</a>
             </div>
         </div>
 
@@ -96,11 +110,13 @@
                     label="全部类型"
                 >
                     <template slot="header" slot-scope="scope">
-                        <el-dropdown style="height: 32px">
+                        <el-dropdown
+                            style="height: 32px"
+                        >
                             <div>
-                                {{selectedType}} <i class="el-icon-caret-bottom"></i>
+                                {{selectedType}} <i v-if="!isPageStyle" class="el-icon-caret-bottom"></i>
                             </div>
-                            <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-menu slot="dropdown" v-if="!isPageStyle">
                                 <el-dropdown-item v-for="item in allTypes">
                                     <a
                                         @click="onChangeType(item)"
@@ -133,9 +149,6 @@
                                     :label="item.policyName"
                                     v-html="spaceReplaceNbsp(item.policyText)"
                                 ></el-tab-pane>
-                                <!--                                <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>-->
-                                <!--                                <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>-->
-                                <!--                                <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>-->
                             </el-tabs>
                             <div
                                 style="display: flex; align-items: center;"
@@ -155,7 +168,10 @@
                                         等{{scope.row.policies.length}}个策略…
                                     </div>
                                 </div>
-                                <a style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; justify-content: center; cursor: pointer;">
+                                <a
+                                    @click="goToAddPolicyPage(scope.row.presentableId)"
+                                    style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; justify-content: center; cursor: pointer;"
+                                >
                                     <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
                                 </a>
                             </div>
@@ -166,9 +182,6 @@
                     prop="updateTime"
                     label="更新时间"
                 >
-                    <!--                    <template slot="header" slot-scope="scope">-->
-                    <!--                        <div style="line-height: 40px;">更新时间</div>-->
-                    <!--                    </template>-->
                     <template slot-scope="scope">
                         <div>
                             <div style="font-size: 14px; color: #000;">{{dateStringToFormat(scope.row.updateDate)}}
@@ -203,9 +216,19 @@
                         <div style="font-size: 14px; display: flex; align-items: center;">
                             <span v-if="scope.row.isOnline === 1" style="color: #000;">已上线</span>
                             <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">未上线</span>
-                            <i v-if="!scope.row.isAuth" class="el-icon-warning"
-                               style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                            ></i>
+                            <el-popover
+                                placement="top"
+                                width="200"
+                                trigger="hover"
+                                content="此合约链上存在异常"
+                            >
+                                <i
+                                    v-if="!scope.row.isAuth"
+                                    slot="reference"
+                                    class="el-icon-warning"
+                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                                ></i>
+                            </el-popover>
                         </div>
 
                     </template>
@@ -238,13 +261,12 @@
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <a
-                                        style="display: block; width: 100%; height: 100%; color: #44a0ff;"
-                                    >上线</a>
-                                </el-dropdown-item>
-                                <el-dropdown-item>
-                                    <a
-                                        style="color: #EE4040; display: block; width: 100%; height: 100%;"
-                                    >下线</a>
+                                        @click="onLineAndOffLine(scope.row)"
+                                        style="display: block; width: 100%; height: 100%;"
+                                    >
+                                        <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">上线</span>
+                                        <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">下线</span>
+                                    </a>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
