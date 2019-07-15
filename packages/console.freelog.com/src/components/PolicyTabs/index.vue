@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <el-tabs v-if="policies.length > 0">
             <el-tab-pane
                 v-for="item in policies"
@@ -8,11 +7,13 @@
             >
                 <div
                     style="height: 200px; overflow-y: auto;"
-                    v-html="spaceReplaceNbsp(item.policyText)"
-                ></div>
+                >
+                    <pre style="white-space: pre-wrap;">{{item.policyText}}</pre>
+                </div>
             </el-tab-pane>
         </el-tabs>
-        <div v-if="policies.length === 0" style="min-height: 200px; display: flex; align-items: center; justify-content: center;">
+        <div v-if="policies.length === 0"
+             style="min-height: 200px; display: flex; align-items: center; justify-content: center;">
             <span>暂无策略......</span>
         </div>
     </div>
@@ -40,9 +41,9 @@
              * 格式化策略
              * @param str
              */
-            spaceReplaceNbsp(str) {
-                return str.replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
-            },
+            // spaceReplaceNbsp(str) {
+            //     return str.replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+            // },
         },
     }
 </script>
