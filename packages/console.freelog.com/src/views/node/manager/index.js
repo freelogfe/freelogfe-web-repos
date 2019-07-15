@@ -4,7 +4,7 @@ import PolicyTabs from '@/components/PolicyTabs/index.vue';
 let searchInputDelay = null;
 
 export default {
-    name: "index",
+    name: 'manager',
     components: {
         clipboard,
         PolicyTabs
