@@ -7,14 +7,16 @@ const nodePreview = resolve => require.ensure([], () => resolve(require('./previ
 const presentableDetail = resolve => require.ensure([], () => resolve(require('./presentable-V4/detail/index.vue')), 'presentable')
 
 const nodeManager = resolve => require.ensure([], () => resolve(require('./manager/index.vue')), 'node');
+const nodeManagerRelease = resolve => require.ensure([], () => resolve(require('./manager-release/index.vue')), 'node');
 
 export default {
-  nodeCreator,
-  nodeList,
-  nodeDetail,
-  presentableList,
-  nodePreview,
-  presentableDetail,
+    nodeCreator,
+    nodeList,
+    nodeDetail,
+    presentableList,
+    nodePreview,
+    presentableDetail,
 
-  nodeManager,
+    nodeManager,
+    nodeManagerRelease,
 }
