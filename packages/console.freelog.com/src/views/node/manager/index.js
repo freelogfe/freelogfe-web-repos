@@ -1,4 +1,5 @@
 import clipboard from '@/components/clipboard/index.vue';
+import PolicyTabs from '@/components/PolicyTabs/index.vue';
 
 let searchInputDelay = null;
 
@@ -6,6 +7,7 @@ export default {
     name: "index",
     components: {
         clipboard,
+        PolicyTabs
     },
     data() {
         return {
