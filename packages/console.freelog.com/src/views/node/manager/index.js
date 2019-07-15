@@ -192,10 +192,19 @@ export default {
          * 上线和下线
          */
         async onLineAndOffLine(item) {
-            console.log(item, 'IYOIUHJLKJN');
+            // console.log(item, 'IYOIUHJLKJN');
+            if (item.isOnline === 0) {
+                if (!item.policies || item.policies.length === 0) {
+                    return this.$message.error('无法上线：没有可用的授权策略');
+                }
+                if (!item.isAuth) {
+                    return this.$message.error('无法上线：授权链异常');
+                }
+            }
             await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
                 onlineState: item.isOnline === 0 ? 1 : 0,
             });
+            item.isOnline === 0 ? this.$message.success('上线成功') : this.$message.success('下线成功');
             // item.isOnline = item.isOnline === 0 ? 1 : 0;
             this.handleTableData();
         },
