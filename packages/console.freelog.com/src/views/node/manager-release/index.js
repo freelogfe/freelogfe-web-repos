@@ -2,7 +2,7 @@ import ContentBlock from './ContentBlock.vue';
 import DisplayOrInput from './DisplayOrInput.vue';
 import FreelogTags from '@/components/Tags/index.vue';
 import PolicyEditor from '@/components/PolicyEditor/index.vue'
-import PolicyList from '@/components/PolicyList/list.vue'
+import PolicyList from '@/components/PolicyList/list/index.vue'
 
 export default {
     name: 'manager-release',
