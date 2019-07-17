@@ -26,7 +26,7 @@
             policies: {
                 type: Array,
                 validator: function (value) {
-                    return value.every(i => i.hasOwnProperty('hasOwnProperty') && i.hasOwnProperty('policyName'));
+                    return value.every(i => i.hasOwnProperty('policyId') && i.hasOwnProperty('policyName'));
                 },
                 default: [
                     // {
@@ -44,6 +44,9 @@
             // spaceReplaceNbsp(str) {
             //     return str.replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
             // },
+        },
+        mounted() {
+            console.log(this.policies)
         },
     }
 </script>

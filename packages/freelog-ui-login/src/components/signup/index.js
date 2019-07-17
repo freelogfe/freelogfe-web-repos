@@ -102,36 +102,6 @@ export default {
   },
 
   methods: {
-    login() {
-      const self = this
-      let redirect = this.$route.query.redirect
-      const isNewPage = /^(https?:)?\/\//.test(redirect)
-      const data = {
-        loginName: this.model.loginName,
-        password: this.model.password,
-        jwtType: 'cookie'
-      }
-
-      if (!redirect || !isSafeUrl(redirect)) {
-        redirect = '/'
-      }
-
-      self.logining = true
-
-      this.$store.dispatch('userLogin', data)
-        .then(() => {
-          window.localStorage.setItem('loginName', data.loginName)
-
-          if (isNewPage) {
-            window.location.replace(redirect)
-          } else {
-            self.$router.replace(redirect || '/')
-          }
-        })
-        .catch(() => {
-          self.logining = false
-        })
-    },
     submit(ref) {
       if (this.loading) {
         return
@@ -157,7 +127,11 @@ export default {
           .then((res) => {
             if (res.data.errcode === 0) {
               // this.$message.success(this.$t('signup.registerSuccess'))
-              this.login()
+              if(res.data.data) {
+                window.localStorage.setItem('loginName', res.data.data.loginName)
+              }
+              
+              this.$router.push(LOGIN_PATH)
             } else {
               this.$message.error(res.data.msg)
             }

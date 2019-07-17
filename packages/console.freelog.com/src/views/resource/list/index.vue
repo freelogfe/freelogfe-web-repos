@@ -9,7 +9,7 @@
       </div>
     </div>
     
-    <resource-items-list :query="selfQueryInput" @release="showReleaseDialog"></resource-items-list>
+    <resource-items-list :query="queryInput" @release="showReleaseDialog"></resource-items-list>
 
     <el-dialog width="750px"
                top="10vh"
@@ -37,9 +37,9 @@ export default {
     return {
       resourceList: [],
       RESOURCE_STATUS,
-      selfQueryInput: '',
+      queryInput: '',
       isShowReleaseSearchDialog: false,
-      targetReleaseResource: null
+      targetReleaseResource: null,
     }
   },
   components: {
@@ -52,8 +52,9 @@ export default {
 
   },
   methods: {
-    searchHandler(query) {
-      this.$message.warning('todo')
+    searchHandler(str) {
+      this.queryInput = str
+      // this.$message.warning('todo')
     },
     showReleaseDialog(resource) {
       this.isShowReleaseSearchDialog = true

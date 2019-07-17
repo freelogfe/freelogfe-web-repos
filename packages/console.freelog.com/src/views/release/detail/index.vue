@@ -2,6 +2,12 @@
   <div class="release-detail-wrapper" v-if="release" v-loading="isShowContentLoading">
     <div class="r-d-w-header clearfix">
       <div class="r-d-w-main-content">
+        <el-alert class="r-d-w-waring" type="warning" :closable="false" v-if="!isOnline">
+          <div slot="title">
+            当前发行未上线，未有可用策略！
+            <router-link :to="`/release/edit/${release.releaseId}`" v-if="isOwnRelease">前去编辑</router-link>
+          </div>
+        </el-alert>
         <div class="preview-box">
           <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
         </div>
@@ -28,8 +34,8 @@
         </div>
       </div>
     </div>
-    <div class="r-d-w-policy">
-      <div class="r-d-w-main-content clearfix" v-if="release.policies.length">
+    <div class="r-d-w-policy" v-if="release.policies.length">
+      <div class="r-d-w-main-content clearfix">
         <div class="r-d-w-p-left">
           <div class="r-d-w-p-current-releases">
             <h3>当前发行策略</h3>
@@ -37,7 +43,8 @@
               <li
                       class="release-policy-item"
                       :class="{'active': p.policyId === activePolicy.policyId}"
-                      v-for="p in release.policies"
+                      v-for="(p, index) in release.policies"
+                      :key="'p'+index"
                       @click="exchangeActivePolicy(p)">
                 <el-checkbox v-model="selectedRPolicyIdsList" :label="p.checkedLabel" size="medium">{{p.policyName}}</el-checkbox>
               </li>
@@ -46,9 +53,9 @@
           <div class="r-d-w-p-upcast-releases" v-if="baseUpcastReleasesList.length">
             <h3>上抛发行策略</h3>
             <ul>
-              <li class="r-d-w-p-u-r-item" v-for="(r, index) in baseUpcastReleasesList">
+              <li class="r-d-w-p-u-r-item" v-for="(r, index) in baseUpcastReleasesList" :key="'bur-'+index">
                 <div class="r-item-name" :class="{'selected': r.isSelectedPolicy}">{{r.releaseName}}</div>
-                <div class="release-policy-item" v-for="(p, index) in r.policies" @click="exchangeActivePolicy(p)">
+                <div class="release-policy-item" v-for="(p, index) in r.policies" :key="index" @click="exchangeActivePolicy(p)">
                   <el-checkbox v-model="selectedUpcastRPolicyIdsList" :label="p.checkedLabel" size="medium" >{{p.policyName}}</el-checkbox>
                 </div>
               </li>
@@ -69,6 +76,9 @@
           <div v-if="resourceDetail.resourceInfo.description"
                class="ql-editor"
                v-html="resourceDetail.resourceInfo.description"></div>
+          <div class="" v-else>
+            暂无描述
+          </div>
         </div>
       </div>
     </div>
@@ -78,8 +88,12 @@
             :visible.sync="compareDialogVisible"
             v-if="release.policies.length > 1"
     >
-      <div class="r-d-w-r-p-compare" v-for="item in comparePolices">
-        <div class="r-d-w-r-p-btn" :class="{'active': item.activeIndex === index}" v-for="(p, index) in release.policies" @click="exchangeComparePolicy(item, index)">{{p.policyName}}</div>
+      <div class="r-d-w-r-p-compare" v-for="(item, index) in comparePolices" :key="'c-p-' + index">
+        <div class="r-d-w-r-p-btn" 
+          :class="{'active': item.activeIndex === index}" 
+          v-for="(p, index) in release.policies" 
+          :key="'p-btn-' + index"
+          @click="exchangeComparePolicy(item, index)">{{p.policyName}}</div>
         <div class="r-d-w-r-p-box">
           <h4>{{release.policies[item.activeIndex].policyName}}</h4>
           <pre class="r-d-w-r-p-text" v-html="release.policies[item.activeIndex].policyText"></pre>
@@ -97,7 +111,8 @@
         <el-checkbox-group class="r-d-w-r-node-list" v-model="checkedNodeList" v-if="nodes.length">
           <el-checkbox
                   class="r-d-w-r-node-item"
-                  v-for="node in nodes"
+                  v-for="(node, index) in nodes"
+                  :key="'node-'+index"
                   :label="node.nodeId"
                   size="medium"
                   :checked="rSubordinateNodesIds.indexOf(node.nodeId) !== -1"
@@ -113,7 +128,7 @@
         </div>
         <h4>策略确认</h4>
         <div class="r-d-w-r-s-releases" >
-          <div class="rdwr-s-r-item" v-for="item in selectedPolicies">
+          <div class="rdwr-s-r-item" v-for="(item, index) in selectedPolicies" :key="'s-p-'+index">
             <span class="rdwr-s-r-item-name">{{item.releaseName}}</span>
             <span class="rdwr-s-r-item-policy">
               {{item.policyName}}

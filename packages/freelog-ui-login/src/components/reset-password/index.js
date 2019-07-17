@@ -70,12 +70,9 @@ export default {
 
         this.$axios.post('/v1/userinfos/resetPassword', this.model).then((res) => {
           if (res.data.errcode === 0) {
-            let redirect = this.$route.query.redirect
             this.$message.success(this.$t('resetPassword.resetSuccess'))
-            if (!redirect || !isSafeUrl(redirect)) {
-              redirect = '/'
-            }
-            this.$router.replace(redirect)
+            let redirect = this.$route.query.redirect
+            this.$router.push({ path: LOGIN_PATH, query: { redirect } })
           } else {
             this.error = { title: '', message: res.data.msg }
           }
@@ -83,7 +80,6 @@ export default {
         }).catch((err) => {
           this.loading = false
           this.error = { title: this.$t('resetPassword.errorTitle'), message: this.$t('resetPassword.defaultErrorMsg') }
-
 
           switch (err.response && err.response.status) {
             case 401:

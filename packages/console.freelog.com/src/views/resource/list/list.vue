@@ -4,19 +4,18 @@
               :config="tableConfig"
               :formatHandler="formatHandler"
               ref="listRef"
-              :pagination="paginationConfig">
+              :pagination="paginationConfig"
+              :empty-text="pagenationEmptyText">
       <template slot="list">
         <el-table-column label="资源名称">
           <template slot-scope="scope">
-            <router-link :to="scope.row._toDetailLink">
-              <div class="r-l-item-name-box">
-                <img 
-                  class="r-l-item__img" 
-                  :class="{'resource-default-preview':!previewImage}" 
-                  :src="scope.row.previewImage" />
-                <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
-              </div>
-            </router-link>
+            <div class="r-l-item-name-box">
+              <img 
+                class="r-l-item__img" 
+                :class="{'resource-default-preview':!previewImage}" 
+                :src="scope.row.previewImage" />
+              <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="资源类型" width="140">
@@ -41,9 +40,10 @@
               '查询中...' : scope.row.releaseList.length ? '' : '暂无发行'}}
             </div>
             <div style="position: relative;" v-if="scope.row.releaseList.length">
-              <div class="r-l-item-release-row1">{{scope.row.releaseList[0].releaseName}}</div>
+              <div class="r-l-item-release-row1" @click="goToReleaseDetail(scope.row.releaseList[0])">{{scope.row.releaseList[0].releaseName}}</div>
               <template  v-if="scope.row.releaseList.length > 1">
                 <el-popover placement="bottom-start" width="370" trigger="hover">
+                  <div class="r-l-item-release-row2" slot="reference">等{{scope.row.releaseList.length}}个发行...</div>
                   <div class="r-l-item-release-floatbox">
                     <div class="release-item" v-for="(r, index) in scope.row.releaseList" :key="'r'+index">
                       <span class="name" @click="goToReleaseDetail(r)">{{r.releaseName}}</span>
@@ -51,7 +51,6 @@
                       <span class="date">{{r.resourceVersion.createDate | fmtDate}}</span>
                     </div>
                   </div>
-                <div class="r-l-item-release-row2" slot="reference">等{{scope.row.releaseList.length}}个发行...</div>
                 </el-popover>
               </template>
             </div>
@@ -83,6 +82,7 @@
   import FPagination from '@/components/Pagination/index.vue'
   import { RESOURCE_TYPES } from '@/config/resource'
 
+  const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ '没有符合条件的资源', '您还没有创建任何资源。' ]
   export default {
     name: 'resource-items-list',
 
@@ -105,11 +105,13 @@
           target: `/v1/resources`,
           params: {
             isSelf: 1,
-            resourceType: undefined
+            resourceType: undefined,
+            keywords: undefined
           }
         },
         resourceMapReleases: {},
-        selectedType: 'all'
+        selectedType: 'all',
+        pagenationEmptyText: NO_REACTED_RESOURCE
       }
     },
 
@@ -132,17 +134,21 @@
         }
       },
       query() {
-        this.initView()
+        if(this.query == '') {
+          this.paginationConfig.params.keywords = undefined
+          this.pagenationEmptyText = NO_REACTED_RESOURCE
+        }else {
+          this.paginationConfig.params.keywords = this.query
+          this.pagenationEmptyText = NO_RIGHT_RESOURCE
+        }
       }
     },
+
     mounted() {
-      this.initView()
+      
     },
 
     methods: {
-      initView() {
-        
-      },
       formatHandler(list) {
         if (!list || !list.length) {
           return []
@@ -154,6 +160,7 @@
           resource.previewImage = previewImages && previewImages[0] || ''
           resource.releaseStatus = 'fetching'
           resource.releaseList = []
+          
           this.fetchReleaseList(resourceId) 
             .then(() => {
               resource.releaseStatus = 'done'
@@ -177,13 +184,17 @@
 
       // 获取单个资源"所属发行列表"
       fetchReleaseList(resourceId) {
-        return this.$services.ResourceService.get(`${resourceId}/releases`)
-          .then(res => res.data)
-          .then(res => {
-            if(res.errcode === 0) {
-              this.resourceMapReleases[resourceId] = res.data
-            }
-          })
+        if(!this.resourceMapReleases[resourceId]) {
+          return this.$services.ResourceService.get(`${resourceId}/releases`)
+            .then(res => res.data)
+            .then(res => {
+              if(res.errcode === 0) {
+                this.resourceMapReleases[resourceId] = res.data
+              }
+            })
+        }else {
+          return Promise.resolve(this.resourceMapReleases[resourceId])
+        }
       },
       tapRelease(resource) {
         this.$emit('release', resource)

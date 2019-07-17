@@ -68,12 +68,13 @@
 </template>
 
 <script>
-import { isSafeUrl, setItemForStorage } from "../../utils";
+import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils";
 import {
   SIGN_PATH,
   RESET_PASSWORD_PATH,
   LOGIN_NAME,
-  USER_SESSION
+  USER_SESSION,
+  LAST_AUTH_INFO
 } from "../../constant";
 import FToast from "../toast/index.vue";
 
@@ -132,16 +133,10 @@ export default {
 
   computed: {
     resetPwLink() {
-      return `${RESET_PASSWORD_PATH}`;
+      return this.resolveLink(RESET_PASSWORD_PATH)
     },
     signUpLink() {
-      if (this.$route) {
-        const redirect = this.$route.query.redirect;
-        if (isSafeUrl(redirect)) {
-          return `${SIGN_PATH}?redirect=${this.$route.query.redirect}`;
-        }
-      }
-      return `${SIGN_PATH}`;
+      return this.resolveLink(SIGN_PATH)
     }
   },
 
@@ -150,6 +145,16 @@ export default {
   },
 
   methods: {
+    resolveLink(path) {
+      var link = `${path}`
+      if (this.$route) {
+        const { redirect } = this.$route.query
+        if (isSafeUrl(redirect)) {
+          link = `${link}?redirect=${redirect}`
+        }
+      }
+      return link
+    },
     submit(ref) {
       const self = this;
       this.$refs[ref].validate(valid => {
@@ -182,44 +187,46 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          this.$emit("after-login-fail");
-          const $i18n = this.$i18n;
+          this.$emit("after-login-fail")
+          const $i18n = this.$i18n
           if (typeof err === "string") {
-            this.error = { title: "", message: err };
+            this.error = { title: "", message: err }
           } else {
             this.error = {
               title: $i18n.t("login.errorTitle"),
               message: err.response.errorMsg || $i18n.t("login.errors[0]")
-            };
+            }
             switch (err.response && err.response.status) {
               case 401:
-                this.error.message = $i18n.t("login.errors[1]");
-                break;
+                this.error.message = $i18n.t("login.errors[1]")
+                break
               case 500:
-                this.error.message = $i18n.t("login.errors[2]");
-                break;
+                this.error.message = $i18n.t("login.errors[2]")
+                break
               default:
-                this.error.message = $i18n.t("login.errors[3]");
+                this.error.message = $i18n.t("login.errors[3]")
             }
           }
-          this.loading = false;
-        });
+          this.loading = false
+        })
     },
     afterLogin(userInfo) {
-      console.log('userInfo --', userInfo)
-      this.$emit("after-login-success");
-      const win = window;
-      setItemForStorage(USER_SESSION, userInfo);
-      setItemForStorage(LOGIN_NAME, userInfo.loginName);
-      const redirect = this.$route.query.redirect;
-      if (isSafeUrl(redirect)) {
-        window.location.replace(redirect);
-      } else {
-        window.location.replace("/");
+      this.$emit("after-login-success")
+      const win = window
+      setItemForStorage(USER_SESSION, userInfo)
+      setItemForStorage(LOGIN_NAME, userInfo.loginName)
+      const lastAuthInfo = getItemFromStorage(LAST_AUTH_INFO)
+      var targetLink = '/'
+      if(lastAuthInfo && lastAuthInfo.userId === userInfo.userId) {
+        const redirect = this.$route.query.redirect
+        if (isSafeUrl(redirect)) {
+          targetLink = redirect
+        }
       }
+      window.location.replace(targetLink)
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
