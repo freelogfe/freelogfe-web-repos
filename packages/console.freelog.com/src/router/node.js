@@ -58,6 +58,17 @@ export default {
             component: Views.nodeManager
         },
         {
+            path: 'manager-release/:presentableId',
+            hidden: true,
+            meta: {
+                hideSidebar: true,
+                requiresAuth: true,
+                title: '节点发行管理',
+                hideFooter: true,
+            },
+            component: Views.nodeManagerRelease
+        },
+        {
             path: 'create',
             hidden: true,
             meta: {

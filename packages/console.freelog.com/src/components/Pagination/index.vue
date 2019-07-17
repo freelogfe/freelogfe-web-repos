@@ -4,6 +4,7 @@
             ref="table"
             @row-click="rowClickHandler"
             v-bind="tableProps"
+            :empty-text="emptyText"
             style="width: 100%">
       <slot name="list"></slot>
     </el-table>
@@ -31,6 +32,10 @@
   export default {
     name: 'fl-pagination',
     props: {
+      emptyText: {
+        type: String,
+        default: '暂无数据'
+      },
       pagination: {
         type: Object,
         default() {

@@ -8,7 +8,7 @@
               @blur="hideInputHandler"
               class="search-input"
               @keyup.enter.native="searchHandler">
-      <i class="el-icon-search el-input__icon" slot="suffix"></i>
+      <i class="el-icon-search el-input__icon" slot="suffix" ></i>
     </el-input>
     <el-button type="text" @click="showInputHandler" v-else><i class="el-icon-search"></i></el-button>
   </div>

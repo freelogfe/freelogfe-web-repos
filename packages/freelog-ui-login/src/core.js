@@ -1,4 +1,4 @@
-import { MESSAGE_TO_NEW_USER, COOKIE_AUTH_INFO, USER_SESSION, LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
+import { LAST_AUTH_INFO, MESSAGE_TO_NEW_USER, COOKIE_AUTH_INFO, USER_SESSION, LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
 import { getItemFromStorage, setItemForStorage } from './utils'
 
 import Toast from './components/toast/toast'
@@ -10,6 +10,7 @@ export default function initCode(options) {
 	axiosInstance = options.axiosInstance || options.Vue.axios
 	router = options.router
 	lastCheckedUserInfo = getAuthInfoByCookie()
+	console.log('lastCheckedUserInfo -', lastCheckedUserInfo)
 }
 
 function goToPath(path) {
@@ -38,11 +39,13 @@ export function goToHomePage() {
 
 // 登出：用户退出登录
 export function logout() {
+	const authInfo = getAuthInfoByCookie()
 	return axiosInstance.get('/v1/passport/logout')
 		.then(res => res.data)
 		.then(res => {
 			if(res.errcode === 0) {
 				localStorage.removeItem(USER_SESSION)
+				setItemForStorage(LAST_AUTH_INFO, authInfo)
 				goToLoginPage()
 				return Promise.resolve()
 			}else {

@@ -1,27 +1,26 @@
 <template>
   <div class="release-list">
     <f-pagination class="release-list-table"
+              ref="listRef"
               :config="tableConfig"
               :formatHandler="formatHandler"
-              ref="listRef"
-              :pagination="paginationConfig">
+              :pagination="paginationConfig"
+              :empty-text="pagenationEmptyText">
       <template slot="list">
         <el-table-column label="发行名称">
           <template slot-scope="scope">
-            <router-link :to="scope.row._toDetailLink">
-              <div class="r-l-item-name-box">
+            <div class="r-l-item-name-box" @click="goToReleaseDetail(scope.row)">
                 <img 
                   class="r-l-item__img" 
                   :class="{'resource-default-preview':!previewImage}" 
                   :src="scope.row.previewImage" />
                 <div class="r-l-item-name" :title="scope.row.releaseName">{{scope.row.releaseName}}</div>
               </div>
-            </router-link>
           </template>
         </el-table-column>
         <el-table-column label="发行类型" width="140">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-types-select" v-model="selectedType" placeholder="类型" size="mini">
+            <el-select class="r-l-types-select" v-model="selectedType" size="mini">
               <el-option
                 v-for="item in resourceTypes"
                 :key="item.value"
@@ -42,8 +41,13 @@
         <el-table-column label="策略" width="160">
           <template slot-scope="scope">
             <div v-if="scope.row.policies.length"> 
-              <div class="r-l-item-policy-row1">{{scope.row.policies[0].policyName}}</div>
-              <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
+              <el-popover placement="bottom-start" width="370" trigger="hover">
+                <div slot="reference">
+                  <div class="r-l-item-policy-row1">{{scope.row.policies[0].policyName}}</div>
+                  <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
+                </div>
+                <f-policy-tabs :policies="scope.row.policies"></f-policy-tabs>
+              </el-popover>
             </div>
             <div class="r-l-item-no-policy" v-else>暂无策略</div> 
           </template>
@@ -60,15 +64,28 @@
             <div class="r-l-item-date-row2">更新时间 {{scope.row.updateDate | fmtDate }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="全部状态" width="130">
+        <el-table-column width="130">
+          <template slot="header" slot-scope="scope">
+            <el-select class="r-l-types-select" v-model="selectedReleaseStatus" size="mini" v-if="type === 'myReleases'">
+              <el-option
+                v-for="item in releaseStatusArray"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <span class="" v-else>
+              {{releaseStatusArray[0].label}}
+            </span>
+          </template>
           <template slot-scope="scope">
-              <div class="r-l-item-online" v-if="scope.row.isOnline">已上线</div>
-              <div class="r-l-item-offline" v-else>
-                未上线 
-                <el-tooltip :content="scope.row.policies.length > 0 ? '策略已下架' : '暂无策略' " placement="top">
-                  <i class="el-icon-warning"></i>
-                </el-tooltip>
-              </div>
+            <div class="r-l-item-online" v-if="scope.row.isOnline">已上线</div>
+            <div class="r-l-item-offline" v-else>
+              未上线 
+              <el-tooltip :content="scope.row.policies.length > 0 ? '策略已下架' : '暂无策略' " placement="top">
+                <i class="el-icon-warning"></i>
+              </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="170">
@@ -94,12 +111,15 @@
 
 <script>
   import FPagination from '@/components/Pagination/index.vue'
+  import FPolicyTabs from '@/components/PolicyTabs/index.vue'
   import { RESOURCE_TYPES } from '@/config/resource'
+  import { RELEASE_STATUS } from '@/config/release'
 
+  const [ NO_RIGHT_RELEASE, NO_CREATED_RELEASE, NO_COLLECTED_RELEASE ] = [ '没有符合条件的发行', '您还没有创建任何发行。', '您还没有收藏任何发行。您在发行市场收藏的发行之后将会出现在这里。' ]
   export default {
     name: 'release-items-list',
 
-    components: { FPagination },
+    components: { FPagination, FPolicyTabs },
 
     props: {
       type: {
@@ -123,10 +143,14 @@
           target: '/v1/releases',
           params: {
             isSelf: 1,
-            resourceType: undefined
+            resourceType: undefined,
+            keywords: undefined,
+            status: undefined
           }
         },
-        selectedType: 'all'
+        selectedType: 'all',
+        pagenationEmptyText: '',
+        selectedReleaseStatus: 0
       }
     },
 
@@ -137,6 +161,11 @@
           arr.push({ label, value })
         }
         return arr
+      },
+      releaseStatusArray() {
+        return RELEASE_STATUS.map((val, index) => {
+          return { label: val, value: index }
+        })
       }
     },
 
@@ -148,8 +177,32 @@
           this.paginationConfig.params.resourceType = this.selectedType
         }
       },
+      selectedReleaseStatus() {
+        // 0: 全部状态；1: 已上线；2: 已下线
+        switch(this.selectedReleaseStatus) {
+          case 0: {
+            this.paginationConfig.params.status = undefined
+            break
+          }
+          case 1: {
+            this.paginationConfig.params.status = 1
+            break
+          }
+          case 2: {
+            this.paginationConfig.params.status = 0
+            break
+          }
+          default: {}
+        }
+      },
       query() {
-        this.initView()
+        if(this.query == '') {
+          this.paginationConfig.params.keywords = undefined
+          this.pagenationEmptyText = this.type === 'myReleases' ? NO_CREATED_RELEASE : NO_COLLECTED_RELEASE
+        }else {
+          this.paginationConfig.params.keywords = this.query
+          this.pagenationEmptyText = NO_RIGHT_RELEASE
+        }
       }
     },
     mounted() {
@@ -161,10 +214,12 @@
         switch(this.type) {
           case 'myReleases': {
             this.paginationConfig.target = '/v1/releases'
+            this.pagenationEmptyText = NO_CREATED_RELEASE
             break
           }
           case 'myCollections': {
             this.paginationConfig.target = '/v1/collections/releases'
+            this.pagenationEmptyText = NO_COLLECTED_RELEASE
             break
           }
           default: {}
@@ -175,7 +230,7 @@
           return []
         }
         list = list.map(release => {
-          const { releaseId, policies = [], previewImages, latestVersion } = release
+          const { releaseId, policies = [], previewImages, latestVersion, status } = release
           let isOnline = false
           for(let i = 0; i < policies.length; i++) {
             if(policies[i].status === 1) {
@@ -206,6 +261,9 @@
               this.paginationConfig.reloadCount = this.paginationConfig.reloadCount + 1
             }
           })
+      },
+      goToReleaseDetail(release) {
+        this.$router.push(release._toDetailLink)
       }
     }
   }

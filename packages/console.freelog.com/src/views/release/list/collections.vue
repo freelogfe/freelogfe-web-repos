@@ -1,11 +1,14 @@
 <template>
   <section class="my-collections">
     <div class="m-c-header clearfix">
+      <router-link :to="releasesMarketLink">
+        <el-button size="medium" type="primary" class="m-c-go-to-market">前往发行市场</el-button>
+      </router-link>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
     </div>
-    <release-items-list type='myCollections' :query="selfQueryInput"></release-items-list>
+    <release-items-list type='myCollections' :query="queryInput"></release-items-list>
   </section>
 </template>
 
@@ -18,8 +21,8 @@ export default {
   data() {
     return {
       resourceList: [],
-      selfQueryInput: '',
-      favorQueryInput: '',
+      queryInput: '',
+      releasesMarketLink: '/'
     }
   },
   components: {
@@ -28,8 +31,8 @@ export default {
   },
 
   methods: {
-    searchHandler(query) {
-      this.$message.warning('todo')
+    searchHandler(str) {
+      this.queryInput = str
     },
   },
 
@@ -48,7 +51,7 @@ export default {
   }
   .m-c-header {
     margin-bottom: 40px;
-    .m-c-create-btn {
+    .m-c-go-to-market {
       width:160px; border-radius: 2px;
     }
     .right-tool-bar-wrap {

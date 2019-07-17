@@ -7,7 +7,7 @@
       </div>
     </div>
     
-    <release-items-list type="myReleases" :query="selfQueryInput"></release-items-list>
+    <release-items-list type="myReleases" :query="queryInput"></release-items-list>
 
     <el-dialog
             class="my-r-search-dialog"
@@ -33,8 +33,7 @@ export default {
     return {
       resourceList: [],
       curTabName: 'self',
-      selfQueryInput: '',
-      favorQueryInput: '',
+      queryInput: '',
       resourceDialogVisible: false
     }
   },
@@ -45,8 +44,8 @@ export default {
   },
 
   methods: {
-    searchHandler(query) {
-      this.$message.warning('todo')
+    searchHandler(str) {
+      this.queryInput = str
     },
     createNewRelease(resource) {
       this.$router.push(`/release/create?resourceId=${resource.resourceId}`)

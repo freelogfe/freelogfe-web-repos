@@ -10,6 +10,8 @@ export default {
     return {
       releaseId: this.$route.params.releaseId,
       activeReleaseVersion: this.$route.query.version,
+      isOwnRelease: false,
+      isOnline: true,
       isShowContentLoading: false,
       isCollectedRelease: false,
       release: null,
@@ -33,8 +35,7 @@ export default {
       ],
       compareDialogVisible: false,
       signDialogVisible: false,
-      rSubordinateNodesIds: []
-
+      rSubordinateNodesIds: [],
     }
   },
   computed: Object.assign({
@@ -57,6 +58,10 @@ export default {
         map[r.releaseId] = r
       })
       return map
+    },
+    isOwnRelease() {
+      console.log(this.session)
+      return true
     },
   }, mapGetters({
     nodes: 'nodes',
@@ -85,10 +90,14 @@ export default {
         .then(res => {
           if(res.errcode === 0) {
             this.release = res.data
+            this.isOnline = this.release.stauts === 1
 
             this.formatReleaseData()
             this.fetchResourceDetail()
             this.fetchUpcastDepReleases()
+            if(this.session && this.session.user) {
+              this.isOwnRelease = this.release.userId === this.session.user.userId
+            }
           }
           this.isShowContentLoading = false
         }).catch(e => {
