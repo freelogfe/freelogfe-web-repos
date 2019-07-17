@@ -4,7 +4,7 @@
       <div class="r-d-w-main-content">
         <el-alert class="r-d-w-waring" type="warning" :closable="false" v-if="!isOnline">
           <div slot="title">
-            当前发行未上线，未有可用策略！
+            当前发行未上线，无可用策略！
             <router-link :to="`/release/edit/${release.releaseId}`" v-if="isOwnRelease">前去编辑</router-link>
           </div>
         </el-alert>

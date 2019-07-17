@@ -68,7 +68,7 @@
             <router-link :to="scope.row._toDetailLink">
               <el-button class="r-l-item-detail-btn" size="mini">编辑</el-button>
             </router-link>
-            <a :href="scope.row._downloadLink">
+            <a :href="scope.row._downloadLink" :download="scope.row.aliasName">
               <el-button class="r-l-item-download-btn" size="mini">下载源文件</el-button>
             </a>
           </template>
