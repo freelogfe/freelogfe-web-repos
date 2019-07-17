@@ -58,7 +58,7 @@ export default {
             component: Views.nodeManager
         },
         {
-            path: 'manager-release',
+            path: 'manager-release/:presentableId',
             hidden: true,
             meta: {
                 hideSidebar: true,
