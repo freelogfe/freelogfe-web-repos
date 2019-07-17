@@ -90,7 +90,7 @@ export default {
         .then(res => {
           if(res.errcode === 0) {
             this.release = res.data
-            this.isOnline = this.release.stauts === 1
+            this.isOnline = this.release.status === 1
 
             this.formatReleaseData()
             this.fetchResourceDetail()
