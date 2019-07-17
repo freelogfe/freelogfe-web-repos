@@ -181,6 +181,9 @@ export default {
         onChangePageSize(pageSize) {
             this.pageSize = pageSize;
         },
+        goToEditPage(presentableId) {
+            this.$router.push(`/node/manager-release/${presentableId}`);
+        },
         /**
          * 跳转到添加策略页面
          * @param presentableId
