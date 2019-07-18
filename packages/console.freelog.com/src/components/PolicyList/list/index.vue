@@ -112,14 +112,14 @@
             <!--                :policy="formatedPolicyList[0]"-->
             <!--            ></PolicyCard>-->
             <div style="font-weight: 600; line-height: 35px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-                <span>{{formatedPolicyList[0].policyName}}</span>
+                <span>{{formatedPolicyList[expandedPolicyIndex].policyName}}</span>
                 <i
                     class="el-icon-circle-close"
                     style="font-size: 16px;"
                     @click="isExpandPolicy = false"
                 ></i>
             </div>
-            <pre style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[0].policyText}}</pre>
+            <pre style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[expandedPolicyIndex].policyText}}</pre>
         </div>
     </div>
 
