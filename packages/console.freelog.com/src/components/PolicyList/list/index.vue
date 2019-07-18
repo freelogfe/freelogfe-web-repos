@@ -95,23 +95,31 @@
 
         </div>
 
-        <div v-if="isExpandPolicy" style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5)"></div>
+        <div v-if="isExpandPolicy"
+             style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5)"></div>
         <div
             v-if="isExpandPolicy"
             style="
             position: fixed;
+            font-size: 14px;
+            color: #333;
             background-color: #fff;
-            transition: top 2s, bottom 2s , right 2s, left 2s;"
+            transition: top 1s, width 1s , height 1s, left 1s;"
             :style="enlargedDisplayBox"
         >
             <!--            <PolicyCard-->
             <!--                :show="isExpandPolicy"-->
             <!--                :policy="formatedPolicyList[0]"-->
             <!--            ></PolicyCard>-->
-            <div>
-                {{formatedPolicyList[0].policyName}}
+            <div style="font-weight: 600; line-height: 35px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span>{{formatedPolicyList[0].policyName}}</span>
+                <i
+                    class="el-icon-circle-close"
+                    style="font-size: 16px;"
+                    @click="isExpandPolicy = false"
+                ></i>
             </div>
-            <pre>{{formatedPolicyList[0].policyText}}</pre>
+            <pre style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[0].policyText}}</pre>
         </div>
     </div>
 
@@ -144,9 +152,9 @@
 
                 enlargedDisplayBox: {
                     top: 0,
-                    right: 0,
-                    bottom: 0,
                     left: 0,
+                    width: 0,
+                    height: 0,
                 },
 
             }
@@ -196,20 +204,20 @@
                 this.isExpandPolicy = true
                 this.expandedPolicyIndex = index
 
-                const {top, right, bottom, left} = event.target.parentNode.getBoundingClientRect();
-                console.log(top, right, bottom, left, 'top, right, bottom, left');
+                // console.log(event.target.parentNode.getBoundingClientRect(), 'event.target.parentNode.getBoundingClientRect()');
+                const {top, width, height, left} = event.target.parentNode.getBoundingClientRect();
                 this.enlargedDisplayBox = {
                     top: top + 'px',
-                    right: (window.innerWidth - right) + 'px',
-                    bottom: (window.innerHeight - bottom) + 'px',
+                    width: width + 'px',
+                    height: height + 'px',
                     left: left + 'px',
                 };
                 setTimeout(() => {
                     this.enlargedDisplayBox = {
-                        top: 100 + 'px',
-                        right: 200 + 'px',
-                        bottom: 100 + 'px',
-                        left: 200 + 'px',
+                        top: (window.innerHeight / 2 - 300) + 'px',
+                        left: (window.innerWidth / 2 - 200) + 'px',
+                        width: 400 + 'px',
+                        height: 600 + 'px',
                     };
                 }, 30);
                 // console.log(this.enlargedDisplayBox, 'enlargedDisplayBox');
