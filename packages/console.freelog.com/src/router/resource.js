@@ -16,6 +16,30 @@ export default {
     redirect: '/resource/list',
     children: [
         {
+            path: 'editor',
+            hidden: true,
+            meta: {
+                requiresAuth: true,
+                title: i18n.t('routes.createResource'),
+                type: 'resource',
+                theme: 'gray',
+                hideFooter: true,
+            },
+            component: Views.resourceNew,
+        },
+        {
+            path: 'editor/:resourceId',
+            hidden: true,
+            meta: {
+                requiresAuth: true,
+                title: '资源管理',
+                type: 'resource',
+                theme: 'gray',
+                hideFooter: true,
+            },
+            component: Views.resourceNew,
+        },
+        {
             path: 'policy_tpl/list',
             meta: {
                 requiresAuth: true,
@@ -26,15 +50,16 @@ export default {
         },
         {
             path: 'create',
-            hidden: true,
-            meta: {
-                requiresAuth: true,
-                title: i18n.t('routes.createResource'),
-                type: 'resource',
-                theme: 'gray',
-                hideFooter: true,
-            },
-            component: Views.resourceCreator,
+            redirect: 'editor',
+            // hidden: true,
+            // meta: {
+            //     requiresAuth: true,
+            //     title: i18n.t('routes.createResource'),
+            //     type: 'resource',
+            //     theme: 'gray',
+            //     hideFooter: true,
+            // },
+            // component: Views.resourceCreator,
         },
         {
             path: 're-edit',
