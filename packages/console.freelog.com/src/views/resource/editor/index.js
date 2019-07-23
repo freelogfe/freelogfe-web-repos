@@ -1,12 +1,13 @@
 import BlockBody from '@/components/ResourceComponents/BlockBody.vue';
 import SmallTitle from '@/components/ResourceComponents/SmallTitle.vue';
-import DepList from '@/components/ResourceComponents/DepList.vue';
+// import DepList from '@/components/ResourceComponents/DepList.vue';
 // import HeaderAlert from '@/components/ResourceComponents/HeaderAlert.vue';
 import UploadFile from '@/components/ResourceComponents/UploadFile/index.vue';
 import UploadCover from '@/components/ResourceComponents/UploadCover/index.vue';
 import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
+import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 
 export default {
     name: 'editor',
@@ -16,7 +17,7 @@ export default {
         UploadFile,
         UploadCover,
         ReleaseSearch,
-        DepList,
+        DependentReleaseList,
         BlockBody,
         RichEditor,
         MetaInfoInput,
