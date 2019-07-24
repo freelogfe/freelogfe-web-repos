@@ -14,7 +14,8 @@
             :type="i.type"
             :version="i.version"
             :date="i.date"
-            :disabled="i.disabled"
+            :disabled="exists.includes(i.id)"
+            @click="$emit('add', i)"
         />
 
     </div>
@@ -27,6 +28,14 @@
         name: "Search",
         components: {
             DepItem,
+        },
+        props: {
+            exists: {
+                type: Array,
+                default() {
+                    return [];
+                },
+            }
         },
         mounted() {
             this.search();
@@ -54,9 +63,15 @@
                     type: i.latestVersion.resourceInfo.resourceType,
                     version: i.latestVersion.version,
                     date: i.updateDate.split('T')[0],
-                    disabled: false,
+                    // disabled: false,
                 }));
             },
+            // onAdd(index) {
+            //
+            // },
+            isInclude(id){
+                return this.exists.inc
+            }
         },
 
         watch: {

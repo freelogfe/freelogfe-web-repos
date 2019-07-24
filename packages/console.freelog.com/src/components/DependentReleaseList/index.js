@@ -35,12 +35,27 @@ export default {
     },
     data() {
         return {
-            dialogVisible: true,
+            dialogVisible: false,
         };
     },
     methods: {
         onRemove(index) {
             console.log(index, '1234aaaaa');
+            this.$emit('onChange',
+                this.dataSource.filter((i, j) => j !== index),
+            );
         },
+        addARelease(item) {
+            // console.log(item, 'ASDFASDCDSARFW');
+            this.$emit('onChange', [
+                ...this.dataSource,
+                item,
+            ]);
+        }
     },
+    computed: {
+        exists() {
+            return this.dataSource.map(i => i.id);
+        }
+    }
 }

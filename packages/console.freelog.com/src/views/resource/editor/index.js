@@ -171,6 +171,7 @@ export default {
          * 依赖列表变化时
          */
         onChangeDeps(deps) {
+            // console.log(deps, 'depsdepsdepsdeps');
             this.depList = deps;
         },
 

@@ -1,6 +1,7 @@
 <template>
     <div
-        style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5); z-index: 100; display: flex; align-items: center; justify-content: center;">
+        style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5); z-index: 100; display: flex; align-items: center; justify-content: center;"
+    >
         <div
             style="width: 960px; height: 630px; background-color: #fff; border-radius: 10px; display: flex; flex-direction: column;">
             <div
@@ -28,18 +29,28 @@
                     <!--                        @click="onChangeTab('mock')"-->
                     <!--                    >我的Mock</a>-->
                 </div>
-                <i class="el-icon-close" style="font-size: 20px; color: #666; margin-right: 30px;"></i>
+                <i
+                    class="el-icon-close"
+                    style="font-size: 20px; color: #666; margin-right: 30px;"
+                    @click="$emit('onClose')"
+                ></i>
             </div>
 
             <div style="flex-shrink: 1; height: 100%; overflow: hidden;">
                 <Search
-                    v-show="activeTab === 'search'"
+                    v-if="activeTab === 'search'"
+                    :exists="exists"
+                    @add="$emit('addARelease', $event)"
                 />
                 <Release
-                    v-show="activeTab === 'release'"
+                    v-if="activeTab === 'release'"
+                    :exists="exists"
+                    @add="$emit('addARelease', $event)"
                 />
                 <Collection
-                    v-show="activeTab === 'collection'"
+                    v-if="activeTab === 'collection'"
+                    :exists="exists"
+                    @add="$emit('addARelease', $event)"
                 />
             </div>
             <div style="height: 20px;"></div>

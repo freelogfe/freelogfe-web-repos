@@ -7,7 +7,8 @@
             :type="i.type"
             :version="i.version"
             :date="i.date"
-            :disabled="i.disabled"
+            :disabled="exists.includes(i.id)"
+            @click="$emit('add', i)"
         />
     </div>
 </template>
@@ -20,6 +21,14 @@
         name: "Collection",
         components: {
             DepItem,
+        },
+        props: {
+            exists: {
+                type: Array,
+                default() {
+                    return [];
+                },
+            }
         },
         mounted() {
             this.search();
@@ -38,16 +47,16 @@
                 const res = await this.$axios.get('/v1/collections/releases', {
                     params,
                 });
-                console.log(res, 'resresresresres');
+                // console.log(res, 'resresresresres');
                 this.data = res.data.data.dataList.map(i => ({
                     id: i.releaseId,
                     name: i.releaseName,
                     // isOnline: i.status === 1,
-                    isOnline: true,
+                    isOnline: i.releaseStatus === 1,
                     type: i.resourceType,
                     version: i.latestVersion.version,
-                    date: i.createDate.createDate.split('T')[0],
-                    disabled: false,
+                    date: i.releaseUpdateDate.split('T')[0],
+                    // disabled: false,
                 }));
             },
         },

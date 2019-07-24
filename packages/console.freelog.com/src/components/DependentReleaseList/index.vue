@@ -8,23 +8,28 @@
                 size="small"
                 icon="el-icon-plus"
                 circle
-                @click="showDepDialog"
+                @click="dialogVisible = true"
             ></el-button>
             <span style="padding-left: 10px; font-size: 14px; color: #333;">添加依赖</span>
         </div>
         <div v-else style="height: 10px;"></div>
 
         <Item
+            v-for="(i, j) in dataSource"
             :isLock="isLock"
-            :name="'策略1'"
-            :isOnline="true"
-            @onRemove="onRemove()"
+            :name="i.name"
+            :isOnline="i.isOnline"
+            @onRemove="onRemove(j)"
         />
         <!--        <Item :isLock="false" :name="'策略2'" :isOnline="true" @onRemove="onRemove(1)"/>-->
         <!--        <Item :isLock="false" :name="'策略3'" :isOnline="false" @onRemove="onRemove(2)"/>-->
 
-
-        <DepDialog/>
+        <DepDialog
+            v-if="dialogVisible"
+            :exists="exists"
+            @addARelease="addARelease"
+            @onClose="dialogVisible = false"
+        />
     </div>
 </template>
 

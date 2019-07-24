@@ -88,9 +88,9 @@
 
         <BlockBody tilte="依赖">
             <DependentReleaseList
-                :dataSource="[]"
-                :isLock="true"
-                :onChange="onChangeDeps"
+                :dataSource="depList"
+                :isLock="false"
+                @onChange="onChangeDeps"
             />
 <!--            <div style="padding-left: 20px; height: 60px; align-items: center; display: flex;">-->
 <!--                <el-button-->
