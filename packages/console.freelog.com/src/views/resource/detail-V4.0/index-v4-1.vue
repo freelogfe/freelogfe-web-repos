@@ -87,26 +87,31 @@
           </span>
         </h2>
       </div>
-      <div class="body">
-        <div class="operation-box" v-if="releasesList.length === 0" @click="tapAddDependencyBtn" >
-          <i class="el-icon-circle-plus-outline"></i>添加依赖
-        </div>
-        <ul class="res-dependencies-list" :class="{'hasBtn': releasesList.length === 0}">
-          <li
-                  v-for="(dependency, index) in dependencies"
-                  :key="'dependency-'+ (index+1)">
-            <i class="el-icon-remove" v-if="releasesList.length === 0" @click="deleteDependency(index)"></i>
-            <i class="el-icon-lock" v-else></i>
-            <span class="r-d-l-name">{{dependency.releaseName}}</span>
-            <span class="r-d-l-type">{{dependency.resourceType}}</span>
-            <span class="r-d-l-version">{{dependency.latestVersion.version}}</span>
-            <span class="r-d-l-updatedate">{{dependency.updateDate | fmtDate}}</span>
-          </li>
-        </ul>
+<!--      <div class="body">-->
+          <DependentReleaseList
+              :dataSource="depList"
+              :isLock="releasesList.length !== 0"
+              @onChange="onChangeDeps"
+          />
+<!--        <div class="operation-box" v-if="releasesList.length === 0" @click="tapAddDependencyBtn" >-->
+<!--          <i class="el-icon-circle-plus-outline"></i>添加依赖-->
+<!--        </div>-->
+<!--        <ul class="res-dependencies-list" :class="{'hasBtn': releasesList.length === 0}">-->
+<!--          <li-->
+<!--                  v-for="(dependency, index) in dependencies"-->
+<!--                  :key="'dependency-'+ (index+1)">-->
+<!--            <i class="el-icon-remove" v-if="releasesList.length === 0" @click="deleteDependency(index)"></i>-->
+<!--            <i class="el-icon-lock" v-else></i>-->
+<!--            <span class="r-d-l-name">{{dependency.releaseName}}</span>-->
+<!--            <span class="r-d-l-type">{{dependency.resourceType}}</span>-->
+<!--            <span class="r-d-l-version">{{dependency.latestVersion.version}}</span>-->
+<!--            <span class="r-d-l-updatedate">{{dependency.updateDate | fmtDate}}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
 <!--        <div class="res-detail-bd-row-placeholder" v-if="dependencies.length === 0">-->
 <!--          暂无依赖-->
 <!--        </div>-->
-      </div>
+<!--      </div>-->
     </div>
     <div class="res-detail-bd-row res-detail-desc ql-snow" ref="resDesc">
       <div class="header clearfix">

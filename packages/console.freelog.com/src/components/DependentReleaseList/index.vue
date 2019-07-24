@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="background-color: #fff;">
         <div
             v-if="!isLock"
             style="padding-left: 20px; height: 60px; align-items: center; display: flex;"
@@ -23,7 +23,6 @@
         />
         <!--        <Item :isLock="false" :name="'策略2'" :isOnline="true" @onRemove="onRemove(1)"/>-->
         <!--        <Item :isLock="false" :name="'策略3'" :isOnline="false" @onRemove="onRemove(2)"/>-->
-
         <DepDialog
             v-if="dialogVisible"
             :exists="exists"

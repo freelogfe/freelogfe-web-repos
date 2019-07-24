@@ -15,7 +15,7 @@
         </a>
         <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{this.name}}</span>
         <span
-            v-if="isOnline"
+            v-if="!isOnline"
             style="background-color: #cdcdcd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 12px; width: 50px; height: 22px; margin-left: 20px;"
         >未上线</span>
     </div>
