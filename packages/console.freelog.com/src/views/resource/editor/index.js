@@ -157,16 +157,16 @@ export default {
         /**
          * 添加依赖
          */
-        addDep(dep) {
-            // console.log(dep, 'debpdebpdebpdebpdebpdebp');
-            this.visibleDepDialog = false;
-            this.depList.push({
-                id: dep.releaseId,
-                name: dep.releaseName,
-                // 有版本号为正式资源，否则为 mock 资源
-                version: dep.latestVersion ? dep.latestVersion.version : undefined,
-            });
-        },
+        // addDep(dep) {
+        //     // console.log(dep, 'debpdebpdebpdebpdebpdebp');
+        //     this.visibleDepDialog = false;
+        //     this.depList.push({
+        //         id: dep.releaseId,
+        //         name: dep.releaseName,
+        //         // 有版本号为正式资源，否则为 mock 资源
+        //         version: dep.latestVersion ? dep.latestVersion.version : undefined,
+        //     });
+        // },
         /**
          * 依赖列表变化时
          */
@@ -208,19 +208,23 @@ export default {
          */
         async submit() {
             if (!this.resourceType) {
-                return this.$message.error('请选择资源类型');
+                this.$message.error('请选择资源类型');
+                throw new Error('请选择资源类型');
             }
 
             if (!this.uploadFileInfo.name) {
-                return this.$message.error('请上传文件');
+                this.$message.error('请上传文件');
+                throw new Error('请上传文件');
             }
 
             if (!this.resourceName) {
-                return this.$message.error('请输入资源名称');
+                this.$message.error('请输入资源名称');
+                throw new Error('请输入资源名称');
             }
 
             if (this.metaValidError) {
-                return this.$message.error('meta JSON格式有误');
+                this.$message.error('meta JSON格式有误');
+                throw new Error('meta JSON格式有误');
             }
 
             // const {bucketName, mockResourceId} = this.$route.params;
@@ -259,6 +263,9 @@ export default {
          * @param bool 是否一起发布
          */
         async onSubmitButtonClick(bool) {
+            if (bool && this.depList.some( i => !i.isOnline)){
+                return this.$message.error('依赖中有未上线的发行');
+            }
             const resourceId = await this.submit();
             if (!bool) {
                 return this.$router.replace(`/resource/list`);
