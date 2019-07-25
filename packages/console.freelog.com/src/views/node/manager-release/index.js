@@ -1,8 +1,10 @@
 import ContentBlock from './ContentBlock.vue';
 import DisplayOrInput from './DisplayOrInput.vue';
 import FreelogTags from '@/components/Tags/index.vue';
-import PolicyEditor from '@/components/PolicyEditor/index.vue'
-import PolicyList from '@/components/PolicyList/list/index.vue'
+import PolicyEditor from '@/components/PolicyEditor/index.vue';
+import PolicyList from '@/components/PolicyList/list/index.vue';
+import ContractManager from '@/components/ContractManager/index.vue';
+import {ContractDetail} from '@freelog/freelog-ui-contract'
 
 export default {
     name: 'manager-release',
@@ -12,6 +14,8 @@ export default {
         FreelogTags,
         PolicyEditor,
         PolicyList,
+        ContractManager,
+        ContractDetail,
     },
     data() {
         return {
@@ -33,10 +37,27 @@ export default {
             policies: [],
             // 新建的策略
             newPolicie: {policyName: '未命名策略', policyText: ''},
+
+            // 发行以及其上抛的解决方式
+            resolveReleases: [
+                // {
+                // releaseId: "5d391df0dd147a002b25d57e",
+                // releaseName: "12345123451234/发行G",
+                // policies: [
+                // {
+                //     id: '',
+                //     name: '',
+                // }
+                // ]
+                // }
+            ],
+            resolveReleaseID: '',
+            resolveReleaseContracts: [],
         };
     },
     mounted() {
         this.handleInitInfo();
+        this.getContractsList();
     },
     methods: {
         /**
@@ -66,6 +87,8 @@ export default {
             this.userDefinedTags = result.userDefinedTags;
             this.policies = result.policies;
 
+            this.resolveReleases = result.resolveReleases;
+            this.resolveReleaseID = result.resolveReleases[0].releaseId;
         },
         /**
          * 更新 presentable 数据
@@ -137,6 +160,22 @@ export default {
             this.policies = res.data.data.policies;
             this.$message.success('更新策略成功');
         },
+        async getContractsList() {
+            // console.log(this.resolveReleases, 'this.resolveReleasesthis.resolveReleases1111111');
+            if (this.resolveReleases.length === 0) {
+                return;
+            }
+            const contractIds = this.resolveReleases.find(i => i.releaseId === this.resolveReleaseID).contracts.map(i => i.contractId).join(',');
+            const params = {
+                contractIds,
+            };
+            const res = await this.$axios.get('/v1/contracts/list', {
+                params,
+            });
+            // console.log(res, 'resresresres');
+            this.resolveReleaseContracts = res.data.data;
+            // console.log(this.resolveReleaseContracts, 'this.resolveReleaseContract');
+        },
     },
     watch: {
         presentableName(val, oldVal) {
@@ -160,6 +199,9 @@ export default {
             });
             this.$message.success('用户标签更新成功');
         },
+        resolveReleaseID() {
+            this.getContractsList();
+        },
         // policies() {
         //     if (this.initState) {
         //         return;
@@ -169,6 +211,6 @@ export default {
     }
 }
 
-function f() {
-
-}
+// function f() {
+//
+// }
