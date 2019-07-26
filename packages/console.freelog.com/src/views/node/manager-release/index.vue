@@ -96,26 +96,45 @@
 
             <ContentBlock title="合约相关">
                 <div style="display: flex; font-size: 14px; font-weight: 600;">
-                    <a style="color: #409eff; padding-bottom: 8px; width: 100px; text-align: center; border-bottom: 2px solid #409eff;">合约</a>
-                    <a style="color: #333; padding-bottom: 8px; width: 100px; text-align: center;">授权链</a>
+                    <a
+                        style="padding-bottom: 8px; width: 100px; text-align: center;"
+                        :style="{color: activeTab === 'contract' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'contract' ? '2px solid #409eff': 'none'}"
+                        @click="activeTab = 'contract'"
+                    >合约</a>
+                    <a
+                        style="padding-bottom: 8px; width: 100px; text-align: center;"
+                        :style="{color: activeTab === 'authorize' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'authorize' ? '2px solid #409eff': 'none'}"
+                        @click="activeTab = 'authorize'"
+                    >授权链</a>
                 </div>
-                <div style="background-color: #fafbfb; padding: 15px 15px 20px; display: flex;">
+                <div
+                    v-if="activeTab === 'contract'"
+                    style="background-color: #fafbfb; padding: 15px 15px 20px; display: flex;"
+                >
                     <div style="width: 380px; flex-shrink: 0;">
-                        <!--                        <div style="font-size: 12px; color: #999; padding-bottom: 5px;">当前发行</div>-->
-                        <a
-                            v-for="release in resolveReleases"
-                            @click="resolveReleaseID = release.releaseId"
-                            style="padding: 12px 20px; display: block;"
-                            :style="{'background-color': resolveReleaseID === release.releaseId ? '#fff': 'transparent'}"
-                        >
-                            <div style="color: #333; font-size: 14px; font-weight: 600;">{{release.releaseName}}</div>
-                            <div style="height: 10px;"></div>
-                            <span
-                                v-for="contract in release.contracts"
-                                style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff; margin-right: 10px;">策略{{contract.policyId}}</span>
-                        </a>
+                        <div v-for="(release, index) in resolveReleases">
+                            <div v-if="index === 0" style="font-size: 12px; color: #999; padding-bottom: 5px;">当前发行
+                            </div>
+                            <div v-if="index === 1" style="font-size: 12px; color: #999; padding-bottom: 5px;">上抛发行
+                            </div>
+
+                            <a
+                                @click="resolveReleaseID = release.releaseId"
+                                style="padding: 12px 20px; display: block;"
+                                :style="{'background-color': resolveReleaseID === release.releaseId ? '#fff': 'transparent'}"
+                            >
+                                <div style="color: #333; font-size: 14px; font-weight: 600;">{{release.releaseName}}
+                                </div>
+                                <div style="height: 10px;"></div>
+                                <span
+                                    v-for="contract in release.contracts"
+                                    style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff; margin-right: 10px;"
+                                >
+                                {{resolveReleasePolicies.find(i => (i.policyId === contract.policyId)) && resolveReleasePolicies.find(i => (i.policyId === contract.policyId)).policyName}}
+                            </span>
+                            </a>
+                        </div>
                         <div style="height: 25px;"></div>
-                        <!--                        <div style="font-size: 12px; color: #999; padding-bottom: 5px;">上抛发行</div>-->
 
                         <!--                        <div style="height: 1px; background-color: #d4d4d4; margin-right: 15px;"></div>-->
                         <!--                        <a style="padding: 12px 20px; display: block;">-->
@@ -180,15 +199,19 @@
                             <div style="font-size: 14px; color: #999;">以下策略可供签约</div>
                             <div style="height: 15px;"></div>
 
-                            <div>
+                            <div v-for="policie in availablePolicies">
                                 <div style="display: flex; align-items: center;">
-                                    <i style="width: 16px; height: 16px; border-radius: 50%; border: 1px solid #666;"></i>
+                                    <i
+                                        style="width: 16px; height: 16px; border-radius: 50%; border: 1px solid #666;"
+                                        @click="signPolicy(policie)"
+                                    ></i>
                                     <span
-                                        style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">策略1</span>
+                                        style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{policie.policyName}}</span>
                                 </div>
                                 <div style="height: 5px;"></div>
-                                <div style="border: 1px solid #ccc; border-radius: 4px; height: 140px;">
-
+                                <div style="border: 1px solid #ccc; border-radius: 4px;">
+                                    <pre
+                                        style="font-size: 14px; color: #333; padding: 20px;">{{policie.policyText}}</pre>
                                 </div>
                             </div>
                         </div>
@@ -201,6 +224,13 @@
                 <!--                        v-if="resolveReleases.length"-->
                 <!--                    ></ContractManager>-->
                 <!--                </div>-->
+                <div v-if="activeTab === 'authorize'">
+                    <!--                    :depReleasesDetailList="depReleasesDetailList"
+                                            :contracts="contracts"-->
+                    <ReleaseEditorContract
+                        :release="releaseDetail"
+                    ></ReleaseEditorContract>
+                </div>
             </ContentBlock>
         </div>
         <div style="height: 65px;"></div>
