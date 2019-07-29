@@ -16,6 +16,7 @@ import {loadDetail} from '@/data/resource/loader'
 import {onloadNodeList} from '@/data/node/loader'
 import {cssSupports} from '@/lib/utils'
 import UploadCover from '@/components/UploadCover/index.vue';
+import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 
 export default {
   name: 'resource-detail',
@@ -23,7 +24,8 @@ export default {
     RichEditor,
     ResourceMetaInfo,
     ReleaseSearch,
-      UploadCover
+      UploadCover,
+      DependentReleaseList
   },
   data() {
     return {
@@ -64,6 +66,7 @@ export default {
       isShowReleaseDenpDialog: false,
       releaseSearchType: 'release',
       meta: "{}",
+        depList: [],
     }
   },
 
@@ -112,6 +115,9 @@ export default {
     window.removeEventListener('scroll', this.scrollFn)
   },
   methods: {
+      onChangeDeps(deps){
+          this.depList = deps;
+      },
     init() {
       loadDetail(this.resourceId).then((res) => {
         if (this.session && this.session.user) {
@@ -182,7 +188,14 @@ export default {
           .then(res => res.data)
           .then(res => {
             if(res.errcode === 0 ) {
+                // console.log(res.data, 'res.datares.datares.data');
               this.dependencies = res.data || []
+                this.depList = res.data.map(i => ({
+                    id: i.releaseId,
+                    name: i.releaseName,
+                    version: i.latestVersion.version,
+                    isOnline: i.status === 1,
+                }))
             }
           })
       }
@@ -360,34 +373,38 @@ export default {
         }
       }
     },
-    addDependency(release) {
-      let isExisted = false
-      const leng = this.dependencies.length
-      for(let i = 0; i < leng; i++) {
-        if(this.dependencies[i].releaseId === release.releaseId) {
-          isExisted = true
-          break
-        }
-      }
-      if(isExisted) {
-        this.$message({ type: 'warning', message: `依赖中已存在发行"${release.releaseName}"!` })
-      }else {
-        this.dependencies.push(release)
-      }
-
-    },
-    deleteDependency(index) {
-      this.dependencies.splice(index, 1)
-    },
+    // addDependency(release) {
+    //   let isExisted = false
+    //   const leng = this.dependencies.length
+    //   for(let i = 0; i < leng; i++) {
+    //     if(this.dependencies[i].releaseId === release.releaseId) {
+    //       isExisted = true
+    //       break
+    //     }
+    //   }
+    //   if(isExisted) {
+    //     this.$message({ type: 'warning', message: `依赖中已存在发行"${release.releaseName}"!` })
+    //   }else {
+    //     this.dependencies.push(release)
+    //   }
+    //
+    // },
+    // deleteDependency(index) {
+    //   this.dependencies.splice(index, 1)
+    // },
     updateResourceDetail() {
       const params = {
         aliasName: this.resourceDetail.resourceInfo.aliasName,
         description: this.resourceDetail.resourceInfo.description,
       }
       if(this.releasesList.length === 0) {
-        params.dependencies = this.dependencies.map(dep => {
-          return { releaseId: dep.releaseId, versionRange: dep.latestVersion.version }
-        })
+        // params.dependencies = this.dependencies.map(dep => {
+        //   return { releaseId: dep.releaseId, versionRange: dep.latestVersion.version }
+        // })
+          params.dependencies = this.depList.map(i => ({
+              releaseId: i.id,
+              versionRange: i.version,
+          }));
       }
       if(this.resPreviewImage !== '') {
         params.previewImages = [this.resPreviewImage]
@@ -425,6 +442,10 @@ export default {
         })
     },
     handleRelease() {
+        console.log(this.depList, 'this.depListthis.depListthis.depListthis.depList');
+        if (this.depList.some( i => !i.isOnline)){
+            return this.$message.error('依赖中有未上线的发行');
+        }
       this.handleSave()
         .then(data => {
           this.addToRelease()
