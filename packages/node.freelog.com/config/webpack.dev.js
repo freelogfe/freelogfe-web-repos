@@ -29,7 +29,7 @@ module.exports = merge(baseConfig, {
     hot: false,
     host: '0.0.0.0',
     inline: false,
-    port: 9880,
+    port: 9888,
   },
 
   devtool: 'cheap-eval-source-map',

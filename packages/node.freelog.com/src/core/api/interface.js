@@ -39,17 +39,11 @@ export default function generateInterfaces(fetch) {
     },
 
     fetchPresentableResource(target, params = {}) {
-      return fetch(`/v1/auths/presentable/${target}`, { data: params })
+      return fetch(`/v1/auths/presentables/${target}`, { data: params })
         .then((resp) => {
           const headers = resp.headers
-          const rids = headers.get('freelog-sub-resourceids')
+          const rids = headers.get('freelog-sub-releases')
           const token = headers.get('freelog-sub-resource-auth-token')
-
-          if (rids && token) {
-            rids.split(',').forEach((id) => {
-              subResourceTokenMap.set(id, token)
-            })
-          }
 
           return resp
         })
@@ -59,14 +53,22 @@ export default function generateInterfaces(fetch) {
      * 获取节点资源的数据内容
      */
     fetchPresentableResourceData(presentableId, params) {
-      return interfaces.fetchPresentableResource(`${presentableId}`, params)
+      return interfaces.fetchPresentableResource(`${presentableId}.file`, params)
     },
 
     /**
-     * 获取节点资源的详情信息
+     * 获取节点资源的授权信息
      */
     fetchPresentableResourceInfo(presentableId, params) {
       return interfaces.fetchPresentableResource(`${presentableId}.info`, params)
+        .then(resp => resp.json())
+    },
+
+    /**
+     * 获取节点资源的授权信息
+     */
+    fetchPresentableAuth(presentableId, params) {
+      return interfaces.fetchPresentableResource(`${presentableId}.auth`, params)
         .then(resp => resp.json())
     },
 
@@ -92,7 +94,12 @@ export default function generateInterfaces(fetch) {
 
     fetchSubResource({ presentableId, subReleaseId, version }) {
       const url = `/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.info?version=${version}`
-      return load(url).then(resp => resp.json())
+      return fetch(url).then(resp => resp.json())
+    },
+
+    fetchSubResourceData({ presentableId, subReleaseId, version }) {
+      const url = `/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.file?version=${version}`
+      return fetch(url)
     },
 
     requireSubResource({ presentableId, subReleaseId, version }) {
@@ -111,42 +118,7 @@ export default function generateInterfaces(fetch) {
         .then(data => injectCodeResource(data, type))
     },
 
-    /**
-     * js/css/json
-     * @param resourceId
-     * @param token
-     * @returns {*}
-     */
-    // requireSubResource(resourceId, presentableId) {
-    //   // 已经加载的资源不再加载
-    //   if (resourceLoadedStateMap.get(resourceId)) {
-    //     return Promise.resolve(resourceLoadedStateMap.get(resourceId))
-    //   }
-    //
-    //   let type
-    //   return interfaces.fetchSubResource(resourceId, presentableId)
-    //   .then((resp) => {
-    //     const contentType = resp.headers.get('content-type')
-    //     if (/css/.test(contentType)) {
-    //       type = 'text/css'
-    //     } else if (/javascript/.test(contentType)) {
-    //       type = 'text/javascript'
-    //     }
-    //
-    //     return type ? resp.text() : resp.json()
-    //   })
-    //   .then((data) => {
-    //     if (typeof data.errcode === 'undefined') {
-    //       if (typeof data === 'object') {
-    //         resourceLoadedStateMap.set(resourceId, data)
-    //         return data
-    //       }
-    //       return injectCodeResource(data, type)
-    //       .then(() => resourceLoadedStateMap.set(resourceId, data))
-    //     }
-    //     return Promise.reject(JSON.stringify(data))
-    //   })
-    // },
+
   }
   return interfaces
 

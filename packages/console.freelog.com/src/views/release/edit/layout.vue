@@ -10,11 +10,10 @@
         <div class="cont">
           <div class="r-e-l-name">
             <template v-if="!isEditingReleaseName">
-              {{release.username}}/{{release.releaseName}}
-              <span class="el-icon-edit-outline" @click="tapEditName"></span>
+              {{release.releaseName}}
+              <!-- <span class="el-icon-edit-outline" @click="tapEditName"></span> -->
             </template>
             <template v-else>
-              {{release.username}}/
               <el-input
                       autofocus
                       show-word-limit
