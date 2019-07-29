@@ -1,10 +1,10 @@
 import ContentBlock from './ContentBlock.vue';
 import DisplayOrInput from './DisplayOrInput.vue';
+import DisplayEditContracts from './DisplayEditContracts/index.vue';
 import FreelogTags from '@/components/Tags/index.vue';
 import PolicyEditor from '@/components/PolicyEditor/index.vue';
 import PolicyList from '@/components/PolicyList/list/index.vue';
 import ContractManager from '@/components/ContractManager/index.vue';
-import {ContractDetail} from '@freelog/freelog-ui-contract';
 import ReleaseEditorContract from '@/views/release/contract/index.vue'
 
 export default {
@@ -16,13 +16,15 @@ export default {
         PolicyEditor,
         PolicyList,
         ContractManager,
-        ContractDetail,
+        DisplayEditContracts,
         ReleaseEditorContract,
     },
     data() {
         return {
 
+            // 是否是初始状态
             initState: true,
+            // 发行相关信息
             releaseInfo: {
                 previewImages: '',
                 releaseName: '',
@@ -30,16 +32,19 @@ export default {
                 version: '',
                 createDate: '',
             },
-
+            // 名称
             presentableName: null,
+            // 用户定义标签
             userDefinedTags: null,
 
+            // 策略是否是编辑状态
             isShowEditPolicy: false,
             // 策略列表
             policies: [],
             // 新建的策略
             newPolicie: {policyName: '未命名策略', policyText: ''},
 
+            // 当前底部激活的是哪个 tabs
             activeTab: 'contract',
 
             // 发行以及其上抛的解决方式
@@ -55,18 +60,24 @@ export default {
                 // ]
                 // }
             ],
+            // 当前激活的发行 ID
             resolveReleaseID: '',
+            // 当前激活的发行的已签约的合约列表
             resolveReleaseContracts: [],
 
+            // 所有发行的策略
             resolveReleasePolicies: [],
+            // 当前 presonble 依赖的所有发行，为了获取未签约的发行
             releases: [],
 
+            // 发行详情，作为授权链的数据源
             releaseDetail: null,
         };
     },
     mounted() {
         this.handleInitInfo();
         this.getContractsList();
+        // this.freshBottomPolicy();
     },
     methods: {
         /**
@@ -95,15 +106,17 @@ export default {
             this.presentableName = result.presentableName;
             this.userDefinedTags = result.userDefinedTags;
             this.policies = result.policies;
-
+            // console.log(result.resolveReleases, 'PPPPPPPPPPPPPPPPPPPPP');
             this.resolveReleases = result.resolveReleases;
             this.resolveReleaseID = result.resolveReleases[0].releaseId;
 
-            this.handleResolveReleases();
+            setTimeout(() => {
+                this.handleResolveReleases();
+            });
 
             // releaseDetail
             const res2 = await this.$axios.get(`/v1/releases/${result.releaseInfo.releaseId}`);
-            console.log(res2, 'res2res2res2res2res2');
+            // console.log(res2, 'res2res2res2res2res2');
             this.releaseDetail = res2.data.data;
         },
         /**
@@ -186,16 +199,16 @@ export default {
             if (this.resolveReleases.length === 0) {
                 return;
             }
-            // console.log(this.resolveReleases, '1111111');
+            // console.log(this.resolveReleases, '6666666666');
             // console.log(this.resolveReleaseID, '2222222');
             const contractIds = this.resolveReleases.find(i => i.releaseId === this.resolveReleaseID).contracts.map(i => i.contractId).join(',');
-            // console.log(contractIds, 'contractIdscontractIds');
+            // console.log(contractIds, '222222222222222');
             const res = await this.$axios.get('/v1/contracts/list', {
                 params: {
                     contractIds
                 },
             });
-            // console.log(res, 'resresresres');
+            // console.log(res, 'resresresresWWWWWWWWWW');
             this.resolveReleaseContracts = res.data.data;
             // console.log(this.resolveReleaseContracts, 'this.resolveReleaseContract');
         },
@@ -218,10 +231,10 @@ export default {
         /**
          * 对可供签约的策略签约
          */
-        signPolicy(policie) {
+        async signPolicy(policie) {
             // console.log(this.resolveReleaseContracts, 'policiepolicie');
-            console.log(policie, 'policiepolicie');
-            this.updatePresentable({
+            // console.log(policie, 'policiepolicie');
+            await this.updatePresentable({
                 resolveReleases: [
                     {
                         releaseId: this.resolveReleaseID,
@@ -236,7 +249,47 @@ export default {
                     },
                 ]
             });
+            // console.log('getContractsListgetContractsListgetContractsList');
+            // setTimeout(() => {
+            //     this.handleInitInfo();
+            //     this.getContractsList();
+            // }, 1000);
+            // this.freshBottomPolicy();
         },
+        /**
+         * 解约
+         */
+        async breakSignPolicy(index) {
+            await this.updatePresentable({
+                resolveReleases: [
+                    {
+                        releaseId: this.resolveReleaseID,
+                        contracts: [
+                            ...this.resolveReleaseContracts
+                                .filter((i, j) => j !== index)
+                                .map(i => ({
+                                    policyId: i.policyId,
+                                })),
+                        ],
+                    },
+                ]
+            });
+            // console.log('breakSignPolicybreakSignPolicybreakSignPolicybreakSignPolicy');
+            // this.handleInitInfo();
+            // this.getContractsList();
+            // this.freshBottomPolicy();
+        },
+        /**
+         * 刷新底部策略
+         * @return {Promise<void>}
+         */
+        // async freshBottomPolicy() {
+        //     setTimeout(async () => {
+        //         const res = await this.$axios.get(`/v1/presentables/${this.$route.params.presentableId}`);
+        //         // console.log(res, '0000000000000000000000000');
+        //     }, 100);
+        //
+        // }
     },
     watch: {
         presentableName(val, oldVal) {
