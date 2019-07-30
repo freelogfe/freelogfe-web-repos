@@ -48,15 +48,16 @@ export default {
     },
     fetchReleaseData(page) {
       const query = {
-        page
+        page,
+        pageSize: 30
       }
       if (this.query) {
         query.keyWords = this.query
       }
       return this.loader(query).then((data) => {
+        data.canLoadMore = !(data.dataList.length < data.pageSize)
         data.dataList = data.dataList.filter(r => r.policies.length > 0)
         const releases = data.dataList
-        data.canLoadMore = !(releases.length < data.pageSize)
 
         if (releases && releases.length) {
           const releasesMap = {}
