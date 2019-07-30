@@ -96,7 +96,7 @@
         </div>
 
         <div v-if="isExpandPolicy"
-             style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5)"></div>
+             style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5); z-index: 99;"></div>
         <div
             v-if="isExpandPolicy"
             style="
@@ -104,14 +104,15 @@
             font-size: 14px;
             color: #333;
             background-color: #fff;
-            transition: top 1s, width 1s , height 1s, left 1s;"
+            transition: top 1s, width 1s , height 1s, left 1s; z-index: 100;"
             :style="enlargedDisplayBox"
         >
             <!--            <PolicyCard-->
             <!--                :show="isExpandPolicy"-->
             <!--                :policy="formatedPolicyList[0]"-->
             <!--            ></PolicyCard>-->
-            <div style="font-weight: 600; line-height: 35px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+                style="font-weight: 600; line-height: 35px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
                 <span>{{formatedPolicyList[expandedPolicyIndex].policyName}}</span>
                 <i
                     class="el-icon-circle-close"
@@ -119,7 +120,8 @@
                     @click="isExpandPolicy = false"
                 ></i>
             </div>
-            <pre style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[expandedPolicyIndex].policyText}}</pre>
+            <pre
+                style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[expandedPolicyIndex].policyText}}</pre>
         </div>
     </div>
 
@@ -241,6 +243,15 @@
         },
         created() {
 
+        },
+        watch: {
+            isExpandPolicy(val) {
+                if (val) {
+                    window.document.body.style.overflowY = 'hidden';
+                } else {
+                    window.document.body.style.overflowY = 'auto';
+                }
+            },
         }
     }
 </script>
