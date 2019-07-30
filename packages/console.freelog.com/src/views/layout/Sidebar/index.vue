@@ -68,7 +68,7 @@
         </a>
         <ul class="my-node-list ls-submenu-list" v-if="nodes&&nodes.length">
           <li class="node-item hover" :key="node.nodeId" v-for="node in nodes">
-            <router-link :to="'/node/'+node.nodeId" class="nav-link mnl-nav-link" :title="node.nodeName">
+            <router-link :to="'/node/manager/'+node.nodeId" class="nav-link mnl-nav-link" :title="node.nodeName">
               {{node.nodeName}}
             </router-link>
           </li>
