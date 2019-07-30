@@ -16,12 +16,26 @@ export default {
         callback(new Error(this.$t('node.createRules.noEmpty')))
       }
     }
+    const validateNodeName = (rule, value, callback) => {
+      if(value) {
+        if(value.length < 2 || value.length > 24) {
+          callback(new Error(this.$t('node.nodeNameRules.length')))
+        }else if(/^[\u4E00-\u9FA5|a-z|0-9|A-Z]+$/.test(value)) {
+          callback()
+        }else {
+          callback(new Error(this.$t('node.nodeNameRules.prefix')))
+        }
+      }else {
+        callback(new Error(this.$t('node.nodeNameRules.noEmpty')))
+      }
+    }
 
     const formRules = {
-      nodeName: [{ required: true, message: this.$t('node.nodeNameRules.noEmpty'), trigger: 'blur' },
-        {
-          min: 4, max: 20, message: this.$t('node.nodeNameRules.length'), trigger: 'blur'
-        }],
+      nodeName: [
+        { required: true, message: this.$t('node.nodeNameRules.noEmpty'), trigger: 'blur' },
+        { validator: validateNodeName, trigger: 'blur' },
+        { min: 4, max: 20, message: this.$t('node.nodeNameRules.length'), trigger: 'blur' }
+      ],
       nodeDomain: [{ validator: validateNodeDomain, trigger: 'blur' }]
     }
 

@@ -223,11 +223,11 @@
             pageSize
           }, this.searchScope)
         }).then((res) => {
-          console.log(res, 'resresres');
+          // console.log(res, 'resresres');
           const data = res.getData() || {}
           if (res.data.errcode === 0) {
-            data.dataList = data.dataList.filter(r => r.policies.length > 0)
-            console.log(data.dataList, 'data.dataListdata.dataListdata.dataList');
+            // data.dataList = data.dataList.filter(r => r.policies.length > 0)
+            // console.log(data.dataList, 'data.dataListdata.dataListdata.dataList');
             this.searchReleases = this.searchReleases.concat(data.dataList)
             if (data.dataList.length < pageSize) {
               data.canLoadMore = false
@@ -235,7 +235,7 @@
           } else {
             data.canLoadMore = false
           }
-          console.log(data, 'datadatadatadatadata');
+          // console.log(data, 'datadatadatadatadata');
           return data
         })
       },

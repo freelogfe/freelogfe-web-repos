@@ -83,10 +83,12 @@
     components: {SchemeManage},
     data() {
       const validateName = (rule, value, callback) => {
-        if(/^\//.test(value)) {
-          callback('名称不能/开头！')
-        }else {
+        if(value.length < 1 || value.length > 60) {
+          callback('长度必须在 1–60 字符之间')
+        }else if(/^[^\/\\\:\*\?\"\<\>\|\!]+$/.test(value)) {
           callback()
+        }else {
+          callback('名称不能包含空格和以下字符：\ / : * ? " < > |!')
         }
       }
       const validateVersion = (rule, value, callback) => {
@@ -106,7 +108,7 @@
         },
         rules: {
           releaseName: [
-            { required: true, message: '版本号不能为空！', trigger: 'blur'},
+            { required: true, message: '发行名不能为空！', trigger: 'blur'},
             { validator: validateName, trigger: 'blur' }
           ],
           version: [

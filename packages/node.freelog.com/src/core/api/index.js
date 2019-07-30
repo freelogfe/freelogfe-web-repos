@@ -26,7 +26,7 @@ function exposeInterfaces(interfaces) {
   const api = {}
   const apiList =  [
     'fetchPresentablesList', 'fetchPresentableInfo', 'fetchPresentableResourceData', 'fetchPresentableResourceInfo',
-    'fetchSubResourceUrl', 'fetchSubResource', 'requireSubResource' ]
+    'fetchSubResourceUrl', 'fetchSubResource', 'requireSubResource', 'fetchSubResourceData', 'fetchPresentableAuth' ]
 
   apiList.forEach((name) => {
     api[name] = function (...args) {
