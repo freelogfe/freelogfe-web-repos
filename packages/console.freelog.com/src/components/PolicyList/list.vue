@@ -92,7 +92,7 @@
 
         <div
             v-if="isExpandPolicy"
-            style="position: fixed; background-color: #fff;"
+            style="position: fixed; background-color: #fff; z-index: 100;"
             :style="enlargedDisplayBox"
         >
 
