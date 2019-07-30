@@ -78,7 +78,7 @@
                         <div
                             style="font-size: 12px; color: #999; display: flex; justify-content: space-between;">
                             <span>授权方：{{item.contract.partyOne}}</span>
-                            <span>被授权方：节点xxx</span>
+                            <span>被授权方：{{nodeInfo.nodeDomain}}</span>
                             <span>合约ID：{{item.contract.contractId}}</span>
                             <span>签约时间：{{item.contract.createDate.split('T')[0]}}</span>
                         </div>
@@ -124,6 +124,7 @@
 
 <script>
     import {ContractDetail} from '@freelog/freelog-ui-contract';
+
     export default {
         name: 'DisplayEditContracts',
         components: {
@@ -133,6 +134,8 @@
             return {
                 dataSource: [],
                 activatedIndex: -1,
+
+                nodeInfo: null,
             };
         },
         mounted() {
@@ -142,6 +145,11 @@
             async handleData() {
                 const res = await this.$axios.get(`/v1/presentables/${this.$route.params.presentableId}`);
                 const data = res.data.data;
+
+                if (!this.nodeInfo) {
+                    this.handleNodeInfo(data.nodeId);
+                }
+
                 // console.log(data, '000000000000000');
                 const dataSource = data.resolveReleases.map(i => ({
                     releaseId: i.releaseId,
@@ -197,6 +205,14 @@
                 }
                 // console.log(this.dataSource, 'CCCCCCCCCC');
                 // console.log(this.dataSource[this.activatedIndex], '!@#$%^&*()');
+            },
+            /**
+             * 获取节点信息
+             */
+            async handleNodeInfo(nodeID) {
+                const res = await this.$axios.get(`/v1/nodes/${nodeID}`);
+                // console.log(res, 'resres');
+                this.nodeInfo = res.data.data;
             },
 
             /**

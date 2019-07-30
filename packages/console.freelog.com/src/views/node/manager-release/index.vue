@@ -107,7 +107,7 @@
                         @click="activeTab = 'authorize'"
                     >授权链</a>
                 </div>
-                <DisplayEditContracts/>
+                <DisplayEditContracts v-show="activeTab === 'contract'"/>
                 <!--                <div-->
                 <!--                    v-if="activeTab === 'contract'"-->
                 <!--                    style="background-color: #fafbfb; padding: 15px 15px 20px; display: flex;"-->
@@ -231,7 +231,7 @@
                 <!--                        v-if="resolveReleases.length"-->
                 <!--                    ></ContractManager>-->
                 <!--                </div>-->
-                <div v-if="activeTab === 'authorize'">
+                <div v-show="activeTab === 'authorize'">
                     <!--                    :depReleasesDetailList="depReleasesDetailList"
                                             :contracts="contracts"-->
                     <ReleaseEditorContract

@@ -76,7 +76,7 @@ export default {
     },
     mounted() {
         this.handleInitInfo();
-        this.getContractsList();
+        // this.getContractsList();
         // this.freshBottomPolicy();
     },
     methods: {
@@ -110,9 +110,9 @@ export default {
             this.resolveReleases = result.resolveReleases;
             this.resolveReleaseID = result.resolveReleases[0].releaseId;
 
-            setTimeout(() => {
-                this.handleResolveReleases();
-            });
+            // setTimeout(() => {
+            //     this.handleResolveReleases();
+            // });
 
             // releaseDetail
             const res2 = await this.$axios.get(`/v1/releases/${result.releaseInfo.releaseId}`);
@@ -194,91 +194,91 @@ export default {
          *
          * @return {Promise<void>}
          */
-        async getContractsList() {
-            // console.log(this.resolveReleases, 'this.resolveReleasesthis.resolveReleases1111111');
-            if (this.resolveReleases.length === 0) {
-                return;
-            }
-            // console.log(this.resolveReleases, '6666666666');
-            // console.log(this.resolveReleaseID, '2222222');
-            const contractIds = this.resolveReleases.find(i => i.releaseId === this.resolveReleaseID).contracts.map(i => i.contractId).join(',');
-            // console.log(contractIds, '222222222222222');
-            const res = await this.$axios.get('/v1/contracts/list', {
-                params: {
-                    contractIds
-                },
-            });
-            // console.log(res, 'resresresresWWWWWWWWWW');
-            this.resolveReleaseContracts = res.data.data;
-            // console.log(this.resolveReleaseContracts, 'this.resolveReleaseContract');
-        },
+        // async getContractsList() {
+        //     // console.log(this.resolveReleases, 'this.resolveReleasesthis.resolveReleases1111111');
+        //     if (this.resolveReleases.length === 0) {
+        //         return;
+        //     }
+        //     // console.log(this.resolveReleases, '6666666666');
+        //     // console.log(this.resolveReleaseID, '2222222');
+        //     const contractIds = this.resolveReleases.find(i => i.releaseId === this.resolveReleaseID).contracts.map(i => i.contractId).join(',');
+        //     // console.log(contractIds, '222222222222222');
+        //     const res = await this.$axios.get('/v1/contracts/list', {
+        //         params: {
+        //             contractIds
+        //         },
+        //     });
+        //     // console.log(res, 'resresresresWWWWWWWWWW');
+        //     this.resolveReleaseContracts = res.data.data;
+        //     // console.log(this.resolveReleaseContracts, 'this.resolveReleaseContract');
+        // },
         /**
          * 组织处理 resolveRelease
          * @return {Promise<void>}
          */
-        async handleResolveReleases() {
-            const releaseIds = this.resolveReleases.map(i => i.releaseId);
-            const res = await this.$axios.get('/v1/releases/list', {
-                params: {
-                    releaseIds: releaseIds.join(','),
-                },
-            });
-            // console.log(res, 'resres');
-            this.releases = res.data.data;
-            this.resolveReleasePolicies = getPolicies(res.data.data);
-        },
+        // async handleResolveReleases() {
+        //     const releaseIds = this.resolveReleases.map(i => i.releaseId);
+        //     const res = await this.$axios.get('/v1/releases/list', {
+        //         params: {
+        //             releaseIds: releaseIds.join(','),
+        //         },
+        //     });
+        //     // console.log(res, 'resres');
+        //     this.releases = res.data.data;
+        //     this.resolveReleasePolicies = getPolicies(res.data.data);
+        // },
 
         /**
          * 对可供签约的策略签约
          */
-        async signPolicy(policie) {
-            // console.log(this.resolveReleaseContracts, 'policiepolicie');
-            // console.log(policie, 'policiepolicie');
-            await this.updatePresentable({
-                resolveReleases: [
-                    {
-                        releaseId: this.resolveReleaseID,
-                        contracts: [
-                            ...this.resolveReleaseContracts.map(i => ({
-                                policyId: i.policyId,
-                            })),
-                            {
-                                policyId: policie.policyId,
-                            }
-                        ],
-                    },
-                ]
-            });
-            // console.log('getContractsListgetContractsListgetContractsList');
-            // setTimeout(() => {
-            //     this.handleInitInfo();
-            //     this.getContractsList();
-            // }, 1000);
-            // this.freshBottomPolicy();
-        },
+        // async signPolicy(policie) {
+        //     // console.log(this.resolveReleaseContracts, 'policiepolicie');
+        //     // console.log(policie, 'policiepolicie');
+        //     await this.updatePresentable({
+        //         resolveReleases: [
+        //             {
+        //                 releaseId: this.resolveReleaseID,
+        //                 contracts: [
+        //                     ...this.resolveReleaseContracts.map(i => ({
+        //                         policyId: i.policyId,
+        //                     })),
+        //                     {
+        //                         policyId: policie.policyId,
+        //                     }
+        //                 ],
+        //             },
+        //         ]
+        //     });
+        //     // console.log('getContractsListgetContractsListgetContractsList');
+        //     // setTimeout(() => {
+        //     //     this.handleInitInfo();
+        //     //     this.getContractsList();
+        //     // }, 1000);
+        //     // this.freshBottomPolicy();
+        // },
         /**
          * 解约
          */
-        async breakSignPolicy(index) {
-            await this.updatePresentable({
-                resolveReleases: [
-                    {
-                        releaseId: this.resolveReleaseID,
-                        contracts: [
-                            ...this.resolveReleaseContracts
-                                .filter((i, j) => j !== index)
-                                .map(i => ({
-                                    policyId: i.policyId,
-                                })),
-                        ],
-                    },
-                ]
-            });
-            // console.log('breakSignPolicybreakSignPolicybreakSignPolicybreakSignPolicy');
-            // this.handleInitInfo();
-            // this.getContractsList();
-            // this.freshBottomPolicy();
-        },
+        // async breakSignPolicy(index) {
+        //     await this.updatePresentable({
+        //         resolveReleases: [
+        //             {
+        //                 releaseId: this.resolveReleaseID,
+        //                 contracts: [
+        //                     ...this.resolveReleaseContracts
+        //                         .filter((i, j) => j !== index)
+        //                         .map(i => ({
+        //                             policyId: i.policyId,
+        //                         })),
+        //                 ],
+        //             },
+        //         ]
+        //     });
+        //     // console.log('breakSignPolicybreakSignPolicybreakSignPolicybreakSignPolicy');
+        //     // this.handleInitInfo();
+        //     // this.getContractsList();
+        //     // this.freshBottomPolicy();
+        // },
         /**
          * 刷新底部策略
          * @return {Promise<void>}
@@ -313,9 +313,9 @@ export default {
             });
             this.$message.success('用户标签更新成功');
         },
-        resolveReleaseID() {
-            this.getContractsList();
-        },
+        // resolveReleaseID() {
+        //     this.getContractsList();
+        // },
         // policies() {
         //     if (this.initState) {
         //         return;
