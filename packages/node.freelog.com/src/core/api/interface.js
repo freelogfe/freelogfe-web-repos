@@ -65,6 +65,13 @@ export default function generateInterfaces(fetch) {
     },
 
     /**
+     * 获取发行的数据内容
+     */
+    fetchSubReleaseData({presentableId, subReleaseId, version }) {
+      return fetch(`/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.file?version=${version}`)
+    },
+
+    /**
      * 获取节点资源的授权信息
      */
     fetchPresentableAuth(presentableId, params) {

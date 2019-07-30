@@ -16,9 +16,9 @@
                   :placeholder="$t('signup.loginNamePlaceholder')" autocomplete="off">
         </el-input>
       </el-form-item>
-      <el-form-item prop="nickname" :label="$t('signup.nickname')" required>
-        <el-input type="text" v-model="model.nickname"
-                  :placeholder="$t('signup.nicknamePlaceholder')" autocomplete="off">
+      <el-form-item prop="username" :label="$t('signup.username')" required>
+        <el-input type="text" v-model="model.username"
+                  :placeholder="$t('signup.usernamePlaceholder')" autocomplete="off">
         </el-input>
       </el-form-item>
       <el-form-item prop="password" :label="$t('signup.password')" required>

@@ -101,6 +101,7 @@ export default {
         },
         nodeNameRules: {
             noEmpty: '节点描述不能为空',
+            prefix: '目前仅支持中文、英文和数字',
             length: '节点描述长度应为4-20字符，不区分大小写'
         },
         createSuccess: '节点创建成功',

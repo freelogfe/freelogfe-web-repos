@@ -32,8 +32,8 @@ export default {
         {required: true, message: this.$t('signup.loginNamePlaceholder'), trigger: 'blur'},
         {validator: validateLoginName.bind(this), trigger: 'blur'}
       ],
-      nickname: [
-        {required: true, message: this.$t('signup.nicknamePlaceholder'), trigger: 'blur'}
+      username: [
+        {required: true, message: this.$t('signup.usernamePlaceholder'), trigger: 'blur'}
       ],
       password: [
         {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'blur'},
@@ -48,7 +48,7 @@ export default {
     }
     const model = {
       loginName: '',
-      nickname: '',
+      username: '',
       password: '',
       checkPassword: '',
       authCode: ''

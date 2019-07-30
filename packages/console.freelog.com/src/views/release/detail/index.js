@@ -294,6 +294,7 @@ export default {
             if(res.errcode === 0) {
               this.rSubordinateNodesIds.push(res.data.nodeId)
               this.$message({ type: 'success', message: '授权签约成功！' })
+              this.signDialogVisible = false
             }else {
               this.$error.showErrorMessage(res.msg)
             }
