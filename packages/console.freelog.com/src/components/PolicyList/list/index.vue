@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="policy-list">
         <div class="policy-list-wrapper">
             <div
                 class="p-l-main-content clearfix"
@@ -9,6 +9,11 @@
                     style="transition: all .3s; white-space: nowrap;"
                     :style="{ transform: `translateX(-${policyTranslateX}px)` }"
                 >
+                    <!--                    <Item-->
+                    <!--                        v-for="(policy, index) in formatedPolicyList"-->
+                    <!--                        :policy="policy"-->
+                    <!--                        :handleCommand="handleCommand(index + '-' + $event)"-->
+                    <!--                    ></Item>-->
                     <div
                         class="p-l-item"
                         v-for="(policy, index) in formatedPolicyList"
@@ -90,24 +95,45 @@
 
         </div>
 
+        <div v-if="isExpandPolicy"
+             style="position: fixed; top: 0; right: 0; bottom: 0; left: 0; background-color: rgba(0,0,0,.5)"></div>
         <div
             v-if="isExpandPolicy"
-            style="position: fixed; background-color: #fff;"
+            style="
+            position: fixed;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            transition: top 1s, width 1s , height 1s, left 1s;"
             :style="enlargedDisplayBox"
         >
-
+            <!--            <PolicyCard-->
+            <!--                :show="isExpandPolicy"-->
+            <!--                :policy="formatedPolicyList[0]"-->
+            <!--            ></PolicyCard>-->
+            <div style="font-weight: 600; line-height: 35px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span>{{formatedPolicyList[expandedPolicyIndex].policyName}}</span>
+                <i
+                    class="el-icon-circle-close"
+                    style="font-size: 16px;"
+                    @click="isExpandPolicy = false"
+                ></i>
+            </div>
+            <pre style="padding: 0 20px; white-space: pre-wrap;">{{formatedPolicyList[expandedPolicyIndex].policyText}}</pre>
         </div>
-        <!--        <span>{{enlargedDisplayBox}}</span>-->
     </div>
 
 </template>
 
 <script>
-    import {beautifyPolicy} from '@freelog/freelog-policy-lang'
+    import {beautifyPolicy} from '@freelog/freelog-policy-lang';
+    import PolicyCard from './PolicyCard.vue';
 
     export default {
         name: 'policy-list',
-        components: {},
+        components: {
+            PolicyCard,
+        },
         props: {
             policyList: {
                 type: Array,
@@ -126,9 +152,9 @@
 
                 enlargedDisplayBox: {
                     top: 0,
-                    right: 0,
-                    bottom: 0,
                     left: 0,
+                    width: 0,
+                    height: 0,
                 },
 
             }
@@ -178,17 +204,26 @@
                 this.isExpandPolicy = true
                 this.expandedPolicyIndex = index
 
-                const {top, right, bottom, left} = event.target.parentNode.getBoundingClientRect();
-                console.log(top, right, bottom, left, 'top, right, bottom, left');
+                // console.log(event.target.parentNode.getBoundingClientRect(), 'event.target.parentNode.getBoundingClientRect()');
+                const {top, width, height, left} = event.target.parentNode.getBoundingClientRect();
                 this.enlargedDisplayBox = {
                     top: top + 'px',
-                    right: (window.innerWidth - right) + 'px',
-                    bottom: (window.innerHeight - bottom) + 'px',
+                    width: width + 'px',
+                    height: height + 'px',
                     left: left + 'px',
                 };
+                setTimeout(() => {
+                    this.enlargedDisplayBox = {
+                        top: (window.innerHeight / 2 - 300) + 'px',
+                        left: (window.innerWidth / 2 - 200) + 'px',
+                        width: 400 + 'px',
+                        height: 600 + 'px',
+                    };
+                }, 30);
                 // console.log(this.enlargedDisplayBox, 'enlargedDisplayBox');
             },
             handleCommand(command) {
+                console.log(command, 'commandcommandcommand');
                 let [policyIndex, status] = command.split('-')
                 status = +status
                 if (status === 0 || status === 1) {
@@ -210,176 +245,182 @@
     }
 </script>
 
-<style lang="less" type="text/less" scoped>
-    .policy-list-wrapper {
-        position: relative;
-    }
+<style
+    lang="less"
+    type="text/less"
+>
+    .policy-list {
 
-    .p-l-main-content {
-        overflow: hidden;
-        margin: 20px 80px;
-
-        &.no-overflow {
-            margin: 10px 0 20px 0;
-        }
-    }
-
-    .p-l-add-box {
-        margin-top: 15px;
-        text-align: right;
-
-        span {
+        .policy-list-wrapper {
             position: relative;
-            cursor: pointer;
-            margin-left: 30px;
-            padding-left: 28px;
-            padding-right: 12px;
-            font-weight: bold;
-            color: #333;
         }
 
-        .el-icon-circle-plus {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            z-index: 5;
-            transform: translateY(-50%);
-            font-size: 22px;
-            font-weight: 600;
-            color: #409EFF;
-        }
-    }
+        .p-l-main-content {
+            overflow: hidden;
+            margin: 20px 80px;
 
-    .p-l-item {
-
-        &:first-child {
-            background-color: gray;
+            &.no-overflow {
+                margin: 10px 0 20px 0;
+            }
         }
 
-        overflow: hidden;
-        position: relative;
-        display: inline-block;
-        margin-right: 20px;
-        padding: 4px;
+        .p-l-add-box {
+            margin-top: 15px;
+            text-align: right;
 
-        .el-dropdown {
-            position: absolute;
-            top: 35px;
-            right: 13px;
-            z-index: 10;
-            cursor: pointer;
+            span {
+                position: relative;
+                cursor: pointer;
+                margin-left: 30px;
+                padding-left: 28px;
+                padding-right: 12px;
+                font-weight: bold;
+                color: #333;
+            }
 
-            .el-icon-more {
+            .el-icon-circle-plus {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                z-index: 5;
+                transform: translateY(-50%);
+                font-size: 22px;
+                font-weight: 600;
+                color: #409EFF;
+            }
+        }
+
+        .p-l-item {
+
+            /*&:first-child {*/
+            /*    background-color: gray;*/
+            /*}*/
+
+            overflow: hidden;
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+            padding: 4px;
+
+            .el-dropdown {
+                position: absolute;
+                top: 35px;
+                right: 13px;
+                z-index: 10;
+                cursor: pointer;
+
+                .el-icon-more {
+                    padding: 4px;
+                    border-radius: 50%;
+                    font-size: 14px;
+                    background-color: #F3F3F3;
+                    color: #979797;
+                }
+            }
+
+            .p-l-expand-btn {
+                position: absolute;
+                bottom: 10px;
+                right: 13px;
+                z-index: 10;
+                cursor: pointer;
                 padding: 4px;
-                border-radius: 50%;
+                border-radius: 2px;
                 font-size: 14px;
                 background-color: #F3F3F3;
                 color: #979797;
             }
         }
 
-        .p-l-expand-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 13px;
-            z-index: 10;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 2px;
-            font-size: 14px;
-            background-color: #F3F3F3;
-            color: #979797;
-        }
-    }
+        .p-l-item-head {
 
-    .p-l-item-head {
+            height: 26px;
 
-        height: 26px;
+            .p-l-status {
+                display: inline-block;
+                font-size: 14px;
 
-        .p-l-status {
-            display: inline-block;
-            font-size: 14px;
+                &.p-l-s-top {
+                    color: #F5A623;
+                }
 
-            &.p-l-s-top {
+                &.p-l-s-disabled {
+                    color: #D8D8D8;
+                }
+
+                &.p-l-s-active {
+                    color: #84CCA8;
+                }
+            }
+
+            .el-icon-download {
+                transform: rotate(180deg);
+                font-size: 14px;
+                font-weight: bold;
                 color: #F5A623;
             }
-
-            &.p-l-s-disabled {
-                color: #D8D8D8;
-            }
-
-            &.p-l-s-active {
-                color: #84CCA8;
-            }
         }
 
-        .el-icon-download {
-            transform: rotate(180deg);
-            font-size: 14px;
-            font-weight: bold;
-            color: #F5A623;
-        }
-    }
-
-    .p-l-card {
-        display: inline-block;
-        box-sizing: border-box;
-        width: 230px;
-        height: 185px;
-        padding: 9px;
-        border-radius: 4px;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-
-        h5 {
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .policy-text {
-            overflow: auto;
-            white-space: pre-wrap;
-            height: 143px;
-            font-size: 14px;
-        }
-    }
-
-    .p-l-left-btn, .p-l-right-btn {
-        position: absolute;
-        top: 100px;
-        z-index: 10;
-        font-size: 36px;
-        cursor: pointer;
-
-        &.disabled {
-            cursor: not-allowed;
-            color: #c3c3c3;
-        }
-    }
-
-    .p-l-left-btn {
-        left: 10px;
-    }
-
-    .p-l-right-btn {
-        right: 10px;
-    }
-
-    .p-l-list-nav-bar {
-        margin-top: 10px;
-        text-align: center;
-        cursor: pointer;
-
-        li {
+        .p-l-card {
             display: inline-block;
-            padding: 0;
-            margin: 0 5px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #DBDBDB;
+            box-sizing: border-box;
+            width: 230px;
+            height: 185px;
+            padding: 9px;
+            border-radius: 4px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 
-            &.active {
-                background-color: #409EFF;
+            h5 {
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+
+            .policy-text {
+                overflow: auto;
+                white-space: pre-wrap;
+                height: 143px;
+                font-size: 14px;
+            }
+        }
+
+        .p-l-left-btn, .p-l-right-btn {
+            position: absolute;
+            top: 100px;
+            z-index: 10;
+            font-size: 36px;
+            cursor: pointer;
+
+            &.disabled {
+                cursor: not-allowed;
+                color: #c3c3c3;
+            }
+        }
+
+        .p-l-left-btn {
+            left: 10px;
+        }
+
+        .p-l-right-btn {
+            right: 10px;
+        }
+
+        .p-l-list-nav-bar {
+            margin-top: 10px;
+            text-align: center;
+            cursor: pointer;
+
+            li {
+                display: inline-block;
+                padding: 0;
+                margin: 0 5px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: #DBDBDB;
+
+                &.active {
+                    background-color: #409EFF;
+                }
             }
         }
     }

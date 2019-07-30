@@ -10,11 +10,10 @@
         <div class="cont">
           <div class="r-e-l-name">
             <template v-if="!isEditingReleaseName">
-              {{release.username}}/{{release.releaseName}}
-              <span class="el-icon-edit-outline" @click="tapEditName"></span>
+              {{release.releaseName}}
+              <!-- <span class="el-icon-edit-outline" @click="tapEditName"></span> -->
             </template>
             <template v-else>
-              {{release.username}}/
               <el-input
                       autofocus
                       show-word-limit
@@ -98,7 +97,7 @@
         </div>
       </div>
       <div class="r-e-l-row r-e-l-r-version" :class="{ 'tuck-up': isTuckUpVersion }">
-        <h3>版本相关 <i class="el-icon-arrow-up" @click="isTuckUpVersion = !isTuckUpVersion"></i></h3>
+        <h3>版本相关111 <i class="el-icon-arrow-up" @click="isTuckUpVersion = !isTuckUpVersion"></i></h3>
         <div class="cont">
           <slot name="about-version"></slot>
         </div>
