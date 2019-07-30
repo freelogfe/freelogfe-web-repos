@@ -6,7 +6,7 @@
  * type: resource/node 对应的侧边栏
  */
 import Router from 'vue-router'
-import { Vue } from '@freelog/freelog-common-lib'
+import {Vue} from '@freelog/freelog-common-lib'
 import Views from '@/views/index'
 import nodeRoute from './node'
 import resourceRoute from './resource'
@@ -38,7 +38,7 @@ const routerConfig = {
     routes: [
         {
             path: '/',
-            meta: { title: i18n.t('resource.market') },
+            meta: {title: i18n.t('resource.market')},
             component: Views.layout,
             children: [
                 resourceRoute,
@@ -73,6 +73,16 @@ const routerConfig = {
                     component: Views.helpView
                 },
                 {
+                    path: 'market',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: false,
+                        title: i18n.t('resource.market'),
+                        theme: 'gray'
+                    },
+                    component: Views.marketView
+                },
+                {
                     path: '/',
                     hidden: true,
                     meta: {
@@ -105,10 +115,12 @@ const notFoundRouteConfig = {
     }]
 }
 const router = new Router(routerConfig)
+
 export function registerNotFoundRouete() {
     // 延迟执行挂载404页面路由
     setTimeout(() => {
         router.addRoutes([notFoundRouteConfig])
     }, 0)
 }
+
 export default router
