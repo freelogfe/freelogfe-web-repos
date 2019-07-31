@@ -189,7 +189,8 @@ export default {
          * @param presentableId
          */
         goToAddPolicyPage(presentableId) {
-            this.$router.push(`/node/${this.$route.params.nodeId}/presentable/${presentableId}?tab=policy`);
+            // this.$router.push(`/node/${this.$route.params.nodeId}/presentable/${presentableId}?tab=policy`);
+            this.$router.push(`/node/manager-release/${presentableId}`);
         },
         /**
          * 上线和下线

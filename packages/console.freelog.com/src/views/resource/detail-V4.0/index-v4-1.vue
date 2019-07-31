@@ -25,7 +25,7 @@
         <el-input
                 class="rdr-i-name__input"
                 show-word-limit
-                maxlength="40"
+                maxlength="60"
                 v-model="resourceDetail.resourceInfo.aliasName"></el-input>
         <h3>资源封面</h3>
         <div class="resource-thumbnail-input">
