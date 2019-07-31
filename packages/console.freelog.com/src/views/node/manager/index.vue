@@ -140,9 +140,13 @@
                 <el-table-column
                     prop="policies"
                     label="策略"
-                    width="110"
+                    width="120"
                 >
-                    <template slot-scope="scope">
+                    <div
+                        class="table-policies"
+                        slot-scope="scope"
+                        style="display: flex; align-items: center; justify-content: space-between;"
+                    >
                         <el-popover
                             placement="bottom-start"
                             width="400"
@@ -151,14 +155,12 @@
                         >
                             <PolicyTabs :policies="scope.row.policies"/>
                             <div
-                                style="display: flex; align-items: center;"
-                                class="table-policies"
                                 slot="reference"
                             >
                                 <div
-                                    style="padding-right: 10px; text-align: left;"
+                                    style="padding-right: 10px; text-align: left; width: 80px; flex-shrink: 1;"
                                 >
-                                    <div v-if="scope.row.policies.length > 0" style="color: #409eff; font-size: 14px;">
+                                    <div v-if="scope.row.policies.length > 0" style="color: #409eff; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 80px;">
                                         {{scope.row.policies[0].policyName}}
                                     </div>
                                     <div v-if="scope.row.policies.length === 0" style="color: #999; font-size: 14px;">
@@ -168,15 +170,15 @@
                                         等{{scope.row.policies.length}}个策略…
                                     </div>
                                 </div>
-                                <a
-                                    @click="goToAddPolicyPage(scope.row.presentableId)"
-                                    style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; justify-content: center; cursor: pointer;"
-                                >
-                                    <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
-                                </a>
                             </div>
                         </el-popover>
-                    </template>
+                        <a
+                            @click="goToAddPolicyPage(scope.row.presentableId)"
+                            style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; display: flex; justify-content: center; cursor: pointer; flex-shrink: 0;"
+                        >
+                            <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
+                        </a>
+                    </div>
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
@@ -322,12 +324,12 @@
 
         .table-policies {
             & > a {
-                display: none;
+                visibility: hidden;
             }
 
             &:hover {
                 & > a {
-                    display: flex;
+                    visibility: visible;
                 }
             }
 
