@@ -60,6 +60,7 @@ export default {
     },
     createNode() {
       const self = this
+      self.dataForm.nodeName = self.dataForm.nodeName.replace(/^(\s*)|(\s*)$/g, '')
       const data = Object.assign({}, self.dataForm)
       data.nodeDomain = data.nodeDomain.toLowerCase()
       self.$services.nodes.post(self.dataForm)
