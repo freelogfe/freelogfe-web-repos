@@ -72,13 +72,39 @@ export default {
   methods: {
     initData() {
       if(this.depReleasesList.length > 0) {
-        console.log('this.depReleasesList--', this.depReleasesList)
         this.isLoading = true
         this.fetchDepReleases()
         this.fetchReleaseScheme()
       }
     },
+    // 获取 发行方案
+    fetchReleaseScheme() {
+      if(!this.release) return
+      var { releaseId, latestVersion: { version } } = this.release
+      version = this.release.selectedVersion || version
+      this.$services.ReleaseService.get(`${releaseId}/versions/${version}`)
+        .then(res => res.data)
+        .then(res => {
+          if(res.errcode === 0) {
+            this.releaseScheme = res.data
+            this.fetchContractsDetail()
+          }
+        })
+        .catch(e => this.$error.showErrorMessage('授权方案获取失败！'))
+    },
     fetchContractsDetail() {
+      const { resolveReleases } = this.releaseScheme 
+      const contractIds = new Set(this.contractIds)
+      for(let i = 0; i < resolveReleases.length; i++) {
+        const { contracts } = resolveReleases[i]
+        contracts.forEach(c => {
+          if(c.contractId) {
+            contractIds.add(c.contractId)
+          }
+        })
+      }
+      this.contractIds = [...contractIds]
+
       if(this.contractIds.length > 0) {
         this.$services.ContractRecords.get({
           params: {
@@ -98,20 +124,6 @@ export default {
       }else {
         this.$emit('update:contracts', [])
       }
-    },
-    // 获取 发行方案
-    fetchReleaseScheme() {
-      if(!this.release) return
-      var { releaseId, latestVersion: { version } } = this.release
-      version = this.release.selectedVersion || version
-      this.$services.ReleaseService.get(`${releaseId}/versions/${version}`)
-        .then(res => res.data)
-        .then(res => {
-          if(res.errcode === 0) {
-            this.releaseScheme = res.data
-          }
-        })
-        .catch(e => this.$error.showErrorMessage('授权方案获取失败！'))
     },
     fetchReleases(ids) {
       return this.$services.ReleaseService.get(`list?releaseIds=${ids}&projection=${this.projection}`)
@@ -137,7 +149,6 @@ export default {
               this.fetchUpcastDepReleases(tmpArr.join(','))
             }else {
               this.upcastDepReleasesMap = {}
-              this.fetchContractsDetail()
             }
           }
         })
@@ -161,7 +172,6 @@ export default {
               }
             }
             this.getTargetReleases()
-            this.fetchContractsDetail()
           }
         })
         .catch(e => this.isLoading = false)
@@ -189,7 +199,6 @@ export default {
       if(!this.releaseScheme ) return
 
       const { resolveReleases } = this.releaseScheme
-      const contractIds = []
 
       for(let i = 0; i < resolveReleases.length; i++) {
         const { contracts, releaseId } = resolveReleases[i]
@@ -198,9 +207,7 @@ export default {
         const pIdsMap = {}
         contracts.forEach(c => {
           pIdsMap[c.policyId] = c.contractId
-          if(c.contractId) {
-            contractIds.push(c.contractId)
-          }
+          
         })
 
         if(release) {
@@ -216,7 +223,6 @@ export default {
           })
         }
       }
-      this.contractIds = contractIds
     },
     formatRelease(release) {
 
@@ -315,7 +321,7 @@ export default {
     // 选择策略
     selectPolicy(policy, index) {
       if(this.type !== 'create') {
-        if(policy.contractId && this.contractsMap[policy.contractId]) {
+        if(policy.contractId && this.contractsMap && this.contractsMap[policy.contractId]) {
           this.$message({ type: 'warning', message: '已签约，不可更改！' })
           return
         }

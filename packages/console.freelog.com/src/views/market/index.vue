@@ -47,7 +47,7 @@
                 const res = await this.$axios.get('/v1/releases', {
                     params: {
                         page: this.page,
-                        pageSize: 1,
+                        pageSize: 3,
                     }
                 });
                 const data = res.data.data;

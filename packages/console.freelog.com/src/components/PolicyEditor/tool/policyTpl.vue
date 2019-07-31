@@ -24,7 +24,7 @@
 <script>
 import PolicyTplList from '@/components/policyTplSelector/index.vue'
 import { storage } from '@/lib'
-import { presentable, resource } from '../defaultPolicyTpls'
+import * as tpls from '../defaultPolicyTpls'
 
 export default {
   name: 'policy-template-selector',
@@ -33,7 +33,7 @@ export default {
       currentTabName: storage.get('POLICY_TPL_ACTIVE_TAB_NAME') || 'official',
       policyTpls: [],
       queryPolicyTpl: '',
-      defaultPolicyTpls: (this.$route.meta.type === 'node') ? presentable : resource
+      defaultPolicyTpls: (this.$route.meta.type === 'node') ? tpls.presentable : tpls.release
     }
   },
 

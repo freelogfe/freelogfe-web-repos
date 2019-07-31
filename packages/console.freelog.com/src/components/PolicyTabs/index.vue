@@ -46,7 +46,7 @@
             // },
         },
         mounted() {
-            console.log(this.policies)
+            // console.log(this.policies)
         },
     }
 </script>

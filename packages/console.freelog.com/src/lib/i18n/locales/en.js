@@ -60,7 +60,7 @@ export default {
   resource: {
     createResource: 'create resource',
     resourceType: 'resource type',
-    market: 'Resource Market',
+    market: 'Release Market',
     myResources: 'My Resources',
     throwUp: 'decentralized resources',
     throwUpResource: 'decentralized resources',
