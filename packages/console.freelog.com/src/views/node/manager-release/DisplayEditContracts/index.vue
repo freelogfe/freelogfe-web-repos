@@ -30,21 +30,6 @@
             </div>
             <div style="height: 25px;"></div>
 
-            <!--                        <div style="height: 1px; background-color: #d4d4d4; margin-right: 15px;"></div>-->
-            <!--                        <a style="padding: 12px 20px; display: block;">-->
-            <!--                            <div style="color: #333; font-size: 14px; font-weight: 600;">上抛1</div>-->
-            <!--                            <div style="height: 10px;"></div>-->
-            <!--                            <span-->
-            <!--                                style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff;">策略1</span>-->
-            <!--                        </a>-->
-            <!--                        <div style="height: 1px; background-color: #d4d4d4; margin-right: 15px;"></div>-->
-            <!--                        <a style="padding: 12px 20px; display: block;">-->
-            <!--                            <div style="color: #333; font-size: 14px; font-weight: 600;">上抛1</div>-->
-            <!--                            <div style="height: 10px;"></div>-->
-            <!--                            <span-->
-            <!--                                style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff;">策略1</span>-->
-            <!--                        </a>-->
-            <!--                        <div style="height: 1px; background-color: #d4d4d4; margin-right: 15px;"></div>-->
         </div>
 
         <div style="flex-shrink: 1; width: 100%; display: flex; flex-direction: column;">
@@ -59,12 +44,20 @@
                     v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
                     style="background-color: #fafbfb; border: 1px solid #ccc;"
                 >
+                    <!--                    <div>{{selectedPolicyIDs}}</div>-->
+                    <!--                    <div>{{item.contract.policyId}}</div>-->
                     <div style="padding: 0 15px; border-bottom: 1px solid #d8d8d8;">
                         <div style="height: 14px;"></div>
                         <div style="display: flex; align-items: center;">
                             <i
+                                v-show="selectedPolicyIDs.includes(item.contract.policyId)"
                                 @click="breakSignPolicy(item.contract.policyId)"
                                 style="color: #409eff; font-size: 20px;" class="el-icon-success"
+                            ></i>
+                            <i
+                                v-show="!selectedPolicyIDs.includes(item.policy.policyId)"
+                                style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #666;"
+                                @click="signPolicy(item.contract.policyId)"
                             ></i>
                             <span
                                 style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.contractName}}</span>
@@ -106,8 +99,14 @@
                 >
                     <div style="display: flex; align-items: center;">
                         <i
-                            style="width: 16px; height: 16px; border-radius: 50%; border: 1px solid #666;"
+                            v-show="!selectedPolicyIDs.includes(item.policy.policyId)"
+                            style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #666;"
                             @click="signPolicy(item.policy.policyId)"
+                        ></i>
+                        <i
+                            v-show="selectedPolicyIDs.includes(item.policy.policyId)"
+                            @click="breakSignPolicy(item.policy.policyId)"
+                            style="color: #409eff; font-size: 20px;" class="el-icon-success"
                         ></i>
                         <span
                             style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.policy.policyName}}</span>
@@ -116,6 +115,16 @@
                     <div style="border: 1px solid #ccc; border-radius: 4px;">
                         <pre style="font-size: 14px; color: #333; padding: 20px;">{{item.policy.policyText}}</pre>
                     </div>
+                </div>
+                <div style="height: 10px;"></div>
+                <div style="text-align: right;">
+                    <el-button
+                        type="primary"
+                        size="medium"
+                        round
+                        @click="updateSignPolicy"
+                    >修改
+                    </el-button>
                 </div>
             </div>
         </div>
@@ -136,6 +145,7 @@
                 activatedIndex: -1,
 
                 nodeInfo: null,
+                selectedPolicyIDs: [],
             };
         },
         mounted() {
@@ -203,6 +213,12 @@
                 if (this.activatedIndex === -1) {
                     this.activatedIndex = 0;
                 }
+
+                // this.selectedPolicyIDs = this.dataSource[this.activatedIndex].children
+                //     .filter(i => i.contract)
+                //     .map(i => ({
+                //         policyId: i.policy.policyId,
+                //     }));
                 // console.log(this.dataSource, 'CCCCCCCCCC');
                 // console.log(this.dataSource[this.activatedIndex], '!@#$%^&*()');
             },
@@ -219,42 +235,70 @@
              * 对可供签约的策略签约
              */
             async signPolicy(policyId) {
-                console.log(this.dataSource[this.activatedIndex], 'dataSource[activatedIndex]');
-                const releaseId = this.dataSource[this.activatedIndex].releaseId;
-                const contracts = this.dataSource[this.activatedIndex].children
-                    .filter(i => i.contract)
-                    .map(i => ({
-                        policyId: i.policy.policyId,
-                    }));
-                contracts.push({
-                    policyId,
-                });
-                // console.log(contracts, 'contractscontracts');
-                await this.updatePresentable({
-                    resolveReleases: [
-                        {
-                            releaseId,
-                            contracts,
-                        },
-                    ]
-                });
-
-                setTimeout(() => {
-                    this.handleData()
-                }, 100);
+                this.selectedPolicyIDs.push(policyId);
+                // console.log(this.dataSource[this.activatedIndex], 'dataSource[activatedIndex]');
+                // const releaseId = this.dataSource[this.activatedIndex].releaseId;
+                // const contracts = this.dataSource[this.activatedIndex].children
+                //     .filter(i => i.contract)
+                //     .map(i => ({
+                //         policyId: i.policy.policyId,
+                //     }));
+                // contracts.push({
+                //     policyId,
+                // });
+                // // console.log(contracts, 'contractscontracts');
+                // await this.updatePresentable({
+                //     resolveReleases: [
+                //         {
+                //             releaseId,
+                //             contracts,
+                //         },
+                //     ]
+                // });
+                //
+                // setTimeout(() => {
+                //     this.handleData()
+                // }, 100);
             },
             /**
              * 解约
              */
             async breakSignPolicy(policyId) {
-                const releaseId = this.dataSource[this.activatedIndex].releaseId;
-                const contracts = this.dataSource[this.activatedIndex].children
-                    .filter(i => i.contract)
-                    .map(i => ({
-                        policyId: i.policy.policyId,
-                    }))
-                    .filter(j => j.policyId !== policyId);
+                this.selectedPolicyIDs = this.selectedPolicyIDs.filter(j => j !== policyId);
+                // const releaseId = this.dataSource[this.activatedIndex].releaseId;
+                // const contracts = this.dataSource[this.activatedIndex].children
+                //     .filter(i => i.contract)
+                //     .map(i => ({
+                //         policyId: i.policy.policyId,
+                //     }))
+                //     .filter(j => j.policyId !== policyId);
+                //
+                // await this.updatePresentable({
+                //     resolveReleases: [
+                //         {
+                //             releaseId,
+                //             contracts,
+                //         },
+                //     ]
+                // });
+                // setTimeout(() => {
+                //     this.handleData()
+                // }, 100);
 
+            },
+            /**
+             * 更新策略
+             * @return {Promise<void>}
+             */
+            async updateSignPolicy() {
+                if (this.selectedPolicyIDs.length === 0) {
+                    return this.$message.error('最少要选择一个策略');
+                }
+                const releaseId = this.dataSource[this.activatedIndex].releaseId;
+                const contracts = this.selectedPolicyIDs
+                    .map(i => ({
+                        policyId: i,
+                    }));
                 await this.updatePresentable({
                     resolveReleases: [
                         {
@@ -265,14 +309,24 @@
                 });
                 setTimeout(() => {
                     this.handleData()
-                }, 100);
-
+                }, 10);
             },
 
             async updatePresentable(params) {
                 return await this.$axios.put(`/v1/presentables/${this.$route.params.presentableId}`, params);
             },
         },
+        watch: {
+            activatedIndex() {
+                this.selectedPolicyIDs = this.dataSource[this.activatedIndex].children
+                    .filter(i => i.contract)
+                    .map(i => i.policy.policyId);
+                // .map(i => ({
+                //         policyId: i.policy.policyId,
+                //     }));
+                // console.log(this.selectedPolicyIDs)
+            },
+        }
     }
 
     /**
