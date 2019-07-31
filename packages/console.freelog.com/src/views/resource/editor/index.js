@@ -217,9 +217,15 @@ export default {
                 throw new Error('请上传文件');
             }
 
+            this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
                 this.$message.error('请输入资源名称');
                 throw new Error('请输入资源名称');
+            }
+
+            if (!/^[\u4E00-\u9FA5|a-z|0-9|A-Z]{2,24}$/.test(this.resourceName)) {
+                this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+                throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
