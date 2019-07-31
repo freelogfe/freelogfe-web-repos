@@ -61,7 +61,13 @@
                     debounce="1000"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                    <i slot="suffix" class="el-input__icon el-icon-circle-close"></i>
+                    <i
+                        style="cursor: pointer"
+                        @click="filterSearch = ''"
+                        v-show="filterSearch && filterSearch.length > 0"
+                        slot="suffix"
+                        class="el-input__icon el-icon-circle-close"
+                    ></i>
                 </el-input>
             </div>
 
@@ -160,7 +166,8 @@
                                 <div
                                     style="padding-right: 10px; text-align: left; width: 80px; flex-shrink: 1;"
                                 >
-                                    <div v-if="scope.row.policies.length > 0" style="color: #409eff; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 80px;">
+                                    <div v-if="scope.row.policies.length > 0"
+                                         style="color: #409eff; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 80px;">
                                         {{scope.row.policies[0].policyName}}
                                     </div>
                                     <div v-if="scope.row.policies.length === 0" style="color: #999; font-size: 14px;">
@@ -280,7 +287,10 @@
                 </el-table-column>
             </el-table>
 
-            <div style="padding: 10px 0; display: flex; justify-content: flex-end;">
+            <div
+                style="padding: 10px 0; display: flex; justify-content: flex-end;"
+                v-if="totalQuantity > pageSize"
+            >
                 <!--                @current-change="onCurrentPageChange"-->
                 <!--                @size-change="onPageSizeChange"-->
                 <el-pagination
