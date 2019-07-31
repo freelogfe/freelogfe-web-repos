@@ -60,7 +60,7 @@
                                 @click="signPolicy(item.contract.policyId)"
                             ></i>
                             <span
-                                style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.contractName}}</span>
+                                style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.contract.contractName}}</span>
                             <span
                                 style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">
                                             <span v-if="item.contract.status === 2">执行中</span>
