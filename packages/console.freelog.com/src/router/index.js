@@ -78,7 +78,8 @@ const routerConfig = {
                     meta: {
                         requiresAuth: false,
                         title: i18n.t('resource.market'),
-                        theme: 'gray'
+                        theme: 'gray',
+                        hideFooter: true,
                     },
                     component: Views.marketView
                 },
