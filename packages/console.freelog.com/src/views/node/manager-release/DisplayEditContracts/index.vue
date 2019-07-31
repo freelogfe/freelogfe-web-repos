@@ -89,9 +89,11 @@
                     </div>
                 </div>
 
-                <div style="height: 30px;"></div>
-                <div style="font-size: 14px; color: #999;">以下策略可供签约</div>
-                <div style="height: 15px;"></div>
+                <div v-show="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0">
+                    <div style="height: 30px;"></div>
+                    <div style="font-size: 14px; color: #999;">以下策略可供签约</div>
+                    <div style="height: 15px;"></div>
+                </div>
 
                 <!-- 可签约列表 -->
                 <div
