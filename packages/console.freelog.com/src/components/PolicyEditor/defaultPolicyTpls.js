@@ -7,16 +7,20 @@ const freePolicy = `for public:
     presentable
     terminate
   `
-
+  const ReleaseFreePolicy = `for public:
+  initial:
+    active
+    terminate
+  `
 const PresentableFreePolicy = `for public:
   initial:
     active
     terminate
   `
 
-export const resource = [
+export const release = [
   {
-    template: freePolicy,
+    template: ReleaseFreePolicy,
     name: i18n.t('components.policyEditor.defaultPolicyNames.free')
   },
   {
@@ -68,6 +72,6 @@ export const presentable = [
 ]
 
 export default {
-  resource,
+  release,
   presentable
 }

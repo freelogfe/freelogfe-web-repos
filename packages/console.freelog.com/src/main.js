@@ -30,8 +30,8 @@ Vue.use(VueLazyload, {
   observer: true
 })
 
-Vue.config.devtools = true,
-Vue.config.productionTip = false
+Vue.config.devtools = true
+// Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,

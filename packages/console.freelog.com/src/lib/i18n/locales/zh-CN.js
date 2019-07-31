@@ -61,7 +61,7 @@ export default {
     resource: {
         createResource: '创建资源',
         resourceType: '资源类型',
-        market: '资源市场',
+        market: '发行市场',
         myResources: '我的资源库',
         throwUp: '资源上抛',
         throwUpResource: '上抛资源',

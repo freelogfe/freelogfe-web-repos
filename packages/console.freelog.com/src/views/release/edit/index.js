@@ -25,6 +25,7 @@ export default {
       contracts: [],
       depReleasesList: [],
       depReleasesDetailList: [],
+      resolvedReleases: [],
       releasesTreeData: [],
       searchInput: '',
       searchResources: [],
@@ -140,6 +141,25 @@ export default {
         this.$message({ type: 'warning', message: `所选资源的类型必须为${this.release.resourceType}`, duration: 5000 })
       }
     },
+    updateResolvedReleases(releases) {
+      this.resolvedReleases = releases.map(r => {
+        return {
+          releaseId: r.releaseId,
+          contracts: r.policies.filter(p => p.isSelected).map(p => { return { policyId: p.policyId}})
+        }
+      })
+    },
+    updateReleaseScheme() {
+      this.$services.ReleaseService.put(`${this.releaseId}/versions/${this.selectedVersion}`, {
+        resolveReleases: this.resolvedReleases
+      })
+      .then(res => res.data)
+      .then(res => {
+        if(res.errcode === 0) {
+          this.$message({ type: 'success', message: '签约成功！' })
+        }
+      })
+    }
   },
   created() {
     this.fetchReleaseDetail()

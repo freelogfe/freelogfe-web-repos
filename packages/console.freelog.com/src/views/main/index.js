@@ -48,7 +48,8 @@ export default {
         },
         fetchReleaseData(page) {
             const query = {
-                page
+                page,
+                pageSize: 30
             }
             if (this.query) {
                 query.keyWords = this.query
