@@ -249,7 +249,7 @@
           }
           return release
         })
-
+        list.sort((r1, r2) => +new Date(r2.updateDate) - (+new Date(r1.updateDate)))
         return list
       },
       cancelCollection(release) {

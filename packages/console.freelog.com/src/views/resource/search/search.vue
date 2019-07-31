@@ -37,7 +37,8 @@ export default {
   data() {
     return {
       searchInput: '',
-      searchResources: []
+      searchResources: [],
+      isFirstSearch: true
     }
   },
   computed: {
@@ -57,9 +58,10 @@ export default {
     searchDataHandler(page) {
       const pageSize = 10
 
-      // if (!this.searchInput) {
+      // if (!this.searchInput && !this.isFirstSearch) {
       //   return Promise.resolve({ canLoadMore: false })
       // }
+      // this.isFirstSearch = false
       // 空输入时，即查询所有属于我的资源
       return this.$services.ResourceService.get({
         params: Object.assign({
@@ -84,6 +86,20 @@ export default {
     },
     selectResource(resource) {
       this.$emit('select-resource', resource)
+    },
+    // 获取单个资源"所属发行列表"
+    fetchReleaseList(resourceId) {
+      if(!this.resourceMapReleases[resourceId]) {
+        return this.$services.ResourceService.get(`${resourceId}/releases`)
+          .then(res => res.data)
+          .then(res => {
+            if(res.errcode === 0) {
+              this.resourceMapReleases[resourceId] = res.data
+            }
+          })
+      }else {
+        return Promise.resolve(this.resourceMapReleases[resourceId])
+      }
     },
   },
 }

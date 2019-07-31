@@ -56,7 +56,7 @@ export default {
             }
             return this.loader(query).then((data) => {
                 data.canLoadMore = !(data.dataList < data.pageSize)
-                data.dataList = data.dataList.filter(r => r.policies.length > 0)
+                data.dataList = data.dataList.filter(r => r.policies.length > 0 && r.status === 1)
                 const releases = data.dataList
 
                 if (releases && releases.length) {
