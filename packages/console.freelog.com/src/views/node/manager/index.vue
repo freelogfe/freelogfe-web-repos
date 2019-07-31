@@ -8,7 +8,7 @@
             <div style="padding: 0 20px;">
                 <a
                     style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
-                    href="//photos.freelog.com"
+                    :href="'//' + nodeInfo.origin"
                 >{{nodeInfo.origin}}</a>
                 <clipboard
                     :value="nodeInfo.origin"
@@ -149,19 +149,19 @@
                             trigger="hover"
                             :disabled="scope.row.policies.length === 0"
                         >
-<!--                            <el-tabs>-->
-<!--                                <el-tab-pane-->
-<!--                                    v-for="item in scope.row.policies"-->
-<!--                                    :label="item.policyName"-->
-<!--                                >-->
-<!--                                    <div-->
-<!--                                        style="height: 200px; overflow-y: auto;"-->
-<!--                                        v-html="spaceReplaceNbsp(item.policyText)"-->
-<!--                                    ></div>-->
-<!--                                </el-tab-pane>-->
-<!--                            </el-tabs>-->
+                            <!--                            <el-tabs>-->
+                            <!--                                <el-tab-pane-->
+                            <!--                                    v-for="item in scope.row.policies"-->
+                            <!--                                    :label="item.policyName"-->
+                            <!--                                >-->
+                            <!--                                    <div-->
+                            <!--                                        style="height: 200px; overflow-y: auto;"-->
+                            <!--                                        v-html="spaceReplaceNbsp(item.policyText)"-->
+                            <!--                                    ></div>-->
+                            <!--                                </el-tab-pane>-->
+                            <!--                            </el-tabs>-->
                             <PolicyTabs :policies="scope.row.policies"/>
-<!--                            1234-->
+                            <!--                            1234-->
                             <div
                                 style="display: flex; align-items: center;"
                                 class="table-policies"
