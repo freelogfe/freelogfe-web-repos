@@ -22,10 +22,10 @@ export default function initWidgets(FreelogApp) {
 function loadWidgets(FreelogApp) {
   const promises = []
   const vis = {}
-  const pbId = getPageBuildId()
+  // const pbId = getPageBuildId() || ''
 
-  if(window.__auth_info__ && pbId) {
-    const { __page_build_sub_releases = [] } = window.__auth_info__
+  if(window.__auth_info__) {
+    const { __page_build_sub_releases = [], __page_build_id } = window.__auth_info__
 
     __page_build_sub_releases
       .filter(({ releaseId }) => !!releaseId)
@@ -34,7 +34,7 @@ function loadWidgets(FreelogApp) {
         if (!vis[releaseId]) {
           vis[releaseId] = true
           const p = FreelogApp.QI.requireSubResource({
-            presentableId: pbId,
+            presentableId: __page_build_id,
             subReleaseId: releaseId,
             version
           })
