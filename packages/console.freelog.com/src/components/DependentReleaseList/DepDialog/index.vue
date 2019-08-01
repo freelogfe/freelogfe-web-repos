@@ -23,11 +23,12 @@
                         :style="{color: activeTab === 'collection' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'collection' ? '1px solid #409eff' : 'none'}"
                         @click="onChangeTab('collection')"
                     >我的收藏</a>
-                    <!--                    <a-->
-                    <!--                        style="display: inline-block; padding: 0 5px; margin-left: 40px;"-->
-                    <!--                        :style="{color: activeTab === 'mock' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'mock' ? '1px solid #409eff' : 'none'}"-->
-                    <!--                        @click="onChangeTab('mock')"-->
-                    <!--                    >我的Mock</a>-->
+                    <a
+                        v-if="showMock"
+                        style="display: inline-block; padding: 0 5px; margin-left: 40px;"
+                        :style="{color: activeTab === 'mock' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'mock' ? '1px solid #409eff' : 'none'}"
+                        @click="onChangeTab('mock')"
+                    >我的Mock</a>
                 </div>
                 <i
                     class="el-icon-close"
@@ -51,6 +52,11 @@
                     v-if="activeTab === 'collection'"
                     :exists="exists"
                     @add="$emit('addARelease', $event)"
+                />
+                <Mock
+                    v-if="activeTab === 'mock'"
+                    :exists="existMocks"
+                    @add="$emit('addAMock', $event)"
                 />
             </div>
             <div style="height: 20px;"></div>

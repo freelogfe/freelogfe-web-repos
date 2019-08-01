@@ -21,12 +21,20 @@
             :isOnline="i.isOnline"
             @onRemove="onRemove(j)"
         />
+        <Item
+            v-for="(i, j) in mockDataSource"
+            :name="i.name"
+            @onRemove="onRemoveMock(j)"
+        />
         <!--        <Item :isLock="false" :name="'策略2'" :isOnline="true" @onRemove="onRemove(1)"/>-->
         <!--        <Item :isLock="false" :name="'策略3'" :isOnline="false" @onRemove="onRemove(2)"/>-->
         <DepDialog
             v-if="dialogVisible"
+            :showMock="!!mockDataSource"
             :exists="exists"
+            :existMocks="existMocks"
             @addARelease="addARelease"
+            @addAMock="addAMock"
             @onClose="dialogVisible = false"
         />
     </div>

@@ -69,9 +69,9 @@
             // onAdd(index) {
             //
             // },
-            isInclude(id){
-                return this.exists.inc
-            }
+            // isInclude(id){
+            //     return this.exists.inc
+            // }
         },
 
         watch: {

@@ -23,7 +23,17 @@ export default {
             default() {
                 return [];
             },
-        }
+        },
+        existMocks: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+        showMock: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {

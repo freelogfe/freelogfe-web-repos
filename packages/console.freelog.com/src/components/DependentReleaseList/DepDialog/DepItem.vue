@@ -10,7 +10,7 @@
             </div>
             <div style="font-size: 14px; color: #999;">
                 <span>{{type}}</span>
-                <span> | v{{version}}</span>
+                <span v-if="!!version"> | v{{version}}</span>
                 <span> | {{date}}</span>
             </div>
         </div>
