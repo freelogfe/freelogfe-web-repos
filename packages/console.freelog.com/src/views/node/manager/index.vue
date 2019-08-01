@@ -9,6 +9,7 @@
                 <a
                     style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
                     :href="'//' + nodeInfo.origin"
+                    target="_blank"
                 >{{nodeInfo.origin}}</a>
                 <clipboard
                     :value="nodeInfo.origin"
