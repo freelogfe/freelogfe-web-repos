@@ -227,19 +227,20 @@
                         <div style="font-size: 14px; display: flex; align-items: center;">
                             <span v-if="scope.row.isOnline === 1" style="color: #000;">已上线</span>
                             <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">未上线</span>
-                            <el-popover
-                                placement="top"
-                                width="200"
-                                trigger="hover"
-                                content="此合约链上存在异常"
-                            >
-                                <i
-                                    v-if="!scope.row.isAuth"
-                                    slot="reference"
-                                    class="el-icon-warning"
-                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
-                            </el-popover>
+                            <template v-if="!scope.row.isAuth">
+                                <el-popover
+                                    placement="top"
+                                    width="100"
+                                    trigger="hover"
+                                    content="此合约链上存在异常"
+                                >
+                                    <i
+                                        slot="reference"
+                                        class="el-icon-warning"
+                                        style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                                    ></i>
+                                </el-popover>
+                            </template>
                         </div>
 
                     </template>

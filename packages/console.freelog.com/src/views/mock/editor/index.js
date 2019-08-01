@@ -217,7 +217,7 @@ export default {
                 return this.$message.error('请输入资源名称');
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
-            if (!/^[\u4E00-\u9FA5|a-z|0-9|A-Z]{2,24}$/.test(this.resourceName)) {
+            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
                 return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
