@@ -84,5 +84,14 @@ export default {
         existMocks() {
             return this.mockDataSource ? this.mockDataSource.map(i => i.id) : [];
         }
+    },
+    watch: {
+        dialogVisible(val) {
+            if (val) {
+                window.document.body.style.overflowY = 'hidden';
+            } else {
+                window.document.body.style.overflowY = 'auto';
+            }
+        }
     }
 }

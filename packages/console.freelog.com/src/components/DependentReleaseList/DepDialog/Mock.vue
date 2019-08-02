@@ -1,5 +1,8 @@
 <template>
-    <div style="margin: 0 90px; height: 100%; overflow-y: auto;">
+    <LazyLoadingBox
+        :end="dataEnd"
+        @toBottom="toBottom"
+    >
         <div style="height: 40px;"></div>
         <el-input
             v-model="input"
@@ -7,7 +10,6 @@
         ></el-input>
         <div style="height: 30px;"></div>
 
-        <!--        :version="i.version"-->
         <DepItem
             v-for="i in data"
             :name="i.name"
@@ -17,16 +19,18 @@
             @click="$emit('add', i)"
         />
 
-    </div>
+    </LazyLoadingBox>
 </template>
 
 <script>
     import DepItem from './DepItem.vue';
+    import LazyLoadingBox from './LazyLoadingBox.vue';
 
     export default {
         name: "Mock",
         components: {
             DepItem,
+            LazyLoadingBox,
         },
         props: {
             exists: {
@@ -42,39 +46,47 @@
         data() {
             return {
                 input: '',
+                page: 1,
                 data: [],
+                dataEnd: false,
             };
         },
         methods: {
             async search() {
                 const params = {
+                    page: this.page,
                     keywords: this.input,
-                    pageSize: 30,
+                    pageSize: 10,
                 };
                 const res = await this.$axios.get('/v1/resources/mocks', {
                     params,
                 });
+                const data = res.data.data;
+                this.dataEnd = data.page * data.pageSize >= data.totalItem;
                 // console.log(res, 'resresresresres');
-                this.data = res.data.data.dataList.map(i => ({
-                    id: i.mockResourceId,
-                    name: i.name,
-                    // isOnline: i.status === 1,
-                    type: i.resourceType,
-                    // version: i.latestVersion.version,
-                    date: i.updateDate.split('T')[0],
-                    // disabled: false,
-                }));
+                this.data = [
+                    ...this.data,
+                    ...data.dataList.map(i => ({
+                        id: i.mockResourceId,
+                        name: i.name,
+                        // isOnline: i.status === 1,
+                        type: i.resourceType,
+                        // version: i.latestVersion.version,
+                        date: i.updateDate.split('T')[0],
+                        // disabled: false,
+                    }))
+                ];
             },
-            // onAdd(index) {
-            //
-            // },
-            // isInclude(id){
-            //     return this.exists.inc
-            // }
+            toBottom() {
+                this.page++;
+                this.search();
+            },
         },
 
         watch: {
             input() {
+                this.page = 1;
+                this.data = [];
                 this.search();
             },
         },

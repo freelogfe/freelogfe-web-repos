@@ -12,12 +12,6 @@ export default {
         Mock,
     },
     props: {
-        // dataSource: {
-        //     type: Array,
-        //     default() {
-        //         return [];
-        //     },
-        // },
         exists: {
             type: Array,
             default() {
@@ -45,13 +39,6 @@ export default {
         onChangeTab(tabName) {
             this.activeTab = tabName;
         },
-        // addARelease(item) {
-        //     console.log(item, 'itemitem');
-        //     this.$emit('addARelease', [
-        //         ...dataSource,
-        //         item,
-        //     ])
-        // },
     }
 
 }

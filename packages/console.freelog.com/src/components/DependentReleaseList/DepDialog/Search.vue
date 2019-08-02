@@ -88,12 +88,6 @@
                 this.page++;
                 this.search();
             },
-            // onAdd(index) {
-            //
-            // },
-            // isInclude(id){
-            //     return this.exists.inc
-            // }
         },
 
         watch: {
