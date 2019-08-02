@@ -10,8 +10,9 @@
             :type="i.type"
             :version="i.version"
             :date="i.date"
-            :disabled="exists.includes(i.id)"
             @click="$emit('add', i)"
+            :showRemove="exists.includes(i.id)"
+            @remove="$emit('remove', i)"
         />
     </LazyLoadingBox>
 </template>

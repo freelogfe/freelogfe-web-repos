@@ -42,21 +42,25 @@
                     v-if="activeTab === 'search'"
                     :exists="exists"
                     @add="$emit('addARelease', $event)"
+                    @remove="$emit('removeARelease', $event)"
                 />
                 <Release
                     v-if="activeTab === 'release'"
                     :exists="exists"
                     @add="$emit('addARelease', $event)"
+                    @remove="$emit('removeARelease', $event)"
                 />
                 <Collection
                     v-if="activeTab === 'collection'"
                     :exists="exists"
                     @add="$emit('addARelease', $event)"
+                    @remove="$emit('removeARelease', $event)"
                 />
                 <Mock
                     v-if="activeTab === 'mock'"
                     :exists="existMocks"
                     @add="$emit('addAMock', $event)"
+                    @remove="$emit('removeAMock', $event)"
                 />
             </div>
             <div style="height: 20px;"></div>

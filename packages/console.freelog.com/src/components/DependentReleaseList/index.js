@@ -76,6 +76,13 @@ export default {
                 item,
             ]);
         },
+        removeARelease(item) {
+            console.log(item, 'itemitemitem');
+            this.$emit('onChange', this.dataSource.filter(i => i.id !== item.id));
+        },
+        removeAMock(item) {
+            this.$emit('onChangeMock', this.mockDataSource.filter(i => i.id !== item.id));
+        },
     },
     computed: {
         exists() {

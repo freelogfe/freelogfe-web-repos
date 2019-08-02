@@ -16,6 +16,7 @@
         </div>
         <!--        <el-button type="primary" round size="small" style="width: 70px;">加入</el-button>-->
         <el-button
+            v-if="!showRemove"
             type="primary"
             round
             size="small"
@@ -23,6 +24,16 @@
             :disabled="disabled"
             @click="$emit('click')"
         >{{disabled ? '已添加': '加入'}}
+        </el-button>
+        <el-button
+            v-else
+            type="danger"
+            round
+            size="small"
+            style="width: 70px;"
+            :disabled="disabled"
+            @click="$emit('remove')"
+        >移除
         </el-button>
     </div>
 </template>
@@ -52,6 +63,10 @@
                 default: '',
             },
             disabled: {
+                type: Boolean,
+                default: false,
+            },
+            showRemove: {
                 type: Boolean,
                 default: false,
             },

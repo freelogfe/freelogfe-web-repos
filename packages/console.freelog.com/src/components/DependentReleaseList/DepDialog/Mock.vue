@@ -15,8 +15,9 @@
             :name="i.name"
             :type="i.type"
             :date="i.date"
-            :disabled="exists.includes(i.id)"
             @click="$emit('add', i)"
+            :showRemove="exists.includes(i.id)"
+            @remove="$emit('remove', i)"
         />
 
     </LazyLoadingBox>

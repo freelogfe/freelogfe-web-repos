@@ -35,6 +35,8 @@
             :existMocks="existMocks"
             @addARelease="addARelease"
             @addAMock="addAMock"
+            @removeARelease="removeARelease"
+            @removeAMock="removeAMock"
             @onClose="dialogVisible = false"
         />
     </div>
