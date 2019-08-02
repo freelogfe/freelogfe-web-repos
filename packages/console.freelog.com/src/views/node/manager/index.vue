@@ -9,6 +9,7 @@
                 <a
                     style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
                     :href="'//' + nodeInfo.origin"
+                    target="_blank"
                 >{{nodeInfo.origin}}</a>
                 <clipboard
                     :value="nodeInfo.origin"
@@ -61,7 +62,13 @@
                     debounce="1000"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                    <i slot="suffix" class="el-input__icon el-icon-circle-close"></i>
+                    <i
+                        style="cursor: pointer"
+                        @click="filterSearch = ''"
+                        v-show="filterSearch && filterSearch.length > 0"
+                        slot="suffix"
+                        class="el-input__icon el-icon-circle-close"
+                    ></i>
                 </el-input>
             </div>
 
@@ -74,10 +81,9 @@
                 <el-table-column
                     prop="publish"
                     label="发行"
-                    width="180"
                 >
                     <template slot-scope="scope">
-                        <div style="display: flex; align-items: center;">
+                        <div style="display: flex; align-items: center; padding-left: 10px;">
                             <div
                                 style="width: 40px; height: 30px; flex-shrink: 0;"
                                 class="resource-default-preview"
@@ -103,7 +109,6 @@
                 <el-table-column
                     prop="presentableName"
                     label="发行标题"
-                    width="180"
                 >
                     <template slot-scope="scope">
                         <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
@@ -114,6 +119,7 @@
                 <el-table-column
                     prop="type"
                     label="全部类型"
+                    width="100"
                 >
                     <template slot="header" slot-scope="scope">
                         <el-dropdown
@@ -141,36 +147,28 @@
                 <el-table-column
                     prop="policies"
                     label="策略"
+                    width="120"
                 >
-                    <template slot-scope="scope">
+                    <div
+                        class="table-policies"
+                        slot-scope="scope"
+                        style="display: flex; align-items: center; justify-content: space-between;"
+                    >
                         <el-popover
                             placement="bottom-start"
                             width="400"
                             trigger="hover"
                             :disabled="scope.row.policies.length === 0"
                         >
-                            <!--                            <el-tabs>-->
-                            <!--                                <el-tab-pane-->
-                            <!--                                    v-for="item in scope.row.policies"-->
-                            <!--                                    :label="item.policyName"-->
-                            <!--                                >-->
-                            <!--                                    <div-->
-                            <!--                                        style="height: 200px; overflow-y: auto;"-->
-                            <!--                                        v-html="spaceReplaceNbsp(item.policyText)"-->
-                            <!--                                    ></div>-->
-                            <!--                                </el-tab-pane>-->
-                            <!--                            </el-tabs>-->
                             <PolicyTabs :policies="scope.row.policies"/>
-                            <!--                            1234-->
                             <div
-                                style="display: flex; align-items: center;"
-                                class="table-policies"
                                 slot="reference"
                             >
                                 <div
-                                    style="padding-right: 10px; text-align: left;"
+                                    style="padding-right: 10px; text-align: left; width: 80px; flex-shrink: 1;"
                                 >
-                                    <div v-if="scope.row.policies.length > 0" style="color: #409eff; font-size: 14px;">
+                                    <div v-if="scope.row.policies.length > 0"
+                                         style="color: #409eff; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 80px;">
                                         {{scope.row.policies[0].policyName}}
                                     </div>
                                     <div v-if="scope.row.policies.length === 0" style="color: #999; font-size: 14px;">
@@ -180,19 +178,20 @@
                                         等{{scope.row.policies.length}}个策略…
                                     </div>
                                 </div>
-                                <a
-                                    @click="goToAddPolicyPage(scope.row.presentableId)"
-                                    style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; justify-content: center; cursor: pointer;"
-                                >
-                                    <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
-                                </a>
                             </div>
                         </el-popover>
-                    </template>
+                        <a
+                            @click="goToAddPolicyPage(scope.row.presentableId)"
+                            style="width: 26px; height: 20px; border-radius: 10px; background-color: #409eff; align-items: center; display: flex; justify-content: center; cursor: pointer; flex-shrink: 0;"
+                        >
+                            <i style="color: #fff; font-size: 12px; font-weight: 600;" class="el-icon-plus"></i>
+                        </a>
+                    </div>
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
                     label="更新时间"
+                    width="130"
                 >
                     <template slot-scope="scope">
                         <div>
@@ -207,6 +206,7 @@
                 <el-table-column
                     prop="state"
                     label="全部状态"
+                    width="90"
                 >
                     <template slot="header" slot-scope="scope">
                         <el-dropdown style="height: 32px">
@@ -228,19 +228,20 @@
                         <div style="font-size: 14px; display: flex; align-items: center;">
                             <span v-if="scope.row.isOnline === 1" style="color: #000;">已上线</span>
                             <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">未上线</span>
-                            <el-popover
-                                placement="top"
-                                width="200"
-                                trigger="hover"
-                                content="此合约链上存在异常"
-                            >
-                                <i
-                                    v-if="!scope.row.isAuth"
-                                    slot="reference"
-                                    class="el-icon-warning"
-                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
-                            </el-popover>
+                            <template v-if="!scope.row.isAuth">
+                                <el-popover
+                                    placement="top"
+                                    width="100"
+                                    trigger="hover"
+                                    content="此合约链上存在异常"
+                                >
+                                    <i
+                                        slot="reference"
+                                        class="el-icon-warning"
+                                        style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                                    ></i>
+                                </el-popover>
+                            </template>
                         </div>
 
                     </template>
@@ -248,6 +249,7 @@
                 <el-table-column
                     prop="operation"
                     label="操作"
+                    width="50"
                 >
 
                     <template slot-scope="scope">
@@ -287,7 +289,10 @@
                 </el-table-column>
             </el-table>
 
-            <div style="padding: 10px 0; display: flex; justify-content: flex-end;">
+            <div
+                style="padding: 10px 0; display: flex; justify-content: flex-end;"
+                v-if="totalQuantity > pageSize"
+            >
                 <!--                @current-change="onCurrentPageChange"-->
                 <!--                @size-change="onPageSizeChange"-->
                 <el-pagination
@@ -331,12 +336,12 @@
 
         .table-policies {
             & > a {
-                display: none;
+                visibility: hidden;
             }
 
             &:hover {
                 & > a {
-                    display: flex;
+                    visibility: visible;
                 }
             }
 

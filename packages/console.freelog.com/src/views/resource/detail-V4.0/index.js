@@ -427,7 +427,7 @@ export default {
         //     return this.$message.error(`不能包含空格和以下字符：\\ / : * ? " < > |`);
         // }
         this.resourceDetail.resourceInfo.aliasName = this.resourceDetail.resourceInfo.aliasName.trim();
-      if (this.resourceDetail.resourceInfo.aliasName && !/^[\u4E00-\u9FA5|a-z|0-9|A-Z]{2,24}$/.test(this.resourceDetail.resourceInfo.aliasName)) {
+      if (this.resourceDetail.resourceInfo.aliasName && !/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceDetail.resourceInfo.aliasName)) {
         return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
       }
 

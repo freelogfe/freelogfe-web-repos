@@ -21,7 +21,7 @@ export default {
                 name: '',
             },
             // 是否是页面样式
-            isPageStyle: false,
+            isPageStyle: this.$route.query.isPageStyle && this.$route.query.isPageStyle === 'true',
             // 筛选『全部』和『待处理』
             filterTodo: '全部',
             // 筛选搜索框
@@ -54,6 +54,9 @@ export default {
 
         switchIsPageStyle(bool) {
             this.isPageStyle = bool;
+            // console.log(this.$router, '!@#$@#!$');
+            // console.log(this.$route, '!@#$@#!$');
+            this.$router.replace(this.$route.path + '?isPageStyle=' + bool);
         },
         /**
          * 处理节点信息
@@ -181,8 +184,13 @@ export default {
         onChangePageSize(pageSize) {
             this.pageSize = pageSize;
         },
+        /**
+         * 新打开页面 去编辑页
+         * @param presentableId
+         */
         goToEditPage(presentableId) {
-            this.$router.push(`/node/manager-release/${presentableId}`);
+            // this.$router.push(`/node/manager-release/${presentableId}`);
+            window.open(`/node/manager-release/${presentableId}`);
         },
         /**
          * 跳转到添加策略页面
@@ -205,9 +213,13 @@ export default {
                     return this.$message.error('无法上线：授权链异常');
                 }
             }
-            await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
+            const res = await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
                 onlineState: item.isOnline === 0 ? 1 : 0,
             });
+
+            if (res.data.errcode !== 0) {
+                return this.$message.error(res.data.msg);
+            }
             item.isOnline === 0 ? this.$message.success('上线成功') : this.$message.success('下线成功');
             // item.isOnline = item.isOnline === 0 ? 1 : 0;
             this.handleTableData();

@@ -7,6 +7,7 @@ import UploadCover from '@/components/ResourceComponents/UploadCover/index.vue';
 import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
+import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 
 export default {
     name: 'editor',
@@ -21,6 +22,7 @@ export default {
         RichEditor,
         MetaInfoInput,
         HeaderAlert,
+        DependentReleaseList,
     },
 
     data() {
@@ -51,6 +53,8 @@ export default {
             visibleDepDialog: false,
             // 依赖列表
             depList: [],
+            // 依赖 mock 列表
+            depMockList: [],
 
             // 资源描述
             description: '',
@@ -90,17 +94,26 @@ export default {
             };
             this.resourceName = result.name;
             this.coverURL = result.previewImages[0] || '';
-            this.depList = [
-                ...result.systemMeta.dependencyInfo.releases.map(i => ({
-                    id: i.releaseId,
-                    name: i.releaseName,
-                    version: i.versionRange,
-                })),
-                ...result.systemMeta.dependencyInfo.mocks.map(i => ({
-                    id: i.mockResourceId,
-                    name: i.mockResourceName,
-                })),
-            ];
+            // this.depList = [
+            //     ...result.systemMeta.dependencyInfo.releases.map(i => ({
+            //         id: i.releaseId,
+            //         name: i.releaseName,
+            //         version: i.versionRange,
+            //     })),
+            //     ...result.systemMeta.dependencyInfo.mocks.map(i => ({
+            //         id: i.mockResourceId,
+            //         name: i.mockResourceName,
+            //     })),
+            // ];
+            this.depList = result.systemMeta.dependencyInfo.releases.map(i => ({
+                id: i.releaseId,
+                name: i.releaseName,
+                version: i.versionRange,
+            }));
+            this.depMockList = result.systemMeta.dependencyInfo.mocks.map(i => ({
+                id: i.mockResourceId,
+                name: i.mockResourceName,
+            }));
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
         },
@@ -150,26 +163,33 @@ export default {
         /**
          * 添加依赖
          */
-        addDep(dep) {
-            // console.log(dep, 'debpdebpdebpdebpdebpdebp');
-            //
-            if (this.depList.some(i => dep.releaseId === i.id)) {
-                return this.$message.error('不能重复添加依赖资源');
-            }
-
-            this.visibleDepDialog = false;
-            this.depList.push({
-                id: dep.releaseId,
-                name: dep.releaseName,
-                // 有版本号为正式资源，否则为 mock 资源
-                version: dep.latestVersion ? dep.latestVersion.version : undefined,
-            });
-        },
+        // addDep(dep) {
+        //     // console.log(dep, 'debpdebpdebpdebpdebpdebp');
+        //     //
+        //     if (this.depList.some(i => dep.releaseId === i.id)) {
+        //         return this.$message.error('不能重复添加依赖资源');
+        //     }
+        //
+        //     this.visibleDepDialog = false;
+        //     this.depList.push({
+        //         id: dep.releaseId,
+        //         name: dep.releaseName,
+        //         // 有版本号为正式资源，否则为 mock 资源
+        //         version: dep.latestVersion ? dep.latestVersion.version : undefined,
+        //     });
+        // },
         /**
          * 依赖列表变化时
          */
         onChangeDeps(deps) {
             this.depList = deps;
+        },
+        /**
+         * 依赖 mock 列表变化时
+         */
+        onChangeMock(mocks) {
+            // console.log(mocks, 'mock');
+            this.depMockList = mocks;
         },
 
         /**
@@ -217,7 +237,7 @@ export default {
                 return this.$message.error('请输入资源名称');
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
-            if (!/^[\u4E00-\u9FA5|a-z|0-9|A-Z]{2,24}$/.test(this.resourceName)) {
+            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
                 return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
@@ -226,7 +246,8 @@ export default {
             }
 
             const {bucketName, mockResourceId} = this.$route.params;
-            console.log(this.depList, 'this.depListthis.depListthis.depListthis.depList');
+            // console.log(this.depList, 'this.depListthis.depListthis.depListthis.depList');
+            // console.log(this.depMockList, 'this.depListthis.depListthis.depListthis.depList');
             const params = {
                 bucketName,
                 resourceType: this.resourceType,
@@ -234,8 +255,8 @@ export default {
                 name: this.resourceName,
                 previewImages: this.coverURL ? [this.coverURL] : undefined,
                 dependencyInfo: {
-                    mocks: this.depList.filter(i => !i.version).map(i => ({mockResourceId: i.id})),
-                    releases: this.depList.filter(i => i.version).map(i => ({releaseId: i.id, versionRange: i.version}))
+                    mocks: this.depMockList.map(i => ({mockResourceId: i.id})),
+                    releases: this.depList.map(i => ({releaseId: i.id, versionRange: i.version}))
                 },
                 description: this.description,
                 meta: JSON.parse(this.metaInfo),

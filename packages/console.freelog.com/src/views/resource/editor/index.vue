@@ -55,13 +55,13 @@
                 <el-input
                     :disabled="isUpdateResource"
                     :minlength="1"
-                    :maxlength="100"
+                    :maxlength="60"
                     v-model="resourceName"
                     placeholder="输入资源名称"
                     style="width: 590px;"
                 ></el-input>
 
-                <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/100</span>
+                <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/60</span>
             </div>
 
             <SmallTitle :dot="false">资源封面</SmallTitle>
