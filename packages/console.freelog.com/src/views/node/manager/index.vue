@@ -81,6 +81,7 @@
                 <el-table-column
                     prop="publish"
                     label="发行"
+                    min-width="20%"
                 >
                     <template slot-scope="scope">
                         <div style="display: flex; align-items: center; padding-left: 10px;">
@@ -92,6 +93,7 @@
                                     style="width: 100%; height: 100%;"
                                     v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
                                     :src="scope.row.releaseInfo.previewImages[0]"
+                                    class="resource-default-preview"
                                 />
                             </div>
                             <div style="padding-left: 10px; overflow: hidden; flex-shrink: 1;">
@@ -109,6 +111,7 @@
                 <el-table-column
                     prop="presentableName"
                     label="发行标题"
+                    min-width="18%"
                 >
                     <template slot-scope="scope">
                         <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
@@ -119,7 +122,7 @@
                 <el-table-column
                     prop="type"
                     label="全部类型"
-                    width="100"
+                    min-width="12%"
                 >
                     <template slot="header" slot-scope="scope">
                         <el-dropdown
@@ -147,12 +150,12 @@
                 <el-table-column
                     prop="policies"
                     label="策略"
-                    width="120"
+                    min-width="14%"
                 >
                     <div
                         class="table-policies"
                         slot-scope="scope"
-                        style="display: flex; align-items: center; justify-content: space-between;"
+                        style="display: flex; align-items: center; justify-content: space-between; width: 120px;"
                     >
                         <el-popover
                             placement="bottom-start"
@@ -191,7 +194,7 @@
                 <el-table-column
                     prop="updateTime"
                     label="更新时间"
-                    width="130"
+                    min-width="18%"
                 >
                     <template slot-scope="scope">
                         <div>
@@ -206,7 +209,7 @@
                 <el-table-column
                     prop="state"
                     label="全部状态"
-                    width="90"
+                    min-width="12%"
                 >
                     <template slot="header" slot-scope="scope">
                         <el-dropdown style="height: 32px">
@@ -249,7 +252,7 @@
                 <el-table-column
                     prop="operation"
                     label="操作"
-                    width="50"
+                    min-width="5%"
                 >
 
                     <template slot-scope="scope">

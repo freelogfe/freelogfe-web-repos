@@ -6,6 +6,7 @@
                 <img
                     :src="releaseInfo.previewImages || undefined"
                     style="width: 100px; height: 75px; flex-shrink: 0;"
+                    class="resource-default-preview"
                 />
                 <div
                     style="height: 75px; width: 100%; flex-shrink: 1; display: flex; flex-direction: column; justify-content: space-between; padding-left: 20px;">
