@@ -85,35 +85,45 @@
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody tilte="依赖">
-            <div style="padding-left: 20px; height: 60px; align-items: center; display: flex;">
-                <el-button
-                    size="small"
-                    icon="el-icon-plus"
-                    circle
-                    @click="showDepDialog"
-                ></el-button>
-                <span style="padding-left: 10px; font-size: 14px; color: #333;">添加依赖</span>
-            </div>
-            <DepList
-                :data="depList"
-                :onChange="onChangeDeps"
-            ></DepList>
-            <div style="height: 10px;"></div>
+<!--        <BlockBody tilte="依赖" v-if="false">-->
+<!--            <div style="padding-left: 20px; height: 60px; align-items: center; display: flex;">-->
+<!--                <el-button-->
+<!--                    size="small"-->
+<!--                    icon="el-icon-plus"-->
+<!--                    circle-->
+<!--                    @click="showDepDialog"-->
+<!--                ></el-button>-->
+<!--                <span style="padding-left: 10px; font-size: 14px; color: #333;">添加依赖</span>-->
+<!--            </div>-->
+<!--            <DepList-->
+<!--                :data="depList"-->
+<!--                :onChange="onChangeDeps"-->
+<!--            ></DepList>-->
+<!--            <div style="height: 10px;"></div>-->
 
-            <!-- 添加依赖的搜索弹出框 -->
-            <el-dialog
-                width="750px"
-                top="10vh"
-                center
-                :visible.sync="visibleDepDialog"
-            >
-                <!--                @add="addDepReleaseHandler"-->
-                <ReleaseSearch
-                    :tabLayout="['search', 'my-release', 'favor', 'mock-search']"
-                    @add="addDep"
-                ></ReleaseSearch>
-            </el-dialog>
+<!--            &lt;!&ndash; 添加依赖的搜索弹出框 &ndash;&gt;-->
+<!--            <el-dialog-->
+<!--                width="750px"-->
+<!--                top="10vh"-->
+<!--                center-->
+<!--                :visible.sync="visibleDepDialog"-->
+<!--            >-->
+<!--                &lt;!&ndash;                @add="addDepReleaseHandler"&ndash;&gt;-->
+<!--                <ReleaseSearch-->
+<!--                    :tabLayout="['search', 'my-release', 'favor', 'mock-search']"-->
+<!--                    @add="addDep"-->
+<!--                ></ReleaseSearch>-->
+<!--            </el-dialog>-->
+<!--        </BlockBody>-->
+
+        <BlockBody tilte="依赖">
+            <DependentReleaseList
+                :dataSource="depList"
+                :mockDataSource="depMockList"
+                :isLock="false"
+                @onChange="onChangeDeps"
+                @onChangeMock="onChangeMock"
+            />
         </BlockBody>
 
         <BlockBody tilte="资源描述">
