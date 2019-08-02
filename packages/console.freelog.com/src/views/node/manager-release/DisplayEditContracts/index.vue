@@ -121,11 +121,12 @@
                 <div style="height: 10px;"></div>
                 <div style="text-align: right;">
                     <el-button
+                        v-show="isSignDirty"
                         type="primary"
                         size="medium"
                         round
                         @click="updateSignPolicy"
-                    >修改
+                    >签约
                     </el-button>
                 </div>
             </div>
@@ -148,6 +149,8 @@
 
                 nodeInfo: null,
                 selectedPolicyIDs: [],
+
+                isSignDirty: false,
             };
         },
         mounted() {
@@ -237,56 +240,15 @@
              * 对可供签约的策略签约
              */
             async signPolicy(policyId) {
+                this.isSignDirty = true;
                 this.selectedPolicyIDs.push(policyId);
-                // console.log(this.dataSource[this.activatedIndex], 'dataSource[activatedIndex]');
-                // const releaseId = this.dataSource[this.activatedIndex].releaseId;
-                // const contracts = this.dataSource[this.activatedIndex].children
-                //     .filter(i => i.contract)
-                //     .map(i => ({
-                //         policyId: i.policy.policyId,
-                //     }));
-                // contracts.push({
-                //     policyId,
-                // });
-                // // console.log(contracts, 'contractscontracts');
-                // await this.updatePresentable({
-                //     resolveReleases: [
-                //         {
-                //             releaseId,
-                //             contracts,
-                //         },
-                //     ]
-                // });
-                //
-                // setTimeout(() => {
-                //     this.handleData()
-                // }, 100);
             },
             /**
              * 解约
              */
             async breakSignPolicy(policyId) {
+                this.isSignDirty = true;
                 this.selectedPolicyIDs = this.selectedPolicyIDs.filter(j => j !== policyId);
-                // const releaseId = this.dataSource[this.activatedIndex].releaseId;
-                // const contracts = this.dataSource[this.activatedIndex].children
-                //     .filter(i => i.contract)
-                //     .map(i => ({
-                //         policyId: i.policy.policyId,
-                //     }))
-                //     .filter(j => j.policyId !== policyId);
-                //
-                // await this.updatePresentable({
-                //     resolveReleases: [
-                //         {
-                //             releaseId,
-                //             contracts,
-                //         },
-                //     ]
-                // });
-                // setTimeout(() => {
-                //     this.handleData()
-                // }, 100);
-
             },
             /**
              * 更新策略
@@ -296,6 +258,7 @@
                 if (this.selectedPolicyIDs.length === 0) {
                     return this.$message.error('最少要选择一个策略');
                 }
+                this.isSignDirty = false;
                 const releaseId = this.dataSource[this.activatedIndex].releaseId;
                 const contracts = this.selectedPolicyIDs
                     .map(i => ({
