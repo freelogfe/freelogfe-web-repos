@@ -22,13 +22,12 @@
         },
         data() {
             return {
-                pause: false,
                 func: null,
             };
         },
         mounted() {
             this.$refs.boxRef.onscroll = () => {
-                if (this.end || this.pause) {
+                if (this.end) {
                     return;
                 }
                 if (this.$refs.boxRef.getBoundingClientRect().bottom >= this.$refs.loadingRef.getBoundingClientRect().top) {
