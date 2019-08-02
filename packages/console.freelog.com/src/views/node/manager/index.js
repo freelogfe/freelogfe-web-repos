@@ -198,7 +198,8 @@ export default {
          */
         goToAddPolicyPage(presentableId) {
             // this.$router.push(`/node/${this.$route.params.nodeId}/presentable/${presentableId}?tab=policy`);
-            this.$router.push(`/node/manager-release/${presentableId}`);
+            // this.$router.push(`/node/manager-release/${presentableId}?addPolicy=true`);
+            window.open(`/node/manager-release/${presentableId}?addPolicy=true`);
         },
         /**
          * 上线和下线
