@@ -224,6 +224,21 @@ export default {
             // item.isOnline = item.isOnline === 0 ? 1 : 0;
             this.handleTableData();
         },
+        upgradePresentable(presentable) {
+            const { presentableId, releaseInfo: { version } } = presentable
+            this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {
+                version
+            })
+            .then(res => res.data)
+            .then(res => {
+                if(res.errcode === 0) {
+                    this.$message({ type: 'success', message: '升级成功！' })
+                }else {
+                    this.$message({ type: 'error', message: '升级失败！' })
+                }
+            })
+            .catch(this.$error.showErrorMessage)
+        }
     },
 
     watch: {

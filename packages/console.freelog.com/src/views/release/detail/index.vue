@@ -108,17 +108,16 @@
     >
       <div class="r-d-w-r-sign">
         <h4>节点选择</h4>
-        <el-checkbox-group class="r-d-w-r-node-list" v-model="checkedNodeList" v-if="nodes.length">
-          <el-checkbox
+        <el-radio-group class="r-d-w-r-node-list" v-model="checkedNodeId" v-if="nodes.length">
+          <el-radio
                   class="r-d-w-r-node-item"
                   v-for="(node, index) in nodes"
                   :key="'node-'+index"
                   :label="node.nodeId"
                   size="medium"
-                  :checked="rSubordinateNodesIds.indexOf(node.nodeId) !== -1"
                   :disabled="rSubordinateNodesIds.indexOf(node.nodeId) !== -1"
-          >{{node.nodeName}}</el-checkbox>
-        </el-checkbox-group>
+          >{{node.nodeName}}{{rSubordinateNodesIds.indexOf(node.nodeId) !== -1 ? '（已签约）':''}}</el-radio>
+        </el-radio-group>
         <div class="rdwr-no-nodes" v-else>
           <el-alert type="warning" show-icon :closable="false">
             <div class="" slot="title">
@@ -137,7 +136,7 @@
         </div>
         <div class="rdwr-s-btn-group">
           <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="signDialogVisible = false">取消</el-button>
-          <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="checkedNodeList.length === 0" @click="authSign">签约</el-button>
+          <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">签约</el-button>
         </div>
       </div>
     </el-dialog>

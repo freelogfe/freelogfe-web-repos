@@ -274,6 +274,9 @@
                                     >置顶</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
+                                    <a @click="upgradePresentable(scope.row)">升级</a>
+                                </el-dropdown-item>
+                                <el-dropdown-item>
                                     <a
                                         @click="onLineAndOffLine(scope.row)"
                                         style="display: block; width: 100%; height: 100%;"

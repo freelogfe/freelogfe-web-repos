@@ -20,6 +20,7 @@ export default {
       selectedUpcastRPolicyIdsList: [],
       baseUpcastReleasesList: [],
       checkedNodeList: [],
+      checkedNodeId: '',
       // selectedPolicies: [],
       upcastDepReleasesMap: null,
       checkedLabelMap: {},
@@ -280,27 +281,31 @@ export default {
     ,
     // 获取授权：即创建presentable
     authSign() {
-      const targetNodes = this.checkedNodeList.filter(nodeId => this.rSubordinateNodesIds.indexOf(nodeId) === -1)
-      targetNodes.forEach(nodeId => {
-        this.$services.PresentablesService.post({
-          nodeId,
-          releaseId: this.releaseId,
-          presentableName: this.release.releaseName,
-          version: this.activeReleaseVersion,
-          resolveReleases: this.getRosolveReleases(),
-        })
-          .then(res => res.data)
-          .then(res => {
-            if(res.errcode === 0) {
-              this.rSubordinateNodesIds.push(res.data.nodeId)
-              this.$message({ type: 'success', message: '授权签约成功！' })
-              this.signDialogVisible = false
-            }else {
-              this.$error.showErrorMessage(res.msg)
-            }
-          })
-          .catch(this.$error.showErrorMessage)
+      // const targetNodes = this.checkedNodeList.filter(nodeId => this.rSubordinateNodesIds.indexOf(nodeId) === -1)
+      const nodeId = this.checkedNodeId
+      const self = this
+      this.$services.PresentablesService.post({
+        nodeId,
+        releaseId: this.releaseId,
+        presentableName: this.release.releaseName,
+        version: this.activeReleaseVersion,
+        resolveReleases: this.getRosolveReleases(),
       })
+        .then(res => res.data)
+        .then(res => {
+          if(res.errcode === 0) {
+            const { nodeId, presentableId } = res.data
+            this.rSubordinateNodesIds.push(nodeId)
+            this.signDialogVisible = false
+            this.$message({ type: 'success', message: '授权签约成功；即将跳转至节点发行管理页！', duration: 2000, onClose() {
+              self.$router.push(`/node/manager-release/${presentableId}`)
+            }})
+
+          }else {
+            this.$error.showErrorMessage(res.msg)
+          }
+        })
+        .catch(this.$error.showErrorMessage)
     },
     // 获取 发行以及其上抛的解决方式
     getRosolveReleases() {

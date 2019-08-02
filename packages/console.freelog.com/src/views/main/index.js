@@ -43,7 +43,7 @@ export default {
             }
 
             this.$refs.resourceList.$emit('reload', {
-                keyWords: encodeURIComponent(this.query)
+                keywords: encodeURIComponent(this.query)
             })
         },
         fetchReleaseData(page) {
@@ -52,7 +52,7 @@ export default {
                 pageSize: 30
             }
             if (this.query) {
-                query.keyWords = this.query
+                query.keywords = this.query
             }
             return this.loader(query).then((data) => {
                 data.canLoadMore = !(data.dataList < data.pageSize)
@@ -82,8 +82,8 @@ export default {
         },
         loader(param) {
             if (typeof param === 'object') {
-                if (param.keyWords) {
-                    this.query = param.keyWords
+                if (param.keywords) {
+                    this.query = param.keywords
                 }
                 param = {
                     params: param

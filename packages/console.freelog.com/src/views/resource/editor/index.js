@@ -240,7 +240,7 @@ export default {
                 previewImages: this.coverURL ? [this.coverURL] : undefined,
                 dependencies: this.depList.filter(i => i.version).map(i => ({
                     releaseId: i.id,
-                    versionRange: i.version
+                    versionRange: `^${i.version}`
                 })),
                 description: this.description,
                 meta: JSON.parse(this.metaInfo),
