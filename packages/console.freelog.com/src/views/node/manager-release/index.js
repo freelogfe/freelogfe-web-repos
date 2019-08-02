@@ -78,6 +78,10 @@ export default {
         this.handleInitInfo();
         // this.getContractsList();
         // this.freshBottomPolicy();
+        // console.log(this.$route.query.addPolicy, '!@#$!@#$@#$');
+        if (this.$route.query.addPolicy === 'true') {
+            this.switchShowEditPolicy(true);
+        }
     },
     methods: {
         /**
