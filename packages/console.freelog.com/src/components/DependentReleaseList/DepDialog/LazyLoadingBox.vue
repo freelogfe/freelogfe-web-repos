@@ -20,16 +20,34 @@
                 default: false,
             },
         },
+        data() {
+            return {
+                pause: false,
+                func: null,
+            };
+        },
         mounted() {
             this.$refs.boxRef.onscroll = () => {
-                if (this.end) {
+                if (this.end || this.pause) {
                     return;
                 }
                 if (this.$refs.boxRef.getBoundingClientRect().bottom >= this.$refs.loadingRef.getBoundingClientRect().top) {
-                    this.$emit('toBottom');
+                    this.func = this.handleEvent;
+                    setTimeout(() => {
+                        if (this.func) {
+                            this.func();
+                            this.func = null;
+                        }
+                    }, 1000);
+
                 }
             };
         },
+        methods: {
+            handleEvent() {
+                this.$emit('toBottom');
+            },
+        }
     }
 </script>
 
