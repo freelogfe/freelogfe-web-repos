@@ -60,6 +60,7 @@
         }
 
         .resource-list-item {
+            overflow: hidden;
             border-radius: 4px;
             background-color: #FFFFFF;
             margin-bottom: 20px;

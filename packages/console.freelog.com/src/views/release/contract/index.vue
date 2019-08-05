@@ -100,7 +100,8 @@
         activeContractTab: '',
         activeContractTabIndex: 0,
         activeKey: '',
-        activeRelease: null
+        activeRelease: null,
+        releaseIdNameMap: {}
       }
     },
     computed: {
@@ -128,14 +129,16 @@
         var key = 'tree-node-i-'
         let firstLevelNodeIndex = -1, secondLevelNodeIndex = 0
         for(let i = 0; i < rtData.length; i++) {
-          const isParentHasContracts = rtData[i].contracts && rtData[i].contracts.length > 0
+          const { contracts, baseUpcastReleases, releaseId, releaseName } = rtData[i]
+          const isParentHasContracts = contracts && contracts.length > 0
           if(isParentHasContracts) {
             firstLevelNodeIndex++
             secondLevelNodeIndex = 0
             tmpTreeData[firstLevelNodeIndex] = this.getTreeNode(rtData[i], key + i)
           }
-
-          rtData[i].baseUpcastReleases.forEach((item) => {
+          this.releaseIdNameMap[releaseId] = releaseName
+          
+          baseUpcastReleases.forEach((item) => {
             if(item.contracts && item.contracts.length > 0) {
               let tmpNode = this.getTreeNode(item, key + i)
               if(isParentHasContracts) {
@@ -211,7 +214,10 @@
       handlerContract(data) {
         const { contractId } = data.contracts[this.activeContractTabIndex]
         this.activeContractTab = data.policies[this.activeContractTabIndex].policyName
+        const { partyOne, partyTwo } = this.contractsMap[contractId]
         this.contractDetail = this.contractsMap[contractId]
+        this.contractDetail.partyOne = this.releaseIdNameMap[partyOne] || partyOne
+        this.contractDetail.partyTwo = this.releaseIdNameMap[partyTwo] || partyTwo
         this.isShowDetailContract = true
         this.targetData = data
       },
@@ -221,7 +227,8 @@
       }
     },
     created() {
-
+      this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
+      
     }
   }
 </script>

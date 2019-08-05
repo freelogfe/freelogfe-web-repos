@@ -37,6 +37,7 @@
         <div :class="['s-m-w-c-p-wrapper', { 'disabled': isSelectedReleaesUpcast }]">
           <div
                   class="s-m-w-c-policy"
+                  :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"
                   v-for="(policy, index) in tmpSelectedPolicies"
                   :key="'policy-' + index"
           >
@@ -44,24 +45,35 @@
               <div class="p-name" @click="selectPolicy(policy, index)">
                 <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                 <i class="el-icon-check" v-else></i>
-                {{policy.policyName}}<span class="smw-c-p-s-text">（已签约）</span>
+                {{policy.policyName}}
+                <span class="contract-status" :class="['status-'+contractsMap[policy.contractId].status]">{{contractsMap[policy.contractId].statusTip}}</span>
+                <!-- <span class="smw-c-p-s-text">（已签约）</span> -->
+              </div>
+              <div class="p-auth-info">
+                <div>
+                  <span>授权方：{{contractsMap[policy.contractId].partyOne}}</span>
+                  <span>被授权方：{{contractsMap[policy.contractId].partyTwo}}</span>
+                </div>
+                <div>
+                  <span>合同ID：{{policy.contractId}}</span>
+                  <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
+                </div>
               </div>
               <el-tooltip placement="top" content="此发行存在历史签约，可直接使用当前合同">
-                <i class="el-icon-warning"></i>
+                <i class="el-icon-info"></i>
               </el-tooltip>
               <div class="p-detail">
                 <contract-detail
                         class="contract-policy-content"
                         :contract.sync="contractsMap[policy.contractId]"
                         :policyText="contractsMap[policy.contractId].contractClause.policyText"
-                        @update-contract="updateContractAfterEvent"
-                ></contract-detail>
+                        @update-contract="updateContractAfterEvent"></contract-detail>
               </div>
             </div>
-            <div v-else>
+            <div class="smw-c-p-box" v-else>
               <div class="p-name" @click="selectPolicy(policy, index)">
                 <span class="p-n-check-box" v-if="!policy.isSelected"></span>
-                <i class="el-icon-check" v-else></i>{{policy.policyName}}
+                <i class="el-icon-check" v-else></i>{{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>  
               </div>
               <div class="p-detail">
                 <pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre>
@@ -75,8 +87,7 @@
             class="s-m-w-c-floatball"
             :selectedAuthSchemes="selectedAuthSchemes"
             :upcastReleases="baseUpcastReleases"
-            v-if="type === 'create'"
-    ></scheme-float-ball>
+            v-if="type === 'create'"></scheme-float-ball>
     </div>
   </div>
 </template>

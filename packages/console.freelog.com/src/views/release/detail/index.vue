@@ -8,6 +8,12 @@
             <router-link :to="`/release/edit/${release.releaseId}`" v-if="isOwnRelease">前去编辑</router-link>
           </div>
         </el-alert>
+        <el-alert class="r-d-w-waring" type="warning" :closable="false" v-if="!isUsable">
+          <div slot="title">
+            当前发行的上抛发行未上线，不可用！
+            <router-link :to="`/release/edit/${release.releaseId}`" v-if="isOwnRelease">前去编辑</router-link>
+          </div>
+        </el-alert>
         <div class="preview-box">
           <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
         </div>
@@ -53,8 +59,11 @@
           <div class="r-d-w-p-upcast-releases" v-if="baseUpcastReleasesList.length">
             <h3>上抛发行策略</h3>
             <ul>
-              <li class="r-d-w-p-u-r-item" v-for="(r, index) in baseUpcastReleasesList" :key="'bur-'+index">
-                <div class="r-item-name" :class="{'selected': r.isSelectedPolicy}">{{r.releaseName}}</div>
+              <li class="r-d-w-p-u-r-item" :class="{ 'disabled': r.status === 0 }" v-for="(r, index) in baseUpcastReleasesList" :key="'bur-'+index">
+                <div class="r-item-name" :class="{'selected': r.isSelectedPolicy}">
+                  {{r.releaseName}}
+                  <el-tag type="warning" size="mini" effect="plain" v-if="r.status === 0">未上线</el-tag>
+                </div>
                 <div class="release-policy-item" v-for="(p, index) in r.policies" :key="index" @click="exchangeActivePolicy(p)">
                   <el-checkbox v-model="selectedUpcastRPolicyIdsList" :label="p.checkedLabel" size="medium" >{{p.policyName}}</el-checkbox>
                 </div>
@@ -65,7 +74,7 @@
         <div class="r-d-w-p-right">
           <pre class="r-d-w-p-text" v-if="activePolicy" v-html="activePolicy.policyText"></pre>
         </div>
-        <div class="r-d-w-p-auth-btn" @click="showSignBox">获取授权</div>
+        <div class="r-d-w-p-auth-btn" :class="{'disabled': !isUsable}" @click="showSignBox">获取授权</div>
         <div class="r-d-w-p-compare-btn" @click="showPolicyCompareBox" v-if="release.policies.length > 1">策略对比</div>
       </div>
     </div>
