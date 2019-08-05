@@ -223,6 +223,8 @@ function humanizeSize(number) {
     return `${number} ${unit}`;
 }
 
+import crypto from 'crypto';
+
 /**
  * 根据 File 获取 SHA1 Hash 字符串
  * @param file
@@ -232,8 +234,13 @@ function getSHA1Hash(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = function (evt) {
-            const hash = CryptoJS.SHA1(evt.target.result);
-            resolve(hash.toString(CryptoJS.enc.Hex));
+            // console.log(evt, 'evt');
+            // const hash = CryptoJS.SHA1(evt.target.result);
+            // resolve(hash.toString(CryptoJS.enc.Hex));
+
+            const sha1sum = crypto.createHash('sha1');
+            resolve(sha1sum.digest('hex'));
+
         };
         reader.readAsBinaryString(file);
     });
