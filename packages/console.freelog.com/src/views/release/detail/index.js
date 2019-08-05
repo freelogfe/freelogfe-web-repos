@@ -12,6 +12,7 @@ export default {
       activeReleaseVersion: this.$route.query.version,
       isOwnRelease: false,
       isOnline: true,
+      isUsable: true,
       isShowContentLoading: false,
       isCollectedRelease: false,
       release: null,
@@ -41,7 +42,7 @@ export default {
   },
   computed: Object.assign({
     projection() {
-      return ["releaseId", "resourceType", "releaseName", "latestVersion", "baseUpcastReleases", "policies", "updateDate"].join(',')
+      return ["releaseId", "resourceType", "releaseName", "latestVersion", "baseUpcastReleases", "policies", "updateDate","status"].join(',')
     },
     selectedPolicies() {
       var targArr = [], tmpArr = [...this.selectedRPolicyIdsList, ...this.selectedUpcastRPolicyIdsList]
@@ -157,6 +158,7 @@ export default {
               const arr = res.data || []
               this.upcastDepReleasesMap = {}
               for(let i = 0; i < arr.length; i++) {
+                this.isUsable = arr[i].status === 1 && this.isUsable
                 let releaseId = arr[i].releaseId
                 arr[i].policies = arr[i].policies.map(p => {
                   p.checkedLabel = `${arr[i].releaseId}-${p.policyId}`
@@ -227,6 +229,7 @@ export default {
       this.compareDialogVisible = true
     },
     showSignBox() {
+      if(!this.isUsable) return 
       var isSelectAllUpcastReleasePolicies = true,
         isSelectReleasePolicies = this.checkIsSelectReleasePolicy(this.selectedRPolicyIdsList, this.release)
       for(let i = 0; i <this.baseUpcastReleasesList.length; i++) {

@@ -1,6 +1,7 @@
 
 import { beautifyPolicy, } from '@freelog/freelog-policy-lang'
 import { ContractDetail } from '@freelog/freelog-ui-contract'
+import { CONTRACT_STATUS_TIPS } from '@/config/contract.js'
 import ReleaseDependItem from './depend-item.vue'
 import SchemeFloatBall from '@/components/Authorization-scheme/scheme-float-ball.vue'
 
@@ -39,6 +40,7 @@ export default {
       activeSelectedIndex: 0,
       isSelectedReleaesUpcast: false,
       releasesMap: {},
+      releaseIdNameMap: {},
       upcastDepReleasesMap: null,
       contractsMap: null,
       targetReleases: [],
@@ -73,6 +75,7 @@ export default {
     initData() {
       if(this.depReleasesList.length > 0) {
         this.isLoading = true
+        this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
         this.fetchDepReleases()
         this.fetchReleaseScheme()
       }
@@ -117,6 +120,9 @@ export default {
               this.$emit('update:contracts', res.data)
               this.contractsMap = {}
               res.data.forEach(c => {
+                c.partyOne = this.releaseIdNameMap[c.partyOne] || c.partyOne
+                c.partyTwo = this.releaseIdNameMap[c.partyTwo] || c.partyTwo
+                c.statusTip = CONTRACT_STATUS_TIPS[c.status]
                 this.contractsMap[c.contractId] = c
               })
             }
@@ -140,6 +146,7 @@ export default {
             let tmpArr = []
             res.data.forEach(release => {
               this.releasesMap[release.releaseId] = release
+              this.releaseIdNameMap[release.releaseId] = release.releaseName
               if(release.baseUpcastReleases) {
                 tmpArr = [ ...tmpArr, ...release.baseUpcastReleases.map(i => i.releaseId) ]
               }
@@ -167,6 +174,7 @@ export default {
             for(let i = 0; i < arr.length; i++) {
               let releaseId = arr[i].releaseId
               this.upcastDepReleasesMap[releaseId] = arr[i]
+              this.releaseIdNameMap[releaseId] = arr[i].releaseName
               if(!this.releasesMap[releaseId]) {
                 this.releasesMap[releaseId] = arr[i]
               }

@@ -121,7 +121,6 @@
   @status0Color: #009AFF;
   @status1Color: #EDA02C;
   .main-resource-item-wrap {
-    overflow: hidden;
     cursor: pointer;
     position: relative;
     padding-bottom: 6px;
@@ -224,7 +223,7 @@
     img {
       width: 100%;
       height: 165px;
-      display: inline-block;
+      display: block;
     }
     .res-digest-info {
       padding: 10px 10px 8px;

@@ -17,7 +17,7 @@
         @current-change="handleCurrentChange"
         :current-page="currentPage"
         :page-sizes="[10, 20, 50]"
-        :page-size="10"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
@@ -62,7 +62,7 @@
         tableProps: {
           data: []
         },
-        currentPage: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_current_page`)) || 1,
+        currentPage: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_page_size`)) || 1,
         pageSize: 10,
         loading: false
       }
@@ -73,6 +73,9 @@
         handler() {
           this.reload()
         }
+      },
+      pageSize() {
+        this.reload()
       }
     },
     methods: {
@@ -111,6 +114,7 @@
         this.tableProps.data = list
       },
       reload() {
+        console.log('reload ---', this.pageSize)
         this.currentPage = 1
         if (this.loading && this.source) {
           this.loading = false
@@ -126,7 +130,7 @@
           .then(this.update.bind(this))
           .then(() => {
             this.loading = false
-            window.sessionStorage.setItem(`${this.$route.fullPath}_current_page`, this.currentPage)
+            window.sessionStorage.setItem(`${this.$route.fullPath}_page_size`, this.currentPage)
           })
           .catch((err) => {
             if (!err.message || err.message !== 'cancel') {

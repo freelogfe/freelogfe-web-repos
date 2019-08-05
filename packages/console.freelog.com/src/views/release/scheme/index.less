@@ -61,10 +61,21 @@
     .s-m-w-c-policy {
       margin-bottom: 20px;
 
+      &.offline {
+        .smw-c-p-box { cursor: not-allowed; }
+        .p-name{ 
+          color: #999; pointer-events: none;
+          .p-n-check-box{ border-color: #999; }
+        }
+        .p-detail {
+          .p-segment-text { background-color: #f5f5f5; color: #999; }
+        }
+      }
+
       .p-name {
         display: inline-block; position: relative; cursor: pointer;
         margin-bottom: 6px; padding-left: 30px;
-        color: #333; cursor: pointer;
+        font-size: 14px; color: #333; cursor: pointer;
 
         .p-n-check-box {
           display: inline-block;
@@ -73,7 +84,7 @@
         }
 
         .el-icon-check {
-          position: absolute; left: -1px; top: 2px; z-index: 10;
+          position: absolute; left: -1px; top: 3px; z-index: 10;
           padding-left: 3px; font-size: 14px; font-weight: bold; color: #fff;
           &:after {
             content: '';
@@ -95,11 +106,29 @@
         position: relative;
         border: 1px solid #D8D8D8; border-radius: 4px; background-color: #fbfbfb;
         .smw-c-p-s-text { color: #409EFF; }
-        .p-name{ margin-top: 8px; margin-left: 15px; cursor: auto; }
+        .p-name{ 
+          margin-top: 8px; margin-left: 15px; font-weight: bold; cursor: auto; 
+          .contract-status{
+            display: inline-block; 
+            margin-left: 10px; padding: 0 10px; border: 1px solid; border-radius: 12px;
+          
+            &.status-0{ color: #fff; border-color: #999; background: #999; }
+            &.status-1, &.status-2{ color: #E36161; border-color: #E36161; }
+            &.status-4 { color: #45BC7B; border-color: #45BC7B; }
+            &.status-3, &.status-5, &.status-6{ color: #fff; border-color: #DA6666; background: #DA6666; }
+          
+          }
+        }
+        .p-auth-info {
+          div { 
+            padding: 5px 15px; 
+            span { display: inline-block; width: 49%; color: #999; }
+          }
+        }
         .p-detail{
           padding: 10px 15px; border-top: 1px solid #D8D8D8;
         }
-        .el-icon-warning {
+        .el-icon-info {
           position: absolute; top: 7px; right: 10px; z-index: 5;
           font-size: 18px; color: #409EFF;
         }
