@@ -92,6 +92,7 @@
               :dataSource="depList"
               :isLock="releasesList.length !== 0"
               @onChange="onChangeDeps"
+              :currentID="$route.params.resourceId"
           />
 <!--        <div class="operation-box" v-if="releasesList.length === 0" @click="tapAddDependencyBtn" >-->
 <!--          <i class="el-icon-circle-plus-outline"></i>添加依赖-->

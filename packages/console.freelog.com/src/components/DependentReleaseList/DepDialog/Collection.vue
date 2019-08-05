@@ -35,6 +35,10 @@
                 default() {
                     return [];
                 },
+            },
+            currentID: {
+                type: String,
+                default: '',
             }
         },
         mounted() {
@@ -71,7 +75,7 @@
                         date: i.releaseUpdateDate.split('T')[0],
                         // disabled: false,
                     }))
-                ];
+                ].filter(i => i.id !== this.currentID);
             },
             toBottom() {
                 this.page++;

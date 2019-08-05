@@ -39,7 +39,11 @@
                 default() {
                     return [];
                 },
-            }
+            },
+            currentID: {
+                type: String,
+                default: '',
+            },
         },
         mounted() {
             this.search();
@@ -76,7 +80,7 @@
                         date: i.updateDate.split('T')[0],
                         // disabled: false,
                     }))
-                ];
+                ].filter(i => i.id !== this.currentID);
             },
             toBottom() {
                 this.page++;

@@ -28,6 +28,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        currentID: {
+            type: String,
+            default: '',
+        }
     },
     data() {
         return {

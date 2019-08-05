@@ -38,6 +38,7 @@
             @removeARelease="removeARelease"
             @removeAMock="removeAMock"
             @onClose="dialogVisible = false"
+            :currentID="currentID"
         />
     </div>
 </template>

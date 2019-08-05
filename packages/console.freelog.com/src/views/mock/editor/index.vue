@@ -123,6 +123,7 @@
                 :isLock="false"
                 @onChange="onChangeDeps"
                 @onChangeMock="onChangeMock"
+                :currentID="$route.params.mockResourceId"
             />
         </BlockBody>
 

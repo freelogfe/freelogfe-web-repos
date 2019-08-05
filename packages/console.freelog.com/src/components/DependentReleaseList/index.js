@@ -38,12 +38,16 @@ export default {
             type: Boolean,
             default: false,
         },
-        onChange: {
-            type: Function,
-            default(dataSource) {
-
-            },
-        },
+        currentID: {
+            type: String,
+            default: '',
+        }
+        // onChange: {
+        //     type: Function,
+        //     default(dataSource) {
+        //
+        //     },
+        // },
     },
     data() {
         return {
