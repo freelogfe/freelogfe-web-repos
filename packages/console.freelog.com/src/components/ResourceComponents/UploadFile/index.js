@@ -236,9 +236,8 @@ function getSHA1Hash(file) {
         reader.onload = function (evt) {
             // console.log(evt, 'evt');
             // const hash = CryptoJS.SHA1(evt.target.result);
-            // resolve(hash.toString(CryptoJS.enc.Hex));
-
             const sha1sum = crypto.createHash('sha1');
+            sha1sum.update(evt.target.result);
             resolve(sha1sum.digest('hex'));
 
         };
