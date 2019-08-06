@@ -34,6 +34,16 @@
           </template>
         </el-table-column>
         <el-table-column label="历史发行" width="200">
+          <template slot="header" slot-scope="scope">
+            <el-select class="r-l-status-select" v-model="selectedReleaseStatus" placeholder="发行情况" size="mini">
+              <el-option
+                v-for="item in releaseStatus"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </template>
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
               {{scope.row.releaseStatus === 'fetching' ? 
@@ -106,11 +116,14 @@
           params: {
             isSelf: 1,
             resourceType: undefined,
-            keywords: undefined
+            keywords: undefined,
+            isReleased: undefined
           }
         },
         resourceMapReleases: {},
         selectedType: 'all',
+        releaseStatus: [{ label: '未发行', value: 0 }, { label: '已发行', value: 1 }, { label: '全部发行情况', value: 2 }],
+        selectedReleaseStatus: 2,
         pagenationEmptyText: NO_REACTED_RESOURCE
       }
     },
@@ -122,7 +135,7 @@
           arr.push({ label, value })
         }
         return arr
-      }
+      },
     },
 
     watch: {
@@ -141,7 +154,10 @@
           this.paginationConfig.params.keywords = this.query
           this.pagenationEmptyText = NO_RIGHT_RESOURCE
         }
-      }
+      },
+      selectedReleaseStatus() {
+        this.paginationConfig.params.isReleased = this.selectedReleaseStatus
+      },
     },
 
     mounted() {
@@ -228,7 +244,7 @@
     }
   }
   .resource-list-table {
-    .r-l-types-select {
+    .r-l-types-select, .r-l-status-select {
       display: block; width: 120px; padding: 0;
       .el-input { line-height: 28px; padding: 0; }
       .el-input__inner { 

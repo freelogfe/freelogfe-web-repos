@@ -62,8 +62,8 @@
         tableProps: {
           data: []
         },
-        currentPage: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_page_size`)) || 1,
-        pageSize: 10,
+        currentPage: 1,
+        pageSize: parseInt(window.sessionStorage.getItem(`${this.$route.fullPath}_page_size`)) || 10,
         loading: false
       }
     },
@@ -114,7 +114,6 @@
         this.tableProps.data = list
       },
       reload() {
-        console.log('reload ---', this.pageSize)
         this.currentPage = 1
         if (this.loading && this.source) {
           this.loading = false
@@ -130,7 +129,7 @@
           .then(this.update.bind(this))
           .then(() => {
             this.loading = false
-            window.sessionStorage.setItem(`${this.$route.fullPath}_page_size`, this.currentPage)
+            window.sessionStorage.setItem(`${this.$route.fullPath}_page_size`, this.pageSize)
           })
           .catch((err) => {
             if (!err.message || err.message !== 'cancel') {
@@ -149,7 +148,7 @@
     },
     mounted() {
       Object.assign(this.tableProps, this.config)
-      this.pageSize = this.pagination.pageSize || 10
+      // this.pageSize = this.pagination.pageSize || 10
       this.load()
     },
   }
