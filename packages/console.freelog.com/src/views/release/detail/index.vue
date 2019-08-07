@@ -115,7 +115,7 @@
             :visible.sync="signDialogVisible"
     >
       <div class="r-d-w-r-sign">
-        <h4>节点选择</h4>
+        <h4>节点选择 <a href="/node/create" target="_blank" v-if="nodes.length"><i class="el-icon-plus"></i></a></h4>
         <el-radio-group class="r-d-w-r-node-list" v-model="checkedNodeId" v-if="nodes.length">
           <el-radio
                   class="r-d-w-r-node-item"

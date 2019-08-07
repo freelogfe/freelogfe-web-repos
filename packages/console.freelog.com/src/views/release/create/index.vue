@@ -364,7 +364,7 @@
     }
 
     .r-c-w-scheme {
-
+      margin-bottom: 54px;
     }
 
     .r-c-w-footer {

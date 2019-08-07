@@ -26,6 +26,7 @@ export default {
       depReleasesList: [],
       depReleasesDetailList: [],
       resolvedReleases: [],
+      resignResolvedReleases: [],
       releasesTreeData: [],
       searchInput: '',
       searchResources: [],
@@ -150,15 +151,28 @@ export default {
       })
     },
     updateReleaseScheme() {
-      this.$services.ReleaseService.put(`${this.releaseId}/versions/${this.selectedVersion}`, {
-        resolveReleases: this.resolvedReleases
-      })
-      .then(res => res.data)
-      .then(res => {
-        if(res.errcode === 0) {
-          this.$message({ type: 'success', message: '签约成功！' })
+      const policyIds = new Set(this.contracts.map(c => c.policyId))
+      const resolvedReleases = this.resolvedReleases
+      for(let i = 0; i < resolvedReleases.length; i++) {
+        const { contracts } = resolvedReleases[i]
+        contracts = contracts.filter(c => !policyIds.has(c.policyId))
+        if(contracts.length) {
+          this.resignResolvedReleases.push(resolvedReleases[i])
         }
+      }
+      if(this.resignResolvedReleases.length === 0) {
+        // this.$message.warning('')
+        return 
+      }
+      this.$services.ReleaseService.put(`${this.releaseId}/versions/${this.selectedVersion}`, {
+        resolveReleases: this.resignResolvedReleases
       })
+        .then(res => res.data)
+        .then(res => {
+          if(res.errcode === 0) {
+            this.$message({ type: 'success', message: '签约成功！' })
+          }
+        })
     }
   },
   created() {
