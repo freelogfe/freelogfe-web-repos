@@ -47,7 +47,7 @@
                 ></scheme-manage>
                 <div class="r-e-w-footer" :class="{'no-scheme': depReleasesList.length === 0}">
                   <!-- <div class="r-e-w-cancel-btn" @click="cancelAddRelease">取消</div> -->
-                  <div class="r-e-w-save-btn" @click="updateReleaseScheme">新增合约</div>
+                  <div class="r-e-w-save-btn" :class="{ 'disabled': resignResolvedReleases.length === 0 }" @click="updateReleaseScheme">签约</div>
                 </div>
               </el-tab-pane>
               <el-tab-pane label="合约" name="contract">
@@ -182,6 +182,9 @@
 
     .r-e-w-save-btn {
       background: #409EFF; color: #fff;
+      &.disabled{
+        opacity: .5; cursor: not-allowed;
+      }
     }
   }
 </style>

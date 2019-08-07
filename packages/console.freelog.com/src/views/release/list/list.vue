@@ -45,7 +45,9 @@
                 <div slot="reference">
                   <div class="r-l-item-policy-row1">
                     {{scope.row.policies[0].policyName}}
-                    <router-link class="r-l-item-policy-add" :to="scope.row._toMangeDetailLink"><i class="el-icon-plus"></i></router-link>
+                    <router-link class="r-l-item-policy-add" v-if="type === 'myReleases'" :to="scope.row._toMangeDetailLink">
+                      <i class="el-icon-plus"></i>
+                    </router-link>
                   </div>
                   <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
                 </div>
