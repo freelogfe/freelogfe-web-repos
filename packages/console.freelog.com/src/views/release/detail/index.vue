@@ -11,7 +11,6 @@
         <el-alert class="r-d-w-waring" type="warning" :closable="false" v-if="!isUsable">
           <div slot="title">
             当前发行的上抛发行未上线，不可用！
-            <router-link :to="`/release/edit/${release.releaseId}`" v-if="isOwnRelease">前去编辑</router-link>
           </div>
         </el-alert>
         <div class="preview-box">
@@ -62,7 +61,7 @@
               <li class="r-d-w-p-u-r-item" :class="{ 'disabled': r.status === 0 }" v-for="(r, index) in baseUpcastReleasesList" :key="'bur-'+index">
                 <div class="r-item-name" :class="{'selected': r.isSelectedPolicy}">
                   {{r.releaseName}}
-                  <el-tag type="warning" size="mini" effect="plain" v-if="r.status === 0">未上线</el-tag>
+                  <span class="ri-offline" v-if="r.status === 0">未上线</span>
                 </div>
                 <div class="release-policy-item" v-for="(p, index) in r.policies" :key="index" @click="exchangeActivePolicy(p)">
                   <el-checkbox v-model="selectedUpcastRPolicyIdsList" :label="p.checkedLabel" size="medium" >{{p.policyName}}</el-checkbox>

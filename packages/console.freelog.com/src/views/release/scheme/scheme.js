@@ -67,7 +67,6 @@ export default {
       this.getTargetReleases()
     },
     depReleasesList(newV, oldV) {
-      console.log(JSON.parse(JSON.stringify(newV)), JSON.parse(JSON.stringify(oldV)))
       this.initData()
     },
   },
@@ -75,7 +74,10 @@ export default {
     initData() {
       if(this.depReleasesList.length > 0) {
         this.isLoading = true
-        this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
+        if(this.release && this.release.releaseId) {
+          this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
+        }
+        
         this.fetchDepReleases()
         this.fetchReleaseScheme()
       }

@@ -28,7 +28,7 @@ export const nodeItemRoute = {
                         requiresAuth: true,
                         title: i18n.t('routes.presentableDetail'),
                         type: 'node',
-                        // hideSidebar: true
+                        hideSidebar: true
                     },
                     component: Views.presentableDetail,
                 }
@@ -73,7 +73,8 @@ export default {
             hidden: true,
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.createNode')
+                title: i18n.t('routes.createNode'),
+                hideFooter: true,
             },
             component: Views.nodeCreator
         },

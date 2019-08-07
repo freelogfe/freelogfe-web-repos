@@ -117,7 +117,7 @@
             isSelf: 1,
             resourceType: undefined,
             keywords: undefined,
-            isReleased: undefined
+            isReleased: 2
           }
         },
         resourceMapReleases: {},

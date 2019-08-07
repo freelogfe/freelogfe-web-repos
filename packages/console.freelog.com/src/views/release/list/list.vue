@@ -43,7 +43,10 @@
             <div v-if="scope.row.policies.length"> 
               <el-popover placement="bottom-start" width="370" trigger="hover">
                 <div slot="reference">
-                  <div class="r-l-item-policy-row1">{{scope.row.policies[0].policyName}}</div>
+                  <div class="r-l-item-policy-row1">
+                    {{scope.row.policies[0].policyName}}
+                    <router-link class="r-l-item-policy-add" :to="scope.row._toMangeDetailLink"><i class="el-icon-plus"></i></router-link>
+                  </div>
                   <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
                 </div>
                 <f-policy-tabs :policies="scope.row.policies"></f-policy-tabs>
@@ -150,7 +153,7 @@
         },
         selectedType: 'all',
         pagenationEmptyText: '',
-        selectedReleaseStatus: 0
+        selectedReleaseStatus: 0,
       }
     },
 

@@ -28,7 +28,19 @@
   }
 
   .r-l-item-policy-row1 {
+    position: relative;
     color: #409EFF; font-weight:600;
+
+    &:hover {
+      .r-l-item-policy-add { display: block; }
+    }
+
+    .r-l-item-policy-add {
+      display: none;
+      position: absolute; top: 1px; right: 0; z-index: 10;
+      width: 26px; height: 20px; border-radius: 10px;
+      background-color: #409eff; color: #fff; text-align: center;
+    }
   }
 
   .r-l-item-no-policy {

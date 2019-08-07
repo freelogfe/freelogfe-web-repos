@@ -20,7 +20,7 @@
       <div class="r-c-w-row r-c-w-name">
         <h3>发行名称</h3>
         <div style="margin-bottom: 10px; font-size: 13px; color: rgb(175, 175, 175);">
-          <strong>• 发行一旦创建，则不可编辑名称（且在同个用户范围内必须唯一）。</strong>
+          <strong>• 请注意发行名称一但创建则不可修改。</strong>
         </div>
         <el-form-item prop="releaseName" class="cont">
           {{session.user.username}} /

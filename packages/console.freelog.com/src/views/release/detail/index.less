@@ -85,7 +85,7 @@
     .r-d-w-p-upcast-releases {
       .r-d-w-p-u-r-item {
         &.disabled {
-          color: #999;
+          color: #999; opacity: .6; pointer-events: none;
         }
         .release-policy-item {
           label { color: #999; }
@@ -102,7 +102,8 @@
         &.selected {
           &:before { background-color: #84CCA8;}
         }
-      }
+        .ri-offline { padding: 2px 5px; border-radius: 2px; background-color: #cdcdcd; color: #fff; font-size: 12px; }
+       }
     }
     .release-policy-item {
       padding: 0 20px 0 30px;

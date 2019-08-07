@@ -81,7 +81,7 @@ export default {
                 title: i18n.t('routes.updateResource'),
                 type: 'resource',
                 theme: 'gray',
-                // hideSidebar: true
+                hideSidebar: true
             },
             component: Views.resourceEditor,
         },
@@ -106,7 +106,8 @@ export default {
                 requiresAuth: true,
                 title: i18n.t('routes.resourceDetail'),
                 type: 'resource',
-                theme: 'gray'
+                theme: 'gray',
+                hideFooter: true
             },
             component: Views.resourceDetail
         },

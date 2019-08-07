@@ -17,6 +17,7 @@ export default {
       hidden: true,
       meta: {
         requiresAuth: true,
+        hideFooter: true,
         title: i18n.t('routes.createRelease'),
         type: 'release',
         theme: 'white'
@@ -39,6 +40,7 @@ export default {
       hidden: true,
       meta: {
         requiresAuth: true,
+        hideFooter: true,
         title: i18n.t('routes.releaseManager'),
         type: 'release',
         theme: 'white'
