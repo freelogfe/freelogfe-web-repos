@@ -96,26 +96,22 @@
             </ContentBlock>
 
             <ContentBlock title="合约相关">
-                <div style="display: flex; font-size: 14px; font-weight: 600;">
-                    <a
-                        style="padding-bottom: 8px; width: 100px; text-align: center;"
-                        :style="{color: activeTab === 'contract' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'contract' ? '2px solid #409eff': 'none'}"
-                        @click="activeTab = 'contract'"
-                    >合约</a>
-                    <a
-                        style="padding-bottom: 8px; width: 100px; text-align: center;"
-                        :style="{color: activeTab === 'authorize' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'authorize' ? '2px solid #409eff': 'none'}"
-                        @click="activeTab = 'authorize'"
-                    >授权链</a>
-                </div>
-                <DisplayEditContracts v-show="activeTab === 'contract'"/>
-                <div v-show="activeTab === 'authorize'">
-                    <!--                    :depReleasesDetailList="depReleasesDetailList"
-                                            :contracts="contracts"-->
-                    <ReleaseEditorContract
-                        :release="releaseDetail"
-                    ></ReleaseEditorContract>
-                </div>
+<!--                <div style="display: flex; font-size: 14px; font-weight: 600;">-->
+<!--                    <a-->
+<!--                        style="padding-bottom: 8px; width: 100px; text-align: center;"-->
+<!--                        :style="{color: activeTab === 'contract' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'contract' ? '2px solid #409eff': 'none'}"-->
+<!--                        @click="activeTab = 'contract'"-->
+<!--                    >合约</a>-->
+<!--                    <a-->
+<!--                        style="padding-bottom: 8px; width: 100px; text-align: center;"-->
+<!--                        :style="{color: activeTab === 'authorize' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'authorize' ? '2px solid #409eff': 'none'}"-->
+<!--                        @click="activeTab = 'authorize'"-->
+<!--                    >授权链</a>-->
+<!--                </div>-->
+                <DisplayEditContracts/>
+<!--                <div v-show="activeTab === 'authorize'">-->
+
+<!--                </div>-->
             </ContentBlock>
         </div>
         <div style="height: 65px;"></div>
