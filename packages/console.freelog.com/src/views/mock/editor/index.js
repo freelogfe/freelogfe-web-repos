@@ -94,17 +94,6 @@ export default {
             };
             this.resourceName = result.name;
             this.coverURL = result.previewImages[0] || '';
-            // this.depList = [
-            //     ...result.systemMeta.dependencyInfo.releases.map(i => ({
-            //         id: i.releaseId,
-            //         name: i.releaseName,
-            //         version: i.versionRange,
-            //     })),
-            //     ...result.systemMeta.dependencyInfo.mocks.map(i => ({
-            //         id: i.mockResourceId,
-            //         name: i.mockResourceName,
-            //     })),
-            // ];
             this.depList = result.systemMeta.dependencyInfo.releases.map(i => ({
                 id: i.releaseId,
                 name: i.releaseName,
@@ -116,6 +105,19 @@ export default {
             }));
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
+
+            const res2 = await this.$axios.get('/v1/releases/list', {
+                params: {
+                    releaseIds: this.depList.map(i => i.id).join(','),
+                }
+            });
+            // console.log(res2, 'res2res2res2res2');
+            this.depList = res2.data.data.map(i => ({
+                id: i.releaseId,
+                name: i.releaseName,
+                version: i.latestVersion.version,
+                isOnline: i.status === 1,
+            }));
         },
 
         /**
