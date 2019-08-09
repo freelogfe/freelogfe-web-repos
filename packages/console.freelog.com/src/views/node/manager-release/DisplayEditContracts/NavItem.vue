@@ -10,7 +10,14 @@
         <span
             v-for="item in tags"
             style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff; margin-right: 10px;"
-        >{{item}}</span>
+        >
+            {{item.policyName}}
+            <i v-if="item.status === 2"
+               style="width: 8px; height: 8px; border-radius: 50%; background-color: #fbb726; display: inline-block;"></i>
+            <i v-if="item.status === 4"
+               style="width: 8px; height: 8px; border-radius: 50%; background-color: #39c500; display: inline-block;"></i>
+
+        </span>
     </a>
 </template>
 
@@ -29,7 +36,12 @@
             tags: {
                 type: Array,
                 default() {
-                    return [];
+                    return [
+                        // {
+                        //     policyName: '',
+                        //     status: 4
+                        // }
+                    ];
                 }
             }
         }

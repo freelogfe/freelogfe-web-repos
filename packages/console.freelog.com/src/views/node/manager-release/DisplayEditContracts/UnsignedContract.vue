@@ -7,6 +7,7 @@
                 type="primary"
                 size="mini"
                 round
+                @click="$emit('add')"
             >获取授权</el-button>
         </div>
         <div style="height: 5px;"></div>

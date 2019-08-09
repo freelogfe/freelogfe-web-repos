@@ -25,9 +25,9 @@ export default {
             activatedIndex: -1,
 
             nodeInfo: null,
-            selectedPolicyIDs: [],
+            // selectedPolicyIDs: [],
 
-            isSignDirty: false,
+            // isSignDirty: false,
 
             activeTab: 'contract',
             presentableName: '',
@@ -37,7 +37,7 @@ export default {
     },
     mounted() {
         this.handleData();
-        this.getAllContracts();
+        // this.getAllContracts();
     },
     methods: {
         async handleData() {
@@ -118,11 +118,13 @@ export default {
                         const contract = allContract.find(i => i.policyId === j.policy.policyId);
                         if (contract) {
                             j.contract = contract;
+                            j.disabled = true;
                         }
                     }
                 }
             }
 
+            console.log(dataSource, 'dataSource');
             this.dataSource = dataSource;
 
             if (this.activatedIndex === -1) {
@@ -160,40 +162,56 @@ export default {
             this.nodeInfo = res.data.data;
         },
 
-        async getAllContracts() {
-            const res = await this.$axios.get('/v1/contracts/list', {
-                params: {
-                    targetIds: '5d391df0dd147a002b25d57e',
-                    partyTwo: '80000034'
-                }
-            });
-            // console.log(res, '!!!!!!!!!!!!!');
-        },
+        // async getAllContracts() {
+        //     const res = await this.$axios.get('/v1/contracts/list', {
+        //         params: {
+        //             targetIds: '5d391df0dd147a002b25d57e',
+        //             partyTwo: '80000034'
+        //         }
+        //     });
+        //     // console.log(res, '!!!!!!!!!!!!!');
+        // },
         /**
          * 对可供签约的策略签约
          */
         async signPolicy(policyId) {
-            this.isSignDirty = true;
-            this.selectedPolicyIDs.push(policyId);
+            console.log(this.dataSource[this.activatedIndex].children, 'policyIdpolicyId');
+            // console.log(
+            //     this.dataSource[this.activatedIndex]
+            //         .children
+            //         .filter(i => i.contract && !i.disabled)
+            //         .map(i => i.policy.policyId)
+            //     , 'this.dataSourcethis.dataSource');
+            const policyIDs = this.dataSource[this.activatedIndex]
+                .children
+                .filter(i => i.contract && !i.disabled)
+                .map(i => i.policy.policyId);
+            policyIDs.push(policyId);
+            this.updateSignPolicy(policyIDs);
         },
         /**
          * 解约
          */
         async breakSignPolicy(policyId) {
-            this.isSignDirty = true;
-            this.selectedPolicyIDs = this.selectedPolicyIDs.filter(j => j !== policyId);
+            // console.log(policyId, 'policyIdpolicyId');
+            const policyIDs = this.dataSource[this.activatedIndex]
+                .children
+                .filter(i => i.contract && !i.disabled)
+                .map(i => i.policy.policyId)
+                .filter(j => j !== policyId);
+            this.updateSignPolicy(policyIDs);
         },
         /**
          * 更新策略
          * @return {Promise<void>}
          */
-        async updateSignPolicy() {
-            if (this.selectedPolicyIDs.length === 0) {
-                return this.$message.error('最少要选择一个策略');
+        async updateSignPolicy(policyIDs) {
+            if (policyIDs.length === 0) {
+                return this.$message.error('当前授权方案中只有一个合约，不可停用');
             }
-            this.isSignDirty = false;
+            // this.isSignDirty = false;
             const releaseId = this.dataSource[this.activatedIndex].releaseId;
-            const contracts = this.selectedPolicyIDs
+            const contracts = policyIDs
                 .map(i => ({
                     policyId: i,
                 }));

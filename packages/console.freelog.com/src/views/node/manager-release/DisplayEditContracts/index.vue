@@ -18,7 +18,7 @@
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
                         :title="release.releaseName"
-                        :tags="release.children.filter(i => i.contract).map(i => i.policy.policyName)"
+                        :tags="release.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
                     ></NavItem>
                 </div>
                 <div style="height: 25px;"></div>
@@ -38,14 +38,27 @@
 
                     <ContractsContainer title="已签约">
                         <!-- 已签约列表 -->
-                        <SignedContract
+                        <div
+                            style="position: relative;"
                             v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
-                            :name="item.contract.contractName"
-                            :status="item.contract.status"
-                            :contractId="item.contract.contractId"
-                            :data="item.contract.createDate.split('T')[0]"
-                            :contract="item.contract"
-                        ></SignedContract>
+                        >
+                            <SignedContract
+                                :name="item.contract.contractName"
+                                :status="item.contract.status"
+                                :contractId="item.contract.contractId"
+                                :data="item.contract.createDate.split('T')[0]"
+                                :contract="item.contract"
+                                :disabled="!!item.disabled"
+                                @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
+                            ></SignedContract>
+                            <!--                            <el-button-->
+                            <!--                                size="mini"-->
+                            <!--                                style="position: absolute; right: 16px; top: 15px;"-->
+                            <!--                                disabled="true"-->
+                            <!--                            >-->
+                            <!--                                应用<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                            <!--                            </el-button>-->
+                        </div>
                     </ContractsContainer>
 
                     <ContractsContainer
@@ -57,6 +70,7 @@
                             v-for="item in dataSource[activatedIndex].children.filter(i => !i.contract)"
                             :policyName="item.policy.policyName"
                             :policyText="item.policy.policyText"
+                            @add="signPolicy(item.policy.policyId)"
                         ></UnsignedContract>
                     </ContractsContainer>
                 </div>
