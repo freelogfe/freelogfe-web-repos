@@ -5,7 +5,7 @@
                 style="padding-bottom: 8px; width: 100px; text-align: center;"
                 :style="{color: value === 'contract' ? '#409eff' : '#333', 'border-bottom':  value === 'contract' ? '2px solid #409eff': 'none'}"
                 @click="$emit('input' ,'contract')"
-            >合约</a>
+            >授权管理</a>
             <a
                 style="padding-bottom: 8px; width: 100px; text-align: center;"
                 :style="{color: value === 'authorize' ? '#409eff' : '#333', 'border-bottom':  value === 'authorize' ? '2px solid #409eff': 'none'}"

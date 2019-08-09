@@ -80,6 +80,9 @@ export default {
             // console.log(releases, 'releasesreleasesreleases');
 
             // console.log(releases, '3333333333333333');
+            for (let i = 0; i < releases.length; i++) {
+                dataSource[i].release = releases[i];
+            }
 
             // 根据策略，合并合约
             for (const item of dataSource) {
@@ -175,7 +178,7 @@ export default {
          * 对可供签约的策略签约
          */
         async signPolicy(policyId) {
-            console.log(this.dataSource[this.activatedIndex].children, 'policyIdpolicyId');
+            // console.log(this.dataSource[this.activatedIndex].children, 'policyIdpolicyId');
             // console.log(
             //     this.dataSource[this.activatedIndex]
             //         .children

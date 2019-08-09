@@ -8,17 +8,23 @@
             style="background-color: #fafbfb; padding: 10px 10px 20px 0; display: flex;"
         >
             <!-- 左侧导航列表 -->
-            <div style="width: 380px; flex-shrink: 0;">
+            <div style="width: 320px; flex-shrink: 0;">
                 <!-- 发行列表 -->
-                <div v-for="(release, index) in dataSource">
+                <div v-for="(item, index) in dataSource">
                     <NavTitle v-if="index === 0">当前发行</NavTitle>
                     <NavTitle v-if="index === 1">上抛发行</NavTitle>
 
+<!--                    :type=""
+                        :version=""
+                        :date=""-->
                     <NavItem
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
-                        :title="release.releaseName"
-                        :tags="release.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
+                        :title="item.releaseName"
+                        :type="item.release.resourceType"
+                        :version="item.release.resourceVersions[0].version"
+                        :date="item.release.updateDate.split('T')[0]"
+                        :tags="item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
                     ></NavItem>
                 </div>
                 <div style="height: 25px;"></div>
@@ -51,13 +57,6 @@
                                 :disabled="!!item.disabled"
                                 @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
                             ></SignedContract>
-                            <!--                            <el-button-->
-                            <!--                                size="mini"-->
-                            <!--                                style="position: absolute; right: 16px; top: 15px;"-->
-                            <!--                                disabled="true"-->
-                            <!--                            >-->
-                            <!--                                应用<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                            <!--                            </el-button>-->
                         </div>
                     </ContractsContainer>
 

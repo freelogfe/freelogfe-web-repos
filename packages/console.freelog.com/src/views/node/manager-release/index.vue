@@ -2,7 +2,7 @@
     <div class="manager-release">
         <div
             style="background-color: #fafbfb; height: 135px; display: flex; align-items: center; justify-content: center;">
-            <div style="width: 1220px; display: flex;">
+            <div style="width: 990px; display: flex;">
                 <img
                     :src="releaseInfo.previewImages || undefined"
                     style="width: 100px; height: 75px; flex-shrink: 0;"
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div style="width: 1220px; margin: 0 auto;">
+        <div style="width: 990px; margin: 0 auto;">
 
             <ContentBlock title="节点发行标题">
                 <DisplayOrInput
@@ -95,23 +95,8 @@
                 ></PolicyEditor>
             </ContentBlock>
 
-            <ContentBlock title="合约相关">
-<!--                <div style="display: flex; font-size: 14px; font-weight: 600;">-->
-<!--                    <a-->
-<!--                        style="padding-bottom: 8px; width: 100px; text-align: center;"-->
-<!--                        :style="{color: activeTab === 'contract' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'contract' ? '2px solid #409eff': 'none'}"-->
-<!--                        @click="activeTab = 'contract'"-->
-<!--                    >合约</a>-->
-<!--                    <a-->
-<!--                        style="padding-bottom: 8px; width: 100px; text-align: center;"-->
-<!--                        :style="{color: activeTab === 'authorize' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'authorize' ? '2px solid #409eff': 'none'}"-->
-<!--                        @click="activeTab = 'authorize'"-->
-<!--                    >授权链</a>-->
-<!--                </div>-->
+            <ContentBlock title="授权管理">
                 <DisplayEditContracts/>
-<!--                <div v-show="activeTab === 'authorize'">-->
-
-<!--                </div>-->
             </ContentBlock>
         </div>
         <div style="height: 65px;"></div>
