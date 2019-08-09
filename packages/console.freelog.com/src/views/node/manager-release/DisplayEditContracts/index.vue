@@ -1,153 +1,67 @@
 <template>
     <div>
 
-        <div style="display: flex; font-size: 14px; font-weight: 600;">
-            <a
-                style="padding-bottom: 8px; width: 100px; text-align: center;"
-                :style="{color: activeTab === 'contract' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'contract' ? '2px solid #409eff': 'none'}"
-                @click="activeTab = 'contract'"
-            >合约</a>
-            <a
-                style="padding-bottom: 8px; width: 100px; text-align: center;"
-                :style="{color: activeTab === 'authorize' ? '#409eff' : '#333', 'border-bottom':  activeTab === 'authorize' ? '2px solid #409eff': 'none'}"
-                @click="activeTab = 'authorize'"
-            >授权链</a>
-        </div>
+        <TabsHeader v-model="activeTab"></TabsHeader>
 
         <div
             v-show="activeTab === 'contract'"
-            style="background-color: #fafbfb; padding: 15px 15px 20px; display: flex;"
+            style="background-color: #fafbfb; padding: 10px 10px 20px 0; display: flex;"
         >
+            <!-- 左侧导航列表 -->
             <div style="width: 380px; flex-shrink: 0;">
                 <!-- 发行列表 -->
                 <div v-for="(release, index) in dataSource">
-                    <div
-                        v-if="index === 0"
-                        style="font-size: 12px; color: #999; padding-bottom: 5px;">当前发行
-                    </div>
-                    <div
-                        v-if="index === 1"
-                        style="font-size: 12px; color: #999; padding-bottom: 5px;">上抛发行
-                    </div>
+                    <NavTitle v-if="index === 0">当前发行</NavTitle>
+                    <NavTitle v-if="index === 1">上抛发行</NavTitle>
 
-                    <a
+                    <NavItem
                         @click="activatedIndex = index"
-                        style="padding: 12px 20px; display: block;"
-                        :style="{'background-color': activatedIndex === index ? '#fff': 'transparent'}"
-                    >
-                        <div style="color: #333; font-size: 14px; font-weight: 600;">{{release.releaseName}}
-                        </div>
-                        <div style="height: 10px;"></div>
-                        <span
-                            v-for="item in release.children.filter(i => i.contract)"
-                            style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff; margin-right: 10px;"
-                        >{{item.policy.policyName}}</span>
-                    </a>
+                        :activated="activatedIndex === index"
+                        :title="release.releaseName"
+                        :tags="release.children.filter(i => i.contract).map(i => i.policy.policyName)"
+                    ></NavItem>
                 </div>
                 <div style="height: 25px;"></div>
-
             </div>
 
             <div style="flex-shrink: 1; width: 100%; display: flex; flex-direction: column;">
-                <div style="height: 23px; flex-shrink: 0;"></div>
                 <div
                     v-if="activatedIndex !== -1"
                     style="background-color: #fff; height: 100%; flex-shrink: 1; padding: 20px 50px;"
                 >
 
-                    <!-- 已签约列表 -->
                     <div
-                        v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
-                        style="background-color: #fafbfb; border: 1px solid #ccc;"
-                    >
-                        <!--                    <div>{{selectedPolicyIDs}}</div>-->
-                        <!--                    <div>{{item.contract.policyId}}</div>-->
-                        <div style="padding: 0 15px; border-bottom: 1px solid #d8d8d8;">
-                            <div style="height: 14px;"></div>
-                            <div style="display: flex; align-items: center;">
-                                <i
-                                    v-show="selectedPolicyIDs.includes(item.contract.policyId)"
-                                    @click="breakSignPolicy(item.contract.policyId)"
-                                    style="color: #409eff; font-size: 20px;" class="el-icon-success"
-                                ></i>
-                                <i
-                                    v-show="!selectedPolicyIDs.includes(item.policy.policyId)"
-                                    style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #666;"
-                                    @click="signPolicy(item.contract.policyId)"
-                                ></i>
-                                <span
-                                    style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.contract.contractName}}</span>
-                                <span
-                                    style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">
-                                            <span v-if="item.contract.status === 2">执行中</span>
-                                            <span v-if="item.contract.status === 4">激活态</span>
-                                        </span>
-                            </div>
-                            <div style="height: 15px"></div>
-                            <div
-                                style="font-size: 12px; color: #999; display: flex; justify-content: space-between;">
-                                <span>授权方：{{item.contract.partyOne}}</span>
-                                <span>被授权方：{{nodeInfo.nodeDomain}}</span>
-                                <span>合约ID：{{item.contract.contractId}}</span>
-                                <span>签约时间：{{item.contract.createDate.split('T')[0]}}</span>
-                            </div>
-                            <div style="height: 14px;"></div>
-                        </div>
-                        <div style="margin: 0 30px;">
-                            <!--                                    @update-contract="updateContractAfterEvent"-->
-                            <div style="height: 20px;"></div>
-                            <ContractDetail
-                                class="contract-policy-content"
-                                :contract.sync="item.contract"
-                                :policyText="item.contract.contractClause.policyText"
-                            ></ContractDetail>
-                            <div style="height: 30px;"></div>
-                        </div>
+                        style="line-height: 45px; color: #333; font-weight: 600; font-size: 14px; background-color: #fafbfb; padding: 0 15px;">
+                        <span style="padding-right: 100px;">授权方：{{dataSource[activatedIndex].releaseName}}</span>
+                        <span>被授权方：{{nodeInfo.nodeName}}</span>
                     </div>
 
-                    <div v-show="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0">
-                        <div style="height: 30px;"></div>
-                        <div style="font-size: 14px; color: #999;">以下策略可供签约</div>
-                        <div style="height: 15px;"></div>
-                    </div>
+                    <ContractsContainer title="已签约">
+                        <!-- 已签约列表 -->
+                        <SignedContract
+                            v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
+                            :name="item.contract.contractName"
+                            :status="item.contract.status"
+                            :contractId="item.contract.contractId"
+                            :data="item.contract.createDate.split('T')[0]"
+                            :contract="item.contract"
+                        ></SignedContract>
+                    </ContractsContainer>
 
-                    <!-- 可签约列表 -->
-                    <div
-                        v-for="item in dataSource[activatedIndex].children.filter(i => !i.contract)"
+                    <ContractsContainer
+                        title="以下策略可供签约"
+                        v-if="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0"
                     >
-                        <div style="display: flex; align-items: center;">
-                            <i
-                                v-show="!selectedPolicyIDs.includes(item.policy.policyId)"
-                                style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid #666;"
-                                @click="signPolicy(item.policy.policyId)"
-                            ></i>
-                            <i
-                                v-show="selectedPolicyIDs.includes(item.policy.policyId)"
-                                @click="breakSignPolicy(item.policy.policyId)"
-                                style="color: #409eff; font-size: 20px;" class="el-icon-success"
-                            ></i>
-                            <span
-                                style="font-size: 16px; color: #333; font-weight: 600; padding-left: 5px; padding-right: 20px;">{{item.policy.policyName}}</span>
-                        </div>
-                        <div style="height: 5px;"></div>
-                        <div style="border: 1px solid #ccc; border-radius: 4px;">
-                            <pre style="font-size: 14px; color: #333; padding: 20px;">{{item.policy.policyText}}</pre>
-                        </div>
-                    </div>
-                    <div style="height: 10px;"></div>
-                    <div style="text-align: right;">
-                        <el-button
-                            v-show="isSignDirty"
-                            type="primary"
-                            size="medium"
-                            round
-                            @click="updateSignPolicy"
-                        >签约
-                        </el-button>
-                    </div>
+
+                        <!-- 可签约列表 -->
+                        <UnsignedContract
+                            v-for="item in dataSource[activatedIndex].children.filter(i => !i.contract)"
+                            :policyName="item.policy.policyName"
+                            :policyText="item.policy.policyText"
+                        ></UnsignedContract>
+                    </ContractsContainer>
                 </div>
             </div>
-
 
         </div>
         <ReleaseEditorContract
@@ -156,21 +70,29 @@
             :depReleasesDetailList="depReleasesDetailList"
             :contracts="contracts"
         ></ReleaseEditorContract>
-        <!--        <br/>-->
-        <!--        <div>depReleasesDetailList {{depReleasesDetailList}}</div>-->
-        <!--        <br/>-->
-        <!--        <div>contracts {{contracts}}</div>-->
     </div>
 </template>
 
 <script>
-    import {ContractDetail} from '@freelog/freelog-ui-contract';
+    // import {ContractDetail} from '@freelog/freelog-ui-contract';
     import ReleaseEditorContract from '@/views/release/contract/index.vue';
+    import NavTitle from "./NavTitle";
+    import NavItem from "./NavItem";
+    import TabsHeader from "./TabsHeader";
+    import SignedContract from "./SignedContract";
+    import ContractsContainer from "./ContractsContainer";
+    import UnsignedContract from "./UnsignedContract";
 
     export default {
         name: 'DisplayEditContracts',
         components: {
-            ContractDetail,
+            UnsignedContract,
+            ContractsContainer,
+            SignedContract,
+            TabsHeader,
+            NavItem,
+            NavTitle,
+            // ContractDetail,
             ReleaseEditorContract,
         },
         data() {
@@ -191,6 +113,7 @@
         },
         mounted() {
             this.handleData();
+            this.getAllContracts();
         },
         methods: {
             async handleData() {
@@ -299,6 +222,15 @@
                 this.nodeInfo = res.data.data;
             },
 
+            async getAllContracts() {
+                const res = await this.$axios.get('/v1/contracts/list', {
+                    params: {
+                        targetIds: '5d391df0dd147a002b25d57e',
+                        partyTwo: '80000034'
+                    }
+                });
+                console.log(res, '!!!!!!!!!!!!!');
+            },
             /**
              * 对可供签约的策略签约
              */
