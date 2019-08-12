@@ -7,7 +7,7 @@
             <div style="height: 14px;"></div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center;">
-                    <span style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px;">{{name}}</span>
+                    <span class="text-overflow-ellipsis" style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{name}}</span>
                     <span v-if="status === 2" style="color: #fbb726; padding: 0 9px; line-height: 18px; border: 1px solid #fbb726; border-radius: 10px; font-size: 14px;">待执行</span>
                     <span v-if="status === 4" style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">生效中</span>
                     <span v-if="status === 6" style="color: #e35a5f; padding: 0 9px; line-height: 18px; border: 1px solid #e35a5f; border-radius: 10px; font-size: 14px;">合约终止</span>
@@ -82,5 +82,9 @@
 </script>
 
 <style scoped>
-
+    .text-overflow-ellipsis {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>

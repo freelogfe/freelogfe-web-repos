@@ -14,9 +14,9 @@
                     <NavTitle v-if="index === 0">当前发行</NavTitle>
                     <NavTitle v-if="index === 1">上抛发行</NavTitle>
 
-<!--                    :type=""
-                        :version=""
-                        :date=""-->
+                    <!--                    :type=""
+                                            :version=""
+                                            :date=""-->
                     <NavItem
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
@@ -37,9 +37,14 @@
                 >
 
                     <div
-                        style="line-height: 45px; color: #333; font-weight: 600; font-size: 14px; background-color: #fafbfb; padding: 0 15px;">
-                        <span style="padding-right: 100px;">授权方：{{dataSource[activatedIndex].releaseName}}</span>
-                        <span>被授权方：{{nodeInfo.nodeName}}</span>
+                        style="color: #333; font-weight: 600; font-size: 14px; background-color: #fafbfb; padding: 15px; display: flex;"
+                    >
+                        <div class="text-overflow-ellipsis" style="width: 50%;">
+                            授权方：{{dataSource[activatedIndex].releaseName}}
+                        </div>
+                        <div class="text-overflow-ellipsis" style="width: 50%; padding-left: 10px;">
+                            被授权方：{{nodeInfo.nodeName}}
+                        </div>
                     </div>
 
                     <ContractsContainer title="已签约">
@@ -90,7 +95,11 @@
 </script>
 
 <style scoped>
-
+    .text-overflow-ellipsis {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
 
 

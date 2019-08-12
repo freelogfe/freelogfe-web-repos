@@ -2,7 +2,7 @@
     <div style="border: 1px solid #ccc; border-radius: 4px;">
         <div
             style="display: flex; align-items: center; justify-content: space-between; height: 45px; background-color: #fafbfb; padding: 0 15px; border-bottom: 1px solid #ccc; border-radius: 4px;">
-            <span style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px;">{{policyName}}</span>
+            <span class="text-overflow-ellipsis" style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{policyName}}</span>
             <el-button
                 type="primary"
                 size="mini"
@@ -34,5 +34,9 @@
 </script>
 
 <style scoped>
-
+    .text-overflow-ellipsis {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
