@@ -47,7 +47,7 @@ export default {
             resourceName: '',
 
             // 封面图链接
-            coverURL: '',
+            // coverURL: '',
 
             // 添加依赖弹出框是否显示
             visibleDepDialog: false,
@@ -93,7 +93,7 @@ export default {
                 size: result.systemMeta.fileSize,
             };
             this.resourceName = result.name;
-            this.coverURL = result.previewImages[0] || '';
+            // this.coverURL = result.previewImages[0] || '';
             this.depList = result.systemMeta.dependencyInfo.releases.map(i => ({
                 id: i.releaseId,
                 name: i.releaseName,
@@ -152,9 +152,9 @@ export default {
          * 封面上传成功后
          * @param imageUrl
          */
-        coverUploaded(imageUrl) {
-            this.coverURL = imageUrl;
-        },
+        // coverUploaded(imageUrl) {
+        //     this.coverURL = imageUrl;
+        // },
 
         /**
          * 显示依赖弹出框
@@ -255,7 +255,7 @@ export default {
                 resourceType: this.resourceType,
                 uploadFileId: this.uploadFileInfo.fileID || undefined,
                 name: this.resourceName,
-                previewImages: this.coverURL ? [this.coverURL] : undefined,
+                // previewImages: this.coverURL ? [this.coverURL] : undefined,
                 dependencyInfo: {
                     mocks: this.depMockList.map(i => ({mockResourceId: i.id})),
                     releases: this.depList.map(i => ({releaseId: i.id, versionRange: i.version}))
