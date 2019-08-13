@@ -30,10 +30,10 @@
                 <div style="height: 25px;"></div>
             </div>
 
-            <div style="flex-shrink: 1; width: 100%; display: flex; flex-direction: column;">
+            <div style="flex-shrink: 1; width: 100%; height: 720px; overflow-y: auto;">
                 <div
                     v-if="activatedIndex !== -1"
-                    style="background-color: #fff; height: 100%; flex-shrink: 1; padding: 20px 50px;"
+                    style="background-color: #fff; padding: 20px 50px;"
                 >
 
                     <div
@@ -53,6 +53,7 @@
                             style="position: relative;"
                             v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
                         >
+                            <div v-if="index !== 0" style="height: 15px;"></div>
                             <SignedContract
                                 :name="item.contract.contractName"
                                 :status="item.contract.status"
@@ -70,12 +71,14 @@
                         v-if="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0"
                     >
                         <!-- 可签约列表 -->
-                        <UnsignedContract
-                            v-for="item in dataSource[activatedIndex].children.filter(i => !i.contract)"
-                            :policyName="item.policy.policyName"
-                            :policyText="item.policy.policyText"
-                            @add="signPolicy(item.policy.policyId)"
-                        ></UnsignedContract>
+                        <div v-for="(item, index) in dataSource[activatedIndex].children.filter(i => !i.contract)">
+                            <div v-if="index !== 0" style="height: 15px;"></div>
+                            <UnsignedContract
+                                :policyName="item.policy.policyName"
+                                :policyText="item.policy.policyText"
+                                @add="signPolicy(item.policy.policyId)"
+                            ></UnsignedContract>
+                        </div>
                     </ContractsContainer>
                 </div>
             </div>
