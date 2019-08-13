@@ -76,7 +76,7 @@
                             <UnsignedContract
                                 :policyName="item.policy.policyName"
                                 :policyText="item.policy.policyText"
-                                @add="signPolicy(item.policy.policyId)"
+                                @add="signPolicy(item.policy.policyId, true)"
                             ></UnsignedContract>
                         </div>
                     </ContractsContainer>

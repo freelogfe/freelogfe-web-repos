@@ -177,7 +177,7 @@ export default {
         /**
          * 对可供签约的策略签约
          */
-        async signPolicy(policyId) {
+        async signPolicy(policyId, newSign) {
             // console.log(this.dataSource[this.activatedIndex].children, 'policyIdpolicyId');
             // console.log(
             //     this.dataSource[this.activatedIndex]
@@ -190,7 +190,12 @@ export default {
                 .filter(i => i.contract && !i.disabled)
                 .map(i => i.policy.policyId);
             policyIDs.push(policyId);
-            this.updateSignPolicy(policyIDs);
+            await this.updateSignPolicy(policyIDs);
+            if (newSign) {
+                this.$message.success('签约成功');
+            } else {
+                this.$message.success('操作成功');
+            }
         },
         /**
          * 解约
@@ -202,7 +207,8 @@ export default {
                 .filter(i => i.contract && !i.disabled)
                 .map(i => i.policy.policyId)
                 .filter(j => j !== policyId);
-            this.updateSignPolicy(policyIDs);
+            await this.updateSignPolicy(policyIDs);
+            this.$message.success('操作成功');
         },
         /**
          * 更新策略
@@ -226,6 +232,7 @@ export default {
                     },
                 ]
             });
+
             setTimeout(() => {
                 this.handleData()
             }, 10);
