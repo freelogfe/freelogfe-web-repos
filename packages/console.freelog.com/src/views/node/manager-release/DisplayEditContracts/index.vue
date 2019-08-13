@@ -33,7 +33,7 @@
             <div style="flex-shrink: 1; width: 100%; height: 720px; overflow-y: auto;">
                 <div
                     v-if="activatedIndex !== -1"
-                    style="background-color: #fff; padding: 20px 50px;"
+                    style="background-color: #fff; padding: 20px 50px; min-height: 100%;"
                 >
 
                     <div
