@@ -190,12 +190,17 @@ export default {
                 .filter(i => i.contract && !i.disabled)
                 .map(i => i.policy.policyId);
             policyIDs.push(policyId);
-            await this.updateSignPolicy(policyIDs);
-            if (newSign) {
-                this.$message.success('签约成功');
-            } else {
-                this.$message.success('操作成功');
+            try {
+                await this.updateSignPolicy(policyIDs);
+                if (newSign) {
+                    this.$message.success('签约成功');
+                } else {
+                    this.$message.success('操作成功');
+                }
+            } catch (e) {
+                console.error(e);
             }
+
         },
         /**
          * 解约
@@ -207,8 +212,13 @@ export default {
                 .filter(i => i.contract && !i.disabled)
                 .map(i => i.policy.policyId)
                 .filter(j => j !== policyId);
-            await this.updateSignPolicy(policyIDs);
-            this.$message.success('操作成功');
+            try {
+                await this.updateSignPolicy(policyIDs);
+                this.$message.success('操作成功');
+            } catch (e) {
+                console.log(e);
+            }
+
         },
         /**
          * 更新策略
@@ -216,7 +226,8 @@ export default {
          */
         async updateSignPolicy(policyIDs) {
             if (policyIDs.length === 0) {
-                return this.$message.error('当前授权方案中只有一个合约，不可停用');
+                this.$message.error('当前授权方案中只有一个合约，不可停用');
+                throw new Error('当前授权方案中只有一个合约');
             }
             // this.isSignDirty = false;
             const releaseId = this.dataSource[this.activatedIndex].releaseId;
