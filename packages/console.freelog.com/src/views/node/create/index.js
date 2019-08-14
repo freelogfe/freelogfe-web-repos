@@ -72,7 +72,7 @@ export default {
             self.$message.success(this.$t('node.createSuccess'))
             this.$store.dispatch('addNode', responseData.data)
             setTimeout(() => {
-              self.$router.push({ path: `/node/${responseData.data.nodeId}` })
+              self.$router.push({ path: `/node/manager/${responseData.data.nodeId}` })
             }, 1e3)
           }
         })

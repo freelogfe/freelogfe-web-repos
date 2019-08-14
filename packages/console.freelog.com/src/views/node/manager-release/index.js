@@ -5,7 +5,7 @@ import FreelogTags from '@/components/Tags/index.vue';
 import PolicyEditor from '@/components/PolicyEditor/index.vue';
 import PolicyList from '@/components/PolicyList/list/index.vue';
 import ContractManager from '@/components/ContractManager/index.vue';
-import ReleaseEditorContract from '@/views/release/contract/index.vue'
+import ReleaseEditorContract from '@/views/release/contract/index.vue';
 
 export default {
     name: 'manager-release',
@@ -71,7 +71,10 @@ export default {
             releases: [],
 
             // 发行详情，作为授权链的数据源
-            releaseDetail: null,
+            // releaseDetail: null,
+
+            depReleasesDetailList: [],
+            contracts: [],
         };
     },
     mounted() {
@@ -119,9 +122,9 @@ export default {
             // });
 
             // releaseDetail
-            const res2 = await this.$axios.get(`/v1/releases/${result.releaseInfo.releaseId}`);
+            // const res2 = await this.$axios.get(`/v1/releases/${result.releaseInfo.releaseId}`);
             // console.log(res2, 'res2res2res2res2res2');
-            this.releaseDetail = res2.data.data;
+            // this.releaseDetail = res2.data.data;
         },
         /**
          * 更新 presentable 数据

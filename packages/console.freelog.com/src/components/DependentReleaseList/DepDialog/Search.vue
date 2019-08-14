@@ -68,7 +68,7 @@
                 const params = {
                     page: this.page,
                     keywords: this.input,
-                    pageSize: 10,
+                    pageSize: 20,
                 };
                 const res = await this.$axios.get('/v1/releases', {
                     params,
@@ -87,7 +87,7 @@
                         date: i.updateDate.split('T')[0],
                         // disabled: false,
                     }))
-                ].filter(i => i.id !== this.currentID);
+                ].filter(i => i.id !== this.currentID && i.isOnline);
             },
             toBottom() {
                 this.page++;

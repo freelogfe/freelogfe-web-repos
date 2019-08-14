@@ -1,8 +1,6 @@
 <template>
     <div style="margin: 0 auto; width: 1200px;">
 
-        <!--        <HeaderAlert/>-->
-
         <BlockBody tilte="资源上传">
 
             <SmallTitle>资源类型</SmallTitle>
@@ -64,24 +62,24 @@
                 <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/60</span>
             </div>
 
-            <SmallTitle :dot="false">资源封面</SmallTitle>
+<!--            <SmallTitle :dot="false">资源封面</SmallTitle>-->
 
-            <div style="padding-left: 40px;">
-                <UploadCover
-                    :imageUrl="coverURL"
-                    :onUploaded="coverUploaded"
-                />
+<!--            <div style="padding-left: 40px;">-->
+<!--                <UploadCover-->
+<!--                    :imageUrl="coverURL"-->
+<!--                    :onUploaded="coverUploaded"-->
+<!--                />-->
 
-                <div
-                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom; color: #afafaf;"
-                >
-                    <small style="vertical-align: top;">•&nbsp;</small>
-                    <div style="display: inline-block;">
-                        只支持JPG/PNG/GIF，GIF文件不能动画化，<br/>大小不超过5M
-                        建议尺寸为800X600
-                    </div>
-                </div>
-            </div>
+<!--                <div-->
+<!--                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom; color: #afafaf;"-->
+<!--                >-->
+<!--                    <small style="vertical-align: top;">•&nbsp;</small>-->
+<!--                    <div style="display: inline-block;">-->
+<!--                        只支持JPG/PNG/GIF，GIF文件不能动画化，<br/>大小不超过5M-->
+<!--                        建议尺寸为800X600-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div style="height: 20px;"></div>
         </BlockBody>
@@ -92,41 +90,9 @@
                 :isLock="false"
                 @onChange="onChangeDeps"
             />
-<!--            <div style="padding-left: 20px; height: 60px; align-items: center; display: flex;">-->
-<!--                <el-button-->
-<!--                    size="small"-->
-<!--                    icon="el-icon-plus"-->
-<!--                    circle-->
-<!--                    @click="showDepDialog"-->
-<!--                ></el-button>-->
-<!--                <span style="padding-left: 10px; font-size: 14px; color: #333;">添加依赖</span>-->
-<!--            </div>-->
-<!--            <DepList-->
-<!--                :data="depList"-->
-<!--                :onChange="onChangeDeps"-->
-<!--            ></DepList>-->
-<!--            <div style="height: 10px;"></div>-->
-
-<!--            &lt;!&ndash; 添加依赖的搜索弹出框 &ndash;&gt;-->
-<!--            <el-dialog-->
-<!--                width="750px"-->
-<!--                top="10vh"-->
-<!--                center-->
-<!--                :visible.sync="visibleDepDialog"-->
-<!--            >-->
-<!--                &lt;!&ndash;                @add="addDepReleaseHandler"&ndash;&gt;-->
-<!--                <ReleaseSearch-->
-<!--                    :tabLayout="['search', 'my-release', 'favor']"-->
-<!--                    @add="addDep"-->
-<!--                ></ReleaseSearch>-->
-<!--            </el-dialog>-->
         </BlockBody>
 
         <BlockBody tilte="资源描述">
-            <!--            ref="editor"-->
-            <!--             v-model="formData.description"-->
-            <!--            :config="editorConfig"-->
-            <!--            @load="imgUploadSuccessHandler"-->
             <RichEditor
                 style="box-sizing: border-box; margin: 0;"
                 width="100%"
@@ -150,10 +116,6 @@
         <BlockBody
             v-if="visibleMetaInput"
             tilte="meta信息">
-            <!-- meta 输入框 -->
-            <!--            v-model="meta"-->
-            <!--            @validate="checkMetaValid"-->
-            <!--            :placeholder="$t('resourceEditView.inputMetaTip')"-->
             <div style="padding: 20px;">
                 <div style="border: 1px solid #E6E6E6;">
                     <MetaInfoInput
