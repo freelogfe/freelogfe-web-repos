@@ -12,8 +12,16 @@
                     <span v-if="status === 4" style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">生效中</span>
                     <span v-if="status === 6" style="color: #e35a5f; padding: 0 9px; line-height: 18px; border: 1px solid #e35a5f; border-radius: 10px; font-size: 14px;">合约终止</span>
                 </div>
-                <el-dropdown @command="$emit('command')">
-                    <el-button size="mini" style="opacity: 1">
+                <el-dropdown v-if="unique">
+                    <el-button size="mini">
+                        启用<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>当前授权方案中只有一个合约，不可停用</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <el-dropdown v-else @command="$emit('command')">
+                    <el-button size="mini">
                         {{disabled ? '搁置' : '应用'}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
@@ -71,6 +79,10 @@
                 }
             },
             disabled: {
+                type: Boolean,
+                default: false,
+            },
+            unique: {
                 type: Boolean,
                 default: false,
             }

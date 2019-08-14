@@ -61,6 +61,7 @@
                                 :data="item.contract.createDate.split('T')[0]"
                                 :contract="item.contract"
                                 :disabled="!!item.disabled"
+                                :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled"
                                 @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
                             ></SignedContract>
                         </div>
