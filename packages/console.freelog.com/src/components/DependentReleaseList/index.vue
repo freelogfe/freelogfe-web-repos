@@ -21,6 +21,13 @@
             :isOnline="i.isOnline"
             @onRemove="onRemove(j)"
         />
+        <div v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
+             style="height: 10px;"></div>
+        <div
+            v-show="mockDataSource && mockDataSource.length > 0"
+            style="font-size: 13px; color: #888; padding-left: 25px;"
+        >mock 依赖
+        </div>
         <Item
             v-for="(i, j) in mockDataSource"
             :name="i.name"

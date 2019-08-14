@@ -27,55 +27,55 @@
                 show-word-limit
                 maxlength="60"
                 v-model="resourceDetail.resourceInfo.aliasName"></el-input>
-        <h3>资源封面</h3>
-        <div class="resource-thumbnail-input">
-<!--          <el-upload-->
-<!--                  v-show="!uploaderStates.thumbnail.isUploading"-->
-<!--                  class="resource-thumbnail-uploader"-->
-<!--                  drag-->
-<!--                  ref="thumbnailUploader"-->
-<!--                  :action="uploadPreviewImageAction"-->
-<!--                  :with-credentials="true"-->
-<!--                  :data="uploader.data"-->
-<!--                  :headers="uploader.headers"-->
-<!--                  :on-error="errorHandler"-->
-<!--                  :on-change="previewImageChangeHandler"-->
-<!--                  :on-success="imageUploadSuccessHandler"-->
-<!--                  :before-upload="validateImageHandler"-->
-<!--                  :on-progress="uploadProgressHandler"-->
-<!--                  :show-file-list="false"-->
-<!--                  :auto-upload="true">-->
-<!--            <img :src="resPreviewImage" :class="{'resource-default-preview': resPreviewImage === ''}" style="height: 100%;" alt="">-->
-<!--            <div class="r-t-update-preview-image">-->
-<!--              <i class="el-icon-plus"></i>-->
+<!--        <h3>资源封面</h3>-->
+<!--        <div class="resource-thumbnail-input">-->
+<!--&lt;!&ndash;          <el-upload&ndash;&gt;-->
+<!--&lt;!&ndash;                  v-show="!uploaderStates.thumbnail.isUploading"&ndash;&gt;-->
+<!--&lt;!&ndash;                  class="resource-thumbnail-uploader"&ndash;&gt;-->
+<!--&lt;!&ndash;                  drag&ndash;&gt;-->
+<!--&lt;!&ndash;                  ref="thumbnailUploader"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :action="uploadPreviewImageAction"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :with-credentials="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :data="uploader.data"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :headers="uploader.headers"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :on-error="errorHandler"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :on-change="previewImageChangeHandler"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :on-success="imageUploadSuccessHandler"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :before-upload="validateImageHandler"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :on-progress="uploadProgressHandler"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :show-file-list="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                  :auto-upload="true">&ndash;&gt;-->
+<!--&lt;!&ndash;            <img :src="resPreviewImage" :class="{'resource-default-preview': resPreviewImage === ''}" style="height: 100%;" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="r-t-update-preview-image">&ndash;&gt;-->
+<!--&lt;!&ndash;              <i class="el-icon-plus"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          </el-upload>&ndash;&gt;-->
+<!--            <UploadCover-->
+<!--                :imageUrl="resPreviewImage"-->
+<!--                :onUploaded="imageUploadSuccessHandler"-->
+<!--            />-->
+<!--          <div class="thumbnail-upload-state" v-show="uploaderStates.thumbnail.isUploading">-->
+<!--            <div>-->
+<!--              <i class="el-icon-circle-close" @click="clearUploaderHandler('thumbnail')"></i>-->
+<!--              <el-progress-->
+<!--                      style="margin-right: 20px;"-->
+<!--                      :stroke-width="10"-->
+<!--                      :percentage="uploaderStates.thumbnail.percentage"-->
+<!--                      color="#333333"></el-progress>-->
 <!--            </div>-->
-<!--          </el-upload>-->
-            <UploadCover
-                :imageUrl="resPreviewImage"
-                :onUploaded="imageUploadSuccessHandler"
-            />
-          <div class="thumbnail-upload-state" v-show="uploaderStates.thumbnail.isUploading">
-            <div>
-              <i class="el-icon-circle-close" @click="clearUploaderHandler('thumbnail')"></i>
-              <el-progress
-                      style="margin-right: 20px;"
-                      :stroke-width="10"
-                      :percentage="uploaderStates.thumbnail.percentage"
-                      color="#333333"></el-progress>
-            </div>
-          </div>
-        </div>
-        <div class="resource-thumbnail-input-tip">
-<!--          <ul>-->
-<!--&lt;!&ndash;            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M</li>&ndash;&gt;-->
-<!--&lt;!&ndash;            <li>建议尺寸为800X600</li>&ndash;&gt;-->
-<!--            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</li>-->
-<!--          </ul>-->
-            <div style="display: flex; padding-left: 20px; font-size: 13px; color: #afafaf;">
-                <span>*&nbsp;</span>
-                <div>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</div>
-            </div>
-        </div>
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="resource-thumbnail-input-tip">-->
+<!--&lt;!&ndash;          <ul>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;            <li>建议尺寸为800X600</li>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <li>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</li>&ndash;&gt;-->
+<!--&lt;!&ndash;          </ul>&ndash;&gt;-->
+<!--            <div style="display: flex; padding-left: 20px; font-size: 13px; color: #afafaf;">-->
+<!--                <span>*&nbsp;</span>-->
+<!--                <div>只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M 建议尺寸为800X600</div>-->
+<!--            </div>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="res-detail-bd-row res-detail-dependencies">
