@@ -54,6 +54,7 @@
                             v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
                         >
                             <div v-if="index !== 0" style="height: 15px;"></div>
+                            <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
                             <SignedContract
                                 :name="item.contract.contractName"
                                 :status="item.contract.status"
@@ -61,7 +62,6 @@
                                 :data="item.contract.createDate.split('T')[0]"
                                 :contract="item.contract"
                                 :disabled="!!item.disabled"
-                                :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled"
                                 @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
                             ></SignedContract>
                         </div>
@@ -103,6 +103,15 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+</style>
+
+<style lang="less">
+    .message-center-customClass {
+        /*font-size: 40px;*/
+        top: 50% !important;
+        /*transform: translateY(-50%);*/
     }
 </style>
 
