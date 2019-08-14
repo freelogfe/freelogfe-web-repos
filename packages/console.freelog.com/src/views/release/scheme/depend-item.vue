@@ -39,13 +39,13 @@
 
 <style lang="less" type="text/less" scoped>
   .r-dependencies-item {
-    margin-bottom: 10px; cursor: pointer;
+    cursor: pointer;
     &.active {
       border-top-left-radius: 4px; border-bottom-left-radius: 4px; background-color: #fff;
     }
 
     .r-item-cont {
-      padding-left: 10px; padding-top: 10px; overflow: hidden;
+      padding: 10px 0 10px 10px; overflow: hidden;
     }
 
     .r-name, .r-info, .r-policies { padding-left: 20px; }
@@ -56,7 +56,7 @@
 
       i {
         position: absolute; left: 0; top: 50%; z-index: 1;
-        transform: translateY(-50%); color: #fff;
+        transform: translateY(-50%); color: transparent;
       }
 
       &.no-resolve, &.resolved{
@@ -65,12 +65,12 @@
           font-size: 12px;
         }
       }
-      &.no-resolve{
-        i { background-color: #FFBD28; color: #FFBD28;  }
-      }
-      &.resolved{
-        i { background-color: #84CCA8; color: #84CCA8; }
-      }
+      // &.no-resolve{
+      //   i { background-color: #FFBD28; color: #FFBD28; }
+      // }
+      // &.resolved{
+      //   i { background-color: #84CCA8; color: #84CCA8; }
+      // }
       &.upcast {
         i { color: #EA7171; font-weight: bold; }
       }
@@ -86,10 +86,10 @@
       }
     }
     .r-policies {
-      margin-right: 8px; border-bottom: 1px solid #D4D4D4;
+      margin-right: 8px; 
       .r-p-item {
         display: inline-block;
-        margin: 0 8px 10px 0; padding: 2px 10px; border: 1px solid #A5D1FF; border-radius: 2px;
+        margin: 0 8px 8px 0; padding: 2px 10px; border: 1px solid #A5D1FF; border-radius: 2px;
         background-color: #E9F4FF; color: #248fff;
       }
     }

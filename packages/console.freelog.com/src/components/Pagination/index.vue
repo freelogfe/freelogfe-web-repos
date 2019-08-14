@@ -148,7 +148,6 @@
     },
     mounted() {
       Object.assign(this.tableProps, this.config)
-      // this.pageSize = this.pagination.pageSize || 10
       this.load()
     },
   }

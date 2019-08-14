@@ -27,14 +27,22 @@
         </div>
       </div>
       <div class="s-m-w-c-right">
-        <div
-                :class="['s-m-w-c-upcast-btn', { 'selected': isSelectedReleaesUpcast }]"
-                v-if="type === 'create'"
-                @click="upcastHandler">
-          <span class="u-check-box" v-if="!isSelectedReleaesUpcast"></span>
-          <i class="el-icon-circle-check" v-else></i>上抛
+        <div class="s-m-w-c-upcast-box" v-if="type === 'create'">
+          <div class="s-m-w-c-ub-head">上抛 <i class="el-icon-info"></i></div>
+          <div class="s-m-w-c-ub-body">
+            <div
+                    :class="['s-m-w-c-upcast-btn', { 'selected': isSelectedReleaesUpcast }]"
+                    @click="upcastHandler">
+              <span class="u-check-box" v-if="!isSelectedReleaesUpcast"></span>
+              <i class="el-icon-circle-check" v-else></i>上抛
+            </div>
+          </div>
+          
         </div>
         <div :class="['s-m-w-c-p-wrapper', { 'disabled': isSelectedReleaesUpcast }]">
+          <div class="s-m-w-c-head">
+            签约 <i class="el-icon-info"></i>
+          </div>
           <div
                   class="s-m-w-c-policy"
                   :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"

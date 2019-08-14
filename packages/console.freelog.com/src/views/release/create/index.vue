@@ -197,7 +197,7 @@
           } else {
             return false;
           }
-        });
+        })
       },
     },
     created() {

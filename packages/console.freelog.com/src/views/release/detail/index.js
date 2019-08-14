@@ -300,7 +300,7 @@ export default {
             const { nodeId, presentableId } = res.data
             this.rSubordinateNodesIds.push(nodeId)
             this.signDialogVisible = false
-            this.$message({ type: 'success', message: '授权签约成功；即将跳转至节点发行管理页！', duration: 2000, onClose() {
+            this.$message({ type: 'success', message: '授权签约成功；即将跳转至节点发行管理页！', duration: 500, onClose() {
               self.$router.push(`/node/manager-release/${presentableId}`)
             }})
 

@@ -79,26 +79,6 @@ export default function generateInterfaces(fetch) {
         .then(resp => resp.json())
     },
 
-    fetchSubResourceUrl(subResourceId = '', presentableId = '') {
-      let token = subResourceTokenMap.get(subResourceId)
-      if(token) {
-        return Promise.resolve(getSubResourceUrl(subResourceId, token))
-      }
-
-      const authErrorMsg = `子资源(${subResourceId})存在授权问题！`
-      if(presentableId){
-        return interfaces.fetchPresentableResource(`${presentableId}.info`)
-          .then(() => {
-            let token = subResourceTokenMap.get(subResourceId)
-            if(token) {
-              return Promise.resolve(getSubResourceUrl(subResourceId, token))
-            }
-            throwError(authErrorMsg, EXCEPTION_AUTH)
-          })
-      }
-      return Promise.reject(createError(authErrorMsg, EXCEPTION_AUTH))
-    },
-
     fetchSubResource({ presentableId, subReleaseId, version }) {
       const url = `/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.info?version=${version}`
       return fetch(url).then(resp => resp.json())
@@ -124,8 +104,10 @@ export default function generateInterfaces(fetch) {
         })
         .then(data => injectCodeResource(data, type))
     },
-
-
+  
+    getPresentableResourceUrl(presentableId) {
+      return `/v1/auths/presentables/${presentableId}.file`
+    }
   }
   return interfaces
 

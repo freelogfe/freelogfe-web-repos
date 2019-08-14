@@ -227,8 +227,9 @@
       }
     },
     created() {
-      this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
-      
+      if(this.release && this.release.releaseId) {
+        this.releaseIdNameMap[this.release.releaseId] = this.release.releaseName
+      }
     }
   }
 </script>

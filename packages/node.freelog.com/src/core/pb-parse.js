@@ -6,6 +6,7 @@ export default function initWidgets(FreelogApp) {
   FreelogApp.$loading.show()
   const authInfo = window.__auth_info__
   const authErrorData = authInfo && authInfo.__auth_error_info__
+  
   if(!authErrorData) {
     loadWidgets(FreelogApp)
       .then(FreelogApp.$loading.hide)
@@ -14,6 +15,7 @@ export default function initWidgets(FreelogApp) {
         FreelogApp.$loading.hide()
       })
   }else {
+    FreelogApp.$loading.hide()
     // 显示PB异常页及授权按钮，待授权问题解决后刷新页面
     throwException('PB授权未通过', EXCEPTION_PB_AUTH)
   }

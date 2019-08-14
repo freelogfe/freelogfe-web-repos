@@ -228,7 +228,10 @@ export default {
             if(typeof pIdsMap[p.policyId] !== 'undefined') {
               p.isSelected = true
               p.contractId = pIdsMap[p.policyId]
+              p.hasContract = 1
               release.selectedPolicies.push(p)
+            }else {
+              p.hasContract = -1
             }
           })
         }
@@ -266,6 +269,13 @@ export default {
     },
     resetData() {
       this.tmpSelectedPolicies = this.selectedRelease.policies
+      if(this.tmpSelectedPolicies.length) {
+        this.tmpSelectedPolicies.sort((v1, v2) => {
+          return v1.hasContract > v2.hasContract ? 1 : 0
+        })
+      }
+        
+      console.log('this.tmpSelectedPolicies ---', JSON.parse(JSON.stringify(this.tmpSelectedPolicies || [])))
       this.isSelectedReleaesUpcast = this.selectedRelease.isUpcasted
       this.selectedRelease.resolveStatus = this.getReleaseResolveStatus()
       this.resolveSelectedAuthSchemes()
