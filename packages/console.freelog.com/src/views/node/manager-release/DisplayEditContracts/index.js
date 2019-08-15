@@ -42,6 +42,10 @@ export default {
     methods: {
         async handleData() {
             const res = await this.$axios.get(`/v1/presentables/${this.$route.params.presentableId}`);
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                this.$message.error(res.data.msg);
+                throw new Error(res.data.msg);
+            }
             const data = res.data.data;
             // console.log(data, 'datadatadata');
 
@@ -113,6 +117,11 @@ export default {
                     partyTwo: res.data.data.nodeId,
                 }
             });
+
+            if (res5.data.errcode !== 0 || res5.data.ret !== 0) {
+                this.$message.error(res5.data.msg);
+                throw new Error(res5.data.msg);
+            }
             // console.log(res5, 'res5res5res5res5res5res5');
             const allContract = res5.data.data;
             for (const i of dataSource) {
@@ -127,7 +136,7 @@ export default {
                 }
             }
 
-            console.log(dataSource, 'dataSource');
+            // console.log(dataSource, 'dataSource');
             this.dataSource = dataSource;
 
             if (this.activatedIndex === -1) {
@@ -162,6 +171,10 @@ export default {
         async handleNodeInfo(nodeID) {
             const res = await this.$axios.get(`/v1/nodes/${nodeID}`);
             // console.log(res, 'resres');
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                this.$message.error(res.data.msg);
+                throw new Error(res.data.msg);
+            }
             this.nodeInfo = res.data.data;
         },
 
@@ -235,18 +248,31 @@ export default {
                 .map(i => ({
                     policyId: i,
                 }));
-            await this.updatePresentable({
-                resolveReleases: [
-                    {
-                        releaseId,
-                        contracts,
-                    },
-                ]
-            });
+            let res;
+            try {
+                res = await this.updatePresentable({
+                    resolveReleases: [
+                        {
+                            releaseId,
+                            contracts,
+                        },
+                    ]
+                });
+
+            } catch (e) {
+                console.error(e);
+                // throw e;
+            }
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                this.$message.error(res.data.msg);
+                throw new Error(res.data.msg);
+            }
 
             setTimeout(() => {
                 this.handleData()
             }, 10);
+
         },
 
         async updatePresentable(params) {
