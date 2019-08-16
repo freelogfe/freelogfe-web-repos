@@ -146,7 +146,13 @@ export default {
       this.resolvedReleases = releases.map(r => {
         return {
           releaseId: r.releaseId,
-          contracts: r.policies.filter(p => (p.isSelected || p.isSigned) && p.isEnbledContract ).map(p => { return { policyId: p.policyId}})
+          contracts: r.policies.filter(p =>{ 
+            if(p.isEnbledContract == null) {
+              return p.isSelected || p.isSigned
+            }else {
+              return p.isEnbledContract
+            }
+          }).map(p => { return { policyId: p.policyId}})
         }
       })
     },

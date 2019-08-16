@@ -231,7 +231,7 @@
 
     .r-c-w-cont {
       width: @main-content-width-990;
-      margin: auto;
+      margin: 0 auto 65px auto;
       padding-top: 40px;
     }
 

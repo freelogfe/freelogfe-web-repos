@@ -84,10 +84,20 @@
                 :key="'p-signed-' + index"
               >
                 <div class="smw-c-p-signed" v-if="contractsMap && contractsMap[policy.contractId]">
-                    <div class="p-name" >
+                    <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
+                      <template v-if="type !== 'edit'">
+                          <span class="p-n-check-box" v-if="!policy.isSelected"></span>
+                        <i class="el-icon-check" v-else></i>
+                      </template>
                       {{policy.policyName}}
                       <span class="contract-status" :class="['status-'+contractsMap[policy.contractId].status]">{{contractsMap[policy.contractId].statusTip}}</span>
-                      <div class="p-enabled-btn" @click="toggleEnabledContract(policy)">{{ policy.isEnbledContract ? '搁置' : '启用'}}</div>
+                      <el-dropdown class="p-enabled-btn" @command="toggleEnabledContract" v-if="type === 'edit'">
+                        <span>{{ policy.isEnbledContract ? '已应用' : '已搁置'}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                        <el-dropdown-menu slot="dropdown">
+                          <el-dropdown-item :command="index+'-1'">应用</el-dropdown-item>
+                          <el-dropdown-item :command="index+'-0'">搁置</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </el-dropdown>
                     </div>
                     <div class="p-auth-info">
                       <span>合同ID：{{policy.contractId}}</span>
@@ -112,9 +122,13 @@
                       :key="'p-' + index"
               >
                 <div class="smw-c-p-box">
-                  <div class="p-name" :class="[type]">
+                  <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
+                      <template v-if="type !== 'edit'">
+                          <span class="p-n-check-box" v-if="!policy.isSelected"></span>
+                        <i class="el-icon-check" v-else></i>
+                      </template>
                     {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>
-                    <div class="p-signed-btn" @click="policySignImmediately(policy)">签约</div>
+                    <div class="p-signed-btn" @click="policySignImmediately(policy)" v-if="type === 'edit'">签约</div>
                   </div>
                   <div class="p-detail"><pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre></div>
                 </div>

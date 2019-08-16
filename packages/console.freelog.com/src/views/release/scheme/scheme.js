@@ -244,7 +244,7 @@ export default {
           release.contracts = contracts
           release.resolveStatus = 'resolved'
           release.selectedPolicies = []
-          release.policies = release.policies.map(p => {
+          release.policies.forEach(p => {
             const contractId = pIdsMap[p.policyId]
             if(typeof contractId !== 'undefined') {
               p.isSelected = true
@@ -255,7 +255,6 @@ export default {
             }else {
               p.hasContract = -1
             }
-            return p
           })
         }
       }
@@ -294,7 +293,7 @@ export default {
       this.tmpSelectedPolicies = this.selectedRelease.policies
       if(this.tmpSelectedPolicies && this.tmpSelectedPolicies.length) {
         this.tmpSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract === 1).map(p => {
-          if(p.contractId) {
+          if(p.contractId && p.isEnbledContract == null) {
             p.isEnbledContract = this.contractsMap && this.contractsMap[p.contractId] && this.contractsMap[p.contractId].isEnbledContract
           }
           return p
