@@ -14,27 +14,30 @@
             <a ref="uploadHandleRef">
                 <div
                     class="re-upload-mask"
+                    :style="{height: height + 'px', width: width + 'px'}"
                     v-if="imageUrl"
                 >
                     <i class="el-icon-circle-plus" style="color: #fff; font-size: 40px;"></i>
-                    <span style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">重新上传</span>
+                    <span v-if="!!reUploadText" style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
                 </div>
 
                 <img
                     v-if="imageUrl"
                     :src="imageUrl"
                     class="avatar"
+                    :style="{height: height + 'px', width: width + 'px'}"
                 />
 
                 <div
-                    style="width: 200px; height: 170px; display: flex; align-items: center; justify-content: center; flex-direction: column;"
+                    :style="{height: height + 'px', width: width + 'px'}"
+                    style="display: flex; align-items: center; justify-content: center; flex-direction: column;"
                     v-else
                 >
                     <i
                         style="color: #ededed; font-size: 40px;"
                         class="el-icon-circle-plus"
                     ></i>
-                    <span style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">上传封面</span>
+                    <span v-if="!!uploadText" style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
                 </div>
             </a>
         </el-upload>
@@ -81,6 +84,22 @@
             imageUrl: String,
             // 上传图片成功后回调，将图片 url 传出
             onUploaded: Function,
+            width: {
+                type: Number,
+                default: 200,
+            },
+            height: {
+                type: Number,
+                default: 170,
+            },
+            uploadText: {
+                type: String,
+                default: '', // 选择封面
+            },
+            reUploadText: {
+                type: String,
+                default: '', // 重新上传
+            }
         },
         data() {
             return {
@@ -174,8 +193,8 @@
                 }
 
                 .re-upload-mask {
-                    width: 200px;
-                    height: 170px;
+                    /*width: 200px;*/
+                    /*height: 170px;*/
                     position: absolute;
                     top: 0;
                     right: 0;
@@ -202,8 +221,8 @@
         /*}*/
 
         .avatar {
-            width: 200px;
-            height: 170px;
+            /*width: 200px;*/
+            /*height: 170px;*/
             display: block;
         }
 
