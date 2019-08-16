@@ -18,7 +18,7 @@
                     v-if="imageUrl"
                 >
                     <i class="el-icon-circle-plus" style="color: #fff; font-size: 40px;"></i>
-                    <span v-if="!!reUploadText" style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
+                    <span v-if="textVisible && !!reUploadText" style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
                 </div>
 
                 <img
@@ -34,10 +34,10 @@
                     v-else
                 >
                     <i
-                        style="color: #ededed; font-size: 40px;"
+                        style="color: #666; font-size: 40px;"
                         class="el-icon-circle-plus"
                     ></i>
-                    <span v-if="!!uploadText" style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
+                    <span v-if="textVisible && !!uploadText" style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
                 </div>
             </a>
         </el-upload>
@@ -92,13 +92,17 @@
                 type: Number,
                 default: 170,
             },
+            textVisible: {
+                type: Boolean,
+                default: true   
+            },
             uploadText: {
                 type: String,
-                default: '', // 选择封面
+                default: '上传封面', // 选择封面
             },
             reUploadText: {
                 type: String,
-                default: '', // 重新上传
+                default: '重新上传', // 重新上传
             }
         },
         data() {

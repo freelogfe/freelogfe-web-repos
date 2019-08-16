@@ -6,7 +6,6 @@ import LazyListView from '@/components/LazyListView/index.vue'
 
 import SchemeManage from '../scheme/index.vue'
 import { versionDescendingOrder } from '@/lib/utils.js'
-import schemeContractsDetail from './scheme.json'
 
 export default {
   name: 'release-detail',

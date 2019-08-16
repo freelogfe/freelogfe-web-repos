@@ -72,8 +72,8 @@
             <template v-if="tmpSignedPolicies.length">
               <div class="s-m-w-c-head">
                 <div class="p-auth-info" v-if="selectedRelease.contracts && selectedRelease.contracts.length > 0">
-                  <span>授权方：{{selectedRelease.releaseName}}</span>
-                  <span>被授权方：{{release.releaseName}}</span>
+                  <div><label>授权方：</label><span>{{selectedRelease.releaseName}}</span></div>
+                  <div><label>被授权方：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>
               <h4 class="s-m-w-c-p-title">已签约</h4> 
@@ -90,10 +90,8 @@
                       <div class="p-enabled-btn" @click="toggleEnabledContract(policy)">{{ policy.isEnbledContract ? '搁置' : '启用'}}</div>
                     </div>
                     <div class="p-auth-info">
-                      <div>
-                        <span>合同ID：{{policy.contractId}}</span>
-                        <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
-                      </div>
+                      <span>合同ID：{{policy.contractId}}</span>
+                      <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
                     </div>
                     <div class="p-detail">
                       <contract-detail

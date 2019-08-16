@@ -74,14 +74,7 @@ export default {
       this.initData()
     },
     contracts() {
-      const contractsMap = this.contractsMap || {}
-      this.contracts.forEach(c => {
-        c.partyOne = this.releaseIdNameMap[c.partyOne] || c.partyOne
-        c.partyTwo = this.releaseIdNameMap[c.partyTwo] || c.partyTwo
-        c.statusTip = CONTRACT_STATUS_TIPS[c.status]
-        contractsMap[c.contractId] = c
-      })
-      this.contractsMap = contractsMap
+      this.getContractsMap(this.contracts)
       this.getTargetReleases()
     }
   },
@@ -192,12 +185,23 @@ export default {
               contracts.forEach(c => {
                 c.isEnbledContract = schemeContractIds.has(c.contractId)
               })
+              this.getContractsMap(contracts)
               this.$emit('update:contracts', contracts)
             }
           })
       }else {
         this.$emit('update:contracts', [])
       }
+    },
+    getContractsMap(contracts){
+      const contractsMap = this.contractsMap || {}
+      contracts.forEach(c => {
+        c.partyOne = this.releaseIdNameMap[c.partyOne] || c.partyOne
+        c.partyTwo = this.releaseIdNameMap[c.partyTwo] || c.partyTwo
+        c.statusTip = CONTRACT_STATUS_TIPS[c.status]
+        contractsMap[c.contractId] = c
+      })
+      this.contractsMap = contractsMap
     },
     getTargetReleases() {
       this.resolveReleaseScheme()
@@ -289,7 +293,12 @@ export default {
     resetData() {
       this.tmpSelectedPolicies = this.selectedRelease.policies
       if(this.tmpSelectedPolicies && this.tmpSelectedPolicies.length) {
-        this.tmpSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract === 1)
+        this.tmpSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract === 1).map(p => {
+          if(p.contractId) {
+            p.isEnbledContract = this.contractsMap && this.contractsMap[p.contractId] && this.contractsMap[p.contractId].isEnbledContract
+          }
+          return p
+        })
         this.tmpNoSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract == null || p.hasContract === -1)
       }
         
@@ -356,9 +365,12 @@ export default {
       this.resetData()
     },
     // 启用或搁置 合同
-    toggleEnabledContract(policy) {
-      // console.log(JSON.parse(JSON.stringify(this.selectedRelease)))
-      if(policy.isEnbledContract) {
+    toggleEnabledContract(command) {
+      const [ index, enableCode ] = command.split('-')
+      const policy = this.tmpSignedPolicies[index]
+      
+      if(+enableCode === 0) {
+        if(!policy.isEnbledContract) return 
         policy.isEnbledContract = false
         const policies = this.selectedRelease.policies
         const leng = policies.length
@@ -369,16 +381,17 @@ export default {
           }
         }
         if(enbledContractCount === 0) {
-          this.$message({ type: 'warning', message: '至少须启动一个合同！'})
+          this.$message({ type: 'warning', message: '至少须应用一个合同！'})
           policy.isEnbledContract = true
           return
         }
       }else {
+        if(policy.isEnbledContract) return 
         policy.isEnbledContract = true
       }
       
       this.resetData()
-      this.$emit('update-release-scheme', policy.isEnbledContract ? '合同启用成功！' : '合同搁置成功！')
+      this.$emit('update-release-scheme', policy.isEnbledContract ? '合同应用成功！' : '合同搁置成功！')
     },
     // 策略 直接签约
     policySignImmediately(policy) {
@@ -388,12 +401,7 @@ export default {
     },
     // 选择策略
     selectPolicy(policy, index) {
-      if(this.type !== 'create') {
-        if(policy.contractId && this.contractsMap && this.contractsMap[policy.contractId]) {
-          this.$message({ type: 'warning', message: '已签约，不可更改！' })
-          return
-        }
-      }
+      if(this.type === 'edit') return 
 
       policy.isSelected = !policy.isSelected
       this.tmpSelectedPolicies.splice(index, 1, policy)
