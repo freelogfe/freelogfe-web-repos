@@ -64,14 +64,16 @@
       margin-bottom: 10px; font-size: 16px;
         
       .p-auth-info {
-        display: flex; 
-        padding: 12px 15px; margin-bottom: 30px; border: 1px solid #D8D8D8; border-radius: 4px;
-        background-color: #FAFBFB;
-        span { 
-          flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-          font-size: 14px; font-weight: 500; color: #333; 
-          &:first-child { padding-right: 9px; }
+        margin-bottom: 20px;
+        div {
+          display: flex; color: #666; font-weight: 500;
+          label { 
+            min-width: 72px;
+            font-size: 14px; line-height: 2;
+          }
+          // span { font-weight: 600; }
         }
+        
 
       }
       
@@ -166,10 +168,8 @@
         }
 
         .p-auth-info {
-          div { 
-            padding: 5px 15px; 
-            span { display: inline-block; width: 49%; color: #999; }
-          }
+          padding: 5px 15px; 
+          span { display: inline-block; width: 49%; color: #999; }
         }
 
         .p-detail{

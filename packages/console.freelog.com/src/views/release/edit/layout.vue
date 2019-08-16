@@ -3,14 +3,14 @@
     <div class="r-e-l-header clearfix">
       <div class="r-e-l-main-content">
         <div class="preview-box">
-          <router-link :to="`/release/detail/${release.releaseId}?version=${selectedVersion}`">
-            <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
-          </router-link>
+          <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
         </div>
         <div class="cont">
           <div class="r-e-l-name">
             <template v-if="!isEditingReleaseName">
-              {{release.releaseName}}
+              <router-link :to="`/release/detail/${release.releaseId}?version=${selectedVersion}`">
+                {{release.releaseName}}
+              </router-link>
               <!-- <span class="el-icon-edit-outline" @click="tapEditName"></span> -->
             </template>
             <template v-else>

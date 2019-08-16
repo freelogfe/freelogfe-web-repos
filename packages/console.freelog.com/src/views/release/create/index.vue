@@ -20,9 +20,6 @@
       </div>
       <div class="r-c-w-row r-c-w-name">
         <h3>发行名称<span>·发行名称一旦则创建不可修改</span></h3>
-        <div style="margin-bottom: 10px; font-size: 13px; color: rgb(175, 175, 175);">
-          
-        </div>
         <el-form-item prop="releaseName" class="cont">
           {{session.user.username}} /
           <el-input
@@ -32,6 +29,10 @@
                   maxlength="100"
                   v-model="formData.releaseName"/>
         </el-form-item>
+      </div>
+      <div class="r-c-w-row r-c-w-cover">
+        <h3>发行封面</h3>
+        <UploadCover :imageUrl="coverImageUrl" :onUploaded="uploadCoverSuccess"></UploadCover>
       </div>
       <div class="r-c-w-row r-c-w-upcast" v-if="depReleasesList.length">
         <h3>基础上抛<span>·方案中所选上抛将会成为基础上抛</span></h3>
@@ -50,10 +51,6 @@
         <el-form-item prop="version" class="cont">
           <i>*</i>
           <el-input v-model="formData.version"></el-input>
-          <!--<div class="release-name">-->
-          <!--<img :src="resourceDetail.previewImages ? resourceDetail.previewImages[0] : ''" alt="" :class="{'resource-default-preview':!(resourceDetail.previewImages && resourceDetail.previewImages[0])}" >-->
-          <!--{{resourceDetail.aliasName}}-->
-          <!--</div>-->
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-scheme" v-if="depReleasesList.length">
@@ -79,12 +76,13 @@
 </template>
 
 <script>
+  import UploadCover from '@/components/UploadCover/index.vue'
   import SchemeManage from '../scheme/index.vue'
   import {mapGetters} from 'vuex'
 
   export default {
     name: 'release-creator',
-    components: {SchemeManage},
+    components: { SchemeManage, UploadCover },
     data() {
       const validateName = (rule, value, callback) => {
         if(value.length < 1 || value.length > 60) {
@@ -106,6 +104,7 @@
       return {
         resourceDetail: null,
         releaseName: '',
+        coverImageUrl: '',
         formData: {
           releaseName: '',
           version: '0.1.0'
@@ -172,8 +171,8 @@
           }),
           resolveReleases: this.resolvedReleases
         }
-        if (this.previewImage) {
-          data.previewImages = [this.previewImage]
+        if (this.coverImageUrl !== '') {
+          data.previewImages = [this.coverImageUrl]
         }
         return data
       },
@@ -199,6 +198,9 @@
             return false;
           }
         })
+      },
+      uploadCoverSuccess(url) {
+        this.coverImageUrl = url
       },
     },
     created() {

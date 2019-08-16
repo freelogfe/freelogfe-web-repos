@@ -299,8 +299,6 @@ export default {
           }
           return p
         })
-        console.log('tmpSignedPolicies --', JSON.parse(JSON.stringify(this.tmpSignedPolicies)))
-        console.log('contractsMap --', JSON.parse(JSON.stringify(this.contractsMap)))
         this.tmpNoSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract == null || p.hasContract === -1)
       }
         
@@ -404,12 +402,6 @@ export default {
     // 选择策略
     selectPolicy(policy, index) {
       if(this.type === 'edit') return 
-      // if(this.type !== 'create') {
-      //   if(policy.contractId && this.contractsMap && this.contractsMap[policy.contractId]) {
-      //     this.$message({ type: 'warning', message: '已签约，不可更改！' })
-      //     return
-      //   }
-      // }
 
       policy.isSelected = !policy.isSelected
       this.tmpSelectedPolicies.splice(index, 1, policy)

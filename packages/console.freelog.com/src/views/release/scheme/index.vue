@@ -72,8 +72,8 @@
             <template v-if="tmpSignedPolicies.length">
               <div class="s-m-w-c-head">
                 <div class="p-auth-info" v-if="selectedRelease.contracts && selectedRelease.contracts.length > 0">
-                  <span>授权方：{{selectedRelease.releaseName}}</span>
-                  <span>被授权方：{{release.releaseName}}</span>
+                  <div><label>授权方：</label><span>{{selectedRelease.releaseName}}</span></div>
+                  <div><label>被授权方：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>
               <h4 class="s-m-w-c-p-title">已签约</h4> 
@@ -84,26 +84,14 @@
                 :key="'p-signed-' + index"
               >
                 <div class="smw-c-p-signed" v-if="contractsMap && contractsMap[policy.contractId]">
-                    <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
-                      <template v-if="type !== 'edit'">
-                          <span class="p-n-check-box" v-if="!policy.isSelected"></span>
-                        <i class="el-icon-check" v-else></i>
-                      </template>
+                    <div class="p-name" >
                       {{policy.policyName}}
                       <span class="contract-status" :class="['status-'+contractsMap[policy.contractId].status]">{{contractsMap[policy.contractId].statusTip}}</span>
-                      <el-dropdown class="p-enabled-btn" @command="toggleEnabledContract" v-if="type === 'edit'">
-                        <span>{{ policy.isEnbledContract ? '已应用' : '已搁置'}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-                        <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item :command="index+'-1'">应用</el-dropdown-item>
-                          <el-dropdown-item :command="index+'-0'">搁置</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </el-dropdown>
+                      <div class="p-enabled-btn" @click="toggleEnabledContract(policy)">{{ policy.isEnbledContract ? '搁置' : '启用'}}</div>
                     </div>
                     <div class="p-auth-info">
-                      <div>
-                        <span>合同ID：{{policy.contractId}}</span>
-                        <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
-                      </div>
+                      <span>合同ID：{{policy.contractId}}</span>
+                      <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
                     </div>
                     <div class="p-detail">
                       <contract-detail
@@ -124,13 +112,9 @@
                       :key="'p-' + index"
               >
                 <div class="smw-c-p-box">
-                  <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
-                      <template v-if="type !== 'edit'">
-                          <span class="p-n-check-box" v-if="!policy.isSelected"></span>
-                        <i class="el-icon-check" v-else></i>
-                      </template>
+                  <div class="p-name" :class="[type]">
                     {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>
-                    <div class="p-signed-btn" @click="policySignImmediately(policy)" v-if="type === 'edit'">签约</div>
+                    <div class="p-signed-btn" @click="policySignImmediately(policy)">签约</div>
                   </div>
                   <div class="p-detail"><pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre></div>
                 </div>
