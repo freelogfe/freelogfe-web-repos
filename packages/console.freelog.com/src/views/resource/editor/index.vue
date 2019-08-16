@@ -1,16 +1,16 @@
 <template>
     <div style="margin: 0 auto; width: 1200px;">
 
-        <BlockBody tilte="资源上传">
+        <BlockBody :tilte="$t('resourceUpload')">
 
-            <SmallTitle>资源类型</SmallTitle>
+            <SmallTitle>{{$t('resourceType')}}</SmallTitle>
 
             <div style="padding-left: 40px;">
                 <el-select
                     style="width: 160px; line-height: 38px;"
                     v-model="resourceType"
                     @change="onChangeResourceType"
-                    placeholder="资源类型"
+                    :placeholder="$t('resourceType')"
                     allow-create
                     filterable
                     :disabled="!!this.uploadFileInfo.name"
@@ -31,11 +31,11 @@
                     :class="{shake: resourceTypeTip}"
                 >
                     <small>•</small>
-                    上传资源之前需要选择资源类型
+                    {{$t('beforeUpload')}}
                 </div>
             </div>
 
-            <SmallTitle>资源文件</SmallTitle>
+            <SmallTitle>{{$t('resourceFile')}}</SmallTitle>
 
             <div style="padding-left: 40px; padding-right: 40px;">
                 <UploadFile
@@ -47,7 +47,7 @@
                 />
             </div>
 
-            <SmallTitle>资源名称</SmallTitle>
+            <SmallTitle>{{$t('resourceName')}}</SmallTitle>
 
             <div style="padding-left: 40px;">
                 <el-input
@@ -55,31 +55,31 @@
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
-                    placeholder="输入资源名称"
+                    :placeholder="$t('enterResourceName')"
                     style="width: 590px;"
                 ></el-input>
 
                 <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/60</span>
             </div>
 
-<!--            <SmallTitle :dot="false">资源封面</SmallTitle>-->
+            <!--            <SmallTitle :dot="false">资源封面</SmallTitle>-->
 
-<!--            <div style="padding-left: 40px;">-->
-<!--                <UploadCover-->
-<!--                    :imageUrl="coverURL"-->
-<!--                    :onUploaded="coverUploaded"-->
-<!--                />-->
+            <!--            <div style="padding-left: 40px;">-->
+            <!--                <UploadCover-->
+            <!--                    :imageUrl="coverURL"-->
+            <!--                    :onUploaded="coverUploaded"-->
+            <!--                />-->
 
-<!--                <div-->
-<!--                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom; color: #afafaf;"-->
-<!--                >-->
-<!--                    <small style="vertical-align: top;">•&nbsp;</small>-->
-<!--                    <div style="display: inline-block;">-->
-<!--                        只支持JPG/PNG/GIF，GIF文件不能动画化，<br/>大小不超过5M-->
-<!--                        建议尺寸为800X600-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--                <div-->
+            <!--                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom; color: #afafaf;"-->
+            <!--                >-->
+            <!--                    <small style="vertical-align: top;">•&nbsp;</small>-->
+            <!--                    <div style="display: inline-block;">-->
+            <!--                        只支持JPG/PNG/GIF，GIF文件不能动画化，<br/>大小不超过5M-->
+            <!--                        建议尺寸为800X600-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div style="height: 20px;"></div>
         </BlockBody>
