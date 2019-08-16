@@ -54,6 +54,7 @@
                             v-for="(item, index) in dataSource[activatedIndex].children.filter(i => i.contract)"
                         >
                             <div v-if="index !== 0" style="height: 15px;"></div>
+                            <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
                             <SignedContract
                                 :name="item.contract.contractName"
                                 :status="item.contract.status"
@@ -102,6 +103,15 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+</style>
+
+<style lang="less">
+    .message-center-customClass {
+        /*font-size: 40px;*/
+        top: 50% !important;
+        /*transform: translateY(-50%);*/
     }
 </style>
 

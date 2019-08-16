@@ -59,26 +59,41 @@
                         >保存
                         </el-button>
                     </template>
-                    <el-button
-                        v-else
-                        type="primary"
-                        icon="el-icon-plus"
-                        size="mini"
-                        round
-                        @click="switchShowEditPolicy(true)"
-                    >添加策略
-                    </el-button>
+                    <div v-if="!isShowEditPolicy && policies.length > 0" style="height: 28px; display: flex; align-items: center;">
+                        <a
+                            style="width: 26px; height: 20px; align-items: center; justify-content: center; background-color: #409eff; border-radius: 10px; text-align: center;"
+                            @click="switchShowEditPolicy(true)"
+                        >
+                            <i class="el-icon-plus" style="font-weight: bolder; color: #fff; font-size: 12px;"></i>
+                        </a>
+                    </div>
+                    <el-popover
+                        v-if="!isShowEditPolicy && policies.length === 0"
+                        placement="top"
+                        trigger="hover"
+                        content="无策略的发行不会出现在市场中"
+                    >
+                        <div style="height: 28px; display: flex; align-items: center;" slot="reference">
+                            <i
+                                class="el-icon-warning"
+                                style="font-size: 20px; color: #ffc210;"
+                            ></i>
+                        </div>
+                    </el-popover>
                 </template>
 
                 <template v-if="!isShowEditPolicy">
                     <div
                         v-if="policies.length === 0"
                     >
-                        无策略的发行不会在市场中出现
+                        <el-button
+                            @click="switchShowEditPolicy(true)"
+                            size="small"
+                            type="primary"
+                        >添加策略
+                        </el-button>
                     </div>
-                    <div
-                        v-else
-                    >
+                    <div v-else>
                         <!-- @add-policy="addPolicyHandler" -->
                         <PolicyList
                             :policyList="policies"
