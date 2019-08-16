@@ -45,9 +45,13 @@ export default {
       contractsMap: null,
       targetReleases: [],
       tmpSelectedPolicies: [],
+      tmpSignedPolicies: [],
+      tmpNoSignedPolicies: [],
       selectedAuthSchemes: [],
       contractIds: [],
       selectedRelease: {},
+      releasesContractRecordsMap: {},
+      selectedReleaseContractRecords: [],
       releaseScheme: null
     }
   },
@@ -69,6 +73,17 @@ export default {
     depReleasesList(newV, oldV) {
       this.initData()
     },
+    contracts() {
+      const contractsMap = this.contractsMap || {}
+      this.contracts.forEach(c => {
+        c.partyOne = this.releaseIdNameMap[c.partyOne] || c.partyOne
+        c.partyTwo = this.releaseIdNameMap[c.partyTwo] || c.partyTwo
+        c.statusTip = CONTRACT_STATUS_TIPS[c.status]
+        contractsMap[c.contractId] = c
+      })
+      this.contractsMap = contractsMap
+      this.getTargetReleases()
+    }
   },
   methods: {
     initData() {
@@ -81,61 +96,6 @@ export default {
         this.fetchDepReleases()
         this.fetchReleaseScheme()
       }
-    },
-    // 获取 发行方案
-    fetchReleaseScheme() {
-      if(!this.release) return
-      var { releaseId, latestVersion: { version } } = this.release
-      version = this.release.selectedVersion || version
-      this.$services.ReleaseService.get(`${releaseId}/versions/${version}`)
-        .then(res => res.data)
-        .then(res => {
-          if(res.errcode === 0) {
-            this.releaseScheme = res.data
-            this.fetchContractsDetail()
-          }
-        })
-        .catch(e => this.$error.showErrorMessage('授权方案获取失败！'))
-    },
-    fetchContractsDetail() {
-      const { resolveReleases } = this.releaseScheme 
-      const contractIds = new Set(this.contractIds)
-      for(let i = 0; i < resolveReleases.length; i++) {
-        const { contracts } = resolveReleases[i]
-        contracts.forEach(c => {
-          if(c.contractId) {
-            contractIds.add(c.contractId)
-          }
-        })
-      }
-      this.contractIds = [...contractIds]
-
-      if(this.contractIds.length > 0) {
-        this.$services.ContractRecords.get({
-          params: {
-            contractIds: this.contractIds.filter(id => id.length > 0).join(',')
-          }
-        })
-          .then(res => res.data)
-          .then(res => {
-            if(res.errcode === 0) {
-              this.$emit('update:contracts', res.data)
-              this.contractsMap = {}
-              res.data.forEach(c => {
-                c.partyOne = this.releaseIdNameMap[c.partyOne] || c.partyOne
-                c.partyTwo = this.releaseIdNameMap[c.partyTwo] || c.partyTwo
-                c.statusTip = CONTRACT_STATUS_TIPS[c.status]
-                this.contractsMap[c.contractId] = c
-              })
-            }
-          })
-      }else {
-        this.$emit('update:contracts', [])
-      }
-    },
-    fetchReleases(ids) {
-      return this.$services.ReleaseService.get(`list?releaseIds=${ids}&projection=${this.projection}`)
-        .then(res => res.data)
     },
     // 获取 依赖发行
     fetchDepReleases() {
@@ -166,6 +126,10 @@ export default {
           this.isLoading = false
         })
     },
+    fetchReleases(ids) {
+      return this.$services.ReleaseService.get(`list?releaseIds=${ids}&projection=${this.projection}`)
+        .then(res => res.data)
+    },
     // 获取 依赖发行的上抛发行
     fetchUpcastDepReleases(upcastDepReleasesIds) {
       this.fetchReleases(upcastDepReleasesIds)
@@ -185,6 +149,55 @@ export default {
           }
         })
         .catch(e => this.isLoading = false)
+    },
+    // 获取 发行方案
+    fetchReleaseScheme() {
+      if(!this.release) return
+      var { releaseId, latestVersion: { version } } = this.release
+      version = this.release.selectedVersion || version
+      this.$services.ReleaseService.get(`${releaseId}/versions/${version}`)
+        .then(res => res.data)
+        .then(res => {
+          if(res.errcode === 0) {
+            this.releaseScheme = res.data
+            this.fetchContractsDetail()
+          }
+        })
+        .catch(e => this.$error.showErrorMessage('授权方案获取失败！'))
+    },
+    fetchContractsDetail() {
+      const { resolveReleases } = this.releaseScheme 
+      const targetIds = resolveReleases.map(r => r.releaseId).join(',')
+      var schemeContractIds = new Set([])
+      for(let i = 0; i < resolveReleases.length; i++) {
+        const { contracts } = resolveReleases[i]
+        contracts.forEach(c => {
+          if(c.contractId) {
+            schemeContractIds.add(c.contractId)
+          }
+        })
+      }
+
+      if(targetIds.length > 0) {
+        this.$services.ContractRecords.get({
+          params: {
+            targetIds,
+            partyTwo: this.release.releaseId
+          }
+        })
+          .then(res => res.data)
+          .then(res => {
+            if(res.errcode === 0) {
+              const contracts = res.data
+              contracts.forEach(c => {
+                c.isEnbledContract = schemeContractIds.has(c.contractId)
+              })
+              this.$emit('update:contracts', contracts)
+            }
+          })
+      }else {
+        this.$emit('update:contracts', [])
+      }
     },
     getTargetReleases() {
       this.resolveReleaseScheme()
@@ -215,24 +228,30 @@ export default {
         const release = this.releasesMap[releaseId]
 
         const pIdsMap = {}
-        contracts.forEach(c => {
-          pIdsMap[c.policyId] = c.contractId
-          
+        contracts.forEach(c => pIdsMap[c.policyId] = c.contractId)
+        this.contracts.forEach(c => {
+          const { contractId, targetId } = c
+          if(targetId === releaseId) {
+            pIdsMap[c.policyId] = contractId
+          }
         })
 
         if(release) {
           release.contracts = contracts
           release.resolveStatus = 'resolved'
           release.selectedPolicies = []
-          release.policies.forEach(p => {
-            if(typeof pIdsMap[p.policyId] !== 'undefined') {
+          release.policies = release.policies.map(p => {
+            const contractId = pIdsMap[p.policyId]
+            if(typeof contractId !== 'undefined') {
               p.isSelected = true
-              p.contractId = pIdsMap[p.policyId]
+              p.isEnbledContract = this.contractsMap && this.contractsMap[contractId].isEnbledContract
+              p.contractId = contractId
               p.hasContract = 1
               release.selectedPolicies.push(p)
             }else {
               p.hasContract = -1
             }
+            return p
           })
         }
       }
@@ -269,13 +288,11 @@ export default {
     },
     resetData() {
       this.tmpSelectedPolicies = this.selectedRelease.policies
-      if(this.tmpSelectedPolicies.length) {
-        this.tmpSelectedPolicies.sort((v1, v2) => {
-          return v1.hasContract > v2.hasContract ? 1 : 0
-        })
+      if(this.tmpSelectedPolicies && this.tmpSelectedPolicies.length) {
+        this.tmpSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract === 1)
+        this.tmpNoSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract == null || p.hasContract === -1)
       }
         
-      console.log('this.tmpSelectedPolicies ---', JSON.parse(JSON.stringify(this.tmpSelectedPolicies || [])))
       this.isSelectedReleaesUpcast = this.selectedRelease.isUpcasted
       this.selectedRelease.resolveStatus = this.getReleaseResolveStatus()
       this.resolveSelectedAuthSchemes()
@@ -336,7 +353,38 @@ export default {
     // 切换 发行
     exchangeSelectedRelease(release) {
       this.selectedRelease = release
-        this.resetData()
+      this.resetData()
+    },
+    // 启用或搁置 合同
+    toggleEnabledContract(policy) {
+      // console.log(JSON.parse(JSON.stringify(this.selectedRelease)))
+      if(policy.isEnbledContract) {
+        policy.isEnbledContract = false
+        const policies = this.selectedRelease.policies
+        const leng = policies.length
+        let enbledContractCount = 0
+        for(let i = 0; i < leng; i++) { 
+          if(policies[i].isEnbledContract) {
+            enbledContractCount += 1
+          }
+        }
+        if(enbledContractCount === 0) {
+          this.$message({ type: 'warning', message: '至少须启动一个合同！'})
+          policy.isEnbledContract = true
+          return
+        }
+      }else {
+        policy.isEnbledContract = true
+      }
+      
+      this.resetData()
+      this.$emit('update-release-scheme', policy.isEnbledContract ? '合同启用成功！' : '合同搁置成功！')
+    },
+    // 策略 直接签约
+    policySignImmediately(policy) {
+      policy.isSigned = true
+      this.resetData()
+      this.$emit('policy-sign-immediately')
     },
     // 选择策略
     selectPolicy(policy, index) {
@@ -355,6 +403,10 @@ export default {
         this.togglePolicy(policy, 'delete')
       }
       this.resetData()
+    },
+    togglePolicy(policy, type) {
+      const arr = this.selectedRelease.selectedPolicies
+      this.toggleArrayItem(type, arr, policy, (i1, i2) => i1.policyId === i2.policyId)
     },
     toggleArrayItem(type, arr, target, verify) {
       var index = -1
@@ -378,10 +430,6 @@ export default {
         }
       }
     },
-    togglePolicy(policy, type) {
-      const arr = this.selectedRelease.selectedPolicies
-      this.toggleArrayItem(type, arr, policy, (i1, i2) => i1.policyId === i2.policyId)
-    },
     toggleBaseUpcastReleases(release, type) {
       const arr = this.baseUpcastReleases
       this.toggleArrayItem(type, arr, release, (i1, i2) => i1.releaseId === i2.releaseId)
@@ -391,3 +439,5 @@ export default {
     this.initData()
   }
 }
+
+ 

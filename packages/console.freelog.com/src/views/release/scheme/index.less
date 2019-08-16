@@ -6,6 +6,16 @@
     text-align: right;
 
     span { margin-left: 20px; color: #999; }
+    i.contract-status {
+      display: inline-block;
+      position: relative; top: 0;
+      width: 9px; height: 9px; margin-right: 5px; border-radius: 50%;
+      
+      &.status-2 { background-color: #FBB726; }
+      &.status-4 { background-color: #39C500; }
+      &.status-6 { background-color: #E35A5F; }
+    }
+
     i.no-resolve, i.resolved {
       position: relative; top: 2px;
       display: inline-block;
@@ -52,34 +62,29 @@
     padding: 25px 30px 0 30px;
     .s-m-w-c-head {
       margin-bottom: 10px; font-size: 16px;
-      .el-icon-info { color: #409EFF; }
-    }
-
-    &.disabled {
-      pointer-events: none;
-      .s-m-w-c-policy {
-        .p-name {
-          color: #999;
-          .p-n-check-box{ border-color: #999; }
-          .el-icon-check, .p-n-check-box { opacity: .6; }
-        }
-
-        .p-detail {
-          .p-segment-text {
-            border-color: #FAFBFB;
-            background-color: #FAFBFB; color: #999;
-          }
+        
+      .p-auth-info {
+        display: flex; 
+        padding: 12px 15px; margin-bottom: 30px; border: 1px solid #D8D8D8; border-radius: 4px;
+        background-color: #FAFBFB;
+        span { 
+          flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+          font-size: 14px; font-weight: 500; color: #333; 
+          &:first-child { padding-right: 9px; }
         }
 
       }
-
+      
+      .el-icon-info { color: #409EFF; }
     }
+
+    .s-m-w-c-p-title { margin-bottom: 10px; font-size: 14px; font-weight: 400; color: #666; }
+
     .s-m-w-c-policy {
-      margin-bottom: 20px; background-color: #FAFBFB;
+      margin-bottom: 30px; background-color: #FAFBFB;
 
       .smw-c-p-box {
         border: 1px solid #ccc; border-radius: 4px;
-        
       }
 
       &.offline {
@@ -94,9 +99,11 @@
       }
 
       .p-name {
-        display: inline-block; position: relative; cursor: pointer;
-        padding: 10px 0 10px 40px;
-        font-size: 14px; color: #333; cursor: pointer;
+        position: relative; cursor: pointer;
+        padding: 12px 0 12px 15px;
+        font-size: 16px; color: #333;
+
+        &.create { display: inline-block; padding-left: 40px; }
 
         .p-n-check-box {
           display: inline-block;
@@ -113,6 +120,12 @@
             width: 16px; height: 16px; border: 1px solid #4497EC; border-radius: 2px;
             background-color: #4497EC; color: #fff;
           }
+        }
+
+        .p-signed-btn {
+          float: right; position: relative; top: -1px;
+          width:84px; height:28px; line-height: 28px; margin-right: 15px; border-radius: 15px;
+          background-color: #409EFF; color: #fff; font-size: 12px; text-align: center;
         }
       }
 
@@ -131,32 +144,57 @@
         .smw-c-p-s-text { color: #409EFF; }
         .p-name{ 
           margin-top: 8px; font-weight: bold; cursor: auto; 
+          .p-enabled-btn {
+            float: right; position: relative; top: -1px;
+            width: 76px; height:28px; line-height: 28px; margin-right: 15px; border-radius: 15px;
+            background-color: #fff; color: #409EFF; font-size: 12px; text-align: center;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.4); cursor: pointer;
+          }
+
           .contract-status {
             display: inline-block; 
             margin-left: 10px; padding: 0 10px; border: 1px solid; border-radius: 12px;
+            font-size: 14px;
           
             &.status-0 { color: #fff; border-color: #999; background: #999; }
-            &.status-1, &.status-2 { color: #E36161; border-color: #E36161; }
+            &.status-1, &.status-2 { color: #FBB726; border-color: #FBB726; }
             &.status-4 { color: #45BC7B; border-color: #45BC7B; }
-            &.status-3, &.status-5, &.status-6 { color: #fff; border-color: #DA6666; background: #DA6666; }
+            &.status-3, &.status-5, &.status-6 { color: #fff; border-color: #E35A5F; background: #E35A5F; }
           
           }
         }
+
         .p-auth-info {
           div { 
             padding: 5px 15px; 
             span { display: inline-block; width: 49%; color: #999; }
           }
         }
+
         .p-detail{
           padding: 10px 15px; border-top: 1px solid #D8D8D8;
         }
-        .el-icon-info {
-          position: absolute; top: 7px; right: 10px; z-index: 5;
-          font-size: 18px; color: #409EFF;
+      }
+    }
+
+    &.disabled {
+      pointer-events: none;
+      .s-m-w-c-policy {
+        .p-name {
+          color: #999;
+          .p-n-check-box{ border-color: #999; }
+          .el-icon-check, .p-n-check-box, .p-signed-btn { opacity: .6; }
+        }
+
+        .p-detail {
+          .p-segment-text {
+            border-color: #FAFBFB;
+            background-color: #FAFBFB; color: #999;
+          }
         }
       }
     }
+
   }
 
   .s-m-w-c-upcast-btn {

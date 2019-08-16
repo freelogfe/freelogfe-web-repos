@@ -50,33 +50,41 @@
             <h4>
               发行简介
               <div class="r-e-w-btn-group">
-                <el-button type="primary" class="edit" size="small" round v-if="!isEditingIntro" @click="editIntroHandler">编辑</el-button>
-                <template v-else>
-                  <el-button class="cnacel" size="small" round @click="cancelEditHandler">取消</el-button>
+                <el-button type="primary" class="edit" size="mini" round v-if="!isEditingIntro && release.intro !== ''" @click="editIntroHandler">编辑</el-button>
+                <template v-if="isEditingIntro">
                   <el-button type="primary" class="save" size="small" round @click="saveIntroHandler">保存</el-button>
+                  <el-button class="cnacel" size="small" round @click="cancelEditHandler">取消</el-button>
                 </template>
               </div>
             </h4>
             <div class="r-e-w-edit-box" v-if="isEditingIntro">
               <el-input type="textarea" :rows="4" v-model="tempEditingIntro"></el-input>
             </div>
-            <p v-else>{{release.intro === '' ? '暂无简介' : release.intro}}</p>
+            <template v-else>
+              <div class="r-e-w-edit-add-btn" v-if="release.intro === ''" @click="editIntroHandler">
+                添加简介
+              </div>
+              <p v-else>{{release.intro}}</p>
+            </template>
           </div>
           <div class="r-e-w-release-policy">
             <h4>
               策略
-              <div class="r-e-w-btn-group">
-                <el-button type="primary" class="add" size="small" round v-if="!isShowEditPolicy"  @click="addPolicyHandler"><i class="el-icon-plus"></i> 添加策略</el-button>
+              <el-tooltip class="r-e-w-r-p-tip" effect="light" content="无策略的发行不会出现在市场中" placement="right" v-if="release.policies.length === 0 && !isShowEditPolicy">
+                <i class="el-icon-warning"></i>
+              </el-tooltip>
+              <div class="r-e-w-btn-group" v-else>
+                <el-button type="primary" class="add" size="mini" round v-if="!isShowEditPolicy"  @click="addPolicyHandler"><i class="el-icon-plus"></i></el-button>
                 <template v-else>
-                  <el-button class="cnacel" size="small" round @click="cancelPolicyHandler">取消</el-button>
                   <el-button type="primary" class="save" size="small" round @click="savePolicyHandler">保存</el-button>
+                  <el-button class="cnacel" size="small" round @click="cancelPolicyHandler">取消</el-button>
                 </template>
               </div>
             </h4>
             <div style="position: relative;">
               <template v-if="!isShowEditPolicy">
-                <div class="r-e-w-r-no-policy" v-if="release.policies.length === 0">
-                  无策略的发行不会在市场中出现
+                <div class="r-e-w-r-policy-add-btn" v-if="release.policies.length === 0"  @click="addPolicyHandler">
+                  添加策略
                 </div>
                 <div class="r-e-w-r-p-list" v-else>
                   <policy-list
@@ -195,7 +203,8 @@
       },
       saveIntroHandler() {
         var successMsg = this.release.intro === '' ? '发行简介添加成功！' : '发行简介更新成功！'
-        this.updateRelease({ intro: this.tempEditingIntro }, successMsg)
+        const intro = this.tempEditingIntro.replace(/^(\s*)|(\s*)$/g, '')
+        this.updateRelease({ intro }, successMsg)
           .then(() => {
             this.isEditingIntro = false
           })

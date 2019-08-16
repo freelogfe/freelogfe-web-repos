@@ -6,6 +6,7 @@ import LazyListView from '@/components/LazyListView/index.vue'
 
 import SchemeManage from '../scheme/index.vue'
 import { versionDescendingOrder } from '@/lib/utils.js'
+import schemeContractsDetail from './scheme.json'
 
 export default {
   name: 'release-detail',
@@ -146,33 +147,55 @@ export default {
       this.resolvedReleases = releases.map(r => {
         return {
           releaseId: r.releaseId,
-          contracts: r.policies.filter(p => p.isSelected).map(p => { return { policyId: p.policyId}})
+          contracts: r.policies.filter(p => (p.isSelected || p.isSigned) && p.isEnbledContract ).map(p => { return { policyId: p.policyId}})
         }
       })
     },
-    updateReleaseScheme() {
-      const policyIds = new Set(this.contracts.map(c => c.policyId))
+    // 立即签约
+    signedImmediately() {
+      this.updateReleaseScheme()
+    },
+    updateReleaseScheme(msg) {
       const resolvedReleases = this.resolvedReleases
-      for(let i = 0; i < resolvedReleases.length; i++) {
-        const { contracts } = resolvedReleases[i]
-        contracts = contracts.filter(c => !policyIds.has(c.policyId))
-        if(contracts.length) {
-          this.resignResolvedReleases.push(resolvedReleases[i])
-        }
-      }
-      if(this.resignResolvedReleases.length === 0) {
-        // this.$message.warning('')
-        return 
-      }
       this.$services.ReleaseService.put(`${this.releaseId}/versions/${this.selectedVersion}`, {
-        resolveReleases: this.resignResolvedReleases
+        resolveReleases: resolvedReleases
       })
         .then(res => res.data)
         .then(res => {
           if(res.errcode === 0) {
-            this.$message({ type: 'success', message: '签约成功！' })
+            const { resolveReleases } = res.data
+            this.updateSchemeContracts(resolveReleases)
+            this.$message({ type: 'success', message: msg || '签约成功！' })
           }
         })
+    },
+    updateSchemeContracts(resolveReleases) {
+      const leng = resolveReleases.length
+      const existedContractIDs = this.contracts.map(c => c.contractId)
+      const targetContractIDs = []
+      for(let i = 0; i < leng; i++) {
+        const { contracts = [] } = resolveReleases[i]
+        contracts.forEach(c => {
+          if(c.contractId && existedContractIDs.indexOf(c.contractId) === -1) {
+            targetContractIDs.push(c.contractId)
+          }
+        })
+      }
+
+      if(targetContractIDs.length) {
+        // 获取 合同详情
+        this.$services.ContractRecords.get({
+          params: {
+            contractIds: targetContractIDs.join(',')
+          }
+        })
+          .then(res => res.data)
+          .then(res => {
+            if(res.errcode === 0) {
+              this.contracts = [ ...this.contracts, ...res.data ]
+            }
+          })
+      }
     }
   },
   created() {

@@ -2,25 +2,26 @@
   <div id="release-create" v-loading="resourceDetail === null" v-if="resourceDetail !== null">
     <el-form class="r-c-w-cont" ref="createReleaseForm" :model="formData" :rules="rules">
       <div class="r-c-w-row r-c-w-resource clearfix">
-        <div class="preview-box">
+        <!-- <div class="preview-box">
           <img :src="previewImage" alt="" :class="{'resource-default-preview':!previewImage}">
-        </div>
+        </div> -->
         <div class="cont">
           <h2>
-            {{resourceDetail.aliasName}}
+            <img class="resource-default-preview" alt="" />
+            <span>{{resourceDetail.aliasName}}</span>
             <div class="rcw-info">
               {{resourceDetail.resourceType}} | {{resourceDetail.updateDate | fmtDate}}
             </div>
           </h2>
           <p class="rcw-intro">
-            {{resourceDetail.intro}}
+            {{resourceDetail.intro || '暂无资源描述'}}
           </p>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-name">
-        <h3>发行名称</h3>
+        <h3>发行名称<span>·发行名称一旦则创建不可修改</span></h3>
         <div style="margin-bottom: 10px; font-size: 13px; color: rgb(175, 175, 175);">
-          <strong>• 请注意发行名称一但创建则不可修改。</strong>
+          
         </div>
         <el-form-item prop="releaseName" class="cont">
           {{session.user.username}} /
@@ -33,7 +34,7 @@
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-upcast" v-if="depReleasesList.length">
-        <h3>基础上抛</h3>
+        <h3>基础上抛<span>·方案中所选上抛将会成为基础上抛</span></h3>
         <div class="cont">
           <div
                   class="upcast-release-item"
@@ -41,7 +42,7 @@
                   :key="'upcast-release-' + index"
           ><i class="el-icon-back"></i>{{item.releaseName}}
           </div>
-          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">初始版本所选择的上报将成为基础上抛</div>
+          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">暂无基础上抛</div>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-version">
@@ -236,56 +237,45 @@
       margin-bottom: 30px;
       h3 {
         position: relative;
-        margin-bottom: 5px;
-        padding: 10px;
+        margin-bottom: 5px; padding: 10px;
 
         &:before {
           content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          z-index: 1;
-          width: 3px;
-          height: 12px;
-          background-color: #333;
-          transform: translateY(-50%);
+          position: absolute; left: 0; top: 50%; z-index: 1;
+          width: 3px; height: 12px;
+          background-color: #333; transform: translateY(-50%);
         }
+
+        span { margin-left: 20px; font-size: 12px; font-weight: 400; color: #999; }
       }
     }
 
     .r-c-w-resource {
-      padding: 10px;
-      border-radius: 10px;
+      margin-bottom: 20px; padding: 14px 20px; border-radius: 10px;
       box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
 
       .preview-box {
-        float: left;
-        overflow: hidden;
-        width: 100px;
-        height: 75px;
-        border-radius: 2px;
+        float: left; overflow: hidden;
+        width: 100px; height: 75px; border-radius: 2px;
         box-shadow: 0 0 1px #999;
 
-        img {
-          display: block;
-          width: 100%;
-          height: 100%;
-        }
+        img { display: block; width: 100%; height: 100%; }
       }
       .cont {
-        padding-left: 120px;
-        h2 {
-          font-size: 16px;
+        h2 { 
+          display: flex; align-items: center;
+          font-size: 16px; 
+          img { width: 40px; height: 30px; margin-right: 16px; }
+          span { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-right: 14px; } 
         }
       }
       .rcw-info {
-        float: right;
-        font-size: 13px;
-        font-weight: 400;
-        color: #999;
+        font-size: 13px; font-weight: 400; color: #999;
       }
       .rcw-intro {
-        margin-top: 15px;
+        display: -webkit-box;
+        overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+        margin-top: 12px; margin-bottom: 2px;
         font-size: 13px;
       }
     }
@@ -325,7 +315,7 @@
         font-weight: bold;
       }
       .no-upcase-releases {
-        color: #999;
+        color: #333;
       }
     }
 

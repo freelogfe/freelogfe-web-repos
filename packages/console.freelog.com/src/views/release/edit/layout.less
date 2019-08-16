@@ -23,13 +23,13 @@
 
     .preview-box {
       float: left; overflow: hidden;
-      width: 80px; height: 60px; border-radius: 2px;
+      width: 100px; height: 75px; border-radius: 2px;
       box-shadow: 0 0 1px #999;
 
       img{ display: block; width: 100%; height: 100%; }
     }
     .cont {
-      padding-left: 100px;
+      padding-left: 120px;
     }
     .r-e-l-name {
       font-size: 18px; color: #333;
@@ -48,7 +48,7 @@
       font-size: 12px; background-color: #D8D8D8; color: #fff;
     }
     .r-e-l-info {
-      margin-top: 18px; margin-bottom: 5px;
+      margin-top: 15px; margin-bottom: 8px;
       span {
         font-size: 12px; color: #999;
         &:not(:first-child) {
@@ -79,18 +79,19 @@
     margin-top: 30px;
 
     h3 {
-      padding: 5px 0; border-bottom: 1px solid #999;
+      padding: 5px 0; border-bottom: 1px solid #DFDFDF;
       font-size: 16px; font-weight: 400; color: #333;
 
       .el-icon-arrow-up {
         float: right;
-        padding: 2px 5px; font-size: 18px; cursor: pointer;
+        padding: 2px 5px; font-size: 20px; font-weight: bold; cursor: pointer;
       }
     }
   }
 
   .r-e-w-release-intro, .r-e-w-release-policy{
-    margin-top: 30px;
+    margin-top: 30px; margin-bottom: 45px;
+
     h4 {
       position: relative;
       margin-bottom: 15px; padding-left: 10px;
@@ -103,9 +104,9 @@
       }
 
       .r-e-w-btn-group {
-        float: right; text-align: right;
+        display: inline-block; margin-left: 10px; text-align: right;
         .el-button {
-          padding: 6px 15px;
+          padding: 4px 8px;
         }
       }
     }
@@ -124,6 +125,12 @@
   }
 
   .r-e-w-release-policy {
+    .el-icon-warning { position: relative; top: 2px; font-size: 20px; color: #FFC210; cursor: pointer; }
+    .r-e-w-btn-group {
+      .el-button { padding: 4px 8px; }
+    }
+
+
     .r-e-w-r-no-policy {
       color: #999;
       span {
@@ -135,6 +142,7 @@
         font-size: 22px; font-weight: 600; color: #409EFF;
       }
     }
+
     .r-e-w-r-p-editor {
       //position: absolute; top: 0; left: 0; z-index: 10;
     }
@@ -144,6 +152,11 @@
     .cont {
       padding: 20px 0;
     }
+  }
+
+  .r-e-w-r-policy-add-btn, .r-e-w-edit-add-btn {
+    width:100px; height:30px; line-height: 30px; border-radius:2px;
+    background:#409EFF; color: #fff; text-align: center; cursor: pointer;
   }
 
 }

@@ -13,7 +13,10 @@
       </div>
       <div class="r-policies">
         <template v-if="!release.isUpcasted">
-          <div class="r-p-item" v-for="(p, index) in release.selectedPolicies" :key="'s-policy-'+index">{{p.policyName}}</div>
+          <div class="r-p-item" v-for="(p, index) in release.selectedPolicies" :key="'s-policy-'+index">
+            {{p.policyName}} 
+            <span :class="['contract-status', 'status-' + contractsMap[p.contractId].status]" v-if="contractsMap && contractsMap[p.contractId]"></span>
+          </div>
         </template>
       </div>
     </div>
@@ -24,6 +27,7 @@
   export default {
     name: 'depend-item',
     props: {
+      contractsMap: Object,
       release: Object,
       resolveStatus: String,
       selectedRelease: Object,
@@ -33,7 +37,7 @@
       exchangeSelectedRelease(item) {
         this.$emit('exchange-item', item)
       }
-    }
+    },
   }
 </script>
 
@@ -75,6 +79,7 @@
         i { color: #EA7171; font-weight: bold; }
       }
     }
+    
     .r-info {
       margin-bottom: 6px;
       font-size: 12px; color: #999;
@@ -85,14 +90,22 @@
         }
       }
     }
+
     .r-policies {
       margin-right: 8px; 
       .r-p-item {
         display: inline-block;
         margin: 0 8px 8px 0; padding: 2px 10px; border: 1px solid #A5D1FF; border-radius: 2px;
         background-color: #E9F4FF; color: #248fff;
+        .contract-status {
+          display: inline-block; width: 8px; height: 8px; margin-left: 2px; border-radius: 50%;
+          &.status-2 { background-color: #FBB726; }
+          &.status-4 { background-color: #39C500; }
+          &.status-6 { background-color: #E35A5F; }
+        }
       }
     }
+
     &.second-level {
       padding: 0 0 0 40px; cursor: pointer;
       &.active {  border-top-left-radius: 4px; border-bottom-left-radius: 4px; background-color: #fff; }
