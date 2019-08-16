@@ -11,7 +11,30 @@ import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 
 export default {
     name: 'editor',
-
+    i18n: { // `i18n` 选项，为组件设置语言环境信息
+        messages: {
+            en: {
+                resourceUpload: 'Resource Upload',
+                resourceType: 'Resource Type',
+                beforeUpload: 'Before uploading resources you need to select the resource type',
+                resourceFile: 'Resource File',
+                uploadResource: 'Upload Resource',
+                noMoreThan50m: 'Resources maximum of no more than 50m',
+                resourceName: 'Resource Name',
+                enterResourceName: 'Please enter a resource name'
+            },
+            'zh-CN': {
+                resourceUpload: '资源上传',
+                resourceType: '资源类型',
+                beforeUpload: '上传资源之前需要选择资源类型',
+                resourceFile: '资源文件',
+                uploadResource: '上传资源',
+                noMoreThan50m: '资源最大不超过50M',
+                resourceName: '资源名称',
+                enterResourceName: '请输入资源名称',
+            },
+        }
+    },
     components: {
         SmallTitle,
         UploadFile,
@@ -72,6 +95,8 @@ export default {
     mounted() {
         // console.log(this.$route, 'this.$routethis.$routethis.$route');
         this.initDataByResourceId();
+        // console.log(this, 'TTTTTTT');
+        // console.log(this.$t("message.hello"), 'MMMMMMM');
     },
 
     methods: {
@@ -269,7 +294,7 @@ export default {
          * @param bool 是否一起发布
          */
         async onSubmitButtonClick(bool) {
-            if (bool && this.depList.some( i => !i.isOnline)){
+            if (bool && this.depList.some(i => !i.isOnline)) {
                 return this.$message.error('依赖中有未上线的发行');
             }
             const resourceId = await this.submit();
