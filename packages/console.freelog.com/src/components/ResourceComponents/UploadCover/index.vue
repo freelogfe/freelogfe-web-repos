@@ -75,6 +75,12 @@
 
 <script>
     export default {
+        i18n: { // `i18n` 选项，为组件设置语言环境信息
+            messages: {
+                en: {message: {hello: 'hello component1'}},
+                ja: {message: {hello: 'こんにちは、component1'}}
+            },
+        },
         name: 'upload-cover',
         props: {
             // 图像封面
