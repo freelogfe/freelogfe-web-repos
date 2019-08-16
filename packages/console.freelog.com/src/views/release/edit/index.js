@@ -44,9 +44,6 @@ export default {
     targetResourceId() {
       this.fetchResourceDetail()
     },
-    contracts() {
-      console.log('updated --- contract de')
-    }
   },
   methods: {
     fetchResourceDetail() {

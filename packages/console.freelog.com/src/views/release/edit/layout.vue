@@ -3,6 +3,13 @@
     <div class="r-e-l-header clearfix">
       <div class="r-e-l-main-content">
         <div class="preview-box">
+          <UploadCover 
+            width="100"
+            height="75"
+            :imageUrl="coverImageUrl"
+            :textVisible="false"
+            :onUploaded="uploadCoverSuccess"
+          ></UploadCover>
           <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
         </div>
         <div class="cont">
@@ -115,14 +122,16 @@
 </template>
 
 <script>
+  import UploadCover from '@/components/UploadCover/index.vue'
   import PolicyEditor from '@/components/PolicyEditor/index.vue'
   // import PolicyList from '@/components/PolicyList/list.vue'
   import PolicyList from '@/components/PolicyList/list/index.vue'
-  import policy from "../../../services/policy";
+  import policy from "../../../services/policy"
+  const defualtImageUrl = 'http://console.testfreelog.com/public/img/resource.jpg'
   export default {
     name: 'release-editor-layout',
     components: {
-      PolicyEditor, PolicyList,
+      PolicyEditor, PolicyList, UploadCover,
     },
 
     props: {
@@ -135,6 +144,7 @@
       return {
         tmpReleaseName: '',
         isEditingReleaseName: false,
+        coverImageUrl: this.release.previewImages[0] || defualtImageUrl,
         editTmpPolicy: { policyName: '未命名策略', policyText: '' },
         isShowEditPolicy: false,
         isEditingIntro: false,
@@ -157,6 +167,14 @@
             }
             return data
           }).catch(this.$error.showErrorMessage)
+      },
+      uploadCoverSuccess(url) {
+        this.updateRelease({
+          previewImages: [url]
+        }, '封面更新成功！')
+        .then(() => {
+          this.coverImageUrl = url
+        })
       },
       savePolicyHandler() {
         const { policyName, policyText } = this.editTmpPolicy
@@ -236,4 +254,15 @@
 
 <style lang="less" type="text/less" scoped>
   @import './layout.less';
+</style>
+<style lang="less" type="text/less">
+.release-editor-layout {
+  .preview-box {
+    #upload-cover {
+      .el-upload {
+          border: none; border-radius: 2px;
+        }
+    }
+  }
+}
 </style>
