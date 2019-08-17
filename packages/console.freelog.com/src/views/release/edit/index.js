@@ -142,19 +142,8 @@ export default {
         this.$message({ type: 'warning', message: `所选资源的类型必须为${this.release.resourceType}`, duration: 5000 })
       }
     },
-    updateResolvedReleases(releases) {
-      this.resolvedReleases = releases.map(r => {
-        return {
-          releaseId: r.releaseId,
-          contracts: r.policies.filter(p =>{ 
-            if(p.isEnbledContract == null) {
-              return p.isSelected || p.isSigned
-            }else {
-              return p.isEnbledContract
-            }
-          }).map(p => { return { policyId: p.policyId}})
-        }
-      })
+    updateResolvedReleases(resolvedReleases) {
+      this.resolvedReleases = resolvedReleases
     },
     // 立即签约
     signedImmediately() {

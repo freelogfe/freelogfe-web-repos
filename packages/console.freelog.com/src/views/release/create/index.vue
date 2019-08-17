@@ -147,15 +147,8 @@
       },
     },
     methods: {
-      updateResolvedReleases(releases) {
-        this.resolvedReleases = releases.map(r => {
-          return {
-            releaseId: r.releaseId,
-            contracts: r.policies.filter(p => p.isSelected).map(p => {
-              return {policyId: p.policyId}
-            })
-          }
-        })
+      updateResolvedReleases(resolvedReleases) {
+        this.resolvedReleases = resolvedReleases
       },
       cancelCreateRelease() {
         this.$router.go(-1)

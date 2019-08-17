@@ -130,7 +130,6 @@
         })
         this.getTargetVersionsList()
       },
-
       fetchEveryVersionRDetail() {
         this.$services.resource.get('list', {
           params: {
@@ -170,13 +169,8 @@
       tapMoreBtn() {
         this.isShowAllVersions = !this.isShowAllVersions
       },
-      updateResolvedReleases(releases) {
-        this.resolvedReleases = releases.map(r => {
-          return {
-            releaseId: r.releaseId,
-            contracts: r.policies.filter(p => p.isSelected).map(p => { return { policyId: p.policyId}})
-          }
-        })
+      updateResolvedReleases(resolvedReleases) {
+        this.resolvedReleases = resolvedReleases
       },
       cancelAddRelease() {
         this.$router.replace(`/release/edit/${this.releaseId}`)

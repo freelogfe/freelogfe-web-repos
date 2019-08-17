@@ -16,17 +16,17 @@
         >
           <release-depend-item
                   :release="rItem"
+                  :is-active="selectedRelease.releaseId === rItem.releaseId"
                   :resolveStatus="rItem.resolveStatus"
-                  :selectedRelease="selectedRelease"
                   :contractsMap="contractsMap"
                   @exchange-item="exchangeSelectedRelease"></release-depend-item>
           <release-depend-item
-                  is-scond-level
                   v-for="(urItem, _index) in rItem.baseUpcastReleases"
                   :key="'dep-item-'+_index"
+                  is-scond-level
                   :release="urItem"
+                  :is-active="selectedRelease.releaseId === rItem.releaseId"
                   :resolveStatus="urItem.resolveStatus"
-                  :selectedRelease="selectedRelease"
                   :contractsMap="contractsMap"
                   @exchange-item="exchangeSelectedRelease"></release-depend-item>
         </div>
@@ -55,7 +55,7 @@
                     :key="'p-nosigned-' + index"
             >
               <div class="smw-c-p-box">
-                <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
+                <div class="p-name" :class="[type]" @click="selectPolicy(tmpNoSignedPolicies, policy, index)">
                   <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                   <i class="el-icon-check" v-else></i>
                   {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>  
@@ -84,7 +84,7 @@
                 :key="'p-signed-' + index"
               >
                 <div class="smw-c-p-signed" v-if="contractsMap && contractsMap[policy.contractId]">
-                    <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
+                    <div class="p-name" :class="[type]" @click="selectPolicy(tmpSignedPolicies, policy, index)">
                       <template v-if="type !== 'edit'">
                           <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                         <i class="el-icon-check" v-else></i>
@@ -122,7 +122,7 @@
                       :key="'p-' + index"
               >
                 <div class="smw-c-p-box">
-                  <div class="p-name" :class="[type]" @click="selectPolicy(policy, index)">
+                  <div class="p-name" :class="[type]" @click="selectPolicy(tmpNoSignedPolicies, policy, index)">
                       <template v-if="type !== 'edit'">
                           <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                         <i class="el-icon-check" v-else></i>

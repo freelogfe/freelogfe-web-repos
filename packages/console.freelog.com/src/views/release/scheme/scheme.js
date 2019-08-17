@@ -76,7 +76,7 @@ export default {
     contracts() {
       this.getContractsMap(this.contracts)
       this.getTargetReleases()
-    }
+    },
   },
   methods: {
     initData() {
@@ -223,6 +223,7 @@ export default {
 
     },
     resolveReleaseScheme() {
+      
       if(!this.releaseScheme ) return
 
       const { resolveReleases } = this.releaseScheme
@@ -259,6 +260,9 @@ export default {
         }
       }
     },
+    getReleaseSelectedPolicies(release) {
+
+    },
     formatRelease(release) {
 
       if(this.baseUpcastReleasesIDs.indexOf(release.releaseId) !== -1) {
@@ -291,14 +295,19 @@ export default {
     },
     resetData() {
       this.tmpSelectedPolicies = this.selectedRelease.policies
-      if(this.tmpSelectedPolicies && this.tmpSelectedPolicies.length) {
-        this.tmpSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract === 1).map(p => {
-          if(p.contractId && p.isEnbledContract == null) {
-            p.isEnbledContract = this.contractsMap && this.contractsMap[p.contractId] && this.contractsMap[p.contractId].isEnbledContract
+      const leng = this.tmpSelectedPolicies && this.tmpSelectedPolicies.length
+      if(leng) {
+        const tmpSignedPolicies = [], tmpNoSignedPolicies = []
+        for(let i = 0; i < leng; i++) {
+          const p = this.tmpSelectedPolicies[i]
+          if(p.hasContract === 1) {
+            tmpSignedPolicies.push(p)
+          }else {
+            tmpNoSignedPolicies.push(p)
           }
-          return p
-        })
-        this.tmpNoSignedPolicies = this.selectedRelease.policies.filter(p => p.hasContract == null || p.hasContract === -1)
+        }
+        this.tmpSignedPolicies = tmpSignedPolicies
+        this.tmpNoSignedPolicies = tmpNoSignedPolicies
       }
         
       this.isSelectedReleaesUpcast = this.selectedRelease.isUpcasted
@@ -341,7 +350,20 @@ export default {
         }
       }
       this.selectedAuthSchemes = arr
-      this.$emit('update-resolved-releases', this.selectedAuthSchemes)
+
+      const resolvedReleases = this.selectedAuthSchemes.map(r => {
+        return {
+          releaseId: r.releaseId,
+          contracts: r.policies.filter(p =>{ 
+            if(p.isEnbledContract == null) {
+              return p.isSelected || p.isSigned
+            }else {
+              return p.isEnbledContract
+            }
+          }).map(p => { return { policyId: p.policyId}})
+        }
+      })
+      this.$emit('update-resolved-releases', resolvedReleases)
     },
     updateContractAfterEvent(){},
     fmtPolicyTextList(p) {
@@ -399,21 +421,19 @@ export default {
       this.$emit('policy-sign-immediately')
     },
     // 选择策略
-    selectPolicy(policy, index) {
+    selectPolicy(policies, policy, index) {
       if(this.type === 'edit') return 
 
       policy.isSelected = !policy.isSelected
-      this.tmpSelectedPolicies.splice(index, 1, policy)
       if(policy.isSelected) {
-        this.togglePolicy(policy, 'add')
+        this.togglePolicy(this.selectedRelease.selectedPolicies, policy, 'add')
       }else {
-        this.togglePolicy(policy, 'delete')
+        this.togglePolicy(this.selectedRelease.selectedPolicies, policy, 'delete')
       }
       this.resetData()
     },
-    togglePolicy(policy, type) {
-      const arr = this.selectedRelease.selectedPolicies
-      this.toggleArrayItem(type, arr, policy, (i1, i2) => i1.policyId === i2.policyId)
+    togglePolicy(policies, policy, type) {
+      this.toggleArrayItem(type, policies, policy, (i1, i2) => i1.policyId === i2.policyId)
     },
     toggleArrayItem(type, arr, target, verify) {
       var index = -1

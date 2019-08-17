@@ -1,7 +1,7 @@
 <template>
   <div
           class="r-dependencies-item"
-          :class="{ 'second-level': isScondLevel, 'active': selectedRelease.releaseId === release.releaseId }"
+          :class="{ 'second-level': isScondLevel, 'active': isActive }"
           @click="exchangeSelectedRelease(release)"
   >
     <div class="r-item-cont">
@@ -13,7 +13,7 @@
       </div>
       <div class="r-policies">
         <template v-if="!release.isUpcasted">
-          <div class="r-p-item" v-for="(p, index) in release.selectedPolicies" :key="'s-policy-'+index">
+          <div class="r-p-item" v-for="(p, index) in selectedPolicies" :key="'s-policy-'+index">
             {{p.policyName}} 
             <span :class="['contract-status', 'status-' + contractsMap[p.contractId].status]" v-if="contractsMap && contractsMap[p.contractId]"></span>
           </div>
@@ -30,8 +30,16 @@
       contractsMap: Object,
       release: Object,
       resolveStatus: String,
-      selectedRelease: Object,
-      isScondLevel: Boolean
+      isScondLevel: Boolean,
+      isActive: Boolean,
+    },
+    data() {
+      return {
+        selectedPolicies: this.release.selectedPolicies       // 如果使用computed，则不能观测到release.selectedPolicies的变化
+      }
+    },
+    updated() {
+      this.selectedPolicies = this.release.selectedPolicies 
     },
     methods: {
       exchangeSelectedRelease(item) {
