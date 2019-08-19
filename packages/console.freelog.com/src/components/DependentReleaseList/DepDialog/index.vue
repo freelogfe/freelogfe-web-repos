@@ -12,23 +12,23 @@
                         style="display: inline-block; padding: 0 5px; margin-left: 30px; color: #409eff; border-bottom: 1px solid #409eff;"
                         :style="{color: activeTab === 'search' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'search' ? '1px solid #409eff' : 'none'}"
                         @click="onChangeTab('search')"
-                    >全局搜索</a>
+                    >{{$t('globalSearching')}}</a>
                     <a
                         style="display: inline-block; padding: 0 5px; margin-left: 40px;"
                         :style="{color: activeTab === 'release' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'release' ? '1px solid #409eff' : 'none'}"
                         @click="onChangeTab('release')"
-                    >我的发行</a>
+                    >{{$t('myReleases')}}</a>
                     <a
                         style="display: inline-block; padding: 0 5px; margin-left: 40px;"
                         :style="{color: activeTab === 'collection' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'collection' ? '1px solid #409eff' : 'none'}"
                         @click="onChangeTab('collection')"
-                    >我的收藏</a>
+                    >{{$t('myCollections')}}</a>
                     <a
                         v-if="showMock"
                         style="display: inline-block; padding: 0 5px; margin-left: 40px;"
                         :style="{color: activeTab === 'mock' ? '#409eff' : 'inherit', 'border-bottom': activeTab === 'mock' ? '1px solid #409eff' : 'none'}"
                         @click="onChangeTab('mock')"
-                    >我的Mock</a>
+                    >{{$t('myMocks')}}</a>
                 </div>
                 <i
                     class="el-icon-close"
