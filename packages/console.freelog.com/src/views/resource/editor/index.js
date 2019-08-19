@@ -18,20 +18,18 @@ export default {
                 resourceType: 'Resource Type',
                 beforeUpload: 'Before uploading resources you need to select the resource type',
                 resourceFile: 'Resource File',
-                uploadResource: 'Upload Resource',
-                noMoreThan50m: 'Resources maximum of no more than 50m',
                 resourceName: 'Resource Name',
-                enterResourceName: 'Please enter a resource name'
+                enterResourceName: 'Please enter a resource name',
+                dependency: 'Dependency'
             },
             'zh-CN': {
                 resourceUpload: '资源上传',
                 resourceType: '资源类型',
                 beforeUpload: '上传资源之前需要选择资源类型',
                 resourceFile: '资源文件',
-                uploadResource: '上传资源',
-                noMoreThan50m: '资源最大不超过50M',
                 resourceName: '资源名称',
                 enterResourceName: '请输入资源名称',
+                dependency: '依赖'
             },
         }
     },

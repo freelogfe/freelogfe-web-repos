@@ -84,7 +84,7 @@
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody tilte="依赖">
+        <BlockBody :tilte="$t('dependency')">
             <DependentReleaseList
                 :dataSource="depList"
                 :isLock="false"
