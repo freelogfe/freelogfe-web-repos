@@ -14,7 +14,7 @@
                 <clipboard
                     :value="nodeInfo.origin"
                     style="display: inline-block;"
-                    @copyDone="$message.success('复制成功')"
+                    @copyDone="$message.success($t('copySuccess'))"
                 >
                     <el-button style="padding: 3px 6px;" type="primary" plain size="mini">copy</el-button>
                 </clipboard>
@@ -30,7 +30,7 @@
                         borderRight: !isPageStyle ? '3px solid #409eff': 'none',
                         color: !isPageStyle ? '#409eff': '#333',
                     }"
-                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点发行列表</a>
+                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">{{$t('nodeReleaseList')}}</a>
                 <a
                     @click="switchIsPageStyle(true)"
                     :style="{
@@ -38,7 +38,7 @@
                         borderRight: isPageStyle ? '3px solid #409eff': 'none',
                         color: isPageStyle ? '#409eff': '#333',
                     }"
-                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点页面样式</a>
+                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">{{$t('nodePageStyle')}}</a>
             </div>
         </div>
 
@@ -49,10 +49,10 @@
                 <el-radio-group
                     v-model="filterTodo">
                     <el-radio-button label="全部">
-                        <span style="display: inline-block; width: 84px; text-align: center;">全部</span>
+                        <span style="display: inline-block; width: 84px; text-align: center;">{{$t('all')}}</span>
                     </el-radio-button>
                     <el-radio-button label="待处理">
-                        <span style="display: inline-block; width: 84px; text-align: center;">待处理</span>
+                        <span style="display: inline-block; width: 84px; text-align: center;">{{$t('pending')}}</span>
                     </el-radio-button>
                 </el-radio-group>
 
@@ -80,7 +80,7 @@
             >
                 <el-table-column
                     prop="publish"
-                    label="发行"
+                    :label="$t('table.publish')"
                     min-width="20%"
                 >
                     <template slot-scope="scope">
@@ -110,7 +110,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="presentableName"
-                    label="发行标题"
+                    :label="$t('table.presentableName')"
                     min-width="18%"
                 >
                     <template slot-scope="scope">
@@ -121,7 +121,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="type"
-                    label="全部类型"
+                    :label="$t('table.type')"
                     min-width="12%"
                 >
                     <template slot="header" slot-scope="scope">
@@ -149,7 +149,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="policies"
-                    label="策略"
+                    :label="$t('table.policies')"
                     min-width="14%"
                 >
                     <div
@@ -175,10 +175,10 @@
                                         {{scope.row.policies[0].policyName}}
                                     </div>
                                     <div v-if="scope.row.policies.length === 0" style="color: #999; font-size: 14px;">
-                                        暂无策略
+                                        {{$t('noPolicy')}}
                                     </div>
-                                    <div v-if="scope.row.policies.length > 1" style="font-size: 12px;">
-                                        等{{scope.row.policies.length}}个策略…
+                                    <div v-if="scope.row.policies.length > 1" style="font-size: 12px; word-break: normal;">
+                                        {{$t('suchAs')}}{{scope.row.policies.length}}{{$t('policies')}}…
                                     </div>
                                 </div>
                             </div>
@@ -193,14 +193,14 @@
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
-                    label="更新时间"
+                    :label="$t('table.updateTime')"
                     min-width="18%"
                 >
                     <template slot-scope="scope">
                         <div>
                             <div style="font-size: 14px; color: #000;">{{dateStringToFormat(scope.row.updateDate)}}
                             </div>
-                            <div style="color: #bfbfbf; font-size: 12px;">加入时间
+                            <div style="color: #bfbfbf; font-size: 12px;">{{$t('joined')}}
                                 {{dateStringToFormat(scope.row.createDate)}}
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="state"
-                    label="全部状态"
+                    :label="$t('table.state')"
                     min-width="12%"
                 >
                     <template slot="header" slot-scope="scope">
@@ -229,14 +229,14 @@
 
                     <template slot-scope="scope">
                         <div style="font-size: 14px; display: flex; align-items: center;">
-                            <span v-if="scope.row.isOnline === 1" style="color: #000;">已上线</span>
-                            <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">未上线</span>
+                            <span v-if="scope.row.isOnline === 1" style="color: #000;">{{$t('online')}}</span>
+                            <span v-if="scope.row.isOnline === 0" style="color: #bfbfbf;">{{$t('noOnline')}}</span>
                             <template v-if="!scope.row.isAuth">
                                 <el-popover
                                     placement="top"
                                     width="100"
                                     trigger="hover"
-                                    content="此合约链上存在异常"
+                                    :content="$t('exceptionExists')"
                                 >
                                     <i
                                         slot="reference"
@@ -251,7 +251,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="operation"
-                    label="操作"
+                    :label="$t('table.operation')"
                     min-width="5%"
                 >
 
@@ -270,23 +270,23 @@
                                     <a
                                         @click="goToEditPage(scope.row.presentableId)"
                                         style="display: block; width: 100%; height: 100%; color: #333;"
-                                    >编辑</a>
+                                    >{{$t('action.edit')}}</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <a
                                         style="display: block; width: 100%; height: 100%; color: #333;"
-                                    >置顶</a>
+                                    >{{$t('action.top')}}</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <a @click="upgradePresentable(scope.row)">升级</a>
+                                    <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <a
                                         @click="onLineAndOffLine(scope.row)"
                                         style="display: block; width: 100%; height: 100%;"
                                     >
-                                        <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">上线</span>
-                                        <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">下线</span>
+                                        <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
+                                        <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>
                                     </a>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
