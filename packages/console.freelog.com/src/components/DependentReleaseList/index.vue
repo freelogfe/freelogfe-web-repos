@@ -10,7 +10,7 @@
                 circle
                 @click="dialogVisible = true"
             ></el-button>
-            <span style="padding-left: 10px; font-size: 14px; color: #333;">添加依赖</span>
+            <span style="padding-left: 10px; font-size: 14px; color: #333;">{{$t('addDependencies')}}</span>
         </div>
         <div v-else style="height: 10px;"></div>
 
@@ -26,7 +26,7 @@
         <div
             v-show="mockDataSource && mockDataSource.length > 0"
             style="font-size: 13px; color: #888; padding-left: 25px;"
-        >mock 依赖
+        >{{$t('mockDependency')}}
         </div>
         <Item
             v-for="(i, j) in mockDataSource"
