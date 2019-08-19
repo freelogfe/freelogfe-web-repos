@@ -5,6 +5,22 @@ import Mock from './Mock.vue';
 
 export default {
     name: 'DepDialog',
+    i18n: { // `i18n` 选项，为组件设置语言环境信息
+        messages: {
+            en: {
+                globalSearching: 'Global Searching',
+                myReleases: 'My Releases',
+                myCollections: 'My Collections',
+                myMocks: 'My Mocks',
+            },
+            'zh-CN': {
+                globalSearching: '全局搜索',
+                myRelease: '我的发行',
+                myCollections: '我的收藏',
+                myMocks: '我的Mock',
+            },
+        }
+    },
     components: {
         Search,
         Release,

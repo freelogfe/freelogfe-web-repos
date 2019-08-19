@@ -3,6 +3,18 @@ import DepDialog from './DepDialog/index.vue';
 
 export default {
     name: 'DependentReleaseList',
+    i18n: { // `i18n` 选项，为组件设置语言环境信息
+        messages: {
+            en: {
+                addDependencies: 'Add Dependencies',
+                mockDependency: 'Mock Dependency',
+            },
+            'zh-CN': {
+                addDependencies: '添加依赖',
+                mockDependency: 'mock 依赖',
+            },
+        }
+    },
     components: {
         Item,
         DepDialog,
@@ -81,7 +93,7 @@ export default {
             ]);
         },
         removeARelease(item) {
-            console.log(item, 'itemitemitem');
+            // console.log(item, 'itemitemitem');
             this.$emit('onChange', this.dataSource.filter(i => i.id !== item.id));
         },
         removeAMock(item) {

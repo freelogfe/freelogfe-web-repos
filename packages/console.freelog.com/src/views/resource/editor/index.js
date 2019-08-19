@@ -8,33 +8,11 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
+import i18n from './i18n';
 
 export default {
     name: 'editor',
-    i18n: { // `i18n` 选项，为组件设置语言环境信息
-        messages: {
-            en: {
-                resourceUpload: 'Resource Upload',
-                resourceType: 'Resource Type',
-                beforeUpload: 'Before uploading resources you need to select the resource type',
-                resourceFile: 'Resource File',
-                uploadResource: 'Upload Resource',
-                noMoreThan50m: 'Resources maximum of no more than 50m',
-                resourceName: 'Resource Name',
-                enterResourceName: 'Please enter a resource name'
-            },
-            'zh-CN': {
-                resourceUpload: '资源上传',
-                resourceType: '资源类型',
-                beforeUpload: '上传资源之前需要选择资源类型',
-                resourceFile: '资源文件',
-                uploadResource: '上传资源',
-                noMoreThan50m: '资源最大不超过50M',
-                resourceName: '资源名称',
-                enterResourceName: '请输入资源名称',
-            },
-        }
-    },
+    i18n,
     components: {
         SmallTitle,
         UploadFile,
@@ -224,7 +202,7 @@ export default {
          * 检查 meta 是否合法
          */
         checkMetaValid(valid) {
-            console.log(valid, 'validvalidvalid');
+            // console.log(valid, 'validvalidvalid');
             this.metaValidError = valid;
         },
 
@@ -233,28 +211,28 @@ export default {
          */
         async submit() {
             if (!this.resourceType) {
-                this.$message.error('请选择资源类型');
+                this.$message.error(this.$t('pleaseSelectAResourceType'));
                 throw new Error('请选择资源类型');
             }
 
             if (!this.uploadFileInfo.name) {
-                this.$message.error('请上传文件');
+                this.$message.error(this.$t('pleaseUploadFiles'));
                 throw new Error('请上传文件');
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                this.$message.error('请输入资源名称');
+                this.$message.error(this.$t('pleaseEnterAResourceName'));
                 throw new Error('请输入资源名称');
             }
 
             if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
                 throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
-                this.$message.error('meta JSON格式有误');
+                this.$message.error(`meta JSON${this.$t('formattingErrors')}`);
                 throw new Error('meta JSON格式有误');
             }
 
@@ -274,9 +252,9 @@ export default {
             // if (bucketName) {
             const res = await this.$axios.post('/v1/resources', params);
             if (res.data.errcode !== 0) {
-                return this.$message.error('创建失败');
+                return this.$message.error(this.$t('creationFailed'));
             }
-            this.$message.success('创建成功');
+            this.$message.success(this.$t('createdSuccessfully'));
             return res.data.data.resourceId;
             // }
 
@@ -295,7 +273,7 @@ export default {
          */
         async onSubmitButtonClick(bool) {
             if (bool && this.depList.some(i => !i.isOnline)) {
-                return this.$message.error('依赖中有未上线的发行');
+                return this.$message.error(this.$t('releaseAreNotOnline'));
             }
             const resourceId = await this.submit();
             if (!bool) {
@@ -320,7 +298,7 @@ export default {
             } else {
                 this.$message({
                     type: 'warning',
-                    message: `所选发行的资源类型必须为${this.resourceType}`
+                    message: this.$t('selectedTypeMustBeRelease') + this.resourceType
                 })
             }
             // console.log(releaseInfo, 'releaseInforeleaseInforeleaseInforeleaseInfo');

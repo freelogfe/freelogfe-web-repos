@@ -28,12 +28,12 @@
             <el-button
                 ref="sourceUploadButton"
                 @click="onClickButton"
-            >上传资源
+            >{{$t('uploadResource')}}
             </el-button>
             <span
                 slot="tip"
                 style="font-size: 13px; color: #afafaf; padding-left: 20px; display: inline-block; vertical-align: bottom;"
-            ><small>•</small> 资源最大不超过50M</span>
+            ><small>•</small> {{$t('noMoreThan50m')}}</span>
         </el-upload>
 
         <div v-if="percentage !== null" style="display: flex;">
@@ -82,16 +82,16 @@
                                 style="font-size: 20px; color: #5cd217;"
                                 class="el-icon-circle-check"
                             ></i>
-                            <span style="font-size: 13px; color: #333;">上传成功</span>
+                            <span style="font-size: 13px; color: #333;">{{$t('uploadSuccess')}}</span>
 
                             <el-popover
                                 placement="top"
-                                width="160"
+                                width="200"
                                 v-model="visiblePopover"
                             >
                                 <div style="height: 10px;"></div>
                                 <p style="font-size: 14px; color: #333; font-weight: 600; text-align: center;">
-                                    确定删除资源文件？</p>
+                                    {{$t('sureDelete')}}</p>
                                 <div style="height: 10px;"></div>
                                 <div style="text-align: center; margin: 0;">
                                     <el-button
@@ -99,13 +99,13 @@
                                         size="mini"
                                         type="text"
                                         @click="deleteUploadedFileCancel"
-                                    >取消
+                                    >{{$t('cancel')}}
                                     </el-button>
                                     <el-button
                                         type="danger"
                                         size="mini"
                                         @click="deleteUploadedFile"
-                                    >确定
+                                    >{{$t('confirm')}}
                                     </el-button>
                                 </div>
                                 <!--                                                            @click="clearUploadedResourceInfo"-->
@@ -141,7 +141,7 @@
                     type="text"
                     style="color: #999;"
                     @click="hideUploadErrorDialog"
-                >取消
+                >{{$t('cancel')}}
                 </el-button>
                 &nbsp;&nbsp;&nbsp;
                 <el-button
@@ -149,7 +149,7 @@
                     plain
                     round
                     @click="onClickUpload"
-                >重新选择
+                >{{$t('reselect')}}
                 </el-button>
             </div>
         </el-dialog>

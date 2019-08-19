@@ -84,7 +84,7 @@
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody tilte="依赖">
+        <BlockBody :tilte="$t('dependency')">
             <DependentReleaseList
                 :dataSource="depList"
                 :isLock="false"
@@ -92,11 +92,11 @@
             />
         </BlockBody>
 
-        <BlockBody tilte="资源描述">
+        <BlockBody :tilte="$t('description')">
             <RichEditor
                 style="box-sizing: border-box; margin: 0;"
                 width="100%"
-                placeholder="请输入资源描述"
+                :placeholder="$t('enterDescription')"
                 v-model="description"
             >
             </RichEditor>
@@ -109,13 +109,13 @@
                 style="background-color: #ececec; color: #666666; border: none;"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus" style="font-weight: 600;"></i> 添加meta信息
+            ><i class="el-icon-plus" style="font-weight: 600;"></i> {{$t('addMeta')}}
             </el-button>
         </div>
 
         <BlockBody
             v-if="visibleMetaInput"
-            tilte="meta信息">
+            :tilte="$t('metaInfo')">
             <div style="padding: 20px;">
                 <div style="border: 1px solid #E6E6E6;">
                     <MetaInfoInput
@@ -137,20 +137,20 @@
                     style="color: #999999;"
                     type="text"
                     @click="goBack"
-                >{{isUpdateResource ? '取消': '取消创建'}}
+                >{{isUpdateResource ? $t('cancel'): $t('cancelCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     type="primary"
                     @click="onSubmitButtonClick(false)"
-                >{{isUpdateResource ? '保存': '完成创建'}}
+                >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     @click="onSubmitButtonClick(true)"
-                >{{isUpdateResource ? '保存并发行': '创建并发行'}}
+                >{{isUpdateResource ? $t('saveAndRelease'): $t('createAndRelease')}}
                 </el-button>
             </div>
         </div>
@@ -171,7 +171,7 @@
                     round
                     type="primary"
                     class="create-release-btn"
-                    @click="createRelease()">创建新发行
+                    @click="createRelease()">{{$t('createANewRelease')}}
                 </el-button>
             </div>
         </el-dialog>

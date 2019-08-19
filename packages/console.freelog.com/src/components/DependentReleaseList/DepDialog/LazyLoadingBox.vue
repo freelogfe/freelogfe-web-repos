@@ -5,8 +5,8 @@
             ref="loadingRef"
             style="font-size: 14px; color: #999; text-align: center; line-height: 40px; padding-top: 10px;"
         >
-            <span v-show="!end">加载中......</span>
-            <span v-show="end">加载完毕</span>
+            <span v-show="!end">{{$t('loading')}}</span>
+            <span v-show="end">{{$t('end')}}</span>
         </div>
     </div>
 </template>
@@ -14,6 +14,18 @@
 <script>
     export default {
         name: 'LazyLoadingBox',
+        i18n: { // `i18n` 选项，为组件设置语言环境信息
+            messages: {
+                en: {
+                    loading: 'Loading...',
+                    end: 'End'
+                },
+                'zh-CN': {
+                    loading: '加载中......',
+                    end: '加载完毕'
+                },
+            }
+        },
         props: {
             end: {
                 type: Boolean,
