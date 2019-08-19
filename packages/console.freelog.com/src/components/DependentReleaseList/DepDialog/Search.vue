@@ -6,7 +6,7 @@
         <div style="height: 40px;"></div>
         <el-input
             v-model="input"
-            placeholder="请输入内容"
+            :placeholder="$t('pleaseEnter')"
         ></el-input>
         <div style="height: 30px;"></div>
 
@@ -30,6 +30,16 @@
 
     export default {
         name: "Search",
+        i18n: { // `i18n` 选项，为组件设置语言环境信息
+            messages: {
+                en: {
+                    pleaseEnter: 'Please enter'
+                },
+                'zh-CN': {
+                    pleaseEnter: '请输入内容'
+                },
+            }
+        },
         components: {
             DepItem,
             LazyLoadingBox,
@@ -52,6 +62,7 @@
                 page: 1,
                 data: [],
                 dataEnd: false,
+                searchTimeout: null,
             };
         },
         mounted() {
@@ -97,9 +108,15 @@
 
         watch: {
             input() {
-                this.page = 1;
-                this.data = [];
-                this.search();
+                if (this.searchTimeout) {
+                    clearTimeout(this.searchTimeout);
+                }
+                this.searchTimeout = setTimeout(() => {
+                    this.page = 1;
+                    this.data = [];
+                    this.search();
+                }, 1000);
+
             },
         },
     }
