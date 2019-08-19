@@ -93,7 +93,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="170">
+        <el-table-column label="操作" width="120">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'">
               <el-button class="r-l-item-edit-btn" size="mini">编辑</el-button>
