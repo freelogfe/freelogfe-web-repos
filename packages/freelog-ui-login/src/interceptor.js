@@ -1,4 +1,4 @@
-import { goToLoginPage } from './core'
+import { goToLoginPage } from './login'
 export default function addAxiosInterceptorHandler(options) {
 	const { Vue, axiosInstance, checkIsAuthException } = options
 	const axios = axiosInstance || Vue.axios

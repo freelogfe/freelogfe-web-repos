@@ -72,7 +72,12 @@
             <template v-if="tmpSignedPolicies.length">
               <div class="s-m-w-c-head">
                 <div class="p-auth-info" v-if="selectedRelease.contracts && selectedRelease.contracts.length > 0">
-                  <div><label>授权方：</label><span>{{selectedRelease.releaseName}}</span></div>
+                  <div>
+                    <label>授权方：</label> 
+                    <router-link :to="`/release/detail/${selectedRelease.releaseId}?version=${selectedRelease.latestVersion.version}`">
+                      {{selectedRelease.releaseName}}
+                    </router-link> 
+                  </div>
                   <div><label>被授权方：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>

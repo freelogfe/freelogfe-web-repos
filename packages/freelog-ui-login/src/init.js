@@ -11,7 +11,8 @@ import { LOGIN_PATH, SIGN_PATH, RESET_PASSWORD_PATH } from './constant'
 import addAxiosInterceptorHandler from './interceptor'
 import initWindowListener from './listenWindowVisibility'
 import defualtOptions, { checkOptions } from './options'
-import initCode, { runAuthenticationHandler, checkLoginStatus, goToLoginPage } from './core'
+import initCode, { runAuthenticationHandler, checkLoginStatus } from './core'
+import { goToLoginPage } from './login'
 
 var isNeedCheckLoginStatus = true
 export default function init(options) {

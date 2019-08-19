@@ -1,5 +1,6 @@
+
 import * as eventNames from '../events/names'
-import { gotoLogin, notifyNode, handleInvalidResponse, handleAuthError, reportError } from '../events/handlers/index'
+import { notifyNode, handleInvalidResponse, handleAuthError, reportError } from '../events/handlers/index'
 import EventCenter from '../events/index'
 
 export default function initEvents(FreelogApp) {
@@ -27,7 +28,7 @@ export default function initEvents(FreelogApp) {
   }
 
   FreelogApp
-    .on(eventNames['GO_TO_LOGIN'], gotoLogin)
+    // .on(eventNames['GO_TO_LOGIN'], goToLoginPage)
     .on(eventNames['NOTIFY_NODE'], notifyNode)
     .on(eventNames['HANDLE_INVALID_RESPONSE'], handleInvalidResponse)
     .on(eventNames['HANDLE_INVALID_AUTH'], handleAuthError)

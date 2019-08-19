@@ -12,13 +12,17 @@
             :presentableList="scAuthPresentableList"
     ></contract-signing-dialog>
     <!--<tool-bar ref="toolbar"></tool-bar>-->
+    <transition name="fade">
+      <div class="pb-login-dialog" v-if="loginDialogVisible">
+        <FLogin class="pb-l-d-comp"></FLogin>
+      </div>
+    </transition>
   </div>
-
 </template>
 
 
 <script>
-
+  import { FLogin, FSignup, FRsetPassword } from '@freelog/freelog-ui-login'
   import { noop } from '../core/utils/util'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../core/events/names'
 
@@ -33,11 +37,12 @@
         isLogin: false,
         isShowDialog: false,
         scAuthPresentableList: [],
-        activePresentableIndex: 0
+        activePresentableIndex: 0,
+        loginDialogVisible: false
       }
     },
     components: {
-      // ToolBar
+      FLogin
     },
 
     computed: {
@@ -70,6 +75,7 @@
        */
       initEvents() {
         window.FreelogApp
+          .on(GO_TO_LOGIN, this.showLoginDialog)
           .on(TOGGLE_TOOL_BAR, this.toggleToolBar)
           .on(SHOW_AUTH_DIALOG, this.showAuthDialog)
       },
@@ -109,6 +115,10 @@
             })
         }
 
+      },
+
+      showLoginDialog() {
+        this.loginDialogVisible = true
       },
 
       showAuthDialog({presentableList, activePresentableId, callback = noop}) {
@@ -179,5 +189,10 @@
 
 <style lang="less">
   @import "./pagebuild.less";
-
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
 </style>

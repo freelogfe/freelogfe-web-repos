@@ -90,7 +90,7 @@
         }else if(/^[^\/\\\:\*\?\"\<\>\|\!]+$/.test(value)) {
           callback()
         }else {
-          callback('名称不能包含空格和以下字符：\ / : * ? " < > |!')
+          callback('不能包含空格和以下字符：\ / : * ? " < > |')
         }
       }
       const validateVersion = (rule, value, callback) => {

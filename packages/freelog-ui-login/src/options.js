@@ -33,13 +33,16 @@ export function checkOptions(options) {
 		errMsg.push('缺少必要参数：axiosInstance！')
 	}
 
-	if (isRegisterRouter && router === null) {
-		errMsg.push('缺少必要参数：router；当时isRegisterRouter为true，router为必要参数！')
-	}
+	if(isRegisterRouter) {
+		if (router === null) {
+			errMsg.push('缺少必要参数：router；当时isRegisterRouter为true，router为必要参数！')
+		}
 
-	if (isAuthenticationBeforeRoute && router === null) {
-		errMsg.push('缺少必要参数：router；当时isAuthenticationBeforeRoute为true，router为必要参数！')
+		if (isAuthenticationBeforeRoute && router === null) {
+			errMsg.push('缺少必要参数：router；当时isAuthenticationBeforeRoute为true，router为必要参数！')
+		}
 	}
+	
 
 	if (errMsg.length > 0) {
 		throw new Error(errMsg.join('\n'))

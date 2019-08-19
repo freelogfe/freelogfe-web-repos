@@ -50,8 +50,14 @@
       <el-form-item>
         <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox>
         <span class="user-ops">
-          <router-link :to="resetPwLink" class="user-op">{{$t('login.resetPW')}}</router-link>|
-          <router-link class="user-op" :to="signUpLink">{{$t('login.signup')}}</router-link>
+          <template v-if="$route">
+            <router-link class="user-op" :to="resetPwLink" target="_blank">{{$t('login.resetPW')}}</router-link>|
+            <router-link class="user-op" :to="signUpLink">{{$t('login.signup')}}</router-link>
+          </template>
+          <template v-else>
+            <a class="user-op" :href="resetPwLink" target="_blank">{{$t('login.resetPW')}}</a> |
+            <a class="user-op" :href="signUpLink" target="_blank">{{$t('login.signup')}}</a>
+          </template>
         </span>
       </el-form-item>
       <el-form-item class="login-btns">
@@ -147,11 +153,14 @@ export default {
   methods: {
     resolveLink(path) {
       var link = `${path}`
-      if (this.$route) {
+      if (this.$route != null) {
         const { redirect } = this.$route.query
         if (isSafeUrl(redirect)) {
           link = `${link}?redirect=${redirect}`
         }
+      }else {
+        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
+        link = `${hostName}${link}`
       }
       return link
     },
