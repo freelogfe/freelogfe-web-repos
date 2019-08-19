@@ -8,9 +8,11 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
+import i18n from './i18n';
 
 export default {
     name: 'editor',
+    i18n,
 
     components: {
         SmallTitle,
@@ -218,7 +220,7 @@ export default {
          * 检查 meta 是否合法
          */
         checkMetaValid(valid) {
-            console.log(valid, 'validvalidvalid');
+            // console.log(valid, 'validvalidvalid');
             this.metaValidError = valid;
         },
 
@@ -227,24 +229,24 @@ export default {
          */
         async submit() {
             if (!this.resourceType) {
-                return this.$message.error('请选择资源类型');
+                return this.$message.error(this.$t('pleaseSelectAResourceType'));
             }
 
             if (!this.uploadFileInfo.name) {
-                return this.$message.error('请上传文件');
+                return this.$message.error(this.$t('pleaseUploadFiles'));
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                return this.$message.error('请输入资源名称');
+                return this.$message.error(this.$t('pleaseEnterAResourceName'));
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
             if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                return this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
-                return this.$message.error('meta JSON格式有误');
+                return this.$message.error('meta JSON' + this.$t('formattingErrors'));
             }
 
             const {bucketName, mockResourceId} = this.$route.params;
@@ -267,18 +269,18 @@ export default {
             if (bucketName) {
                 const res = await this.$axios.post('/v1/resources/mocks', params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error('创建失败');
+                    return this.$message.error(this.$t('creationFailed'));
                 }
-                this.$message.success('创建成功');
+                this.$message.success(this.$t('createdSuccessfully'));
                 return this.$router.replace(`/mock/update/${res.data.data.mockResourceId}`);
             }
 
             if (mockResourceId) {
                 const res = await this.$axios.put(`/v1/resources/mocks/${mockResourceId}`, params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error('保存失败');
+                    return this.$message.error(this.$t('saveFailed'));
                 }
-                this.$message.success('保存成功');
+                this.$message.success(this.$t('saveSuccess'));
             }
 
         },

@@ -1,10 +1,12 @@
 import clipboard from '@/components/clipboard/index.vue';
 import PolicyTabs from '@/components/PolicyTabs/index.vue';
+import i18n from './i18n';
 
 let searchInputDelay = null;
 
 export default {
     name: 'manager',
+    i18n,
     components: {
         clipboard,
         PolicyTabs
@@ -29,13 +31,13 @@ export default {
             // 表格数据
             tableData: [],
             // 类型可选项
-            allTypes: ['全部类型', 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+            allTypes: [this.$t('allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
             // 已选类型
-            selectedType: '全部类型',
+            selectedType: this.$t('allType'),
             // 状态可以选项
-            allState: ['全部状态', '已上线', '未上线', '合约异常'],
+            allState: [this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
             // 已选状态
-            selectedState: '全部状态',
+            selectedState: this.$t('allState'),
 
             // 当前页码
             currentPage: 1,
@@ -83,7 +85,7 @@ export default {
                 nodeId: this.$route.params.nodeId,
                 page: this.currentPage,
                 pageSize: this.pageSize,
-                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === '全部类型' ? undefined : this.selectedType),
+                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === this.$t('allType') ? undefined : this.selectedType),
                 isOnline: this.stateTextToValue(this.selectedState),
                 keywords: this.filterSearch || undefined,
                 omitResourceType: this.isPageStyle ? undefined : 'page_build',
@@ -142,13 +144,14 @@ export default {
          * 文字转换为对应数字
          */
         stateTextToValue(text) {
+            //this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')
             //'全部状态', '已上线', '未上线', '合约异常'
             switch (text) {
-                case '全部状态':
+                case this.$t('allState'):
                     return 2;
-                case '已上线':
+                case this.$t('online'):
                     return 1;
-                case '未上线':
+                case this.$t('noOnline'):
                     return 0;
                 default:
                     return 2;
@@ -208,10 +211,10 @@ export default {
             // console.log(item, 'IYOIUHJLKJN');
             if (item.isOnline === 0) {
                 if (!item.policies || item.policies.length === 0) {
-                    return this.$message.error('无法上线：没有可用的授权策略');
+                    return this.$message.error(this.$t('cannotOnline.noPolicy'));
                 }
                 if (!item.isAuth) {
-                    return this.$message.error('无法上线：授权链异常');
+                    return this.$message.error(this.$t('cannotOnline.exceptions'));
                 }
             }
             const res = await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
@@ -226,13 +229,13 @@ export default {
             this.handleTableData();
         },
         upgradePresentable(presentable) {
-            const { presentableId, releaseInfo: { version, releaseId } } = presentable
+            const {presentableId, releaseInfo: {version, releaseId}} = presentable
             this.$services.ReleaseService.get(releaseId)
                 .then(res => res.data)
                 .then(res => {
                     var _version = version
-                    if(res.errcode === 0) {
-                        const { latestVersion } = res.data
+                    if (res.errcode === 0) {
+                        const {latestVersion} = res.data
                         _version = latestVersion.version
                     }
                     return _version
@@ -244,10 +247,10 @@ export default {
                 })
                 .then(res => res.data)
                 .then(res => {
-                    if(res.errcode === 0) {
-                        this.$message({ type: 'success', message: '升级成功！' })
-                    }else {
-                        this.$message({ type: 'error', message: '升级失败！' })
+                    if (res.errcode === 0) {
+                        this.$message({type: 'success', message: '升级成功！'})
+                    } else {
+                        this.$message({type: 'error', message: '升级失败！'})
                     }
                 })
                 .catch(this.$error.showErrorMessage)
@@ -257,8 +260,8 @@ export default {
     watch: {
         isPageStyle() {
             this.filterSearch = '';
-            this.selectedType = '全部类型';
-            this.selectedState = '全部状态';
+            this.selectedType = this.$t('allType');
+            this.selectedState = this.$t('allState');
             this.currentPage = 1;
             this.pageSize = 10;
             this.handleTableData();
