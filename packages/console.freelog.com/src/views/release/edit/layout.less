@@ -2,7 +2,7 @@
 
 .release-editor-layout {
   .r-e-l-main-content {
-    width: @main-content-width-990; margin: auto;
+    width: @main-content-width-1190; margin: auto;
 
     .r-e-l-release, .r-e-l-r-version {
       .el-icon-arrow-up {
@@ -172,4 +172,14 @@
     background:#409EFF; color: #fff; text-align: center; cursor: pointer;
   }
 
+}
+
+
+@media screen and (max-width: 1250px) {
+  .release-editor-layout{
+    .r-e-l-main-content {
+      width: @main-content-width-990;
+    }
+  }
+  
 }

@@ -2,7 +2,7 @@
     <div class="manager-release">
         <div
             style="background-color: #fafbfb; height: 135px; display: flex; align-items: center; justify-content: center;">
-            <div style="width: 990px; display: flex;">
+            <div class="manager-release-header">
                 <img
                     :src="releaseInfo.previewImages || undefined"
                     style="width: 100px; height: 75px; flex-shrink: 0;"
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div style="width: 990px; margin: 0 auto;">
+        <div class="manager-release-body">
 
             <ContentBlock title="节点发行标题">
                 <DisplayOrInput
@@ -124,6 +124,26 @@
     export default ManagerRelease;
 </script>
 
+<style lang="less" scoped>
+    @import '../../../styles/variables.less';
+    .manager-release-header {
+        width: @main-content-width-1190; display: flex;
+    }
+    .manager-release-body {
+        width: @main-content-width-1190; margin: 0 auto;
+    }
+
+    @media screen and (max-width: 1250px) {
+        .manager-release-header {
+            width: @main-content-width-990; display: flex;
+        }
+        .manager-release-body {
+            width: @main-content-width-990; margin: 0 auto;
+        }
+    }
+
+</style>
+
 <style lang="less">
     .manager-release {
         .policy-input-item.edit-mode {
@@ -131,5 +151,4 @@
         }
 
     }
-
 </style>

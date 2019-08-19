@@ -1,5 +1,5 @@
 <template>
-    <div style="margin: 0 auto; width: 1200px;">
+    <div class="mock-resource-editor" style="margin: 0 auto;">
 
         <HeaderAlert/>
 
