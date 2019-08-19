@@ -1,7 +1,9 @@
 import {axios} from "@/lib";
 import querystring from 'querystring';
+import i18n from './i18n';
 
 export default {
+    i18n,
     // name: "index",
     data() {
         return {

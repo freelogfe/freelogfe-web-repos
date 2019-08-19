@@ -12,7 +12,7 @@
             <div class="mock-list__buckets__title">
                 <div class="mock-list__buckets__title__content">
                     <div>
-                        <span>Bucket列表</span>
+                        <span>Bucket{{$t('list')}}</span>
                         <span style="padding-left: 10px;">{{bucketsList && bucketsList.length}}/5</span>
                     </div>
                     <el-button
@@ -49,14 +49,14 @@
                 v-if="bucketsList && bucketsList.length === 0"
             >
                 <div class="mock-list__mocks_empty__content">
-                    <h3>自由创作从Freelog开始</h3>
+                    <h3>{{$t('startingFromFreelog')}}</h3>
                     <div style="height: 60px;"></div>
-                    <p>在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。</p>
+                    <p>{{$t('freelogMockResourcePool')}}</p>
                     <div style="height: 60px;"></div>
                     <el-button
                         @click="showNewBucketDialog"
                         type="primary"
-                    >创建Bucket
+                    >{{$t('createBucket')}}
                     </el-button>
                 </div>
             </div>
@@ -68,10 +68,11 @@
             >
                 <div class="mock-list__mocks_non-empty__header">
                     <div class="mock-list__mocks_non-empty__header__info">
-                        <div>mock资源数量<span>{{activatedBucket.resourceCount}}</span></div>
-                        <div>创建时间<span>{{transformToDateString(activatedBucket.createDate)}}</span></div>
+                        <div>{{$t('mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
+                        <div>{{$t('creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
+                        </div>
                         <div>
-                            已使用<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
+                            {{$t('used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
                             <el-progress
                                 :percentage="Math.floor(activatedBucket.totalFileSize / 2147483648 * 100) / 100"
                                 :show-text="false"
@@ -88,7 +89,7 @@
                         <template v-if="mockTableData && mockTableData.length === 0">
                             <div style="height: 30px;"></div>
                             <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                存储空间一旦删除则无法恢复，确认删除吗？</p>
+                                {{$t('confirmDeletion')}}</p>
                             <div style="height: 25px;"></div>
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <el-button
@@ -96,13 +97,13 @@
                                     type="text"
                                     style="padding-left: 20px; padding-right: 20px; color: #999;"
                                     @click="controlDeleteBucketPopoverShow(false)"
-                                >取消
+                                >{{$t('cancel')}}
                                 </el-button>
                                 <el-button
                                     type="danger"
                                     size="small"
                                     @click="removeABucketByAPI"
-                                >确定
+                                >{{$t('confirm')}}
                                 </el-button>
                             </div>
                             <div style="height: 8px;"></div>
@@ -110,7 +111,7 @@
                         <template v-if="mockTableData && mockTableData.length > 0">
                             <div style="height: 30px;"></div>
                             <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                该存储空间内还有未删除模拟资源</p>
+                                {{$t('doesNotRemove')}}</p>
                             <div style="height: 25px;"></div>
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <el-button
@@ -118,7 +119,7 @@
                                     type="primary"
                                     plain
                                     @click="controlDeleteBucketPopoverShow(false)"
-                                >确定
+                                >{{$t('confirm')}}
                                 </el-button>
                             </div>
                             <div style="height: 8px;"></div>
@@ -131,7 +132,7 @@
                             size="small"
                             icon="el-icon-delete"
                             style="border-radius: 2px;"
-                        >删除Bucket
+                        >{{$t('deleteBucket')}}
                         </el-button>
                     </el-popover>
 
@@ -142,7 +143,8 @@
                         :to="'/mock/create/' + activatedBucket.bucketName"
                         class="nav-link ls-nav-link"
                     >
-                        <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">创建mock资源
+                        <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
+                            {{$t('createMock')}}
                         </el-button>
                     </router-link>
                 </div>
@@ -152,7 +154,7 @@
                         v-if="mockTableData && mockTableData.length === 0"
                         class="mock-list__mocks_non-empty__body_null"
                     >
-                        <p>您还没有创建任何mock资源</p>
+                        <p>{{$t('notCreatedAnyMock')}}</p>
                     </div>
 
                     <div
@@ -182,27 +184,27 @@
                             </el-table-column>
                             <el-table-column
                                 prop="name"
-                                label="名称"
+                                :label="$t('table.name')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="type"
-                                label="类型"
+                                :label="$t('table.type')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="size"
-                                label="大小"
+                                :label="$t('table.size')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="date"
-                                label="创建时间"
+                                :label="$t('table.date')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="action"
-                                label="操作"
+                                :label="$t('table.action')"
                                 width="70"
                             >
                                 <template slot-scope="scope">
@@ -222,28 +224,26 @@
                                                 >
                                                     <a
                                                         style="display: block; width: 100%; height: 100%; color: #333;"
-                                                    >编辑</a>
+                                                    >{{$t('edit')}}</a>
                                                 </router-link>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="downloadAMockByAPI(scope.row.mockResourceId)"
                                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                                >
-                                                    下载资源文件
-                                                </a>
+                                                >{{$t('downloadResourceFile')}}</a>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="buildFormalResourcesConfirm(scope.row)"
                                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                                >生成正式资源</a>
+                                                >{{$t('generateFormalResources')}}</a>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="showDeleteMockDialog(scope.row.mockResourceId)"
                                                     style="color: #EE4040; display: block; width: 100%; height: 100%;"
-                                                >删除</a>
+                                                >{{$t('delete')}}</a>
                                             </el-dropdown-item>
                                         </el-dropdown-menu>
                                     </el-dropdown>
@@ -273,21 +273,21 @@
             <!-- 添加 bucket 弹窗 -->
             <el-dialog
                 :close-on-click-modal="false"
-                title="新建Bucket"
+                :title="$t('newBucket')"
                 :visible.sync="dialogVisible"
-                width="660px"
+                width="700px"
             >
                 <div style="height: 17px"></div>
                 <div class="dialog-body">
-                    <div>
-                        <p>• 请注意存储空间的名称一但创建则不可修改</p>
-                        <p>• Freelog为每个用户提供2GB的免费存储空间</p>
+                    <div style="width: 490px;">
+                        <p>• {{$t('createdMayNotBeModified')}}</p>
+                        <p>• {{$t('provide2GBStorage')}}</p>
                         <div style="height: 21px;"></div>
                         <!--          v-model="input"-->
                         <div style="display: flex;">
                             <el-input
                                 v-model="bucketNameInputValue"
-                                placeholder="Bucket名称"
+                                :placeholder="$t('bucketName')"
                                 style="flex-shrink: 1;"
                             >
                             </el-input>
@@ -302,14 +302,14 @@
                     style="height: 99px; line-height: 25px; padding: 5px 0; color: #f54242;"
                 >
                     <div
-                        style="width: 400px; margin: 0 auto;"
+                        style="width: 490px; margin: 0 auto;"
                         class="animated"
                         :class="{shake: !!bucketNameInputValueError}"
                     >
                         <template v-if="bucketNameInputValueError === true">
-                            <p>只能包括小写字母、数字和短横线（-）；</p>
-                            <p>必须以小写字母或者数字开头和结尾 ；</p>
-                            <p>长度必须在 1–63 字符之间。</p>
+                            <p>{{$t('includeOnly')}}</p>
+                            <p>{{$t('startAndEnd')}}</p>
+                            <p>{{$t('between1To63Characters')}}</p>
                         </template>
                         <template v-if="bucketNameInputValueError !==true && !!bucketNameInputValueError">
                             <p>{{bucketNameInputValueError}}</p>
@@ -326,13 +326,13 @@
                     style="color: #999999"
                     type="text"
                     @click="hideNewBucketDialog"
-                >取消</el-button>
+                >{{$t('cancel')}}</el-button>
                 <el-button
                     type="primary"
-                    style="margin-left: 20px; width: 90px;"
+                    style="margin-left: 20px; width: 90px; padding-left: 0; padding-right: 0;"
                     round
                     @click="createNewBucketByAPI"
-                >确定</el-button>
+                >{{$t('confirm')}}</el-button>
             </span>
             </el-dialog>
         </div>
@@ -345,19 +345,19 @@
                 :close-on-click-modal="false"
             >
                 <div style="height: 10px;"></div>
-                <div style="color: #333; font-size: 14px; text-align: center;">模拟资源一旦删除则无法恢复，确认删除吗？</div>
+                <div style="color: #333; font-size: 14px; text-align: center; word-break: normal;">{{$t('mockOnceDeleted')}}</div>
                 <div style="height: 26px;"></div>
                 <div style="text-align: center;">
                     <el-button
                         type="text"
                         style="padding: 0 20px; color: #999;"
                         @click="hideDeleteMockDialog"
-                    >取 消
+                    >{{$t('cancel')}}
                     </el-button>
                     <el-button
                         type="danger"
                         @click="deleteAMock"
-                    >确 定
+                    >{{$t('confirm')}}
                     </el-button>
                 </div>
             </el-dialog>
