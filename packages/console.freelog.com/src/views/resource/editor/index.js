@@ -20,7 +20,27 @@ export default {
                 resourceFile: 'Resource File',
                 resourceName: 'Resource Name',
                 enterResourceName: 'Please enter a resource name',
-                dependency: 'Dependency'
+                dependency: 'Dependency',
+                description: 'Resource Description',
+                enterDescription: 'Please enter the resource description',
+                addMeta: 'Add meta information',
+                metaInfo: 'Meta Information',
+                cancel: 'Cancel',
+                cancelCreating: 'Cancel creating',
+                save: 'Save',
+                completeCreating: 'Complete creating',
+                saveAndRelease: 'Save and release',
+                createAndRelease: 'Create and release',
+                createANewRelease: 'Create a new release',
+                pleaseSelectAResourceType: 'Please select a resource type',
+                pleaseUploadFiles: 'Please upload files',
+                pleaseEnterAResourceName: 'Please enter a resource name',
+                resourceNamesCannotContain: 'Resource names cannot contain spaces or the following characters:',
+                formattingErrors: 'Formatting errors',
+                creationFailed: 'Creation failed',
+                createdSuccessfully: 'Created successfully',
+                releaseAreNotOnline: 'Have relied on in the not Online release',
+                selectedTypeMustBeRelease: 'The selected resource type must be ',
             },
             'zh-CN': {
                 resourceUpload: '资源上传',
@@ -29,7 +49,27 @@ export default {
                 resourceFile: '资源文件',
                 resourceName: '资源名称',
                 enterResourceName: '请输入资源名称',
-                dependency: '依赖'
+                dependency: '依赖',
+                description: '资源描述',
+                enterDescription: '请输入资源描述',
+                addMeta: '添加meta信息',
+                metaInfo: 'meta信息',
+                cancel: '取消',
+                cancelCreating: '取消创建',
+                save: '保存',
+                completeCreating: '完成创建',
+                saveAndRelease: '保存并发行',
+                createAndRelease: '创建并发行',
+                createANewRelease: '创建新发行',
+                pleaseSelectAResourceType: '请选择资源类型',
+                pleaseUploadFiles: '请上传文件',
+                pleaseEnterAResourceName: '请输入资源名称',
+                resourceNamesCannotContain: '资源的名称不能包含空格和以下字符：',
+                formattingErrors: '格式有误',
+                creationFailed: '创建失败',
+                createdSuccessfully: '创建成功',
+                releaseAreNotOnline: '依赖中有未上线的发行',
+                selectedTypeMustBeRelease: '所选发行的资源类型必须为',
             },
         }
     },
@@ -222,7 +262,7 @@ export default {
          * 检查 meta 是否合法
          */
         checkMetaValid(valid) {
-            console.log(valid, 'validvalidvalid');
+            // console.log(valid, 'validvalidvalid');
             this.metaValidError = valid;
         },
 
@@ -231,28 +271,28 @@ export default {
          */
         async submit() {
             if (!this.resourceType) {
-                this.$message.error('请选择资源类型');
+                this.$message.error(this.$t('pleaseSelectAResourceType'));
                 throw new Error('请选择资源类型');
             }
 
             if (!this.uploadFileInfo.name) {
-                this.$message.error('请上传文件');
+                this.$message.error(this.$t('pleaseUploadFiles'));
                 throw new Error('请上传文件');
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                this.$message.error('请输入资源名称');
+                this.$message.error(this.$t('pleaseEnterAResourceName'));
                 throw new Error('请输入资源名称');
             }
 
             if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                this.$message.error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
                 throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
             }
 
             if (this.metaValidError) {
-                this.$message.error('meta JSON格式有误');
+                this.$message.error(`meta JSON${this.$t('formattingErrors')}`);
                 throw new Error('meta JSON格式有误');
             }
 
@@ -272,9 +312,9 @@ export default {
             // if (bucketName) {
             const res = await this.$axios.post('/v1/resources', params);
             if (res.data.errcode !== 0) {
-                return this.$message.error('创建失败');
+                return this.$message.error(this.$t('creationFailed'));
             }
-            this.$message.success('创建成功');
+            this.$message.success(this.$t('createdSuccessfully'));
             return res.data.data.resourceId;
             // }
 
@@ -293,7 +333,7 @@ export default {
          */
         async onSubmitButtonClick(bool) {
             if (bool && this.depList.some(i => !i.isOnline)) {
-                return this.$message.error('依赖中有未上线的发行');
+                return this.$message.error(this.$t('releaseAreNotOnline'));
             }
             const resourceId = await this.submit();
             if (!bool) {
@@ -318,7 +358,7 @@ export default {
             } else {
                 this.$message({
                     type: 'warning',
-                    message: `所选发行的资源类型必须为${this.resourceType}`
+                    message: this.$t('selectedTypeMustBeRelease') + this.resourceType
                 })
             }
             // console.log(releaseInfo, 'releaseInforeleaseInforeleaseInforeleaseInfo');
