@@ -3,16 +3,16 @@
 
         <HeaderAlert/>
 
-        <BlockBody tilte="资源上传">
+        <BlockBody :tilte="$t('resourceUpload')">
 
-            <SmallTitle>资源类型</SmallTitle>
+            <SmallTitle>{{$t('resourceType')}}</SmallTitle>
 
             <div style="padding-left: 40px;">
                 <el-select
                     style="width: 160px; line-height: 38px;"
                     v-model="resourceType"
                     @change="onChangeResourceType"
-                    placeholder="资源类型"
+                    :placeholder="$t('resourceType')"
                     allow-create
                     filterable
                     :disabled="!!this.uploadFileInfo.name"
@@ -33,11 +33,11 @@
                     :class="{shake: resourceTypeTip}"
                 >
                     <small>•</small>
-                    上传资源之前需要选择资源类型
+                    {{$t('beforeUpload')}}
                 </div>
             </div>
 
-            <SmallTitle>资源文件</SmallTitle>
+            <SmallTitle>{{$t('resourceFile')}}</SmallTitle>
 
             <div style="padding-left: 40px; padding-right: 40px;">
                 <UploadFile
@@ -48,7 +48,7 @@
                 />
             </div>
 
-            <SmallTitle>资源名称</SmallTitle>
+            <SmallTitle>{{$t('resourceName')}}</SmallTitle>
 
             <div style="padding-left: 40px;">
                 <el-input
@@ -56,36 +56,17 @@
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
-                    placeholder="输入资源名称"
+                    :placeholder="$t('enterResourceName')"
                     style="width: 590px;"
                 ></el-input>
 
                 <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/60</span>
             </div>
 
-<!--            <SmallTitle :dot="false">资源封面</SmallTitle>-->
-
-<!--            <div style="padding-left: 40px;">-->
-<!--                <UploadCover-->
-<!--                    :imageUrl="coverURL"-->
-<!--                    :onUploaded="coverUploaded"-->
-<!--                />-->
-
-<!--                <div-->
-<!--                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom; color: #afafaf;"-->
-<!--                >-->
-<!--                    <small style="vertical-align: top;">•&nbsp;</small>-->
-<!--                    <div style="display: inline-block;">-->
-<!--                        只支持JPG/PNG/GIF，GIF文件不能动画化，<br/>大小不超过5M-->
-<!--                        建议尺寸为800X600-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody tilte="依赖">
+        <BlockBody :tilte="$t('dependency')">
             <DependentReleaseList
                 :dataSource="depList"
                 :mockDataSource="depMockList"
@@ -96,7 +77,7 @@
             />
         </BlockBody>
 
-        <BlockBody tilte="资源描述">
+        <BlockBody :tilte="$t('description')">
             <!--            ref="editor"-->
             <!--             v-model="formData.description"-->
             <!--            :config="editorConfig"-->
@@ -104,7 +85,7 @@
             <RichEditor
                 style="box-sizing: border-box; margin: 0;"
                 width="100%"
-                placeholder="请输入资源描述"
+                :placeholder="$t('enterDescription')"
                 v-model="description"
             >
             </RichEditor>
@@ -117,13 +98,13 @@
                 style="background-color: #ececec; color: #666666; border: none;"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus" style="font-weight: 600;"></i> 添加meta信息
+            ><i class="el-icon-plus" style="font-weight: 600;"></i> {{$t('addMeta')}}
             </el-button>
         </div>
 
         <BlockBody
             v-if="visibleMetaInput"
-            tilte="meta信息">
+            :tilte="$t('metaInfo')">
             <!-- meta 输入框 -->
             <!--            v-model="meta"-->
             <!--            @validate="checkMetaValid"-->
@@ -149,14 +130,14 @@
                     style="color: #999999;"
                     type="text"
                     @click="goBack"
-                >{{isUpdateResource ? '取消': '取消创建'}}
+                >{{isUpdateResource ? $t('cancel'): $t('cancelCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     type="primary"
                     @click="submit"
-                >{{isUpdateResource ? '保存': '完成创建'}}
+                >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
                 </el-button>
             </div>
         </div>
