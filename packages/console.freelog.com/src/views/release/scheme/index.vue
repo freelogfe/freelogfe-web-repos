@@ -1,7 +1,7 @@
 <template>
   <div class="scheme-manage-wrapper" v-loading="isLoading">
     <div class="s-m-w-tags">
-      <template v-show="type !== 'edit'">
+      <template v-if="type !== 'create'">
         <span><i class="contract-status status-2"></i>待执行</span>
         <span><i class="contract-status status-4"></i>生效中</span>
         <span><i class="contract-status status-6"></i>合同终止</span>
