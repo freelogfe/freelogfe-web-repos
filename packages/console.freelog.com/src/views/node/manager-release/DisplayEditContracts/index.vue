@@ -11,12 +11,9 @@
             <div style="width: 320px; flex-shrink: 0;">
                 <!-- 发行列表 -->
                 <div v-for="(item, index) in dataSource">
-                    <NavTitle v-if="index === 0">当前发行</NavTitle>
-                    <NavTitle v-if="index === 1">上抛发行</NavTitle>
+                    <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>
+                    <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
 
-                    <!--                    :type=""
-                                            :version=""
-                                            :date=""-->
                     <NavItem
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
@@ -40,14 +37,14 @@
                         style="color: #333; font-weight: 600; font-size: 14px; background-color: #fafbfb; padding: 15px; display: flex;"
                     >
                         <div class="text-overflow-ellipsis" style="width: 50%;">
-                            授权方：{{dataSource[activatedIndex].releaseName}}
+                            {{$t('authorizer')}}{{dataSource[activatedIndex].releaseName}}
                         </div>
                         <div class="text-overflow-ellipsis" style="width: 50%; padding-left: 10px;">
-                            被授权方：{{nodeInfo.nodeName}}
+                            {{$t('authorized')}}{{nodeInfo.nodeName}}
                         </div>
                     </div>
 
-                    <ContractsContainer title="已签约">
+                    <ContractsContainer :title="$t('contracted')">
                         <!-- 已签约列表 -->
                         <div
                             style="position: relative;"
@@ -68,7 +65,7 @@
                     </ContractsContainer>
 
                     <ContractsContainer
-                        title="以下策略可供签约"
+                        :title="$t('availableSigning')"
                         v-if="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0"
                     >
                         <!-- 可签约列表 -->
