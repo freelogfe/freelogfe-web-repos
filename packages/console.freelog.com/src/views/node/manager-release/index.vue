@@ -17,9 +17,9 @@
                             style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>
                     </div>
                     <div style="font-size: 14px; color: #999;">
-                        <span>类型 {{releaseInfo.resourceType}}</span>
+                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
                         <span style="padding: 0 5px;">|</span>
-                        <span>签约时间 {{releaseInfo.createDate}}</span>
+                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
                     </div>
                 </div>
             </div>
@@ -27,20 +27,20 @@
 
         <div class="manager-release-body">
 
-            <ContentBlock title="节点发行标题">
+            <ContentBlock :title="$t('nodeReleaseTitle')">
                 <DisplayOrInput
                     v-model="presentableName"
                 />
             </ContentBlock>
 
-            <ContentBlock title="标签">
+            <ContentBlock :title="$t('tags')">
                 <FreelogTags
-                    actionText="新标签"
+                    :actionText="$t('newTag')"
                     v-model="userDefinedTags"
                 ></FreelogTags>
             </ContentBlock>
 
-            <ContentBlock title="策略">
+            <ContentBlock :title="$t('policies')">
 
                 <template v-slot:right>
                     <template v-if="isShowEditPolicy">
@@ -48,7 +48,7 @@
                             size="mini"
                             round
                             @click="switchShowEditPolicy(false)"
-                        >取消
+                        >{{$t('cancel')}}
                         </el-button>
                         <el-button
                             size="mini"
@@ -56,10 +56,11 @@
                             round
                             style="margin-left: 10px;"
                             @click="saveANewPolicy"
-                        >保存
+                        >{{$t('save')}}
                         </el-button>
                     </template>
-                    <div v-if="!isShowEditPolicy && policies.length > 0" style="height: 28px; display: flex; align-items: center;">
+                    <div v-if="!isShowEditPolicy && policies.length > 0"
+                         style="height: 28px; display: flex; align-items: center;">
                         <a
                             style="width: 26px; height: 20px; align-items: center; justify-content: center; background-color: #409eff; border-radius: 10px; text-align: center;"
                             @click="switchShowEditPolicy(true)"
@@ -71,7 +72,7 @@
                         v-if="!isShowEditPolicy && policies.length === 0"
                         placement="top"
                         trigger="hover"
-                        content="无策略的发行不会出现在市场中"
+                        :content="$t('noPolicyNotAppear')"
                     >
                         <div style="height: 28px; display: flex; align-items: center;" slot="reference">
                             <i
@@ -90,7 +91,7 @@
                             @click="switchShowEditPolicy(true)"
                             size="small"
                             type="primary"
-                        >添加策略
+                        >$t('addPolicy')
                         </el-button>
                     </div>
                     <div v-else>
@@ -110,7 +111,7 @@
                 ></PolicyEditor>
             </ContentBlock>
 
-            <ContentBlock title="授权管理">
+            <ContentBlock :title="$t('authorization')">
                 <DisplayEditContracts/>
             </ContentBlock>
         </div>
@@ -126,19 +127,26 @@
 
 <style lang="less" scoped>
     @import '../../../styles/variables.less';
+
     .manager-release-header {
-        width: @main-content-width-1190; display: flex;
+        width: @main-content-width-1190;
+        display: flex;
     }
+
     .manager-release-body {
-        width: @main-content-width-1190; margin: 0 auto;
+        width: @main-content-width-1190;
+        margin: 0 auto;
     }
 
     @media screen and (max-width: 1250px) {
         .manager-release-header {
-            width: @main-content-width-990; display: flex;
+            width: @main-content-width-990;
+            display: flex;
         }
+
         .manager-release-body {
-            width: @main-content-width-990; margin: 0 auto;
+            width: @main-content-width-990;
+            margin: 0 auto;
         }
     }
 
