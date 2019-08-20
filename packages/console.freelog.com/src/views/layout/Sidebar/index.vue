@@ -85,7 +85,7 @@
       <li class="ls-item">
         <el-tooltip
                 effect="dark"
-                content="mock资源"
+                :content="$t('routes.mockResource')"
                 placement="right"
                 :disabled="!isMini">
           <router-link

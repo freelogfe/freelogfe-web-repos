@@ -199,10 +199,17 @@ export default {
 
   routes: {
     accountSetting: 'Account Setting',
+
+      mockResource: 'Mock Resource',
+
     nodes: 'Nodes',
     releaseMarket: 'Release Market',
     presentableDetail: 'Presentable Detail',
     nodesSystem: 'Nodes System',
+
+      nodeManager: 'Node Manager',
+      nodeReleaseManagement: 'Node release management',
+
     createNode: 'Create Node',
     nodeList: 'Nodes',
     policyList: 'Policy Templates',
@@ -223,7 +230,11 @@ export default {
     releaseDetail: 'Release details',
     releaseSystem: '',
     releaseManager: 'Release management',
-    releaseAdd: 'Add the release'
+    releaseAdd: 'Add the release',
+
+      mockResourcePool: 'Mock resource pool',
+      createMockResource: 'Create mock resource',
+      manageMockResource: 'Manage mock resource',
   },
 
   axios: {
