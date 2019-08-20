@@ -34,7 +34,7 @@
           </div>
           <div class="r-e-w-v-scheme" v-if="depReleasesList.length > 0">
             <el-tabs v-model="vTabActiveName" type="card" :closable="false" @tab-click="exchangeVTab">
-              <el-tab-pane label="方案" name="scheme">
+              <el-tab-pane label="授权管理" name="scheme">
                 <scheme-manage
                         type="edit"
                         :release="release"
@@ -48,7 +48,7 @@
                         :contracts.sync="contracts"
                 ></scheme-manage>
               </el-tab-pane>
-              <el-tab-pane label="合约" name="contract">
+              <el-tab-pane label="授权链" name="contract">
                 <release-editor-contract
                         :release="release"
                         :depReleasesDetailList="depReleasesDetailList"

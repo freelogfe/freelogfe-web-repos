@@ -13,7 +13,12 @@
       </div>
       <div class="r-policies">
         <template v-if="!release.isUpcasted">
-          <div class="r-p-item" v-for="(p, index) in selectedPolicies" :key="'s-policy-'+index">
+          <div 
+            class="r-p-item" 
+            :class="{'disabled': p.contractId && p.isEnbledContract === false}" 
+            v-for="(p, index) in selectedPolicies" 
+            :key="'s-policy-'+index"
+          >
             {{p.policyName}} 
             <span :class="['contract-status', 'status-' + contractsMap[p.contractId].status]" v-if="contractsMap && contractsMap[p.contractId]"></span>
           </div>
@@ -40,6 +45,7 @@
     },
     updated() {
       this.selectedPolicies = this.release.selectedPolicies 
+      console.log('selectedPolicies ---', this.selectedPolicies)
     },
     methods: {
       exchangeSelectedRelease(item) {
@@ -67,7 +73,7 @@
       font-size: 16px; color: #333; font-weight: 500;
 
       i {
-        position: absolute; left: 0; top: 50%; z-index: 1;
+        position: absolute; left: 0; top: 54%; z-index: 1;
         transform: translateY(-50%); color: transparent;
       }
 
@@ -111,6 +117,7 @@
           &.status-4 { background-color: #39C500; }
           &.status-6 { background-color: #E35A5F; }
         }
+        &.disabled { opacity: .5; }
       }
     }
 
