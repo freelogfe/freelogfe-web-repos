@@ -7,10 +7,14 @@
             <div style="height: 14px;"></div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center;">
-                    <span class="text-overflow-ellipsis" style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{name}}</span>
-                    <span v-if="status === 2" style="color: #fbb726; padding: 0 9px; line-height: 18px; border: 1px solid #fbb726; border-radius: 10px; font-size: 14px;">待执行</span>
-                    <span v-if="status === 4" style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">生效中</span>
-                    <span v-if="status === 6" style="color: #e35a5f; padding: 0 9px; line-height: 18px; border: 1px solid #e35a5f; border-radius: 10px; font-size: 14px;">合约终止</span>
+                    <span class="text-overflow-ellipsis"
+                          style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{name}}</span>
+                    <span v-if="status === 2"
+                          style="color: #fbb726; padding: 0 9px; line-height: 18px; border: 1px solid #fbb726; border-radius: 10px; font-size: 14px;">{{$t('pending')}}</span>
+                    <span v-if="status === 4"
+                          style="color: #39c500; padding: 0 9px; line-height: 18px; border: 1px solid #39c500; border-radius: 10px; font-size: 14px;">{{$t('active')}}</span>
+                    <span v-if="status === 6"
+                          style="color: #e35a5f; padding: 0 9px; line-height: 18px; border: 1px solid #e35a5f; border-radius: 10px; font-size: 14px;">{{$t('termination')}}</span>
                 </div>
                 <el-dropdown v-if="unique">
                     <el-button size="mini">
@@ -22,18 +26,18 @@
                 </el-dropdown>
                 <el-dropdown v-else @command="$emit('command')">
                     <el-button size="mini">
-                        已{{disabled ? '搁置' : '应用'}}<i class="el-icon-arrow-down el-icon--right"></i>
+                        {{disabled ? $t('paused') : $t('used')}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>{{disabled ? '应用' : '搁置'}}</el-dropdown-item>
+                        <el-dropdown-item>{{disabled ? $t('use') : $t('pause')}}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
             <div style="height: 15px"></div>
             <div
                 style="font-size: 12px; color: #999;">
-                <span style="padding-right: 50px;">合约ID：{{contractId}}</span>
-                <span>签约时间：{{data}}</span>
+                <span style="padding-right: 50px;">{{$t('contract')}}ID：{{contractId}}</span>
+                <span>{{$t('signingTime')}}{{data}}</span>
             </div>
             <div style="height: 14px;"></div>
         </div>
@@ -55,6 +59,32 @@
 
     export default {
         name: "SignedContract",
+        i18n: {
+            messages: {
+                en: {
+                    pending: 'Pending',
+                    active: 'Active',
+                    termination: 'Termination',
+                    paused: 'Paused',
+                    used: 'Used',
+                    use: 'Use',
+                    pause: 'Pause',
+                    contract: 'Contract ',
+                    signingTime: 'Signing Time: ',
+                },
+                'zh-CN': {
+                    pending: '待执行',
+                    active: '生效中',
+                    termination: '合约终止',
+                    paused: '已搁置',
+                    used: '已应用',
+                    use: '应用',
+                    pause: '搁置',
+                    contract: '合约',
+                    signingTime: '签约时间：'
+                },
+            }
+        },
         props: {
             name: {
                 type: String,
