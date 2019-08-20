@@ -2,13 +2,15 @@
     <div style="border: 1px solid #ccc; border-radius: 4px;">
         <div
             style="display: flex; align-items: center; justify-content: space-between; height: 45px; background-color: #fafbfb; padding: 0 15px; border-bottom: 1px solid #ccc; border-radius: 4px;">
-            <span class="text-overflow-ellipsis" style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{policyName}}</span>
+            <span class="text-overflow-ellipsis"
+                  style="font-size: 16px; color: #333; font-weight: 600; padding-right: 20px; max-width: 350px;">{{policyName}}</span>
             <el-button
                 type="primary"
                 size="mini"
                 round
                 @click="$emit('add')"
-            >获取授权</el-button>
+            >{{$t('license')}}
+            </el-button>
         </div>
         <div style="height: 5px;"></div>
         <div style="">
@@ -20,6 +22,16 @@
 <script>
     export default {
         name: "UnsignedContract",
+        i18n: {
+            messages: {
+                en: {
+                    license: 'License',
+                },
+                'zh-CN': {
+                    license: '获取授权',
+                }
+            },
+        },
         props: {
             policyName: {
                 type: String,
