@@ -77,6 +77,9 @@ export default {
       this.getContractsMap(this.contracts)
       this.getTargetReleases()
     },
+    isSelectedReleaesUpcast() {
+      this.upcastHandler()
+    }
   },
   methods: {
     initData() {
@@ -371,7 +374,7 @@ export default {
     },
     // 上抛
     upcastHandler() {
-      this.selectedRelease.isUpcasted = !this.selectedRelease.isUpcasted
+      this.selectedRelease.isUpcasted = this.isSelectedReleaesUpcast
       this.resetData()
       if(this.selectedRelease.isUpcasted) {
         this.toggleBaseUpcastReleases(this.selectedRelease, 'add')

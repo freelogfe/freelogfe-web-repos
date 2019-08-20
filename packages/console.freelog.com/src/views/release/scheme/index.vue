@@ -1,8 +1,8 @@
 <template>
   <div class="scheme-manage-wrapper" v-loading="isLoading">
     <div class="s-m-w-tags">
-      <template v-show="type !== 'edit'">
-        <span><i class="contract-status status-2"></i>执行中</span>
+      <template v-if="type !== 'create'">
+        <span><i class="contract-status status-2"></i>待执行</span>
         <span><i class="contract-status status-4"></i>生效中</span>
         <span><i class="contract-status status-6"></i>合同终止</span>
       </template>
@@ -34,19 +34,42 @@
       <div class="s-m-w-c-right">
         <template v-if="type === 'create'">
           <div class="s-m-w-c-upcast-box">
-            <div class="s-m-w-c-ub-head">上抛 <i class="el-icon-info"></i></div>
-            <div class="s-m-w-c-ub-body">
+            <div class="s-m-w-c-ub-head">
+              <el-radio v-model="isSelectedReleaesUpcast" :label="true">上抛</el-radio>  
+              <el-tooltip placement="right" effect="light">
+                <i class="el-icon-info" :class="[{ 'selected': isSelectedReleaesUpcast }]"></i>
+                <div class="s-m-w-c-ubh-tip" slot="content">
+                  如果因为某些原因无法和依赖发行的授权方达成合约，您可以选择将依赖上抛给最终整合方解决。
+                  <ul>
+                    <li>请注意依赖发行一旦被上抛就不能再签约了。</li>
+                    <li>基础上抛是在发行的第一个版本的授权方案中被上抛的依赖。</li>
+                    <li>基础上抛贯穿发行的所有版本，发行中新版本上抛的依赖都不能超过基础上抛的范围。</li>
+                  </ul>
+                </div>
+              </el-tooltip>
+            </div>
+            <!-- <div class="s-m-w-c-ub-body">
               <div
                       :class="['s-m-w-c-upcast-btn', { 'selected': isSelectedReleaesUpcast }]"
                       @click="upcastHandler">
                 <span class="u-check-box" v-if="!isSelectedReleaesUpcast"></span>
                 <i class="el-icon-circle-check" v-else></i>上抛
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="s-m-w-c-p-wrapper" :class="[{ 'disabled': isSelectedReleaesUpcast }]">
             <div class="s-m-w-c-head">
-               签约 <i class="el-icon-info"></i>
+               <el-radio v-model="isSelectedReleaesUpcast" :label="false">签约</el-radio>  
+               <el-tooltip placement="right" effect="light">
+                <div class="s-m-w-c-ubh-tip" slot="content">
+                  作为被授权方，如果您满足且接受授权方的授权策略，则可以选择和授权方签约。授权双方之间存在一个按照未来发生的事件改变资源授权状态的机制，称之为合约。
+                  <ul>
+                    <li>合约的复用：授权方和被授权方的合约在同一个授权方（节点或发行）范围内可以复用。</li>
+                    <li>合约的启用和停用：如果您和授权方的多个授权策略签订了多个合约，则在管理合约时，至少要有一个合约是启用状态。您可以选择启用或者停用其中某一个或某几个合约，在授权链中，系统仅会验证启用合约的授权状态。</li>
+                  </ul>
+                </div>
+                <i class="el-icon-info"></i>
+              </el-tooltip>
             </div>
             <div
                     class="s-m-w-c-policy"
@@ -84,7 +107,10 @@
               <h4 class="s-m-w-c-p-title">已签约</h4> 
               <div
                 class="s-m-w-c-policy"
-                :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"
+                :class="{ 
+                  'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]),
+                  'disabled': policy.isEnbledContract === false
+                }"
                 v-for="(policy, index) in tmpSignedPolicies"
                 :key="'p-signed-' + index"
               >
@@ -119,7 +145,7 @@
               </div>
             </template>
             <template v-if="tmpNoSignedPolicies.length">
-              <h4 class="s-m-w-c-p-title">以下策略可进行新的签约</h4>
+              <h4 class="s-m-w-c-p-title"> {{isSelectedReleaesUpcast ? '该发行已上抛' : '以下策略可进行新的签约'}} </h4>
               <div
                       class="s-m-w-c-policy"
                       :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"
@@ -155,6 +181,21 @@
   import SchemeManage from './scheme.js'
   export default SchemeManage
 </script>
+
+<style lang="less">
+  .s-m-w-c-ubh-tip{
+    width: 420px; padding: 10px; 
+
+    ul {
+      margin-top: 15px; list-style-type: disc;
+      li { margin-left: 15px; line-height: 20px; color: #333; }
+    }
+  } 
+  // .el-tooltip__popper.is-light {
+  //   border-color: #fff;
+  //   box-shadow: 1px 1px 3px rgba(0,0,0,.3);
+  // }
+</style>
 
 <style lang="less" type="text/less" scoped>
   @import './index.less';
