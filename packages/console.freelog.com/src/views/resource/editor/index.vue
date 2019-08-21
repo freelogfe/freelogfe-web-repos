@@ -185,6 +185,7 @@
             <!--            :historicalReleases="releasesList"-->
             <release-search
                 :tabLayout="['my-release']"
+                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"
                 @add="createRelease"
             ></release-search>
             <div slot="footer">

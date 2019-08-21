@@ -100,6 +100,7 @@ export default {
             }
 
             this.releasedList = res.data.data.map(i => ({
+                id: i.releaseId,
                 name: i.releaseName,
                 version: i.resourceVersion.version,
                 date: i.resourceVersion.createDate.split('T')[0],
