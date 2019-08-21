@@ -105,7 +105,7 @@ export default {
                 version: i.resourceVersion.version,
                 date: i.resourceVersion.createDate.split('T')[0],
             }));
-            console.log(this.releasedList, 'this.releasedListthis.releasedList');
+            // console.log(this.releasedList, 'this.releasedListthis.releasedList');
         },
         /**
          * 当为更新 mock 资源时，初始化数据
