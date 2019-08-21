@@ -31,7 +31,7 @@ export default {
         return {
             isUpdateResource: !!this.$route.params.mockResourceId,
             // 资源类型选项
-            resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'revealSlide', 'license', 'video', 'catalog'],
+            resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'],
             // 资源类型值
             resourceType: '',
             // 资源类型，是否提醒
