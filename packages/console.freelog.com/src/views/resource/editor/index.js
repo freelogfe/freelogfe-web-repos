@@ -161,9 +161,9 @@ export default {
          * 上传文件信息发生变化
          */
         onFileInfoChange(fileInfo) {
-            console.log(fileInfo, 'fileInfofileInfo');
+            // console.log(fileInfo, 'fileInfofileInfo');
             this.uploadFileInfo = {...fileInfo};
-            console.log(this.resourceName, 'this.resourceName');
+            // console.log(this.resourceName, 'this.resourceName');
             if (!this.resourceName) {
                 if (fileInfo.name.includes('.')) {
                     const arr = fileInfo.name.split('.');
