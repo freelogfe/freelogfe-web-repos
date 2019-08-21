@@ -28,6 +28,7 @@ export default {
             createdSuccessfully: 'Created successfully',
             releaseAreNotOnline: 'Have relied on in the not Online release',
             selectedTypeMustBeRelease: 'The selected resource type must be ',
+            cannotChangedDep: 'After the release of resources cannot be changed depend on',
         },
         'zh-CN': {
             resourceUpload: '资源上传',
@@ -57,6 +58,7 @@ export default {
             createdSuccessfully: '创建成功',
             releaseAreNotOnline: '依赖中有未上线的发行',
             selectedTypeMustBeRelease: '所选发行的资源类型必须为',
+            cannotChangedDep: '资源发行后不可更改依赖',
         },
     }
 };

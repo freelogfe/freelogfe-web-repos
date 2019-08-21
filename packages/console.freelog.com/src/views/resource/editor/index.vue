@@ -102,7 +102,7 @@
         <BlockBody :tilte="$t('dependency')">
             <template v-slot:title2 v-if="releasedList.length > 0">
                 <div style="color: #999; font-size: 14px; font-weight: normal;">
-                    <i class="el-icon-info"></i> 资源发行后不可更改依赖
+                    <i class="el-icon-info"></i> {{$t('cannotChangedDep')}}
                 </div>
             </template>
 <!--            :isLock="releasedList.length > 0"-->

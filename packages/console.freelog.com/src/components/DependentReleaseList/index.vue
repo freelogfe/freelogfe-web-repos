@@ -16,7 +16,7 @@
 
             <!-- 按钮与发行间距 -->
             <div v-if="dataSource.length > 0 && !isLock" style="height: 10px;"></div>
-            <div v-if="dataSource.length === 0 && isLock" style="font-size: 14px;">此资源没有依赖...</div>
+            <div v-if="dataSource.length === 0 && isLock" style="font-size: 14px;">{{$t('notRely')}}...</div>
 
             <!-- 发行列表 -->
             <Item

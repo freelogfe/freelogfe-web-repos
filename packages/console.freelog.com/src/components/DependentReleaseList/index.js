@@ -8,10 +8,12 @@ export default {
             en: {
                 addDependencies: 'Add Dependencies',
                 mockDependency: 'Mock Dependency',
+                notRely: 'Not Rely on this resource',
             },
             'zh-CN': {
                 addDependencies: '添加依赖',
                 mockDependency: 'mock 依赖',
+                notRely: '此资源没有依赖',
             },
         }
     },
