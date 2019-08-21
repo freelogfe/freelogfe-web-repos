@@ -240,8 +240,8 @@ export default {
         releaseAdd: '添加发行',
 
         mockResourcePool: '模拟资源池',
-        createMockResources: '创建模拟资源',
-        manageMockResources: '模拟资源管理',
+        createMockResource: '创建模拟资源',
+        manageMockResource: '模拟资源管理',
     },
 
     axios: {
