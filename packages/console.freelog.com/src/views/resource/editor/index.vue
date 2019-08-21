@@ -1,12 +1,12 @@
 <template>
     <div class="resource-editor" style="margin: 0 auto;">
 
-        <BlockBody v-if="isUpdateResource" :tilte="'历史发行'">
+        <BlockBody v-if="isUpdateResource" :tilte="$t('historyRelease')">
             <div style="padding: 10px 0;">
                 <div
                     v-if="releasedList.length === 0"
                     style="padding: 10px 20px;"
-                >暂无发行历史...</div>
+                >{{$t('noReleaseHistory')}}...</div>
                 <ReleasedItem
                     v-for="item in releasedList"
                     :name="item.name"
