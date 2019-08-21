@@ -8,9 +8,9 @@
             @click="onRemoveBtnClick"
         >
             <i
-                :class="iconClass"
                 style="font-size: 18px;"
                 :style="{color: !this.isLock ? '#f02323': '#666'}"
+                :class="this.isLock ? 'el-icon-goods': 'el-icon-remove'"
             ></i>
         </a>
         <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{this.name}}</span>
@@ -46,10 +46,10 @@
         },
         data() {
             return {
-                iconClass: {
-                    'el-icon-goods': this.isLock,
-                    'el-icon-remove': !this.isLock,
-                },
+                // iconClass: {
+                //     'el-icon-goods': this.isLock,
+                //     'el-icon-remove': !this.isLock,
+                // },
             };
         },
         methods: {
