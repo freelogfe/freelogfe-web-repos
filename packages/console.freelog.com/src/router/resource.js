@@ -101,6 +101,7 @@ export default {
         },
         {
             path: 'detail/:resourceId',
+            redirect: 'editor/:resourceId',
             hidden: true,
             meta: {
                 requiresAuth: true,
