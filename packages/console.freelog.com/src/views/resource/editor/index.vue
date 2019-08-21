@@ -108,7 +108,7 @@
 <!--            :isLock="releasedList.length > 0"-->
             <DependentReleaseList
                 :dataSource="depList"
-                :isLock="true"
+                :isLock="releasedList.length > 0"
                 @onChange="onChangeDeps"
             />
         </BlockBody>
