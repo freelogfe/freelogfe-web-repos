@@ -2,37 +2,41 @@
     <div style="background-color: #fff;">
         <div
             v-if="!isLock"
-            style="padding-left: 20px; height: 60px; align-items: center; display: flex;"
+            style="padding: 15px 20px;"
         >
-            <el-button
-                size="small"
-                icon="el-icon-plus"
-                circle
-                @click="dialogVisible = true"
-            ></el-button>
-            <span style="padding-left: 10px; font-size: 14px; color: #333;">{{$t('addDependencies')}}</span>
-        </div>
-        <div v-else style="height: 10px;"></div>
+            <div style="align-items: center; display: flex;">
+                <el-button
+                    size="small"
+                    icon="el-icon-plus"
+                    circle
+                    @click="dialogVisible = true"
+                ></el-button>
+                <span style="padding-left: 10px; font-size: 14px; color: #333;">{{$t('addDependencies')}}</span>
+            </div>
 
-        <Item
-            v-for="(i, j) in dataSource"
-            :isLock="isLock"
-            :name="i.name"
-            :isOnline="i.isOnline"
-            @onRemove="onRemove(j)"
-        />
-        <div v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
-             style="height: 10px;"></div>
-        <div
-            v-show="mockDataSource && mockDataSource.length > 0"
-            style="font-size: 13px; color: #888; padding-left: 25px;"
-        >{{$t('mockDependency')}}
+            <div v-if="dataSource.length > 0" style="height: 10px;"></div>
+            <Item
+                v-for="(i, j) in dataSource"
+                :isLock="isLock"
+                :name="i.name"
+                :isOnline="i.isOnline"
+                @onRemove="onRemove(j)"
+            />
+            <div v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
+                 style="height: 10px;"></div>
+            <div
+                v-show="mockDataSource && mockDataSource.length > 0"
+                style="font-size: 13px; color: #888; padding-left: 25px;"
+            >{{$t('mockDependency')}}
+            </div>
+            <Item
+                v-for="(i, j) in mockDataSource"
+                :name="i.name"
+                @onRemove="onRemoveMock(j)"
+            />
         </div>
-        <Item
-            v-for="(i, j) in mockDataSource"
-            :name="i.name"
-            @onRemove="onRemoveMock(j)"
-        />
+
+
         <!--        <Item :isLock="false" :name="'策略2'" :isOnline="true" @onRemove="onRemove(1)"/>-->
         <!--        <Item :isLock="false" :name="'策略3'" :isOnline="false" @onRemove="onRemove(2)"/>-->
         <DepDialog

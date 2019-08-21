@@ -1,6 +1,6 @@
 <template>
     <div
-        style="height: 40px; display: flex; align-items: center; padding-left: 25px;"
+        style="height: 40px; display: flex; align-items: center; padding-left: 5px;"
     >
         <a
             style="height: 20px; width: 20px; align-items: center; justify-content: center; display: flex;"
