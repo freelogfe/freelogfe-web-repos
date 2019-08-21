@@ -9,11 +9,13 @@ import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 import i18n from './i18n';
+import ReleasedItem from "./ReleasedItem";
 
 export default {
     name: 'editor',
     i18n,
     components: {
+        ReleasedItem,
         SmallTitle,
         UploadFile,
         // UploadCover,
@@ -28,6 +30,8 @@ export default {
     data() {
         return {
             isUpdateResource: !!this.$route.params.resourceId,
+            // 历史发行
+            releasedList: [],
             // 资源类型选项
             resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'],
             // 资源类型值
@@ -73,11 +77,35 @@ export default {
     mounted() {
         // console.log(this.$route, 'this.$routethis.$routethis.$route');
         this.initDataByResourceId();
+        this.initReleasedList();
         // console.log(this, 'TTTTTTT');
         // console.log(this.$t("message.hello"), 'MMMMMMM');
     },
 
     methods: {
+        /**
+         * 初始化已发行的列表
+         * @return {Promise<void>}
+         */
+        async initReleasedList() {
+            const {resourceId} = this.$route.params;
+            if (!resourceId) {
+                return;
+            }
+            ///v1/resources/8b0e74c58a82d6b38cb0f29d15a027eecd40268f/releases
+            const res = await this.$axios.get(`/v1/resources/${resourceId}/releases`);
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                return this.$message.error(res.data.msg);
+            }
+
+            this.releasedList = res.data.data.map(i => ({
+                name: i.releaseName,
+                version: i.resourceVersion.version,
+                date: i.resourceVersion.createDate.split('T')[0],
+            }));
+            console.log(this.releasedList, 'this.releasedListthis.releasedList');
+        },
         /**
          * 当为更新 mock 资源时，初始化数据
          * @return {Promise<void>}
@@ -88,29 +116,35 @@ export default {
                 return;
             }
             const res = await this.$axios.get(`/v1/resources/${resourceId}`);
-            return;
+            // return;
             // console.log(res.data.data, 'res.data.datares.data.data');
             const result = res.data.data;
-            this.resourceType = result.resourceType;
-            this.uploadFileInfo = {
-                fileID: '',
-                sha1: '',
-                name: result.systemMeta.filename,
-                size: result.systemMeta.fileSize,
-            };
-            this.resourceName = result.name;
+            // this.resourceType = result.resourceType;
+            // this.uploadFileInfo = {
+            //     fileID: '',
+            //     sha1: '',
+            //     name: result.systemMeta.filename,
+            //     size: result.systemMeta.fileSize,
+            // };
+            this.resourceName = result.aliasName;
             // this.coverURL = result.previewImages[0] || '';
-            this.depList = [
-                ...result.systemMeta.dependencyInfo.releases.map(i => ({
-                    id: i.releaseId,
-                    name: i.releaseName,
-                    version: i.versionRange,
-                })),
-                ...result.systemMeta.dependencyInfo.mocks.map(i => ({
-                    id: i.mockResourceId,
-                    name: i.mockResourceName,
-                })),
-            ];
+            // this.depList = [
+            //     ...result.systemMeta.dependencyInfo.releases.map(i => ({
+            //         id: i.releaseId,
+            //         name: i.releaseName,
+            //         version: i.versionRange,
+            //     })),
+            //     ...result.systemMeta.dependencyInfo.mocks.map(i => ({
+            //         id: i.mockResourceId,
+            //         name: i.mockResourceName,
+            //     })),
+            // ];
+            this.depList = result.systemMeta.dependencies.map(i => ({
+                id: i.releaseId,
+                name: i.releaseName,
+                version: i.versionRange,
+            }));
+            // console.log(this.depList, 'this.depList');
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
         },
@@ -210,14 +244,17 @@ export default {
          * 提交数据
          */
         async submit() {
-            if (!this.resourceType) {
-                this.$message.error(this.$t('pleaseSelectAResourceType'));
-                throw new Error('请选择资源类型');
-            }
 
-            if (!this.uploadFileInfo.name) {
-                this.$message.error(this.$t('pleaseUploadFiles'));
-                throw new Error('请上传文件');
+            if (!this.isUpdateResource) {
+                if (!this.resourceType) {
+                    this.$message.error(this.$t('pleaseSelectAResourceType'));
+                    throw new Error('请选择资源类型');
+                }
+
+                if (!this.uploadFileInfo.name) {
+                    this.$message.error(this.$t('pleaseUploadFiles'));
+                    throw new Error('请上传文件');
+                }
             }
 
             this.resourceName = this.resourceName.trim();
@@ -241,22 +278,33 @@ export default {
                 uploadFileId: this.uploadFileInfo.fileID || undefined,
                 aliasName: this.resourceName,
                 // previewImages: this.coverURL ? [this.coverURL] : undefined,
-                dependencies: this.depList.filter(i => i.version).map(i => ({
-                    releaseId: i.id,
-                    versionRange: `^${i.version}`
-                })),
+                dependencies: this.releasedList.length === 0
+                    ? this.depList.filter(i => i.version).map(i => ({
+                        releaseId: i.id,
+                        versionRange: i.version
+                    }))
+                    : undefined
+                ,
                 description: this.description,
                 meta: JSON.parse(this.metaInfo),
             };
 
-            // if (bucketName) {
-            const res = await this.$axios.post('/v1/resources', params);
-            if (res.data.errcode !== 0) {
-                return this.$message.error(this.$t('creationFailed'));
+            if (!this.isUpdateResource) {
+                const res = await this.$axios.post('/v1/resources', params);
+                if (res.data.errcode !== 0) {
+                    return this.$message.error(this.$t('creationFailed'));
+                }
+                this.$message.success(this.$t('createdSuccessfully'));
+                return res.data.data.resourceId;
+            } else {
+                const {resourceId} = this.$route.params;
+                const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
+                if (res.data.errcode !== 0) {
+                    return this.$message.error(this.$t('saveFailed'));
+                }
+                this.$message.success(this.$t('saveSuccess'));
+                return res.data.data.resourceId;
             }
-            this.$message.success(this.$t('createdSuccessfully'));
-            return res.data.data.resourceId;
-            // }
 
             // if (mockResourceId) {
             //     const res = await this.$axios.put(`/v1/resources/mocks/${mockResourceId}`, params);
@@ -278,6 +326,7 @@ export default {
             const resourceId = await this.submit();
             if (!bool) {
                 return this.$router.replace(`/resource/list`);
+                // return ;
             }
             this.tmpRreatedResourceID = resourceId;
             this.isShowReleaseSearchDialog = true;

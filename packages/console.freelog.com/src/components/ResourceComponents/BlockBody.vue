@@ -1,7 +1,12 @@
 <template>
     <div>
         <div style="height: 35px;"></div>
-        <div style="color: #666; font-size: 14px; font-weight: 600;">{{tilte}}</div>
+        <div style="color: #666; font-size: 14px; font-weight: 600; display: flex; align-items: center;">
+            <span>{{tilte}}</span>
+            <div style="padding-left: 10px;">
+                <slot name="title2"></slot>
+            </div>
+        </div>
         <div style="height: 6px;"></div>
         <div style="background-color: #fff;">
             <slot></slot>

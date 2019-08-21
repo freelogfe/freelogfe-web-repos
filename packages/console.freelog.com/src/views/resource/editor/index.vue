@@ -1,11 +1,26 @@
 <template>
     <div class="resource-editor" style="margin: 0 auto;">
 
+        <BlockBody v-if="isUpdateResource" :tilte="'历史发行'">
+            <div style="padding: 10px 0;">
+                <div
+                    v-if="releasedList.length === 0"
+                    style="padding: 10px 20px;"
+                >暂无发行历史...</div>
+                <ReleasedItem
+                    v-for="item in releasedList"
+                    :name="item.name"
+                    :version="item.version"
+                    :date="item.date"
+                ></ReleasedItem>
+            </div>
+        </BlockBody>
+
         <BlockBody :tilte="$t('resourceUpload')">
 
-            <SmallTitle>{{$t('resourceType')}}</SmallTitle>
+            <SmallTitle v-if="!isUpdateResource">{{$t('resourceType')}}</SmallTitle>
 
-            <div style="padding-left: 40px;">
+            <div v-if="!isUpdateResource" style="padding-left: 40px;">
                 <el-select
                     style="width: 160px; line-height: 38px;"
                     v-model="resourceType"
@@ -35,9 +50,9 @@
                 </div>
             </div>
 
-            <SmallTitle>{{$t('resourceFile')}}</SmallTitle>
+            <SmallTitle v-if="!isUpdateResource">{{$t('resourceFile')}}</SmallTitle>
 
-            <div style="padding-left: 40px; padding-right: 40px;">
+            <div v-if="!isUpdateResource" style="padding-left: 40px; padding-right: 40px;">
                 <UploadFile
                     :noRepeat="true"
                     :fileType="resourceType"
@@ -50,8 +65,8 @@
             <SmallTitle>{{$t('resourceName')}}</SmallTitle>
 
             <div style="padding-left: 40px;">
+                <!--                :disabled="isUpdateResource"-->
                 <el-input
-                    :disabled="isUpdateResource"
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
@@ -85,9 +100,14 @@
         </BlockBody>
 
         <BlockBody :tilte="$t('dependency')">
+            <template v-slot:title2 v-if="releasedList.length > 0">
+                <div style="color: #999; font-size: 14px; font-weight: normal;">
+                    <i class="el-icon-info"></i> 资源发行后不可更改依赖
+                </div>
+            </template>
             <DependentReleaseList
                 :dataSource="depList"
-                :isLock="false"
+                :isLock="releasedList.length > 0"
                 @onChange="onChangeDeps"
             />
         </BlockBody>
