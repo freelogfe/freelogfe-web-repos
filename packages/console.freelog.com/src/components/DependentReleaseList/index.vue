@@ -1,10 +1,10 @@
 <template>
     <div style="background-color: #fff;">
         <div
-            v-if="!isLock"
             style="padding: 15px 20px;"
         >
-            <div style="align-items: center; display: flex;">
+            <!-- 添加发行按钮 -->
+            <div v-if="!isLock" style="align-items: center; display: flex;">
                 <el-button
                     size="small"
                     icon="el-icon-plus"
@@ -14,7 +14,11 @@
                 <span style="padding-left: 10px; font-size: 14px; color: #333;">{{$t('addDependencies')}}</span>
             </div>
 
-            <div v-if="dataSource.length > 0" style="height: 10px;"></div>
+            <!-- 按钮与发行间距 -->
+            <div v-if="dataSource.length > 0 && !isLock" style="height: 10px;"></div>
+            <div v-if="dataSource.length === 0 && isLock" style="font-size: 14px;">此资源没有依赖...</div>
+
+            <!-- 发行列表 -->
             <Item
                 v-for="(i, j) in dataSource"
                 :isLock="isLock"
@@ -22,13 +26,18 @@
                 :isOnline="i.isOnline"
                 @onRemove="onRemove(j)"
             />
-            <div v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
-                 style="height: 10px;"></div>
+            <!-- 发行与mock 之间的间隔 -->
+            <div
+                v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
+                style="height: 10px;"
+            ></div>
+            <!-- mock 列表的小标题 -->
             <div
                 v-show="mockDataSource && mockDataSource.length > 0"
                 style="font-size: 13px; color: #888; padding-left: 25px;"
             >{{$t('mockDependency')}}
             </div>
+            <!-- mock 列表 -->
             <Item
                 v-for="(i, j) in mockDataSource"
                 :name="i.name"

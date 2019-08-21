@@ -105,9 +105,10 @@
                     <i class="el-icon-info"></i> 资源发行后不可更改依赖
                 </div>
             </template>
+<!--            :isLock="releasedList.length > 0"-->
             <DependentReleaseList
                 :dataSource="depList"
-                :isLock="releasedList.length > 0"
+                :isLock="true"
                 @onChange="onChangeDeps"
             />
         </BlockBody>
