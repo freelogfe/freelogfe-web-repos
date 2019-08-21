@@ -161,12 +161,17 @@ export default {
          * 上传文件信息发生变化
          */
         onFileInfoChange(fileInfo) {
-            // console.log(fileInfo, 'fileInfofileInfo');
+            console.log(fileInfo, 'fileInfofileInfo');
             this.uploadFileInfo = {...fileInfo};
+            console.log(this.resourceName, 'this.resourceName');
             if (!this.resourceName) {
-                const arr = fileInfo.name.split('.');
-                arr.pop();
-                this.resourceName = arr.join('.');
+                if (fileInfo.name.includes('.')) {
+                    const arr = fileInfo.name.split('.');
+                    arr.pop();
+                    this.resourceName = arr.join('.');
+                } else {
+                    this.resourceName = fileInfo.name;
+                }
             }
         },
         /**
@@ -359,6 +364,13 @@ export default {
         goBack() {
             this.$router.back();
         },
+    },
+    watch: {
+        isShowReleaseSearchDialog(val) {
+            // console.log(val, 'val');
+            if (val === false) {
+                this.$router.replace(`/resource/list`);
+            }
+        }
     }
-
 }

@@ -136,9 +136,13 @@ export default {
             // console.log(fileInfo, 'fileInfofileInfo');
             this.uploadFileInfo = {...fileInfo};
             if (!this.resourceName) {
-                const arr = fileInfo.name.split('.');
-                arr.pop();
-                this.resourceName = arr.join('.');
+                if (fileInfo.name.includes('.')) {
+                    const arr = fileInfo.name.split('.');
+                    arr.pop();
+                    this.resourceName = arr.join('.');
+                } else {
+                    this.resourceName = fileInfo.name;
+                }
             }
         },
         /**
