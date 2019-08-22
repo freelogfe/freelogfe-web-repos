@@ -50,7 +50,7 @@ export default {
                 policies: '策略',
                 updateTime: '更新时间',
                 state: '全部状态',
-                operation: '全部状态',
+                operation: '操作',
             },
             allType: '全部类型',
             allState: '全部状态',
