@@ -50,10 +50,38 @@ export default {
     mounted() {
         this.handleTableData();
         this.handleNodeInfo();
+        this.listenWindowVisibility();
     },
 
     methods: {
+        /**
+         * 监听窗口激活事件
+         */
+        listenWindowVisibility() {
+            // 不同浏览器 hidden 名称
+            const hiddenProperty = 'hidden' in document ? 'hidden' :
+                'webkitHidden' in document ? 'webkitHidden' :
+                    'mozHidden' in document ? 'mozHidden' :
+                        null;
+            // 不同浏览器的事件名
+            const visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+            const onVisibilityChange = () => {
+                if (document[hiddenProperty]) {
+                    // 窗口隐藏
+                    // console.log(Date(), 'hidden');
+                } else {
+                    // 窗口可见
+                    // console.log(Date(), 'visible');
+                    this.handleTableData();
+                }
+            };
+            document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+        },
 
+        /**
+         * 切换样式页
+         * @param bool
+         */
         switchIsPageStyle(bool) {
             this.isPageStyle = bool;
             // console.log(this.$router, '!@#$@#!$');
