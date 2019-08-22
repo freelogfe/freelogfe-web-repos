@@ -12,7 +12,7 @@ export default {
             },
             'zh-CN': {
                 addDependencies: '添加依赖',
-                mockDependency: 'mock 依赖',
+                mockDependency: 'Mock 依赖',
                 notRely: '此资源没有依赖',
             },
         }

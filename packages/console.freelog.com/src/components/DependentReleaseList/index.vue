@@ -28,13 +28,13 @@
             />
             <!-- 发行与mock 之间的间隔 -->
             <div
-                v-show="mockDataSource && mockDataSource.length > 0 && dataSource && dataSource.length > 0"
+                v-show="mockDataSource && mockDataSource.length > 0"
                 style="height: 10px;"
             ></div>
             <!-- mock 列表的小标题 -->
             <div
                 v-show="mockDataSource && mockDataSource.length > 0"
-                style="font-size: 13px; color: #888; padding-left: 25px;"
+                style="font-size: 13px; color: #888; padding-left: 5px; line-height: 20px;"
             >{{$t('mockDependency')}}
             </div>
             <!-- mock 列表 -->
