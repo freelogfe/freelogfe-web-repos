@@ -15,6 +15,7 @@ module.exports = {
     branch: 'publish',
     env: 'prod',
     bucket: 'frcdn',
+    cmd: `npm run build:prod`,
     path: targetPath
   }, {
     branch: 'beta',
