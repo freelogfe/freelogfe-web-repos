@@ -16,7 +16,8 @@ export default {
             // 『bucket 列表』
             bucketsList: null,
             // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
-            activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
+            // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
+            activeBucketIndex: 0,
 
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
@@ -250,7 +251,7 @@ export default {
             const {data} = await axios.delete(`/v1/resources/mocks/${mockResourceId}`);
             // console.log(data, 'aadsfaewazxdf');
             // this.mockTotalItem = this.mockTotalItem - 1;
-            this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize));
+            this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize) || 1);
             // console.log(this.mockCurrentPage, 'this.mockCurrentPagethis.mockCurrentPage');
             this.handleMockData();
         },
