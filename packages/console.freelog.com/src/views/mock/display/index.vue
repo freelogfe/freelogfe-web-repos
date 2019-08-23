@@ -220,6 +220,7 @@
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item>
                                                 <router-link
+                                                    target="_blank"
                                                     :to="'/mock/update/' + scope.row.mockResourceId"
                                                 >
                                                     <a

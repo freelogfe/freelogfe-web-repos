@@ -16,7 +16,8 @@ export default {
             // 『bucket 列表』
             bucketsList: null,
             // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
-            activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
+            // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
+            activeBucketIndex: 0,
 
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
