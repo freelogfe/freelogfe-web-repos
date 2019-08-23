@@ -134,7 +134,7 @@
   import PolicyList from '@/components/PolicyList/list/index.vue'
   import policy from "../../../services/policy"
 
-  const defualtImageUrl = 'http://console.testfreelog.com/public/img/resource.jpg'
+  const defualtImageUrl = '/public/img/resource.jpg'
   const releaseStateTexts = [ "未添加策略", "策略已停用" ]
 
   export default {
@@ -150,6 +150,7 @@
     },
 
     data() {
+      console.log(this.release.previewImages[0] || defualtImageUrl)
       return {
         tmpReleaseName: '',
         isEditingReleaseName: false,
