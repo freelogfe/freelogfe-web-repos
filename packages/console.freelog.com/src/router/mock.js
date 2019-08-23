@@ -21,7 +21,7 @@ export default {
                 requiresAuth: true,
                 // title: i18n.t('routes.resourcePolicyTplList'),
                 // title: i18n.t('routes.resourcePolicyTplList'),
-                title: '模拟资源池',
+                title: i18n.t('routes.mockResourcePool'),
                 type: 'resource',
                 hideFooter: true,
             },
@@ -32,8 +32,7 @@ export default {
             hidden: true,
             meta: {
                 requiresAuth: true,
-                // title: i18n.t('routes.createResource'),
-                title: '创建模拟资源',
+                title: i18n.t('routes.createMockResource'),
                 theme: 'gray',
                 hideFooter: true,
             },
@@ -45,7 +44,7 @@ export default {
             meta: {
                 requiresAuth: true,
                 // title: i18n.t('routes.createResource'),
-                title: '模拟资源管理',
+                title: i18n.t('routes.manageMockResource'),
                 theme: 'gray',
                 hideFooter: true,
             },

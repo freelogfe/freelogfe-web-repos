@@ -10,9 +10,9 @@
         <el-table-column label="资源名称">
           <template slot-scope="scope">
             <div class="r-l-item-name-box">
-              <img 
-                class="r-l-item__img" 
-                :class="{'resource-default-preview':!previewImage}" 
+              <img
+                class="r-l-item__img"
+                :class="{'resource-default-preview':!previewImage}"
                 :src="scope.row.previewImage" />
               <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
             </div>
@@ -46,7 +46,7 @@
           </template>
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
-              {{scope.row.releaseStatus === 'fetching' ? 
+              {{scope.row.releaseStatus === 'fetching' ?
               '查询中...' : scope.row.releaseList.length ? '' : '暂无发行'}}
             </div>
             <div style="position: relative;" v-if="scope.row.releaseList.length">
@@ -161,7 +161,7 @@
     },
 
     mounted() {
-      
+
     },
 
     methods: {
@@ -171,13 +171,14 @@
         }
         list = list.map(resource => {
           const { resourceId, previewImages } = resource
-          resource._toDetailLink = resourceId ? `/resource/detail/${resourceId}` : ''
+          // resource._toDetailLink = resourceId ? `/resource/detail/${resourceId}` : ''
+          resource._toDetailLink = resourceId ? `/resource/editor/${resourceId}` : ''
           resource._downloadLink = `${window.FreelogApp.Env.qiOrigin}/v1/resources/${resourceId}/download`
           resource.previewImage = previewImages && previewImages[0] || ''
           resource.releaseStatus = 'fetching'
           resource.releaseList = []
-          
-          this.fetchReleaseList(resourceId) 
+
+          this.fetchReleaseList(resourceId)
             .then(() => {
               resource.releaseStatus = 'done'
               resource.releaseList = this.resourceMapReleases[resource.resourceId]
@@ -232,9 +233,9 @@
   .r-l-item-release-floatbox {
     .release-item {
       display: flex;
-      span { 
-        display: inline-block; margin: 5px; 
-        &.name { 
+      span {
+        display: inline-block; margin: 5px;
+        &.name {
           width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
           text-decoration: underline;
         }
@@ -247,8 +248,8 @@
     .r-l-types-select, .r-l-status-select {
       display: block; width: 120px; padding: 0;
       .el-input { line-height: 28px; padding: 0; }
-      .el-input__inner { 
-        padding-left: 0; padding-right: 22px; border: none; 
+      .el-input__inner {
+        padding-left: 0; padding-right: 22px; border: none;
         font-size: 14px;
       }
     }

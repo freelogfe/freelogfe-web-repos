@@ -31,7 +31,7 @@ export default {
         return {
             isUpdateResource: !!this.$route.params.mockResourceId,
             // 资源类型选项
-            resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'revealSlide', 'license', 'video', 'catalog'],
+            resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'],
             // 资源类型值
             resourceType: '',
             // 资源类型，是否提醒
@@ -136,9 +136,13 @@ export default {
             // console.log(fileInfo, 'fileInfofileInfo');
             this.uploadFileInfo = {...fileInfo};
             if (!this.resourceName) {
-                const arr = fileInfo.name.split('.');
-                arr.pop();
-                this.resourceName = arr.join('.');
+                if (fileInfo.name.includes('.')) {
+                    const arr = fileInfo.name.split('.');
+                    arr.pop();
+                    this.resourceName = arr.join('.');
+                } else {
+                    this.resourceName = fileInfo.name;
+                }
             }
         },
         /**

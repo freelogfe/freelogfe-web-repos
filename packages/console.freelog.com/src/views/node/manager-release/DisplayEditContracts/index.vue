@@ -34,13 +34,17 @@
                 >
 
                     <div
-                        style="color: #333; font-weight: 600; font-size: 14px; background-color: #fafbfb; padding: 15px; display: flex;"
+                        style="color: #333; font-size: 14px; background-color: #fafbfb; padding: 15px;"
                     >
-                        <div class="text-overflow-ellipsis" style="width: 50%;">
-                            {{$t('authorizer')}}{{dataSource[activatedIndex].releaseName}}
+                        <div style="padding-bottom: 5px; display: flex;">
+                            <div style="flex-shrink: 0;">{{$t('authorizer')}}</div>
+                            <div style="width: 100%; flex-shrink: 1; white-space: normal;">
+                                {{dataSource[activatedIndex].releaseName}}
+                            </div>
                         </div>
-                        <div class="text-overflow-ellipsis" style="width: 50%; padding-left: 10px;">
-                            {{$t('authorized')}}{{nodeInfo.nodeName}}
+                        <div style="display: flex;">
+                            <div style="flex-shrink: 0;">{{$t('authorized')}}</div>
+                            <div style="width: 100%; flex-shrink: 1; white-space: normal;">{{nodeInfo.nodeName}}</div>
                         </div>
                     </div>
 
@@ -53,7 +57,7 @@
                             <div v-if="index !== 0" style="height: 15px;"></div>
                             <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
                             <SignedContract
-                                :name="item.contract.contractName"
+                                :name="item.contract.contractName.split('/')[1]"
                                 :status="item.contract.status"
                                 :contractId="item.contract.contractId"
                                 :data="item.contract.createDate.split('T')[0]"

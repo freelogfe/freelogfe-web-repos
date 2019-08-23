@@ -3,8 +3,10 @@
         <div
             v-if="!!fileInfo.name && !fileInfo.fileID && percentage === null"
             style="background-color: #fafbfb; padding: 0 10px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="line-height: 46px; font-size: 14px; color: #333;">
-                <span style="padding-right: 70px;">{{fileInfo.name}}</span>
+            <div style="line-height: 46px; font-size: 14px; color: #333; display: flex; align-items: center;">
+                <!-- {{fileType}} -->
+                <i class="resource-default-preview" style="width: 20px; height: 20px;"></i>
+                <span style="padding-right: 70px; padding-left: 10px;">{{fileInfo.name}}</span>
                 <span>{{fileSize}}</span>
             </div>
             <a
@@ -37,17 +39,21 @@
         </el-upload>
 
         <div v-if="percentage !== null" style="display: flex;">
-            <div
-                style="flex-shrink: 0; width: 104px; height: 104px; display: flex; align-items: center; justify-content: center;">
-                {{fileType}}
-            </div>
+            <!--            <div-->
+            <!--                style="flex-shrink: 0; width: 104px; height: 104px; display: flex; align-items: center; justify-content: center;">-->
+            <!--                {{fileType}}-->
+            <!--            </div>-->
             <div
                 style="background-color: #fafbfb; flex-shrink: 1; width: 100%;"
             >
                 <div
                     style="display: flex; justify-content: space-between;  font-size: 16px; color: #333; padding: 0 20px; line-height: 45px; height: 45px"
                 >
-                    <span>{{fileInfo.name}}</span>
+                    <div style="display: flex; align-items: center;">
+                        <!-- {{fileType}} -->
+                        <i class="resource-default-preview" style="width: 20px; height: 20px;"></i>
+                        <span style="padding-left: 10px;">{{fileInfo.name}}</span>
+                    </div>
                     <span>{{fileSize}}</span>
                 </div>
                 <div

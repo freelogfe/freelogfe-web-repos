@@ -1,6 +1,8 @@
 export default {
     messages: {
         en: {
+            historyRelease: 'History Release',
+            noReleaseHistory: 'No Release history',
             resourceUpload: 'Resource Upload',
             resourceType: 'Resource Type',
             beforeUpload: 'Before uploading resources you need to select the resource type',
@@ -28,8 +30,11 @@ export default {
             createdSuccessfully: 'Created successfully',
             releaseAreNotOnline: 'Have relied on in the not Online release',
             selectedTypeMustBeRelease: 'The selected resource type must be ',
+            cannotChangedDep: 'After the release of resources cannot be changed depend on',
         },
         'zh-CN': {
+            historyRelease: '历史发行',
+            noReleaseHistory: '暂无发行历史',
             resourceUpload: '资源上传',
             resourceType: '资源类型',
             beforeUpload: '上传资源之前需要选择资源类型',
@@ -57,6 +62,7 @@ export default {
             createdSuccessfully: '创建成功',
             releaseAreNotOnline: '依赖中有未上线的发行',
             selectedTypeMustBeRelease: '所选发行的资源类型必须为',
+            cannotChangedDep: '资源发行后不可更改依赖',
         },
     }
 };

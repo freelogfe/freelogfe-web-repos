@@ -30,9 +30,10 @@ export default {
         {
             path: 'editor/:resourceId',
             hidden: true,
+
             meta: {
                 requiresAuth: true,
-                title: '资源管理',
+                title: i18n.t('routes.resourceManager'),
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
@@ -101,6 +102,7 @@ export default {
         },
         {
             path: 'detail/:resourceId',
+            redirect: 'editor/:resourceId',
             hidden: true,
             meta: {
                 requiresAuth: true,

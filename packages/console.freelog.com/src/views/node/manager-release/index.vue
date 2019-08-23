@@ -91,7 +91,7 @@
                             @click="switchShowEditPolicy(true)"
                             size="small"
                             type="primary"
-                        >$t('addPolicy')
+                        >{{$t('addPolicy')}}
                         </el-button>
                     </div>
                     <div v-else>

@@ -52,7 +52,7 @@ export default {
             meta: {
                 hideSidebar: true,
                 requiresAuth: true,
-                title: '节点管理',
+                title: i18n.t('routes.nodeManager'),
                 hideFooter: true,
             },
             component: Views.nodeManager
@@ -63,7 +63,7 @@ export default {
             meta: {
                 hideSidebar: true,
                 requiresAuth: true,
-                title: '节点发行管理',
+                title: i18n.t('routes.nodeReleaseManagement'),
                 hideFooter: true,
             },
             component: Views.nodeManagerRelease
