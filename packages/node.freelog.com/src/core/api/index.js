@@ -1,5 +1,5 @@
-import generateInterfaces from './interface'
-import { resolvePresentableDataUrl } from './resolveUrl'
+import initInterfaces, * as _interfaces from './interface'
+import { resolvePresentableDataUrl, resolveSubResourceDataUrl } from './resolveUrl'
 import { getUserInfo, checkUserIsLogin } from './resolveUserInfo'
 
 export default function generateAPIs(QI) {
@@ -12,25 +12,21 @@ export default function generateAPIs(QI) {
     data: {nodeId}
   })
 
-  let interfaces = generateInterfaces(_fetch)
+  initInterfaces(_fetch)
 
   return Object.assign({
     resolvePresentableDataUrl,
+    resolveSubResourceDataUrl,
     getUserInfo,
     checkUserIsLogin
-  }, exposeInterfaces(interfaces))
+  }, exposeInterfaces(_interfaces))
 }
 
 
 function exposeInterfaces(interfaces) {
   const api = {}
-  const apiList =  [
-    'fetchPresentablesList', 'fetchPresentableInfo', 'fetchPresentableResourceData', 'fetchPresentableResourceInfo',
-    'fetchSubResourceUrl', 'fetchSubResource', 'requireSubResource', 'fetchSubResourceData', 'fetchPresentableAuth', 'fetchSubReleaseData', 
-    'getPresentableResourceUrl'
-  ]
 
-  apiList.forEach((name) => {
+  Object.keys(interfaces).forEach((name) => {
     api[name] = function (...args) {
       return interfaces[name](...args)
     }
@@ -38,7 +34,7 @@ function exposeInterfaces(interfaces) {
 
   // 向后兼容（兼容之前版本的api）
   api['resolveResourceUrl'] = function({ resourceId, presentableId }) {
-    return interfaces['fetchSubResourceUrl'](resourceId, presentableId)
+    return resolveSubResourceDataUrl(resourceId, presentableId)
   }
   return api
 }

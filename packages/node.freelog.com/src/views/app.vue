@@ -22,7 +22,7 @@
 
 
 <script>
-  import { FLogin, FSignup, FRsetPassword } from '@freelog/freelog-ui-login'
+  import { FLogin } from '@freelog/freelog-ui-login'
   import { noop } from '../core/utils/util'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../core/events/names'
 
@@ -74,10 +74,12 @@
        * 开发者可通过api - window.FreelogApp.trigger 触发事件并唤起对应视图
        */
       initEvents() {
-        window.FreelogApp
-          .on(GO_TO_LOGIN, this.showLoginDialog)
-          .on(TOGGLE_TOOL_BAR, this.toggleToolBar)
-          .on(SHOW_AUTH_DIALOG, this.showAuthDialog)
+        if(window.FreelogApp.on) {
+          window.FreelogApp
+            .on(GO_TO_LOGIN, this.showLoginDialog)
+            .on(TOGGLE_TOOL_BAR, this.toggleToolBar)
+            .on(SHOW_AUTH_DIALOG, this.showAuthDialog)
+        }
       },
 
       checkPbAuth() {

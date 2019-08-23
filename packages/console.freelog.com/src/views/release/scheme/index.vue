@@ -48,14 +48,6 @@
                 </div>
               </el-tooltip>
             </div>
-            <!-- <div class="s-m-w-c-ub-body">
-              <div
-                      :class="['s-m-w-c-upcast-btn', { 'selected': isSelectedReleaesUpcast }]"
-                      @click="upcastHandler">
-                <span class="u-check-box" v-if="!isSelectedReleaesUpcast"></span>
-                <i class="el-icon-circle-check" v-else></i>上抛
-              </div>
-            </div> -->
           </div>
           <div class="s-m-w-c-p-wrapper" :class="[{ 'disabled': isSelectedReleaesUpcast }]">
             <div class="s-m-w-c-head">

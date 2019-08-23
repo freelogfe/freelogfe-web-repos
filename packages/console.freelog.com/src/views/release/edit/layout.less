@@ -39,12 +39,19 @@
       padding-left: 120px;
     }
     .r-e-l-name {
-      font-size: 18px; 
+      position: relative;
+      padding-right: 70px; font-size: 18px; 
+
+      .r-e-l-state {
+        position: absolute; top: 2px; right: 0; z-index: 10;
+        font-size: 14px; color: #333;
+        .el-icon-warning { margin-right: 2px; color: #FFC210; }
+      }
+
       a {
         color: #333;
         &:hover { text-decoration: underline; }
       }
-
 
       .el-input { width: 400px; }
       .el-icon-edit-outline { display: inline-block; cursor: pointer; }
@@ -174,12 +181,10 @@
 
 }
 
-
 @media screen and (max-width: 1250px) {
   .release-editor-layout{
     .r-e-l-main-content {
       width: @main-content-width-990;
     }
   }
-  
 }

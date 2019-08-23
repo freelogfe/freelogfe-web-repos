@@ -199,6 +199,8 @@
 </script>
 
 <style lang="less" type="text/less" scoped>
+  @import '../../../styles/variables.less';
+
   .r-a-w-version, .r-a-w-scheme {
     background-color: #FAFBFB;
     h4 {
@@ -258,7 +260,6 @@
       span { display: inline-block; }
     }
   }
-
 
   .r-a-w-footer {
     padding: 20px 10px;

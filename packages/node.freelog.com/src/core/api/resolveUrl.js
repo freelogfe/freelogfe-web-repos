@@ -1,11 +1,15 @@
 
-export function resolvePresentableDataUrl(presentableId = '') {
-  const authInfo = window.__auth_info__ || {}
-  const nodeId = authInfo.__auth_node_id__ || ''
-  return `${window.FreelogApp.Env.qiOrigin}/v1/auths/presentable/${presentableId}?nodeId=${nodeId}`
+// 获取url：依赖子发行的数据内容
+export function resolveSubResourceDataUrl({ presentableId, subReleaseId, version }){
+  return `${window.FreelogApp.Env.qiOrigin}/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.file?version=${version}`
 }
 
-export function getSubResourceUrl(resourceId, token) {
-  return `${window.FreelogApp.Env.qiOrigin}/v1/auths/presentable/subResource/${resourceId}?token=${token}`
+// 获取url：依赖子发行的信息
+export function resolveSubReleaseInfoUrl({ presentableId, subReleaseId, version }){
+  return `${window.FreelogApp.Env.qiOrigin}/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.info?version=${version}`
 }
 
+// 获取url：节点发行(presentable)的数据内容
+export function resolvePresentableResourceUrl(presentableId) {
+  return `${window.FreelogApp.Env.qiOrigin}/v1/auths/presentables/${presentableId}.file`
+}

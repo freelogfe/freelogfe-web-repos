@@ -17,8 +17,6 @@ export function complementQueryString(url, data){
   return url
 }
 
-
-
 export function createScript(url) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
@@ -29,7 +27,6 @@ export function createScript(url) {
     document.getElementsByTagName('head').item(0).appendChild(script)
   })
 }
-
 
 export function createCssLink(href, type) {
   return new Promise((resolve, reject) => {

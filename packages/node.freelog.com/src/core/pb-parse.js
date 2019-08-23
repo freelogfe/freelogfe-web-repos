@@ -1,6 +1,8 @@
 import { throwError } from './exceptions/throwError'
 import { throwException } from './exceptions/throwException'
 import { EXCEPTION_LOADWIDGET, EXCEPTION_PB_AUTH } from './exceptions/names'
+import { createScript, createCssLink } from './helpers/index'
+import { resolveSubResourceDataUrl } from '../core/api/resolveUrl'
 
 export default function initWidgets(FreelogApp) {
   FreelogApp.$loading.show()
@@ -15,45 +17,47 @@ export default function initWidgets(FreelogApp) {
         FreelogApp.$loading.hide()
       })
   }else {
-    FreelogApp.$loading.hide()
-    // 显示PB异常页及授权按钮，待授权问题解决后刷新页面
+    /**
+     * 授权异常
+     * 显示PB异常页及授权按钮，待授权问题解决后刷新页面
+     */
     throwException('PB授权未通过', EXCEPTION_PB_AUTH)
+    FreelogApp.$loading.hide()
   }
 }
 
 function loadWidgets(FreelogApp) {
   const promises = []
   const vis = {}
-  // const pbId = getPageBuildId() || ''
 
   if(window.__auth_info__) {
-    const { __page_build_sub_releases = [], __page_build_id } = window.__auth_info__
+    const { __page_build_sub_releases = [], __page_build_id: presentableId } = window.__auth_info__
 
     __page_build_sub_releases
       .filter(({ releaseId }) => !!releaseId)
       .forEach(subRelease => {
-        const { releaseId, version } = subRelease
-        if (!vis[releaseId]) {
-          vis[releaseId] = true
-          const p = FreelogApp.QI.requireSubResource({
-            presentableId: __page_build_id,
-            subReleaseId: releaseId,
-            version
-          })
-          promises.push(p)
+        const { releaseId: subReleaseId, version, resourceType } = subRelease
+        if (!vis[subReleaseId]) {
+          vis[subReleaseId] = true
+          const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+
+          switch(resourceType) {
+            case 'widget': 
+            case 'js': {
+              createScript(url)
+              break
+            }
+            case 'css': {
+              createCssLink(url)
+            }
+            default: {}
+          }
         }
       })
   }
   return Promise.all(promises)
 }
 
-function getPageBuildId() {
-  var $doms = Array.from(document.querySelectorAll('#js-page-container .js-wc-widget'))
-  if($doms.length) {
-    return $doms[0].getAttribute('data-page-build-id')
-  }
-  return null
-}
 
 
 

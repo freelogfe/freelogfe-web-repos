@@ -32,6 +32,12 @@
               <el-button size="small" round class="r-e-l-name-cancel" @click="cancelEditName">取消</el-button>
             </template>
             <span class="r-e-l-version">{{selectedVersion || release.latestVersion.version}}</span>
+            <div class="r-e-l-state" v-if="releaseState !=1">
+              <el-tooltip :content="releaseStateText" placement="bottom" effect="light">
+                <i class="el-icon-warning"></i>
+              </el-tooltip>
+              未上线
+            </div>
           </div>
           <div class="r-e-l-info">
             <span class="r-i-type">{{release.resourceType}}</span>
@@ -127,7 +133,10 @@
   // import PolicyList from '@/components/PolicyList/list.vue'
   import PolicyList from '@/components/PolicyList/list/index.vue'
   import policy from "../../../services/policy"
+
   const defualtImageUrl = 'http://console.testfreelog.com/public/img/resource.jpg'
+  const releaseStateTexts = [ "未添加策略", "策略已停用" ]
+
   export default {
     name: 'release-editor-layout',
     components: {
@@ -146,11 +155,19 @@
         isEditingReleaseName: false,
         coverImageUrl: this.release.previewImages[0] || defualtImageUrl,
         editTmpPolicy: { policyName: '未命名策略', policyText: '' },
+        tempEditingIntro: this.release.intro,
+        releaseStateText: '',
         isShowEditPolicy: false,
         isEditingIntro: false,
         isTuckUpRelease: true,
         isTuckUpVersion: false,
-        tempEditingIntro: this.release.intro,
+        isReleaseOnline: false
+      }
+    },
+
+    watch: {
+      release() {
+        this.checkReleaseState()
       }
     },
 
@@ -243,12 +260,33 @@
         this.tmpReleaseName = this.release.releaseName
         this.isEditingReleaseName = false
       },
+      checkReleaseState() {
+        const policies = this.release.policies
+        const leng = policies.length
+        if(leng > 0) {
+          let releaseState = 0
+          for(let i = 0; i < leng; i++) {
+            if(policies[i].status === 1) {
+              releaseState = 1
+              break
+            }
+          }
+          this.releaseState = releaseState
+          this.releaseStateText = releaseState === 1 ? '' : releaseStateTexts[1]
+        }else {
+          this.releaseState = -1
+          this.releaseStateText = releaseStateTexts[0]
+        }
+      }
     },
+
     created() {
       this.isTuckUpRelease = this.type === 'add'
+    },
 
-      'UI4.0-发行-修复发行管理bug'
-    }
+    mounted() {
+      this.checkReleaseState()
+    },
   }
 </script>
 

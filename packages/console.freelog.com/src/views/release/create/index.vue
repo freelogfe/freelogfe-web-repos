@@ -219,11 +219,19 @@
 <style lang="less" type="text/less" scoped>
   @import '../../../styles/variables.less';
 
+  @media screen and (max-width: 1250px) {
+    #release-create {
+      .r-c-w-cont {
+        width: @main-content-width-990;
+      }
+    }
+  }
+
   #release-create {
     padding-left: 50px;
 
     .r-c-w-cont {
-      width: @main-content-width-990;
+      width: @main-content-width-1190;
       margin: 0 auto 65px auto;
       padding-top: 40px;
     }
