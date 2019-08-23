@@ -14,7 +14,8 @@ module.exports = {
     branch: 'publish',
     env: 'prod',
     bucket: 'frcdn',
-    path: 'freelog-common/'
+    path: 'freelog-common/',
+    cmd: `npm run build`,
   }, {
     branch: 'beta',
     env: 'beta',
