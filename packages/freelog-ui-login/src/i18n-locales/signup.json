@@ -37,7 +37,7 @@
       "head": "注册用户",
       "loginName": "账号",
       "loginNamePlaceholder": "请输入手机号或邮箱",
-      "username": "用户昵称",
+      "username": "用户名称",
       "usernamePlaceholder": "请输入用户名称",
       "password": "设置密码",
       "passwordPlaceholder": "密码(6-16位字母、数字和符号)",
