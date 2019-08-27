@@ -84,7 +84,10 @@ export default {
             // console.log(item, 'ASDFASDCDSARFW');
             this.$emit('onChange', [
                 ...this.dataSource,
-                item,
+                {
+                    ...item,
+                    version: '^' + item.version,
+                },
             ]);
         },
         addAMock(item) {

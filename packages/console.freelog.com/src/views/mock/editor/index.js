@@ -236,6 +236,10 @@ export default {
                 return this.$message.error(this.$t('pleaseSelectAResourceType'));
             }
 
+            if (this.uploadFileInfo.uploading) {
+                return this.$message.error(this.$t('fileUploading'));
+            }
+
             if (!this.uploadFileInfo.name) {
                 return this.$message.error(this.$t('pleaseUploadFiles'));
             }

@@ -45,6 +45,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             },
         },
         // fileURL: {
@@ -161,6 +162,7 @@ export default {
                 sha1: '',
                 name: file.name,
                 size: file.size,
+                uploading: true,
             });
             this.percentage = 0;
         },
@@ -171,7 +173,7 @@ export default {
          */
         onProgress(event, file) {
             // console.log(event.percent, '11111111111');
-            this.percentage = Math.ceil(event.percent);
+            this.percentage = Math.ceil(event.percent * .95);
         },
         /**
          * 文件上传成功时的钩子
@@ -184,6 +186,7 @@ export default {
                 ...this.fileInfo,
                 fileID: response.data.uploadFileId,
                 sha1: response.data.sha1,
+                uploading: false,
             });
         },
         /**
@@ -203,6 +206,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             });
         },
         /**
