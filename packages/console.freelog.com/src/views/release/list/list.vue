@@ -1,3 +1,4 @@
+<i18n src="./release-list.json"></i18n>
 <template>
   <div class="release-list">
     <f-pagination class="release-list-table"
@@ -7,7 +8,7 @@
               :pagination="paginationConfig"
               :empty-text="pagenationEmptyText">
       <template slot="list">
-        <el-table-column label="发行名称">
+        <el-table-column :label="$t('list.name')">
           <template slot-scope="scope">
             <div class="r-l-item-name-box" @click="goToReleaseDetail(scope.row)">
                 <img 
@@ -18,7 +19,7 @@
               </div>
           </template>
         </el-table-column>
-        <el-table-column label="发行类型" width="140">
+        <el-table-column :label="$t('list.type')" width="140">
           <template slot="header" slot-scope="scope">
             <el-select class="r-l-types-select" v-model="selectedType" size="mini">
               <el-option
@@ -33,12 +34,12 @@
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="最新版本" width="120">
+        <el-table-column :label="$t('list.newVersion')" width="120">
           <template slot-scope="scope">
             <div> {{scope.row.latestVersion.version}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="策略" width="160">
+        <el-table-column :label="$t('list.policy')" width="160">
           <template slot-scope="scope">
             <div v-if="scope.row.policies.length"> 
               <el-popover placement="bottom-start" width="370" trigger="hover">
@@ -49,24 +50,24 @@
                       <i class="el-icon-plus"></i>
                     </router-link>
                   </div>
-                  <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">等{{scope.row.policies.length}}个策略…</div>
+                  <div class="r-l-item-policy-row2" v-show="scope.row.policies.length > 1">{{$t('list.policyCount[0]')}}{{scope.row.policies.length}}{{$t('list.policyCount[1]')}}</div>
                 </div>
                 <f-policy-tabs :policies="scope.row.policies"></f-policy-tabs>
               </el-popover>
             </div>
-            <div class="r-l-item-no-policy" v-else>暂无策略</div> 
+            <div class="r-l-item-no-policy" v-else>{{$t('list.noPolicies')}}</div> 
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" label="更新时间" width="180" v-if="type ==='myReleases' ">
+        <el-table-column prop="updateDate" :label="$t('list.updateDate')" width="180" v-if="type ==='myReleases' ">
           <template slot-scope="scope">
             <div class="r-l-item-date-row1">{{scope.row.updateDate | fmtDate}}</div>
-            <div class="r-l-item-date-row2">加入时间 {{scope.row.createDate | fmtDate }}</div>
+            <div class="r-l-item-date-row2">{{$t('list.createDate')}} {{scope.row.createDate | fmtDate }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="collectionDate" label="收藏时间" width="180" v-else>
+        <el-table-column prop="collectionDate" :label="$t('list.collectDate')" width="180" v-else>
           <template slot-scope="scope">
             <div class="r-l-item-date-row1">{{scope.row.collectionDate | fmtDate}}</div>
-            <div class="r-l-item-date-row2">更新时间 {{scope.row.updateDate | fmtDate }}</div>
+            <div class="r-l-item-date-row2">{{$t('list.updateDate')}} {{scope.row.updateDate | fmtDate }}</div>
           </template>
         </el-table-column>
         <el-table-column width="130">
@@ -84,26 +85,26 @@
             </span>
           </template>
           <template slot-scope="scope">
-            <div class="r-l-item-online" v-if="scope.row.isOnline">已上线</div>
+            <div class="r-l-item-online" v-if="scope.row.isOnline">{{$t('list.status[1]')}}</div>
             <div class="r-l-item-offline" v-else>
-              未上线 
-              <el-tooltip :content="scope.row.policies.length > 0 ? '策略已下架' : '暂无策略' " placement="top">
+              {{$t('list.status[0]')}} 
+              <el-tooltip :content="scope.row.policies.length > 0 ? $t('list.tips[0]') : $t('list.noPolicies') " placement="top">
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120">
+        <el-table-column :label="$t('list.operate')" width="140">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'">
-              <el-button class="r-l-item-edit-btn" size="mini">编辑</el-button>
+              <el-button class="r-l-item-edit-btn" size="mini">{{$t('list.editBtnText')}}</el-button>
             </router-link>
             <el-button 
               v-if="type === 'myCollections'"
               class="r-l-item-cancel-favor-btn" 
               type="danger" 
               size="mini" 
-              @click="cancelCollection(scope.row)">取消收藏</el-button>
+              @click="cancelCollection(scope.row)">{{$t('list.cancelCollectionBtnText')}}</el-button>
             <!-- <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
               <el-button class="r-l-item-detail-btn" size="mini">详情</el-button>
             </router-link> -->
@@ -120,7 +121,6 @@
   import { RESOURCE_TYPES } from '@/config/resource'
   import { RELEASE_STATUS } from '@/config/release'
 
-  const [ NO_RIGHT_RELEASE, NO_CREATED_RELEASE, NO_COLLECTED_RELEASE ] = [ '没有符合条件的发行', '您还没有创建任何发行。', '您还没有收藏任何发行。您在发行市场收藏的发行之后将会出现在这里。' ]
   export default {
     name: 'release-items-list',
 
@@ -161,7 +161,8 @@
 
     computed: {
       resourceTypes() {
-        const arr = [{ label: '全部类型', value: 'all' }]
+        const $i18n = this.$i18n
+        const arr = [{ label: $i18n.t('list.allTypes'), value: 'all' }]
         for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
           arr.push({ label, value })
         }
@@ -201,6 +202,8 @@
         }
       },
       query() {
+        const $i18n = this.$i18n
+        const [ NO_RIGHT_RELEASE, NO_CREATED_RELEASE, NO_COLLECTED_RELEASE ] = [ $i18n.t('list.messages[0]'), $i18n.t('list.messages[1]'), $i18n.t('list.messages[2]') ]
         if(this.query == '') {
           this.paginationConfig.params.keywords = undefined
           this.pagenationEmptyText = this.type === 'myReleases' ? NO_CREATED_RELEASE : NO_COLLECTED_RELEASE
@@ -216,6 +219,8 @@
 
     methods: {
       initView() {
+        const $i18n = this.$i18n
+        const [ NO_CREATED_RELEASE, NO_COLLECTED_RELEASE ] = [ $i18n.t('list.messages[1]'), $i18n.t('list.messages[2]') ]
         switch(this.type) {
           case 'myReleases': {
             this.paginationConfig.target = '/v1/releases'
@@ -258,11 +263,12 @@
         return list
       },
       cancelCollection(release) {
+        const $i18n = this.$i18n
         this.$services.collections.delete(release.releaseId)
           .then(res => res.data)
           .then(res => {
             if(res.errcode === 0) {
-              this.$message({ type: 'success', message: '取消成功！' })
+              this.$message({ type: 'success', message: $i18n.t('list.messages[3]') })
               this.paginationConfig.reloadCount = this.paginationConfig.reloadCount + 1
             }
           })

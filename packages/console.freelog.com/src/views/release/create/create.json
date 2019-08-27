@@ -1,0 +1,26 @@
+{
+  "zh-CN": {
+    "noDesc": "暂无资源描述",
+    "name": "发行名称",
+    "cover": "发行封面",
+    "basicUpcast": "基础上抛",
+    "noBasicUpcast": "暂无基础上抛",
+    "scheme": "方案",
+    "version": "版本号",
+    "tips": [ "发行名称一旦则创建不可修改", "方案中所选上抛将会成为基础上抛" ],
+    "createBtnText": "创建发行",
+    "cancelBtnText": "取消创建"
+  },
+  "en": {
+    "noDesc": "No resource description yet",
+    "name": "Release Name",
+    "cover": "Release Cover",
+    "basicUpcast": "Basic upcast",
+    "noBasicUpcast": "There are no basic upcast yet",
+    "scheme": "scheme",
+    "version": "version",
+    "tips": [ "Once the release name is created, it cannot be modified", "The upcast selected in the scheme will become a base upcast"  ],
+    "createBtnText": "Create Release",
+    "cancelBtnText": "Cancel"
+  }
+}

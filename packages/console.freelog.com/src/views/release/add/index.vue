@@ -33,7 +33,7 @@
         </div>
         <div class="r-a-w-scheme" v-if="depReleasesList.length > 0">
           <div class="r-a-w-s-line"></div>
-          <h4>方案</h4>
+          <h4>{{$t('scheme')}}</h4>
           <scheme-manage
                   type="add"
                   :release="release"
@@ -44,8 +44,8 @@
           ></scheme-manage>
         </div>
         <div class="r-a-w-footer" :class="{'no-scheme': depReleasesList.length === 0}">
-          <div class="r-a-w-cancel-btn" @click="cancelAddRelease">取消</div>
-          <div class="r-a-w-save-btn" @click="saveReleaseVersion">保存版本</div>
+          <div class="r-a-w-cancel-btn" @click="cancelAddRelease">{{$t('cancelBtnText')}}</div>
+          <div class="r-a-w-save-btn" @click="saveReleaseVersion">{{$t('saveBtnText')}}</div>
         </div>
       </template>
     </release-editor-layout>

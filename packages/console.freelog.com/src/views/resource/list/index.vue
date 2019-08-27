@@ -1,8 +1,9 @@
+<i18n src="./resource-list.json"></i18n>
 <template>
   <section class="my-resources">
     <div class="m-r-header clearfix">
       <router-link to="/resource/create">
-        <el-button size="medium" type="primary" class="m-r-create-btn">创建资源</el-button>
+        <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('createBtnText')}}</el-button>
       </router-link>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>
@@ -17,7 +18,7 @@
                :visible.sync="isShowReleaseSearchDialog">
       <release-search :tabLayout="['my-release']" :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []" @add="releaseSearchHandler"></release-search>
       <div class="" slot="footer">
-        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">创建新发行</el-button>
+        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('createNewReleaseText')}}</el-button>
       </div>
     </el-dialog>
   </section>
