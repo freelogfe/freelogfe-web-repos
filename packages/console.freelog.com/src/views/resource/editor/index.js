@@ -45,6 +45,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             },
 
             // 资源名称
@@ -250,6 +251,11 @@ export default {
          * 提交数据
          */
         async submit() {
+
+            if (this.uploadFileInfo.uploading) {
+                this.$message.error(this.$t('fileUploading'));
+                throw new Error('文件正在上传中');
+            }
 
             if (!this.isUpdateResource) {
                 if (!this.resourceType) {
