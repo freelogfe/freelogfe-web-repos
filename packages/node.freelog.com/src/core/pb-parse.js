@@ -8,15 +8,15 @@ export default function initWidgets(FreelogApp) {
   FreelogApp.$loading.show()
   const authInfo = window.__auth_info__
   const authErrorData = authInfo && authInfo.__auth_error_info__
-  
-  if(!authErrorData) {
+
+  if (!authErrorData) {
     loadWidgets(FreelogApp)
       .then(FreelogApp.$loading.hide)
       .catch(e => {
         throwError(e.toString(), EXCEPTION_LOADWIDGET)
         FreelogApp.$loading.hide()
       })
-  }else {
+  } else {
     /**
      * 授权异常
      * 显示PB异常页及授权按钮，待授权问题解决后刷新页面
@@ -30,7 +30,7 @@ function loadWidgets(FreelogApp) {
   const promises = []
   const vis = {}
 
-  if(window.__auth_info__) {
+  if (window.__auth_info__) {
     const { __page_build_sub_releases = [], __page_build_id: presentableId } = window.__auth_info__
 
     __page_build_sub_releases
@@ -41,8 +41,8 @@ function loadWidgets(FreelogApp) {
           vis[subReleaseId] = true
           const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
 
-          switch(resourceType) {
-            case 'widget': 
+          switch (resourceType) {
+            case 'widget':
             case 'js': {
               createScript(url)
               break
@@ -50,7 +50,7 @@ function loadWidgets(FreelogApp) {
             case 'css': {
               createCssLink(url)
             }
-            default: {}
+            default: { }
           }
         }
       })

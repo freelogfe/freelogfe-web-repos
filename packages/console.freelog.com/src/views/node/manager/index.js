@@ -268,10 +268,8 @@ export default {
                     }
                     return _version
                 })
-                .then(version => {
-                    return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {
-                        version
-                    })
+                .then(_v => {
+                    return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: _v})
                 })
                 .then(res => res.data)
                 .then(res => {

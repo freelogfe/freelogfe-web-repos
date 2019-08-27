@@ -45,7 +45,6 @@
     },
     updated() {
       this.selectedPolicies = this.release.selectedPolicies 
-      console.log('selectedPolicies ---', this.selectedPolicies)
     },
     methods: {
       exchangeSelectedRelease(item) {

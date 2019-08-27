@@ -287,7 +287,7 @@ export default {
                 dependencies: this.releasedList.length === 0
                     ? this.depList.filter(i => i.version).map(i => ({
                         releaseId: i.id,
-                        versionRange: i.version
+                        versionRange: '^' + i.version
                     }))
                     : undefined
                 ,
