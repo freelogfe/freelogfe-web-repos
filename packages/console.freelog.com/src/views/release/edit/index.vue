@@ -1,3 +1,4 @@
+<i18n src="./edit.json"></i18n>
 <template>
   <div class="release-editor-wrapper" v-if="release !== null">
     <release-editor-layout :release.sync="release" :selectedVersion="selectedVersion" type="edit">
@@ -6,7 +7,7 @@
           <div class="re-wvb-header clearfix">
             <div class="rew-v-selector">
               <div class="rew-v-version-box">
-                <span class="rew-v-b-version">版本{{release.resourceVersions[selectedVersionIndex].version}}</span>
+                <span class="rew-v-b-version">{{$t('version')}}{{release.resourceVersions[selectedVersionIndex].version}}</span>
                 <span class="rew-v-b-name">
                   <router-link
                           target="_blank"
@@ -30,11 +31,11 @@
                 </ul>
               </div>
             </div>
-            <div class="r-e-w-v-add-btn" @click="showResourceDialog">新增版本</div>
+            <div class="r-e-w-v-add-btn" @click="showResourceDialog">{{$t('addBtnText')}}</div>
           </div>
           <div class="r-e-w-v-scheme" v-if="depReleasesList.length > 0">
             <el-tabs v-model="vTabActiveName" type="card" :closable="false" @tab-click="exchangeVTab">
-              <el-tab-pane label="授权管理" name="scheme">
+              <el-tab-pane :label="$('authManagement')" name="scheme">
                 <scheme-manage
                         type="edit"
                         :release="release"
@@ -48,7 +49,7 @@
                         :contracts.sync="contracts"
                 ></scheme-manage>
               </el-tab-pane>
-              <el-tab-pane label="授权链" name="contract">
+              <el-tab-pane :label="$t('contract')" name="contract">
                 <release-editor-contract
                         :release="release"
                         :depReleasesDetailList="depReleasesDetailList"
@@ -63,7 +64,7 @@
     <el-dialog
             class="r-e-w-search-dialog"
             center
-            title="我的资源"
+            :title="$t('dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
     >

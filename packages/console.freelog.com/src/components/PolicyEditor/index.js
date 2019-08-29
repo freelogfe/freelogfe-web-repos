@@ -103,6 +103,7 @@ export default {
     },
     selectPolicyTemplateCallback(data) {
       this.policy.policyText = data.template
+      this.policy.policyName = data.name
     },
     selectLicenseIdCallback(data) {
       this.policy.policyText += ` ${data.licenseId}`

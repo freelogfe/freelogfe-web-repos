@@ -1,3 +1,4 @@
+<i18n src="../policyList.json"></i18n>
 <template>
     <!--        v-for="(policy, index) in formatedPolicyList"-->
     <div
@@ -9,15 +10,15 @@
                 v-show="false"
             >
                 <i class="el-icon-download"></i>
-                已置顶
+                {{$t('status[0]')}}
             </div>
             <div class="p-l-status p-l-s-disabled" v-show="policy.status == 0">
                 <i class="el-icon-error"></i>
-                已停用
+                {{$t('status[1]')}}
             </div>
             <div class="p-l-status p-l-s-active" v-show="policy.status == 1">
                 <i class="el-icon-success"></i>
-                已启用
+                {{$t('status[2]')}}
             </div>
         </div>
 
@@ -47,12 +48,12 @@
                 <el-dropdown-item
                     v-if="policy.status == 0"
                     :command="1"
-                >启用
+                >{{$t('enableBtnText')}}
                 </el-dropdown-item>
                 <el-dropdown-item
                     v-if="policy.status == 1"
                     :command="0"
-                >停用
+                >{{$t('disableBtnText')}}
                 </el-dropdown-item>
                 <!--<el-dropdown-item :command="index + '-' + 2">置顶</el-dropdown-item>-->
             </el-dropdown-menu>

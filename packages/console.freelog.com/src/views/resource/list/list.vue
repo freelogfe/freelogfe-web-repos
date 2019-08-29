@@ -1,3 +1,4 @@
+<i18n src="./resource-list.json"></i18n>
 <template>
   <div class="resource-list">
     <f-pagination class="resource-list-table"
@@ -7,7 +8,7 @@
               :pagination="paginationConfig"
               :empty-text="pagenationEmptyText">
       <template slot="list">
-        <el-table-column label="资源名称">
+        <el-table-column :label="$t('list.name')">
           <template slot-scope="scope">
             <div class="r-l-item-name-box">
               <img
@@ -18,9 +19,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="资源类型" width="140">
+        <el-table-column :label="$t('list.type')" width="140">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-types-select" v-model="selectedType" placeholder="类型" size="mini">
+            <el-select class="r-l-types-select" v-model="selectedType" :placeholder="$t('list.type')" size="mini">
               <el-option
                 v-for="item in resourceTypes"
                 :key="item.value"
@@ -33,9 +34,9 @@
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="历史发行" width="200">
+        <el-table-column :label="$t('list.history')" width="200">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-status-select" v-model="selectedReleaseStatus" placeholder="发行情况" size="mini">
+            <el-select class="r-l-status-select" v-model="selectedReleaseStatus" :placeholder="$t('list.status')" size="mini">
               <el-option
                 v-for="item in releaseStatus"
                 :key="item.value"
@@ -47,13 +48,13 @@
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
               {{scope.row.releaseStatus === 'fetching' ?
-              '查询中...' : scope.row.releaseList.length ? '' : '暂无发行'}}
+              $t('list.querying') : scope.row.releaseList.length ? '' : $t('list.noReleases')}}
             </div>
             <div style="position: relative;" v-if="scope.row.releaseList.length">
               <div class="r-l-item-release-row1" @click="goToReleaseDetail(scope.row.releaseList[0])">{{scope.row.releaseList[0].releaseName}}</div>
               <template  v-if="scope.row.releaseList.length > 1">
                 <el-popover placement="bottom-start" width="370" trigger="hover">
-                  <div class="r-l-item-release-row2" slot="reference">等{{scope.row.releaseList.length}}个发行...</div>
+                  <div class="r-l-item-release-row2" slot="reference">{{$t('list.releasesCount[0]')}}{{scope.row.releaseList.length}}{{$t('list.releasesCount[1]')}}</div>
                   <div class="r-l-item-release-floatbox">
                     <div class="release-item" v-for="(r, index) in scope.row.releaseList" :key="'r'+index">
                       <span class="name" @click="goToReleaseDetail(r)">{{r.releaseName}}</span>
@@ -66,20 +67,20 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" label="更新时间" width="180">
+        <el-table-column prop="updateDate" :label="$t('list.updateDate')" width="180">
           <template slot-scope="scope">
             <div class="r-l-item-updateDate">{{scope.row.updateDate | fmtDate}}</div>
-            <div class="r-l-item-createDate">加入时间 {{scope.row.createDate | fmtDate }}</div>
+            <div class="r-l-item-createDate">{{$t('list.createDate')}} {{scope.row.createDate | fmtDate }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="240">
+        <el-table-column :label="$t('list.operate')" width="240">
           <template slot-scope="scope">
-            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">发行</el-button>
+            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('list.releaseBtnText')}}</el-button>
             <router-link :to="scope.row._toDetailLink">
-              <el-button class="r-l-item-detail-btn" size="mini">编辑</el-button>
+              <el-button class="r-l-item-detail-btn" size="mini">{{$t('list.editBtnText')}}</el-button>
             </router-link>
             <a :href="scope.row._downloadLink" :download="scope.row.aliasName">
-              <el-button class="r-l-item-download-btn" size="mini">下载源文件</el-button>
+              <el-button class="r-l-item-download-btn" size="mini">{{$t('list.downloadBtnText')}}</el-button>
             </a>
           </template>
         </el-table-column>
@@ -92,7 +93,6 @@
   import FPagination from '@/components/Pagination/index.vue'
   import { RESOURCE_TYPES } from '@/config/resource'
 
-  const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ '没有符合条件的资源', '您还没有创建任何资源。' ]
   export default {
     name: 'resource-items-list',
 
@@ -103,6 +103,9 @@
     },
 
     data() {
+      const NO_REACTED_RESOURCE = this.$i18n.t('list.messages[1]')
+      const $i18n = this.$i18n
+
       return {
         search: '',
         loader: null,
@@ -122,7 +125,11 @@
         },
         resourceMapReleases: {},
         selectedType: 'all',
-        releaseStatus: [{ label: '未发行', value: 0 }, { label: '已发行', value: 1 }, { label: '全部发行情况', value: 2 }],
+        releaseStatus: [
+          { label: $i18n.t('list.releaseStatus[0]'), value: 0 }, 
+          { label: $i18n.t('list.releaseStatus[1]'), value: 1 }, 
+          { label: $i18n.t('list.releaseStatus[2]'), value: 2 }
+        ],
         selectedReleaseStatus: 2,
         pagenationEmptyText: NO_REACTED_RESOURCE
       }
@@ -130,7 +137,8 @@
 
     computed: {
       resourceTypes() {
-        const arr = [{ label: '全部类型', value: 'all' }]
+        const $i18n = this.$i18n
+        const arr = [{ label: $i18n.t('list.allTypes'), value: 'all' }]
         for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
           arr.push({ label, value })
         }
@@ -147,6 +155,7 @@
         }
       },
       query() {
+        const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('list.messages[0]'), this.$i18n.t('list.messages[1]') ]
         if(this.query == '') {
           this.paginationConfig.params.keywords = undefined
           this.pagenationEmptyText = NO_REACTED_RESOURCE

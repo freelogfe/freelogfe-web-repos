@@ -1,3 +1,4 @@
+<i18n src="../policyList.json"></i18n>
 <template>
     <div class="policy-list">
         <div class="policy-list-wrapper">
@@ -21,15 +22,15 @@
                         <div class="p-l-item-head">
                             <div class="p-l-status p-l-s-top" v-show="false">
                                 <i class="el-icon-download"></i>
-                                已置顶
+                                {{$t('status[0]')}}
                             </div>
                             <div class="p-l-status p-l-s-disabled" v-show="policy.status == 0">
                                 <i class="el-icon-error"></i>
-                                已停用
+                                {{$t('status[1]')}}
                             </div>
                             <div class="p-l-status p-l-s-active" v-show="policy.status == 1">
                                 <i class="el-icon-success"></i>
-                                已启用
+                                {{$t('status[2]')}}
                             </div>
                         </div>
 
@@ -47,9 +48,9 @@
                             <span class="el-dropdown-link"><i class="el-icon-more"></i></span>
 
                             <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item v-if="policy.status == 0" :command="index + '-' + 1">启用
+                                <el-dropdown-item v-if="policy.status == 0" :command="index + '-' + 1">{{$t('enableBtnText')}}
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if="policy.status == 1" :command="index + '-' + 0">停用
+                                <el-dropdown-item v-if="policy.status == 1" :command="index + '-' + 0">{{$t('disableBtnText')}}
                                 </el-dropdown-item>
                                 <!--<el-dropdown-item :command="index + '-' + 2">置顶</el-dropdown-item>-->
                             </el-dropdown-menu>

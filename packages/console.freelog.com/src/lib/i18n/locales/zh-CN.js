@@ -200,6 +200,7 @@ export default {
         noMyReleases: '暂无发行',
         favorTitle: '收藏发行',
         noFavorReleases: '暂无收藏发行',
+        historicVersion: '历史版本',
         searchTitle: '全局搜索',
     },
 

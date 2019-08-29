@@ -1,3 +1,4 @@
+<i18n src="./create.json"></i18n>
 <template>
   <div id="release-create" v-loading="resourceDetail === null" v-if="resourceDetail !== null">
     <el-form class="r-c-w-cont" ref="createReleaseForm" :model="formData" :rules="rules">
@@ -14,12 +15,12 @@
             </div>
           </h2>
           <p class="rcw-intro">
-            {{resourceDetail.intro || '暂无资源描述'}}
+            {{resourceDetail.intro || $t('noDesc')}}
           </p>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-name">
-        <h3>发行名称<span>·发行名称一旦则创建不可修改</span></h3>
+        <h3>{{$t('name')}}<span>·{{$t('tips[0]')}}</span></h3>
         <el-form-item prop="releaseName" class="cont">
           {{session.user.username}} /
           <el-input
@@ -31,11 +32,11 @@
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-cover">
-        <h3>发行封面</h3>
+        <h3>{{$t('cover')}}</h3>
         <UploadCover :imageUrl="coverImageUrl" :onUploaded="uploadCoverSuccess"></UploadCover>
       </div>
       <div class="r-c-w-row r-c-w-upcast" v-if="depReleasesList.length">
-        <h3>基础上抛<span>·方案中所选上抛将会成为基础上抛</span></h3>
+        <h3>{{$t('basicUpcast')}}<span>·{{$t('tips[1]')}}</span></h3>
         <div class="cont">
           <div
                   class="upcast-release-item"
@@ -43,18 +44,18 @@
                   :key="'upcast-release-' + index"
           ><i class="el-icon-back"></i>{{item.releaseName}}
           </div>
-          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">暂无基础上抛</div>
+          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">{{$t('noBasicUpcast')}}</div>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-version">
-        <h3>版本号</h3>
+        <h3>{{$t('version')}}</h3>
         <el-form-item prop="version" class="cont">
           <i>*</i>
           <el-input v-model="formData.version"></el-input>
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-scheme" v-if="depReleasesList.length">
-        <h3>方案</h3>
+        <h3>{{$t('scheme')}}</h3>
         <div class="cont">
           <scheme-manage
                   type="create"
@@ -68,8 +69,8 @@
     </el-form>
     <div class="r-c-w-footer">
       <div class="body">
-        <div class="cancel" @click="cancelCreateRelease">取消创建</div>
-        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">创建发行</el-button>
+        <div class="cancel" @click="cancelCreateRelease">{{$t('cancelBtnText')}}</div>
+        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">{{$t('createBtnText')}}</el-button>
       </div>
     </div>
   </div>

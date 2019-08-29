@@ -71,9 +71,7 @@ export default {
       if (typeof this.callback === 'function') {
         this.callback({
           name: 'selectPolicyTemplate',
-          data: {
-            template: data.template
-          }
+          data
         })
       }
     },

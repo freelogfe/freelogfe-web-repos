@@ -1,3 +1,4 @@
+
 <template>
   <div class="releases-search-wrapper">
     <el-tabs v-model="activeName">

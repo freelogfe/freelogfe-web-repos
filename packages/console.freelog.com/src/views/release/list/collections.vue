@@ -1,8 +1,9 @@
+<i18n src="./release-list.json"></i18n>
 <template>
   <section class="my-collections">
     <div class="m-c-header clearfix">
       <router-link :to="releasesMarketLink">
-        <el-button size="medium" type="primary" class="m-c-go-to-market">前往发行市场</el-button>
+        <el-button size="medium" type="primary" class="m-c-go-to-market">{{$t('goToMarket')}}</el-button>
       </router-link>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>

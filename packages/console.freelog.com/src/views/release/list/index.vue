@@ -1,7 +1,8 @@
+<i18n src="./release-list.json"></i18n>
 <template>
   <section class="my-releases">
     <div class="m-r-header clearfix">
-      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">创建发行</el-button>
+      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">{{$t('createBtnText')}}</el-button>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
@@ -12,7 +13,7 @@
     <el-dialog
             class="my-r-search-dialog"
             center
-            title="我的资源"
+            :title="$t('dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
     >

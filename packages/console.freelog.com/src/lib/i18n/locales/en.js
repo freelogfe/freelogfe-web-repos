@@ -193,6 +193,7 @@ export default {
     noFavorReleases: 'no favorite releases',
     addBtn: 'add',
     placeholder: 'Enter the release name',
+    historicVersion: 'Historic version',
     searchTitle: 'search release',
     favorTitle: 'favorite releases'
   },
