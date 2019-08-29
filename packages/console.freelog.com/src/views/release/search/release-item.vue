@@ -5,7 +5,7 @@
       <span class="r-i-type">{{release.resourceType}}</span>
       <span v-if="!!release.latestVersion" class="r-i-version">{{release.latestVersion && release.latestVersion.version}}</span>
       <span class="r-i-date">{{release.updateDate | fmtDate}}</span>
-      <strong v-if="isHistoricalRelease">历史版本</strong>
+      <strong v-if="isHistoricalRelease">{{$t('search.historicVersion')}}</strong>
     </div>
     <el-button class="add-release-btn" :class="{ 'disabled': isHistoricalRelease }" @click="addToRelease">{{$t('search.addBtn')}}</el-button>
   </div>

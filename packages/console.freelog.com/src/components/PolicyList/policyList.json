@@ -1,0 +1,12 @@
+{
+  "zh-CN": {
+    "enableBtnText": "启用",
+    "disableBtnText": "停用",
+    "status": [ "已置顶", "已停用", "已启用" ]
+  },
+  "en": {
+    "enableBtnText": "enable",
+    "disableBtnText": "disable",
+    "status": [ "Already topped", "Already disabled", "Already enabled" ]
+  }
+}

@@ -1,3 +1,4 @@
+<i18n src="./edit.json"></i18n>
 <template>
   <div class="release-editor-wrapper" v-if="release !== null">
     <release-editor-layout :release.sync="release" :selectedVersion="selectedVersion" type="edit">
