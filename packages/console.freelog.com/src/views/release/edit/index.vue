@@ -35,7 +35,7 @@
           </div>
           <div class="r-e-w-v-scheme" v-if="depReleasesList.length > 0">
             <el-tabs v-model="vTabActiveName" type="card" :closable="false" @tab-click="exchangeVTab">
-              <el-tab-pane :label="$('authManagement')" name="scheme">
+              <el-tab-pane :label="$t('authManagement')" name="scheme">
                 <scheme-manage
                         type="edit"
                         :release="release"
