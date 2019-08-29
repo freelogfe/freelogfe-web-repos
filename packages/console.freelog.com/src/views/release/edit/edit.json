@@ -1,0 +1,20 @@
+{
+  "zh-CN": {
+    "version": "版本号",
+    "dialogTitle": "我的资源",
+    "authManagement": "授权管理",
+    "authContract": "授权链",
+    "addBtnText": "新增版本",
+    "saveBtnText": "保存",
+    "cancelBtnText": "取消",
+    "": ""
+  },
+  "en": {
+    "version": "Version",
+    "dialogTitle": "My resources",
+    "authManagement": "Authorization management",
+    "authContract": "Contract",
+    "addBtnText": "Add new version",
+    "": ""
+  }
+}

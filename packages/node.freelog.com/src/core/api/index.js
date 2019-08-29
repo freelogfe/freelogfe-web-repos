@@ -1,5 +1,5 @@
 import initInterfaces, * as _interfaces from './interface'
-import { resolvePresentableDataUrl, resolveSubResourceDataUrl } from './resolveUrl'
+import { resolveSubResourceDataUrl, resolveSubReleaseInfoUrl, resolvePresentableResourceUrl } from './resolveUrl'
 import { getUserInfo, checkUserIsLogin } from './resolveUserInfo'
 
 export default function generateAPIs(QI) {
@@ -15,8 +15,9 @@ export default function generateAPIs(QI) {
   initInterfaces(_fetch)
 
   return Object.assign({
-    resolvePresentableDataUrl,
     resolveSubResourceDataUrl,
+    resolveSubReleaseInfoUrl,
+    resolvePresentableResourceUrl,
     getUserInfo,
     checkUserIsLogin
   }, exposeInterfaces(_interfaces))

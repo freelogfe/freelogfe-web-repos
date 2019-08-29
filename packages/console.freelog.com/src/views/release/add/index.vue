@@ -1,11 +1,12 @@
+<i18n src="./add.json"></i18n>
 <template>
   <div class="release-add-wrapper" v-if="release !== null">
     <release-editor-layout :release.sync="release" type="add">
       <template slot="about-version">
         <div class="r-a-w-version">
-          <h4>版本号</h4>
+          <h4>{{$t('version')}}</h4>
           <div class="r-a-w-v-current">
-            <label>当前版本</label>
+            <label>{{$t('currentVersion')}}</label>
             <el-input v-model="newVersion"></el-input>
             <div class="raw-v--li-name" v-if="resourceDetail">
               <img :src="resourceDetail.previewImages ? resourceDetail.previewImages[0] : ''" alt="" :class="{'resource-default-preview':!(resourceDetail.previewImages && resourceDetail.previewImages[0])}" >
@@ -13,7 +14,7 @@
             </div>
           </div>
           <div class="r-a-w-v-list clearfix">
-            <label>历史版本</label>
+            <label>{{$t('historicVersion')}}</label>
             <div style="margin-left: 72px;">
               <ul class="raw-v--ul">
                 <li v-for="item in targetVersionsList">
@@ -27,7 +28,9 @@
                   </div>
                 </li>
               </ul>
-              <div class="r-a-w-v-l-more" v-if="release.resourceVersions.length > 3" @click="tapMoreBtn">{{this.isShowAllVersions ? "收起" : "更多..."}}</div>
+              <div class="r-a-w-v-l-more" v-if="release.resourceVersions.length > 3" @click="tapMoreBtn">
+                {{this.isShowAllVersions ? $t('tuckUp') : $t('more') }}
+              </div>
             </div>
           </div>
         </div>
