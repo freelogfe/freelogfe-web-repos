@@ -293,7 +293,7 @@ export default {
                 dependencies: this.releasedList.length === 0
                     ? this.depList.filter(i => i.version).map(i => ({
                         releaseId: i.id,
-                        versionRange: '^' + i.version
+                        versionRange: i.version
                     }))
                     : undefined
                 ,
@@ -304,7 +304,8 @@ export default {
             if (!this.isUpdateResource) {
                 const res = await this.$axios.post('/v1/resources', params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('creationFailed'));
+                    this.$message.error(this.$t('creationFailed'));
+                    throw new Error(this.$t('creationFailed'));
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
                 return res.data.data.resourceId;
@@ -312,7 +313,8 @@ export default {
                 const {resourceId} = this.$route.params;
                 const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('saveFailed'));
+                    this.$message.error(this.$t('saveFailed'));
+                    throw new Error(this.$t('saveFailed'));
                 }
                 this.$message.success(this.$t('saveSuccess'));
                 return res.data.data.resourceId;
