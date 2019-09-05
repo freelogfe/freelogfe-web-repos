@@ -2,7 +2,8 @@
   "name": "freelogfe-repos",
   "private": true,
   "scripts": {
-    "proxy": "sudo xproxy server"
+    "proxy": "sudo xproxy server",
+    "registOss": "node registOssConfig.js"
   },
   "devDependencies": {
     "lerna": "^3.16.4",

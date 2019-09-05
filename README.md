@@ -57,18 +57,13 @@ cd packages/console.freelog.com
 npm run dev
 ```
 
-### 配置像代码仓库 push 代码的权限
+### 配置向代码仓库 push 代码的权限
 
-- 在用户主目录下创建.freelog目录
+- 在项目主目录下执行
 ```
-cd
-mkdir .freelog
+npm run registOss
 ```
 
-- 将项目跟目录下的 oos-config.json 文件拷贝到 ```~/.freelog``` 目录下
-```
-cp oss-config.json ~/.freelog/
-```
 
 ### 项目构建
 ```
