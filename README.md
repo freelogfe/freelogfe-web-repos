@@ -64,16 +64,6 @@ npm run dev
 npm run registOss
 ```
 
+### 向测试环境部署代码
 
-### 项目构建
-```
-cd packages/www.freelog.com
-npm run build
-```
-
-### 项目部署
-```
-cd packages/www.freelog.com
-npm run deploy
-```
-https://www.npmjs.com/package/xproxy
+* 将分支切换到 *daily* 分支，然后向仓库 push 代码，将会自动部署到测试环境
