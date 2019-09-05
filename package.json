@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "proxy": "sudo xproxy server",
+    "lernaBootstrap": "lerna bootstrap",
     "registOss": "node registOssConfig.js"
   },
   "devDependencies": {

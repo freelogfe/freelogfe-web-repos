@@ -21,7 +21,7 @@ npm install
 
 - 然后执行以下命令，安装全部项目依赖
 ```
-npx lerna bootstrap
+npm run lernaBootstrap
 ```
 
 ### 配置并启动服务代理
