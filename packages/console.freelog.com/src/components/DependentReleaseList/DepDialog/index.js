@@ -15,7 +15,7 @@ export default {
             },
             'zh-CN': {
                 globalSearching: '全局搜索',
-                myRelease: '我的发行',
+                myReleases: '我的发行',
                 myCollections: '我的收藏',
                 myMocks: 'Mock资源',
             },
