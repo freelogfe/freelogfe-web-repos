@@ -17,7 +17,7 @@ export default {
                 globalSearching: '全局搜索',
                 myRelease: '我的发行',
                 myCollections: '我的收藏',
-                myMocks: '我的Mock',
+                myMocks: 'Mock资源',
             },
         }
     },
