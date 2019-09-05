@@ -5,9 +5,9 @@
     "proxy": "sudo xproxy server"
   },
   "devDependencies": {
-    "lerna": "^3.16.4"
+    "lerna": "^3.16.4",
+    "xproxy": "^0.2.2"
   },
   "dependencies": {
-    "xproxy": "^0.2.2"
   }
 }
