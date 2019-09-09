@@ -22,4 +22,4 @@ yarn-error.log*
 *.sw*
 
 #敏感文件不上传
-oss-config.*
+#oss-config.*

@@ -83,7 +83,7 @@
                     ...this.data,
                     ...data.dataList.map(i => ({
                         id: i.mockResourceId,
-                        name: i.name,
+                        name: i.fullName,
                         // isOnline: i.status === 1,
                         type: i.resourceType,
                         // version: i.latestVersion.version,

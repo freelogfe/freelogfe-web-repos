@@ -1,8 +1,15 @@
 {
   "name": "freelogfe-repos",
   "private": true,
-  "devDependencies": {
-    "lerna": "^3.4.3"
+  "scripts": {
+    "proxy": "sudo xproxy server",
+    "lernaBootstrap": "lerna bootstrap",
+    "registOss": "node registOssConfig.js"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "lerna": "^3.16.4",
+    "xproxy": "^0.2.2"
+  },
+  "dependencies": {
+  }
 }
