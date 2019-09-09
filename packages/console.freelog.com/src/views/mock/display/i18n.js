@@ -12,6 +12,7 @@ export default {
             confirm: 'Confirm',
             cancel: 'Cancel',
             confirmDeletion: 'Storage space once deleted cannot be recovered, to confirm the deletion ?',
+            successfullyDeleted: 'Successfully deleted',
             doesNotRemove: 'The storage space does not remove the simulation of resources',
             createMock: 'Create mock',
             notCreatedAnyMock: 'You have not created any mock resources',
@@ -33,7 +34,13 @@ export default {
             includeOnly: 'Include lowercase letters, numbers and dashes only (-);',
             startAndEnd: 'Start and end must be in lowercase letters or numbers;',
             between1To63Characters: 'The length must be between 1 - 63 characters.',
-            mockOnceDeleted: 'Simulation of resources once deleted cannot be recovered, to confirm the deletion?'
+            successfullyCreated: 'Successfully created',
+            mockOnceDeleted: 'Simulation of resources once deleted cannot be recovered, to confirm the deletion?',
+            invalidRelease :'Resource dependence there is an invalid release : simulation of funding resources.',
+            resourceAlreadyExists: 'The resource already exists, cannot be duplicated to create.',
+            formalResource: 'Confirm whether you want to make a formal resource',
+            prompt: 'Prompt',
+            generateSuccess: 'Generate success of official resources',
         },
         'zh-CN': {
             list: '列表',
@@ -47,6 +54,7 @@ export default {
             confirm: '确定',
             cancel: '取消',
             confirmDeletion: '存储空间一旦删除则无法恢复，确认删除吗？',
+            successfullyDeleted: '删除成功',
             doesNotRemove: '该存储空间内还有未删除模拟资源',
             createMock: '创建mock资源',
             notCreatedAnyMock: '您还没有创建任何mock资源',
@@ -68,7 +76,13 @@ export default {
             includeOnly: '只能包括小写字母、数字和短横线（-）；',
             startAndEnd: '必须以小写字母或者数字开头和结尾；',
             between1To63Characters: '长度必须在 1–63 字符之间。',
-            mockOnceDeleted: '模拟资源一旦删除则无法恢复，确认删除吗？'
+            successfullyCreated: '创建成功',
+            mockOnceDeleted: '模拟资源一旦删除则无法恢复，确认删除吗？',
+            invalidRelease :'资源依赖存在无效发行：模拟资资源。',
+            resourceAlreadyExists: '该资源已存在，不能重复创建。',
+            formalResource: '确认是否生成正式资源',
+            prompt: '提示',
+            generateSuccess: '生成正式资源成功',
         },
     }
 };
