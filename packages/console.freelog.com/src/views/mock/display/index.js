@@ -114,7 +114,7 @@ export default {
                 this.bucketNameInputValueError = data.msg;
                 return;
             }
-            this.$message.success('创建成功');
+            this.$message.success(this.$t('successfullyCreated'));
             this.hideNewBucketDialog();
             await this.initBucketsByAPI(true);
             // this.activeBucketIndex = this.bucketsList.length - 1;
@@ -132,6 +132,9 @@ export default {
             if (data.errcode !== 0) {
                 return this.errorMessage(data.msg);
             }
+            this.$message.success(this.$t('successfullyDeleted'));
+            // 从 bucket 列表中 移除当前 bucket
+            this.bucketsList.splice(this.activeBucketIndex, 1);
             this.onChangeBucketActiveIndex(0);
             this.controlDeleteBucketPopoverShow(false);
 
@@ -184,19 +187,19 @@ export default {
             // console.log(row, 'RRRRRWWWWWWW');
 
             if (row.systemMeta.dependencyInfo && row.systemMeta.dependencyInfo.mocks && row.systemMeta.dependencyInfo.mocks.length > 0) {
-                return this.$message.error('资源依赖存在无效发行：模拟资资源。');
+                return this.$message.error(this.$t('invalidRelease'));
             }
 
             const res = await this.$axios.get(`/v1/resources/${row.sha1}`);
             if (res.data.data) {
-                return this.$message.error('该资源已存在，不能重复创建。');
+                return this.$message.error(this.$t('resourceAlreadyExists'));
             }
 
             this.tmpNeedBuildResource = row;
 
-            this.$confirm('确认是否生成正式资源', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            this.$confirm(this.$t('formalResource'), this.$t('prompt'), {
+                confirmButtonText: this.$t('confirm'),
+                cancelButtonText: this.$t('cancel'),
                 type: 'warning'
             })
                 .then(async () => {
@@ -214,7 +217,7 @@ export default {
                     }
                     this.$message({
                         type: 'success',
-                        message: '生成正式资源成功'
+                        message: this.$t('generateSuccess')
                     });
                     this.$router.push(`/resource/detail/${res1.data.data.resourceId}`);
                     // console.log(res1, 'res1res1res1res1res1');
