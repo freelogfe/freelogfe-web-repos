@@ -73,8 +73,8 @@
 
         <div style="width: 100%; flex-shrink: 1; background-color: #fff; padding: 0 60px;">
             <ReleaseList v-if="selectedTab === 'ReleaseList'"/>
-            <StylePage v-if="StylePage"/>
-            <MappingRules v-if="MappingRules"/>
+            <StylePage v-if="selectedTab === 'StylePage'"/>
+            <MappingRules v-if="selectedTab === 'MappingRules'"/>
         </div>
     </div>
 </template>

@@ -74,7 +74,7 @@
                 <div class="p-name" :class="[type]" @click="selectPolicy(tmpNoSignedPolicies, policy, index)">
                   <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                   <i class="el-icon-check" v-else></i>
-                  {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>  
+                  {{policy.policyName}}<span v-if="policy.status === 0">（{{$t('offline')}}）</span>  
                 </div>
                 <div class="p-detail">
                   <pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre>
@@ -97,7 +97,12 @@
                   <div><label>{{$t('partyB')}}：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>
-              <h4 class="s-m-w-c-p-title">{{$t('signedContracts')}} <i class="el-icon-info"></i></h4> 
+              <h4 class="s-m-w-c-p-title">
+                {{$t('signedContracts')}} 
+                <el-tooltip placement="right" :content="$t('tips[2]')">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </h4> 
               <div
                 class="s-m-w-c-policy"
                 :class="{ 

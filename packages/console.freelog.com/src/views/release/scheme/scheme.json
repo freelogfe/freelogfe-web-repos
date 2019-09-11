@@ -13,7 +13,7 @@
     "policyStatus": [ "已应用", "已搁置" ],
     "signStatus": [ "已签约" ],
     "contractStatus": [ "执行中", "生效中", "合同终止", "上抛" ],
-    "tips": [ "该发行已上抛", "以下策略可进行新的签约" ],
+    "tips": [ "该发行已上抛", "以下策略可进行新的签约", "此发行存在历史签约，可直接使用" ],
     "messages": [ "" ]
   },
   "en": {
@@ -30,7 +30,7 @@
     "policyStatus": [ "Already applied", "Already lay aside" ],
     "signStatus": [ "Already signed" ],
     "contractStatus": [ "Executing", "In effect", "Termination of contract", "Upcast" ],
-    "tips": [ "The release has been upcasted", "The following policies are available for new signings" ],
+    "tips": [ "The release has been upcasted", "The following policies are available for new signings", "This issue has a historical contract and can be used directly." ],
     "messages": [ "" ]
   }
 }
