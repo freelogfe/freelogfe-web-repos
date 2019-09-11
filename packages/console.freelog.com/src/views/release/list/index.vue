@@ -86,7 +86,7 @@ export default {
 .my-r-search-dialog {
   .el-dialog__body {
     overflow: auto;
-    height: 300px; margin: 0 20px; padding: 20px 50px 0; border-top: 1px solid #D8D8D8;
+    height: 300px; margin: 0 20px; padding: 20px 45px 0; border-top: 1px solid #D8D8D8;
 
     .el-input__inner { padding-left: 30px; }
   }

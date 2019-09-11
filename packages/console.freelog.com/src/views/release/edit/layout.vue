@@ -135,7 +135,7 @@
   import PolicyList from '@/components/PolicyList/list/index.vue'
   import policy from "../../../services/policy"
 
-  const defualtImageUrl = '/public/img/resource.jpg'
+  const defualtImageUrl = '//frcdn.oss-cn-shenzhen.aliyuncs.com/console/img/resource.d29ef4da.jpg'
 
   export default {
     name: 'release-editor-layout',

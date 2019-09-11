@@ -26,7 +26,7 @@
                   :key="'dep-item-'+_index"
                   is-scond-level
                   :release="urItem"
-                  :is-active="selectedRelease.releaseId === rItem.releaseId"
+                  :is-active="selectedRelease.releaseId === urItem.releaseId"
                   :resolveStatus="urItem.resolveStatus"
                   :contractsMap="contractsMap"
                   @exchange-item="exchangeSelectedRelease"></release-depend-item>
@@ -97,7 +97,7 @@
                   <div><label>{{$t('partyB')}}：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>
-              <h4 class="s-m-w-c-p-title">{{$t('signStatus[0]')}}</h4> 
+              <h4 class="s-m-w-c-p-title">{{$t('signedContracts')}} <i class="el-icon-info"></i></h4> 
               <div
                 class="s-m-w-c-policy"
                 :class="{ 
