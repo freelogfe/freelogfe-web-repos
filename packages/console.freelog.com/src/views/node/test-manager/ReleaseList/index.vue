@@ -3,17 +3,8 @@
         <div style="height: 40px;"></div>
 
         <div style="display: flex; align-items: center;justify-content: space-between;">
-            <div>
-                <a style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;">
-                    <i class="el-icon-plus" style="font-size: 16px; font-weight: 600;"></i>
-                    <span style="vertical-align: center;">添加测试资源</span>
-                </a>
 
-                <a style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;">
-                    <i class="el-icon-refresh" style="font-size: 16px; font-weight: 600;"></i>
-                    <span style="vertical-align: center;">资源替换</span>
-                </a>
-            </div>
+            <AddAndReplace/>
 
             <el-input
                 style="width: 400px;"
@@ -236,8 +227,13 @@
 </template>
 
 <script>
+    import AddAndReplace from '../AddAndReplace/index.vue';
+
     export default {
         name: "index",
+        components: {
+            AddAndReplace,
+        },
         data() {
             return {
                 tableData: [{}],
