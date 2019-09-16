@@ -98,8 +98,8 @@
                 </div>
               </div>
               <h4 class="s-m-w-c-p-title">
-                {{$t('signedContracts')}} 
-                <el-tooltip placement="right" :content="$t('tips[2]')">
+                {{type !== 'edit' ? $t('signedContracts') : $t('signStatus[0]')}} 
+                <el-tooltip placement="right" :content="$t('tips[2]')" v-if="type !== 'edit'" >
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </h4> 
