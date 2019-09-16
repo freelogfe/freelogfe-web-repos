@@ -8,7 +8,10 @@
             <span style="vertical-align: center;">添加测试资源</span>
         </a>
 
-        <a style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;">
+        <a
+            @click="elDialogVisible = true"
+            style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;"
+        >
             <i class="el-icon-refresh" style="font-size: 16px; font-weight: 600;"></i>
             <span style="vertical-align: center;">资源替换</span>
         </a>
@@ -27,7 +30,7 @@
         />
 
         <el-dialog
-            :visible.sync="elDialogVisible"
+            :visible="elDialogVisible"
             width="840px"
             :before-close="handleClose"
             custom-class="custom-class"
@@ -35,7 +38,11 @@
         >
             <div>
                 <div style="text-align: right; padding-right: 10px; padding-top: 5px">
-                    <i class="el-icon-close" style="font-size: 10px; color: #999;"></i>
+                    <i
+                        @click="elDialogVisible = false"
+                        class="el-icon-close"
+                        style="font-size: 10px; color: #999; cursor: pointer;"
+                    ></i>
                 </div>
 
                 <div style="padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -48,7 +55,12 @@
                     style="height: 50px; align-items: center; display: flex; flex-direction: row-reverse; padding: 0 20px;"
                 >
                     <el-button type="primary" size="mini" style="font-size: 14px;">替换</el-button>
-                    <el-button type="text" size="mini" style="font-size: 14px; padding: 0 20px; color: #999;">取消
+                    <el-button
+                        type="text"
+                        size="mini"
+                        style="font-size: 14px; padding: 0 20px; color: #999;"
+                        @click="elDialogVisible = false"
+                    >取消
                     </el-button>
                 </div>
             </div>

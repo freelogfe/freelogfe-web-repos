@@ -5,18 +5,25 @@
 
         <div style="border: 1px solid #c8c8c8; border-radius: 2px; overflow: hidden;">
             <div
-                style="border-radius: 2px 2px 0 0; background-color: #fafbfb; font-size: 14px; overflow: hidden; display: flex; color: #333; height: 40px; align-items: center; justify-content: space-between; padding: 0 15px;">
-                <div style="display: flex; align-items: center;">
+                style="border-radius: 2px 2px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 15px 15px 10px;">
+                <el-autocomplete
+                    size="small"
+                    v-model="filterSearch"
+                    style="width: 80%;"
+                    :fetch-suggestions="querySearchAsync"
+                    placeholder="请输入内容"
+                    :trigger-on-focus="false"
+                >
+                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
+<!--                    <i-->
+<!--                        style="cursor: pointer"-->
+<!--                        @click="filterSearch = ''"-->
+<!--                        v-show="filterSearch && filterSearch.length > 0"-->
+<!--                        slot="suffix"-->
+<!--                        class="el-input__icon el-icon-circle-close"-->
+<!--                    ></i>-->
+                </el-autocomplete>
 
-                    <div style="display: flex; align-items: center;">
-                        <Radio/>
-                        <span style="padding-left: 5px;">全选</span>
-                    </div>
-                    <div style="padding-left: 20px; display: flex; align-items: center;">
-                        <Radio/>
-                        <span style="padding-left: 5px;">反选</span>
-                    </div>
-                </div>
                 <el-popover
                     placement="bottom-end"
                     width="325"
@@ -27,21 +34,35 @@
                         style="font-size: 12px; display: flex; align-items: center;"
                         slot="reference"
                     >
-                        <span>筛选</span>
+                        <span>版本范围</span>
                         <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"></i>
                     </a>
 
                     <div style="width: 100%; overflow: hidden;">
+                        <div style="display: flex; align-items: center;">
+                            <Radio :selected="true"/>
+                            <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
+                            <el-select
+                                placeholder="请选择"
+                                size="mini"
+                                style="width: 100px;"
+                            >
+                                <el-option
+                                    :label="'黄金糕'"
+                                    :value="'选项1'"
+                                ></el-option>
+                            </el-select>
+                        </div>
+                        <div style="height: 10px;"></div>
                         <div>
+                            <div style="display: flex; align-items: center;">
+                                <Radio :selected="true"/>
+                                <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
+                            </div>
+                            <div style="height: 5px;"></div>
                             <el-input
                                 v-model="input"
-                                placeholder="名称"
-                                style="display: block;"
-                            ></el-input>
-                            <div style="height: 10px;"></div>
-                            <el-input
-                                v-model="input"
-                                placeholder="版本范围"
+                                placeholder="输入semver版本范围"
                                 style="display: block;"
                             ></el-input>
                         </div>
@@ -55,8 +76,9 @@
                         </div>
                     </div>
                 </el-popover>
+
             </div>
-            <div style="height: 380px;">
+            <div style="height: 365px;">
                 <el-tree
                     :data="data2"
                     show-checkbox
@@ -119,13 +141,23 @@
                             label: '二级 3-2'
                         }]
                     }],
+                filterSearch: '',
             };
         },
         methods: {
             treeCheckChange() {
                 console.log(this.$refs.tree.getCheckedKeys(), 'getCheckedKeys');
                 console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
-            }
+            },
+            querySearchAsync(queryString, cb) {
+
+                setTimeout(() => {
+                    cb([
+                        {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
+                        {"value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号"},
+                    ])
+                }, 1200);
+            },
         }
     }
 </script>
