@@ -6,11 +6,26 @@
             <div
                 style="border-radius: 2px 2px 0 0; background-color: #fafbfb; font-size: 14px; overflow: hidden; display: flex; color: #333;">
                 <a
-                    style=" padding: 10px 0; margin-left: 15px;"
-                    :style="{fontWeight: 600, color: '#409eff', borderBottom: '2px solid #378fea'}"
+                    style=" padding: 10px 0; margin-left: 15px; cursor: pointer;"
+                    :style="{
+                    // fontWeight: activeTab==='myRelease' ? 600 : 400,
+                    color: activeTab==='myRelease' ? '#409eff': '#333', borderBottom: activeTab==='myRelease' ? '2px solid #378fea': 'none'}"
+                    @click="activeTab = 'myRelease'"
                 >我的发行</a>
-                <a style="padding: 10px 0; margin-left: 20px;">我的mock</a>
-                <a style="padding: 10px 0; margin-left: 20px;">发行市场</a>
+                <a
+                    style="padding: 10px 0; margin-left: 20px; cursor: pointer;"
+                    :style="{
+                    // fontWeight: activeTab==='mock' ? 600 : 400,
+                     color: activeTab==='mock' ? '#409eff': '#333', borderBottom: activeTab==='mock' ? '2px solid #378fea': 'none'}"
+                    @click="activeTab = 'mock'"
+                >我的mock</a>
+                <a
+                    style="padding: 10px 0; margin-left: 20px; cursor: pointer;"
+                    :style="{
+                    // fontWeight: activeTab==='release' ? 600 : 400,
+                    color: activeTab==='release' ? '#409eff': '#333', borderBottom: activeTab==='release' ? '2px solid #378fea': 'none'}"
+                    @click="activeTab = 'release'"
+                >发行市场</a>
             </div>
             <div style="height: 380px;">
 
@@ -24,13 +39,13 @@
                         :trigger-on-focus="false"
                     >
                         <i slot="prefix" class="el-input__icon el-icon-search"></i>
-<!--                        <i-->
-<!--                            style="cursor: pointer"-->
-<!--                            @click="filterSearch = ''"-->
-<!--                            v-show="filterSearch && filterSearch.length > 0"-->
-<!--                            slot="suffix"-->
-<!--                            class="el-input__icon el-icon-circle-close"-->
-<!--                        ></i>-->
+                        <!--                        <i-->
+                        <!--                            style="cursor: pointer"-->
+                        <!--                            @click="filterSearch = ''"-->
+                        <!--                            v-show="filterSearch && filterSearch.length > 0"-->
+                        <!--                            slot="suffix"-->
+                        <!--                            class="el-input__icon el-icon-circle-close"-->
+                        <!--                        ></i>-->
                     </el-autocomplete>
                 </div>
 
@@ -51,7 +66,8 @@
         },
         data() {
             return {
-                filterSearch: ''
+                filterSearch: '',
+                activeTab: 'myRelease',
             };
         },
         methods: {
