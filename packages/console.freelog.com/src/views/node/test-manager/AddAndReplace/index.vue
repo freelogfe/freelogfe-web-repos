@@ -38,8 +38,10 @@
                     <i class="el-icon-close" style="font-size: 10px; color: #999;"></i>
                 </div>
 
-                <div style="padding: 0 20px;">
+                <div style="padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
                     <Replacer/>
+                    <i class="el-icon-back" style="transform: rotate(180deg)"></i>
+                    <Replaced/>
                 </div>
 
                 <div
@@ -58,12 +60,14 @@
 <script>
     import DepDialog from '@/components/DependentReleaseList/DepDialog/index.vue';
     import Replacer from './Replacer/index.vue';
+    import Replaced from './Replaced/index.vue';
 
     export default {
         name: "index",
         components: {
             DepDialog,
             Replacer,
+            Replaced,
         },
         data() {
             return {
