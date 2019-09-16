@@ -9,7 +9,7 @@ export default {
         clipboard,
         ReleaseList,
         StylePage,
-        MappingRules
+        MappingRules,
     },
     data() {
         return {
