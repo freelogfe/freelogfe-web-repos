@@ -12,10 +12,11 @@
                 placement="bottom-end"
                 width="325"
                 trigger="click"
+                v-model="popoverShow"
             >
                 <!--                            <el-button slot="reference">focus 激活</el-button>-->
                 <a
-                    style="font-size: 12px; display: flex; align-items: center;"
+                    style="font-size: 12px; display: flex; align-items: center; cursor: pointer;"
                     slot="reference"
                 >
                     <span>版本范围</span>
@@ -55,7 +56,12 @@
                         style="align-items: center; display: flex; flex-direction: row-reverse; width: 100%;"
                     >
                         <el-button type="primary" size="mini" style="font-size: 12px;">确定</el-button>
-                        <el-button type="text" size="mini" style="font-size: 12px; padding: 0 20px; color: #999;">取消
+                        <el-button
+                            type="text"
+                            size="mini"
+                            style="font-size: 12px; padding: 0 20px; color: #999;"
+                            @click="popoverShow = false"
+                        >取消
                         </el-button>
                     </div>
                 </div>
@@ -74,6 +80,11 @@
         components: {
             Radio,
         },
+        data(){
+            return {
+                popoverShow: false,
+            };
+        }
     }
 </script>
 
