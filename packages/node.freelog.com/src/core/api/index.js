@@ -8,12 +8,12 @@ export default function generateAPIs(QI) {
 
   const _fetch = QI.create({
     baseURL: window.FreelogApp.Env.qiOrigin,
+    // baseURL: location.origin,
     timeout: 1000,
     data: {nodeId}
   })
 
   initInterfaces(_fetch)
-
   return Object.assign({
     resolveSubResourceDataUrl,
     resolveSubReleaseInfoUrl,

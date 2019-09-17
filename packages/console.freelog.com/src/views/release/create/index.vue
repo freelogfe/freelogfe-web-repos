@@ -85,20 +85,21 @@
     name: 'release-creator',
     components: { SchemeManage, UploadCover },
     data() {
+      const $i18n = this.$i18n
       const validateName = (rule, value, callback) => {
         if(value.length < 1 || value.length > 60) {
-          callback('长度必须在 1–60 字符之间')
+          callback($i18n.t('messages[0]'))
         }else if(/^[^\/\\\:\*\?\"\<\>\|\!]+$/.test(value)) {
           callback()
         }else {
-          callback('不能包含空格和以下字符：\ / : * ? " < > |')
+          callback($i18n.t('messages[1]') + '：\\ / : * ? " < > |')
         }
       }
       const validateVersion = (rule, value, callback) => {
         if(/^\d+\.\d+.\d+$/.test(value)) {
           callback()
         }else {
-          callback(new Error('版本号格式有误！'))
+          callback(new Error($i18n.t('messages[2]')))
         }
       }
 
@@ -112,11 +113,11 @@
         },
         rules: {
           releaseName: [
-            { required: true, message: '发行名不能为空！', trigger: 'blur'},
+            { required: true, message: $i18n.t('messages[3]'), trigger: 'blur'},
             { validator: validateName, trigger: 'blur' }
           ],
           version: [
-            { required: true, message: '版本号不能为空！', trigger: 'blur'},
+            { required: true, message: $i18n.t('messages[4]'), trigger: 'blur'},
             { validator: validateVersion, trigger: 'blur' }
           ]
         },
@@ -171,7 +172,7 @@
         return data
       },
       createRelease(formName) {
-
+        const $i18n = this.$i18n
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const formData = this.getFormData()
@@ -179,7 +180,7 @@
               .then(res => res.data)
               .then(res => {
                 if (res.errcode === 0 && res.data) {
-                  this.$message({type: 'success', message: '发行创建成功！'})
+                  this.$message({type: 'success', message: $i18n.t('messages[5]')})
                   if (res.data.releaseId) {
                     this.$router.push(`/release/edit/${res.data.releaseId}`)
                   }
@@ -213,7 +214,7 @@
         .catch(e => this.$message({type: 'error', message: e.toString()}))
       }
 
-    }
+    },
   }
 </script>
 
