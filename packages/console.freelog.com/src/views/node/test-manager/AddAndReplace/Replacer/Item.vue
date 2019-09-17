@@ -1,18 +1,21 @@
 <template>
     <div style="padding: 5px 15px;">
         <div style="display: flex; align-items: center;">
-            <Radio :selected="true"/>
-            <span style="padding-left: 10px; font-size: 14px; color: #333;">我的发行</span>
+            <Radio :selected="active" @click="onDataChange"/>
+            <span
+                style="padding-left: 10px; font-size: 14px; color: #333;"
+                class="overflow">{{title}}</span>
         </div>
         <div
             style="padding-left: 25px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 12px; color: #333;">markdown | v1.0.1 | 2019-07-07</div>
+            <div style="font-size: 12px; color: #333;">{{type}} {{version ? '| v' + version: ''}} | {{date}}</div>
 
             <el-popover
                 placement="bottom-end"
                 width="325"
                 trigger="click"
                 v-model="popoverShow"
+                v-if="active"
             >
                 <!--                            <el-button slot="reference">focus 激活</el-button>-->
                 <a
@@ -25,31 +28,37 @@
 
                 <div style="width: 100%; overflow: hidden;">
                     <div style="display: flex; align-items: center;">
-                        <Radio :selected="true"/>
+                        <Radio :selected="!customer" @click="customer=false"/>
                         <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
                         <el-select
+                            @change="onDataChange"
                             placeholder="请选择"
                             size="mini"
                             style="width: 100px;"
+                            v-model="selectedVersion"
+                            :disabled="customer"
                         >
                             <el-option
-                                :label="'黄金糕'"
-                                :value="'选项1'"
+                                v-for="v in versions"
+                                :label="v"
+                                :value="v"
                             ></el-option>
                         </el-select>
                     </div>
                     <div style="height: 10px;"></div>
                     <div>
                         <div style="display: flex; align-items: center;">
-                            <Radio :selected="true"/>
+                            <Radio :selected="customer" @click="customer=true"/>
                             <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
                         </div>
-                        <div style="height: 5px;"></div>
-                        <el-input
-                            v-model="input"
-                            placeholder="输入semver版本范围"
-                            style="display: block;"
-                        ></el-input>
+                        <div v-show="customer">
+                            <div style="height: 5px;"></div>
+                            <el-input
+                                v-model="input"
+                                placeholder="输入semver版本范围"
+                                style="display: block;"
+                            ></el-input>
+                        </div>
                     </div>
                     <div style="height: 10px;"></div>
                     <div
@@ -76,18 +85,48 @@
     import Radio from '../components/Radio.vue';
 
     export default {
-        name: "Item",
+        name: 'Item',
         components: {
             Radio,
         },
-        data(){
+        props: {
+            active: {
+                type: Boolean,
+                default: false,
+            },
+            title: String,
+            type: String,
+            version: String,
+            date: String,
+            versions: {
+                type: Array,
+                default() {
+                    return []
+                }
+            }
+        },
+        data() {
             return {
                 popoverShow: false,
+                customer: false,
+                selectedVersion: this.versions[0],
             };
+        },
+        mounted() {
+        },
+        methods: {
+            onDataChange() {
+                this.$emit('onDataChange', {name: this.title, selectedVersion: this.selectedVersion});
+            }
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+    .overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
 </style>

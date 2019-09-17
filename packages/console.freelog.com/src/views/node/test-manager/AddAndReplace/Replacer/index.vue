@@ -29,27 +29,7 @@
             </div>
             <div style="height: 380px;">
 
-                <div style="padding: 15px 15px 10px;">
-                    <el-autocomplete
-                        size="small"
-                        style="display: block;"
-                        v-model="filterSearch"
-                        :fetch-suggestions="querySearchAsync"
-                        placeholder="请输入内容"
-                        :trigger-on-focus="false"
-                    >
-                        <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                        <!--                        <i-->
-                        <!--                            style="cursor: pointer"-->
-                        <!--                            @click="filterSearch = ''"-->
-                        <!--                            v-show="filterSearch && filterSearch.length > 0"-->
-                        <!--                            slot="suffix"-->
-                        <!--                            class="el-input__icon el-icon-circle-close"-->
-                        <!--                        ></i>-->
-                    </el-autocomplete>
-                </div>
-
-                <Item/>
+                <MyRelease/>
 
             </div>
         </div>
@@ -57,12 +37,14 @@
 </template>
 
 <script>
-    import Item from './Item.vue';
+    // import Item from './Item.vue';
+    import MyRelease from './MyRelease';
 
     export default {
         name: "index",
         components: {
-            Item,
+            MyRelease,
+
         },
         data() {
             return {
