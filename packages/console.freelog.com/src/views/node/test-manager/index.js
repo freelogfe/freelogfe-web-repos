@@ -16,7 +16,7 @@ export default {
             styleObject: {
                 minHeight: (window.innerHeight - 60) + 'px',
             },
-            selectedTab: 'MappingRules',
+            selectedTab: 'ReleaseList',
         };
     },
 }

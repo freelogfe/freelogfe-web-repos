@@ -10,6 +10,8 @@
             style="padding-left: 25px; display: flex; align-items: center; justify-content: space-between;">
             <div style="font-size: 12px; color: #333;">{{type}} {{version ? '| v' + version: ''}} | {{date}}</div>
 
+<!--            :value="popoverShow"-->
+<!--            @show="popoverShow = true"-->
             <el-popover
                 placement="bottom-end"
                 width="325"
@@ -31,7 +33,6 @@
                         <Radio :selected="!customer" @click="customer=false"/>
                         <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
                         <el-select
-                            @change="onDataChange"
                             placeholder="请选择"
                             size="mini"
                             style="width: 100px;"
@@ -54,7 +55,7 @@
                         <div v-show="customer">
                             <div style="height: 5px;"></div>
                             <el-input
-                                v-model="input"
+                                v-model="inputVersion"
                                 placeholder="输入semver版本范围"
                                 style="display: block;"
                             ></el-input>
@@ -64,7 +65,13 @@
                     <div
                         style="align-items: center; display: flex; flex-direction: row-reverse; width: 100%;"
                     >
-                        <el-button type="primary" size="mini" style="font-size: 12px;">确定</el-button>
+                        <el-button
+                            type="primary"
+                            size="mini"
+                            style="font-size: 12px;"
+                            @click="onDataChange"
+                        >确定
+                        </el-button>
                         <el-button
                             type="text"
                             size="mini"
@@ -110,13 +117,17 @@
                 popoverShow: false,
                 customer: false,
                 selectedVersion: this.versions[0],
+                inputVersion: '',
             };
         },
         mounted() {
         },
         methods: {
             onDataChange() {
-                this.$emit('onDataChange', {name: this.title, selectedVersion: this.selectedVersion});
+                this.$emit('onDataChange', {
+                    name: this.title,
+                    selectedVersion: this.customer ? this.inputVersion : this.selectedVersion,
+                });
             }
         }
     }
