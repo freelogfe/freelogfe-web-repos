@@ -110,9 +110,9 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
-                        style="height: 32px"
+                        style="height: 32px; padding-left: 0;"
                     >
-                        <div>
+                        <div style="padding-left: 0;">
                             全部类型 <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
@@ -138,9 +138,9 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
-                        style="height: 32px"
+                        style="height: 32px; padding-left: 0;"
                     >
-                        <div>
+                        <div style="padding-left: 0;">
                             全部状态 <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
