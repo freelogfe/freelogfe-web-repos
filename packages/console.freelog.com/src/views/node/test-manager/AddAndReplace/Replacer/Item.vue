@@ -10,8 +10,8 @@
             style="padding-left: 25px; display: flex; align-items: center; justify-content: space-between;">
             <div style="font-size: 12px; color: #333;">{{type}} {{version ? '| v' + version: ''}} | {{date}}</div>
 
-<!--            :value="popoverShow"-->
-<!--            @show="popoverShow = true"-->
+            <!--            :value="popoverShow"-->
+            <!--            @show="popoverShow = true"-->
             <el-popover
                 placement="bottom-end"
                 width="325"
@@ -110,23 +110,36 @@
                 default() {
                     return []
                 }
+            },
+            state: {
+                type: Object,
+                default() {
+                    return {
+                        customer: false,
+                        selectedVersion: this.versions[0],
+                        inputVersion: '',
+                    };
+                }
             }
         },
         data() {
             return {
                 popoverShow: false,
-                customer: false,
-                selectedVersion: this.versions[0],
-                inputVersion: '',
+                customer: this.state ? this.state.customer : false,
+                selectedVersion: this.state ? this.state.selectedVersion : this.versions[0],
+                inputVersion: this.state ? this.state.inputVersion : '',
             };
         },
         mounted() {
         },
         methods: {
             onDataChange() {
+                this.popoverShow = false;
                 this.$emit('onDataChange', {
                     name: this.title,
-                    selectedVersion: this.customer ? this.inputVersion : this.selectedVersion,
+                    customer: this.customer,
+                    selectedVersion: this.selectedVersion,
+                    inputVersion: this.inputVersion,
                 });
             }
         }

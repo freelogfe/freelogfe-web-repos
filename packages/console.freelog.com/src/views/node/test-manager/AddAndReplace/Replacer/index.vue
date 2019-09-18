@@ -29,7 +29,16 @@
             </div>
             <div style="height: 380px;">
 
-                <MyRelease/>
+                <MyRelease
+                    :activatedRelease="activatedRelease"
+                    v-if="activeTab === 'myRelease'"
+                    @onDataChange="onDataChange"
+                />
+                <Release
+                    :activatedRelease="activatedRelease"
+                    v-if="activeTab === 'release'"
+                    @onDataChange="onDataChange"
+                />
 
             </div>
         </div>
@@ -38,18 +47,20 @@
 
 <script>
     // import Item from './Item.vue';
-    import MyRelease from './MyRelease';
+    import MyRelease from './MyRelease.vue';
+    import Release from './Release.vue';
 
     export default {
         name: "index",
         components: {
+            Release,
             MyRelease,
-
         },
         data() {
             return {
                 filterSearch: '',
                 activeTab: 'myRelease',
+                activatedRelease: null,
             };
         },
         methods: {
@@ -62,6 +73,10 @@
                     ])
                 }, 1200);
             },
+            onDataChange(data) {
+                this.activatedRelease = data;
+                // console.log(data, 'hhhhhhhhhhh');
+            }
         }
     }
 </script>

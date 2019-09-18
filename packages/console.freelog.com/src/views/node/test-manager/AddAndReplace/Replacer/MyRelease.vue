@@ -25,6 +25,7 @@
         <Item
             v-for="i in this.data"
             :active="activatedRelease && (i.name === activatedRelease.name)"
+            :state="activatedRelease && (i.name === activatedRelease.name) ? activatedRelease: undefined"
             :title="i.name"
             :type="i.type"
             :version="i.version"
@@ -45,12 +46,18 @@
             LazyLoadingBox,
             Item,
         },
+        props: {
+            activatedRelease: {
+                default: null,
+            },
+        },
         data() {
             return {
+                page: 1,
                 input: '',
                 dataEnd: false,
                 data: [],
-                activatedRelease: null,
+                // activatedRelease: null,
             };
         },
         mounted() {
@@ -85,15 +92,16 @@
                     }))
                 ];
                 // .filter(i => i.id !== this.currentID && i.isOnline);
-                console.log(this.data, 'this.datathis.data');
+                // console.log(this.data, 'this.datathis.data');
             },
             toBottom() {
                 this.page++;
                 this.search();
             },
             onDataChange(data) {
-                console.log(data, 'dataaaa');
-                this.activatedRelease = data;
+                // console.log(data, 'dataaaa');
+                // this.activatedRelease = data;
+                this.$emit('onDataChange', data);
             }
         },
         watch: {
@@ -108,6 +116,10 @@
                 }, 1000);
 
             },
+            // activatedRelease() {
+            //     // console.log(this.activatedRelease, 'this.activatedRelease');
+            //     this.$emit('onDataChange', this.activatedRelease);
+            // },
         },
     }
 </script>
