@@ -17,7 +17,7 @@
                 width="325"
                 trigger="click"
                 v-model="popoverShow"
-                v-if="active"
+                v-if="active && version"
             >
                 <!--                            <el-button slot="reference">focus 激活</el-button>-->
                 <a
@@ -135,12 +135,19 @@
         methods: {
             onDataChange() {
                 this.popoverShow = false;
-                this.$emit('onDataChange', {
-                    name: this.title,
-                    customer: this.customer,
-                    selectedVersion: this.selectedVersion,
-                    inputVersion: this.inputVersion,
-                });
+                if (this.version) {
+                    this.$emit('onDataChange', {
+                        name: this.title,
+                        customer: this.customer,
+                        selectedVersion: this.selectedVersion,
+                        inputVersion: this.inputVersion,
+                    });
+                } else {
+                    this.$emit('onDataChange', {
+                        name: this.title,
+                    });
+                }
+
             }
         }
     }

@@ -39,6 +39,10 @@
                     v-if="activeTab === 'release'"
                     @onDataChange="onDataChange"
                 />
+                <Mock
+                    v-show="activeTab === 'mock'"
+                    @onDataChange="onDataChange"
+                />
 
             </div>
         </div>
@@ -49,10 +53,12 @@
     // import Item from './Item.vue';
     import MyRelease from './MyRelease.vue';
     import Release from './Release.vue';
+    import Mock from './Mock.vue';
 
     export default {
         name: "index",
         components: {
+            Mock,
             Release,
             MyRelease,
         },
