@@ -24,62 +24,10 @@
                     <!--                    ></i>-->
                 </el-autocomplete>
 
-                <el-popover
-                    placement="bottom-end"
-                    width="325"
-                    trigger="click"
-                    v-model="popoverShow"
-                >
-                    <!--                            <el-button slot="reference">focus 激活</el-button>-->
-                    <a
-                        style="font-size: 12px; display: flex; align-items: center; cursor: pointer;"
-                        slot="reference"
-                    >
-                        <span>版本范围</span>
-                        <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"></i>
-                    </a>
-
-                    <div style="width: 100%; overflow: hidden;">
-                        <div style="display: flex; align-items: center;">
-                            <Radio :selected="true"/>
-                            <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
-                            <el-select
-                                placeholder="请选择"
-                                size="mini"
-                                style="width: 100px;"
-                            >
-                                <el-option
-                                    :label="'黄金糕'"
-                                    :value="'选项1'"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div style="height: 10px;"></div>
-                        <div>
-                            <div style="display: flex; align-items: center;">
-                                <Radio :selected="true"/>
-                                <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
-                            </div>
-                            <div style="height: 5px;"></div>
-                            <el-input
-                                v-model="input"
-                                placeholder="输入semver版本范围"
-                                style="display: block;"
-                            ></el-input>
-                        </div>
-                        <div style="height: 10px;"></div>
-                        <div
-                            style="align-items: center; display: flex; flex-direction: row-reverse; width: 100%;"
-                        >
-                            <el-button type="primary" size="mini" style="font-size: 12px;">确定</el-button>
-                            <el-button
-                                type="text" size="mini" style="font-size: 12px; padding: 0 20px; color: #999;"
-                                @click="popoverShow = false"
-                            >取消
-                            </el-button>
-                        </div>
-                    </div>
-                </el-popover>
+                <Version
+                    :versions="['1.1.2', '1.1.1', '1.0.0']"
+                    @change="onVersionChange"
+                />
 
             </div>
             <div style="height: 365px;">
@@ -91,7 +39,7 @@
                     ref="tree"
                     :default-expand-all="true"
                     :default-checked-keys="[]"
-                    :props="defaultProps">
+                >
                 </el-tree>
             </div>
         </div>
@@ -101,70 +49,95 @@
 <script>
 
     import Radio from '../components/Radio.vue';
+    import Version from "./Version";
 
     export default {
         name: "index",
         components: {
+            Version,
             Radio,
         },
         data() {
             return {
                 data2: [
                     {
-                        id: '1',
-                        label: '一级 1',
-                        children: [{
-                            id: 4,
-                            label: '二级 1-1',
-                            children: [{
-                                id: 9,
-                                label: '三级 1-1-1'
-                            }, {
-                                id: 10,
-                                label: '三级 1-1-2'
+                        id: 'presentation1',
+                        label: 'presentation1',
+                        children: [
+                            {
+                                id: 'presentation1->release1',
+                                label: 'release1',
+                                children: [
+                                    {
+                                        id: 'presentation1->release1->release2',
+                                        label: 'release2'
+                                    },
+                                    {
+                                        id: 'presentation1->release1->release3',
+                                        label: 'release3',
+                                        children: [
+                                            {
+                                                id: 'presentation1->release1->release3->release2',
+                                                label: 'release2'
+                                            },
+                                        ]
+                                    }
+
+                                ]
                             }]
-                        }]
-                    }, {
-                        id: 2,
-                        label: '一级 2',
-                        children: [{
-                            id: 5,
-                            label: '二级 2-1'
-                        }, {
-                            id: 6,
-                            label: '二级 2-2'
-                        }]
-                    }, {
-                        id: 3,
-                        label: '一级 3',
-                        children: [{
-                            id: 7,
-                            label: '二级 3-1'
-                        }, {
-                            id: 8,
-                            label: '二级 3-2'
-                        }]
-                    }],
+                    },
+                    {
+                        id: 'presentation2',
+                        label: 'presentation2',
+                        children: [
+                            {
+                                id: 'presentation2->release2',
+                                label: 'release2'
+                            }
+                        ]
+                    },
+                ],
                 filterSearch: '',
                 popoverShow: false,
+                scope: [],
+                timeout: null,
             };
         },
         methods: {
             treeCheckChange() {
-                console.log(this.$refs.tree.getCheckedKeys(), 'getCheckedKeys');
-                console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
+                if (this.timeout) {
+                    return;
+                }
+                this.timeout = setTimeout(() => {
+                    // console.log(this.$refs.tree.getCheckedKeys(), 'getCheckedKeys');
+                    this.timeout = null;
+                }, 10);
+
+                const scope = [];
+                let tempScope = [...this.$refs.tree.getCheckedKeys()];
+                while (tempScope.length > 0) {
+                    const temp = tempScope.shift();
+                    scope.push(temp);
+                    tempScope = tempScope.filter(i => !i.startsWith(temp + '->'));
+                }
+                console.log(scope);
+                this.scope = scope;
+                // console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
             },
             querySearchAsync(queryString, cb) {
 
                 setTimeout(() => {
                     cb([
-                        {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
-                        {"value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号"},
+                        {"value": "release2"},
+                        {"value": "release21"},
                     ])
                 }, 1200);
             },
             closePopover() {
 
+            },
+            onVersionChange(data) {
+                console.log(data, 'datadata');
             }
         }
     }
