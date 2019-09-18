@@ -83,7 +83,7 @@
         },
         data() {
             return {
-                elDialogVisible: true,
+                elDialogVisible: false,
                 dialogVisible: false,
             };
         },
