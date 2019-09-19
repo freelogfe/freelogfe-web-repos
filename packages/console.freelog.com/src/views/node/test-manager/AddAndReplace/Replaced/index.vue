@@ -143,7 +143,7 @@
 
             },
             onVersionChange(data) {
-                console.log(data, '123412341234231423434234');
+                // console.log(data, '123412341234231423434234');
                 // this.$emit('onChange', data);
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
             }
