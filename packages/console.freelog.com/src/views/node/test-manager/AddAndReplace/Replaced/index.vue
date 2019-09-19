@@ -49,7 +49,7 @@
 <script>
 
     import Radio from '../components/Radio.vue';
-    import Version from "./Version";
+    import Version from './Version';
 
     export default {
         name: "index",
@@ -99,8 +99,9 @@
                 ],
                 filterSearch: '',
                 popoverShow: false,
-                scope: [],
                 timeout: null,
+                version: '',
+                scope: [],
             };
         },
         methods: {
@@ -120,8 +121,13 @@
                     scope.push(temp);
                     tempScope = tempScope.filter(i => !i.startsWith(temp + '->'));
                 }
-                console.log(scope);
+                // console.log(scope);
                 this.scope = scope;
+                this.$emit('onChange', {
+                    release: this.filterSearch,
+                    version: this.version,
+                    scope: this.scope,
+                });
                 // console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
             },
             querySearchAsync(queryString, cb) {
@@ -137,7 +143,9 @@
 
             },
             onVersionChange(data) {
-                console.log(data, 'datadata');
+                console.log(data, '123412341234231423434234');
+                // this.$emit('onChange', data);
+                this.version = data.custom ? data.inputVersion : data.selectedVersion;
             }
         }
     }

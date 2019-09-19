@@ -46,15 +46,21 @@
                 </div>
 
                 <div style="padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-                    <Replacer/>
+                    <Replacer @onChange="replacerChange"/>
                     <i class="el-icon-back" style="transform: rotate(180deg)"></i>
-                    <Replaced/>
+                    <Replaced @onChange="replacedChange"/>
                 </div>
 
                 <div
                     style="height: 50px; align-items: center; display: flex; flex-direction: row-reverse; padding: 0 20px;"
                 >
-                    <el-button type="primary" size="mini" style="font-size: 14px;">替换</el-button>
+                    <el-button
+                        type="primary"
+                        size="mini"
+                        style="font-size: 14px;"
+                        @click="confirmReplace"
+                    >替换
+                    </el-button>
                     <el-button
                         type="text"
                         size="mini"
@@ -85,6 +91,8 @@
             return {
                 elDialogVisible: false,
                 dialogVisible: false,
+                replacer: null,
+                replaced: null,
             };
         },
         methods: {
@@ -99,6 +107,17 @@
             },
             removeAMock() {
 
+            },
+            replacerChange(data) {
+                this.replacer = data;
+            },
+            replacedChange(data) {
+                console.log(data, 'DDDDDDDDDDD');
+                this.replaced = data;
+            },
+            confirmReplace() {
+                console.log(this.replacer, 'this.replacer');
+                console.log(this.replaced, 'this.replaced');
             }
         }
     }

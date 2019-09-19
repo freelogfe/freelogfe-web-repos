@@ -250,6 +250,18 @@
                     '全部状态',
                     this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
             };
+        },
+        mounted() {
+            // console.log(this.$route.params.nodeId, 'this.$router');
+            const {nodeId} = this.$route.params;
+            // const nodeId = this.$router
+            this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+        },
+        methods: {
+            async handleData() {
+                const {nodeId} = this.$route.params;
+                await this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+            }
         }
     }
 </script>
