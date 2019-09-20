@@ -96,11 +96,26 @@
             };
         },
         methods: {
-            addARelease() {
-
+            async addARelease(data) {
+                // console.log(data);
+                // console.log(Buffer.from('事件').toString('base64'), '######');
+                const {nodeId} = this.$route.params;
+                // const testRuleText = `+ ${data.name} => #:${data.name}`;
+                // const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => $:${data.name.replace(/[-]/g, '')}`;
+                const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
+                console.log(testRuleText, 'testRuleTexttestRuleText');
+                this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                    testRuleText: Buffer.from(testRuleText).toString('base64'),
+                });
             },
-            addAMock() {
-
+            addAMock(data) {
+                const {nodeId} = this.$route.params;
+                // const testRuleText = `+ ${data.name} => #:${data.name}`;
+                const testRuleText = `+ ${data.name} => #:${data.name}`;
+                // console.log(testRuleText, 'testRuleTexttestRuleText');
+                this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                    testRuleText: Buffer.from(testRuleText).toString('base64'),
+                });
             },
             removeARelease() {
 
