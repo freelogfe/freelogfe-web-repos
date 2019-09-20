@@ -131,12 +131,26 @@
                 // console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
             },
             querySearchAsync(queryString, cb) {
+                setTimeout(async () => {
 
-                setTimeout(() => {
-                    cb([
-                        {"value": "release2"},
-                        {"value": "release21"},
-                    ])
+                    const {nodeId} = this.$route.params;
+                    const params = {
+                        dependentEntityName: queryString,
+                    };
+                    const res = await this.$axios.get(`/v1/testNodes/${nodeId}/searchTestResource`, {
+                        params,
+                    });
+                    // if (res.errcode !== 0 || res.ret !== 0) {
+                    //     return this.$message.error(res.msg);
+                    // }
+                    // console.log(res, 'RERRRRRRR');
+                    const dataList = res.data.data.dataList;
+                    // console.log(dataList, 'dataListdataList');
+                    const list = dataList.map(i => (
+                        {value: i.testResourceName}
+                    ));
+                    // console.log(list, 'listlist');
+                    cb(list);
                 }, 1200);
             },
             closePopover() {
