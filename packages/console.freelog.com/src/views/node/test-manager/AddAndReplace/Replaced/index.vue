@@ -13,6 +13,7 @@
                     :fetch-suggestions="querySearchAsync"
                     placeholder="请输入内容"
                     :trigger-on-focus="false"
+                    @select="handleSelect"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"></i>
                     <!--                    <i-->
@@ -160,6 +161,9 @@
                 // console.log(data, '123412341234231423434234');
                 // this.$emit('onChange', data);
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
+            },
+            handleSelect(item) {
+                console.log(item);
             }
         }
     }

@@ -112,12 +112,17 @@
                 this.replacer = data;
             },
             replacedChange(data) {
-                console.log(data, 'DDDDDDDDDDD');
+                // console.log(data, 'DDDDDDDDDDD');
                 this.replaced = data;
             },
-            confirmReplace() {
-                console.log(this.replacer, 'this.replacer');
-                console.log(this.replaced, 'this.replaced');
+            async confirmReplace() {
+                // console.log(this.replacer, 'this.replacer');
+                // console.log(this.replaced, 'this.replaced');
+                const testRuleText = '';
+                console.log(testRuleText, 'testRuleText');
+                // await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                //     testRuleText: btoa(testRuleText),
+                // });
             }
         }
     }

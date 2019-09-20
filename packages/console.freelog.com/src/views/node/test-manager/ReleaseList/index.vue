@@ -68,9 +68,14 @@
                         <!--                        {{scope.row.presentableName}}-->
                         <!--                       #f5a623 -->
                         <label
+                            v-if="scope.row.originInfo.type === 'mock'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72bb1f; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
-                        <span>presentableName</span>
+                        <label
+                            v-if="scope.row.originInfo.type === 'release'"
+                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
+                        >市场</label>
+                        <span>{{scope.row.testResourceName}}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -93,12 +98,10 @@
                         <div style="padding-left: 10px; overflow: hidden; flex-shrink: 1;">
                             <div class="text-overflow-ellipsis"
                                  style="color: #000; font-size: 14px; font-weight: 600; line-height: 20px; width: 100%;">
-                                <!--                                {{scope.row.releaseInfo.releaseName}}-->
-                                数据库应用
+                                {{scope.row.originInfo.name}}
                             </div>
                             <div style="line-height: 17px; color: #999; font-size: 12px;">
-                                <!--                                {{scope.row.releaseInfo.version}}-->
-                                v1.0.1
+                                {{scope.row.originInfo.version}}
                             </div>
                         </div>
                     </div>
@@ -128,8 +131,7 @@
 
                 <template slot-scope="scope">
                     <div style="color: #000; font-size: 14px;">
-                        <!--                            {{scope.row.releaseInfo.resourceType}}-->
-                        image
+                        {{scope.row.resourceType}}
                     </div>
                 </template>
             </el-table-column>
@@ -169,7 +171,7 @@
                                 placement="top"
                                 width="100"
                                 trigger="hover"
-                                content="content"
+                                content="此合约链上存在异常"
                             >
                                 <i
                                     slot="reference"
@@ -236,7 +238,7 @@
         },
         data() {
             return {
-                tableData: [{}],
+                tableData: [],
                 // 类型可选项
                 allTypes: [
                     // this.$t('allType'),
@@ -253,15 +255,28 @@
         },
         mounted() {
             // console.log(this.$route.params.nodeId, 'this.$router');
-            const {nodeId} = this.$route.params;
+            // const {nodeId} = this.$route.params;
             // const nodeId = this.$router
-            this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+            // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+            this.handleData();
         },
         methods: {
-            async handleData() {
+            async matchTestResources() {
                 const {nodeId} = this.$route.params;
-                await this.$axios(`/v1/testNodes/${nodeId}/testResources`);
-            }
+                await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
+            },
+            async handleData() {
+                await this.matchTestResources();
+                const {nodeId} = this.$route.params;
+                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+                if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                    return this.$message.error(res.data.msg);
+                }
+                const data = res.data.data;
+                // console.log(data, 'datadatadatadatadata');
+                this.tableData = data.dataList;
+                console.log(data.dataList);
+            },
         }
     }
 </script>
