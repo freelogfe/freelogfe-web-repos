@@ -268,7 +268,14 @@
             async handleData() {
                 await this.matchTestResources();
                 const {nodeId} = this.$route.params;
-                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+                const params = {
+                    pageIndex: 1,
+                    pageSize: 100,
+                    // resourceType: ''
+                };
+                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
+                    params,
+                });
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(res.data.msg);
                 }
