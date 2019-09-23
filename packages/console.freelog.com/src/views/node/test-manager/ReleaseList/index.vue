@@ -31,32 +31,25 @@
                 label="规则"
             >
                 <template slot-scope="scope">
-                    <!--                    <div style="color: #333; font-size: 16px;">-->
-                    <!--                        <i class="el-icon-plus" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-sort-down" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-refresh" style="font-weight: 600;"></i>-->
-                    <!--                    </div>-->
-                    <el-dropdown>
+<!--                    <el-dropdown>-->
                         <div style="color: #333; font-size: 16px;">
-                            <i class="el-icon-plus" style="font-weight: 600;"></i>
-                            <i class="el-icon-sort-up" style="font-weight: 600;"></i>
-                            <i class="el-icon-sort-down" style="font-weight: 600;"></i>
-                            <i class="el-icon-tickets" style="font-weight: 600;"></i>
-                            <i class="el-icon-refresh" style="font-weight: 600;"></i>
+                            <i
+                                v-for="i in scope.row.rules"
+                                :class="getIconClass(i.operation)"
+                                style="font-weight: 600;"
+                            ></i>
                         </div>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
-                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>
-                                <span>测试资源上线</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <i class="el-icon-tickets" style="font-weight: 600;"></i>
-                                <span>添加标签【image】</span>
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
+<!--                        <el-dropdown-menu slot="dropdown">-->
+<!--                            <el-dropdown-item>-->
+<!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
+<!--                                <span>测试资源上线</span>-->
+<!--                            </el-dropdown-item>-->
+<!--                            <el-dropdown-item>-->
+<!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
+<!--                                <span>添加标签【image】</span>-->
+<!--                            </el-dropdown-item>-->
+<!--                        </el-dropdown-menu>-->
+<!--                    </el-dropdown>-->
                 </template>
             </el-table-column>
             <el-table-column
@@ -282,10 +275,28 @@
                 const data = res.data.data;
                 // console.log(data, 'datadatadatadatadata');
                 this.tableData = data.dataList;
-                console.log(data.dataList);
+                console.log(data.dataList, 'ddddddddddddDDDDDD');
             },
+            getIconClass(operation) {
+                switch (operation) {
+                    case 'add':
+                        return 'el-icon-plus';
+                    case 'replace':
+                        return 'el-icon-refresh';
+                    case 'offline':
+                        return 'el-icon-sort-down';
+                    case 'online':
+                        return 'el-icon-sort-up';
+                    case 'set':
+                        return 'el-icon-tickets';
+                    default:
+                        return '';
+                }
+            }
         }
     }
+
+
 </script>
 
 <style scoped>
