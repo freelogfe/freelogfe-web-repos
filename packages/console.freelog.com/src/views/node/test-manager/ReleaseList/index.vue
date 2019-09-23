@@ -150,13 +150,8 @@
 
                 <template slot-scope="scope">
                     <div style="font-size: 14px; display: flex; align-items: center;">
-                        <!--                            <span v-if="scope.row.isOnline === 1" style="color: #000;">{{$t('online')}}</span>-->
-                        <!--                            v-if="scope.row.isOnline === 0"-->
-                        <span
-                            style="color: #bfbfbf;">
-<!--                                {{$t('noOnline')}}-->
-                                未上线
-                            </span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1" style="color: #000;">已上线</span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
                         <template>
                             <!--                                :content="$t('exceptionExists')"-->

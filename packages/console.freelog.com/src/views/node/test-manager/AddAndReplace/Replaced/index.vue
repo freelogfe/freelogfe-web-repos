@@ -71,7 +71,7 @@
             };
         },
         mounted() {
-            this.searchTestResource('ww-zh/Super-Mario-Bros');
+            this.searchTestResource('12345123451234/资源H');
         },
         methods: {
             treeCheckChange() {
@@ -135,6 +135,11 @@
                 // await this.$axios.get(`/v1/testNodes/testResources/${item.id}/dependencyTree`);
                 // this.searchTestResource(item.value)
             },
+            /**
+             * 获取 树根 列表
+             * @param queryString
+             * @returns {Promise<void>}
+             */
             async searchTestResource(queryString) {
                 const {nodeId} = this.$route.params;
                 const params = {
@@ -148,7 +153,7 @@
                 // }
                 // console.log(res, 'RERRRRRRR');
                 const dataList = res.data.data.dataList;
-                console.log(dataList, 'dataListdataListdataListdataListdataList');
+                // console.log(dataList, 'dataListdataListdataListdataListdataList');
                 this.data2 = dataList.map(i => ({
                     id: i.testResourceName,
                     label: i.testResourceName,
@@ -159,7 +164,7 @@
             loadNode1(node, resolve) {
                 console.log(node, 'nodenodenodenodenodenode');
                 if (node.level === 0) {
-                    return resolve([{name: 'region'}]);
+                    return resolve([]);
                 }
 
                 if (node.level > 1) {
@@ -167,7 +172,9 @@
                 }
                 // if (node.level > 1) return resolve([]);
 
-                setTimeout(() => {
+                setTimeout(async () => {
+                    const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/dependencyTree`);
+                    console.log(res, 'resresresresresresresresresres');
                     const data = [{
                         id: 'leaf',
                         label: 'leaf',
@@ -175,12 +182,8 @@
                     }, {
                         id: 'zone',
                         label: 'zone',
-                        children: [
-                            {
-                                id: 'zone1',
-                                label: 'zone1',
-                            }
-                        ],
+                        leaf: true,
+                        children: undefined,
                     }];
 
                     resolve(data);
