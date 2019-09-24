@@ -279,7 +279,7 @@
                 const data = res.data.data;
                 // console.log(data, 'datadatadatadatadata');
                 this.tableData = data.dataList;
-                console.log(data.dataList, 'ddddddddddddDDDDDD');
+                // console.log(data.dataList, 'ddddddddddddDDDDDD');
             },
             getIconClass(operation) {
                 switch (operation) {
