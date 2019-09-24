@@ -29,33 +29,35 @@
             <el-table-column
                 prop="rules"
                 label="规则"
+                min-width="12%"
             >
                 <template slot-scope="scope">
-<!--                    <el-dropdown>-->
-                        <div style="color: #333; font-size: 16px;">
-                            <i
-                                v-for="i in scope.row.rules"
-                                :class="getIconClass(i.operation)"
-                                style="font-weight: 600;"
-                            ></i>
-                        </div>
-<!--                        <el-dropdown-menu slot="dropdown">-->
-<!--                            <el-dropdown-item>-->
-<!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
-<!--                                <span>测试资源上线</span>-->
-<!--                            </el-dropdown-item>-->
-<!--                            <el-dropdown-item>-->
-<!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
-<!--                                <span>添加标签【image】</span>-->
-<!--                            </el-dropdown-item>-->
-<!--                        </el-dropdown-menu>-->
-<!--                    </el-dropdown>-->
+                    <!--                    <el-dropdown>-->
+                    <div style="color: #333; font-size: 16px;">
+                        <i
+                            v-for="i in scope.row.rules"
+                            :class="getIconClass(i.operation)"
+                            style="font-weight: 600;"
+                        ></i>
+                    </div>
+                    <!--                        <el-dropdown-menu slot="dropdown">-->
+                    <!--                            <el-dropdown-item>-->
+                    <!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
+                    <!--                                <span>测试资源上线</span>-->
+                    <!--                            </el-dropdown-item>-->
+                    <!--                            <el-dropdown-item>-->
+                    <!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
+                    <!--                                <span>添加标签【image】</span>-->
+                    <!--                            </el-dropdown-item>-->
+                    <!--                        </el-dropdown-menu>-->
+                    <!--                    </el-dropdown>-->
                 </template>
             </el-table-column>
             <el-table-column
                 prop="name"
                 label="来源 | 测试资源名称"
-                width="180">
+                min-width="25%"
+            >
                 <template slot-scope="scope">
                     <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
                         <!--                        {{scope.row.presentableName}}-->
@@ -74,7 +76,9 @@
             </el-table-column>
             <el-table-column
                 prop="entries"
-                label="相关条目 | 展示版本">
+                label="相关条目 | 展示版本"
+                min-width="30%"
+            >
                 <template slot-scope="scope">
                     <div style="display: flex; align-items: center; padding-left: 10px;">
                         <div
@@ -103,6 +107,7 @@
 
             <el-table-column
                 prop="type"
+                min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
@@ -130,6 +135,7 @@
             </el-table-column>
             <el-table-column
                 prop="status"
+                min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
@@ -150,7 +156,8 @@
 
                 <template slot-scope="scope">
                     <div style="font-size: 14px; display: flex; align-items: center;">
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1" style="color: #000;">已上线</span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
+                              style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
                         <template>
@@ -174,7 +181,9 @@
             </el-table-column>
             <el-table-column
                 prop="operation"
-                label="操作">
+                min-width="5%"
+                label="操作"
+            >
                 <template slot-scope="scope">
                     <el-dropdown>
 

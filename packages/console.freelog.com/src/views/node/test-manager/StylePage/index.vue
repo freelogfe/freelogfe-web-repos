@@ -29,6 +29,7 @@
             <el-table-column
                 prop="rules"
                 label="规则"
+                min-width="12%"
             >
                 <template slot-scope="scope">
                     <!--                    <el-dropdown>-->
@@ -60,7 +61,8 @@
             <el-table-column
                 prop="name"
                 label="来源 | 测试资源名称"
-                width="180">
+                min-width="25%"
+            >
                 <template slot-scope="scope">
                     <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
                         <!--                        {{scope.row.presentableName}}-->
@@ -79,7 +81,9 @@
             </el-table-column>
             <el-table-column
                 prop="entries"
-                label="相关条目 | 展示版本">
+                label="相关条目 | 展示版本"
+                min-width="30%"
+            >
                 <template slot-scope="scope">
                     <div style="display: flex; align-items: center; padding-left: 10px;">
                         <div
@@ -109,6 +113,7 @@
             <el-table-column
                 prop="type"
                 label="全部类型"
+                min-width="12%"
             >
                 <!--                <template slot="header" slot-scope="scope">-->
                 <!--                    <el-dropdown-->
@@ -137,6 +142,7 @@
             </el-table-column>
             <el-table-column
                 prop="status"
+                min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
@@ -181,7 +187,9 @@
             </el-table-column>
             <el-table-column
                 prop="operation"
-                label="操作">
+                label="操作"
+                min-width="5%"
+            >
                 <template slot-scope="scope">
                     <el-dropdown>
 
