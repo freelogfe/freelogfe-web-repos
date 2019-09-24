@@ -9,7 +9,7 @@
       <p class="r-name" :class="[resolveStatus]">
         <i class="el-icon-top"></i>
         {{release.releaseName}}
-        <router-link :to="`/release/detail/${release.releaseId}?version=${release.latestVersion.version}`">
+        <router-link :to="`/release/detail/${release.releaseId}?version=${release.latestVersion.version}`" target="_blank">
           {{$t('detail')}}
         </router-link>
       </p>
