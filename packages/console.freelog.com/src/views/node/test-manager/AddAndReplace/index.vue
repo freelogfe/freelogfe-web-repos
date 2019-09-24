@@ -101,21 +101,31 @@
                 // console.log(Buffer.from('事件').toString('base64'), '######');
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                // const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => $:${data.name.replace(/[-]/g, '')}`;
-                const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
-                console.log(testRuleText, 'testRuleTexttestRuleText');
-                this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => $:${data.name}`;
+                // const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
+                // console.log(testRuleText, 'testRuleTexttestRuleText');
+                const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
+                if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                    return this.$message.error(JSON.stringify(res.data.data.errors));
+                }
+                this.$message.success('添加规则成功');
             },
-            addAMock(data) {
+            async addAMock(data) {
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name} => #:${data.name}`;
+                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => #:${data.name}`;
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
-                this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
+                // console.log(res, 'resresresresres');
+                if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                    return this.$message.error(JSON.stringify(res.data.data.errors));
+                }
+                this.$message.success('添加规则成功');
+
             },
             removeARelease() {
 

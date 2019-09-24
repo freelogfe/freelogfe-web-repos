@@ -34,11 +34,13 @@
             <div style="height: 365px;">
                 <el-tree
                     :data="data2"
+                    :load="loadNode1"
+                    lazy
                     show-checkbox
                     @check-change="treeCheckChange"
                     node-key="id"
                     ref="tree"
-                    :default-expand-all="true"
+                    :default-expand-all="false"
                     :default-checked-keys="[]"
                 >
                 </el-tree>
@@ -60,50 +62,16 @@
         },
         data() {
             return {
-                data2: [
-                    {
-                        id: 'presentation1',
-                        label: 'presentation1',
-                        children: [
-                            {
-                                id: 'presentation1->release1',
-                                label: 'release1',
-                                children: [
-                                    {
-                                        id: 'presentation1->release1->release2',
-                                        label: 'release2'
-                                    },
-                                    {
-                                        id: 'presentation1->release1->release3',
-                                        label: 'release3',
-                                        children: [
-                                            {
-                                                id: 'presentation1->release1->release3->release2',
-                                                label: 'release2'
-                                            },
-                                        ]
-                                    }
-
-                                ]
-                            }]
-                    },
-                    {
-                        id: 'presentation2',
-                        label: 'presentation2',
-                        children: [
-                            {
-                                id: 'presentation2->release2',
-                                label: 'release2'
-                            }
-                        ]
-                    },
-                ],
+                data2: [],
                 filterSearch: '',
                 popoverShow: false,
                 timeout: null,
                 version: '',
                 scope: [],
             };
+        },
+        mounted() {
+            this.searchTestResource('12345123451234/images12341234');
         },
         methods: {
             treeCheckChange() {
@@ -122,7 +90,7 @@
                     scope.push(temp);
                     tempScope = tempScope.filter(i => !i.startsWith(temp + '->'));
                 }
-                // console.log(scope);
+                console.log(scope, 'SSSSSSSSOOOOOOO');
                 this.scope = scope;
                 this.$emit('onChange', {
                     release: this.filterSearch,
@@ -148,10 +116,10 @@
                     const dataList = res.data.data.dataList;
                     // console.log(dataList, 'dataListdataList');
                     const list = dataList.map(i => (
-                        {value: i.testResourceName}
+                        {id: i.testResourceId, value: i.testResourceName}
                     ));
                     // console.log(list, 'listlist');
-                    cb(list);
+                    cb([]);
                 }, 1200);
             },
             closePopover() {
@@ -162,10 +130,80 @@
                 // this.$emit('onChange', data);
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
             },
-            handleSelect(item) {
+            async handleSelect(item) {
                 console.log(item);
+                // await this.$axios.get(`/v1/testNodes/testResources/${item.id}/dependencyTree`);
+                // this.searchTestResource(item.value)
+            },
+            /**
+             * 获取 树根 列表
+             * @param queryString
+             * @returns {Promise<void>}
+             */
+            async searchTestResource(queryString) {
+                const {nodeId} = this.$route.params;
+                const params = {
+                    dependentEntityName: queryString,
+                };
+                const res = await this.$axios.get(`/v1/testNodes/${nodeId}/searchTestResource`, {
+                    params,
+                });
+                // if (res.errcode !== 0 || res.ret !== 0) {
+                //     return this.$message.error(res.msg);
+                // }
+                // console.log(res, 'RERRRRRRR');
+                const dataList = res.data.data.dataList;
+                // console.log(dataList, 'dataListdataListdataListdataListdataList');
+                this.data2 = dataList.map(i => ({
+                    id: i.testResourceName,
+                    label: i.testResourceName,
+                    testResourceId: i.testResourceId,
+                    children: [],
+                }));
+            },
+            loadNode1(node, resolve) {
+                if (node.level === 0) {
+                    return resolve([]);
+                }
+
+                if (node.level > 1) {
+                    return resolve(node.data.children || []);
+                }
+
+                setTimeout(async () => {
+                    const params = {
+                        dependentEntityName: '12345123451234/images12341234',
+                        dependentEntityVersionRange: '*',
+                    };
+                    const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/filterDependencyTree`, {
+                        params,
+                    });
+                    const data = transformTreeArr(res.data.data, node.data.id);
+                    // console.log(data, 'datadata');
+                    resolve(data);
+                }, 500);
             }
         }
+    }
+
+    /**
+     * 将服务端 tree 数组 转换成 客户端所需数据结构
+     * @param nodeSources
+     * @param parentID
+     * @returns {[]}
+     */
+    function transformTreeArr(nodeSources, parentID = '') {
+        // console.log(nodeSources, 'nodeSources');
+        const arr = [];
+        for (const i of nodeSources) {
+            const id = parentID + '->' + (i.type === 'mock' ? '#:' : '$:') + i.name;
+            arr.push({
+                id,
+                label: i.name,
+                children: transformTreeArr(i.dependencies, id),
+            })
+        }
+        return arr;
     }
 </script>
 

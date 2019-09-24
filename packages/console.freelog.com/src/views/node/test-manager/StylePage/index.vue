@@ -29,54 +29,61 @@
             <el-table-column
                 prop="rules"
                 label="规则"
+                min-width="12%"
             >
                 <template slot-scope="scope">
-                    <!--                    <div style="color: #333; font-size: 16px;">-->
-                    <!--                        <i class="el-icon-plus" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-sort-down" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
-                    <!--                        <i class="el-icon-refresh" style="font-weight: 600;"></i>-->
-                    <!--                    </div>-->
-                    <el-dropdown>
-                        <div style="color: #333; font-size: 16px;">
-                            <i class="el-icon-plus" style="font-weight: 600;"></i>
-                            <i class="el-icon-sort-up" style="font-weight: 600;"></i>
-                            <i class="el-icon-sort-down" style="font-weight: 600;"></i>
-                            <i class="el-icon-tickets" style="font-weight: 600;"></i>
-                            <i class="el-icon-refresh" style="font-weight: 600;"></i>
-                        </div>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
-                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>
-                                <span>测试资源上线</span>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <i class="el-icon-tickets" style="font-weight: 600;"></i>
-                                <span>添加标签【image】</span>
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
+                    <!--                    <el-dropdown>-->
+                    <div style="color: #333; font-size: 16px;">
+                        <!--                            <i class="el-icon-plus" style="font-weight: 600;"></i>-->
+                        <!--                            <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
+                        <!--                            <i class="el-icon-sort-down" style="font-weight: 600;"></i>-->
+                        <!--                            <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
+                        <!--                            <i class="el-icon-refresh" style="font-weight: 600;"></i>-->
+                        <i
+                            v-for="i in scope.row.rules"
+                            :class="getIconClass(i.operation)"
+                            style="font-weight: 600;"
+                        ></i>
+                    </div>
+                    <!--                        <el-dropdown-menu slot="dropdown">-->
+                    <!--                            <el-dropdown-item>-->
+                    <!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
+                    <!--                                <span>测试资源上线</span>-->
+                    <!--                            </el-dropdown-item>-->
+                    <!--                            <el-dropdown-item>-->
+                    <!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
+                    <!--                                <span>添加标签【image】</span>-->
+                    <!--                            </el-dropdown-item>-->
+                    <!--                        </el-dropdown-menu>-->
+                    <!--                    </el-dropdown>-->
                 </template>
             </el-table-column>
             <el-table-column
                 prop="name"
                 label="来源 | 测试资源名称"
-                width="180">
+                min-width="25%"
+            >
                 <template slot-scope="scope">
                     <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
                         <!--                        {{scope.row.presentableName}}-->
                         <!--                       #f5a623 -->
                         <label
+                            v-if="scope.row.originInfo.type === 'mock'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72bb1f; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
-                        <span>presentableName</span>
+                        <label
+                            v-if="scope.row.originInfo.type === 'release'"
+                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
+                        >市场</label>
+                        <span>{{scope.row.testResourceName}}</span>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column
                 prop="entries"
-                label="相关条目 | 展示版本">
+                label="相关条目 | 展示版本"
+                min-width="30%"
+            >
                 <template slot-scope="scope">
                     <div style="display: flex; align-items: center; padding-left: 10px;">
                         <div
@@ -93,12 +100,10 @@
                         <div style="padding-left: 10px; overflow: hidden; flex-shrink: 1;">
                             <div class="text-overflow-ellipsis"
                                  style="color: #000; font-size: 14px; font-weight: 600; line-height: 20px; width: 100%;">
-                                <!--                                {{scope.row.releaseInfo.releaseName}}-->
-                                数据库应用
+                                {{scope.row.originInfo.name}}
                             </div>
                             <div style="line-height: 17px; color: #999; font-size: 12px;">
-                                <!--                                {{scope.row.releaseInfo.version}}-->
-                                v1.0.1
+                                {{scope.row.originInfo.version}}
                             </div>
                         </div>
                     </div>
@@ -108,35 +113,36 @@
             <el-table-column
                 prop="type"
                 label="全部类型"
+                min-width="12%"
             >
-<!--                <template slot="header" slot-scope="scope">-->
-<!--                    <el-dropdown-->
-<!--                        style="height: 32px"-->
-<!--                    >-->
-<!--                        <div>-->
-<!--                            全部类型-->
-<!--                            <i class="el-icon-caret-bottom"></i>-->
-<!--                        </div>-->
-<!--                        <el-dropdown-menu slot="dropdown">-->
-<!--                            <el-dropdown-item v-for="item in allTypes">-->
-<!--                                <a-->
-<!--                                    style="display: block; width: 100%; height: 100%;"-->
-<!--                                >{{item}}</a>-->
-<!--                            </el-dropdown-item>-->
-<!--                        </el-dropdown-menu>-->
-<!--                    </el-dropdown>-->
+                <!--                <template slot="header" slot-scope="scope">-->
+                <!--                    <el-dropdown-->
+                <!--                        style="height: 32px"-->
+                <!--                    >-->
+                <!--                        <div>-->
+                <!--                            全部类型-->
+                <!--                            <i class="el-icon-caret-bottom"></i>-->
+                <!--                        </div>-->
+                <!--                        <el-dropdown-menu slot="dropdown">-->
+                <!--                            <el-dropdown-item v-for="item in allTypes">-->
+                <!--                                <a-->
+                <!--                                    style="display: block; width: 100%; height: 100%;"-->
+                <!--                                >{{item}}</a>-->
+                <!--                            </el-dropdown-item>-->
+                <!--                        </el-dropdown-menu>-->
+                <!--                    </el-dropdown>-->
 
-<!--                </template>-->
+                <!--                </template>-->
 
                 <template slot-scope="scope">
                     <div style="color: #000; font-size: 14px;">
-                        <!--                            {{scope.row.releaseInfo.resourceType}}-->
-                        image
+                        {{scope.row.resourceType}}
                     </div>
                 </template>
             </el-table-column>
             <el-table-column
                 prop="status"
+                min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
@@ -157,13 +163,8 @@
 
                 <template slot-scope="scope">
                     <div style="font-size: 14px; display: flex; align-items: center;">
-                        <!--                            <span v-if="scope.row.isOnline === 1" style="color: #000;">{{$t('online')}}</span>-->
-                        <!--                            v-if="scope.row.isOnline === 0"-->
-                        <span
-                            style="color: #bfbfbf;">
-<!--                                {{$t('noOnline')}}-->
-                                未上线
-                            </span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1" style="color: #000;">已上线</span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
                         <template>
                             <!--                                :content="$t('exceptionExists')"-->
@@ -186,7 +187,9 @@
             </el-table-column>
             <el-table-column
                 prop="operation"
-                label="操作">
+                label="操作"
+                min-width="5%"
+            >
                 <template slot-scope="scope">
                     <el-dropdown>
 
@@ -238,21 +241,69 @@
         },
         data() {
             return {
-                tableData: [{}],
+                tableData: [],
                 // 类型可选项
-                allTypes: [
-                    // this.$t('allType'),
-                    '全部类型',
-                    'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+                // allTypes: [
+                //     // this.$t('allType'),
+                //     '全部类型',
+                //     'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
                 // 已选类型
-                selectedType: this.$t('allType'),
+                // selectedType: this.$t('allType'),
                 // 状态可以选项
                 allState: [
                     // this.$t('allState'),
                     '全部状态',
                     this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
             };
-        }
+        },
+        mounted() {
+            // console.log(this.$route.params.nodeId, 'this.$router');
+            // const {nodeId} = this.$route.params;
+            // const nodeId = this.$router
+            // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
+            this.handleData();
+        },
+        methods: {
+            async matchTestResources() {
+                const {nodeId} = this.$route.params;
+                await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
+            },
+            async handleData() {
+                await this.matchTestResources();
+                const {nodeId} = this.$route.params;
+                const params = {
+                    pageIndex: 1,
+                    pageSize: 100,
+                    resourceType: 'page_build'
+                };
+                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
+                    params,
+                });
+                if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                    return this.$message.error(res.data.msg);
+                }
+                const data = res.data.data;
+                // console.log(data, 'datadatadatadatadata');
+                this.tableData = data.dataList;
+                // console.log(data.dataList, 'ddddddddddddDDDDDD');
+            },
+            getIconClass(operation) {
+                switch (operation) {
+                    case 'add':
+                        return 'el-icon-plus';
+                    case 'replace':
+                        return 'el-icon-refresh';
+                    case 'offline':
+                        return 'el-icon-sort-down';
+                    case 'online':
+                        return 'el-icon-sort-up';
+                    case 'set':
+                        return 'el-icon-tickets';
+                    default:
+                        return '';
+                }
+            }
+        },
     }
 </script>
 
