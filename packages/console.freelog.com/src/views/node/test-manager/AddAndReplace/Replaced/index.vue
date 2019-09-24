@@ -71,7 +71,7 @@
             };
         },
         mounted() {
-            this.searchTestResource('12345123451234/资源H');
+            this.searchTestResource('12345123451234/images12341234');
         },
         methods: {
             treeCheckChange() {
@@ -90,7 +90,7 @@
                     scope.push(temp);
                     tempScope = tempScope.filter(i => !i.startsWith(temp + '->'));
                 }
-                // console.log(scope);
+                console.log(scope, 'SSSSSSSSOOOOOOO');
                 this.scope = scope;
                 this.$emit('onChange', {
                     release: this.filterSearch,
@@ -162,7 +162,6 @@
                 }));
             },
             loadNode1(node, resolve) {
-                console.log(node, 'nodenodenodenodenodenode');
                 if (node.level === 0) {
                     return resolve([]);
                 }
@@ -170,26 +169,41 @@
                 if (node.level > 1) {
                     return resolve(node.data.children || []);
                 }
-                // if (node.level > 1) return resolve([]);
 
                 setTimeout(async () => {
-                    const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/dependencyTree`);
-                    console.log(res, 'resresresresresresresresresres');
-                    const data = [{
-                        id: 'leaf',
-                        label: 'leaf',
-                        leaf: true
-                    }, {
-                        id: 'zone',
-                        label: 'zone',
-                        leaf: true,
-                        children: undefined,
-                    }];
-
+                    const params = {
+                        dependentEntityName: '12345123451234/images12341234',
+                        dependentEntityVersionRange: '*',
+                    };
+                    const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/filterDependencyTree`, {
+                        params,
+                    });
+                    const data = transformTreeArr(res.data.data, node.data.id);
+                    // console.log(data, 'datadata');
                     resolve(data);
                 }, 500);
             }
         }
+    }
+
+    /**
+     * 将服务端 tree 数组 转换成 客户端所需数据结构
+     * @param nodeSources
+     * @param parentID
+     * @returns {[]}
+     */
+    function transformTreeArr(nodeSources, parentID = '') {
+        // console.log(nodeSources, 'nodeSources');
+        const arr = [];
+        for (const i of nodeSources) {
+            const id = parentID + '->' + (i.type === 'mock' ? '#:' : '$:') + i.name;
+            arr.push({
+                id,
+                label: i.name,
+                children: transformTreeArr(i.dependencies, id),
+            })
+        }
+        return arr;
     }
 </script>
 
