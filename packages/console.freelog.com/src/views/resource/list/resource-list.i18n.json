@@ -18,7 +18,7 @@
       "downloadBtnText": "下载源文件",
       "releasesCount": [ "等", "个发行..." ],
       "messages": [ "没有符合条件的资源", "您还没有创建任何资源。" ],
-      "releaseStatus": [ "未发行", "已发行", "全部发行情况" ]
+      "releaseStatus": [ "未发行", "已发行", "全部" ]
     }
   },
   "en": {
@@ -40,7 +40,7 @@
       "downloadBtnText": "Download resource file",
       "releasesCount": [ "There are ", " releases..." ],
       "messages": [ "There are no resources available", "You have not created any resources." ],
-      "releaseStatus": [ "Not release", "Relased", "All release status" ]
+      "releaseStatus": [ "Not release", "Relased", "All" ]
     }
   }
 }

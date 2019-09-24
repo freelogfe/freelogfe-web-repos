@@ -1,3 +1,4 @@
+<i18n src="./scheme.i18n.json"></i18n>
 <template>
   <div
           class="r-dependencies-item"
@@ -5,7 +6,13 @@
           @click="exchangeSelectedRelease(release)"
   >
     <div class="r-item-cont">
-      <p class="r-name" :class="[resolveStatus]"><i class="el-icon-top"></i>{{release.releaseName}}</p>
+      <p class="r-name" :class="[resolveStatus]">
+        <i class="el-icon-top"></i>
+        {{release.releaseName}}
+        <router-link :to="`/release/detail/${release.releaseId}?version=${release.latestVersion.version}`">
+          {{$t('detail')}}
+        </router-link>
+      </p>
       <div class="r-info" v-if="release.policies">
         <span>{{release.resourceType}}</span>
         <span>{{release.latestVersion.version}}</span>
@@ -69,11 +76,15 @@
     .r-name {
       position: relative;
       margin-bottom: 6px;
-      font-size: 16px; color: #333; font-weight: 500;
+      font-size: 16px; font-weight: 500;
 
       i {
         position: absolute; left: 0; top: 54%; z-index: 1;
         transform: translateY(-50%); color: transparent;
+      } 
+
+      a { 
+        font-size: 12px; color: #91C7FF; text-decoration: underline;
       }
 
       &.no-resolve, &.resolved{

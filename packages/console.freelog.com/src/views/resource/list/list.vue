@@ -1,4 +1,4 @@
-<i18n src="./resource-list.json"></i18n>
+<i18n src="./resource-list.i18n.json"></i18n>
 <template>
   <div class="resource-list">
     <f-pagination class="resource-list-table"
@@ -19,16 +19,16 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.type')" width="140">
+        <el-table-column :label="$t('list.type')" width="176">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-types-select" v-model="selectedType" :placeholder="$t('list.type')" size="mini">
-              <el-option
-                v-for="item in resourceTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+            <el-dropdown class="r-l-types-select" @command="handleSelectType">
+              <span class="el-dropdown-link">
+                {{$t('list.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </template>
           <template slot-scope="scope">
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
@@ -36,14 +36,14 @@
         </el-table-column>
         <el-table-column :label="$t('list.history')" width="200">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-status-select" v-model="selectedReleaseStatus" :placeholder="$t('list.status')" size="mini">
-              <el-option
-                v-for="item in releaseStatus"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+            <el-dropdown class="r-l-types-select" @command="handleSelectReleaseStatus">
+              <span class="el-dropdown-link">
+                {{$t('list.history')}} {{releaseStatus[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in releaseStatus" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </template>
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
@@ -147,13 +147,7 @@
     },
 
     watch: {
-      selectedType() {
-        if(this.selectedType === 'all') {
-          this.paginationConfig.params.resourceType = undefined
-        }else {
-          this.paginationConfig.params.resourceType = this.selectedType
-        }
-      },
+      
       query() {
         const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('list.messages[0]'), this.$i18n.t('list.messages[1]') ]
         if(this.query == '') {
@@ -230,7 +224,19 @@
         if(release.releaseId) {
           this.$router.push(`/release/detail/${release.releaseId}?version=${release.resourceVersion.version}`)
         }
-      }
+      },
+      handleSelectType(command) {
+        this.selectedType = command
+        if(this.selectedType === 'all') {
+          this.paginationConfig.params.resourceType = undefined
+        }else {
+          this.paginationConfig.params.resourceType = this.selectedType
+        }
+      },
+      handleSelectReleaseStatus(command) {
+        this.selectedReleaseStatus = command
+        this.paginationConfig.params.isReleased = this.selectedReleaseStatus
+      } 
     }
   }
 </script>
@@ -255,12 +261,7 @@
   }
   .resource-list-table {
     .r-l-types-select, .r-l-status-select {
-      display: block; width: 120px; padding: 0;
-      .el-input { line-height: 28px; padding: 0; }
-      .el-input__inner {
-        padding-left: 0; padding-right: 22px; border: none;
-        font-size: 14px;
-      }
+      display: block; padding: 0;
     }
   }
 </style>

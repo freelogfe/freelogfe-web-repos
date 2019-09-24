@@ -1,4 +1,4 @@
-<i18n src="./release-list.json"></i18n>
+<i18n src="./release-list.i18n.json"></i18n>
 <template>
   <div class="release-list">
     <f-pagination class="release-list-table"
@@ -19,16 +19,16 @@
               </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.type')" width="140">
+        <el-table-column :label="$t('list.type')" width="160">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-types-select" v-model="selectedType" size="mini">
-              <el-option
-                v-for="item in resourceTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+            <el-dropdown class="r-l-types" @command="handleSelectType">
+              <span class="el-dropdown-link">
+                {{$t('list.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </template>
           <template slot-scope="scope">
             <div class="r-l-item-type"> {{scope.row.resourceType}}</div>
@@ -72,14 +72,18 @@
         </el-table-column>
         <el-table-column width="130">
           <template slot="header" slot-scope="scope">
-            <el-select class="r-l-types-select" v-model="selectedReleaseStatus" size="mini" v-if="type === 'myReleases'">
-              <el-option
-                v-for="item in releaseStatusArray"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+            <el-dropdown class="r-l-status" @command="handleSelectReleaseStatus" v-if="type === 'myReleases'">
+              <span class="el-dropdown-link">
+                {{$t('list.statusText')}} {{releaseStatusArray[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item 
+                  v-for="item in releaseStatusArray" 
+                  :key="item.value" 
+                  :command="item.value">{{item.label}}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
             <span class="" v-else>
               {{releaseStatusArray[0].label}}
             </span>
@@ -88,7 +92,14 @@
             <div class="r-l-item-online" v-if="scope.row.isOnline">{{$t('list.status[1]')}}</div>
             <div class="r-l-item-offline" v-else>
               {{$t('list.status[0]')}} 
-              <el-tooltip :content="scope.row.policies.length > 0 ? $t('list.tips[0]') : $t('list.noPolicies') " placement="top">
+              <el-tooltip placement="top">
+                <div class="" slot="content">
+                  <template v-if="scope.row.policies.length > 0"> {{$t('list.tips[0]')}}</template>
+                  <template v-else>
+                    {{$t('list.noPolicies')}}
+                    <el-button type="text" size="mini" @click="goToMangeDetailLink(scope.row)">{{$t('list.view')}}</el-button>
+                  </template>
+                </div>
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
@@ -176,30 +187,8 @@
     },
 
     watch: {
-      selectedType() {
-        if(this.selectedType === 'all') {
-          this.paginationConfig.params.resourceType = undefined
-        }else {
-          this.paginationConfig.params.resourceType = this.selectedType
-        }
-      },
       selectedReleaseStatus() {
-        // 0: 全部状态；1: 已上线；2: 已下线
-        switch(this.selectedReleaseStatus) {
-          case 0: {
-            this.paginationConfig.params.status = undefined
-            break
-          }
-          case 1: {
-            this.paginationConfig.params.status = 1
-            break
-          }
-          case 2: {
-            this.paginationConfig.params.status = 0
-            break
-          }
-          default: {}
-        }
+        
       },
       query() {
         const $i18n = this.$i18n
@@ -275,6 +264,37 @@
       },
       goToReleaseDetail(release) {
         this.$router.push(release._toDetailLink)
+      },
+      goToMangeDetailLink(release) {
+        this.$router.push(release._toMangeDetailLink)
+      },
+      handleSelectType(command) {
+        this.selectedType = command
+        if(this.selectedType === 'all') {
+          this.paginationConfig.params.resourceType = undefined
+        }else {
+          this.paginationConfig.params.resourceType = this.selectedType
+        }
+      },
+      handleSelectReleaseStatus(command) {
+        console.log(command)
+        this.selectedReleaseStatus = command
+        // 0: 全部状态；1: 已上线；2: 已下线
+        switch(+this.selectedReleaseStatus) {
+          case 0: {
+            this.paginationConfig.params.status = undefined
+            break
+          }
+          case 1: {
+            this.paginationConfig.params.status = 1
+            break
+          }
+          case 2: {
+            this.paginationConfig.params.status = 0
+            break
+          }
+          default: {}
+        }
       }
     }
   }
@@ -286,13 +306,9 @@
 
 <style lang="less">
 .release-list-table {
-  .r-l-types-select {
-    display: block; width: 120px; padding: 0;
-    .el-input { line-height: 28px; padding: 0; }
-    .el-input__inner { 
-      padding-left: 0; padding-right: 22px; border: none; 
-      font-size: 14px;
-    }
+  .r-l-types, .r-l-status {
+    display: block; padding: 0;
+    .el-dropdown { padding: 0; }
   }
 }
 </style>
