@@ -1,11 +1,14 @@
 import { format } from 'date-fns'
 import { mapGetters } from 'vuex'
 import RichEditor from '@/components/RichEditor/index.vue'
+import SchemeManage from '../scheme/index.vue'
+import ReleaseDependItem from '../scheme/depend-item.vue'
+import signPolicyList from './sign-policy-list.vue'
 import { versionDescendingOrder } from '@/lib/utils.js'
 
 export default {
   name: "release-detail",
-  components: { RichEditor },
+  components: { RichEditor, SchemeManage, ReleaseDependItem, signPolicyList },
   data() {
     return {
       releaseId: this.$route.params.releaseId,
@@ -16,13 +19,15 @@ export default {
       isShowContentLoading: false,
       isCollectedRelease: false,
       release: null,
-      activePolicy: null,
-      selectedRPolicyIdsList: [],
-      selectedUpcastRPolicyIdsList: [],
+      selectedRelease: null,
       baseUpcastReleasesList: [],
+      releasesTreeData: [],
+      contractsMap: {},
+      nodeContractsMap: {},
+      nodeContracts: [],
       checkedNodeList: [],
       checkedNodeId: '',
-      // selectedPolicies: [],
+      rSubordinateNodesIds: [],
       upcastDepReleasesMap: null,
       checkedLabelMap: {},
       resourceDetail: {
@@ -30,28 +35,17 @@ export default {
           description: ''
         }
       },
-      selectedPolicyId: '',
       comparePolices: [
         { activeIndex: 0 },
         { activeIndex: 1 },
       ],
       compareDialogVisible: false,
       signDialogVisible: false,
-      rSubordinateNodesIds: [],
     }
   },
   computed: Object.assign({
     projection() {
       return ["releaseId", "resourceType", "releaseName", "latestVersion", "baseUpcastReleases", "policies", "updateDate","status"].join(',')
-    },
-    selectedPolicies() {
-      var targArr = [], tmpArr = [...this.selectedRPolicyIdsList, ...this.selectedUpcastRPolicyIdsList]
-      tmpArr.forEach(item => {
-        const [ releaseId, policyId ] = item.split('-')
-        const { releaseName, policyName } = this.checkedLabelMap[`${releaseId}-${policyId}`]
-        targArr.push({ releaseId, releaseName, policyId, policyName })
-      })
-      return targArr
     },
     releaseMap() {
       const map = {}
@@ -62,8 +56,15 @@ export default {
       return map
     },
     isOwnRelease() {
-      console.log(this.session)
       return true
+    },
+    nodeMap() {
+      const map = {}
+      for(let i = 0; i < this.nodes.length; i++) {
+        const { nodeId, nodeName } = this.nodes[i]
+        map[nodeId] = nodeName
+      }
+      return map
     },
   }, mapGetters({
     nodes: 'nodes',
@@ -77,21 +78,31 @@ export default {
         this.fetchResourceDetail()
       }
     },
-    selectedUpcastRPolicyIdsList() {
-      var tmpIds = this.selectedPolicies.map(i => i.releaseId)
-      this.baseUpcastReleasesList = this.baseUpcastReleasesList.map(r => {
-        r.isSelectedPolicy = tmpIds.indexOf(r.releaseId) !== -1
-        return r
-      })
+    checkedNodeId() {
+      this.fetchContracts(this.checkedNodeId)
+        .then(contracts => {
+          this.nodeContracts = contracts
+          contracts.forEach(c => {
+            this.contractsMap[c.contractId] = c
+          })
+        })
     },
   },
+  created() {
+    this.isShowContentLoading = true
+    this.fetchReleaseDetail()
+    this.fetchReleaseSubordinateNodes()
+    this.getColleactedStatus()
+  },
   methods: {
+    // 获取发行详情
     fetchReleaseDetail() {
       this.$services.ReleaseService.get(this.releaseId)
         .then(res => res.data)
         .then(res => {
           if(res.errcode === 0) {
-            this.release = res.data
+            this.release = this.selectedRelease = res.data
+            this.release.selectedPolicies = []
             this.isOnline = this.release.status === 1
 
             this.formatReleaseData()
@@ -107,6 +118,7 @@ export default {
           this.isShowContentLoading = false
         })
     },
+    // 获取资源详情
     fetchResourceDetail() {
       const rVersions = this.release.resourceVersions
       var resourceId = ''
@@ -128,26 +140,37 @@ export default {
           this.isShowContentLoading = false
         })
     },
-    fetchReleaseSubordinateNodes() {
-      this.$services.PresentablesService.get(`list`, {
+    // 获取发行与节点的签约数据
+    fetchContracts(nodeId) {
+      if(this.nodeContractsMap[nodeId]) {
+        return Promise.resolve(this.nodeContractsMap[nodeId])
+      }
+      return this.$services.ContractService.get('list', {
         params: {
-          releaseIds: this.releaseId,
-          userId: this.session.user.userId,
-          projection: 'nodeId'
+          contractType: 2,
+          targetIds: this.releaseId,
+          partyOne: this.releaseId,
+          partyTwo: nodeId
         }
       })
-        .then(res => res.data)
-        .then(res => {
-          if(res.errcode === 0) {
-            this.rSubordinateNodesIds = res.data.map(n => n.nodeId)
-          }
-        })
+      .then(resp => resp.data)
+      .then(res => {
+        if(res.errcode === 0) {
+          this.nodeContractsMap[nodeId] = res.data
+          return Promise.resolve(res.data)
+        }else {
+          return Promise.reject(res.msg)
+        }
+      })
+      .catch(e => {
+        this.$error.showErrorMessage(e)
+      })
     },
     fetchReleases(ids) {
       return this.$services.ReleaseService.get(`list?releaseIds=${ids}&projection=${this.projection}`)
         .then(res => res.data)
     },
-    // 获取 依赖发行的上抛发行
+    // 获取 依赖发行的上抛发行详情
     fetchUpcastDepReleases() {
       const bUpcastReleases = this.release.baseUpcastReleases
       if(bUpcastReleases.length) {
@@ -165,6 +188,7 @@ export default {
                   this.checkedLabelMap[p.checkedLabel] = { releaseName: arr[i].releaseName, policyName: p.policyName }
                   return p
                 })
+                arr[i].selectedPolicies = []
                 this.upcastDepReleasesMap[releaseId] = arr[i]
               }
               this.baseUpcastReleasesList = arr
@@ -172,8 +196,24 @@ export default {
           })
           .catch(e => this.isLoading = false)
       }
-
     },
+    // 查询当前发行已签约生成presentables列表，从而获知发行已和哪些节点签约
+    fetchReleaseSubordinateNodes() {
+      this.$services.PresentablesService.get(`list`, {
+        params: {
+          releaseIds: this.releaseId,
+          userId: this.session.user.userId,
+          projection: 'nodeId'
+        }
+      })
+        .then(res => res.data)
+        .then(res => {
+          if(res.errcode === 0) {
+            this.rSubordinateNodesIds = res.data.map(n => n.nodeId)
+          }
+        })
+    },
+    // 获取 收藏状态
     getColleactedStatus() {
       this.$services.collections.get(`isCollection?releaseIds=${this.releaseId}`)
         .then(res => res.data)
@@ -185,13 +225,13 @@ export default {
           }
         })
     },
+    // 重新处理发行详情数据
     formatReleaseData() {
       this.release.policies = this.release.policies.filter(p => p.status === 1).map(p => {
         p.checkedLabel = `${this.release.releaseId}-${p.policyId}`
         this.checkedLabelMap[p.checkedLabel] = { releaseName: this.release.releaseName, policyName: p.policyName }
         return p
       })
-      this.activePolicy = this.release.policies[0]
       this.release.resourceVersions = this.release.resourceVersions.sort(versionDescendingOrder).map(i => {
         i.createDate = format(i.createDate, 'YYYY-MM-DD')
         return i
@@ -216,75 +256,44 @@ export default {
             }
           })
       }
-    },
-    exchangeActivePolicy(p) {
-      if(p.policyId !== this.activePolicy.policyId) {
-        this.activePolicy = p
-      }
+    }, 
+    // 切换“选中的发行”
+    exchangeSelectedRelease(release) {
+      this.selectedRelease = release
     },
     exchangeComparePolicy(item, index) {
       item.activeIndex = index
     },
-    showPolicyCompareBox() {
-      this.compareDialogVisible = true
-    },
     showSignBox() {
       if(!this.isUsable) return 
-      var isSelectAllUpcastReleasePolicies = true,
-        isSelectReleasePolicies = this.checkIsSelectReleasePolicy(this.selectedRPolicyIdsList, this.release)
-      for(let i = 0; i <this.baseUpcastReleasesList.length; i++) {
-        if(!this.checkIsSelectReleasePolicy(this.selectedUpcastRPolicyIdsList, this.baseUpcastReleasesList[i])) {
-          isSelectAllUpcastReleasePolicies = false
-          break
+
+      var message = ''
+      if(this.checkedNodeId === '') {
+        message = '请先选择签约的节点'
+      }else {
+        var tmpArr = []
+        if(this.release.selectedPolicies.length === 0) {
+          tmpArr.push(this.release.releaseName)
+        }
+        this.baseUpcastReleasesList.forEach(r => {
+          if(r.selectedPolicies.length === 0) {
+            tmpArr.push(r.releaseName)
+          }
+        })
+        if(tmpArr.length > 0) {
+          message = `发行“${tmpArr.join(',')}”未选择策略！`
         }
       }
-
-      if(isSelectAllUpcastReleasePolicies && isSelectReleasePolicies) {
+      
+      if(message === '') {
         this.signDialogVisible = true
       }else {
-        let message = ''
-        if(!isSelectReleasePolicies && !isSelectAllUpcastReleasePolicies) {
-          message = '发行未选择策略'
-        }else  if(!isSelectReleasePolicies) {
-          message = '当前发行未选择策略'
-        }else if(!isSelectAllUpcastReleasePolicies) {
-          message = '仍有上抛发行未选择策略'
-        }
         this.$message({ type: 'warning', message })
       }
-
     },
-    checkIsSelectReleasePolicy(sList, release) {
-      var tmp = false
-      const releaseId = release.releaseId
-      for(let i = 0; i < release.policies.length; i++) {
-        if(sList.indexOf(`${releaseId}-${release.policies[i].policyId}`) > -1) {
-          tmp = true
-          break
-        }
-      }
-      return tmp
-    },
-    handlePolicyCommad(command) {
-      const [ releaseId ] = command.split('-')
-      var index = -1
-      if(this.releaseId === releaseId) {
-        index = this.selectedRPolicyIdsList.indexOf(command)
-        if(index === -1) {
-          this.selectedRPolicyIdsList.push(command)
-        }else {
-
-        }
-      }else {
-        if(this.selectedUpcastRPolicyIdsList.indexOf(command) === -1) {
-          this.selectedUpcastRPolicyIdsList.push(command)
-        }
-      }
-    }
-    ,
     // 获取授权：即创建presentable
     authSign() {
-      // const targetNodes = this.checkedNodeList.filter(nodeId => this.rSubordinateNodesIds.indexOf(nodeId) === -1)
+
       const nodeId = this.checkedNodeId
       const self = this
       this.$services.PresentablesService.post({
@@ -310,27 +319,32 @@ export default {
         })
         .catch(this.$error.showErrorMessage)
     },
-    // 获取 发行以及其上抛的解决方式
+    // 签约数据：已选择发行以及其上抛发行的策略
     getRosolveReleases() {
       const tmpMap = {}
-      const targetArr = []
-      this.selectedPolicies.forEach(p => {
-        const { releaseId, policyId } = p
-        if(tmpMap[releaseId]) {
-          tmpMap[releaseId].contracts.push({ policyId })
-        }else {
-          const rItem = { releaseId, contracts:[{ policyId }]}
-          tmpMap[releaseId] = rItem
-          targetArr.push(rItem)
-        }
+      var targetArr = []
+      targetArr = [ ...targetArr, ...resolveSelectedPolicies(this.release) ]
+      this.baseUpcastReleasesList.forEach(release => {
+        targetArr = [ ...targetArr, ...resolveSelectedPolicies(release) ]
       })
       return targetArr
+
+      function resolveSelectedPolicies(release) {
+        const targetArr = []
+        release.selectedPolicies.forEach(p => {
+          const { policyId } = p
+          const { releaseId } = release
+          if(tmpMap[releaseId]) {
+            tmpMap[releaseId].contracts.push({ policyId })
+          }else {
+            const rItem = { releaseId, contracts:[{ policyId }]}
+            tmpMap[releaseId] = rItem
+            targetArr.push(rItem)
+          }
+        })
+        return targetArr
+      }
     },
-  },
-  created() {
-    this.isShowContentLoading = true
-    this.fetchReleaseDetail()
-    this.fetchReleaseSubordinateNodes()
-    this.getColleactedStatus()
+    
   }
 }

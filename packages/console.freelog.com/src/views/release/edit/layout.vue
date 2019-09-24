@@ -1,4 +1,4 @@
-<i18n src="./edit.json"></i18n>
+<i18n src="./edit.i18n.json"></i18n>
 <template>
   <div class="release-editor-layout" v-if="release !== null">
     <div class="r-e-l-header clearfix">

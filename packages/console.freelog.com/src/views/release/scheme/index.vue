@@ -1,4 +1,4 @@
-<i18n src="./scheme.json"></i18n>
+<i18n src="./scheme.i18n.json"></i18n>
 <template>
   <div class="scheme-manage-wrapper" v-loading="isLoading">
     <div class="s-m-w-tags">

@@ -1,4 +1,4 @@
-<i18n src="./release-list.json"></i18n>
+<i18n src="./release-list.i18n.json"></i18n>
 <template>
   <section class="my-collections">
     <div class="m-c-header clearfix">

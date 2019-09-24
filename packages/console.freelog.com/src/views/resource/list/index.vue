@@ -1,4 +1,4 @@
-<i18n src="./resource-list.json"></i18n>
+<i18n src="./resource-list.i18n.json"></i18n>
 <template>
   <section class="my-resources">
     <div class="m-r-header clearfix">

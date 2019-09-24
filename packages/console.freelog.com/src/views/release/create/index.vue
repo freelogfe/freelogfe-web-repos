@@ -1,4 +1,4 @@
-<i18n src="./create.json"></i18n>
+<i18n src="./create.i18n.json"></i18n>
 <template>
   <div id="release-create" v-loading="resourceDetail === null" v-if="resourceDetail !== null">
     <el-form class="r-c-w-cont" ref="createReleaseForm" :model="formData" :rules="rules">
