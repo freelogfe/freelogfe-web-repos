@@ -134,6 +134,7 @@
 
             },
             replacerChange(data) {
+                console.log(data, 'data');
                 this.replacer = data;
             },
             replacedChange(data) {
@@ -141,13 +142,17 @@
                 this.replaced = data;
             },
             async confirmReplace() {
+                const {nodeId} = this.$route.params;
                 // console.log(this.replacer, 'this.replacer');
                 // console.log(this.replaced, 'this.replaced');
-                const testRuleText = '';
+                const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
+                const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
+                const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
                 console.log(testRuleText, 'testRuleText');
-                // await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
-                //     testRuleText: btoa(testRuleText),
-                // });
+                await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                    testRuleText: Buffer.from(testRuleText).toString('base64'),
+                });
+
             }
         }
     }

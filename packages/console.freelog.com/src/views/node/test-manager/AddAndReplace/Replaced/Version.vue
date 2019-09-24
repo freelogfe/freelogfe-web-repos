@@ -27,7 +27,7 @@
                 >
                     <el-option
                         label="全部版本"
-                        value=""
+                        value="*"
                     ></el-option>
                     <el-option
                         v-for="i in versions"

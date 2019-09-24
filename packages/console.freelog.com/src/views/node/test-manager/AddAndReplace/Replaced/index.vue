@@ -63,15 +63,15 @@
         data() {
             return {
                 data2: [],
-                filterSearch: '',
+                filterSearch: 'yanghongtian/stefan111',
                 popoverShow: false,
                 timeout: null,
-                version: '',
+                version: '*',
                 scope: [],
             };
         },
         mounted() {
-            this.searchTestResource('12345123451234/images12341234');
+            this.searchTestResource('yanghongtian/stefan111');
         },
         methods: {
             treeCheckChange() {
@@ -90,10 +90,10 @@
                     scope.push(temp);
                     tempScope = tempScope.filter(i => !i.startsWith(temp + '->'));
                 }
-                console.log(scope, 'SSSSSSSSOOOOOOO');
+                // console.log(scope, 'SSSSSSSSOOOOOOO');
                 this.scope = scope;
                 this.$emit('onChange', {
-                    release: this.filterSearch,
+                    name: this.filterSearch,
                     version: this.version,
                     scope: this.scope,
                 });
@@ -131,9 +131,9 @@
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
             },
             async handleSelect(item) {
-                console.log(item);
+                // console.log(item);
                 // await this.$axios.get(`/v1/testNodes/testResources/${item.id}/dependencyTree`);
-                // this.searchTestResource(item.value)
+                this.searchTestResource(item.value)
             },
             /**
              * 获取 树根 列表
@@ -172,7 +172,7 @@
 
                 setTimeout(async () => {
                     const params = {
-                        dependentEntityName: '12345123451234/images12341234',
+                        dependentEntityName: 'yanghongtian/stefan111',
                         dependentEntityVersionRange: '*',
                     };
                     const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/filterDependencyTree`, {
