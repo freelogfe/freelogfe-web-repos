@@ -12,7 +12,7 @@
                         <label
                             style="line-height: 20px; width: 20px; text-align: center; background-color: #e9e9e9; border-radius: 2px;"
                         >T</label>
-                        <span style="color: #333; font-size: 20px; font-weight: 600; padding-left: 8px;">测试节点1</span>
+                        <span style="color: #333; font-size: 20px; font-weight: 600; padding-left: 8px;">{{nodeInfo.name}}</span>
                     </div>
 
                     <div style="height: 10px;"></div>
@@ -20,11 +20,11 @@
                     <div style="display: flex; align-items: center;">
                         <a
                             target="_blank"
-                            href="test1.freelog.com"
+                            :href="'//' + nodeInfo.testOrigin"
                             style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
-                        >test1.freelog.com</a>
+                        >{{nodeInfo.testOrigin}}</a>
                         <clipboard
-                            :value="'test1.freelog.com'"
+                            :value="nodeInfo.testOrigin"
                             style="display: inline-block;"
                             @copyDone="$message.success($t('copySuccess'))"
                         >
@@ -34,7 +34,11 @@
 
                     <div style="height: 25px;"></div>
 
-                    <a style="display: block; line-height: 30px; font-size: 12px; color: #999; text-align: center; background-color: #fafbfb; border-radius: 4px; border: 1px solid #d8d8d8;">进入正式节点</a>
+                    <a
+                        target="_blank"
+                        :href="'//' + nodeInfo.origin"
+                        style="display: block; line-height: 30px; font-size: 12px; color: #999; text-align: center; background-color: #fafbfb; border-radius: 4px; border: 1px solid #d8d8d8;"
+                    >进入正式节点</a>
 
                     <div style="height: 25px;"></div>
 
