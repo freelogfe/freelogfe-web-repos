@@ -38,15 +38,18 @@ export default {
         // const {nodeId} = this.$route.params;
         // const nodeId = this.$router
         // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
-        this.handleTableData();
+        this.handleTableData(true);
     },
     methods: {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
             await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
         },
-        async handleTableData() {
-            await this.matchTestResources();
+        async handleTableData(init = false) {
+            if (init) {
+                await this.matchTestResources();
+            }
+
             const {nodeId} = this.$route.params;
             const params = {
                 pageIndex: this.currentPage,
