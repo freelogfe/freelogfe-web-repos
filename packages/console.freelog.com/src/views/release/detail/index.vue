@@ -71,11 +71,12 @@
           <div class="rdw-p-scheme-box">
             <div class="rdw-p-left-box">
               <release-depend-item
-                  :release="release"
-                  :is-active="selectedRelease.releaseId === release.releaseId"
-                  :resolveStatus="release.resolveStatus"
-                  :contractsMap="contractsMap"
-                  @exchange-item="exchangeSelectedRelease"></release-depend-item>
+                class="rdw-hide-detial-btn"
+                :release="release"
+                :is-active="selectedRelease.releaseId === release.releaseId"
+                :resolveStatus="release.resolveStatus"
+                :contractsMap="contractsMap"
+                @exchange-item="exchangeSelectedRelease"></release-depend-item>
               <release-depend-item
                       v-for="(urItem, _index) in baseUpcastReleasesList"
                       :key="'dep-item-'+_index"
@@ -216,6 +217,11 @@
     &.checked {
       color: #409EFF;
       .el-icon-check { color: #409EFF; }
+    }
+  }
+  .rdw-hide-detial-btn {
+    .r-name {
+      a { visibility: hidden; }
     }
   }
 </style>
