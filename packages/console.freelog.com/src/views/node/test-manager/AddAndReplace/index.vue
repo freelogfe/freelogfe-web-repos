@@ -138,7 +138,7 @@
 
             },
             replacerChange(data) {
-                console.log(data, 'data');
+                // console.log(data, 'data');
                 this.replacer = data;
             },
             replacedChange(data) {
