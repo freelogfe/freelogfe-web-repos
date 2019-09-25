@@ -8,6 +8,7 @@
 
             <el-input
                 style="width: 400px;"
+                v-model="filterSearch"
             >
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
@@ -111,14 +112,16 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
+                        trigger="click"
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0;">
-                            全部类型 <i class="el-icon-caret-bottom"></i>
+                            {{selectedType}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in allTypes">
                                 <a
+                                    @click="onChangeType(item)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
                             </el-dropdown-item>
@@ -142,11 +145,12 @@
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0;">
-                            全部状态 <i class="el-icon-caret-bottom"></i>
+                            {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
-                        <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-menu trigger="click" slot="dropdown">
                             <el-dropdown-item v-for="item in allState">
                                 <a
+                                    @click="onChangeState(item)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
                             </el-dropdown-item>
@@ -222,6 +226,23 @@
                 </template>
             </el-table-column>
         </el-table>
+        <!--            v-if="totalQuantity > pageSize"-->
+        <div
+            style="padding: 10px 0; display: flex; justify-content: flex-end;"
+        >
+            <!--                @current-change="onCurrentPageChange"-->
+            <!--                @size-change="onPageSizeChange"-->
+            <el-pagination
+                :current-page="currentPage"
+                :page-size="pageSize"
+                @current-change="onChangeCurrentPage"
+                @size-change="onChangePageSize"
+                :page-sizes="[10, 20, 30, 40, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalQuantity"
+            >
+            </el-pagination>
+        </div>
     </div>
 </template>
 
