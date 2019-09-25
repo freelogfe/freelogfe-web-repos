@@ -226,80 +226,9 @@
 </template>
 
 <script>
-    import AddAndReplace from '../AddAndReplace/index.vue';
+    import Index from './index';
 
-    export default {
-        name: "index",
-        components: {
-            AddAndReplace,
-        },
-        data() {
-            return {
-                tableData: [],
-                // 类型可选项
-                allTypes: [
-                    // this.$t('allType'),
-                    '全部类型',
-                    'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
-                // 已选类型
-                selectedType: this.$t('allType'),
-                // 状态可以选项
-                allState: [
-                    // this.$t('allState'),
-                    '全部状态',
-                    this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
-            };
-        },
-        mounted() {
-            // console.log(this.$route.params.nodeId, 'this.$router');
-            // const {nodeId} = this.$route.params;
-            // const nodeId = this.$router
-            // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
-            this.handleData();
-        },
-        methods: {
-            async matchTestResources() {
-                const {nodeId} = this.$route.params;
-                await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
-            },
-            async handleData() {
-                await this.matchTestResources();
-                const {nodeId} = this.$route.params;
-                const params = {
-                    pageIndex: 1,
-                    pageSize: 100,
-                    // resourceType: ''
-                };
-                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
-                    params,
-                });
-                if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                    return this.$message.error(res.data.msg);
-                }
-                const data = res.data.data;
-                // console.log(data, 'datadatadatadatadata');
-                this.tableData = data.dataList;
-                // console.log(data.dataList, 'ddddddddddddDDDDDD');
-            },
-            getIconClass(operation) {
-                switch (operation) {
-                    case 'add':
-                        return 'el-icon-plus';
-                    case 'replace':
-                        return 'el-icon-refresh';
-                    case 'offline':
-                        return 'el-icon-sort-down';
-                    case 'online':
-                        return 'el-icon-sort-up';
-                    case 'set':
-                        return 'el-icon-tickets';
-                    default:
-                        return '';
-                }
-            }
-        }
-    }
-
+    export default Index;
 
 </script>
 
