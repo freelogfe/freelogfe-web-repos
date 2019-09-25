@@ -8,6 +8,7 @@
 
             <el-input
                 style="width: 400px;"
+                v-model="filterSearch"
             >
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
@@ -147,13 +148,15 @@
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
                         style="height: 32px; padding-left: 0;"
+                        trigger="click"
                     >
                         <div style="padding-left: 0;">
-                            全部状态 <i class="el-icon-caret-bottom"></i>
+                            {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in allState">
                                 <a
+                                    @click="onChangeState(item)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
                             </el-dropdown-item>
@@ -163,7 +166,8 @@
 
                 <template slot-scope="scope">
                     <div style="font-size: 14px; display: flex; align-items: center;">
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1" style="color: #000;">已上线</span>
+                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
+                              style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
                         <template>
@@ -228,77 +232,30 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div
+            style="padding: 10px 0; display: flex; justify-content: flex-end;"
+            v-if="totalQuantity !== 0"
+        >
+            <!--                @current-change="onCurrentPageChange"-->
+            <!--                @size-change="onPageSizeChange"-->
+            <el-pagination
+                :current-page="currentPage"
+                :page-size="pageSize"
+                @current-change="onChangeCurrentPage"
+                @size-change="onChangePageSize"
+                :page-sizes="[10, 20, 30, 40, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalQuantity"
+            >
+            </el-pagination>
+        </div>
     </div>
 </template>
 
 <script>
-    import AddAndReplace from '../AddAndReplace/index.vue';
+    import Index from './index';
 
-    export default {
-        name: "index",
-        components: {
-            AddAndReplace,
-        },
-        data() {
-            return {
-                tableData: [],
-                // 筛选搜索框
-                filterSearch: '',
-                // 已选类型
-                selectedType: '全部类型',
-                // 状态可以选项
-                allState: ['全部状态', '已上线', '未上线', '异常'],
-            };
-        },
-        mounted() {
-            // console.log(this.$route.params.nodeId, 'this.$router');
-            // const {nodeId} = this.$route.params;
-            // const nodeId = this.$router
-            // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
-            this.handleData();
-        },
-        methods: {
-            async matchTestResources() {
-                const {nodeId} = this.$route.params;
-                await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
-            },
-            async handleData() {
-                await this.matchTestResources();
-                const {nodeId} = this.$route.params;
-                const params = {
-                    pageIndex: 1,
-                    pageSize: 100,
-                    resourceType: 'page_build'
-                };
-                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
-                    params,
-                });
-                if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                    return this.$message.error(res.data.msg);
-                }
-                const data = res.data.data;
-                // console.log(data, 'datadatadatadatadata');
-                this.tableData = data.dataList;
-                // console.log(data.dataList, 'ddddddddddddDDDDDD');
-            },
-            getIconClass(operation) {
-                switch (operation) {
-                    case 'add':
-                        return 'el-icon-plus';
-                    case 'replace':
-                        return 'el-icon-refresh';
-                    case 'offline':
-                        return 'el-icon-sort-down';
-                    case 'online':
-                        return 'el-icon-sort-up';
-                    case 'set':
-                        return 'el-icon-tickets';
-                    default:
-                        return '';
-                }
-            }
-        },
-    }
+    export default Index;
 </script>
 
 <style scoped>

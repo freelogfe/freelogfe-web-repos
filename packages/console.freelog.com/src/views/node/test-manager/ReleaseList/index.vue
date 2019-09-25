@@ -229,6 +229,7 @@
         <!--            v-if="totalQuantity > pageSize"-->
         <div
             style="padding: 10px 0; display: flex; justify-content: flex-end;"
+            v-if="totalQuantity !== 0"
         >
             <!--                @current-change="onCurrentPageChange"-->
             <!--                @size-change="onPageSizeChange"-->
