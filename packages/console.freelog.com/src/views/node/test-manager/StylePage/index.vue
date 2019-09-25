@@ -94,6 +94,7 @@
                             <!--                            v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
                                                             :src="scope.row.releaseInfo.previewImages[0]"-->
                             <img
+                                :src="scope.row.previewImages[0]"
                                 style="width: 100%; height: 100%;"
                                 class="resource-default-preview"
                             />
