@@ -145,7 +145,7 @@
                             全部状态 <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allTypes">
+                            <el-dropdown-item v-for="item in allState">
                                 <a
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>

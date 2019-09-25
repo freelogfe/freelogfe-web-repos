@@ -152,7 +152,7 @@
                             全部状态 <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allTypes">
+                            <el-dropdown-item v-for="item in allState">
                                 <a
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
@@ -242,18 +242,12 @@
         data() {
             return {
                 tableData: [],
-                // 类型可选项
-                // allTypes: [
-                //     // this.$t('allType'),
-                //     '全部类型',
-                //     'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+                // 筛选搜索框
+                filterSearch: '',
                 // 已选类型
-                // selectedType: this.$t('allType'),
+                selectedType: '全部类型',
                 // 状态可以选项
-                allState: [
-                    // this.$t('allState'),
-                    '全部状态',
-                    this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
+                allState: ['全部状态', '已上线', '未上线', '异常'],
             };
         },
         mounted() {
