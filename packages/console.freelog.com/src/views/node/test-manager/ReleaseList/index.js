@@ -57,6 +57,7 @@ export default {
                 resourceType: this.selectedType === '全部类型' ? undefined : this.selectedType,
                 omitResourceType: 'page_build',
                 isOnline: this.stateTextToValue(this.selectedState),
+                keywords: this.filterSearch || undefined,
             };
             const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
                 params,
