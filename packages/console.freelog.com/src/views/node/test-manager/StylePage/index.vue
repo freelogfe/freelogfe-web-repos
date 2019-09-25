@@ -4,7 +4,7 @@
 
         <div style="display: flex; align-items: center;justify-content: space-between;">
 
-            <AddAndReplace/>
+            <AddAndReplace @success="pushRuleSuccess"/>
 
             <el-input
                 style="width: 400px;"
@@ -76,7 +76,7 @@
                             v-if="scope.row.originInfo.type === 'release'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
-                        <span>{{scope.row.testResourceName}}</span>
+                        <span>{{scope.row.originInfo.name}}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -171,21 +171,21 @@
                               style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
-                        <template>
-                            <!--                                :content="$t('exceptionExists')"-->
-                            <el-popover
-                                placement="top"
-                                width="100"
-                                trigger="hover"
-                                content="content"
-                            >
-                                <i
-                                    slot="reference"
-                                    class="el-icon-warning"
-                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
-                            </el-popover>
-                        </template>
+<!--                        <template>-->
+<!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
+<!--                            <el-popover-->
+<!--                                placement="top"-->
+<!--                                width="100"-->
+<!--                                trigger="hover"-->
+<!--                                content="content"-->
+<!--                            >-->
+<!--                                <i-->
+<!--                                    slot="reference"-->
+<!--                                    class="el-icon-warning"-->
+<!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
+<!--                                ></i>-->
+<!--                            </el-popover>-->
+<!--                        </template>-->
                     </div>
 
                 </template>

@@ -72,6 +72,12 @@ export default {
             // console.log(data.dataList, 'ddddddddddddDDDDDD');
         },
         /**
+         * 追加新加规则成功
+         */
+        pushRuleSuccess() {
+            this.handleTableData();
+        },
+        /**
          * 当前page发生变化时
          * @param currentPage
          */

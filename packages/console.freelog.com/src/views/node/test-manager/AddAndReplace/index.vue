@@ -110,7 +110,9 @@
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.data.errors));
                 }
-                this.$message.success('添加规则成功');
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
             },
             async addAMock(data) {
                 const {nodeId} = this.$route.params;
@@ -124,7 +126,9 @@
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.data.errors));
                 }
-                this.$message.success('添加规则成功');
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
 
             },
             removeARelease() {
@@ -152,7 +156,17 @@
                 await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
-
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
+            },
+            pushRuleSuccess() {
+                this.$message.success('添加规则成功');
+                this.$emit('success');
+                this.elDialogVisible = false;
+                this.dialogVisible = false;
+                this.replacer = null;
+                this.replaced = null;
             }
         }
     }
