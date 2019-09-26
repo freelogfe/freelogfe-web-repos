@@ -137,6 +137,36 @@ export default {
                     return 2;
             }
         },
+        /**
+         * 上下线
+         * @param row
+         */
+        async onLineAndOffLine(row) {
+            const {nodeId} = this.$route.params;
+            const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
+            // console.log(res, 'reRRRERERERERERE');
+            console.log(row, 'rowrowrow');
+            const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
+            const onlineRule = res.data.data.testRules.find(i => i.ruleInfo.presentation === row.testResourceName && (i.operation === 'online'));
+            const downlineRule = res.data.data.testRules.find(i => i.ruleInfo.presentation === row.testResourceName && (i.operation === 'downline'));
+            if (isOnline) {
+                if (onlineRule) {
+                    const testRuleText = res.data.data.ruleText.replace(`^ ${row.testResourceName}`, `- ${row.testResourceName}`);
+                    const response = await this.$axios.post(`/v1/testNodes`, {
+                        nodeId,
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    });
+                } else if (downlineRule) {
+                    console.log('重复下线');
+                } else {
+                    const testRuleText = `- ${row.testResourceName}`;
+                    const params = {
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    };
+                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
+                }
+            }
+        }
     },
     watch: {
         isPageStyle() {
