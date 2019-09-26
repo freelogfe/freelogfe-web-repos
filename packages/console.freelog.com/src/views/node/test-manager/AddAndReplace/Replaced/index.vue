@@ -26,7 +26,8 @@
                 </el-autocomplete>
 
                 <Version
-                    :versions="['1.1.2', '1.1.1', '1.0.0']"
+                    v-if="selectedExact && selectedExact.versions"
+                    :versions="selectedExact.versions"
                     @change="onVersionChange"
                 />
 
@@ -54,6 +55,7 @@
     import Radio from '../components/Radio.vue';
     import Version from './Version';
 
+    let timeout = null;
     export default {
         name: "index",
         components: {
@@ -63,24 +65,24 @@
         data() {
             return {
                 data2: [],
-                filterSearch: 'yanghongtian/stefan111',
+                filterSearch: '',
                 popoverShow: false,
-                timeout: null,
+                selectedExact: null,
                 version: '*',
                 scope: [],
             };
         },
         mounted() {
-            this.searchTestResource('yanghongtian/stefan111');
+            // this.searchTestResource('yanghongtian/stefan111');
         },
         methods: {
             treeCheckChange() {
-                if (this.timeout) {
+                if (timeout) {
                     return;
                 }
-                this.timeout = setTimeout(() => {
+                timeout = setTimeout(() => {
                     // console.log(this.$refs.tree.getCheckedKeys(), 'getCheckedKeys');
-                    this.timeout = null;
+                    timeout = null;
                 }, 10);
 
                 const scope = [];
@@ -99,28 +101,31 @@
                 });
                 // console.log(this.$refs.tree.getCheckedNodes(), 'getCheckedNodes');
             },
+            /**
+             * 模糊搜索 获取提示列表
+             */
             querySearchAsync(queryString, cb) {
-                setTimeout(async () => {
+                (async () => {
 
                     const {nodeId} = this.$route.params;
                     const params = {
-                        dependentEntityName: queryString,
+                        keywords: queryString,
                     };
-                    const res = await this.$axios.get(`/v1/testNodes/${nodeId}/searchTestResource`, {
+                    const res = await this.$axios.get(`/v1/testNodes/${nodeId}/searchTestResourceDependencyTree`, {
                         params,
                     });
                     // if (res.errcode !== 0 || res.ret !== 0) {
                     //     return this.$message.error(res.msg);
                     // }
                     // console.log(res, 'RERRRRRRR');
-                    const dataList = res.data.data.dataList;
+                    const dataList = res.data.data;
                     // console.log(dataList, 'dataListdataList');
                     const list = dataList.map(i => (
-                        {id: i.testResourceId, value: i.testResourceName}
+                        {id: i.id, value: i.name, type: i.type, versions: i.versions}
                     ));
                     // console.log(list, 'listlist');
-                    cb([]);
-                }, 1200);
+                    cb(list);
+                })();
             },
             closePopover() {
 
@@ -131,8 +136,9 @@
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
             },
             async handleSelect(item) {
-                // console.log(item);
+                console.log(item);
                 // await this.$axios.get(`/v1/testNodes/testResources/${item.id}/dependencyTree`);
+                this.selectedExact = item;
                 this.searchTestResource(item.value)
             },
             /**
@@ -169,10 +175,10 @@
                 if (node.level > 1) {
                     return resolve(node.data.children || []);
                 }
-
+                console.log(node, 'nodenodenode');
                 setTimeout(async () => {
                     const params = {
-                        dependentEntityName: 'yanghongtian/stefan111',
+                        dependentEntityName: node.data.label,
                         dependentEntityVersionRange: '*',
                     };
                     const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/filterDependencyTree`, {

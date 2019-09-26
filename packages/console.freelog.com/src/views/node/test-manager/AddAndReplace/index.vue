@@ -149,7 +149,10 @@
                 const {nodeId} = this.$route.params;
                 // console.log(this.replacer, 'this.replacer');
                 // console.log(this.replaced, 'this.replaced');
+                // const replacedVersion = this.replaced.
+                console.log(this.replaced, 'this.replaced');
                 const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
+                console.log(this.replacer, 'this.replacer');
                 const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
                 const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
                 console.log(testRuleText, 'testRuleText');
