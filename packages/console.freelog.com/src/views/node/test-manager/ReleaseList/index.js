@@ -144,13 +144,9 @@ export default {
         async onLineAndOffLine(row) {
             const {nodeId} = this.$route.params;
             const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
-            // console.log(res, 'reRRRERERERERERE');
-            // console.log(row, 'rowrowrow');
             const testResourceName = row.testResourceName;
             const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
             const ruleText = res.data.data ? res.data.data.ruleText : '';
-            // const onlineRule = ((res.data.data && res.data.data.testRules) || []).find(i => i.ruleInfo.presentation === testResourceName && (i.operation === 'online'));
-            // const downlineRule = ((res.data.data && res.data.data.testRules) || []).find(i => i.ruleInfo.presentation === testResourceName && (i.operation === 'downline'));
             if (isOnline) {
                 // 需要下线
                 if (ruleText.includes(`^ ${testResourceName}`)) {

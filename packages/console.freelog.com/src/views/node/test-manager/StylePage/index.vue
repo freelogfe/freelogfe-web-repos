@@ -209,23 +209,27 @@
                             <el-dropdown-item>
                                 <a
                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                >{{$t('action.edit')}}</a>
+                                >编辑</a>
                             </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a
-                                    style="display: block; width: 100%; height: 100%; color: #333;"
-                                >{{$t('action.top')}}</a>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>
-                            </el-dropdown-item>
+                            <!--                            <el-dropdown-item>-->
+                            <!--                                <a-->
+                            <!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
+                            <!--                                >上线</a>-->
+                            <!--                            </el-dropdown-item>-->
+                            <!--                            <el-dropdown-item>-->
+                            <!--                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>-->
+                            <!--                            </el-dropdown-item>-->
                             <el-dropdown-item>
                                 <a
                                     @click="onLineAndOffLine(scope.row)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >
-                                    <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
-                                    <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>
+                                    <span
+                                        v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
+                                        style="color: #44a0ff;">上线</span>
+                                    <span
+                                        v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
+                                        style="color: #ee4040;">下线</span>
                                 </a>
                             </el-dropdown-item>
                         </el-dropdown-menu>

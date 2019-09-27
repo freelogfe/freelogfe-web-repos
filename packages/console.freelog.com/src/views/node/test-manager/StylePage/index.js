@@ -122,6 +122,51 @@ export default {
                     return 2;
             }
         },
+        /**
+         * 上下线
+         * @param row
+         */
+        async onLineAndOffLine(row) {
+            const {nodeId} = this.$route.params;
+            const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
+            const testResourceName = row.testResourceName;
+            const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
+            const ruleText = res.data.data ? res.data.data.ruleText : '';
+            if (isOnline) {
+                // 需要下线
+                if (ruleText.includes(`^ ${testResourceName}`)) {
+                    const testRuleText = ruleText.replace(`^ ${testResourceName}`, `- ${testResourceName}`);
+                    const response = await this.$axios.post(`/v1/testNodes`, {
+                        nodeId,
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    });
+                } else {
+                    const testRuleText = `- ${testResourceName}`;
+                    const params = {
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    };
+                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
+                }
+                this.$message.success('下线成功');
+            } else {
+                // 需要上线
+                if (ruleText.includes(`- ${testResourceName}`)) {
+                    const testRuleText = ruleText.replace(`- ${testResourceName}`, `^ ${testResourceName}`);
+                    const response = await this.$axios.post(`/v1/testNodes`, {
+                        nodeId,
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    });
+                } else {
+                    const testRuleText = `^ ${testResourceName}`;
+                    const params = {
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    };
+                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
+                }
+                this.$message.success('上线成功');
+            }
+            this.handleTableData();
+        }
     },
     watch: {
         selectedState() {
