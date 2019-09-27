@@ -110,7 +110,9 @@
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.data.errors));
                 }
-                this.$message.success('添加规则成功');
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
             },
             async addAMock(data) {
                 const {nodeId} = this.$route.params;
@@ -124,7 +126,9 @@
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.data.errors));
                 }
-                this.$message.success('添加规则成功');
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
 
             },
             removeARelease() {
@@ -134,7 +138,7 @@
 
             },
             replacerChange(data) {
-                console.log(data, 'data');
+                // console.log(data, 'data');
                 this.replacer = data;
             },
             replacedChange(data) {
@@ -145,14 +149,27 @@
                 const {nodeId} = this.$route.params;
                 // console.log(this.replacer, 'this.replacer');
                 // console.log(this.replaced, 'this.replaced');
+                // const replacedVersion = this.replaced.
+                console.log(this.replaced, 'this.replaced');
                 const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
+                console.log(this.replacer, 'this.replacer');
                 const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
                 const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
                 console.log(testRuleText, 'testRuleText');
                 await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
-
+                // this.$message.success('添加规则成功');
+                // this.$emit('success');
+                this.pushRuleSuccess();
+            },
+            pushRuleSuccess() {
+                this.$message.success('添加规则成功');
+                this.$emit('success');
+                this.elDialogVisible = false;
+                this.dialogVisible = false;
+                this.replacer = null;
+                this.replaced = null;
             }
         }
     }

@@ -1,28 +1,42 @@
 <template>
     <div class="manager-release">
+        <div style="height: 30px;"></div>
         <div
-            style="background-color: #fafbfb; height: 135px; display: flex; align-items: center; justify-content: center;">
-            <div class="manager-release-header">
+            style="width: 1190px; margin: 0 auto; box-shadow:0 3px 8px 0 rgba(0,0,0,0.2); border-radius:10px; padding: 20px; box-sizing: border-box; display: flex;"
+        >
+<!--            <div class="manager-release-header">-->
                 <img
                     :src="releaseInfo.previewImages || undefined"
-                    style="width: 100px; height: 75px; flex-shrink: 0;"
+                    style="width: 88px; height: 66px; flex-shrink: 0;"
                     class="resource-default-preview"
                 />
-                <div
-                    style="height: 75px; width: 100%; flex-shrink: 1; display: flex; flex-direction: column; justify-content: space-between; padding-left: 20px;">
-                    <div style="display: flex; align-items: center;">
+                <div style="width: 100%; flex-shrink: 1; display: flex; flex-direction: column; padding-left: 20px;">
+                    <div
+                        style="display: flex; width: 100%; justify-content: space-between; align-items: center; box-sizing: border-box;"
+                    >
+                        <div style="display: flex; align-items: center;">
                         <span
-                            style="font-size: 24px; color: #333; padding-right: 15px;">{{releaseInfo.releaseName}}</span>
-                        <span
-                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>
+                            style="font-size: 18px; color: #333;">{{releaseInfo.releaseName}}</span>
+                            <label
+                                style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px;">发行</label>
+                            <!--                        <span-->
+                            <!--                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>-->
+                        </div>
+                        <div style="font-size: 12px; color: #999;">
+                            <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
+                            <span style="padding: 0 5px;">|</span>
+                            <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
+                            <span style="padding: 0 5px;">|</span>
+                            <span>最新版本 v{{releaseInfo.version}}</span>
+                        </div>
                     </div>
-                    <div style="font-size: 14px; color: #999;">
-                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
-                        <span style="padding: 0 5px;">|</span>
-                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
+
+                    <div style="color: #333; font-size: 12px;">
+                        这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…
+                        这是一段发行介绍……这是一段发行介绍……这是一段发行介绍……
                     </div>
                 </div>
-            </div>
+<!--            </div>-->
         </div>
 
         <div class="manager-release-body">

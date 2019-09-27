@@ -4,10 +4,11 @@
 
         <div style="display: flex; align-items: center;justify-content: space-between;">
 
-            <AddAndReplace/>
+            <AddAndReplace @success="pushRuleSuccess"/>
 
             <el-input
                 style="width: 400px;"
+                v-model="filterSearch"
             >
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
@@ -70,7 +71,7 @@
                             v-if="scope.row.originInfo.type === 'release'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
-                        <span>{{scope.row.testResourceName}}</span>
+                        <span>{{scope.row.originInfo.name}}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -88,6 +89,7 @@
                             <!--                            v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
                                                             :src="scope.row.releaseInfo.previewImages[0]"-->
                             <img
+                                :src="scope.row.previewImages[0]"
                                 style="width: 100%; height: 100%;"
                                 class="resource-default-preview"
                             />
@@ -111,14 +113,16 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
+                        trigger="click"
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0;">
-                            全部类型 <i class="el-icon-caret-bottom"></i>
+                            {{selectedType}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="item in allTypes">
                                 <a
+                                    @click="onChangeType(item)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
                             </el-dropdown-item>
@@ -142,11 +146,12 @@
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0;">
-                            全部状态 <i class="el-icon-caret-bottom"></i>
+                            {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allTypes">
+                        <el-dropdown-menu trigger="click" slot="dropdown">
+                            <el-dropdown-item v-for="item in allState">
                                 <a
+                                    @click="onChangeState(item)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >{{item}}</a>
                             </el-dropdown-item>
@@ -160,21 +165,21 @@
                               style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
-                        <template>
-                            <!--                                :content="$t('exceptionExists')"-->
-                            <el-popover
-                                placement="top"
-                                width="100"
-                                trigger="hover"
-                                content="此合约链上存在异常"
-                            >
-                                <i
-                                    slot="reference"
-                                    class="el-icon-warning"
-                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
-                            </el-popover>
-                        </template>
+<!--                        <template>-->
+<!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
+<!--                            <el-popover-->
+<!--                                placement="top"-->
+<!--                                width="100"-->
+<!--                                trigger="hover"-->
+<!--                                content="此合约链上存在异常"-->
+<!--                            >-->
+<!--                                <i-->
+<!--                                    slot="reference"-->
+<!--                                    class="el-icon-warning"-->
+<!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
+<!--                                ></i>-->
+<!--                            </el-popover>-->
+<!--                        </template>-->
                     </div>
 
                 </template>
@@ -198,23 +203,27 @@
                             <el-dropdown-item>
                                 <a
                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                >{{$t('action.edit')}}</a>
+                                >编辑</a>
                             </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a
-                                    style="display: block; width: 100%; height: 100%; color: #333;"
-                                >{{$t('action.top')}}</a>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>
-                            </el-dropdown-item>
+<!--                            <el-dropdown-item>-->
+<!--                                <a-->
+<!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
+<!--                                >上线</a>-->
+<!--                            </el-dropdown-item>-->
+<!--                            <el-dropdown-item>-->
+<!--                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>-->
+<!--                            </el-dropdown-item>-->
                             <el-dropdown-item>
                                 <a
                                     @click="onLineAndOffLine(scope.row)"
                                     style="display: block; width: 100%; height: 100%;"
                                 >
-                                    <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
-                                    <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>
+                                    <span
+                                        v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
+                                        style="color: #44a0ff;">上线</span>
+                                    <span
+                                        v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
+                                        style="color: #ee4040;">下线</span>
                                 </a>
                             </el-dropdown-item>
                         </el-dropdown-menu>
@@ -222,84 +231,31 @@
                 </template>
             </el-table-column>
         </el-table>
+        <!--            v-if="totalQuantity > pageSize"-->
+        <div
+            style="padding: 10px 0; display: flex; justify-content: flex-end;"
+            v-if="totalQuantity !== 0"
+        >
+            <!--                @current-change="onCurrentPageChange"-->
+            <!--                @size-change="onPageSizeChange"-->
+            <el-pagination
+                :current-page="currentPage"
+                :page-size="pageSize"
+                @current-change="onChangeCurrentPage"
+                @size-change="onChangePageSize"
+                :page-sizes="[10, 20, 30, 40, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalQuantity"
+            >
+            </el-pagination>
+        </div>
     </div>
 </template>
 
 <script>
-    import AddAndReplace from '../AddAndReplace/index.vue';
+    import Index from './index';
 
-    export default {
-        name: "index",
-        components: {
-            AddAndReplace,
-        },
-        data() {
-            return {
-                tableData: [],
-                // 类型可选项
-                allTypes: [
-                    // this.$t('allType'),
-                    '全部类型',
-                    'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
-                // 已选类型
-                selectedType: this.$t('allType'),
-                // 状态可以选项
-                allState: [
-                    // this.$t('allState'),
-                    '全部状态',
-                    this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
-            };
-        },
-        mounted() {
-            // console.log(this.$route.params.nodeId, 'this.$router');
-            // const {nodeId} = this.$route.params;
-            // const nodeId = this.$router
-            // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
-            this.handleData();
-        },
-        methods: {
-            async matchTestResources() {
-                const {nodeId} = this.$route.params;
-                await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
-            },
-            async handleData() {
-                await this.matchTestResources();
-                const {nodeId} = this.$route.params;
-                const params = {
-                    pageIndex: 1,
-                    pageSize: 100,
-                    // resourceType: ''
-                };
-                const res = await this.$axios(`/v1/testNodes/${nodeId}/testResources`, {
-                    params,
-                });
-                if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                    return this.$message.error(res.data.msg);
-                }
-                const data = res.data.data;
-                // console.log(data, 'datadatadatadatadata');
-                this.tableData = data.dataList;
-                // console.log(data.dataList, 'ddddddddddddDDDDDD');
-            },
-            getIconClass(operation) {
-                switch (operation) {
-                    case 'add':
-                        return 'el-icon-plus';
-                    case 'replace':
-                        return 'el-icon-refresh';
-                    case 'offline':
-                        return 'el-icon-sort-down';
-                    case 'online':
-                        return 'el-icon-sort-up';
-                    case 'set':
-                        return 'el-icon-tickets';
-                    default:
-                        return '';
-                }
-            }
-        }
-    }
-
+    export default Index;
 
 </script>
 

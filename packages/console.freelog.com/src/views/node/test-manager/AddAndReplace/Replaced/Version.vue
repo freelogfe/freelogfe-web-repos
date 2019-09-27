@@ -95,7 +95,7 @@
             return {
                 popoverShow: false,
                 custom: false,
-                selectedVersion: '',
+                selectedVersion: '*',
                 inputVersion: '',
             }
         },
