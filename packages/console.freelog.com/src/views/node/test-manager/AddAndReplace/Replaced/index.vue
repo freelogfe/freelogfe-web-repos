@@ -64,11 +64,17 @@
         },
         data() {
             return {
+                // 关系依赖树
                 data2: [],
+                // 搜索框文字
                 filterSearch: '',
+                // 是否现实版本选择器
                 popoverShow: false,
+                // 当前被选中要操作的发行或mock对象
                 selectedExact: null,
+                // 当前选择的版本
                 version: '*',
+                // 作用域范围
                 scope: [],
             };
         },
@@ -134,12 +140,13 @@
                 // console.log(data, '123412341234231423434234');
                 // this.$emit('onChange', data);
                 this.version = data.custom ? data.inputVersion : data.selectedVersion;
+                this.searchTestResource();
             },
             async handleSelect(item) {
                 console.log(item);
                 // await this.$axios.get(`/v1/testNodes/testResources/${item.id}/dependencyTree`);
                 this.selectedExact = item;
-                this.searchTestResource(item.value)
+                this.searchTestResource()
             },
             /**
              * 获取 树根 列表
@@ -149,7 +156,8 @@
             async searchTestResource(queryString) {
                 const {nodeId} = this.$route.params;
                 const params = {
-                    dependentEntityName: queryString,
+                    dependentEntityId: this.selectedExact.id,
+                    dependentEntityVersionRange: this.version,
                 };
                 const res = await this.$axios.get(`/v1/testNodes/${nodeId}/searchTestResource`, {
                     params,
@@ -158,7 +166,7 @@
                 //     return this.$message.error(res.msg);
                 // }
                 // console.log(res, 'RERRRRRRR');
-                const dataList = res.data.data.dataList;
+                const dataList = res.data.data;
                 // console.log(dataList, 'dataListdataListdataListdataListdataList');
                 this.data2 = dataList.map(i => ({
                     id: i.testResourceName,
@@ -167,6 +175,12 @@
                     children: [],
                 }));
             },
+            /**
+             * 加载 presentable 根节点下的数据
+             * @param node
+             * @param resolve
+             * @returns {*}
+             */
             loadNode1(node, resolve) {
                 if (node.level === 0) {
                     return resolve([]);
@@ -175,17 +189,18 @@
                 if (node.level > 1) {
                     return resolve(node.data.children || []);
                 }
-                // console.log(node, 'nodenodenode');
+                console.log(this.selectedExact, 'nodenodenode');
                 setTimeout(async () => {
                     const params = {
-                        dependentEntityName: node.data.label,
-                        dependentEntityVersionRange: '*',
+                        testResourceId: node.data.id,
+                        dependentEntityId: this.selectedExact.id,
+                        dependentEntityVersionRange: this.version,
                     };
                     const res = await this.$axios.get(`/v1/testNodes/testResources/${node.data.testResourceId}/filterDependencyTree`, {
                         params,
                     });
                     const data = transformTreeArr(res.data.data, node.data.id);
-                    // console.log(data, 'datadata');
+                    console.log(data, 'datadata');
                     resolve(data);
                 }, 500);
             }

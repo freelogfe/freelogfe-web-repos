@@ -34,11 +34,13 @@ export default {
         };
     },
     mounted() {
-        // console.log(this.$route.params.nodeId, 'this.$router');
-        // const {nodeId} = this.$route.params;
-        // const nodeId = this.$router
-        // this.$axios(`/v1/testNodes/${nodeId}/testResources`);
         this.handleTableData(true);
+
+        // const {nodeId} = this.$route.params;
+        // this.$axios.post(`/v1/testNodes`, {
+        //     nodeId,
+        //     testRuleText: Buffer.from('').toString('base64'),
+        // });
     },
     methods: {
         async matchTestResources() {
