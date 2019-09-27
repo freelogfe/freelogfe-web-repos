@@ -145,27 +145,46 @@ export default {
             const {nodeId} = this.$route.params;
             const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
             // console.log(res, 'reRRRERERERERERE');
-            console.log(row, 'rowrowrow');
+            // console.log(row, 'rowrowrow');
+            const testResourceName = row.testResourceName;
             const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
-            const onlineRule = res.data.data.testRules.find(i => i.ruleInfo.presentation === row.testResourceName && (i.operation === 'online'));
-            const downlineRule = res.data.data.testRules.find(i => i.ruleInfo.presentation === row.testResourceName && (i.operation === 'downline'));
+            const ruleText = res.data.data ? res.data.data.ruleText : '';
+            // const onlineRule = ((res.data.data && res.data.data.testRules) || []).find(i => i.ruleInfo.presentation === testResourceName && (i.operation === 'online'));
+            // const downlineRule = ((res.data.data && res.data.data.testRules) || []).find(i => i.ruleInfo.presentation === testResourceName && (i.operation === 'downline'));
             if (isOnline) {
-                if (onlineRule) {
-                    const testRuleText = res.data.data.ruleText.replace(`^ ${row.testResourceName}`, `- ${row.testResourceName}`);
+                // 需要下线
+                if (ruleText.includes(`^ ${testResourceName}`)) {
+                    const testRuleText = ruleText.replace(`^ ${testResourceName}`, `- ${testResourceName}`);
                     const response = await this.$axios.post(`/v1/testNodes`, {
                         nodeId,
                         testRuleText: Buffer.from(testRuleText).toString('base64'),
                     });
-                } else if (downlineRule) {
-                    console.log('重复下线');
                 } else {
-                    const testRuleText = `- ${row.testResourceName}`;
+                    const testRuleText = `- ${testResourceName}`;
                     const params = {
                         testRuleText: Buffer.from(testRuleText).toString('base64'),
                     };
                     const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
                 }
+                this.$message.success('下线成功');
+            } else {
+                // 需要上线
+                if (ruleText.includes(`- ${testResourceName}`)) {
+                    const testRuleText = ruleText.replace(`- ${testResourceName}`, `^ ${testResourceName}`);
+                    const response = await this.$axios.post(`/v1/testNodes`, {
+                        nodeId,
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    });
+                } else {
+                    const testRuleText = `^ ${testResourceName}`;
+                    const params = {
+                        testRuleText: Buffer.from(testRuleText).toString('base64'),
+                    };
+                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
+                }
+                this.$message.success('上线成功');
             }
+            this.handleTableData();
         }
     },
     watch: {
