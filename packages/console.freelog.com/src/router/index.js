@@ -12,6 +12,7 @@ import nodeRoute from './node'
 import resourceRoute from './resource'
 import mockRoute from './mock'
 import releaseRoute from './release'
+import batchOperationRoute from './batch-operation'
 import i18n from '../lib/i18n'
 
 Vue.use(Router)
@@ -45,6 +46,7 @@ const routerConfig = {
                 nodeRoute,
                 releaseRoute,
                 mockRoute,
+                batchOperationRoute,
                 {
                     path: 'about',
                     hidden: true,

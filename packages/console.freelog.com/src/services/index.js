@@ -13,6 +13,7 @@ import AllResourcesService from './g_resources'
 import PresentablesService from './presentables'
 import ContractService from './contract'
 import NodesService from './nodes'
+import TestNodesService from './testNodes'
 import PagebuildService from './pagebuild'
 import OtherService from './other'
 import PbContract from './pbcontract'
@@ -36,6 +37,7 @@ export {
   AllResourcesService,
   PresentablesService,
   NodesService,
+  TestNodesService,
   ContractService,
   PagebuildService,
   OtherService,

@@ -120,7 +120,7 @@
             isSelf: 1,
             resourceType: undefined,
             keywords: undefined,
-            isReleased: 2
+            isReleased: 2               // 0: 未发行；1: 已发行；2: 全部发行
           }
         },
         resourceMapReleases: {},

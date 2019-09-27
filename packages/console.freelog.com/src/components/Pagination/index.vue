@@ -3,6 +3,7 @@
     <el-table
             ref="table"
             @row-click="rowClickHandler"
+            @selection-change="selectionChangeHandler"
             v-bind="tableProps"
             :empty-text="emptyText"
             style="width: 100%">
@@ -47,8 +48,11 @@
       config: Object,
       rowClickHandler: {
         type: Function,
-        default: () => {
-        }
+        default: () => {}
+      },
+      selectionChangeHandler: {
+        type: Function,
+        default: (args) => {}
       },
       formatHandler: Function,
       showFooter: {

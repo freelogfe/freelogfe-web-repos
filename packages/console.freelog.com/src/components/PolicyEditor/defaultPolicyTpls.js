@@ -20,10 +20,12 @@ const PresentableFreePolicy = `for public:
 
 export const release = [
   {
+    type: 'free',
     template: ReleaseFreePolicy,
     name: i18n.t('components.policyEditor.defaultPolicyNames.free')
   },
   {
+    type: 'charge',
     template: `for public:
   escrow account acct
   custom event acceptor.customEvent
