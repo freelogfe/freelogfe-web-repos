@@ -101,7 +101,7 @@
                 // console.log(Buffer.from('事件').toString('base64'), '######');
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => $:${data.name}`;
+                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => $:${data.name}`;
                 // const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
@@ -117,7 +117,7 @@
             async addAMock(data) {
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => #:${data.name}`;
+                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => #:${data.name}`;
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
