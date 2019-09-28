@@ -70,7 +70,7 @@
                         <!--                       #f5a623 -->
                         <label
                             v-if="scope.row.originInfo.type === 'mock'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72bb1f; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
+                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #f5a623; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
                         <label
                             v-if="scope.row.originInfo.type === 'release'"
