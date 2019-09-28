@@ -2,7 +2,15 @@
     <div style="width: 1190px; margin: 0 auto;">
         <div style="height: 30px;"></div>
 
-        <OverviewHeader/>
+        <OverviewHeader
+            :previewSrc="''"
+            :title="'数据库应用'"
+            :type="'release'"
+            :resourceType="'markdown'"
+            :datetime="'2018-10-10 12:00'"
+            :version="'1.1.1'"
+            :content="'这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介'"
+        />
 
         <ModuleBlock>
             <BlockItem label="状态">
