@@ -312,7 +312,9 @@
         }
       },
       batchCreateReleases() {
-        if(this.selectedResources.length) {
+        const count = this.selectedResources.length
+        var i = 0
+        if(count) {
           this.selectedResources.forEach(resource => {
             const { resourceId, releasePolicyType } = resource
             const { name, template } = this.policyTplsMap[releasePolicyType]
@@ -320,6 +322,12 @@
               { policyName: name, policyText: window.btoa(template) }
             ]
             this.createNewRelease(resource)
+              .finally(() => {
+                i++
+                if(count === i) {
+                  this.refreshResourcesList()
+                }
+              }) 
           })
         }else {
           this.$message.warning('请先选择需发行的资源')

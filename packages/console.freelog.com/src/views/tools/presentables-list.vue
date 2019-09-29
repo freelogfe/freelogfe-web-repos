@@ -219,7 +219,6 @@
       },
       tagsChangeHandler(row) {
         row.isChangePresentable = true
-        console.log('onlineChangeHandler --', row)
       }
     }
   }

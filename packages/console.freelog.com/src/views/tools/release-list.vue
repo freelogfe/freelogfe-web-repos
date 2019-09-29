@@ -66,11 +66,12 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('releaseList.operate')" width="140">
+        <el-table-column :label="$t('releaseList.operate')" width="145">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink">
               <el-button class="trl-item-edit-btn" size="mini">{{$t('releaseList.editBtnText')}}</el-button>
             </router-link>
+            <el-button class="trl-item-create-btn" type="primary" size="mini" v-if="scope.row.checkedNodeId !== ''" @click="createPresentable(scope.row)">{{$t('releaseList.createBtnText')}}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -112,7 +113,6 @@
         },
         selectedType: 'all',
         pagenationEmptyText: '',
-        selectedReleaseStatus: 0,
         checkedNodeId: '',
         selectedReleases: []
       }
@@ -148,9 +148,6 @@
       }),
     },
     watch: {
-      selectedReleaseStatus() {
-        
-      },
       query() {
         const $i18n = this.$i18n
         const [ NO_RIGHT_RELEASE, NO_CREATED_RELEASE, NO_COLLECTED_RELEASE ] = [ $i18n.t('releaseList.messages[0]'), $i18n.t('releaseList.messages[1]'), $i18n.t('releaseList.messages[2]') ]
@@ -244,26 +241,75 @@
           }
         }).then(res => res.data)
       },
+      batchCreatePresentables() {
+        const count = this.selectedReleases.length
+        var i = 0
+        if(count) {
+          this.selectedReleases.forEach(release => {
+            this.createPresentable(release)
+              .finally(() => {
+                i++
+                if(count === i) {
+                  this.refreshReleasesList()
+                }
+              }) 
+          })
+        }
+      },
       createPresentable(release) {
         const { checkedNodeId: nodeId, presentablePolicyType, policies, username, latestVersion, releaseId, releaseName } = release
         const presentableName = releaseName.replace(new RegExp(`${username}/`, 'i'), '')
         const { name: policyName, template } = this.policyTplsMap[presentablePolicyType]
         
-        const resolveReleases = []
+        const resolveReleases = this.getResolveReleases(release)
         const data = {
           presentableName, nodeId, releaseId, 
           policies: [ { policyName, policyText: window.btoa(template) } ],
           version: latestVersion.version,
           resolveReleases,
         }
-        console.log(JSON.parse(JSON.stringify(data)))
-        // return this.$services.PresentablesService.post({})
-      },
-      batchCreatePresentables() {
-        this.selectedReleases.forEach(release => {
-          
-        })
         
+        return this.$services.PresentablesService.post(data)
+                .then(res => res.data)
+                .then(res => {
+                  if(res.errcode === 0) {
+                    this.$message.success(`节点发行「${res.data.presentableName}」创建成功！`)
+                    release.rSubordinateNodesIds.push(nodeId)
+                  }
+                })
+      },
+      upgradePresentable() {
+        const {presentableId, releaseInfo: {version, releaseId}} = presentable
+        this.$services.ReleaseService.get(releaseId)
+          .then(res => res.data)
+          .then(res => {
+            var _version = version
+            if (res.errcode === 0) {
+                const { latestVersion } = res.data
+                _version = latestVersion.version
+            }
+            return _version
+          })
+          .then(_v => {
+            return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: _v})
+          })
+          .then(res => res.data)
+          .then(res => {
+              if (res.errcode === 0) {
+                  this.$message({type: 'success', message: '升级成功！'})
+              } else {
+                  this.$message({type: 'error', message: '升级失败！'})
+              }
+          })
+          .catch(this.$error.showErrorMessage)
+      },
+      getResolveReleases(release) {
+        const { policies, releaseId, baseUpcastReleases } = release
+        var resolveReleases = [
+          { releaseId, contracts: policies.map(({policyId}) => { return { policyId }}) }
+        ]
+        const tmpArr = baseUpcastReleases.map(r => {})
+        return resolveReleases
       },
       handleSelectionChange(selections) {
         this.selectedReleases = selections
@@ -344,8 +390,8 @@
     color: #BFBFBF;
   }
   
-  .trl-item-edit-btn, .trl-item-detail-btn, .trl-item-cancel-favor-btn {
-    padding: 4px 10px; margin-right: 10px;
+  .trl-item-edit-btn, .trl-item-detail-btn, .trl-item-cancel-favor-btn, .trl-item-create-btn {
+    padding: 4px 8px; margin-right: 8px; margin-left: 0;
   }
 }
 
