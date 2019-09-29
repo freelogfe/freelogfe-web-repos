@@ -9,6 +9,7 @@ const presentableDetail = resolve => require.ensure([], () => resolve(require('.
 const nodeManager = resolve => require.ensure([], () => resolve(require('./manager/index.vue')), 'node');
 const nodeManagerRelease = resolve => require.ensure([], () => resolve(require('./manager-release/index.vue')), 'node');
 const testNodeManager = resolve => require.ensure([], () => resolve(require('./test-manager/index.vue')), 'node');
+const testManagerResource = resolve => require.ensure([], () => resolve(require('./test-manager-resource/index.vue')), 'node');
 
 export default {
     nodeCreator,
@@ -21,4 +22,5 @@ export default {
     nodeManager,
     nodeManagerRelease,
     testNodeManager,
+    testManagerResource,
 }

@@ -101,7 +101,7 @@
                 // console.log(Buffer.from('事件').toString('base64'), '######');
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => $:${data.name}`;
+                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => $:${data.name}`;
                 // const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
@@ -117,7 +117,7 @@
             async addAMock(data) {
                 const {nodeId} = this.$route.params;
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/[/,-]/g, '')} => #:${data.name}`;
+                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => #:${data.name}`;
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
@@ -147,20 +147,12 @@
             },
             async confirmReplace() {
                 const {nodeId} = this.$route.params;
-                // console.log(this.replacer, 'this.replacer');
-                // console.log(this.replaced, 'this.replaced');
-                // const replacedVersion = this.replaced.
-                console.log(this.replaced, 'this.replaced');
                 const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
-                console.log(this.replacer, 'this.replacer');
                 const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
                 const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
-                console.log(testRuleText, 'testRuleText');
                 await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
-                // this.$message.success('添加规则成功');
-                // this.$emit('success');
                 this.pushRuleSuccess();
             },
             pushRuleSuccess() {

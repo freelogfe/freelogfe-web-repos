@@ -65,13 +65,13 @@
                         <!--                       #f5a623 -->
                         <label
                             v-if="scope.row.originInfo.type === 'mock'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72bb1f; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
+                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #f5a623; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
                         <label
                             v-if="scope.row.originInfo.type === 'release'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
-                        <span>{{scope.row.originInfo.name}}</span>
+                        <span>{{scope.row.testResourceName}}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -202,6 +202,8 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
                                 <a
+                                    target="_blank"
+                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"
                                     style="display: block; width: 100%; height: 100%; color: #333;"
                                 >编辑</a>
                             </el-dropdown-item>

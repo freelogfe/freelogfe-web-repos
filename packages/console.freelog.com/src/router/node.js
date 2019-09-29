@@ -47,6 +47,17 @@ export default {
     redirect: '/',
     children: [
         {
+            path: 'test-manager-resource/:testResourceID',
+            hidden: true,
+            meta: {
+                hideSidebar: true,
+                requiresAuth: true,
+                title: i18n.t('routes.nodeManager'),
+                hideFooter: true,
+            },
+            component: Views.testManagerResource
+        },
+        {
             path: 'test-manager/:nodeId',
             hidden: true,
             meta: {
