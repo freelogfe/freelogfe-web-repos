@@ -1,7 +1,16 @@
 <template>
   <div id="f-operation">
     <div class="fo-main-content">
-      <div class="fo-upload-wrapper">
+      <el-steps :active="activeStep" finish-status="finish" simple style="margin-bottom: 50px;">
+        <el-step 
+          class="fo-step-item"
+          v-for="(step, index) in stepList"
+          :key="step"
+          :icon="step.icon">
+          <div slot="title" @click="tapStep(index)">{{step.title}}</div>
+        </el-step>
+      </el-steps>
+      <div class="fo-upload-wrapper" v-if="activeStep === 0">
         <div class="upload-operation-box">
           <el-select class="fo-upload-select" v-model="selectType" placeholder="请选择资源类型">
             <el-option v-for="type in resourceTypes" :key="type" :label="type" :value="type"></el-option>
@@ -23,8 +32,8 @@
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         </el-upload>
       </div>
-      <div class="fo-list-box">
-        <tool-resource-list></tool-resource-list>
+      <div :class="[ item.className, { 'visible': activeStep === item.step } ]" v-for="item in stepComponents" :key="item.component">
+        <component :is="item.component" v-if="activeStep === item.step"></component>
       </div>
     </div>
   </div>
@@ -33,10 +42,12 @@
 <script>
 import { RESOURCE_TYPES } from '@/config/resource.js'
 import toolResourceList from './resource-list.vue'
+import toolReleaseList from './release-list.vue'
+import toolPresentablesList from './presentables-list.vue'
 export default {
   name: "batch-operation",
   components: {
-    toolResourceList, 
+    toolResourceList, toolReleaseList, toolPresentablesList
   },
   data() {
     return {
@@ -46,7 +57,19 @@ export default {
       errorFilesSet: new Set(),
       uploadData: {
         resourceType: "image"
-      }
+      },
+      stepList: [
+        { title: '创建资源', icon: 'el-icon-edit' },
+        { title: '资源列表', icon: 'el-icon-upload' },
+        { title: '发行列表', icon: 'el-icon-picture' },
+        { title: '节点发行列表', icon: 'el-icon-files' },
+      ],
+      stepComponents: [
+        { step: 1, component: "toolResourceList", className: "fo-resource-list-box" }, 
+        { step: 2, component: "toolReleaseList", className: "fo-release-list-box" }, 
+        { step: 3, component: "toolPresentablesList", className: "fo-presentables-list-box" }
+      ],
+      activeStep: 2
     }
   },
   computed: {
@@ -56,6 +79,9 @@ export default {
     }
   },
   methods: {
+    tapStep(step) {
+      this.activeStep = step
+    },
     fileChangeHandler(file, fileList) {
       this.fileList = fileList
     },
@@ -140,21 +166,25 @@ export default {
     .fo-main-content{
       width: @main-content-width-1190;
       margin: auto;
+      
+      .fo-resource-list-box, .fo-release-list-box, .fo-presentables-list-box {
+        display: none; padding: 0 0 30px;
+        &.visible {
+          display: block;
+        }
+      } 
       .upload-operation-box {
-        width: 500px; margin: 20px auto;
+        width: 500px; margin: 0 auto 20px;
         .fo-upload-select {
           margin-right: 10px;
         }
       }
       
       .fo-upload-wrapper {
-        text-align: center;
+        padding: 20px 0; text-align: center;
         .upload-box {
           display: inline-block;
         }
-      }
-      .fo-list-box {
-        margin-top: 30px;
       }
     }
   }
@@ -169,6 +199,10 @@ export default {
 
 <style lang="less">
   #f-operation {
+    .fo-step-item {
+      .el-step__title { cursor: pointer; }
+    }
+
     .upload-box {
       .el-upload-dragger {
         width: 500px; height: 210px;

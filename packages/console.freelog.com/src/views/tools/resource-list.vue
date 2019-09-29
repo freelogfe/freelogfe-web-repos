@@ -1,4 +1,4 @@
-<i18n src="./resource-list.i18n.json"></i18n>
+<i18n src="./tools.i18n.json"></i18n>
 <template>
   <div class="tool-resource-list">
     <div class="trl-header">
@@ -11,14 +11,14 @@
         </el-dropdown-menu>
       </el-dropdown>
       <div class="trl-btn-group">
-        <el-button type="primary" @click="refreshResourceList">刷新列表</el-button>
+        <el-button type="primary" @click="refreshResourcesList">刷新列表</el-button>
         <el-button type="success" @click="batchUpdateResources">批量更新资源</el-button>
         <el-button type="success" @click="batchCreateReleases">批量创建新发行</el-button>
       </div>
     </div>
     
     <f-pagination class="resource-list-table"
-              ref="listRef"
+              ref="resourcesListRef"
               :config="tableConfig"
               :formatHandler="formatHandler"
               :pagination="paginationConfig"
@@ -26,7 +26,7 @@
               :selectionChangeHandler="handleSelectionChange">
       <template slot="list">
         <el-table-column type="selection" width="45" :selectable="(row) => row.systemMeta.dependencies.length === 0"></el-table-column>
-        <el-table-column :label="$t('list.name')">
+        <el-table-column :label="$t('resourceList.name')">
           <template slot-scope="scope">
             <div class="r-l-item-name-box">
               <div class="r-l-item-name" v-if="!scope.row.isEdittingName">
@@ -38,11 +38,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.type')" width="176">
+        <el-table-column :label="$t('resourceList.type')" width="176">
           <template slot="header" slot-scope="scope">
             <el-dropdown class="r-l-types-select" @command="handleSelectType">
               <span class="el-dropdown-link">
-                {{$t('list.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+                {{$t('resourceList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -74,13 +74,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.operate')" width="240">
+        <el-table-column :label="$t('resourceList.operate')" width="240">
           <template slot-scope="scope">
-            <!-- <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('list.releaseBtnText')}}</el-button> -->
+            <!-- <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('resourceList.releaseBtnText')}}</el-button> -->
             <router-link :to="scope.row._toDetailLink">
-              <el-button class="r-l-item-detail-btn" size="mini">{{$t('list.detailBtnText')}}</el-button>
+              <el-button class="r-l-item-detail-btn" size="mini">{{$t('resourceList.detailBtnText')}}</el-button>
             </router-link>
-            <el-button class="r-l-item-save-btn" size="mini" @click="tapSaveBtn(scope.row)">{{$t('list.saveBtnText')}}</el-button>
+            <el-button class="r-l-item-save-btn" size="mini" @click="tapSaveBtn(scope.row)">{{$t('resourceList.saveBtnText')}}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -94,13 +94,13 @@
   import policyTpls from '@/components/PolicyEditor/defaultPolicyTpls.js'
 
   export default {
-    name: 'resource-items-list',
+    name: 'tool-resource-list',
     components: { FPagination },
     props: {
       query: String
     },
     data() {
-      const NO_REACTED_RESOURCE = this.$i18n.t('list.messages[1]')
+      const NO_REACTED_RESOURCE = this.$i18n.t('resourceList.messages[1]')
       const $i18n = this.$i18n
 
       return {
@@ -123,9 +123,9 @@
         resourceMapReleases: {},
         selectedType: 'all',
         releaseStatus: [
-          { label: $i18n.t('list.releaseStatus[0]'), value: 0 }, 
-          { label: $i18n.t('list.releaseStatus[1]'), value: 1 }, 
-          { label: $i18n.t('list.releaseStatus[2]'), value: 2 }
+          { label: $i18n.t('resourceList.releaseStatus[0]'), value: 0 }, 
+          { label: $i18n.t('resourceList.releaseStatus[1]'), value: 1 }, 
+          { label: $i18n.t('resourceList.releaseStatus[2]'), value: 2 }
         ],
         selectedReleaseStatus: 0,
         pagenationEmptyText: NO_REACTED_RESOURCE,
@@ -135,7 +135,7 @@
     computed: {
       resourceTypes() {
         const $i18n = this.$i18n
-        const arr = [{ label: $i18n.t('list.allTypes'), value: 'all' }]
+        const arr = [{ label: $i18n.t('resourceList.allTypes'), value: 'all' }]
         for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
           arr.push({ label, value })
         }
@@ -155,7 +155,7 @@
     },
     watch: {
       query() {
-        const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('list.messages[0]'), this.$i18n.t('list.messages[1]') ]
+        const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('resourceList.messages[0]'), this.$i18n.t('resourceList.messages[1]') ]
         if(this.query == '') {
           this.paginationConfig.params.keywords = undefined
           this.pagenationEmptyText = NO_REACTED_RESOURCE
@@ -282,14 +282,14 @@
       tapSaveBtn(resource) {
         this.updateResourceDetail(resource)
           .then(() => {
-            this.refreshResourceList()
+            this.refreshResourcesList()
           })
       },
       handleSelectionChange(selections) {
         this.selectedResources = selections
       },
-      refreshResourceList() {
-        this.$refs.listRef.reload()
+      refreshResourcesList() {
+        this.$refs.resourcesListRef.reload()
       },
       batchUpdateResources() {
         const count = this.selectedResources.length
@@ -303,7 +303,7 @@
               .finally(() => {
                 i++
                 if(count === i) {
-                  this.refreshResourceList()
+                  this.refreshResourcesList()
                 }
               }) 
           })
@@ -332,19 +332,19 @@
 <style lang="less" scoped>
 .tool-resource-list {
   .trl-header {
-    height: 82px;
+    height: 72px;
     background-color: #f5f5f5;
     .trl-status-select { 
       display: inline-block; 
-      margin-top: 41px; transform: translateY(-50%);
+      margin-top: 36px; transform: translateY(-50%);
       .el-dropdown-link {
-        padding: 0 20px; font-size: 16px; 
-        span { color: #409eff; }
+        padding: 0 20px; font-size: 16px; color: #409eff;
+        span { color: #000; }
       }
     }
     .trl-btn-group {
       float: right;
-      padding: 20px; border-bottom: 1px solid #eee; 
+      padding: 15px 20px; border-bottom: 1px solid #eee; 
       
     }
   }
@@ -366,7 +366,7 @@
   }
 
   .r-l-item-name {
-    .el-button { padding: 4px 6px; transform: scale(.9); }
+    .el-button { padding: 4px 6px; transform: scale(.8); }
     .el-icon-edit { cursor: pointer; }
   }
   .r-l-item-name, .r-l-item-release-row1{

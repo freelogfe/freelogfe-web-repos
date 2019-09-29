@@ -295,11 +295,12 @@ export default {
     authSign() {
 
       const nodeId = this.checkedNodeId
+      var regE = new RegExp(`${this.release.username}/`, 'i')
       const self = this
       this.$services.PresentablesService.post({
         nodeId,
         releaseId: this.releaseId,
-        presentableName: this.release.releaseName,
+        presentableName: this.release.releaseName.replace(regE, ''),
         version: this.activeReleaseVersion,
         resolveReleases: this.getRosolveReleases(),
       })
