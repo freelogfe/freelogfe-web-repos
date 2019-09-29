@@ -84,7 +84,7 @@
           <div class="r-e-w-release-policy">
             <h4>
               {{$t('policy')}}
-              <el-tooltip class="r-e-w-r-p-tip" effect="light" :content="$t('tips[0]')" placement="right" v-if="release.policies.length === 0 && !isShowEditPolicy">
+              <!-- <el-tooltip class="r-e-w-r-p-tip" effect="light" :content="$t('tips[0]')" placement="right" v-if="release.policies.length === 0 && !isShowEditPolicy">
                 <i class="el-icon-warning"></i>
               </el-tooltip>
               <div class="r-e-w-btn-group" v-else>
@@ -93,7 +93,7 @@
                   <el-button type="primary" class="save" size="small" round @click="savePolicyHandler">{{$t('saveBtnText')}}</el-button>
                   <el-button class="cnacel" size="small" round @click="cancelPolicyHandler">{{$t('cancelBtnText')}}</el-button>
                 </template>
-              </div>
+              </div> -->
             </h4>
             <div style="position: relative;">
               <template v-if="!isShowEditPolicy">
@@ -109,7 +109,7 @@
                 </div>
               </template>
               <policy-editor
-                      :showFooterBtns="false"
+                      show-footer-btns
                       :policy="editTmpPolicy"
                       class="r-e-w-r-p-editor"
                       v-if="isShowEditPolicy"
