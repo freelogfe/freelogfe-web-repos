@@ -81,7 +81,7 @@
             //     }, 1200);
             // },
             onDataChange(data) {
-                console.log(data, 'AAAAAAAAAA');
+                // console.log(data, 'AAAAAAAAAA');
                 this.activatedRelease = data;
                 this.$emit('onChange', data);
                 // console.log(data, 'hhhhhhhhhhh');
