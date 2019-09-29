@@ -21,11 +21,13 @@
         <el-upload class="upload-box" ref="foUpload"
           drag
           multiple
-          action="/v1/resources/temporaryFiles/uploadResourceFile"
+          with-credentials
+          :action="uploadActionUrl"
           :data="uploadData"
           :file-list="fileList"
           :on-change="fileChangeHandler"
           :on-success="fileSuccessHandler"
+          :on-error="fileErrorHandler"
           :auto-upload="false"
         >
           <i class="el-icon-upload"></i>
@@ -69,10 +71,13 @@ export default {
         { step: 2, component: "toolReleaseList", className: "fo-release-list-box" }, 
         { step: 3, component: "toolPresentablesList", className: "fo-presentables-list-box" }
       ],
-      activeStep: 2
+      activeStep: 0
     }
   },
   computed: {
+    uploadActionUrl() {
+      return `${window.window.FreelogApp.Env.qiOrigin}/v1/resources/temporaryFiles/uploadResourceFile`
+    },
     resourceTypes() {
       var types = Object.values(RESOURCE_TYPES)
       return types
@@ -127,6 +132,16 @@ export default {
           file.name = `${name} (已存在！！！)`
         }
         return file
+      })
+    },
+    fileErrorHandler(response, file, fileList) {
+      this.errorFilesSet.add(file.name)
+      this.fileList = fileList.map(_f => {
+        const { name } = _f
+        if(this.errorFilesSet.has(name)) {
+          file.name = `${name} (出错喇！！！)`
+        }
+        return _f
       })
     },
     createResources() {
