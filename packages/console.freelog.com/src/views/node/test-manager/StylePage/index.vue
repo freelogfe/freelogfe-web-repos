@@ -208,6 +208,8 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
                                 <a
+                                    target="_blank"
+                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"
                                     style="display: block; width: 100%; height: 100%; color: #333;"
                                 >编辑</a>
                             </el-dropdown-item>
