@@ -22,6 +22,7 @@
             </el-input>
         </div>
 
+<!--        {{activatedRelease}}-->
         <Item
             v-for="i in this.data"
             :active="activatedRelease && (i.name === activatedRelease.name)"
@@ -46,9 +47,9 @@
             Item,
         },
         props: {
-            // activatedRelease: {
-            //     default: null,
-            // },
+            activatedRelease: {
+                default: null,
+            },
         },
         data() {
             return {
@@ -56,7 +57,7 @@
                 input: '',
                 dataEnd: false,
                 data: [],
-                activatedRelease: null,
+                // activatedRelease: null,
             };
         },
         mounted() {
@@ -87,6 +88,7 @@
                         // disabled: false,
                     }))
                 ];
+                // console.log(this.data, 'this.datathis.datathis.data');
             },
             toBottom() {
                 this.page++;
