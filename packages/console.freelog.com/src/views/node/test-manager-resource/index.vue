@@ -2,30 +2,46 @@
     <div style="width: 1190px; margin: 0 auto;">
         <div style="height: 30px;"></div>
 
+        <!--            :datetime="'2018-10-10 12:00'"-->
         <OverviewHeader
-            :previewSrc="''"
-            :title="'数据库应用'"
-            :type="'release'"
-            :resourceType="'markdown'"
-            :datetime="'2018-10-10 12:00'"
-            :version="'1.1.1'"
-            :content="'这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介'"
+            v-if="!!originInfo"
+            :previewSrc="originInfo.previewImage"
+            :title="originInfo.name"
+            :type="originInfo.type"
+            :resourceType="originInfo.resourceType"
+            :version="originInfo.version"
+            :content="originInfo.intro"
         />
 
         <ModuleBlock>
             <BlockItem label="状态">
-                <div style="display: flex; align-items: center;">
+                <div v-show="!isOnline" style="display: flex; align-items: center;">
                     <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">未上线</label>
-                    <a style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;">上线</a>
+                    <a
+                        @click="onLineAndOffLine"
+                        style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
+                    >上线</a>
+                </div>
+                <div v-show="isOnline" style="display: flex; align-items: center;">
+                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">已上线</label>
+                    <a
+                        @click="onLineAndOffLine"
+                        style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
+                    >下线</a>
                 </div>
             </BlockItem>
             <BlockItem label="节点发行名称">
                 <ConfirmInput
-                    value="北极光"
+                    v-if="!!originInfo"
+                    :disabled="!(originInfo.type ==='release' || originInfo.type ==='mock')"
+                    :value="testResourceName"
                     @confirmChange="confirmChange"
                 />
             </BlockItem>
-            <BlockItem label="展示版本">
+            <BlockItem
+                label="展示版本"
+                v-if="versions.length !== 0"
+            >
                 <el-select
                     v-model="versionValue"
                     style="display: block; width: 700px; background-color: #fafbfb; font-weight: 600;"
@@ -51,34 +67,9 @@
 </template>
 
 <script>
-    import OverviewHeader from './OverviewHeader';
-    import ModuleBlock from './ModuleBlock';
-    import BlockItem from './BlockItem';
-    import ConfirmInput from './ConfirmInput';
-    import FreelogTags from '@/components/Tags/index.vue';
+    import Index from './index';
 
-    export default {
-        name: 'index',
-        components: {
-            ConfirmInput,
-            BlockItem,
-            ModuleBlock,
-            OverviewHeader,
-            FreelogTags,
-        },
-        data() {
-            return {
-                versions: ['1.1.0', '1.0.2', '1.0.0'],
-                versionValue: '1.1.0',
-                userDefinedTags: [],
-            };
-        },
-        methods: {
-            confirmChange(value) {
-                console.log(value, 'confirmChange');
-            }
-        }
-    }
+    export default Index;
 </script>
 
 <style scoped>
