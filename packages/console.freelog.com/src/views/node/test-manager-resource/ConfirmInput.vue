@@ -3,7 +3,8 @@
         <a
             v-show="!isEdit"
             @click="clickEdit"
-            style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; background-color: #fafbfb; cursor: pointer; border-radius: 2px; padding: 0 15px; box-sizing: border-box; border: 1px solid #fafbfb;"
+            :style="{cursor: disabled? 'not-allowed': 'pointer'}"
+            style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; background-color: #fafbfb; border-radius: 2px; padding: 0 15px; box-sizing: border-box; border: 1px solid #fafbfb;"
         >
             <span style="font-weight: 600; font-size: 14px; color: #333;">{{value}}</span>
             <i class="el-icon-edit" style="color: #888; font-size: 16px;"></i>
@@ -38,6 +39,10 @@
                 type: String,
                 default: '',
             },
+            disabled: {
+                type: Boolean,
+                default: false,
+            }
         },
         data() {
             return {
@@ -47,6 +52,9 @@
         },
         methods: {
             clickEdit() {
+                if (this.disabled) {
+                    return;
+                }
                 this.isEdit = true;
                 this.inputValue = this.value;
             },

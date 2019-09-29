@@ -59,6 +59,7 @@
                         size="mini"
                         style="font-size: 14px;"
                         @click="confirmReplace"
+                        :disabled="!replacer || !replaced"
                     >替换
                     </el-button>
                     <el-button

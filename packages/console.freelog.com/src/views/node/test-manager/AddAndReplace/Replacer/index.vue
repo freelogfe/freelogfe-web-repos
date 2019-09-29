@@ -40,6 +40,7 @@
                     @onDataChange="onDataChange"
                 />
                 <Mock
+                    :activatedRelease="activatedRelease"
                     v-show="activeTab === 'mock'"
                     @onDataChange="onDataChange"
                 />
@@ -70,16 +71,17 @@
             };
         },
         methods: {
-            querySearchAsync(queryString, cb) {
-
-                setTimeout(() => {
-                    cb([
-                        {"value": "三全鲜食（北新泾店）"},
-                        {"value": "Hot honey 首尔炸鸡（仙霞路）"},
-                    ]);
-                }, 1200);
-            },
+            // querySearchAsync(queryString, cb) {
+            //
+            //     setTimeout(() => {
+            //         cb([
+            //             {"value": "三全鲜食（北新泾店）"},
+            //             {"value": "Hot honey 首尔炸鸡（仙霞路）"},
+            //         ]);
+            //     }, 1200);
+            // },
             onDataChange(data) {
+                // console.log(data, 'AAAAAAAAAA');
                 this.activatedRelease = data;
                 this.$emit('onChange', data);
                 // console.log(data, 'hhhhhhhhhhh');
