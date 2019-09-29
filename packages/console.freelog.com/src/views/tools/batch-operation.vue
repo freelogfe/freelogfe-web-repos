@@ -58,7 +58,7 @@ export default {
       existedFilesSet: new Set(),
       errorFilesSet: new Set(),
       uploadData: {
-        resourceType: "image"
+        resourceType: ""
       },
       stepList: [
         { title: '创建资源', icon: 'el-icon-edit' },
@@ -81,6 +81,11 @@ export default {
     resourceTypes() {
       var types = Object.values(RESOURCE_TYPES)
       return types
+    }
+  },
+  watch: {
+    selectType() {
+      this.uploadData.resourceType = this.selectType
     }
   },
   methods: {
