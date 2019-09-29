@@ -2,7 +2,7 @@
     <div style="height: 40px; width: 700px;">
         <a
             v-show="!isEdit"
-            @click="isEdit = true"
+            @click="clickEdit"
             style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; background-color: #fafbfb; cursor: pointer; border-radius: 2px; padding: 0 15px; box-sizing: border-box; border: 1px solid #fafbfb;"
         >
             <span style="font-weight: 600; font-size: 14px; color: #333;">{{value}}</span>
@@ -46,6 +46,10 @@
             };
         },
         methods: {
+            clickEdit() {
+                this.isEdit = true;
+                this.inputValue = this.value;
+            },
             confirmChange() {
                 this.isEdit = false;
                 // console.log(this.inputValue, 'inputValue');
