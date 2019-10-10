@@ -12,16 +12,14 @@
       </el-steps>
       <div class="fo-upload-wrapper" v-if="activeStep === 0">
         <div class="upload-operation-box">
-          <el-select class="fo-upload-select" v-model="selectType" placeholder="请选择资源类型">
+          <el-select class="fo-upload-select" allow-create filterable v-model="selectType" placeholder="请选择资源类型">
             <el-option v-for="type in resourceTypes" :key="type" :label="type" :value="type"></el-option>
           </el-select>
           <el-button type="primary" @click="createResources">上传并创建资源</el-button>
           <el-button type="danger" @click="clearFileList">清空</el-button>
         </div>
         <el-upload class="upload-box" ref="foUpload"
-          drag
-          multiple
-          with-credentials
+          drag multiple with-credentials
           :action="uploadActionUrl"
           :data="uploadData"
           :file-list="fileList"

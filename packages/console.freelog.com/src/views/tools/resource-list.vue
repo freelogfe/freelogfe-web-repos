@@ -250,7 +250,7 @@
         .then(res => res.data)
         .then(res => {
           if(res.errcode === 0) {
-            this.$message.success(`“${res.data.releaseName}”创建成功！！！`)
+            this.$message.success(`“${aliasName}”创建成功！！！`)
             return Promise.resolve()
           }else {
             this.$message.error(`创建失败：${res.msg}！！！`)

@@ -113,6 +113,8 @@
                       :policy="editTmpPolicy"
                       class="r-e-w-r-p-editor"
                       v-if="isShowEditPolicy"
+                      @save="savePolicyHandler"
+                      @cancel="cancelPolicyHandler"
               ></policy-editor>
             </div>
           </div>

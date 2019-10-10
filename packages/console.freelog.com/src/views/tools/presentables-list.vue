@@ -176,8 +176,7 @@
       updatePresentable(presentable) {
         const { presentableName, userDefinedTags } = presentable
         return this.$services.PresentablesService.put(presentable.presentableId, {
-          presentableName,
-          userDefinedTags
+          presentableName, userDefinedTags
         })
         .then(res => res.data)
         .then(res => {
@@ -199,7 +198,7 @@
         row.isChangePresentable = true
       },
       onlineChangeHandler(row) {
-        const { lineStatus, presentableId } = row
+        const { lineStatus, presentableId, presentableName } = row
         var online = lineStatus === 'online' ? 1 : 0
         return this.$services.PresentablesService.put(`${presentableId}/switchOnlineState`, {
           onlineState: online
@@ -208,11 +207,11 @@
         .then(res => {
           if(res.errcode === 0) {
             const msg = online === 1 ? "上线成功！" : "下线成功！"
-            this.$message.success(msg)
+            this.$message.success(`「${presentableName}」${msg}`)
             row.online = online
           }else {
             const msg = online === 1 ? "上线失败！" : "下线失败！"
-            this.$message.error(msg)
+            this.$message.error(`「${presentableName}」${msg}`)
             row.lineStatus = online === 1 ? "offline" : "online"
           }
         })

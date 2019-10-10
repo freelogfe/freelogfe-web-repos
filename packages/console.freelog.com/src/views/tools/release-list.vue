@@ -258,7 +258,7 @@
       },
       createPresentable(release) {
         const { checkedNodeId: nodeId, presentablePolicyType, policies, username, latestVersion, releaseId, releaseName } = release
-        const presentableName = releaseName.replace(new RegExp(`${username}/`, 'i'), '')
+        const presentableName = releaseName.replace(new RegExp(`${username}/`, 'i'), '').replace(/(\s*)/g, '')
         const { name: policyName, template } = this.policyTplsMap[presentablePolicyType]
         
         const resolveReleases = this.getResolveReleases(release)
@@ -275,7 +275,12 @@
                   if(res.errcode === 0) {
                     this.$message.success(`节点发行「${res.data.presentableName}」创建成功！`)
                     release.rSubordinateNodesIds.push(nodeId)
+                  }else {
+                    this.$message.error(res.msg)
                   }
+                })
+                .catch(e => {
+                  this.$message.error(e)
                 })
       },
       upgradePresentable() {
