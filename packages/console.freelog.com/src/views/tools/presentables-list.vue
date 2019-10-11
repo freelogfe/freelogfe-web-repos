@@ -174,7 +174,8 @@
         this.selectedPresentables = selections
       },
       updatePresentable(presentable) {
-        const { presentableName, userDefinedTags } = presentable
+        const { presentableName, userDefinedTags, releaseInfo: { releaseId } } = presentable
+        console.log('releaseId---', releaseId)
         return this.$services.PresentablesService.put(presentable.presentableId, {
           presentableName, userDefinedTags
         })

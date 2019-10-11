@@ -5,7 +5,7 @@ export default function initEnv(FreelogApp) {
   const isTestFreelog = _isTestFreelog(mainDomain)
 
   if(isLocalhost) {
-    qiOrigin = `${window.location.protocol}//qi.testfreelog.com`
+    qiOrigin = window.location.origin
   }else {
     qiOrigin = getQiOrigin()
   }
@@ -16,11 +16,13 @@ export default function initEnv(FreelogApp) {
   }
   FreelogApp.Env = FreelogApp.Env || {}
   Object.assign(FreelogApp.Env, {
+    type: isTestFreelog ? 'test' : isLocalhost ? 'dev' : 'prod', 
     isTest: isTestFreelog || isLocalhost,
     mainDomain,
     qiOrigin
   })
 }
+
 
 function _isLocalhost() {
   const host = window.location.host
@@ -28,7 +30,7 @@ function _isLocalhost() {
 }
 
 function _isTestFreelog(mainDomain) {
-  return /test/.test(mainDomain)
+  return /testfreelog/.test(mainDomain)
 }
 
 function getQiOrigin() {
