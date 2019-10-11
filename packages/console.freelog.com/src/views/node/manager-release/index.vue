@@ -42,8 +42,12 @@
         <div class="manager-release-body">
 
             <ContentBlock :title="$t('nodeReleaseTitle')">
-                <DisplayOrInput
-                    v-model="presentableName"
+<!--                <DisplayOrInput-->
+<!--                    v-model="presentableName"-->
+<!--                />-->
+                <ConfirmInput
+                    :value="presentableName"
+                    @confirmChange="confirmChange"
                 />
             </ContentBlock>
 
