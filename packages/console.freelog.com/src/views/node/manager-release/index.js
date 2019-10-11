@@ -7,11 +7,13 @@ import PolicyList from '@/components/PolicyList/list/index.vue';
 import ContractManager from '@/components/ContractManager/index.vue';
 import ReleaseEditorContract from '@/views/release/contract/index.vue';
 import i18n from './i18n';
+import ConfirmInput from "../test-manager-resource/ConfirmInput";
 
 export default {
     name: 'manager-release',
     i18n,
     components: {
+        ConfirmInput,
         ContentBlock,
         DisplayOrInput,
         FreelogTags,
@@ -183,19 +185,30 @@ export default {
             this.policies = res.data.data.policies;
             this.$message.success(this.$t('updatedPolicySuccessfully'));
         },
-    },
-    watch: {
-        presentableName(val, oldVal) {
-            if (this.initState) {
-                return;
-            }
-            // 更新 presentableName
-            // console.log(this.presentableName, val, oldVal, 'presentableNamepresentableNamepresentableName');
+        /**
+         * presentableName 变化
+         * @param value
+         */
+        confirmChange(value){
+            this.presentableName = value;
             this.updatePresentable({
-                presentableName: val,
+                presentableName: value,
             });
             this.$message.success(this.$t('titleUpdateSuccessful'));
-        },
+        }
+    },
+    watch: {
+        // presentableName(val, oldVal) {
+        //     if (this.initState) {
+        //         return;
+        //     }
+        //     // 更新 presentableName
+        //     // console.log(this.presentableName, val, oldVal, 'presentableNamepresentableNamepresentableName');
+        //     this.updatePresentable({
+        //         presentableName: val,
+        //     });
+        //     this.$message.success(this.$t('titleUpdateSuccessful'));
+        // },
         userDefinedTags(val) {
             if (this.initState) {
                 return;
