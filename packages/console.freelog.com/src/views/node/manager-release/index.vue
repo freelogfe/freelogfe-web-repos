@@ -115,6 +115,7 @@
                     <div v-else>
                         <!-- @add-policy="addPolicyHandler" -->
                         <PolicyList
+                            @add-policy="switchShowEditPolicy(true)"
                             :policyList="policies"
                             @update-policies="updatePolicies"
                         ></PolicyList>
