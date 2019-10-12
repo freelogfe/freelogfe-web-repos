@@ -40,6 +40,7 @@
                             :class="getIconClass(i.operation)"
                             style="font-weight: 600;"
                         ></i>
+                        <span v-if="scope.row.rules.length === 0">---</span>
                     </div>
                     <!--                        <el-dropdown-menu slot="dropdown">-->
                     <!--                            <el-dropdown-item>-->
