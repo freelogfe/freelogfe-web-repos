@@ -40,6 +40,8 @@
                             :class="getIconClass(i.operation)"
                             style="font-weight: 600;"
                         ></i>
+                        <div style="border-top: 1px solid #b5b5b5; width: 16px;" v-if="scope.row.rules.length === 0"></div>
+
                     </div>
                     <!--                        <el-dropdown-menu slot="dropdown">-->
                     <!--                            <el-dropdown-item>-->
@@ -60,7 +62,7 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px;">
+                    <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px; display: flex; align-items: center;">
                         <!--                        {{scope.row.presentableName}}-->
                         <!--                       #f5a623 -->
                         <label
@@ -71,7 +73,13 @@
                             v-if="scope.row.originInfo.type === 'release'"
                             style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
-                        <span>{{scope.row.testResourceName}}</span>
+                        <label
+                            v-if="scope.row.originInfo.type === 'presentable'"
+                            style="width: 40px; display: inline-block;"
+                        >
+                            <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
+                        </label>
+                        <span style="padding-left: 10px;">{{scope.row.testResourceName}}</span>
                     </div>
                 </template>
             </el-table-column>

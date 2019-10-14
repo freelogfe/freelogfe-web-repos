@@ -4,131 +4,167 @@
         <div
             style="width: 1190px; margin: 0 auto; box-shadow:0 3px 8px 0 rgba(0,0,0,0.2); border-radius:10px; padding: 20px; box-sizing: border-box; display: flex;"
         >
-<!--            <div class="manager-release-header">-->
-                <img
-                    :src="releaseInfo.previewImages || undefined"
-                    style="width: 88px; height: 66px; flex-shrink: 0;"
-                    class="resource-default-preview"
-                />
-                <div style="width: 100%; flex-shrink: 1; display: flex; flex-direction: column; padding-left: 20px;">
-                    <div
-                        style="display: flex; width: 100%; justify-content: space-between; align-items: center; box-sizing: border-box;"
-                    >
-                        <div style="display: flex; align-items: center;">
+            <!--            <div class="manager-release-header">-->
+            <img
+                :src="releaseInfo.previewImages || undefined"
+                style="width: 88px; height: 66px; flex-shrink: 0;"
+                class="resource-default-preview"
+            />
+            <div style="width: 100%; flex-shrink: 1; display: flex; flex-direction: column; padding-left: 20px;">
+                <div
+                    style="display: flex; width: 100%; justify-content: space-between; align-items: center; box-sizing: border-box;"
+                >
+                    <div style="display: flex; align-items: center;">
                         <span
                             style="font-size: 18px; color: #333;">{{releaseInfo.releaseName}}</span>
-                            <label
-                                style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px;">发行</label>
-                            <!--                        <span-->
-                            <!--                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>-->
-                        </div>
-                        <div style="font-size: 12px; color: #999;">
-                            <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
-                            <span style="padding: 0 5px;">|</span>
-                            <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
-                            <span style="padding: 0 5px;">|</span>
-                            <span>最新版本 v{{releaseInfo.version}}</span>
-                        </div>
+                        <label
+                            style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px;">发行</label>
+                        <!--                        <span-->
+                        <!--                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>-->
                     </div>
-
-                    <div style="color: #333; font-size: 12px;">
-                        这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…这是一段发行介绍…
-                        这是一段发行介绍……这是一段发行介绍……这是一段发行介绍……
+                    <div style="font-size: 12px; color: #999;">
+                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
+                        <span style="padding: 0 5px;">|</span>
+                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
+                        <span style="padding: 0 5px;">|</span>
+                        <span>最新版本 v{{releaseInfo.version}}</span>
                     </div>
                 </div>
-<!--            </div>-->
+
+                <div style="color: #333; font-size: 12px;">
+                    {{releaseInfo.intro}}
+                </div>
+            </div>
+            <!--            </div>-->
         </div>
 
         <div class="manager-release-body">
+            <ModuleBlock>
+                <BlockItem label="节点发行名称">
+                    <ConfirmInput
+                        :value="presentableName"
+                        @confirmChange="confirmChange"
+                    />
+                </BlockItem>
 
-            <ContentBlock :title="$t('nodeReleaseTitle')">
-<!--                <DisplayOrInput-->
-<!--                    v-model="presentableName"-->
-<!--                />-->
-                <ConfirmInput
-                    :value="presentableName"
-                    @confirmChange="confirmChange"
-                />
-            </ContentBlock>
+                <BlockItem label="标签">
+                    <div style="height: 5px;"></div>
+                    <FreelogTags
+                        :actionText="$t('newTag')"
+                        v-model="userDefinedTags"
+                    ></FreelogTags>
+                </BlockItem>
 
-            <ContentBlock :title="$t('tags')">
-                <FreelogTags
-                    :actionText="$t('newTag')"
-                    v-model="userDefinedTags"
-                ></FreelogTags>
-            </ContentBlock>
-
-            <ContentBlock :title="$t('policies')">
-
-                <template v-slot:right>
-                    <template v-if="isShowEditPolicy">
-                        <el-button
-                            size="mini"
-                            round
-                            @click="switchShowEditPolicy(false)"
-                        >{{$t('cancel')}}
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            type="primary"
-                            round
-                            style="margin-left: 10px;"
-                            @click="saveANewPolicy"
-                        >{{$t('save')}}
-                        </el-button>
-                    </template>
-                    <div v-if="!isShowEditPolicy && policies.length > 0"
-                         style="height: 28px; display: flex; align-items: center;">
-                        <a
-                            style="width: 26px; height: 20px; align-items: center; justify-content: center; background-color: #409eff; border-radius: 10px; text-align: center;"
-                            @click="switchShowEditPolicy(true)"
-                        >
-                            <i class="el-icon-plus" style="font-weight: bolder; color: #fff; font-size: 12px;"></i>
-                        </a>
-                    </div>
-                    <el-popover
-                        v-if="!isShowEditPolicy && policies.length === 0"
-                        placement="top"
-                        trigger="hover"
-                        :content="$t('noPolicyNotAppear')"
-                    >
-                        <div style="height: 28px; display: flex; align-items: center;" slot="reference">
-                            <i
-                                class="el-icon-warning"
-                                style="font-size: 20px; color: #ffc210;"
-                            ></i>
-                        </div>
-                    </el-popover>
-                </template>
-
-                <template v-if="!isShowEditPolicy">
-                    <div
-                        v-if="policies.length === 0"
-                    >
-                        <el-button
-                            @click="switchShowEditPolicy(true)"
-                            size="small"
-                            type="primary"
-                        >{{$t('addPolicy')}}
-                        </el-button>
-                    </div>
-                    <div v-else>
+                <BlockItem label="授权策略">
+                    <template v-if="!isShowEditPolicy">
+                        <!--                        <div-->
+                        <!--                            v-if="policies.length === 0"-->
+                        <!--                        >-->
+                        <!--                            <el-button-->
+                        <!--                                @click="switchShowEditPolicy(true)"-->
+                        <!--                                size="small"-->
+                        <!--                                type="primary"-->
+                        <!--                            >{{$t('addPolicy')}}-->
+                        <!--                            </el-button>-->
+                        <!--                        </div>-->
+                        <!--                        <div v-else>-->
                         <!-- @add-policy="addPolicyHandler" -->
+                        <div v-if="policies.length === 0" style="display: flex; align-items: center;">
+                            <el-button
+                                @click="switchShowEditPolicy(true)"
+                                type="primary"
+                                size="small"
+                            >添加策略
+                            </el-button>
+                            <el-popover
+                                placement="top"
+                                trigger="hover"
+                                :content="$t('noPolicyNotAppear')"
+                            >
+                                <div style="height: 28px; display: flex; align-items: center; padding-left: 10px;" slot="reference">
+                                    <i
+                                        class="el-icon-warning"
+                                        style="font-size: 20px; color: #ffc210;"
+                                    ></i>
+                                </div>
+                            </el-popover>
+                        </div>
                         <PolicyList
+                            v-if="policies.length > 0"
+                            style="width: 100%;"
                             @add-policy="switchShowEditPolicy(true)"
                             :policyList="policies"
                             @update-policies="updatePolicies"
                         ></PolicyList>
-                    </div>
-                </template>
-                <!--                :policy="editTmpPolicy"-->
-                <PolicyEditor
-                    :policy="newPolicie"
-                    :showFooterBtns="false"
-                    class="r-e-w-r-p-editor"
-                    v-if="isShowEditPolicy"
-                ></PolicyEditor>
-            </ContentBlock>
+                        <!--                        </div>-->
+                    </template>
+                    <!--                :policy="editTmpPolicy"-->
+                    <PolicyEditor
+                        :policy="newPolicie"
+                        :showFooterBtns="true"
+                        class="r-e-w-r-p-editor"
+                        v-if="isShowEditPolicy"
+                        @save="saveANewPolicy"
+                        @cancel="switchShowEditPolicy(false)"
+                    ></PolicyEditor>
+                </BlockItem>
+            </ModuleBlock>
+            <!--            <ContentBlock :title="$t('nodeReleaseTitle')">-->
+            <!--                <DisplayOrInput-->
+            <!--                    v-model="presentableName"-->
+            <!--                />-->
+
+            <!--            </ContentBlock>-->
+
+            <!--            <ContentBlock :title="$t('tags')">-->
+
+            <!--            </ContentBlock>-->
+
+            <!--            <ContentBlock :title="$t('policies')">-->
+
+            <!--                <template v-slot:right>-->
+            <!--                    <template v-if="isShowEditPolicy">-->
+            <!--                        <el-button-->
+            <!--                            size="mini"-->
+            <!--                            round-->
+            <!--                            @click="switchShowEditPolicy(false)"-->
+            <!--                        >{{$t('cancel')}}-->
+            <!--                        </el-button>-->
+            <!--                        <el-button-->
+            <!--                            size="mini"-->
+            <!--                            type="primary"-->
+            <!--                            round-->
+            <!--                            style="margin-left: 10px;"-->
+            <!--                            @click="saveANewPolicy"-->
+            <!--                        >{{$t('save')}}-->
+            <!--                        </el-button>-->
+            <!--                    </template>-->
+            <!--                    <div v-if="!isShowEditPolicy && policies.length > 0"-->
+            <!--                         style="height: 28px; display: flex; align-items: center;">-->
+            <!--                        <a-->
+            <!--                            style="width: 26px; height: 20px; align-items: center; justify-content: center; background-color: #409eff; border-radius: 10px; text-align: center;"-->
+            <!--                            @click="switchShowEditPolicy(true)"-->
+            <!--                        >-->
+            <!--                            <i class="el-icon-plus" style="font-weight: bolder; color: #fff; font-size: 12px;"></i>-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+            <!--                    <el-popover-->
+            <!--                        v-if="!isShowEditPolicy && policies.length === 0"-->
+            <!--                        placement="top"-->
+            <!--                        trigger="hover"-->
+            <!--                        :content="$t('noPolicyNotAppear')"-->
+            <!--                    >-->
+            <!--                        <div style="height: 28px; display: flex; align-items: center;" slot="reference">-->
+            <!--                            <i-->
+            <!--                                class="el-icon-warning"-->
+            <!--                                style="font-size: 20px; color: #ffc210;"-->
+            <!--                            ></i>-->
+            <!--                        </div>-->
+            <!--                    </el-popover>-->
+            <!--                </template>-->
+
+
+            <!--            </ContentBlock>-->
 
             <ContentBlock :title="$t('authorization')">
                 <DisplayEditContracts/>

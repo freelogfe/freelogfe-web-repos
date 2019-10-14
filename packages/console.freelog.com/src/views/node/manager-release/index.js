@@ -8,11 +8,15 @@ import ContractManager from '@/components/ContractManager/index.vue';
 import ReleaseEditorContract from '@/views/release/contract/index.vue';
 import i18n from './i18n';
 import ConfirmInput from "../test-manager-resource/ConfirmInput";
+import ModuleBlock from "../test-manager-resource/ModuleBlock";
+import BlockItem from "../test-manager-resource/BlockItem";
 
 export default {
     name: 'manager-release',
     i18n,
     components: {
+        BlockItem,
+        ModuleBlock,
         ConfirmInput,
         ContentBlock,
         DisplayOrInput,
@@ -35,6 +39,7 @@ export default {
                 resourceType: '',
                 version: '',
                 createDate: '',
+                intro: '',
             },
             // 名称
             presentableName: null,
@@ -109,6 +114,7 @@ export default {
                 releaseName: result.releaseInfo.releaseName,
                 resourceType: result.releaseInfo.resourceType,
                 version: result.releaseInfo.version,
+                intro: result.releaseInfo.intro,
                 createDate: [
                     [time.getFullYear(), (time.getMonth() + 1 < 10 ? '0' : '') + (time.getMonth() + 1), (time.getDate() < 10 ? '0' : '') + time.getDate()].join('-'),
                     [(time.getHours() < 10 ? '0' : '') + time.getHours(), (time.getMinutes() < 10 ? '0' : '') + time.getMinutes()].join(':')
@@ -138,14 +144,26 @@ export default {
         /**
          * 保存一个新策略
          */
-        async saveANewPolicy() {
+        async saveANewPolicy(policy) {
+            console.log(policy, 'policypolicypolicy');
+            // return;
             // console.log(this.btoa, 'newPolicienewPolicie');
+            // const res = await this.updatePresentable({
+            //     policyInfo: {
+            //         addPolicies: [
+            //             {
+            //                 policyName: this.newPolicie.policyName,
+            //                 policyText: window.btoa(this.newPolicie.policyText),
+            //             },
+            //         ],
+            //     },
+            // });
             const res = await this.updatePresentable({
                 policyInfo: {
                     addPolicies: [
                         {
-                            policyName: this.newPolicie.policyName,
-                            policyText: window.btoa(this.newPolicie.policyText),
+                            policyName: policy.policyName,
+                            policyText: window.btoa(policy.policyText),
                         },
                     ],
                 },
@@ -189,7 +207,7 @@ export default {
          * presentableName 变化
          * @param value
          */
-        confirmChange(value){
+        confirmChange(value) {
             this.presentableName = value;
             this.updatePresentable({
                 presentableName: value,

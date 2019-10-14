@@ -11,7 +11,7 @@
         </a>
         <div
             v-show="isEdit"
-            style="width: 100%; height: 100%; display: flex; border: 1px solid #c7c7c7; border-radius: 2px;"
+            style="width: 100%; height: 100%; display: flex; border: 1px solid #c7c7c7; border-radius: 2px; box-sizing: border-box;"
         >
             <input
                 v-model="inputValue"
