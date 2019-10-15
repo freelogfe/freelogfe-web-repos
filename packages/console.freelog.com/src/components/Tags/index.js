@@ -38,8 +38,10 @@ export default {
       this.tags = value
     },
     handleClose(tag) {
-      this.tags.splice(this.tags.indexOf(tag), 1)
-      this.$emit('input', this.tags)
+      // this.tags.splice(this.tags.indexOf(tag), 1)
+
+        this.tags = this.tags.filter(i => i !== tag);
+      this.$emit('input', this.tags);
     },
     showInput() {
       this.inputVisible = true
@@ -50,11 +52,16 @@ export default {
     handleInputConfirm() {
       const inputValue = this.inputValue
       if (inputValue) {
-        this.tags.push(inputValue)
+        // this.tags.push(inputValue)
+          const tags = [
+              ...this.tags,
+              inputValue,
+          ];
+          this.tags = Array.from(new Set(tags));
         this.$emit('input', this.tags)
       }
-      this.inputVisible = false
-      this.inputValue = ''
+      this.inputVisible = false;
+      this.inputValue = '';
     }
   }
 }
