@@ -44,6 +44,11 @@ export default {
             isOnline: 0,
             // 名称
             presentableName: null,
+
+            // 当前可选版本
+            versions: [],
+            // 当前选择版本
+            versionValue: null,
             // 用户定义标签
             userDefinedTags: null,
 
@@ -114,7 +119,7 @@ export default {
                 previewImages: result.releaseInfo.previewImages[0] ? result.releaseInfo.previewImages[0] : undefined,
                 releaseName: result.releaseInfo.releaseName,
                 resourceType: result.releaseInfo.resourceType,
-                version: result.releaseInfo.version,
+                version: result.releaseInfo.versions.reverse()[0],
                 intro: result.releaseInfo.intro,
                 createDate: [
                     [time.getFullYear(), (time.getMonth() + 1 < 10 ? '0' : '') + (time.getMonth() + 1), (time.getDate() < 10 ? '0' : '') + time.getDate()].join('-'),
@@ -123,6 +128,8 @@ export default {
             };
             this.isOnline = result.isOnline;
             this.presentableName = result.presentableName;
+            this.versions = result.releaseInfo.versions;
+            this.versionValue = result.releaseInfo.version;
             this.userDefinedTags = result.userDefinedTags;
             this.policies = result.policies;
             // console.log(result.resolveReleases, 'PPPPPPPPPPPPPPPPPPPPP');
@@ -241,6 +248,14 @@ export default {
             // item.isOnline = item.isOnline === 0 ? 1 : 0;
             this.handleInitInfo();
         },
+        async updateVersion(val) {
+            const {presentableId} = this.$route.params;
+            const {data: {errcode}} = await this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: val});
+            if (errcode !== 0) {
+                return this.$message.error('更新版本失败！')
+            }
+            this.$message.success('更新版本成功！');
+        },
     },
     watch: {
         // presentableName(val, oldVal) {
@@ -255,18 +270,32 @@ export default {
         //     this.$message.success(this.$t('titleUpdateSuccessful'));
         // },
         userDefinedTags(val, old) {
+
             if (this.initState) {
                 return;
             }
+
             // console.log(this.userDefinedTags, 'userDefinedTagsuserDefinedTagsuserDefinedTags');
+            // console.log(val, old, 'OOOOOOO');
             if (JSON.stringify(val) === JSON.stringify(old)) {
                 return;
             }
+            // console.log(val, 'userDefinedTagsuserDefinedTags');
             this.updatePresentable({
                 userDefinedTags: val,
             });
             this.$message.success(this.$t('tagUpdatedSuccessfully'));
         },
+        versionValue(val, old) {
+            if (old === null) {
+                return;
+            }
+            this.updateVersion(val);
+            // this.updatePresentable({
+            //     version: val,
+            // });
+            // this.$message.success(this.$t('tagUpdatedSuccessfully'));
+        }
     },
     computed: {
         availablePolicies() {

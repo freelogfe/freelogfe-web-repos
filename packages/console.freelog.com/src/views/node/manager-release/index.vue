@@ -65,6 +65,23 @@
                     />
                 </BlockItem>
 
+                <BlockItem
+                    label="展示版本"
+                    v-if="versions.length !== 0"
+                >
+                    <el-select
+                        v-model="versionValue"
+                        style="display: block; width: 700px; background-color: #fafbfb; font-weight: 600;"
+                    >
+                        <el-option
+                            v-for="item in versions"
+                            :key="item"
+                            :label="'v' + item"
+                            :value="item">
+                        </el-option>
+                    </el-select>
+                </BlockItem>
+
                 <BlockItem label="标签">
                     <div style="height: 5px;"></div>
                     <FreelogTags
