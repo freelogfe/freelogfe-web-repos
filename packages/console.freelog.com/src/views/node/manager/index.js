@@ -24,6 +24,7 @@ export default {
             },
             // 是否是页面样式
             isPageStyle: this.$route.query.isPageStyle && this.$route.query.isPageStyle === 'true',
+            // isPageStyle: true,
             // 筛选『全部』和『待处理』
             filterTodo: '全部',
             // 筛选搜索框
@@ -63,9 +64,11 @@ export default {
                 'webkitHidden' in document ? 'webkitHidden' :
                     'mozHidden' in document ? 'mozHidden' :
                         null;
+            // console.log(hiddenProperty, 'hiddenPropertyhiddenProperty');
             // 不同浏览器的事件名
             const visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
             const onVisibilityChange = () => {
+                // console.log('111111');
                 if (document[hiddenProperty]) {
                     // 窗口隐藏
                     // console.log(Date(), 'hidden');
@@ -83,6 +86,9 @@ export default {
          * @param bool
          */
         switchIsPageStyle(bool) {
+            if (this.isPageStyle === bool) {
+                return;
+            }
             this.isPageStyle = bool;
             // console.log(this.$router, '!@#$@#!$');
             // console.log(this.$route, '!@#$@#!$');
