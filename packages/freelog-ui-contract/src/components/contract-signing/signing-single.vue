@@ -90,11 +90,11 @@
           if(contract.isDefault) {
             this.defaultContract = contract
           }
-          map[contract.segmentId] = contract
+          map[contract.policyId] = contract
         })
 
         this.presentable.policies.forEach(p => {
-          p.contract = map[p.segmentId] || null
+          p.contract = map[p.policyId] || null
         })
         this.$set(this.presentable, this.presentable.policies)
       },

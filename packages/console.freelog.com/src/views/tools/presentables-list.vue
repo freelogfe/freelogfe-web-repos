@@ -103,7 +103,8 @@
           target: '/v1/presentables',
           params: {
             nodeId: '',
-            isOnline: 2
+            isOnline: 2,
+            resourceType: undefined
           }
         },
         selectedType: 'all',
@@ -163,6 +164,7 @@
         this.$refs.presentableslistRef.reload()
       },
       handleSelectType(command) {
+        console.log('cammand ---', command)
         this.selectedType = command
         if(this.selectedType === 'all') {
           this.paginationConfig.params.resourceType = undefined

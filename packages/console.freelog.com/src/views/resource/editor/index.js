@@ -73,6 +73,8 @@ export default {
             isShowReleaseSearchDialog: false,
             // 临时存放的 新建的资源 ID
             tmpRreatedResourceID: '',
+            // 创建或保存的资源Data
+            targetResourceData: null
         };
     },
     mounted() {
@@ -308,6 +310,7 @@ export default {
                     throw new Error(this.$t('creationFailed'));
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
+                this.targetResourceData = res.data.data
                 return res.data.data.resourceId;
             } else {
                 const {resourceId} = this.$route.params;
@@ -316,6 +319,7 @@ export default {
                     this.$message.error(this.$t('saveFailed'));
                     throw new Error(this.$t('saveFailed'));
                 }
+                this.targetResourceData = res.data.data
                 this.$message.success(this.$t('saveSuccess'));
                 return res.data.data.resourceId;
             }

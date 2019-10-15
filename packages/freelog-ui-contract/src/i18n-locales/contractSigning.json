@@ -2,6 +2,7 @@
   "en": {
     "contractSigning": {
       "resourceType": "Resource type",
+      "releaseId": "Release ID",
       "resourceId": "Resource ID",
       "resourceIntro": "Resource description",
       "recordsText": "Resource signing history",
@@ -49,6 +50,7 @@
   "zh-CN": {
     "contractSigning": {
       "resourceType": "资源类型",
+      "releaseId": "发行ID",
       "resourceId": "资源ID",
       "resourceIntro": "资源描述",
       "recordsText": "资源签约历史",

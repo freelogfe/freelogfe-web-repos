@@ -1,17 +1,27 @@
 <template>
-  <div id="f-operation">
-    <div class="fo-main-content">
-      <el-steps :active="activeIndex" finish-status="finish" simple style="margin-bottom: 50px;">
-        <el-step 
-          class="fo-step-item"
-          v-for="(step, index) in stepList"
-          :key="'step' + index"
-          :icon="step.icon">
-          <div slot="title" @click="tapStep(step, index)">{{step.title}}</div>
-        </el-step>
-      </el-steps>
-      <router-view></router-view>
-    </div>
+  <div>
+    <div class="fo-upload-wrapper">
+        <div class="upload-operation-box">
+          <el-select class="fo-upload-select" allow-create filterable v-model="selectType" placeholder="请选择资源类型">
+            <el-option v-for="type in resourceTypes" :key="type" :label="type" :value="type"></el-option>
+          </el-select>
+          <el-button type="primary" @click="createResources">上传并创建资源</el-button>
+          <el-button type="danger" @click="clearFileList">清空</el-button>
+        </div>
+        <el-upload class="upload-box" ref="foUpload"
+          drag multiple with-credentials
+          :action="uploadActionUrl"
+          :data="uploadData"
+          :file-list="fileList"
+          :on-change="fileChangeHandler"
+          :on-success="fileSuccessHandler"
+          :on-error="fileErrorHandler"
+          :auto-upload="false"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+      </div>
   </div>
 </template>
 
@@ -28,13 +38,6 @@ export default {
       uploadData: {
         resourceType: ""
       },
-      stepList: [
-        { title: '创建资源', icon: 'el-icon-edit', path: '/tools/batch-operation/create-resource' },
-        { title: '资源列表', icon: 'el-icon-upload', path: '/tools/batch-operation/resources-list' },
-        { title: '发行列表', icon: 'el-icon-picture', path: '/tools/batch-operation/releases-list' },
-        { title: '节点发行列表', icon: 'el-icon-files', path: '/tools/batch-operation/presentables-list' },
-      ],
-      activeIndex: 0
     }
   },
   computed: {
@@ -44,9 +47,6 @@ export default {
     resourceTypes() {
       var types = Object.values(RESOURCE_TYPES)
       return types
-    },
-    stepPaths() {
-      return this.stepList.map(s => s.path)
     }
   },
   watch: {
@@ -54,15 +54,7 @@ export default {
       this.uploadData.resourceType = this.selectType
     }
   },
-  mounted() {
-    console.log('mouted ---', this.stepPaths, this.$route.path, this.stepPaths.indexOf(this.$route.path))
-    this.activeIndex = this.stepPaths.indexOf(this.$route.path)
-  },
   methods: {
-    tapStep(step, index) {
-      this.$router.push(step.path)
-      this.activeStep = index
-    },
     fileChangeHandler(file, fileList) {
       this.fileList = fileList
     },
@@ -150,50 +142,24 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @import '../../styles/variables.less';
-  #f-operation {   
-    padding-top: 20px;
-
-    .fo-main-content{
-      width: @main-content-width-1190;
-      margin: auto;
-      
-      .fo-resource-list-box, .fo-release-list-box, .fo-presentables-list-box {
-        display: none; padding: 0 0 30px;
-        &.visible {
-          display: block;
-        }
-      } 
-      .upload-operation-box {
-        width: 500px; margin: 0 auto 20px;
-        .fo-upload-select {
-          margin-right: 10px;
-        }
-      }
-      
-      .fo-upload-wrapper {
-        padding: 20px 0; text-align: center;
-        .upload-box {
-          display: inline-block;
-        }
-      }
+  .upload-operation-box {
+    width: 500px; margin: 0 auto 20px;
+    .fo-upload-select {
+      margin-right: 10px;
     }
   }
   
-
-  @media screen and (max-width: 1250px) {
-    .fo-main-content{
-      width: @main-content-width-990;
+  .fo-upload-wrapper {
+    padding: 20px 0; text-align: center;
+    .upload-box {
+      display: inline-block;
     }
   }
+  
 </style>
 
 <style lang="less">
   #f-operation {
-    .fo-step-item {
-      .el-step__title { cursor: pointer; }
-    }
-
     .upload-box {
       .el-upload-dragger {
         width: 500px; height: 210px;

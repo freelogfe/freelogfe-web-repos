@@ -35,7 +35,7 @@ export default {
       resourceList: [],
       curTabName: 'self',
       queryInput: '',
-      resourceDialogVisible: false
+      resourceDialogVisible: false,
     }
   },
   components: {
@@ -50,7 +50,7 @@ export default {
     },
     createNewRelease(resource) {
       this.$router.push(`/release/create?resourceId=${resource.resourceId}`)
-    }
+    },
   },
 
   mounted() {

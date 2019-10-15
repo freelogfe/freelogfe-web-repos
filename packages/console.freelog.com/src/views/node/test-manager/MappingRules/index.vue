@@ -6,10 +6,10 @@
 					<i class="el-icon-edit"></i>进入编辑模式
 				</el-button>
 				<el-upload class="mr-import" accept="text/plain" :show-file-list="false" :auto-upload="false"  :on-change="rulesImportHandler">
-					<el-button type="text"><i class="el-icon-upload2"></i> 导入</el-button>
+					<el-button type="text"><i class="el-icon-download"></i> 导入</el-button>
 				</el-upload>
 				<el-button type="text" @click="tapExportBtn">
-					<i class="el-icon-download"></i>
+					<i class="el-icon-upload2"></i>
 					{{selectedRules.length > 0 ? "批量" : "全部" }}导出
 				</el-button>
 				<a v-show="false" ref="rulesDownload" :href="rulesTextDownloadUrl" :download="rulesTextDownloadName"></a>

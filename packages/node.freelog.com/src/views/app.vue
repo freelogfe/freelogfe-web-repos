@@ -23,6 +23,7 @@
 
 <script>
   import { FLogin } from '@freelog/freelog-ui-login'
+  import { ContractSigningDialog } from '@freelog/freelog-ui-contract'
   import { noop } from '../core/utils/util'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../core/events/names'
 
@@ -42,7 +43,7 @@
       }
     },
     components: {
-      FLogin
+      FLogin, ContractSigningDialog
     },
 
     computed: {
@@ -124,6 +125,7 @@
       },
 
       showAuthDialog({presentableList, activePresentableId, callback = noop}) {
+        
         if (typeof callback === 'function'){
           authCallback = callback
         }

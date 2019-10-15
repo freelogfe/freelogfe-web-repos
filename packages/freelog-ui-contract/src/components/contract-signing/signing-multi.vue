@@ -73,21 +73,22 @@
         var userInfo = getUserInfo()
         return userInfo && userInfo.userId
       },
-      selectedResourceId() {
-        return this.selectedPresentable.resourceId
+      selectedReleaseId() {
+        return this.selectedPresentable.releaseInfo.releaseId
       },
     },
     methods: {
       init() {
-        const resourceIds = this.presentableList.map(p => p.resourceId)
+        const presentableIds = this.presentableList.map(p => p.presentableId)
         return this.$axios.get(`/v1/contracts/`, {
           params: {
             pageSize: this.presentableList.length,
-            resourceIds: resourceIds.join(','),
+            presentableIds: presentableIds.join(','),
             contractType: 3,
             partyOne: this.nodeId,
             partyTwo: this.userId,
-            isDefault: 1
+            isDefault: 1,
+            identityType: 2
           }
         })
           .then(res => {
@@ -108,7 +109,7 @@
         var map = {}
 
         this.contracts.forEach(contract => {
-          if(this.selectedResourceId === contract.resourceId) {
+          if(this.selectedReleaseId === contract.resourceId) {
             this.defaultContract = contract
           }
           map[contract.resourceId] = contract

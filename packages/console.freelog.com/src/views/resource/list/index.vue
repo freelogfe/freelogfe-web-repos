@@ -16,7 +16,11 @@
                top="10vh"
                center
                :visible.sync="isShowReleaseSearchDialog">
-      <release-search :tabLayout="['my-release']" :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []" @add="releaseSearchHandler"></release-search>
+      <release-search 
+        :release-source="targetReleaseResource"
+        :tabLayout="['my-release']" 
+        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []" 
+        @add="releaseSearchHandler"></release-search>
       <div class="" slot="footer">
         <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('createNewReleaseText')}}</el-button>
       </div>

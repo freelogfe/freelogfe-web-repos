@@ -38,8 +38,8 @@ export function getHasDefaultContractPolicyIndex(presentable, resourceIdContract
   const contractMap = resourceIdContractsMap[resourceId]
   if(contractMap) {
     for(let i = 0; i < policies.length; i++) {
-      let segmentId = policies[i].segmentId
-      let contract = contractMap[segmentId]
+      let policyId = policies[i].policyId
+      let contract = contractMap[policyId]
       if(contract && contract.isDefault === 1) {
         index = i
         defaultContract = contract
@@ -58,7 +58,7 @@ export function resolvePolicyContractState(policyList, resourceIdContractsMap) {
     var contractMap = resourceIdContractsMap[policy.resourceId]
     var contract = null
     if(contractMap) {
-      contract = contractMap[policy.segmentId] || null
+      contract = contractMap[policy.policyId] || null
     }
     policy.contractState = getContractState(contract)
   })

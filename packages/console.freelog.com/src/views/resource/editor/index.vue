@@ -184,6 +184,7 @@
         >
             <!--            :historicalReleases="releasesList"-->
             <release-search
+                :release-source="targetResourceData"
                 :tabLayout="['my-release']"
                 :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"
                 @add="createRelease"

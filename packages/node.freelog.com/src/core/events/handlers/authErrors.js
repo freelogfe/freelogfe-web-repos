@@ -1,6 +1,5 @@
 import { SHOW_AUTH_DIALOG, NOTIFY_NODE } from '../names'
 export function handleAuthError(options, callback) {
-  console.log('options', options)
   const response = options.response
 
   let presentableInfo
@@ -8,8 +7,8 @@ export function handleAuthError(options, callback) {
     presentableInfo = response.data.presentableInfo || (response.data.data && response.data.data.presentableInfo)
   }
 
-  if (response && response.errcode && presentableInfo) {
-    switch (response.errcode) {
+  if (response && response.authCode && presentableInfo) {
+    switch (response.authCode) {
       // 未激活状态
       case 501:
       // 未签约状态

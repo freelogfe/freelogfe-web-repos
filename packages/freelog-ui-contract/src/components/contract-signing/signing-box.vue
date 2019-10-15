@@ -2,8 +2,8 @@
 <template>
   <div class="ss-main-content resource-contract-box">
     <div class="rcb-id-box">
-      <label class="rcb-name">{{$t('contractSigning.resourceId')}}:</label>
-      <div class="rcb-value">{{resourceId}}</div>
+      <label class="rcb-name">{{$t('contractSigning.releaseId')}}:</label>
+      <div class="rcb-value">{{releaseId}}</div>
     </div>
     <div class="rcb-type-box">
       <label class="rcb-name">{{$t('contractSigning.resourceType')}}:</label>
@@ -139,8 +139,8 @@
         var userInfo = getUserInfo()
         return userInfo && userInfo.userId
       },
-      resourceId() {
-        return this.presentable.resourceId
+      releaseId() {
+        return this.presentable.releaseInfo.releaseId
       },
       presentableId() {
         return this.presentable.presentableId
@@ -165,9 +165,8 @@
     },
     methods: {
       init() {
-
         this.policyList = this.presentable.policies.map((p, index) => {
-          p.resourceId = this.resourceId
+          p.releaseId = this.releaseId
           if(this.defaultContract && p.contract && p.contract.contractId === this.defaultContract.contractId) {
             this.actPolicyIndex = index
           }
@@ -202,16 +201,15 @@
       // 执行合同签约
       signContract(isSetDefault) {
         const {presentableId} = this.presentable
-        const {segmentId} = this.actPolicy
+        const {policyId} = this.actPolicy
         const isDefault = isSetDefault ? 1 : 0
 
         this.$axios({
-          url: '/v1/contracts/createUserPresentableContract',
+          url: '/v1/contracts',
           method: 'POST',
           data: {
             presentableId,
-            segmentId,
-            targetId: presentableId,
+            policyId,
             isDefault
           }
         })

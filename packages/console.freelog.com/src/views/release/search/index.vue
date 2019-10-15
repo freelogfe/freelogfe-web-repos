@@ -40,6 +40,7 @@
           <div class="no-release-items" slot="empty">{{$t('search.noFavorReleases')}}</div>
         </lazy-list-view>
       </el-tab-pane>
+
       <el-tab-pane v-if="tabLayout.indexOf('favor') !== -1" :label="$t('search.favorTitle')" name="favor">
         <lazy-list-view :list="favorReleases" class="search-release-list" :height="60" :fetch="fetchFavorData">
           <template slot-scope="scope">
@@ -107,6 +108,9 @@
       type: {
         type: String,
         default: 'release'
+      },
+      releaseSource: {
+        type: Object
       },
       historicalReleases: {
         type: Array,
@@ -186,7 +190,8 @@
             dataList: []
           })
         }
-        return this.myLoader({page, isSelf: 1}).then((data) => {
+        const params = Object.assign({page, isSelf: 1}, { resourceType: this.releaseSource ? this.releaseSource.resourceType : null })
+        return this.myLoader(params).then((data) => {
           this.myReleases = this.myReleases.concat(data.dataList)
           if (data.dataList.length < pageSize) {
             data.canLoadMore = false

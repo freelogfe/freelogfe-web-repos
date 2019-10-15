@@ -12,7 +12,7 @@ export default {
         title: ""
     },
     component: Views.container,
-    redirect: '/tools/batch-operation',
+    redirect: '/tools/batch-operation/create',
     children: [
         {
             path: 'batch-operation',
@@ -24,6 +24,52 @@ export default {
                 hideFooter: true,
             },
             component: Views.batchOperation,
+            children: [
+                {
+                    path: 'create-resource',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: true,
+                        title: "",
+                        theme: 'gray',
+                        hideFooter: true,
+                    },
+                    component: Views.toolsCreateResource,
+                },
+                {
+                    path: 'resources-list',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: true,
+                        title: "",
+                        theme: 'gray',
+                        hideFooter: true,
+                    },
+                    component: Views.toolsResourcesList,
+                },
+                {
+                    path: 'releases-list',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: true,
+                        title: "",
+                        theme: 'gray',
+                        hideFooter: true,
+                    },
+                    component: Views.toolsReleasesList,
+                },
+                {
+                    path: 'presentables-list',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: true,
+                        title: "",
+                        theme: 'gray',
+                        hideFooter: true,
+                    },
+                    component: Views.toolsPresentablesList,
+                }
+            ]
         },
     ]
 }
