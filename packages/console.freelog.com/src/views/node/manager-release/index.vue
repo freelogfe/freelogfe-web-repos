@@ -85,7 +85,6 @@
                 <BlockItem label="标签">
                     <div style="height: 5px;"></div>
                     <FreelogTags
-                        :actionText="$t('newTag')"
                         v-model="userDefinedTags"
                     ></FreelogTags>
                 </BlockItem>

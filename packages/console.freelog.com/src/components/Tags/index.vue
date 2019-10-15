@@ -23,7 +23,24 @@
       @keyup.enter.native="handleInputConfirm"
       @blur="handleInputConfirm">
     </el-input>
-    <el-button v-if="inputVisible || isCanCURD" class="button-new-tag" round size="mini" @click="showInput"><i class="el-icon-plus"></i> {{actionText}}</el-button>
+
+<!--    <el-button-->
+<!--        v-if="inputVisible || isCanCURD"-->
+<!--        class="button-new-tag"-->
+<!--        round-->
+<!--        size="mini"-->
+<!--        @click="showInput"-->
+<!--    >-->
+
+<!--      <span style="background-color: #666; border-radius: 50%; border: none; display: inline-block; width: 20px; height: 20px;">-->
+        <i
+            v-if="inputVisible || isCanCURD"
+            style="font-size: 12px; color: #666; background-color: #f1f1f1; border-radius: 50%; padding: 5px; cursor: pointer;"
+            class="el-icon-plus"
+            @click="showInput"
+        ></i>
+<!--      </span>-->
+<!--    </el-button>-->
   </div>
 </template>
 
@@ -62,7 +79,7 @@ export default FreelogTags
 
   .el-tag {
     position: relative;
-    z-index: 10;
+    z-index: 9;
     margin-right: 20px; padding: 0 10px; border: 1px solid #B1D1F6; border-radius: 4px; border-left-width: 0;
     height: 28px; line-height: 24px;
     background-color: #E4EEFA;
