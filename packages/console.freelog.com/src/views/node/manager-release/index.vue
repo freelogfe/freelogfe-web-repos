@@ -40,6 +40,24 @@
 
         <div class="manager-release-body">
             <ModuleBlock>
+
+                <BlockItem label="状态">
+                    <div v-show="!isOnline" style="display: flex; align-items: center;">
+                        <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">未上线</label>
+                        <a
+                            @click="onLineAndOffLine"
+                            style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
+                        >上线</a>
+                    </div>
+                    <div v-show="isOnline" style="display: flex; align-items: center;">
+                        <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">已上线</label>
+                        <a
+                            @click="onLineAndOffLine"
+                            style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
+                        >下线</a>
+                    </div>
+                </BlockItem>
+
                 <BlockItem label="节点发行名称">
                     <ConfirmInput
                         :value="presentableName"

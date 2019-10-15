@@ -41,6 +41,7 @@ export default {
                 createDate: '',
                 intro: '',
             },
+            isOnline: 0,
             // 名称
             presentableName: null,
             // 用户定义标签
@@ -120,6 +121,7 @@ export default {
                     [(time.getHours() < 10 ? '0' : '') + time.getHours(), (time.getMinutes() < 10 ? '0' : '') + time.getMinutes()].join(':')
                 ].join(' '),
             };
+            this.isOnline = result.isOnline;
             this.presentableName = result.presentableName;
             this.userDefinedTags = result.userDefinedTags;
             this.policies = result.policies;
@@ -145,7 +147,7 @@ export default {
          * 保存一个新策略
          */
         async saveANewPolicy(policy) {
-            console.log(policy, 'policypolicypolicy');
+            // console.log(policy, 'policypolicypolicy');
             // return;
             // console.log(this.btoa, 'newPolicienewPolicie');
             // const res = await this.updatePresentable({
@@ -213,7 +215,32 @@ export default {
                 presentableName: value,
             });
             this.$message.success(this.$t('titleUpdateSuccessful'));
-        }
+        },
+        /**
+         * 上线和下线
+         */
+        async onLineAndOffLine() {
+            // console.log(item, 'IYOIUHJLKJN');
+            const {presentableId} = this.$route.params;
+            if (this.isOnline === 0) {
+                if (!this.policies || this.policies.length === 0) {
+                    return this.$message.error('暂无策略');
+                }
+                // if (!item.isAuth) {
+                //     return this.$message.error(this.$t('cannotOnline.exceptions'));
+                // }
+            }
+            const res = await this.$axios.put(`/v1/presentables/${presentableId}/switchOnlineState`, {
+                onlineState: this.isOnline === 0 ? 1 : 0,
+            });
+
+            if (res.data.errcode !== 0) {
+                return this.$message.error(res.data.msg);
+            }
+            this.isOnline === 0 ? this.$message.success('上线成功') : this.$message.success('下线成功');
+            // item.isOnline = item.isOnline === 0 ? 1 : 0;
+            this.handleInitInfo();
+        },
     },
     watch: {
         // presentableName(val, oldVal) {
@@ -227,11 +254,14 @@ export default {
         //     });
         //     this.$message.success(this.$t('titleUpdateSuccessful'));
         // },
-        userDefinedTags(val) {
+        userDefinedTags(val, old) {
             if (this.initState) {
                 return;
             }
             // console.log(this.userDefinedTags, 'userDefinedTagsuserDefinedTagsuserDefinedTags');
+            if (JSON.stringify(val) === JSON.stringify(old)) {
+                return;
+            }
             this.updatePresentable({
                 userDefinedTags: val,
             });
