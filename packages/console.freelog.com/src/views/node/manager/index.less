@@ -1,0 +1,238 @@
+.node-manager {
+    display: flex;
+
+    .node-manager__aside {
+        width: 280px;
+        flex-shrink: 0;
+        background-color: #fafbfb;
+
+        .node-manager__aside__name {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 0 20px;
+        }
+
+        .node-manager__aside__url {
+            padding: 0 20px;
+
+            .node-manager__aside__url__link {
+                font-size: 14px;
+                color: #333;
+                text-decoration: underline;
+                margin-right: 5px;
+            }
+
+            .node-manager__aside__url__clipboard {
+                display: inline-block;
+
+                .node-manager__aside__url__clipboard__button {
+                    padding: 3px 6px;
+                }
+            }
+
+        }
+
+        .node-manager__aside__navs {
+            border-top: 1px solid #ebebeb;
+            cursor: pointer;
+
+            a {
+                line-height: 54px;
+                display: block;
+                padding-left: 60px;
+                font-size: 14px;
+                font-weight: 600;
+                border-bottom: 1px solid #ebebeb;
+                color: #333;
+
+                &.node-manager__aside__navs__a--active {
+                    background-color: #fff;
+                    border-right: 3px solid #409eff;
+                    color: #409eff;
+                }
+            }
+        }
+    }
+
+    .node-manager__main {
+        width: 100%;
+        flex-shrink: 1;
+        background-color: #fff;
+        padding: 0 60px;
+
+        .node-manager__main__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .node-manager__main__header__text {
+                display: inline-block;
+                width: 84px;
+                text-align: center;
+            }
+
+            .node-manager__main__header__input {
+                width: 400px;
+
+                .el-icon-circle-close {
+                    cursor: pointer
+                }
+            }
+        }
+
+        .node-manager__main__table {
+            width: 100%;
+
+            .node-manager__main__table__release {
+                display: flex;
+                align-items: center;
+                padding-left: 10px;
+
+                .node-manager__main__table__release__preview {
+                    width: 40px;
+                    height: 30px;
+                    flex-shrink: 0;
+                }
+
+                .node-manager__main__table__release__content {
+                    padding-left: 10px;
+                    overflow: hidden;
+                    flex-shrink: 1;
+
+                    .node-manager__main__table__release__content__name {
+                        color: #000;
+                        font-size: 14px;
+                        font-weight: 600;
+                        line-height: 20px;
+                        width: 100%;
+                    }
+
+                    .node-manager__main__table__release__content__version {
+                        line-height: 17px;
+                        color: #999;
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .node-manager__main__table__name {
+                color: #000;
+                font-size: 14px;
+            }
+
+            .node-manager__main__table__type {
+                color: #000;
+                font-size: 14px;
+            }
+
+            .node-manager__main__table__policy {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 120px;
+
+                .node-manager__main__table__policy__box {
+                    padding-right: 10px;
+                    text-align: left;
+                    width: 80px;
+                    flex-shrink: 1;
+
+                    .node-manager__main__table__policy__box--then-zero {
+                        color: #409eff;
+                        font-size: 14px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        width: 80px;
+                    }
+
+                    .node-manager__main__table__policy__box--zero {
+                        color: #999;
+                        font-size: 14px;
+                    }
+
+                    .node-manager__main__table__policy__box--then-one {
+                        font-size: 12px;
+                        word-break: normal;
+                    }
+                }
+
+                .node-manager__main__table__policy__add {
+                    width: 26px;
+                    height: 20px;
+                    border-radius: 10px;
+                    background-color: #409eff;
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    cursor: pointer;
+                    flex-shrink: 0;
+
+                    i {
+                        color: #fff;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .node-manager__main__table__date {
+                .node-manager__main__table__date__update {
+                    font-size: 14px;
+                    color: #000;
+                }
+
+                .node-manager__main__table__date__create {
+                    color: #bfbfbf;
+                    font-size: 12px;
+                }
+            }
+
+            .node-manager__main__table__state__button {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            .node-manager__main__table__state__text {
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+
+                .node-manager__main__table__state__text--online {
+                    color: #000;
+                }
+
+                .node-manager__main__table__state__text--no-online {
+                    color: #bfbfbf;
+                }
+
+                i {
+                    font-size: 20px;
+                    color: #ffc210;
+                    margin-left: 8px;
+                }
+            }
+
+            .node-manager__main__table__operation {
+                background-color: #fafbfb;
+
+                .node-manager__main__table__operation__dropdown-link {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    color: #333;
+                }
+            }
+
+        }
+
+        .node-manager__main__pagination {
+            padding: 10px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+
+}
