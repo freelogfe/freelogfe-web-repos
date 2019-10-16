@@ -10,11 +10,13 @@ import i18n from './i18n';
 import ConfirmInput from "../test-manager-resource/ConfirmInput";
 import ModuleBlock from "../test-manager-resource/ModuleBlock";
 import BlockItem from "../test-manager-resource/BlockItem";
+import OverviewHeader from "../test-manager-resource/OverviewHeader";
 
 export default {
     name: 'manager-release',
     i18n,
     components: {
+        OverviewHeader,
         BlockItem,
         ModuleBlock,
         ConfirmInput,

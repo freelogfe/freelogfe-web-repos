@@ -1,42 +1,52 @@
 <template>
     <div class="manager-release">
         <div style="height: 30px;"></div>
-        <div
-            style="width: 1190px; margin: 0 auto; box-shadow:0 3px 8px 0 rgba(0,0,0,0.2); border-radius:10px; padding: 20px; box-sizing: border-box; display: flex;"
-        >
-            <!--            <div class="manager-release-header">-->
-            <img
-                :src="releaseInfo.previewImages || undefined"
-                style="width: 88px; height: 66px; flex-shrink: 0;"
-                class="resource-default-preview"
-            />
-            <div style="width: 100%; flex-shrink: 1; display: flex; flex-direction: column; padding-left: 20px;">
-                <div
-                    style="display: flex; width: 100%; justify-content: space-between; align-items: center; box-sizing: border-box;"
-                >
-                    <div style="display: flex; align-items: center;">
-                        <span
-                            style="font-size: 18px; color: #333;">{{releaseInfo.releaseName}}</span>
-                        <label
-                            style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px;">发行</label>
-                        <!--                        <span-->
-                        <!--                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>-->
-                    </div>
-                    <div style="font-size: 12px; color: #999;">
-                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
-                        <span style="padding: 0 5px;">|</span>
-                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
-                        <span style="padding: 0 5px;">|</span>
-                        <span>最新版本 v{{releaseInfo.version}}</span>
-                    </div>
-                </div>
+<!--        <div-->
+<!--            style="width: 1190px; margin: 0 auto; box-shadow:0 3px 8px 0 rgba(0,0,0,0.2); border-radius:10px; padding: 20px; box-sizing: border-box; display: flex;"-->
+<!--        >-->
+<!--            &lt;!&ndash;            <div class="manager-release-header">&ndash;&gt;-->
+<!--            <img-->
+<!--                :src="releaseInfo.previewImages || undefined"-->
+<!--                style="width: 88px; height: 66px; flex-shrink: 0;"-->
+<!--                class="resource-default-preview"-->
+<!--            />-->
+<!--            <div style="width: 100%; flex-shrink: 1; display: flex; flex-direction: column; padding-left: 20px;">-->
+<!--                <div-->
+<!--                    style="display: flex; width: 100%; justify-content: space-between; align-items: center; box-sizing: border-box;"-->
+<!--                >-->
+<!--                    <div style="display: flex; align-items: center;">-->
+<!--                        <span-->
+<!--                            style="font-size: 18px; color: #333;">{{releaseInfo.releaseName}}</span>-->
+<!--                        <label-->
+<!--                            style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px;">发行</label>-->
+<!--                        &lt;!&ndash;                        <span&ndash;&gt;-->
+<!--                        &lt;!&ndash;                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div style="font-size: 12px; color: #999;">-->
+<!--                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>-->
+<!--                        <span style="padding: 0 5px;">|</span>-->
+<!--                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>-->
+<!--                        <span style="padding: 0 5px;">|</span>-->
+<!--                        <span>最新版本 v{{releaseInfo.version}}</span>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div style="color: #333; font-size: 12px;">
-                    {{releaseInfo.intro}}
-                </div>
-            </div>
-            <!--            </div>-->
-        </div>
+<!--                <div style="color: #333; font-size: 12px;">-->
+<!--                    {{releaseInfo.intro}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </div>-->
+
+        <OverviewHeader
+            v-if="!!releaseInfo"
+            :previewSrc="releaseInfo.previewImages || undefined"
+            :title="releaseInfo.releaseName"
+            :type="'release'"
+            :resourceType="releaseInfo.resourceType"
+            :version="releaseInfo.version"
+            :content="releaseInfo.intro"
+        />
 
         <div class="manager-release-body">
             <ModuleBlock>
@@ -210,6 +220,7 @@
 
 <script>
     import ManagerRelease from './index.js';
+
 
     export default ManagerRelease;
 </script>
