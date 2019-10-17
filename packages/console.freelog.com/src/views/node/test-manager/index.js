@@ -41,7 +41,7 @@ export default {
             this.nodeInfo = {
                 origin,
                 name: res.data.data.nodeName,
-                testOrigin: origin,
+                testOrigin: 't.' + origin,
             };
         },
     }
