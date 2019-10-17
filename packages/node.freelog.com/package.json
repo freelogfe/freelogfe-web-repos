@@ -7,7 +7,7 @@
   "scripts": {
     "deploy": "freelog-ci deploy",
     "dev": "lerna link && webpack-dev-server --config ./config/webpack.dev.js",
-    "build": "webpack --config ./config/webpack.prod.js",
+    "build": "rm -rf ./dist/** && webpack --config ./config/webpack.prod.js",
     "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
     "build:prod": "npm run build -- --env=prod",
     "build:beta": "npm run build -- --env=beta",
