@@ -80,28 +80,41 @@
             <router-link :to="scope.row._toDetailLink">
               <el-button class="r-l-item-detail-btn" size="mini">{{$t('resourceList.detailBtnText')}}</el-button>
             </router-link>
+            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('resourceList.releaseBtnText')}}</el-button>
             <el-button class="r-l-item-save-btn" size="mini" @click="tapSaveBtn(scope.row)">{{$t('resourceList.saveBtnText')}}</el-button>
           </template>
         </el-table-column>
       </template>
     </f-pagination>
+    
+    <el-dialog width="750px" top="10vh" center :visible.sync="isShowReleaseSearchDialog">
+      <release-search 
+        :release-source="targetReleaseResource"
+        :tabLayout="['my-release']" 
+        @add="releaseSearchHandler"></release-search>
+      <div class="" slot="footer">
+        <el-button round type="primary" class="create-release-btn" @click="tapCreateNewReleaseBtn">{{$t('createNewReleaseText')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import FPagination from '@/components/Pagination/index.vue'
+  import ReleaseSearch from '@/views/release/search/index.vue'
   import { RESOURCE_TYPES } from '@/config/resource'
   import policyTpls from '@/components/PolicyEditor/defaultPolicyTpls.js'
 
   export default {
     name: 'tool-resource-list',
-    components: { FPagination },
+    components: { FPagination, ReleaseSearch },
     props: {
       query: String
     },
     data() {
       const NO_REACTED_RESOURCE = this.$i18n.t('resourceList.messages[1]')
       const $i18n = this.$i18n
+      const qResourceType = this.$route.query.resourceType
 
       return {
         search: '',
@@ -115,13 +128,13 @@
           target: `/v1/resources`,
           params: {
             isSelf: 1,
-            resourceType: undefined,
+            resourceType: qResourceType != null ? qResourceType : undefined,
             keywords: undefined,
             isReleased: 0               // 0: 未发行；1: 已发行；2: 全部发行
           }
         },
         resourceMapReleases: {},
-        selectedType: 'all',
+        selectedType: qResourceType != null ? qResourceType : 'all',
         releaseStatus: [
           { label: $i18n.t('resourceList.releaseStatus[0]'), value: 0 }, 
           { label: $i18n.t('resourceList.releaseStatus[1]'), value: 1 }, 
@@ -129,7 +142,9 @@
         ],
         selectedReleaseStatus: 0,
         pagenationEmptyText: NO_REACTED_RESOURCE,
-        selectedResources: []
+        selectedResources: [],
+        isShowReleaseSearchDialog: false,
+        targetReleaseResource: null
       }
     },
     computed: {
@@ -265,6 +280,9 @@
       },
       handleSelectType(command) {
         this.selectedType = command
+        this.$router.push({
+          query: { resourceType: command }
+        })
         if(this.selectedType === 'all') {
           this.paginationConfig.params.resourceType = undefined
         }else {
@@ -276,7 +294,16 @@
         this.paginationConfig.params.isReleased = this.selectedReleaseStatus
       },
       tapRelease(resource) {
-        this.$emit('release', resource)
+        this.isShowReleaseSearchDialog = true
+        this.targetReleaseResource = resource
+      },
+      releaseSearchHandler(release) {
+        this.$router.push(`/release/add?releaseId=${release.releaseId}&resourceId=${this.targetReleaseResource.resourceId}`)
+      },
+      // 创建一个全新的发行
+      tapCreateNewReleaseBtn() {
+        // 跳转 发行中间页
+        this.$router.push(`/release/create?resourceId=${this.targetReleaseResource.resourceId}`)
       },
       // 更新单个资源
       tapSaveBtn(resource) {

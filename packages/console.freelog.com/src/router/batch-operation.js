@@ -12,7 +12,7 @@ export default {
         title: ""
     },
     component: Views.container,
-    redirect: '/tools/batch-operation/create',
+    redirect: '/tools/batch-operation/create-resource',
     children: [
         {
             path: 'batch-operation',

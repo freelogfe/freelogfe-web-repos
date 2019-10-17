@@ -89,6 +89,7 @@
     props: {},
     components: { FPagination, FPolicyTabs, Tags },
     data() {
+      const qResourceType = this.$route.query.resourceType
       return {
         search: '',
         loader: null,
@@ -104,10 +105,10 @@
           params: {
             nodeId: '',
             isOnline: 2,
-            resourceType: undefined
+            resourceType: qResourceType != null ? qResourceType : undefined
           }
         },
-        selectedType: 'all',
+        selectedType: qResourceType != null ? qResourceType : 'all',
         checkedNodeId: '',
         selectedPresentables: []
       }
@@ -164,8 +165,10 @@
         this.$refs.presentableslistRef.reload()
       },
       handleSelectType(command) {
-        console.log('cammand ---', command)
         this.selectedType = command
+        this.$router.push({
+          query: { resourceType: command }
+        })
         if(this.selectedType === 'all') {
           this.paginationConfig.params.resourceType = undefined
         }else {
@@ -195,7 +198,31 @@
       tapSaveBtn(row) {
         this.updatePresentable(row)
       },
-      tapUpgradeBtn(row) {},
+      tapUpgradeBtn(presentable) {
+        const {presentableId, releaseInfo: {version, releaseId}} = presentable
+        this.$services.ReleaseService.get(releaseId)
+            .then(res => res.data)
+            .then(res => {
+                var _version = version
+                if (res.errcode === 0) {
+                    const {latestVersion} = res.data
+                    _version = latestVersion.version
+                }
+                return _version
+            })
+            .then(_v => {
+                return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: _v})
+            })
+            .then(res => res.data)
+            .then(res => {
+                if (res.errcode === 0) {
+                    this.$message({type: 'success', message: '升级成功！'})
+                } else {
+                    this.$message({type: 'error', message: '升级失败！'})
+                }
+            })
+            .catch(this.$error.showErrorMessage)
+      },
       editNameHandler(row) {
         row.isEdittingName = true
         row.isChangePresentable = true
@@ -214,7 +241,7 @@
             row.online = online
           }else {
             const msg = online === 1 ? "上线失败！" : "下线失败！"
-            this.$message.error(`「${presentableName}」${msg}`)
+            this.$message.error(`「${presentableName}」${msg}:${res.msg}`)
             row.lineStatus = online === 1 ? "offline" : "online"
           }
         })

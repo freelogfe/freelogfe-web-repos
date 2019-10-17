@@ -18,6 +18,7 @@ export default function initEnv(FreelogApp) {
   Object.assign(FreelogApp.Env, {
     type: isTestFreelog ? 'test' : isLocalhost ? 'dev' : 'prod', 
     isTest: isTestFreelog || isLocalhost,
+    isMobile: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent),
     mainDomain,
     qiOrigin
   })
@@ -26,7 +27,7 @@ export default function initEnv(FreelogApp) {
 
 function _isLocalhost() {
   const host = window.location.host
-  return /^localhost/.test(host) || /^127\.0\.0\.1/.test(host)
+  return /^localhost/.test(host) || /^\d+\.\d+\.\d+\.\d+/.test(host)
 }
 
 function _isTestFreelog(mainDomain) {

@@ -55,7 +55,6 @@ export default {
     }
   },
   mounted() {
-    console.log('mouted ---', this.stepPaths, this.$route.path, this.stepPaths.indexOf(this.$route.path))
     this.activeIndex = this.stepPaths.indexOf(this.$route.path)
   },
   methods: {

@@ -5,7 +5,7 @@
           <el-select class="fo-upload-select" allow-create filterable v-model="selectType" placeholder="请选择资源类型">
             <el-option v-for="type in resourceTypes" :key="type" :label="type" :value="type"></el-option>
           </el-select>
-          <el-button type="primary" @click="createResources">上传并创建资源</el-button>
+          <el-button type="primary" @click="uploadResources">上传并创建资源</el-button>
           <el-button type="danger" @click="clearFileList">清空</el-button>
         </div>
         <el-upload class="upload-box" ref="foUpload"
@@ -67,9 +67,10 @@ export default {
           this.$message.warning(`“${fileName}”已存在！`)
           this.existedFilesSet.add(fileName)
         }else {
+          // 创建资源
           this.$services.resource.post({
             uploadFileId,
-            aliasName: fileName, 
+            aliasName: fileName.replace(/\.(\w+)$/, ''), 
             description: "",
             dependencies: []
           })
@@ -112,7 +113,7 @@ export default {
         return _f
       })
     },
-    createResources() {
+    uploadResources() {
       const resourceType = this.selectType
       if(resourceType === '') {
         this.$message.error('请先选择资源类型！！！')

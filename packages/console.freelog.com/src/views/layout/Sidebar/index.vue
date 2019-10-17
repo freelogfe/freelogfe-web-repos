@@ -70,13 +70,17 @@
                 </a>
                 <ul class="my-node-list ls-submenu-list" v-if="nodes&&nodes.length">
                     <li class="node-item hover" :key="node.nodeId" v-for="node in nodes">
-                        <router-link :to="'/node/manager/'+node.nodeId" class="nav-link mnl-nav-link"
-                                     :title="node.nodeName">
+                        <router-link 
+                            :to="'/node/manager/'+node.nodeId" 
+                            :title="node.nodeName"
+                            class="nav-link mnl-nav-link"
+                            target="_blank">
                             {{node.nodeName}}
                         </router-link>
                         <router-link
                             :to="'/node/test-manager/'+node.nodeId"
                             class="nav-link mnl-nav-link"
+                            target="_blank"
                             :title="node.nodeName"
                         >
                             {{node.nodeName}} 测试

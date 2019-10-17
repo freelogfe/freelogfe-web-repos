@@ -47,8 +47,22 @@ export function fetchPresentableResourceInfo(presentableId, params) {
  * 获取节点资源的授权信息
  */
 export function fetchPresentableAuth(presentableId, params) {
+  var subReleases = []
   return fetchPresentableResource(`${presentableId}.auth`, params)
+    .then(resp => {
+      try {
+        subReleases = window.atob(resp.headers.get('freelog-sub-releases'))
+        subReleases = JSON.parse(subReleases)
+      }catch(e) {
+        console.warn(e)
+      }
+      return resp
+    })
     .then(resp => resp.json())
+    .then(res => {
+      res.data.subReleases = subReleases
+      return res
+    })
 }
 
 /**
