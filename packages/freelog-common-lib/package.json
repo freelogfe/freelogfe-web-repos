@@ -2,7 +2,7 @@
   "name": "@freelog/freelog-common-lib",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/index.af40073f6c179d34d798.js",
+  "main": "lib/index.de8d2685e5b9b476c172.js",
   "scripts": {
     "build": "rm -rf ./lib/** && webpack --config ./config/webpack.base.js && node resetPkgJson.js",
     "build:test": "npm run build -- --env=test",
@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "element-ui": "^2.9.1",
+    "element-ui": "^2.12.0",
     "store": "^2.0.12",
     "vue": "^2.6.10",
     "vue-i18n": "^8.10.0"

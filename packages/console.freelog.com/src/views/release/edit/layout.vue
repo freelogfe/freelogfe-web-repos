@@ -7,11 +7,12 @@
           <UploadCover 
             width="100"
             height="75"
+            multiple
             :imageUrl="coverImageUrl"
             :textVisible="false"
             :onUploaded="uploadCoverSuccess"
           ></UploadCover>
-          <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
+          <!-- <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" > -->
         </div>
         <div class="cont">
           <div class="r-e-l-name">
@@ -188,12 +189,20 @@
             return data
           }).catch(this.$error.showErrorMessage)
       },
-      uploadCoverSuccess(url) {
+      uploadCoverSuccess(urls) {
+        var previewImages, coverImageUrl
+        if(typeof urls === 'string') {
+          previewImages = [ urls ]
+          coverImageUrl = urls
+        }else {
+          previewImages = urls
+          coverImageUrl = urls[0]
+        }
         this.updateRelease({
-          previewImages: [url]
+          previewImages,
         }, this.$i18n.t('messages[0]'))
         .then(() => {
-          this.coverImageUrl = url
+          this.coverImageUrl = coverImageUrl
         })
       },
       savePolicyHandler() {
@@ -305,8 +314,11 @@
   .preview-box {
     #upload-cover {
       .el-upload {
-          border: none; border-radius: 2px;
-        }
+        border: none; border-radius: 2px;
+      }
+      .el-upload-dragger {
+        overflow: initial; border-width: 0; 
+      }
     }
   }
 }
