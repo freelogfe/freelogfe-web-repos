@@ -10,15 +10,18 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
+            :multiple="multiple"
+            :drag="true"
         >
-            <a ref="uploadHandleRef">
+            <a @click="initData" ref="uploadHandleRef">
                 <div
                     class="re-upload-mask"
                     :style="{height: height + 'px', width: width + 'px'}"
                     v-if="imageUrl"
                 >
                     <i class="el-icon-circle-plus" style="color: #fff; font-size: 40px;"></i>
-                    <span v-if="textVisible && !!reUploadText" style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
+                    <span v-if="textVisible && !!reUploadText"
+                          style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
                 </div>
 
                 <img
@@ -37,7 +40,8 @@
                         style="color: #666; font-size: 40px;"
                         class="el-icon-circle-plus"
                     ></i>
-                    <span v-if="textVisible && !!uploadText" style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
+                    <span v-if="textVisible && !!uploadText"
+                          style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
                 </div>
             </a>
         </el-upload>
@@ -94,7 +98,7 @@
             },
             textVisible: {
                 type: Boolean,
-                default: true   
+                default: true
             },
             uploadText: {
                 type: String,
@@ -103,15 +107,26 @@
             reUploadText: {
                 type: String,
                 default: '重新上传', // 重新上传
-            }
+            },
+            multiple: {
+                type: Boolean,
+                default: false,
+            },
         },
         data() {
             return {
                 // 是否显示提示框
                 showDialog: false,
+                count: 0,
+                list: [],
             };
         },
         methods: {
+
+            initData() {
+                this.count = 0;
+                this.list = [];
+            },
             /**
              * 图片上传完成
              */
@@ -120,9 +135,14 @@
                     return;
                 }
                 // console.log(res, 'resresresresresresres');
-                this.onUploaded && this.onUploaded(res.data);
-                // this.imageUrl = URL.createObjectURL(file.raw);
-                // console.log(this.imageUrl, 'this.imageUrlthis.imageUrl');
+                if (!this.multiple) {
+                    return this.onUploaded && this.onUploaded(res.data);
+                }
+
+                this.list.push(res.data);
+                if (this.count === this.list.length) {
+                    this.onUploaded(this.list);
+                }
             },
             /**
              * 在图片上传之前
@@ -130,12 +150,20 @@
             beforeAvatarUpload(file) {
                 // const isJPG = file.type === 'image/jpeg';
                 const isLt5M = file.size / 1024 / 1024 <= 5;
+                // console.log(file, 'filefilefilefile');
 
                 if (!isLt5M) {
+
+                    if (this.multiple) {
+                        setTimeout(() => this.$message.error(`『 ${file.name} 』超过了5M，该图片已丢弃`));
+
+                        return false;
+                    }
                     // this.$message.error('上传头像图片大小不能超过 2MB!');
                     this.showDialog = true;
                     return false;
                 }
+                this.count++;
             },
             /**
              * 隐藏 dialog

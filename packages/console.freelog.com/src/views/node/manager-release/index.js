@@ -10,11 +10,13 @@ import i18n from './i18n';
 import ConfirmInput from "../test-manager-resource/ConfirmInput";
 import ModuleBlock from "../test-manager-resource/ModuleBlock";
 import BlockItem from "../test-manager-resource/BlockItem";
+import OverviewHeader from "../test-manager-resource/OverviewHeader";
 
 export default {
     name: 'manager-release',
     i18n,
     components: {
+        OverviewHeader,
         BlockItem,
         ModuleBlock,
         ConfirmInput,
@@ -41,8 +43,14 @@ export default {
                 createDate: '',
                 intro: '',
             },
+            isOnline: 0,
             // 名称
             presentableName: null,
+
+            // 当前可选版本
+            versions: [],
+            // 当前选择版本
+            versionValue: null,
             // 用户定义标签
             userDefinedTags: null,
 
@@ -113,14 +121,17 @@ export default {
                 previewImages: result.releaseInfo.previewImages[0] ? result.releaseInfo.previewImages[0] : undefined,
                 releaseName: result.releaseInfo.releaseName,
                 resourceType: result.releaseInfo.resourceType,
-                version: result.releaseInfo.version,
+                version: result.releaseInfo.versions.reverse()[0],
                 intro: result.releaseInfo.intro,
                 createDate: [
                     [time.getFullYear(), (time.getMonth() + 1 < 10 ? '0' : '') + (time.getMonth() + 1), (time.getDate() < 10 ? '0' : '') + time.getDate()].join('-'),
                     [(time.getHours() < 10 ? '0' : '') + time.getHours(), (time.getMinutes() < 10 ? '0' : '') + time.getMinutes()].join(':')
                 ].join(' '),
             };
+            this.isOnline = result.isOnline;
             this.presentableName = result.presentableName;
+            this.versions = result.releaseInfo.versions;
+            this.versionValue = result.releaseInfo.version;
             this.userDefinedTags = result.userDefinedTags;
             this.policies = result.policies;
             // console.log(result.resolveReleases, 'PPPPPPPPPPPPPPPPPPPPP');
@@ -145,7 +156,7 @@ export default {
          * 保存一个新策略
          */
         async saveANewPolicy(policy) {
-            console.log(policy, 'policypolicypolicy');
+            // console.log(policy, 'policypolicypolicy');
             // return;
             // console.log(this.btoa, 'newPolicienewPolicie');
             // const res = await this.updatePresentable({
@@ -213,7 +224,40 @@ export default {
                 presentableName: value,
             });
             this.$message.success(this.$t('titleUpdateSuccessful'));
-        }
+        },
+        /**
+         * 上线和下线
+         */
+        async onLineAndOffLine() {
+            // console.log(item, 'IYOIUHJLKJN');
+            const {presentableId} = this.$route.params;
+            if (this.isOnline === 0) {
+                if (!this.policies || this.policies.length === 0) {
+                    return this.$message.error('暂无策略');
+                }
+                // if (!item.isAuth) {
+                //     return this.$message.error(this.$t('cannotOnline.exceptions'));
+                // }
+            }
+            const res = await this.$axios.put(`/v1/presentables/${presentableId}/switchOnlineState`, {
+                onlineState: this.isOnline === 0 ? 1 : 0,
+            });
+
+            if (res.data.errcode !== 0) {
+                return this.$message.error(res.data.msg);
+            }
+            this.isOnline === 0 ? this.$message.success('上线成功') : this.$message.success('下线成功');
+            // item.isOnline = item.isOnline === 0 ? 1 : 0;
+            this.handleInitInfo();
+        },
+        async updateVersion(val) {
+            const {presentableId} = this.$route.params;
+            const {data: {errcode}} = await this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: val});
+            if (errcode !== 0) {
+                return this.$message.error('更新版本失败！')
+            }
+            this.$message.success('更新版本成功！');
+        },
     },
     watch: {
         // presentableName(val, oldVal) {
@@ -227,16 +271,33 @@ export default {
         //     });
         //     this.$message.success(this.$t('titleUpdateSuccessful'));
         // },
-        userDefinedTags(val) {
+        userDefinedTags(val, old) {
+
             if (this.initState) {
                 return;
             }
+
             // console.log(this.userDefinedTags, 'userDefinedTagsuserDefinedTagsuserDefinedTags');
+            // console.log(val, old, 'OOOOOOO');
+            if (JSON.stringify(val) === JSON.stringify(old)) {
+                return;
+            }
+            // console.log(val, 'userDefinedTagsuserDefinedTags');
             this.updatePresentable({
                 userDefinedTags: val,
             });
             this.$message.success(this.$t('tagUpdatedSuccessfully'));
         },
+        versionValue(val, old) {
+            if (old === null) {
+                return;
+            }
+            this.updateVersion(val);
+            // this.updatePresentable({
+            //     version: val,
+            // });
+            // this.$message.success(this.$t('tagUpdatedSuccessfully'));
+        }
     },
     computed: {
         availablePolicies() {

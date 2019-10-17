@@ -56,8 +56,8 @@
             </BlockItem>
             <BlockItem label="标签">
                 <div style="height: 5px;"></div>
+<!--                actionText="新标签"-->
                 <FreelogTags
-                    actionText="新标签"
                     v-model="userDefinedTags"
                 ></FreelogTags>
             </BlockItem>
