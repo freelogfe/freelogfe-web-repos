@@ -13,8 +13,8 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
                     style="cursor: pointer"
-                    @click=""
-                    v-show="true"
+                    @click="filterSearch = ''"
+                    v-show="filterSearch.length !== 0"
                     slot="suffix"
                     class="el-input__icon el-icon-circle-close"
                 ></i>
@@ -45,7 +45,8 @@
                             :class="getIconClass(i.operation)"
                             style="font-weight: 600;"
                         ></i>
-                        <div style="border-top: 1px solid #b5b5b5; width: 16px;" v-if="scope.row.rules.length === 0"></div>
+                        <div style="border-top: 1px solid #b5b5b5; width: 16px;"
+                             v-if="scope.row.rules.length === 0"></div>
                     </div>
                     <!--                        <el-dropdown-menu slot="dropdown">-->
                     <!--                            <el-dropdown-item>-->
@@ -66,7 +67,8 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px; display: flex; align-items: center;">
+                    <div class="text-overflow-ellipsis"
+                         style="color: #000; font-size: 14px; display: flex; align-items: center;">
                         <!--                        {{scope.row.presentableName}}-->
                         <!--                       #f5a623 -->
                         <label
@@ -154,11 +156,11 @@
                 min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
+                    <!--                     trigger="click"-->
                     <el-dropdown
                         style="height: 32px; padding-left: 0;"
-                        trigger="click"
                     >
-                        <div style="padding-left: 0;">
+                        <div style="padding-left: 0; cursor: pointer;">
                             {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
@@ -178,21 +180,21 @@
                               style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
-<!--                        <template>-->
-<!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
-<!--                            <el-popover-->
-<!--                                placement="top"-->
-<!--                                width="100"-->
-<!--                                trigger="hover"-->
-<!--                                content="content"-->
-<!--                            >-->
-<!--                                <i-->
-<!--                                    slot="reference"-->
-<!--                                    class="el-icon-warning"-->
-<!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
-<!--                                ></i>-->
-<!--                            </el-popover>-->
-<!--                        </template>-->
+                        <!--                        <template>-->
+                        <!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
+                        <!--                            <el-popover-->
+                        <!--                                placement="top"-->
+                        <!--                                width="100"-->
+                        <!--                                trigger="hover"-->
+                        <!--                                content="content"-->
+                        <!--                            >-->
+                        <!--                                <i-->
+                        <!--                                    slot="reference"-->
+                        <!--                                    class="el-icon-warning"-->
+                        <!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
+                        <!--                                ></i>-->
+                        <!--                            </el-popover>-->
+                        <!--                        </template>-->
                     </div>
 
                 </template>
@@ -272,6 +274,6 @@
     export default Index;
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    @import "index";
 </style>

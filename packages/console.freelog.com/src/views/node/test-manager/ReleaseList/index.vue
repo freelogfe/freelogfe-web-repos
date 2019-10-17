@@ -13,8 +13,8 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
                     style="cursor: pointer"
-                    @click=""
-                    v-show="true"
+                    @click="filterSearch = ''"
+                    v-show="filterSearch.length !== 0"
                     slot="suffix"
                     class="el-input__icon el-icon-circle-close"
                 ></i>
@@ -120,11 +120,11 @@
                 min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
+<!--                    trigger="click"-->
                     <el-dropdown
-                        trigger="click"
                         style="height: 32px; padding-left: 0;"
                     >
-                        <div style="padding-left: 0;">
+                        <div style="padding-left: 0; cursor: pointer;">
                             {{selectedType}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
@@ -153,7 +153,7 @@
                     <el-dropdown
                         style="height: 32px; padding-left: 0;"
                     >
-                        <div style="padding-left: 0;">
+                        <div style="padding-left: 0; cursor: pointer;">
                             {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu trigger="click" slot="dropdown">
@@ -269,6 +269,6 @@
 
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    @import "index";
 </style>
