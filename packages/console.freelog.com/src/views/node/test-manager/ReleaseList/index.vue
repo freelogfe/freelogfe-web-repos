@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <div class="release-list">
         <div style="height: 40px;"></div>
 
-        <div style="display: flex; align-items: center;justify-content: space-between;">
+        <div class="release-list__header">
 
             <AddAndReplace @success="pushRuleSuccess"/>
 
             <el-input
-                style="width: 400px;"
+                class="release-list__header__input"
                 v-model="filterSearch"
             >
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -33,27 +33,13 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <!--                    <el-dropdown>-->
-                    <div style="color: #333; font-size: 16px;">
+                    <div class="release-list__table__rule">
                         <i
                             v-for="i in scope.row.rules"
                             :class="getIconClass(i.operation)"
-                            style="font-weight: 600;"
                         ></i>
-                        <div style="border-top: 1px solid #b5b5b5; width: 16px;" v-if="scope.row.rules.length === 0"></div>
-
+                        <div v-if="scope.row.rules.length === 0"></div>
                     </div>
-                    <!--                        <el-dropdown-menu slot="dropdown">-->
-                    <!--                            <el-dropdown-item>-->
-                    <!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
-                    <!--                                <span>测试资源上线</span>-->
-                    <!--                            </el-dropdown-item>-->
-                    <!--                            <el-dropdown-item>-->
-                    <!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
-                    <!--                                <span>添加标签【image】</span>-->
-                    <!--                            </el-dropdown-item>-->
-                    <!--                        </el-dropdown-menu>-->
-                    <!--                    </el-dropdown>-->
                 </template>
             </el-table-column>
             <el-table-column
@@ -62,24 +48,22 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px; display: flex; align-items: center;">
-                        <!--                        {{scope.row.presentableName}}-->
-                        <!--                       #f5a623 -->
+                    <div class="text-overflow-ellipsis release-list__table__name">
                         <label
+                            class="release-list__table__name--mock"
                             v-if="scope.row.originInfo.type === 'mock'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #f5a623; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
                         <label
+                            class="release-list__table__name--release"
                             v-if="scope.row.originInfo.type === 'release'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
                         <label
+                            class="release-list__table__name--presentable"
                             v-if="scope.row.originInfo.type === 'presentable'"
-                            style="width: 40px; display: inline-block;"
                         >
-                            <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
+                            <div></div>
                         </label>
-                        <span style="padding-left: 10px;">{{scope.row.testResourceName}}</span>
+                        <span>{{scope.row.testResourceName}}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -120,7 +104,7 @@
                 min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
-<!--                    trigger="click"-->
+                    <!--                    trigger="click"-->
                     <el-dropdown
                         style="height: 32px; padding-left: 0;"
                     >
@@ -173,21 +157,21 @@
                               style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
                         <!--                            v-if="!scope.row.isAuth"-->
-<!--                        <template>-->
-<!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
-<!--                            <el-popover-->
-<!--                                placement="top"-->
-<!--                                width="100"-->
-<!--                                trigger="hover"-->
-<!--                                content="此合约链上存在异常"-->
-<!--                            >-->
-<!--                                <i-->
-<!--                                    slot="reference"-->
-<!--                                    class="el-icon-warning"-->
-<!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
-<!--                                ></i>-->
-<!--                            </el-popover>-->
-<!--                        </template>-->
+                        <!--                        <template>-->
+                        <!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
+                        <!--                            <el-popover-->
+                        <!--                                placement="top"-->
+                        <!--                                width="100"-->
+                        <!--                                trigger="hover"-->
+                        <!--                                content="此合约链上存在异常"-->
+                        <!--                            >-->
+                        <!--                                <i-->
+                        <!--                                    slot="reference"-->
+                        <!--                                    class="el-icon-warning"-->
+                        <!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
+                        <!--                                ></i>-->
+                        <!--                            </el-popover>-->
+                        <!--                        </template>-->
                     </div>
 
                 </template>
@@ -215,14 +199,14 @@
                                     style="display: block; width: 100%; height: 100%; color: #333;"
                                 >编辑</a>
                             </el-dropdown-item>
-<!--                            <el-dropdown-item>-->
-<!--                                <a-->
-<!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
-<!--                                >上线</a>-->
-<!--                            </el-dropdown-item>-->
-<!--                            <el-dropdown-item>-->
-<!--                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>-->
-<!--                            </el-dropdown-item>-->
+                            <!--                            <el-dropdown-item>-->
+                            <!--                                <a-->
+                            <!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
+                            <!--                                >上线</a>-->
+                            <!--                            </el-dropdown-item>-->
+                            <!--                            <el-dropdown-item>-->
+                            <!--                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>-->
+                            <!--                            </el-dropdown-item>-->
                             <el-dropdown-item>
                                 <a
                                     @click="onLineAndOffLine(scope.row)"

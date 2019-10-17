@@ -1,0 +1,72 @@
+.release-list {
+    .release-list__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .release-list__header__input {
+            width: 400px;
+        }
+    }
+
+    .release-list__table__rule {
+        color: #333;
+        font-size: 16px;
+
+        i {
+            font-weight: 600;
+        }
+
+        div {
+            border-top: 1px solid #b5b5b5;
+            width: 16px;
+        }
+    }
+
+    .release-list__table__name {
+        color: #000;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+
+        .release-list__table__name--mock {
+            line-height: 20px;
+            width: 40px;
+            text-align: center;
+            border-radius: 2px;
+            background-color: #f5a623;
+            color: #fff;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .release-list__table__name--release {
+            line-height: 20px;
+            width: 40px;
+            text-align: center;
+            border-radius: 2px;
+            background-color: #72BB1F;
+            color: #fff;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .release-list__table__name--presentable {
+            width: 40px;
+            display: inline-block;
+
+            div {
+                border-top: 1px solid #b5b5b5;
+                width: 16px;
+            }
+        }
+
+        & > span {
+            padding-left: 10px;
+        }
+    }
+
+
+}
