@@ -17,7 +17,8 @@
             </li>
             <li class="ls-item ls-create-resource">
                 <el-tooltip effect="dark" :content="$t('routes.createResource')" placement="right" :disabled="!isMini">
-                    <router-link to="/resource/create" class="nav-link create-resource ls-nav-link">
+<!--                    <router-link to="/resource/create" class="nav-link create-resource ls-nav-link">-->
+                    <router-link to="/resource/editor" class="nav-link create-resource ls-nav-link">
                         <i class="el-icon-plus"></i>
                         <span>{{$t('routes.createResource')}}</span>
                     </router-link>
