@@ -202,7 +202,7 @@
         <!--            v-if="totalQuantity > pageSize"-->
         <div
             class="release-list__table__pagination"
-            v-if="totalQuantity !== 0"
+            v-if="totalQuantity > 10"
         >
             <!--                @current-change="onCurrentPageChange"-->
             <!--                @size-change="onPageSizeChange"-->

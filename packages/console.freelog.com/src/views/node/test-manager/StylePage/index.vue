@@ -174,7 +174,7 @@
         </el-table>
         <div
             class="style-page__pagination"
-            v-if="totalQuantity !== 0"
+            v-if="totalQuantity > 10"
         >
             <el-pagination
                 :current-page="currentPage"
