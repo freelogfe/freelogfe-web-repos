@@ -317,7 +317,7 @@
 
             <div
                 class="node-manager__main__pagination"
-                v-if="totalQuantity > pageSize"
+                v-if="totalQuantity > 10"
             >
                 <el-pagination
                     :current-page="currentPage"
