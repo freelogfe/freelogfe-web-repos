@@ -14,7 +14,9 @@
             style="width: 100%; height: 100%; display: flex; border: 1px solid #c7c7c7; border-radius: 2px; box-sizing: border-box;"
         >
             <input
+                ref="input"
                 v-model="inputValue"
+                @keyup.enter="confirmChange"
                 style="padding: 0 15px; color: #333; line-height: 20px; font-size: 14px; display: block; width: 100%; border: none; outline: none; flex-shrink: 1; font-weight: 600;"
             />
             <div style="display: flex; align-items: center; padding: 0 10px;">
@@ -57,6 +59,9 @@
                 }
                 this.isEdit = true;
                 this.inputValue = this.value;
+                setTimeout(() => {
+                    this.$refs.input.focus();
+                }, 10);
             },
             confirmChange() {
                 this.isEdit = false;
