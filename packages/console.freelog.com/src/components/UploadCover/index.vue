@@ -1,6 +1,6 @@
 <template>
     <div
-        id="upload-cover"
+        class="upload-cover"
     >
         <el-upload
             class="avatar-uploader"
@@ -203,7 +203,7 @@
 </script>
 
 <style lang="less">
-    #upload-cover {
+    .upload-cover {
         /*padding: 10px;*/
         background-color: #fff;
         display: inline-block;
@@ -211,11 +211,13 @@
         .el-upload-dragger {
             width: auto;
             height: auto;
+            border: none;
         }
 
         .avatar-uploader {
             .el-upload {
                 border: 1px dashed #d9d9d9;
+                /*border: none;*/
                 border-radius: 6px;
                 cursor: pointer;
                 position: relative;
