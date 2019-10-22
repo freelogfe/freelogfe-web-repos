@@ -112,7 +112,7 @@ export default {
          * @param file
          */
         changeImageHandler(file) {
-            console.log(file, 'filefile');
+            // console.log(file, 'filefile');
             if (this.multiple) {
                 return;
             }
@@ -128,9 +128,9 @@ export default {
                 return;
             }
 
-            if (cropper) {
-                cropper.replace(this.tmpImageUrl)
-            } else {
+            // if (cropper) {
+            //     cropper.replace(this.tmpImageUrl)
+            // } else {
                 cropper = new Cropper(this.$refs.tmpImage, {
                     aspectRatio: this.width / this.height,
                     viewMode: 1,
@@ -142,7 +142,7 @@ export default {
                     },
                     // preview: '.crop-img-preview'
                 })
-            }
+            // }
         },
         /**
          * 开始上传
