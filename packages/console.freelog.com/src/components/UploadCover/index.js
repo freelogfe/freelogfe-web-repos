@@ -141,7 +141,7 @@ export default {
                     ready() {
                     },
                     // preview: '.crop-img-preview'
-                })
+                });
             // }
         },
         /**
