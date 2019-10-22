@@ -208,6 +208,11 @@
         background-color: #fff;
         display: inline-block;
 
+        .el-upload-dragger {
+            width: auto;
+            height: auto;
+        }
+
         .avatar-uploader {
             .el-upload {
                 border: 1px dashed #d9d9d9;
