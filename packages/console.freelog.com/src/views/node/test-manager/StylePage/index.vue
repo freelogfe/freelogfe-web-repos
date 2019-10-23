@@ -127,6 +127,21 @@
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
                               style="color: #000;">已上线</span>
                         <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
+
+                        <template v-if="scope.row.resolveReleaseSignStatus === 2">
+                            <el-popover
+                                placement="top"
+                                width="100"
+                                trigger="hover"
+                                :content="'此合约链上存在异常'"
+                            >
+                                <i
+                                    slot="reference"
+                                    class="el-icon-warning"
+                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                                ></i>
+                            </el-popover>
+                        </template>
                     </div>
 
                 </template>
