@@ -58,8 +58,11 @@
                             class="style-page__table__name__release"
                             v-if="scope.row.originInfo.type === 'release'"
                         >市场</label>
-                        <label v-if="scope.row.originInfo.type === 'presentable'">
-                            <div></div>
+                        <label
+                            style="width: 40px; display: inline-block;"
+                            v-if="scope.row.originInfo.type === 'presentable'"
+                        >
+                            <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
