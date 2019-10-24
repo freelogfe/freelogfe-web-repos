@@ -56,12 +56,16 @@
             </BlockItem>
             <BlockItem label="标签">
                 <div style="height: 5px;"></div>
-<!--                actionText="新标签"-->
+                <!--                actionText="新标签"-->
                 <FreelogTags
                     v-model="userDefinedTags"
                 ></FreelogTags>
             </BlockItem>
         </ModuleBlock>
+
+        <ContentBlock :title="'授权管理'">
+            <DisplayEditContracts/>
+        </ContentBlock>
 
     </div>
 </template>

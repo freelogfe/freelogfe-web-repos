@@ -68,7 +68,11 @@ export default {
     },
     methods: {
         async handleData() {
-            const res = await this.$axios.get(`/v1/presentables/${this.$route.params.presentableId}`);
+            const {testResourceID} = this.$route.params;
+            // console.log(testResourceID, 'testResourceIDtestResourceID');
+            // const res = await this.$axios.get(`/v1/presentables/${this.$route.params.presentableId}`);
+            const res = await this.$axios.get(`/v1/testNodes/testResources/${testResourceID}`);
+            // console.log(res, 'res');
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 this.$message.error(res.data.msg);
                 throw new Error(res.data.msg);
@@ -94,10 +98,16 @@ export default {
                 })),
             }));
 
-            const policies = await getContracts(this.$axios, getContractIDs(dataSource));
+            const contractIDs = getContractIDs(dataSource);
+            let policies = [];
+            if (contractIDs.length > 0) {
+                policies = await getContracts(this.$axios, contractIDs);
+            }
 
             // console.log(policies, 'policiespoliciespolicies');
             // console.log(policies, '999999999');
+            // console.log(dataSource, 'dataSource');
+            // console.log(policies, 'policies');
             for (const item of dataSource) {
                 for (const item2 of item.children) {
                     const id = item2.contract.id;
@@ -137,7 +147,7 @@ export default {
             }
             // console.log(dataSource, '1111111111111');
             // console.log(res, '22222222');
-
+            // console.log(dataSource, 'dataSource');
             const res5 = await this.$axios.get('/v1/contracts/list', {
                 params: {
                     targetIds: dataSource.map(i => i.releaseId).join(','),
@@ -183,7 +193,7 @@ export default {
                     contracts,
                 });
             }
-            console.log(depReleasesDetailList, 'depReleasesDetailListdepReleasesDetailList');
+            // console.log(depReleasesDetailList, 'depReleasesDetailListdepReleasesDetailList');
             this.presentableName = data.presentableName;
             this.depReleasesDetailList = depReleasesDetailList;
             this.contracts = policies;
@@ -303,7 +313,9 @@ export default {
         },
 
         async updatePresentable(params) {
-            return await this.$axios.put(`/v1/presentables/${this.$route.params.presentableId}`, params);
+            // return await this.$axios.put(`/v1/presentables/${this.$route.params.presentableId}`, params);
+            const {testResourceID} = this.$route.params;
+            return await this.$axios.put(`/v1/testNodes/testResources/${testResourceID}`, params);
         },
     },
     watch: {

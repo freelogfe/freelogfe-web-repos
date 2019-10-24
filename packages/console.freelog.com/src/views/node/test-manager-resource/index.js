@@ -3,6 +3,8 @@ import ModuleBlock from './ModuleBlock';
 import BlockItem from './BlockItem';
 import ConfirmInput from './ConfirmInput';
 import FreelogTags from '@/components/Tags/index.vue';
+import ContentBlock from './ContentBlock.vue';
+import DisplayEditContracts from './DisplayEditContracts/index.vue';
 
 export default {
     name: 'index',
@@ -12,6 +14,8 @@ export default {
         ModuleBlock,
         OverviewHeader,
         FreelogTags,
+        DisplayEditContracts,
+        ContentBlock,
     },
     data() {
         return {
