@@ -101,16 +101,24 @@
             >
                 <template slot="header" slot-scope="scope">
                     <!--                    trigger="click"-->
-                    <el-dropdown class="release-list__table__type__dropdown">
+                    <el-dropdown
+                        @command="onChangeType"
+                        class="release-list__table__type__dropdown"
+                    >
                         <div class="release-list__table__type__dropdown__text">
                             {{selectedType}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allTypes">
-                                <a
-                                    @click="onChangeType(item)"
-                                    class="release-list__table__type__dropdown__item"
-                                >{{item}}</a>
+                            <el-dropdown-item
+                                v-for="item in allTypes"
+                                :command="item"
+                            >
+<!--                                <a-->
+<!--                                    @click="onChangeType(item)"-->
+<!--                                    class="release-list__table__type__dropdown__item"-->
+<!--                                >-->
+                                    {{item}}
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -129,17 +137,23 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
+                        @command="onChangeState"
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0; cursor: pointer;">
                             {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu trigger="click" slot="dropdown">
-                            <el-dropdown-item v-for="item in allState">
-                                <a
-                                    @click="onChangeState(item)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >{{item}}</a>
+                            <el-dropdown-item
+                                v-for="item in allState"
+                                :command="item"
+                            >
+<!--                                <a-->
+<!--                                    @click="onChangeState(item)"-->
+<!--                                    style="display: block; width: 100%; height: 100%;"-->
+<!--                                >-->
+                                {{item}}
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>

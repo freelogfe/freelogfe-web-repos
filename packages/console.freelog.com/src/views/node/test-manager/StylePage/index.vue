@@ -110,17 +110,23 @@
                 <template slot="header" slot-scope="scope">
                     <!--                     trigger="click"-->
                     <el-dropdown
+                        @command="onChangeState"
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0; cursor: pointer;">
                             {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allState">
-                                <a
-                                    @click="onChangeState(item)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >{{item}}</a>
+                            <el-dropdown-item
+                                :command="item"
+                                v-for="item in allState"
+                            >
+                                <!--                                <a-->
+                                <!--                                    @click="onChangeState(item)"-->
+                                <!--                                    style="display: block; width: 100%; height: 100%;"-->
+                                <!--                                >-->
+                                {{item}}
+                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>

@@ -87,6 +87,8 @@ export default {
          * 节点状态发生变化
          */
         onChangeState(value) {
+            console.log(value, 'valuevaluevalue');
+            // return;
             this.selectedState = value;
         },
         getIconClass(operation) {
