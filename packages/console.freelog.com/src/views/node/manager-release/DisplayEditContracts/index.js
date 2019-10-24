@@ -183,7 +183,7 @@ export default {
                     contracts,
                 });
             }
-            console.log(depReleasesDetailList, 'depReleasesDetailListdepReleasesDetailList');
+            // console.log(depReleasesDetailList, 'depReleasesDetailListdepReleasesDetailList');
             this.presentableName = data.presentableName;
             this.depReleasesDetailList = depReleasesDetailList;
             this.contracts = policies;

@@ -14,14 +14,15 @@
                     <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>
                     <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
 
+                    <!--                    :isTip="true"-->
                     <NavItem
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
                         :title="item.releaseName"
-                        :type="item.release.resourceType"
-                        :version="item.release.resourceVersions[0].version"
-                        :date="item.release.updateDate.split('T')[0]"
-                        :tags="item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
+                        :type="item.release && item.release.resourceType"
+                        :version="item.release && item.release.resourceVersions[0].version"
+                        :date="item.release && item.release.updateDate.split('T')[0]"
+                        :tags="item.children && item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
                     ></NavItem>
                 </div>
                 <div style="height: 25px;"></div>

@@ -173,7 +173,8 @@ export default {
                 }
             }
 
-            // console.log(dataSource, 'dataSource');
+            console.log(dataSource, 'dataSource');
+            // setTimeout(() => this.dataSource = dataSource, 100);
             this.dataSource = dataSource;
 
             if (this.activatedIndex === -1) {
@@ -197,6 +198,8 @@ export default {
             this.presentableName = data.presentableName;
             this.depReleasesDetailList = depReleasesDetailList;
             this.contracts = policies;
+
+            // console.log(dataSource, 'dataSourcedataSource');
             // this.depReleasesDetailList = this.depReleasesDetailList.map(i => ({
             //     ...i,
             //     contracts: this.contracts,

@@ -1,10 +1,13 @@
 <template>
+
     <a
         @click="$emit('click')"
         style="padding: 12px 20px; display: block; cursor: pointer;"
         :style="{'background-color': activated ? '#fff': 'transparent'}"
     >
-        <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}}</div>
+        <el-badge :is-dot="tags.length === 0" style="display: block;">
+            <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}}</div>
+        </el-badge>
         <!--        <div style="height: 10px;"></div>-->
         <div style="font-size: 12px; color: #999;">{{type}} | v{{version}} | {{date}}</div>
         <div style="overflow: hidden;">
@@ -18,6 +21,7 @@
             </label>
         </div>
     </a>
+
 </template>
 
 <script>
@@ -55,7 +59,11 @@
                         // }
                     ];
                 }
-            }
+            },
+            // isTip: {
+            //     type: Boolean,
+            //     default: false,
+            // }
         }
     }
 </script>
