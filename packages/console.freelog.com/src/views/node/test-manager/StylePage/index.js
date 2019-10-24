@@ -96,9 +96,9 @@ export default {
                 case 'replace':
                     return 'el-icon-refresh';
                 case 'offline':
-                    return 'el-icon-sort-down';
+                    return 'el-icon-bottom';
                 case 'online':
-                    return 'el-icon-sort-up';
+                    return 'el-icon-top';
                 case 'set':
                     return 'el-icon-tickets';
                 default:
