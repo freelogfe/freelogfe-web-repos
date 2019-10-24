@@ -125,6 +125,22 @@ export default {
             }
         },
         /**
+         * 操作命令
+         * @param mark
+         * @param row
+         * @returns {*|Promise<void>|Window}
+         */
+        operationCommand(mark, row) {
+            // console.log(mark, row, 'R$RRRRRRRR');
+            if (mark === '编辑') {
+                return window.open('/node/test-manager-resource/' + row.testResourceId);
+            }
+
+            if (mark === 'isOnline') {
+                return this.onLineAndOffLine(row);
+            }
+        },
+        /**
          * 上下线
          * @param row
          */

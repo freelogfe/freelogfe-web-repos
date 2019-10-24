@@ -194,7 +194,7 @@
                 label="操作"
             >
                 <template slot-scope="scope">
-                    <el-dropdown>
+                    <el-dropdown @command="$event => operationCommand($event, scope.row)">
 
                         <el-button
                             icon="el-icon-more"
@@ -204,25 +204,27 @@
                         ></el-button>
 
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
-                                <a
-                                    target="_blank"
-                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"
-                                    style="display: block; width: 100%; height: 100%; color: #333;"
-                                >编辑</a>
+                            <el-dropdown-item :command="'编辑'">
+<!--                                <a-->
+<!--                                    target="_blank"-->
+<!--                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"-->
+<!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
+<!--                                >-->
+                                    编辑
+<!--                                </a>-->
                             </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a
-                                    @click="onLineAndOffLine(scope.row)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >
+                            <el-dropdown-item :command="'isOnline'">
+<!--                                <a-->
+<!--                                    @click="onLineAndOffLine(scope.row)"-->
+<!--                                    style="display: block; width: 100%; height: 100%;"-->
+<!--                                >-->
                                     <span
                                         v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
                                         style="color: #44a0ff;">上线</span>
                                     <span
                                         v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
                                         style="color: #ee4040;">下线</span>
-                                </a>
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
