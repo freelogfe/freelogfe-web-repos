@@ -79,6 +79,7 @@
                             class="resource-default-preview style-page__table__entries__img"
                         >
                             <img
+                                v-if="scope.row.previewImages.length > 0"
                                 :src="scope.row.previewImages[0]"
                                 class="resource-default-preview"
                             />
