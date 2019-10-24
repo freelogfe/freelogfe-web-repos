@@ -49,7 +49,10 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis style-page__table__name">
+                    <a
+                        @click="goToOrigin(scope.row.originInfo)"
+                        class="text-overflow-ellipsis style-page__table__name"
+                    >
                         <label
                             class="style-page__table__name__mock"
                             v-if="scope.row.originInfo.type === 'mock'"
@@ -65,7 +68,7 @@
                             <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
-                    </div>
+                    </a>
                 </template>
             </el-table-column>
             <el-table-column

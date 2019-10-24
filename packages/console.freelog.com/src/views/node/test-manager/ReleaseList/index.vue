@@ -48,7 +48,10 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis release-list__table__name">
+                    <a
+                        @click="goToOrigin(scope.row.originInfo)"
+                        class="text-overflow-ellipsis release-list__table__name"
+                    >
                         <label
                             class="release-list__table__name--mock"
                             v-if="scope.row.originInfo.type === 'mock'"
@@ -64,7 +67,7 @@
                             <div></div>
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
-                    </div>
+                    </a>
                 </template>
             </el-table-column>
             <el-table-column
