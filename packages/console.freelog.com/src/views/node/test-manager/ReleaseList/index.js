@@ -80,6 +80,26 @@ export default {
             this.handleTableData();
         },
         /**
+         * 去来源编辑页
+         */
+        goToOrigin(originInfo) {
+            // console.log(originInfo, 'originInfooriginInfo');
+            let url = '';
+            if (originInfo.type === 'presentable') {
+                url = `/node/manager-release/${originInfo.id}`;
+            }
+
+            if (originInfo.type === 'mock') {
+                url = `/mock/update/${originInfo.id}`;
+            }
+
+            if (originInfo.type === 'release') {
+                url = `/release/detail/${originInfo.id}?version=${originInfo.version}`;
+            }
+
+            window.open(url);
+        },
+        /**
          * 当前page发生变化时
          * @param currentPage
          */
@@ -113,9 +133,9 @@ export default {
                 case 'replace':
                     return 'el-icon-refresh';
                 case 'offline':
-                    return 'el-icon-sort-down';
+                    return 'el-icon-bottom';
                 case 'online':
-                    return 'el-icon-sort-up';
+                    return 'el-icon-top';
                 case 'set':
                     return 'el-icon-tickets';
                 default:
@@ -137,6 +157,23 @@ export default {
                     return 0;
                 default:
                     return 2;
+            }
+        },
+
+        /**
+         * 操作命令
+         * @param mark
+         * @param row
+         * @returns {*|Promise<void>|Window}
+         */
+        operationCommand(mark, row) {
+            // console.log(mark, row, 'R$RRRRRRRR');
+            if (mark === '编辑') {
+                return window.open('/node/test-manager-resource/' + row.testResourceId);
+            }
+
+            if (mark === 'isOnline') {
+                return this.onLineAndOffLine(row);
             }
         },
         /**

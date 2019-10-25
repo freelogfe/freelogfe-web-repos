@@ -1,20 +1,20 @@
 <template>
-    <div>
+    <div class="release-list">
         <div style="height: 40px;"></div>
 
-        <div style="display: flex; align-items: center;justify-content: space-between;">
+        <div class="release-list__header">
 
             <AddAndReplace @success="pushRuleSuccess"/>
 
             <el-input
-                style="width: 400px;"
+                class="release-list__header__input"
                 v-model="filterSearch"
             >
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
                 <i
                     style="cursor: pointer"
-                    @click=""
-                    v-show="true"
+                    @click="filterSearch = ''"
+                    v-show="filterSearch.length !== 0"
                     slot="suffix"
                     class="el-input__icon el-icon-circle-close"
                 ></i>
@@ -25,7 +25,7 @@
 
         <el-table
             :data="tableData"
-            style="width: 100%"
+            class="release-list__table"
         >
             <el-table-column
                 prop="rules"
@@ -33,27 +33,13 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <!--                    <el-dropdown>-->
-                    <div style="color: #333; font-size: 16px;">
+                    <div class="release-list__table__rule">
                         <i
                             v-for="i in scope.row.rules"
                             :class="getIconClass(i.operation)"
-                            style="font-weight: 600;"
                         ></i>
-                        <div style="border-top: 1px solid #b5b5b5; width: 16px;" v-if="scope.row.rules.length === 0"></div>
-
+                        <div v-if="scope.row.rules.length === 0"></div>
                     </div>
-                    <!--                        <el-dropdown-menu slot="dropdown">-->
-                    <!--                            <el-dropdown-item>-->
-                    <!--                                <i class="el-icon-sort-up" style="font-weight: 600;"></i>-->
-                    <!--                                <span>测试资源上线</span>-->
-                    <!--                            </el-dropdown-item>-->
-                    <!--                            <el-dropdown-item>-->
-                    <!--                                <i class="el-icon-tickets" style="font-weight: 600;"></i>-->
-                    <!--                                <span>添加标签【image】</span>-->
-                    <!--                            </el-dropdown-item>-->
-                    <!--                        </el-dropdown-menu>-->
-                    <!--                    </el-dropdown>-->
                 </template>
             </el-table-column>
             <el-table-column
@@ -62,25 +48,26 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <div class="text-overflow-ellipsis" style="color: #000; font-size: 14px; display: flex; align-items: center;">
-                        <!--                        {{scope.row.presentableName}}-->
-                        <!--                       #f5a623 -->
+                    <a
+                        @click="goToOrigin(scope.row.originInfo)"
+                        class="text-overflow-ellipsis release-list__table__name"
+                    >
                         <label
+                            class="release-list__table__name--mock"
                             v-if="scope.row.originInfo.type === 'mock'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #f5a623; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >mock</label>
                         <label
+                            class="release-list__table__name--release"
                             v-if="scope.row.originInfo.type === 'release'"
-                            style="line-height: 20px; width: 40px; text-align: center; border-radius: 2px;background-color: #72BB1F; color: #fff; display: inline-block; font-weight: 600; font-size: 12px;"
                         >市场</label>
                         <label
+                            class="release-list__table__name--presentable"
                             v-if="scope.row.originInfo.type === 'presentable'"
-                            style="width: 40px; display: inline-block;"
                         >
-                            <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
+                            <div></div>
                         </label>
-                        <span style="padding-left: 10px;">{{scope.row.testResourceName}}</span>
-                    </div>
+                        <span>{{scope.row.testResourceName}}</span>
+                    </a>
                 </template>
             </el-table-column>
             <el-table-column
@@ -89,25 +76,21 @@
                 min-width="30%"
             >
                 <template slot-scope="scope">
-                    <div style="display: flex; align-items: center; padding-left: 10px;">
+                    <div class="release-list__table__entries">
                         <div
-                            style="width: 40px; height: 30px; flex-shrink: 0;"
-                            class="resource-default-preview"
+                            class="resource-default-preview release-list__table__entries__preview"
                         >
-                            <!--                            v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
-                                                            :src="scope.row.releaseInfo.previewImages[0]"-->
                             <img
+                                v-if="scope.row.previewImages.length > 0"
                                 :src="scope.row.previewImages[0]"
-                                style="width: 100%; height: 100%;"
                                 class="resource-default-preview"
                             />
                         </div>
-                        <div style="padding-left: 10px; overflow: hidden; flex-shrink: 1;">
-                            <div class="text-overflow-ellipsis"
-                                 style="color: #000; font-size: 14px; font-weight: 600; line-height: 20px; width: 100%;">
+                        <div class="release-list__table__entries__info">
+                            <div class="text-overflow-ellipsis">
                                 {{scope.row.originInfo.name}}
                             </div>
-                            <div style="line-height: 17px; color: #999; font-size: 12px;">
+                            <div>
                                 {{scope.row.originInfo.version}}
                             </div>
                         </div>
@@ -120,19 +103,25 @@
                 min-width="12%"
             >
                 <template slot="header" slot-scope="scope">
+                    <!--                    trigger="click"-->
                     <el-dropdown
-                        trigger="click"
-                        style="height: 32px; padding-left: 0;"
+                        @command="onChangeType"
+                        class="release-list__table__type__dropdown"
                     >
-                        <div style="padding-left: 0;">
+                        <div class="release-list__table__type__dropdown__text">
                             {{selectedType}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="item in allTypes">
-                                <a
-                                    @click="onChangeType(item)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >{{item}}</a>
+                            <el-dropdown-item
+                                v-for="item in allTypes"
+                                :command="item"
+                            >
+<!--                                <a-->
+<!--                                    @click="onChangeType(item)"-->
+<!--                                    class="release-list__table__type__dropdown__item"-->
+<!--                                >-->
+                                    {{item}}
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -140,7 +129,7 @@
                 </template>
 
                 <template slot-scope="scope">
-                    <div style="color: #000; font-size: 14px;">
+                    <div class="release-list__table__type__text">
                         {{scope.row.resourceType}}
                     </div>
                 </template>
@@ -151,43 +140,53 @@
             >
                 <template slot="header" slot-scope="scope">
                     <el-dropdown
+                        @command="onChangeState"
                         style="height: 32px; padding-left: 0;"
                     >
-                        <div style="padding-left: 0;">
+                        <div style="padding-left: 0; cursor: pointer;">
                             {{selectedState}} <i class="el-icon-caret-bottom"></i>
                         </div>
                         <el-dropdown-menu trigger="click" slot="dropdown">
-                            <el-dropdown-item v-for="item in allState">
-                                <a
-                                    @click="onChangeState(item)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >{{item}}</a>
+                            <el-dropdown-item
+                                v-for="item in allState"
+                                :command="item"
+                            >
+<!--                                <a-->
+<!--                                    @click="onChangeState(item)"-->
+<!--                                    style="display: block; width: 100%; height: 100%;"-->
+<!--                                >-->
+                                {{item}}
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </template>
 
                 <template slot-scope="scope">
-                    <div style="font-size: 14px; display: flex; align-items: center;">
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
-                              style="color: #000;">已上线</span>
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
-                        <!--                            v-if="!scope.row.isAuth"-->
-<!--                        <template>-->
-<!--                            &lt;!&ndash;                                :content="$t('exceptionExists')"&ndash;&gt;-->
-<!--                            <el-popover-->
-<!--                                placement="top"-->
-<!--                                width="100"-->
-<!--                                trigger="hover"-->
-<!--                                content="此合约链上存在异常"-->
-<!--                            >-->
-<!--                                <i-->
-<!--                                    slot="reference"-->
-<!--                                    class="el-icon-warning"-->
-<!--                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"-->
-<!--                                ></i>-->
-<!--                            </el-popover>-->
-<!--                        </template>-->
+                    <div class="release-list__table__status">
+                        <span
+                            class="release-list__table__status--online"
+                            v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
+                        >已上线</span>
+                        <span
+                            class="release-list__table__status--downline"
+                            v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
+                        >未上线</span>
+
+                        <template v-if="scope.row.resolveReleaseSignStatus === 2">
+                            <el-popover
+                                placement="top"
+                                width="100"
+                                trigger="hover"
+                                :content="'此合约链上存在异常'"
+                            >
+                                <i
+                                    slot="reference"
+                                    class="el-icon-warning"
+                                    style="font-size: 20px; color: #ffc210; margin-left: 8px;"
+                                ></i>
+                            </el-popover>
+                        </template>
                     </div>
 
                 </template>
@@ -198,43 +197,37 @@
                 label="操作"
             >
                 <template slot-scope="scope">
-                    <el-dropdown>
+                    <el-dropdown @command="$event => operationCommand($event, scope.row)">
 
                         <el-button
                             icon="el-icon-more"
                             type="small"
                             circle
-                            style="background-color: #fafbfb;"
+                            class="release-list__table__operation"
                         ></el-button>
 
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>
-                                <a
-                                    target="_blank"
-                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"
-                                    style="display: block; width: 100%; height: 100%; color: #333;"
-                                >编辑</a>
-                            </el-dropdown-item>
-<!--                            <el-dropdown-item>-->
+                            <el-dropdown-item :command="'编辑'">
 <!--                                <a-->
+<!--                                    target="_blank"-->
+<!--                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"-->
 <!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
-<!--                                >上线</a>-->
-<!--                            </el-dropdown-item>-->
-<!--                            <el-dropdown-item>-->
-<!--                                <a @click="upgradePresentable(scope.row)">{{$t('action.upgrade')}}</a>-->
-<!--                            </el-dropdown-item>-->
-                            <el-dropdown-item>
-                                <a
-                                    @click="onLineAndOffLine(scope.row)"
-                                    style="display: block; width: 100%; height: 100%;"
-                                >
+<!--                                >-->
+                                    编辑
+<!--                                </a>-->
+                            </el-dropdown-item>
+                            <el-dropdown-item :command="'isOnline'">
+<!--                                <a-->
+<!--                                    @click="onLineAndOffLine(scope.row)"-->
+<!--                                    style="display: block; width: 100%; height: 100%;"-->
+<!--                                >-->
                                     <span
                                         v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
                                         style="color: #44a0ff;">上线</span>
                                     <span
                                         v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
                                         style="color: #ee4040;">下线</span>
-                                </a>
+<!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -243,8 +236,8 @@
         </el-table>
         <!--            v-if="totalQuantity > pageSize"-->
         <div
-            style="padding: 10px 0; display: flex; justify-content: flex-end;"
-            v-if="totalQuantity !== 0"
+            class="release-list__table__pagination"
+            v-if="totalQuantity > 10"
         >
             <!--                @current-change="onCurrentPageChange"-->
             <!--                @size-change="onPageSizeChange"-->
@@ -269,6 +262,6 @@
 
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    @import "index";
 </style>

@@ -34,6 +34,7 @@
             </div>
             <div style="height: 365px;">
                 <el-tree
+                    :props="{isLeaf: 'leaf'}"
                     :data="data2"
                     :load="loadNode1"
                     lazy
@@ -189,7 +190,7 @@
                 if (node.level > 1) {
                     return resolve(node.data.children || []);
                 }
-                console.log(this.selectedExact, 'nodenodenode');
+                // console.log(this.selectedExact, 'nodenodenode');
                 setTimeout(async () => {
                     const params = {
                         testResourceId: node.data.id,
@@ -218,11 +219,13 @@
         const arr = [];
         for (const i of nodeSources) {
             const id = parentID + '->' + (i.type === 'mock' ? '#:' : '$:') + i.name;
+            const children = transformTreeArr(i.dependencies, id);
             arr.push({
                 id,
                 label: i.name,
-                children: transformTreeArr(i.dependencies, id),
-            })
+                children,
+                leaf: children.length === 0,
+            });
         }
         return arr;
     }

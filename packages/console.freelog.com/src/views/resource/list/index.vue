@@ -2,24 +2,25 @@
 <template>
   <section class="my-resources">
     <div class="m-r-header clearfix">
-      <router-link to="/resource/create">
+<!--      <router-link to="/resource/create">-->
+      <router-link to="/resource/editor">
         <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('createBtnText')}}</el-button>
       </router-link>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
     </div>
-    
+
     <resource-items-list :query="queryInput" @release="showReleaseDialog"></resource-items-list>
 
     <el-dialog width="750px"
                top="10vh"
                center
                :visible.sync="isShowReleaseSearchDialog">
-      <release-search 
+      <release-search
         :release-source="targetReleaseResource"
-        :tabLayout="['my-release']" 
-        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []" 
+        :tabLayout="['my-release']"
+        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []"
         @add="releaseSearchHandler"></release-search>
       <div class="" slot="footer">
         <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('createNewReleaseText')}}</el-button>
@@ -104,8 +105,8 @@ export default {
 </style>
 <style lang="less">
   .my-resources {
-    .el-dialog__header{ 
-      padding: 0; 
+    .el-dialog__header{
+      padding: 0;
       .el-dialog__headerbtn { z-index: 100; }
     }
   }

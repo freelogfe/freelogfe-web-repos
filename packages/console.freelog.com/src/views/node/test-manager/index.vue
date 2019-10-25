@@ -1,34 +1,38 @@
 <template>
     <div
         class="test-management"
-        style="display: flex;"
         :style="styleObject"
     >
 
-        <div style="width: 280px; background-color: #fafbfb; flex-shrink: 0;">
-            <div style="padding: 25px 20px;">
+        <div class="test-management__aside">
+            <div class="test-management__aside__url">
                 <div>
-                    <div style="display: flex; align-items: center;">
-                        <label
-                            style="line-height: 20px; width: 20px; text-align: center; background-color: #e9e9e9; border-radius: 2px;"
-                        >T</label>
-                        <span style="color: #333; font-size: 20px; font-weight: 600; padding-left: 8px;">{{nodeInfo.name}}</span>
+                    <div class="test-management__aside__url__name">
+                        <label>T</label>
+                        <span>{{nodeInfo.name}}</span>
                     </div>
 
                     <div style="height: 10px;"></div>
 
-                    <div style="display: flex; align-items: center;">
+                    <div class="test-management__aside__url__link">
                         <a
                             target="_blank"
                             :href="'//' + nodeInfo.testOrigin"
+                            class="test-management__aside__url__link__a"
                             style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
                         >{{nodeInfo.testOrigin}}</a>
                         <clipboard
                             :value="nodeInfo.testOrigin"
                             style="display: inline-block;"
-                            @copyDone="$message.success($t('copySuccess'))"
+                            @copyDone="$message.success($t('复制成功'))"
                         >
-                            <el-button style="padding: 3px 6px;" type="primary" plain size="mini">copy</el-button>
+                            <el-button
+                                type="primary"
+                                plain
+                                size="mini"
+                                class="test-management__aside__url__link__button"
+                            >copy
+                            </el-button>
                         </clipboard>
                     </div>
 
@@ -37,7 +41,7 @@
                     <a
                         target="_blank"
                         :href="'//' + nodeInfo.origin"
-                        style="display: block; line-height: 30px; font-size: 12px; color: #999; text-align: center; background-color: #fafbfb; border-radius: 4px; border: 1px solid #d8d8d8;"
+                        class="test-management__aside__url__origin-link"
                     >进入正式节点</a>
 
                     <div style="height: 25px;"></div>
@@ -45,37 +49,25 @@
                 </div>
             </div>
 
-            <div style="border-top: 1px solid #ebebeb; cursor: pointer;">
+            <div class="test-management__aside__nav">
                 <a
-                    :style="{
-                        backgroundColor: selectedTab === 'ReleaseList' ? '#fff':'transparent',
-                        borderRight: selectedTab === 'ReleaseList' ? '3px solid #409eff': 'none',
-                        color: selectedTab === 'ReleaseList' ? '#409eff': '#333',
-                    }"
+                    :class="{'test-management__aside__nav--active': selectedTab === 'ReleaseList' }"
                     @click="selectedTab = 'ReleaseList'"
-                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点发行列表</a>
+                >节点发行列表</a>
                 <a
-                    :style="{
-                        backgroundColor: selectedTab === 'StylePage' ? '#fff':'transparent',
-                        borderRight: selectedTab === 'StylePage' ? '3px solid #409eff': 'none',
-                        color: selectedTab === 'StylePage' ? '#409eff': '#333',
-                    }"
+                    :class="{'test-management__aside__nav--active': selectedTab === 'StylePage' }"
                     @click="selectedTab = 'StylePage'"
-                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">节点页面样式</a>
+                >节点页面样式</a>
 
                 <a
-                    :style="{
-                        backgroundColor: selectedTab === 'MappingRules' ? '#fff':'transparent',
-                        borderRight: selectedTab === 'MappingRules' ? '3px solid #409eff': 'none',
-                        color: selectedTab === 'MappingRules' ? '#409eff': '#333',
-                    }"
+                    :class="{'test-management__aside__nav--active': selectedTab === 'MappingRules' }"
                     @click="selectedTab = 'MappingRules'"
-                    style="line-height: 54px; display: block; padding-left: 60px; font-size: 14px; font-weight: 600; border-bottom: 1px solid #ebebeb;">映射规则管理</a>
+                >映射规则管理</a>
             </div>
 
         </div>
 
-        <div style="width: 100%; flex-shrink: 1; background-color: #fff; padding: 0 60px;">
+        <div class="test-management__main">
             <ReleaseList v-if="selectedTab === 'ReleaseList'"/>
             <StylePage v-if="selectedTab === 'StylePage'"/>
             <MappingRules v-if="selectedTab === 'MappingRules'"/>
@@ -89,6 +81,6 @@
     export default Index;
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    @import "index";
 </style>
