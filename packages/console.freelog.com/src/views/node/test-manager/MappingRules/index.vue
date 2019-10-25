@@ -196,8 +196,8 @@ export default {
 						break
 					}
 					case 'online': {
-						const { presentation } = ruleInfo
-						tmpRow.content = `${operationText}【${presentation}】`
+						const { presentableName } = ruleInfo
+						tmpRow.content = `${operationText}【${presentableName}】`
 						break
 					}
 					case 'replace': {
@@ -216,8 +216,8 @@ export default {
 						break
 					}
 					case 'offline': {
-						const { presentation } = ruleInfo
-						tmpRow.content = `${operationText}【${presentation}】`
+						const { presentableName } = ruleInfo
+						tmpRow.content = `${operationText}【${presentableName}】`
 						break
 					}
 					default: {}
