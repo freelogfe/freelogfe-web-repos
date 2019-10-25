@@ -105,6 +105,7 @@
     data() {
       const NO_REACTED_RESOURCE = this.$i18n.t('list.messages[1]')
       const $i18n = this.$i18n
+      const qResourceType = this.$route.query.resourceType
 
       return {
         search: '',
@@ -118,13 +119,13 @@
           target: `/v1/resources`,
           params: {
             isSelf: 1,
-            resourceType: undefined,
+            resourceType: qResourceType != null ? qResourceType : undefined,
             keywords: undefined,
             isReleased: 2               // 0: 未发行；1: 已发行；2: 全部发行
           }
         },
         resourceMapReleases: {},
-        selectedType: 'all',
+        selectedType: qResourceType != null ? qResourceType : 'all',
         releaseStatus: [
           { label: $i18n.t('list.releaseStatus[0]'), value: 0 }, 
           { label: $i18n.t('list.releaseStatus[1]'), value: 1 }, 
@@ -227,6 +228,9 @@
       },
       handleSelectType(command) {
         this.selectedType = command
+        this.$router.push({
+          query: { resourceType: command }
+        })
         if(this.selectedType === 'all') {
           this.paginationConfig.params.resourceType = undefined
         }else {

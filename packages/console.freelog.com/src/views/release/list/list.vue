@@ -146,6 +146,7 @@
     },
 
     data() {
+      const qResourceType = this.$route.query.resourceType
       return {
         search: '',
         loader: null,
@@ -159,12 +160,12 @@
           target: '/v1/releases',
           params: {
             isSelf: 1,
-            resourceType: undefined,
+            resourceType: qResourceType != null ? qResourceType : undefined,
             keywords: undefined,
             status: undefined
           }
         },
-        selectedType: 'all',
+        selectedType: qResourceType != null ? qResourceType : 'all',
         pagenationEmptyText: '',
         selectedReleaseStatus: 0,
       }
@@ -270,6 +271,9 @@
       },
       handleSelectType(command) {
         this.selectedType = command
+        this.$router.push({
+          query: { resourceType: command }
+        })
         if(this.selectedType === 'all') {
           this.paginationConfig.params.resourceType = undefined
         }else {

@@ -11,5 +11,6 @@
     "xproxy": "^0.2.2"
   },
   "dependencies": {
+    "@freelog/nmr_translator": "^2.2.3"
   }
 }

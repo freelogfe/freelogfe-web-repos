@@ -16,6 +16,11 @@ export function fetchPresentablesList(params = {}) {
           .then(resp => resp.json())
 }
 
+export function fetchPresentablesAuthList(params = {}) {
+  return _fetch('/v1/presentables/authList', { data: params })
+  .then(resp => resp.json())
+}
+
 /**
  * 获取单个presentable的详情
  */

@@ -50,9 +50,9 @@
               <div class="trl-item-type"> {{scope.row.releaseInfo.resourceType}}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('presentablesList.type')" width="180">
+          <el-table-column :label="$t('presentablesList.tags')" width="180">
             <template slot-scope="scope">
-              <tags :value="scope.row.userDefinedTags" actionText="新标签" @input="tagsChangeHandler(scope.row)"></tags>
+              <tags :value="scope.row.userDefinedTags" actionText="新标签" @input="(tags) => tagsChangeHandler(scope.row, tags)"></tags>
             </template>
           </el-table-column>
           <el-table-column :label="$t('presentablesList.onlineStatus')" width="80"> 
@@ -246,7 +246,8 @@
           }
         })
       },
-      tagsChangeHandler(row) {
+      tagsChangeHandler(row, tags) {
+        row.userDefinedTags = tags
         row.isChangePresentable = true
       }
     }

@@ -317,7 +317,11 @@ export default {
 		},
 		// 校验规则 并 保存
 		tapSaveBtn() {
-			const result = compile(this.rulesText)
+			try {
+				var result = compile(this.rulesText)
+			}catch(e) {
+				console.error(e)
+			}
 			
 			if(result.errors != null) {
 				this.syntaxErrorsText = result.errors.map(error => {
