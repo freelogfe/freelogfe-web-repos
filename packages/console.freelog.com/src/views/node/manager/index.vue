@@ -34,7 +34,7 @@
                 :nodeHref="nodeInfo.origin"
                 :isTestNode="false"
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
-                btnText="进入测试节点"
+                btnText="进入测试节点管理"
             />
 
 <!--            <div style="height: 79px;"></div>-->

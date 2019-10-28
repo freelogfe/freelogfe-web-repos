@@ -11,7 +11,7 @@
                 :nodeHref="nodeInfo.testOrigin"
                 :isTestNode="true"
                 :enterNode="`/node/manager/${$route.params.nodeId}`"
-                btnText="进入正式节点"
+                btnText="进入节点管理"
             />
 
             <div class="test-management__aside__nav">
