@@ -60,7 +60,7 @@
                         <label
                             class="release-list__table__name--release"
                             v-if="scope.row.originInfo.type === 'release'"
-                        >市场</label>
+                        >发行</label>
                         <label
                             class="release-list__table__name--presentable"
                             v-if="scope.row.originInfo.type === 'presentable'"

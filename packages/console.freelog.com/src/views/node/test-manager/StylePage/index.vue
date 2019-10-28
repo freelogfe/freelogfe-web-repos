@@ -61,7 +61,7 @@
                         <label
                             class="style-page__table__name__release"
                             v-if="scope.row.originInfo.type === 'release'"
-                        >市场</label>
+                        >发行</label>
                         <label
                             style="width: 40px; display: inline-block;"
                             v-if="scope.row.originInfo.type === 'presentable'"
