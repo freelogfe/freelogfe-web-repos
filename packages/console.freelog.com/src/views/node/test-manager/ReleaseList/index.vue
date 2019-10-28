@@ -33,13 +33,14 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <div class="release-list__table__rule">
-                        <i
-                            v-for="j in Array.from(new Set(scope.row.rules.map(i => i.operation)))"
-                            :class="getIconClass(j)"
-                        ></i>
-                        <div v-if="scope.row.rules.length === 0"></div>
-                    </div>
+                    <!--                    <div class="release-list__table__rule">-->
+                    <!--                        <i-->
+                    <!--                            v-for="j in Array.from(new Set(scope.row.rules.map(i => i.operation)))"-->
+                    <!--                            :class="getIconClass(j)"-->
+                    <!--                        ></i>-->
+                    <!--                        <div v-if="scope.row.rules.length === 0"></div>-->
+                    <!--                    </div>-->
+                    <RulesBar :rules="scope.row.rules"/>
                 </template>
             </el-table-column>
             <el-table-column

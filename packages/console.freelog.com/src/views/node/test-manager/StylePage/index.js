@@ -1,10 +1,12 @@
 import AddAndReplace from '../AddAndReplace/index.vue';
+import RulesBar from "../../components/RulesBar";
 
 let searchInputDelay = null;
 
 export default {
     name: "index",
     components: {
+        RulesBar,
         AddAndReplace,
     },
     data() {
