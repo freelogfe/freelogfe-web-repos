@@ -157,6 +157,22 @@ export default {
                 this.tableData[i].isAuth = res1.data.data[i].authResult.isAuth;
             }
         },
+        /**
+         * 修改使用版本
+         * @param value
+         * @param row
+         * @returns {Promise<ElMessageComponent>}
+         */
+        async onVersionChange(value, row) {
+            // console.log(value, row, '1234233');
+            const presentableId = row.presentableId;
+            const {data: {errcode}} = await this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: value});
+            if (errcode !== 0) {
+                return this.$message.error('更新版本失败！')
+            }
+            this.$message.success('更新版本成功！');
+            row.releaseInfo.version = value;
+        },
 
         /**
          * 格式化策略

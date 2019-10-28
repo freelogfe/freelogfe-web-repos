@@ -84,6 +84,31 @@
                 class="node-manager__main__table"
             >
                 <el-table-column
+                    prop="presentableName"
+                    :label="$t('table.presentableName')"
+                    min-width="18%"
+                >
+                    <template slot-scope="scope">
+                        <div class="text-overflow-ellipsis node-manager__main__table__name">
+                            {{scope.row.presentableName}}
+                        </div>
+                        <el-select
+                            placeholder="请选择"
+                            :value="scope.row.releaseInfo.version"
+                            style="width: 90px;"
+                            size="mini"
+                            @change="$event => onVersionChange($event, scope.row)"
+                        >
+                            <el-option
+                                v-for="i in [...scope.row.releaseInfo.versions].reverse()"
+                                :key="i"
+                                :label="i"
+                                :value="i">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
                     prop="publish"
                     :label="$t('table.publish')"
                     min-width="20%"
@@ -105,23 +130,13 @@
                                     {{scope.row.releaseInfo.releaseName}}
                                 </div>
                                 <div class="node-manager__main__table__release__content__version">
-                                    {{scope.row.releaseInfo.version}}
+                                    {{scope.row.releaseInfo.versions[scope.row.releaseInfo.versions.length - 1]}}
                                 </div>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    prop="presentableName"
-                    :label="$t('table.presentableName')"
-                    min-width="18%"
-                >
-                    <template slot-scope="scope">
-                        <div class="text-overflow-ellipsis node-manager__main__table__name">
-                            {{scope.row.presentableName}}
-                        </div>
-                    </template>
-                </el-table-column>
+
                 <el-table-column
                     prop="type"
                     :label="$t('table.type')"
