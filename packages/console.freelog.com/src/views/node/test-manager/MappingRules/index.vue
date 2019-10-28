@@ -54,7 +54,7 @@
 				</el-table-column>
 				<el-table-column label="操作" width="160">
 					<template slot-scope="scope">
-						<!-- <el-button type="text" class="mrb-btn--disabled" @click="tapDisabledBtn(scope.row)">停用</el-button> -->
+						<el-button type="text" class="mrb-btn--disabled" @click="tapDisabledBtn(scope.row)">停用</el-button>
 						<el-button type="text" class="mrb-btn--delete" @click="tapDeleteBtn(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -174,9 +174,11 @@ export default {
 		loadMappingRulesTable() {
 			return this.fetchMappingRules()
 				.then(data => {
-					const { testRules } = data
-					this.testRulesData = testRules
-					this.resolveTestRules(testRules)
+					if(data != null) {
+						const { testRules } = data
+						this.testRulesData = testRules
+						this.resolveTestRules(testRules)
+					}
 				})
 		},
 		resolveTestRules(testRules) {
@@ -184,7 +186,7 @@ export default {
 			const rulesTextArr = []
 			for(let i = 0; i < testRules.length; i++) {
 				const { effectiveMatchCount, matchErrors, ruleInfo, text, id } = testRules[i]
-				const { icon, operationText, operation } = this.rulesMap[ruleInfo.operation]
+				const { icon, operationText, operation } = this.rulesMap[ruleInfo.operation || 'set']
 				const tmpRow = {
 					text, id, operation,
 					icon, matchCount: effectiveMatchCount
@@ -238,10 +240,16 @@ export default {
 		},
 		// 更新映射规则
 		updateMappingRules(rulesText) {
-			return this.createFetcher(this.$services.TestNodesService.post({
-				nodeId: this.nodeId,
-				testRuleText: rulesText === '' ? rulesText : window.btoa(rulesText)
-			}))
+			try {
+				rulesText = rulesText === '' ? rulesText : Buffer.from(rulesText).toString('base64')
+				return this.createFetcher(this.$services.TestNodesService.post({
+					nodeId: this.nodeId,
+					testRuleText: rulesText
+				}))
+				.catch(e => this.$message.error(e))
+			} catch(e) {
+				this.$message.error(e)
+			}
 		},
 		rulesSelectionHandler(selection) {
 			this.selectedRules = selection
@@ -294,13 +302,38 @@ export default {
 			const idsSet = new Set(deletedRules.map(r => r.id))
 			var tmpArr = this.rulesTableData.filter(r => !idsSet.has(r.id))
 			const rulesText = tmpArr.map(r => r.text).join('\n')
+			
 			this.updateMappingRules(rulesText)
 				.then(() => {
 					this.$message({ type: 'success', message: '映射规则删除成功!' })
 					this.refreshMappingRules()
 				})
 		},
-		tapDisabledBtn(row) {},
+		// 停用规则
+		tapDisabledBtn(row) {
+			this.$confirm(`此操作将停用规则“${row.content}”, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+					const rulesText = this.rulesTableData.map(r => {
+						if(r.id === row.id) {
+							return '!' + r.text
+						}else {
+							return r.text
+						}
+					}).join('\n')
+					console.log('rulesText --', rulesText)
+					return this.updateMappingRules(rulesText)
+        })
+				.then(() => {
+					this.$message({ type: 'success', message: '映射规则停用成功!' })
+					this.refreshMappingRules()
+				})
+				.catch((e) => {
+					console.warn(e)
+				})
+		},
 		// 解析：规则文件下载地址
 		getRulesDownloadUrl(rules) {
 			const rulesText = rules.map(r => r.text).join('\n')
@@ -323,6 +356,11 @@ export default {
 				console.error(e)
 			}
 			
+			if(result == null) {
+				this.syntaxErrorsText = '<li class="mr-syntax-error">映射规则编译失败：存在语法错误！</li>'
+				return 
+			} 
+
 			if(result.errors != null) {
 				this.syntaxErrorsText = result.errors.map(error => {
 					return `<li class="mr-syntax-error">${error}</li>`
