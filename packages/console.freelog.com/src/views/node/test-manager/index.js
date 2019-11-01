@@ -2,10 +2,12 @@ import clipboard from '@/components/clipboard/index.vue';
 import ReleaseList from './ReleaseList/index.vue';
 import StylePage from './StylePage/index.vue';
 import MappingRules from './MappingRules/index.vue';
+import NodeHeader from "../components/NodeHeader";
 
 export default {
     name: 'test-management',
     components: {
+        NodeHeader,
         clipboard,
         ReleaseList,
         StylePage,

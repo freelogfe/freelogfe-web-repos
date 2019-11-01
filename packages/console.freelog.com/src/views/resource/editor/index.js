@@ -111,7 +111,7 @@ export default {
             // console.log(this.releasedList, 'this.releasedListthis.releasedList');
         },
         /**
-         * 当为更新 mock 资源时，初始化数据
+         * 当为更新资源时，初始化数据
          * @return {Promise<void>}
          */
         async initDataByResourceId() {
@@ -123,7 +123,8 @@ export default {
             // return;
             // console.log(res.data.data, 'res.data.datares.data.data');
             const result = res.data.data;
-            // this.resourceType = result.resourceType;
+            // console.log(result, 'resultresult');
+            this.resourceType = result.resourceType;
             // this.uploadFileInfo = {
             //     fileID: '',
             //     sha1: '',
@@ -353,6 +354,7 @@ export default {
          * 创建发行
          */
         createRelease(releaseInfo) {
+            // console.log(releaseInfo, 'releaseInforeleaseInfo');
             // 如果是 创建新发行
             if (!releaseInfo) {
                 // console.log(this.tmpRreatedResourceID, 'this.tmpRreatedResourceIDthis.tmpRreatedResourceID');

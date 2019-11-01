@@ -1,6 +1,7 @@
 import clipboard from '@/components/clipboard/index.vue';
 import PolicyTabs from '@/components/PolicyTabs/index.vue';
 import i18n from './i18n';
+import NodeHeader from '../components/NodeHeader.vue';
 
 let searchInputDelay = null;
 
@@ -9,7 +10,8 @@ export default {
     i18n,
     components: {
         clipboard,
-        PolicyTabs
+        PolicyTabs,
+        NodeHeader,
     },
     data() {
         return {

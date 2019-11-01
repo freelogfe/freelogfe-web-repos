@@ -5,49 +5,14 @@
     >
 
         <div class="test-management__aside">
-            <div class="test-management__aside__url">
-                <div>
-                    <div class="test-management__aside__url__name">
-                        <label>T</label>
-                        <span>{{nodeInfo.name}}</span>
-                    </div>
 
-                    <div style="height: 10px;"></div>
-
-                    <div class="test-management__aside__url__link">
-                        <a
-                            target="_blank"
-                            :href="'//' + nodeInfo.testOrigin"
-                            class="test-management__aside__url__link__a"
-                            style="font-size: 14px; color: #333; text-decoration: underline; margin-right: 5px;"
-                        >{{nodeInfo.testOrigin}}</a>
-                        <clipboard
-                            :value="nodeInfo.testOrigin"
-                            style="display: inline-block;"
-                            @copyDone="$message.success($t('复制成功'))"
-                        >
-                            <el-button
-                                type="primary"
-                                plain
-                                size="mini"
-                                class="test-management__aside__url__link__button"
-                            >copy
-                            </el-button>
-                        </clipboard>
-                    </div>
-
-                    <div style="height: 25px;"></div>
-
-                    <a
-                        target="_blank"
-                        :href="'//' + nodeInfo.origin"
-                        class="test-management__aside__url__origin-link"
-                    >进入正式节点</a>
-
-                    <div style="height: 25px;"></div>
-
-                </div>
-            </div>
+            <NodeHeader
+                :nodeName="nodeInfo.name"
+                :nodeHref="nodeInfo.testOrigin"
+                :isTestNode="true"
+                :enterNode="`/node/manager/${$route.params.nodeId}`"
+                btnText="进入节点管理"
+            />
 
             <div class="test-management__aside__nav">
                 <a

@@ -33,13 +33,14 @@
             >
                 <template slot-scope="scope">
                     <!--                    <el-dropdown>-->
-                    <div class="style-page__table__rules">
-                        <i
-                            v-for="i in scope.row.rules"
-                            :class="getIconClass(i.operation)"
-                        ></i>
-                        <div v-if="scope.row.rules.length === 0"></div>
-                    </div>
+                    <!--                    <div class="style-page__table__rules">-->
+                    <!--                        <i-->
+                    <!--                            v-for="j in Array.from(new Set(scope.row.rules.map(i => i.operation)))"-->
+                    <!--                            :class="getIconClass(j)"-->
+                    <!--                        ></i>-->
+                    <!--                        <div v-if="scope.row.rules.length === 0"></div>-->
+                    <!--                    </div>-->
+                    <RulesBar :rules="scope.row.rules"/>
 
                 </template>
             </el-table-column>
@@ -60,7 +61,7 @@
                         <label
                             class="style-page__table__name__release"
                             v-if="scope.row.originInfo.type === 'release'"
-                        >市场</label>
+                        >发行</label>
                         <label
                             style="width: 40px; display: inline-block;"
                             v-if="scope.row.originInfo.type === 'presentable'"

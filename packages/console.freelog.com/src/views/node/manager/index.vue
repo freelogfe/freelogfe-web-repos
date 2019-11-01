@@ -5,31 +5,39 @@
             :style="styleObject"
             class="node-manager__aside"
         >
-            <div style="height: 30px;"></div>
-            <div class="node-manager__aside__name">{{nodeInfo.name}}</div>
-            <div style="height: 10px;"></div>
-            <div class="node-manager__aside__url">
-                <a
-                    class="node-manager__aside__url__link"
-                    :href="'//' + nodeInfo.origin"
-                    target="_blank"
-                >{{nodeInfo.origin}}</a>
-                <clipboard
-                    class="node-manager__aside__url__clipboard"
-                    :value="nodeInfo.origin"
-                    @copyDone="$message.success($t('copySuccess'))"
-                >
-                    <el-button
-                        class="node-manager__aside__url__clipboard__button"
-                        type="primary"
-                        plain
-                        size="mini"
-                    >copy
-                    </el-button>
-                </clipboard>
-            </div>
+<!--            <div style="height: 30px;"></div>-->
+<!--            <div class="node-manager__aside__name">{{nodeInfo.name}}</div>-->
+<!--            <div style="height: 10px;"></div>-->
+<!--            <div class="node-manager__aside__url">-->
+<!--                <a-->
+<!--                    class="node-manager__aside__url__link"-->
+<!--                    :href="'//' + nodeInfo.origin"-->
+<!--                    target="_blank"-->
+<!--                >{{nodeInfo.origin}}</a>-->
+<!--                <clipboard-->
+<!--                    class="node-manager__aside__url__clipboard"-->
+<!--                    :value="nodeInfo.origin"-->
+<!--                    @copyDone="$message.success($t('copySuccess'))"-->
+<!--                >-->
+<!--                    <el-button-->
+<!--                        class="node-manager__aside__url__clipboard__button"-->
+<!--                        type="primary"-->
+<!--                        plain-->
+<!--                        size="mini"-->
+<!--                    >copy-->
+<!--                    </el-button>-->
+<!--                </clipboard>-->
+<!--            </div>-->
 
-            <div style="height: 79px;"></div>
+            <NodeHeader
+                :nodeName="nodeInfo.name"
+                :nodeHref="nodeInfo.origin"
+                :isTestNode="false"
+                :enterNode="`/node/test-manager/${$route.params.nodeId}`"
+                btnText="进入测试节点管理"
+            />
+
+<!--            <div style="height: 79px;"></div>-->
 
             <div class="node-manager__aside__navs">
                 <a
