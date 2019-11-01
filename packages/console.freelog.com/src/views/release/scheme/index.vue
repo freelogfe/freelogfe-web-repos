@@ -123,8 +123,8 @@
                       <el-dropdown class="p-enabled-btn" @command="toggleEnabledContract" v-if="type === 'edit'">
                         <span>{{ policy.isEnbledContract ? $t('policyStatus[0]') : $t('policyStatus[1]')}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item :command="index+'-1'">{{$t('apply')}}</el-dropdown-item>
-                          <el-dropdown-item :command="index+'-0'">{{$t('layAside')}}</el-dropdown-item>
+                          <el-dropdown-item :command="index+'-1'" v-if="!policy.isEnbledContract">{{$t('applyBtnText')}}</el-dropdown-item>
+                          <el-dropdown-item :command="index+'-0'" v-else>{{$t('layAsideBtnText')}}</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
                     </div>

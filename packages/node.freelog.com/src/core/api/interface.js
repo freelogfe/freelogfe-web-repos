@@ -3,6 +3,8 @@ import { throwError, createError } from '../exceptions/throwError'
 import { EXCEPTION_AUTH } from '../exceptions/names'
 import { injectCodeResource } from '../helpers/index'
 
+const HEADERS_FREELOG_SUB_RELEASE = 'freelog-sub-releases'
+
 var _fetch = null
 export default function init(fetch) {
   _fetch = fetch
@@ -12,8 +14,25 @@ export default function init(fetch) {
  * 获取节点的presentables列表
  */
 export function fetchPresentablesList(params = {}) {
-  return _fetch('/v1/presentables', { data: params })
-          .then(resp => resp.json())
+  return fetchPresentablesAuthList(params)
+    .then(res => {
+      if(res.errcode === 0) {
+        res.data.dataList = res.data.dataList.map(p => {
+          const authResult = p.authResult 
+          if(authResult != null) {
+            try {
+              const fSubReleases = Buffer.from(authResult[HEADERS_FREELOG_SUB_RELEASE], 'base64').toString('utf-8')
+              authResult[HEADERS_FREELOG_SUB_RELEASE] = JSON.parse(fSubReleases)
+            }catch(e) {
+              console.warn(e)
+              authResult[HEADERS_FREELOG_SUB_RELEASE] = []
+            }
+          }
+          return p
+        })
+      }
+      return res
+    })
 }
 
 export function fetchPresentablesAuthList(params = {}) {
@@ -56,7 +75,8 @@ export function fetchPresentableAuth(presentableId, params) {
   return fetchPresentableResource(`${presentableId}.auth`, params)
     .then(resp => {
       try {
-        subReleases = window.atob(resp.headers.get('freelog-sub-releases'))
+        const fSubReleases = resp.headers.get(HEADERS_FREELOG_SUB_RELEASE)
+        subReleases = Buffer.from(fSubReleases,'base64').toString('utf-8')
         subReleases = JSON.parse(subReleases)
       }catch(e) {
         console.warn(e)

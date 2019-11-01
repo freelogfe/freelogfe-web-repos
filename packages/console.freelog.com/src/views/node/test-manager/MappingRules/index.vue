@@ -159,14 +159,15 @@ export default {
 	methods: {
 		createFetcher(service){
 			return service.then(res => res.data)
+				.catch(e => this.$error.showErrorMessage(e))
 				.then(res => {
+					console.log('res ---', res)
 					if(res.errcode !== 0) {
 						return Promise.reject(res.msg)
 					}else {
 						return Promise.resolve(res.data)
 					}
 				})
-				.catch(e => this.$error.showErrorMessage(e))
 		},
 		fetchMappingRules() {
 			return this.createFetcher(this.$services.TestNodesService.get(this.nodeId))
@@ -246,7 +247,6 @@ export default {
 					nodeId: this.nodeId,
 					testRuleText: rulesText
 				}))
-				.catch(e => this.$message.error(e))
 			} catch(e) {
 				this.$message.error(e)
 			}
@@ -323,16 +323,19 @@ export default {
 							return r.text
 						}
 					}).join('\n')
-					console.log('rulesText --', rulesText)
-					return this.updateMappingRules(rulesText)
+					return this.disableMappingRules(rulesText)
         })
-				.then(() => {
-					this.$message({ type: 'success', message: '映射规则停用成功!' })
-					this.refreshMappingRules()
-				})
 				.catch((e) => {
 					console.warn(e)
 				})
+		},
+		disableMappingRules(rulesText) {
+			return this.updateMappingRules(rulesText)
+						.then(() => {
+							this.$message({ type: 'success', message: '映射规则停用成功!' })
+							this.refreshMappingRules()
+						})
+						.catch(e => this.$error.showErrorMessage(e))
 		},
 		// 解析：规则文件下载地址
 		getRulesDownloadUrl(rules) {

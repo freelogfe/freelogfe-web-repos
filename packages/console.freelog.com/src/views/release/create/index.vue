@@ -89,10 +89,10 @@
       const validateName = (rule, value, callback) => {
         if(value.length < 1 || value.length > 60) {
           callback($i18n.t('messages[0]'))
-        }else if(/^[^\/\\\:\*\?\"\<\>\|\!]+$/.test(value)) {
+        }else if(/^[^\/\\\:\*\?\"\<\>\|\!\@\[\]]+$/.test(value)) {
           callback()
         }else {
-          callback($i18n.t('messages[1]') + '：\\ / : * ? " < > |')
+          callback($i18n.t('messages[1]') + '：\\ / : * ? " < > | @ [ ]')
         }
       }
       const validateVersion = (rule, value, callback) => {
