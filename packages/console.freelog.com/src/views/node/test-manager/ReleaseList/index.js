@@ -11,6 +11,7 @@ export default {
     },
     data() {
         return {
+            matchTestResult: [],
             tableData: [],
             // 筛选搜索框
             filterSearch: '',
@@ -47,7 +48,7 @@ export default {
     methods: {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
-            await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
+            this.matchTestResult = (await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)).data.data;
         },
         async handleTableData(init = false) {
             if (init) {

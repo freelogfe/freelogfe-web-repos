@@ -4,7 +4,10 @@
 
         <div class="release-list__header">
 
-            <AddAndReplace @success="pushRuleSuccess"/>
+            <AddAndReplace
+                @success="pushRuleSuccess"
+                :matchTestResult="matchTestResult"
+            />
 
             <el-input
                 class="release-list__header__input"

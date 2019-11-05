@@ -89,6 +89,14 @@
             Replacer,
             Replaced,
         },
+        props: {
+            matchTestResult: {
+                type: Object,
+                default() {
+                    return {};
+                }
+            }
+        },
         data() {
             return {
                 elDialogVisible: false,
@@ -170,14 +178,32 @@
                 // console.log(data, 'DDDDDDDDDDD');
                 this.replaced = data;
             },
+            /**
+             * 替换
+             * @returns {Promise<ElMessageComponent>}
+             */
             async confirmReplace() {
+                // console.log(this.replaced, 'this.replaced');
+                // console.log(this.replacer, 'this.replacer');
+
+                // console.log(decompile([ruleObj]));
+                // return;
                 const {nodeId} = this.$route.params;
-                const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
-                const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
-                const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
-                await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                // const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
+                // const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
+                // const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
+                const testRuleText = handleRulesToNewText(this.replaced, this.replacer, this.matchTestResult);
+                // const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
+                //     testRuleText: Buffer.from(testRuleText).toString('base64'),
+                // });
+                console.log(testRuleText, 'testRuleText');
+                const res = await this.$axios.post(`/v1/testNodes`, {
+                    nodeId,
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
+                if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                    return this.$message.error(JSON.stringify(res.data.data.msg));
+                }
                 this.pushRuleSuccess();
             },
             pushRuleSuccess() {
@@ -189,6 +215,80 @@
                 this.replaced = null;
             }
         }
+    }
+
+    // TODO: scope 尚未开发
+    function handleRulesToNewText(replaced, replacer, matchTestResult = {}) {
+        // console.log(matchTestResult, 'matchTestResult');
+        const testRules = [...matchTestResult.testRules];
+        let rulesText = matchTestResult.ruleText;
+        const changedPresentableName = new Set();
+        for (const item of replaced.scope) {
+            const presentableName = item;
+            changedPresentableName.add(presentableName);
+            const rule = testRules.find(i => i.presentableName === item[0]);
+            if (!rule) {
+                testRules.push(newAlterRule(replaced, replacer, presentableName));
+            } else {
+                updateAlterRule(replaced, replacer, rule);
+            }
+        }
+
+        for (const item of changedPresentableName) {
+            const rule = testRules.find(i => i.presentableName === item);
+            const oldText = rule.text;
+            const newText = decompile([rule]);
+            if (oldText) {
+                rulesText = rulesText.replace(oldText, newText);
+            } else {
+                rulesText += ('\n' + newText);
+            }
+        }
+
+        return rulesText;
+    }
+
+    function newAlterRule(replaced, replacer, presentableName, scopes = []) {
+        const ruleObj = {
+            text: '',
+            "tags": null,
+            "replaces": [
+                {
+                    "replaced": {
+                        "name": replaced.name,
+                        "versionRange": replaced.version,
+                        "type": replaced.version ? 'release' : 'mock',
+                    },
+                    "replacer": {
+                        "name": replacer.name,
+                        "type": (typeof replacer.customer === 'boolean') ? "release" : 'mock',
+                        versionRange: replacer.customer ? replacer.inputVersion : replacer.selectedVersion,
+                    },
+                    "scopes": scopes,
+                }
+            ],
+            "online": null,
+            "operation": "alter",
+            "presentableName": presentableName,
+        };
+        return ruleObj;
+    }
+
+    function updateAlterRule(replaced, replacer, rule, scopes = []) {
+        rule.replaces.push({
+            "replaced": {
+                "name": replaced.name,
+                "versionRange": replaced.version,
+                "type": replaced.version ? 'release' : 'mock',
+            },
+            "replacer": {
+                "name": replacer.name,
+                "type": (typeof replacer.customer === 'boolean') ? "release" : 'mock',
+                versionRange: replacer.customer ? replacer.inputVersion : replacer.selectedVersion,
+            },
+            "scopes": scopes
+        });
+
     }
 </script>
 
