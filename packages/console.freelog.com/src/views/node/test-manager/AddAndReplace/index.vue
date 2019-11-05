@@ -77,6 +77,7 @@
 </template>
 
 <script>
+    import {decompile} from '@freelog/nmr_translator';
     import DepDialog from '@/components/DependentReleaseList/DepDialog/index.vue';
     import Replacer from './Replacer/index.vue';
     import Replaced from './Replaced/index.vue';
@@ -98,13 +99,23 @@
         },
         methods: {
             async addARelease(data) {
-                // console.log(data);
-                // console.log(Buffer.from('事件').toString('base64'), '######');
+                // console.log(data, 'datadata');
+                const ruleObj = {
+                    "tags": null,
+                    "replaces": [],
+                    "online": null,
+                    "operation": "add",
+                    "candidate": {
+                        "name": data.name,
+                        "type": "release",
+                        versionRange: data.version,
+                    },
+                    "presentableName": data.name.replace(/^(.*)\//, '') + '_' + Array(4).fill(null).map(i => Math.floor(Math.random() * 36).toString(36)).join(''),
+                };
+                // console.log(JSON.stringify(ruleObj));
+                const testRuleText = decompile([ruleObj]) + '\n';
+                // console.log(testRuleText, 'testRuleText');
                 const {nodeId} = this.$route.params;
-                // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => $:${data.name}`;
-                // const testRuleText = '+ yanghongtianFreelogText => $:yanghongtian/FreelogText';
-                // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
@@ -116,9 +127,22 @@
                 this.pushRuleSuccess();
             },
             async addAMock(data) {
+                const ruleObj = {
+                    "tags": null,
+                    "replaces": [],
+                    "online": null,
+                    "operation": "add",
+                    "candidate": {
+                        "name": data.name,
+                        "type": "mock",
+                        // versionRange: data.version,
+                    },
+                    "presentableName": data.name.replace(/^(.*)\//, '') + '_' + Array(4).fill(null).map(i => Math.floor(Math.random() * 36).toString(36)).join(''),
+                };
                 const {nodeId} = this.$route.params;
+                const testRuleText = decompile([ruleObj]) + '\n';
                 // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => #:${data.name}`;
+                // const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => #:${data.name}`;
                 // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
