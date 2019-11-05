@@ -48,7 +48,13 @@ export default {
     methods: {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
-            this.matchTestResult = (await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)).data.data;
+            const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
+            const result = res.data.data;
+            this.matchTestResult = {
+                ruleText: result.ruleText,
+                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+            };
+            console.log(this.matchTestResult, 'this.matchTestResult');
         },
         async handleTableData(init = false) {
             if (init) {
@@ -191,19 +197,11 @@ export default {
             const ruleText = res.data.data ? res.data.data.ruleText : '';
             if (isOnline) {
                 // 需要下线
-                if (ruleText.includes(`^ ${testResourceName}`)) {
-                    const testRuleText = ruleText.replace(`^ ${testResourceName}`, `- ${testResourceName}`);
-                    const response = await this.$axios.post(`/v1/testNodes`, {
-                        nodeId,
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    });
-                } else {
-                    const testRuleText = `- ${testResourceName}`;
-                    const params = {
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    };
-                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
-                }
+                const testRuleText = ruleText.replace(`^ ${testResourceName}`, `- ${testResourceName}`);
+                const response = await this.$axios.post(`/v1/testNodes`, {
+                    nodeId,
+                    testRuleText: Buffer.from(testRuleText).toString('base64'),
+                });
                 this.$message.success('下线成功');
             } else {
                 // 需要上线

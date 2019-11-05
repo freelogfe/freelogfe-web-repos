@@ -196,7 +196,7 @@
                 // const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                 //     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 // });
-                console.log(testRuleText, 'testRuleText');
+                // console.log(testRuleText, 'testRuleText');
                 const res = await this.$axios.post(`/v1/testNodes`, {
                     nodeId,
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
