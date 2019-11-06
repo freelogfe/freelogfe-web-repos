@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            matchTestResult: [],
+            matchTestResult: {},
             tableData: [],
             // 筛选搜索框
             filterSearch: '',
@@ -54,7 +54,7 @@ export default {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
             };
-            console.log(this.matchTestResult, 'this.matchTestResult');
+            // console.log(this.matchTestResult, 'this.matchTestResult');
         },
         async handleTableData(init = false) {
             if (init) {
@@ -85,7 +85,11 @@ export default {
         /**
          * 追加新加规则成功
          */
-        pushRuleSuccess() {
+        pushRuleSuccess(result) {
+            this.matchTestResult = {
+                ruleText: result.ruleText,
+                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+            };
             this.handleTableData();
         },
         /**

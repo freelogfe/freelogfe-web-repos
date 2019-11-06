@@ -132,7 +132,7 @@
                 }
                 // this.$message.success('添加规则成功');
                 // this.$emit('success');
-                this.pushRuleSuccess();
+                this.pushRuleSuccess(res.data.data);
             },
             async addAMock(data) {
                 const ruleObj = {
@@ -161,7 +161,7 @@
                 }
                 // this.$message.success('添加规则成功');
                 // this.$emit('success');
-                this.pushRuleSuccess();
+                this.pushRuleSuccess(res.data.data);
 
             },
             removeARelease() {
@@ -185,30 +185,21 @@
             async confirmReplace() {
                 // console.log(this.replaced, 'this.replaced');
                 // console.log(this.replacer, 'this.replacer');
-
-                // console.log(decompile([ruleObj]));
-                // return;
                 const {nodeId} = this.$route.params;
-                // const replacedText = (this.replaced.version ? '$:' : '#:') + this.replaced.name;
-                // const replacerText = (this.replacer.customer !== undefined ? '$:' : '#:') + this.replacer.name;
-                // const testRuleText = `* ${replacedText} => ${replacerText} scope=${JSON.stringify(this.replaced.scope).replace(/"/g, '')}`;
                 const testRuleText = handleRulesToNewText(this.replaced, this.replacer, this.matchTestResult);
-                // const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
-                //     testRuleText: Buffer.from(testRuleText).toString('base64'),
-                // });
-                // console.log(testRuleText, 'testRuleText');
                 const res = await this.$axios.post(`/v1/testNodes`, {
                     nodeId,
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
+                // console.log(res, 'resresresres');
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                    return this.$message.error(JSON.stringify(res.data.data.msg));
+                    return this.$message.error(JSON.stringify(res.data.msg));
                 }
-                this.pushRuleSuccess();
+                this.pushRuleSuccess(res.data.data);
             },
-            pushRuleSuccess() {
+            pushRuleSuccess(result) {
                 this.$message.success('添加规则成功');
-                this.$emit('success');
+                this.$emit('success', result);
                 this.elDialogVisible = false;
                 this.dialogVisible = false;
                 this.replacer = null;
@@ -222,15 +213,18 @@
         // console.log(matchTestResult, 'matchTestResult');
         const testRules = [...matchTestResult.testRules];
         let rulesText = matchTestResult.ruleText;
+        // console.log(testRules, '******########');
         const changedPresentableName = new Set();
         for (const item of replaced.scope) {
             const presentableName = item;
             changedPresentableName.add(presentableName);
-            const rule = testRules.find(i => i.presentableName === item[0]);
+            const rule = testRules.find(i => i.presentableName === presentableName);
+            // console.log(rule, '$$$$$$$$');
             if (!rule) {
                 testRules.push(newAlterRule(replaced, replacer, presentableName));
             } else {
                 updateAlterRule(replaced, replacer, rule);
+                // console.log(rule, '#######');
             }
         }
 
