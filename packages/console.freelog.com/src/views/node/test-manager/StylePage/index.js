@@ -1,5 +1,6 @@
 import AddAndReplace from '../AddAndReplace/index.vue';
 import RulesBar from "../../components/RulesBar";
+import {decompile} from "@freelog/nmr_translator";
 
 let searchInputDelay = null;
 
@@ -11,6 +12,7 @@ export default {
     },
     data() {
         return {
+            matchTestResult: {},
             tableData: [],
             // 筛选搜索框
             filterSearch: '',
@@ -38,7 +40,12 @@ export default {
     methods: {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
-            await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`)
+            const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
+            const result = res.data.data;
+            this.matchTestResult = {
+                ruleText: result.ruleText,
+                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+            };
         },
         async handleTableData(init = false) {
             if (init) {
@@ -66,9 +73,13 @@ export default {
             // console.log(data.dataList, 'ddddddddddddDDDDDD');
         },
         /**
-         * 追加新加规则成功
+         * 修改规则成功，并且重新生成匹配规则
          */
-        pushRuleSuccess() {
+        pushRuleSuccess(result) {
+            this.matchTestResult = {
+                ruleText: result.ruleText,
+                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+            };
             this.handleTableData();
         },
         /**
@@ -167,45 +178,42 @@ export default {
          * @param row
          */
         async onLineAndOffLine(row) {
+            const testRules = [...this.matchTestResult.testRules];
             const {nodeId} = this.$route.params;
-            const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
+            // const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
             const testResourceName = row.testResourceName;
             const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
-            const ruleText = res.data.data ? res.data.data.ruleText : '';
-            if (isOnline) {
-                // 需要下线
-                if (ruleText.includes(`^ ${testResourceName}`)) {
-                    const testRuleText = ruleText.replace(`^ ${testResourceName}`, `- ${testResourceName}`);
-                    const response = await this.$axios.post(`/v1/testNodes`, {
-                        nodeId,
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    });
-                } else {
-                    const testRuleText = `- ${testResourceName}`;
-                    const params = {
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    };
-                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
-                }
-                this.$message.success('下线成功');
+            const oldRulesText = this.matchTestResult.ruleText;
+            const rule = testRules.find(i => i.presentableName === testResourceName);
+            // console.log(rule, 'rulerulerulerule');
+            let newRulesText;
+            if (rule) {
+                rule.online = !isOnline;
+                const ruleText = decompile([rule]);
+                newRulesText = oldRulesText.replace(rule.text, ruleText);
             } else {
-                // 需要上线
-                if (ruleText.includes(`- ${testResourceName}`)) {
-                    const testRuleText = ruleText.replace(`- ${testResourceName}`, `^ ${testResourceName}`);
-                    const response = await this.$axios.post(`/v1/testNodes`, {
-                        nodeId,
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    });
-                } else {
-                    const testRuleText = `^ ${testResourceName}`;
-                    const params = {
-                        testRuleText: Buffer.from(testRuleText).toString('base64'),
-                    };
-                    const response = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, params);
-                }
-                this.$message.success('上线成功');
+                const ruleObj = {
+                    "tags": null,
+                    "replaces": [],
+                    "online": !isOnline,
+                    "operation": "alter",
+                    "presentableName": testResourceName,
+                };
+                // console.log(decompile([ruleObj]), 'decompile([ruleObj])');
+                newRulesText = oldRulesText + '\n' + decompile([ruleObj]);
             }
-            this.handleTableData();
+
+            const res = await this.$axios.post(`/v1/testNodes`, {
+                nodeId,
+                testRuleText: Buffer.from(newRulesText).toString('base64'),
+            });
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                return this.$message.error(JSON.stringify(res.data.data.errors));
+            }
+            isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
+            // this.handleTableData();
+            this.pushRuleSuccess(res.data.data);
         }
     },
     watch: {
