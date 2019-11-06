@@ -121,6 +121,9 @@ export default {
             // console.log(releases, 'releasesreleasesreleases');
 
             // console.log(releases, '3333333333333333');
+            if (!releases) {
+                return;
+            }
             for (let i = 0; i < releases.length; i++) {
                 dataSource[i].release = releases[i];
             }
