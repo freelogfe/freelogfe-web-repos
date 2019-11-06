@@ -202,7 +202,7 @@ export default {
             const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
             const oldRulesText = this.matchTestResult.ruleText;
             const rule = testRules.find(i => i.presentableName === testResourceName);
-            console.log(rule, 'rulerulerulerule');
+            // console.log(rule, 'rulerulerulerule');
             let newRulesText;
             if (rule) {
                 rule.online = !isOnline;
@@ -216,7 +216,7 @@ export default {
                     "operation": "alter",
                     "presentableName": testResourceName,
                 };
-                console.log(decompile([ruleObj]), 'decompile([ruleObj])');
+                // console.log(decompile([ruleObj]), 'decompile([ruleObj])');
                 newRulesText = oldRulesText + '\n' + decompile([ruleObj]);
             }
 
