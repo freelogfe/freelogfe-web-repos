@@ -201,7 +201,7 @@
                         params,
                     });
                     const data = transformTreeArr(res.data.data, node.data.id);
-                    console.log(data, 'datadata');
+                    // console.log(data, 'datadata');
                     resolve(data);
                 }, 500);
             }
