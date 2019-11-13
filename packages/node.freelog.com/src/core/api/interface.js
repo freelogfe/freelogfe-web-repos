@@ -49,14 +49,14 @@ export function fetchPresentableInfo(presentableId) {
 }
 
 function fetchPresentableResource(target, params = {}) {
-  return _fetch(`/v1/auths/presentables/${target}`, { data: params })
+  return _fetch(`/v1/auths/presentable/${target}`, { data: params })
 }
 
 /**
  * 获取节点资源的数据内容
  */
-export function fetchPresentableResourceData(presentableId, params) {
-  return fetchPresentableResource(`${presentableId}.file`, params)
+export function fetchPresentableResourceData(id, params = {}) {
+  return _fetch(`/v1/auths/presentable/data/${id}`, { data: params })
 }
 
 /**
@@ -93,26 +93,26 @@ export function fetchPresentableAuth(presentableId, params) {
 /**
  * 获取presentable依赖的子发行的数据内容
  */
-export function fetchSubReleaseData({presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+export function fetchSubReleaseData(presentableId, subReleaseId, version) {
+  const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version)
   return _fetch(url)
 }
 
 /**
  * 获取presentable依赖的子发行信息
  */
-export function fetchSubResource({ presentableId, subReleaseId, version }) {
+export function fetchSubResource(presentableId, subReleaseId, version) {
   const url = resolveSubReleaseInfoUrl({presentableId, subReleaseId, version})
   return _fetch(url).then(resp => resp.json())
 }
 
-export function fetchSubResourceData({ presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+export function fetchSubResourceData(presentableId, subReleaseId, version) {
+  const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version)
   return _fetch(url)
 }
 
-export function requireSubResource({ presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+export function requireSubResource(presentableId, subReleaseId, version) {
+  const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version)
   var type
   return _fetch(url)
     .then(resp => {

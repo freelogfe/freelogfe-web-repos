@@ -4,7 +4,10 @@
 
         <div class="style-page__header">
 
-            <AddAndReplace @success="pushRuleSuccess"/>
+            <AddAndReplace
+                @success="pushRuleSuccess"
+                :matchTestResult="matchTestResult"
+            />
 
             <el-input
                 class="style-page__header__input"

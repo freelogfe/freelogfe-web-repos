@@ -20,10 +20,14 @@ export default function initEnv(FreelogApp) {
     isTest: isTestFreelog || isLocalhost,
     isMobile: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent),
     mainDomain,
-    qiOrigin
+    qiOrigin,
+    nodeType: _isTestNode() ? 'test' : 'formal'
   })
 }
 
+function _isTestNode() {
+  return /^t\./.test(window.location.host)
+}
 
 function _isLocalhost() {
   const host = window.location.host
