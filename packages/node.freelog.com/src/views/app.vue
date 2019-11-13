@@ -14,7 +14,7 @@
     <!--<tool-bar ref="toolbar"></tool-bar>-->
     <transition name="fade">
       <div class="pb-login-dialog" v-if="loginDialogVisible">
-        <FLogin class="pb-l-d-comp"></FLogin>
+        <FLogin class="pb-l-d-comp" show-close @close-dialog="loginDialogVisible = false"></FLogin>
       </div>
     </transition>
   </div>

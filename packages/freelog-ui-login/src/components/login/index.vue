@@ -5,13 +5,9 @@
       <!--<h1 class="brand">-->
       <!--<router-link to="/" tabindex="-1">freelog.com</router-link>-->
       <!--</h1>-->
-      <el-alert
-        v-if="error"
-        :title="error.title"
-        type="warning"
-        :description="error.message"
-        show-icon
-      />
+      <h2 class="heading">{{$t('login.title')}}</h2>
+      <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
+      <el-alert type="warning" :title="error.title" :description="error.message" show-icon v-if="error" />
     </header>
     <el-form
       class="login-form"
@@ -21,7 +17,6 @@
       ref="loginForm"
       label-width="0"
     >
-      <h2 class="heading">{{$t('login.title')}}</h2>
       <el-form-item prop="loginName">
         <el-input
           type="text"
@@ -47,7 +42,7 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="login-sc-operation">
         <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox>
         <span class="user-ops">
           <template v-if="$route">
@@ -88,6 +83,13 @@ export default {
   name: "f-login",
 
   components: { FToast },
+
+  props: {
+    showClose: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   data() {
     const $i18n = this.$i18n;
@@ -147,10 +149,13 @@ export default {
   },
 
   mounted() {
-    console.log(this.$i18n.locale)
+    
   },
 
   methods: {
+    tapCloseBtn() {
+      this.$emit('close-dialog')
+    },
     resolveLink(path) {
       var link = `${path}`
       if (this.$route != null) {
@@ -240,14 +245,17 @@ export default {
 
 <style lang="less" scoped>
 .login-section {
-  border-radius: 5px;
-  width: 350px;
-  padding: 35px 35px 15px 35px;
-  background: #fff;
-  background-clip: padding-box;
-  border: 1px solid #eaeaea;
+  position: relative;
+  width: 350px; height: auto;
+  padding: 35px 35px 15px 35px; border: 1px solid #eaeaea; border-radius: 5px;
+  background: #fff; background-clip: padding-box;
   box-shadow: 0 0 25px #cac6c6;
-  height: auto;
+ 
+  .el-icon-close {
+    position: absolute; top: 4px; right: 4px; z-index: 10;
+    padding: 6px;
+    font-size: 16px; cursor: pointer;
+  }
 
   .heading {
     margin: 0px auto 40px auto;
@@ -268,4 +276,38 @@ export default {
     text-align: center;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .login-section {
+    box-sizing: border-box; padding: 30px 20px; width: 90%;
+    .heading {
+      margin-bottom: 20px; font-size: 26px;
+    }
+    .login-btns {
+      margin-bottom: 0;
+    }
+  }
+}
+</style>
+
+<style lang="less">
+  @media screen and (max-width: 768px) {
+    .login-section {
+      .login-sc-operation {
+        .el-form-item__content {
+          line-height: 28px;
+          .el-input-group__prepend {
+            padding: 0 15px;
+          }
+        }
+      }
+
+      .el-form-item__content {
+        .el-input-group__prepend {
+          padding: 0 15px;
+        }
+      }
+    }
+    
+  }
 </style>

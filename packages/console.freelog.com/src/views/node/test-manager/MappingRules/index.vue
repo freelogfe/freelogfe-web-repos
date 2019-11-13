@@ -23,7 +23,8 @@
 				<el-table-column type="selection" width="45"></el-table-column>
 				<el-table-column width="146">
           <template slot="header" slot-scope="scope">
-            <el-dropdown class="mr-operations-select" @command="handleSelectType">
+						<span>规则类型</span>
+            <!-- <el-dropdown class="mr-operations-select" @command="handleSelectType">
               <span class="el-dropdown-link">
                 操作类型: {{rulesMap[selectedRuleType].operationText}} <i class="el-icon-caret-bottom"></i>
               </span>
@@ -35,11 +36,11 @@
 									:command="item.operation"
 								>{{item.desc}}</el-dropdown-item>
               </el-dropdown-menu>
-            </el-dropdown>
+            </el-dropdown> -->
           </template>
           <template slot-scope="scope">
             <div>
-							<i :class="scope.row.icon"></i><span>{{rulesMap[scope.row.operation].operationText}}</span>
+							<i v-for="(iconClass, index) in scope.row.iconArr" :key="'icon' + index" :class="iconClass"></i>
 						</div>
           </template>
         </el-table-column>
@@ -48,7 +49,7 @@
 						<span>映射规则内容</span> | <span>匹配结果</span>
 					</template>
 					<template slot-scope="scope">
-						<span class="mr-rule-name">{{scope.row.content}}</span>
+						<span class="mr-rule-content" v-html="scope.row.content"></span>
 						<span class="mr-rule-result">（匹配结果：{{scope.row.matchCount}}）</span>
 					</template>
 				</el-table-column>
@@ -185,42 +186,51 @@ export default {
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
 			const rulesTextArr = []
+			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-top", "el-icon-set-up", "el-icon-plus", "el-icon-bottom" ]
+
 			for(let i = 0; i < testRules.length; i++) {
 				const { effectiveMatchCount, matchErrors, ruleInfo, text, id } = testRules[i]
-				const { icon, operationText, operation } = this.rulesMap[ruleInfo.operation || 'set']
+				const { operation } = ruleInfo
 				const tmpRow = {
 					text, id, operation,
-					icon, matchCount: effectiveMatchCount
+					iconArr: [], 
+					matchCount: effectiveMatchCount
+				}
+				const tagsMap = {
+					'mock': `<span class="t-rule-tag-mock">mock</span>`,
+					'release': `<span class="t-rule-tag-release">发行</span>`
 				}
 				switch(operation) {
-					case 'set': {
-						const { presentation, tags } = ruleInfo
-						tmpRow.content = `【${presentation}】${operationText}【${tags.join('，')}】`
-						break
-					}
-					case 'online': {
-						const { presentableName } = ruleInfo
-						tmpRow.content = `${operationText}【${presentableName}】`
-						break
-					}
-					case 'replace': {
-						const { replaced, replacer } = ruleInfo
-						tmpRow.content = `【${replacer.name}】${operationText}【${replaced.name}】`
-						break
-					}
 					case 'add': {
-						const { presentation, candidate: { name, type } } = ruleInfo
-						if(type === 'mock') {
-							tmpRow.content = `${operationText}【Mock资源 ${name}】到测试节点`
-						}else {
-							tmpRow.content = `${operationText}【${name}】到测试节点`
-						}
+						const { tags, online, presentableName, candidate: { name, versionRange = '', type } } = ruleInfo
+						let tagString = '', content = ''
 						
+						content += `添加 ${tagsMap[type]}<strong>${name}</strong> 到测试节点作为 <strong>${presentableName}</strong>`
+						tmpRow.iconArr.push(RULE_ICONS[3])
+						if(versionRange !== '') {
+							content += `，展示版本设置为 ${versionRange}`
+						}
+						if(tags != null && tags.length > 0) {
+							content += '， 设置标签：' + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
+							tmpRow.iconArr.push(RULE_ICONS[0])
+						}
+						if(online) {
+							content += `上线 <strong>${presentableName}</strong>`
+						}
+						tmpRow.content = content
 						break
 					}
-					case 'offline': {
-						const { presentableName } = ruleInfo
-						tmpRow.content = `${operationText}【${presentableName}】`
+					case 'alter': {
+						const { presentableName, replaces, tags, online } = ruleInfo
+						var content = ''
+						tmpRow.iconArr.push(RULE_ICONS[2])
+						replaces.forEach(item => {
+							const { name: n1, type: t1 } = item['replacer']
+							const { name: n2, type: t2 } = item['replaced']
+							content += `<strong>${tagsMap[t1]}${n1}</strong> 替换 <strong>${tagsMap[t2]}${n2}</strong>`
+						})
+						tmpRow.content = content
+						console.log('content --', content)
 						break
 					}
 					default: {}
@@ -445,7 +455,14 @@ export default {
 		}
 	}
 	.mapping-rule__body {
-		.mr-rule-name {  }
+		.mr-rule-content {
+			.t-rule-tag-mock, .t-rule-tag-release {
+				margin-right: 2px; padding: 2px 8px; 
+				font-size: 12px; color: #fff;
+			}
+			.t-rule-tag-release { background-color: #F5A623; }
+			.t-rule-tag-mock { background-color: #72BB1F; }
+		}
 		.mr-rule-result { color: #9b9b9b; }
 		.mr-operations-select {
 			display: block; padding: 0;
@@ -500,6 +517,14 @@ export default {
 	.mapping-rule__body {
 		.cell {
 			font-size: 14px; font-weight: 400; color: #000;
+		}
+		.mr-rule-content {
+			.t-rule-tag-mock, .t-rule-tag-release {
+				margin-right: 5px; padding: 2px 8px; 
+				font-size: 12px; color: #fff;
+			}
+			.t-rule-tag-release { background-color: #F5A623; }
+			.t-rule-tag-mock { background-color: #72BB1F; }
 		}
 	}
 	.mapping-rule-editor-box {
