@@ -21,7 +21,7 @@ export default function initEnv(FreelogApp) {
     isMobile: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent),
     mainDomain,
     qiOrigin,
-    nodeType: _isTestNode() ? 'test' : 'formal'
+    nodeType: !_isTestNode() ? 'test' : 'formal'
   })
 }
 

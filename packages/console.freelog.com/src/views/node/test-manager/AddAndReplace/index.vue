@@ -211,15 +211,17 @@
             changedPresentableName.add(presentableName);
             const rule = testRules.find(i => i.presentableName === presentableName);
             if (!rule) {
-                testRules.push(newAlterRule(replaced, replacer, presentableName, [scope]));
+                testRules.push(newAlterRule(replaced, replacer, presentableName, scope.length > 0 ? [scope] : []));
             } else {
-                updateAlterRule(replaced, replacer, rule, [scope]);
+                updateAlterRule(replaced, replacer, rule, scope.length > 0 ? [scope] : []);
             }
         }
         for (const item of changedPresentableName) {
             const rule = testRules.find(i => i.presentableName === item);
             const oldText = rule.text;
+            console.log(JSON.stringify(rule), 'rulerulerulerulerule');
             const newText = decompile([rule]);
+            console.log(newText, 'newTextnewText');
             if (oldText) {
                 rulesText = rulesText.replace(oldText, newText);
             } else {
