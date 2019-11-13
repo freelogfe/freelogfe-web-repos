@@ -149,18 +149,12 @@
                 };
                 const {nodeId} = this.$route.params;
                 const testRuleText = decompile([ruleObj]) + '\n';
-                // const testRuleText = `+ ${data.name} => #:${data.name}`;
-                // const testRuleText = `+ ${data.name.replace(/^(.*)\//, '')} => #:${data.name}`;
-                // console.log(testRuleText, 'testRuleTexttestRuleText');
                 const res = await this.$axios.put(`/v1/testNodes/${nodeId}/additionalTestRule`, {
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
-                // console.log(res, 'resresresresres');
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.data.errors));
                 }
-                // this.$message.success('添加规则成功');
-                // this.$emit('success');
                 this.pushRuleSuccess(res.data.data);
 
             },
@@ -171,11 +165,9 @@
 
             },
             replacerChange(data) {
-                // console.log(data, 'data');
                 this.replacer = data;
             },
             replacedChange(data) {
-                // console.log(data, 'DDDDDDDDDDD');
                 this.replaced = data;
             },
             /**
@@ -183,15 +175,12 @@
              * @returns {Promise<ElMessageComponent>}
              */
             async confirmReplace() {
-                // console.log(this.replaced, 'this.replaced');
-                // console.log(this.replacer, 'this.replacer');
                 const {nodeId} = this.$route.params;
                 const testRuleText = handleRulesToNewText(this.replaced, this.replacer, this.matchTestResult);
                 const res = await this.$axios.post(`/v1/testNodes`, {
                     nodeId,
                     testRuleText: Buffer.from(testRuleText).toString('base64'),
                 });
-                // console.log(res, 'resresresres');
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.msg));
                 }
@@ -208,26 +197,25 @@
         }
     }
 
-    // TODO: scope 尚未开发
+    /**
+     * 将规则转换成 规则语言 文本
+     */
     function handleRulesToNewText(replaced, replacer, matchTestResult = {}) {
-        // console.log(matchTestResult, 'matchTestResult');
         const testRules = [...matchTestResult.testRules];
         let rulesText = matchTestResult.ruleText;
-        // console.log(testRules, '******########');
         const changedPresentableName = new Set();
         for (const item of replaced.scope) {
-            const presentableName = item;
+            const arr = item.split('->');
+            const presentableName = arr.shift();
+            const scope = arr.map(i => text2Obj(i));
             changedPresentableName.add(presentableName);
             const rule = testRules.find(i => i.presentableName === presentableName);
-            // console.log(rule, '$$$$$$$$');
             if (!rule) {
-                testRules.push(newAlterRule(replaced, replacer, presentableName));
+                testRules.push(newAlterRule(replaced, replacer, presentableName, [scope]));
             } else {
-                updateAlterRule(replaced, replacer, rule);
-                // console.log(rule, '#######');
+                updateAlterRule(replaced, replacer, rule, [scope]);
             }
         }
-
         for (const item of changedPresentableName) {
             const rule = testRules.find(i => i.presentableName === item);
             const oldText = rule.text;
@@ -242,6 +230,9 @@
         return rulesText;
     }
 
+    /**
+     * 新增 presentable 对象
+     */
     function newAlterRule(replaced, replacer, presentableName, scopes = []) {
         const ruleObj = {
             text: '',
@@ -268,21 +259,67 @@
         return ruleObj;
     }
 
+    /**
+     * 更新已存在的 presentable
+     * @param replaced
+     * @param replacer
+     * @param rule
+     * @param scopes
+     */
     function updateAlterRule(replaced, replacer, rule, scopes = []) {
+        // console.log(replaced, replacer, rule, scopes, 'rulerulerule');
+        const replaced1 = {
+            name: replaced.name,
+            versionRange: replaced.version,
+            // type: replaced.version ? 'release' : 'mock',
+            "type": replaced.version ? 'release' : 'mock',
+        };
+        const replacer1 = {
+            name: replacer.name,
+            // type: (typeof replacer.customer === 'boolean') ? 'release' : 'mock',
+            "type": (typeof replacer.customer === 'boolean') ? "release" : 'mock',
+            versionRange: replacer.customer ? replacer.inputVersion : replacer.selectedVersion,
+        };
+        // console.log(replaced1, 'replaced1');
+        // console.log(replacer1, 'replacer1');
+        const replace = rule.replaces.find(i => (toEqual(replaced1, i.replaced) && toEqual(replacer1, i.replacer)));
+        if (replace) {
+            return replace.scopes.push(scopes[0]);
+        }
         rule.replaces.push({
-            "replaced": {
-                "name": replaced.name,
-                "versionRange": replaced.version,
-                "type": replaced.version ? 'release' : 'mock',
-            },
-            "replacer": {
-                "name": replacer.name,
-                "type": (typeof replacer.customer === 'boolean') ? "release" : 'mock',
-                versionRange: replacer.customer ? replacer.inputVersion : replacer.selectedVersion,
-            },
-            "scopes": scopes
+            replaced: replaced1,
+            replacer: replacer1,
+            scopes: scopes,
         });
 
+    }
+
+    /**
+     * 将文本 release 或 mock 转换成对象
+     * @param text
+     * @returns {{versionRange: *, name: *, type: (string)}}
+     */
+    function text2Obj(text) {
+        const arr = text.split(/[:@]/);
+        // console.log(arr, 'arrarr');
+        return {
+            name: arr[1],
+            versionRange: arr[0] === '#' ? undefined : (arr[2] || '*'),
+            type: arr[0] === '$' ? 'release' : 'mock',
+        };
+    }
+
+    /**
+     * 两个 release 或 mock 对象是否相等
+     * @param obj1
+     * @param obj2
+     * @returns {boolean}
+     */
+    function toEqual(obj1, obj2) {
+        console.log(obj1, obj2, 'obj1, obj2');
+        return obj1.name === obj2.name
+            && obj1.type === obj2.type
+            && obj1.versionRange === obj2.versionRange;
     }
 </script>
 
