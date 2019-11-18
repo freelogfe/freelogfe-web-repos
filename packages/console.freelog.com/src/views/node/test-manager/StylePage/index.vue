@@ -43,7 +43,7 @@
                     <!--                        ></i>-->
                     <!--                        <div v-if="scope.row.rules.length === 0"></div>-->
                     <!--                    </div>-->
-                    <RulesBar :rules="scope.row.rules"/>
+                    <RulesBar :rules="scope.row.icons"/>
 
                 </template>
             </el-table-column>

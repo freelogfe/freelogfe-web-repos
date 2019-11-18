@@ -68,7 +68,33 @@ export default {
             }
             const data = res.data.data;
             // console.log(data, 'datadatadatadatadata');
-            this.tableData = data.dataList;
+            this.tableData = data.dataList.map(i => {
+                const matched = this.matchTestResult.testRules.find(j => j.presentableName === i.testResourceName);
+                // console.log(matched, 'matched');
+                const arr = [];
+                if (matched) {
+                    arr.push(matched.operation);
+                    if (matched.tags !== null) {
+                        arr.push('set_tags')
+                    }
+                    if (matched.replaces.length > 0) {
+                        arr.push('replace');
+                    }
+
+                    // if (matched.online === true) {
+                    //     arr.push('show');
+                    // }
+                    //
+                    // if (matched.online === false) {
+                    //     arr.push('hide');
+                    // }
+                }
+                // console.log(arr, 'arrarrarr');
+                return {
+                    ...i,
+                    icons: arr,
+                };
+            });
             this.totalQuantity = data.totalItem;
             // console.log(data.dataList, 'ddddddddddddDDDDDD');
         },
@@ -124,22 +150,22 @@ export default {
             // return;
             this.selectedState = value;
         },
-        getIconClass(operation) {
-            switch (operation) {
-                case 'add':
-                    return 'el-icon-plus';
-                case 'replace':
-                    return 'el-icon-refresh';
-                case 'offline':
-                    return 'el-icon-bottom';
-                case 'online':
-                    return 'el-icon-top';
-                case 'set':
-                    return 'el-icon-tickets';
-                default:
-                    return '';
-            }
-        },
+        // getIconClass(operation) {
+        //     switch (operation) {
+        //         case 'add':
+        //             return 'el-icon-plus';
+        //         case 'replace':
+        //             return 'el-icon-refresh';
+        //         case 'offline':
+        //             return 'el-icon-bottom';
+        //         case 'online':
+        //             return 'el-icon-top';
+        //         case 'set':
+        //             return 'el-icon-tickets';
+        //         default:
+        //             return '';
+        //     }
+        // },
         /**
          * 文字转换为对应数字
          */

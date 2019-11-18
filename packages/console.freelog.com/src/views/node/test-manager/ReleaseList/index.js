@@ -79,7 +79,8 @@ export default {
             }
             const data = res.data.data;
             // console.log(data, 'datadatadatadatadata');
-            this.tableData = data.dataList;
+            this.tableData = data.dataList.map(i => {
+                const arr = [];
             this.totalQuantity = data.totalItem;
             // console.log(data.dataList, 'ddddddddddddDDDDDD');
         },
