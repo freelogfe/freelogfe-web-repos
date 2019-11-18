@@ -5,7 +5,7 @@
             @click="dialogVisible = true"
         >
             <i class="el-icon-plus" style="font-size: 16px; font-weight: 600;"></i>
-            <span style="vertical-align: center;">添加测试资源</span>
+            <span style="vertical-align: center;">添加节点发行</span>
         </a>
 
         <a
@@ -13,7 +13,7 @@
             style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;"
         >
             <i class="el-icon-refresh" style="font-size: 16px; font-weight: 600;"></i>
-            <span style="vertical-align: center;">资源替换</span>
+            <span style="vertical-align: center;">替换资源的依赖</span>
         </a>
 
         <DepDialog
@@ -45,7 +45,8 @@
                     ></i>
                 </div>
 
-                <div style="padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+                <div v-if="controlShowHide"
+                     style="padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
                     <Replacer @onChange="replacerChange"/>
                     <i class="el-icon-back" style="transform: rotate(180deg)"></i>
                     <Replaced @onChange="replacedChange"/>
@@ -103,6 +104,7 @@
                 dialogVisible: false,
                 replacer: null,
                 replaced: null,
+                controlShowHide: true,
             };
         },
         methods: {
@@ -184,6 +186,10 @@
                 if (res.data.errcode !== 0 || res.data.ret !== 0) {
                     return this.$message.error(JSON.stringify(res.data.msg));
                 }
+                this.controlShowHide = false;
+                setTimeout(() => {
+                    this.controlShowHide = true;
+                }, 30);
                 this.pushRuleSuccess(res.data.data);
             },
             pushRuleSuccess(result) {

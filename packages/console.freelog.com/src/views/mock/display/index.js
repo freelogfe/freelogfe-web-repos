@@ -219,7 +219,7 @@ export default {
                         type: 'success',
                         message: this.$t('generateSuccess')
                     });
-                    this.$router.push(`/resource/detail/${res1.data.data.resourceId}`);
+                    this.$router.push(`/resource/editor/${res1.data.data.resourceId}`);
                     // console.log(res1, 'res1res1res1res1res1');
 
                 })
