@@ -21,8 +21,10 @@ export function fetchPresentablesList(params = {}) {
           const authResult = p.authResult 
           if(authResult != null) {
             try {
-              const fSubReleases = Buffer.from(authResult[HEADERS_FREELOG_SUB_RELEASE], 'base64').toString('utf-8')
-              authResult[HEADERS_FREELOG_SUB_RELEASE] = JSON.parse(fSubReleases)
+              if (authResult[HEADERS_FREELOG_SUB_RELEASE]) {
+                const fSubReleases = Buffer.from(authResult[HEADERS_FREELOG_SUB_RELEASE], 'base64').toString('utf-8')
+                authResult[HEADERS_FREELOG_SUB_RELEASE] = JSON.parse(fSubReleases)
+              }
             }catch(e) {
               console.warn(e)
               authResult[HEADERS_FREELOG_SUB_RELEASE] = []

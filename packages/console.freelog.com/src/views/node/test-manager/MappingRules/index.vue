@@ -1,20 +1,21 @@
+<i18n src="./mappingRules.i18n.json"></i18n>
 <template>
 	<div class="mapping-rule-wrapper">
 		<div class="mapping-rule__header">
 			<div class="mr-btn-group">
 				<el-button class="mr-edit-btn" type="text" @click="tapEditBtn" v-if="rulesText !== ''">
-					<i class="el-icon-edit"></i>进入编辑模式
+					<i class="el-icon-edit"></i>{{$t('enterBtnText')}}
 				</el-button>
 				<el-upload class="mr-import" accept="text/plain" :show-file-list="false" :auto-upload="false"  :on-change="rulesImportHandler">
-					<el-button type="text"><i class="el-icon-download"></i> 导入</el-button>
+					<el-button type="text"><i class="el-icon-download"></i> {{$t('imortBtnText')}}</el-button>
 				</el-upload>
 				<el-button type="text" @click="tapExportBtn">
 					<i class="el-icon-upload2"></i>
-					{{selectedRules.length > 0 ? "批量" : "全部" }}导出
+					{{selectedRules.length > 0 ? $t('batchExportBtnText') : $t('exportAllBtnText') }}
 				</el-button>
 				<a v-show="false" ref="rulesDownload" :href="rulesTextDownloadUrl" :download="rulesTextDownloadName"></a>
 				<template v-if="selectedRules.length > 0">
-					<el-button type="text" @click="tapBatchDeleteBtn" class="mr-btn--delete"><i class="el-icon-delete"></i> 批量删除</el-button>
+					<el-button type="text" @click="tapBatchDeleteBtn" class="mr-btn--delete"><i class="el-icon-delete"></i> {{$t('batchDeletionBtnText')}}</el-button>
 				</template>
 			</div>
 		</div>
@@ -23,7 +24,7 @@
 				<el-table-column type="selection" width="45"></el-table-column>
 				<el-table-column width="146">
           <template slot="header" slot-scope="scope">
-						<span>规则类型</span>
+						<span>{{$t('ruleType')}}</span>
             <!-- <el-dropdown class="mr-operations-select" @command="handleSelectType">
               <span class="el-dropdown-link">
                 操作类型: {{rulesMap[selectedRuleType].operationText}} <i class="el-icon-caret-bottom"></i>
@@ -46,32 +47,32 @@
         </el-table-column>
 				<el-table-column>
 					<template slot="header">
-						<span>映射规则内容</span> | <span>匹配结果</span>
+						<span>{{$t('mappingRuleContent')}}</span> | <span>{{$t('matchResult')}}</span>
 					</template>
 					<template slot-scope="scope">
 						<span class="mr-rule-content" v-html="scope.row.content"></span>
-						<span class="mr-rule-result">（匹配结果：{{scope.row.matchCount}}）</span>
+						<!-- <span class="mr-rule-result">（匹配结果：{{scope.row.matchCount}}）</span> -->
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="160">
+				<el-table-column :label="$t('operation')" width="160">
 					<template slot-scope="scope">
-						<el-button type="text" class="mrb-btn--disabled" @click="tapDisabledBtn(scope.row)">停用</el-button>
-						<el-button type="text" class="mrb-btn--delete" @click="tapDeleteBtn(scope.row)">删除</el-button>
+						<el-button type="text" class="mrb-btn--disabled" @click="tapDisabledBtn(scope.row)">{{$t('disableBtnText')}}</el-button>
+						<el-button type="text" class="mrb-btn--delete" @click="tapDeleteBtn(scope.row)">{{$t('deleteBtnText')}}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</div>
 		<div class="mapping-rule-editor-box" :class="{'visible': editorVisible}">
 			<h4>
-				编辑映射规则
+				{{$t('editMappingRules')}}
 				<el-button class="mr-back-btn" type="text" @click="tapBackBtn">
-					<i class="el-icon-back"></i> 退出编辑模式
+					<i class="el-icon-back"></i> {{$t('exitBtnText')}}
 				</el-button>
 			</h4>
 			<div class="mapping-rule-input-box">
-				<el-input type="textarea" :rows="rulesInputRowsCount" placeholder="请输入规则" v-model="rulesText"></el-input>
+				<el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('inputPlaceHolder')" v-model="rulesText"></el-input>
 				<div class="mr-rb-btns-box">
-					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>校验并保存</el-button>
+					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('saveBtnText')}}</el-button>
 				</div>
 			</div>
 			<div class="mapping-rule-errors-box">
@@ -119,14 +120,14 @@ export default {
 				{ "operation": "all", "desc": "全部" }
 			]
 		},
-		rulesMap() {
-			const map = {}
-			this.rulesOperationConfig.forEach(item => {
-				const { operation, icon, desc } = item
-				map[operation] = { operation, icon, operationText: desc }
-			})
-			return map
-		},
+		// rulesMap() {
+		// 	const map = {}
+		// 	this.rulesOperationConfig.forEach(item => {
+		// 		const { operation, icon, desc } = item
+		// 		map[operation] = { operation, icon, operationText: desc }
+		// 	})
+		// 	return map
+		// },
 		nodeId() {
 			return this.$route.params.nodeId
 		},
@@ -162,7 +163,6 @@ export default {
 			return service.then(res => res.data)
 				.catch(e => this.$error.showErrorMessage(e))
 				.then(res => {
-					console.log('res ---', res)
 					if(res.errcode !== 0) {
 						return Promise.reject(res.msg)
 					}else {
@@ -188,6 +188,7 @@ export default {
 			const rulesTextArr = []
 			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-top", "el-icon-set-up", "el-icon-plus", "el-icon-bottom" ]
 
+			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
 				const { effectiveMatchCount, matchErrors, ruleInfo, text, id } = testRules[i]
 				const { operation } = ruleInfo
@@ -198,24 +199,24 @@ export default {
 				}
 				const tagsMap = {
 					'mock': `<span class="t-rule-tag-mock">mock</span>`,
-					'release': `<span class="t-rule-tag-release">发行</span>`
+					'release': `<span class="t-rule-tag-release">${this.$i18n.t('release')}</span>`
 				}
 				switch(operation) {
 					case 'add': {
 						const { tags, online, presentableName, candidate: { name, versionRange = '', type } } = ruleInfo
 						let tagString = '', content = ''
 						
-						content += `添加 ${tagsMap[type]}<strong>${name}</strong> 到测试节点作为 <strong>${presentableName}</strong>`
+						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
 						tmpRow.iconArr.push(RULE_ICONS[3])
 						if(versionRange !== '') {
-							content += `，展示版本设置为 ${versionRange}`
+							content += `${operationsTexts[2]} ${versionRange}`
 						}
 						if(tags != null && tags.length > 0) {
-							content += '， 设置标签：' + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
+							content += `${operationsTexts[3]}` + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
 							tmpRow.iconArr.push(RULE_ICONS[0])
 						}
 						if(online) {
-							content += `上线 <strong>${presentableName}</strong>`
+							content += `${operationsTexts[4]} <strong>${presentableName}</strong>`
 						}
 						tmpRow.content = content
 						break
@@ -227,10 +228,9 @@ export default {
 						replaces.forEach(item => {
 							const { name: n1, type: t1 } = item['replacer']
 							const { name: n2, type: t2 } = item['replaced']
-							content += `<strong>${tagsMap[t1]}${n1}</strong> 替换 <strong>${tagsMap[t2]}${n2}</strong>`
+							content += `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[5]} <strong>${tagsMap[t2]}${n2}</strong>`
 						})
 						tmpRow.content = content
-						console.log('content --', content)
 						break
 					}
 					default: {}
@@ -269,19 +269,25 @@ export default {
 		},
 		tapExportBtn() {
 			var confirmText = ''
+			const $i18n = this.$i18n
+			const confirmTexts = $i18n.t('confirmTexts')
 			if(this.selectedRules.length > 0) {
-				confirmText = `是否导出所选的规则?`
+				confirmText = confirmTexts[0]
 				const [ url, name ] = this.getRulesDownloadUrl(this.selectedRules)
 				this.rulesTextDownloadUrl = url
 				this.rulesTextDownloadName = name
 			}else {
-				confirmText = `是否导出全部的规则?`
+				confirmText = confirmTexts[1]
 				const [ url, name ] = this.getRulesDownloadUrl(this.rulesTableData)
 				this.rulesTextDownloadUrl = url
 				this.rulesTextDownloadName = name
 			}
 
-			this.$confirm(confirmText, '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
+			this.$confirm(confirmText, confirmTexts[4], { 
+				confirmButtonText: $i18n.t('sureBtnText'), 
+				cancelButtonText: $i18n.t('cancalBtnText'), 
+				type: 'warning' 
+			})
 				.then(() => {
 					this.$refs['rulesDownload'].click()
 				})
@@ -289,10 +295,12 @@ export default {
 		},
 		// 批量删除规则
 		tapBatchDeleteBtn() {
+			const $i18n = this.$i18n
+			const confirmTexts = $i18n.t('confirmTexts')
 			const text = this.selectedRules.map(r => r.content).join(', ')
-			this.$confirm(`此操作将删除规则“${text}”, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+			this.$confirm(`${confirmTexts[2]}“${text}”, ${confirmTexts[3]}`, confirmTexts[4], {
+          confirmButtonText: $i18n.t('sureBtnText'),
+          cancelButtonText: $i18n.t('cancalBtnText'),
           type: 'warning'
         }).then(() => {
           this.deleteMappingRules(this.selectedRules)
@@ -300,9 +308,11 @@ export default {
 		},
 		// 删除规则
 		tapDeleteBtn(row) {
-			this.$confirm(`此操作将删除规则“${row.content}”, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+			const $i18n = this.$i18n
+			const confirmTexts = $i18n.t('confirmTexts')
+			this.$confirm(`${confirmTexts[2]}“${row.content}”, ${confirmTexts[3]}`, confirmTexts[4], {
+          confirmButtonText: $i18n.t('sureBtnText'),
+          cancelButtonText: $i18n.t('cancalBtnText'),
           type: 'warning'
         }).then(() => {
           this.deleteMappingRules([row])

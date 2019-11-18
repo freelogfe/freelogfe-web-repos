@@ -49,6 +49,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.3",
     "@freelog/freelog-ci": "0.0.1",
+    "@freelog/nmr_translator": "^4.1.8",
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@vue/babel-preset-app": "^3.8.0",
     "ali-oss": "^6.1.0",
