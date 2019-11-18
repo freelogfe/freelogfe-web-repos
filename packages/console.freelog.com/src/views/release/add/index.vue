@@ -176,7 +176,7 @@
         this.resolvedReleases = resolvedReleases
       },
       cancelAddRelease() {
-        this.$router.replace(`/release/edit/${this.releaseId}`)
+        this.$router.go(-1)
       },
       saveReleaseVersion() {
         this.$axios.post(`/v1/releases/${this.releaseId}/versions`, {

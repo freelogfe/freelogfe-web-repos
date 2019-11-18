@@ -19,7 +19,8 @@
     "addPolicyBtnText": "添加策略",
     "enabled": "已启用",
     "disabled": "已停用",
-    "notNoline": "未上线",
+    "online": "已上线",
+    "notOnline": "未上线",
     "tips": [ "无策略的发行不会出现在市场中", "未添加策略", "策略已停用", "未命名策略" ],
     "messages": [ "封面更新成功！", "策略添加成功！", "发行简介添加成功！", "发行简介更新成功！", "发行名称更新成功！" ]
   },
@@ -43,7 +44,8 @@
     "addPolicyBtnText": "add the policy ",
     "enabled": " enabled",
     "disabled": " disabled",
-    "notNoline": "Not online",
+    "online": "Online",
+    "notOnline": "Not online",
     "tips": [ "The release without a policy do not appear in the market", "There are no policy", "The policies are disabled", "Policy unnamed" ],
     "messages": [ "Release cover updated successfully!", "Release policy added successfully!", "Release intro added successfully!", "Release intro updated successfully!", "Release name updated successfully!" ]
   }

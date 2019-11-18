@@ -22,6 +22,7 @@
       <div class="r-c-w-row r-c-w-name">
         <h3>{{$t('name')}}<span>·{{$t('tips[0]')}}</span></h3>
         <el-form-item prop="releaseName" class="cont">
+          <span>*</span>
           {{session.user.username}} /
           <el-input
                   autofocus
@@ -50,7 +51,7 @@
       <div class="r-c-w-row r-c-w-version">
         <h3>{{$t('version')}}</h3>
         <el-form-item prop="version" class="cont">
-          <i>*</i>
+          <span>*</span>
           <el-input v-model="formData.version"></el-input>
         </el-form-item>
       </div>
@@ -290,6 +291,10 @@
         font-size: 18px;
         color: #333;
       }
+      span {
+        margin-right: 5px;
+        color: #FA686D;
+      }
 
       .el-input {
         width: 340px;
@@ -330,7 +335,7 @@
         align-items: center;
       }
 
-      i {
+      span {
         margin-right: 5px;
         color: #FA686D;
       }

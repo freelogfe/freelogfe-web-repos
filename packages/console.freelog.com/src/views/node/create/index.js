@@ -4,7 +4,7 @@ export default {
   data() {
     const validateNodeDomain = (rule, value, callback) => {
       if (value) {
-        const DOMAIN_REG = /^[a-zA-Z\d-]+$/
+        const DOMAIN_REG = /^[a-z\d-]+$/
         if (value.length < 4 || value.length > 20) {
           callback(new Error(this.$t('node.createRules.length')))
         } else if (!DOMAIN_REG.test(value)) {
@@ -97,6 +97,15 @@ export default {
             })
         }
       })
+    },
+    trimNodeDomain() {
+      this.dataForm.nodeDomain = this.dataForm.nodeDomain.replace(/^(\s*)|(\s*)$/g, '')
+    },
+    toLowerCase() {
+      this.dataForm.nodeDomain = this.dataForm.nodeDomain.toLowerCase()
+    },
+    trimNodeName() {
+      this.dataForm.nodeName = this.dataForm.nodeName.replace(/^(\s*)|(\s*)$/g, '')
     }
   }
 }
