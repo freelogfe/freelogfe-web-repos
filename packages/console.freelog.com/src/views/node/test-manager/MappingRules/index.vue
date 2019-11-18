@@ -4,7 +4,7 @@
 		<div class="mapping-rule__header">
 			<div class="mr-btn-group">
 				<el-button class="mr-edit-btn" type="text" @click="tapEditBtn" v-if="rulesText !== ''">
-					<i class="el-icon-edit"></i>{{$t('enterBtnText')}}
+					<i class="el-icon-edit"></i>{{$t('editBtnText')}}
 				</el-button>
 				<el-upload class="mr-import" accept="text/plain" :show-file-list="false" :auto-upload="false"  :on-change="rulesImportHandler">
 					<el-button type="text"><i class="el-icon-download"></i> {{$t('imortBtnText')}}</el-button>
@@ -22,23 +22,7 @@
 		<div class="mapping-rule__body">
 			<el-table ref="mrTable" :data="targetRulesTableData" style="width: 100%" @selection-change="rulesSelectionHandler">
 				<el-table-column type="selection" width="45"></el-table-column>
-				<el-table-column width="146">
-          <template slot="header" slot-scope="scope">
-						<span>{{$t('ruleType')}}</span>
-            <!-- <el-dropdown class="mr-operations-select" @command="handleSelectType">
-              <span class="el-dropdown-link">
-                操作类型: {{rulesMap[selectedRuleType].operationText}} <i class="el-icon-caret-bottom"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item 
-									v-for="item in rulesOperationConfig" 
-									:class="['mr-operation-item', 'mr-operation-' + item.operation, { 'active': item.operation == selectedRuleType }]"
-									:key="item.operation" 
-									:command="item.operation"
-								>{{item.desc}}</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown> -->
-          </template>
+				<el-table-column :label="$t('ruleType')" width="146">
           <template slot-scope="scope">
             <div>
 							<i v-for="(iconClass, index) in scope.row.iconArr" :key="'icon' + index" :class="iconClass"></i>
@@ -47,16 +31,17 @@
         </el-table-column>
 				<el-table-column>
 					<template slot="header">
-						<span>{{$t('mappingRuleContent')}}</span> | <span>{{$t('matchResult')}}</span>
+						<span>{{$t('mappingRuleContent')}}</span> 
+						<!-- | <span>{{$t('matchResult')}}</span> -->
 					</template>
 					<template slot-scope="scope">
 						<span class="mr-rule-content" v-html="scope.row.content"></span>
-						<!-- <span class="mr-rule-result">（匹配结果：{{scope.row.matchCount}}）</span> -->
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('operation')" width="160">
 					<template slot-scope="scope">
-						<el-button type="text" class="mrb-btn--disabled" @click="tapDisabledBtn(scope.row)">{{$t('disableBtnText')}}</el-button>
+						<!-- <el-button type="text" class="mrb-btn--online" v-if="!scope.row.ruleInfo.online" @click="exchangeOnlineStatus(scope.row, true)">{{$t('onlineBtnText')}}</el-button>
+						<el-button type="text" class="mrb-btn--offline" v-else @click="exchangeOnlineStatus(scope.row, false)">{{$t('offlineBtnText')}}</el-button> -->
 						<el-button type="text" class="mrb-btn--delete" @click="tapDeleteBtn(scope.row)">{{$t('deleteBtnText')}}</el-button>
 					</template>
 				</el-table-column>
@@ -90,7 +75,7 @@
 </template>
 
 <script>
-import { compile } from '@freelog/nmr_translator'
+import { compile, decompile } from '@freelog/nmr_translator'
 export default {
 	name: "MappingRules",
 	data() {
@@ -120,14 +105,6 @@ export default {
 				{ "operation": "all", "desc": "全部" }
 			]
 		},
-		// rulesMap() {
-		// 	const map = {}
-		// 	this.rulesOperationConfig.forEach(item => {
-		// 		const { operation, icon, desc } = item
-		// 		map[operation] = { operation, icon, operationText: desc }
-		// 	})
-		// 	return map
-		// },
 		nodeId() {
 			return this.$route.params.nodeId
 		},
@@ -186,16 +163,15 @@ export default {
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
 			const rulesTextArr = []
-			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-top", "el-icon-set-up", "el-icon-plus", "el-icon-bottom" ]
+			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-set-up", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
 
 			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
-				const { effectiveMatchCount, matchErrors, ruleInfo, text, id } = testRules[i]
-				const { operation } = ruleInfo
+				const { matchErrors, ruleInfo, text, id } = testRules[i]
+				const { operation, online, presentableName } = ruleInfo
 				const tmpRow = {
-					text, id, operation,
-					iconArr: [], 
-					matchCount: effectiveMatchCount
+					text, id, online,
+					iconArr: [], ruleInfo,
 				}
 				const tagsMap = {
 					'mock': `<span class="t-rule-tag-mock">mock</span>`,
@@ -203,20 +179,17 @@ export default {
 				}
 				switch(operation) {
 					case 'add': {
-						const { tags, online, presentableName, candidate: { name, versionRange = '', type } } = ruleInfo
+						const { tags, candidate: { name, versionRange = '', type } } = ruleInfo
 						let tagString = '', content = ''
 						
 						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
-						tmpRow.iconArr.push(RULE_ICONS[3])
+						tmpRow.iconArr.push(RULE_ICONS[2])
 						if(versionRange !== '') {
 							content += `${operationsTexts[2]} ${versionRange}`
 						}
 						if(tags != null && tags.length > 0) {
 							content += `${operationsTexts[3]}` + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
 							tmpRow.iconArr.push(RULE_ICONS[0])
-						}
-						if(online) {
-							content += `${operationsTexts[4]} <strong>${presentableName}</strong>`
 						}
 						tmpRow.content = content
 						break
@@ -225,16 +198,24 @@ export default {
 						const { presentableName, replaces, tags, online } = ruleInfo
 						var content = ''
 						tmpRow.iconArr.push(RULE_ICONS[2])
-						replaces.forEach(item => {
+						content += replaces.map(item => {
 							const { name: n1, type: t1 } = item['replacer']
 							const { name: n2, type: t2 } = item['replaced']
-							content += `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[5]} <strong>${tagsMap[t2]}${n2}</strong>`
-						})
+							return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
+						}).join('，')
 						tmpRow.content = content
 						break
 					}
 					default: {}
 				} 
+
+				if(online) {
+					tmpRow.content += `，${operationsTexts[4]} <strong>${presentableName}</strong>`
+					tmpRow.iconArr.push(RULE_ICONS[3])
+				}else {
+					tmpRow.content += `，${operationsTexts[5]} <strong>${presentableName}</strong>`
+					tmpRow.iconArr.push(RULE_ICONS[4])
+				}
 				rulesTextArr.push(text)
 				rulesTableData.push(tmpRow)
 			}
@@ -243,20 +224,28 @@ export default {
 			this.rulesTableData = rulesTableData
 		},
 		// 刷新 映射规则列表
-		refreshMappingRules() {
-			this.loadMappingRulesTable()
-				.then(() => {
-					this.$refs.mrTable.clearSelection()
-				})
+		refreshMappingRules(data) {
+			if(data != null) {
+				const { testRules } = data
+				this.testRulesData = testRules
+				this.resolveTestRules(testRules)
+			}
+			this.$refs.mrTable.clearSelection()
 		},
 		// 更新映射规则
-		updateMappingRules(rulesText) {
+		updateMappingRules(rulesText, successMsg) {
 			try {
 				rulesText = rulesText === '' ? rulesText : Buffer.from(rulesText).toString('base64')
 				return this.createFetcher(this.$services.TestNodesService.post({
 					nodeId: this.nodeId,
 					testRuleText: rulesText
 				}))
+				.then((data) => {
+					if (successMsg && successMsg !== '') {
+						this.$message({ type: 'success', message: successMsg })
+					}
+					return data
+				})
 			} catch(e) {
 				this.$message.error(e)
 			}
@@ -323,39 +312,34 @@ export default {
 			var tmpArr = this.rulesTableData.filter(r => !idsSet.has(r.id))
 			const rulesText = tmpArr.map(r => r.text).join('\n')
 			
-			this.updateMappingRules(rulesText)
-				.then(() => {
-					this.$message({ type: 'success', message: '映射规则删除成功!' })
-					this.refreshMappingRules()
+			this.updateMappingRules(rulesText, '映射规则删除成功!')
+				.then(data => {
+					this.refreshMappingRules(data)
 				})
 		},
-		// 停用规则
-		tapDisabledBtn(row) {
-			this.$confirm(`此操作将停用规则“${row.content}”, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-					const rulesText = this.rulesTableData.map(r => {
-						if(r.id === row.id) {
-							return '!' + r.text
-						}else {
-							return r.text
-						}
-					}).join('\n')
-					return this.disableMappingRules(rulesText)
-        })
-				.catch((e) => {
-					console.warn(e)
-				})
-		},
-		disableMappingRules(rulesText) {
-			return this.updateMappingRules(rulesText)
-						.then(() => {
-							this.$message({ type: 'success', message: '映射规则停用成功!' })
-							this.refreshMappingRules()
-						})
-						.catch(e => this.$error.showErrorMessage(e))
+		// 上下线规则
+		exchangeOnlineStatus(row, isOnline) {
+			var operationText = isOnline ? '上线规则' : '下线规则'
+			this.$confirm(`${operationText} “${row.content}”, 是否继续?`, '提示', {
+				dangerouslyUseHTMLString: true,
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				const rulesText = this.rulesTableData.map(r => {
+					if(r.id === row.id) {
+						r.ruleInfo.online = isOnline 
+						return decompile([r.ruleInfo])
+					}else {
+						return r.text
+					}
+				}).join('\n')
+				return this.updateMappingRules(rulesText, `${operationText}成功！`)
+					.then(data => {
+						this.refreshMappingRules(data)
+					})
+			})
+			.catch(e => console.warn(e))
 		},
 		// 解析：规则文件下载地址
 		getRulesDownloadUrl(rules) {
@@ -452,12 +436,12 @@ export default {
 	position: relative;
 	padding-top: 40px; 
 	.mapping-rule__header {
-		margin-bottom: 60px; font-size: 14px; 
+		margin-bottom: 36px; font-size: 14px; 
 		.mr-import { display: inline-block; }
 		.el-button--text {
 			margin-right: 20px; color: #333;
 			a { font-weight: 400; color: #333; }
-			&.mr-edit-btn { float: right; }
+			// &.mr-edit-btn { float: right; }
 			&.mr-btn--delete { color: #EE4040; }
 			i {
 				margin-right: 3px; font-weight: 600;
@@ -485,20 +469,20 @@ export default {
 				transform: rotate(-90deg);
 			}
 		}
-		.mrb-btn--disabled { font-weight: 400; color: #000; margin-right: 10px; }
+		.mrb-btn--offline, .mrb-btn--online { font-weight: 400; color: #000; margin-right: 10px; }
 		.mrb-btn--delete { color: #EE4040; }
 	}
 	.mapping-rule-editor-box {
 		position: absolute; top: 0; left: -15px; z-index: 5;
 		width: 100%; height: 100%; padding: 40px 15px;
-		background-color: #fff;
+		background-color: #fff; opacity: 0; pointer-events: none;
 
 		// transition: all .36s ease-out;
-		-webkit-transform: translateX(100%); transform: translateX(100%); opacity: 0;
+		// -webkit-transform: translateX(100%); transform: translateX(100%); 
 
 		&.visible {
-			opacity: 1;
-			-webkit-transform: translateX(0); transform: translateX(0);
+			opacity: 1; pointer-events: inherit;
+			// -webkit-transform: translateX(0); transform: translateX(0);
 		}
 
 		h4 {
@@ -523,18 +507,20 @@ export default {
 </style>
 
 <style lang="less" type="text/less">
+.t-rule-tag-mock, .t-rule-tag-release {
+	margin-right: 5px; padding: 2px 8px; 
+	font-size: 12px; color: #fff;
+}
+.t-rule-tag-release { background-color: #F5A623; }
+.t-rule-tag-mock { background-color: #72BB1F; }
+
 .mapping-rule-wrapper {
 	.mapping-rule__body {
 		.cell {
 			font-size: 14px; font-weight: 400; color: #000;
 		}
 		.mr-rule-content {
-			.t-rule-tag-mock, .t-rule-tag-release {
-				margin-right: 5px; padding: 2px 8px; 
-				font-size: 12px; color: #fff;
-			}
-			.t-rule-tag-release { background-color: #F5A623; }
-			.t-rule-tag-mock { background-color: #72BB1F; }
+			
 		}
 	}
 	.mapping-rule-editor-box {

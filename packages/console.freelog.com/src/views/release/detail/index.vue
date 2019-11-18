@@ -50,8 +50,7 @@
               v-for="node in nodes"
               :key="node.nodeId"
               :label="node.nodeName + (rSubordinateNodesIds.indexOf(node.nodeId) !== -1 ? '（已签约）':'')"
-              :value="node.nodeId"
-              :disabled="rSubordinateNodesIds.indexOf(node.nodeId) !== -1">
+              :value="node.nodeId">
             </el-option>
             <!-- :disabled="rSubordinateNodesIds.indexOf(node.nodeId) !== -1" -->
           </el-select>

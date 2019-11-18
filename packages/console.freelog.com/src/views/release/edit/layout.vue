@@ -34,11 +34,16 @@
               <el-button size="small" round class="r-e-l-name-cancel" @click="cancelEditName">{{$t('cancelBtnText')}}</el-button>
             </template>
             <span class="r-e-l-version">{{selectedVersion || release.latestVersion.version}}</span>
-            <div class="r-e-l-state" v-if="releaseState !=1">
-              <el-tooltip :content="releaseStateText" placement="bottom" effect="light">
-                <i class="el-icon-warning"></i>
-              </el-tooltip>
-              {{$t('notNoline')}}
+            <div class="r-e-l-state" >
+              <template v-if="releaseState === 1">
+                {{$t('online')}}
+              </template>
+              <template v-else>
+                <el-tooltip :content="releaseStateText" placement="bottom" effect="light">
+                  <i class="el-icon-warning"></i>
+                </el-tooltip>
+                {{$t('notOnline')}}
+              </template>
             </div>
           </div>
           <div class="r-e-l-info">
