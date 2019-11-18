@@ -22,7 +22,7 @@
                 <a
                     :class="{'test-management__aside__nav--active': selectedTab === 'StylePage' }"
                     @click="selectedTab = 'StylePage'"
-                >节点页面样式</a>
+                >主题管理</a>
 
                 <a
                     :class="{'test-management__aside__nav--active': selectedTab === 'MappingRules' }"
