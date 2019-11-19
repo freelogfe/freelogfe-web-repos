@@ -14,7 +14,6 @@ export default {
         MappingRules,
     },
     data() {
-        console.log(this.$route)
         return {
             styleObject: {
                 minHeight: (window.innerHeight - 60) + 'px',

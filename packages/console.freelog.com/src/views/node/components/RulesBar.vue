@@ -1,7 +1,7 @@
 <template>
     <div class="rules-bar">
         <i
-            v-for="j in Array.from(new Set(rules.map(i => i.operation)))"
+            v-for="j in rules"
             :class="getIconClass(j)"
         ></i>
         <div v-if="rules.length === 0"></div>
@@ -29,13 +29,15 @@
                 switch (operation) {
                     case 'add':
                         return 'el-icon-plus';
+                    case 'alter':
+                        return 'el-icon-setting';
                     case 'replace':
                         return 'el-icon-refresh';
-                    case 'offline':
+                    case 'hide':
                         return 'el-icon-bottom';
-                    case 'online':
+                    case 'show':
                         return 'el-icon-top';
-                    case 'set':
+                    case 'set-tags':
                         return 'el-icon-tickets';
                     default:
                         return '';

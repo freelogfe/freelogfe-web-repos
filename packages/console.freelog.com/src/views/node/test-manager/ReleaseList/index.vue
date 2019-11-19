@@ -36,14 +36,7 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <!--                    <div class="release-list__table__rule">-->
-                    <!--                        <i-->
-                    <!--                            v-for="j in Array.from(new Set(scope.row.rules.map(i => i.operation)))"-->
-                    <!--                            :class="getIconClass(j)"-->
-                    <!--                        ></i>-->
-                    <!--                        <div v-if="scope.row.rules.length === 0"></div>-->
-                    <!--                    </div>-->
-                    <RulesBar :rules="scope.row.rules"/>
+                    <RulesBar :rules="scope.row.icons"/>
                 </template>
             </el-table-column>
             <el-table-column
@@ -120,12 +113,7 @@
                                 v-for="item in allTypes"
                                 :command="item"
                             >
-                                <!--                                <a-->
-                                <!--                                    @click="onChangeType(item)"-->
-                                <!--                                    class="release-list__table__type__dropdown__item"-->
-                                <!--                                >-->
                                 {{item}}
-                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -155,12 +143,7 @@
                                 v-for="item in allState"
                                 :command="item"
                             >
-                                <!--                                <a-->
-                                <!--                                    @click="onChangeState(item)"-->
-                                <!--                                    style="display: block; width: 100%; height: 100%;"-->
-                                <!--                                >-->
                                 {{item}}
-                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -212,19 +195,9 @@
 
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item :command="'编辑'">
-                                <!--                                <a-->
-                                <!--                                    target="_blank"-->
-                                <!--                                    :href="'/node/test-manager-resource/' + scope.row.testResourceId"-->
-                                <!--                                    style="display: block; width: 100%; height: 100%; color: #333;"-->
-                                <!--                                >-->
                                 编辑
-                                <!--                                </a>-->
                             </el-dropdown-item>
                             <el-dropdown-item :command="'isOnline'">
-                                <!--                                <a-->
-                                <!--                                    @click="onLineAndOffLine(scope.row)"-->
-                                <!--                                    style="display: block; width: 100%; height: 100%;"-->
-                                <!--                                >-->
                                 <span
                                     v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
                                     style="color: #44a0ff;">上线</span>
@@ -232,6 +205,12 @@
                                     v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
                                     style="color: #ee4040;">下线</span>
                                 <!--                                </a>-->
+                            </el-dropdown-item>
+                            <el-dropdown-item
+                                :command="'delete'"
+                                v-if="matchTestResult.testRules.find(i => i.presentableName === scope.row.testResourceName)"
+                            >
+                                <span style="color: #ee4040;">删除</span>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
