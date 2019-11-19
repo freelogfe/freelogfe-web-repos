@@ -198,6 +198,11 @@ export default {
             if (mark === 'isOnline') {
                 return this.onLineAndOffLine(row);
             }
+
+            if (mark === 'delete') {
+                // console.log(row, 'row');
+                this.deleteRule(row.testResourceName);
+            }
         },
         /**
          * 上下线
@@ -240,7 +245,34 @@ export default {
             isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
-        }
+        },
+        /**
+         * 删除
+         */
+        async deleteRule(testResourceName) {
+            // console.log(this.matchTestResult, 'this.matchTestResult');
+            // console.log(testResourceName, 'testResourceName');
+            const matched = this.matchTestResult.testRules.find(i => i.presentableName === testResourceName);
+            if (!matched) {
+                return;
+            }
+
+            // console.log(matched, 'matched');
+            const {nodeId} = this.$route.params;
+            const newRulesText = this.matchTestResult.ruleText.replace(matched.text, '');
+
+            const res = await this.$axios.post(`/v1/testNodes`, {
+                nodeId,
+                testRuleText: Buffer.from(newRulesText).toString('base64'),
+            });
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                return this.$message.error(JSON.stringify(res.data.data.errors));
+            }
+            this.$message.success('删除成功');
+            // this.handleTableData();
+            this.pushRuleSuccess(res.data.data);
+        },
     },
     watch: {
         selectedState() {

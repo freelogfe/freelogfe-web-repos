@@ -80,7 +80,32 @@ export default {
             const data = res.data.data;
             // console.log(data, 'datadatadatadatadata');
             this.tableData = data.dataList.map(i => {
+                const matched = this.matchTestResult.testRules.find(j => j.presentableName === i.testResourceName);
+                // console.log(matched, 'matched');
                 const arr = [];
+                if (matched) {
+                    arr.push(matched.operation);
+                    if (matched.tags !== null) {
+                        arr.push('set_tags')
+                    }
+                    if (matched.replaces.length > 0) {
+                        arr.push('replace');
+                    }
+
+                    if (matched.online === true) {
+                        arr.push('show');
+                    }
+
+                    if (matched.online === false) {
+                        arr.push('hide');
+                    }
+                }
+                // console.log(arr, 'arrarrarr');
+                return {
+                    ...i,
+                    icons: arr,
+                };
+            });
             this.totalQuantity = data.totalItem;
             // console.log(data.dataList, 'ddddddddddddDDDDDD');
         },
@@ -141,22 +166,6 @@ export default {
         onChangeState(value) {
             this.selectedState = value;
         },
-        getIconClass(operation) {
-            switch (operation) {
-                case 'add':
-                    return 'el-icon-plus';
-                case 'replace':
-                    return 'el-icon-refresh';
-                case 'offline':
-                    return 'el-icon-bottom';
-                case 'online':
-                    return 'el-icon-top';
-                case 'set':
-                    return 'el-icon-tickets';
-                default:
-                    return '';
-            }
-        },
         /**
          * 文字转换为对应数字
          */
@@ -189,6 +198,11 @@ export default {
 
             if (mark === 'isOnline') {
                 return this.onLineAndOffLine(row);
+            }
+
+            if (mark === 'delete') {
+                // console.log(row, 'row');
+                this.deleteRule(row.testResourceName);
             }
         },
         /**
@@ -232,7 +246,34 @@ export default {
             isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
-        }
+        },
+        /**
+         * 删除
+         */
+        async deleteRule(testResourceName) {
+            // console.log(this.matchTestResult, 'this.matchTestResult');
+            // console.log(testResourceName, 'testResourceName');
+            const matched = this.matchTestResult.testRules.find(i => i.presentableName === testResourceName);
+            if (!matched) {
+                return;
+            }
+
+            // console.log(matched, 'matched');
+            const {nodeId} = this.$route.params;
+            const newRulesText = this.matchTestResult.ruleText.replace(matched.text, '');
+
+            const res = await this.$axios.post(`/v1/testNodes`, {
+                nodeId,
+                testRuleText: Buffer.from(newRulesText).toString('base64'),
+            });
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                return this.$message.error(JSON.stringify(res.data.data.errors));
+            }
+            this.$message.success('删除成功');
+            // this.handleTableData();
+            this.pushRuleSuccess(res.data.data);
+        },
     },
     watch: {
         isPageStyle() {
