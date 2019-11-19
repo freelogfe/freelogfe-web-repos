@@ -40,7 +40,7 @@ export default {
         'zh-CN': {
             copySuccess: '复制成功',
             nodeReleaseList: '节点发行列表',
-            nodePageStyle: '节点页面样式',
+            nodePageStyle: '主题管理',
             all: '全部',
             pending: '待处理',
             table: {
