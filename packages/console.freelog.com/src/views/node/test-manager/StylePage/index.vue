@@ -120,12 +120,7 @@
                                 :command="item"
                                 v-for="item in allState"
                             >
-                                <!--                                <a-->
-                                <!--                                    @click="onChangeState(item)"-->
-                                <!--                                    style="display: block; width: 100%; height: 100%;"-->
-                                <!--                                >-->
                                 {{item}}
-                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>

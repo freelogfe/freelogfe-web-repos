@@ -36,13 +36,6 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-<!--                    <div class="release-list__table__rule">-->
-<!--                        <i-->
-<!--                            v-for="j in Array.from(new Set(scope.row.rules.map(i => i.operation)))"-->
-<!--                            :class="getIconClass(j)"-->
-<!--                        ></i>-->
-<!--                        <div v-if="scope.row.rules.length === 0"></div>-->
-<!--                    </div>-->
                     <RulesBar :rules="scope.row.icons"/>
                 </template>
             </el-table-column>
@@ -120,12 +113,7 @@
                                 v-for="item in allTypes"
                                 :command="item"
                             >
-                                <!--                                <a-->
-                                <!--                                    @click="onChangeType(item)"-->
-                                <!--                                    class="release-list__table__type__dropdown__item"-->
-                                <!--                                >-->
                                 {{item}}
-                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -155,12 +143,7 @@
                                 v-for="item in allState"
                                 :command="item"
                             >
-                                <!--                                <a-->
-                                <!--                                    @click="onChangeState(item)"-->
-                                <!--                                    style="display: block; width: 100%; height: 100%;"-->
-                                <!--                                >-->
                                 {{item}}
-                                <!--                                </a>-->
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
