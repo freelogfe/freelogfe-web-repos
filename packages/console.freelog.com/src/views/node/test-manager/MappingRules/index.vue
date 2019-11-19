@@ -3,8 +3,8 @@
 	<div class="mapping-rule-wrapper">
 		<div class="mapping-rule__header">
 			<div class="mr-btn-group">
-				<el-button class="mr-edit-btn" type="text" @click="tapEditBtn" v-if="rulesText !== ''">
-					<i class="el-icon-edit"></i>{{$t('editBtnText')}}
+				<el-button class="mr-edit-btn" type="text" @click="tapEditBtn" >
+					<i class="el-icon-edit"></i>{{$t('enterBtnText')}}
 				</el-button>
 				<el-upload class="mr-import" accept="text/plain" :show-file-list="false" :auto-upload="false"  :on-change="rulesImportHandler">
 					<el-button type="text"><i class="el-icon-download"></i> {{$t('imortBtnText')}}</el-button>
@@ -154,8 +154,9 @@ export default {
 			return this.fetchMappingRules()
 				.then(data => {
 					if(data != null) {
-						const { testRules } = data
+						const { testRules, ruleText } = data
 						this.testRulesData = testRules
+						this.rulesText = ruleText
 						this.resolveTestRules(testRules)
 					}
 				})
@@ -163,7 +164,7 @@ export default {
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
 			const rulesTextArr = []
-			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-set-up", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
+			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-setting", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
 
 			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
@@ -184,7 +185,7 @@ export default {
 						
 						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
 						tmpRow.iconArr.push(RULE_ICONS[2])
-						if(versionRange !== '') {
+						if(versionRange !== '' && versionRange !== 'latest') {
 							content += `${operationsTexts[2]} ${versionRange}`
 						}
 						if(tags != null && tags.length > 0) {
@@ -197,7 +198,7 @@ export default {
 					case 'alter': {
 						const { presentableName, replaces, tags, online } = ruleInfo
 						var content = ''
-						tmpRow.iconArr.push(RULE_ICONS[2])
+						tmpRow.iconArr.push(RULE_ICONS[1])
 						content += replaces.map(item => {
 							const { name: n1, type: t1 } = item['replacer']
 							const { name: n2, type: t2 } = item['replaced']
@@ -209,25 +210,25 @@ export default {
 					default: {}
 				} 
 
-				if(online) {
+				if (online === true) {
 					tmpRow.content += `，${operationsTexts[4]} <strong>${presentableName}</strong>`
 					tmpRow.iconArr.push(RULE_ICONS[3])
-				}else {
+				}else if (online === false){
 					tmpRow.content += `，${operationsTexts[5]} <strong>${presentableName}</strong>`
 					tmpRow.iconArr.push(RULE_ICONS[4])
 				}
 				rulesTextArr.push(text)
 				rulesTableData.push(tmpRow)
 			}
-			this.rulesText = rulesTextArr.join('\n')
 			this.lastRulesText = this.rulesText
 			this.rulesTableData = rulesTableData
 		},
 		// 刷新 映射规则列表
 		refreshMappingRules(data) {
 			if(data != null) {
-				const { testRules } = data
+				const { testRules, ruleText } = data
 				this.testRulesData = testRules
+				this.rulesText = ruleText
 				this.resolveTestRules(testRules)
 			}
 			this.$refs.mrTable.clearSelection()
@@ -255,7 +256,9 @@ export default {
 		},
 		tapEditBtn() {
 			this.editorVisible = true
+			this.resolveMatchErrors(this.testRulesData)
 		},
+		// 导出规则
 		tapExportBtn() {
 			var confirmText = ''
 			const $i18n = this.$i18n
@@ -287,7 +290,8 @@ export default {
 			const $i18n = this.$i18n
 			const confirmTexts = $i18n.t('confirmTexts')
 			const text = this.selectedRules.map(r => r.content).join(', ')
-			this.$confirm(`${confirmTexts[2]}“${text}”, ${confirmTexts[3]}`, confirmTexts[4], {
+			this.$confirm(`此操作将删除所选中的${this.selectedRules.length}条规则, ${confirmTexts[3]}`, confirmTexts[4], {
+					dangerouslyUseHTMLString: true,
           confirmButtonText: $i18n.t('sureBtnText'),
           cancelButtonText: $i18n.t('cancalBtnText'),
           type: 'warning'
@@ -299,7 +303,8 @@ export default {
 		tapDeleteBtn(row) {
 			const $i18n = this.$i18n
 			const confirmTexts = $i18n.t('confirmTexts')
-			this.$confirm(`${confirmTexts[2]}“${row.content}”, ${confirmTexts[3]}`, confirmTexts[4], {
+			this.$confirm(`${confirmTexts[2]} “${row.content}”，${confirmTexts[3]}`, confirmTexts[4], {
+					dangerouslyUseHTMLString: true,
           confirmButtonText: $i18n.t('sureBtnText'),
           cancelButtonText: $i18n.t('cancalBtnText'),
           type: 'warning'
@@ -349,6 +354,7 @@ export default {
 			const url = window.URL.createObjectURL(file)
 			return [ url, fileName ]
 		},
+		// 退出编辑
 		tapBackBtn() {
 			this.editorVisible = false
 			this.rulesText = this.lastRulesText
@@ -379,28 +385,34 @@ export default {
 
 			this.updateMappingRules(this.rulesText)
 				.then(data => {
-					const { testRules, text } = data
-					var matchErrors = []
-					testRules.forEach(item => {
-						if(item.matchErrors.length > 0) {
-							matchErrors = [...matchErrors, {
-								text: item.text,
-								error: item.matchErrors.join(', ')
-							}]
-						}
-					})
-					if(matchErrors.length > 0) {
-						this.matchErrorsText = matchErrors.map(item => {
-							return `<li class="mr-match-error">
-												<p>line: ${item.text}</p>
-												<p>error: ${item.error}</p>	
-											</li>`
-						}).join('')
-					}else {
+					const { testRules } = data
+					this.resolveMatchErrors(testRules)
+					if (this.matchErrorsText === '') {
 						this.$message.success('映射规则保存成功！')
-						this.refreshMappingRules()
 					}
+					this.refreshMappingRules(data)
 				})
+		},
+		resolveMatchErrors(testRules) {
+			var matchErrorsText = ''
+			var matchErrors = []
+			testRules.forEach(item => {
+				if(item.matchErrors.length > 0) {
+					matchErrors = [...matchErrors, {
+						text: item.text,
+						error: item.matchErrors.join(', ')
+					}]
+				}
+			})
+			if(matchErrors.length > 0) {
+				matchErrorsText = matchErrors.map(item => {
+					return `<li class="mr-match-error">
+										<p>line: ${item.text}</p>
+										<p>error: ${item.error}</p>	
+									</li>`
+				}).join('')
+			}
+			this.matchErrorsText = matchErrorsText
 		},
 		handleSelectType(command) {
 			this.selectedRuleType = command
@@ -441,7 +453,7 @@ export default {
 		.el-button--text {
 			margin-right: 20px; color: #333;
 			a { font-weight: 400; color: #333; }
-			// &.mr-edit-btn { float: right; }
+			&.mr-edit-btn { float: right; }
 			&.mr-btn--delete { color: #EE4040; }
 			i {
 				margin-right: 3px; font-weight: 600;
@@ -454,8 +466,8 @@ export default {
 				margin-right: 2px; padding: 2px 8px; 
 				font-size: 12px; color: #fff;
 			}
-			.t-rule-tag-release { background-color: #F5A623; }
-			.t-rule-tag-mock { background-color: #72BB1F; }
+			.t-rule-tag-release { background-color: #72BB1F; }
+			.t-rule-tag-mock { background-color: #F5A623; }
 		}
 		.mr-rule-result { color: #9b9b9b; }
 		.mr-operations-select {
@@ -511,8 +523,8 @@ export default {
 	margin-right: 5px; padding: 2px 8px; 
 	font-size: 12px; color: #fff;
 }
-.t-rule-tag-release { background-color: #F5A623; }
-.t-rule-tag-mock { background-color: #72BB1F; }
+.t-rule-tag-release { background-color: #72BB1F; }
+.t-rule-tag-mock { background-color: #F5A623; }
 
 .mapping-rule-wrapper {
 	.mapping-rule__body {

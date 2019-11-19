@@ -31,15 +31,16 @@ function loadWidgets(FreelogApp) {
   const vis = {}
 
   if (window.__auth_info__) {
-    const { __page_build_sub_releases = [], __page_build_id: presentableId } = window.__auth_info__
+    const { __page_build_sub_releases = [], __page_build_id: presentableId, __page_build_entity_id: entityNid } = window.__auth_info__
 
     __page_build_sub_releases
-      .filter(({ releaseId }) => !!releaseId)
+      .filter(({ releaseId, id }) => !!releaseId || !!id)
       .forEach(subRelease => {
-        const { releaseId: subReleaseId, version, resourceType } = subRelease
+        const { releaseId, version, resourceType, id } = subRelease
+        const subReleaseId = releaseId || id
         if (!vis[subReleaseId]) {
           vis[subReleaseId] = true
-          const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+          const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version, entityNid)
 
           switch (resourceType) {
             case 'widget':

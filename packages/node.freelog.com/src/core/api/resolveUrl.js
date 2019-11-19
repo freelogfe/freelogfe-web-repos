@@ -1,28 +1,31 @@
 
 // 获取url：依赖子发行的数据内容
-export function resolveSubResourceDataUrl(presentableId, subDependId, version){
-  return resolveUrl(`/v1/auths/presentable/data/${presentableId}/subDepend/${subDependId}`, {
-    version
-  })
+export function resolveSubResourceDataUrl(presentableId, subDependId, version, entityNid){
+  entityNid = entityNid || presentableId.substring(0, 12)
+  return resolveUrl(`/v1/presentable/data/${presentableId}/subDepend/${subDependId}`, { entityNid, version })
 }
 
 // 获取url：依赖子发行的信息
 export function resolveSubReleaseInfoUrl({ presentableId, subReleaseId, version }){
-  return resolveUrl(`/v1/auths/presentables/${presentableId}/subRelease/${subReleaseId}.info`, {
+  return resolveUrl(`/v1/presentables/${presentableId}/subRelease/${subReleaseId}.info`, {
     version
   })
 }
 
 // 获取url：节点发行(presentable)的数据内容
 export function resolvePresentableResourceUrl(presentableId) {
-  return resolveUrl(`/v1/auths/presentable/data/${presentableId}`)
+  return resolveUrl(`/v1/presentable/data/${presentableId}`)
 }
 
 function resolveUrl(path, params) {
   const { nodeType, qiOrigin } = window.FreelogApp.Env
   params = Object.assign({ nodeType }, params)
   var queryString = Object.entries(params).map(([k, v]) => {
-    return `${k}=${v}`
-  }).join('&')
+    if (v != null) {
+      return `${k}=${v}`
+    } else {
+      return ''
+    }
+  }).filter(str => str !== '').join('&')
   return `${qiOrigin}${path}?${queryString}`
 }
