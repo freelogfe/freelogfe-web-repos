@@ -199,29 +199,24 @@ export default {
          * @param row
          */
         async onLineAndOffLine(row) {
+            console.log(this.matchTestResult, 'this.matchTestResult');
             const testRules = [...this.matchTestResult.testRules];
             const {nodeId} = this.$route.params;
             // const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
             const testResourceName = row.testResourceName;
             const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
             const oldRulesText = this.matchTestResult.ruleText;
-            const rule = testRules.find(i => i.presentableName === testResourceName);
-            // console.log(rule, 'rulerulerulerule');
+            const rule = testRules.find(i => i.operation === 'activate_theme');
+            console.log(rule, 'rulerulerulerule');
             let newRulesText;
+            if (isOnline) {
+                return;
+            }
+
             if (rule) {
-                rule.online = !isOnline;
-                const ruleText = decompile([rule]);
-                newRulesText = oldRulesText.replace(rule.text, ruleText);
+                newRulesText = oldRulesText.replace(rule.text, `activate_theme ${testResourceName}`);
             } else {
-                const ruleObj = {
-                    "tags": null,
-                    "replaces": [],
-                    "online": !isOnline,
-                    "operation": "alter",
-                    "presentableName": testResourceName,
-                };
-                // console.log(decompile([ruleObj]), 'decompile([ruleObj])');
-                newRulesText = oldRulesText + '\n' + decompile([ruleObj]);
+                newRulesText = `activate_theme ${testResourceName}` + '\n' + oldRulesText;
             }
 
             const res = await this.$axios.post(`/v1/testNodes`, {

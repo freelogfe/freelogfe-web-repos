@@ -169,13 +169,12 @@
                             <el-dropdown-item :command="'编辑'">
                                 编辑
                             </el-dropdown-item>
-                            <el-dropdown-item :command="'isOnline'">
+                            <el-dropdown-item
+                                v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
+                                :command="'isOnline'"
+                            >
                                 <span
-                                    v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
-                                    style="color: #44a0ff;">上线</span>
-                                <span
-                                    v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
-                                    style="color: #ee4040;">下线</span>
+                                    style="color: #44a0ff;">激活</span>
                             </el-dropdown-item>
                             <el-dropdown-item
                                 :command="'delete'"

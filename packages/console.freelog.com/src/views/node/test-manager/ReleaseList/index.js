@@ -279,6 +279,21 @@ export default {
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
+
+        /**
+         * 公共更新方法
+         * @returns {Promise<ElMessageComponent>}
+         */
+        // async commonUpdate(newRulesText) {
+        //     const res = await this.$axios.post(`/v1/testNodes`, {
+        //         nodeId,
+        //         testRuleText: Buffer.from(newRulesText).toString('base64'),
+        //     });
+        //
+        //     if (res.data.errcode !== 0 || res.data.ret !== 0) {
+        //         return this.$message.error(JSON.stringify(res.data.data.errors));
+        //     }
+        // },
     },
     watch: {
         isPageStyle() {
