@@ -5,7 +5,7 @@
             @click="dialogVisible = true"
         >
             <i class="el-icon-plus" style="font-size: 16px; font-weight: 600;"></i>
-            <span style="vertical-align: center;">添加节点发行</span>
+            <span style="vertical-align: center;">新增测试展品</span>
         </a>
 
         <a
@@ -13,7 +13,7 @@
             style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;"
         >
             <i class="el-icon-refresh" style="font-size: 16px; font-weight: 600;"></i>
-            <span style="vertical-align: center;">替换资源的依赖</span>
+            <span style="vertical-align: center;">替换依赖</span>
         </a>
 
         <DepDialog
