@@ -41,7 +41,7 @@ export default {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
             const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
-            
+
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
@@ -155,22 +155,7 @@ export default {
             // return;
             this.selectedState = value;
         },
-        // getIconClass(operation) {
-        //     switch (operation) {
-        //         case 'add':
-        //             return 'el-icon-plus';
-        //         case 'replace':
-        //             return 'el-icon-refresh';
-        //         case 'offline':
-        //             return 'el-icon-bottom';
-        //         case 'online':
-        //             return 'el-icon-top';
-        //         case 'set':
-        //             return 'el-icon-tickets';
-        //         default:
-        //             return '';
-        //     }
-        // },
+
         /**
          * 文字转换为对应数字
          */
