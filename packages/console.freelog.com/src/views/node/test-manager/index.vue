@@ -16,18 +16,11 @@
 
             <div class="test-management__aside__nav">
                 <a
-                    :class="{'test-management__aside__nav--active': selectedTab === 'ReleaseList' }"
-                    @click="selectedTab = 'ReleaseList'"
-                >节点发行列表</a>
-                <a
-                    :class="{'test-management__aside__nav--active': selectedTab === 'StylePage' }"
-                    @click="selectedTab = 'StylePage'"
-                >节点页面样式</a>
-
-                <a
-                    :class="{'test-management__aside__nav--active': selectedTab === 'MappingRules' }"
-                    @click="selectedTab = 'MappingRules'"
-                >映射规则管理</a>
+                    :class="{'test-management__aside__nav--active': selectedTab === tab.tab }"
+                    v-for="(tab, index) in tabList"
+                    :key="'tab' + index"
+                    @click="exchangeTab(tab)"
+                >{{tab.name}}</a>
             </div>
 
         </div>

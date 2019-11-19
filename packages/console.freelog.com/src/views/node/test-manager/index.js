@@ -14,15 +14,21 @@ export default {
         MappingRules,
     },
     data() {
+        console.log(this.$route)
         return {
             styleObject: {
                 minHeight: (window.innerHeight - 60) + 'px',
             },
-            selectedTab: 'ReleaseList',
+            selectedTab: this.$route.query.tab || 'ReleaseList',
             nodeInfo: {
                 origin: '',
                 name: '',
             },
+            tabList: [
+                { name: '节点发行列表', tab: 'ReleaseList' },
+                { name: '节点页面样式', tab: 'StylePage' },
+                { name: '节点发行列表', tab: 'MappingRules' },
+            ]
         };
     },
     mounted() {
@@ -46,5 +52,14 @@ export default {
                 testOrigin: 't.' + origin,
             };
         },
+        exchangeTab(tab) {
+            this.selectedTab = tab.tab
+            this.$router.replace({ 
+                path: this.$route.path, 
+                query: {
+                    tab: tab.tab
+                } 
+            })
+        }
     }
 }

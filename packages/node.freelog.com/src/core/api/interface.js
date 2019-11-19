@@ -50,22 +50,18 @@ export function fetchPresentableInfo(presentableId) {
           .then(resp => resp.json())
 }
 
-function fetchPresentableResource(target, params = {}) {
-  return _fetch(`/v1/auths/presentable/${target}`, { data: params })
-}
-
 /**
  * 获取节点资源的数据内容
  */
 export function fetchPresentableResourceData(id, params = {}) {
-  return _fetch(`/v1/auths/presentable/data/${id}`, { data: params })
+  return _fetch(`/v1/presentable/data/${id}`, { data: params })
 }
 
 /**
  * 获取节点资源的授权信息
  */
 export function fetchPresentableResourceInfo(presentableId, params) {
-  return fetchPresentableResource(`${presentableId}.info`, params)
+  return _fetch(`/v1/auths/presentable/${presentableId}.info`, params)
     .then(resp => resp.json())
 }
 
@@ -74,20 +70,16 @@ export function fetchPresentableResourceInfo(presentableId, params) {
  */
 export function fetchPresentableAuth(presentableId, params) {
   var subReleases = []
-  return fetchPresentableResource(`${presentableId}.auth`, params)
-    .then(resp => {
-      try {
-        const fSubReleases = resp.headers.get(HEADERS_FREELOG_SUB_RELEASE)
-        subReleases = Buffer.from(fSubReleases,'base64').toString('utf-8')
-        subReleases = JSON.parse(subReleases)
-      }catch(e) {
-        console.warn(e)
-      }
-      return resp
-    })
+  return _fetch(`/v1/presentable/auth/${presentableId}`, params)
     .then(resp => resp.json())
     .then(res => {
-      res.data.subReleases = subReleases
+      if(res.errcode === 0 && res.data) {
+        const fSubReleases = res.data[HEADERS_FREELOG_SUB_RELEASE]
+        subReleases = Buffer.from(fSubReleases,'base64').toString('utf-8')
+        subReleases = JSON.parse(subReleases) 
+        res.data.subReleases = subReleases
+      }
+      console.log(res)
       return res
     })
 }
@@ -95,8 +87,8 @@ export function fetchPresentableAuth(presentableId, params) {
 /**
  * 获取presentable依赖的子发行的数据内容
  */
-export function fetchSubReleaseData(presentableId, subReleaseId, version) {
-  const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version)
+export function fetchSubReleaseData(presentableId, subReleaseId, version, entityNid) {
+  const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version, entityNid)
   return _fetch(url)
 }
 
