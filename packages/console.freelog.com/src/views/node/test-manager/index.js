@@ -25,8 +25,8 @@ export default {
             },
             tabList: [
                 { name: '节点发行列表', tab: 'ReleaseList' },
-                { name: '节点页面样式', tab: 'StylePage' },
-                { name: '节点发行列表', tab: 'MappingRules' },
+                { name: '主题管理', tab: 'StylePage' },
+                { name: '映射规则管理', tab: 'MappingRules' },
             ]
         };
     },

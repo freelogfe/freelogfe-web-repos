@@ -164,7 +164,7 @@ export default {
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
 			const rulesTextArr = []
-			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-set-up", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
+			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-setting", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
 
 			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
@@ -185,7 +185,7 @@ export default {
 						
 						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
 						tmpRow.iconArr.push(RULE_ICONS[2])
-						if(versionRange !== '') {
+						if(versionRange !== '' && versionRange !== 'latest') {
 							content += `${operationsTexts[2]} ${versionRange}`
 						}
 						if(tags != null && tags.length > 0) {
@@ -198,7 +198,7 @@ export default {
 					case 'alter': {
 						const { presentableName, replaces, tags, online } = ruleInfo
 						var content = ''
-						tmpRow.iconArr.push(RULE_ICONS[2])
+						tmpRow.iconArr.push(RULE_ICONS[1])
 						content += replaces.map(item => {
 							const { name: n1, type: t1 } = item['replacer']
 							const { name: n2, type: t2 } = item['replaced']
@@ -220,7 +220,6 @@ export default {
 				rulesTextArr.push(text)
 				rulesTableData.push(tmpRow)
 			}
-			// this.rulesText = rulesTextArr.join('\n')
 			this.lastRulesText = this.rulesText
 			this.rulesTableData = rulesTableData
 		},
@@ -257,7 +256,9 @@ export default {
 		},
 		tapEditBtn() {
 			this.editorVisible = true
+			this.resolveMatchErrors(this.testRulesData)
 		},
+		// 导出规则
 		tapExportBtn() {
 			var confirmText = ''
 			const $i18n = this.$i18n
@@ -353,6 +354,7 @@ export default {
 			const url = window.URL.createObjectURL(file)
 			return [ url, fileName ]
 		},
+		// 退出编辑
 		tapBackBtn() {
 			this.editorVisible = false
 			this.rulesText = this.lastRulesText
@@ -383,28 +385,34 @@ export default {
 
 			this.updateMappingRules(this.rulesText)
 				.then(data => {
-					const { testRules, text } = data
-					var matchErrors = []
-					testRules.forEach(item => {
-						if(item.matchErrors.length > 0) {
-							matchErrors = [...matchErrors, {
-								text: item.text,
-								error: item.matchErrors.join(', ')
-							}]
-						}
-					})
-					if(matchErrors.length > 0) {
-						this.matchErrorsText = matchErrors.map(item => {
-							return `<li class="mr-match-error">
-												<p>line: ${item.text}</p>
-												<p>error: ${item.error}</p>	
-											</li>`
-						}).join('')
-					}else {
+					const { testRules } = data
+					this.resolveMatchErrors(testRules)
+					if (this.matchErrorsText === '') {
 						this.$message.success('映射规则保存成功！')
-						this.refreshMappingRules()
 					}
+					this.refreshMappingRules(data)
 				})
+		},
+		resolveMatchErrors(testRules) {
+			var matchErrorsText = ''
+			var matchErrors = []
+			testRules.forEach(item => {
+				if(item.matchErrors.length > 0) {
+					matchErrors = [...matchErrors, {
+						text: item.text,
+						error: item.matchErrors.join(', ')
+					}]
+				}
+			})
+			if(matchErrors.length > 0) {
+				matchErrorsText = matchErrors.map(item => {
+					return `<li class="mr-match-error">
+										<p>line: ${item.text}</p>
+										<p>error: ${item.error}</p>	
+									</li>`
+				}).join('')
+			}
+			this.matchErrorsText = matchErrorsText
 		},
 		handleSelectType(command) {
 			this.selectedRuleType = command
