@@ -33,7 +33,7 @@
             <BlockItem label="节点发行名称">
                 <ConfirmInput
                     v-if="!!originInfo"
-                    :disabled="!(originInfo.type ==='release' || originInfo.type ==='mock')"
+                    :disabled="!!nodePresentableId"
                     :value="testResourceName"
                     @confirmChange="confirmChange"
                 />
