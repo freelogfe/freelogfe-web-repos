@@ -21,16 +21,16 @@
     "sureBtnText": "确定",
     "cancalBtnText": "取消",
     "operations": [
-      "添加", "到测试节点作为", "，展示版本设置为", "，设置标签：", "上线", "下线", "替换"
+      "添加", "到测试节点作为", "，展示版本设置为", "，设置标签：", "上线", "下线", "替换", "激活"
     ],
     "confirmTexts": [
-      "是否导出所选的规则？", "是否导出全部的规则？", "此操作将删除规则", "是否继续？", "提示"
+      "是否导出所选的规则？", "是否导出全部的规则？", "此操作将删除规则", "是否继续？", "提示", "此操作将删除所选中的", "条规则", "上线规则", "下线规则", "成功"
     ],
     "messages": [
-      "映射规则保存成功！"
+      "映射规则保存成功！", "映射规则删除成功!"
     ],
     "erros": [
-      "映射规则编译失败：存在语法错误！"
+      "映射规则编译失败：存在语法错误！", "映射规则内容存在语法错误："
     ]
   },
   "en": {
@@ -55,16 +55,16 @@
     "sureBtnText": "Sure",
     "cancalBtnText": "Cancel",
     "operations": [
-      "Add", "to test node as", ", display version: ", ", set label: ", "online", "offline", "replace"
+      "Add", "to test node as", ", display version: ", ", set label: ", "online", "offline", "replace", "activate"
     ],
     "confirmTexts": [
-      "Whether to export the selected rule?", "Whether to export all rules?", "This action will delete the rule", "Whether to continue?", "Prompt"
+      "Whether to export the selected rule?", "Whether to export all rules?", "This action will delete the rule", "Whether to continue?", "Prompt", "This will delete the ", " rules selected", "Online rules", "Offline rules", " are successful"
     ],
     "messages": [
-      "The mapping rules are saved successfully!"
+      "The mapping rules are saved successfully!", "The mapping rule was deleted successfully!"
     ],
     "erros": [
-      "Mapping rule compilation failed: there is a syntax error！"
+      "Mapping rule compilation failed: there is a syntax error！", "There is a syntax error in the mapping rule content: "
     ]
   }
 }

@@ -164,7 +164,7 @@ export default {
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
 			const rulesTextArr = []
-			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-setting", "el-icon-plus", "el-icon-top", "el-icon-bottom" ]
+			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-setting", "el-icon-plus", "el-icon-top", "el-icon-bottom", "el-icon-set-up" ]
 
 			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
@@ -178,13 +178,22 @@ export default {
 					'mock': `<span class="t-rule-tag-mock">mock</span>`,
 					'release': `<span class="t-rule-tag-release">${this.$i18n.t('release')}</span>`
 				}
+				var content
 				switch(operation) {
 					case 'add': {
-						const { tags, candidate: { name, versionRange = '', type } } = ruleInfo
-						let tagString = '', content = ''
-						
+						const { tags, candidate: { name, versionRange = '', type }, replaces } = ruleInfo
+						let tagString = ''
+						content = ''
 						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
 						tmpRow.iconArr.push(RULE_ICONS[2])
+						if(replaces.length > 0) {
+							tmpRow.iconArr.push(RULE_ICONS[5])
+							content += '，' + replaces.map(item => {
+								const { name: n1, type: t1 } = item['replacer']
+								const { name: n2, type: t2 } = item['replaced']
+								return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
+							}).join('，')
+						}
 						if(versionRange !== '' && versionRange !== 'latest') {
 							content += `${operationsTexts[2]} ${versionRange}`
 						}
@@ -192,31 +201,39 @@ export default {
 							content += `${operationsTexts[3]}` + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
 							tmpRow.iconArr.push(RULE_ICONS[0])
 						}
-						tmpRow.content = content
 						break
 					}
 					case 'alter': {
 						const { presentableName, replaces, tags, online } = ruleInfo
-						var content = ''
 						tmpRow.iconArr.push(RULE_ICONS[1])
-						content += replaces.map(item => {
-							const { name: n1, type: t1 } = item['replacer']
-							const { name: n2, type: t2 } = item['replaced']
-							return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
-						}).join('，')
+						content = ''
+						if(replaces.length > 0) {
+							tmpRow.iconArr.push(RULE_ICONS[5])
+							content += replaces.map(item => {
+								const { name: n1, type: t1 } = item['replacer']
+								const { name: n2, type: t2 } = item['replaced']
+								return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
+							}).join('，')
+						}
 						tmpRow.content = content
+						break
+					}
+					case 'activate_theme': {
+						const { themeName } = ruleInfo
+						content = `${operationsTexts[7]}<strong>${themeName}</strong>`
 						break
 					}
 					default: {}
 				} 
 
 				if (online === true) {
-					tmpRow.content += `，${operationsTexts[4]} <strong>${presentableName}</strong>`
+					content += `，${operationsTexts[4]} <strong>${presentableName}</strong>`
 					tmpRow.iconArr.push(RULE_ICONS[3])
 				}else if (online === false){
-					tmpRow.content += `，${operationsTexts[5]} <strong>${presentableName}</strong>`
+					content += `，${operationsTexts[5]} <strong>${presentableName}</strong>`
 					tmpRow.iconArr.push(RULE_ICONS[4])
 				}
+				tmpRow.content = content
 				rulesTextArr.push(text)
 				rulesTableData.push(tmpRow)
 			}
@@ -290,7 +307,7 @@ export default {
 			const $i18n = this.$i18n
 			const confirmTexts = $i18n.t('confirmTexts')
 			const text = this.selectedRules.map(r => r.content).join(', ')
-			this.$confirm(`此操作将删除所选中的${this.selectedRules.length}条规则, ${confirmTexts[3]}`, confirmTexts[4], {
+			this.$confirm(`${confirmTexts[5]}${this.selectedRules.length}${confirmTexts[6]}, ${confirmTexts[3]}`, confirmTexts[4], {
 					dangerouslyUseHTMLString: true,
           confirmButtonText: $i18n.t('sureBtnText'),
           cancelButtonText: $i18n.t('cancalBtnText'),
@@ -317,18 +334,20 @@ export default {
 			var tmpArr = this.rulesTableData.filter(r => !idsSet.has(r.id))
 			const rulesText = tmpArr.map(r => r.text).join('\n')
 			
-			this.updateMappingRules(rulesText, '映射规则删除成功!')
+			this.updateMappingRules(rulesText, this.$i18n.t('messages[1]'))
 				.then(data => {
 					this.refreshMappingRules(data)
 				})
 		},
 		// 上下线规则
 		exchangeOnlineStatus(row, isOnline) {
-			var operationText = isOnline ? '上线规则' : '下线规则'
-			this.$confirm(`${operationText} “${row.content}”, 是否继续?`, '提示', {
+			const $i18n = this.$i18n
+			const confirmTexts = $i18n.t('confirmTexts')
+			var operationText = isOnline ? confirmTexts[7] : confirmTexts[8]
+			this.$confirm(`${operationText} “${row.content}”, ${confirmTexts[3]}`, confirmTexts[4], {
 				dangerouslyUseHTMLString: true,
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
+				confirmButtonText: $i18n.t('sureBtnText'),
+				cancelButtonText: $i18n.t('cancalBtnText'),
 				type: 'warning'
 			}).then(() => {
 				const rulesText = this.rulesTableData.map(r => {
@@ -339,7 +358,7 @@ export default {
 						return r.text
 					}
 				}).join('\n')
-				return this.updateMappingRules(rulesText, `${operationText}成功！`)
+				return this.updateMappingRules(rulesText, `${operationText}${confirmTexts[9]}！`)
 					.then(data => {
 						this.refreshMappingRules(data)
 					})
@@ -363,6 +382,7 @@ export default {
 		},
 		// 校验规则 并 保存
 		tapSaveBtn() {
+			
 			try {
 				var result = compile(this.rulesText)
 			}catch(e) {
@@ -370,7 +390,7 @@ export default {
 			}
 			
 			if(result == null) {
-				this.syntaxErrorsText = '<li class="mr-syntax-error">映射规则编译失败：存在语法错误！</li>'
+				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('erros[0]')}</li>`
 				return 
 			} 
 
@@ -388,7 +408,7 @@ export default {
 					const { testRules } = data
 					this.resolveMatchErrors(testRules)
 					if (this.matchErrorsText === '') {
-						this.$message.success('映射规则保存成功！')
+						this.$message.success(this.$i18n.t('messages[0]'))
 					}
 					this.refreshMappingRules(data)
 				})
@@ -428,7 +448,7 @@ export default {
 					self.$message.error({
 						dangerouslyUseHTMLString: true,
 						duration: 5000,
-						message: "映射规则内容存在语法错误：<br/>" + result.errors.join('<br/>')
+						message: self.$i18n.t('erros[1]') + "<br/>" + result.errors.join('<br/>')
 					})
 				}else {
 					self.rulesText = self.rulesText + '\n' + exportText
