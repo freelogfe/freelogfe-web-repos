@@ -4,6 +4,7 @@
 
         <OverviewHeader
             v-if="!!releaseInfo"
+            :theID="releaseInfo.theID"
             :previewSrc="releaseInfo.previewImages || undefined"
             :title="releaseInfo.releaseName"
             :type="'release'"
@@ -54,7 +55,7 @@
                     <el-option
                         v-for="item in versions"
                         :key="item"
-                        :label="'v' + item"
+                        :label="item"
                         :value="item">
                     </el-option>
                 </el-select>

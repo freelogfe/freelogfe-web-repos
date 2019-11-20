@@ -5,6 +5,7 @@
         <!--            :datetime="'2018-10-10 12:00'"-->
         <OverviewHeader
             v-if="!!originInfo"
+            :theID="originInfo.theID"
             :previewSrc="originInfo.previewImage"
             :title="originInfo.name"
             :type="originInfo.type"
@@ -33,7 +34,7 @@
             <BlockItem label="节点发行名称">
                 <ConfirmInput
                     v-if="!!originInfo"
-                    :disabled="!(originInfo.type ==='release' || originInfo.type ==='mock')"
+                    :disabled="!!nodePresentableId"
                     :value="testResourceName"
                     @confirmChange="confirmChange"
                 />
@@ -49,7 +50,7 @@
                     <el-option
                         v-for="item in versions"
                         :key="item"
-                        :label="'v' + item"
+                        :label="item"
                         :value="item">
                     </el-option>
                 </el-select>

@@ -10,7 +10,11 @@
         <div
             style="display: flex; flex-shrink: 1; width: 100%; flex-direction: column; justify-content: space-between; box-sizing: border-box; padding-left: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="align-items: center; display: flex;">
+                <a
+                    target="_blank"
+                    :href="type==='release' ? `/release/detail/${theID}?version=${version}`: `/mock/update/${theID}`"
+                    style="align-items: center; display: flex;"
+                >
                     <span style="font-size: 18px; color: #222; line-height: 1;">{{title}}</span>
                     <label
                         v-if="type==='release'"
@@ -18,7 +22,7 @@
                     <label
                         v-if="type==='mock'"
                         style="background-color: #f5a623; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px; display: inline-block;">mock</label>
-                </div>
+                </a>
                 <div style="font-size: 12px; color: #999;">
                     <span>类型 {{resourceType}}</span>
                     <span v-if="!!datetime"> | 签约时间 {{datetime}}</span>
@@ -36,6 +40,7 @@
     export default {
         name: 'OverviewHeader',
         props: {
+            theID: String,
             previewSrc: String,
             title: String,
             type: String,
