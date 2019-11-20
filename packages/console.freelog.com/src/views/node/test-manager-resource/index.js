@@ -20,6 +20,7 @@ export default {
     },
     data() {
         return {
+            nodePresentableId: '',
             matchTestResult: {},
             nodeId: '',
             originInfo: null,
@@ -27,7 +28,7 @@ export default {
             testResourceName: '',
             versions: [],
             versionValue: '',
-            userDefinedTags: null,
+            userDefinedTags: [],
         };
     },
     mounted() {
@@ -52,6 +53,7 @@ export default {
             const data = res.data.data;
 
             this.nodeId = data.nodeId;
+            this.nodePresentableId = data.nodePresentableId;
             if (bool) {
                 this.matchTestResources(data.nodeId);
             }
@@ -82,23 +84,24 @@ export default {
          * 上下线
          */
         async onLineAndOffLine() {
+            console.log('SSSSXXXXXXXX');
             const testRules = [...this.matchTestResult.testRules];
             const oldRulesText = this.matchTestResult.ruleText;
             const testResourceName = this.testResourceName;
-            const isOnline = this.isOnline;
+            // const isOnline = this.isOnline;
 
             const rule = testRules.find(i => i.presentableName === testResourceName);
             // console.log(rule, 'rulerulerulerule');
             let newRulesText;
             if (rule) {
-                rule.online = !isOnline;
+                rule.online = !this.isOnline;
                 const ruleText = decompile([rule]);
                 newRulesText = oldRulesText.replace(rule.text, ruleText);
             } else {
                 const ruleObj = {
                     "tags": null,
                     "replaces": [],
-                    "online": !isOnline,
+                    "online": !this.isOnline,
                     "operation": "alter",
                     "presentableName": testResourceName,
                 };
@@ -114,11 +117,12 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
+            this.isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
         async confirmChange(value) {
+            console.log(value, 'valuevaluevalue');
             const testRules = [...this.matchTestResult.testRules];
             const oldRulesText = this.matchTestResult.ruleText;
 
@@ -154,7 +158,7 @@ export default {
                 const ruleObj = {
                     "tags": null,
                     "replaces": [],
-                    "online": !isOnline,
+                    "online": !this.isOnline,
                     "operation": "alter",
                     "presentableName": testResourceName,
                 };
@@ -223,9 +227,7 @@ export default {
                 };
                 const ruleText = decompile([ruleObj]);
                 newRulesText = oldRulesText + '\n' + ruleText;
-                this.$message.success('设置版本成功');
-                // this.handleTableData();
-                this.pushRuleSuccess(res.data.data);
+
             }
 
             const res = await this.$axios.post(`/v1/testNodes`, {
@@ -235,6 +237,12 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
+            // this.$message.success('设置版本成功');
+            // // this.handleTableData();
+            // this.pushRuleSuccess(res.data.data);
+            this.$message.success('设置版本成功');
+            // this.handleTableData();
+            this.pushRuleSuccess(res.data.data);
         }
     },
     watch: {
@@ -250,7 +258,7 @@ export default {
                 return;
             }
             // console.log(val);
-            this.setTags(val);
+            this.setVersion(val);
         },
     }
 }
