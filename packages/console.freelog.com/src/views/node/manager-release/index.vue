@@ -4,6 +4,7 @@
 
         <OverviewHeader
             v-if="!!releaseInfo"
+            :theID="releaseInfo.theID"
             :previewSrc="releaseInfo.previewImages || undefined"
             :title="releaseInfo.releaseName"
             :type="'release'"

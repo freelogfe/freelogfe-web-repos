@@ -59,6 +59,7 @@ export default {
             }
 
             this.originInfo = {
+                theID: data.originInfo.id,
                 name: data.originInfo.name,
                 previewImage: data.previewImages[0],
                 type: data.originInfo.type,

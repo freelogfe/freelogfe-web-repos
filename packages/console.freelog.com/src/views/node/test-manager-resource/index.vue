@@ -5,6 +5,7 @@
         <!--            :datetime="'2018-10-10 12:00'"-->
         <OverviewHeader
             v-if="!!originInfo"
+            :theID="originInfo.theID"
             :previewSrc="originInfo.previewImage"
             :title="originInfo.name"
             :type="originInfo.type"

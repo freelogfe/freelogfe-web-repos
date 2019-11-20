@@ -36,6 +36,7 @@ export default {
             initState: true,
             // 发行相关信息
             releaseInfo: {
+                theID: '',
                 previewImages: '',
                 releaseName: '',
                 resourceType: '',
@@ -118,6 +119,7 @@ export default {
             // console.log(time, 'tTWERFTTTTTTT');
             // console.log(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours(), time.getMinutes(), '@AFDSASDF@#RASEZCX');
             this.releaseInfo = {
+                theID: result.releaseInfo.releaseId,
                 previewImages: result.releaseInfo.previewImages[0] ? result.releaseInfo.previewImages[0] : undefined,
                 releaseName: result.releaseInfo.releaseName,
                 resourceType: result.releaseInfo.resourceType,
