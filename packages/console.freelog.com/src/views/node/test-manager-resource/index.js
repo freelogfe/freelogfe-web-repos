@@ -85,7 +85,7 @@ export default {
          * 上下线
          */
         async onLineAndOffLine() {
-            console.log('SSSSXXXXXXXX');
+            // console.log('SSSSXXXXXXXX');
             const testRules = [...this.matchTestResult.testRules];
             const oldRulesText = this.matchTestResult.ruleText;
             const testResourceName = this.testResourceName;
@@ -121,6 +121,35 @@ export default {
             this.isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
+        },
+        /**
+         * 激活主题
+         */
+        async activateTheme(theme) {
+            const testRules = [...this.matchTestResult.testRules];
+            const oldRulesText = this.matchTestResult.ruleText;
+            const testResourceName = this.testResourceName;
+
+            const rule = testRules.find(i => i.operation === 'activate_theme');
+
+            let newRulesText;
+            if (rule) {
+                newRulesText = oldRulesText.replace(rule.text, `activate_theme ${testResourceName}`);
+            } else {
+                newRulesText = `activate_theme ${testResourceName}` + '\n' + oldRulesText;
+            }
+
+            const res = await this.$axios.post(`/v1/testNodes`, {
+                nodeId: this.nodeId,
+                testRuleText: Buffer.from(newRulesText).toString('base64'),
+            });
+
+            if (res.data.errcode !== 0 || res.data.ret !== 0) {
+                return this.$message.error(JSON.stringify(res.data.data.errors));
+            }
+            this.$message.success('激活成功');
+            this.pushRuleSuccess(res.data.data);
+
         },
         async confirmChange(value) {
             console.log(value, 'valuevaluevalue');
