@@ -50,7 +50,7 @@
                     <el-option
                         v-for="item in versions"
                         :key="item"
-                        :label="'v' + item"
+                        :label="item"
                         :value="item">
                     </el-option>
                 </el-select>
