@@ -20,7 +20,7 @@ export default {
     },
     data() {
         return {
-            nodePresentableId: '',
+            testResourceID: '',
             matchTestResult: {},
             nodeId: '',
             originInfo: null,
@@ -29,6 +29,7 @@ export default {
             versions: [],
             versionValue: '',
             userDefinedTags: [],
+            activatedThemeId: '',
         };
     },
     mounted() {
@@ -40,6 +41,8 @@ export default {
             // const {nodeId} = this.$route.params;
             const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
             const result = res.data.data;
+            // console.log(result.themeId, 'result.themeIdresult.themeId');
+            this.activatedThemeId = result.themeId;
             this.matchTestResult = {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
@@ -53,7 +56,7 @@ export default {
             const data = res.data.data;
 
             this.nodeId = data.nodeId;
-            this.nodePresentableId = data.nodePresentableId;
+            this.testResourceID = testResourceID;
             if (bool) {
                 this.matchTestResources(data.nodeId);
             }
@@ -75,6 +78,7 @@ export default {
             this.userDefinedTags = data.differenceInfo.userDefinedTagInfo.tags;
         },
         pushRuleSuccess(result) {
+            this.activatedThemeId = result.themeId;
             this.matchTestResult = {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
@@ -125,7 +129,7 @@ export default {
         /**
          * 激活主题
          */
-        async activateTheme(theme) {
+        async activateTheme() {
             const testRules = [...this.matchTestResult.testRules];
             const oldRulesText = this.matchTestResult.ruleText;
             const testResourceName = this.testResourceName;

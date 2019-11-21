@@ -89,13 +89,6 @@ export default {
                         arr.push('replace');
                     }
 
-                    // if (matched.online === true) {
-                    //     arr.push('show');
-                    // }
-                    //
-                    // if (matched.online === false) {
-                    //     arr.push('hide');
-                    // }
                 }
                 // console.log(arr, 'arrarrarr');
                 return {
