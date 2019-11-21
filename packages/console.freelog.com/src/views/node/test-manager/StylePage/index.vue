@@ -128,9 +128,10 @@
 
                 <template slot-scope="scope">
                     <div class="style-page__table__status">
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
-                              style="color: #000;">已上线</span>
-                        <span v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0" style="color: #bfbfbf;">未上线</span>
+                        <span v-if="scope.row.testResourceId === activatedThemeId"
+                              style="color: #000;">已激活</span>
+                        <span v-if="scope.row.testResourceId !== activatedThemeId"
+                              style="color: #bfbfbf;">未激活</span>
 
                         <template v-if="scope.row.resolveReleaseSignStatus === 2">
                             <el-popover
@@ -170,7 +171,7 @@
                                 编辑
                             </el-dropdown-item>
                             <el-dropdown-item
-                                v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
+                                v-if="scope.row.testResourceId !== activatedThemeId"
                                 :command="'isOnline'"
                             >
                                 <span

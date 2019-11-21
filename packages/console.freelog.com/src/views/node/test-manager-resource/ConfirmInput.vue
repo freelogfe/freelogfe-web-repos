@@ -1,9 +1,20 @@
 <template>
     <div style="height: 40px; width: 700px;">
+        <el-tooltip v-if="disabled" content="正式节点导入，不能修改名称" placement="top">
+            <a
+                v-show="!isEdit"
+                @click="clickEdit"
+                :style="{cursor: 'not-allowed'}"
+                style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; background-color: #fafbfb; border-radius: 2px; padding: 0 15px; box-sizing: border-box; border: 1px solid #fafbfb;"
+            >
+                <span style="font-weight: 600; font-size: 14px; color: #333;">{{value}}</span>
+                <i class="el-icon-edit" style="color: #888; font-size: 16px;"></i>
+            </a>
+        </el-tooltip>
         <a
             v-show="!isEdit"
             @click="clickEdit"
-            :style="{cursor: disabled? 'not-allowed': 'pointer'}"
+            :style="{cursor: 'pointer'}"
             style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; background-color: #fafbfb; border-radius: 2px; padding: 0 15px; box-sizing: border-box; border: 1px solid #fafbfb;"
         >
             <span style="font-weight: 600; font-size: 14px; color: #333;">{{value}}</span>

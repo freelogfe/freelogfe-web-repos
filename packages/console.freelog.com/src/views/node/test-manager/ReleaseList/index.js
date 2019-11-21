@@ -50,15 +50,16 @@ export default {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
             const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
-
+            console.log(res.data, 'res.data');
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                return this.$message.error(JSON.stringify(res.data.data.errors));
+                return this.$message.error(JSON.stringify(res.data.msg));
             }
 
             const result = res.data.data;
+            // console.log(result.testRules, 'result.testRulesresult.testRules');
             this.matchTestResult = {
                 ruleText: result.ruleText,
-                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+                testRules: result.testRules.filter(i => i.matchErrors.length === 0).map(i => ({text: i.text, ...i.ruleInfo}))
             };
             // console.log(this.matchTestResult, 'this.matchTestResult');
         },
@@ -89,6 +90,7 @@ export default {
                 // console.log(matched, 'matched');
                 const arr = [];
                 if (matched) {
+                    // if (matched)
                     arr.push(matched.operation);
                     if (matched.tags !== null) {
                         arr.push('set_tags')

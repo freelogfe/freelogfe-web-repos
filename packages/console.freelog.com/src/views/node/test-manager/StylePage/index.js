@@ -28,6 +28,8 @@ export default {
             pageSize: 10,
             // 表格总数量
             totalQuantity: 0,
+            // 已激活的 themeId
+            activatedThemeId: '',
         };
     },
     mounted() {
@@ -43,13 +45,14 @@ export default {
             const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
 
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                return this.$message.error(JSON.stringify(res.data.data.errors));
+                return this.$message.error(JSON.stringify(res.data.msg));
             }
 
             const result = res.data.data;
+            this.activatedThemeId = result.themeId;
             this.matchTestResult = {
                 ruleText: result.ruleText,
-                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+                testRules: result.testRules.filter(i => i.matchErrors.length === 0).map(i => ({text: i.text, ...i.ruleInfo}))
             };
         },
         async handleTableData(init = false) {
@@ -86,13 +89,6 @@ export default {
                         arr.push('replace');
                     }
 
-                    // if (matched.online === true) {
-                    //     arr.push('show');
-                    // }
-                    //
-                    // if (matched.online === false) {
-                    //     arr.push('hide');
-                    // }
                 }
                 // console.log(arr, 'arrarrarr');
                 return {
@@ -107,6 +103,7 @@ export default {
          * 修改规则成功，并且重新生成匹配规则
          */
         pushRuleSuccess(result) {
+            this.activatedThemeId = result.themeId;
             this.matchTestResult = {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
@@ -151,7 +148,7 @@ export default {
          * 节点状态发生变化
          */
         onChangeState(value) {
-            console.log(value, 'valuevaluevalue');
+            // console.log(value, 'valuevaluevalue');
             // return;
             this.selectedState = value;
         },
@@ -199,19 +196,19 @@ export default {
          * @param row
          */
         async onLineAndOffLine(row) {
-            console.log(this.matchTestResult, 'this.matchTestResult');
+            // console.log(this.matchTestResult, 'this.matchTestResult');
             const testRules = [...this.matchTestResult.testRules];
             const {nodeId} = this.$route.params;
             // const res = await this.$axios.get(`/v1/testNodes/${nodeId}`);
             const testResourceName = row.testResourceName;
-            const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
+            // const isOnline = row.differenceInfo.onlineStatusInfo.isOnline === 1;
             const oldRulesText = this.matchTestResult.ruleText;
             const rule = testRules.find(i => i.operation === 'activate_theme');
             console.log(rule, 'rulerulerulerule');
             let newRulesText;
-            if (isOnline) {
-                return;
-            }
+            // if (isOnline) {
+            //     return;
+            // }
 
             if (rule) {
                 newRulesText = oldRulesText.replace(rule.text, `activate_theme ${testResourceName}`);
@@ -227,7 +224,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
+            this.$message.success('激活成功');
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },

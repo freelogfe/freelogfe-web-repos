@@ -12,6 +12,7 @@
     export default {
         name: "RulesBar",
         props: {
+            // add alter set_tags replace show hide
             rules: {
                 type: Array,
                 default() {
@@ -37,7 +38,7 @@
                         return 'el-icon-bottom';
                     case 'show':
                         return 'el-icon-top';
-                    case 'set-tags':
+                    case 'set_tags':
                         return 'el-icon-tickets';
                     default:
                         return '';
