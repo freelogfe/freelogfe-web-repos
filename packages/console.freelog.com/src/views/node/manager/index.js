@@ -304,7 +304,27 @@ export default {
                     }
                 })
                 .catch(this.$error.showErrorMessage)
-        }
+        },
+        /**
+         * 去来源编辑页
+         */
+        // goToOrigin(originInfo) {
+        //     // console.log(originInfo, 'originInfooriginInfo');
+        //     let url = '';
+        //     if (originInfo.type === 'presentable') {
+        //         url = `/node/manager-release/${originInfo.id}`;
+        //     }
+        //
+        //     if (originInfo.type === 'mock') {
+        //         url = `/mock/update/${originInfo.id}`;
+        //     }
+        //
+        //     if (originInfo.type === 'release') {
+        //         url = `/release/detail/${originInfo.id}?version=${originInfo.version}`;
+        //     }
+        //
+        //     window.open(url);
+        // },
     },
 
     watch: {

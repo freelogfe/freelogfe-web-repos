@@ -122,7 +122,11 @@
                     min-width="20%"
                 >
                     <template slot-scope="scope">
-                        <div class="node-manager__main__table__release">
+                        <a
+                            :href="`/release/detail/${scope.row.releaseInfo.releaseId}?version=${scope.row.releaseInfo.version}`"
+                            target="_blank"
+                            class="node-manager__main__table__release"
+                        >
                             <div
                                 class="resource-default-preview node-manager__main__table__release__preview"
                             >
@@ -141,7 +145,7 @@
                                     {{scope.row.releaseInfo.versions[scope.row.releaseInfo.versions.length - 1]}}
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </template>
                 </el-table-column>
 
