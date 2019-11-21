@@ -20,6 +20,8 @@ export default {
     },
     data() {
         return {
+            // 对应的正式 PresentableId
+            nodePresentableId: '',
             testResourceID: '',
             matchTestResult: {},
             nodeId: '',
@@ -57,6 +59,7 @@ export default {
 
             this.nodeId = data.nodeId;
             this.testResourceID = testResourceID;
+            this.nodePresentableId = data.nodePresentableId;
             if (bool) {
                 this.matchTestResources(data.nodeId);
             }
