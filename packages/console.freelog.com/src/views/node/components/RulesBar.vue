@@ -38,7 +38,7 @@
                         return 'el-icon-bottom';
                     case 'show':
                         return 'el-icon-top';
-                    case 'set-tags':
+                    case 'set_tags':
                         return 'el-icon-tickets';
                     default:
                         return '';
