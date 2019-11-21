@@ -12,6 +12,7 @@
     export default {
         name: "RulesBar",
         props: {
+            // add alter set_tags replace show hide
             rules: {
                 type: Array,
                 default() {
