@@ -45,8 +45,7 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <a
-                        @click="goToOrigin(scope.row.originInfo)"
+                    <div
                         class="text-overflow-ellipsis style-page__table__name"
                     >
                         <label
@@ -64,7 +63,7 @@
                             <div style="border-top: 1px solid #b5b5b5; width: 16px;"></div>
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
-                    </a>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
@@ -73,7 +72,7 @@
                 min-width="30%"
             >
                 <template slot-scope="scope">
-                    <div class="style-page__table__entries">
+                    <a @click="goToOrigin(scope.row.originInfo)" class="style-page__table__entries">
                         <div
                             class="resource-default-preview style-page__table__entries__img"
                         >
@@ -87,7 +86,7 @@
                             <div class="text-overflow-ellipsis">{{scope.row.originInfo.name}}</div>
                             <div>{{scope.row.originInfo.version}}</div>
                         </div>
-                    </div>
+                    </a>
                 </template>
             </el-table-column>
 

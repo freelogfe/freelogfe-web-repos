@@ -36,7 +36,14 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <RulesBar :rules="scope.row.icons"/>
+                    <el-popover
+                        placement="right"
+                        width="200"
+                        trigger="hover"
+                    >
+                        <RulesBar slot="reference" :rules="scope.row.icons"/>
+<!--                        <rule-text :textRule="scope.row."/>-->
+                    </el-popover>
                 </template>
             </el-table-column>
             <el-table-column
@@ -45,8 +52,7 @@
                 min-width="25%"
             >
                 <template slot-scope="scope">
-                    <a
-                        @click="goToOrigin(scope.row.originInfo)"
+                    <div
                         class="text-overflow-ellipsis release-list__table__name"
                     >
                         <label
@@ -64,7 +70,7 @@
                             <div></div>
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
-                    </a>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
@@ -73,7 +79,10 @@
                 min-width="30%"
             >
                 <template slot-scope="scope">
-                    <div class="release-list__table__entries">
+                    <a
+                        @click="goToOrigin(scope.row.originInfo)"
+                        class="release-list__table__entries"
+                    >
                         <div
                             class="resource-default-preview release-list__table__entries__preview"
                         >
@@ -91,7 +100,7 @@
                                 {{scope.row.originInfo.version}}
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </template>
             </el-table-column>
 

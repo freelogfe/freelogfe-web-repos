@@ -1,12 +1,14 @@
 import AddAndReplace from '../AddAndReplace/index.vue';
 import RulesBar from '../../components/RulesBar';
 import {decompile} from '@freelog/nmr_translator';
+import RuleText from "../../components/rule-text";
 
 let searchInputDelay = null;
 
 export default {
     name: "index",
     components: {
+        RuleText,
         AddAndReplace,
         RulesBar,
     },
@@ -113,8 +115,9 @@ export default {
                     icons: arr,
                 };
             });
+
             this.totalQuantity = data.totalItem;
-            // console.log(data.dataList, 'ddddddddddddDDDDDD');
+            // console.log(this.tableData, 'ddddddddddddDDDDDD');
         },
         /**
          * 修改规则成功，并且重新生成匹配规则
