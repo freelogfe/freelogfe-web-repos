@@ -49,7 +49,7 @@ export default {
             const result = res.data.data;
             this.matchTestResult = {
                 ruleText: result.ruleText,
-                testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
+                testRules: result.testRules.filter(i => i.matchErrors.length === 0).map(i => ({text: i.text, ...i.ruleInfo}))
             };
         },
         async handleTableData(init = false) {
@@ -151,7 +151,7 @@ export default {
          * 节点状态发生变化
          */
         onChangeState(value) {
-            console.log(value, 'valuevaluevalue');
+            // console.log(value, 'valuevaluevalue');
             // return;
             this.selectedState = value;
         },
