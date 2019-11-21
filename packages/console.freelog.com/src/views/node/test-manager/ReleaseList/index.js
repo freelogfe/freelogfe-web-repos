@@ -50,9 +50,9 @@ export default {
         async matchTestResources() {
             const {nodeId} = this.$route.params;
             const res = await this.$axios.post(`/v1/testNodes/${nodeId}/matchTestResources`);
-
+            console.log(res.data, 'res.data');
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
-                return this.$message.error(JSON.stringify(res.data.data.errors));
+                return this.$message.error(JSON.stringify(res.data.msg));
             }
 
             const result = res.data.data;
