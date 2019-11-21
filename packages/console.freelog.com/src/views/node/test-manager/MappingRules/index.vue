@@ -24,9 +24,7 @@
 				<el-table-column type="selection" width="45"></el-table-column>
 				<el-table-column :label="$t('ruleType')" width="146">
           <template slot-scope="scope">
-            <div>
-							<i v-for="(iconClass, index) in scope.row.iconArr" :key="'icon' + index" :class="iconClass"></i>
-						</div>
+            <rules-bar class="mr-icons" :class="{ 'disabled': scope.row.matchErrors.length }" :rules="scope.row.iconArr"></rules-bar>	
           </template>
         </el-table-column>
 				<el-table-column>
@@ -35,7 +33,8 @@
 						<!-- | <span>{{$t('matchResult')}}</span> -->
 					</template>
 					<template slot-scope="scope">
-						<span class="mr-rule-content" v-html="scope.row.content"></span>
+						<!-- <span class="mr-rule-content" v-html="scope.row.content"></span> -->
+						<rule-text :textRule="scope.row"></rule-text>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('operation')" width="160">
@@ -76,6 +75,8 @@
 
 <script>
 import { compile, decompile } from '@freelog/nmr_translator'
+import RulesBar from '../../components/RulesBar.vue'
+import RuleText from '../../components/rule-text.vue'
 export default {
 	name: "MappingRules",
 	data() {
@@ -85,6 +86,7 @@ export default {
 			editorVisible: false,
 			lastRulesText: '',
 			rulesText: '',
+			themeId: '',
 			syntaxErrorsText: '',
 			matchErrorsText: '',
 			rulesTextDownloadUrl: '',
@@ -94,6 +96,7 @@ export default {
 			rulesInputRowsCount: 18
 		}
 	},
+	components: { RuleText, RulesBar },
 	computed: {
 		rulesOperationConfig() {
 			return [
@@ -153,88 +156,59 @@ export default {
 		loadMappingRulesTable() {
 			return this.fetchMappingRules()
 				.then(data => {
-					if(data != null) {
-						const { testRules, ruleText } = data
-						this.testRulesData = testRules
-						this.rulesText = ruleText
-						this.resolveTestRules(testRules)
-					}
+					this.refreshMappingRules(data)
 				})
 		},
 		resolveTestRules(testRules) {
 			const rulesTableData = [] 
-			const rulesTextArr = []
-			const RULE_ICONS = [ "el-icon-price-tag", "el-icon-setting", "el-icon-plus", "el-icon-top", "el-icon-bottom", "el-icon-set-up" ]
+			const RULE_ICONS = [ "set_tags", "alter", "add", "show", "hide", "replace" ]
 
 			const operationsTexts = this.$i18n.t('operations')
 			for(let i = 0; i < testRules.length; i++) {
 				const { matchErrors, ruleInfo, text, id } = testRules[i]
 				const { operation, online, presentableName } = ruleInfo
 				const tmpRow = {
-					text, id, online,
-					iconArr: [], ruleInfo,
-				}
-				const tagsMap = {
-					'mock': `<span class="t-rule-tag-mock">mock</span>`,
-					'release': `<span class="t-rule-tag-release">${this.$i18n.t('release')}</span>`
+					text, id, ruleInfo, matchErrors,
+					iconArr: [], online, 
 				}
 				var content
 				switch(operation) {
 					case 'add': {
-						const { tags, candidate: { name, versionRange = '', type }, replaces } = ruleInfo
-						let tagString = ''
-						content = ''
-						content += `${operationsTexts[0]} ${tagsMap[type]}<strong>${name}</strong> ${operationsTexts[1]} <strong>${presentableName}</strong>`
+						const { tags, replaces } = ruleInfo
 						tmpRow.iconArr.push(RULE_ICONS[2])
 						if(replaces.length > 0) {
 							tmpRow.iconArr.push(RULE_ICONS[5])
-							content += '，' + replaces.map(item => {
-								const { name: n1, type: t1 } = item['replacer']
-								const { name: n2, type: t2 } = item['replaced']
-								return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
-							}).join('，')
-						}
-						if(versionRange !== '' && versionRange !== 'latest') {
-							content += `${operationsTexts[2]} ${versionRange}`
 						}
 						if(tags != null && tags.length > 0) {
-							content += `${operationsTexts[3]}` + tags.map(tag => `<strong>${tag}</strong>`).join(' ')
 							tmpRow.iconArr.push(RULE_ICONS[0])
+						}
+						if (online === true) {
+							tmpRow.iconArr.push(RULE_ICONS[3])
+						}else if (online === false){
+							tmpRow.iconArr.push(RULE_ICONS[4])
 						}
 						break
 					}
 					case 'alter': {
 						const { presentableName, replaces, tags, online } = ruleInfo
 						tmpRow.iconArr.push(RULE_ICONS[1])
-						content = ''
 						if(replaces.length > 0) {
 							tmpRow.iconArr.push(RULE_ICONS[5])
-							content += replaces.map(item => {
-								const { name: n1, type: t1 } = item['replacer']
-								const { name: n2, type: t2 } = item['replaced']
-								return `<strong>${tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${tagsMap[t2]}${n2}</strong>`
-							}).join('，')
 						}
-						tmpRow.content = content
+
+						if (online === true) {
+							tmpRow.iconArr.push(RULE_ICONS[3])
+						}else if (online === false){
+							tmpRow.iconArr.push(RULE_ICONS[4])
+						}
 						break
 					}
 					case 'activate_theme': {
-						const { themeName } = ruleInfo
-						content = `${operationsTexts[7]}<strong>${themeName}</strong>`
 						break
 					}
 					default: {}
 				} 
 
-				if (online === true) {
-					content += `，${operationsTexts[4]} <strong>${presentableName}</strong>`
-					tmpRow.iconArr.push(RULE_ICONS[3])
-				}else if (online === false){
-					content += `，${operationsTexts[5]} <strong>${presentableName}</strong>`
-					tmpRow.iconArr.push(RULE_ICONS[4])
-				}
-				tmpRow.content = content
-				rulesTextArr.push(text)
 				rulesTableData.push(tmpRow)
 			}
 			this.lastRulesText = this.rulesText
@@ -243,9 +217,10 @@ export default {
 		// 刷新 映射规则列表
 		refreshMappingRules(data) {
 			if(data != null) {
-				const { testRules, ruleText } = data
+				const { testRules, ruleText, themeId } = data
 				this.testRulesData = testRules
-				this.rulesText = ruleText
+				this.rulesText = ruleText						
+				this.themeId = themeId
 				this.resolveTestRules(testRules)
 			}
 			this.$refs.mrTable.clearSelection()
@@ -488,6 +463,9 @@ export default {
 			}
 			.t-rule-tag-release { background-color: #72BB1F; }
 			.t-rule-tag-mock { background-color: #F5A623; }
+		}
+		.mr-icons {
+			&.disabled { color: #999; opacity: .7; }
 		}
 		.mr-rule-result { color: #9b9b9b; }
 		.mr-operations-select {
