@@ -72,7 +72,7 @@ export default {
 
             const {nodeId} = this.$route.params;
             const params = {
-                pageIndex: this.currentPage,
+                page: this.currentPage,
                 pageSize: this.pageSize,
                 resourceType: this.selectedType === '全部类型' ? undefined : this.selectedType,
                 omitResourceType: 'page_build',
