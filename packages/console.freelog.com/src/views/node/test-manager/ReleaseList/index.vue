@@ -37,13 +37,15 @@
             >
                 <template slot-scope="scope">
                     <el-popover
+                        v-if="scope.row.textRule"
                         placement="right"
-                        width="200"
+                        width="670"
                         trigger="hover"
                     >
                         <RulesBar slot="reference" :rules="scope.row.icons"/>
-<!--                        <rule-text :textRule="scope.row."/>-->
+                        <rule-text :textRule="scope.row.textRule"/>
                     </el-popover>
+                    <RulesBar v-else :rules="scope.row.icons"/>
                 </template>
             </el-table-column>
             <el-table-column
