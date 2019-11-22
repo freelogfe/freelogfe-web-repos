@@ -12,7 +12,6 @@
             :version="releaseInfo.version"
             :content="releaseInfo.intro"
         />
-
         <ModuleBlock>
 
             <BlockItem label="状态">
