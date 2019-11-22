@@ -92,7 +92,10 @@ export default {
                     if (matched.replaces.length > 0) {
                         arr.push('replace');
                     }
-
+                }
+                // console.log(i.testResourceId, this.activatedThemeId, 'i.testResourceId === this.activatedThemeId')
+                if (i.testResourceId === this.activatedThemeId) {
+                    arr.push('show');
                 }
                 // console.log(arr, 'arrarrarr');
                 return {
