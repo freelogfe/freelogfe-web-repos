@@ -35,8 +35,16 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
-                    <RulesBar :rules="scope.row.icons"/>
-
+                    <el-popover
+                        v-if="scope.row.textRule"
+                        placement="right"
+                        width="670"
+                        trigger="hover"
+                    >
+                        <RulesBar slot="reference" :rules="scope.row.icons"/>
+                        <rule-text :textRule="scope.row.textRule"/>
+                    </el-popover>
+                    <RulesBar v-else :rules="scope.row.icons"/>
                 </template>
             </el-table-column>
             <el-table-column

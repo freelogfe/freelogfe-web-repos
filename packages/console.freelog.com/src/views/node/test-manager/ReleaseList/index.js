@@ -120,7 +120,7 @@ export default {
             });
 
             this.totalQuantity = data.totalItem;
-            console.log(this.tableData, 'ddddddddddddDDDDDD');
+            // console.log(this.tableData, 'ddddddddddddDDDDDD');
         },
         /**
          * 修改规则成功，并且重新生成匹配规则
