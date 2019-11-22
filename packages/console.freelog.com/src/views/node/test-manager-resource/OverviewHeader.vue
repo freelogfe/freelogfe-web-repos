@@ -26,7 +26,7 @@
                 <div style="font-size: 12px; color: #999;">
                     <span>类型 {{resourceType}}</span>
                     <span v-if="!!datetime"> | 签约时间 {{datetime}}</span>
-                    <span v-if="!!version"> | 最新版本 v{{version}}</span>
+                    <span v-if="!!version"> | 最新版本 {{version}}</span>
                 </div>
             </div>
             <div style="font-size: 12px; color: #333;">
