@@ -13,7 +13,6 @@
             :content="releaseInfo.intro"
         />
 
-        <!--        <div class="manager-release-body">-->
         <ModuleBlock>
 
             <BlockItem label="状态">
