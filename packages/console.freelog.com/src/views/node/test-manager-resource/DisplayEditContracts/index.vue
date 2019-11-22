@@ -49,7 +49,10 @@
                         </div>
                     </div>
 
-                    <ContractsContainer :title="$t('contracted')">
+                    <ContractsContainer
+                        v-if="dataSource[activatedIndex].children.filter(i => i.contract).length > 0"
+                        :title="$t('contracted')"
+                    >
                         <!-- 已签约列表 -->
                         <div
                             style="position: relative;"
