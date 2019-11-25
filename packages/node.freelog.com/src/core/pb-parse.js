@@ -40,7 +40,7 @@ function loadWidgets(FreelogApp) {
         const subReleaseId = releaseId || id
         if (!vis[subReleaseId]) {
           vis[subReleaseId] = true
-          const url = resolveSubResourceDataUrl(presentableId, subReleaseId, version, entityNid)
+          const url = resolveSubDependDataUrl(presentableId, subReleaseId, entityNid)
 
           switch (resourceType) {
             case 'widget':
