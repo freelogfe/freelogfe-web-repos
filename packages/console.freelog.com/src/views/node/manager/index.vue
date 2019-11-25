@@ -5,29 +5,6 @@
             :style="styleObject"
             class="node-manager__aside"
         >
-<!--            <div style="height: 30px;"></div>-->
-<!--            <div class="node-manager__aside__name">{{nodeInfo.name}}</div>-->
-<!--            <div style="height: 10px;"></div>-->
-<!--            <div class="node-manager__aside__url">-->
-<!--                <a-->
-<!--                    class="node-manager__aside__url__link"-->
-<!--                    :href="'//' + nodeInfo.origin"-->
-<!--                    target="_blank"-->
-<!--                >{{nodeInfo.origin}}</a>-->
-<!--                <clipboard-->
-<!--                    class="node-manager__aside__url__clipboard"-->
-<!--                    :value="nodeInfo.origin"-->
-<!--                    @copyDone="$message.success($t('copySuccess'))"-->
-<!--                >-->
-<!--                    <el-button-->
-<!--                        class="node-manager__aside__url__clipboard__button"-->
-<!--                        type="primary"-->
-<!--                        plain-->
-<!--                        size="mini"-->
-<!--                    >copy-->
-<!--                    </el-button>-->
-<!--                </clipboard>-->
-<!--            </div>-->
 
             <NodeHeader
                 :nodeName="nodeInfo.name"
@@ -36,8 +13,6 @@
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
                 btnText="进入测试节点管理"
             />
-
-<!--            <div style="height: 79px;"></div>-->
 
             <div class="node-manager__aside__navs">
                 <a
@@ -122,7 +97,11 @@
                     min-width="20%"
                 >
                     <template slot-scope="scope">
-                        <div class="node-manager__main__table__release">
+                        <a
+                            :href="`/release/detail/${scope.row.releaseInfo.releaseId}?version=${scope.row.releaseInfo.version}`"
+                            target="_blank"
+                            class="node-manager__main__table__release"
+                        >
                             <div
                                 class="resource-default-preview node-manager__main__table__release__preview"
                             >
@@ -141,7 +120,7 @@
                                     {{scope.row.releaseInfo.versions[scope.row.releaseInfo.versions.length - 1]}}
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </template>
                 </el-table-column>
 

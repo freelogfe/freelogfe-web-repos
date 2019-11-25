@@ -193,11 +193,11 @@ export default {
                 newRulesText = oldRulesText.replace(rule.text, ruleText);
             } else {
                 const ruleObj = {
-                    "tags": null,
+                    "tags": val,
                     "replaces": [],
-                    "online": !this.isOnline,
+                    "online": null,
                     "operation": "alter",
-                    "presentableName": testResourceName,
+                    "presentableName": this.testResourceName,
                 };
                 newRulesText = oldRulesText + '\n' + decompile([ruleObj]);
             }

@@ -1,12 +1,14 @@
 import AddAndReplace from '../AddAndReplace/index.vue';
 import RulesBar from '../../components/RulesBar';
 import {decompile} from '@freelog/nmr_translator';
+import RuleText from "../../components/rule-text";
 
 let searchInputDelay = null;
 
 export default {
     name: "index",
     components: {
+        RuleText,
         AddAndReplace,
         RulesBar,
     },
@@ -14,6 +16,7 @@ export default {
         return {
             matchTestResult: {},
             tableData: [],
+            testRules: [],
             // 筛选搜索框
             filterSearch: '',
             // 类型可选项
@@ -61,6 +64,7 @@ export default {
                 ruleText: result.ruleText,
                 testRules: result.testRules.filter(i => i.matchErrors.length === 0).map(i => ({text: i.text, ...i.ruleInfo}))
             };
+            this.testRules = result.testRules;
             // console.log(this.matchTestResult, 'this.matchTestResult');
         },
         async handleTableData(init = false) {
@@ -70,7 +74,7 @@ export default {
 
             const {nodeId} = this.$route.params;
             const params = {
-                pageIndex: this.currentPage,
+                page: this.currentPage,
                 pageSize: this.pageSize,
                 resourceType: this.selectedType === '全部类型' ? undefined : this.selectedType,
                 omitResourceType: 'page_build',
@@ -110,11 +114,13 @@ export default {
                 // console.log(arr, 'arrarrarr');
                 return {
                     ...i,
+                    textRule: this.testRules.find(j => j.id === i.ruleId),
                     icons: arr,
                 };
             });
+
             this.totalQuantity = data.totalItem;
-            // console.log(data.dataList, 'ddddddddddddDDDDDD');
+            // console.log(this.tableData, 'ddddddddddddDDDDDD');
         },
         /**
          * 修改规则成功，并且重新生成匹配规则
@@ -124,6 +130,7 @@ export default {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
             };
+            this.testRules = result.testRules;
             this.handleTableData();
         },
         /**

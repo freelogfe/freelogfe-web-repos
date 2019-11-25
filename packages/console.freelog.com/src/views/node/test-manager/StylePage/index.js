@@ -1,6 +1,7 @@
 import AddAndReplace from '../AddAndReplace/index.vue';
 import RulesBar from "../../components/RulesBar";
-import {decompile} from "@freelog/nmr_translator";
+// import {decompile} from "@freelog/nmr_translator";
+import RuleText from "../../components/rule-text";
 
 let searchInputDelay = null;
 
@@ -9,10 +10,12 @@ export default {
     components: {
         RulesBar,
         AddAndReplace,
+        RuleText,
     },
     data() {
         return {
             matchTestResult: {},
+            testRules: [],
             tableData: [],
             // 筛选搜索框
             filterSearch: '',
@@ -54,6 +57,7 @@ export default {
                 ruleText: result.ruleText,
                 testRules: result.testRules.filter(i => i.matchErrors.length === 0).map(i => ({text: i.text, ...i.ruleInfo}))
             };
+            this.testRules = result.testRules;
         },
         async handleTableData(init = false) {
             if (init) {
@@ -88,11 +92,15 @@ export default {
                     if (matched.replaces.length > 0) {
                         arr.push('replace');
                     }
-
+                }
+                // console.log(i.testResourceId, this.activatedThemeId, 'i.testResourceId === this.activatedThemeId')
+                if (i.testResourceId === this.activatedThemeId) {
+                    arr.push('show');
                 }
                 // console.log(arr, 'arrarrarr');
                 return {
                     ...i,
+                    textRule: this.testRules.find(j => j.id === i.ruleId),
                     icons: arr,
                 };
             });
@@ -108,6 +116,7 @@ export default {
                 ruleText: result.ruleText,
                 testRules: result.testRules.map(i => ({text: i.text, ...i.ruleInfo}))
             };
+            this.testRules = result.testRules;
             this.handleTableData();
         },
         /**
