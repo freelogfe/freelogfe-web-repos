@@ -2,7 +2,6 @@
 import Views from '@/views'
 import i18n from '../lib/i18n'
 
-
 export default {
   name: 'release',
   path: 'release',
