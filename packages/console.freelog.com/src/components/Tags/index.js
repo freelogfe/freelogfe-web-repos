@@ -51,7 +51,9 @@ export default {
         },
         handleInputConfirm() {
             const inputValue = this.inputValue
-        
+            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.inputValue)) {
+                return this.$message.error('标签的名称不能包含空格和以下字符：\\ / : * ? " < > |');
+            }
             if (inputValue) {
                 // this.tags.push(inputValue)
                 const tags = [
