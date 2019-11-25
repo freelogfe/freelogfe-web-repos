@@ -1,5 +1,6 @@
 <template>
     <div
+        class="overview-header"
         style="padding: 20px; display: flex; box-sizing: border-box; box-shadow:0 3px 8px 0 rgba(0,0,0,0.2); border-radius:10px;">
         <img
             :src="previewSrc || undefined"
@@ -11,6 +12,7 @@
             style="display: flex; flex-shrink: 1; width: 100%; flex-direction: column; justify-content: space-between; box-sizing: border-box; padding-left: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <a
+
                     target="_blank"
                     :href="type==='release' ? `/release/detail/${theID}?version=${version}`: `/mock/update/${theID}`"
                     style="align-items: center; display: flex;"
@@ -55,6 +57,10 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    .overview-header {
+        a:hover {
+            text-decoration: underline;
+        }
+    }
 </style>
