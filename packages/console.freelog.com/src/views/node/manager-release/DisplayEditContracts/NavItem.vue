@@ -4,7 +4,9 @@
         style="padding: 12px 20px; display: block; cursor: pointer;"
         :style="{'background-color': activated ? '#fff': 'transparent'}"
     >
-        <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}}</div>
+        <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}} <a
+            @click="gotoDetails"
+            style="font-size: 12px;text-decoration: underline; color: #409eff; margin-left: 8px;">详情</a></div>
         <!--        <div style="height: 10px;"></div>-->
         <div style="font-size: 12px; color: #999;">{{type}} | {{version}} | {{date}}</div>
         <div style="overflow: hidden;">
@@ -56,6 +58,13 @@
                     ];
                 }
             }
+        },
+        methods: {
+            gotoDetails(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.$emit('gotoDetails');
+            },
         }
     }
 </script>

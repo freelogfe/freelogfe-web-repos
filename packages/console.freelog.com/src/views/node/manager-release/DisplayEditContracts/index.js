@@ -305,6 +305,10 @@ export default {
         async updatePresentable(params) {
             return await this.$axios.put(`/v1/presentables/${this.$route.params.presentableId}`, params);
         },
+        gotoDetails(releaseId, version) {
+            // console.log(releaseId, version, 'gotoDetails');
+            window.open(`/release/detail/${releaseId}?version=${version}`)
+        },
     },
     watch: {
         activatedIndex() {

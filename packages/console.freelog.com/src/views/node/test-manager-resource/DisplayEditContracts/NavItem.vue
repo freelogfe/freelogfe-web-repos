@@ -5,8 +5,14 @@
         style="padding: 12px 20px; display: block; cursor: pointer;"
         :style="{'background-color': activated ? '#fff': 'transparent'}"
     >
-        <el-badge :is-dot="tags.length === 0" style="display: block;">
-            <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}}</div>
+        <el-badge
+            :is-dot="tags.length === 0"
+            style="display: block;"
+        >
+            <div style="color: #333; font-size: 14px; font-weight: 600; display: flex; align-items: center;">{{title}}
+                <a
+                    @click="gotoDetails"
+                    style="font-size: 12px;text-decoration: underline; color: #409eff; margin-left: 8px;">详情</a></div>
         </el-badge>
         <!--        <div style="height: 10px;"></div>-->
         <div style="font-size: 12px; color: #999;">{{type}} | {{version}} | {{date}}</div>
@@ -64,10 +70,17 @@
             //     type: Boolean,
             //     default: false,
             // }
+        },
+        methods: {
+            gotoDetails(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.$emit('gotoDetails');
+            },
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 
 </style>

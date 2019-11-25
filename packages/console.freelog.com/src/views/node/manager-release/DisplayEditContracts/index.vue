@@ -15,6 +15,7 @@
                     <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
 
                     <NavItem
+                        @gotoDetails="gotoDetails(item.releaseId, item.release.resourceVersions[0].version)"
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
                         :title="item.releaseName"

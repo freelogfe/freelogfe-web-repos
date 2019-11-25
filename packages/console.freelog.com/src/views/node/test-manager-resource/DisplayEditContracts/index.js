@@ -323,6 +323,10 @@ export default {
             const {testResourceID} = this.$route.params;
             return await this.$axios.put(`/v1/testNodes/testResources/${testResourceID}`, params);
         },
+        gotoDetails(releaseId, version) {
+            // console.log(releaseId, version, 'gotoDetails');
+            window.open(`/release/detail/${releaseId}?version=${version}`)
+        },
     },
     watch: {
         activatedIndex() {
