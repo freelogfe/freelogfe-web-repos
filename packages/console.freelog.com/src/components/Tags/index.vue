@@ -33,8 +33,9 @@
         <!--    >-->
 
         <!--      <span style="background-color: #666; border-radius: 50%; border: none; display: inline-block; width: 20px; height: 20px;">-->
+        <!--            v-if="inputVisible || isCanCURD"-->
         <i
-            v-if="inputVisible || isCanCURD"
+            v-if="!inputVisible"
             style="font-size: 12px; color: #666; background-color: #f1f1f1; border-radius: 50%; padding: 5px; cursor: pointer; margin-bottom: 10px;"
             class="el-icon-plus"
             @click="showInput"
