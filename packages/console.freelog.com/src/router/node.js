@@ -1,42 +1,6 @@
 import Views from '@/views'
 import i18n from '../lib/i18n'
 
-// 节点操作相关的页面
-// export const nodeItemRoute = {
-//     path: ':nodeId',
-//     component: Views.container,
-//     hidden: true,
-//     meta: {
-//         requiresAuth: true,
-//         title: `:nodeId${i18n.t('routes.nodes')}` // :key 可动态通过route.params上的k-v进行替换
-//     },
-//     children: [
-//         {
-//             path: 'presentable',
-//             meta: {
-//                 requiresAuth: true,
-//                 title: 'presentable',
-//                 type: 'node'
-//             },
-//             hidden: true,
-//             component: Views.container,
-//             redirect: '/node/:nodeId/presentable',
-//             children: [
-//                 {
-//                     path: ':presentableId',
-//                     meta: {
-//                         requiresAuth: true,
-//                         title: i18n.t('routes.presentableDetail'),
-//                         type: 'node',
-//                         hideSidebar: true
-//                     },
-//                     component: Views.presentableDetail,
-//                 }
-//             ]
-//         }
-//     ]
-// }
-
 export default {
     path: 'node',
     meta: {
