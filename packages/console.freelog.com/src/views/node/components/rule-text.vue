@@ -52,31 +52,31 @@ export default {
   methods: {
     resolveTextRule() {
       const { operation, replaces } = this.ruleInfo
+      const contentsArr = []
       var content = ''
       switch(operation) {
         case 'add': {
-          content += this.resolveAddRule()
+          contentsArr.push(this.resolveAddRule())
           if(replaces && replaces.length > 0) {
-            content += '，' + this.resolveReplaceRule()
+            contentsArr.push(this.resolveReplaceRule())
           }
-          content += this.resolveSetVersionRule()
-          content += this.resolveSetTagRule()
+          contentsArr.push(this.resolveSetVersionRule())
+          contentsArr.push(this.resolveSetTagRule())
           break
         }
         case 'alter': {
-          content += this.resolveReplaceRule()
-          content += this.resolveSetTagRule()
+          contentsArr.push(this.resolveReplaceRule())
+          contentsArr.push(this.resolveSetTagRule())
           break
         }
         case 'activate_theme': {
-          content = this.resolveActivateTheme()
+          contentsArr.push(this.resolveActivateTheme())
           break
         }
         default: {}
       } 
-
-      content += this.resolveOnlineRule()
-      this.content = content
+      contentsArr.push(this.resolveOnlineRule())
+      this.content = contentsArr.filter(cont => cont !== '').join('，')
     },
     resolveAddRule() {
       const { presentableName, candidate: { name, type } } = this.ruleInfo
@@ -118,9 +118,9 @@ export default {
       const { online, presentableName } = this.ruleInfo
       const operationsTexts = this.$i18n.t('operations')
       if (online === true) {
-        return `，${operationsTexts[4]} <strong>${presentableName}</strong>`
+        return `${operationsTexts[4]} <strong>${presentableName}</strong>`
       } else if (online === false){
-        return `，${operationsTexts[5]} <strong>${presentableName}</strong>`
+        return `${operationsTexts[5]} <strong>${presentableName}</strong>`
       } else {
         return ''
       }

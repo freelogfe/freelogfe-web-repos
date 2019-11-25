@@ -3,7 +3,7 @@ import { throwError, createError } from '../exceptions/throwError'
 import { EXCEPTION_AUTH } from '../exceptions/names'
 import { injectCodeResource } from '../helpers/index'
 
-const HEADERS_FREELOG_SUB_RELEASE = 'freelog-sub-releases'
+const HEADERS_FREELOG_SUB_DEPENDENCIES = 'freelog-sub-dependencies'
 
 var _fetch = window.fetch
 export default function init(fetch) {
@@ -17,6 +17,17 @@ export default function init(fetch) {
 export function pagingGetPresentables(params) {
   return _fetch('/v1/presentables/authList', { data: params })
     .then(resp => resp.json())
+    .then(res => {
+      if(res.errcode === 0 && res.data.dataList) {
+        res.data.dataList = res.data.dataList.map(p => {
+          const authResult = p.authResult  
+          const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
+          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          return p
+        })
+      }
+      return res
+    })
 }
 
 /**
@@ -38,13 +49,17 @@ export function getPresentableAuth(presentableId) {
     .then(resp => resp.json())
     .then(res => {
       if(res.errcode === 0 && res.data) {
-        const fSubReleases = res.data[HEADERS_FREELOG_SUB_RELEASE]
-        subReleases = Buffer.from(fSubReleases,'base64').toString('utf-8')
-        subReleases = JSON.parse(subReleases) 
-        res.data.subReleases = subReleases
+        const fSubReleases = res.data[HEADERS_FREELOG_SUB_DEPENDENCIES]
+        res.data.subReleases = resolveSubDependencies(fSubReleases)
       }
       return res
     })
+}
+
+function resolveSubDependencies(fSubDependencies) {
+  var subDependencies = Buffer.from(fSubDependencies,'base64').toString('utf-8')
+  subDependencies = JSON.parse(subDependencies) 
+  return subDependencies
 }
 
 /**
@@ -63,6 +78,17 @@ export function batchGetPresentables(params) {
   const nodeId = window.__auth_info__.__auth_node_id__
   return _fetch(`/v1/${nodeId}/presentables/authList`, { data: params })
     .then(resp => resp.json())
+    .then(res => {
+      if(res.errcode === 0 && res.data.dataList) {
+        res.data.dataList = res.data.dataList.map(p => {
+          const authResult = p.authResult  
+          const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
+          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          return p
+        })
+      }
+      return res
+    })
 }
 
 /**
