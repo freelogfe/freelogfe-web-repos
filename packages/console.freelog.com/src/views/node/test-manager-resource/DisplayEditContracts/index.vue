@@ -17,6 +17,7 @@
                     <!--                    :isTip="true"-->
                     <NavItem
                         @click="activatedIndex = index"
+                        @gotoDetails="gotoDetails(item.releaseId, item.release.resourceVersions[0].version)"
                         :activated="activatedIndex === index"
                         :title="item.releaseName"
                         :type="item.release && item.release.resourceType"
