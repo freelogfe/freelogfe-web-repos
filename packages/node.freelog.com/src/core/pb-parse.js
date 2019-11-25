@@ -30,32 +30,37 @@ function loadWidgets(FreelogApp) {
   const promises = []
   const vis = {}
 
-  if (window.__auth_info__) {
-    const { __page_build_sub_releases = [], __page_build_id: presentableId, __page_build_entity_id: entityNid } = window.__auth_info__
+  try {
+    if (window.__auth_info__) {
+      const { __page_build_sub_releases = [], __page_build_id: presentableId, __page_build_entity_id: entityNid } = window.__auth_info__
 
-    __page_build_sub_releases
-      .filter(({ releaseId, id }) => !!releaseId || !!id)
-      .forEach(subRelease => {
-        const { releaseId, version, resourceType, id } = subRelease
-        const subReleaseId = releaseId || id
-        if (!vis[subReleaseId]) {
-          vis[subReleaseId] = true
-          const url = resolveSubDependDataUrl(presentableId, subReleaseId, entityNid)
+      __page_build_sub_releases
+        .filter(({ releaseId, id }) => !!releaseId || !!id)
+        .forEach(subRelease => {
+          const { releaseId, version, resourceType, id } = subRelease
+          const subReleaseId = releaseId || id
+          if (!vis[subReleaseId]) {
+            vis[subReleaseId] = true
+            const url = window.FreelogApp.QI.resolveSubDependDataUrl(presentableId, subReleaseId, entityNid)
 
-          switch (resourceType) {
-            case 'widget':
-            case 'js': {
-              createScript(url)
-              break
+            switch (resourceType) {
+              case 'widget':
+              case 'js': {
+                createScript(url)
+                break
+              }
+              case 'css': {
+                createCssLink(url)
+              }
+              default: { }
             }
-            case 'css': {
-              createCssLink(url)
-            }
-            default: { }
           }
-        }
-      })
+        })
+    }
+  } catch (e) {
+
   }
+  
   return Promise.all(promises)
 }
 
