@@ -10,6 +10,7 @@ import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 import i18n from './i18n';
 import ReleasedItem from "./ReleasedItem";
+import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {
     name: 'editor',
@@ -278,9 +279,9 @@ export default {
                 throw new Error('请输入资源名称');
             }
 
-            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
-                throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+            if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
+                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
+                throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {

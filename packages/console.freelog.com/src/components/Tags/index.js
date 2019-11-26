@@ -1,3 +1,5 @@
+import {COMMON_NAME_REGEXP} from '@/config/regexp';
+
 export default {
     name: 'freelog-tags',
     data() {
@@ -53,7 +55,7 @@ export default {
             const inputValue = this.inputValue;
 
             if (inputValue) {
-                if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.inputValue)) {
+                if (!COMMON_NAME_REGEXP.test(this.inputValue)) {
                     return this.$message.error('标签的名称不能包含空格和以下字符：\\ / : * ? " < > |');
                 }
                 // this.tags.push(inputValue)

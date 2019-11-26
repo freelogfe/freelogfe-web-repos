@@ -45,6 +45,7 @@
 </template>
 
 <script>
+    import {COMMON_NAME_REGEXP} from '@/config/regexp';
     export default {
         name: 'ConfirmInput',
         props: {
@@ -75,8 +76,8 @@
                 }, 10);
             },
             confirmChange() {
-                if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.inputValue)) {
-                    return this.$message.error('资源的名称不能包含空格和以下字符：\\ / : * ? " < > |');
+                if (!COMMON_NAME_REGEXP.test(this.inputValue)) {
+                    return this.$message.error('资源的名称不能包含空格和以下字符：\\ / : * ? " < > | @ # $');
                 }
                 this.isEdit = false;
                 // console.log(this.inputValue, 'inputValue');
