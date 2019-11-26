@@ -61,11 +61,11 @@
 			</div>
 			<div class="mapping-rule-errors-box">
 				<template v-if="syntaxErrorsText !== ''">
-					<h4>SyntaxErrors:</h4>	
+					<h4 class="syntax-error__title">{{$t('errors[2]')}}</h4>	
 					<ul v-html="syntaxErrorsText"></ul>
 				</template>
 				<template v-if="matchErrorsText !== ''">
-					<h4>MatchErrors:</h4>	
+					<h4 class="match-error__title">{{$t('errors[3]')}}</h4>	
 					<ul v-html="matchErrorsText"></ul>
 				</template>
 			</div>
@@ -248,7 +248,7 @@ export default {
 		},
 		tapEditBtn() {
 			this.editorVisible = true
-			this.resolveMatchErrors(this.testRulesData)
+			// this.resolveMatchErrors(this.testRulesData)
 		},
 		// 导出规则
 		tapExportBtn() {
@@ -360,12 +360,14 @@ export default {
 			
 			try {
 				var result = compile(this.rulesText)
+				console.log(result)
 			}catch(e) {
 				console.error(e)
 			}
 			
 			if(result == null) {
-				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('erros[0]')}</li>`
+				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('errors[0]')}</li>`
+				this.matchErrorsText = ''
 				return 
 			} 
 
@@ -373,6 +375,7 @@ export default {
 				this.syntaxErrorsText = result.errors.map(error => {
 					return `<li class="mr-syntax-error">${error}</li>`
 				}).join('')
+				this.matchErrorsText = ''
 				return 
 			}else {
 				this.syntaxErrorsText = ''
@@ -402,8 +405,8 @@ export default {
 			if(matchErrors.length > 0) {
 				matchErrorsText = matchErrors.map(item => {
 					return `<li class="mr-match-error">
-										<p>line: ${item.text}</p>
-										<p>error: ${item.error}</p>	
+										<p>语句: ${item.text}</p>
+										<p>错误: ${item.error}</p>	
 									</li>`
 				}).join('')
 			}
@@ -423,7 +426,7 @@ export default {
 					self.$message.error({
 						dangerouslyUseHTMLString: true,
 						duration: 5000,
-						message: self.$i18n.t('erros[1]') + "<br/>" + result.errors.join('<br/>')
+						message: self.$i18n.t('errors[1]') + "<br/>" + result.errors.join('<br/>')
 					})
 				}else {
 					self.rulesText = self.rulesText + '\n' + exportText
@@ -494,10 +497,13 @@ export default {
 			opacity: 1; pointer-events: inherit;
 			// -webkit-transform: translateX(0); transform: translateX(0);
 		}
-
-		h4 {
-		 	line-height: 40px; font-size: 14px; color: #666;
+		.syntax-error__title, .match-error__title  {
+			margin-bottom: 20px;
+			line-height:20px; font-size: 14px; font-weight: 600;
 		}
+		.syntax-error__title { color: #EE4040; }
+		.match-error__title { color: #409EFF}
+
 		.mapping-rule-input-box { 
 			position: relative; 
 		}
@@ -553,7 +559,7 @@ export default {
 	margin-top: 20px; margin-bottom: 30px; 
 	.mr-syntax-error, .mr-match-error {
 		margin-left: 15px; list-style-type: disc;
-		line-height: 2; color: #F56C6C;
+		line-height: 2; color: #666;
 	}
 }
 </style>
