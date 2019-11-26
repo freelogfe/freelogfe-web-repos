@@ -9,6 +9,7 @@ import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
 import i18n from './i18n';
+import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {
     name: 'editor',
@@ -249,8 +250,9 @@ export default {
                 return this.$message.error(this.$t('pleaseEnterAResourceName'));
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
-            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
+            // if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
+            if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
+                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
