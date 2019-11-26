@@ -7,6 +7,7 @@
         <el-select class="tpl-node-select" v-model="checkedNodeId" placeholder="请选择节点">
           <el-option v-for="node in nodes" :key="node.nodeId" :label="node.nodeName" :value="node.nodeId"></el-option>
         </el-select>
+        <a :href="nodeSiteMap[checkedNodeId]" target="_blank"> {{nodeSiteMap[checkedNodeId]}}</a>
       </h3>
       <div class="tpl-btn-group">
         <el-button type="primary" @click="refreshPresentablesList">刷新列表</el-button>
@@ -110,6 +111,7 @@
         },
         selectedType: qResourceType != null ? qResourceType : 'all',
         checkedNodeId: '',
+        nodeSiteMap: {},
         selectedPresentables: []
       }
     },
@@ -130,6 +132,9 @@
     watch: {
       nodes() {
         if(this.nodes.length) {
+          this.nodes.forEach(node => {
+            this.nodeSiteMap[node.nodeId] = `${window.location.protocol}//${node.nodeDomain}.${window.FreelogApp.Env.mainDomain}`
+          })
           this.checkedNodeId = this.nodes[0].nodeId
         }
       },
@@ -262,7 +267,7 @@
     h3 { 
       height: 72px;  padding: 0 20px;
       span { line-height: 72px; font-size: 16px; }
-      .tpl-node-select { display: inline-block; margin-left: 12px; }
+      .tpl-node-select { display: inline-block; margin: 0 12px; }
     }
     .tpl-btn-group {
       position: absolute; top: 0; right: 0;

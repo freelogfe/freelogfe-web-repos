@@ -5,7 +5,7 @@
       <!--<h1 class="brand">-->
       <!--<router-link to="/" tabindex="-1">freelog.com</router-link>-->
       <!--</h1>-->
-      <h2 class="heading">{{$t('login.title')}}</h2>
+      <h2 class="heading" :class="{ 'show-error': error }">{{$t('login.title')}}</h2>
       <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
       <el-alert type="warning" :title="error.title" :description="error.message" show-icon v-if="error" />
     </header>
@@ -149,7 +149,6 @@ export default {
   },
 
   mounted() {
-    
   },
 
   methods: {
@@ -225,6 +224,7 @@ export default {
         })
     },
     afterLogin(userInfo) {
+      if (userInfo == null) return 
       this.$emit("after-login-success")
       const win = window
       setItemForStorage(USER_SESSION, userInfo)
@@ -261,7 +261,11 @@ export default {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #505458;
+    &.show-error { 
+      margin-bottom: 20px; 
+    }
   }
+  .el-alert { margin-bottom: 20px; }
 
   .user-ops {
     float: right;

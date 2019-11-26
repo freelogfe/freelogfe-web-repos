@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       releaseId: this.$route.params.releaseId,
+      releaseName: this.$route.query.releaseName,
       activeReleaseVersion: this.$route.query.version,
       isOwnRelease: false,
       isOnline: true,
@@ -90,33 +91,62 @@ export default {
   },
   created() {
     this.isShowContentLoading = true
-    this.fetchReleaseDetail()
-    this.fetchReleaseSubordinateNodes()
-    this.getColleactedStatus()
+    if (this.releaseId) {
+      this.fetchReleaseDetail(true)
+      this.fetchReleaseSubordinateNodes()
+      this.getColleactedStatus()
+    } else if (this.releaseName){
+      this.fetchReleaseDetail(false)
+        .then(() => {
+          this.fetchReleaseSubordinateNodes()
+          this.getColleactedStatus()
+        })
+    }
+    
   },
   methods: {
-    // 获取发行详情
-    fetchReleaseDetail() {
-      this.$services.ReleaseService.get(this.releaseId)
+    getReleaseDetailById() {
+      return this.$services.ReleaseService.get(this.releaseId)
+    },
+    getReleaseDetailByName() {
+      const releaseName = encodeURIComponent(this.releaseName)
+      return this.$services.ReleaseService.get(`/detail?releaseName=${releaseName}`)
+    },
+    fetchReleaseDetail(isById = true) {
+      let promise = null
+      if (isById) {
+        promise = this.getReleaseDetailById()
+      } else {
+        promise = this.getReleaseDetailByName()
+      }
+      return promise
         .then(res => res.data)
         .then(res => {
-          if(res.errcode === 0) {
-            this.release = this.selectedRelease = res.data
-            this.release.selectedPolicies = []
-            this.isOnline = this.release.status === 1
-
-            this.formatReleaseData()
-            this.fetchResourceDetail()
-            this.fetchUpcastDepReleases()
-            if(this.session && this.session.user) {
-              this.isOwnRelease = this.release.userId === this.session.user.userId
-            }
-          }
-          this.isShowContentLoading = false
+          this.resolveReleaseDetail(res)
         }).catch(e => {
           this.$error.showErrorMessage(e)
           this.isShowContentLoading = false
         })
+    },
+    // 获取发行详情
+    resolveReleaseDetail(res) {
+      if(res.errcode === 0) {
+        this.releaseId = res.data.releaseId
+        this.release = this.selectedRelease = res.data
+        this.release.selectedPolicies = []
+        this.isOnline = this.release.status === 1
+        if (this.activeReleaseVersion == null) {
+          this.activeReleaseVersion = res.data.latestVersion.version
+        }
+        
+        this.formatReleaseData()
+        this.fetchResourceDetail()
+        this.fetchUpcastDepReleases()
+        if(this.session && this.session.user) {
+          this.isOwnRelease = this.release.userId === this.session.user.userId
+        }
+      }
+      this.isShowContentLoading = false
     },
     // 获取资源详情
     fetchResourceDetail() {

@@ -24,6 +24,17 @@ export default {
       component: Views.releaseCreator,
     },
     {
+      path: 'detail',
+      hidden: true,
+      meta: {
+        requiresAuth: true,
+        title: i18n.t('routes.releaseDetail'),
+        type: 'release',
+        theme: 'white'
+      },
+      component: Views.releaseDetail
+    },
+    {
       path: 'detail/:releaseId',
       hidden: true,
       meta: {

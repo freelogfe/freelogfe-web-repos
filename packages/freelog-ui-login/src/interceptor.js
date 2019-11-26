@@ -6,8 +6,10 @@ export default function addAxiosInterceptorHandler(options) {
 		(response) => {
 			if(typeof checkIsAuthException === 'function') {
 				if (checkIsAuthException(response)) {
-					// 跳登录
-					goToLoginPage()
+					setTimeout(() => {
+						// 跳登录
+						goToLoginPage()
+					})
 	
 					// 延迟返回响应
 					return new Promise(resolve => {

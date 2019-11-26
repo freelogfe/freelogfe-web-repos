@@ -15,9 +15,11 @@ function goToPath(path) {
 
 // 跳登录页
 export function goToLoginPage() {
-	const redirect = encodeURIComponent(window.location.href)
-	var targetPath = `${LOGIN_PATH}?redirect=${redirect}`
-	return goToPath(targetPath)
+	if (window.location.pathname !== LOGIN_PATH) {
+		const redirect = encodeURIComponent(window.location.href)
+		var targetPath = `${LOGIN_PATH}?redirect=${redirect}`
+		return goToPath(targetPath)
+	}
 }
 
 // 跳首页

@@ -372,8 +372,11 @@ export default {
 			} 
 
 			if(result.errors != null) {
-				this.syntaxErrorsText = result.errors.map(error => {
-					return `<li class="mr-syntax-error">${error}</li>`
+				this.syntaxErrorsText = result.errorObjects.map(error => {
+					return `<li class="mr-syntax-error">
+						<p>语句: line ${error.line}, col ${error.col} ${error.lineText}</p>
+						<p>错误: ${error.msg}</p>	
+					</li>`
 				}).join('')
 				this.matchErrorsText = ''
 				return 
