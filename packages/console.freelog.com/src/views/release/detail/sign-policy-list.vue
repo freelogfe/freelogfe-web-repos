@@ -3,27 +3,29 @@
   <div>
     <div class="signed-list" v-if="signedPolicies.length">
       <h3>
-        {{type !== 'edit' ? $t('signedContracts') : $t('signStatus[0]')}} 
-        <el-tooltip placement="right" :content="$t('tips[2]')" v-if="type !== 'edit'" >
+        {{isSignedNode ? '已签约至' + nodeMap[checkedNodeId] : '历史合约'}}
+        <el-tooltip placement="right" :content="$t('tips[2]')" >
           <i class="el-icon-info"></i>
         </el-tooltip>
       </h3>
-      <div class="s-l-item" v-for="policy in signedPolicies" :key="policy.policyId">
-        <div class="p-name" :class="[type]" @click="selectPolicy(signedPolicies, policy)">
-          <span class="p-n-check-box" v-if="!policy.isSelected"></span>
-          <i class="el-icon-check" v-else></i>
+      <div class="s-l-item" v-for="policy in signedPolicies" :key="policy.pCombinationID">
+        <div class="p-name" :class="{'isSigned': isSignedNode}" @click="selectPolicy(signedPolicies, policy)">
+          <template v-if="!isSignedNode"> 
+            <span class="p-n-check-box" v-if="!policy.isSelected"></span>
+            <i class="el-icon-check" v-else></i>
+          </template>
           {{policy.policyName}}
-          <span class="contract-status" :class="['status-'+contractsPolicyIdMap[policy.policyId].status]">{{contractsPolicyIdMap[policy.policyId].statusTip}}</span>
+          <span class="contract-status" :class="['status-'+policy.contract.status]">{{policy.statusTip}}</span>
         </div>
         <div class="p-auth-info">
-          <span>{{$t('contractID')}}：{{contractsPolicyIdMap[policy.policyId].contractId}}</span>
-          <span>{{$t('signingDate')}}：{{contractsPolicyIdMap[policy.policyId].updateDate | fmtDate}}</span>
+          <span>{{$t('contractID')}}：{{policy.contract.contractId}}</span>
+          <span>{{$t('signingDate')}}：{{policy.contract.updateDate | fmtDate}}</span>
         </div>
         <div class="p-detail">
           <contract-detail
                   class="contract-policy-content"
-                  :contract.sync="contractsPolicyIdMap[policy.policyId]"
-                  :policyText="contractsPolicyIdMap[policy.policyId].contractClause.policyText"
+                  :contract.sync="policy.contract"
+                  :policyText="policy.contract.contractClause.policyText"
                   @update-contract="updateContractAfterEvent"></contract-detail>
         </div>
       </div>
@@ -43,9 +45,14 @@
         </el-tooltip>
       </h3>
       <div class="no-s-l-item" v-for="p in nodSignPolicies" :key="p.policyId">
-        <div class="p-name" :class="[type]" @click="selectPolicy(nodSignPolicies, p)">
-          <span class="p-n-check-box" v-if="!p.isSelected"></span>
-          <i class="el-icon-check" v-else></i>
+        <div class="p-name" :class="{'isSigned': isSignedNode}" @click="selectPolicy(nodSignPolicies, p)">
+          <template v-if="isSignedNode">
+            <el-button class="p-sign-btn" type="primary" size="mini" @click="signPolicy">签约</el-button>
+          </template>
+          <template v-else>
+            <span class="p-n-check-box" v-if="!p.isSelected"></span>
+            <i class="el-icon-check" v-else></i>
+          </template>
           {{p.policyName}}<span v-if="p.status === 0">（{{$t('offline')}}）</span>  
         </div>
         <div class="p-detail">
@@ -60,25 +67,38 @@
 import { beautifyPolicy } from '@freelog/freelog-policy-lang'
 import { ContractDetail } from '@freelog/freelog-ui-contract'
 import { CONTRACT_STATUS_TIPS } from '@/config/contract.js'
+import { togglePolicy } from '@/lib/utils'
 export default {
   name: 'sign-policy-list',
   components: { ContractDetail },
   props: {
     policies: {
-      type: 'Array',
+      type: Array,
       default: () => []
     },
     contracts: {
-      type: 'Array',
+      type: Array,
       default: () => []
     },
     release: {
-      type: "Object",
+      type: Object,
+      default: () => {}
+    },
+    checkedNodeId: {
+      type: String,
+      default: ''
+    },
+    nodeMap: Object,
+    rSubordinateNodesIds: {
+      type: Array,
       default: () => []
-    }
+    },
   },
   data() {
-    return {}
+    return {
+      nodSignPolicies: [],
+      signedPolicies: []
+    }
   },
   computed: {
     // policyId和contract的映射
@@ -90,82 +110,69 @@ export default {
       })
       return map
     },
-    signedPolicies() {
-      return this.policies.filter(p => this.contractsPolicyIdMap[p.policyId]).map(p => {
-        const contract = this.contractsPolicyIdMap[p.policyId]
-        p.contractId = contract.contractId
-        return p
-      })
+    isSignedNode() {
+      return this.rSubordinateNodesIds.indexOf(this.checkedNodeId) !== -1
     },
-    nodSignPolicies() {
-      return this.policies.filter(p => !this.contractsPolicyIdMap[p.policyId]).map(p => {
-        p.contractId = ''
-        return p
-      })
-    }
+    // nodSignPolicies() {
+    //   return this.getNoSignedPolicies()
+    // },
+    // signedPolicies() {
+    //   return this.getSignedPolicies()
+    // }
   },
   watch: {
-    contracts() {
-      const tmpPolicies = this.release.selectedPolicies
-      const leng = tmpPolicies.length
-      for(let i = 0; i < leng; i++) {
-        const p = tmpPolicies[i]
-        const contract = this.contractsPolicyIdMap[p.policyId]
-        if(p.contractId) {
-          if(!contract) {
-            p.contractId = ''
-            tmpPolicies.splice(i, 1, p)
-          }
-        }else {
-          if(contract) {
-            p.contractId = contract.contractId
-            tmpPolicies.splice(i, 1, p)
-          }
-        }
-      }
+    policies() {
+      console.log('policies --')
+      this.resolvePolicies()
     },
+    contracts() {
+      console.log('contracts --')
+      this.resolvePolicies()
+    },
+  },
+  mounted() {
+    this.resolvePolicies()
   },
   methods: {
     fmtPolicyTextList(p) {
       return beautifyPolicy(p.policyText)
     },
+    resolvePolicies() {
+      this.signedPolicies = this.getSignedPolicies()
+      this.nodSignPolicies = this.getNoSignedPolicies()
+    },
+    getNoSignedPolicies() {
+      return this.policies.filter(p => p.contract == null).map(p => {
+        p.statusTip = ''
+        return p
+      })
+    },
+    getSignedPolicies() {
+      return this.policies.filter(p => p.contract != null).map(p => {
+        p.statusTip = CONTRACT_STATUS_TIPS[p.contract.status]
+        return p
+      })
+    },
     // 选择策略
     selectPolicy(policies, policy) {
-      if(this.type === 'edit') return 
+      if(this.checkedNodeId === '') {
+        this.$message({
+          message: '请先选择签约节点',
+          type: 'warning'
+        })
+        return 
+      }
 
       policy.isSelected = !policy.isSelected
       this.policies = this.policies.map(p => p)
       if(policy.isSelected) {
-        this.togglePolicy(this.release.selectedPolicies, policy, 'add')
+        togglePolicy(this.release.selectedPolicies, policy, 'add')
       }else {
-        this.togglePolicy(this.release.selectedPolicies, policy, 'delete')
+        togglePolicy(this.release.selectedPolicies, policy, 'delete')
       }
     },
-    togglePolicy(policies, policy, type) {
-      this.toggleArrayItem(type, policies, policy, (i1, i2) => i1.policyId === i2.policyId)
-    },
-    toggleArrayItem(type, arr, target, verify) {
-      var index = -1
-      for(let i = 0; i < arr.length; i++) {
-        if(verify(target, arr[i])) {
-          index = i
-          break
-        }
-      }
-      switch (type) {
-        case 'add': {
-          if(index === -1) {
-            arr.push(target)
-          }
-          break
-        }
-        case 'delete': {
-          if(index !== -1) {
-            arr.splice(index, 1)
-          }
-        }
-        default: {}
-      }
+    signPolicy() {
+      
     },
   },
 }
@@ -182,11 +189,16 @@ export default {
   margin-bottom: 20px; border: 1px solid #ccc; border-top-left-radius: 4px; border-top-right-radius: 4px;
   color: #333;
   
-  
   .p-name {
     position: relative; cursor: pointer;
     padding: 10px 0 10px 40px;
     font-size: 16px; color: #333;
+    &.isSigned { padding-left: 15px; background-color: #FAFBFB; }
+    .p-sign-btn {
+      float: right;
+      margin-right: 15px; border-radius: 20px;
+      font-size: 12px; 
+    }
 
     .p-n-check-box {
       display: inline-block;
@@ -215,7 +227,7 @@ export default {
 }
 .s-l-item {
   position: relative;
-  border: 1px solid #ccc; border-radius: 4px; background-color: #fbfbfb;
+  border: 1px solid #ccc; border-radius: 4px; background-color: #FAFBFB;
   
   .p-name{ 
     margin-top: 8px; font-weight: 600;

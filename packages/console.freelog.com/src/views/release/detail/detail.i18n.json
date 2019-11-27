@@ -1,36 +1,8 @@
 {
   "zh-CN": {
-    "upcast": "上抛",
-    "signContractBtnText": "签约",
-    "applyBtnText": "应用",
-    "layAsideBtnText": "搁置",
-    "offline": "已下线",
-    "signedContracts": "历史合约",
-    "contractID": "合同ID",
-    "signingDate": "签约时间",
-    "partyA": "授权方",
-    "partyB": "被授权方",
-    "policyStatus": [ "已应用", "已搁置" ],
-    "signStatus": [ "已签约" ],
-    "contractStatus": [ "执行中", "生效中", "合同终止", "上抛" ],
-    "tips": [ "该发行已上抛", "以下策略可进行新的签约", "此发行存在历史签约，可直接使用" ],
-    "messages": [ "" ]
+    
   },
   "en": {
-    "upcast": "Upcast",
-    "signContractBtnText": "Sign contract",
-    "applyBtnText": "apply",
-    "layAsideBtnText": "lay aside",
-    "offline": "Already offline",
-    "signedContracts": "Signed contracts",
-    "contractID": "Contract ID",
-    "signingDate": "Signing Date",
-    "partyA": "Party A",
-    "partyB": "Party B",
-    "policyStatus": [ "Already applied", "Already lay aside" ],
-    "signStatus": [ "Already signed" ],
-    "contractStatus": [ "Executing", "In effect", "Termination of contract", "Upcast" ],
-    "tips": [ "The release has been upcasted", "The following policies are available for new signings", "This issue has a historical contract and can be used directly." ],
-    "messages": [ "" ]
+    
   }
 }
