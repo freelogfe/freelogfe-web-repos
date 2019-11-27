@@ -157,12 +157,13 @@
                         <p>{{$t('notCreatedAnyMock')}}</p>
                     </div>
 
+                    <!--                    v-if="mockTableData && mockTableData.length > 0"-->
                     <div
-                        v-if="mockTableData && mockTableData.length > 0"
                         class="mock-list__mocks_non-empty__body_table"
                     >
                         <el-table
-                            :data="mockTableData || []"
+                            :empty-text="mockTableData === null ? '加载中...' : ''"
+                            :data="mockTableData"
                             style="width: 100%">
                             <el-table-column
                                 prop="preview"
@@ -346,7 +347,9 @@
                 :close-on-click-modal="false"
             >
                 <div style="height: 10px;"></div>
-                <div style="color: #333; font-size: 14px; text-align: center; word-break: normal;">{{$t('mockOnceDeleted')}}</div>
+                <div style="color: #333; font-size: 14px; text-align: center; word-break: normal;">
+                    {{$t('mockOnceDeleted')}}
+                </div>
                 <div style="height: 26px;"></div>
                 <div style="text-align: center;">
                     <el-button
