@@ -63,6 +63,7 @@
             <div style="height: 80px;"></div>
 
             <el-table
+                :empty-text="tableData === null ? '加载中...' : ''"
                 :data="tableData"
                 class="node-manager__main__table"
             >
