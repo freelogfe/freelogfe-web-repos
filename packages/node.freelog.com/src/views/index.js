@@ -8,7 +8,7 @@ import contractUIPlugin from '@freelog/freelog-ui-contract'
 import initLogin from '@freelog/freelog-ui-login'
 
 import App from './app.vue'
-import i18n from '@/lib/i18n/index'
+import i18n from '@/i18n/index'
 
 Vue.use(contractUIPlugin)
 initLogin({ Vue, isRegisterRouter: false })
