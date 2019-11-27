@@ -27,6 +27,7 @@
 
         <el-table
             :data="tableData"
+            :empty-text="tableData === null ? '加载中...' : ''"
             class="style-page__table"
         >
             <el-table-column

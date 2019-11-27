@@ -32,7 +32,7 @@ export default {
             // 筛选搜索框
             filterSearch: '',
             // 表格数据
-            tableData: [],
+            tableData: null,
             // 类型可选项
             allTypes: [this.$t('allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
             // 已选类型

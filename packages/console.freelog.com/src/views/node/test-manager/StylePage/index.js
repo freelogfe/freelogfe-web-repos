@@ -16,7 +16,7 @@ export default {
         return {
             matchTestResult: {},
             testRules: [],
-            tableData: [],
+            tableData: null,
             // 筛选搜索框
             filterSearch: '',
             // 已选类型

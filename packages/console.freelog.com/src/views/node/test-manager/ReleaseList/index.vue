@@ -27,6 +27,7 @@
         <div style="height: 70px;"></div>
 
         <el-table
+            :empty-text="tableData === null ? '加载中...' : ''"
             :data="tableData"
             class="release-list__table"
         >
@@ -174,15 +175,19 @@
                         <template v-if="scope.row.resolveReleaseSignStatus === 2">
                             <el-popover
                                 placement="top"
-                                width="100"
+                                width="160"
                                 trigger="hover"
-                                :content="'此合约链上存在异常'"
                             >
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span>此合约链上存在异常</span>
+                                    <el-button @click="operationCommand('编辑', scope.row)" type="text">详情</el-button>
+                                </div>
+                                <!-- operationCommand('编辑', scope.row)   -->
                                 <i
                                     slot="reference"
                                     class="el-icon-warning"
                                     style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
+                                />
                             </el-popover>
                         </template>
                     </div>
