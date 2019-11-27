@@ -27,6 +27,7 @@
         <div style="height: 70px;"></div>
 
         <el-table
+            :empty-text="tableData === null ? '加载中...' : ''"
             :data="tableData"
             class="release-list__table"
         >

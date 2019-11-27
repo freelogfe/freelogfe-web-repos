@@ -15,7 +15,8 @@ export default {
     data() {
         return {
             matchTestResult: {},
-            tableData: [],
+            tableData: null,
+            // loadingTable: true,
             testRules: [],
             // 筛选搜索框
             filterSearch: '',
