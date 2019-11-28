@@ -5,7 +5,6 @@
             :style="styleObject"
             class="node-manager__aside"
         >
-
             <NodeHeader
                 :nodeName="nodeInfo.name"
                 :nodeHref="nodeInfo.origin"
