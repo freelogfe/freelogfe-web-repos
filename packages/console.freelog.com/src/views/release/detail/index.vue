@@ -44,7 +44,7 @@
     <div class="r-d-w-auth-box">
       <div class="r-d-w-main-content">
         <div class="r-d-w-node-list">
-          <h3>选择签约的节点 <a title="添加节点" class="rdw-w-create-node" href="/node/create" target="_blank" v-if="nodes.length"><i class="el-icon-plus"></i></a></h3>
+          <h3>步骤1：选择签约节点 <a title="添加节点" class="rdw-w-create-node" href="/node/create" target="_blank" v-if="nodes.length"><i class="el-icon-plus"></i></a></h3>
           <el-select class="r-d-node-select" v-model="checkedNodeId" placeholder="请选择签约节点" v-if="nodes.length">
             <el-option
               v-for="node in nodes"
@@ -52,7 +52,6 @@
               :label="node.nodeName + (rSubordinateNodesIds.indexOf(node.nodeId) !== -1 ? '（已签约）':'')"
               :value="node.nodeId">
             </el-option>
-            <!-- :disabled="rSubordinateNodesIds.indexOf(node.nodeId) !== -1" -->
           </el-select>
           <div class="rdwr-no-nodes" v-else>
             <el-alert type="warning" show-icon :closable="false">
@@ -62,13 +61,13 @@
             </el-alert>
           </div>
         </div>  
-        <div class="r-d-w-policy-box" :class="{'highlight': checkedNodeId!=''}">
+        <div class="r-d-w-policy-box " :class="{'highlight': checkedNodeId!=''}">
           <h3>
-            策略选择
-            <span><i class="el-icon-top"></i> 上抛</span>
+            步骤2：选择授权策略<span><i class="el-icon-top"></i> 上抛</span>
           </h3>
           <div class="rdw-p-scheme-box">
             <div class="rdw-p-left-box">
+              <h4>当前发行</h4>
               <release-depend-item
                 class="rdw-hide-detial-btn"
                 :release="release"
@@ -76,6 +75,7 @@
                 :resolveStatus="release.resolveStatus"
                 :contractsMap="contractsMap"
                 @exchange-item="exchangeSelectedRelease"></release-depend-item>
+              <h4 v-if="baseUpcastReleasesList.length">基础上抛</h4>
               <release-depend-item
                       v-for="(urItem, _index) in baseUpcastReleasesList"
                       :key="'dep-item-'+_index"
@@ -91,13 +91,16 @@
                 :release="selectedRelease"
                 :policies="selectedRelease.policies" 
                 :contracts="nodeContracts"
+                :rSubordinateNodesIds="rSubordinateNodesIds"
+                :checkedNodeId="checkedNodeId"
+                :nodeMap="nodeMap"
               ></sign-policy-list>
             </div>
           </div>
-          <div class="rdw-p-auth-btn-bar">
+          <div class="rdw-p-auth-btn-bar" v-if="rSubordinateNodesIds.indexOf(checkedNodeId) === -1">
             <el-button type="primary" class="rdw-p-auth-btn" @click="showSignBox">获取授权</el-button>
-            <el-button class="rdw-p-compare-btn" v-if="selectedRelease.policies.length > 1" @click="compareDialogVisible = true">策略对比</el-button>
           </div>
+          <el-button class="rdw-p-compare-btn" v-if="selectedRelease.policies.length > 1" @click="compareDialogVisible = true">策略对比</el-button>
         </div>
       </div>  
     </div>
@@ -115,57 +118,17 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="策略对比"
-      width="740px"
-      :visible.sync="compareDialogVisible"
-      v-if="selectedRelease.policies.length > 1"
-    >
-      <div class="r-d-w-r-p-compare" v-for="(item, index) in comparePolices" :key="'c-p-' + index">
-        <div class="r-d-w-r-p-btn" 
-          :class="{'active': item.activeIndex === index}" 
-          v-for="(p, index) in selectedRelease.policies" 
-          :key="'p-btn-' + index"
-          @click="exchangeComparePolicy(item, index)">{{p.policyName}}</div>
-        <div class="r-d-w-r-p-box">
-          <h4>{{selectedRelease.policies[item.activeIndex].policyName}}</h4>
-          <pre class="r-d-w-r-p-text" v-html="selectedRelease.policies[item.activeIndex].policyText"></pre>
-        </div>
-      </div>
+    <el-dialog title="策略对比" width="740px" :visible.sync="compareDialogVisible" v-if="selectedRelease.policies.length > 1">
+      <policies-compare :selectedRelease="selectedRelease"></policies-compare>
     </el-dialog>
-    <el-dialog
-            center
-            title="签约确认"
-            width="640px"
-            :visible.sync="signDialogVisible"
-    >
-      <div class="r-d-w-r-sign">
-        <h4>选择的节点</h4>
-        <div class="r-d-w-r-node">
-          {{nodeMap[checkedNodeId]}}
-        </div>
-        <h4>策略确认</h4>
-        <div class="r-d-w-r-s-releases" >
-          <div class="rdwr-s-r-item" v-for="(item, index) in release.selectedPolicies" :key="'s-p-'+index">
-            <span class="rdwr-s-r-item-name">{{release.releaseName}}</span>
-            <span class="rdwr-s-r-item-policy">
-              {{item.policyName}}
-            </span>
-          </div>
-          <div v-for="buRelease in baseUpcastReleasesList" :key="buRelease.releaseId">
-            <div class="rdwr-s-r-item" v-for="(item, index) in buRelease.selectedPolicies" :key="'s-p-'+index">
-              <span class="rdwr-s-r-item-name">{{buRelease.releaseName}}</span>
-              <span class="rdwr-s-r-item-policy">
-                {{item.policyName}}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="rdwr-s-btn-group">
-          <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="signDialogVisible = false">取消</el-button>
-          <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">签约</el-button>
-        </div>
-      </div>
+    <el-dialog title="签约确认" width="640px" :visible.sync="signDialogVisible" center>
+      <signed-confirm 
+        :checkedNodeId="checkedNodeId"
+        :checkedNodeName="nodeMap[checkedNodeId]"
+        :release="release"
+        :baseUpcastReleasesList="baseUpcastReleasesList"
+        @cancel-sign="signDialogVisible = false"
+        @auth-signed="authSign"></signed-confirm>
     </el-dialog>
   </div>
 </template>

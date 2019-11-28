@@ -3,12 +3,14 @@ import { mapGetters } from 'vuex'
 import RichEditor from '@/components/RichEditor/index.vue'
 import SchemeManage from '../scheme/index.vue'
 import ReleaseDependItem from '../scheme/depend-item.vue'
+import SignedConfirm from './signed-confirm.vue'
+import PoliciesCompare from './policies-compare.vue'
 import signPolicyList from './sign-policy-list.vue'
-import { versionDescendingOrder } from '@/lib/utils.js'
+import { versionDescendingOrder, togglePolicy } from '@/lib/utils.js'
 
 export default {
   name: "release-detail",
-  components: { RichEditor, SchemeManage, ReleaseDependItem, signPolicyList },
+  components: { RichEditor, SchemeManage, ReleaseDependItem, signPolicyList, SignedConfirm, PoliciesCompare },
   data() {
     return {
       releaseId: this.$route.params.releaseId,
@@ -30,16 +32,12 @@ export default {
       checkedNodeId: '',
       rSubordinateNodesIds: [],
       upcastDepReleasesMap: null,
-      checkedLabelMap: {},
+      pCombinationIDMap: {},
       resourceDetail: {
         resourceInfo: {
           description: ''
         }
       },
-      comparePolices: [
-        { activeIndex: 0 },
-        { activeIndex: 1 },
-      ],
       compareDialogVisible: false,
       signDialogVisible: false,
     }
@@ -55,9 +53,6 @@ export default {
         map[r.releaseId] = r
       })
       return map
-    },
-    isOwnRelease() {
-      return true
     },
     nodeMap() {
       const map = {}
@@ -80,12 +75,12 @@ export default {
       }
     },
     checkedNodeId() {
-      this.fetchContracts(this.checkedNodeId)
-        .then(contracts => {
-          this.nodeContracts = contracts
-          contracts.forEach(c => {
-            this.contractsMap[c.contractId] = c
-          })
+      this.getContracts(this.checkedNodeId)
+        .then((contracts) => {
+          const map = {}
+          const nodeContracts = contracts.map(c => (map[c.targetId + '-' + c.policyId] = c))
+          this.resolveReleaseSelectedPolicies(map)
+          this.nodeContracts = nodeContracts
         })
     },
   },
@@ -170,16 +165,46 @@ export default {
           this.isShowContentLoading = false
         })
     },
-    // 获取发行与节点的签约数据
-    fetchContracts(nodeId) {
+    getContracts(nodeId) {
       if(this.nodeContractsMap[nodeId]) {
         return Promise.resolve(this.nodeContractsMap[nodeId])
+      } else {
+        return this.fetchContracts(nodeId)
+          .then(contracts => {
+            contracts.forEach(c => {
+              this.contractsMap[c.contractId] = c
+            })
+            return contracts
+          })
       }
+    },
+    resolveReleaseSelectedPolicies(contractsMap) {
+      var targetReleases = [ this.release, ...this.baseUpcastReleasesList ]
+      for(let r of targetReleases) {
+        for(let p of r.policies) {
+          const contract = contractsMap[p.pCombinationID]
+          if (contract) {
+            p.contract = contract
+            p.contractId = contract.contractId
+            p.isSelected = true
+            togglePolicy(r.selectedPolicies, p, 'add')
+          } else {
+            p.contract = null
+            p.contractId = ''
+            p.isSelected = false
+            togglePolicy(r.selectedPolicies, p, 'delete')
+          }
+        }
+      }
+    },
+    // 获取发行与节点的签约数据
+    fetchContracts(nodeId) {
+      const targetIds = [this.releaseId]
+      this.baseUpcastReleasesList.forEach(r => targetIds.push(r.releaseId))
       return this.$services.ContractService.get('list', {
         params: {
           contractType: 2,
-          targetIds: this.releaseId,
-          partyOne: this.releaseId,
+          targetIds: targetIds.join(','),
           partyTwo: nodeId
         }
       })
@@ -214,8 +239,8 @@ export default {
                 this.isUsable = arr[i].status === 1 && this.isUsable
                 let releaseId = arr[i].releaseId
                 arr[i].policies = arr[i].policies.map(p => {
-                  p.checkedLabel = `${arr[i].releaseId}-${p.policyId}`
-                  this.checkedLabelMap[p.checkedLabel] = { releaseName: arr[i].releaseName, policyName: p.policyName }
+                  p.pCombinationID = `${arr[i].releaseId}-${p.policyId}`
+                  this.pCombinationIDMap[p.pCombinationID] = { releaseName: arr[i].releaseName, policyName: p.policyName }
                   return p
                 })
                 arr[i].selectedPolicies = []
@@ -258,8 +283,8 @@ export default {
     // 重新处理发行详情数据
     formatReleaseData() {
       this.release.policies = this.release.policies.filter(p => p.status === 1).map(p => {
-        p.checkedLabel = `${this.release.releaseId}-${p.policyId}`
-        this.checkedLabelMap[p.checkedLabel] = { releaseName: this.release.releaseName, policyName: p.policyName }
+        p.pCombinationID = `${this.release.releaseId}-${p.policyId}`
+        this.pCombinationIDMap[p.pCombinationID] = { releaseName: this.release.releaseName, policyName: p.policyName }
         return p
       })
       this.release.resourceVersions = this.release.resourceVersions.sort(versionDescendingOrder).map(i => {
