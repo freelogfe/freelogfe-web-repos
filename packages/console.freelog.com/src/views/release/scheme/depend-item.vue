@@ -26,7 +26,7 @@
             v-for="(p, index) in selectedPolicies" 
             :key="'s-policy-'+index"
           >
-            {{p.contractId ? '已签约' : ''}}{{p.policyName}} 
+            {{p.policyName}} 
             <span :class="['contract-status', 'status-' + contractsMap[p.contractId].status]" v-if="contractsMap && contractsMap[p.contractId]"></span>
           </div>
         </template>

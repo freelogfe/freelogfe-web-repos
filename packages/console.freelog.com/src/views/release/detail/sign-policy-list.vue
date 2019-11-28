@@ -3,14 +3,14 @@
   <div>
     <div class="signed-list" v-if="signedPolicies.length">
       <h3>
-        {{isSignedNode ? '已签约至' + nodeMap[checkedNodeId] : '历史合约'}}
-        <el-tooltip placement="right" :content="$t('tips[2]')" >
+        {{checkedNodeIsSigned ? $t('signPolicyBox.titles[0]') + checkedNodeName : $t('signPolicyBox.titles[1]')}}
+        <el-tooltip placement="right" :content="$t('signPolicyBox.tips[0]')" >
           <i class="el-icon-info"></i>
         </el-tooltip>
       </h3>
       <div class="s-l-item" v-for="policy in signedPolicies" :key="policy.pCombinationID">
-        <div class="p-name" :class="{'isSigned': isSignedNode}" @click="selectPolicy(signedPolicies, policy)">
-          <template v-if="!isSignedNode"> 
+        <div class="p-name" :class="{'isSigned': checkedNodeIsSigned}" @click="selectPolicy(signedPolicies, policy)">
+          <template v-if="!checkedNodeIsSigned"> 
             <span class="p-n-check-box" v-if="!policy.isSelected"></span>
             <i class="el-icon-check" v-else></i>
           </template>
@@ -18,36 +18,36 @@
           <span class="contract-status" :class="['status-'+policy.contract.status]">{{policy.statusTip}}</span>
         </div>
         <div class="p-auth-info">
-          <span>{{$t('contractID')}}：{{policy.contract.contractId}}</span>
-          <span>{{$t('signingDate')}}：{{policy.contract.updateDate | fmtDate}}</span>
+          <span>{{$t('signPolicyBox.contractID')}}：{{policy.contract.contractId}}</span>
+          <span>{{$t('signPolicyBox.signingDate')}}：{{policy.contract.updateDate | fmtDate}}</span>
         </div>
         <div class="p-detail">
           <contract-detail
                   class="contract-policy-content"
                   :contract.sync="policy.contract"
                   :policyText="policy.contract.contractClause.policyText"
-                  @update-contract="updateContractAfterEvent"></contract-detail>
+                  @update-contract="updateContractAfterEvent(policy)"></contract-detail>
         </div>
       </div>
     </div>
     <div class="no-sign-list" v-if="nodSignPolicies.length">
       <h3>
-        签约
+        {{signedPolicies.length > 0 ? $t('signPolicyBox.tips[1]') : $t('btns.sign')}}
         <el-tooltip placement="right" effect="light">
           <div class="s-m-w-c-ubh-tip" slot="content">
-            作为被授权方，如果您满足且接受授权方的授权策略，则可以选择和授权方签约。授权双方之间存在一个按照未来发生的事件改变资源授权状态的机制，称之为合约。
+            {{$t('signPolicyBox.signState')}}
             <ul>
-              <li>合约的复用：授权方和被授权方的合约在同一个授权方（节点或发行）范围内可以复用。</li>
-              <li>合约的启用和停用：如果您和授权方的多个授权策略签订了多个合约，则在管理合约时，至少要有一个合约是启用状态。您可以选择启用或者停用其中某一个或某几个合约，在授权链中，系统仅会验证启用合约的授权状态。</li>
+              <li>{{$t('signPolicyBox.signRuleState1')}}</li>
+              <li>{{$t('signPolicyBox.signRuleState2')}}</li>
             </ul>
           </div>
           <i class="el-icon-info"></i>
         </el-tooltip>
       </h3>
       <div class="no-s-l-item" v-for="p in nodSignPolicies" :key="p.policyId">
-        <div class="p-name" :class="{'isSigned': isSignedNode}" @click="selectPolicy(nodSignPolicies, p)">
-          <template v-if="isSignedNode">
-            <el-button class="p-sign-btn" type="primary" size="mini" @click="signPolicy">签约</el-button>
+        <div class="p-name" :class="{'isSigned': checkedNodeIsSigned}" @click="selectPolicy(nodSignPolicies, p)">
+          <template v-if="checkedNodeIsSigned">
+            <el-button class="p-sign-btn" type="primary" size="mini" @click="signNewPolicy(p)">{{$t('btns.sign')}}</el-button>
           </template>
           <template v-else>
             <span class="p-n-check-box" v-if="!p.isSelected"></span>
@@ -84,15 +84,7 @@ export default {
       type: Object,
       default: () => {}
     },
-    checkedNodeId: {
-      type: String,
-      default: ''
-    },
-    nodeMap: Object,
-    rSubordinateNodesIds: {
-      type: Array,
-      default: () => []
-    },
+    checkedNode: Object
   },
   data() {
     return {
@@ -101,32 +93,21 @@ export default {
     }
   },
   computed: {
-    // policyId和contract的映射
-    contractsPolicyIdMap() {
-      const map = {}
-      this.contracts.forEach(c => {
-        c.statusTip = CONTRACT_STATUS_TIPS[c.status]
-        map[c.policyId] = c
-      })
-      return map
+    checkedNodeId() {
+      return this.checkedNode.nodeId
     },
-    isSignedNode() {
-      return this.rSubordinateNodesIds.indexOf(this.checkedNodeId) !== -1
+    checkedNodeName() {
+      return this.checkedNode.nodeName
     },
-    // nodSignPolicies() {
-    //   return this.getNoSignedPolicies()
-    // },
-    // signedPolicies() {
-    //   return this.getSignedPolicies()
-    // }
+    checkedNodeIsSigned() {
+      return this.checkedNode.isSigned
+    }
   },
   watch: {
     policies() {
-      console.log('policies --')
       this.resolvePolicies()
     },
     contracts() {
-      console.log('contracts --')
       this.resolvePolicies()
     },
   },
@@ -171,8 +152,12 @@ export default {
         togglePolicy(this.release.selectedPolicies, policy, 'delete')
       }
     },
-    signPolicy() {
-      
+    signNewPolicy(policy) {
+      togglePolicy(this.release.selectedPolicies, policy, 'add')
+      this.$emit('sign-new-policy')
+    },
+    updateContractAfterEvent() {
+      this.resolvePolicies()
     },
   },
 }

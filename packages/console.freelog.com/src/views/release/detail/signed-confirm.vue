@@ -1,11 +1,11 @@
 <i18n src="./detail.i18n.json"></i18n>
 <template>
   <div class="r-d-w-r-sign">
-    <h4>选择的节点</h4>
+    <h4>{{$t('signConfirm.title1')}}</h4>
     <div class="r-d-w-r-node">
       {{checkedNodeName}}
     </div>
-    <h4>策略确认</h4>
+    <h4>{{$t('signConfirm.title2')}}</h4>
     <div class="r-d-w-r-s-releases" >
       <div class="rdwr-s-r-item" v-for="(item, index) in release.selectedPolicies" :key="'s-p-'+index">
         <span class="rdwr-s-r-item-name">{{release.releaseName}}</span>
@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="rdwr-s-btn-group">
-      <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="cancel">取消</el-button>
-      <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">签约</el-button>
+      <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="cancel">{{$t('btns.cancel')}}</el-button>
+      <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">{{$t('btns.sign')}}</el-button>
     </div>
   </div>
 </template>
@@ -69,17 +69,17 @@ export default {
   .r-d-w-r-s-releases {
     margin: 0 50px 25px 60px;
     font-size: 14px; font-weight: 500; color: #333;
-    .rdwr-s-r-item { overflow: hidden; margin: 10px 0; }
+    .rdwr-s-r-item { overflow: hidden; margin: 10px 0; line-height: 22px; }
     .rdwr-s-r-item-policy {
       float: right;
-      margin: 0 0 0 8px; padding: 2px 10px; border: 1px solid #A5D1FF; border-radius: 2px;
-      background-color: #E9F4FF; color: #248fff;
+      margin: 0 0 0 8px; padding: 0 6px; border: 1px solid #A5D1FF; border-radius: 2px;
+      font-size: 12px; background-color: #E9F4FF; color: #248fff;
     }
   }
   .rdwr-s-btn-group {
     text-align: center;
 
-    .rdwr-s-btn { width: 110px; padding: 8px 0; border-width: 0; }
+    .rdwr-s-btn { width: 110px; padding: 8px 10px; border-width: 0; }
     .rdwr-s-btn-cancel { color: #999;  }
     .rdwr-s-btn-sign { border-radius: 4px; }
   }
