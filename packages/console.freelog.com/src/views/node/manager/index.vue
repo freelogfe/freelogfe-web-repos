@@ -12,7 +12,7 @@
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
                 btnText="进入测试节点管理"
             />
-
+ 
             <div class="node-manager__aside__navs">
                 <a
                     @click="switchIsPageStyle(false)"
