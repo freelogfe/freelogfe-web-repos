@@ -64,8 +64,8 @@ export default {
     },
     checkedNode() {
       return this.nodeMap[this.checkedNodeId] || {
-        checkedNodeId: '',
-        checkedNodeName: '',
+        nodeId: '',
+        nodeName: '',
         isSigned: false
       }
     },
