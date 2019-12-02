@@ -50,7 +50,7 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="来源 | 测试资源名称"
+                label="相关条目|展示版本"
                 min-width="25%"
             >
                 <template slot-scope="scope">
@@ -77,7 +77,7 @@
             </el-table-column>
             <el-table-column
                 prop="entries"
-                label="相关条目 | 展示版本"
+                label="相关测试资源"
                 min-width="30%"
             >
                 <template slot-scope="scope">
