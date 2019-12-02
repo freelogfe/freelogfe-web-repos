@@ -9,7 +9,9 @@
             <el-input
                 v-model="input"
                 :placeholder="$t('pleaseEnter')"
-            />
+            >
+                <i slot="prefix" class="el-input__icon el-icon-search"/>
+            </el-input>
             <div style="height: 30px;"></div>
 
             <DepItem
