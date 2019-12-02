@@ -1,6 +1,7 @@
 <template>
     <LazyLoadingBox
         :end="dataEnd"
+        :endText="(data && data.length === 0) ? '没有符合条件的资源' : ''"
         @toBottom="toBottom"
     >
         <div style="padding: 0 90px;">

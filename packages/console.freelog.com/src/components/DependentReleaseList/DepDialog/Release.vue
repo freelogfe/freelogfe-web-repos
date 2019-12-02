@@ -3,6 +3,7 @@
         <LazyLoadingBox
             v-if="data.length > 0"
             :end="dataEnd"
+            :endText="(data && data.length === 0) ? '没有符合条件的发行' : ''"
             @toBottom="toBottom"
         >
             <div style="padding: 0 90px;">

@@ -1,8 +1,10 @@
 <template>
     <div style="height: 100%;">
+
+<!--        :endText="(data && data.length === 0) ? '没有符合条件的发行' : ''"-->
         <LazyLoadingBox
-            v-if="data.length > 0"
             :end="dataEnd"
+            v-if="data.length > 0"
             @toBottom="toBottom"
         >
             <!-- :disabled="exists.includes(i.id)" -->
