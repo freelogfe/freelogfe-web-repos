@@ -74,6 +74,7 @@
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
+                    <div style="font-size: 12px; color: #888; padding-left: 50px;">{{scope.row.originInfo.version}}</div>
                 </template>
             </el-table-column>
             <el-table-column
