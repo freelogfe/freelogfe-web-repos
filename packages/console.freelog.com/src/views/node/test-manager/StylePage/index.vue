@@ -121,7 +121,7 @@
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0; cursor: pointer;">
-                            {{selectedState}} <i class="el-icon-caret-bottom"></i>
+                            {{selectedState}} <i class="el-icon-caret-bottom"/>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item
@@ -146,8 +146,11 @@
                                 placement="top"
                                 width="100"
                                 trigger="hover"
-                                :content="'尚未获得测试授权'"
                             >
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span>尚未获得测试授权</span>
+                                    <el-button @click="operationCommand('编辑', scope.row)" type="text">详情</el-button>
+                                </div>
                                 <i
                                     slot="reference"
                                     class="el-icon-warning"
@@ -172,7 +175,7 @@
                             type="small"
                             circle
                             class="release-list__table__operation"
-                        ></el-button>
+                        />
 
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item :command="'编辑'">

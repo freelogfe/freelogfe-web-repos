@@ -175,7 +175,7 @@
                         <template v-if="scope.row.resolveReleaseSignStatus === 2">
                             <el-popover
                                 placement="top"
-                                width="160"
+                                width="150"
                                 trigger="hover"
                             >
                                 <div style="display: flex; align-items: center; justify-content: space-between;">
