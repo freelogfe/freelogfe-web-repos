@@ -12,7 +12,7 @@
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
                 btnText="进入测试节点管理"
             />
- 
+
             <div class="node-manager__aside__navs">
                 <a
                     @click="switchIsPageStyle(false)"
@@ -199,7 +199,7 @@
                             @click="goToAddPolicyPage(scope.row.presentableId)"
                             class="node-manager__main__table__policy__add"
                         >
-                            <i class="el-icon-plus"></i>
+                            <i class="el-icon-plus"/>
                         </a>
                     </div>
                 </el-table-column>
@@ -229,7 +229,7 @@
                             style="height: 32px"
                         >
                             <div>
-                                {{selectedState}} <i class="el-icon-caret-bottom"></i>
+                                {{selectedState}} <i class="el-icon-caret-bottom"/>
                             </div>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item v-for="item in allState">
@@ -292,22 +292,15 @@
 
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item command="edit">
-                                    <!--                                    @click="goToEditPage(scope.row.presentableId)"-->
                                     <a
                                         class="node-manager__main__table__operation__dropdown-link"
                                     >{{$t('action.edit')}}</a>
                                 </el-dropdown-item>
-                                <!--                                <el-dropdown-item>-->
-                                <!--                                    <a-->
-                                <!--                                        class="node-manager__main__table__operation__dropdown-link"-->
-                                <!--                                    >{{$t('action.top')}}</a>-->
-                                <!--                                </el-dropdown-item>-->
-                                <el-dropdown-item command="upgrade">
-                                    <!--                                     @click="upgradePresentable(scope.row)"-->
-                                    <a class="node-manager__main__table__operation__dropdown-link"
+<!--                                <el-dropdown-item command="upgrade">-->
+<!--                                    <a class="node-manager__main__table__operation__dropdown-link"-->
 
-                                    >{{$t('action.upgrade')}}</a>
-                                </el-dropdown-item>
+<!--                                    >{{$t('action.upgrade')}}</a>-->
+<!--                                </el-dropdown-item>-->
                                 <el-dropdown-item
                                     command="online"
                                     v-if="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0"
