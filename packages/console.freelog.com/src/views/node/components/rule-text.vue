@@ -104,11 +104,19 @@ export default {
       const { replaces } = this.ruleInfo
       if(replaces.length > 0) {
 			  const operationsTexts = this.$i18n.t('operationsTexts')
+        const symbolString = this.$i18n.locale === 'zh-CN' ? '，' : ', '
         return replaces.map(item => {
           const { name: n1, type: t1 } = item['replacer']
           const { name: n2, type: t2 } = item['replaced']
-          return `<strong>${this.tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${this.tagsMap[t2]}${n2}</strong>`
-        }).join('，')
+          var replaceText = `<strong>${this.tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${this.tagsMap[t2]}${n2}</strong>${symbolString}`
+          if (item['scopes'].length > 0) {
+            replaceText += `<span>${operationsTexts[9]}</span> ` + item['scopes'].map(item => {
+              const { name, type } = item
+              return `${this.tagsMap[type]}<strong>${name}</strong>`
+            }).join('-')
+          }
+          return replaceText
+        }).join(symbolString)
       } else {
         return ''
       }
