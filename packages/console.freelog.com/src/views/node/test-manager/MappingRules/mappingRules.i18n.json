@@ -22,7 +22,7 @@
     "sureBtnText": "确定",
     "cancalBtnText": "取消",
     "operationsTexts": [
-      "新增", "；来源", "，展示版本 ", "设置标签 ", "展品状态 上线", "展品状态 下线", "替换", "激活主题", "变更"
+      "新增", "；来源", "，展示版本 ", "设置标签 ", "展品状态 上线", "展品状态 下线", "替换", "激活主题", "变更", "作用域"
     ],
     "confirmTexts": [
       "是否导出所选的规则？", "是否导出全部的规则？", "此操作将删除规则", "是否继续？", "提示", "此操作将删除所选中的", "条规则", "上线规则", "下线规则", "成功"
@@ -57,7 +57,7 @@
     "sureBtnText": "Sure",
     "cancalBtnText": "Cancel",
     "operationsTexts": [
-      "Add", "Source", "Display version ", "Set label ", "online", "offline", "replace", "Activate theme", "Change"
+      "Add", "Source", "Display version ", "Set label ", "online", "offline", "replace", "Activate theme", "Change", "scopes"
     ],
     "confirmTexts": [
       "Whether to export the selected rule?", "Whether to export all rules?", "This action will delete the rule", "Whether to continue?", "Prompt", "This will delete the ", " rules selected", "Online rules", "Offline rules", " are successful"
