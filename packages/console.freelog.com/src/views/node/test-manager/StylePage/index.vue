@@ -146,13 +146,13 @@
                                 placement="top"
                                 width="100"
                                 trigger="hover"
-                                :content="'此合约链上存在异常'"
+                                :content="'尚未获得测试授权'"
                             >
                                 <i
                                     slot="reference"
                                     class="el-icon-warning"
                                     style="font-size: 20px; color: #ffc210; margin-left: 8px;"
-                                ></i>
+                                />
                             </el-popover>
                         </template>
                     </div>

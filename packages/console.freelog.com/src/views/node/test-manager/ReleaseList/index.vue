@@ -179,7 +179,7 @@
                                 trigger="hover"
                             >
                                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span>此合约链上存在异常</span>
+                                    <span>尚未获得测试授权</span>
                                     <el-button @click="operationCommand('编辑', scope.row)" type="text">详情</el-button>
                                 </div>
                                 <!-- operationCommand('编辑', scope.row)   -->
