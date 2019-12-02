@@ -66,9 +66,10 @@
                 :data="tableData"
                 class="node-manager__main__table"
             >
+<!--                :label="$t('table.presentableName')"-->
                 <el-table-column
+                    label="展品 | 展示版本"
                     prop="presentableName"
-                    :label="$t('table.presentableName')"
                     min-width="18%"
                 >
                     <template slot-scope="scope">
@@ -91,9 +92,10 @@
                         </el-select>
                     </template>
                 </el-table-column>
+<!--                label="$t('table.publish')"-->
                 <el-table-column
                     prop="publish"
-                    :label="$t('table.publish')"
+                    label="相关发行"
                     min-width="20%"
                 >
                     <template slot-scope="scope">
@@ -110,6 +112,7 @@
                                     v-if="scope.row.releaseInfo.previewImages && scope.row.releaseInfo.previewImages.length > 0"
                                     :src="scope.row.releaseInfo.previewImages[0]"
                                     class="resource-default-preview"
+                                    alt=""
                                 />
                             </div>
                             <div class="node-manager__main__table__release__content">
@@ -134,7 +137,7 @@
                             style="height: 32px"
                         >
                             <div>
-                                {{selectedType}} <i v-if="!isPageStyle" class="el-icon-caret-bottom"></i>
+                                {{selectedType}} <i v-if="!isPageStyle" class="el-icon-caret-bottom"/>
                             </div>
                             <el-dropdown-menu slot="dropdown" v-if="!isPageStyle">
                                 <el-dropdown-item v-for="item in allTypes">
@@ -296,11 +299,11 @@
                                         class="node-manager__main__table__operation__dropdown-link"
                                     >{{$t('action.edit')}}</a>
                                 </el-dropdown-item>
-<!--                                <el-dropdown-item command="upgrade">-->
-<!--                                    <a class="node-manager__main__table__operation__dropdown-link"-->
+                                <!--                                <el-dropdown-item command="upgrade">-->
+                                <!--                                    <a class="node-manager__main__table__operation__dropdown-link"-->
 
-<!--                                    >{{$t('action.upgrade')}}</a>-->
-<!--                                </el-dropdown-item>-->
+                                <!--                                    >{{$t('action.upgrade')}}</a>-->
+                                <!--                                </el-dropdown-item>-->
                                 <el-dropdown-item
                                     command="online"
                                     v-if="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0"
