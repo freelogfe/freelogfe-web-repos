@@ -120,7 +120,7 @@
                         class="release-list__table__type__dropdown"
                     >
                         <div class="release-list__table__type__dropdown__text">
-                            {{selectedType}} <i class="el-icon-caret-bottom"></i>
+                            {{selectedType}} <i class="el-icon-caret-bottom"/>
                         </div>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item
@@ -150,7 +150,7 @@
                         style="height: 32px; padding-left: 0;"
                     >
                         <div style="padding-left: 0; cursor: pointer;">
-                            {{selectedState}} <i class="el-icon-caret-bottom"></i>
+                            {{selectedState}} <i class="el-icon-caret-bottom"/>
                         </div>
                         <el-dropdown-menu trigger="click" slot="dropdown">
                             <el-dropdown-item

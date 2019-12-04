@@ -66,7 +66,7 @@
                 :data="tableData"
                 class="node-manager__main__table"
             >
-<!--                :label="$t('table.presentableName')"-->
+                <!--                :label="$t('table.presentableName')"-->
                 <el-table-column
                     label="展品 | 展示版本"
                     prop="presentableName"
@@ -92,7 +92,7 @@
                         </el-select>
                     </template>
                 </el-table-column>
-<!--                label="$t('table.publish')"-->
+                <!--                label="$t('table.publish')"-->
                 <el-table-column
                     prop="publish"
                     label="相关发行"
@@ -261,12 +261,19 @@
                                  {{scope.row.releaseInfo.resourceType === 'page_build' ? '未激活' : $t('noOnline')}}
                             </span>
                             <template v-if="!scope.row.isAuth">
+                                <!--                                :content="$t('exceptionExists')"-->
                                 <el-popover
                                     placement="top"
                                     width="100"
                                     trigger="hover"
-                                    :content="$t('exceptionExists')"
                                 >
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span>{{$t('exceptionExists')}}</span>
+                                        <el-button
+                                            @click="handleOperation('edit', scope.row)"
+                                            type="text"
+                                        >详情</el-button>
+                                    </div>
                                     <i
                                         slot="reference"
                                         class="el-icon-warning"
