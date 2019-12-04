@@ -11,7 +11,8 @@
             <div style="width: 320px; flex-shrink: 0;">
                 <!-- 发行列表 -->
                 <div v-for="(item, index) in dataSource">
-                    <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>
+<!--                    <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>-->
+                    <NavTitle v-if="index === 0">依赖发行</NavTitle>
                     <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
 
                     <!--                    :isTip="true"-->
@@ -24,7 +25,7 @@
                         :version="item.release && item.release.resourceVersions[0].version"
                         :date="item.release && item.release.updateDate.split('T')[0]"
                         :tags="item.children && item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
-                    ></NavItem>
+                    />
                 </div>
                 <div style="height: 25px;"></div>
             </div>
