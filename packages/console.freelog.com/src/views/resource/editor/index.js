@@ -127,17 +127,22 @@ export default {
             const result = res.data.data;
             this.resourceType = result.resourceType;
             this.resourceName = result.aliasName;
+            this.description = result.description;
+            this.metaInfo = JSON.stringify(result.meta);
 
             // this.depList = result.systemMeta.dependencies.map(i => ({
             //     id: i.releaseId,
             //     name: i.releaseName,
             //     version: i.versionRange,
             // }));
-            const releaseIds = result.systemMeta.dependencies.map(i => i.releaseId).join(',');
 
+            const releaseIds = result.systemMeta.dependencies.map(i => i.releaseId).join(',');
+            if (!releaseIds) {
+                return;
+            }
             const res1 = await this.$axios.get(`/v1/releases/list?releaseIds=${releaseIds}`);
 
-            console.log(res1, 'res1res1');
+            // console.log(res1, 'res1res1');
             if (res1.data.ret !== 0 || res1.data.ret !== 0) {
                 return this.message.error(res1.data.msg);
             }
@@ -152,8 +157,6 @@ export default {
                 version: i.resourceVersions[0].version,
             }));
             // console.log(this.depList, 'this.depList');
-            this.description = result.description;
-            this.metaInfo = JSON.stringify(result.meta);
         },
 
         /**
@@ -220,7 +223,7 @@ export default {
          * 依赖列表变化时
          */
         onChangeDeps(deps) {
-            console.log(deps, 'depsdepsdepsdeps');
+            // console.log(deps, 'depsdepsdepsdeps');
             this.depList = deps;
         },
 
@@ -323,7 +326,7 @@ export default {
                     throw new Error(this.$t('saveFailed'));
                 }
                 this.targetResourceData = res.data.data
-                this.$message.success(this.$t('saveSuccess'));
+                this.$message.success('保存成功');
                 return res.data.data.resourceId;
             }
 
@@ -346,8 +349,10 @@ export default {
             }
             const resourceId = await this.submit();
             if (!bool) {
-                return this.$router.replace(`/resource/list`);
-                // return ;
+                if (!this.$route.params.resourceId) {
+                    this.$router.replace(`/resource/editor/${resourceId}`);
+                }
+                return;
             }
             this.tmpRreatedResourceID = resourceId;
             this.isShowReleaseSearchDialog = true;
@@ -385,7 +390,9 @@ export default {
         isShowReleaseSearchDialog(val) {
             // console.log(val, 'val');
             if (val === false) {
-                this.$router.replace(`/resource/list`);
+                if (!this.$route.params.resourceId) {
+                    this.$router.replace(`/resource/editor/${this.tmpRreatedResourceID}`);
+                }
             }
         }
     }
