@@ -80,7 +80,7 @@
                     v-model="resourceName"
                     :placeholder="$t('enterResourceName')"
                     class="resource-editor__name__input"
-                ></el-input>
+                />
 
                 <span
                     class="resource-editor__name__length"
@@ -98,7 +98,7 @@
                 <div
                     class="resource-editor__dependency--lock"
                 >
-                    <i class="el-icon-info"></i> {{$t('cannotChangedDep')}}
+                    <i class="el-icon-info"/> {{$t('cannotChangedDep')}}
                 </div>
             </template>
             <!--            :isLock="releasedList.length > 0"-->
@@ -126,7 +126,7 @@
                 class="resource-editor__meta__button"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus"></i> {{$t('addMeta')}}
+            ><i class="el-icon-plus"/> {{$t('addMeta')}}
             </el-button>
         </div>
 
@@ -138,7 +138,7 @@
                     <MetaInfoInput
                         @validate="checkMetaValid"
                         v-model="metaInfo"
-                    ></MetaInfoInput>
+                    />
                 </div>
             </div>
         </BlockBody>

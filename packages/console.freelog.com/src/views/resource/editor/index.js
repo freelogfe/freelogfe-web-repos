@@ -121,34 +121,35 @@ export default {
                 return;
             }
             const res = await this.$axios.get(`/v1/resources/${resourceId}`);
-            // return;
-            // console.log(res.data.data, 'res.data.datares.data.data');
+            if (res.data.ret !== 0 || res.data.ret !== 0) {
+                return this.message.error(res.data.msg);
+            }
             const result = res.data.data;
-            // console.log(result, 'resultresult');
             this.resourceType = result.resourceType;
-            // this.uploadFileInfo = {
-            //     fileID: '',
-            //     sha1: '',
-            //     name: result.systemMeta.filename,
-            //     size: result.systemMeta.fileSize,
-            // };
             this.resourceName = result.aliasName;
-            // this.coverURL = result.previewImages[0] || '';
-            // this.depList = [
-            //     ...result.systemMeta.dependencyInfo.releases.map(i => ({
-            //         id: i.releaseId,
-            //         name: i.releaseName,
-            //         version: i.versionRange,
-            //     })),
-            //     ...result.systemMeta.dependencyInfo.mocks.map(i => ({
-            //         id: i.mockResourceId,
-            //         name: i.mockResourceName,
-            //     })),
-            // ];
-            this.depList = result.systemMeta.dependencies.map(i => ({
+
+            // this.depList = result.systemMeta.dependencies.map(i => ({
+            //     id: i.releaseId,
+            //     name: i.releaseName,
+            //     version: i.versionRange,
+            // }));
+            const releaseIds = result.systemMeta.dependencies.map(i => i.releaseId).join(',');
+
+            const res1 = await this.$axios.get(`/v1/releases/list?releaseIds=${releaseIds}`);
+
+            console.log(res1, 'res1res1');
+            if (res1.data.ret !== 0 || res1.data.ret !== 0) {
+                return this.message.error(res1.data.msg);
+            }
+
+            const result1 = res1.data.data;
+            this.depList = result1.map(i => ({
+                date: i.createDate.split('T')[0],
                 id: i.releaseId,
+                isOnline: i.status === 1,
                 name: i.releaseName,
-                version: i.versionRange,
+                type: i.resourceType,
+                version: i.resourceVersions[0].version,
             }));
             // console.log(this.depList, 'this.depList');
             this.description = result.description;
@@ -219,7 +220,7 @@ export default {
          * 依赖列表变化时
          */
         onChangeDeps(deps) {
-            // console.log(deps, 'depsdepsdepsdeps');
+            console.log(deps, 'depsdepsdepsdeps');
             this.depList = deps;
         },
 

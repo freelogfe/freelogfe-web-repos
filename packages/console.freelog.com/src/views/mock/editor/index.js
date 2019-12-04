@@ -279,7 +279,7 @@ export default {
             if (bucketName) {
                 const res = await this.$axios.post('/v1/resources/mocks', params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('creationFailed'));
+                    return this.$message.error(res.data.msg);
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
                 return this.$router.replace(`/mock/update/${res.data.data.mockResourceId}`);
