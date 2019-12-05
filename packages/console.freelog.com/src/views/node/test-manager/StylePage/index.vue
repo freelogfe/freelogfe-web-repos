@@ -13,13 +13,13 @@
                 class="style-page__header__input"
                 v-model="filterSearch"
             >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <i slot="prefix" class="el-input__icon el-icon-search"/>
                 <i
                     @click="filterSearch = ''"
                     v-show="filterSearch.length !== 0"
                     slot="suffix"
                     class="el-input__icon el-icon-circle-close"
-                ></i>
+                />
             </el-input>
         </div>
 
@@ -73,7 +73,23 @@
                         </label>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
-                    <div style="font-size: 12px; color: #888; padding-left: 50px;">{{scope.row.originInfo.version}}</div>
+                    <div style="font-size: 12px; color: #888; padding-left: 50px;">
+<!--                        {{scope.row.originInfo.version}}-->
+                        <el-select
+                            placeholder="请选择"
+                            :value="scope.row.originInfo.version"
+                            style="width: 110px; transform: scale(.714); transform-origin: 0;"
+                            size="mini"
+                            @change="$event => onVersionChange($event, scope.row)"
+                        >
+                            <el-option
+                                v-for="i in [...scope.row.originInfo.versions].reverse()"
+                                :key="i"
+                                :label="i"
+                                :value="i">
+                            </el-option>
+                        </el-select>
+                    </div>
                 </template>
             </el-table-column>
             <el-table-column
@@ -226,4 +242,16 @@
 
 <style scoped lang="less">
     @import "index";
+</style>
+
+<style lang="less">
+    .style-page {
+        .release-list__table {
+            .el-input--mini {
+                font-size: 16px;
+            }
+        }
+
+    }
+
 </style>
