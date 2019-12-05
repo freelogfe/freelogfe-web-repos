@@ -51,7 +51,7 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="相关条目|展示版本"
+                label="测试展品 | 展示版本"
                 min-width="25%"
             >
                 <template slot-scope="scope">
