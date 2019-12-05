@@ -88,7 +88,7 @@
                 <!--                actionText="新标签"-->
                 <FreelogTags
                     v-model="userDefinedTags"
-                ></FreelogTags>
+                />
             </BlockItem>
         </ModuleBlock>
 

@@ -79,7 +79,7 @@
                         <el-select
                             placeholder="请选择"
                             :value="scope.row.releaseInfo.version"
-                            style="width: 110px; transform: scale(.714); transform-origin: 0; font-size: 16px;"
+                            style="width: 110px; transform: scale(.714); transform-origin: 0;"
                             size="mini"
                             @change="$event => onVersionChange($event, scope.row)"
                         >
