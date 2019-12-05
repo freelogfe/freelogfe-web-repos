@@ -15,11 +15,11 @@
             />
         </div>
 
-<!--        :accept="accept"-->
+        <!--        :accept="accept"-->
         <el-upload
             v-show="!fileInfo.name"
             :action="uploadResourceFileAction"
-
+            :accept="accept"
             :on-change="handleChange"
             :show-file-list="false"
             :before-upload="beforeUpload"
