@@ -37,7 +37,7 @@
                     <el-option
                         v-for="item in resourceTypes"
                         :key="item"
-                        :label="item"
+                        :label="item | pageBuildFilter"
                         :value="item">
                     </el-option>
 

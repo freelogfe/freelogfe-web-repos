@@ -300,6 +300,15 @@ export default {
         goBack() {
             this.$router.back();
         },
-    }
+    },
+    // filters: {
+    //     pageBuildFilter: function (value) {
+    //         if (!value) return '';
+    //         if (value === 'page_build') {
+    //             return 'theme';
+    //         }
+    //         return value;
+    //     }
+    // }
 
 }

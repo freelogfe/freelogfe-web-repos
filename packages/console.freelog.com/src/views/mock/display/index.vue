@@ -20,7 +20,7 @@
                         circle
                         size="small"
                         @click="showNewBucketDialog"
-                    ></el-button>
+                    />
                 </div>
                 <div style="height: 10px;"></div>
             </div>
@@ -77,7 +77,7 @@
                                 :percentage="Math.floor(activatedBucket.totalFileSize / 2147483648 * 100) / 100"
                                 :show-text="false"
                                 style="width: 120px;"
-                            ></el-progress>
+                            />
                         </div>
                     </div>
 
@@ -178,6 +178,7 @@
                                             style="width: 100%; height: 100%;"
                                             v-if="scope.row.previewImages && scope.row.previewImages.length > 0"
                                             :src="scope.row.previewImages[0]"
+                                            alt=""
                                         />
                                         <!--                                        <span v-if="scope.previewImages"></span>-->
                                     </div>
@@ -192,6 +193,9 @@
                                 prop="type"
                                 :label="$t('table.type')"
                                 min-width="180">
+                                <template slot-scope="scope">
+                                    {{scope.row.type | pageBuildFilter}}
+                                </template>
                             </el-table-column>
                             <el-table-column
                                 prop="size"
@@ -216,7 +220,7 @@
                                             type="small"
                                             circle
                                             style="background-color: #fafbfb;"
-                                        ></el-button>
+                                        />
 
                                         <el-dropdown-menu slot="dropdown">
                                             <el-dropdown-item>
