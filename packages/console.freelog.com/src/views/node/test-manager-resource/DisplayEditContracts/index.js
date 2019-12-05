@@ -60,6 +60,7 @@ export default {
             presentableName: '',
             depReleasesDetailList: [],
             contracts: [],
+            currentRelease: null,
         };
     },
     mounted() {
@@ -80,6 +81,8 @@ export default {
             const data = res.data.data;
             // console.log(data, 'datadatadata');
 
+            this.currentRelease = data.originInfo;
+            console.log(this.currentRelease, 'currentReleasecurrentReleasecurrentRelease');
             if (!this.nodeInfo) {
                 this.handleNodeInfo(data.nodeId);
             }
@@ -202,7 +205,7 @@ export default {
             this.depReleasesDetailList = depReleasesDetailList;
             this.contracts = policies;
 
-            // console.log(dataSource, 'dataSourcedataSource');
+            console.log(dataSource, 'dataSourcedataSource');
             // this.depReleasesDetailList = this.depReleasesDetailList.map(i => ({
             //     ...i,
             //     contracts: this.contracts,
