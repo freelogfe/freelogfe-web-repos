@@ -13,7 +13,7 @@
                     :name="item.name"
                     :version="item.version"
                     :date="item.date"
-                ></ReleasedItem>
+                />
             </div>
         </BlockBody>
 

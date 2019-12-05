@@ -312,7 +312,7 @@ export default {
             if (!this.isUpdateResource) {
                 const res = await this.$axios.post('/v1/resources', params);
                 if (res.data.errcode !== 0) {
-                    this.$message.error(this.$t('creationFailed'));
+                    this.$message.error(res.data.msg);
                     throw new Error(this.$t('creationFailed'));
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
@@ -322,7 +322,7 @@ export default {
                 const {resourceId} = this.$route.params;
                 const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
                 if (res.data.errcode !== 0) {
-                    this.$message.error(this.$t('saveFailed'));
+                    this.$message.error(res.data.msg);
                     throw new Error(this.$t('saveFailed'));
                 }
                 this.targetResourceData = res.data.data
