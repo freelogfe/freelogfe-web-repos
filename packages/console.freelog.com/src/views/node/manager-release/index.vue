@@ -8,7 +8,7 @@
             :previewSrc="releaseInfo.previewImages || undefined"
             :title="releaseInfo.releaseName"
             :type="'release'"
-            :resourceType="releaseInfo.resourceType"
+            :resourceType="releaseInfo.resourceType | pageBuildFilter"
             :version="releaseInfo.version"
             :content="releaseInfo.intro"
         />

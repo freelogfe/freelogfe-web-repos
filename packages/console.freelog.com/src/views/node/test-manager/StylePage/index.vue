@@ -123,7 +123,7 @@
             >
                 <template slot-scope="scope">
                     <div class="style-page__table__type">
-                        {{scope.row.resourceType}}
+                        {{scope.row.resourceType | pageBuildFilter}}
                     </div>
                 </template>
             </el-table-column>

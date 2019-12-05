@@ -9,7 +9,7 @@
             :previewSrc="originInfo.previewImage"
             :title="originInfo.name"
             :type="originInfo.type"
-            :resourceType="originInfo.resourceType"
+            :resourceType="originInfo.resourceType | pageBuildFilter"
             :version="originInfo.version"
             :content="originInfo.intro"
         />

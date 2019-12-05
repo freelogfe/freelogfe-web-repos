@@ -25,7 +25,7 @@
         </div>
         <!--        </el-badge>-->
         <!--        <div style="height: 10px;"></div>-->
-        <div style="font-size: 12px; color: #999;">{{type}} | {{version}} | {{date}}</div>
+        <div style="font-size: 12px; color: #999;">{{type | pageBuildFilter}} | {{version}} | {{date}}</div>
         <div style="overflow: hidden;">
             <label v-for="item in tags"
                    style="background-color: #e9f4ff; border-radius: 2px; color: #409eff; padding: 3px 10px; border: 1px solid #a5d1ff; margin-right: 10px; margin-top: 5px; display: inline-block;">

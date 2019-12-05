@@ -151,7 +151,7 @@
                     </template>
                     <template slot-scope="scope">
                         <div class="node-manager__main__table__type">
-                            {{scope.row.releaseInfo.resourceType}}
+                            {{scope.row.releaseInfo.resourceType | pageBuildFilter}}
                         </div>
                     </template>
                 </el-table-column>
