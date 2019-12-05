@@ -17,7 +17,7 @@
                 <a
                     @click="switchIsPageStyle(false)"
                     :class="{'node-manager__aside__navs__a--active': !isPageStyle}"
-                >{{$t('nodeReleaseList')}}</a>
+                >展品管理</a>
                 <a
                     @click="switchIsPageStyle(true)"
                     :style="{
@@ -79,7 +79,7 @@
                         <el-select
                             placeholder="请选择"
                             :value="scope.row.releaseInfo.version"
-                            style="width: 90px;"
+                            style="width: 110px; transform: scale(.714); transform-origin: 0; font-size: 16px;"
                             size="mini"
                             @change="$event => onVersionChange($event, scope.row)"
                         >
@@ -394,6 +394,12 @@
                 }
             }
 
+        }
+
+        .node-manager__main__table {
+            .el-input--mini {
+                font-size: 16px;
+            }
         }
     }
 
