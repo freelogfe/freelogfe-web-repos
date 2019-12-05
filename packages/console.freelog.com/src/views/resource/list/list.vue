@@ -23,7 +23,7 @@
           <template slot="header" slot-scope="scope">
             <el-dropdown class="r-l-types-select" @command="handleSelectType">
               <span class="el-dropdown-link">
-                {{$t('list.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+                {{$t('list.type')}} {{selectedType === 'all' ? '': `${selectedType}` | pageBuildFilter}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label | pageBuildFilter}}</el-dropdown-item>
