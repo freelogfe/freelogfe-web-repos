@@ -58,14 +58,14 @@
                             <div v-if="index !== 0" style="height: 15px;"></div>
                             <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
                             <SignedContract
-                                :name="item.contract.contractName.split('/')[1]"
+                                :name="[...item.contract.contractName.split('-')].pop()"
                                 :status="item.contract.status"
                                 :contractId="item.contract.contractId"
                                 :data="item.contract.createDate.split('T')[0]"
                                 :contract="item.contract"
                                 :disabled="!!item.disabled"
                                 @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
-                            ></SignedContract>
+                            />
                         </div>
                     </ContractsContainer>
 
@@ -80,7 +80,7 @@
                                 :policyName="item.policy.policyName"
                                 :policyText="item.policy.policyText"
                                 @add="signPolicy(item.policy.policyId, true)"
-                            ></UnsignedContract>
+                            />
                         </div>
                     </ContractsContainer>
                 </div>
@@ -92,7 +92,7 @@
             :release="{releaseName: this.presentableName}"
             :depReleasesDetailList="depReleasesDetailList"
             :contracts="contracts"
-        ></ReleaseEditorContract>
+        />
     </div>
 </template>
 
