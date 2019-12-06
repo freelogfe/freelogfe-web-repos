@@ -54,7 +54,8 @@
 				</el-button>
 			</h4>
 			<div class="mapping-rule-input-box">
-				<el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('inputPlaceHolder')" v-model="rulesText"></el-input>
+				<!-- <el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('inputPlaceHolder')" v-model="rulesText"></el-input> -->
+				<codemirror ref="codeMirror" :code="rulesText" :options="editorOptions" @input="onCodeChange"></codemirror>
 				<div class="mr-rb-btns-box">
 					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('saveBtnText')}}</el-button>
 				</div>
@@ -77,6 +78,10 @@
 import { compile, decompile } from '@freelog/nmr_translator'
 import RulesBar from '../../components/RulesBar.vue'
 import RuleText from '../../components/rule-text.vue'
+import { codemirror, codeMirrorOptions } from '@/lib/codemirror'
+import 'codemirror/mode/javascript/javascript'
+require('codemirror/theme/idea.css')
+
 export default {
 	name: "MappingRules",
 	data() {
@@ -93,10 +98,15 @@ export default {
 			rulesTextDownloadName: '',
 			selectedRules: [],
 			selectedRuleType: 'all',
-			rulesInputRowsCount: 18
+			rulesInputRowsCount: 18,
+			editorOptions: Object.assign({ 
+				
+				viewportMargin: 50,
+				viewportMargin: Infinity,
+				theme: 'idea', gutters: [] }, codeMirrorOptions),
 		}
 	},
-	components: { RuleText, RulesBar },
+	components: { RuleText, RulesBar, codemirror },
 	computed: {
 		rulesOperationConfig() {
 			return [
@@ -440,6 +450,9 @@ export default {
 				console.log('evt --', evt)
 			}
 		},
+		onCodeChange(val) {
+			this.rulesText = val
+		}
 	},
 };
 </script>
@@ -493,6 +506,7 @@ export default {
 		width: 100%; height: 100%; padding: 40px 15px;
 		background-color: #fff; opacity: 0; pointer-events: none;
 
+		h4 { margin-bottom: 25px; font-size: 14px; }
 		// transition: all .36s ease-out;
 		// -webkit-transform: translateX(100%); transform: translateX(100%); 
 
@@ -511,12 +525,13 @@ export default {
 			position: relative; 
 		}
 		.mr-rb-btns-box {
-			position: absolute; bottom: 10px; right: 10px;
+			position: absolute; bottom: 10px; right: 10px; z-index: 100;
 			text-align: right; 
 		}
 		.mr-rb-cancel-btn { margin-right: 10px; color: #999; }
 		.mr-rb-save-btn { }
 		.mr-back-btn { 
+			position: relative; top: -10px;
 			float: right; color: #909399; 
 			&:hover { color: #C0C4CC; }
 		}
@@ -537,6 +552,7 @@ export default {
 		}
 	}
 	.mapping-rule-editor-box {
+		.CodeMirror { height: 400px; border-radius: 4px; }
 		.el-textarea__inner {
 			padding: 20px; line-height: 2;
 		}

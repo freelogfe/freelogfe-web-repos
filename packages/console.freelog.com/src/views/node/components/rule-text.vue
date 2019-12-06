@@ -110,7 +110,7 @@ export default {
           const { name: n2, type: t2 } = item['replaced']
           var replaceText = `<strong>${this.tagsMap[t1]}${n1}</strong> ${operationsTexts[6]} <strong>${this.tagsMap[t2]}${n2}</strong>${symbolString}`
           if (item['scopes'].length > 0) {
-            replaceText += `<span>${operationsTexts[9]}</span> ` + item['scopes'].map(item => {
+            replaceText += `<span>${operationsTexts[9]}</span> ` + item['scopes'].flat(Infinity).map(item => {
               const { name, type } = item
               return `${this.tagsMap[type]}<strong>${name}</strong>`
             }).join('-')
@@ -165,7 +165,7 @@ export default {
     margin: 0 5px 0 8px; padding: 2px 8px; border-radius: 2px;
     font-size: 12px; color: #fff;
   }
-  .t-rule-tag-presentable { background-color: #409EFF; }
+  .t-rule-tag-presentable { background-color: #AEC1D4; }
   .t-rule-tag-release { background-color: #72BB1F; }
   .t-rule-tag-mock { background-color: #F5A623; }
 }

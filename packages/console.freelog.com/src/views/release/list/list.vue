@@ -107,16 +107,17 @@
         </el-table-column>
         <el-table-column :label="$t('list.operate')" width="140">
           <template slot-scope="scope">
-            <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'">
+            <router-link :to="scope.row._toMangeDetailLink" >
               <el-button class="r-l-item-edit-btn" size="mini">{{$t('list.editBtnText')}}</el-button>
             </router-link>
-            <el-button 
+            <!-- v-if="type === 'myReleases'" -->
+            <!-- <el-button 
               v-if="type === 'myCollections'"
               class="r-l-item-cancel-favor-btn" 
               type="danger" 
               size="mini" 
               @click="cancelCollection(scope.row)">{{$t('list.cancelCollectionBtnText')}}</el-button>
-            <!-- <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
+            <router-link :to="scope.row._toDetailLink" v-if="scope.row.isOnline">
               <el-button class="r-l-item-detail-btn" size="mini">详情</el-button>
             </router-link> -->
           </template>
