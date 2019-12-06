@@ -19,19 +19,19 @@
                     v-show="!isOnline"
                     class="manager-release__state"
                 >
-                    <label>未上线</label>
+                    <label>未激活</label>
                     <a
                         @click="onLineAndOffLine"
-                    >上线</a>
+                    >激活</a>
                 </div>
                 <div
                     v-show="isOnline"
                     class="manager-release__state"
                 >
-                    <label>已上线</label>
-                    <a
-                        @click="onLineAndOffLine"
-                    >下线</a>
+                    <label>已激活</label>
+<!--                    <a-->
+<!--                        @click="onLineAndOffLine"-->
+<!--                    >下线</a>-->
                 </div>
             </BlockItem>
 
