@@ -17,7 +17,7 @@
                 <a
                     @click="switchIsPageStyle(false)"
                     :class="{'node-manager__aside__navs__a--active': !isPageStyle}"
-                >{{$t('nodeReleaseList')}}</a>
+                >展品管理</a>
                 <a
                     @click="switchIsPageStyle(true)"
                     :style="{
@@ -66,20 +66,22 @@
                 :data="tableData"
                 class="node-manager__main__table"
             >
-<!--                :label="$t('table.presentableName')"-->
+                <!--                :label="$t('table.presentableName')"-->
                 <el-table-column
-                    label="展品 | 展示版本"
                     prop="presentableName"
                     min-width="18%"
                 >
-                    <template slot-scope="scope">
-                        <div class="text-overflow-ellipsis node-manager__main__table__name">
-                            {{scope.row.presentableName}}
-                        </div>
+                    <div style="padding-left: 16px;" slot="header" slot-scope="scope">
+                        展品 | 展示版本
+                    </div>
+                    <div style="padding-left: 16px;" slot-scope="scope">
+                        <a @click="handleOperation('edit', scope.row)"
+                           class="text-overflow-ellipsis node-manager__main__table__name"
+                        >{{scope.row.presentableName}}</a>
                         <el-select
                             placeholder="请选择"
                             :value="scope.row.releaseInfo.version"
-                            style="width: 90px;"
+                            style="width: 110px; transform: scale(.714); transform-origin: 0;"
                             size="mini"
                             @change="$event => onVersionChange($event, scope.row)"
                         >
@@ -90,9 +92,9 @@
                                 :value="i">
                             </el-option>
                         </el-select>
-                    </template>
+                    </div>
                 </el-table-column>
-<!--                label="$t('table.publish')"-->
+                <!--                label="$t('table.publish')"-->
                 <el-table-column
                     prop="publish"
                     label="相关发行"
@@ -151,7 +153,7 @@
                     </template>
                     <template slot-scope="scope">
                         <div class="node-manager__main__table__type">
-                            {{scope.row.releaseInfo.resourceType}}
+                            {{scope.row.releaseInfo.resourceType | pageBuildFilter}}
                         </div>
                     </template>
                 </el-table-column>
@@ -261,12 +263,20 @@
                                  {{scope.row.releaseInfo.resourceType === 'page_build' ? '未激活' : $t('noOnline')}}
                             </span>
                             <template v-if="!scope.row.isAuth">
+                                <!--                                :content="$t('exceptionExists')"-->
                                 <el-popover
                                     placement="top"
                                     width="100"
                                     trigger="hover"
-                                    :content="$t('exceptionExists')"
                                 >
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span>{{$t('exceptionExists')}}</span>
+                                        <el-button
+                                            @click="handleOperation('edit', scope.row)"
+                                            type="text"
+                                        >详情
+                                        </el-button>
+                                    </div>
                                     <i
                                         slot="reference"
                                         class="el-icon-warning"
@@ -299,24 +309,20 @@
                                         class="node-manager__main__table__operation__dropdown-link"
                                     >{{$t('action.edit')}}</a>
                                 </el-dropdown-item>
-                                <!--                                <el-dropdown-item command="upgrade">-->
-                                <!--                                    <a class="node-manager__main__table__operation__dropdown-link"-->
-
-                                <!--                                    >{{$t('action.upgrade')}}</a>-->
-                                <!--                                </el-dropdown-item>-->
                                 <el-dropdown-item
-                                    command="online"
-                                    v-if="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0"
+                                    :command="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0 ? 'online': ''"
                                 >
                                     <!--                                     @click="onLineAndOffLine(scope.row)"-->
                                     <a
-
                                         style="display: block; width: 100%; height: 100%;"
                                     >
                                         <span
                                             v-if="scope.row.releaseInfo.resourceType === 'page_build'"
                                             style="color: #44a0ff;"
-                                        >激活</span>
+                                        >
+                                            <div v-if="scope.row.isOnline === 0">激活</div>
+                                            <div v-if="scope.row.isOnline === 1" style="color: #bfbfbf;">已激活</div>
+                                        </span>
                                         <template v-else>
                                             <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
                                             <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>
@@ -387,6 +393,12 @@
                 }
             }
 
+        }
+
+        .node-manager__main__table {
+            .el-input--mini {
+                font-size: 16px;
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 <template>
     <LazyLoadingBox
         :end="dataEnd"
+        :endText="(data && data.length === 0) ? '没有符合条件的发行' : ''"
         @toBottom="toBottom"
     >
         <div style="padding: 0 90px;">
@@ -8,7 +9,9 @@
             <el-input
                 v-model="input"
                 :placeholder="$t('pleaseEnter')"
-            />
+            >
+                <i slot="prefix" class="el-input__icon el-icon-search"/>
+            </el-input>
             <div style="height: 30px;"></div>
 
             <DepItem

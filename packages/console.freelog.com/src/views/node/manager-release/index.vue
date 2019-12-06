@@ -8,7 +8,7 @@
             :previewSrc="releaseInfo.previewImages || undefined"
             :title="releaseInfo.releaseName"
             :type="'release'"
-            :resourceType="releaseInfo.resourceType"
+            :resourceType="releaseInfo.resourceType | pageBuildFilter"
             :version="releaseInfo.version"
             :content="releaseInfo.intro"
         />
@@ -19,19 +19,19 @@
                     v-show="!isOnline"
                     class="manager-release__state"
                 >
-                    <label>未上线</label>
+                    <label>未激活</label>
                     <a
                         @click="onLineAndOffLine"
-                    >上线</a>
+                    >激活</a>
                 </div>
                 <div
                     v-show="isOnline"
                     class="manager-release__state"
                 >
-                    <label>已上线</label>
-                    <a
-                        @click="onLineAndOffLine"
-                    >下线</a>
+                    <label>已激活</label>
+<!--                    <a-->
+<!--                        @click="onLineAndOffLine"-->
+<!--                    >下线</a>-->
                 </div>
             </BlockItem>
 
@@ -63,7 +63,7 @@
                 <div style="height: 5px;"></div>
                 <FreelogTags
                     v-model="userDefinedTags"
-                ></FreelogTags>
+                />
             </BlockItem>
 
             <BlockItem label="授权策略">
@@ -89,7 +89,7 @@
                             >
                                 <i
                                     class="el-icon-warning"
-                                ></i>
+                                />
                             </div>
                         </el-popover>
                     </div>
@@ -99,7 +99,7 @@
                         @add-policy="switchShowEditPolicy(true)"
                         :policyList="policies"
                         @update-policies="updatePolicies"
-                    ></PolicyList>
+                    />
                     <!--                        </div>-->
                 </template>
                 <!--                :policy="editTmpPolicy"-->
@@ -110,7 +110,7 @@
                     v-if="isShowEditPolicy"
                     @save="saveANewPolicy"
                     @cancel="switchShowEditPolicy(false)"
-                ></PolicyEditor>
+                />
             </BlockItem>
         </ModuleBlock>
 
