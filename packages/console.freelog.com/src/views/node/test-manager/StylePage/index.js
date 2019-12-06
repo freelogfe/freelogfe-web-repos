@@ -188,15 +188,15 @@ export default {
          */
         operationCommand(mark, row) {
             // console.log(mark, row, 'R$RRRRRRRR');
-            if (mark === '编辑') {
+            if (mark === 'edit') {
                 return window.open('/node/test-manager-resource/' + row.testResourceId);
             }
 
-            if (mark === 'isOnline') {
+            else if (mark === 'isOnline') {
                 return this.onLineAndOffLine(row);
             }
 
-            if (mark === 'delete') {
+            else if (mark === 'delete') {
                 // console.log(row, 'row');
                 this.deleteRule(row.testResourceName);
             }

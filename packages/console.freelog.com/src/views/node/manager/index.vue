@@ -272,7 +272,8 @@
                                         <el-button
                                             @click="handleOperation('edit', scope.row)"
                                             type="text"
-                                        >详情</el-button>
+                                        >详情
+                                        </el-button>
                                     </div>
                                     <i
                                         slot="reference"
@@ -306,24 +307,20 @@
                                         class="node-manager__main__table__operation__dropdown-link"
                                     >{{$t('action.edit')}}</a>
                                 </el-dropdown-item>
-                                <!--                                <el-dropdown-item command="upgrade">-->
-                                <!--                                    <a class="node-manager__main__table__operation__dropdown-link"-->
-
-                                <!--                                    >{{$t('action.upgrade')}}</a>-->
-                                <!--                                </el-dropdown-item>-->
                                 <el-dropdown-item
-                                    command="online"
-                                    v-if="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0"
+                                    :command="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0 ? 'online': ''"
                                 >
                                     <!--                                     @click="onLineAndOffLine(scope.row)"-->
                                     <a
-
                                         style="display: block; width: 100%; height: 100%;"
                                     >
                                         <span
                                             v-if="scope.row.releaseInfo.resourceType === 'page_build'"
                                             style="color: #44a0ff;"
-                                        >激活</span>
+                                        >
+                                            <div v-if="scope.row.isOnline === 0">激活</div>
+                                            <div v-if="scope.row.isOnline === 1" style="color: #bfbfbf;">已激活</div>
+                                        </span>
                                         <template v-else>
                                             <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
                                             <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>

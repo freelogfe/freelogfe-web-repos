@@ -195,15 +195,20 @@
                         />
 
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item :command="'编辑'">
+                            <el-dropdown-item :command="'edit'">
                                 编辑
                             </el-dropdown-item>
                             <el-dropdown-item
-                                v-if="scope.row.testResourceId !== activatedThemeId"
-                                :command="'isOnline'"
+                                :command="scope.row.testResourceId !== activatedThemeId ? 'isOnline' : ''"
                             >
-                                <span
-                                    style="color: #44a0ff;">激活</span>
+                                <div
+                                    v-if="scope.row.testResourceId !== activatedThemeId"
+                                    style="color: #44a0ff;"
+                                >激活</div>
+                                <div
+                                    v-if="scope.row.testResourceId === activatedThemeId"
+                                    style="color: #bfbfbf;"
+                                >已激活</div>
                             </el-dropdown-item>
                             <el-dropdown-item
                                 :command="'delete'"
