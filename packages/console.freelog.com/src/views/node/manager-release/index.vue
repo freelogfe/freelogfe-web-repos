@@ -63,7 +63,7 @@
                 <div style="height: 5px;"></div>
                 <FreelogTags
                     v-model="userDefinedTags"
-                ></FreelogTags>
+                />
             </BlockItem>
 
             <BlockItem label="授权策略">
@@ -89,7 +89,7 @@
                             >
                                 <i
                                     class="el-icon-warning"
-                                ></i>
+                                />
                             </div>
                         </el-popover>
                     </div>
@@ -99,7 +99,7 @@
                         @add-policy="switchShowEditPolicy(true)"
                         :policyList="policies"
                         @update-policies="updatePolicies"
-                    ></PolicyList>
+                    />
                     <!--                        </div>-->
                 </template>
                 <!--                :policy="editTmpPolicy"-->
@@ -110,7 +110,7 @@
                     v-if="isShowEditPolicy"
                     @save="saveANewPolicy"
                     @cancel="switchShowEditPolicy(false)"
-                ></PolicyEditor>
+                />
             </BlockItem>
         </ModuleBlock>
 
