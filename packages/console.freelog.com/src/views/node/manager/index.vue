@@ -1,10 +1,8 @@
 <template>
     <div class="node-manager">
 
-        <div
-            :style="styleObject"
-            class="node-manager__aside"
-        >
+        <!--         :style="styleObject"-->
+        <div class="node-manager__aside">
             <NodeHeader
                 :nodeName="nodeInfo.name"
                 :nodeHref="nodeInfo.origin"

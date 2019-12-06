@@ -35,7 +35,7 @@
                 </div>
             </BlockItem>
 
-            <BlockItem label="节点发行名称">
+            <BlockItem label="展品名称">
                 <ConfirmInput
                     :value="presentableName"
                     @confirmChange="confirmChange"
