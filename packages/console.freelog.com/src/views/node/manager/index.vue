@@ -264,7 +264,7 @@
                                 <!--                                :content="$t('exceptionExists')"-->
                                 <el-popover
                                     placement="top"
-                                    width="100"
+                                    width="160"
                                     trigger="hover"
                                 >
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
