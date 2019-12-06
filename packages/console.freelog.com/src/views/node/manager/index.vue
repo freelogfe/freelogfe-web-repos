@@ -68,14 +68,16 @@
             >
                 <!--                :label="$t('table.presentableName')"-->
                 <el-table-column
-                    label="展品 | 展示版本"
                     prop="presentableName"
                     min-width="18%"
                 >
-                    <template slot-scope="scope">
-                        <div class="text-overflow-ellipsis node-manager__main__table__name">
-                            {{scope.row.presentableName}}
-                        </div>
+                    <div style="padding-left: 16px;" slot="header" slot-scope="scope">
+                        展品 | 展示版本
+                    </div>
+                    <div style="padding-left: 16px;" slot-scope="scope">
+                        <a @click="handleOperation('edit', scope.row)"
+                           class="text-overflow-ellipsis node-manager__main__table__name"
+                        >{{scope.row.presentableName}}</a>
                         <el-select
                             placeholder="请选择"
                             :value="scope.row.releaseInfo.version"
@@ -90,7 +92,7 @@
                                 :value="i">
                             </el-option>
                         </el-select>
-                    </template>
+                    </div>
                 </el-table-column>
                 <!--                label="$t('table.publish')"-->
                 <el-table-column
