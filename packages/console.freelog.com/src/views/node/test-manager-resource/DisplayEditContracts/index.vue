@@ -64,7 +64,7 @@
                             <div v-if="index !== 0" style="height: 15px;"></div>
                             <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
                             <SignedContract
-                                :name="item.policy.policyName"
+                                :name="item.contract.contractName"
                                 :status="item.contract.status"
                                 :contractId="item.contract.contractId"
                                 :data="item.contract.createDate.split('T')[0]"
