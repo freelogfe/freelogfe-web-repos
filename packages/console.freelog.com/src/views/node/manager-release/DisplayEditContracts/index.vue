@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <TabsHeader v-model="activeTab"></TabsHeader>
+        <TabsHeader v-model="activeTab"/>
 
         <div
             v-show="activeTab === 'contract'"
@@ -23,7 +23,7 @@
                         :version="item.release.resourceVersions[0].version"
                         :date="item.release.updateDate.split('T')[0]"
                         :tags="item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
-                    ></NavItem>
+                    />
                 </div>
                 <div style="height: 25px;"></div>
             </div>
