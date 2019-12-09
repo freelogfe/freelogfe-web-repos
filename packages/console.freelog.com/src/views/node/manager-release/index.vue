@@ -15,24 +15,46 @@
         <ModuleBlock>
 
             <BlockItem label="状态">
-                <div
-                    v-show="!isOnline"
-                    class="manager-release__state"
-                >
-                    <label>未激活</label>
-                    <a
-                        @click="onLineAndOffLine"
-                    >激活</a>
-                </div>
-                <div
-                    v-show="isOnline"
-                    class="manager-release__state"
-                >
-                    <label>已激活</label>
-<!--                    <a-->
-<!--                        @click="onLineAndOffLine"-->
-<!--                    >下线</a>-->
-                </div>
+                <template v-if="releaseInfo.resourceType === 'page_build'">
+                    <div
+                        v-show="!isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>未激活</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >激活</a>
+                    </div>
+                    <div
+                        v-show="isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>已激活</label>
+                        <!--                    <a-->
+                        <!--                        @click="onLineAndOffLine"-->
+                        <!--                    >下线</a>-->
+                    </div>
+                </template>
+                <template v-else>
+                    <div
+                        v-show="!isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>未上线</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >上线</a>
+                    </div>
+                    <div
+                        v-show="isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>已上线</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >下线</a>
+                    </div>
+                </template>
             </BlockItem>
 
             <BlockItem label="展品名称">
