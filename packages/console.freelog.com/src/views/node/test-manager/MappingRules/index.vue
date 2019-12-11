@@ -557,7 +557,7 @@ export default {
 			position: relative; 
 		}
 		.mr-rb-btns-box {
-			position: absolute; bottom: 10px; right: 10px; z-index: 100;
+			position: absolute; bottom: 10px; right: 20px; z-index: 100;
 			text-align: right; 
 		}
 		.mr-rb-cancel-btn { margin-right: 10px; color: #999; }
@@ -586,7 +586,7 @@ export default {
 	}
 	.mapping-rule-editor-box {
 		.CodeMirror { 
-			height: 480px; border-radius: 4px; 
+			height: 480px; padding-bottom: 45px; border-radius: 4px; 
 			pre { line-height: 1.8; }
 		}
 		.el-textarea__inner {
