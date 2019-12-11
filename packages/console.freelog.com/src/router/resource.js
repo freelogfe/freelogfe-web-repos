@@ -33,7 +33,8 @@ export default {
 
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.resourceManager'),
+                // title: i18n.t('routes.resourceManager'),
+                title: '资源信息',
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,

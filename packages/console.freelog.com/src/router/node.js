@@ -17,7 +17,7 @@ export default {
                 hideSidebar: true,
                 requiresAuth: true,
                 // title: i18n.t('routes.nodeManager'),
-                title: '测试展品管理',
+                title: '测试展品信息',
                 hideFooter: true,
             },
             component: Views.testManagerResource
@@ -52,7 +52,7 @@ export default {
                 hideSidebar: true,
                 requiresAuth: true,
                 // title: i18n.t('routes.nodeReleaseManagement'),
-                title: '展品管理',
+                title: '展品信息',
                 hideFooter: true,
             },
             component: Views.nodeManagerRelease
