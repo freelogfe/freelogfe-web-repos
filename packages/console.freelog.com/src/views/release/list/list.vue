@@ -91,7 +91,7 @@
           <template slot-scope="scope">
             <div class="r-l-item-online" v-if="scope.row.isOnline">{{$t('list.status[1]')}}</div>
             <div class="r-l-item-offline" v-else>
-              {{$t('list.status[0]')}}
+              {{$t('list.status[2]')}}
               <el-tooltip placement="top">
                 <div class="" slot="content">
                   <template v-if="scope.row.policies.length > 0"> {{$t('list.tips[0]')}}</template>
@@ -182,9 +182,12 @@
         return arr
       },
       releaseStatusArray() {
-        return RELEASE_STATUS.map((val, index) => {
-          return { label: val, value: index }
-        })
+        var status = typeof this.$i18n.t('list.status') === 'string' ? RELEASE_STATUS : this.$i18n.t('list.status')
+        const arr = []
+        for(let index in status) {
+          arr.push({ label: status[index], value: +index })
+        }
+        return arr
       }
     },
 
