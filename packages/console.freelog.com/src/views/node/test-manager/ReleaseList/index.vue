@@ -26,7 +26,14 @@
 
         <div style="height: 70px;"></div>
 
+        <div
+            v-if="tableData && tableData.length === 0"
+            style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
+            <div>您还没有添加任何发行到该节点。</div>
+        </div>
+
         <el-table
+            v-else
             :empty-text="tableData === null ? '加载中...' : ''"
             :data="tableData"
             class="release-list__table"
@@ -37,10 +44,10 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
+                    <!--                     width="670"-->
                     <el-popover
                         v-if="scope.row.textRule"
-                        placement="right"
-                        width="670"
+                        placement="top-start"
                         trigger="hover"
                     >
                         <RulesBar slot="reference" :rules="scope.row.icons"/>

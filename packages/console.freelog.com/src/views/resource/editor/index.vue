@@ -160,12 +160,12 @@
                 <el-button
                     size="medium"
                     round
-                    type="primary"
                     @click="onSubmitButtonClick(false)"
                 >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
+                    type="primary"
                     round
                     @click="onSubmitButtonClick(true)"
                 >{{isUpdateResource ? $t('saveAndRelease'): $t('createAndRelease')}}
