@@ -1,10 +1,8 @@
 <template>
     <div class="node-manager">
 
-        <div
-            :style="styleObject"
-            class="node-manager__aside"
-        >
+        <!--         :style="styleObject"-->
+        <div class="node-manager__aside">
             <NodeHeader
                 :nodeName="nodeInfo.name"
                 :nodeHref="nodeInfo.origin"
@@ -266,7 +264,7 @@
                                 <!--                                :content="$t('exceptionExists')"-->
                                 <el-popover
                                     placement="top"
-                                    width="100"
+                                    width="160"
                                     trigger="hover"
                                 >
                                     <div style="display: flex; align-items: center; justify-content: space-between;">

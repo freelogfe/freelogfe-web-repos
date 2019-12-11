@@ -59,19 +59,19 @@
                         class="text-overflow-ellipsis release-list__table__name"
                     >
                         <label
-                            class="release-list__table__name--mock"
-                            v-if="scope.row.originInfo.type === 'mock'"
-                        >mock</label>
-                        <label
-                            class="release-list__table__name--release"
-                            v-if="scope.row.originInfo.type === 'release'"
-                        >发行</label>
-                        <label
                             class="release-list__table__name--presentable"
-                            v-if="scope.row.originInfo.type === 'presentable'"
-                        >
-                            <div/>
-                        </label>
+                            v-if="!!scope.row.nodePresentableId"
+                        >节点</label>
+                        <template v-else>
+                            <label
+                                class="release-list__table__name--mock"
+                                v-if="scope.row.originInfo.type === 'mock'"
+                            >mock</label>
+                            <label
+                                class="release-list__table__name--release"
+                                v-if="scope.row.originInfo.type === 'release'"
+                            >发行</label>
+                        </template>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
                     <div style="font-size: 12px; color: #888; padding-left: 50px;">
