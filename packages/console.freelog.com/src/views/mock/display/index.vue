@@ -142,6 +142,7 @@
                     <router-link
                         :to="'/mock/create/' + activatedBucket.bucketName"
                         class="nav-link ls-nav-link"
+                        target="_blank"
                     >
                         <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
                             {{$t('createMock')}}
