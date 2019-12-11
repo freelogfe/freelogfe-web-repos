@@ -75,7 +75,7 @@
 
                 <div
                     style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-                    <div>您还没有为该节点设置主题，节点无法展示。您可以添加“theme”类型的发行作为节点的主题。</div>
+                    <div>{{!isPageStyle ? '您还没有添加任何发行到该节点。': '您还没有为该节点设置主题，节点无法展示。您可以添加“theme”类型的发行作为节点的主题。'}}</div>
                 </div>
             </template>
 
