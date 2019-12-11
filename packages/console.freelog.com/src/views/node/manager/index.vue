@@ -32,16 +32,16 @@
         <div class="node-manager__main">
             <div style="height: 40px;"></div>
             <div class="node-manager__main__header">
-                <el-radio-group
-                    v-model="filterTodo">
-                    <el-radio-button label="全部">
-                        <span class="node-manager__main__header__text">{{$t('all')}}</span>
-                    </el-radio-button>
-                    <el-radio-button label="待处理">
-                        <span class="node-manager__main__header__text">{{$t('pending')}}</span>
-                    </el-radio-button>
-                </el-radio-group>
-
+                <!--                <el-radio-group-->
+                <!--                    v-model="filterTodo">-->
+                <!--                    <el-radio-button label="全部">-->
+                <!--                        <span class="node-manager__main__header__text">{{$t('all')}}</span>-->
+                <!--                    </el-radio-button>-->
+                <!--                    <el-radio-button label="待处理">-->
+                <!--                        <span class="node-manager__main__header__text">{{$t('pending')}}</span>-->
+                <!--                    </el-radio-button>-->
+                <!--                </el-radio-group>-->
+                <div></div>
                 <el-input
                     class="node-manager__main__header__input"
                     v-model="filterSearch"
