@@ -37,10 +37,10 @@
                 min-width="12%"
             >
                 <template slot-scope="scope">
+                    <!--                     width="670"-->
                     <el-popover
                         v-if="scope.row.textRule"
-                        placement="right"
-                        width="670"
+                        placement="top-start"
                         trigger="hover"
                     >
                         <RulesBar slot="reference" :rules="scope.row.icons"/>
