@@ -161,6 +161,7 @@
                     <!--                    v-if="mockTableData && mockTableData.length > 0"-->
                     <div
                         class="mock-list__mocks_non-empty__body_table"
+                        v-else
                     >
                         <el-table
                             :empty-text="mockTableData === null ? '加载中...' : ''"
