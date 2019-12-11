@@ -19,7 +19,7 @@
 				</template>
 			</div>
 		</div>
-		<div class="mapping-rule__body">
+		<div class="mapping-rule__body" v-show="!editorVisible">
 			<el-table ref="mrTable" :data="targetRulesTableData" style="width: 100%" @selection-change="rulesSelectionHandler">
 				<el-table-column type="selection" width="45"></el-table-column>
 				<el-table-column :label="$t('ruleType')" width="146">
@@ -55,7 +55,7 @@
 			</h4>
 			<div class="mapping-rule-input-box">
 				<!-- <el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('inputPlaceHolder')" v-model="rulesText"></el-input> -->
-				<codemirror ref="codeMirror" :code="rulesText" :options="editorOptions" @input="onCodeChange"></codemirror>
+				<codemirror :class="{ 'hasErrors': rulesInputRowsCount === 13 }" ref="codeMirror" :code="rulesText" :options="editorOptions" @input="onCodeChange"></codemirror>
 				<div class="mr-rb-btns-box">
 					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('saveBtnText')}}</el-button>
 				</div>
@@ -69,6 +69,10 @@
 					<h4 class="match-error__title">{{$t('errors[3]')}}</h4>	
 					<ul v-html="matchErrorsText"></ul>
 				</template>
+			</div>
+			<div class="mapping-rule-match-result" v-if="matchResultsText !== ''">
+				<h4 class="match-result__title">{{$t('matchResultsTexts[0]')}}</h4>
+				<ul v-html="matchResultsText"></ul>
 			</div>
 		</div>
 	</div>
@@ -94,13 +98,13 @@ export default {
 			themeId: '',
 			syntaxErrorsText: '',
 			matchErrorsText: '',
+			matchResultsText: '',
 			rulesTextDownloadUrl: '',
 			rulesTextDownloadName: '',
 			selectedRules: [],
 			selectedRuleType: 'all',
 			rulesInputRowsCount: 18,
 			editorOptions: Object.assign({ 
-				
 				viewportMargin: 50,
 				viewportMargin: Infinity,
 				theme: 'idea', gutters: [] }, codeMirrorOptions),
@@ -173,7 +177,7 @@ export default {
 			const rulesTableData = [] 
 			const RULE_ICONS = [ "set_tags", "alter", "add", "show", "hide", "replace" ]
 
-			const operationsTexts = this.$i18n.t('operations')
+			const operationsTexts = this.$i18n.t('operationsTexts')
 			for(let i = 0; i < testRules.length; i++) {
 				const { matchErrors, ruleInfo, text, id } = testRules[i]
 				const { operation, online, presentableName } = ruleInfo
@@ -383,10 +387,11 @@ export default {
 
 			if(result.errors != null) {
 				this.syntaxErrorsText = result.errorObjects.map(error => {
-					return `<li class="mr-syntax-error">
-						<p>语句: line ${error.line}, col ${error.col} ${error.lineText}</p>
-						<p>错误: ${error.msg}</p>	
-					</li>`
+					const { lineText = '', line = -1, col = -1, msg = '' } = error
+					return '<li class="mr-syntax-error">' +
+					 	(line === -1 || col === -1 ? '' : `<p>${this.$i18n.t('errors[4]')}: line ${line}, col ${col} ${lineText}</p>`) +
+						`<p>${this.$i18n.t('errors[5]')}: ${msg}</p>` +
+					'</li>'
 				}).join('')
 				this.matchErrorsText = ''
 				return 
@@ -398,6 +403,7 @@ export default {
 				.then(data => {
 					const { testRules } = data
 					this.resolveMatchErrors(testRules)
+					this.resolveMatchResults(testRules)
 					if (this.matchErrorsText === '') {
 						this.$message.success(this.$i18n.t('messages[0]'))
 					}
@@ -418,12 +424,37 @@ export default {
 			if(matchErrors.length > 0) {
 				matchErrorsText = matchErrors.map(item => {
 					return `<li class="mr-match-error">
-										<p>语句: ${item.text}</p>
-										<p>错误: ${item.error}</p>	
+										<p>${this.$i18n.t('errors[4]')}: ${item.text}</p>
+										<p>${this.$i18n.t('errors[5]')}: ${item.error}</p>	
 									</li>`
 				}).join('')
 			}
 			this.matchErrorsText = matchErrorsText
+		},
+		resolveMatchResults(testRules) {
+			var matchResultsText = ''
+			const symbolString = this.$i18n.locale === 'zh-CN' ? '，' : ', '
+			const operationsTexts = this.$i18n.t('operationsTexts')
+			const matchResultsTexts = this.$i18n.t('matchResultsTexts')
+			for (let tRule of testRules) {
+				const { ruleInfo: { replaces } } = tRule
+				if (replaces && replaces.length > 0) {
+					matchResultsText += replaces.map(item => {
+						const { replaced, replacer, scopes = [], efficientCount = 0 } = item
+						let scopeText = '', replacerName = '', replacedName = ''
+						if (scopes.length > 0) {
+							scopeText = `${symbolString}<span>${operationsTexts[9]}</span> ` + scopes.flat(Infinity).map(scope => `<strong>${scope.name}</strong>`).join('-')
+						}
+						replacerName = replacer.name + (replacer.versionRange === '*' ? '' : `@${replacer.versionRange}`)
+						replacedName = replaced.name + (replaced.versionRange === '*' ? '' : `@${replaced.versionRange}`)
+						return `<li class="mr-match-result">
+										<p>${matchResultsTexts[1]}: ${replacerName} ${operationsTexts[6]} ${replacedName}${scopeText}</p>
+										<p>${matchResultsTexts[2]}: ${efficientCount}</p>	
+									</li>`
+					}).join('')
+				}
+			}
+			this.matchResultsText = matchResultsText
 		},
 		handleSelectType(command) {
 			this.selectedRuleType = command
@@ -514,12 +545,13 @@ export default {
 			opacity: 1; pointer-events: inherit;
 			// -webkit-transform: translateX(0); transform: translateX(0);
 		}
-		.syntax-error__title, .match-error__title  {
-			margin-bottom: 20px;
+		.syntax-error__title, .match-error__title, .match-result__title {
+			margin-bottom: 15px;
 			line-height:20px; font-size: 14px; font-weight: 600;
 		}
 		.syntax-error__title { color: #EE4040; }
 		.match-error__title { color: #409EFF}
+		.match-result__title { color: #000; }
 
 		.mapping-rule-input-box { 
 			position: relative; 
@@ -544,6 +576,7 @@ export default {
 
 .mapping-rule-wrapper {
 	.mapping-rule__body {
+		margin-bottom: 30px;
 		.cell {
 			font-size: 14px; font-weight: 400; color: #000;
 		}
@@ -552,7 +585,10 @@ export default {
 		}
 	}
 	.mapping-rule-editor-box {
-		.CodeMirror { height: 400px; border-radius: 4px; }
+		.CodeMirror { 
+			height: 480px; border-radius: 4px; 
+			pre { line-height: 1.8; }
+		}
 		.el-textarea__inner {
 			padding: 20px; line-height: 2;
 		}
@@ -570,7 +606,13 @@ export default {
 }
 .mapping-rule-errors-box {
 	margin-top: 20px; margin-bottom: 30px; 
-	.mr-syntax-error, .mr-match-error {
+	.mr-syntax-error, .mr-match-error, .mr-match-result {
+		margin-left: 15px; list-style-type: disc;
+		line-height: 2; color: #666;
+	}
+}
+.mapping-rule-match-result {
+	.mr-match-result {
 		margin-left: 15px; list-style-type: disc;
 		line-height: 2; color: #666;
 	}
