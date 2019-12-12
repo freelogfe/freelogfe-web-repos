@@ -81,7 +81,7 @@
                         </template>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
-                    <div style="font-size: 12px; color: #888; padding-left: 50px;">
+                    <div v-if="scope.row.originInfo.type !== 'mock'" style="padding-left: 50px;">
                         <!--                        {{scope.row.originInfo.version}}-->
                         <el-select
                             placeholder="请选择"

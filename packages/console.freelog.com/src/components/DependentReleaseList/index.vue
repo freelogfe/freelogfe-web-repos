@@ -10,7 +10,7 @@
                     icon="el-icon-plus"
                     circle
                     @click="dialogVisible = true"
-                ></el-button>
+                />
                 <span style="padding-left: 10px; font-size: 14px; color: #333;">{{$t('addDependencies')}}</span>
             </div>
 
