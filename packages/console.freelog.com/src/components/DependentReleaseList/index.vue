@@ -1,5 +1,6 @@
 <template>
     <div style="background-color: #fff;">
+<!--        {{// dataSource}}-->
         <div
             style="padding: 15px 20px;"
         >
@@ -23,7 +24,10 @@
                 v-for="(i, j) in dataSource"
                 :isLock="isLock"
                 :name="i.name"
+                :version="i.version"
+                :versions="i.versions"
                 :isOnline="i.isOnline"
+                @onVersionChange="i.version = $event"
                 @onRemove="onRemove(j)"
             />
             <!-- 发行与mock 之间的间隔 -->

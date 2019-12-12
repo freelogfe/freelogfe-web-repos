@@ -1,29 +1,52 @@
 <template>
-    <div
-        style="height: 40px; display: flex; align-items: center; padding-left: 5px;"
-    >
-        <a
-            style="height: 20px; width: 20px; align-items: center; justify-content: center; display: flex;"
-            :style="{cursor: !this.isLock ? 'pointer' : 'not-allowed'}"
-            @click="onRemoveBtnClick"
+    <div style="display: flex; align-items: center;">
+        <div
+            style="height: 40px; display: flex; align-items: center; padding-left: 5px; width: 50%;"
         >
-            <i
-                style="font-size: 18px;"
-                :style="{color: !this.isLock ? '#f02323': '#666'}"
-                :class="this.isLock ? 'el-icon-goods': 'el-icon-remove'"
-            ></i>
-        </a>
-        <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{this.name}}</span>
-        <span
-            v-if="!isOnline"
-            style="background-color: #cdcdcd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 12px; width: 50px; height: 22px; margin-left: 20px;"
-        >未上线</span>
+            <a
+                style="height: 20px; width: 20px; align-items: center; justify-content: center; display: flex;"
+                :style="{cursor: !this.isLock ? 'pointer' : 'not-allowed'}"
+                @click="onRemoveBtnClick"
+            >
+                <i
+                    style="font-size: 18px;"
+                    :style="{color: !this.isLock ? '#f02323': '#666'}"
+                    :class="this.isLock ? 'el-icon-goods': 'el-icon-remove'"
+                />
+            </a>
+            <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{this.name}}</span>
+            <span
+                v-if="!isOnline"
+                style="background-color: #cdcdcd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 12px; width: 50px; height: 22px; margin-left: 20px;"
+            >未上线</span>
+        </div>
+
+        <div v-if="!!versions" style="width: 50%; display: flex; align-items: center;">
+            <SemverVersion
+                :version="version"
+                :versions="versions"
+                @onConfirm="$emit('onVersionChange', $event)"
+            >
+                <a style="display: flex; cursor: pointer;">
+                    <div style="font-size: 12px; color: #999; padding-right: 8px;">版本范围：{{version === '*' ? '最新版本':
+                        version}}
+                    </div>
+                    <i class="freelog fl-icon-edit" style="font-size: 12px;"/>
+                </a>
+            </SemverVersion>
+        </div>
+
     </div>
 </template>
 
 <script>
+    import SemverVersion from './SemverVersion';
+
     export default {
         name: 'Item',
+        components: {
+            SemverVersion
+        },
         props: {
             isLock: {
                 type: Boolean,
@@ -37,6 +60,11 @@
                 type: Boolean,
                 default: true,
             },
+            versions: Array,
+            version: {
+                type: String,
+                default: '*',
+            }
             // onRemove: {
             //     type: Function,
             //     default() {

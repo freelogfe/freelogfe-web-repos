@@ -148,14 +148,19 @@ export default {
             }
 
             const result1 = res1.data.data;
-            this.depList = result1.map(i => ({
-                date: i.createDate.split('T')[0],
-                id: i.releaseId,
-                isOnline: i.status === 1,
-                name: i.releaseName,
-                type: i.resourceType,
-                version: i.resourceVersions[0].version,
-            }));
+            this.depList = result1.map(i => {
+                const version = result.systemMeta.dependencies.find(j => j.releaseId === i.releaseId).versionRange;
+                return {
+                    date: i.createDate.split('T')[0],
+                    id: i.releaseId,
+                    isOnline: i.status === 1,
+                    name: i.releaseName,
+                    type: i.resourceType,
+                    // version: i.resourceVersions[0].version,
+                    version,
+                    versions: i.resourceVersions.map(k => k.version),
+                };
+            });
             // console.log(this.depList, 'this.depList');
         },
 

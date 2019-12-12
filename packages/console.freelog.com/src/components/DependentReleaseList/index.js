@@ -86,7 +86,9 @@ export default {
                 ...this.dataSource,
                 {
                     ...item,
-                    version: '^' + item.version,
+                    // version: '^' + item.version,
+                    version: '*',
+                    // customVersion: false,
                 },
             ]);
         },
