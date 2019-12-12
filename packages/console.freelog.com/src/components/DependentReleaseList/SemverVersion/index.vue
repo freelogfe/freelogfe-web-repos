@@ -121,7 +121,7 @@
                 this.$emit('onConfirm', version);
             },
             semverValid(){
-                return semver.valid(this.inputVersion);
+                return semver.validRange(this.inputVersion);
             }
         }
     }

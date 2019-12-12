@@ -97,7 +97,7 @@ export default {
             };
             this.resourceName = result.name;
             // this.coverURL = result.previewImages[0] || '';
-            this.depList = result.systemMeta.dependencyInfo.releases.map(i => ({
+            const depList = result.systemMeta.dependencyInfo.releases.map(i => ({
                 id: i.releaseId,
                 name: i.releaseName,
                 version: i.versionRange,
@@ -111,16 +111,21 @@ export default {
 
             const res2 = await this.$axios.get('/v1/releases/list', {
                 params: {
-                    releaseIds: this.depList.map(i => i.id).join(','),
+                    releaseIds: depList.map(i => i.id).join(','),
                 }
             });
             // console.log(res2, 'res2res2res2res2');
-            this.depList = res2.data.data.map(i => ({
-                id: i.releaseId,
-                name: i.releaseName,
-                version: i.latestVersion.version,
-                isOnline: i.status === 1,
-            }));
+            this.depList = res2.data.data.map(i => {
+                const version = depList.find(j => j.id === i.releaseId).version;
+                return {
+                    id: i.releaseId,
+                    name: i.releaseName,
+                    // version: i.latestVersion.version,
+                    version,
+                    versions: i.resourceVersions.map(k => k.version),
+                    isOnline: i.status === 1,
+                };
+            });
         },
 
         /**
