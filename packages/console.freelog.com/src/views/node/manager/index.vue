@@ -62,20 +62,23 @@
             >
                 <div style="height: 40px;"/>
                 <div style="display: flex; justify-content: flex-end; align-items: center;">
-                    <router-link
-                        :to="!isPageStyle ? '/' : '/?q=page_build'"
-                        class="nav-link ls-nav-link"
-                        target="_blank"
-                    >
-                        <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                            {{!isPageStyle ? '前往发行市场': '添加主题'}}
-                        </el-button>
-                    </router-link>
+
                 </div>
 
                 <div
                     style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-                    <div>{{!isPageStyle ? '您还没有添加任何发行到该节点。': '您还没有为该节点设置主题，节点无法展示。\n您可以添加“theme”类型的发行作为节点的主题。'}}</div>
+                    <div>
+                        <span>{{!isPageStyle ? '您还没有添加任何发行到该节点。': '您还没有为该节点设置主题，节点无法展示。\n您可以添加“theme”类型的发行作为节点的主题。'}}</span>
+                        <router-link
+                            :to="!isPageStyle ? '/' : '/?q=page_build'"
+                            class="nav-link ls-nav-link"
+                            target="_blank"
+                        >
+                            <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
+                                {{!isPageStyle ? '前往发行市场': '添加主题'}}
+                            </el-button>
+                        </router-link>
+                    </div>
                 </div>
             </template>
 

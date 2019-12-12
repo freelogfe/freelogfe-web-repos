@@ -29,7 +29,7 @@
         <div
             v-if="tableData && tableData.length === 0"
             style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-            <div>您还没有添加任何发行到该节点。</div>
+            <div>您还没有添加任何测试资源。</div>
         </div>
 
         <el-table

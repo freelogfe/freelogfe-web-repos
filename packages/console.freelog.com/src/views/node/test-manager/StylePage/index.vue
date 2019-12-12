@@ -28,7 +28,7 @@
         <div
             v-if="tableData && tableData.length === 0"
             style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-            <div>您还没有为该节点设置主题，节点无法展示。 您可以添加“theme”类型的发行作为节点的主题。</div>
+            <div>您还没有为该节点设置主题，节点无法展示。 您可以添加theme类型的测试资源作为节点的主题。</div>
         </div>
 
         <el-table

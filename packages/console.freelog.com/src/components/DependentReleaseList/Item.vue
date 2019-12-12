@@ -23,6 +23,7 @@
 
         <div v-if="!!versions" style="width: 50%; display: flex; align-items: center;">
             <SemverVersion
+                v-if="!this.isLock"
                 :version="version"
                 :versions="versions"
                 @onConfirm="$emit('onVersionChange', $event)"
@@ -34,6 +35,11 @@
                     <i class="freelog fl-icon-edit" style="font-size: 12px;"/>
                 </a>
             </SemverVersion>
+            <div v-else style="display: flex;">
+                <div style="font-size: 12px; color: #999; padding-right: 8px;">版本范围：{{version === '*' ? '最新版本':
+                    version}}
+                </div>
+            </div>
         </div>
 
     </div>
