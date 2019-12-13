@@ -1,7 +1,7 @@
 <template>
     <LazyLoadingBox
         :end="dataEnd"
-        :endText="(data && data.length === 0) ? '没有符合条件的发行' : ''"
+        :endText="(data && data.length === 0) ? $t('noConditions') : ''"
         @toBottom="toBottom"
     >
         <div style="padding: 0 90px;">
@@ -38,10 +38,12 @@
         i18n: { // `i18n` 选项，为组件设置语言环境信息
             messages: {
                 en: {
-                    pleaseEnter: 'Please enter'
+                    pleaseEnter: 'Please enter',
+                    noConditions: 'Does not meet the conditions of release',
                 },
                 'zh-CN': {
-                    pleaseEnter: '请输入内容'
+                    pleaseEnter: '请输入内容',
+                    noConditions: '没有符合条件的发行',
                 },
             }
         },

@@ -3,7 +3,7 @@
         <LazyLoadingBox
             v-if="noData === false"
             :end="dataEnd"
-            :endText="(data && data.length === 0) ? '没有符合条件的资源' : ''"
+            :endText="(data && data.length === 0) ? $t('noConditions') : ''"
             @toBottom="toBottom"
         >
             <div style="padding: 0 90px;">
@@ -30,9 +30,7 @@
         <div
             style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"
             v-if="noData === true"
-        >
-            您还没有创建任何mock
-        </div>
+        >{{$t('noMock')}}</div>
     </div>
 </template>
 
@@ -45,10 +43,14 @@
         i18n: { // `i18n` 选项，为组件设置语言环境信息
             messages: {
                 en: {
-                    pleaseEnter: 'Please enter'
+                    pleaseEnter: 'Please enter',
+                    noMock: 'You have not created any mock',
+                    noConditions: 'Does not meet the conditions of resources',
                 },
                 'zh-CN': {
-                    pleaseEnter: '请输入内容'
+                    pleaseEnter: '请输入内容',
+                    noMock: '您还没有创建任何mock',
+                    noConditions: '没有符合条件的资源',
                 },
             }
         },

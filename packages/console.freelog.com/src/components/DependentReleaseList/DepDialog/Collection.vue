@@ -5,6 +5,7 @@
         <LazyLoadingBox
             :end="dataEnd"
             v-if="noData === false"
+            :endText="(data && data.length === 0) ? $t('noConditions') : ''"
             @toBottom="toBottom"
         >
             <!-- :disabled="exists.includes(i.id)" -->
@@ -13,7 +14,7 @@
                 <div style="height: 40px;"></div>
                 <el-input
                     v-model="input"
-                    :placeholder="'请输入内容'"
+                    :placeholder="$t('pleaseEnter')"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"/>
                 </el-input>
@@ -52,10 +53,14 @@
         i18n: { // `i18n` 选项，为组件设置语言环境信息
             messages: {
                 en: {
-                    noCollection: 'You are not collecting any issue you in the market after the release of the collection will show up here'
+                    noCollection: 'You are not collecting any issue you in the market after the release of the collection will show up here',
+                    pleaseEnter: 'Please enter',
+                    noConditions: 'Does not meet the conditions of release',
                 },
                 'zh-CN': {
-                    noCollection: '您还没有收藏任何发行，您在发行市场收藏的发行之后将会出现在这里'
+                    noCollection: '您还没有收藏任何发行，您在发行市场收藏的发行之后将会出现在这里',
+                    pleaseEnter: '请输入内容',
+                    noConditions: '没有符合条件的发行',
                 },
             }
         },

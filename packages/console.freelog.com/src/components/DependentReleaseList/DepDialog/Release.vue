@@ -3,14 +3,14 @@
         <LazyLoadingBox
             v-if="noData === false"
             :end="dataEnd"
-            :endText="(data && data.length === 0) ? '没有符合条件的发行' : ''"
+            :endText="(data && data.length === 0) ? $t('noConditions') : ''"
             @toBottom="toBottom"
         >
             <div style="padding: 0 90px;">
                 <div style="height: 40px;"></div>
                 <el-input
                     v-model="input"
-                    :placeholder="'请输入内容'"
+                    :placeholder="$t('pleaseEnter')"
                 >
                     <i slot="prefix" class="el-input__icon el-icon-search"/>
                 </el-input>
@@ -45,10 +45,14 @@
         i18n: { // `i18n` 选项，为组件设置语言环境信息
             messages: {
                 en: {
-                    noRelease: 'You have not created any issue'
+                    pleaseEnter: 'Please enter',
+                    noRelease: 'You have not created any issue',
+                    noConditions: 'Does not meet the conditions of release',
                 },
                 'zh-CN': {
-                    noRelease: '您还没有创建任何发行'
+                    pleaseEnter: '请输入内容',
+                    noRelease: '您还没有创建任何发行',
+                    noConditions: '没有符合条件的发行',
                 },
             }
         },
