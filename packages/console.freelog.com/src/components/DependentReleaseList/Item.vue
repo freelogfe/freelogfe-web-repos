@@ -69,7 +69,7 @@
             versions: Array,
             version: {
                 type: String,
-                default: '*',
+                default: '',
             }
             // onRemove: {
             //     type: Function,

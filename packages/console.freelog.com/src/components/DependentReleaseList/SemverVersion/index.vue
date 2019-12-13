@@ -1,7 +1,7 @@
 <template>
     <el-popover
         placement="bottom-end"
-        width="325"
+        width="400"
         trigger="click"
         v-model="popoverShow"
     >
@@ -30,13 +30,22 @@
                     v-model="selectedVersion"
                     :disabled="customer !== false"
                 >
-                    <el-option label="最新版本" value="*"/>
+<!--                    <el-option label="最新版本" value="*"/>-->
                     <el-option
                         v-for="v in versions"
                         :label="v"
                         :value="v"
                     />
                 </el-select>
+                <div
+                    style="font-size: 12px; display: flex; align-items: center; justify-content: flex-end; flex-shrink: 1; width: 200px;">
+                    <el-checkbox
+                        size="mini"
+                        v-model="checked"
+                        :disabled="customer !== false"
+                    />
+                    <span style="padding-left: 8px;">允许使用当前版本的最新变动</span>
+                </div>
             </div>
             <div style="height: 10px;"/>
             <div>
@@ -95,33 +104,34 @@
             },
             version: {
                 type: String,
-                default: '*',
+                default: '',
             }
         },
         data() {
             return {
                 popoverShow: false,
                 customer: null,
-                selectedVersion: this.version,
+                selectedVersion: this.version.replace('^', ''),
+                checked: this.version.startsWith('^'),
                 // versions: ['1.1.2', '1.2.2'],
-                inputVersion: this.version,
+                inputVersion: this.version
             }
         },
         methods: {
             confirm() {
                 // const version = customer ===
                 // console.log(this.selectedVersion, this.inputVersion, '##########');
-                let version = '*';
+                let version = '';
                 if (this.customer === false) {
-                    version = this.selectedVersion;
+                    version = (this.checked ? '^' : '') + this.selectedVersion;
                 } else if (this.customer === true) {
                     version = this.inputVersion;
                 }
                 this.popoverShow = false;
                 this.$emit('onConfirm', version);
             },
-            semverValid(){
-                return semver.validRange(this.inputVersion);
+            semverValid() {
+                return this.inputVersion && semver.validRange(this.inputVersion);
             }
         }
     }

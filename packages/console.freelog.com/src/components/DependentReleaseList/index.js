@@ -87,7 +87,7 @@ export default {
                 {
                     ...item,
                     // version: '^' + item.version,
-                    version: '*',
+                    version: '^' + item.versions[item.versions.length - 1],
                     // customVersion: false,
                 },
             ]);
