@@ -22,15 +22,14 @@
                     @click="customer = false"
                 />
 
-                <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
+                <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('selected')}}</span>
                 <el-select
-                    placeholder="请选择"
                     size="mini"
                     style="width: 100px;"
                     v-model="selectedVersion"
                     :disabled="customer !== false"
                 >
-<!--                    <el-option label="最新版本" value="*"/>-->
+                    <!--                    <el-option label="最新版本" value="*"/>-->
                     <el-option
                         v-for="v in versions"
                         :label="v"
@@ -44,20 +43,20 @@
                         v-model="checked"
                         :disabled="customer !== false"
                     />
-                    <span style="padding-left: 8px;">允许使用当前版本的最新变动</span>
+                    <span style="padding-left: 8px;">Allows changes version</span>
                 </div>
             </div>
             <div style="height: 10px;"/>
             <div>
                 <div style="display: flex; align-items: center;">
                     <Radio :selected="customer === true" @click="customer = true"/>
-                    <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
+                    <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('custom')}}</span>
                 </div>
                 <div v-show="customer === true">
                     <div style="height: 5px;"></div>
                     <el-input
                         v-model="inputVersion"
-                        placeholder="输入semver版本范围"
+                        :placeholder="$t('enterSemver')"
                         style="display: block;"
                     />
                 </div>
@@ -72,15 +71,13 @@
                     style="font-size: 12px;"
                     @click="confirm"
                     :disabled="customer === null || (customer === true && !semverValid())"
-                >确定
-                </el-button>
+                >{{$t('confirm')}}</el-button>
                 <el-button
                     type="text"
                     size="mini"
                     style="font-size: 12px; padding: 0 20px; color: #999;"
                     @click="popoverShow = false"
-                >取消
-                </el-button>
+                >{{$t('cancel')}}</el-button>
             </div>
         </div>
     </el-popover>
@@ -92,6 +89,26 @@
 
     export default {
         name: "index",
+        i18n: { // `i18n` 选项，为组件设置语言环境信息
+            messages: {
+                en: {
+                    selected: 'Selected',
+                    custom: 'Custom',
+                    allowsChanges: 'Allows changes version',
+                    enterSemver: 'Enter semver version range',
+                    confirm: 'Confirm',
+                    cancel: 'Cancel',
+                },
+                'zh-CN': {
+                    selected: '选定版本',
+                    custom: '自定义',
+                    allowsChanges: '允许使用当前版本的最新变动',
+                    enterSemver: '输入semver版本范围',
+                    confirm: '确定',
+                    cancel: '取消',
+                },
+            }
+        },
         components: {
             Radio,
         },
