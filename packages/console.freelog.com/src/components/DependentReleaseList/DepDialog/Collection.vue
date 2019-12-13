@@ -110,6 +110,7 @@
                         type: i.resourceType,
                         version: i.latestVersion.version,
                         date: i.releaseUpdateDate.split('T')[0],
+                        versions: i.resourceVersions.map(i => i.version),
                         // disabled: false,
                     }))
                 ].filter(i => i.id !== this.currentID);
