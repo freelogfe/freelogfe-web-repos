@@ -85,7 +85,7 @@
             <template v-else>
                 <div style="height: 80px;"/>
                 <el-table
-                    :empty-text="tableData === null ? '加载中...' : ''"
+                    :empty-text="tableData === null ? `${$t('loading')}...` : ''"
                     :data="tableData"
                     class="node-manager__main__table"
                 >
