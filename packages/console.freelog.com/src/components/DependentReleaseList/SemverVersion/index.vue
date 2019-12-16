@@ -31,7 +31,7 @@
                 >
                     <!--                    <el-option label="最新版本" value="*"/>-->
                     <el-option
-                        v-for="v in versions"
+                        v-for="v in [...versions].reverse()"
                         :label="v"
                         :value="v"
                     />
