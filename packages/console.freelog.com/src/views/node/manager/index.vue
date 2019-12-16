@@ -8,14 +8,14 @@
                 :nodeHref="nodeInfo.origin"
                 :isTestNode="false"
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
-                btnText="进入测试节点管理"
+                :btnText="$t('gotoTest')"
             />
 
             <div class="node-manager__aside__navs">
                 <a
                     @click="switchIsPageStyle(false)"
                     :class="{'node-manager__aside__navs__a--active': !isPageStyle}"
-                >展品管理</a>
+                >{{$t('presentableManagement')}}</a>
                 <a
                     @click="switchIsPageStyle(true)"
                     :style="{
@@ -68,14 +68,14 @@
                 <div
                     style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
                     <div>
-                        <span>{{!isPageStyle ? '您还没有添加任何发行到该节点。': '您还没有为该节点设置主题，节点无法展示。\n您可以添加“theme”类型的发行作为节点的主题。'}}</span>
+                        <span>{{!isPageStyle ? $t('notAdded'): $t('notSetTheme')}}</span>
                         <router-link
                             :to="!isPageStyle ? '/' : '/?q=page_build'"
                             class="nav-link ls-nav-link"
                             target="_blank"
                         >
                             <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                                {{!isPageStyle ? '前往发行市场': '添加主题'}}
+                                {{!isPageStyle ? $t('toMarket'): $t('addTheme')}}
                             </el-button>
                         </router-link>
                     </div>
