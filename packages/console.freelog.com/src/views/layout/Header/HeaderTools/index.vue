@@ -1,5 +1,7 @@
 <template>
-    <div>1234</div>
+    <div style="display: flex; color: #fff;">
+        1234
+    </div>
 </template>
 
 <script>

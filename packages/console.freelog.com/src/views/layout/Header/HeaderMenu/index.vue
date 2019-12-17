@@ -26,7 +26,7 @@
                     </a>
                 </div>
                 <div class="header-menu__footer">
-                    <i class="el-icon-plus"/>
+                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                 </div>
             </div>
         </a>
@@ -61,7 +61,7 @@
                     </a>
                 </div>
                 <div class="header-menu__footer">
-                    <i class="el-icon-plus"/>
+                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                 </div>
             </div>
         </a>
@@ -159,11 +159,13 @@
                 border-top: 1px solid #444;
                 text-align: center;
                 display: block;
+                font-size: 14px;
+                color: #999;
+                /*font-weight: 600;*/
 
                 &:hover {
                     background-color: #444;
                     color: #ddd;
-                    font-weight: 600;
                 }
             }
 
