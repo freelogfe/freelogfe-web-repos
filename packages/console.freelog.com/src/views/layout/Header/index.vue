@@ -5,7 +5,7 @@
         <i class="freelog fl-icon-logo-freelog"/>
       </router-link>
 <!--      <span class="page-title">{{pageTitle}}</span>-->
-        <HeaderMenu/>
+        <HeaderMenu style="margin-left: 45px;"/>
     </div>
 
     <nav class="toolbar" v-if="session.user">

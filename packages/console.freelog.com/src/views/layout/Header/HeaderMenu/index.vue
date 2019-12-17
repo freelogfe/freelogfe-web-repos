@@ -52,10 +52,12 @@
             <div class="header-menu__dropdown" style="width: 280px;">
                 <div class="header-menu__menu">
                     <a class="header-menu__menu__item">
-                        我的节点1
+                        <span>我的节点1</span>
+                        <a>测试节点</a>
                     </a>
                     <a class="header-menu__menu__item">
-                        我的节点1
+                        <span>我的节点2</span>
+                        <a>测试节点</a>
                     </a>
                 </div>
                 <div class="header-menu__footer">
@@ -110,26 +112,43 @@
             position: absolute;
             display: none;
             top: 100%;
-            left: 0;
+            left: 5px;
             font-size: 14px;
             color: #999;
             background-color: #333;
             width: 180px;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.2);
 
             .header-menu__menu {
                 padding: 10px 0;
 
                 .header-menu__menu__item {
-                    display: block;
-
+                    /*display: block;*/
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                     padding: 0 20px;
                     box-sizing: border-box;
                     line-height: 40px;
+
+                    & > a {
+                        background-color: #444;
+                        color: #999;
+                        font-size: 12px;
+                        line-height: 20px;
+                        padding: 0 6px;
+                        font-weight: 600;
+                    }
 
                     &:hover {
                         background-color: #444;
                         color: #ddd;
                         font-weight: 600;
+
+                        & > a {
+                            background-color: #555;
+                            color: #ddd;
+                        }
                     }
                 }
             }
