@@ -1,68 +1,106 @@
 <template>
     <div class="header-menu">
-        <a class="header-menu__nav">
+        <a
+            class="header-menu__nav"
+            :class="{'header-menu__nav--active': ['/'].includes($route.path)}"
+        >
             <span>发现</span>
             <div class="header-menu__dropdown">
                 <div class="header-menu__menu">
-                    <a class="header-menu__menu__item">
-                        发行市场
-                    </a>
-                    <a class="header-menu__menu__item">
-                        示例节点
-                    </a>
+                    <router-link
+                        to="/"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/'}"
+                    >发行市场
+                    </router-link>
+                    <router-link
+                        to="/"
+                        class="header-menu__menu__item"
+                    >示例节点
+                    </router-link>
                 </div>
-
             </div>
         </a>
-        <a class="header-menu__nav header-menu__nav--active">
+        <a
+            class="header-menu__nav"
+            :class="{'header-menu__nav--active': ['/mock/display'].includes($route.path)}"
+        >
             <span>储存空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <div class="header-menu__menu">
-                    <a class="header-menu__menu__item">
-                        bucket1
-                    </a>
-                    <a class="header-menu__menu__item">
-                        bucket2
-                    </a>
+                    <router-link
+                        v-for="(bucket, index) in (bucketsList || [])"
+                        :to="{
+                            path: '/mock/display',
+                        }"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && index === 0}"
+                    >{{bucket.bucketName}}
+                    </router-link>
+                    <!--                    <router-link to="/mock/display" class="header-menu__menu__item">-->
+                    <!--                        bucket2-->
+                    <!--                    </router-link>-->
                 </div>
-                <div class="header-menu__footer">
-                    <i class="el-icon-plus"/>
-                </div>
+                <a class="header-menu__footer">
+                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
+                </a>
             </div>
         </a>
-        <a class="header-menu__nav">
+        <a
+            class="header-menu__nav"
+            :class="{'header-menu__nav--active': ['/resource/list', '/release/list', '/release/collections'].includes($route.path)}"
+        >
             <span>发行管理</span>
             <div class="header-menu__dropdown">
                 <div class="header-menu__menu">
-                    <a class="header-menu__menu__item">
-                        我的资源
-                    </a>
-                    <a class="header-menu__menu__item">
-                        我的发行
-                    </a>
-                    <a class="header-menu__menu__item">
-                        我的收藏
-                    </a>
+                    <router-link
+                        to="/resource/list"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/resource/list'}"
+                    >我的资源
+                    </router-link>
+                    <router-link
+                        to="/release/list"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/release/list'}"
+                    >我的发行
+                    </router-link>
+                    <router-link
+                        to="/release/collections"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/release/collections'}"
+                    >我的收藏
+                    </router-link>
                 </div>
 
             </div>
         </a>
-        <a class="header-menu__nav">
+        <a
+            class="header-menu__nav"
+            :class="{'header-menu__nav--active': $route.path.startsWith('/node/manager/') || $route.path.startsWith('/node/test-manager/')}"
+        >
             <span>节点管理</span>
             <div class="header-menu__dropdown" style="width: 280px;">
                 <div class="header-menu__menu">
-                    <a class="header-menu__menu__item">
-                        <span>我的节点1</span>
-                        <a>测试节点</a>
-                    </a>
-                    <a class="header-menu__menu__item">
-                        <span>我的节点2</span>
-                        <a>测试节点</a>
-                    </a>
+                    <router-link
+                        v-for="node in (nodesList || [])"
+                        class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === `/node/manager/${node.nodeId}` || $route.path === `/node/test-manager/${node.nodeId}`}"
+                        :to="`/node/manager/${node.nodeId}`"
+                    >
+                        <span>{{node.nodeName}}</span>
+                        <router-link
+                            :to="`/node/test-manager/${node.nodeId}`"
+                        >测试节点
+                        </router-link>
+                    </router-link>
                 </div>
-                <div class="header-menu__footer">
-                    <i class="el-icon-plus"/>
-                </div>
+                <router-link
+                    to="/node/create"
+                    class="header-menu__footer"
+                >
+                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
+                </router-link>
             </div>
         </a>
     </div>
@@ -70,7 +108,31 @@
 
 <script>
     export default {
-        name: "index"
+        name: "index",
+        data() {
+            return {
+                bucketsList: null,
+                nodesList: null,
+            };
+        },
+        mounted() {
+            console.log(this.$route, '$$$$$$$$');
+            this.initBucket();
+            this.initNode();
+        },
+        methods: {
+            async initBucket() {
+                const {data} = await this.$axios.get('/v1/resources/mocks/buckets');
+                // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
+                this.bucketsList = data.data;
+                // console.log(this.bucketsList, 'this.bucketsList');
+            },
+            async initNode() {
+                const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
+                this.nodesList = data.data.dataList;
+                console.log(this.nodesList, 'data');
+            },
+        },
     }
 </script>
 
@@ -130,6 +192,7 @@
                     padding: 0 20px;
                     box-sizing: border-box;
                     line-height: 40px;
+                    color: #999;
 
                     & > a {
                         background-color: #444;
@@ -150,6 +213,16 @@
                             color: #ddd;
                         }
                     }
+
+                    &.header-menu__menu__item--active {
+                        color: #fff;
+                        font-weight: 600;
+
+                        & > a {
+                            background-color: #555;
+                            color: #fff;
+                        }
+                    }
                 }
             }
 
@@ -159,11 +232,13 @@
                 border-top: 1px solid #444;
                 text-align: center;
                 display: block;
+                font-size: 14px;
+                color: #999;
+                /*font-weight: 600;*/
 
                 &:hover {
                     background-color: #444;
                     color: #ddd;
-                    font-weight: 600;
                 }
             }
 
