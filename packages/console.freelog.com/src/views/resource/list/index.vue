@@ -2,13 +2,12 @@
 <template>
   <section class="my-resources">
     <div class="m-r-header clearfix">
-<!--      <router-link to="/resource/create">-->
-      <router-link to="/resource/editor">
-        <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('createBtnText')}}</el-button>
-      </router-link>
       <div class="right-tool-bar-wrap">
         <search-input @search="searchHandler" showInputImmediately></search-input>
       </div>
+      <router-link to="/resource/editor">
+        <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('createBtnText')}}</el-button>
+      </router-link>
     </div>
 
     <resource-items-list :query="queryInput" @release="showReleaseDialog"></resource-items-list>
@@ -89,12 +88,12 @@ export default {
     .el-dialog__header{ padding: 0; }
   }
   .m-r-header {
-    margin-bottom: 40px;
+    margin-bottom: 28px; text-align: right;
     .m-r-create-btn {
-      width:160px; border-radius: 2px;
+      width:120px; margin-left: 20px; border-radius: 2px;
     }
     .right-tool-bar-wrap {
-      float: right;
+      display: inline-block;
     }
   }
   @media screen and (max-width: 1250px){

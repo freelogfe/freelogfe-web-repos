@@ -22,6 +22,7 @@ export default {
     sureText: 'sure',
     sureBtnText: 'sure',
     cancelBtnText: 'cancel',
+    allTypes: 'all'
   },
 
   header: {
