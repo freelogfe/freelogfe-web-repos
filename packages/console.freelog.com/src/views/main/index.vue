@@ -54,12 +54,26 @@
 <style lang="less">
     .index-main-container {
 		.el-tabs__header { 
+			height: 40px;
 			text-align: center; background-color: #fff;
-			.el-tabs__active-bar { background-color: #333; }
-			.el-tabs__item {
-				color: #666; font-weight: 400; font-size: 16px;
-				&.is-active { font-weight: 600; color: #333; }
+			.el-tabs__active-bar { 
+				background-color: #333;  color: #444;
+				&::before, &::after {
+					content: '';
+					position: absolute; top: 0; z-index: 10;
+					width: 12px; height: 2px; 
+					background-color: #333; 
+				}
+				&::before { left: 100%; }
+				&::after { right: 100%; }
 			}
+			.el-tabs__nav {
+				.el-tabs__item {
+					padding: 0 20px; color: #666; font-weight: 400; font-size: 16px;
+					&.is-active { font-weight: 600; color: #333; }
+				}
+			}
+			
 		}
 		.el-tabs__nav-wrap { 
 			display: inline-block; 
