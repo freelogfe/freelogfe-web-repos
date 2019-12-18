@@ -1,6 +1,7 @@
 import {mapGetters} from 'vuex'
 import SearchInput from '@/components/SearchInput/index.vue'
 import { logout, LOGIN_PATH } from '@freelog/freelog-ui-login'
+import HeaderMenu from './HeaderMenu/index.vue';
 
 export default {
   name: 'fl-header',
@@ -25,11 +26,12 @@ export default {
   },
 
   components: {
-    SearchInput
+    SearchInput,
+      HeaderMenu,
   },
 
   created() {
-    
+
   },
   mounted() {
     if (this.session && this.session.user && this.session.user.userId) {

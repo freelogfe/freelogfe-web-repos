@@ -2,9 +2,10 @@
   <header class="nav-header">
     <div class="brand">
       <router-link to="/" class="">
-        <i>F</i>
+        <i class="freelog fl-icon-logo-freelog"/>
       </router-link>
-      <span class="page-title">{{pageTitle}}</span>
+<!--      <span class="page-title">{{pageTitle}}</span>-->
+        <HeaderMenu style="margin-left: 45px;"/>
     </div>
 
     <nav class="toolbar" v-if="session.user">

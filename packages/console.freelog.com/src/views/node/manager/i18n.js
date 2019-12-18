@@ -43,6 +43,7 @@ export default {
             notSetTheme: 'You have not set a theme for the node, the node cannot be shown. You can add a " theme " theme of the issue as a node of Type',
             toMarket: 'To release the market',
             addTheme: 'AddTheme',
+            loading: 'Loading',
         },
         'zh-CN': {
             copySuccess: '复制成功',
@@ -87,6 +88,7 @@ export default {
             notSetTheme: '您还没有为该节点设置主题，节点无法展示。 您可以添加“theme”类型的发行作为节点的主题',
             toMarket: '前往发行市场',
             addTheme: '添加主题',
+            loading: '加载中'
         },
     }
 };
