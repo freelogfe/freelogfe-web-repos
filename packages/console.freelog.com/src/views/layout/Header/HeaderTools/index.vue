@@ -33,8 +33,17 @@
             <a class="header-tool__avatar">
                 <img/>
 
-                <div class="header-tools__dropdown">
-
+                <div class="header-tools__dropdown" style="width: 240px; left: unset; right: -10px; cursor: auto">
+                    <div
+                        style="display: flex; flex-direction: column; align-items: center; padding: 20px 0; font-size: 14px;font-weight: 600; color: #999;">
+                        <img style="height: 60px; width: 60px; border-radius: 50%;"/>
+                        <div style="height: 10px;"/>
+                        <div style="color: #999; font-size: 16px; font-weight: 600;">YANGHONGTIAN</div>
+                        <div style="height: 8px;"/>
+                        <div style="">13145959706</div>
+                    </div>
+                    <a>个人中心</a>
+                    <a>登出</a>
                 </div>
             </a>
         </div>
@@ -183,6 +192,18 @@
             height: 32px;
             display: block;
             border: none;
+        }
+
+        a {
+            padding: 0 20px;
+            line-height: 60px;
+            display: block;
+            border-top: 1px solid #444;
+
+            &:hover {
+                background-color: #444;
+                color: #ddd;
+            }
         }
     }
 
