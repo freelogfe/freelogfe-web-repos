@@ -1,17 +1,58 @@
 <template>
-    <div
+    <label
         class="tool__search"
-        style="background-color: #fff;"
+        :style="{backgroundColor: editable ? '#fff': ''}"
+        @click="onClick"
     >
-        <input/>
-        <i class="freelog fl-icon-content"/>
-    </div>
+        <input
+            v-show="editable"
+            v-model="value"
+            @blur="onBlur"
+            ref="input"
+            @keydown.enter="onConfirm"
+            @click="$event.stopPropagation()"
+        />
+        <i
+            @mousedown="onConfirm"
+            class="freelog fl-icon-content"
+        />
+    </label>
 </template>
 
 <script>
+    let searching = false;
     export default {
         name: "ToolSearch",
+        data() {
+            return {
+                editable: false,
+                value: '',
+            }
+        },
+        methods: {
+            onClick() {
+                this.editable = true;
+                // console.log(this.$refs.input);
+                setTimeout(() => this.$refs.input.focus());
+            },
+            onBlur() {
+                if (this.value || searching) {
+                    return;
+                }
+                this.editable = false;
+            },
+            onConfirm(event) {
+                searching = true;
+                setTimeout(() => searching = false);
+                if (this.value) {
+                    event.stopPropagation();
+                }
 
+                if (this.editable) {
+                    this.$emit('onConfirm', this.value);
+                }
+            }
+        }
     }
 </script>
 

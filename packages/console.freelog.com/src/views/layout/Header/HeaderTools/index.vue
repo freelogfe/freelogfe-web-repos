@@ -26,7 +26,7 @@
         </div>
 
         <div class="header-tools__col">
-            <ToolSearch/>
+            <ToolSearch @onConfirm="onSearch"/>
         </div>
 
         <div class="header-tools__col">
@@ -75,6 +75,11 @@
         name: "index",
         components: {
             ToolSearch
+        },
+        methods: {
+            onSearch(value) {
+                console.log(value, 'VVVVVVV');
+            }
         }
     }
 </script>
