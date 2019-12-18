@@ -75,22 +75,22 @@ export default {
     logout() {
       logout().catch(this.$error.showErrorMessage)
     },
-    searchHandler(qs) {
-      this.$router.push({path: '/', query: {q: qs}})
-    },
-    handleCommand(lang) {
-      if (lang === this.$i18n.locale) return
-      var langMap = {
-        'en': 'English',
-        'zh-CN': '中文'
-      }
-      this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
-        .then(() => {
-          window.localStorage.setItem('locale', lang)
-          this.$i18n.locale = lang
-          window.location.reload()
-        }).catch(() => {
-      })
-    }
+    // searchHandler(qs) {
+    //   this.$router.push({path: '/', query: {q: qs}})
+    // },
+    // handleCommand(lang) {
+    //   if (lang === this.$i18n.locale) return
+    //   var langMap = {
+    //     'en': 'English',
+    //     'zh-CN': '中文'
+    //   }
+    //   this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
+    //     .then(() => {
+    //       window.localStorage.setItem('locale', lang)
+    //       this.$i18n.locale = lang
+    //       window.location.reload()
+    //     }).catch(() => {
+    //   })
+    // }
   }
 }

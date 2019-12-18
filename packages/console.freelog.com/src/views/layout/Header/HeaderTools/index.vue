@@ -7,18 +7,20 @@
                 </div>
                 <div class="header-tools__dropdown">
                     <div class="header-tools__menu">
-                        <a class="header-tools__menu__item">
-                            创建资源
-                        </a>
-                        <a class="header-tools__menu__item">
-                            创建发行
-                        </a>
-                        <a class="header-tools__menu__item">
-                            创建mock
-                        </a>
-                        <a class="header-tools__menu__item">
-                            创建节点
-                        </a>
+                        <router-link
+                            to="/resource/editor"
+                            class="header-tools__menu__item"
+                        >创建资源
+                        </router-link>
+                        <a class="header-tools__menu__item">创建发行</a>
+                        <!--                        <router-link to="/" class="header-tools__menu__item">-->
+                        <!--                            创建mock-->
+                        <!--                        </router-link>-->
+                        <router-link
+                            to="/node/create"
+                            class="header-tools__menu__item"
+                        >创建节点
+                        </router-link>
                     </div>
 
                 </div>
@@ -31,35 +33,48 @@
 
         <div class="header-tools__col">
             <a class="header-tool__avatar">
-                <img/>
+                <img src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
 
-                <div class="header-tools__dropdown" style="width: 240px; left: unset; right: -10px; cursor: auto">
+                <div
+                    class="header-tools__dropdown"
+                    style="width: 240px; left: unset; right: -10px; cursor: auto;"
+                >
                     <div
                         style="display: flex; flex-direction: column; align-items: center; padding: 20px 0; font-size: 14px;font-weight: 600; color: #999;">
-                        <img style="height: 60px; width: 60px; border-radius: 50%;"/>
+                        <img
+                            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            style="height: 60px; width: 60px; border-radius: 50%;"
+                        />
                         <div style="height: 10px;"/>
                         <div style="color: #999; font-size: 16px; font-weight: 600;">YANGHONGTIAN</div>
                         <div style="height: 8px;"/>
                         <div style="">13145959706</div>
                     </div>
                     <a>个人中心</a>
-                    <a>登出</a>
+                    <router-link
+                        :to="'/login'"
+                    >登出
+                    </router-link>
                 </div>
             </a>
         </div>
 
         <div class="header-tools__col">
             <a class="header-tool__language">
-                <span>中文 <i class="el-icon-arrow-down"/></span>
+                <span>{{$i18n.locale === 'zh-CN'? '中文' : 'English'}} <i class="el-icon-arrow-down"/></span>
 
                 <div class="header-tools__dropdown" style="right: -10px; left: unset;">
                     <div class="header-tools__menu">
-                        <a class="header-tools__menu__item" style="color: #fff;">
-                            中文
-                        </a>
-                        <a class="header-tools__menu__item">
-                            English
-                        </a>
+                        <a
+                            @click="handleCommand('zh-CN')"
+                            class="header-tools__menu__item"
+                            :class="{'header-tools__menu__item--active':$i18n.locale === 'zh-CN'}"
+                        >中文</a>
+                        <a
+                            @click="handleCommand('en')"
+                            class="header-tools__menu__item"
+                            :class="{'header-tools__menu__item--active':$i18n.locale === 'en'}"
+                        >English</a>
                     </div>
 
                 </div>
@@ -78,7 +93,22 @@
         },
         methods: {
             onSearch(value) {
-                console.log(value, 'VVVVVVV');
+                // console.log(value, 'VVVVVVV');
+                this.$router.push({path: '/', query: {q: value}})
+            },
+            handleCommand(lang) {
+                if (lang === this.$i18n.locale) return;
+                const langMap = {
+                    'en': 'English',
+                    'zh-CN': '中文'
+                };
+                this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
+                    .then(() => {
+                        window.localStorage.setItem('locale', lang);
+                        this.$i18n.locale = lang;
+                        window.location.reload();
+                    }).catch(() => {
+                })
             }
         }
     }
@@ -126,25 +156,31 @@
                             padding: 0 20px;
                             box-sizing: border-box;
                             line-height: 40px;
+                            color: #999;
 
-                            & > a {
-                                background-color: #444;
-                                color: #999;
-                                font-size: 12px;
-                                line-height: 20px;
-                                padding: 0 6px;
-                                font-weight: 600;
-                            }
+                            /*& > a {*/
+                            /*    background-color: #444;*/
+                            /*    color: #999;*/
+                            /*    font-size: 12px;*/
+                            /*    line-height: 20px;*/
+                            /*    padding: 0 6px;*/
+                            /*    font-weight: 600;*/
+                            /*}*/
 
                             &:hover {
                                 background-color: #444;
                                 color: #ddd;
                                 font-weight: 600;
 
-                                & > a {
-                                    background-color: #555;
-                                    color: #ddd;
-                                }
+                                /*& > a {*/
+                                /*    background-color: #555;*/
+                                /*    color: #ddd;*/
+                                /*}*/
+                            }
+
+                            &.header-tools__menu__item--active {
+                                color: #fff;
+                                font-weight: 600;
                             }
                         }
                     }
@@ -158,13 +194,14 @@
                     .header-tool__create {
                         background-color: #61afff;
                     }
+
+                    & > span {
+                        color: #ddd;
+                        font-weight: 600;
+                    }
                 }
             }
-
-
         }
-
-
     }
 
     .header-tool__create {
@@ -204,6 +241,7 @@
             line-height: 60px;
             display: block;
             border-top: 1px solid #444;
+            color: #999;
 
             &:hover {
                 background-color: #444;
