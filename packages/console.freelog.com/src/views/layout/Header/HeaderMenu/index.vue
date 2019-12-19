@@ -41,7 +41,10 @@
                     <!--                        bucket2-->
                     <!--                    </router-link>-->
                 </div>
-                <a class="header-menu__footer">
+                <a
+                    @click="createBucketDialogVisible=true"
+                    class="header-menu__footer"
+                >
                     <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                 </a>
             </div>
@@ -103,16 +106,31 @@
                 </router-link>
             </div>
         </a>
+
+        <CreateBucketDialog
+            :visible="createBucketDialogVisible"
+            @cancel="createBucketDialogVisible=false"
+            @success="createBucketSuccess"
+        />
+
     </div>
+
 </template>
 
 <script>
+    import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
+
     export default {
         name: "index",
+        components: {
+            CreateBucketDialog,
+        },
         data() {
             return {
                 bucketsList: null,
                 nodesList: null,
+
+                createBucketDialogVisible: false,
             };
         },
         mounted() {
@@ -131,6 +149,9 @@
                 const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
                 this.nodesList = data.data.dataList;
                 // console.log(this.nodesList, 'data');
+            },
+            createBucketSuccess() {
+                console.log('#######');
             },
         },
     }

@@ -1,5 +1,5 @@
 <template>
-    <div class="create-bucket-dialog">
+<!--    <div class="">-->
         <!-- 添加 bucket 弹窗 -->
         <el-dialog
             :close-on-click-modal="false"
@@ -7,6 +7,8 @@
             :visible="visible"
             width="700px"
             @close="onClose"
+            custom-class="create-bucket-dialog"
+            :modal-append-to-body="false"
         >
             <div style="height: 17px"></div>
             <div class="dialog-body">
@@ -66,7 +68,7 @@
                 >{{$t('confirm')}}</el-button>
             </span>
         </el-dialog>
-    </div>
+<!--    </div>-->
 </template>
 
 <script>
@@ -152,7 +154,7 @@
 
 <style lang="less">
     .create-bucket-dialog {
-        .el-dialog {
+        &.el-dialog {
             border-radius: 10px;
 
             .el-dialog__header {

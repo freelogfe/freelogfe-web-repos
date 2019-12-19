@@ -74,6 +74,7 @@ export default {
         },
         async createBucketSuccess() {
             // console.log('######');
+            this.$message.success(this.$t('successfullyCreated'));
             this.dialogVisible = false;
             this.initBucketsByAPI(true)
         },
