@@ -59,7 +59,7 @@
             </a>
         </div>
 
-        <div class="header-tools__col">
+        <div class="header-tools__col" style="padding-right: 0">
             <a class="header-tool__language">
                 <span>{{$i18n.locale === 'zh-CN'? '中文' : 'English'}} <i class="el-icon-arrow-down"/></span>
 

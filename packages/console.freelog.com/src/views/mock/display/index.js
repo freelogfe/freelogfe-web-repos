@@ -1,9 +1,13 @@
 import {axios} from "@/lib";
 import querystring from 'querystring';
+import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
 import i18n from './i18n';
 
 export default {
     i18n,
+    components: {
+        CreateBucketDialog,
+    },
     // name: "index",
     data() {
         return {
@@ -22,9 +26,9 @@ export default {
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
             // 『新建 bucket 弹窗』中的 『输入框』value
-            bucketNameInputValue: '',
+            // bucketNameInputValue: '',
             // 『新建 bucket 弹窗』中的错误提示信息
-            bucketNameInputValueError: '',
+            // bucketNameInputValueError: '',
 
             // 『mock 表格』数据
             mockTableData: null,
@@ -68,6 +72,11 @@ export default {
                 this.activeBucketIndex = data.data.length - 1
             }
         },
+        async createBucketSuccess() {
+            // console.log('######');
+            this.dialogVisible = false;
+            this.initBucketsByAPI(true)
+        },
         /**
          * 改变 bucket 列表中激活的索引
          * @param index
@@ -89,36 +98,36 @@ export default {
          */
         hideNewBucketDialog() {
             this.dialogVisible = false;
-            this.bucketNameInputValue = '';
-            this.bucketNameInputValueError = '';
+            // this.bucketNameInputValue = '';
+            // this.bucketNameInputValueError = '';
         },
-        /**
-         * 向服务端 API 发起，新建 bucket 的请求
-         */
-        async createNewBucketByAPI() {
-
-            this.bucketNameInputValueError = false;
-
-            if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(this.bucketNameInputValue)) {
-                setTimeout(() => this.bucketNameInputValueError = true);
-                return;
-            }
-            this.bucketNameInputValueError = '';
-
-            const params = {
-                bucketName: this.bucketNameInputValue,
-            };
-            const {data} = await axios.post('/v1/resources/mocks/buckets', params);
-
-            if (data.errcode !== 0) {
-                this.bucketNameInputValueError = data.msg;
-                return;
-            }
-            this.$message.success(this.$t('successfullyCreated'));
-            this.hideNewBucketDialog();
-            await this.initBucketsByAPI(true);
-            // this.activeBucketIndex = this.bucketsList.length - 1;
-        },
+        // /**
+        //  * 向服务端 API 发起，新建 bucket 的请求
+        //  */
+        // async createNewBucketByAPI() {
+        //
+        //     this.bucketNameInputValueError = false;
+        //
+        //     if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(this.bucketNameInputValue)) {
+        //         setTimeout(() => this.bucketNameInputValueError = true);
+        //         return;
+        //     }
+        //     this.bucketNameInputValueError = '';
+        //
+        //     const params = {
+        //         bucketName: this.bucketNameInputValue,
+        //     };
+        //     const {data} = await axios.post('/v1/resources/mocks/buckets', params);
+        //
+        //     if (data.errcode !== 0) {
+        //         this.bucketNameInputValueError = data.msg;
+        //         return;
+        //     }
+        //     this.$message.success(this.$t('successfullyCreated'));
+        //     this.hideNewBucketDialog();
+        //     await this.initBucketsByAPI(true);
+        //     // this.activeBucketIndex = this.bucketsList.length - 1;
+        // },
         /**
          * 向 API 发起请求，删除当前激活的 bucket
          * @returns {Promise<void>}

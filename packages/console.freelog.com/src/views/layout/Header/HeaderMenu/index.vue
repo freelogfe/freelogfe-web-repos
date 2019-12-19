@@ -116,7 +116,7 @@
             };
         },
         mounted() {
-            console.log(this.$route, '$$$$$$$$');
+            // console.log(this.$route, '$$$$$$$$');
             this.initBucket();
             this.initNode();
         },
@@ -130,7 +130,7 @@
             async initNode() {
                 const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
                 this.nodesList = data.data.dataList;
-                console.log(this.nodesList, 'data');
+                // console.log(this.nodesList, 'data');
             },
         },
     }
