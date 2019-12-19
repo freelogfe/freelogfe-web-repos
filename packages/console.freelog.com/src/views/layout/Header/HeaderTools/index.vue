@@ -38,24 +38,29 @@
 
         <div class="header-tools__col">
             <a class="header-tool__avatar">
-                <img src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+                <img
+                    :src="userInfo && userInfo.headImage"
+                    alt=""
+                />
 
                 <div
+                    v-if="!!userInfo"
                     class="header-tools__dropdown"
                     style="width: 240px; left: unset; right: -10px; cursor: auto;"
                 >
                     <div
                         style="display: flex; flex-direction: column; align-items: center; padding: 20px 0; font-size: 14px;font-weight: 600; color: #999;">
                         <img
-                            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            :src="userInfo && userInfo.headImage"
                             style="height: 60px; width: 60px; border-radius: 50%;"
                         />
                         <div style="height: 10px;"/>
-                        <div style="color: #999; font-size: 16px; font-weight: 600;">YANGHONGTIAN</div>
+                        <div style="color: #999; font-size: 16px; font-weight: 600;">{{userInfo && userInfo.username}}
+                        </div>
                         <div style="height: 8px;"/>
-                        <div style="">13145959706</div>
+                        <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
-                    <a>个人中心</a>
+                    <a @click="gotoUserProfile">个人中心</a>
                     <router-link
                         :to="'/login'"
                     >登出
@@ -114,12 +119,25 @@
         data() {
             return {
                 resourceDialogVisible: false,
+                userInfo: null,
             };
+        },
+        mounted() {
+            this.handleUserInfo();
         },
         methods: {
             onSearch(value) {
                 // console.log(value, 'VVVVVVV');
                 this.$router.push({path: '/', query: {q: value}})
+            },
+            async handleUserInfo() {
+                const {data} = await this.$axios.get('/v1/userinfos/current');
+
+                // console.log(data, 'DDDDDDD');
+                this.userInfo = data.data;
+            },
+            gotoUserProfile() {
+                window.location.href = window.location.origin.replace('//console.', '//www.') + '/user/profile';
             },
             handleCommand(lang) {
                 if (lang === this.$i18n.locale) return;
