@@ -78,8 +78,9 @@ export default {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
             this.dialogVisible = false;
-            this.initBucketsByAPI(true);
+            // this.initBucketsByAPI(true);
             this.onChangeBucketActiveIndex(bucket);
+            window.location.reload();
         },
         /**
          * 改变 bucket 列表中激活的索引
