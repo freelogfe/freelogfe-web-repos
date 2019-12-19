@@ -10,15 +10,20 @@
                         <router-link
                             to="/resource/editor"
                             class="header-tools__menu__item"
+                            target="_blank"
                         >创建资源
                         </router-link>
-                        <a class="header-tools__menu__item">创建发行</a>
+                        <a
+                            class="header-tools__menu__item"
+                            @click="resourceDialogVisible=true"
+                        >创建发行</a>
                         <!--                        <router-link to="/" class="header-tools__menu__item">-->
                         <!--                            创建mock-->
                         <!--                        </router-link>-->
                         <router-link
                             to="/node/create"
                             class="header-tools__menu__item"
+                            target="_blank"
                         >创建节点
                         </router-link>
                     </div>
@@ -80,16 +85,36 @@
                 </div>
             </a>
         </div>
+
+        <el-dialog
+            class="my-r-search-dialog"
+            :append-to-body="true"
+            center
+            :title="$t('dialogTitle')"
+            width="640px"
+            :visible.sync="resourceDialogVisible"
+        >
+            <resource-search
+                @select-resource="createNewRelease"
+            />
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import ToolSearch from './ToolSearch';
+    import ResourceSearch from '@/views/resource/search/search.vue'
 
     export default {
         name: "index",
         components: {
-            ToolSearch
+            ToolSearch,
+            ResourceSearch,
+        },
+        data() {
+            return {
+                resourceDialogVisible: false,
+            };
         },
         methods: {
             onSearch(value) {
@@ -109,7 +134,12 @@
                         window.location.reload();
                     }).catch(() => {
                 })
-            }
+            },
+            createNewRelease(resource) {
+                // this.resourceDialogVisible = false;
+                // this.$router.
+                window.open(`/release/create?resourceId=${resource.resourceId}`);
+            },
         }
     }
 </script>
@@ -272,6 +302,20 @@
             }
         }
     }
+</style>
 
+<style lang="less">
+    .my-r-search-dialog {
+        .el-dialog__body {
+            overflow: auto;
+            height: 300px;
+            margin: 0 20px;
+            padding: 20px 45px 0;
+            border-top: 1px solid #D8D8D8;
 
+            .el-input__inner {
+                padding-left: 30px;
+            }
+        }
+    }
 </style>
