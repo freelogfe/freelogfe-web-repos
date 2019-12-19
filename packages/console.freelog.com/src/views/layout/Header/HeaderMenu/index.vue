@@ -28,18 +28,13 @@
             <span>储存空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <div class="header-menu__menu">
-                    <router-link
+                    <a
                         v-for="(bucket, index) in (bucketsList || [])"
-                        :to="{
-                            path: '/mock/display',
-                        }"
                         class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && index === 0}"
+                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
+                        @click="gotoMock(bucket)"
                     >{{bucket.bucketName}}
-                    </router-link>
-                    <!--                    <router-link to="/mock/display" class="header-menu__menu__item">-->
-                    <!--                        bucket2-->
-                    <!--                    </router-link>-->
+                    </a>
                 </div>
                 <a
                     @click="createBucketDialogVisible=true"
@@ -150,9 +145,20 @@
                 this.nodesList = data.data.dataList;
                 // console.log(this.nodesList, 'data');
             },
-            createBucketSuccess() {
-                console.log('#######');
+            createBucketSuccess(bucket) {
+                // console.log('#######');
+                this.createBucketDialogVisible = false;
+                this.gotoMock(bucket);
+                window.location.reload();
             },
+            gotoMock(bucket){
+                this.$router.push({
+                    path: '/mock/display',
+                    query: {
+                        activatedBucketName: bucket.bucketName,
+                    }
+                });
+            }
         },
     }
 </script>

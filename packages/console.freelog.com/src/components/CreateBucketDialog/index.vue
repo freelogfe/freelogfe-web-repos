@@ -138,7 +138,7 @@
                     this.bucketNameInputValueError = data.msg;
                     return;
                 }
-                this.$emit('success');
+                this.$emit('success', data.data);
                 // this.$message.success(this.$t('successfullyCreated'));
                 // this.hideNewBucketDialog();
                 // await this.initBucketsByAPI(true);

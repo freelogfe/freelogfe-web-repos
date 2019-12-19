@@ -13,13 +13,14 @@
                 <div class="mock-list__buckets__title__content">
                     <div>
                         <span>Bucket{{$t('list')}}</span>
-                        <span style="padding-left: 10px;">{{bucketsList && bucketsList.length}}/5</span>
+                        <span style="padding-left: 10px;">{{(bucketsList || []).length}}/5</span>
                     </div>
                     <el-button
+                        v-if="(bucketsList || []).length < 5"
                         icon="el-icon-plus"
                         circle
                         size="small"
-                        @click="showNewBucketDialog"
+                        @click="dialogVisible=true"
                     />
                 </div>
                 <div style="height: 10px;"></div>
@@ -32,8 +33,8 @@
                     v-for="(bucket, index) in (bucketsList || [])"
                     :key="bucket.bucketId"
                     class="mock-list__buckets__list__item"
-                    :class="{'mock-list__buckets__list__item_active': index === activeBucketIndex}"
-                    @click="onChangeBucketActiveIndex(index)"
+                    :class="{'mock-list__buckets__list__item_active': $route.query.activatedBucketName === bucket.bucketName}"
+                    @click="onChangeBucketActiveIndex(bucket)"
                 >{{bucket.bucketName}}</a>
             </div>
         </div>
@@ -52,7 +53,7 @@
                     <p>{{$t('freelogMockResourcePool')}}</p>
                     <div style="height: 60px;"></div>
                     <el-button
-                        @click="showNewBucketDialog"
+                        @click="dialogVisible=true"
                         type="primary"
                     >{{$t('createBucket')}}
                     </el-button>
@@ -60,9 +61,10 @@
             </div>
 
             <!-- 有 bucket 时显示 -->
+<!--            v-if="bucketsList && bucketsList.length > 0"-->
             <div
                 class="mock-list__mocks_non-empty"
-                v-if="bucketsList && bucketsList.length > 0"
+                v-if="!!activatedBucket"
             >
                 <div class="mock-list__mocks_non-empty__header">
                     <div class="mock-list__mocks_non-empty__header__info">

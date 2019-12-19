@@ -21,7 +21,7 @@ export default {
             bucketsList: null,
             // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
             // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
-            activeBucketIndex: 0,
+            // activeBucketIndex: 0,
 
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
@@ -53,7 +53,9 @@ export default {
     computed: {
         // 当前已激活的 bucket
         activatedBucket: function () {
-            return this.bucketsList && this.bucketsList[this.activeBucketIndex];
+            // console.log(this.$route);
+            return this.bucketsList && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
+            // return this.bucketsList && this.bucketsList.find(i => );
         }
     },
     mounted() {
@@ -68,32 +70,39 @@ export default {
             const {data} = await axios.get('/v1/resources/mocks/buckets');
             // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
             this.bucketsList = data.data;
-            if (bool) {
-                this.activeBucketIndex = data.data.length - 1
-            }
+            // if (bool) {
+            //     this.activeBucketIndex = data.data.length - 1
+            // }
         },
-        async createBucketSuccess() {
+        async createBucketSuccess(bucket) {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
             this.dialogVisible = false;
-            this.initBucketsByAPI(true)
+            this.initBucketsByAPI(true);
+            this.onChangeBucketActiveIndex(bucket);
         },
         /**
          * 改变 bucket 列表中激活的索引
-         * @param index
+         * @param bucket
          */
-        onChangeBucketActiveIndex(index) {
+        onChangeBucketActiveIndex(bucket) {
             // 将激活的索引放到本地，方便再次进入页面时选中
-            window.sessionStorage.setItem('activeBucketIndex', index);
-            this.activeBucketIndex = index;
+            // window.sessionStorage.setItem('activeBucketIndex', index);
+            // this.activeBucketIndex = index;
+            this.$router.push({
+                path: '/mock/display',
+                query: {
+                    activatedBucketName: (bucket && bucket.bucketName) || '',
+                }
+            });
         },
 
         /**
          * 显示『新建 bucket』弹窗
          */
-        showNewBucketDialog() {
-            this.dialogVisible = true;
-        },
+        // showNewBucketDialog() {
+        //     this.dialogVisible = true;
+        // },
         /**
          * 隐藏『新建 bucket』弹窗
          */
@@ -138,14 +147,14 @@ export default {
             // console.log(bucketName, 'bucketNamebucketNamebucketName');
             const {data} = await axios.delete(`/v1/resources/mocks/buckets/${bucketName}`);
             // console.log(data, 'datadatadata');
-
             if (data.errcode !== 0) {
                 return this.errorMessage(data.msg);
             }
             this.$message.success(this.$t('successfullyDeleted'));
             // 从 bucket 列表中 移除当前 bucket
-            this.bucketsList.splice(this.activeBucketIndex, 1);
-            this.onChangeBucketActiveIndex(0);
+            // this.bucketsList.splice(this.activeBucketIndex, 1);
+            this.bucketsList = this.bucketsList.filter(i => i.bucketName !== this.$route.query.activatedBucketName);
+            this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
             this.controlDeleteBucketPopoverShow(false);
 
             await null;
