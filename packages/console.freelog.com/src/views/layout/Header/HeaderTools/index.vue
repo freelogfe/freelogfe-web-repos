@@ -10,15 +10,20 @@
                         <router-link
                             to="/resource/editor"
                             class="header-tools__menu__item"
+                            target="_blank"
                         >创建资源
                         </router-link>
-                        <a class="header-tools__menu__item">创建发行</a>
+                        <a
+                            class="header-tools__menu__item"
+                            @click="resourceDialogVisible=true"
+                        >创建发行</a>
                         <!--                        <router-link to="/" class="header-tools__menu__item">-->
                         <!--                            创建mock-->
                         <!--                        </router-link>-->
                         <router-link
                             to="/node/create"
                             class="header-tools__menu__item"
+                            target="_blank"
                         >创建节点
                         </router-link>
                     </div>
@@ -33,24 +38,29 @@
 
         <div class="header-tools__col">
             <a class="header-tool__avatar">
-                <img src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+                <img
+                    :src="userInfo && userInfo.headImage"
+                    alt=""
+                />
 
                 <div
+                    v-if="!!userInfo"
                     class="header-tools__dropdown"
                     style="width: 240px; left: unset; right: -10px; cursor: auto;"
                 >
                     <div
                         style="display: flex; flex-direction: column; align-items: center; padding: 20px 0; font-size: 14px;font-weight: 600; color: #999;">
                         <img
-                            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            :src="userInfo && userInfo.headImage"
                             style="height: 60px; width: 60px; border-radius: 50%;"
                         />
                         <div style="height: 10px;"/>
-                        <div style="color: #999; font-size: 16px; font-weight: 600;">YANGHONGTIAN</div>
+                        <div style="color: #999; font-size: 16px; font-weight: 600;">{{userInfo && userInfo.username}}
+                        </div>
                         <div style="height: 8px;"/>
-                        <div style="">13145959706</div>
+                        <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
-                    <a>个人中心</a>
+                    <a @click="gotoUserProfile">个人中心</a>
                     <router-link
                         :to="'/login'"
                     >登出
@@ -59,7 +69,7 @@
             </a>
         </div>
 
-        <div class="header-tools__col">
+        <div class="header-tools__col" style="padding-right: 0">
             <a class="header-tool__language">
                 <span>{{$i18n.locale === 'zh-CN'? '中文' : 'English'}} <i class="el-icon-arrow-down"/></span>
 
@@ -80,21 +90,54 @@
                 </div>
             </a>
         </div>
+
+        <el-dialog
+            class="my-r-search-dialog"
+            :append-to-body="true"
+            center
+            :title="$t('dialogTitle')"
+            width="640px"
+            :visible.sync="resourceDialogVisible"
+        >
+            <resource-search
+                @select-resource="createNewRelease"
+            />
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import ToolSearch from './ToolSearch';
+    import ResourceSearch from '@/views/resource/search/search.vue'
 
     export default {
         name: "index",
         components: {
-            ToolSearch
+            ToolSearch,
+            ResourceSearch,
+        },
+        data() {
+            return {
+                resourceDialogVisible: false,
+                userInfo: null,
+            };
+        },
+        mounted() {
+            this.handleUserInfo();
         },
         methods: {
             onSearch(value) {
                 // console.log(value, 'VVVVVVV');
                 this.$router.push({path: '/', query: {q: value}})
+            },
+            async handleUserInfo() {
+                const {data} = await this.$axios.get('/v1/userinfos/current');
+
+                // console.log(data, 'DDDDDDD');
+                this.userInfo = data.data;
+            },
+            gotoUserProfile() {
+                window.location.href = window.location.origin.replace('//console.', '//www.') + '/user/profile';
             },
             handleCommand(lang) {
                 if (lang === this.$i18n.locale) return;
@@ -109,7 +152,12 @@
                         window.location.reload();
                     }).catch(() => {
                 })
-            }
+            },
+            createNewRelease(resource) {
+                // this.resourceDialogVisible = false;
+                // this.$router.
+                window.open(`/release/create?resourceId=${resource.resourceId}`);
+            },
         }
     }
 </script>
@@ -272,6 +320,20 @@
             }
         }
     }
+</style>
 
+<style lang="less">
+    .my-r-search-dialog {
+        .el-dialog__body {
+            overflow: auto;
+            height: 300px;
+            margin: 0 20px;
+            padding: 20px 45px 0;
+            border-top: 1px solid #D8D8D8;
 
+            .el-input__inner {
+                padding-left: 30px;
+            }
+        }
+    }
 </style>

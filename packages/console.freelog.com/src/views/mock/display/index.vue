@@ -13,13 +13,14 @@
                 <div class="mock-list__buckets__title__content">
                     <div>
                         <span>Bucket{{$t('list')}}</span>
-                        <span style="padding-left: 10px;">{{bucketsList && bucketsList.length}}/5</span>
+                        <span style="padding-left: 10px;">{{(bucketsList || []).length}}/5</span>
                     </div>
                     <el-button
+                        v-if="(bucketsList || []).length < 5"
                         icon="el-icon-plus"
                         circle
                         size="small"
-                        @click="showNewBucketDialog"
+                        @click="dialogVisible=true"
                     />
                 </div>
                 <div style="height: 10px;"></div>
@@ -32,11 +33,9 @@
                     v-for="(bucket, index) in (bucketsList || [])"
                     :key="bucket.bucketId"
                     class="mock-list__buckets__list__item"
-                    :class="{'mock-list__buckets__list__item_active': index === activeBucketIndex}"
-                    @click="onChangeBucketActiveIndex(index)"
-                >
-                    {{bucket.bucketName}}
-                </a>
+                    :class="{'mock-list__buckets__list__item_active': $route.query.activatedBucketName === bucket.bucketName}"
+                    @click="onChangeBucketActiveIndex(bucket)"
+                >{{bucket.bucketName}}</a>
             </div>
         </div>
 
@@ -54,7 +53,7 @@
                     <p>{{$t('freelogMockResourcePool')}}</p>
                     <div style="height: 60px;"></div>
                     <el-button
-                        @click="showNewBucketDialog"
+                        @click="dialogVisible=true"
                         type="primary"
                     >{{$t('createBucket')}}
                     </el-button>
@@ -62,9 +61,10 @@
             </div>
 
             <!-- 有 bucket 时显示 -->
+<!--            v-if="bucketsList && bucketsList.length > 0"-->
             <div
                 class="mock-list__mocks_non-empty"
-                v-if="bucketsList && bucketsList.length > 0"
+                v-if="!!activatedBucket"
             >
                 <div class="mock-list__mocks_non-empty__header">
                     <div class="mock-list__mocks_non-empty__header__info">
@@ -277,73 +277,78 @@
 
         </div>
 
-        <div class="mock-list__border-dialog">
-            <!-- 添加 bucket 弹窗 -->
-            <el-dialog
-                :close-on-click-modal="false"
-                :title="$t('newBucket')"
-                :visible.sync="dialogVisible"
-                width="700px"
-            >
-                <div style="height: 17px"></div>
-                <div class="dialog-body">
-                    <div style="width: 490px;">
-                        <p>• {{$t('createdMayNotBeModified')}}</p>
-                        <p>• {{$t('provide2GBStorage')}}</p>
-                        <div style="height: 21px;"></div>
-                        <!--          v-model="input"-->
-                        <div style="display: flex;">
-                            <el-input
-                                v-model="bucketNameInputValue"
-                                :placeholder="$t('bucketName')"
-                                style="flex-shrink: 1;"
-                            >
-                            </el-input>
-                            <span style="line-height: 46px; display: inline-block; flex-shrink: 0; padding: 0 10px;"
-                                  slot="suffix">{{bucketNameInputValue.length}}/63</span>
-                        </div>
-                    </div>
-                </div>
+        <CreateBucketDialog
+            :visible="dialogVisible"
+            @cancel="dialogVisible=false"
+            @success="createBucketSuccess"
+        />
+        <!--        <div class="mock-list__border-dialog">-->
+        <!--            &lt;!&ndash; 添加 bucket 弹窗 &ndash;&gt;-->
+        <!--            <el-dialog-->
+        <!--                :close-on-click-modal="false"-->
+        <!--                :title="$t('newBucket')"-->
+        <!--                :visible.sync="dialogVisible"-->
+        <!--                width="700px"-->
+        <!--            >-->
+        <!--                <div style="height: 17px"></div>-->
+        <!--                <div class="dialog-body">-->
+        <!--                    <div style="width: 490px;">-->
+        <!--                        <p>• {{$t('createdMayNotBeModified')}}</p>-->
+        <!--                        <p>• {{$t('provide2GBStorage')}}</p>-->
+        <!--                        <div style="height: 21px;"></div>-->
+        <!--                        &lt;!&ndash;          v-model="input"&ndash;&gt;-->
+        <!--                        <div style="display: flex;">-->
+        <!--                            <el-input-->
+        <!--                                v-model="bucketNameInputValue"-->
+        <!--                                :placeholder="$t('bucketName')"-->
+        <!--                                style="flex-shrink: 1;"-->
+        <!--                            >-->
+        <!--                            </el-input>-->
+        <!--                            <span style="line-height: 46px; display: inline-block; flex-shrink: 0; padding: 0 10px;"-->
+        <!--                                  slot="suffix">{{bucketNameInputValue.length}}/63</span>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
 
-                <!-- 错误提示区域 -->
-                <div
-                    style="height: 99px; line-height: 25px; padding: 5px 0; color: #f54242;"
-                >
-                    <div
-                        style="width: 490px; margin: 0 auto;"
-                        class="animated"
-                        :class="{shake: !!bucketNameInputValueError}"
-                    >
-                        <template v-if="bucketNameInputValueError === true">
-                            <p>{{$t('includeOnly')}}</p>
-                            <p>{{$t('startAndEnd')}}</p>
-                            <p>{{$t('between1To63Characters')}}</p>
-                        </template>
-                        <template v-if="bucketNameInputValueError !==true && !!bucketNameInputValueError">
-                            <p>{{bucketNameInputValueError}}</p>
-                        </template>
-                    </div>
-                </div>
+        <!--                &lt;!&ndash; 错误提示区域 &ndash;&gt;-->
+        <!--                <div-->
+        <!--                    style="height: 99px; line-height: 25px; padding: 5px 0; color: #f54242;"-->
+        <!--                >-->
+        <!--                    <div-->
+        <!--                        style="width: 490px; margin: 0 auto;"-->
+        <!--                        class="animated"-->
+        <!--                        :class="{shake: !!bucketNameInputValueError}"-->
+        <!--                    >-->
+        <!--                        <template v-if="bucketNameInputValueError === true">-->
+        <!--                            <p>{{$t('includeOnly')}}</p>-->
+        <!--                            <p>{{$t('startAndEnd')}}</p>-->
+        <!--                            <p>{{$t('between1To63Characters')}}</p>-->
+        <!--                        </template>-->
+        <!--                        <template v-if="bucketNameInputValueError !==true && !!bucketNameInputValueError">-->
+        <!--                            <p>{{bucketNameInputValueError}}</p>-->
+        <!--                        </template>-->
+        <!--                    </div>-->
+        <!--                </div>-->
 
-                <!-- dialog 底部按钮 -->
-                <span
-                    slot="footer"
-                    class="dialog-footer"
-                >
-                <el-button
-                    style="color: #999999"
-                    type="text"
-                    @click="hideNewBucketDialog"
-                >{{$t('cancel')}}</el-button>
-                <el-button
-                    type="primary"
-                    style="margin-left: 20px; width: 90px; padding-left: 0; padding-right: 0;"
-                    round
-                    @click="createNewBucketByAPI"
-                >{{$t('confirm')}}</el-button>
-            </span>
-            </el-dialog>
-        </div>
+        <!--                &lt;!&ndash; dialog 底部按钮 &ndash;&gt;-->
+        <!--                <span-->
+        <!--                    slot="footer"-->
+        <!--                    class="dialog-footer"-->
+        <!--                >-->
+        <!--                <el-button-->
+        <!--                    style="color: #999999"-->
+        <!--                    type="text"-->
+        <!--                    @click="hideNewBucketDialog"-->
+        <!--                >{{$t('cancel')}}</el-button>-->
+        <!--                <el-button-->
+        <!--                    type="primary"-->
+        <!--                    style="margin-left: 20px; width: 90px; padding-left: 0; padding-right: 0;"-->
+        <!--                    round-->
+        <!--                    @click="createNewBucketByAPI"-->
+        <!--                >{{$t('confirm')}}</el-button>-->
+        <!--            </span>-->
+        <!--            </el-dialog>-->
+        <!--        </div>-->
 
         <div class="mock-list__noheader-dialog">
             <el-dialog
@@ -404,52 +409,52 @@
     }
 
     .mock-list {
-        .mock-list__border-dialog {
-            .el-dialog {
-                border-radius: 10px;
+        /*.mock-list__border-dialog {*/
+        /*    .el-dialog {*/
+        /*        border-radius: 10px;*/
 
-                .el-dialog__header {
-                    padding-bottom: 6px;
-                    padding-top: 6px;
-                    text-align: center;
-                    border-bottom: 1px solid #d8d8d8;
+        /*        .el-dialog__header {*/
+        /*            padding-bottom: 6px;*/
+        /*            padding-top: 6px;*/
+        /*            text-align: center;*/
+        /*            border-bottom: 1px solid #d8d8d8;*/
 
-                    .el-dialog__title {
-                        line-height: 38px;
-                        color: #333;
-                        font-size: 14px;
-                    }
+        /*            .el-dialog__title {*/
+        /*                line-height: 38px;*/
+        /*                color: #333;*/
+        /*                font-size: 14px;*/
+        /*            }*/
 
-                    .el-dialog__headerbtn {
-                        top: 15px
-                    }
-                }
+        /*            .el-dialog__headerbtn {*/
+        /*                top: 15px*/
+        /*            }*/
+        /*        }*/
 
-                .el-input__inner {
-                    border: 1px solid #979797;
-                    height: 46px;
-                    line-height: 45px;
-                }
-            }
+        /*        .el-input__inner {*/
+        /*            border: 1px solid #979797;*/
+        /*            height: 46px;*/
+        /*            line-height: 45px;*/
+        /*        }*/
+        /*    }*/
 
-            /*.mock-list__mocks_non-empty__body_table {*/
-            /*    .el-table {*/
-            /*        overflow: auto !important;*/
+        /*    !*.mock-list__mocks_non-empty__body_table {*!*/
+        /*    !*    .el-table {*!*/
+        /*    !*        overflow: auto !important;*!*/
 
-            /*        .el-table__body-wrapper {*/
-            /*            overflow: auto;*/
-            /*        }*/
-            /*    }*/
-            /*}*/
+        /*    !*        .el-table__body-wrapper {*!*/
+        /*    !*            overflow: auto;*!*/
+        /*    !*        }*!*/
+        /*    !*    }*!*/
+        /*    !*}*!*/
 
-            .el-dialog__footer {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding-bottom: 45px;
-                padding-top: 0;
-            }
-        }
+        /*    .el-dialog__footer {*/
+        /*        display: flex;*/
+        /*        align-items: center;*/
+        /*        justify-content: center;*/
+        /*        padding-bottom: 45px;*/
+        /*        padding-top: 0;*/
+        /*    }*/
+        /*}*/
 
         .mock-list__noheader-dialog {
             .el-dialog__header {

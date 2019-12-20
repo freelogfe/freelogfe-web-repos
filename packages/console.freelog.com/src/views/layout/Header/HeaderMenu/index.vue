@@ -28,20 +28,18 @@
             <span>储存空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <div class="header-menu__menu">
-                    <router-link
+                    <a
                         v-for="(bucket, index) in (bucketsList || [])"
-                        :to="{
-                            path: '/mock/display',
-                        }"
                         class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && index === 0}"
+                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
+                        @click="gotoMock(bucket)"
                     >{{bucket.bucketName}}
-                    </router-link>
-                    <!--                    <router-link to="/mock/display" class="header-menu__menu__item">-->
-                    <!--                        bucket2-->
-                    <!--                    </router-link>-->
+                    </a>
                 </div>
-                <a class="header-menu__footer">
+                <a
+                    @click="createBucketDialogVisible=true"
+                    class="header-menu__footer"
+                >
                     <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                 </a>
             </div>
@@ -103,20 +101,35 @@
                 </router-link>
             </div>
         </a>
+
+        <CreateBucketDialog
+            :visible="createBucketDialogVisible"
+            @cancel="createBucketDialogVisible=false"
+            @success="createBucketSuccess"
+        />
+
     </div>
+
 </template>
 
 <script>
+    import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
+
     export default {
         name: "index",
+        components: {
+            CreateBucketDialog,
+        },
         data() {
             return {
                 bucketsList: null,
                 nodesList: null,
+
+                createBucketDialogVisible: false,
             };
         },
         mounted() {
-            console.log(this.$route, '$$$$$$$$');
+            // console.log(this.$route, '$$$$$$$$');
             this.initBucket();
             this.initNode();
         },
@@ -130,8 +143,22 @@
             async initNode() {
                 const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
                 this.nodesList = data.data.dataList;
-                console.log(this.nodesList, 'data');
+                // console.log(this.nodesList, 'data');
             },
+            createBucketSuccess(bucket) {
+                // console.log('#######');
+                this.createBucketDialogVisible = false;
+                this.gotoMock(bucket);
+                window.location.reload();
+            },
+            gotoMock(bucket){
+                this.$router.push({
+                    path: '/mock/display',
+                    query: {
+                        activatedBucketName: bucket.bucketName,
+                    }
+                });
+            }
         },
     }
 </script>
