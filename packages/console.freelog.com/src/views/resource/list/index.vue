@@ -83,7 +83,7 @@ export default {
   .my-resources {
     width: @main-content-width-1190;
     margin: auto;
-    padding-top: 50px;
+    padding-top: 30px;
     padding-left: 50px;
     .el-dialog__header{ padding: 0; }
   }

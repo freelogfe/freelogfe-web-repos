@@ -14,7 +14,7 @@
                     >发行市场
                     </router-link>
                     <router-link
-                        to="/"
+                        to="/main/node-examples"
                         class="header-menu__menu__item"
                     >示例节点
                     </router-link>
@@ -54,19 +54,19 @@
             <div class="header-menu__dropdown">
                 <div class="header-menu__menu">
                     <router-link
-                        to="/resource/list"
+                        to="/release-management/resource/list"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/resource/list'}"
                     >我的资源
                     </router-link>
                     <router-link
-                        to="/release/list"
+                        to="/release-management/release/list"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/release/list'}"
                     >我的发行
                     </router-link>
                     <router-link
-                        to="/release/collections"
+                        to="/release-management/release/collections"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/release/collections'}"
                     >我的收藏

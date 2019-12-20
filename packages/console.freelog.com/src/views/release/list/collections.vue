@@ -47,7 +47,7 @@ export default {
   .my-collections {
     width: @main-content-width-1190;
     margin: auto;
-    padding-top: 50px;
+    padding-top: 30px;
     padding-left: 50px;
   }
   .m-c-header {

@@ -12,7 +12,14 @@ export default {
 			resourceList: [],
 			query: '',
 			selectedType: this.$route.query.resourceType || 'all',
-			activeTabName: 'nodeExample'
+			tabs: [{
+				name: 'market',
+				path: '/',
+			}, {
+				name: 'node-examples',
+				path: '/main/node-examples',
+			}],
+			activeTabName: '',
 		}
 	},
 	components: { ListItem, LazyListView, SearchInput, NodeExample },
@@ -36,6 +43,9 @@ export default {
 		'$route.resourceType': function () {
 			this.selectedType = this.$route.query.resourceType || 'all'
 			this.queryHandler()
+		},
+		'$route.path': function () {
+			this.resolvePath()
 		}
 	},
 
@@ -44,10 +54,24 @@ export default {
 		if (qs.q) {
 			this.query = qs.q
 		}
+		this.resolvePath()
 	},
 	methods: {
+		resolvePath() {
+			const tabs = this.tabs
+			const path = this.$route.path
+			for(let i = 0; i < tabs.length; i++) {
+				if (tabs[i].path === path) {
+					this.activeTabName = tabs[i].name
+					break
+				}
+			}
+			this.activeTabName = this.activeTabName || tabs[0].name
+		},
 		exchangeActiveTabName(tab) {
 			this.activeTabName = tab.name
+			const path = +tab.index < this.tabs.length ? this.tabs[tab.index].path : this.tabs[0].path
+			this.$router.push({ path })
 		},
 		exchangeSelectedResourceType(resourceType) {
 			this.selectedType = resourceType 

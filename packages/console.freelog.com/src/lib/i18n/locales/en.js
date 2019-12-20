@@ -78,6 +78,11 @@ export default {
     createDate: 'creation date'
   },
 
+  release: {
+    myReleases: 'My releases',
+    management: 'Release management',
+  },
+
   node: {
     title: 'node',
     nodeName: 'node name',
