@@ -1,6 +1,6 @@
 <template>
   <div class="f-pb-presentaion">
-    <div class="f-pb-p-tags-box">
+    <div class="f-pb-p-tags-box" v-if="pbTags.length">
       <el-button type="text" size="small" :class="{'selected': selectedTag.length === 0}" @click="emptySelectedTag">全部</el-button>
       <el-button
         size="small"
@@ -301,7 +301,7 @@ export default {
 
   .f-pb-p-item {
     position: relative;
-    margin: 20px; border-width: 0; border-bottom: 1px solid #E3E3E3;
+    margin: 20px; border-width: 0; border-bottom: 1px solid #E3E3E3; border-radius: 0;
     background-color: #FAFBFB;
   }
 
@@ -338,7 +338,7 @@ export default {
       &.disabled { opacity: .5; pointer-events: none; cursor: not-allowed; }
     }
     .f-pb-p-i-btn-group {
-      position: absolute; top: 20px; right: 0;
+      position: absolute; top: 0; right: 0;
       .f-pb-p-i-btn-auth { border-radius: 2px; }
       a { color: #fff; }
     }

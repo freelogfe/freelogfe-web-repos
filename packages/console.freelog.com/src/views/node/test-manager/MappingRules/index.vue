@@ -70,7 +70,7 @@
 					<ul v-html="matchErrorsText"></ul>
 				</template>
 			</div>
-			<div class="mapping-rule-match-result" v-if="matchResultsText !== ''">
+			<div class="mapping-rule-match-result" v-if="syntaxErrorsText === '' && matchResultsText !== ''">
 				<h4 class="match-result__title">{{$t('matchResultsTexts[0]')}}</h4>
 				<ul v-html="matchResultsText"></ul>
 			</div>
@@ -588,6 +588,7 @@ export default {
 		.CodeMirror { 
 			height: 480px; padding-bottom: 45px; border-radius: 4px; 
 			pre { line-height: 1.8; }
+			.CodeMirror-scroll { padding-bottom: 45px; }
 		}
 		.el-textarea__inner {
 			padding: 20px; line-height: 2;

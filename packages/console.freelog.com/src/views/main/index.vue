@@ -1,8 +1,8 @@
 <template>
     <section class="index-main-container">
 
-		<el-tabs v-model="activeTabName" @tab-click="exchangeActiveTabName">
-			<el-tab-pane label="发行市场" name="market">
+		<el-tabs class="main-c-tabs" v-model="activeTabName" @tab-click="exchangeActiveTabName">
+			<el-tab-pane label="发行市场" :name="tabs[0].name">
 				<div class="resource-types-bar">
 					<el-button 
 						type="text"
@@ -33,7 +33,7 @@
 					</lazy-list-view>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="示例节点" name="nodeExample">
+			<el-tab-pane label="示例节点" :name="tabs[1].name">
 				<node-example></node-example>
 			</el-tab-pane>
   		</el-tabs>
@@ -53,34 +53,7 @@
 
 <style lang="less">
     .index-main-container {
-		.el-tabs__header { 
-			height: 40px;
-			text-align: center; background-color: #fff;
-			.el-tabs__active-bar { 
-				background-color: #333;  color: #444;
-				&::before, &::after {
-					content: '';
-					position: absolute; top: 0; z-index: 10;
-					width: 12px; height: 2px; 
-					background-color: #333; 
-				}
-				&::before { left: 100%; }
-				&::after { right: 100%; }
-			}
-			.el-tabs__nav {
-				.el-tabs__item {
-					padding: 0 20px; color: #666; font-weight: 400; font-size: 16px;
-					&.is-active { font-weight: 600; color: #333; }
-				}
-			}
-			
-		}
-		.el-tabs__nav-wrap { 
-			display: inline-block; 
-			&:after { background-color: transparent; }
-		}
 		
-
         .fl-lazy-list-view.resource-list {
             > ul {
                 display: flex;

@@ -42,15 +42,6 @@ export default {
             component: Views.resourceNew,
         },
         // {
-        //     path: 'policy_tpl/list',
-        //     meta: {
-        //         requiresAuth: true,
-        //         title: i18n.t('routes.resourcePolicyTplList'),
-        //         type: 'resource'
-        //     },
-        //     component: Views.policyTplList
-        // },
-        // {
         //     path: 'create',
         //     redirect: 'editor',
         //     // hidden: true,
@@ -63,30 +54,6 @@ export default {
         //     // },
         //     // component: Views.resourceCreator,
         // },
-        // {
-        //     path: 're-edit',
-        //     meta: {
-        //         requiresAuth: true,
-        //         // title: i18n.t('routes.resourcePolicyTplList'),
-        //         title: i18n.t('routes.resourcePolicyTplList'),
-        //         type: 'resource',
-        //         hideFooter: true,
-        //         theme: 'gray'
-        //     },
-        //     component: Views.resourceReEditor,
-        // },
-        // {
-        //     path: 'edit/:resourceId',
-        //     hidden: true,
-        //     meta: {
-        //         requiresAuth: true,
-        //         title: i18n.t('routes.updateResource'),
-        //         type: 'resource',
-        //         theme: 'gray',
-        //         hideSidebar: true
-        //     },
-        //     component: Views.resourceEditor,
-        // },
         {
             path: 'list',
             meta: {
@@ -96,24 +63,6 @@ export default {
             },
             component: Views.resourceList
         },
-        // {
-        //     path: 'detail',
-        //     hidden: true,
-        //     redirect: '/resource/list',
-        // },
-        // {
-        //     path: 'detail/:resourceId',
-        //     redirect: 'editor/:resourceId',
-        //     hidden: true,
-        //     meta: {
-        //         requiresAuth: true,
-        //         title: i18n.t('routes.resourceDetail'),
-        //         type: 'resource',
-        //         theme: 'gray',
-        //         hideFooter: true
-        //     },
-        //     component: Views.resourceDetail
-        // },
         // {
         //     path: 'policy_tpl',
         //     hidden: true,

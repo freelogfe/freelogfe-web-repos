@@ -46,7 +46,12 @@
       <div class="r-d-w-main-content">
         <div class="r-d-w-node-list">
           <h3>{{$t('steps[0]')}}<a :title="$t('titles[0]')" class="rdw-w-create-node" href="/node/create" target="_blank" v-if="nodes.length"><i class="el-icon-plus"></i></a></h3>
-          <el-select class="r-d-node-select" v-model="checkedNodeId" :placeholder="$t('selectionPlaceholder')" v-if="nodes.length">
+          <el-select 
+            class="r-d-node-select" 
+            :class="{ 'highlight': checkedNodeId === '' }" 
+            :placeholder="$t('selectionPlaceholder')"
+            v-model="checkedNodeId" 
+            v-if="nodes.length">
             <el-option
               v-for="node in nodeSelections"
               :key="node.nodeId"
@@ -149,8 +154,10 @@
       overflow: hidden; padding: 0px;
     }
     .r-d-node-select {
-      .el-input__inner {
-        border:1px solid rgba(145,199,255,1);
+      &.highlight {
+        .el-input__inner {
+          border: 1px solid rgba(145, 199, 255, 1);
+        }
       }
     }
 
