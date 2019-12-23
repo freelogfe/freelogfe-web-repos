@@ -4,7 +4,7 @@
     <div class="signed-list" v-if="signedPolicies.length">
       <h3>
         {{checkedNodeIsSigned ? $t('signPolicyBox.titles[0]') + checkedNodeName : $t('signPolicyBox.titles[1]')}}
-        <el-tooltip placement="right" :content="$t('signPolicyBox.tips[0]')" >
+        <el-tooltip placement="right" :content="$t('signPolicyBox.tips[0]')" effect="light">
           <i class="el-icon-info"></i>
         </el-tooltip>
       </h3>
@@ -181,7 +181,8 @@ export default {
 .no-sign-list, .signed-list {
   h3 {
     margin-bottom: 8px;
-    font-size: 14px; color: #4497EC;
+    font-size: 14px; font-weight: 400; color: #666;
+    .el-icon-info { color: #c6c6c6; }
   }
 }
 .no-s-l-item, .s-l-item  {
@@ -192,7 +193,7 @@ export default {
     position: relative; cursor: pointer;
     padding: 10px 0 10px 40px;
     font-size: 14px; color: #333;
-    &.isSigned { padding-left: 15px; background-color: #FAFBFB; }
+    &.isSigned { pointer-events: none; cursor: auto; padding-left: 15px; background-color: #FAFBFB; }
     .p-sign-btn {
       float: right;
       margin-right: 15px; border-radius: 20px;
