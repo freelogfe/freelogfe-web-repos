@@ -81,7 +81,7 @@
             <div class="header-menu__dropdown" style="width: 280px;">
                 <div class="header-menu__menu">
                     <router-link
-                        v-for="node in (nodesList || [])"
+                        v-for="node in (nodes || [])"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === `/node/manager/${node.nodeId}` || $route.path === `/node/test-manager/${node.nodeId}`}"
                         :to="`/node/manager/${node.nodeId}`"
@@ -114,6 +114,7 @@
 
 <script>
     import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
+    import {mapGetters} from "vuex";
 
     export default {
         name: "index",
@@ -132,6 +133,15 @@
             // console.log(this.$route, '$$$$$$$$');
             this.initBucket();
             this.initNode();
+            setTimeout(() => {
+                console.log(this.nodes, 'nodesList');
+                // console.log(this.nodesList, 'nodesList');
+            }, 2000);
+        },
+        computed: {
+            ...mapGetters({
+                nodes: 'nodes'
+            }),
         },
         methods: {
             async initBucket() {
@@ -141,9 +151,10 @@
                 // console.log(this.bucketsList, 'this.bucketsList');
             },
             async initNode() {
-                const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
-                this.nodesList = data.data.dataList;
+                // const {data} = await this.$axios.get('/v1//nodes?pageSize=100');
+                // this.nodesList = data.data.dataList;
                 // console.log(this.nodesList, 'data');
+                this.$store.dispatch('loadNodes');
             },
             createBucketSuccess(bucket) {
                 // console.log('#######');
@@ -151,7 +162,7 @@
                 this.gotoMock(bucket);
                 window.location.reload();
             },
-            gotoMock(bucket){
+            gotoMock(bucket) {
                 this.$router.push({
                     path: '/mock/display',
                     query: {

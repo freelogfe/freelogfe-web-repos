@@ -54,7 +54,7 @@ export default {
 
   methods: {
     initData() {
-      this.$store.dispatch('loadNodes')
+      // this.$store.dispatch('loadNodes')
       if (this.session.user.headImage) {
         this.avatarUrl = `${this.session.user.headImage}?x-oss-process=style/head-image`
       }
