@@ -11,7 +11,7 @@
       <transition-group name="list" tag="p">
         <div class="s-l-item" v-for="policy in signedPolicies" :key="policy.pCombinationID">
           <div class="p-name" :class="{'isSigned': checkedNodeIsSigned}" @click="selectPolicy(signedPolicies, policy)">
-            <template v-if="!checkedNodeIsSigned"> 
+            <template v-if="!checkedNodeIsSigned">
               <span class="p-n-check-box" v-if="!policy.isSelected"></span>
               <i class="el-icon-check" v-else></i>
             </template>
@@ -31,7 +31,7 @@
           </div>
         </div>
       </transition-group>
-      
+
     </div>
     <div class="no-sign-list" v-if="nodSignPolicies.length">
       <h3>
@@ -49,7 +49,7 @@
       </h3>
       <transition-group name="list" tag="p">
         <div class="no-s-l-item" v-for="p in nodSignPolicies" :key="p.pCombinationID">
-          <div class="p-name" :class="{'isSigned': checkedNodeIsSigned}" @click="selectPolicy(nodSignPolicies, p)">
+          <div class="p-name" @click="selectPolicy(nodSignPolicies, p)">
             <template v-if="checkedNodeIsSigned">
               <el-button class="p-sign-btn" type="primary" size="mini" @click="signNewPolicy(p)">{{$t('btns.sign')}}</el-button>
             </template>
@@ -57,7 +57,7 @@
               <span class="p-n-check-box" v-if="!p.isSelected"></span>
               <i class="el-icon-check" v-else></i>
             </template>
-            {{p.policyName}}<span v-if="p.status === 0">（{{$t('offline')}}）</span>  
+            {{p.policyName}}<span v-if="p.status === 0">（{{$t('offline')}}）</span>
           </div>
           <div class="p-detail">
             <pre class="p-segment-text" >{{fmtPolicyTextList(p)}}</pre>
@@ -146,7 +146,7 @@ export default {
           message: '请先选择签约节点',
           type: 'warning'
         })
-        return 
+        return
       }
 
       policy.isSelected = !policy.isSelected
@@ -188,7 +188,7 @@ export default {
 .no-s-l-item, .s-l-item  {
   margin-bottom: 20px; border: 1px solid #ccc; border-top-left-radius: 4px; border-top-right-radius: 4px;
   color: #333;
-  
+
   .p-name {
     position: relative; cursor: pointer;
     padding: 10px 0 10px 40px;
@@ -197,7 +197,7 @@ export default {
     .p-sign-btn {
       float: right;
       margin-right: 15px; border-radius: 20px;
-      font-size: 12px; 
+      font-size: 12px;
     }
 
     .p-n-check-box {
@@ -228,15 +228,14 @@ export default {
 .s-l-item {
   position: relative;
   border: 1px solid #ccc; border-radius: 4px; background-color: #FAFBFB;
-  
-  .p-name{ 
-    margin-top: 8px; font-weight: 600;
 
-    .contract-status {
-      display: inline-block; 
+  .p-name{
+    margin-top: 8px; font-weight: 600;
+      .contract-status {
+      display: inline-block;
       margin-left: 10px; padding: 0 10px; border: 1px solid; border-radius: 12px;
       font-size: 14px;
-    
+
       &.status-0 { color: #fff; border-color: #999; background: #999; }
       &.status-1, &.status-2 { color: #FBB726; border-color: #FBB726; }
       &.status-4 { color: #45BC7B; border-color: #45BC7B; }
@@ -245,9 +244,9 @@ export default {
   }
 
   .p-auth-info {
-    padding: 5px 15px 10px; 
+    padding: 5px 15px 10px;
     span { display: inline-block; width: 49%; color: #999; }
   }
 }
-  
+
 </style>
