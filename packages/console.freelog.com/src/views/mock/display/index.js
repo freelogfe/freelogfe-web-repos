@@ -2,6 +2,7 @@ import {axios} from "@/lib";
 import querystring from 'querystring';
 import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
 import i18n from './i18n';
+import {mapGetters} from "vuex";
 
 export default {
     i18n,
@@ -18,7 +19,7 @@ export default {
             },
 
             // 『bucket 列表』
-            bucketsList: null,
+            // bucketsList: null,
             // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
             // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
             // activeBucketIndex: 0,
@@ -56,7 +57,12 @@ export default {
             // console.log(this.$route);
             return this.bucketsList && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
             // return this.bucketsList && this.bucketsList.find(i => );
-        }
+        },
+        ...mapGetters({
+            // nodes: 'nodes',
+            // buckets: 'bucketsList',
+            bucketsList: 'buckets',
+        }),
     },
     mounted() {
         this.initBucketsByAPI();
@@ -67,9 +73,9 @@ export default {
          * @returns {Promise<void>}
          */
         async initBucketsByAPI(bool) {
-            const {data} = await axios.get('/v1/resources/mocks/buckets');
+            // const {data} = await axios.get('/v1/resources/mocks/buckets');
             // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
-            this.bucketsList = data.data;
+            // this.bucketsList = data.data;
             // if (bool) {
             //     this.activeBucketIndex = data.data.length - 1
             // }
@@ -78,9 +84,10 @@ export default {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
             this.dialogVisible = false;
+            // window.location.reload();
+            this.$store.dispatch('loadBuckets');
             // this.initBucketsByAPI(true);
             this.onChangeBucketActiveIndex(bucket);
-            window.location.reload();
         },
         /**
          * 改变 bucket 列表中激活的索引
@@ -154,12 +161,14 @@ export default {
             this.$message.success(this.$t('successfullyDeleted'));
             // 从 bucket 列表中 移除当前 bucket
             // this.bucketsList.splice(this.activeBucketIndex, 1);
-            this.bucketsList = this.bucketsList.filter(i => i.bucketName !== this.$route.query.activatedBucketName);
-            this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
+            // this.bucketsList = this.bucketsList.filter(i => i.bucketName !== this.$route.query.activatedBucketName);
+            await this.$store.dispatch('loadBuckets');
             this.controlDeleteBucketPopoverShow(false);
 
-            await null;
-            this.initBucketsByAPI();
+            // await null;
+            console.log('########');
+            this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
+            // this.initBucketsByAPI();
         },
         /**
          * 处理展示 mock table

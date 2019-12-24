@@ -28,8 +28,9 @@
             <span>储存空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <div class="header-menu__menu">
+<!--                    v-for="(bucket, index) in (bucketsList || [])"-->
                     <a
-                        v-for="(bucket, index) in (bucketsList || [])"
+                        v-for="(bucket, index) in (buckets || [])"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
                         @click="gotoMock(bucket)"
@@ -123,8 +124,8 @@
         },
         data() {
             return {
-                bucketsList: null,
-                nodesList: null,
+                // bucketsList: null,
+                // nodesList: null,
 
                 createBucketDialogVisible: false,
             };
@@ -133,21 +134,23 @@
             // console.log(this.$route, '$$$$$$$$');
             this.initBucket();
             this.initNode();
-            setTimeout(() => {
-                console.log(this.nodes, 'nodesList');
+            // setTimeout(() => {
+                // console.log(this.nodes, 'nodesList');
                 // console.log(this.nodesList, 'nodesList');
-            }, 2000);
+            // }, 2000);
         },
         computed: {
             ...mapGetters({
-                nodes: 'nodes'
+                nodes: 'nodes',
+                buckets: 'buckets',
             }),
         },
         methods: {
             async initBucket() {
-                const {data} = await this.$axios.get('/v1/resources/mocks/buckets');
+                this.$store.dispatch('loadBuckets');
+                // const {data} = await this.$axios.get('/v1/resources/mocks/buckets');
                 // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
-                this.bucketsList = data.data;
+                // this.bucketsList = data.data;
                 // console.log(this.bucketsList, 'this.bucketsList');
             },
             async initNode() {
@@ -156,11 +159,12 @@
                 // console.log(this.nodesList, 'data');
                 this.$store.dispatch('loadNodes');
             },
-            createBucketSuccess(bucket) {
+            async createBucketSuccess(bucket) {
                 // console.log('#######');
                 this.createBucketDialogVisible = false;
+                await this.$store.dispatch('loadBuckets');
                 this.gotoMock(bucket);
-                window.location.reload();
+                // window.location.reload();
             },
             gotoMock(bucket) {
                 this.$router.push({
