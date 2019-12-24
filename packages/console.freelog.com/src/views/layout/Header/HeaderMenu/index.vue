@@ -28,22 +28,32 @@
         >
             <span>储存空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
-                <div class="header-menu__menu">
-<!--                    v-for="(bucket, index) in (bucketsList || [])"-->
+                <template v-if="buckets && buckets.length > 0">
+                    <div class="header-menu__menu">
+                        <!--                    v-for="(bucket, index) in (bucketsList || [])"-->
+                        <a
+                            v-for="(bucket, index) in (buckets || [])"
+                            class="header-menu__menu__item"
+                            :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
+                            @click="gotoMock(bucket)"
+                        >{{bucket.bucketName}}
+                        </a>
+                    </div>
                     <a
-                        v-for="(bucket, index) in (buckets || [])"
-                        class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/mock/display' && $route.query.activatedBucketName === bucket.bucketName}"
-                        @click="gotoMock(bucket)"
-                    >{{bucket.bucketName}}
+                        @click="createBucketDialogVisible=true"
+                        class="header-menu__footer"
+                    >
+                        <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                     </a>
+                </template>
+                <div v-else style="height: 180px; display: flex; align-items: center;">
+                    <div
+                        style="display: flex; width: 100%; height: 80px; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">自由创作从Freelog开始</div>
+                        <div style="height: 30px;"/>
+                        <a @click="createBucketDialogVisible=true" class="round-button">创建Bucket</a>
+                    </div>
                 </div>
-                <a
-                    @click="createBucketDialogVisible=true"
-                    class="header-menu__footer"
-                >
-                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
-                </a>
             </div>
         </a>
         <a
@@ -81,26 +91,39 @@
         >
             <span>节点管理</span>
             <div class="header-menu__dropdown" style="width: 280px;">
-                <div class="header-menu__menu">
-                    <router-link
-                        v-for="node in (nodes || [])"
-                        class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === `/node/manager/${node.nodeId}` || $route.path === `/node/test-manager/${node.nodeId}`}"
-                        :to="`/node/manager/${node.nodeId}`"
-                    >
-                        <span>{{node.nodeName}}</span>
+                <template v-if="nodes && nodes.length > 0">
+                    <div class="header-menu__menu">
                         <router-link
-                            :to="`/node/test-manager/${node.nodeId}`"
-                        >测试节点
+                            v-for="node in (nodes || [])"
+                            class="header-menu__menu__item"
+                            :class="{'header-menu__menu__item--active': $route.path === `/node/manager/${node.nodeId}` || $route.path === `/node/test-manager/${node.nodeId}`}"
+                            :to="`/node/manager/${node.nodeId}`"
+                        >
+                            <span>{{node.nodeName}}</span>
+                            <router-link
+                                :to="`/node/test-manager/${node.nodeId}`"
+                            >测试节点
+                            </router-link>
                         </router-link>
+                    </div>
+                    <router-link
+                        to="/node/create"
+                        class="header-menu__footer"
+                    >
+                        <i style="font-size: 14px;" class="freelog fl-icon-add"/>
                     </router-link>
+                </template>
+                <div v-else style="height: 180px; display: flex; align-items: center;">
+                    <div
+                        style="display: flex; width: 100%; height: 80px; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">自由创作从Freelog开始</div>
+                        <div style="height: 30px;"/>
+                        <router-link
+                            to="/node/create"
+                            class="round-button"
+                        >创建节点</router-link>
+                    </div>
                 </div>
-                <router-link
-                    to="/node/create"
-                    class="header-menu__footer"
-                >
-                    <i style="font-size: 14px;" class="freelog fl-icon-add"/>
-                </router-link>
             </div>
         </a>
 
@@ -136,8 +159,8 @@
             this.initBucket();
             this.initNode();
             // setTimeout(() => {
-                // console.log(this.nodes, 'nodesList');
-                // console.log(this.nodesList, 'nodesList');
+            // console.log(this.nodes, 'nodesList');
+            // console.log(this.nodesList, 'nodesList');
             // }, 2000);
         },
         computed: {
@@ -288,5 +311,18 @@
 
         }
 
+        .round-button {
+            width: 100px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            background-color: #409eff;
+            display: inline-block;
+            border-radius: 15px;
+
+            &:hover {
+                background-color: #61afff;
+            }
+        }
     }
 </style>
