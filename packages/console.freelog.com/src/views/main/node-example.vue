@@ -285,8 +285,9 @@ export default {
 </script>
 
 <style lang="less">
+@import '../../styles/variables.less';
 .f-pb-presentaion {
-  padding: 0 100px;
+  width: @main-content-width-1190; margin: auto; 
   .f-pb-p-tags-box {
     margin: 10px 20px 0; padding-bottom: 25px; border-bottom: 1px solid #E3E3E3; text-align: center;
     .el-button {
@@ -412,6 +413,11 @@ export default {
         }
       }
     }
+  }
+}
+@media screen and (max-width: 1250px) {
+  .f-pb-presentaion {
+    width: @main-content-width-990;
   }
 }
 </style>

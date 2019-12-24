@@ -317,7 +317,7 @@
 <style lang="less" type="text/less">
 .release-editor-layout {
   .preview-box {
-    #upload-cover {
+    .avatar-uploader {
       .el-upload {
         border: none; border-radius: 2px;
       }

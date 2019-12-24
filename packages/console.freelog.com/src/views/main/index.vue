@@ -10,7 +10,16 @@
 						v-for="item in resourceTypes" 
 						:key="item.value"
 						@click="exchangeSelectedResourceType(item.value)">{{item.label}}</el-button>
-					<search-input showInputImmediately width="160px" placeholder="搜索自定义类型" @search="searchHandler"></search-input>
+						<!-- prefix-icon -->
+					<el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" placeholder="搜索自定义类型"
+						:class="{ 'focus': isInputFocus }"
+						:style="{width: '160px'}"
+						@focus="focusHandler"
+						@blur="blurHandler"
+						@keyup.enter.native="searchHandler(searchInputStr)">
+						<i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
+						<!-- <i class="freelog fl-icon-content" slot="suffix" @click="searchHandler(searchInputStr)"></i> -->
+					</el-input>
 				</div>
 				<div class="main-content-wrap">
 					<lazy-list-view
@@ -75,6 +84,27 @@
             background-color: #FFFFFF;
             margin-bottom: 20px;
             box-shadow: rgba(0, 0, 0, .2) 0 2px 2px 0;
-		}
+				}
+
+				.resource-types-bar {
+					.search-input {
+						margin-left: 60px;
+						.el-input__inner {
+							border-color: transparent; background-color: #FAFBFB;
+						}
+						.el-input__prefix {
+							left: 8px; line-height: 36px;
+						}
+						&.focus {
+							.el-input__inner {
+								background-color: #fff;
+							}
+							.el-input__suffix {
+								line-height: 36px;
+							}
+						}
+					}
+				}
+				
     }
 </style>

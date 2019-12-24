@@ -20,6 +20,8 @@ export default {
 				path: '/main/node-examples',
 			}],
 			activeTabName: '',
+			searchInputStr: '',
+			isInputFocus: false
 		}
 	},
 	components: { ListItem, LazyListView, SearchInput, NodeExample },
@@ -57,6 +59,12 @@ export default {
 		this.resolvePath()
 	},
 	methods: {
+		focusHandler() {
+			this.isInputFocus = true
+		},
+		blurHandler() {
+			this.isInputFocus = false
+		},
 		resolvePath() {
 			const tabs = this.tabs
 			const path = this.$route.path

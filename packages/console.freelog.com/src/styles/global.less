@@ -194,8 +194,9 @@ html body {
 }
 
 .main-c-tabs {
+  @tabH: 60px;
   .el-tabs__header { 
-    height: 40px; margin-bottom: 10px;
+    height: @tabH; margin-bottom: 10px;
     text-align: center; background-color: #fff;
     .el-tabs__active-bar { 
       background-color: #333;  color: #444;
@@ -210,7 +211,8 @@ html body {
     }
     .el-tabs__nav {
       .el-tabs__item {
-        padding: 0 40px; color: #666; font-weight: 400; font-size: 16px;
+        height: @tabH; line-height: @tabH; padding: 0 40px; 
+        font-weight: 400; font-size: 16px; color: #666;
         &.is-active { font-weight: 600; color: #333; }
       }
     }

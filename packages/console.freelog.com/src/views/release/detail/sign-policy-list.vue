@@ -49,16 +49,14 @@
       </h3>
       <transition-group name="list" tag="p">
         <div class="no-s-l-item" v-for="p in nodSignPolicies" :key="p.pCombinationID">
-          <div class="p-name" @click="selectPolicy(nodSignPolicies, p)">
-            <template v-if="checkedNodeIsSigned">
-              <el-button class="p-sign-btn" type="primary" size="mini" @click="signNewPolicy(p)">{{$t('btns.sign')}}</el-button>
-            </template>
-            <template v-else>
+          <div class="p-name" :class="{'isSigned': checkedNodeIsSigned}" @click="selectPolicy(nodSignPolicies, p)">
+            <template v-if="!checkedNodeIsSigned">
               <span class="p-n-check-box" v-if="!p.isSelected"></span>
               <i class="el-icon-check" v-else></i>
             </template>
             {{p.policyName}}<span v-if="p.status === 0">（{{$t('offline')}}）</span>
           </div>
+          <el-button class="p-sign-btn" type="primary" size="mini" v-if="checkedNodeIsSigned" @click="signNewPolicy(p)">{{$t('btns.sign')}}</el-button>
           <div class="p-detail">
             <pre class="p-segment-text" >{{fmtPolicyTextList(p)}}</pre>
           </div>
@@ -186,6 +184,7 @@ export default {
   }
 }
 .no-s-l-item, .s-l-item  {
+  position: relative;
   margin-bottom: 20px; border: 1px solid #ccc; border-top-left-radius: 4px; border-top-right-radius: 4px;
   color: #333;
 
@@ -194,11 +193,6 @@ export default {
     padding: 10px 0 10px 40px;
     font-size: 14px; color: #333;
     &.isSigned { pointer-events: none; cursor: auto; padding-left: 15px; background-color: #FAFBFB; }
-    .p-sign-btn {
-      float: right;
-      margin-right: 15px; border-radius: 20px;
-      font-size: 12px;
-    }
 
     .p-n-check-box {
       display: inline-block;
@@ -216,6 +210,11 @@ export default {
         background-color: #4497EC; color: #fff;
       }
     }
+  }
+  .p-sign-btn {
+    position: absolute; top: 7px; right: 15px; z-index: 10;
+    border-radius: 20px;
+    font-size: 12px;
   }
   .p-detail {
     padding: 10px 15px; font-size: 14px;  border-top: 1px solid #ccc;
