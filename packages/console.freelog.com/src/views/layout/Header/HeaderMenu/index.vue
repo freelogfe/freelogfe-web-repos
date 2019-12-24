@@ -266,8 +266,9 @@
                         color: #999;
                         font-size: 12px;
                         line-height: 20px;
-                        padding: 0 6px;
+                        padding: 0 10px;
                         font-weight: 600;
+                        border-radius: 10px;
                     }
 
                     &:hover {
