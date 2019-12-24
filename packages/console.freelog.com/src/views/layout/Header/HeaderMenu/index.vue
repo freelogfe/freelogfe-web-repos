@@ -2,7 +2,7 @@
     <div class="header-menu">
         <a
             class="header-menu__nav"
-            :class="{'header-menu__nav--active': ['/'].includes($route.path)}"
+            :class="{'header-menu__nav--active': ['/', '/main/node-examples'].includes($route.path)}"
         >
             <span>发现</span>
             <div class="header-menu__dropdown">
@@ -16,6 +16,7 @@
                     <router-link
                         to="/main/node-examples"
                         class="header-menu__menu__item"
+                        :class="{'header-menu__menu__item--active': $route.path === '/main/node-examples'}"
                     >示例节点
                     </router-link>
                 </div>
@@ -47,7 +48,7 @@
         </a>
         <a
             class="header-menu__nav"
-            :class="{'header-menu__nav--active': ['/resource/list', '/release/list', '/release/collections'].includes($route.path)}"
+            :class="{'header-menu__nav--active': $route.path.startsWith('/release-management/')}"
         >
             <span>发行管理</span>
             <div class="header-menu__dropdown">
@@ -55,19 +56,19 @@
                     <router-link
                         to="/release-management/resource/list"
                         class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/resource/list'}"
+                        :class="{'header-menu__menu__item--active': $route.path === '/release-management/resource/list'}"
                     >我的资源
                     </router-link>
                     <router-link
                         to="/release-management/release/list"
                         class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/release/list'}"
+                        :class="{'header-menu__menu__item--active': $route.path === '/release-management/release/list'}"
                     >我的发行
                     </router-link>
                     <router-link
                         to="/release-management/release/collections"
                         class="header-menu__menu__item"
-                        :class="{'header-menu__menu__item--active': $route.path === '/release/collections'}"
+                        :class="{'header-menu__menu__item--active': $route.path === '/release-management/release/collections'}"
                     >我的收藏
                     </router-link>
                 </div>
