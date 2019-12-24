@@ -247,6 +247,7 @@
             background-color: #333;
             width: 180px;
             box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+            cursor: auto;
 
             .header-menu__menu {
                 padding: 10px 0;
@@ -319,6 +320,7 @@
             background-color: #409eff;
             display: inline-block;
             border-radius: 15px;
+            cursor: pointer;
 
             &:hover {
                 background-color: #61afff;
