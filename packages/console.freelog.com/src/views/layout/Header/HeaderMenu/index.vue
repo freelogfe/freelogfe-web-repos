@@ -163,6 +163,7 @@
             async createBucketSuccess(bucket) {
                 // console.log('#######');
                 this.createBucketDialogVisible = false;
+                this.$message.success('创建成功');
                 await this.$store.dispatch('loadBuckets');
                 this.gotoMock(bucket);
                 // window.location.reload();
