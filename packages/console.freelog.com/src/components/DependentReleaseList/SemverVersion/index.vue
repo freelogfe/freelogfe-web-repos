@@ -43,7 +43,7 @@
                         v-model="checked"
                         :disabled="customer !== false"
                     />
-                    <span style="padding-left: 8px;">Allows changes version</span>
+                    <span style="padding-left: 8px;">{{$t('allowsChanges')}}</span>
                 </div>
             </div>
             <div style="height: 10px;"/>
