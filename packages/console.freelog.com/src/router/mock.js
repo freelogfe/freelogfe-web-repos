@@ -36,6 +36,15 @@ export default {
                 // title: '模拟资源信息',
                 theme: 'gray',
                 hideFooter: true,
+                // breadCrumb: [
+                //     {
+                //         to: '/release-management/release/list',
+                //         text: '我的发行',
+                //     },
+                //     {
+                //         text: i18n.t('routes.createRelease'),
+                //     },
+                // ]
             },
             component: Views.mockEditor,
         },

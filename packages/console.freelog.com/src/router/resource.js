@@ -24,6 +24,15 @@ export default {
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
+                breadCrumb: [
+                    {
+                        to: '/release-management/resource/list',
+                        text: '我的资源',
+                    },
+                    {
+                        text: i18n.t('routes.createResource'),
+                    },
+                ]
             },
             component: Views.resourceNew,
         },
@@ -38,6 +47,15 @@ export default {
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
+                breadCrumb: [
+                    {
+                        to: '/release-management/resource/list',
+                        text: '我的资源',
+                    },
+                    {
+                        text: '资源信息',
+                    },
+                ]
             },
             component: Views.resourceNew,
         },
