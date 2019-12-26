@@ -1,5 +1,6 @@
 <template>
-    <div :class="[sidebar.openSidebar?'': 'collapse-sidebar']">
+<!--    <div :class="[sidebar.openSidebar?'': 'collapse-sidebar']">-->
+    <div>
         <fl-header/>
         <!--        <fl-sidebar/>-->
         <section class="main" :class="themeCls">
