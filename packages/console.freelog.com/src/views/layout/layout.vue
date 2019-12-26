@@ -19,7 +19,7 @@
                 </transition>
             </main>
         </section>
-        <fl-footer class="footer-wrap"/>
+        <fl-footer class="footer-wrap" :class="themeCls" />
     </div>
 </template>
 

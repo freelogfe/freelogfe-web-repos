@@ -18,7 +18,8 @@ export default Footer
 <style scoped lang="less">
   .app-footer {
     border-top: 1px solid #E5E5E5;
-    line-height: 80px; text-align: center; background-color: #fff;
+    line-height: 80px; text-align: center; background-color: #FAFBFB;
+    &.gray-theme { background-color: #fff; }
   }
 
   a {
