@@ -55,7 +55,7 @@
     @import "../../styles/mixin.less";
 
     .main {
-        min-height: 100%;
+        min-height: 100%; padding-bottom: 100px;
     }
 
     .white-theme {

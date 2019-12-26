@@ -101,7 +101,8 @@ const routerConfig = {
                     meta: {
                         requiresAuth: false,
                         title: i18n.t('resource.market'),
-                        theme: 'gray'
+                        theme: 'gray',
+                        hideFooter: true,
                     },
                     component: Views.mainView
                 },
@@ -111,7 +112,8 @@ const routerConfig = {
                     meta: {
                         requiresAuth: false,
                         title: i18n.t('release.management'),
-                        theme: 'white'
+                        theme: 'white',
+                        hideFooter: true,
                     },
                     component: Views.releaseManagementView
                 }
