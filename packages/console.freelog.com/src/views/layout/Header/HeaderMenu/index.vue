@@ -13,7 +13,7 @@
                         :class="{'header-menu__menu__item--active': $route.path === '/'}"
                     >发行市场
                     </router-link>
-                     <router-link
+                    <router-link
                         to="/main/node-examples"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/main/node-examples'}"
@@ -121,7 +121,8 @@
                         <router-link
                             to="/node/create"
                             class="round-button"
-                        >创建节点</router-link>
+                        >创建节点
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -261,7 +262,6 @@
                     box-sizing: border-box;
                     line-height: 40px;
                     color: #999;
-                    cursor: pointer;
 
                     & > a {
                         background-color: #444;
@@ -281,6 +281,11 @@
                         & > a {
                             background-color: #555;
                             color: #ddd;
+
+                            &:hover {
+                                background-color: #61afff;
+                                color: #fff;
+                            }
                         }
                     }
 
@@ -304,7 +309,6 @@
                 display: block;
                 font-size: 14px;
                 color: #999;
-                cursor: pointer;
                 /*font-weight: 600;*/
 
                 &:hover {
