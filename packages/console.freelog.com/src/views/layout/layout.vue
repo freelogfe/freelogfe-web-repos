@@ -4,7 +4,7 @@
         <fl-header/>
         <!--        <fl-sidebar/>-->
         <section class="main" :class="themeCls">
-            <div style="height: 60px; flex-shrink: 0;"/>
+            <div style="height: 60px;"/>
             <main class="content">
                 <div
                     style="margin: 0 auto; width: 1190px;"
@@ -89,8 +89,8 @@
     }
 
     .content {
-        flex-shrink: 1;
-        height: 100%;
+        /*flex-shrink: 1;*/
+        /*min-height: 100vh;*/
         transition: all .5s;
     }
 
