@@ -261,6 +261,7 @@
                     box-sizing: border-box;
                     line-height: 40px;
                     color: #999;
+                    cursor: pointer;
 
                     & > a {
                         background-color: #444;
@@ -303,6 +304,7 @@
                 display: block;
                 font-size: 14px;
                 color: #999;
+                cursor: pointer;
                 /*font-weight: 600;*/
 
                 &:hover {
