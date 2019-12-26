@@ -59,7 +59,8 @@ export default {
             meta: {
                 requiresAuth: true,
                 title: i18n.t('routes.myResources'),
-                type: 'resource'
+                type: 'resource',
+                theme: 'white'
             },
             component: Views.resourceList
         },

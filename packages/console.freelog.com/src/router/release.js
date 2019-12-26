@@ -74,7 +74,8 @@ export default {
       meta: {
         requiresAuth: true,
         title: i18n.t('routes.myReleases'),
-        type: 'release'
+        type: 'release',
+        theme: 'white'
       },
       component: Views.releaseList
     },
@@ -83,7 +84,8 @@ export default {
       meta: {
         requiresAuth: true,
         title: i18n.t('routes.myCollections'),
-        type: 'release'
+        type: 'release',
+        theme: 'white'
       },
       component: Views.releaseCollections
     },

@@ -111,7 +111,7 @@ const routerConfig = {
                     meta: {
                         requiresAuth: false,
                         title: i18n.t('release.management'),
-                        theme: 'gray'
+                        theme: 'white'
                     },
                     component: Views.releaseManagementView
                 }
