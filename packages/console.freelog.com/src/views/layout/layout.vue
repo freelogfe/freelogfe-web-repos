@@ -3,6 +3,7 @@
         <fl-header/>
         <!--        <fl-sidebar/>-->
         <section class="main" :class="themeCls">
+            <div style="height: 60px; flex-shrink: 0;"/>
             <main class="content">
                 <div
                     style="margin: 0 auto; width: 1190px;"
@@ -13,7 +14,7 @@
                     />
                 </div>
                 <transition name="content">
-                    <router-view class="main-view"></router-view>
+                    <router-view class="main-view"/>
                 </transition>
             </main>
         </section>
@@ -65,7 +66,9 @@
     @import "../../styles/mixin.less";
 
     .main {
-        min-height: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
     .white-theme {
@@ -81,10 +84,12 @@
     }
 
     .content {
-        margin-top: @header-height;
+        // margin-top: @header-height;
     }
 
     .content {
+        flex-shrink: 1;
+        height: 100%;
         transition: all .5s;
     }
 
