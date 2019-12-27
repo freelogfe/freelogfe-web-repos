@@ -154,7 +154,7 @@ export default router
 
 router.beforeEach((to, from, next) => {
     // ...
-    console.log(to, from, 'to, from');
+    // console.log(to, from, 'to, from');
 
     if (to.path === '/login') {
         return next();
