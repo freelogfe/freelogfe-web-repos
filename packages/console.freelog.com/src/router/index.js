@@ -160,7 +160,7 @@ router.beforeEach((to, from, next) => {
         return next();
     }
 
-    if (!to.path.startsWith('/alpha-test')) {
+    if (!to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType !== 1) {
         return next({path: '/alpha-test'});
     }
     next();

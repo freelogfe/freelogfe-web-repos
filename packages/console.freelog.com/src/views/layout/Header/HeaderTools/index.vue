@@ -1,40 +1,42 @@
 <template>
     <div class="header-tools">
-        <div class="header-tools__col">
-            <a>
-                <div class="header-tool__create">
-                    <i class="freelog fl-icon-add"/>
-                </div>
-                <div class="header-tools__dropdown">
-                    <div class="header-tools__menu">
-                        <router-link
-                            to="/resource/editor"
-                            class="header-tools__menu__item"
-                            target="_blank"
-                        >创建资源
-                        </router-link>
-                        <a
-                            class="header-tools__menu__item"
-                            @click="resourceDialogVisible=true"
-                        >创建发行</a>
-                        <!--                        <router-link to="/" class="header-tools__menu__item">-->
-                        <!--                            创建mock-->
-                        <!--                        </router-link>-->
-                        <router-link
-                            to="/node/create"
-                            class="header-tools__menu__item"
-                            target="_blank"
-                        >创建节点
-                        </router-link>
+        <template v-if="userType === 1">
+            <div class="header-tools__col">
+                <a>
+                    <div class="header-tool__create">
+                        <i class="freelog fl-icon-add"/>
                     </div>
+                    <div class="header-tools__dropdown">
+                        <div class="header-tools__menu">
+                            <router-link
+                                to="/resource/editor"
+                                class="header-tools__menu__item"
+                                target="_blank"
+                            >创建资源
+                            </router-link>
+                            <a
+                                class="header-tools__menu__item"
+                                @click="resourceDialogVisible=true"
+                            >创建发行</a>
+                            <!--                        <router-link to="/" class="header-tools__menu__item">-->
+                            <!--                            创建mock-->
+                            <!--                        </router-link>-->
+                            <router-link
+                                to="/node/create"
+                                class="header-tools__menu__item"
+                                target="_blank"
+                            >创建节点
+                            </router-link>
+                        </div>
 
-                </div>
-            </a>
-        </div>
+                    </div>
+                </a>
+            </div>
 
-        <div class="header-tools__col" style="padding-right: 10px;">
-            <ToolSearch @onConfirm="onSearch"/>
-        </div>
+            <div class="header-tools__col" style="padding-right: 10px;">
+                <ToolSearch @onConfirm="onSearch"/>
+            </div>
+        </template>
 
         <div class="header-tools__col" style="padding-left: 0;">
             <a class="header-tool__avatar" style="padding-left: 20px;">
@@ -120,6 +122,7 @@
             return {
                 resourceDialogVisible: false,
                 userInfo: null,
+                userType: JSON.parse(window.localStorage.getItem('user_session')).userType,
             };
         },
         mounted() {
