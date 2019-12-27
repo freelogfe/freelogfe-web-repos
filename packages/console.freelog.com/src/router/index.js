@@ -161,7 +161,10 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType !== 1) {
-        return next({path: '/alpha-test'});
+        return next({
+            path: '/alpha-test',
+            replace: true,
+        });
     }
     next();
 });
