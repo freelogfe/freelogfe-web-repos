@@ -17,7 +17,10 @@
             <div style="height: 70px;"/>
             <div style="font-size: 14px; text-align: center;">
                 <span style="color: #999;">没有内测邀请码？</span>
-                <a style="color: #409eff; font-weight: 600;">申请参加内测</a>
+                <router-link
+                    style="color: #409eff; font-weight: 600;"
+                    to="/alpha-test/apply"
+                >申请参加内测</router-link>
             </div>
         </div>
     </div>
