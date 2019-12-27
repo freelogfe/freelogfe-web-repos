@@ -136,8 +136,8 @@
             async handleUserInfo() {
                 const {data} = await this.$axios.get('/v1/userinfos/current');
 
-                // console.log(data, 'DDDDDDD');
                 this.userInfo = data.data;
+                window.localStorage.setItem('user_session', JSON.stringify(data.data));
             },
             gotoUserProfile() {
                 window.location.href = window.location.origin.replace('//console.', '//www.') + '/user/profile';
