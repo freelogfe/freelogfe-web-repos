@@ -114,7 +114,7 @@
                 });
 
                 if (data.ret !== 0 || data.errcode !== 0) {
-                    return;
+                    return this.$message.error(data.msg);
                 }
 
                 this.$router.replace('/alpha-test/success');
