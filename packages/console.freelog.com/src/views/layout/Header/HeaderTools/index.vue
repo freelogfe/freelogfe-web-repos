@@ -40,11 +40,14 @@
 
         <div class="header-tools__col" style="padding-left: 0;">
             <a class="header-tool__avatar" style="padding-left: 20px;">
-                <img
-                    :src="userInfo && userInfo.headImage"
-                    alt=""
-                />
 
+                <div class="header-tool__avatar__display">
+                    <img
+                        :src="userInfo && userInfo.headImage"
+                        alt=""
+                    />
+                    <label v-if="userType === 1">内测</label>
+                </div>
                 <div
                     v-if="!!userInfo"
                     class="header-tools__dropdown"
@@ -275,17 +278,38 @@
     }
 
     .header-tool__avatar {
-        width: 32px;
+        /*width: 32px;*/
         display: block;
 
-        & > img {
-            background: rgba(142, 142, 147, 0.4);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: block;
-            border: none;
+        .header-tool__avatar__display {
+            display: flex;
+            align-items: center;
+
+            & > img {
+                background: rgba(142, 142, 147, 0.4);
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: block;
+                border: none;
+            }
+
+            & > label {
+                margin-left: 10px;
+                /*display: none;*/
+                background-color: #409eff;
+                color: #fff;
+                width: 36px;
+                line-height: 20px;
+                height: 20px;
+                text-align: center;
+
+                border-radius: 10px;
+                font-size: 12px;
+                font-weight: 600;
+            }
         }
+
 
         a {
             padding: 0 20px;
