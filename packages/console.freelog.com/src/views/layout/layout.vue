@@ -67,9 +67,7 @@
     @import "../../styles/mixin.less";
 
     .main {
-        min-height: 100vh;
-        padding-bottom: 100px;
-        box-sizing: border-box;
+        min-height: 100vh; padding-bottom: 100px;
         display: flex;
         flex-direction: column;
     }

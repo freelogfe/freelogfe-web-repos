@@ -7,10 +7,7 @@
                 />
             </router-link>
             <!--      <span class="page-title">{{pageTitle}}</span>-->
-            <HeaderMenu
-                v-if="userType === 1"
-                style="margin-left: 45px;"
-            />
+            <HeaderMenu style="margin-left: 45px;"/>
         </div>
 
         <HeaderTools/>
