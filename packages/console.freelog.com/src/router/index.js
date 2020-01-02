@@ -151,3 +151,27 @@ export function registerNotFoundRouete() {
 }
 
 export default router
+
+router.beforeEach((to, from, next) => {
+    // ...
+    // console.log(to, from, 'to, from');
+
+    if (to.path === '/login') {
+        return next();
+    }
+
+    if (!to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType !== 1) {
+        return next({
+            path: '/alpha-test',
+            replace: true,
+        });
+    }
+
+    if (to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType === 1) {
+        return next({
+            path: '/',
+            replace: true,
+        });
+    }
+    next();
+});
