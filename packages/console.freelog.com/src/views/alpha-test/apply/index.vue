@@ -8,7 +8,11 @@
         </ContentBlock>
         <div style="height: 30px;"/>
         <ContentBlock title="申请结果通知方式">
-            <div style="font-size: 14px; font-weight: 600; color: #000;">13487639088</div>
+<!--<<<<<<< HEAD-->
+<!--            <div style="font-size: 14px; font-weight: 600; color: #000;">13487639088</div>-->
+<!--=======-->
+            <div style="font-size: 14px; font-weight: 600; color: #000;">{{userInfo && (userInfo.mobile || userInfo.email)}}</div>
+<!--&gt;>>>>>> alpha-test-->
         </ContentBlock>
         <div style="height: 30px;"/>
         <ContentBlock
