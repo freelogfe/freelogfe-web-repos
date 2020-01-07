@@ -191,13 +191,20 @@ export default {
 }
 
 @media screen and (max-width: 1250px) {
-.contract-detail-view {
+  .contract-detail-view {
     width: @main-content-width-990;
   }
 }
 
 </style>
 <style lang="less" type="text/less">
+@import '../../styles/variables.less';
+.main-app-content.contract-detail #breadcrumb-wrap { width: @main-content-width-1190; }
+@media screen and (max-width: 1250px) {
+  .main-app-content.contract-detail #breadcrumb-wrap {
+    width: @main-content-width-990;
+  }
+}
 .el-tabs__header {
   margin-bottom: 0;
   .el-tabs__nav-wrap {

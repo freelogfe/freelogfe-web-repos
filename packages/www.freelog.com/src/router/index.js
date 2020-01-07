@@ -118,20 +118,30 @@ const routerConfig = {
       },
       {
         path: 'profile',
+        name: 'profile',
         meta: { title: '资料与账号' },
         component: MyProfileView
       }, {
         path: 'collections',
+        name: 'collections',
         meta: { title: '我的关注' },
         component: MyCollectionsView
       }, {
         path: 'contracts',
+        name: 'contracts-management',
         meta: { title: '合约管理' },
         component: MyContractsView
       },
       {
         path: 'contracts/detail',
-        meta: { title: '合约详情', hideAside: true },
+        name: 'contract-detail',
+        meta: { 
+          title: '合约详情', 
+          hideAside: true,
+          breadcrumbs: [
+            { path: '/user/contracts', title: '合约管理', },
+          ]
+        },
         component: ResourceContractDetailView
       }]
     },

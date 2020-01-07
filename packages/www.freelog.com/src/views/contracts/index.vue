@@ -141,7 +141,14 @@ export default {
 			this.isInputFocus = false
 		},
     viewContractDetail (row) {
-      window.open(`${window.location.origin}/user/contracts/detail?contractId=${row.contractId}`)
+      const { contractId } = row
+
+      this.$router.push({
+        path: '/user/contracts/detail/',
+        query: {
+          contractId
+        }
+      })
     },
     formatNodeDomain(nodeInfo) {
       if (nodeInfo && nodeInfo.nodeDomain) {
