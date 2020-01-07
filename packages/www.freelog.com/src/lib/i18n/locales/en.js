@@ -18,7 +18,7 @@ export default {
     cancelBtnText: 'cancel',
   },
   userAsideNav: {
-    title: ['My focus','My contract','My account','Information & Account']
+    title: ['My account','My contract','Information & Account']
   },
   navTop: ['exit','My freelog'],
   pagination: {
@@ -38,7 +38,17 @@ export default {
     userTabTitle: 'Personal center',
     contractTabTitle: 'Contract management',
   },
-  resources: {
+  company: {
+    name: 'freelog',
+    copyright: 'all rights reserved'
+  },
+  aboutView: {
+    about: 'About'
+  },
+  helpView: {
+    title: 'Help Center'
+  },
+  contracts: {
     searchType: {
       placeholder: 'please choose',
       label: ['Node','Resource','Resource Type']
@@ -68,7 +78,7 @@ export default {
     ],
     addrName: ['Ethereum address','Bank account'],
     index: {
-      create: 'to create+',
+      create: 'to create',
       name: 'Account name',
       id: 'Account ID',
       node: 'Node',

@@ -18,7 +18,7 @@ export default {
     cancelBtnText: '取 消',
   },
   userAsideNav: {
-    title: ['我的关注','我的合同','我的账户','资料与账号']
+    title: ['钱包','合同管理','资料与账号']
   },
   navTop: ['退出','我的freelog'],
   pagination: {
@@ -38,14 +38,24 @@ export default {
     userTabTitle: '个人中心',
     contractTabTitle: '合同管理',
   },
-  resources: {
+  company: {
+    name: 'freelog',
+    copyright: '版权所有'
+  },
+  aboutView: {
+    about: '关于'
+  },
+  helpView: {
+    title: '帮助中心'
+  },
+  contracts: {
     searchType: {
       placeholder: '请选择',
       label: ['节点','资源','资源类型']
     },
-    tableColumn: ['资源|状态|类型','节点','签约时间'],
+    tableColumn: ['合约', '被授权方','授权方', '合约状态', '签约时间', '合约详情'],
     detail: {
-      title: '资源详情'
+      title: '合同详情'
     },
   },
   profile: {
@@ -54,9 +64,11 @@ export default {
     editAvatar: '编辑头像',
     userName: '用户姓名',
     userNickname: '用户昵称',
-    email: '邮箱',
-    phoneNumber: '手机号',
-    noPhoneNumber: '未设置手机号'
+    email: '邮箱账号',
+    noMail: '未设置邮箱账号',
+    phoneNumber: '手机账号',
+    noPhoneNumber: '未设置手机号',
+    password: '登陆密码',
   },
   accounts: {
     currencyAccounts: [
@@ -68,7 +80,7 @@ export default {
     ],
     addrName: ['以太坊地址','银行账号'],
     index: {
-      create: '去创建+',
+      create: '去创建',
       name: '账户名',
       id: '账户ID',
       node: '节点',

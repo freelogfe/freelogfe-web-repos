@@ -2,7 +2,7 @@
     <section class="index-main-container">
 
 		<el-tabs class="main-c-tabs" v-model="activeTabName" @tab-click="exchangeActiveTabName">
-			<el-tab-pane label="发行市场" :name="tabs[0].name">
+			<el-tab-pane label="发行市场" :name="tabs[0].name" lazy>
 				<div class="resource-types-bar">
 					<el-button 
 						type="text"
@@ -42,7 +42,7 @@
 					</lazy-list-view>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="示例节点" :name="tabs[1].name">
+			<el-tab-pane label="示例节点" :name="tabs[1].name" lazy>
 				<node-example></node-example>
 			</el-tab-pane>
   		</el-tabs>

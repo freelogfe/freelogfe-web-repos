@@ -2,7 +2,7 @@
 import Router from 'vue-router'
 import { Vue } from '@freelog/freelog-common-lib'
 import UserLayout from '@/views/layout/user.vue'
-import MyResourcesView from '@/views/resources/index.vue'
+import MyContractsView from '@/views/contracts/index.vue'
 import MyAccountsView from '@/views/accounts/index.vue'
 import MyProfileView from '@/views/profile/index.vue'
 import MyCollectionsView from '@/views/collections/index.vue'
@@ -14,7 +14,7 @@ import AccountWithdrawView from '@/views/accounts/withdraw.vue'
 import AccountTransferView from '@/views/accounts/transfer.vue'
 import AccountListManagerView from '@/views/accounts/list.vue'
 import AddPayAccountView from '@/views/accounts/add-pay-account.vue'
-import ResourceContractDetailView from '@/views/resources/detail.vue'
+import ResourceContractDetailView from '@/views/contracts/detail.vue'
 import ErrorView from '@/views/error/index.vue'
 
 Vue.use(Router)
@@ -52,7 +52,7 @@ const routerConfig = {
       children: [{
         path: 'accounts',
         meta: {
-          title: '我的账户',
+          title: '钱包',
           theme: 'transparent'
         },
         component: MyAccountsView
@@ -118,7 +118,7 @@ const routerConfig = {
       },
       {
         path: 'profile',
-        meta: { title: '我的账号' },
+        meta: { title: '资料与账号' },
         component: MyProfileView
       }, {
         path: 'collections',
@@ -126,12 +126,12 @@ const routerConfig = {
         component: MyCollectionsView
       }, {
         path: 'contracts',
-        meta: { title: '我的资源' },
-        component: MyResourcesView
+        meta: { title: '合约管理' },
+        component: MyContractsView
       },
       {
         path: 'contracts/detail',
-        meta: { title: '资源详情' },
+        meta: { title: '合约详情', hideAside: true },
         component: ResourceContractDetailView
       }]
     },

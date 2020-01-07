@@ -1,6 +1,6 @@
 <i18n src="./main.json"></i18n>
 <template>
-  <div class="f-pb-presentaion">
+  <div class="f-pb-presentaion" v-loading="loading" element-loading-background="#fafbfb">
     <div class="f-pb-p-tags-box" v-if="pbTags.length">
       <el-button type="text" size="small" :class="{'selected': selectedTag.length === 0}" @click="emptySelectedTag">{{$t('pbTags[0]')}}</el-button>
       <el-button
@@ -32,7 +32,6 @@
           </div>
           <div class="f-pb-p-i-btn-group"></div>
           <div class="f-pb-p-i-demo-btn" :class="{'disabled': !pb.demoSite}" @click="tapDemoPreviewBtn(pb.demoSite)">
-            <!-- <span v-show="pb.demoSite">{{pb.demoSite}}</span> -->
             <a :href="pb.demoSite" target="_blank"><i class="el-icon-caret-right"></i>{{$t('pbDemo')}}</a>
           </div>
           <div class="f-pb-p-i-footer">
@@ -71,7 +70,8 @@ export default {
       pbDemoPreviewSiteMap: null,
       pbTagsSet: new Set(),
       pbTags: [],
-      selectedTag: []
+      selectedTag: [],
+      loading: true
     }
   },
   computed: {
@@ -108,16 +108,17 @@ export default {
     }
   },
   created() {
-    this.fetchPbMarkdownList()
-    this.fetchDemoPreviewSiteData()
+    
   },
   mounted() {
-    
+    this.fetchPbMarkdownList()
+    this.fetchDemoPreviewSiteData()
   },
   methods: {
     fetchPbMarkdownList() {
       const tag = 'pb-md'
       const refPbUsagePrefix = 'pbUsage'
+      this.loading = true
       return this.$axios.get('/v1/presentables/authList', {
           params: { 
             nodeId: this.pbDemosNodeId,
@@ -157,6 +158,7 @@ export default {
           }
         })
         .catch(e => console.log(e))
+        .finally(() => (this.loading = false))
       
     },
     renderPbMarkdown(presentable) {
@@ -289,7 +291,7 @@ export default {
 <style lang="less">
 @import '../../styles/variables.less';
 .f-pb-presentaion {
-  width: @main-content-width-1190; margin: auto; 
+  width: @main-content-width-1190; min-height: 60vh; margin: auto; 
   .f-pb-p-tags-box {
     margin: 10px 20px 0; padding-bottom: 25px; border-bottom: 1px solid #E3E3E3; text-align: center;
     .el-button {
@@ -430,6 +432,7 @@ export default {
     }
   }
 }
+
 @media screen and (max-width: 1250px) {
   .f-pb-presentaion {
     width: @main-content-width-990;
