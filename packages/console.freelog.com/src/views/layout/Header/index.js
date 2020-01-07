@@ -13,7 +13,8 @@ export default {
       isSideBarOpen: true,
       domainPostfix: /\.test/.test(window.location.host) ? '.testfreelog.com' : '.freelog.com',
       avatarUrl: '',
-      loginLink: LOGIN_PATH
+      loginLink: LOGIN_PATH,
+        userType: JSON.parse(window.localStorage.getItem('user_session')).userType,
     }
   },
   computed: {
