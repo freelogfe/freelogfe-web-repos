@@ -21,7 +21,7 @@ export default {
                 type: '',
                 hideFooter: true,
             },
-            component: Views.alphaTestInput
+            component: Views.alphaTestResult
         },
         {
             path: 'input',
