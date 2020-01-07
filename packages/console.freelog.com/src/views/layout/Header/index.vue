@@ -9,9 +9,7 @@
             <!--      <span class="page-title">{{pageTitle}}</span>-->
             <HeaderMenu style="margin-left: 45px;"/>
         </div>
-
         <HeaderTools/>
-
         <!--      v-if="session.user"-->
         <!--        <nav class="toolbar">-->
         <!--      <ul class="navbar-menu">-->
