@@ -2,14 +2,10 @@
     <header class="nav-header">
         <div class="brand">
             <router-link to="/" class="">
-                <i
-                    class="freelog fl-icon-logo-freelog"
-                />
+                <i class="freelog fl-icon-logo-freelog" />
             </router-link>
         </div>
-
         <HeaderTools/>
-        
     </header>
 </template>
 
