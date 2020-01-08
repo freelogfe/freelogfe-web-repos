@@ -75,14 +75,13 @@
                     return this.$router.replace('/alpha-test/input');
                 }
 
-                this.status = dataList[0] ? dataList[0].status : 0;
+                this.status = dataList[0] ? dataList[0].status : -1;
             },
             async submit() {
                 const {data} = await this.$axios.post('/v1/testQualifications/beta/activate', {
                     code: this.input,
                 });
                 // console.log(data, 'datadata');
-
                 if (!data.data) {
                     return this.error = true;
                 }
