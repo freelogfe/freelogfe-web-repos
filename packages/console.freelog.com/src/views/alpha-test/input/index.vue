@@ -25,7 +25,10 @@
                 </el-button>
             </div>
             <div style="height: 70px;"/>
-            <div style="font-size: 14px; text-align: center;">
+            <div
+                style="font-size: 14px; text-align: center;"
+                v-if="status !== 0"
+            >
                 <span style="color: #999;">没有内测邀请码？</span>
                 <router-link
                     style="color: #409eff; font-weight: 600;"
@@ -44,12 +47,36 @@
             return {
                 input: '',
                 error: false,
+                status: 0,
             };
         },
         mounted() {
-
+            this.getApplyRecords();
         },
         methods: {
+            async getApplyRecords() {
+                const authInfoText = document.cookie.split('; ').find(i => i.startsWith('authInfo='));
+                // console.log(authInfoText, 'authInfoText');
+                if (!authInfoText) {
+                    return;
+                }
+                const authInfo = JSON.parse(Buffer.from(authInfoText.replace('authInfo=').split('.')[1], 'base64').toString());
+                // console.log(authInfo, 'authInfoauthInfo');
+                const {data} = await this.$axios.get('/v1/testQualifications/beta/applyRecords', {
+                    params: {page: 1, pageSize: 1, userId: authInfo.userId},
+                });
+
+                if (data.ret !== 0 || data.errcode) {
+                    return this.$message.error(data.msg);
+                }
+
+                const dataList = data.data.dataList;
+                if (dataList.length === 0) {
+                    return this.$router.replace('/alpha-test/input');
+                }
+
+                this.status = dataList[0].status;
+            },
             async submit() {
                 const {data} = await this.$axios.post('/v1/testQualifications/beta/activate', {
                     code: this.input,
