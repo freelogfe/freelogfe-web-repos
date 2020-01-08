@@ -17,6 +17,8 @@ import AddPayAccountView from '@/views/accounts/add-pay-account.vue'
 import ResourceContractDetailView from '@/views/contracts/detail.vue'
 import ErrorView from '@/views/error/index.vue'
 
+import i18n from '../lib/i18n'
+
 Vue.use(Router)
 const scrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
@@ -45,29 +47,26 @@ const routerConfig = {
     },
     {
       path: '/user',
-      meta: {
-        title: '我的账户'
-      },
       component: UserLayout,
       children: [{
         path: 'accounts',
         meta: {
-          title: '钱包',
+          title: i18n.t('titles.accounts'),
           theme: 'transparent'
         },
         component: MyAccountsView
       }, {
         path: 'create',
-        name: 'accountCreate',
+        name: 'createAccount',
         meta: {
-          title: '创建账户'
+          title: i18n.t('titles.createAccount')
         },
         component: AccountCreateView
       }, {
         path: 'recharge',
-        name: 'accountRecharge',
+        name: 'rechangeAccount',
         meta: {
-          title: '账户充值'
+          title: i18n.t('titles.rechangeAccount')
         },
         component: AccountRechargeView
       }, {
@@ -81,7 +80,7 @@ const routerConfig = {
         path: 'accounts-manager',
         name: 'accountsManager',
         meta: {
-          title: '账号管理'
+          title: i18n.t('titles.accountsManager')
         },
         component: AccountListManagerView
         // AddPayAccountView
@@ -89,7 +88,7 @@ const routerConfig = {
         path: 'accounts/add',
         name: 'addPayAccount',
         meta: {
-          title: '添加支付账号'
+          title: i18n.t('titles.addPayAccount')
         },
         component: AddPayAccountView
         // AddPayAccountView
@@ -104,7 +103,7 @@ const routerConfig = {
         path: 'withdraw',
         name: 'accountWithdraw',
         meta: {
-          title: '账户提现'
+          title: i18n.t('titles.accountWithdraw')
         },
         component: AccountWithdrawView
       },
@@ -112,34 +111,34 @@ const routerConfig = {
         path: 'transfer',
         name: 'accountTransfer',
         meta: {
-          title: '账户转账'
+          title: i18n.t('titles.accountTransfer')
         },
         component: AccountTransferView
       },
       {
         path: 'profile',
         name: 'profile',
-        meta: { title: '资料与账号' },
+        meta: { title: i18n.t('titles.profile') },
         component: MyProfileView
       }, {
         path: 'collections',
         name: 'collections',
-        meta: { title: '我的关注' },
+        meta: { title: i18n.t('titles.collections') },
         component: MyCollectionsView
       }, {
         path: 'contracts',
         name: 'contracts-management',
-        meta: { title: '合约管理' },
+        meta: { title: i18n.t('titles.contract.management') },
         component: MyContractsView
       },
       {
         path: 'contracts/detail',
         name: 'contract-detail',
         meta: { 
-          title: '合约详情', 
+          title: i18n.t('titles.contract.detail'), 
           hideAside: true,
           breadcrumbs: [
-            { path: '/user/contracts', title: '合约管理', },
+            { path: '/user/contracts', title: i18n.t('titles.contract.management'), },
           ]
         },
         component: ResourceContractDetailView

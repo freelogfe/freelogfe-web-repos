@@ -1,31 +1,31 @@
 <template>
   <div class="contract-detail-list">
     <el-table :data="list" style="width: 100%" :empty-text="emptyText">
-      <el-table-column :label="$t(`contracts.tableColumn[0]`)" min-width="230">
+      <el-table-column :label="$t('contracts.tableColumn[0]')" min-width="230">
         <template slot-scope="scope">
           <p class="contract-name">{{ scope.row.contractName }}</p>
           <p class="contract-id">
-            <span>合同ID</span>
+            <span>{{$t('contracts.id')}}</span>
             <span>{{scope.row.contractId}}</span>
           </p>
         </template>
       </el-table-column>
-      <el-table-column :label="$t(`contracts.tableColumn[1]`)" min-width="180">
+      <el-table-column :label="$t('contracts.tableColumn[1]')" min-width="180">
         <template slot-scope="scope">
           <contract-part :contract="scope.row" partyType="partyTwo"></contract-part>
         </template>
       </el-table-column>
-      <el-table-column :label="$t(`contracts.tableColumn[2]`)" min-width="180">
+      <el-table-column :label="$t('contracts.tableColumn[2]')" min-width="180">
         <template slot-scope="scope">
           <contract-part :contract="scope.row" partyType="partyOne"></contract-part>
         </template>
       </el-table-column>
-      <el-table-column :label="$t(`contracts.tableColumn[3]`)" min-width="120">
+      <el-table-column :label="$t('contracts.tableColumn[3]')" min-width="120">
         <template slot-scope="scope">
           <span class="contract-status" :class="['status-'+scope.row.status]">{{ resolveStatus(scope.row.status) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t(`contracts.tableColumn[4]`)" min-width="155">
+      <el-table-column :label="$t('contracts.tableColumn[4]')" min-width="155">
         <template slot-scope="scope">
           <p>{{scope.row.createDate | fmtDate('yyyy.MM.dd')}}</p>
           <!-- <p class="item-updateDate">
@@ -34,9 +34,9 @@
           </p> -->
         </template>
       </el-table-column>
-      <el-table-column :label="$t(`contracts.tableColumn[5]`)" width="80">
+      <el-table-column :label="$t('contracts.tableColumn[5]')" width="80">
         <template slot-scope="scope">
-          <el-button round size="mini" class="view-btn" @click="viewContractDetail(scope.row)">查看</el-button>
+          <el-button round size="mini" class="view-btn" @click="viewContractDetail(scope.row)">{{$t('contracts.viewBtn')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,24 +72,25 @@ export default {
       window.open(`${window.location.origin}/user/contracts/detail?contractId=${row.contractId}`)
     },
     resolveStatus(status) {
+      const statusArr = this.$i18n.t('contracts.status')
       let text
       switch (status) {
         case 1:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 2:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 4:
-          text = '授权正常'
+          text = statusArr[1]
           break
         case 3:
         case 5:
         case 6:
-          text = '合同终止'
+          text = statusArr[2]
           break
         default:
-          text = '未知状态'
+          text = statusArr[3]
       }
 
       return text

@@ -3,25 +3,25 @@
     <h3>{{contractDetailInfo.contractName}}</h3>
     <div class="party-bar">
       <div>
-        <h4>授权方</h4>
+        <h4>{{$t('contracts.partyOne')}}</h4>
         <contract-part :contract="contractDetailInfo" partyType="partyOne" v-if="isFetchedParty"></contract-part>
       </div>
       <div>
-        <h4>授权方</h4>
+        <h4>{{$t('contracts.partyTwo')}}</h4>
         <contract-part :contract="contractDetailInfo" partyType="partyTwo" v-if="isFetchedParty"></contract-part>
       </div>
     </div>
     <el-tabs v-model="activeTabName" @tab-click="handleClick">
-      <el-tab-pane label="合约内容" name="contract-content">
+      <el-tab-pane :label="$t('contracts.content')" name="contract-content">
         <contract-content :contract="contractDetailInfo"></contract-content>
       </el-tab-pane>
-      <!-- <el-tab-pane label="应用记录" name="application-record">
+      <!-- <el-tab-pane :label="'应用记录'" name="application-record">
         <contracts-list :list="applicationRecords"></contracts-list>
       </el-tab-pane>
-      <el-tab-pane label="历史记录" name="history-record">
+      <el-tab-pane :label="'历史记录'" name="history-record">
         <contracts-list :list="historyRecords"></contracts-list>
       </el-tab-pane> -->
-      <el-tab-pane label="关联合约" name="relevancy-contract">
+      <el-tab-pane :label="$t('contracts.relevancy')" name="relevancy-contract">
         <contracts-list :list="relevancyContracts"></contracts-list>
       </el-tab-pane>
     </el-tabs>

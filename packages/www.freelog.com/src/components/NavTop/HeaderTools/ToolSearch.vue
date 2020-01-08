@@ -1,9 +1,5 @@
 <template>
-    <label
-        class="tool__search"
-        :style="{backgroundColor: editable ? '#fff': ''}"
-        @click="onClick"
-    >
+    <label class="tool__search" :style="{backgroundColor: editable ? '#fff': ''}" @click="onClick">
         <input
             v-show="editable"
             v-model="value"
@@ -12,10 +8,7 @@
             @keydown.enter="onConfirm"
             @click="$event.stopPropagation()"
         />
-        <i
-            @mousedown="onConfirm"
-            class="freelog fl-icon-content"
-        />
+        <i class="freelog fl-icon-content" @mousedown="onConfirm" />
     </label>
 </template>
 

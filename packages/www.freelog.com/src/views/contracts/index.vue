@@ -2,11 +2,11 @@
   <div class="my-contracts-wrap">
     <div class="my-contracts-tabs-bar">
       <div class="tabs-bar">
-        <div class="tab-item" :class="{ 'active': identityType === 2 }" @click="identityType = 2">被授权合约</div>
-        <div class="tab-item" :class="{ 'active': identityType === 1 }" @click="identityType = 1">授权合约</div>
+        <div class="tab-item" :class="{ 'active': identityType === 2 }" @click="identityType = 2">{{$t('contracts.partyOne')}}</div>
+        <div class="tab-item" :class="{ 'active': identityType === 1 }" @click="identityType = 1">{{$t('contracts.partyTwo')}}</div>
       </div>
       <el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" 
-            :placeholder="'合约ID / 合约名称'"
+            :placeholder="$t('contracts.inputPlaceholder')"
 						:class="{ 'focus': isInputFocus }"
 						:style="{width: '400px'}"
 						@focus="focusHandler"
@@ -158,24 +158,25 @@ export default {
       }
     },
     resolveStatus(status) {
+      const statusArr = this.$i18n.t('contracts.status')
       let text
       switch (status) {
         case 1:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 2:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 4:
-          text = '授权正常'
+          text = statusArr[1]
           break
         case 3:
         case 5:
         case 6:
-          text = '合同终止'
+          text = statusArr[2]
           break
         default:
-          text = '未知状态'
+          text = statusArr[3]
       }
 
       return text

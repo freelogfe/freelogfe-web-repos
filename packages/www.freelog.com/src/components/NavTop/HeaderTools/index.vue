@@ -1,13 +1,12 @@
 <template>
     <div class="header-tools">
         <div class="header-tools__col" style="padding-left: 0;">
-            <a :href="consoleHref" target="_blank" class="header-tool-btn__console">console</a>
+            <a :href="consoleHref" target="_blank" class="header-tool-btn__console">{{$t('navTop[0]')}}</a>
         </div>
 
         <div class="header-tools__col" style="padding-left: 0;">
             <a class="header-tool__avatar">
                 <img :src="userInfo && userInfo.headImage" alt="" />
-
                 <div
                     v-if="!!userInfo"
                     class="header-tools__dropdown"
@@ -15,18 +14,14 @@
                 >
                     <div
                         style="display: flex; flex-direction: column; align-items: center; padding: 20px 0; font-size: 14px;font-weight: 600; color: #999;">
-                        <img
-                            :src="userInfo && userInfo.headImage"
-                            style="height: 60px; width: 60px; border-radius: 50%;"
-                        />
+                        <img :src="userInfo && userInfo.headImage" style="height: 60px; width: 60px; border-radius: 50%;" />
                         <div style="height: 10px;"/>
-                        <div style="color: #999; font-size: 16px; font-weight: 600;">{{userInfo && userInfo.username}}
-                        </div>
+                        <div style="color: #999; font-size: 16px; font-weight: 600;">{{userInfo && userInfo.username}}</div>
                         <div style="height: 8px;"/>
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
                     <!-- <a @click="gotoUserProfile">个人中心</a> -->
-                    <router-link to="/login" >登出</router-link>
+                    <router-link to="/login" >{{$t('navTop[1]')}}</router-link>
                 </div>
             </a>
         </div>
@@ -69,7 +64,7 @@
         },
         computed: {
             consoleHref() {
-                return window.location.origin.replace(/^\/\/www\./, 'console.')
+                return window.location.origin.replace(/\/\/www\./, '//console.')
             }
         },
         mounted() {
