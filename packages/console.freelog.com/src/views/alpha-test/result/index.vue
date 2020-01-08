@@ -4,7 +4,7 @@
     >
         <div
             style="width: 600px; text-align: center;"
-            v-if="false"
+            v-if="status === 0"
         >
             <i class="freelog fl-icon-shenhe" style="font-size: 75px; color: #f39700; line-height: 1;"/>
             <div style="height: 30px;"/>
@@ -15,22 +15,23 @@
                 手机号发送给你，敬请留意
             </div>
             <div style="height: 40px;"/>
-            <el-button
-                type="primary"
-                style="width: 100px; border-radius: 2px;"
-                @click="submit"
-            >知道了
-            </el-button>
-            <div style="height: 20px;"/>
+<!--            <el-button-->
+<!--                type="primary"-->
+<!--                style="width: 100px; border-radius: 2px;"-->
+<!--                @click="submit"-->
+<!--            >知道了-->
+<!--            </el-button>-->
+<!--            <div style="height: 20px;"/>-->
             <router-link
                 to="/alpha-test/input"
                 style="color: #dca32d; font-size: 12px;"
-            >我有验证码</router-link>
+            >我有验证码
+            </router-link>
         </div>
 
         <div
             style="margin: 0 auto; width: 600px; text-align: center;"
-            v-if="true"
+            v-if="status === 2"
         >
             <i class="freelog fl-icon-shenqingshibai" style="font-size: 75px; color: #e74c50; line-height: 1;"/>
             <div style="height: 30px;"/>
@@ -60,7 +61,8 @@
             <router-link
                 to="/alpha-test/input"
                 style="color: #dca32d; font-size: 12px;"
-            >我有验证码</router-link>
+            >我有验证码
+            </router-link>
         </div>
     </div>
 </template>
@@ -72,9 +74,38 @@
             return {
                 style: {
                     height: (window.innerHeight - 160) + 'px',
-                }
+                },
+                status: -1,
             }
-        }
+        },
+        mounted() {
+            this.getApplyRecords();
+        },
+        methods: {
+            async getApplyRecords() {
+                const authInfoText = document.cookie.split('; ').find(i => i.startsWith('authInfo='));
+                // console.log(authInfoText, 'authInfoText');
+                if (!authInfoText) {
+                    return;
+                }
+                const authInfo = JSON.parse(Buffer.from(authInfoText.replace('authInfo=').split('.')[1], 'base64').toString());
+                // console.log(authInfo, 'authInfoauthInfo');
+                const {data} = await this.$axios.get('/v1/testQualifications/beta/applyRecords', {
+                    params: {page: 1, pageSize: 1, userId: authInfo.userId},
+                });
+
+                if (data.ret !== 0 || data.errcode) {
+                    return this.$message.error(data.msg);
+                }
+
+                const dataList = data.data.dataList;
+                if (dataList.length === 0) {
+                    return this.$router.replace('/alpha-test/input');
+                }
+
+                this.status = dataList[0].status;
+            }
+        },
     }
 </script>
 
