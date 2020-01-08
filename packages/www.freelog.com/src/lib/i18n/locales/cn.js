@@ -27,6 +27,8 @@ export default {
     addPayAccount: '添加支付账号',
     accountWithdraw: '账户提现',
     accountTransfer: '账户转账',
+    accountRecords: '账户交易记录',
+    accountReset: '账户充值密码',
     contract: {
       detail: '合约详情',
       management: '合约管理'
