@@ -20,7 +20,7 @@ export default {
   userAsideNav: {
     title: ['My account','My contract','Information & Account']
   },
-  navTop: ['exit','My freelog'],
+  navTop: ['enter console','logout',],
   pagination: {
     emptyText: 'No data',
     start: 'First Page',

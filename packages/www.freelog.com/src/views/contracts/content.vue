@@ -2,19 +2,19 @@
   <div class="contract-content">
     <div class="contract-content-header">
       <div>
-        <h5>合约状态</h5>
+        <h5>{{$t('contracts.statusText')}}</h5>
         <div class="contract-status" :class="['status-'+contract.status]">{{ resolveStatus(contract.status) }}</div>
       </div>
       <div>
-        <h5>签约时间</h5>
+        <h5>{{$t('contracts.signTime')}}</h5>
         <div>{{contract.createDate | fmtDate('yyyy.MM.dd')}}</div>
       </div>
       <div>
-        <h5>更新时间</h5>
+        <h5>{{$t('contracts.updateTime')}}</h5>
         <div>{{contract.updateDate | fmtDate('yyyy.MM.dd')}}</div>
       </div>
       <div>
-        <h5>合约ID</h5>
+        <h5>{{$t('contracts.id')}}</h5>
         <div>{{contract.contractId}}</div>
       </div>
     </div>
@@ -43,24 +43,25 @@ export default {
 
   methods: {
     resolveStatus(status) {
+      const statusArr = this.$i18n.t('contracts.status')
       let text
       switch (status) {
         case 1:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 2:
-          text = '待执行'
+          text = statusArr[0]
           break
         case 4:
-          text = '授权正常'
+          text = statusArr[1]
           break
         case 3:
         case 5:
         case 6:
-          text = '合同终止'
+          text = statusArr[2]
           break
         default:
-          text = '未知状态'
+          text = statusArr[3]
       }
 
       return text

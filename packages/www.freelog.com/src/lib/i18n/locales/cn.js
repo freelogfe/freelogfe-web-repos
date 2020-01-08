@@ -17,10 +17,25 @@ export default {
     sureBtnText: '确 定',
     cancelBtnText: '取 消',
   },
-  userAsideNav: {
-    title: ['钱包','合同管理','资料与账号']
+  titles: {
+    collections: '我的关注',
+    accounts: '钱包',
+    profile: '资料与账号',
+    createAccount: '创建账户',
+    rechangeAccount: '账户充值',
+    accountsManager: '账号管理',
+    addPayAccount: '添加支付账号',
+    accountWithdraw: '账户提现',
+    accountTransfer: '账户转账',
+    contract: {
+      detail: '合约详情',
+      management: '合约管理'
+    },
   },
-  navTop: ['退出','我的freelog'],
+  userAsideNav: {
+    title: ['钱包','合约管理','资料与账号']
+  },
+  navTop: ['进入console','登出',],
   pagination: {
     emptyText: '暂无数据',
     start: '首页',
@@ -36,7 +51,7 @@ export default {
   },
   toolbar: {
     userTabTitle: '个人中心',
-    contractTabTitle: '合同管理',
+    contractTabTitle: '合约管理',
   },
   company: {
     name: 'freelog',
@@ -49,13 +64,24 @@ export default {
     title: '帮助中心'
   },
   contracts: {
+    status: [ '待执行', '授权正常', '合约终止', '未知状态' ],
     searchType: {
       placeholder: '请选择',
       label: ['节点','资源','资源类型']
     },
+    inputPlaceholder: '合约ID / 合约名称',
+    partyOne: '授权方',
+    partyTwo: '被授权方',
+    content: '合约内容',
+    relevancy: '关联合约',
     tableColumn: ['合约', '被授权方','授权方', '合约状态', '签约时间', '合约详情'],
+    id: '合约ID',
+    signTime: '签约时间',
+    updateTime: '更新时间',
+    statusText: '合约状态',
+    viewBtn: '查看',
     detail: {
-      title: '合同详情'
+      title: '合约详情'
     },
   },
   profile: {
@@ -194,7 +220,7 @@ export default {
     contractStatus: {
       inactive: '不可用',
       active: '可用',
-      termination: '合同终止',
+      termination: '合约终止',
       unknown: '未知状态'
     }
   },
@@ -205,7 +231,7 @@ export default {
       msg: '参数有误'
     },
     notifyNode: {
-      msg: '节点资源合同未生效，已通知节点'
+      msg: '节点资源合约未生效，已通知节点'
     },
   },
 }
