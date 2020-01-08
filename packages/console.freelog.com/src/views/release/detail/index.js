@@ -12,7 +12,7 @@ export default {
     name: "release-detail",
     components: {RichEditor, SchemeManage, ReleaseDependItem, signPolicyList, SignedConfirm, PoliciesCompare},
     mounted() {
-        console.log('@@@@@@@@@@@');
+        // console.log('@@@@@@@@@@@');
     },
     data() {
         return {
