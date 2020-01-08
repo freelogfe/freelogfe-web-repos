@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column :label="$t(`contracts.tableColumn[3]`)" min-width="120">
           <template slot-scope="scope">
-            <span class="contract-status" :class="['status-'+scope.row.status]">{{ resolveStatus(scope.row.status) }}</span>
+            <div class="contract-status" :class="['status-'+scope.row.status]">{{ resolveStatus(scope.row.status) }}</div>
           </template>
         </el-table-column>
         <el-table-column :label="$t(`contracts.tableColumn[4]`)" min-width="145">
@@ -63,7 +63,6 @@
     </fl-pagination>
   </div>
 </template>
-
 
 <script>
 import { mapGetters } from 'vuex'

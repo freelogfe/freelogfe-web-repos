@@ -35,7 +35,7 @@ export default {
     },
   },
   userAsideNav: {
-    title: ['wallet','My contract','Information & Account']
+    title: ['Wallet','My contract','Information & Account']
   },
   navTop: ['enter console','logout',],
   pagination: {

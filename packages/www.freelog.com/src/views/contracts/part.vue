@@ -109,6 +109,7 @@ export default {
       padding-left: 38px; 
       font-size: 14px; color: #000;
       a {
+        display: inline-block;
         margin-left: 10px; padding: 0; font-size: 12px; color: #409EFF;
       }
     }

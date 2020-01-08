@@ -63,10 +63,10 @@
     }
 
     .contract-status {
-      position: relative;
-      height: 16px; margin-right: 5px; padding-left: 15px; 
+      position: relative; word-break: break-word;
+      margin-right: 5px; padding-left: 15px; 
       line-height: 18px; vertical-align: middle; font-size: 14px;
-      transform: scale(.85); color: #333;
+      color: #333;
 
       &::after {
         content: '';
@@ -74,8 +74,7 @@
         width: 10px; height: 10px; border-radius: 5px;
       }
 
-      &.status-1,
-      &.status-2 {
+      &.status-1, &.status-2 {
         &::after { background-color: #F5A623; }
       }
 
@@ -83,9 +82,7 @@
         &::after { background-color: #7ED321; }
       }
 
-      &.status-3,
-      &.status-5,
-      &.status-6 {
+      &.status-3, &.status-5, &.status-6 {
         &::after { background-color: #E36161; }
       }
     }
