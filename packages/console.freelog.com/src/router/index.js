@@ -102,7 +102,8 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('resource.market'),
+                        // title: i18n.t('resource.market'),
+                        title: '示例节点',
                         theme: 'gray',
                         hideFooter: true,
                     },
