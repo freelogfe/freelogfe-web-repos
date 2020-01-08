@@ -7,7 +7,7 @@ export default (Vue, options) => {
         // items = route.matched.map(item => (item.meta && item.meta.title) || item.name || '').filter(v => !!v)
 
         // document.title = items.join(options.separator)
-        console.log(route.matched, 'optionsoptions');
+        // console.log(route.matched, 'optionsoptions');
 
         const title = route.matched[route.matched.length - 1].meta.title;
         document.title = title + ' - Freelog';
