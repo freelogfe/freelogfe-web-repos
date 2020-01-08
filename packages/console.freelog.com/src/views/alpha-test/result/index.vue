@@ -15,13 +15,13 @@
                 手机号发送给你，敬请留意
             </div>
             <div style="height: 40px;"/>
-<!--            <el-button-->
-<!--                type="primary"-->
-<!--                style="width: 100px; border-radius: 2px;"-->
-<!--                @click="submit"-->
-<!--            >知道了-->
-<!--            </el-button>-->
-<!--            <div style="height: 20px;"/>-->
+            <!--            <el-button-->
+            <!--                type="primary"-->
+            <!--                style="width: 100px; border-radius: 2px;"-->
+            <!--                @click="submit"-->
+            <!--            >知道了-->
+            <!--            </el-button>-->
+            <!--            <div style="height: 20px;"/>-->
             <router-link
                 to="/alpha-test/input"
                 style="color: #dca32d; font-size: 12px;"
@@ -37,24 +37,33 @@
             <div style="height: 30px;"/>
             <div style="font-weight: 600; font-size: 18px; color: #333;">内测申请失败</div>
             <div style="height: 30px;"/>
-            <div v-if="false" style="font-weight: 600; font-size: 14px; color: #333;">
+            <div
+                v-if="auditMsg === '链接无法打开'"
+                style="font-weight: 600; font-size: 14px; color: #333;"
+            >
                 经审核，您需要重新提交您常用的创作平台或社区的个人主页网址。<br/>
-                “[链接]”无法打开。
+                “{{description}}”无法打开。
             </div>
-            <div v-if="false" style="font-weight: 600; font-size: 14px; color: #333;">
+            <div
+                v-if="auditMsg === '公众号ID不存在'"
+                style="font-weight: 600; font-size: 14px; color: #333;"
+            >
                 经审核，您需要重新提交您的微信公众号ID。<br/>
-                “[公众号ID]”不存在。
+                “{{description}}”不存在。
             </div>
-            <div v-if="true" style="font-weight: 600; font-size: 14px; color: #333;">
-                经审核，您需要重新提交申请信息。
-            </div>
-            <div style="height: 20px;"/>
-            <div style="font-size: 14px; color: #666;">这里是违规问题描述这里是违规问题描述这里是违规问题描述这里是违规问题描述这里是违规问题描述这里是违规问题描述这里是</div>
+            <template v-if="auditMsg !== '链接无法打开' && auditMsg !== '公众号ID不存在'">
+                <div style="font-weight: 600; font-size: 14px; color: #333;">
+                    经审核，您需要重新提交申请信息。
+                </div>
+                <div style="height: 20px;"/>
+                <div style="font-size: 14px; color: #666;">{{auditMsg}}
+                </div>
+            </template>
             <div style="height: 30px;"/>
             <el-button
                 type="primary"
                 style="width: 100px; border-radius: 2px;"
-                @click="submit"
+                @click="$router.push('/alpha-test/apply')"
             >重新提交
             </el-button>
             <div style="height: 20px;"/>
@@ -76,6 +85,8 @@
                     height: (window.innerHeight - 160) + 'px',
                 },
                 status: -1,
+                auditMsg: '',
+                description: '',
             }
         },
         mounted() {
@@ -104,6 +115,8 @@
                 }
 
                 this.status = dataList[0].status;
+                this.auditMsg = dataList[0].auditMsg;
+                this.description = dataList[0].description;
             }
         },
     }
