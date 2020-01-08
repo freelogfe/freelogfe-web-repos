@@ -114,6 +114,7 @@
 <script>
     import ToolSearch from './ToolSearch';
     import ResourceSearch from '@/views/resource/search/search.vue'
+    import {getUserInfoFromLocalStorage} from "../../../../lib/utils";
 
     export default {
         name: "index",
@@ -125,7 +126,7 @@
             return {
                 resourceDialogVisible: false,
                 userInfo: null,
-                userType: JSON.parse(window.localStorage.getItem('user_session')).userType,
+                userType: (getUserInfoFromLocalStorage() || {userType: 0}).userType,
             };
         },
         mounted() {

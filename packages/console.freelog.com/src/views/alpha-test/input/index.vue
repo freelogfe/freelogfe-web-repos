@@ -71,9 +71,9 @@
                 }
 
                 const dataList = data.data.dataList;
-                if (dataList.length === 0) {
-                    return this.$router.replace('/alpha-test/input');
-                }
+                // if (dataList.length === 0) {
+                //     return this.$router.replace('/alpha-test/input');
+                // }
 
                 this.status = dataList[0] ? dataList[0].status : 0;
             },

@@ -15,6 +15,7 @@ import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
 import i18n from '../lib/i18n'
+import {getUserInfoFromLocalStorage} from "../lib/utils";
 
 Vue.use(Router)
 
@@ -161,14 +162,14 @@ router.beforeEach((to, from, next) => {
         return next();
     }
 
-    if (!to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType !== 1) {
+    if (!to.path.startsWith('/alpha-test') && (getUserInfoFromLocalStorage() || {userType: 0}).userType !== 1) {
         return next({
             path: '/alpha-test',
             replace: true,
         });
     }
 
-    if (to.path.startsWith('/alpha-test') && JSON.parse(window.localStorage.getItem('user_session')).userType === 1) {
+    if (to.path.startsWith('/alpha-test') && (getUserInfoFromLocalStorage() || {userType: 0}).userType === 1) {
         return next({
             path: '/',
             replace: true,
