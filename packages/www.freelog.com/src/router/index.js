@@ -73,7 +73,7 @@ const routerConfig = {
         path: 'records',
         name: 'accountRecords',
         meta: {
-          title: '账户交易记录'
+          title: i18n.t('titles.accountRecords')
         },
         component: AccountTransactionRecordsView
       }, {
@@ -96,7 +96,7 @@ const routerConfig = {
         path: 'reset',
         name: 'accountReset',
         meta: {
-          title: '账户充值密码'
+          title: i18n.t('titles.accountReset')
         },
         component: AccountResetPayPasswordView
       }, {
