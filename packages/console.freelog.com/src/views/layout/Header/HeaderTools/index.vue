@@ -68,10 +68,10 @@
                     </div>
                     <a @click="gotoUserProfile">个人中心</a>
                     <a @click="logout">登出</a>
-<!--                    <router-link-->
-<!--                        :to="'/login'"-->
-<!--                    >登出-->
-<!--                    </router-link>-->
+                    <!--                    <router-link-->
+                    <!--                        :to="'/login'"-->
+                    <!--                    >登出-->
+                    <!--                    </router-link>-->
                 </div>
             </a>
         </div>
@@ -157,6 +157,7 @@
                 this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
                     .then(() => {
                         window.localStorage.setItem('locale', lang);
+                        document.cookie = 'locale=' + lang + '; path=/; domain=testfreelog.com';
                         this.$i18n.locale = lang;
                         window.location.reload();
                     }).catch(() => {

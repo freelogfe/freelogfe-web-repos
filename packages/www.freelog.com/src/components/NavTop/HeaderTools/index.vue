@@ -55,7 +55,7 @@
     export default {
         name: "index",
         components: {
-            
+
         },
         data() {
             return {
@@ -89,6 +89,7 @@
                 this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
                     .then(() => {
                         window.localStorage.setItem('locale', lang);
+                        document.cookie = 'locale=' + lang;
                         this.$i18n.locale = lang;
                         window.location.reload();
                     }).catch(() => {
