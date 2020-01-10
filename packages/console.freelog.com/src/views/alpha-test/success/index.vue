@@ -14,7 +14,7 @@
             <el-button
                 type="primary"
                 @click="gotoUserCenter"
-            >返回个人中心
+            >进入个人中心
             </el-button>
         </div>
     </div>

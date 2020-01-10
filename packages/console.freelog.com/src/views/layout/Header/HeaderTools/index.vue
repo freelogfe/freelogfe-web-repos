@@ -58,6 +58,7 @@
                         <img
                             :src="userInfo && userInfo.headImage"
                             style="height: 60px; width: 60px; border-radius: 50%;"
+                            alt=""
                         />
                         <div style="height: 10px;"/>
                         <div style="color: #999; font-size: 16px; font-weight: 600;">{{userInfo && userInfo.username}}
@@ -66,10 +67,11 @@
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
                     <a @click="gotoUserProfile">个人中心</a>
-                    <router-link
-                        :to="'/login'"
-                    >登出
-                    </router-link>
+                    <a @click="logout">登出</a>
+                    <!--                    <router-link-->
+                    <!--                        :to="'/login'"-->
+                    <!--                    >登出-->
+                    <!--                    </router-link>-->
                 </div>
             </a>
         </div>
@@ -114,6 +116,7 @@
 <script>
     import ToolSearch from './ToolSearch';
     import ResourceSearch from '@/views/resource/search/search.vue'
+    import {getUserInfoFromLocalStorage} from "../../../../lib/utils";
 
     export default {
         name: "index",
@@ -125,7 +128,7 @@
             return {
                 resourceDialogVisible: false,
                 userInfo: null,
-                userType: JSON.parse(window.localStorage.getItem('user_session')).userType,
+                userType: (getUserInfoFromLocalStorage() || {userType: 0}).userType,
             };
         },
         mounted() {
@@ -154,6 +157,7 @@
                 this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
                     .then(() => {
                         window.localStorage.setItem('locale', lang);
+                        document.cookie = 'locale=' + lang + '; path=/; domain=testfreelog.com';
                         this.$i18n.locale = lang;
                         window.location.reload();
                     }).catch(() => {
@@ -164,6 +168,16 @@
                 // this.$router.
                 window.open(`/release/create?resourceId=${resource.resourceId}`);
             },
+            async logout() {
+                const {data} = await this.$axios.get('/v1/passport/logout');
+                console.log(data, 'DDDDDDDDD');
+                if (data.ret !== 0 || data.errcode !== 0) {
+                    return this.$message.error(data.msg);
+                }
+                window.localStorage.removeItem('user_session');
+                // if (data)
+                this.$router.push('/login');
+            }
         }
     }
 </script>
