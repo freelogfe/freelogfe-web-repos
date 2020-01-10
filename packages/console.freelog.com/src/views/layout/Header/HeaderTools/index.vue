@@ -157,7 +157,7 @@
                 this.$confirm(this.$t('header.langSwitchQuestion', {lang: langMap[lang]}))
                     .then(() => {
                         window.localStorage.setItem('locale', lang);
-                        document.cookie = 'locale=' + lang + '; path=/; domain=testfreelog.com';
+                        document.cookie = 'locale=' + lang + `; path=/; domain=${window.origin.split('.').slice(-2).join('.')}`;
                         this.$i18n.locale = lang;
                         window.location.reload();
                     }).catch(() => {
@@ -170,7 +170,7 @@
             },
             async logout() {
                 const {data} = await this.$axios.get('/v1/passport/logout');
-                console.log(data, 'DDDDDDDDD');
+                // console.log(data, 'DDDDDDDDD');
                 if (data.ret !== 0 || data.errcode !== 0) {
                     return this.$message.error(data.msg);
                 }
