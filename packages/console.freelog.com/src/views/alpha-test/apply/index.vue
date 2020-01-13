@@ -8,7 +8,9 @@
         </ContentBlock>
         <div style="height: 30px;"/>
         <ContentBlock title="申请结果通知方式">
-            <div style="font-size: 14px; font-weight: 600; color: #000;">{{userInfo && (userInfo.mobile || userInfo.email)}}</div>
+            <div style="font-size: 14px; font-weight: 600; color: #000;">{{userInfo && (userInfo.mobile ||
+                userInfo.email)}}
+            </div>
         </ContentBlock>
         <div style="height: 30px;"/>
         <ContentBlock
@@ -116,7 +118,7 @@
                 if (data.ret !== 0 || data.errcode !== 0) {
                     return this.$message.error(data.msg);
                 }
-
+                window.sessionStorage.setItem('alpha-test', 'success');
                 this.$router.replace('/alpha-test/success');
             }
         },

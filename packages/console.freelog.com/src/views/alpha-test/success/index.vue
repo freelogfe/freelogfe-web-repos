@@ -23,6 +23,12 @@
 <script>
     export default {
         name: "index",
+        mounted() {
+            if (window.sessionStorage.getItem('alpha-test') !== 'success') {
+                this.$router.replace('/alpha-test/result');
+            }
+            window.sessionStorage.removeItem('alpha-test');
+        },
         methods: {
             gotoUserCenter() {
                 window.location.href = window.location.origin.replace('//console.', '//www.') + '/user/profile';
