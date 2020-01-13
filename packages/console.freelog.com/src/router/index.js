@@ -16,6 +16,7 @@ import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
 import i18n from '../lib/i18n'
 import {getUserInfoFromLocalStorage} from "../lib/utils";
+// import i18n from '@/lib/i18n'
 
 Vue.use(Router)
 
@@ -157,6 +158,14 @@ export default router
 router.beforeEach((to, from, next) => {
     // ...
     // console.log(to, from, 'to, from');
+    const cookieLocale = document.cookie.split(';').map(i => i.trim()).find(i => i.startsWith('locale='));
+
+    let localeCookie = '';
+
+    if (cookieLocale){
+        localeCookie = cookieLocale.replace('locale=', '');
+        i18n.locale = localeCookie;
+    }
 
     if (to.path === '/login' || to.path === '/signup') {
         return next();
