@@ -81,11 +81,10 @@
 </template>
 
 <script>
-    import ContentBlock from "./ContentBlock";
+    import ContentBlock from './ContentBlock';
     import region from './region';
 
     export default {
-        name: "index",
         components: {
             ContentBlock
         },
