@@ -14,7 +14,7 @@ import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {
     name: 'editor',
-    i18n,
+    // i18n,
 
     components: {
         SmallTitle,

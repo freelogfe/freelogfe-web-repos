@@ -22,16 +22,16 @@
 
         <HeaderAlert/>
 
-        <BlockBody :tilte="$t('resourceUpload')">
+        <BlockBody :tilte="$t('mock.resourceUpload')">
 
-            <SmallTitle>{{$t('resourceType')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceType')}}</SmallTitle>
 
             <div class="mock-editor__type">
                 <el-select
                     class="mock-editor__type__select"
                     v-model="resourceType"
                     @change="onChangeResourceType"
-                    :placeholder="$t('resourceType')"
+                    :placeholder="$t('mock.resourceType')"
                     allow-create
                     filterable
                     :disabled="!!this.uploadFileInfo.name"
@@ -51,11 +51,11 @@
                     :class="{shake: resourceTypeTip}"
                 >
                     <small>•</small>
-                    {{$t('beforeUpload')}}
+                    {{$t('mock.beforeUpload')}}
                 </div>
             </div>
 
-            <SmallTitle>{{$t('resourceFile')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceFile')}}</SmallTitle>
 
             <div class="mock-editor__upload">
                 <UploadFile
@@ -66,7 +66,7 @@
                 />
             </div>
 
-            <SmallTitle>{{$t('resourceName')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceName')}}</SmallTitle>
 
             <div class="mock-editor__name">
                 <el-input
@@ -74,7 +74,7 @@
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
-                    :placeholder="$t('enterResourceName')"
+                    :placeholder="$t('mock.enterResourceName')"
                     class="mock-editor__name__input"
                 />
 
@@ -86,7 +86,7 @@
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody :tilte="$t('dependency')">
+        <BlockBody :tilte="$t('mock.dependency')">
             <DependentReleaseList
                 :dataSource="depList"
                 :mockDataSource="depMockList"
@@ -97,7 +97,7 @@
             />
         </BlockBody>
 
-        <BlockBody :tilte="$t('description')">
+        <BlockBody :tilte="$t('mock.description')">
             <!--            ref="editor"-->
             <!--             v-model="formData.description"-->
             <!--            :config="editorConfig"-->
@@ -105,7 +105,7 @@
             <RichEditor
                 class="mock-editor__description"
                 width="100%"
-                :placeholder="$t('enterDescription')"
+                :placeholder="$t('mock.enterDescription')"
                 v-model="description"
             >
             </RichEditor>
@@ -118,17 +118,17 @@
                 class="mock-editor__meta__button"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus"/> {{$t('addMeta')}}
+            ><i class="el-icon-plus"/> {{$t('mock.addMeta')}}
             </el-button>
         </div>
 
         <BlockBody
             v-if="visibleMetaInput"
-            :tilte="$t('metaInfo')">
+            :tilte="$t('mock.metaInfo')">
             <!-- meta 输入框 -->
             <!--            v-model="meta"-->
             <!--            @validate="checkMetaValid"-->
-            <!--            :placeholder="$t('resourceEditView.inputMetaTip')"-->
+            <!--            :placeholder="$t('mock.resourceEditView.inputMetaTip')"-->
             <div style="padding: 20px;">
                 <div class="mock-editor__meta__input">
                     <MetaInfoInput
@@ -151,14 +151,14 @@
                     class="mock-editor__footer__box__cancel"
                     type="text"
                     @click="goBack"
-                >{{isUpdateResource ? $t('cancel'): $t('cancelCreating')}}
+                >{{isUpdateResource ? $t('mock.cancel'): $t('mock.cancelCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     type="primary"
                     @click="submit"
-                >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
+                >{{isUpdateResource ? $t('mock.save'): $t('mock.completeCreating')}}
                 </el-button>
             </div>
         </div>
