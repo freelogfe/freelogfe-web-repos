@@ -14,8 +14,8 @@ import mockRoute from './mock'
 import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
-import i18n from '../lib/i18n'
-import {getUserInfoFromLocalStorage} from "../lib/utils";
+import i18n from '@/lib/i18n'
+import {getCookieLocale, getUserInfoFromLocalStorage} from "../lib/utils";
 // import i18n from '@/lib/i18n'
 
 Vue.use(Router)
@@ -158,14 +158,17 @@ export default router
 router.beforeEach((to, from, next) => {
     // ...
     // console.log(to, from, 'to, from');
-    const cookieLocale = document.cookie.split(';').map(i => i.trim()).find(i => i.startsWith('locale='));
+    // const cookieLocale = document.cookie.split(';').map(i => i.trim()).find(i => i.startsWith('locale='));
 
-    let localeCookie = '';
+    // let localeCookie = '';
 
-    if (cookieLocale){
-        localeCookie = cookieLocale.replace('locale=', '');
-        i18n.locale = localeCookie;
-    }
+    // const locale = getCookieLocale();
+
+    // if (cookieLocale){
+    // if (locale){
+        // localeCookie = cookieLocale.replace('locale=', '');
+        // i18n.locale = locale;
+    // }
 
     if (to.path === '/login' || to.path === '/signup') {
         return next();

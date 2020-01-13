@@ -116,7 +116,7 @@
 <script>
     import ToolSearch from './ToolSearch';
     import ResourceSearch from '@/views/resource/search/search.vue'
-    import {getUserInfoFromLocalStorage} from "../../../../lib/utils";
+    import {getCookieLocale, getUserInfoFromLocalStorage} from '@/lib/utils';
 
     export default {
         name: "index",
@@ -132,9 +132,41 @@
             };
         },
         mounted() {
+            this.listenWindowVisibility();
             this.handleUserInfo();
         },
         methods: {
+            /**
+             * 监听窗口激活事件
+             */
+            listenWindowVisibility() {
+                // 不同浏览器 hidden 名称
+                const hiddenProperty = 'hidden' in document ? 'hidden' :
+                    'webkitHidden' in document ? 'webkitHidden' :
+                        'mozHidden' in document ? 'mozHidden' :
+                            null;
+                // console.log(hiddenProperty, 'hiddenPropertyhiddenProperty');
+                // 不同浏览器的事件名
+                const visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
+                const onVisibilityChange = () => {
+                    // console.log('111111');
+                    if (document[hiddenProperty]) {
+                        // 窗口隐藏
+                        // console.log(Date(), 'hidden');
+                    } else {
+                        // 窗口可见
+                        // console.log(Date(), 'visible');
+                        // this.handleTableData();
+                        // if ($i18n.locale === 'zh-CN')
+                        // console.log('@#@#@#@#@#@#@');
+                        const locale = getCookieLocale();
+                        if (locale && locale !== this.$i18n.locale) {
+                            window.location.reload();
+                        }
+                    }
+                };
+                document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+            },
             onSearch(value) {
                 // console.log(value, 'VVVVVVV');
                 this.$router.push({path: '/', query: {q: value}})

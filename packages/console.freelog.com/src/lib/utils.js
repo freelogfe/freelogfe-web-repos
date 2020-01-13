@@ -178,6 +178,18 @@ export const getUserInfoFromLocalStorage = () => {
     return null;
 };
 
+/**
+ * 获取 cookie 中的 locale
+ * @returns {string|null}
+ */
+export const getCookieLocale = () => {
+    const locale = document.cookie.split(';').map(i => i.trim()).find(i => i.startsWith('locale='));
+    if (!locale) {
+        return null;
+    }
+    return locale.replace('locale=', '');
+};
+
 export {
     createLoader,
     createCacheLoaders,
