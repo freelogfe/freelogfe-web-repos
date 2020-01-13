@@ -26,7 +26,7 @@
             class="header-menu__nav"
             :class="{'header-menu__nav--active': ['/mock/display'].includes($route.path)}"
         >
-            <span>储存空间</span>
+            <span>存储空间</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <template v-if="buckets && buckets.length > 0">
                     <div class="header-menu__menu">
