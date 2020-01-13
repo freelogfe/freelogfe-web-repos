@@ -12,7 +12,7 @@
             <div class="mock-list__buckets__title">
                 <div class="mock-list__buckets__title__content">
                     <div>
-                        <span>Bucket{{$t('list')}}</span>
+                        <span>Bucket{{$t('mock.list')}}</span>
                         <span style="padding-left: 10px;">{{(bucketsList || []).length}}/5</span>
                     </div>
                     <el-button
@@ -48,14 +48,14 @@
                 v-if="bucketsList && bucketsList.length === 0"
             >
                 <div class="mock-list__mocks_empty__content">
-                    <h3>{{$t('startingFromFreelog')}}</h3>
+                    <h3>{{$t('mock.startingFromFreelog')}}</h3>
                     <div style="height: 60px;"></div>
-                    <p>{{$t('freelogMockResourcePool')}}</p>
+                    <p>{{$t('mock.freelogMockResourcePool')}}</p>
                     <div style="height: 60px;"></div>
                     <el-button
                         @click="dialogVisible=true"
                         type="primary"
-                    >{{$t('createBucket')}}
+                    >{{$t('mock.createBucket')}}
                     </el-button>
                 </div>
             </div>
@@ -68,11 +68,11 @@
             >
                 <div class="mock-list__mocks_non-empty__header">
                     <div class="mock-list__mocks_non-empty__header__info">
-                        <div>{{$t('mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
-                        <div>{{$t('creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
+                        <div>{{$t('mock.mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
+                        <div>{{$t('mock.creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
                         </div>
                         <div>
-                            {{$t('used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
+                            {{$t('mock.used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
                             <el-progress
                                 :percentage="Math.floor(activatedBucket.totalFileSize / 2147483648 * 100) / 100"
                                 :show-text="false"
@@ -89,7 +89,7 @@
                         <template v-if="mockTableData && mockTableData.length === 0">
                             <div style="height: 30px;"></div>
                             <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('confirmDeletion')}}</p>
+                                {{$t('mock.confirmDeletion')}}</p>
                             <div style="height: 25px;"></div>
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <el-button
@@ -97,13 +97,13 @@
                                     type="text"
                                     style="padding-left: 20px; padding-right: 20px; color: #999;"
                                     @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('cancel')}}
+                                >{{$t('mock.cancel')}}
                                 </el-button>
                                 <el-button
                                     type="danger"
                                     size="small"
                                     @click="removeABucketByAPI"
-                                >{{$t('confirm')}}
+                                >{{$t('mock.confirm')}}
                                 </el-button>
                             </div>
                             <div style="height: 8px;"></div>
@@ -111,7 +111,7 @@
                         <template v-if="mockTableData && mockTableData.length > 0">
                             <div style="height: 30px;"></div>
                             <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('doesNotRemove')}}</p>
+                                {{$t('mock.doesNotRemove')}}</p>
                             <div style="height: 25px;"></div>
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <el-button
@@ -119,7 +119,7 @@
                                     type="primary"
                                     plain
                                     @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('confirm')}}
+                                >{{$t('mock.confirm')}}
                                 </el-button>
                             </div>
                             <div style="height: 8px;"></div>
@@ -132,7 +132,7 @@
                             size="small"
                             icon="el-icon-delete"
                             style="border-radius: 2px;"
-                        >{{$t('deleteBucket')}}
+                        >{{$t('mock.deleteBucket')}}
                         </el-button>
                     </el-popover>
 
@@ -145,7 +145,7 @@
                         target="_blank"
                     >
                         <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                            {{$t('createMock')}}
+                            {{$t('mock.createMock')}}
                         </el-button>
                     </router-link>
                 </div>
@@ -155,7 +155,7 @@
                         v-if="mockTableData && mockTableData.length === 0"
                         class="mock-list__mocks_non-empty__body_null"
                     >
-                        <p>{{$t('notCreatedAnyMock')}}</p>
+                        <p>{{$t('mock.notCreatedAnyMock')}}</p>
                     </div>
 
                     <!--                    v-if="mockTableData && mockTableData.length > 0"-->
@@ -188,12 +188,12 @@
                             </el-table-column>
                             <el-table-column
                                 prop="name"
-                                :label="$t('table.name')"
+                                :label="$t('mock.table.name')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="type"
-                                :label="$t('table.type')"
+                                :label="$t('mock.table.type')"
                                 min-width="180">
                                 <template slot-scope="scope">
                                     {{scope.row.type | pageBuildFilter}}
@@ -201,17 +201,17 @@
                             </el-table-column>
                             <el-table-column
                                 prop="size"
-                                :label="$t('table.size')"
+                                :label="$t('mock.table.size')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="date"
-                                :label="$t('table.date')"
+                                :label="$t('mock.table.date')"
                                 min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="action"
-                                :label="$t('table.action')"
+                                :label="$t('mock.table.action')"
                                 width="70"
                             >
                                 <template slot-scope="scope">
@@ -232,26 +232,26 @@
                                                 >
                                                     <a
                                                         style="display: block; width: 100%; height: 100%; color: #333;"
-                                                    >{{$t('edit')}}</a>
+                                                    >{{$t('mock.edit')}}</a>
                                                 </router-link>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="downloadAMockByAPI(scope.row.mockResourceId)"
                                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                                >{{$t('downloadResourceFile')}}</a>
+                                                >{{$t('mock.downloadResourceFile')}}</a>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="buildFormalResourcesConfirm(scope.row)"
                                                     style="display: block; width: 100%; height: 100%; color: #333;"
-                                                >{{$t('generateFormalResources')}}</a>
+                                                >{{$t('mock.generateFormalResources')}}</a>
                                             </el-dropdown-item>
                                             <el-dropdown-item>
                                                 <a
                                                     @click="showDeleteMockDialog(scope.row.mockResourceId)"
                                                     style="color: #EE4040; display: block; width: 100%; height: 100%;"
-                                                >{{$t('delete')}}</a>
+                                                >{{$t('mock.delete')}}</a>
                                             </el-dropdown-item>
                                         </el-dropdown-menu>
                                     </el-dropdown>
@@ -359,7 +359,7 @@
             >
                 <div style="height: 10px;"></div>
                 <div style="color: #333; font-size: 14px; text-align: center; word-break: normal;">
-                    {{$t('mockOnceDeleted')}}
+                    {{$t('mock.mockOnceDeleted')}}
                 </div>
                 <div style="height: 26px;"></div>
                 <div style="text-align: center;">
@@ -367,12 +367,12 @@
                         type="text"
                         style="padding: 0 20px; color: #999;"
                         @click="hideDeleteMockDialog"
-                    >{{$t('cancel')}}
+                    >{{$t('mock.cancel')}}
                     </el-button>
                     <el-button
                         type="danger"
                         @click="deleteAMock"
-                    >{{$t('confirm')}}
+                    >{{$t('mock.confirm')}}
                     </el-button>
                 </div>
             </el-dialog>

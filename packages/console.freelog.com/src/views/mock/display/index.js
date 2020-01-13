@@ -5,7 +5,7 @@ import i18n from './i18n';
 import {mapGetters} from "vuex";
 
 export default {
-    i18n,
+    // i18n,
     components: {
         CreateBucketDialog,
     },

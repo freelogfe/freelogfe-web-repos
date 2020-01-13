@@ -1,4 +1,3 @@
-
 export default {
     common: {
         login: '登录',
@@ -511,5 +510,49 @@ export default {
     helpView: {
         title: '帮助中心'
     },
+
+    //
+    mock: {
+        list: '列表',
+        startingFromFreelog: '自由创作从Freelog开始',
+        freelogMockResourcePool: '在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。',
+        createBucket: '创建Bucket',
+        mockQuantity: 'mock资源数量',
+        creationTime: '创建时间',
+        used: '已使用',
+        deleteBucket: '删除Bucket',
+        confirm: '确定',
+        cancel: '取消',
+        confirmDeletion: '存储空间一旦删除则无法恢复，确认删除吗？',
+        successfullyDeleted: '删除成功',
+        doesNotRemove: '该存储空间内还有未删除模拟资源',
+        createMock: '创建mock资源',
+        notCreatedAnyMock: '您还没有创建任何mock资源',
+        table: {
+            name: '名称',
+            type: '类型',
+            size: '大小',
+            date: '创建时间',
+            action: '操作',
+        },
+        edit: '编辑',
+        downloadResourceFile: '下载资源文件',
+        generateFormalResources: '生成正式资源',
+        delete: '删除',
+        // newBucket: '新建Bucket',
+        // createdMayNotBeModified: '请注意存储空间的名称一但创建则不可修改',
+        // provide2GBStorage: 'Freelog为每个用户提供2GB的免费存储空间',
+        // bucketName: 'Bucket名称',
+        // includeOnly: '只能包括小写字母、数字和短横线（-）；',
+        // startAndEnd: '必须以小写字母或者数字开头和结尾；',
+        // between1To63Characters: '长度必须在 1–63 字符之间。',
+        successfullyCreated: '创建成功',
+        mockOnceDeleted: '模拟资源一旦删除则无法恢复，确认删除吗？',
+        invalidRelease :'资源依赖存在无效发行：模拟资资源。',
+        resourceAlreadyExists: '该资源已存在，不能重复创建。',
+        formalResource: '确认是否生成正式资源',
+        prompt: '提示',
+        generateSuccess: '生成正式资源成功',
+    }
 
 }
