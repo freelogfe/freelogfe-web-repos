@@ -74,7 +74,8 @@ export default {
         version: 'version',
         status: 'resource status',
         author: 'author',
-        createDate: 'creation date'
+        createDate: 'creation date',
+
     },
 
     release: {
@@ -198,6 +199,26 @@ export default {
         presentableName: 'Name',
         displayVersion: 'Version',
         authorizationPolicy: 'Policies',
+
+        // test-management
+        inNodeManagement: 'In node management',
+        mappingRulesManagement: 'Mapping rules management',
+        addTestPresentable: 'Add test Presentable',
+        replaceRelyOn: 'Replace rely on',
+        replace: 'Replace',
+        selectReplacingResource: 'Select replacing resource',
+        myRelease: 'My Release',
+        myMock: 'My Mock',
+        releaseMarket: 'Release Market',
+        versionRange: 'Versions',
+        selectedVersion: 'Selected Version',
+        pleaseSelect: 'Please Select',
+        customer: 'Customer',
+        enterSemverVersionRange: 'Enter semver version range',
+        confirm: 'Confirm',
+        content: 'Content',
+        selectReplacedResource: 'Select replaced resource',
+        allVersions: 'All Versions',
     },
 
     presentable: {

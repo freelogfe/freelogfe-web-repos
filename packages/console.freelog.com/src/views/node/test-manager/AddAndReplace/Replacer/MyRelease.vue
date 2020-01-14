@@ -9,9 +9,9 @@
                 size="small"
                 style="display: block;"
                 v-model="input"
-                placeholder="请输入内容"
+                :placeholder="$t('node.content')"
             >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <i slot="prefix" class="el-input__icon el-icon-search"/>
                 <!--                        <i-->
                 <!--                            style="cursor: pointer"-->
                 <!--                            @click="filterSearch = ''"-->

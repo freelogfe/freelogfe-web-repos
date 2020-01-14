@@ -1,6 +1,6 @@
 <template>
     <div style="width: 384px;">
-        <div style="font-size: 14px; color: #333;">选择替换资源</div>
+        <div style="font-size: 14px; color: #333;">{{$t('node.selectReplacingResource')}}</div>
         <div style="height: 5px;"></div>
         <div style="border: 1px solid #c8c8c8; border-radius: 2px; overflow: hidden;">
             <div
@@ -11,21 +11,21 @@
                     // fontWeight: activeTab==='myRelease' ? 600 : 400,
                     color: activeTab==='myRelease' ? '#409eff': '#333', borderBottom: activeTab==='myRelease' ? '2px solid #378fea': 'none'}"
                     @click="activeTab = 'myRelease'"
-                >我的发行</a>
+                >{{$t('node.myRelease')}}</a>
                 <a
                     style="padding: 10px 0; margin-left: 20px; cursor: pointer;"
                     :style="{
                     // fontWeight: activeTab==='mock' ? 600 : 400,
                      color: activeTab==='mock' ? '#409eff': '#333', borderBottom: activeTab==='mock' ? '2px solid #378fea': 'none'}"
                     @click="activeTab = 'mock'"
-                >我的mock</a>
+                >{{$t('node.myMock')}}</a>
                 <a
                     style="padding: 10px 0; margin-left: 20px; cursor: pointer;"
                     :style="{
                     // fontWeight: activeTab==='release' ? 600 : 400,
                     color: activeTab==='release' ? '#409eff': '#333', borderBottom: activeTab==='release' ? '2px solid #378fea': 'none'}"
                     @click="activeTab = 'release'"
-                >发行市场</a>
+                >{{$t('node.releaseMarket')}}</a>
             </div>
             <div style="height: 380px;">
 

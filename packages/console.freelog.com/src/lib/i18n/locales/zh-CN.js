@@ -200,6 +200,26 @@ export default {
         presentableName: '展品名称',
         displayVersion: '展示版本',
         authorizationPolicy: '授权策略',
+
+        // test-management
+        inNodeManagement: '进入节点管理',
+        mappingRulesManagement: '映射规则管理',
+        addTestPresentable: '新增测试展品',
+        replaceRelyOn: '替换依赖',
+        replace: '替换',
+        selectReplacingResource: '选择替换资源',
+        myRelease: '我的发行',
+        myMock: '我的mock',
+        releaseMarket: '发行市场',
+        versionRange: '版本范围',
+        selectedVersion: '选定版本',
+        pleaseSelect: '请选择',
+        customer: '自定义',
+        enterSemverVersionRange: '输入semver版本范围',
+        confirm: '确定',
+        content: '请输入内容',
+        selectReplacedResource: '选择被替换资源',
+        allVersions: '全部版本',
     },
 
     presentable: {

@@ -24,9 +24,9 @@ export default {
                 name: '',
             },
             tabList: [
-                { name: '展品管理', tab: 'ReleaseList' },
-                { name: '主题管理', tab: 'StylePage' },
-                { name: '映射规则管理', tab: 'MappingRules' },
+                { name: this.$t('node.presentableManagement'), tab: 'ReleaseList' },
+                { name: this.$t('node.nodePageStyle'), tab: 'StylePage' },
+                { name: this.$t('node.mappingRulesManagement'), tab: 'MappingRules' },
             ]
         };
     },

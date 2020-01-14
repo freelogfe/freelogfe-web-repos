@@ -5,7 +5,7 @@
             @click="dialogVisible = true"
         >
             <i class="el-icon-plus" style="font-size: 16px; font-weight: 600;"/>
-            <span style="vertical-align: center;">新增测试展品</span>
+            <span style="vertical-align: center;">{{$t('node.addTestPresentable')}}</span>
         </a>
 
         <a
@@ -13,7 +13,7 @@
             style="color: #333; font-size: 14px; padding: 10px; cursor: pointer;"
         >
             <i class="el-icon-refresh" style="font-size: 16px; font-weight: 600;"/>
-            <span style="vertical-align: center;">替换依赖</span>
+            <span style="vertical-align: center;">{{$t('node.replaceRelyOn')}}</span>
         </a>
 
         <DepDialog
@@ -61,14 +61,14 @@
                         style="font-size: 14px;"
                         @click="confirmReplace"
                         :disabled="!replacer || !replaced"
-                    >替换
+                    >{{$t('node.replace')}}
                     </el-button>
                     <el-button
                         type="text"
                         size="mini"
                         style="font-size: 14px; padding: 0 20px; color: #999;"
                         @click="elDialogVisible = false"
-                    >取消
+                    >{{$t('node.cancel')}}
                     </el-button>
                 </div>
             </div>

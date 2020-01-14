@@ -1,6 +1,6 @@
 <template>
     <div style="width: 384px;">
-        <div style="font-size: 14px; color: #333;">选择被替换资源</div>
+        <div style="font-size: 14px; color: #333;">{{$t('node.selectReplacedResource')}}</div>
         <div style="height: 5px;"></div>
 
         <div style="border: 1px solid #c8c8c8; border-radius: 2px; overflow: hidden;">
@@ -11,7 +11,7 @@
                     v-model="filterSearch"
                     style="width: 80%;"
                     :fetch-suggestions="querySearchAsync"
-                    placeholder="请输入内容"
+                    :placeholder="$t('node.content')"
                     :trigger-on-focus="false"
                     @select="handleSelect"
                 >

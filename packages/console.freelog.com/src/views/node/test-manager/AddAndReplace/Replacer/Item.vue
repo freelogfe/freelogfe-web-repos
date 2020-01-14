@@ -8,7 +8,7 @@
         </div>
         <div
             style="padding-left: 25px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="font-size: 12px; color: #333;">{{type}} {{version ? '| v' + version: ''}} | {{date}}</div>
+            <div style="font-size: 12px; color: #333;">{{type | pageBuildFilter}} {{version ? '| v' + version: ''}} | {{date}}</div>
 
             <!--            :value="popoverShow"-->
             <!--            @show="popoverShow = true"-->
@@ -24,16 +24,16 @@
                     style="font-size: 12px; display: flex; align-items: center; cursor: pointer;"
                     slot="reference"
                 >
-                    <span>版本范围</span>
-                    <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"></i>
+                    <span>{{$t('node.versionRange')}}</span>
+                    <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"/>
                 </a>
 
                 <div style="width: 100%; overflow: hidden;">
                     <div style="display: flex; align-items: center;">
                         <Radio :selected="!customer" @click="customer=false"/>
-                        <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
+                        <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('node.selectedVersion')}}</span>
                         <el-select
-                            placeholder="请选择"
+                            :placeholder="$t('node.pleaseSelect')"
                             size="mini"
                             style="width: 100px;"
                             v-model="selectedVersion"
@@ -43,22 +43,22 @@
                                 v-for="v in versions"
                                 :label="v"
                                 :value="v"
-                            ></el-option>
+                            />
                         </el-select>
                     </div>
                     <div style="height: 10px;"></div>
                     <div>
                         <div style="display: flex; align-items: center;">
                             <Radio :selected="customer" @click="customer=true"/>
-                            <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
+                            <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('node.customer')}}</span>
                         </div>
                         <div v-show="customer">
                             <div style="height: 5px;"></div>
                             <el-input
                                 v-model="inputVersion"
-                                placeholder="输入semver版本范围"
+                                :placeholder="$t('node.enterSemverVersionRange')"
                                 style="display: block;"
-                            ></el-input>
+                            />
                         </div>
                     </div>
                     <div style="height: 10px;"></div>
@@ -70,14 +70,14 @@
                             size="mini"
                             style="font-size: 12px;"
                             @click="onDataChange"
-                        >确定
+                        >{{$t('node.confirm')}}
                         </el-button>
                         <el-button
                             type="text"
                             size="mini"
                             style="font-size: 12px; padding: 0 20px; color: #999;"
                             @click="popoverShow = false"
-                        >取消
+                        >{{$t('node.cancel')}}
                         </el-button>
                     </div>
                 </div>

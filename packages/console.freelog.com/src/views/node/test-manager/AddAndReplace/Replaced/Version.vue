@@ -10,30 +10,30 @@
             style="font-size: 12px; display: flex; align-items: center; cursor: pointer;"
             slot="reference"
         >
-            <span>版本范围</span>
-            <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"></i>
+            <span>{{$t('node.versionRange')}}</span>
+            <i class="el-icon-d-arrow-right" style="transform: rotate(90deg); font-size: 12px;"/>
         </a>
 
         <div style="width: 100%; overflow: hidden;">
             <div style="display: flex; align-items: center;">
                 <Radio :selected="!custom" @click="custom = false"/>
-                <span style="padding: 0 10px; font-size: 14px; color: #333;">选定版本</span>
+                <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('node.selectedVersion')}}</span>
                 <el-select
                     v-model="selectedVersion"
-                    placeholder="请选择"
+                    :placeholder="$t('node.pleaseSelect')"
                     size="mini"
                     style="width: 100px;"
                     :disabled="custom"
                 >
                     <el-option
-                        label="全部版本"
+                        :label="$t('node.allVersions')"
                         value="*"
-                    ></el-option>
+                    />
                     <el-option
                         v-for="i in versions"
                         :label="i"
                         :value="i"
-                    ></el-option>
+                    />
                 </el-select>
             </div>
 
@@ -41,15 +41,15 @@
             <div>
                 <div style="display: flex; align-items: center;">
                     <Radio :selected="custom" @click="custom = true"/>
-                    <span style="padding: 0 10px; font-size: 14px; color: #333;">自定义</span>
+                    <span style="padding: 0 10px; font-size: 14px; color: #333;">{{$t('node.customer')}}</span>
                 </div>
                 <div v-show="custom">
                     <div style="height: 5px;"></div>
                     <el-input
                         v-model="inputVersion"
-                        placeholder="输入semver版本范围"
+                        :placeholder="$t('node.enterSemverVersionRange')"
                         style="display: block;"
-                    ></el-input>
+                    />
                 </div>
             </div>
             <div style="height: 10px;"></div>
@@ -61,13 +61,13 @@
                     size="mini"
                     style="font-size: 12px;"
                     @click="onchange"
-                >确定</el-button>
+                >{{$t('node.confirm')}}</el-button>
                 <el-button
                     type="text"
                     size="mini"
                     style="font-size: 12px; padding: 0 20px; color: #999;"
                     @click="popoverShow = false"
-                >取消
+                >{{$t('node.cancel')}}
                 </el-button>
             </div>
         </div>
