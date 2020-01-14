@@ -71,7 +71,7 @@
                         <label
                             class="style-page__table__name__release"
                             v-if="scope.row.originInfo.type === 'release'"
-                        >发行</label>
+                        >{{$t('node.table.publish')}}</label>
                         <label
                             style="width: 40px; display: inline-block;"
                             v-if="scope.row.originInfo.type === 'presentable'"
@@ -126,7 +126,7 @@
 
             <el-table-column
                 prop="type"
-                label="全部类型"
+                :label="$t('node.table.type')"
                 min-width="12%"
             >
                 <template slot-scope="scope">
