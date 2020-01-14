@@ -15,7 +15,7 @@ import BreadCrumb from '@/components/BreadCrumb/index.vue';
 
 export default {
     name: 'manager-release',
-    i18n,
+    // i18n,
     components: {
         OverviewHeader,
         BlockItem,

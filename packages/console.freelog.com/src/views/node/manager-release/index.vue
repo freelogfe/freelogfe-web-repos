@@ -6,8 +6,8 @@
         >
             <BreadCrumb
                 :list="[
-                    {text: releaseInfo.resourceType === 'page_build' ? '主题管理' : '展品管理', to: `/node/manager/${nodeId}`},
-                    {text: '展品信息'}
+                    {text: releaseInfo.resourceType === 'page_build' ? $t('node.nodePageStyle') : $t('node.presentableManagement'), to: `/node/manager/${nodeId}`},
+                    {text: $t('node.presentableInfo')}
                 ]"
             />
         </div>
@@ -26,22 +26,22 @@
         />
         <ModuleBlock>
 
-            <BlockItem label="状态">
+            <BlockItem :label="$t('node.status')">
                 <template v-if="releaseInfo.resourceType === 'page_build'">
                     <div
                         v-show="!isOnline"
                         class="manager-release__state"
                     >
-                        <label>未激活</label>
+                        <label>{{$t('node.inactive')}}</label>
                         <a
                             @click="onLineAndOffLine"
-                        >激活</a>
+                        >{{$t('node.active')}}</a>
                     </div>
                     <div
                         v-show="isOnline"
                         class="manager-release__state"
                     >
-                        <label>已激活</label>
+                        <label>{{$t('node.activated')}}</label>
                         <!--                    <a-->
                         <!--                        @click="onLineAndOffLine"-->
                         <!--                    >下线</a>-->
@@ -52,24 +52,24 @@
                         v-show="!isOnline"
                         class="manager-release__state"
                     >
-                        <label>未上线</label>
+                        <label>{{$t('node.noOnline')}}</label>
                         <a
                             @click="onLineAndOffLine"
-                        >上线</a>
+                        >{{$t('node.action.online')}}</a>
                     </div>
                     <div
                         v-show="isOnline"
                         class="manager-release__state"
                     >
-                        <label>已上线</label>
+                        <label>{{$t('node.online')}}</label>
                         <a
                             @click="onLineAndOffLine"
-                        >下线</a>
+                        >{{$t('node.action.downline')}}</a>
                     </div>
                 </template>
             </BlockItem>
 
-            <BlockItem label="展品名称">
+            <BlockItem :label="$t('node.presentableName')">
                 <ConfirmInput
                     :value="presentableName"
                     @confirmChange="confirmChange"
@@ -77,7 +77,7 @@
             </BlockItem>
 
             <BlockItem
-                label="展示版本"
+                :label="$t('node.displayVersion')"
                 v-if="versions.length !== 0"
             >
                 <el-select
@@ -93,14 +93,14 @@
                 </el-select>
             </BlockItem>
 
-            <BlockItem label="标签">
+            <BlockItem :label="$t('node.tags')">
                 <div style="height: 5px;"></div>
                 <FreelogTags
                     v-model="userDefinedTags"
                 />
             </BlockItem>
 
-            <BlockItem label="授权策略">
+            <BlockItem :label="$t('node.authorizationPolicy')">
                 <template v-if="!isShowEditPolicy">
                     <div
                         v-if="policies.length === 0"
@@ -110,12 +110,12 @@
                             @click="switchShowEditPolicy(true)"
                             type="primary"
                             size="small"
-                        >添加策略
+                        >{{$t('node.addPolicy')}}
                         </el-button>
                         <el-popover
                             placement="top"
                             trigger="hover"
-                            :content="$t('noPolicyNotAppear')"
+                            :content="$t('node.noPolicyNotAppear')"
                         >
                             <div
                                 slot="reference"
@@ -148,7 +148,7 @@
             </BlockItem>
         </ModuleBlock>
 
-        <ContentBlock :title="$t('authorization')">
+        <ContentBlock :title="$t('node.authorization')">
             <DisplayEditContracts/>
         </ContentBlock>
         <!--        </div>-->

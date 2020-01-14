@@ -7,7 +7,7 @@ let searchInputDelay = null;
 
 export default {
     name: 'manager',
-    i18n,
+    // i18n,
     components: {
         clipboard,
         PolicyTabs,

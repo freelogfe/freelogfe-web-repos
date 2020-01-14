@@ -8,14 +8,14 @@
             icon="el-icon-edit"
             style="color: #333; font-size: 20px;"
             @click="switchEdit(true)"
-        ></el-button>
+        />
     </div>
     <div v-else>
         <el-input
             v-model="inputValue"
             style="width: 400px;"
             placeholder="请输入内容"
-        ></el-input>
+        />
 
         <el-button
             size="mini"

@@ -8,14 +8,14 @@
                 :nodeHref="nodeInfo.origin"
                 :isTestNode="false"
                 :enterNode="`/node/test-manager/${$route.params.nodeId}`"
-                :btnText="$t('gotoTest')"
+                :btnText="$t('node.gotoTest')"
             />
 
             <div class="node-manager__aside__navs">
                 <a
                     @click="switchIsPageStyle(false)"
                     :class="{'node-manager__aside__navs__a--active': !isPageStyle}"
-                >{{$t('presentableManagement')}}</a>
+                >{{$t('node.presentableManagement')}}</a>
                 <a
                     @click="switchIsPageStyle(true)"
                     :style="{
@@ -24,7 +24,7 @@
                         color: isPageStyle ? '#409eff': '#333',
                     }"
                     :class="{'node-manager__aside__navs__a--active': isPageStyle}"
-                >{{$t('nodePageStyle')}}</a>
+                >{{$t('node.nodePageStyle')}}</a>
             </div>
         </div>
 
@@ -35,10 +35,10 @@
                 <!--                <el-radio-group-->
                 <!--                    v-model="filterTodo">-->
                 <!--                    <el-radio-button label="全部">-->
-                <!--                        <span class="node-manager__main__header__text">{{$t('all')}}</span>-->
+                <!--                        <span class="node-manager__main__header__text">{{$t('node.all')}}</span>-->
                 <!--                    </el-radio-button>-->
                 <!--                    <el-radio-button label="待处理">-->
-                <!--                        <span class="node-manager__main__header__text">{{$t('pending')}}</span>-->
+                <!--                        <span class="node-manager__main__header__text">{{$t('node.pending')}}</span>-->
                 <!--                    </el-radio-button>-->
                 <!--                </el-radio-group>-->
                 <div></div>
@@ -68,14 +68,14 @@
                 <div
                     style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
                     <div>
-                        <span>{{!isPageStyle ? $t('notAdded'): $t('notSetTheme')}}</span>
+                        <span>{{!isPageStyle ? $t('node.notAdded'): $t('node.notSetTheme')}}</span>
                         <router-link
                             :to="!isPageStyle ? '/' : '/?q=page_build'"
                             class="nav-link ls-nav-link"
                             target="_blank"
                         >
                             <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                                {{!isPageStyle ? $t('toMarket'): $t('addTheme')}}
+                                {{!isPageStyle ? $t('node.toMarket'): $t('node.addTheme')}}
                             </el-button>
                         </router-link>
                     </div>
@@ -85,11 +85,11 @@
             <template v-else>
                 <div style="height: 80px;"/>
                 <el-table
-                    :empty-text="tableData === null ? `${$t('loading')}...` : ''"
+                    :empty-text="tableData === null ? `${$t('node.loading')}...` : ''"
                     :data="tableData"
                     class="node-manager__main__table"
                 >
-                    <!--                :label="$t('table.presentableName')"-->
+                    <!--                :label="$t('node.table.presentableName')"-->
                     <el-table-column
                         prop="presentableName"
                         min-width="18%"
@@ -117,7 +117,7 @@
                             </el-select>
                         </div>
                     </el-table-column>
-                    <!--                label="$t('table.publish')"-->
+                    <!--                label="$t('node.table.publish')"-->
                     <el-table-column
                         prop="publish"
                         label="相关发行"
@@ -155,7 +155,7 @@
 
                     <el-table-column
                         prop="type"
-                        :label="$t('table.type')"
+                        :label="$t('node.table.type')"
                         min-width="12%"
                     >
                         <template slot="header" slot-scope="scope">
@@ -183,7 +183,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="policies"
-                        :label="$t('table.policies')"
+                        :label="$t('node.table.policies')"
                         min-width="14%"
                     >
                         <div
@@ -213,13 +213,13 @@
                                             v-if="scope.row.policies.length === 0"
                                             class="node-manager__main__table__policy__box--zero"
                                         >
-                                            {{$t('noPolicy')}}
+                                            {{$t('node.noPolicy')}}
                                         </div>
                                         <div
                                             v-if="scope.row.policies.length > 1"
                                             class="node-manager__main__table__policy__box--then-one"
                                         >
-                                            {{$t('suchAs')}}{{scope.row.policies.length}}{{$t('policies')}}…
+                                            {{$t('node.suchAs')}}{{scope.row.policies.length}}{{$t('node.policies')}}…
                                         </div>
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="updateTime"
-                        :label="$t('table.updateTime')"
+                        :label="$t('node.table.updateTime')"
                         min-width="18%"
                     >
                         <template slot-scope="scope">
@@ -242,7 +242,7 @@
                                 <div class="node-manager__main__table__date__update">
                                     {{dateStringToFormat(scope.row.updateDate)}}
                                 </div>
-                                <div class="node-manager__main__table__date__create">{{$t('joined')}}
+                                <div class="node-manager__main__table__date__create">{{$t('node.joined')}}
                                     {{dateStringToFormat(scope.row.createDate)}}
                                 </div>
                             </div>
@@ -250,7 +250,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="state"
-                        :label="$t('table.state')"
+                        :label="$t('node.table.state')"
                         min-width="12%"
                     >
                         <template slot="header" slot-scope="scope">
@@ -277,17 +277,17 @@
                                 v-if="scope.row.isOnline === 1"
                                 class="node-manager__main__table__state__text--online"
                             >
-                                {{scope.row.releaseInfo.resourceType === 'page_build' ? '已激活' : $t('online')}}
+                                {{scope.row.releaseInfo.resourceType === 'page_build' ? '已激活' : $t('node.online')}}
                             </span>
                                 <span
                                     v-if="scope.row.isOnline === 0"
                                     class="node-manager__main__table__state__text--no-online"
                                 >
-<!--                                {{$t('noOnline')}}-->
-                                 {{scope.row.releaseInfo.resourceType === 'page_build' ? '未激活' : $t('noOnline')}}
+<!--                                {{$t('node.noOnline')}}-->
+                                 {{scope.row.releaseInfo.resourceType === 'page_build' ? '未激活' : $t('node.noOnline')}}
                             </span>
                                 <template v-if="!scope.row.isAuth">
-                                    <!--                                :content="$t('exceptionExists')"-->
+                                    <!--                                :content="$t('node.exceptionExists')"-->
                                     <el-popover
                                         placement="top"
                                         width="160"
@@ -295,7 +295,7 @@
                                     >
                                         <div
                                             style="display: flex; align-items: center; justify-content: space-between;">
-                                            <span>{{$t('exceptionExists')}}</span>
+                                            <span>{{$t('node.exceptionExists')}}</span>
                                             <el-button
                                                 @click="handleOperation('edit', scope.row)"
                                                 type="text"
@@ -314,7 +314,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="operation"
-                        :label="$t('table.operation')"
+                        :label="$t('node.table.operation')"
                         min-width="5%"
                     >
 
@@ -332,7 +332,7 @@
                                     <el-dropdown-item command="edit">
                                         <a
                                             class="node-manager__main__table__operation__dropdown-link"
-                                        >{{$t('action.edit')}}</a>
+                                        >{{$t('node.action.edit')}}</a>
                                     </el-dropdown-item>
                                     <el-dropdown-item
                                         :command="scope.row.releaseInfo.resourceType !== 'page_build' || scope.row.isOnline === 0 ? 'online': ''"
@@ -349,8 +349,8 @@
                                             <div v-if="scope.row.isOnline === 1" style="color: #bfbfbf;">已激活</div>
                                         </span>
                                             <template v-else>
-                                                <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('action.online')}}</span>
-                                                <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('action.downline')}}</span>
+                                                <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('node.action.online')}}</span>
+                                                <span v-if="scope.row.isOnline === 1" style="color: #ee4040;">{{$t('node.action.downline')}}</span>
                                             </template>
                                         </a>
                                     </el-dropdown-item>
