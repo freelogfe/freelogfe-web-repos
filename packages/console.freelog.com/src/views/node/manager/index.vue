@@ -95,14 +95,14 @@
                         min-width="18%"
                     >
                         <div style="padding-left: 16px;" slot="header" slot-scope="scope">
-                            展品 | 展示版本
+                            {{$t('node.presentable')}} | {{$t('node.displayVersion')}}
                         </div>
                         <div style="padding-left: 16px;" slot-scope="scope">
                             <a @click="handleOperation('edit', scope.row)"
                                class="text-overflow-ellipsis node-manager__main__table__name"
                             >{{scope.row.presentableName}}</a>
                             <el-select
-                                placeholder="请选择"
+                                :placeholder="$t('pleaseSelect')"
                                 :value="scope.row.releaseInfo.version"
                                 style="width: 110px; transform: scale(.714); transform-origin: 0;"
                                 size="mini"
@@ -120,7 +120,7 @@
                     <!--                label="$t('node.table.publish')"-->
                     <el-table-column
                         prop="publish"
-                        label="相关发行"
+                        :label="$t('node.aboutRelease')"
                         min-width="20%"
                     >
                         <template slot-scope="scope">
@@ -155,7 +155,7 @@
 
                     <el-table-column
                         prop="type"
-                        :label="$t('node.table.type')"
+                        :label="$t('node.allType')"
                         min-width="12%"
                     >
                         <template slot="header" slot-scope="scope">
@@ -277,14 +277,14 @@
                                 v-if="scope.row.isOnline === 1"
                                 class="node-manager__main__table__state__text--online"
                             >
-                                {{scope.row.releaseInfo.resourceType === 'page_build' ? '已激活' : $t('node.online')}}
+                                {{scope.row.releaseInfo.resourceType === 'page_build' ? $t('node.activated') : $t('node.online')}}
                             </span>
                                 <span
                                     v-if="scope.row.isOnline === 0"
                                     class="node-manager__main__table__state__text--no-online"
                                 >
 <!--                                {{$t('node.noOnline')}}-->
-                                 {{scope.row.releaseInfo.resourceType === 'page_build' ? '未激活' : $t('node.noOnline')}}
+                                 {{scope.row.releaseInfo.resourceType === 'page_build' ? $t('node.inactive') : $t('node.noOnline')}}
                             </span>
                                 <template v-if="!scope.row.isAuth">
                                     <!--                                :content="$t('node.exceptionExists')"-->
@@ -299,7 +299,7 @@
                                             <el-button
                                                 @click="handleOperation('edit', scope.row)"
                                                 type="text"
-                                            >详情
+                                            >{{$t('node.detail')}}
                                             </el-button>
                                         </div>
                                         <i
@@ -345,8 +345,8 @@
                                             v-if="scope.row.releaseInfo.resourceType === 'page_build'"
                                             style="color: #44a0ff;"
                                         >
-                                            <div v-if="scope.row.isOnline === 0">激活</div>
-                                            <div v-if="scope.row.isOnline === 1" style="color: #bfbfbf;">已激活</div>
+                                            <div v-if="scope.row.isOnline === 0">{{$t('node.active')}}</div>
+                                            <div v-if="scope.row.isOnline === 1" style="color: #bfbfbf;">{{$t('node.activated')}}</div>
                                         </span>
                                             <template v-else>
                                                 <span v-if="scope.row.isOnline === 0" style="color: #44a0ff;">{{$t('node.action.online')}}</span>

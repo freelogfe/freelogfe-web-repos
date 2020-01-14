@@ -155,4 +155,6 @@ export default {
     testPresentableInfo: '测试展品信息',
     nodeReleaseName: '节点发行名称',
     aboutNode: '节点相关',
+    presentable: '展品',
+    aboutRelease: '相关发行',
 };

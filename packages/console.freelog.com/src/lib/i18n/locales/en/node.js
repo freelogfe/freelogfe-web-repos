@@ -154,4 +154,6 @@ export default {
     testPresentableInfo: 'Test Presentable Info',
     nodeReleaseName: 'Name',
     aboutNode: 'About Node',
+    presentable: 'Presentable',
+    aboutRelease: 'Release'
 };
