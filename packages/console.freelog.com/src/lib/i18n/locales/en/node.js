@@ -149,5 +149,6 @@ export default {
     deletedSuccess: 'Deleted Success',
     setVersionSuccess: 'Set the version successfully',
     haveNotSetTheme: 'You have not set a theme for the node, the node cannot be shown. You can add a theme types of testing resources as a theme of the node.',
-
+    exception: 'Exception',
+    activationSuccess: 'Activation Success',
 };

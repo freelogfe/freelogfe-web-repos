@@ -150,6 +150,7 @@ export default {
     deletedSuccess: '删除成功',
     setVersionSuccess: '设置版本成功',
     haveNotSetTheme: '您还没有为该节点设置主题，节点无法展示。 您可以添加theme类型的测试资源作为节点的主题。',
-
+    exception: '异常',
+    activationSuccess: '激活成功',
 
 };

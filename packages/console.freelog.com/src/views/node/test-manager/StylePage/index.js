@@ -21,11 +21,13 @@ export default {
             // 筛选搜索框
             filterSearch: '',
             // 已选类型
-            selectedType: '全部类型',
+            selectedType: this.$t('node.allType'),
             // 状态可以选项
-            allState: ['全部状态', '已上线', '未上线', '异常'],
+            allState: [this.$t('node.allState'), this.$t('node.online'), this.$t('node.noOnline')
+                // , this.$t('node.exception')
+            ],
             // 已选状态
-            selectedState: '全部状态',
+            selectedState: this.$t('node.allState'),
             // 当前页码
             currentPage: 1,
             // 当前页面条数
@@ -170,11 +172,11 @@ export default {
             //this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')
             //'全部状态', '已上线', '未上线', '合约异常'
             switch (text) {
-                case '全部状态':
+                case this.$t('node.allState'):
                     return 2;
-                case '已上线':
+                case this.$t('node.online'):
                     return 1;
-                case '未上线':
+                case this.$t('node.noOnline'):
                     return 0;
                 default:
                     return 2;
@@ -190,13 +192,9 @@ export default {
             // console.log(mark, row, 'R$RRRRRRRR');
             if (mark === 'edit') {
                 return window.open('/node/test-manager-resource/' + row.testResourceId);
-            }
-
-            else if (mark === 'isOnline') {
+            } else if (mark === 'isOnline') {
                 return this.onLineAndOffLine(row);
-            }
-
-            else if (mark === 'delete') {
+            } else if (mark === 'delete') {
                 // console.log(row, 'row');
                 this.deleteRule(row.testResourceName);
             }
@@ -234,7 +232,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            this.$message.success('激活成功');
+            this.$message.success(this.$t('node.activationSuccess'));
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
@@ -261,7 +259,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            this.$message.success('删除成功');
+            this.$message.success(this.$t('node.deletedSuccess'));
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
@@ -328,7 +326,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            this.$message.success('设置版本成功');
+            this.$message.success(this.$t('node.setVersionSuccess'));
             this.pushRuleSuccess(res.data.data);
         }
     },
