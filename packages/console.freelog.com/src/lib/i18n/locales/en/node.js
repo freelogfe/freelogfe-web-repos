@@ -151,4 +151,7 @@ export default {
     haveNotSetTheme: 'You have not set a theme for the node, the node cannot be shown. You can add a theme types of testing resources as a theme of the node.',
     exception: 'Exception',
     activationSuccess: 'Activation Success',
+    testPresentableInfo: 'Test Presentable Info',
+    nodeReleaseName: 'Name',
+    aboutNode: 'About Node',
 };

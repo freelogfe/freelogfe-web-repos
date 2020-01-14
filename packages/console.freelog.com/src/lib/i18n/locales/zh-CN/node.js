@@ -152,5 +152,7 @@ export default {
     haveNotSetTheme: '您还没有为该节点设置主题，节点无法展示。 您可以添加theme类型的测试资源作为节点的主题。',
     exception: '异常',
     activationSuccess: '激活成功',
-
+    testPresentableInfo: '测试展品信息',
+    nodeReleaseName: '节点发行名称',
+    aboutNode: '节点相关',
 };
