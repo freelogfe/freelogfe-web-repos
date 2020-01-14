@@ -220,6 +220,21 @@ export default {
         content: '请输入内容',
         selectReplacedResource: '选择被替换资源',
         allVersions: '全部版本',
+        noAddedResources: '您还没有添加任何测试资源',
+        rule: '规则',
+        source: '来源',
+        testPresentable: '测试展品',
+        node: '节点',
+        testResources: '相关测试资源',
+        notYetAuthorization: '尚未获得测试授权',
+        detail: '详情',
+        delete: '删除',
+        // release: '发行',
+        downlineSuccess: '下线成功',
+        onlineSuccess: '上线成功',
+        deletedSuccess: '删除成功',
+        setVersionSuccess: '设置版本成功',
+
     },
 
     presentable: {

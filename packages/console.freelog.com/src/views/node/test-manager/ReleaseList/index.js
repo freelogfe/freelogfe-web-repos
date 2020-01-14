@@ -23,16 +23,17 @@ export default {
             // 类型可选项
             allTypes: [
                 // this.$t('allType'),
-                '全部类型',
-                'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+                this.$t('node.table.type'),
+                'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'
+            ],
             // 已选类型
-            selectedType: '全部类型',
+            selectedType: this.$t('node.table.type'),
             // 状态可以选项
-            allState: ['全部状态', '已上线', '未上线',
+            allState: [this.$t('node.allState'), this.$t('node.online'), this.$t('node.noOnline'),
                 // '异常'
             ],
             // 已选状态
-            selectedState: '全部状态',
+            selectedState: this.$t('node.allState'),
             // 当前页码
             currentPage: 1,
             // 当前页面条数
@@ -77,7 +78,7 @@ export default {
             const params = {
                 page: this.currentPage,
                 pageSize: this.pageSize,
-                resourceType: this.selectedType === '全部类型' ? undefined : this.selectedType,
+                resourceType: this.selectedType === this.$t('node.table.type') ? undefined : this.selectedType,
                 omitResourceType: 'page_build',
                 isOnline: this.stateTextToValue(this.selectedState),
                 keywords: this.filterSearch || undefined,
@@ -188,11 +189,11 @@ export default {
             //this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')
             //'全部状态', '已上线', '未上线', '合约异常'
             switch (text) {
-                case '全部状态':
+                case this.$t('node.state'):
                     return 2;
-                case '已上线':
+                case this.$t('node.online'):
                     return 1;
-                case '未上线':
+                case this.$t('node.noOnline'):
                     return 0;
                 default:
                     return 2;
@@ -207,7 +208,7 @@ export default {
          */
         operationCommand(mark, row) {
             // console.log(mark, row, 'R$RRRRRRRR');
-            if (mark === '编辑') {
+            if (mark === this.$t('node.action.edit')) {
                 return window.open('/node/test-manager-resource/' + row.testResourceId);
             }
 
@@ -258,7 +259,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            isOnline ? this.$message.success('下线成功') : this.$message.success('上线成功');
+            isOnline ? this.$message.success(this.$t('node.downlineSuccess')) : this.$message.success(this.$t('node.onlineSuccess'));
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
@@ -285,7 +286,7 @@ export default {
             if (res.data.errcode !== 0 || res.data.ret !== 0) {
                 return this.$message.error(JSON.stringify(res.data.data.errors));
             }
-            this.$message.success('删除成功');
+            this.$message.success(this.$t('node.deletedSuccess'));
             // this.handleTableData();
             this.pushRuleSuccess(res.data.data);
         },
@@ -374,8 +375,8 @@ export default {
     watch: {
         isPageStyle() {
             this.filterSearch = '';
-            this.selectedType = this.$t('allType');
-            this.selectedState = this.$t('allState');
+            this.selectedType = this.$t('node.allType');
+            this.selectedState = this.$t('node.allState');
             this.currentPage = 1;
             this.pageSize = 10;
             this.handleTableData();

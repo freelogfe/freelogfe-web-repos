@@ -29,18 +29,18 @@
         <div
             v-if="tableData && tableData.length === 0"
             style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-            <div>您还没有添加任何测试资源。</div>
+            <div>{{$t('node.noAddedResources')}}</div>
         </div>
 
         <el-table
             v-else
-            :empty-text="tableData === null ? '加载中...' : ''"
+            :empty-text="tableData === null ? $t('node.loading') + '...' : ''"
             :data="tableData"
             class="release-list__table"
         >
             <el-table-column
                 prop="rules"
-                label="规则"
+                :label="$t('node.rule')"
                 min-width="12%"
             >
                 <template slot-scope="scope">
@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="来源|测试展品|展示版本"
+                :label="$t('node.source') + '|' + $t('node.testPresentable') + '|' + $t('node.displayVersion')"
                 min-width="25%"
             >
                 <template slot-scope="scope">
@@ -68,7 +68,7 @@
                         <label
                             class="release-list__table__name--presentable"
                             v-if="!!scope.row.nodePresentableId"
-                        >节点</label>
+                        >{{$t('node.node')}}</label>
                         <template v-else>
                             <label
                                 class="release-list__table__name--mock"
@@ -77,14 +77,14 @@
                             <label
                                 class="release-list__table__name--release"
                                 v-if="scope.row.originInfo.type === 'release'"
-                            >发行</label>
+                            >{{$t('node.table.publish')}}</label>
                         </template>
                         <span>{{scope.row.testResourceName}}</span>
                     </div>
                     <div v-if="scope.row.originInfo.type !== 'mock'" style="padding-left: 50px;">
                         <!--                        {{scope.row.originInfo.version}}-->
                         <el-select
-                            placeholder="请选择"
+                            :placeholder="$t('node.pleaseSelect')"
                             :value="scope.row.originInfo.version"
                             style="width: 110px; transform: scale(.714); transform-origin: 0;"
                             size="mini"
@@ -103,7 +103,7 @@
             </el-table-column>
             <el-table-column
                 prop="entries"
-                label="相关测试资源"
+                :label="$t('node.testResources')"
                 min-width="30%"
             >
                 <template slot-scope="scope">
@@ -192,11 +192,11 @@
                         <span
                             class="release-list__table__status--online"
                             v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
-                        >已上线</span>
+                        >{{$t('node.online')}}</span>
                         <span
                             class="release-list__table__status--downline"
                             v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
-                        >未上线</span>
+                        >{{$t('node.noOnline')}}</span>
 
                         <template v-if="scope.row.resolveReleaseSignStatus === 2">
                             <el-popover
@@ -205,8 +205,10 @@
                                 trigger="hover"
                             >
                                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span>尚未获得测试授权</span>
-                                    <el-button @click="operationCommand('编辑', scope.row)" type="text">详情</el-button>
+                                    <span>{{$t('node.notYetAuthorization')}}</span>
+                                    <el-button @click="operationCommand($t('node.action.edit'), scope.row)" type="text">
+                                        {{$t('node.detail')}}
+                                    </el-button>
                                 </div>
                                 <!-- operationCommand('编辑', scope.row)   -->
                                 <i
@@ -223,7 +225,7 @@
             <el-table-column
                 prop="operation"
                 min-width="5%"
-                label="操作"
+                :label="$t('node.table.operation')"
             >
                 <template slot-scope="scope">
                     <el-dropdown @command="$event => operationCommand($event, scope.row)">
@@ -236,23 +238,23 @@
                         />
 
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item :command="'编辑'">
-                                编辑
+                            <el-dropdown-item :command="$t('node.action.edit')">
+                                {{$t('node.action.edit')}}
                             </el-dropdown-item>
                             <el-dropdown-item :command="'isOnline'">
                                 <span
                                     v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 0"
-                                    style="color: #44a0ff;">上线</span>
+                                    style="color: #44a0ff;">{{$t('node.action.online')}}</span>
                                 <span
                                     v-if="scope.row.differenceInfo.onlineStatusInfo.isOnline === 1"
-                                    style="color: #ee4040;">下线</span>
+                                    style="color: #ee4040;">{{$t('node.action.downline')}}</span>
                                 <!--                                </a>-->
                             </el-dropdown-item>
                             <el-dropdown-item
                                 :command="'delete'"
                                 v-if="matchTestResult.testRules.find(i => i.presentableName === scope.row.testResourceName)"
                             >
-                                <span style="color: #ee4040;">删除</span>
+                                <span style="color: #ee4040;">{{$t('node.delete')}}</span>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -274,8 +276,7 @@
                 :page-sizes="[10, 20, 30, 40, 50]"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="totalQuantity"
-            >
-            </el-pagination>
+            />
         </div>
     </div>
 </template>
