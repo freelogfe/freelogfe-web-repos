@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                :label="$t('node.source') + '|' + $t('node.testPresentable') + '|' + $t('node.displayVersion')"
+                :label="$t('node.source') + ' | ' + $t('node.testPresentable') + ' | ' + $t('node.displayVersion')"
                 min-width="25%"
             >
                 <template slot-scope="scope">

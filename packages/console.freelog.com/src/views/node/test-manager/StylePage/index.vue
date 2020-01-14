@@ -28,18 +28,18 @@
         <div
             v-if="tableData && tableData.length === 0"
             style="display: flex; height: 400px; justify-content: center; align-items: center; color: #999; font-size: 22px;">
-            <div>您还没有为该节点设置主题，节点无法展示。 您可以添加theme类型的测试资源作为节点的主题。</div>
+            <div>{{$t('haveNotSetTheme')}}</div>
         </div>
 
         <el-table
             v-else
             :data="tableData"
-            :empty-text="tableData === null ? '加载中...' : ''"
+            :empty-text="tableData === null ? $t('loading') + '...' : ''"
             class="style-page__table"
         >
             <el-table-column
                 prop="rules"
-                label="规则"
+                :label="$t('rule')"
                 min-width="12%"
             >
                 <template slot-scope="scope">
@@ -57,7 +57,7 @@
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="测试展品 | 展示版本"
+                :label="$t('testPresentable') + ' | ' +  $t('displayVersion')"
                 min-width="25%"
             >
                 <template slot-scope="scope">
@@ -83,7 +83,7 @@
                     <div v-if="scope.row.originInfo.type !== 'mock'" style="padding-left: 50px;">
 <!--                        {{scope.row.originInfo.version}}-->
                         <el-select
-                            placeholder="请选择"
+                            :placeholder="$t('pleaseSelect')"
                             :value="scope.row.originInfo.version"
                             style="width: 110px; transform: scale(.714); transform-origin: 0;"
                             size="mini"
