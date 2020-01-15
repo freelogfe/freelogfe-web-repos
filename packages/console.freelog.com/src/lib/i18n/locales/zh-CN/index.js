@@ -1,5 +1,6 @@
 import mock from './mock';
 import node from './node';
+import layout from './layout';
 
 export default {
     common: {
@@ -472,4 +473,5 @@ export default {
     //
     mock,
     node,
+    layout,
 }

@@ -4,20 +4,20 @@
             class="header-menu__nav"
             :class="{'header-menu__nav--active': ['/', '/main/node-examples'].includes($route.path)}"
         >
-            <span>发现</span>
+            <span>{{$t('layout.find')}}</span>
             <div class="header-menu__dropdown">
                 <div class="header-menu__menu">
                     <router-link
                         to="/"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/'}"
-                    >发行市场
+                    >{{$t('layout.releaseMarket')}}
                     </router-link>
                     <router-link
                         to="/main/node-examples"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/main/node-examples'}"
-                    >示例节点
+                    >{{$t('layout.exampleNode')}}
                     </router-link>
                 </div>
             </div>
@@ -26,7 +26,7 @@
             class="header-menu__nav"
             :class="{'header-menu__nav--active': ['/mock/display'].includes($route.path)}"
         >
-            <span>存储空间</span>
+            <span>{{$t('layout.storageSpace')}}</span>
             <div class="header-menu__dropdown" style="width: 240px;">
                 <template v-if="buckets && buckets.length > 0">
                     <div class="header-menu__menu">
@@ -49,9 +49,10 @@
                 <div v-else style="height: 180px; display: flex; align-items: center;">
                     <div
                         style="display: flex; width: 100%; height: 80px; flex-direction: column; align-items: center; justify-content: center;">
-                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">自由创作从Freelog开始</div>
+                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">{{$t('layout.startingFromFreelog')}}
+                        </div>
                         <div style="height: 30px;"/>
-                        <a @click="createBucketDialogVisible=true" class="round-button">创建Bucket</a>
+                        <a @click="createBucketDialogVisible=true" class="round-button">{{$t('layout.createBucket')}}</a>
                     </div>
                 </div>
             </div>
@@ -60,26 +61,26 @@
             class="header-menu__nav"
             :class="{'header-menu__nav--active': $route.path.startsWith('/release-management/')}"
         >
-            <span>发行管理</span>
+            <span>{{$t('layout.release')}}</span>
             <div class="header-menu__dropdown">
                 <div class="header-menu__menu">
                     <router-link
                         to="/release-management/resource/list"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/release-management/resource/list'}"
-                    >我的资源
+                    >{{$t('layout.myResource')}}
                     </router-link>
                     <router-link
                         to="/release-management/release/list"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/release-management/release/list'}"
-                    >我的发行
+                    >{{$t('layout.myRelease')}}
                     </router-link>
                     <router-link
                         to="/release-management/release/collections"
                         class="header-menu__menu__item"
                         :class="{'header-menu__menu__item--active': $route.path === '/release-management/release/collections'}"
-                    >我的收藏
+                    >{{$t('layout.myCollection')}}
                     </router-link>
                 </div>
 
@@ -89,7 +90,7 @@
             class="header-menu__nav"
             :class="{'header-menu__nav--active': $route.path.startsWith('/node/manager/') || $route.path.startsWith('/node/test-manager/')}"
         >
-            <span>节点管理</span>
+            <span>{{$t('layout.nodeManager')}}</span>
             <div class="header-menu__dropdown" style="width: 280px;">
                 <template v-if="nodes && nodes.length > 0">
                     <div class="header-menu__menu">
@@ -102,7 +103,7 @@
                             <span>{{node.nodeName}}</span>
                             <router-link
                                 :to="`/node/test-manager/${node.nodeId}`"
-                            >进入测试节点
+                            >{{$t('layout.enterTestNode')}}
                             </router-link>
                         </router-link>
                     </div>
@@ -116,12 +117,12 @@
                 <div v-else style="height: 180px; display: flex; align-items: center;">
                     <div
                         style="display: flex; width: 100%; height: 80px; flex-direction: column; align-items: center; justify-content: center;">
-                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">自由创作从Freelog开始</div>
+                        <div style="color: #ddd; line-height: 20px; font-size: 14px;">{{$t('layout.startingFromFreelog')}}</div>
                         <div style="height: 30px;"/>
                         <router-link
                             to="/node/create"
                             class="round-button"
-                        >创建节点
+                        >{{$t('layout.createNode')}}
                         </router-link>
                     </div>
                 </div>

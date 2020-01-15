@@ -12,12 +12,12 @@
                                 to="/resource/editor"
                                 class="header-tools__menu__item"
                                 target="_blank"
-                            >创建资源
+                            >{{$t('layout.createResource')}}
                             </router-link>
                             <a
                                 class="header-tools__menu__item"
                                 @click="resourceDialogVisible=true"
-                            >创建发行</a>
+                            >{{$t('layout.createRelease')}}</a>
                             <!--                        <router-link to="/" class="header-tools__menu__item">-->
                             <!--                            创建mock-->
                             <!--                        </router-link>-->
@@ -25,7 +25,7 @@
                                 to="/node/create"
                                 class="header-tools__menu__item"
                                 target="_blank"
-                            >创建节点
+                            >{{$t('layout.createNode')}}
                             </router-link>
                         </div>
 
@@ -46,7 +46,7 @@
                         :src="userInfo && userInfo.headImage"
                         alt=""
                     />
-                    <label v-if="userType === 1">内测</label>
+                    <label v-if="userType === 1">{{$t('layout.alphaTest')}}</label>
                 </div>
                 <div
                     v-if="!!userInfo"
@@ -66,8 +66,8 @@
                         <div style="height: 8px;"/>
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
-                    <a @click="gotoUserProfile">个人中心</a>
-                    <a @click="logout">登出</a>
+                    <a @click="gotoUserProfile">{{$t('layout.personalCenter')}}</a>
+                    <a @click="logout">{{$t('layout.logout')}}</a>
                     <!--                    <router-link-->
                     <!--                        :to="'/login'"-->
                     <!--                    >登出-->
