@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import FreelogSearchInput from './index'
+    import FreelogSearchInput from './index'
 
-export default FreelogSearchInput
+    export default FreelogSearchInput
 </script>
 
 <style lang="less" scoped>

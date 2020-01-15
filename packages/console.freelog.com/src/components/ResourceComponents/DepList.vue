@@ -10,7 +10,7 @@
                 style="height: 20px; width: 20px; align-items: center; justify-content: center; display: flex; cursor: pointer;"
                 @click="removeDep(j)"
             >
-                <i class="el-icon-remove" style="font-size: 18px; color: #f02323"></i>
+                <i class="el-icon-remove" style="font-size: 18px; color: #f02323"/>
             </a>
             <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{i.name}}</span>
         </div>
