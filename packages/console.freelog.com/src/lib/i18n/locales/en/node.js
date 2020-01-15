@@ -206,4 +206,6 @@ export default {
 
     enabled: 'Enabled',
     details: 'Details',
+
+    latestVersion: 'Latest Version',
 };

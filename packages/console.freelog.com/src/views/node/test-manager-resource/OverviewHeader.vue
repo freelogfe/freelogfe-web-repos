@@ -6,6 +6,7 @@
             :src="previewSrc || undefined"
             class="resource-default-preview"
             style="width: 88px; height: 66px; flex-shrink: 0"
+            alt=""
         />
 
         <div
@@ -20,15 +21,15 @@
                     <span style="font-size: 18px; color: #222; line-height: 1;">{{title}}</span>
                     <label
                         v-if="type==='release'"
-                        style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px; display: inline-block;">发行</label>
+                        style="background-color: #72bb1f; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px; display: inline-block;">{{$t('node.release')}}</label>
                     <label
                         v-if="type==='mock'"
                         style="background-color: #f5a623; font-size: 12px; font-weight: 600; color: #fff; text-align: center; line-height: 18px; padding: 0 8px; margin-left: 5px; border-radius: 2px; display: inline-block;">mock</label>
                 </a>
                 <div style="font-size: 12px; color: #999;">
-                    <span>类型 {{resourceType}}</span>
-                    <span v-if="!!datetime"> | 签约时间 {{datetime}}</span>
-                    <span v-if="!!version"> | 最新版本 {{version}}</span>
+                    <span>{{$t('node.type')}} {{resourceType}}</span>
+                    <span v-if="!!datetime"> | {{$t('node.signingTime')}} {{datetime}}</span>
+                    <span v-if="!!version"> | {{$t('node.latestVersion')}} {{version}}</span>
                 </div>
             </div>
             <div style="font-size: 12px; color: #333;">

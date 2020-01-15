@@ -207,4 +207,6 @@ export default {
 
     enabled: '已启用',
     details: '详情',
+
+    latestVersion: '最新版本',
 };
