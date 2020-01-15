@@ -126,4 +126,5 @@ export default {
     reselect: '重新选择',
     resourceDuplicated: '该资源已存在，不能重复创建',
     unused: '未使用',
+    mockCanOnlyBeUsedWithinMock: 'mock资源只可在模拟资源池内使用，若要将mock资源发行，需在创建成功后，先将mock资源转为正式资源',
 };

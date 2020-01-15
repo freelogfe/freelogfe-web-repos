@@ -3,7 +3,7 @@
         <span
             style="display: inline-block; width: 30px; padding-left: 10px; text-align: center; color: #f15e5e;"> {{dot ? '•' : ''}}</span>
         <div style="display: inline-block; font-size: 13px; color: #666;">
-            <slot></slot>
+            <slot/>
         </div>
     </div>
 </template>

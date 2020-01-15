@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>未使用</div>
+        <div>{{$t('components.unused')}}</div>
         <div
             style="height: 40px; display: flex; align-items: center; padding-left: 25px;"
             v-for="(i, j) in data"

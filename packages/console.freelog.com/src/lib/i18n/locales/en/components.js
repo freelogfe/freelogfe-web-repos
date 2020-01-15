@@ -126,4 +126,5 @@ export default {
     reselect: 'Reselect',
     resourceDuplicated: 'The resource already exists, cannot be duplicated to create',
     unused: 'Unused',
+    mockCanOnlyBeUsedWithinMock: 'Mock resources can only be used within the simulation resource pool, to mock the resource issue, need to create successful, the first mock resources to official resources',
 };
