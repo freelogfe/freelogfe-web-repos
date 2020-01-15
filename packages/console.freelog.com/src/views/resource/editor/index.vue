@@ -1,12 +1,15 @@
 <template>
     <div class="resource-editor">
 
-        <BlockBody v-if="isUpdateResource" :tilte="$t('historyRelease')">
+        <BlockBody
+            v-if="isUpdateResource"
+            :tilte="$t('resource.historyRelease')"
+        >
             <div class="resource-editor__history">
                 <div
                     v-if="releasedList.length === 0"
                     class="resource-editor__history--none"
-                >{{$t('noReleaseHistory')}}...
+                >{{$t('resource.noReleaseHistory')}}...
                 </div>
                 <ReleasedItem
                     v-for="item in releasedList"
@@ -17,9 +20,9 @@
             </div>
         </BlockBody>
 
-        <BlockBody :tilte="$t('resourceUpload')">
+        <BlockBody :tilte="$t('resource.resourceUpload')">
 
-            <SmallTitle v-if="!isUpdateResource">{{$t('resourceType')}}</SmallTitle>
+            <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceType')}}</SmallTitle>
 
             <div
                 v-if="!isUpdateResource"
@@ -29,7 +32,7 @@
                     class="resource-editor__type__select"
                     v-model="resourceType"
                     @change="onChangeResourceType"
-                    :placeholder="$t('resourceType')"
+                    :placeholder="$t('resource.resourceType')"
                     allow-create
                     filterable
                     :disabled="!!this.uploadFileInfo.name"
@@ -49,11 +52,11 @@
                     :class="{shake: resourceTypeTip}"
                 >
                     <small>•</small>
-                    {{$t('beforeUpload')}}
+                    {{$t('resource.beforeUpload')}}
                 </div>
             </div>
 
-            <SmallTitle v-if="!isUpdateResource">{{$t('resourceFile')}}</SmallTitle>
+            <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceFile')}}</SmallTitle>
 
             <div
                 v-if="!isUpdateResource"
@@ -68,7 +71,7 @@
                 />
             </div>
 
-            <SmallTitle>{{$t('resourceName')}}</SmallTitle>
+            <SmallTitle>{{$t('resource.resourceName')}}</SmallTitle>
 
             <div
                 class="resource-editor__name"
@@ -78,7 +81,7 @@
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
-                    :placeholder="$t('enterResourceName')"
+                    :placeholder="$t('resource.enterResourceName')"
                     class="resource-editor__name__input"
                 />
 
@@ -90,7 +93,7 @@
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody :tilte="$t('dependency')">
+        <BlockBody :tilte="$t('resource.dependency')">
             <template
                 v-slot:title2
                 v-if="releasedList.length > 0"
@@ -98,7 +101,7 @@
                 <div
                     class="resource-editor__dependency--lock"
                 >
-                    <i class="el-icon-info"/> {{$t('cannotChangedDep')}}
+                    <i class="el-icon-info"/> {{$t('resource.cannotChangedDep')}}
                 </div>
             </template>
             <!--            :isLock="releasedList.length > 0"-->
@@ -109,11 +112,11 @@
             />
         </BlockBody>
 
-        <BlockBody :tilte="$t('description')">
+        <BlockBody :tilte="$t('resource.description')">
             <RichEditor
                 class="resource-editor__description"
                 width="100%"
-                :placeholder="$t('enterDescription')"
+                :placeholder="$t('resource.enterDescription')"
                 v-model="description"
             >
             </RichEditor>
@@ -126,13 +129,13 @@
                 class="resource-editor__meta__button"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus"/> {{$t('addMeta')}}
+            ><i class="el-icon-plus"/> {{$t('resource.addMeta')}}
             </el-button>
         </div>
 
         <BlockBody
             v-if="visibleMetaInput"
-            :tilte="$t('metaInfo')">
+            :tilte="$t('resource.metaInfo')">
             <div class="resource-editor__meta__input">
                 <div class="resource-editor__meta__input__box">
                     <MetaInfoInput
@@ -155,20 +158,20 @@
                     class="resource-editor__footer__box__cancel"
                     type="text"
                     @click="goBack"
-                >{{isUpdateResource ? $t('cancel'): $t('cancelCreating')}}
+                >{{isUpdateResource ? $t('resource.cancel'): $t('resource.cancelCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     @click="onSubmitButtonClick(false)"
-                >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
+                >{{isUpdateResource ? $t('resource.save'): $t('resource.completeCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     type="primary"
                     round
                     @click="onSubmitButtonClick(true)"
-                >{{isUpdateResource ? $t('saveAndRelease'): $t('createAndRelease')}}
+                >{{isUpdateResource ? $t('resource.saveAndRelease'): $t('resource.createAndRelease')}}
                 </el-button>
             </div>
         </div>
@@ -191,7 +194,7 @@
                     round
                     type="primary"
                     class="create-release-btn"
-                    @click="createRelease()">{{$t('createANewRelease')}}
+                    @click="createRelease()">{{$t('resource.createANewRelease')}}
                 </el-button>
             </div>
         </el-dialog>

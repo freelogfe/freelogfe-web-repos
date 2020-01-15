@@ -1,6 +1,7 @@
 import mock from './mock';
 import node from './node';
 import layout from './layout';
+import resource from './resource';
 
 export default {
     common: {
@@ -61,26 +62,26 @@ export default {
         statesMap: ['normal', 'deleted']
     },
 
-    resource: {
-        createResource: 'create resource',
-        resourceType: 'resource type',
-        market: 'Release Market',
-        myResources: 'My Resources',
-        throwUp: 'decentralized resources',
-        throwUpResource: 'decentralized resources',
-        updateSuccess: 'successfully updated',
-        createSuccess: 'successfully created',
-        cancelQuestion: 'do you like to cancel resource creation?',
-        createDoneText: 'save',
-        resourceId: 'resource ID',
-        name: 'resource name',
-        type: 'resource type',
-        version: 'version',
-        status: 'resource status',
-        author: 'author',
-        createDate: 'creation date',
-
-    },
+    // resource: {
+    //     createResource: 'create resource',
+    //     resourceType: 'resource type',
+    //     market: 'Release Market',
+    //     myResources: 'My Resources',
+    //     throwUp: 'decentralized resources',
+    //     throwUpResource: 'decentralized resources',
+    //     updateSuccess: 'successfully updated',
+    //     createSuccess: 'successfully created',
+    //     cancelQuestion: 'do you like to cancel resource creation?',
+    //     createDoneText: 'save',
+    //     resourceId: 'resource ID',
+    //     name: 'resource name',
+    //     type: 'resource type',
+    //     version: 'version',
+    //     status: 'resource status',
+    //     author: 'author',
+    //     createDate: 'creation date',
+    //
+    // },
 
     release: {
         myReleases: 'My releases',
@@ -469,4 +470,5 @@ export default {
     mock,
     node,
     layout,
+    resource,
 }

@@ -1,6 +1,7 @@
 import mock from './mock';
 import node from './node';
 import layout from './layout';
+import resource from './resource';
 
 export default {
     common: {
@@ -62,25 +63,25 @@ export default {
         statesMap: ['正常', '已删除']
     },
 
-    resource: {
-        createResource: '创建资源',
-        resourceType: '资源类型',
-        market: '发行市场',
-        myResources: '我的资源库',
-        throwUp: '资源上抛',
-        throwUpResource: '上抛资源',
-        updateSuccess: '资源更新成功',
-        createSuccess: '资源创建成功',
-        cancelQuestion: '确定取消创建资源？',
-        createDoneText: '完成',
-        resourceId: '资源ID',
-        name: '资源名称',
-        type: '资源类型',
-        version: '版本',
-        status: '资源状态',
-        author: '资源作者',
-        createDate: '创建时间'
-    },
+    // resource: {
+    //     createResource: '创建资源',
+    //     resourceType: '资源类型',
+    //     market: '发行市场',
+    //     myResources: '我的资源库',
+    //     throwUp: '资源上抛',
+    //     throwUpResource: '上抛资源',
+    //     updateSuccess: '资源更新成功',
+    //     createSuccess: '资源创建成功',
+    //     cancelQuestion: '确定取消创建资源？',
+    //     createDoneText: '完成',
+    //     resourceId: '资源ID',
+    //     name: '资源名称',
+    //     type: '资源类型',
+    //     version: '版本',
+    //     status: '资源状态',
+    //     author: '资源作者',
+    //     createDate: '创建时间'
+    // },
 
     release: {
         myReleases: '我的发行',
@@ -474,4 +475,5 @@ export default {
     mock,
     node,
     layout,
+    resource,
 }
