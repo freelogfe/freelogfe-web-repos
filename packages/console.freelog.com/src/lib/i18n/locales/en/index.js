@@ -6,30 +6,6 @@ import layout from './layout';
 import resource from './resource';
 
 export default {
-    // common: {
-    //     login: 'sign in',
-    //     logout: 'sign out',
-    //     register: 'sign up',
-    //     yes: 'has bubble resources',
-    //     no: 'no bubble resources',
-    //     cancel: 'cancel',
-    //     confirm: 'ok',
-    //     operation: 'operation',
-    //     detail: 'detail',
-    //     save: 'save',
-    //     saveSuccess: 'successfully saved',
-    //     createText: 'create',
-    //     cancelCreateText: 'cancel',
-    //     createSuccessTip: 'successfully created',
-    //     searchPlaceholder: 'Search',
-    //     avatarPlaceholder: 'Upload avatar',
-    //     backText: 'back',
-    //     cancelText: 'cancel',
-    //     sureText: 'sure',
-    //     sureBtnText: 'sure',
-    //     cancelBtnText: 'cancel',
-    //     allTypes: 'all'
-    // },
 
     header: {
         langSwitchQuestion: 'Change language to {lang}?'
