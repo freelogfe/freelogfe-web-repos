@@ -114,5 +114,16 @@ export default {
 
     richEditor: {
         uploadTip: 'Click Upload or drag the image here'
-    }
+    },
+
+    // ResourceComponents
+    uploadResource: 'Upload Resource',
+    noMoreThan50m: 'Resources maximum of no more than 50m',
+    uploadSuccess: 'Success',
+    sureDelete: 'Sure delete a resource file ?',
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    reselect: 'Reselect',
+    resourceDuplicated: 'The resource already exists, cannot be duplicated to create',
+    unused: 'Unused',
 };

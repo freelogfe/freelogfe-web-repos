@@ -31,12 +31,12 @@
             <el-button
                 ref="sourceUploadButton"
                 @click="onClickButton"
-            >{{$t('uploadResource')}}
+            >{{$t('components.uploadResource')}}
             </el-button>
             <span
                 slot="tip"
                 style="font-size: 13px; color: #afafaf; padding-left: 20px; display: inline-block; vertical-align: bottom;"
-            ><small>•</small> {{$t('noMoreThan50m')}}</span>
+            ><small>•</small> {{$t('components.noMoreThan50m')}}</span>
         </el-upload>
 
         <div v-if="percentage !== null" style="display: flex;">
@@ -89,7 +89,7 @@
                                 style="font-size: 20px; color: #5cd217;"
                                 class="el-icon-circle-check"
                             />
-                            <span style="font-size: 13px; color: #333;">{{$t('uploadSuccess')}}</span>
+                            <span style="font-size: 13px; color: #333;">{{$t('components.uploadSuccess')}}</span>
 
                             <el-popover
                                 placement="top"
@@ -98,7 +98,7 @@
                             >
                                 <div style="height: 10px;"></div>
                                 <p style="font-size: 14px; color: #333; font-weight: 600; text-align: center;">
-                                    {{$t('sureDelete')}}</p>
+                                    {{$t('components.sureDelete')}}</p>
                                 <div style="height: 10px;"></div>
                                 <div style="text-align: center; margin: 0;">
                                     <el-button
@@ -106,13 +106,13 @@
                                         size="mini"
                                         type="text"
                                         @click="deleteUploadedFileCancel"
-                                    >{{$t('cancel')}}
+                                    >{{$t('components.cancel')}}
                                     </el-button>
                                     <el-button
                                         type="danger"
                                         size="mini"
                                         @click="deleteUploadedFile"
-                                    >{{$t('confirm')}}
+                                    >{{$t('components.confirm')}}
                                     </el-button>
                                 </div>
                                 <!--                                                            @click="clearUploadedResourceInfo"-->
@@ -148,7 +148,7 @@
                     type="text"
                     style="color: #999;"
                     @click="hideUploadErrorDialog"
-                >{{$t('cancel')}}
+                >{{$t('components.cancel')}}
                 </el-button>
                 &nbsp;&nbsp;&nbsp;
                 <el-button
@@ -156,7 +156,7 @@
                     plain
                     round
                     @click="onClickUpload"
-                >{{$t('reselect')}}
+                >{{$t('components.reselect')}}
                 </el-button>
             </div>
         </el-dialog>

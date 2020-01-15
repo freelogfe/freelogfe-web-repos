@@ -114,5 +114,16 @@ export default {
 
     richEditor: {
         uploadTip: '点击上传或将图片拖到此处'
-    }
+    },
+
+    // ResourceComponents
+    uploadResource: '上传资源',
+    noMoreThan50m: '资源最大不超过50M',
+    uploadSuccess: '上传成功',
+    sureDelete: '确定删除资源文件？',
+    cancel: '取消',
+    confirm: '确定',
+    reselect: '重新选择',
+    resourceDuplicated: '该资源已存在，不能重复创建',
+    unused: '未使用',
 };

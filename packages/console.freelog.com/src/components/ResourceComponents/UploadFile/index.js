@@ -3,30 +3,30 @@ import path from 'path';
 
 export default {
     name: 'UploadFile',
-    i18n: { // `i18n` 选项，为组件设置语言环境信息
-        messages: {
-            en: {
-                uploadResource: 'Upload Resource',
-                noMoreThan50m: 'Resources maximum of no more than 50m',
-                uploadSuccess: 'Success',
-                sureDelete: 'Sure delete a resource file ?',
-                cancel: 'Cancel',
-                confirm: 'Confirm',
-                reselect: 'Reselect',
-                resourceDuplicated: 'The resource already exists, cannot be duplicated to create'
-            },
-            'zh-CN': {
-                uploadResource: '上传资源',
-                noMoreThan50m: '资源最大不超过50M',
-                uploadSuccess: '上传成功',
-                sureDelete: '确定删除资源文件？',
-                cancel: '取消',
-                confirm: '确定',
-                reselect: '重新选择',
-                resourceDuplicated: '该资源已存在，不能重复创建',
-            },
-        }
-    },
+    // i18n: { // `i18n` 选项，为组件设置语言环境信息
+    //     messages: {
+    //         en: {
+    //             uploadResource: 'Upload Resource',
+    //             noMoreThan50m: 'Resources maximum of no more than 50m',
+    //             uploadSuccess: 'Success',
+    //             sureDelete: 'Sure delete a resource file ?',
+    //             cancel: 'Cancel',
+    //             confirm: 'Confirm',
+    //             reselect: 'Reselect',
+    //             resourceDuplicated: 'The resource already exists, cannot be duplicated to create'
+    //         },
+    //         'zh-CN': {
+    //             uploadResource: '上传资源',
+    //             noMoreThan50m: '资源最大不超过50M',
+    //             uploadSuccess: '上传成功',
+    //             sureDelete: '确定删除资源文件？',
+    //             cancel: '取消',
+    //             confirm: '确定',
+    //             reselect: '重新选择',
+    //             resourceDuplicated: '该资源已存在，不能重复创建',
+    //         },
+    //     }
+    // },
     props: {
         // 保证资源不能与现有资源重复
         noRepeat: {
@@ -152,7 +152,7 @@ export default {
             }
 
             if (file.size > 52428800) {
-                this.errorText = '资源最大不超过50M';
+                this.errorText = this.$t('components.noMoreThan50m');
                 throw new Error(this.errorText);
             }
 
@@ -160,7 +160,7 @@ export default {
                 const hash = await getSHA1Hash(file);
                 const res = await this.$axios.get(`/v1/resources/${hash}`);
                 if (res.data.data) {
-                    this.errorText = this.$t('resourceDuplicated');
+                    this.errorText = this.$t('components.resourceDuplicated');
                     throw new Error(this.errorText);
                 }
             }
