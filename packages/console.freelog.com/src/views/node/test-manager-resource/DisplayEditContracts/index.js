@@ -9,32 +9,32 @@ import UnsignedContract from "./UnsignedContract";
 
 export default {
     name: 'DisplayEditContracts',
-    i18n: {
-        messages: {
-            en: {
-                currentRelease: 'Current Release',
-                throwingRelease: 'Throwing Release',
-                authorizer: 'Authorizer: ',
-                authorized: 'Authorized: ',
-                contracted: 'Contracted',
-                availableSigning: 'Available for signing',
-                agencySuccess: 'Agency success',
-                success: 'Success',
-                onlyOneContract: 'Only one contract in the current licensing scheme, cannot be deactivated',
-            },
-            'zh-CN': {
-                currentRelease: '当前发行',
-                throwingRelease: '上抛发行',
-                authorizer: '授权方：',
-                authorized: '被授权方：',
-                contracted: '已签约',
-                availableSigning: '以下策略可供签约',
-                agencySuccess: '签约成功',
-                success: '操作成功',
-                onlyOneContract: '当前授权方案中只有一个合约，不可停用',
-            }
-        }
-    },
+    // i18n: {
+    //     messages: {
+    //         en: {
+    //             currentRelease: 'Current Release',
+    //             throwingRelease: 'Throwing Release',
+    //             authorizer: 'Authorizer: ',
+    //             authorized: 'Authorized: ',
+    //             contracted: 'Contracted',
+    //             availableSigning: 'Available for signing',
+    //             agencySuccess: 'Agency success',
+    //             success: 'Success',
+    //             onlyOneContract: 'Only one contract in the current licensing scheme, cannot be deactivated',
+    //         },
+    //         'zh-CN': {
+    //             currentRelease: '当前发行',
+    //             throwingRelease: '上抛发行',
+    //             authorizer: '授权方：',
+    //             authorized: '被授权方：',
+    //             contracted: '已签约',
+    //             availableSigning: '以下策略可供签约',
+    //             agencySuccess: '签约成功',
+    //             success: '操作成功',
+    //             onlyOneContract: '当前授权方案中只有一个合约，不可停用',
+    //         }
+    //     }
+    // },
 
     components: {
         UnsignedContract,

@@ -11,8 +11,8 @@
             <div style="width: 320px; flex-shrink: 0;">
                 <!-- 发行列表 -->
                 <div v-for="(item, index) in dataSource">
-                    <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>
-                    <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
+                    <NavTitle v-if="index === 0">{{$t('node.currentRelease')}}</NavTitle>
+                    <NavTitle v-if="index === 1">{{$t('node.throwingRelease')}}</NavTitle>
 
                     <NavItem
                         @gotoDetails="gotoDetails(item.releaseId, item.release.resourceVersions[0].version)"
@@ -38,18 +38,18 @@
                         style="color: #333; font-size: 14px; background-color: #fafbfb; padding: 15px;"
                     >
                         <div style="padding-bottom: 5px; display: flex;">
-                            <div style="flex-shrink: 0;">{{$t('authorizer')}}</div>
+                            <div style="flex-shrink: 0;">{{$t('node.authorizer')}}</div>
                             <div style="width: 100%; flex-shrink: 1; white-space: normal;">
                                 {{dataSource[activatedIndex].releaseName}}
                             </div>
                         </div>
                         <div style="display: flex;">
-                            <div style="flex-shrink: 0;">{{$t('authorized')}}</div>
+                            <div style="flex-shrink: 0;">{{$t('node.authorized')}}</div>
                             <div style="width: 100%; flex-shrink: 1; white-space: normal;">{{nodeInfo.nodeName}}</div>
                         </div>
                     </div>
 
-                    <ContractsContainer :title="$t('contracted')">
+                    <ContractsContainer :title="$t('node.contracted')">
                         <!-- 已签约列表 -->
                         <div
                             style="position: relative;"
@@ -71,7 +71,7 @@
                     </ContractsContainer>
 
                     <ContractsContainer
-                        :title="$t('availableSigning')"
+                        :title="$t('node.availableSigning')"
                         v-if="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0"
                     >
                         <!-- 可签约列表 -->

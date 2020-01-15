@@ -192,5 +192,18 @@ export default {
     ],
     matchResultsTexts: [
         '替换执行结果', '替换指令', '匹配数量'
-    ]
+    ],
+
+    currentRelease: 'Current Release',
+    throwingRelease: 'Throwing Release',
+    authorizer: 'Authorizer: ',
+    authorized: 'Authorized: ',
+    contracted: 'Contracted',
+    availableSigning: 'Available for signing',
+    agencySuccess: 'Agency success',
+    success: 'Success',
+    onlyOneContract: 'Only one contract in the current licensing scheme, cannot be deactivated',
+
+    enabled: 'Enabled',
+    details: 'Details',
 };

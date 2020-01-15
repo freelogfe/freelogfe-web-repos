@@ -193,5 +193,18 @@ export default {
     ],
     matchResultsTexts: [
         '替换执行结果', '替换指令', '匹配数量'
-    ]
+    ],
+
+    currentRelease: '当前发行',
+    throwingRelease: '上抛发行',
+    authorizer: '授权方：',
+    authorized: '被授权方：',
+    contracted: '已签约',
+    availableSigning: '以下策略可供签约',
+    agencySuccess: '签约成功',
+    success: '操作成功',
+    onlyOneContract: '当前授权方案中只有一个合约，不可停用',
+
+    enabled: '已启用',
+    details: '详情',
 };
