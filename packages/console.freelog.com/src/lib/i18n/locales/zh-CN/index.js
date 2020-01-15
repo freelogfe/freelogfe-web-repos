@@ -1,9 +1,9 @@
+import common from './common';
+import components from './components';
 import mock from './mock';
 import node from './node';
 import layout from './layout';
 import resource from './resource';
-import components from './components';
-import common from './common';
 
 export default {
     // common: {
@@ -332,10 +332,11 @@ export default {
     },
 
     //
+    common,
+    components,
+
     mock,
     node,
     layout,
     resource,
-    components,
-    common,
 }
