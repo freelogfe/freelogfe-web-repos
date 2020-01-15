@@ -155,5 +155,42 @@ export default {
     nodeReleaseName: 'Name',
     aboutNode: 'About Node',
     presentable: 'Presentable',
-    aboutRelease: 'Release'
+    aboutRelease: 'Release',
+
+    ruleType: 'Rule type',
+    mappingRuleContent: 'Mapping rule content',
+    matchResult: 'Match result',
+    release: 'release',
+    // presentable: 'presentable',
+    operation: 'Operation',
+    editBtnText: 'Edit',
+    enterBtnText: 'Enter mapping rules',
+    editMappingRules: 'Edit mapping rules',
+    exitBtnText: 'Exit edit mode',
+    inputPlaceHolder: 'Please enter a rule',
+    imortBtnText: 'Import',
+    batchExportBtnText: 'Batch export',
+    exportAllBtnText: 'Export all',
+    batchDeletionBtnText: 'Batch deletion',
+    saveBtnText: 'Verify and save',
+    onlineBtnText: 'Online',
+    offlineBtnText: 'Offline',
+    deleteBtnText: 'Delete',
+    sureBtnText: 'Sure',
+    cancalBtnText: 'Cancel',
+    operationsTexts: [
+        'Add', 'Source', 'Display version ', 'Set label ', 'online', 'offline', 'replace', 'Activate theme', 'Change', 'scopes'
+    ],
+    confirmTexts: [
+        'Whether to export the selected rule?', 'Whether to export all rules?', 'This action will delete the rule', 'Whether to continue?', 'Prompt', 'This will delete the ', ' rules selected', 'Online rules', 'Offline rules', ' are successful'
+    ],
+    messages: [
+        'The mapping rules are saved successfully!', 'The mapping rule was deleted successfully!'
+    ],
+    errors: [
+        'Mapping rule compilation failed: there is a syntax error！', 'There is a syntax error in the mapping rule content: ', 'Validation failed, please check and submit:', 'Validation succeeded, but there were pre-execution errors in the rule:', 'statement', 'error'
+    ],
+    matchResultsTexts: [
+        '替换执行结果', '替换指令', '匹配数量'
+    ]
 };

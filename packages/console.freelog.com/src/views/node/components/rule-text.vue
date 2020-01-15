@@ -1,13 +1,13 @@
-<i18n src="../test-manager/MappingRules/mappingRules.i18n.json"></i18n>
+<!--<i18n src="../test-manager/MappingRules/mappingRules.i18n.json"></i18n>-->
 <template >
   <div>
-    <div 
-      class="node-mapping-rule-text" 
+    <div
+      class="node-mapping-rule-text"
       :class="{ 'disabled': matchErrors.length }"
       v-html="content"></div>
     <el-tooltip placement="top">
       <div class="node-mapping-rt-tip" slot="content" v-html="matchErrorsText"></div>
-      <i class="el-icon-warning" v-if="matchErrors.length"></i>
+      <i class="el-icon-warning" v-if="matchErrors.length"/>
     </el-tooltip>
   </div>
 </template>
@@ -74,7 +74,7 @@ export default {
           break
         }
         default: {}
-      } 
+      }
       contentsArr.push(this.resolveOnlineRule())
       const symbolString = this.$i18n.locale === 'zh-CN' ? '；' : '; '
       this.content = contentsArr.filter(cont => cont !== '').join(symbolString)

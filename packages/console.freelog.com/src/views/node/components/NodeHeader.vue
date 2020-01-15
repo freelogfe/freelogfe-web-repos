@@ -18,7 +18,7 @@
                 <clipboard
                     :value="nodeHref"
                     style="display: inline-block;"
-                    @copyDone="$message.success($t('复制成功'))"
+                    @copyDone="$message.success($t('node.copySuccess'))"
                 >
                     <el-button
                         type="primary"

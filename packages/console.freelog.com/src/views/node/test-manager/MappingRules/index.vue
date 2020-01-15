@@ -1,35 +1,35 @@
-<i18n src="./mappingRules.i18n.json"></i18n>
+<!--<i18n src="./mappingRules.i18n.json"></i18n>-->
 <template>
 	<div class="mapping-rule-wrapper">
 		<div class="mapping-rule__header">
 			<div class="mr-btn-group">
 				<el-button class="mr-edit-btn" type="text" @click="tapEditBtn" >
-					<i class="el-icon-edit"></i>{{$t('enterBtnText')}}
+					<i class="el-icon-edit"></i>{{$t('node.enterBtnText')}}
 				</el-button>
 				<el-upload class="mr-import" accept="text/plain" :show-file-list="false" :auto-upload="false"  :on-change="rulesImportHandler">
-					<el-button type="text"><i class="el-icon-download"></i> {{$t('imortBtnText')}}</el-button>
+					<el-button type="text"><i class="el-icon-download"></i> {{$t('node.imortBtnText')}}</el-button>
 				</el-upload>
 				<el-button type="text" @click="tapExportBtn">
 					<i class="el-icon-upload2"></i>
-					{{selectedRules.length > 0 ? $t('batchExportBtnText') : $t('exportAllBtnText') }}
+					{{selectedRules.length > 0 ? $t('node.batchExportBtnText') : $t('node.exportAllBtnText') }}
 				</el-button>
 				<a v-show="false" ref="rulesDownload" :href="rulesTextDownloadUrl" :download="rulesTextDownloadName"></a>
 				<template v-if="selectedRules.length > 0">
-					<el-button type="text" @click="tapBatchDeleteBtn" class="mr-btn--delete"><i class="el-icon-delete"></i> {{$t('batchDeletionBtnText')}}</el-button>
+					<el-button type="text" @click="tapBatchDeleteBtn" class="mr-btn--delete"><i class="el-icon-delete"></i> {{$t('node.batchDeletionBtnText')}}</el-button>
 				</template>
 			</div>
 		</div>
 		<div class="mapping-rule__body" v-show="!editorVisible">
 			<el-table ref="mrTable" :data="targetRulesTableData" style="width: 100%" @selection-change="rulesSelectionHandler">
 				<el-table-column type="selection" width="45"></el-table-column>
-				<el-table-column :label="$t('ruleType')" width="146">
+				<el-table-column :label="$t('node.ruleType')" width="146">
           <template slot-scope="scope">
-            <rules-bar class="mr-icons" :class="{ 'disabled': scope.row.matchErrors.length }" :rules="scope.row.iconArr"></rules-bar>	
+            <rules-bar class="mr-icons" :class="{ 'disabled': scope.row.matchErrors.length }" :rules="scope.row.iconArr"></rules-bar>
           </template>
         </el-table-column>
 				<el-table-column>
 					<template slot="header">
-						<span>{{$t('mappingRuleContent')}}</span> 
+						<span>{{$t('node.mappingRuleContent')}}</span>
 						<!-- | <span>{{$t('matchResult')}}</span> -->
 					</template>
 					<template slot-scope="scope">
@@ -37,7 +37,7 @@
 						<rule-text :textRule="scope.row"></rule-text>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('operation')" width="120">
+				<el-table-column :label="$t('node.operation')" width="120">
 					<template slot-scope="scope">
 						<!-- <el-button type="text" class="mrb-btn--online" v-if="!scope.row.ruleInfo.online" @click="exchangeOnlineStatus(scope.row, true)">{{$t('onlineBtnText')}}</el-button>
 						<el-button type="text" class="mrb-btn--offline" v-else @click="exchangeOnlineStatus(scope.row, false)">{{$t('offlineBtnText')}}</el-button> -->
@@ -48,30 +48,30 @@
 		</div>
 		<div class="mapping-rule-editor-box" :class="{'visible': editorVisible}">
 			<h4>
-				{{$t('editMappingRules')}}
+				{{$t('node.editMappingRules')}}
 				<el-button class="mr-back-btn" type="text" @click="tapBackBtn">
-					<i class="el-icon-back"></i> {{$t('exitBtnText')}}
+					<i class="el-icon-back"></i> {{$t('node.exitBtnText')}}
 				</el-button>
 			</h4>
 			<div class="mapping-rule-input-box">
-				<!-- <el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('inputPlaceHolder')" v-model="rulesText"></el-input> -->
+				<!-- <el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('node.inputPlaceHolder')" v-model="rulesText"></el-input> -->
 				<codemirror :class="{ 'hasErrors': rulesInputRowsCount === 13 }" ref="codeMirror" :code="rulesText" :options="editorOptions" @input="onCodeChange"></codemirror>
 				<div class="mr-rb-btns-box">
-					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('saveBtnText')}}</el-button>
+					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('node.saveBtnText')}}</el-button>
 				</div>
 			</div>
 			<div class="mapping-rule-errors-box">
 				<template v-if="syntaxErrorsText !== ''">
-					<h4 class="syntax-error__title">{{$t('errors[2]')}}</h4>	
+					<h4 class="syntax-error__title">{{$t('node.errors[2]')}}</h4>
 					<ul v-html="syntaxErrorsText"></ul>
 				</template>
 				<template v-if="matchErrorsText !== ''">
-					<h4 class="match-error__title">{{$t('errors[3]')}}</h4>	
+					<h4 class="match-error__title">{{$t('node.errors[3]')}}</h4>
 					<ul v-html="matchErrorsText"></ul>
 				</template>
 			</div>
 			<div class="mapping-rule-match-result" v-if="syntaxErrorsText === '' && matchResultsText !== ''">
-				<h4 class="match-result__title">{{$t('matchResultsTexts[0]')}}</h4>
+				<h4 class="match-result__title">{{$t('node.matchResultsTexts[0]')}}</h4>
 				<ul v-html="matchResultsText"></ul>
 			</div>
 		</div>
@@ -104,7 +104,7 @@ export default {
 			selectedRules: [],
 			selectedRuleType: 'all',
 			rulesInputRowsCount: 18,
-			editorOptions: Object.assign({ 
+			editorOptions: Object.assign({
 				viewportMargin: 50,
 				viewportMargin: Infinity,
 				theme: 'idea', gutters: [] }, codeMirrorOptions),
@@ -174,7 +174,7 @@ export default {
 				})
 		},
 		resolveTestRules(testRules) {
-			const rulesTableData = [] 
+			const rulesTableData = []
 			const RULE_ICONS = [ "set_tags", "alter", "add", "show", "hide", "replace" ]
 
 			const operationsTexts = this.$i18n.t('operationsTexts')
@@ -183,7 +183,7 @@ export default {
 				const { operation, online, presentableName } = ruleInfo
 				const tmpRow = {
 					text, id, ruleInfo, matchErrors,
-					iconArr: [], online, 
+					iconArr: [], online,
 				}
 				var content
 				switch(operation) {
@@ -221,7 +221,7 @@ export default {
 						break
 					}
 					default: {}
-				} 
+				}
 
 				rulesTableData.push(tmpRow)
 			}
@@ -233,7 +233,7 @@ export default {
 			if(data != null) {
 				const { testRules, ruleText, themeId } = data
 				this.testRulesData = testRules
-				this.rulesText = ruleText						
+				this.rulesText = ruleText
 				this.themeId = themeId
 				this.resolveTestRules(testRules)
 			}
@@ -281,10 +281,10 @@ export default {
 				this.rulesTextDownloadName = name
 			}
 
-			this.$confirm(confirmText, confirmTexts[4], { 
-				confirmButtonText: $i18n.t('sureBtnText'), 
-				cancelButtonText: $i18n.t('cancalBtnText'), 
-				type: 'warning' 
+			this.$confirm(confirmText, confirmTexts[4], {
+				confirmButtonText: $i18n.t('sureBtnText'),
+				cancelButtonText: $i18n.t('cancalBtnText'),
+				type: 'warning'
 			})
 				.then(() => {
 					this.$refs['rulesDownload'].click()
@@ -322,7 +322,7 @@ export default {
 			const idsSet = new Set(deletedRules.map(r => r.id))
 			var tmpArr = this.rulesTableData.filter(r => !idsSet.has(r.id))
 			const rulesText = tmpArr.map(r => r.text).join('\n')
-			
+
 			this.updateMappingRules(rulesText, this.$i18n.t('messages[1]'))
 				.then(data => {
 					this.refreshMappingRules(data)
@@ -341,7 +341,7 @@ export default {
 			}).then(() => {
 				const rulesText = this.rulesTableData.map(r => {
 					if(r.id === row.id) {
-						r.ruleInfo.online = isOnline 
+						r.ruleInfo.online = isOnline
 						return decompile([r.ruleInfo])
 					}else {
 						return r.text
@@ -371,19 +371,19 @@ export default {
 		},
 		// 校验规则 并 保存
 		tapSaveBtn() {
-			
+
 			try {
 				var result = compile(this.rulesText)
 				console.log(result)
 			}catch(e) {
 				console.error(e)
 			}
-			
+
 			if(result == null) {
 				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('errors[0]')}</li>`
 				this.matchErrorsText = ''
-				return 
-			} 
+				return
+			}
 
 			if(result.errors != null) {
 				this.syntaxErrorsText = result.errorObjects.map(error => {
@@ -394,7 +394,7 @@ export default {
 					'</li>'
 				}).join('')
 				this.matchErrorsText = ''
-				return 
+				return
 			}else {
 				this.syntaxErrorsText = ''
 			}
@@ -425,7 +425,7 @@ export default {
 				matchErrorsText = matchErrors.map(item => {
 					return `<li class="mr-match-error">
 										<p>${this.$i18n.t('errors[4]')}: ${item.text}</p>
-										<p>${this.$i18n.t('errors[5]')}: ${item.error}</p>	
+										<p>${this.$i18n.t('errors[5]')}: ${item.error}</p>
 									</li>`
 				}).join('')
 			}
@@ -449,7 +449,7 @@ export default {
 						replacedName = replaced.name + (replaced.versionRange === '*' ? '' : `@${replaced.versionRange}`)
 						return `<li class="mr-match-result">
 										<p>${matchResultsTexts[1]}: ${replacerName} ${operationsTexts[6]} ${replacedName}${scopeText}</p>
-										<p>${matchResultsTexts[2]}: ${efficientCount}</p>	
+										<p>${matchResultsTexts[2]}: ${efficientCount}</p>
 									</li>`
 					}).join('')
 				}
@@ -491,9 +491,9 @@ export default {
 <style lang="less" type="text/less" scoped>
 .mapping-rule-wrapper {
 	position: relative;
-	padding-top: 40px; 
+	padding-top: 40px;
 	.mapping-rule__header {
-		margin-bottom: 36px; font-size: 14px; 
+		margin-bottom: 36px; font-size: 14px;
 		.mr-import { display: inline-block; }
 		.el-button--text {
 			margin-right: 20px; color: #333;
@@ -508,7 +508,7 @@ export default {
 	.mapping-rule__body {
 		.mr-rule-content {
 			.t-rule-tag-mock, .t-rule-tag-release {
-				margin-right: 2px; padding: 2px 8px; 
+				margin-right: 2px; padding: 2px 8px;
 				font-size: 12px; color: #fff;
 			}
 			.t-rule-tag-release { background-color: #72BB1F; }
@@ -522,7 +522,7 @@ export default {
 			display: block; padding: 0;
 			line-height: 24px; font-weight: 400; color: #333;
 		}
-			
+
 		i {
 			margin-right: 6px; font-size: 14px; font-weight: 600;
 			&.el-icon-price-tag {
@@ -539,7 +539,7 @@ export default {
 
 		h4 { margin-bottom: 25px; font-size: 14px; }
 		// transition: all .36s ease-out;
-		// -webkit-transform: translateX(100%); transform: translateX(100%); 
+		// -webkit-transform: translateX(100%); transform: translateX(100%);
 
 		&.visible {
 			opacity: 1; pointer-events: inherit;
@@ -553,21 +553,21 @@ export default {
 		.match-error__title { color: #409EFF}
 		.match-result__title { color: #000; }
 
-		.mapping-rule-input-box { 
-			position: relative; 
+		.mapping-rule-input-box {
+			position: relative;
 		}
 		.mr-rb-btns-box {
 			position: absolute; bottom: 10px; right: 20px; z-index: 100;
-			text-align: right; 
+			text-align: right;
 		}
 		.mr-rb-cancel-btn { margin-right: 10px; color: #999; }
 		.mr-rb-save-btn { }
-		.mr-back-btn { 
+		.mr-back-btn {
 			position: relative; top: -10px;
-			float: right; color: #909399; 
+			float: right; color: #909399;
 			&:hover { color: #C0C4CC; }
 		}
-		
+
 	}
 }
 </style>
@@ -581,12 +581,12 @@ export default {
 			font-size: 14px; font-weight: 400; color: #000;
 		}
 		.mr-rule-content {
-			
+
 		}
 	}
 	.mapping-rule-editor-box {
-		.CodeMirror { 
-			height: 480px; padding-bottom: 45px; border-radius: 4px; 
+		.CodeMirror {
+			height: 480px; padding-bottom: 45px; border-radius: 4px;
 			pre { line-height: 1.8; }
 			.CodeMirror-scroll { margin-right: 0; padding-bottom: 45px; }
 		}
@@ -597,7 +597,7 @@ export default {
 }
 .mr-operation-item {
 	&.active { color:#409EFF; }
-	
+
 	&.mr-operation-set {
 		i.el-icon-price-tag { transform: rotate(-90deg); }
 	}
@@ -606,7 +606,7 @@ export default {
 	textarea { padding-bottom: 45px; }
 }
 .mapping-rule-errors-box {
-	margin-top: 20px; margin-bottom: 30px; 
+	margin-top: 20px; margin-bottom: 30px;
 	.mr-syntax-error, .mr-match-error, .mr-match-result {
 		margin-left: 15px; list-style-type: disc;
 		line-height: 2; color: #666;
