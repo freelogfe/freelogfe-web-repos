@@ -3,32 +3,33 @@ import node from './node';
 import layout from './layout';
 import resource from './resource';
 import components from './components';
+import common from './common';
 
 export default {
-    common: {
-        login: '登录',
-        logout: '登出',
-        register: '注册',
-        yes: '有',
-        no: '无',
-        cancel: '取消',
-        confirm: '确定',
-        operation: '操作',
-        detail: '详情',
-        save: '保存',
-        saveSuccess: '保存成功',
-        createText: '创建',
-        cancelCreateText: '取消创建',
-        createSuccessTip: '创建成功',
-        searchPlaceholder: '按回车搜索',
-        avatarPlaceholder: '去上传头像',
-        backText: '返回',
-        cancelText: '取消',
-        sureText: '确定',
-        sureBtnText: '确 定',
-        cancelBtnText: '取 消',
-        allTypes: '全部类型'
-    },
+    // common: {
+    //     login: '登录',
+    //     logout: '登出',
+    //     register: '注册',
+    //     yes: '有',
+    //     no: '无',
+    //     cancel: '取消',
+    //     confirm: '确定',
+    //     operation: '操作',
+    //     detail: '详情',
+    //     save: '保存',
+    //     saveSuccess: '保存成功',
+    //     createText: '创建',
+    //     cancelCreateText: '取消创建',
+    //     createSuccessTip: '创建成功',
+    //     searchPlaceholder: '按回车搜索',
+    //     avatarPlaceholder: '去上传头像',
+    //     backText: '返回',
+    //     cancelText: '取消',
+    //     sureText: '确定',
+    //     sureBtnText: '确 定',
+    //     cancelBtnText: '取 消',
+    //     allTypes: '全部类型'
+    // },
 
     header: {
         langSwitchQuestion: '切换为 {lang}？'
@@ -336,4 +337,5 @@ export default {
     layout,
     resource,
     components,
+    common,
 }
