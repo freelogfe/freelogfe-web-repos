@@ -27,7 +27,8 @@ export default {
                 { name: this.$t('node.presentableManagement'), tab: 'ReleaseList' },
                 { name: this.$t('node.nodePageStyle'), tab: 'StylePage' },
                 { name: this.$t('node.mappingRulesManagement'), tab: 'MappingRules' },
-            ]
+            ],
+            routeUpdated: false
         };
     },
     mounted() {
@@ -60,5 +61,14 @@ export default {
                 }
             })
         }
+    },
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            vm.routeUpdated = true
+        })
+    },
+    beforeRouteUpdate (to, from, next) {
+        this.routeUpdated = false
+        next()
     }
 }

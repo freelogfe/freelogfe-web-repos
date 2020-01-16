@@ -24,9 +24,10 @@
         </div>
 
         <div class="test-management__main">
-            <ReleaseList v-if="selectedTab === 'ReleaseList'"/>
+            <component :is="selectedTab" :routeUpdated="routeUpdated"></component>
+            <!-- <ReleaseList v-if="selectedTab === 'ReleaseList'"/>
             <StylePage v-if="selectedTab === 'StylePage'"/>
-            <MappingRules v-if="selectedTab === 'MappingRules'"/>
+            <MappingRules v-if="selectedTab === 'MappingRules'"/> -->
         </div>
     </div>
 </template>

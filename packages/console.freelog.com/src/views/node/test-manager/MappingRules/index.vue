@@ -33,14 +33,11 @@
 						<!-- | <span>{{$t('matchResult')}}</span> -->
 					</template>
 					<template slot-scope="scope">
-						<!-- <span class="mr-rule-content" v-html="scope.row.content"></span> -->
 						<rule-text :textRule="scope.row"></rule-text>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('node.operation')" width="120">
 					<template slot-scope="scope">
-						<!-- <el-button type="text" class="mrb-btn--online" v-if="!scope.row.ruleInfo.online" @click="exchangeOnlineStatus(scope.row, true)">{{$t('onlineBtnText')}}</el-button>
-						<el-button type="text" class="mrb-btn--offline" v-else @click="exchangeOnlineStatus(scope.row, false)">{{$t('offlineBtnText')}}</el-button> -->
 						<el-button type="text" class="mrb-btn--delete" @click="tapDeleteBtn(scope.row)"><i class="el-icon-delete"></i></el-button>
 					</template>
 				</el-table-column>
@@ -54,7 +51,6 @@
 				</el-button>
 			</h4>
 			<div class="mapping-rule-input-box">
-				<!-- <el-input type="textarea" :rows="rulesInputRowsCount" :placeholder="$t('node.inputPlaceHolder')" v-model="rulesText"></el-input> -->
 				<codemirror :class="{ 'hasErrors': rulesInputRowsCount === 13 }" ref="codeMirror" :code="rulesText" :options="editorOptions" @input="onCodeChange"></codemirror>
 				<div class="mr-rb-btns-box">
 					<el-button type="primary" class="mr-rb-save-btn" @click="tapSaveBtn" size="small" round>{{$t('node.saveBtnText')}}</el-button>
@@ -86,8 +82,12 @@ import { codemirror, codeMirrorOptions } from '@/lib/codemirror'
 import 'codemirror/mode/javascript/javascript'
 require('codemirror/theme/idea.css')
 
+var editorVisible = false
 export default {
 	name: "MappingRules",
+	props: {
+		routeUpdated: Boolean
+	},
 	data() {
 		return {
 			rulesTableData: [],
@@ -150,6 +150,12 @@ export default {
 		},
 	},
 	mounted() {
+		if (this.routeUpdated) {
+			editorVisible = false
+			this.editorVisible = editorVisible
+		} else {
+			this.editorVisible = editorVisible
+		}
 		this.loadMappingRulesTable()
 	},
 	methods: {
@@ -177,7 +183,7 @@ export default {
 			const rulesTableData = []
 			const RULE_ICONS = [ "set_tags", "alter", "add", "show", "hide", "replace" ]
 
-			const operationsTexts = this.$i18n.t('operationsTexts')
+			const operationsTexts = this.$i18n.t('node.operationsTexts')
 			for(let i = 0; i < testRules.length; i++) {
 				const { matchErrors, ruleInfo, text, id } = testRules[i]
 				const { operation, online, presentableName } = ruleInfo
@@ -262,13 +268,14 @@ export default {
 		},
 		tapEditBtn() {
 			this.editorVisible = true
+			editorVisible = this.editorVisible
 			// this.resolveMatchErrors(this.testRulesData)
 		},
 		// 导出规则
 		tapExportBtn() {
 			var confirmText = ''
 			const $i18n = this.$i18n
-			const confirmTexts = $i18n.t('confirmTexts')
+			const confirmTexts = $i18n.t('node.confirmTexts')
 			if(this.selectedRules.length > 0) {
 				confirmText = confirmTexts[0]
 				const [ url, name ] = this.getRulesDownloadUrl(this.selectedRules)
@@ -282,8 +289,8 @@ export default {
 			}
 
 			this.$confirm(confirmText, confirmTexts[4], {
-				confirmButtonText: $i18n.t('sureBtnText'),
-				cancelButtonText: $i18n.t('cancalBtnText'),
+				confirmButtonText: $i18n.t('node.sureBtnText'),
+				cancelButtonText: $i18n.t('node.cancalBtnText'),
 				type: 'warning'
 			})
 				.then(() => {
@@ -294,12 +301,12 @@ export default {
 		// 批量删除规则
 		tapBatchDeleteBtn() {
 			const $i18n = this.$i18n
-			const confirmTexts = $i18n.t('confirmTexts')
+			const confirmTexts = $i18n.t('node.confirmTexts')
 			const text = this.selectedRules.map(r => r.content).join(', ')
 			this.$confirm(`${confirmTexts[5]}${this.selectedRules.length}${confirmTexts[6]}, ${confirmTexts[3]}`, confirmTexts[4], {
 					dangerouslyUseHTMLString: true,
-          confirmButtonText: $i18n.t('sureBtnText'),
-          cancelButtonText: $i18n.t('cancalBtnText'),
+          confirmButtonText: $i18n.t('node.sureBtnText'),
+          cancelButtonText: $i18n.t('node.cancalBtnText'),
           type: 'warning'
         }).then(() => {
           this.deleteMappingRules(this.selectedRules)
@@ -308,11 +315,11 @@ export default {
 		// 删除规则
 		tapDeleteBtn(row) {
 			const $i18n = this.$i18n
-			const confirmTexts = $i18n.t('confirmTexts')
+			const confirmTexts = $i18n.t('node.confirmTexts')
 			this.$confirm(`${confirmTexts[2]} “${row.content}”，${confirmTexts[3]}`, confirmTexts[4], {
 					dangerouslyUseHTMLString: true,
-          confirmButtonText: $i18n.t('sureBtnText'),
-          cancelButtonText: $i18n.t('cancalBtnText'),
+          confirmButtonText: $i18n.t('node.sureBtnText'),
+          cancelButtonText: $i18n.t('node.cancalBtnText'),
           type: 'warning'
         }).then(() => {
           this.deleteMappingRules([row])
@@ -323,7 +330,7 @@ export default {
 			var tmpArr = this.rulesTableData.filter(r => !idsSet.has(r.id))
 			const rulesText = tmpArr.map(r => r.text).join('\n')
 
-			this.updateMappingRules(rulesText, this.$i18n.t('messages[1]'))
+			this.updateMappingRules(rulesText, this.$i18n.t('node.messages[1]'))
 				.then(data => {
 					this.refreshMappingRules(data)
 				})
@@ -331,12 +338,12 @@ export default {
 		// 上下线规则
 		exchangeOnlineStatus(row, isOnline) {
 			const $i18n = this.$i18n
-			const confirmTexts = $i18n.t('confirmTexts')
+			const confirmTexts = $i18n.t('node.confirmTexts')
 			var operationText = isOnline ? confirmTexts[7] : confirmTexts[8]
 			this.$confirm(`${operationText} “${row.content}”, ${confirmTexts[3]}`, confirmTexts[4], {
 				dangerouslyUseHTMLString: true,
-				confirmButtonText: $i18n.t('sureBtnText'),
-				cancelButtonText: $i18n.t('cancalBtnText'),
+				confirmButtonText: $i18n.t('node.sureBtnText'),
+				cancelButtonText: $i18n.t('node.cancalBtnText'),
 				type: 'warning'
 			}).then(() => {
 				const rulesText = this.rulesTableData.map(r => {
@@ -380,7 +387,7 @@ export default {
 			}
 
 			if(result == null) {
-				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('errors[0]')}</li>`
+				this.syntaxErrorsText = `<li class="mr-syntax-error">${this.$i18n.t('node.errors[0]')}</li>`
 				this.matchErrorsText = ''
 				return
 			}
@@ -389,8 +396,8 @@ export default {
 				this.syntaxErrorsText = result.errorObjects.map(error => {
 					const { lineText = '', line = -1, col = -1, msg = '' } = error
 					return '<li class="mr-syntax-error">' +
-					 	(line === -1 || col === -1 ? '' : `<p>${this.$i18n.t('errors[4]')}: line ${line}, col ${col} ${lineText}</p>`) +
-						`<p>${this.$i18n.t('errors[5]')}: ${msg}</p>` +
+					 	(line === -1 || col === -1 ? '' : `<p>${this.$i18n.t('node.errors[4]')}: line ${line}, col ${col} ${lineText}</p>`) +
+						`<p>${this.$i18n.t('node.errors[5]')}: ${msg}</p>` +
 					'</li>'
 				}).join('')
 				this.matchErrorsText = ''
@@ -405,7 +412,7 @@ export default {
 					this.resolveMatchErrors(testRules)
 					this.resolveMatchResults(testRules)
 					if (this.matchErrorsText === '') {
-						this.$message.success(this.$i18n.t('messages[0]'))
+						this.$message.success(this.$i18n.t('node.messages[0]'))
 					}
 					this.refreshMappingRules(data)
 				})
@@ -424,8 +431,8 @@ export default {
 			if(matchErrors.length > 0) {
 				matchErrorsText = matchErrors.map(item => {
 					return `<li class="mr-match-error">
-										<p>${this.$i18n.t('errors[4]')}: ${item.text}</p>
-										<p>${this.$i18n.t('errors[5]')}: ${item.error}</p>
+										<p>${this.$i18n.t('node.errors[4]')}: ${item.text}</p>
+										<p>${this.$i18n.t('node.errors[5]')}: ${item.error}</p>
 									</li>`
 				}).join('')
 			}
@@ -434,8 +441,8 @@ export default {
 		resolveMatchResults(testRules) {
 			var matchResultsText = ''
 			const symbolString = this.$i18n.locale === 'zh-CN' ? '，' : ', '
-			const operationsTexts = this.$i18n.t('operationsTexts')
-			const matchResultsTexts = this.$i18n.t('matchResultsTexts')
+			const operationsTexts = this.$i18n.t('node.operationsTexts')
+			const matchResultsTexts = this.$i18n.t('node.matchResultsTexts')
 			for (let tRule of testRules) {
 				const { ruleInfo: { replaces } } = tRule
 				if (replaces && replaces.length > 0) {
@@ -470,7 +477,7 @@ export default {
 					self.$message.error({
 						dangerouslyUseHTMLString: true,
 						duration: 5000,
-						message: self.$i18n.t('errors[1]') + "<br/>" + result.errors.join('<br/>')
+						message: self.$i18n.t('node.errors[1]') + "<br/>" + result.errors.join('<br/>')
 					})
 				}else {
 					self.rulesText = self.rulesText + '\n' + exportText
