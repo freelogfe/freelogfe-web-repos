@@ -1,7 +1,6 @@
 <template>
   <transition name="content">
-    <router-view :key="key"></router-view>
-      123
+    <router-view :key="key"/>
   </transition>
 </template>
 

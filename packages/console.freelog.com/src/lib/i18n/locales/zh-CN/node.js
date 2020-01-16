@@ -150,6 +150,63 @@ export default {
     deletedSuccess: '删除成功',
     setVersionSuccess: '设置版本成功',
     haveNotSetTheme: '您还没有为该节点设置主题，节点无法展示。 您可以添加theme类型的测试资源作为节点的主题。',
+    exception: '异常',
+    activationSuccess: '激活成功',
+    testPresentableInfo: '测试展品信息',
+    nodeReleaseName: '节点发行名称',
+    aboutNode: '节点相关',
+    presentable: '展品',
+    aboutRelease: '相关发行',
 
+    ruleType: '规则类型',
+    mappingRuleContent: '映射规则内容',
+    matchResult: '匹配结果',
+    release: '发行',
+    // 'presentable': '展品',
+    operation: '操作',
+    editMappingRules: '编辑映射规则',
+    inputPlaceHolder: '请输入规则',
+    imortBtnText: '导入',
+    batchExportBtnText: '批量导出',
+    exportAllBtnText: '全部导出',
+    batchDeletionBtnText: '批量删除',
+    editBtnText: '编辑',
+    enterBtnText: '进入编辑模式',
+    exitBtnText: '退出编辑模式',
+    saveBtnText: '校验并保存',
+    onlineBtnText: '上线',
+    offlineBtnText: '下线',
+    deleteBtnText: '删除',
+    sureBtnText: '确定',
+    cancalBtnText: '取消',
+    operationsTexts: [
+        '新增', '；来源', '，展示版本 ', '设置标签 ', '展品状态 上线', '展品状态 下线', '替换', '激活主题', '变更', '作用域'
+    ],
+    confirmTexts: [
+        '是否导出所选的规则？', '是否导出全部的规则？', '此操作将删除规则', '是否继续？', '提示', '此操作将删除所选中的', '条规则', '上线规则', '下线规则', '成功'
+    ],
+    messages: [
+        '映射规则保存成功！', '映射规则删除成功!'
+    ],
+    errors: [
+        '映射规则编译失败：存在语法错误！', '映射规则内容存在语法错误：', '校验失败，请检查更正后提交:', '校验成功，但规则中存在预执行错误:', '语句', '错误'
+    ],
+    matchResultsTexts: [
+        '替换执行结果', '替换指令', '匹配数量'
+    ],
 
+    currentRelease: '当前发行',
+    throwingRelease: '上抛发行',
+    authorizer: '授权方：',
+    authorized: '被授权方：',
+    contracted: '已签约',
+    availableSigning: '以下策略可供签约',
+    agencySuccess: '签约成功',
+    success: '操作成功',
+    onlyOneContract: '当前授权方案中只有一个合约，不可停用',
+
+    enabled: '已启用',
+    details: '详情',
+
+    latestVersion: '最新版本',
 };

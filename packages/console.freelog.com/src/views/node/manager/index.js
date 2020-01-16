@@ -28,19 +28,19 @@ export default {
             isPageStyle: this.$route.query.isPageStyle && this.$route.query.isPageStyle === 'true',
             // isPageStyle: true,
             // 筛选『全部』和『待处理』
-            filterTodo: '全部',
+            filterTodo: this.$t('all'),
             // 筛选搜索框
             filterSearch: '',
             // 表格数据
             tableData: null,
             // 类型可选项
-            allTypes: [this.$t('allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+            allTypes: [this.$t('node.allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
             // 已选类型
-            selectedType: this.$t('allType'),
+            selectedType: this.$t('node.allType'),
             // 状态可以选项
-            allState: [this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
+            allState: [this.$t('node.allState'), this.$t('node.online'), this.$t('node.noOnline'), this.$t('node.contractException')],
             // 已选状态
-            selectedState: this.$t('allState'),
+            selectedState: this.$t('node.allState'),
 
             // 当前页码
             currentPage: 1,
@@ -121,7 +121,7 @@ export default {
                 nodeId: this.$route.params.nodeId,
                 page: this.currentPage,
                 pageSize: this.pageSize,
-                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === this.$t('allType') ? undefined : this.selectedType),
+                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === this.$t('node.allType') ? undefined : this.selectedType),
                 isOnline: this.stateTextToValue(this.selectedState),
                 keywords: this.filterSearch || undefined,
                 omitResourceType: this.isPageStyle ? undefined : 'page_build',
@@ -163,7 +163,7 @@ export default {
          * 修改使用版本
          * @param value
          * @param row
-         * @returns {Promise<ElMessageComponent>}
+         * @returns {Promise<any>}
          */
         async onVersionChange(value, row) {
             // console.log(value, row, '1234233');
@@ -199,11 +199,11 @@ export default {
             //this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')
             //'全部状态', '已上线', '未上线', '合约异常'
             switch (text) {
-                case this.$t('allState'):
+                case this.$t('node.allState'):
                     return 2;
-                case this.$t('online'):
+                case this.$t('node.online'):
                     return 1;
-                case this.$t('noOnline'):
+                case this.$t('node.noOnline'):
                     return 0;
                 default:
                     return 2;
@@ -263,10 +263,10 @@ export default {
             // console.log(item, 'IYOIUHJLKJN');
             if (item.isOnline === 0) {
                 if (!item.policies || item.policies.length === 0) {
-                    return this.$message.error(this.$t('cannotOnline.noPolicy'));
+                    return this.$message.error(this.$t('node.cannotOnline.noPolicy'));
                 }
                 if (!item.isAuth) {
-                    return this.$message.error(this.$t('cannotOnline.exceptions'));
+                    return this.$message.error(this.$t('node.cannotOnline.exceptions'));
                 }
             }
             const res = await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
@@ -346,8 +346,8 @@ export default {
     watch: {
         isPageStyle() {
             this.filterSearch = '';
-            this.selectedType = this.$t('allType');
-            this.selectedState = this.$t('allState');
+            this.selectedType = this.$t('node.allType');
+            this.selectedState = this.$t('node.allState');
             this.currentPage = 1;
             this.pageSize = 10;
             this.handleTableData();

@@ -5,8 +5,8 @@
         >
             <BreadCrumb
                 :list="[
-                    {text: originInfo.resourceType === 'page_build' ? '主题管理' : '展品管理', to: `/node/test-manager/${nodeId}`},
-                    {text: '测试展品信息'}
+                    {text: originInfo.resourceType === 'page_build' ? $t('node.nodePageStyle') : $t('node.presentableManagement'), to: `/node/test-manager/${nodeId}`},
+                    {text: $t('node.testPresentableInfo')}
                 ]"
             />
         </div>
@@ -24,26 +24,30 @@
             :content="originInfo.intro"
         />
 
-        <ModuleBlock>
-            <BlockItem label="状态" v-if="originInfo.resourceType !== 'page_build'">
+        <ModuleBlock :label="$t('node.aboutNode')">
+            <BlockItem
+                :label="$t('node.status')"
+                v-if="originInfo.resourceType !== 'page_build'"
+            >
                 <div v-show="!isOnline" style="display: flex; align-items: center;">
-                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">未上线</label>
+                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">{{$t('node.noOnline')}}</label>
                     <a
                         @click="onLineAndOffLine"
                         style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
-                    >上线</a>
+                    >{{$t('node.action.online')}}</a>
                 </div>
                 <div v-show="isOnline" style="display: flex; align-items: center;">
-                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">已上线</label>
+                    <label
+                        style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">{{$t('node.online')}}</label>
                     <a
                         @click="onLineAndOffLine"
                         style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
-                    >下线</a>
+                    >{{$t('node.action.downline')}}</a>
                 </div>
             </BlockItem>
 
             <BlockItem
-                label="状态"
+                :label="$t('node.status')"
                 v-if="originInfo.resourceType === 'page_build'"
             >
                 <div
@@ -51,17 +55,17 @@
                     style="display: flex; align-items: center;"
                 >
                     <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;"
-                    >未激活</label>
+                    >{{$t('node.inactive')}}</label>
                     <a
                         @click="activateTheme"
                         style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"
-                    >激活</a>
+                    >{{$t('node.active')}}</a>
                 </div>
                 <div
                     v-show="activatedThemeId === testResourceID"
                     style="display: flex; align-items: center;"
                 >
-                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">已激活</label>
+                    <label style="font-size: 14px; color: #333; font-weight: 600; padding-right: 40px;">{{$t('node.activated')}}</label>
                     <!--                    <a-->
                     <!--                        @click="onLineAndOffLine"-->
                     <!--                        style="display: inline-block; line-height: 28px; background-color: #409eff; color: #fff; width: 60px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer;"-->
@@ -69,7 +73,7 @@
                 </div>
             </BlockItem>
 
-            <BlockItem label="节点发行名称">
+            <BlockItem :label="$t('node.nodeReleaseName')">
                 <ConfirmInput
                     v-if="!!originInfo"
                     :disabled="!!nodePresentableId"
@@ -78,7 +82,7 @@
                 />
             </BlockItem>
             <BlockItem
-                label="展示版本"
+                :label="$t('node.displayVersion')"
                 v-if="versions.length !== 0"
             >
                 <el-select
@@ -93,7 +97,7 @@
                     </el-option>
                 </el-select>
             </BlockItem>
-            <BlockItem label="标签">
+            <BlockItem :label="$t('node.tags')">
                 <div style="height: 5px;"></div>
                 <!--                actionText="新标签"-->
                 <FreelogTags
@@ -102,7 +106,7 @@
             </BlockItem>
         </ModuleBlock>
 
-        <ContentBlock :title="'授权管理'">
+        <ContentBlock :title="$t('node.authorization')">
             <DisplayEditContracts/>
         </ContentBlock>
 

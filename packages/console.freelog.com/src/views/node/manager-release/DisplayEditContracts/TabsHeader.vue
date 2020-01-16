@@ -14,15 +14,15 @@
         </div>
         <div style="display: flex; font-size: 12px; color: #333; padding-right: 10px;">
             <div style="display: flex; padding-left: 30px; align-items: center;">
-                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #fbb726;"></i>
+                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #fbb726;"/>
                 <span style="padding-left: 5px;">{{$t('pending')}}</span>
             </div>
             <div style="display: flex; padding-left: 30px; align-items: center;">
-                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #39c500;"></i>
+                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #39c500;"/>
                 <span style="padding-left: 5px;">{{$t('active')}}</span>
             </div>
             <div style="display: flex; padding-left: 30px; align-items: center;">
-                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #e35a5f;"></i>
+                <i style="width: 8px; height: 8px; border-radius: 50%; background-color: #e35a5f;"/>
                 <span style="padding-left: 5px;">{{$t('termination')}}</span>
             </div>
         </div>

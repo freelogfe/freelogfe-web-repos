@@ -25,7 +25,7 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import Sidebar from './Sidebar/index.vue'
+    // import Sidebar from './Sidebar/index.vue'
     import Header from './Header/index.vue'
     import Footer from './Footer/index.vue'
     // import Breadcrumb from './breadcrumb/index.vue'
@@ -55,7 +55,7 @@
         },
         components: {
             'fl-header': Header,
-            'fl-sidebar': Sidebar,
+            // 'fl-sidebar': Sidebar,
             'fl-footer': Footer,
             // 'fl-breadcrumb': Breadcrumb
             BreadCrumb,

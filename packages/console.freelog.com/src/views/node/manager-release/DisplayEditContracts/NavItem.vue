@@ -6,7 +6,7 @@
     >
         <div style="color: #333; font-size: 14px; font-weight: 600;">{{title}} <a
             @click="gotoDetails"
-            style="font-size: 12px;text-decoration: underline; color: #409eff; margin-left: 8px;">详情</a></div>
+            style="font-size: 12px;text-decoration: underline; color: #409eff; margin-left: 8px;">{{$t('node.details')}}</a></div>
         <!--        <div style="height: 10px;"></div>-->
         <div style="font-size: 12px; color: #999;">{{type | pageBuildFilter}} | {{version}} | {{date}}</div>
         <div style="overflow: hidden;">

@@ -39,7 +39,7 @@
             style="font-size: 12px; color: #666; background-color: #f1f1f1; border-radius: 50%; padding: 5px; cursor: pointer; margin-bottom: 10px;"
             class="el-icon-plus"
             @click="showInput"
-        ></i>
+        />
         <!--      </span>-->
         <!--    </el-button>-->
     </div>

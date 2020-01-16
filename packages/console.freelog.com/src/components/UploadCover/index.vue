@@ -22,7 +22,7 @@
                     :style="{height: height + 'px', width: width + 'px'}"
                     v-if="imageUrl"
                 >
-                    <i class="el-icon-circle-plus" style="color: #fff; font-size: 40px;"></i>
+                    <i class="el-icon-circle-plus" style="color: #fff; font-size: 40px;"/>
                     <span v-if="textVisible && !!reUploadText"
                           style="color: #fff; font-weight: 600; font-size: 14px; padding-top: 10px;">{{reUploadText}}</span>
                 </div>
@@ -32,6 +32,7 @@
                     :src="imageUrl"
                     class="avatar"
                     :style="{height: height + 'px', width: width + 'px'}"
+                    alt=""
                 />
 
                 <div
@@ -42,7 +43,7 @@
                     <i
                         style="color: #666; font-size: 40px;"
                         class="el-icon-circle-plus"
-                    ></i>
+                    />
                     <span v-if="textVisible && !!uploadText"
                           style="color: #666; font-weight: 600; font-size: 14px; padding-top: 10px;">{{uploadText}}</span>
                 </div>
@@ -61,6 +62,7 @@
                     style="max-width: 400px; max-height: 400px;"
                     :src="tmpImageUrl"
                     ref="tmpImage"
+                    alt=""
                 />
             </div>
             <div style="height: 40px;"></div>
@@ -69,7 +71,7 @@
                     type="text"
                     style="color: #999;"
                     @click="tmpImageUrl = ''"
-                >取消
+                >{{$t('components.cancel')}}
                 </el-button>
                 &nbsp;&nbsp;&nbsp;
                 <el-button
@@ -77,7 +79,7 @@
                     plain
                     round
                     @click="saveCropImageHandler"
-                >裁剪
+                >{{$t('components.crop')}}
                 </el-button>
             </div>
         </el-dialog>
@@ -92,8 +94,8 @@
         >
             <div style="height: 20px;"></div>
             <div style="display: flex; align-items: center; justify-content: center;">
-                <i class="el-icon-warning" style="color: #FFC000; font-size: 20px;"></i> <span
-                style="font-size: 14px; color: #333; font-weight: 600; padding-left: 10px;">封面图片不能超过5M</span>
+                <i class="el-icon-warning" style="color: #FFC000; font-size: 20px;"/> <span
+                style="font-size: 14px; color: #333; font-weight: 600; padding-left: 10px;">{{$t('components.coverMoreThan')}}</span>
             </div>
             <div style="height: 40px;"></div>
             <div style="display: flex; align-items: center; justify-content: center;">
@@ -101,7 +103,7 @@
                     type="text"
                     style="color: #999;"
                     @click="hideUploadDialog"
-                >取消
+                >{{$t('components.cancel')}}
                 </el-button>
                 &nbsp;&nbsp;&nbsp;
                 <el-button
@@ -109,7 +111,7 @@
                     plain
                     round
                     @click="emitUpload"
-                >重新选择
+                >{{$t('components.reselect')}}
                 </el-button>
             </div>
         </el-dialog>
