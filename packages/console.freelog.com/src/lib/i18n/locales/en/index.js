@@ -4,6 +4,7 @@ import mock from './mock';
 import node from './node';
 import layout from './layout';
 import resource from './resource';
+import release from './release';
 
 export default {
 
@@ -40,10 +41,10 @@ export default {
         statesMap: ['normal', 'deleted']
     },
 
-    release: {
-        myReleases: 'My releases',
-        management: 'Release management',
-    },
+    // release: {
+    //     myReleases: 'My releases',
+    //     management: 'Release management',
+    // },
     presentable: {
         nodeIndex: 'node home page',
         id: 'presentable ID',
@@ -310,5 +311,6 @@ export default {
     node,
     layout,
     resource,
+    release,
 
 }

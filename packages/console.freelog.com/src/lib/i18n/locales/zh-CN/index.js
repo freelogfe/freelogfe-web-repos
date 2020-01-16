@@ -4,6 +4,7 @@ import mock from './mock';
 import node from './node';
 import layout from './layout';
 import resource from './resource';
+import release from './release';
 
 export default {
     header: {
@@ -39,10 +40,10 @@ export default {
         statesMap: ['正常', '已删除']
     },
 
-    release: {
-        myReleases: '我的发行',
-        management: '发行管理',
-    },
+    // release: {
+    //     myReleases: '我的发行',
+    //     management: '发行管理',
+    // },
 
     presentable: {
         nodeIndex: '节点首页',
@@ -314,4 +315,5 @@ export default {
     node,
     layout,
     resource,
+    release,
 }
