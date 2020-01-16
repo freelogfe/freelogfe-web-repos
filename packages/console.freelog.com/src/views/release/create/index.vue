@@ -1,4 +1,4 @@
-<i18n src="./create.i18n.json"></i18n>
+<!--<i18n src="./create.i18n.json"></i18n>-->
 <template>
   <div id="release-create" v-loading="resourceDetail === null" v-if="resourceDetail !== null">
     <el-form class="r-c-w-cont" ref="createReleaseForm" :model="formData" :rules="rules">
@@ -15,12 +15,12 @@
             </div>
           </h2>
           <p class="rcw-intro">
-            {{resourceDetail.intro || $t('noDesc')}}
+            {{resourceDetail.intro || $t('release.noDesc')}}
           </p>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-name">
-        <h3>{{$t('name')}}<span>·{{$t('tips[0]')}}</span></h3>
+        <h3>{{$t('release.name')}}<span>·{{$t('release.tips[0]')}}</span></h3>
         <el-form-item prop="releaseName" class="cont">
           <span>*</span>
           {{session.user.username}} /
@@ -33,11 +33,11 @@
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-cover">
-        <h3>{{$t('cover')}}</h3>
+        <h3>{{$t('release.cover')}}</h3>
         <UploadCover :imageUrl="coverImageUrl" :onUploaded="uploadCoverSuccess"></UploadCover>
       </div>
       <div class="r-c-w-row r-c-w-upcast" v-if="depReleasesList.length">
-        <h3>{{$t('basicUpcast')}}<span>·{{$t('tips[1]')}}</span></h3>
+        <h3>{{$t('release.basicUpcast')}}<span>·{{$t('release.tips[1]')}}</span></h3>
         <div class="cont">
           <div
                   class="upcast-release-item"
@@ -45,18 +45,18 @@
                   :key="'upcast-release-' + index"
           ><i class="el-icon-back"></i>{{item.releaseName}}
           </div>
-          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">{{$t('noBasicUpcast')}}</div>
+          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">{{$t('release.noBasicUpcast')}}</div>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-version">
-        <h3>{{$t('version')}}</h3>
+        <h3>{{$t('release.version')}}</h3>
         <el-form-item prop="version" class="cont">
           <span>*</span>
           <el-input v-model="formData.version"></el-input>
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-scheme" v-if="depReleasesList.length">
-        <h3>{{$t('scheme')}}</h3>
+        <h3>{{$t('release.scheme')}}</h3>
         <div class="cont">
           <scheme-manage
                   type="create"
@@ -70,8 +70,8 @@
     </el-form>
     <div class="r-c-w-footer">
       <div class="body">
-        <div class="cancel" @click="cancelCreateRelease">{{$t('cancelBtnText')}}</div>
-        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">{{$t('createBtnText')}}</el-button>
+        <div class="cancel" @click="cancelCreateRelease">{{$t('release.cancelBtnText')}}</div>
+        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">{{$t('release.cancelCreateBtnText')}}</el-button>
       </div>
     </div>
   </div>
@@ -90,18 +90,18 @@
       const $i18n = this.$i18n
       const validateName = (rule, value, callback) => {
         if(value.length < 1 || value.length > 60) {
-          callback($i18n.t('messages[0]'))
+          callback($i18n.t('release.messages[0]'))
         }else if(config['COMMON_NAME_REGEXP'].test(value)) {
           callback()
         }else {
-          callback($i18n.t('messages[1]') + '：\ / : * ? " < > | @ # $')
+          callback($i18n.t('release.messages[1]') + '：\ / : * ? " < > | @ # $')
         }
       }
       const validateVersion = (rule, value, callback) => {
         if(/^\d+\.\d+.\d+$/.test(value)) {
           callback()
         }else {
-          callback(new Error($i18n.t('messages[2]')))
+          callback(new Error($i18n.t('release.messages[2]')))
         }
       }
 
@@ -115,11 +115,11 @@
         },
         rules: {
           releaseName: [
-            { required: true, message: $i18n.t('messages[3]'), trigger: 'blur'},
+            { required: true, message: $i18n.t('release.messages[3]'), trigger: 'blur'},
             { validator: validateName, trigger: 'blur' }
           ],
           version: [
-            { required: true, message: $i18n.t('messages[4]'), trigger: 'blur'},
+            { required: true, message: $i18n.t('release.messages[4]'), trigger: 'blur'},
             { validator: validateVersion, trigger: 'blur' }
           ]
         },
@@ -182,7 +182,7 @@
               .then(res => res.data)
               .then(res => {
                 if (res.errcode === 0 && res.data) {
-                  this.$message({type: 'success', message: $i18n.t('messages[5]')})
+                  this.$message({type: 'success', message: $i18n.t('release.messages[5]')})
                   if (res.data.releaseId) {
                     this.$router.push(`/release/edit/${res.data.releaseId}`)
                   }

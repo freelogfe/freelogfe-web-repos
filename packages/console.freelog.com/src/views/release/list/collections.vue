@@ -1,4 +1,4 @@
-<i18n src="./release-list.i18n.json"></i18n>
+<!--<i18n src="./release-list.i18n.json"></i18n>-->
 <template>
   <section class="my-collections">
     <div class="m-c-header clearfix">
@@ -14,7 +14,7 @@
         <!-- <search-input @search="searchHandler" showInputImmediately></search-input> -->
       </div>
       <router-link :to="releasesMarketLink">
-        <el-button size="medium" type="warning" class="m-c-go-to-market">{{$t('goToMarket')}}</el-button>
+        <el-button size="medium" type="warning" class="m-c-go-to-market">{{$t('release.goToMarket')}}</el-button>
       </router-link>
     </div>
     <release-items-list type='myCollections' :query="queryInput"></release-items-list>
