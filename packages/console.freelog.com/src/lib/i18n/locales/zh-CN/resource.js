@@ -50,4 +50,25 @@ export default {
     releaseAreNotOnline: '依赖中有未上线的发行',
     selectedTypeMustBeRelease: '所选发行的资源类型必须为',
     cannotChangedDep: '资源发行后不可更改依赖',
+
+    createBtnText: '创建资源',
+    createNewReleaseText: '创建新发行',
+    list: {
+        name: '资源名称',
+        type: '资源类型',
+        allTypes: '全部类型',
+        history: '历史发行',
+        status: '发行情况',
+        updateDate: '更新时间',
+        createDate: '创建时间',
+        operate: '操作',
+        querying: '查询中...',
+        noReleases: '暂无发行',
+        releaseBtnText: '发行',
+        editBtnText: '编辑',
+        downloadBtnText: '导出资源文件',
+        releasesCount: [ '等', '个发行...' ],
+        messages: [ '没有符合条件的资源', '您还没有创建任何资源。' ],
+        releaseStatus: [ '未发行', '已发行', '全部' ]
+    }
 };
