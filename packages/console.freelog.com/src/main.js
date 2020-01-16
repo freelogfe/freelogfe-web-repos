@@ -15,11 +15,11 @@ import plugins from './plugins'
 import i18n from './lib/i18n/index'
 import './lib/index'
 
-sync(store, router, {moduleName: 'route'})
 
 initEnv()
 /* eslint-disable no-new */
 initLogin({ Vue, router, i18n })
+sync(store, router, {moduleName: 'route'})
 // 404页面路由是通配符的路由，须放在最后
 registerNotFoundRouete()
 

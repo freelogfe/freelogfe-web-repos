@@ -1,70 +1,36 @@
-<i18n src="../../i18n-locales/login.json"></i18n>
+<i18n src="../../i18n-locales/ui-login.json"></i18n>
 <template>
   <section class="login-section">
-    <header class="login-header">
-      <!--<h1 class="brand">-->
-      <!--<router-link to="/" tabindex="-1">freelog.com</router-link>-->
-      <!--</h1>-->
+    <header>
+      <div class="h-logo" ><i class="freelog fl-icon-logo-freelog" /></div>
       <h2 class="heading" :class="{ 'show-error': error }">{{$t('login.head')}}</h2>
-      <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
-      <el-alert type="warning" :title="error.title" :description="error.message" show-icon v-if="error" />
     </header>
-    <el-form
-      class="login-form"
-      auto-complete="off"
-      :model="model"
-      :rules="rules"
-      ref="loginForm"
-      label-width="0"
-    >
-      <el-form-item prop="loginName">
-        <el-input
-          type="text"
-          v-model="model.loginName"
-          name="username"
-          :placeholder="$t('login.usernamePlaceholder')"
-        >
-          <template slot="prepend">
-            <i class="fa fa-user" aria-hidden="true"></i>
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          type="password"
-          v-model="model.password"
-          name="password"
-          :placeholder="$t('login.passwordPlaceholder')"
-          @keyup.native.enter="submit('loginForm')"
-        >
-          <template slot="prepend">
-            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item class="login-sc-operation">
-        <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox>
-        <span class="user-ops">
-          <template v-if="$route">
-            <router-link class="user-op" :to="resetPwLink" target="_blank">{{$t('login.resetPW')}}</router-link>|
-            <router-link class="user-op" :to="signUpLink">{{$t('login.signup')}}</router-link>
-          </template>
-          <template v-else>
-            <a class="user-op" :href="resetPwLink" target="_blank">{{$t('login.resetPW')}}</a> |
-            <a class="user-op" :href="signUpLink" target="_blank">{{$t('login.signup')}}</a>
-          </template>
-        </span>
-      </el-form-item>
-      <el-form-item class="login-btns">
-        <el-button
-          type="primary"
-          style="width: 100%;"
-          :loading="loading"
-          class="js-login-btn"
-          @click="submit('loginForm')"
-        >{{ loading ? $t('login.loginStatus[0]') : $t('login.loginStatus[1]') }}</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="login-body">
+      <div class="login-error-box">
+        <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
+        <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
+      </div>
+      <el-form class="login-form" auto-complete="off" :model="model" :rules="rules" ref="loginForm">
+        <el-form-item prop="loginName" :label="$t('loginName')">
+          <el-input type="text" name="loginName" v-model="model.loginName"></el-input>
+        </el-form-item>
+        <el-form-item prop="password" class="login-password" :label="$('password')">
+          <a class="user-password" :href="resetPwLink">{{$t('login.resetPW')}}</a>
+          <el-input type="password" name="password" v-model="model.password" @keyup.native.enter="submit('loginForm')"
+          ></el-input>
+        </el-form-item>
+        <el-form-item class="login-btns">
+          <el-button type="primary" style="width: 100%;" :loading="loading" @click="submit('loginForm')" >
+            {{ loading ? $t('login.loginStatus[0]') : $t('login.loginStatus[1]') }}
+          </el-button>
+        </el-form-item>
+        <el-form-item class="login-sc-operation">
+          <!-- <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox> -->
+          {{$t('login.newUserText')}}
+          <a :href="signUpLink">{{$t('login.signup')}}</a>
+        </el-form-item>
+      </el-form>
+    </div>
   </section>
 </template>
 
@@ -78,6 +44,7 @@ import {
   LAST_AUTH_INFO
 } from "../../constant";
 import FToast from "../toast/index.vue";
+import {validateLoginName} from '../../validator'
 
 export default {
   name: "f-login",
@@ -93,28 +60,15 @@ export default {
 
   data() {
     const $i18n = this.$i18n;
-    const validateLoginName = function(rule, value, callback) {
-      if (value) {
-        const EMAIL_REG = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-        const PHONE_REG = /^1[34578]\d{9}$/;
-        if (!EMAIL_REG.test(value) && !PHONE_REG.test(value)) {
-          callback(new Error($i18n.t("login.validateErrors[0]")));
-        } else {
-          callback();
-        }
-      } else {
-        callback(new Error($i18n.t("login.validateErrors[1]")));
-      }
-    };
 
     const rules = {
       loginName: [
         {
           required: true,
-          message: $i18n.t("login.ruleMessages[0]"),
+          message: $i18n.t("login.validateErrors.loginName_empty"),
           trigger: "blur"
         },
-        { validator: validateLoginName, trigger: "blur" }
+        { validator: validateLoginName.bind(this), trigger: "blur" }
       ],
       password: [
         {
@@ -135,7 +89,7 @@ export default {
       rules,
       error: null,
       loading: false,
-      rememberUser: false
+      rememberUser: true
     };
   },
 
@@ -169,34 +123,34 @@ export default {
       return link
     },
     submit(ref) {
-      const self = this;
+      const self = this
       this.$refs[ref].validate(valid => {
         if (!valid) {
-          return;
+          return
         }
 
         const data = Object.assign(this.model, {
           isRememer: this.rememberUser ? 1 : 0
-        });
+        })
 
         this.fetchLogin(data).then(userInfo => {
-          this.afterLogin(userInfo);
-        });
-      });
+          this.afterLogin(userInfo)
+        })
+      })
     },
     fetchLogin(data) {
-      this.error = null;
-      this.loading = true;
+      this.error = null
+      this.loading = true
       return this.$axios
         .post("/v1/passport/login", data)
         .then(res => {
-          this.loading = false;
+          this.loading = false
           if (res.data.ret === 0 && res.data.errcode === 0) {
             var userInfo = res.data.data
             userInfo.loginName = data.loginName
-            return Promise.resolve(userInfo);
+            return Promise.resolve(userInfo)
           }
-          return Promise.reject(res.data.msg);
+          return Promise.reject(res.data.msg)
         })
         .catch(err => {
           console.log(err);
@@ -246,72 +200,69 @@ export default {
 <style lang="less" scoped>
 .login-section {
   position: relative;
-  width: 350px; height: auto;
-  padding: 35px 35px 15px 35px; border: 1px solid #eaeaea; border-radius: 5px;
-  background: #fff; background-clip: padding-box;
-  box-shadow: 0 0 25px #cac6c6;
- 
-  .el-icon-close {
-    position: absolute; top: 4px; right: 4px; z-index: 10;
-    padding: 6px;
-    font-size: 16px; cursor: pointer;
-  }
+  width: 550px; height: auto;
 
-  .heading {
-    margin: 0px auto 40px auto;
-    text-align: center;
-    color: #505458;
-    &.show-error { 
-      margin-bottom: 20px; 
-    }
-  }
-  .el-alert { margin-bottom: 20px; }
+  .login-body {
+    padding: 30px 75px 10px 75px; border: 1px solid #F0F0F0; border-radius: 10px;
+    background: #fff; background-clip: padding-box;
 
-  .user-ops {
-    float: right;
-    .user-op {
-      color: #1f2d3d;
-      &:hover {
-        color: #35b5ff;
+    .login-error-box {
+      .el-icon-close {
+        position: absolute; top: 4px; right: 4px; z-index: 10;
+        padding: 6px;
+        font-size: 16px; cursor: pointer;
+      }
+      .el-alert { 
+        margin-top: 10px; margin-bottom: 20px; padding: 16px 20px 20px; border: 1px solid #ECBCBC; 
+        background-color: #F7ECEC;
       }
     }
-  }
-  .login-btns {
-    text-align: center;
+
+    .login-password {
+      .user-password {
+        position: absolute; top: 0; right: 0; z-index: 10;
+        line-height: 35px; color: #297CBB;
+      }
+    }
+    .login-btns { margin: 50px 0 34px; text-align: center; }
+    .login-sc-operation {
+      line-height: 20px; font-size: 14px; font-weight: 400; text-align: center; color: #666;
+      a { color: #409EFF; }
+    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .login-section {
-    box-sizing: border-box; padding: 30px 20px; width: 90%;
+    box-sizing: border-box; width: 90%; min-width: 320px; max-width: 550px;
     .heading {
       margin-bottom: 20px; font-size: 26px;
     }
-    .login-btns {
-      margin-bottom: 0;
+    .login-body {
+      padding: 30px 40px 10px 40px;
     }
+    
   }
 }
 </style>
 
 <style lang="less">
+  .el-alert {  
+    .el-alert__content {
+      padding-right: 12px;
+      font-size: 14px;
+      .el-alert__description {
+        font-size: 14px; color: #DA3F3F;
+      }
+    }
+  }
   @media screen and (max-width: 768px) {
     .login-section {
       .login-sc-operation {
         .el-form-item__content {
           line-height: 28px;
-          .el-input-group__prepend {
-            padding: 0 15px;
-          }
-        }
-      }
-
-      .el-form-item__content {
-        .el-input-group__prepend {
-          padding: 0 15px;
         }
       }
     }
-    
   }
 </style>

@@ -1,48 +1,55 @@
-<i18n src="../../i18n-locales/reset-password.json"></i18n>
+<i18n src="../../i18n-locales/ui-login.json"></i18n>
 <template>
-  <section class="login-section">
-    <header class="login-header">
-      <!--<h1 class="brand">-->
-      <!--<router-link to="/" tabindex="-1">freelog.com</router-link>-->
-      <!--</h1>-->
-      <el-alert v-if="error" :title="error.title" type="warning" :description="error.message" show-icon/>
-    </header>
-    <el-form class="login-form" auto-complete="off" :model="model" :rules="rules" ref="formRef" label-width="60px">
-      <h2 class="heading">{{$t('resetPassword.head')}}</h2>
-      <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
-        <el-input type="text" v-model="model.loginName" :placeholder="$t('resetPassword.loginNamePlaceholder')"></el-input>
-      </el-form-item>
-      <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
-        <el-input type="text" v-model="model.authCode"
-                  style="width: 60%"
-                  :placeholder="$t('resetPassword.verifyCodeInputTip')"></el-input>
-        <el-button class="vcode-btn"
-                   @click="sendCheckCodeNotifyHandler"
-                   :disabled="disabledCheckCodeBtn">
-          {{vcodeBtnText}}
-        </el-button>
-      </el-form-item>
-      <el-form-item prop="password" :label="$t('resetPassword.password')">
-        <el-input type="password" v-model="model.password"
-                  autocomplete="new-password"
-                  :readonly="readonly"
-                  :placeholder="$t('resetPassword.inputPasswordTip')"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <router-link :to="loginLink" class="user-op">{{$t('resetPassword.backToLogin')}}<i class="el-icon-d-arrow-right"></i></router-link>
-      </el-form-item>
-      <el-form-item class="login-btns">
-        <el-button type="primary"
-                   style="width: 100%;"
-                   :loading="loading"
-                   @click="submit('formRef')">{{ loading ? $t('resetPassword.verifyCodeStatus[0]') : $t('resetPassword.verifyCodeStatus[1]') }}
-        </el-button>
-      </el-form-item>
-
-    </el-form>
-    <!--<footer class="login-footer">-->
-    <!--<a href="/">返回到 freelog.com</a>-->
-    <!--</footer>-->
+  <section class="reset-password-section">
+    <template v-if="step === steps[0]">
+      <header>
+        <div class="h-logo" ><i class="freelog fl-icon-logo-freelog" /></div>
+        <h2 class="heading">
+          {{$t('resetPassword.heads[0]')}}
+          <div class="reset-password-intro">{{$t('resetPassword.heads[1]')}}</div>
+        </h2>
+      </header>
+      <div class="reset-password-body">
+        <div class="reset-password-error-box">
+          <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
+          <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
+        </div>
+        <el-form class="reset-password-form" auto-complete="off" :model="model" :rules="rules" ref="formRef">
+          <el-form-item prop="loginName" :label="'手机号/邮箱'">
+            <el-input type="text" v-model="model.loginName"></el-input>
+          </el-form-item>
+          <el-form-item prop="authCode" :label="'验证码'">
+            <div>
+              <el-input type="text" v-model="model.authCode" style="width: 280px"></el-input>
+              <el-button class="vcode-btn" style="width: 110px"
+                        @click="sendCheckCodeNotifyHandler"
+                        :disabled="disabledCheckCodeBtn">
+                {{vcodeBtnText}}
+              </el-button>
+            </div>
+          </el-form-item>
+          <el-form-item class="reset-password-btns">
+            <el-button type="primary"
+                      style="width: 100%;"
+                      :loading="loading"
+                      @click="submit('formRef')">{{ loading ? $t('resetPassword.verifyCodeStatus[0]') : $t('resetPassword.verifyCodeStatus[1]') }}
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="reset-password-footer">
+        <a :href="loginLink">{{$t('resetPassword.backToLoginTexts[0]')}}</a>
+        <a :href="signupLink">{{$t('resetPassword.registerNewUser')}}</a>
+      </div>
+    </template>
+    <div class="reset-password-success-box" v-if="step === steps[2]">
+      <div><i class="freelog fl-icon-shenqingchenggong"></i></div>
+      <p class="reset-pw-success-msg">{{$t('resetPassword.successMsg')}}</p>
+      <p class="reset-pw-success-footer">
+        {{$t('resetPassword.backToLoginTexts[1]', {time: remainTimer})}}
+        <a :href="loginLink">{{$t('resetPassword.backToLoginTexts[2]')}}</a>
+      </p>
+    </div>
   </section>
 </template>
 
@@ -53,26 +60,29 @@ export default ResetView
 </script>
 
 <style lang="less" scoped>
-  .login-section {
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    width: 400px;
-    min-height: 300px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-
-    .heading {
-      margin: 0px auto 40px auto;
-      text-align: center;
-      color: #505458;
+  .reset-password-section {
+    header {
+      .reset-password-intro { 
+        margin-top: 10px; margin-bottom: 30px;
+        line-height: 20px; font-size: 14px; font-weight: 400; color: #000; 
+      }
     }
 
-    .login-btns {
-      text-align: center;
+    .vcode-btn {
+      margin-left: 4px; padding: 12px 0;
+      background-color: #409EFF; color: #fff;
+      &.is-disabled {
+        background-color: #CCCCCC; color: #fff;
+      }
+    }
+
+    .reset-password-btns {
+      margin: 50px 0 60px; text-align: center;
+    }
+
+    .reset-password-footer {
+      margin-top: 40px; text-align: center;
+      a { margin: 0 20px; font-size: 14px; color: #666666; }
     }
 
     .user-op {
@@ -85,8 +95,18 @@ export default ResetView
       }
     }
 
-    .vcode-btn {
-      margin-left: 10px;
+    .reset-password-success-box {
+      width: 490px; margin: 220px auto; padding: 22px 0 40px;  border: 1px solid #F0F0F0; border-radius: 10px;
+      background-color: #fff; text-align: center;
+      .fl-icon-shenqingchenggong { font-size: 76px; color: #7ED321; }
+      .reset-pw-success-msg {
+        margin: 15px 0 50px;
+        font-size: 18px; color: #000;
+      }
+      .reset-pw-success-footer {
+        font-size: 14px; color: #999; 
+        a { color: #409EFF; } 
+      }
     }
   }
 </style>

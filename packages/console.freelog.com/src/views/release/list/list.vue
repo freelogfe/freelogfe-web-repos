@@ -105,7 +105,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.operate')" :width="type === 'myReleases' ? 66: 90">
+        <el-table-column :label="$t('list.operate')" :width="type === 'myReleases' ? 76: 95">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink" v-if="type === 'myReleases'" target="_blank">
               <el-button class="r-l-item-edit-btn" size="mini">{{$t('list.editBtnText')}}</el-button>

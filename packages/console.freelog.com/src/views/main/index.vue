@@ -1,8 +1,8 @@
+<i18n src="./main.json"></i18n>
 <template>
-    <section class="index-main-container">
-
+  <section class="index-main-container">
 		<el-tabs class="main-c-tabs" v-model="activeTabName" @tab-click="exchangeActiveTabName">
-			<el-tab-pane label="发行市场" :name="tabs[0].name" lazy>
+			<el-tab-pane :label="$t('tabs[0]')" :name="tabs[0].name" lazy>
 				<div class="resource-types-bar">
 					<el-button
 						type="text"
@@ -11,13 +11,13 @@
 						:key="item.value"
 						@click="exchangeSelectedResourceType(item.value)">{{item.label | pageBuildFilter}}</el-button>
 						<!-- prefix-icon -->
-					<el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" placeholder="搜索自定义类型"
+					<el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" :placeholder="$t('releaseSearchPlaceholder')"
 						:class="{ 'focus': isInputFocus }"
 						:style="{width: '160px'}"
 						@focus="focusHandler"
 						@blur="blurHandler"
 						@keyup.enter.native="searchHandler(searchInputStr)">
-						<i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
+						<i class="freelog fl-icon-content" :slot="'prefix'" @click="searchHandler(searchInputStr)"></i>
 						<!-- <i class="freelog fl-icon-content" slot="suffix" @click="searchHandler(searchInputStr)"></i> -->
 					</el-input>
 				</div>
@@ -42,12 +42,12 @@
 					</lazy-list-view>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane label="示例节点" :name="tabs[1].name" lazy>
+			<el-tab-pane :label="$t('tabs[1]')" :name="tabs[1].name" lazy>
 				<node-example></node-example>
 			</el-tab-pane>
   		</el-tabs>
 
-    </section>
+  </section>
 </template>
 
 <script>

@@ -162,11 +162,10 @@ export default {
 
     routes: {
         accountSetting: 'Account Setting',
-
         mockResource: 'Mock Resource',
-
         nodes: 'Nodes',
         releaseMarket: 'Release Market',
+        nodeExamples: 'Node Examples',
         presentableDetail: 'Presentable Detail',
         nodesSystem: 'Nodes System',
 

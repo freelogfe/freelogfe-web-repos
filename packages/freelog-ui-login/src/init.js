@@ -1,10 +1,10 @@
 
 import FLogin from './components/login/index.vue'
 import FSignup from './components/signup/index.vue'
-import FRsetPassword from './components/reset-password/index.vue'
+import FResetPassword from './components/reset-password/index.vue'
 import LoginPage from './views/login.vue'
 import SignupPage from './views/signup.vue'
-import RsetPasswordPage from './views/reset-password.vue'
+import ResetPasswordPage from './views/reset-password.vue'
 import { initToast } from './components/toast/toast'
 
 import { LOGIN_PATH, SIGN_PATH, RESET_PASSWORD_PATH } from './constant'
@@ -14,9 +14,7 @@ import defualtOptions, { checkOptions } from './options'
 import initCode, { runAuthenticationHandler, checkLoginStatus } from './core'
 import { goToLoginPage } from './login'
 
-import loginLocales from './i18n-locales/login.json'
-import signupLocales from './i18n-locales/signup.json'
-import resetPasswordLocales from './i18n-locales/reset-password.json'
+import loginLocales from './i18n-locales/ui-login.json'
 
 var isNeedCheckLoginStatus = true
 export default function init(options) {
@@ -51,36 +49,40 @@ function registerComponent(options) {
 	const Vue = options.Vue
 	Vue.component(FLogin.name, FLogin)
 	Vue.component(FSignup.name, FSignup)
-	Vue.component(FRsetPassword.name, FRsetPassword)
+	Vue.component(FResetPassword.name, FResetPassword)
 }
 
 function registerRouter(options) {
-	const locale = options.i18n.locale
-	options.router.addRoutes([{
+	const locale = loginLocales[options.i18n.locale]
+	const routes = [{
 		path: LOGIN_PATH,
 		component: LoginPage,
 		meta: { 
+			isSkipAlphaTest: true,
 			requiresAuth: false,
-			title: loginLocales[locale]['login']['title']
+			title: locale['login']['title']
+		}
+	},
+	{
+		path: RESET_PASSWORD_PATH,
+		component: ResetPasswordPage,
+		meta: { 
+			isSkipAlphaTest: true,
+			requiresAuth: false,
+			title: locale['resetPassword']['title']
 		}
 	},
 	{
 		path: SIGN_PATH,
 		component: SignupPage,
 		meta: { 
+			isSkipAlphaTest: true,
 			requiresAuth: false,
-			title: signupLocales[locale]['signup']['title']
+			title: locale['signup']['title']
 		}
-	},
-	{
-		path: RESET_PASSWORD_PATH,
-		component: RsetPasswordPage,
-		meta: { 
-			requiresAuth: false,
-			title: resetPasswordLocales[locale]['resetPassword']['title']
-		}
-	}])
-
+	}]
+	options.router.addRoutes(routes)
+	
 	if (options.isAuthenticationBeforeRoute) {
 		options.router.beforeEach((to, from, next) => {
 			const meta = to.meta || { requiresAuth: true, requireAuth: true }

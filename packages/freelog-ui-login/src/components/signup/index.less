@@ -1,28 +1,17 @@
-.login-section {
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  background-clip: padding-box;
-  width: 400px;
-  padding: 35px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
-  max-height: 100%;
-  height: auto;
+.signup-section {
 
-  .heading {
-    margin: 0 auto 40px auto;
-    text-align: center;
-    color: #505458;
+  .vcode-btn {
+    margin-left: 4px; padding: 12px 0;
+    background-color: #409EFF; color: #fff;
+    &.is-disabled {
+      background-color: #CCCCCC; color: #fff;
+    }
   }
 
-  .login-btns {
-    text-align: center;
-  }
+  .signup-btns { margin: 50px auto 44px; text-align: center; }
 
   .check-code-wrap {
-    float: right; margin-left: 10px;
+    float: right; margin-left: 4px;
     .vcode-btn {
       width: 140px; padding: 12px; 
       overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
@@ -37,13 +26,21 @@
     padding: 0 13px;
     border-radius: 2px;
   }
-}
 
-.user-op {
-  float: right;
-  color: #1f2d3d;
-
-  &:hover {
-    color: #409EFF;
+  .signup-to-login { 
+    line-height: 20px; font-size: 14px; color: #666; text-align: center; 
+    a { color: #409EFF; }
+  }
+  .signup-register-type-box {
+    position: relative;
+    .signup-radios {
+      position: absolute; top: 0; right: 0; z-index: 10;
+      line-height: 35px;
+      .el-radio{ 
+        margin-right: 22px; 
+        &:last-child { margin-right: 0; }
+      }
+      .el-radio__label { padding-left: 5px; }
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { isSafeUrl } from '../../utils'
-import { LOGIN_PATH } from '../../constant'
-import {EMAIL_REG, PHONE_REG, validateLoginName} from '../login/validator'
+import { LOGIN_PATH, SIGN_PATH } from '../../constant'
+import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
 
 export default {
   name: 'f-reset-password',
@@ -12,11 +12,11 @@ export default {
         { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'blur' },
         { validator: validateLoginName.bind(this), trigger: 'blur' }
       ],
-      verifyCode: [
-        { required: true, message: this.$t('resetPassword.verifyCodeInputTip'), trigger: 'blur' }
+      authCode: [
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
       ]
     }
-
+    console.log(' this.$route.query.result', this.$route.query.result)
     return {
       model: {
         loginName: '',
@@ -29,7 +29,12 @@ export default {
       sending: false,
       waitingTimer: 0,
       readonly: true,
-      loginLink: LOGIN_PATH
+      loginLink: LOGIN_PATH,
+      signupLink: SIGN_PATH,
+      valid: false,
+      steps: ['authCode', 'reset', 'success'],
+      step: this.$route.query.result ? this.$route.query.result : 'authCode',
+      remainTimer: 5
     }
   },
 
@@ -51,11 +56,22 @@ export default {
     }
   },
 
+  watch: {
+    step() {
+      if (this.step === 'success') {
+        this.goToLoginAfterCountdown()
+      }
+    }
+  },
+
   mounted() {
     //阻止浏览器自动填充
     setTimeout(() => {
       this.readonly = false
     }, 1e3)
+    if (this.step === 'success') {
+      this.goToLoginAfterCountdown()
+    }
   },
 
   methods: {
@@ -112,5 +128,15 @@ export default {
         }
       })
     },
+    goToLoginAfterCountdown() {
+      this.remainTimer = 5 
+      const timer = setInterval(() => {
+        this.remainTimer--
+        if (this.remainTimer === 0) {
+          clearInterval(timer)
+          window.location.href = LOGIN_PATH
+        }
+      }, 1e3)
+    }
   }
 }

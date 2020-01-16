@@ -1,7 +1,7 @@
 
 import Router from 'vue-router'
 import { Vue } from '@freelog/freelog-common-lib'
-import UserLayout from '@/views/layout/user.vue'
+import Layout from '@/views/layout/layout.vue'
 import MyContractsView from '@/views/contracts/index.vue'
 import MyAccountsView from '@/views/accounts/index.vue'
 import MyProfileView from '@/views/profile/index.vue'
@@ -47,7 +47,7 @@ const routerConfig = {
     },
     {
       path: '/user',
-      component: UserLayout,
+      component: Layout,
       children: [{
         path: 'accounts',
         meta: {

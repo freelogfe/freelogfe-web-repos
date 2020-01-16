@@ -34,6 +34,9 @@ export default {
       management: 'contract management'
     },
   },
+  header: {
+    langSwitchQuestion: 'Change language to {lang}?'
+  },
   userAsideNav: {
     title: ['Wallet','My contract','Information & Account']
   },

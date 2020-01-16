@@ -36,7 +36,7 @@
           </div>
           <div class="f-pb-p-i-footer">
             <el-button type="text" size="mini" class="f-pb-p-i-auth-btn" v-if="pb.pbReleaseDetailPageUrl">
-              <a :href="pb.pbReleaseDetailPageUrl" target="_blank">马上使用该主题</a>
+              <a :href="pb.pbReleaseDetailPageUrl" target="_blank">{{$t('useTheTheme')}}</a>
             </el-button>
             <div class="f-pb-p-usage-btn" @click="tapViewUsageBtn(index)">
               {{pb.mdBoxVisible ? $t('pbUsageBtns[0]') : $t('pbUsageBtns[1]') }} 

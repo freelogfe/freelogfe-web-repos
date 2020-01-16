@@ -83,7 +83,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('resource.market'),
+                        title: i18n.t('routes.releaseMarket'),
                         theme: 'gray',
                         hideFooter: true,
                     },
@@ -94,7 +94,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('resource.market'),
+                        title: i18n.t('routes.releaseMarket'),
                         theme: 'gray'
                     },
                     component: Views.mainView
@@ -104,8 +104,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        // title: i18n.t('resource.market'),
-                        title: '示例节点',
+                        title: i18n.t('routes.nodeExamples'),
                         theme: 'gray',
                         hideFooter: true,
                     },
@@ -170,7 +169,7 @@ router.beforeEach((to, from, next) => {
         // i18n.locale = locale;
     // }
 
-    if (to.path === '/login' || to.path === '/signup') {
+    if (to.meta.isSkipAlphaTest) {
         return next();
     }
 

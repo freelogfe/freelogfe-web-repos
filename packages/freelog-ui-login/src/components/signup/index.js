@@ -1,7 +1,6 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
-import {validateLoginName, EMAIL_REG, PHONE_REG} from '../login/validator'
-import {validateUsername, USERNAME_REG} from './validator'
+import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
 
 export default {
   name: 'f-signup',
@@ -29,12 +28,16 @@ export default {
     }
 
     const rules = {
-      loginName: [
-        {required: true, message: this.$t('signup.loginNamePlaceholder'), trigger: 'blur'},
-        {validator: validateLoginName.bind(this), trigger: 'blur'}
+      loginIphone: [
+        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'blur'},
+        {validator: validateLoginIphone.bind(this), trigger: 'blur'}
+      ],
+      loginEmail: [
+        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'blur'},
+        {validator: validateLoginEmail.bind(this), trigger: 'blur'}
       ],
       username: [
-        {required: true, message: this.$t('signup.usernamePlaceholder'), trigger: 'blur'},
+        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'blur'},
         {validator: validateUsername.bind(this), trigger: 'blur'}
       ],
       password: [
@@ -46,10 +49,14 @@ export default {
         {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'blur'},
         {validator: validateCheckPassword, trigger: 'blur'},
         {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
+      ],
+      authCode: [
+        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'blur'},
       ]
     }
     const model = {
-      loginName: '',
+      loginIphone: '',
+      loginEmail: '',
       username: '',
       password: '',
       checkPassword: '',
@@ -64,7 +71,9 @@ export default {
       readonly: true,
       sending: false,
       waitingTimer: 0,
-      loginLink: LOGIN_PATH
+      loginLink: LOGIN_PATH,
+      registerTypes: [ 'iphone', 'email' ],
+      selectedRegisterType: 'iphone'
     }
   },
 
@@ -96,6 +105,24 @@ export default {
     }
   },
 
+  watch: {
+    selectedRegisterType() {
+      this.$nextTick(() => {
+        const $input = this.$refs['iphone'] || this.$refs['email']
+        if ($input != null) {
+          $input.focus()
+          $input.blur()
+        }
+      })
+      if (this.selectedRegisterType === 'iphone') {
+        this.model.loginIphone = this.model.loginEmail
+      }
+      if (this.selectedRegisterType === 'email') {
+        this.model.loginEmail = this.model.loginIphone
+      }
+    }
+  },
+
   mounted() {
     //阻止浏览器自动填充
     setTimeout(() => {
@@ -120,8 +147,11 @@ export default {
         const data = {}
 
         Object.keys(this.model).forEach((key) => {
-          if ((key !== 'checkPassword')) {
+          if (key !== 'checkPassword') {
             data[key] = this.model[key]
+            if((key === 'loginIphone' || key === 'loginEmail') && this.model[key] !== '') {
+              data['loginName'] = this.model[key]
+            }
           }
         })
 
@@ -158,9 +188,9 @@ export default {
     sendCheckCodeNotifyHandler() {
       if (this.sending || !this.model.loginName) return
 
-      if (!this.model.password) {
-        return this.$message.error(this.$t('signup.passwordInputTip'))
-      }
+      // if (!this.model.password) {
+      //   return this.$message.error(this.$t('signup.passwordInputTip'))
+      // }
 
       this.sending = true
       this.$axios.post(`/v1/message/send`, {

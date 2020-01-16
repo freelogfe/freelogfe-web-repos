@@ -1,0 +1,85 @@
+.login-page, .reset-password-page, .signup-page {
+	overflow: hidden;
+  min-height: 100vh; 
+	background-color: #FAFBFB;
+
+  .login-section, .reset-password-section, .signup-section {
+    position: relative;
+    width: 550px; height: auto; margin: 35px auto;
+    
+    header { 
+      text-align: center;
+      .h-logo { 
+        margin-bottom: 16px; 
+        i.freelog { font-size: 36px; }
+      }
+
+      .heading {
+        margin: 0px auto 20px auto;
+        font-size: 18px; font-weight: 400; line-height: 25px; color: #000;
+        &.show-error { 
+          margin-bottom: 20px; 
+        }
+      }
+    }
+  }
+
+  .login-section .login-body, .reset-password-section .reset-password-body, .signup-section .signup-body {
+    padding: 30px 75px 10px 75px; border: 1px solid #F0F0F0; border-radius: 10px;
+    background: #fff; background-clip: padding-box;
+
+    .login-error-box, .reset-password-error-box {
+      .el-alert { 
+        margin-top: 10px; margin-bottom: 20px; padding: 16px 20px 20px; border: 1px solid #ECBCBC; 
+        background-color: #F7ECEC;
+        .el-alert__content {
+          box-sizing: border-box;
+          display: -webkit-box;
+          -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+          width: 100%;
+        }
+        .el-alert__closebtn {
+          position: absolute; top: 50%; right: 20px; transform: translateY(-50%);
+          color: #DA3F3F; font-weight: 600; cursor: pointer;
+        }
+      }
+    }
+
+    .el-form-item {
+      .el-input__inner {
+        border-color: #B3B3B3;
+      }
+      .el-form-item__label {
+        display: block; width: 100%;
+        line-height: 35px; font-size: 12px; font-weight: 400; color: #666666; 
+        text-align: left;
+      }
+    }
+  }
+}
+
+.login-page {
+  .login-section .login-body{
+    .el-form-item__label {
+      &::before { display: none; }
+    }
+  }
+}
+
+.el-form-item.is-error {
+  .el-form-item__content {
+    .el-form-item__error {
+      top: 85px; z-index: 100;
+      padding: 20px; border: 1px solid #ECBCBC; border-radius: 4px;
+      line-height: 20px; font-size: 14px; 
+      background-color: #F7ECEC; color: #DA3F3F; box-shadow: 0px 3px 5px 3px rgba(255,0,5,0.1);
+      &::before {
+        content: '';
+        position: absolute; top: -6px; left: 20px; z-index: 10;
+        width: 10px; height: 10px; border: 1px solid #ECBCBC; border-bottom-color: transparent; border-right-color: transparent;
+        background-color: #F7ECEC;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

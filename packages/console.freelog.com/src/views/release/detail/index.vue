@@ -159,6 +159,7 @@
           border: 1px solid rgba(145, 199, 255, 1);
         }
       }
+      .el-input__inner:focus{ border-color: #dcdfe6; }
     }
 
   }

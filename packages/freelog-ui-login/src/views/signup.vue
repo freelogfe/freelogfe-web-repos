@@ -12,12 +12,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.signup-page {
-	margin: 120px auto 0; text-align: center;
-	.login-section {
-		display: inline-block;
-	}
-}
+<style lang="less">
+  @import './index.less';
 </style>
 

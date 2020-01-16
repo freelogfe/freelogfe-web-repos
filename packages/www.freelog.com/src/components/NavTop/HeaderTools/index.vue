@@ -28,7 +28,7 @@
 
         <div class="header-tools__col" style="padding-right: 0">
             <a class="header-tool__language">
-                <span>{{$i18n.locale === 'zh-CN'? '中文' : 'English'}} <i class="el-icon-arrow-down"/></span>
+                <span>{{$i18n.locale === 'zh-CN'? '切换语言' : 'Languages'}} <i class="el-icon-arrow-down"/></span>
 
                 <div class="header-tools__dropdown" style="right: -10px; left: unset;">
                     <div class="header-tools__menu">

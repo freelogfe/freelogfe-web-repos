@@ -34,6 +34,10 @@ export default {
       management: '合约管理'
     },
   },
+
+  header: {
+      langSwitchQuestion: '切换为 {lang}？'
+  },
   userAsideNav: {
     title: ['钱包','合约管理','资料与账号']
   },

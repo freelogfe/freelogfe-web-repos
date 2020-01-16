@@ -57,7 +57,6 @@ export default {
             resource: '资源策略模板',
             user: '用户策略模板'
         },
-
         statesMap: ['正常', '已删除']
     },
 
@@ -85,8 +84,6 @@ export default {
         myReleases: '我的发行',
         management: '发行管理',
     },
-
-
 
     presentable: {
         nodeIndex: '节点首页',
@@ -171,6 +168,7 @@ export default {
 
         nodes: '节点',
         releaseMarket: '发行市场',
+        nodeExamples: '示例节点',
         presentableDetail: '节点资源详情',
         nodesSystem: '节点管理系统',
 
