@@ -1,4 +1,4 @@
-<i18n src="./scheme.i18n.json"></i18n>
+<!--<i18n src="./scheme.i18n.json"></i18n>-->
 <template>
   <div
           class="r-dependencies-item"
@@ -10,7 +10,7 @@
         <i class="el-icon-top" v-if="!hideUpcastIcon"></i>
         {{release.releaseName}}
         <router-link :to="`/release/detail/${release.releaseId}?version=${release.latestVersion.version}`" target="_blank" v-if="release && release.latestVersion">
-          {{$t('detail')}}
+          {{$t('release.detail')}}
         </router-link>
       </p>
       <div class="r-info">

@@ -340,7 +340,7 @@ export default {
 
             var message = ''
             if (this.checkedNodeId === '') {
-                message = this.$i18n.t('messages[0]')
+                message = this.$i18n.t('release.messages1[0]')
             } else {
                 var tmpArr = []
                 if (this.release.selectedPolicies.length === 0) {
@@ -352,7 +352,7 @@ export default {
                     }
                 })
                 if (tmpArr.length > 0) {
-                    message = `${this.$i18n.t('release')}${tmpArr.join(',')}”${this.$i18n.t('messages[1]')}`
+                    message = `${this.$i18n.t('release.release')}${tmpArr.join(',')}”${this.$i18n.t('release.messages1[1]')}`
                 }
             }
 
@@ -369,7 +369,7 @@ export default {
                 })
                 const res = await this.getData(p)
                 if (res != null) {
-                    const message = this.$i18n.t('messages[2]')
+                    const message = this.$i18n.t('release.messages1[2]')
                     this.$message({type: 'success', message})
                     const contracts = await this.fetchContracts(this.checkedNodeId)
                     if (contracts != null) {
@@ -401,7 +401,7 @@ export default {
                     const {nodeId, presentableId} = res.data
                     this.rSubordinateNodes.push({nodeId, presentableId})
                     this.signDialogVisible = false
-                    const message = this.$i18n.t('messages[3]')
+                    const message = this.$i18n.t('release.messages1[3]')
                     this.$message({
                         type: 'success', message, duration: 500, onClose() {
                             self.$router.push(`/node/manager-release/${presentableId}`)

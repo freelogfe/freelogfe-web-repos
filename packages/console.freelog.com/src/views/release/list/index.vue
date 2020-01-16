@@ -1,4 +1,4 @@
-<i18n src="./release-list.i18n.json"></i18n>
+<!--<i18n src="./release-list.i18n.json"></i18n>-->
 <template>
   <section class="my-releases">
     <div class="m-r-header clearfix">
@@ -12,15 +12,15 @@
           <i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
         </el-input>
       </div>
-      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">{{$t('createBtnText')}}</el-button>
+      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">{{$t('release.createBtnText')}}</el-button>
     </div>
-    
+
     <release-items-list type="myReleases" :query="queryInput"></release-items-list>
 
     <el-dialog
             class="my-r-search-dialog"
             center
-            :title="$t('dialogTitle')"
+            :title="$t('release.dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
     >

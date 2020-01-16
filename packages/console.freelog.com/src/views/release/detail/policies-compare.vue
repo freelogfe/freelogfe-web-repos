@@ -1,10 +1,10 @@
-<i18n src="./detail.i18n.json"></i18n>
+<!--<i18n src="./detail.i18n.json"></i18n>-->
 <template>
   <div>
     <div class="r-d-w-r-p-compare" v-for="(item, index) in compareBox" :key="'c-p-' + index">
-      <div class="r-d-w-r-p-btn" 
-        :class="{'active': item.activeIndex === index}" 
-        v-for="(p, index) in policies" 
+      <div class="r-d-w-r-p-btn"
+        :class="{'active': item.activeIndex === index}"
+        v-for="(p, index) in policies"
         :key="'p-btn-' + index"
         @click="exchangeComparePolicy(item, index)">{{p.policyName}}</div>
       <div class="r-d-w-r-p-box">

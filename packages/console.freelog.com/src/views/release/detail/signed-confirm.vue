@@ -1,11 +1,11 @@
-<i18n src="./detail.i18n.json"></i18n>
+<!--<i18n src="./detail.i18n.json"></i18n>-->
 <template>
   <div class="r-d-w-r-sign">
-    <h4>{{$t('signConfirm.title1')}}</h4>
+    <h4>{{$t('release.signConfirm.title1')}}</h4>
     <div class="r-d-w-r-node">
       {{checkedNodeName}}
     </div>
-    <h4>{{$t('signConfirm.title2')}}</h4>
+    <h4>{{$t('release.signConfirm.title2')}}</h4>
     <div class="r-d-w-r-s-releases" >
       <div class="rdwr-s-r-item" v-for="(item, index) in release.selectedPolicies" :key="'s-p-'+index">
         <span class="rdwr-s-r-item-name">{{release.releaseName}}</span>
@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="rdwr-s-btn-group">
-      <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="cancel">{{$t('btns.cancel')}}</el-button>
-      <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">{{$t('btns.sign')}}</el-button>
+      <el-button class="rdwr-s-btn rdwr-s-btn-cancel" @click="cancel">{{$t('release.btns.cancel')}}</el-button>
+      <el-button type="primary" class="rdwr-s-btn rdwr-s-btn-sign" :disabled="!checkedNodeId" @click="authSign">{{$t('release.btns.sign')}}</el-button>
     </div>
   </div>
 </template>
@@ -65,7 +65,7 @@ export default {
     }
   }
   .r-d-w-r-node { overflow: hidden; margin-left: 60px; margin-bottom: 15px; }
-  
+
   .r-d-w-r-s-releases {
     margin: 0 50px 25px 60px;
     font-size: 14px; font-weight: 500; color: #333;

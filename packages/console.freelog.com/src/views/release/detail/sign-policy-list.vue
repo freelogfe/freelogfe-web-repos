@@ -1,10 +1,10 @@
-<i18n src="./detail.i18n.json"></i18n>
+<!--<i18n src="./detail.i18n.json"></i18n>-->
 <template>
   <div>
     <div class="signed-list" v-if="signedPolicies.length">
       <h3>
-        {{checkedNodeIsSigned ? $t('signPolicyBox.titles[0]') + checkedNodeName : $t('signPolicyBox.titles[1]')}}
-        <el-tooltip placement="right" :content="$t('signPolicyBox.tips[0]')" effect="light">
+        {{checkedNodeIsSigned ? $t('release.signPolicyBox.titles[0]') + checkedNodeName : $t('release.signPolicyBox.titles[1]')}}
+        <el-tooltip placement="right" :content="$t('release.signPolicyBox.tips[0]')" effect="light">
           <i class="el-icon-info"></i>
         </el-tooltip>
       </h3>
@@ -19,8 +19,8 @@
             <span class="contract-status" :class="['status-'+policy.contract.status]">{{policy.statusTip}}</span>
           </div>
           <div class="p-auth-info">
-            <span>{{$t('signPolicyBox.contractID')}}：{{policy.contract.contractId}}</span>
-            <span>{{$t('signPolicyBox.signingDate')}}：{{policy.contract.updateDate | fmtDate}}</span>
+            <span>{{$t('release.signPolicyBox.contractID')}}：{{policy.contract.contractId}}</span>
+            <span>{{$t('release.signPolicyBox.signingDate')}}：{{policy.contract.updateDate | fmtDate}}</span>
           </div>
           <div class="p-detail">
             <contract-detail
@@ -35,13 +35,13 @@
     </div>
     <div class="no-sign-list" v-if="nodSignPolicies.length">
       <h3>
-        {{signedPolicies.length > 0 ? $t('signPolicyBox.tips[1]') : $t('btns.sign')}}
+        {{signedPolicies.length > 0 ? $t('release.signPolicyBox.tips[1]') : $t('release.btns.sign')}}
         <el-tooltip placement="right" effect="light">
           <div class="s-m-w-c-ubh-tip" slot="content">
-            {{$t('signPolicyBox.signState')}}
+            {{$t('release.signPolicyBox.signState')}}
             <ul>
-              <li>{{$t('signPolicyBox.signRuleState1')}}</li>
-              <li>{{$t('signPolicyBox.signRuleState2')}}</li>
+              <li>{{$t('release.signPolicyBox.signRuleState1')}}</li>
+              <li>{{$t('release.signPolicyBox.signRuleState2')}}</li>
             </ul>
           </div>
           <i class="el-icon-info"></i>
@@ -54,9 +54,9 @@
               <span class="p-n-check-box" v-if="!p.isSelected"></span>
               <i class="el-icon-check" v-else></i>
             </template>
-            {{p.policyName}}<span v-if="p.status === 0">（{{$t('offline')}}）</span>
+            {{p.policyName}}<span v-if="p.status === 0">（{{$t('release.offline')}}）</span>
           </div>
-          <el-button class="p-sign-btn" type="primary" size="mini" v-if="checkedNodeIsSigned" @click="signNewPolicy(p)">{{$t('btns.sign')}}</el-button>
+          <el-button class="p-sign-btn" type="primary" size="mini" v-if="checkedNodeIsSigned" @click="signNewPolicy(p)">{{$t('release.btns.sign')}}</el-button>
           <div class="p-detail">
             <pre class="p-segment-text" >{{fmtPolicyTextList(p)}}</pre>
           </div>
