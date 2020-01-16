@@ -1,4 +1,4 @@
-<i18n src="./resource-list.i18n.json"></i18n>
+<!--<i18n src="./resource-list.i18n.json"></i18n>-->
 <template>
   <section class="my-resources">
     <div class="m-r-header clearfix">
@@ -14,7 +14,7 @@
         <!-- <search-input @search="searchHandler" showInputImmediately></search-input> -->
       </div>
       <router-link to="/resource/editor" target="_blank">
-        <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('createBtnText')}}</el-button>
+        <el-button size="medium" type="primary" class="m-r-create-btn">{{$t('resource.createBtnText')}}</el-button>
       </router-link>
     </div>
 
@@ -30,7 +30,7 @@
         :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []"
         @add="releaseSearchHandler"></release-search>
       <div class="" slot="footer">
-        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('createNewReleaseText')}}</el-button>
+        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('resource.createNewReleaseText')}}</el-button>
       </div>
     </el-dialog>
   </section>

@@ -49,4 +49,25 @@ export default {
     releaseAreNotOnline: 'Have relied on in the not Online release',
     selectedTypeMustBeRelease: 'The selected resource type must be ',
     cannotChangedDep: 'After the release of resources cannot be changed depend on',
+
+    createBtnText: 'Create Resource',
+    createNewReleaseText: 'Create a New Release',
+    list: {
+        name: 'Resource name',
+        type: 'Resource type',
+        allTypes: 'All types',
+        history: 'Release history',
+        status: 'Release status',
+        updateDate: 'Update date',
+        createDate: 'Create date',
+        operate: 'Operate',
+        querying: 'Querying...',
+        noReleases: 'No releases',
+        releaseBtnText: 'Release',
+        editBtnText: 'Edit',
+        downloadBtnText: 'Export resource file',
+        releasesCount: [ 'There are ', ' releases...' ],
+        messages: [ 'There are no resources available', 'You have not created any resources.' ],
+        releaseStatus: [ 'Not release', 'Relased', 'All' ]
+    }
 };

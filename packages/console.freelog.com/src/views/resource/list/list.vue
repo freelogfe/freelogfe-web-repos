@@ -1,4 +1,4 @@
-<i18n src="./resource-list.i18n.json"></i18n>
+<!--<i18n src="./resource-list.i18n.json"></i18n>-->
 <template>
   <div class="resource-list">
     <f-pagination class="resource-list-table"
@@ -8,7 +8,7 @@
               :pagination="paginationConfig"
               :empty-text="pagenationEmptyText">
       <template slot="list">
-        <el-table-column :label="$t('list.name')">
+        <el-table-column :label="$t('resource.list.name')">
           <template slot-scope="scope">
             <div class="r-l-item-name-box">
               <img
@@ -19,11 +19,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.type')" width="176">
+        <el-table-column :label="$t('resource.list.type')" width="176">
           <template slot="header" slot-scope="scope">
             <el-dropdown class="r-l-types-select" @command="handleSelectType">
               <span class="el-dropdown-link">
-                {{$t('list.type')}} {{selectedType === 'all' ? '': `${selectedType}` | pageBuildFilter}}<i class="el-icon-caret-bottom"></i>
+                {{$t('resource.list.type')}} {{selectedType === 'all' ? '': `${selectedType}` | pageBuildFilter}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label | pageBuildFilter}}</el-dropdown-item>
@@ -34,11 +34,11 @@
             <div class="r-l-item-type"> {{scope.row.resourceType | pageBuildFilter}}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.history')" width="200">
+        <el-table-column :label="$t('resource.list.history')" width="200">
           <template slot="header" slot-scope="scope">
             <el-dropdown class="r-l-types-select" @command="handleSelectReleaseStatus">
               <span class="el-dropdown-link">
-                {{$t('list.history')}} {{releaseStatus[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
+                {{$t('resource.list.history')}} {{releaseStatus[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in releaseStatus" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -48,13 +48,13 @@
           <template slot-scope="scope">
             <div class="r-l-item-no-release">
               {{scope.row.releaseStatus === 'fetching' ?
-              $t('list.querying') : scope.row.releaseList.length ? '' : $t('list.noReleases')}}
+              $t('resource.list.querying') : scope.row.releaseList.length ? '' : $t('resource.list.noReleases')}}
             </div>
             <div style="position: relative;" v-if="scope.row.releaseList.length">
               <div class="r-l-item-release-row1" @click="goToReleaseDetail(scope.row.releaseList[0])">{{scope.row.releaseList[0].releaseName}}</div>
               <template  v-if="scope.row.releaseList.length > 1">
                 <el-popover placement="bottom-start" width="370" trigger="hover">
-                  <div class="r-l-item-release-row2" slot="reference">{{$t('list.releasesCount[0]')}}{{scope.row.releaseList.length}}{{$t('list.releasesCount[1]')}}</div>
+                  <div class="r-l-item-release-row2" slot="reference">{{$t('resource.list.releasesCount[0]')}}{{scope.row.releaseList.length}}{{$t('resource.list.releasesCount[1]')}}</div>
                   <div class="r-l-item-release-floatbox">
                     <div class="release-item" v-for="(r, index) in scope.row.releaseList" :key="'r'+index">
                       <span class="name" @click="goToReleaseDetail(r)">{{r.releaseName}}</span>
@@ -67,20 +67,20 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="updateDate" :label="$t('list.updateDate')" width="180">
+        <el-table-column prop="updateDate" :label="$t('resource.list.updateDate')" width="180">
           <template slot-scope="scope">
             <div class="r-l-item-updateDate">{{scope.row.updateDate | fmtDate}}</div>
-            <div class="r-l-item-createDate">{{$t('list.createDate')}} {{scope.row.createDate | fmtDate }}</div>
+            <div class="r-l-item-createDate">{{$t('resource.list.createDate')}} {{scope.row.createDate | fmtDate }}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('list.operate')" width="230">
+        <el-table-column :label="$t('resource.list.operate')" width="230">
           <template slot-scope="scope">
-            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('list.releaseBtnText')}}</el-button>
+            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('resource.list.releaseBtnText')}}</el-button>
             <router-link :to="scope.row._toDetailLink" target="_blank">
-              <el-button class="r-l-item-detail-btn" size="mini">{{$t('list.editBtnText')}}</el-button>
+              <el-button class="r-l-item-detail-btn" size="mini">{{$t('resource.list.editBtnText')}}</el-button>
             </router-link>
             <a :href="scope.row._downloadLink" :download="scope.row.aliasName">
-              <el-button class="r-l-item-download-btn" size="mini">{{$t('list.downloadBtnText')}}</el-button>
+              <el-button class="r-l-item-download-btn" size="mini">{{$t('resource.list.downloadBtnText')}}</el-button>
             </a>
           </template>
         </el-table-column>
@@ -103,7 +103,7 @@
     },
 
     data() {
-      const NO_REACTED_RESOURCE = this.$i18n.t('list.messages[1]')
+      const NO_REACTED_RESOURCE = this.$i18n.t('resource.list.messages[1]')
       const $i18n = this.$i18n
       const qResourceType = this.$route.query.resourceType
 
@@ -127,9 +127,9 @@
         resourceMapReleases: {},
         selectedType: qResourceType != null ? qResourceType : 'all',
         releaseStatus: [
-          { label: $i18n.t('list.releaseStatus[0]'), value: 0 },
-          { label: $i18n.t('list.releaseStatus[1]'), value: 1 },
-          { label: $i18n.t('list.releaseStatus[2]'), value: 2 }
+          { label: $i18n.t('resource.list.releaseStatus[0]'), value: 0 },
+          { label: $i18n.t('resource.list.releaseStatus[1]'), value: 1 },
+          { label: $i18n.t('resource.list.releaseStatus[2]'), value: 2 }
         ],
         selectedReleaseStatus: 2,
         pagenationEmptyText: NO_REACTED_RESOURCE
@@ -139,7 +139,7 @@
     computed: {
       resourceTypes() {
         const $i18n = this.$i18n
-        const arr = [{ label: $i18n.t('list.allTypes'), value: 'all' }]
+        const arr = [{ label: $i18n.t('resource.list.allTypes'), value: 'all' }]
         for(let [label, value] of Object.entries(RESOURCE_TYPES)) {
           arr.push({ label, value })
         }
@@ -150,7 +150,7 @@
     watch: {
 
       query() {
-        const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('list.messages[0]'), this.$i18n.t('list.messages[1]') ]
+        const [ NO_RIGHT_RESOURCE, NO_REACTED_RESOURCE ] = [ this.$i18n.t('resource.list.messages[0]'), this.$i18n.t('resource.list.messages[1]') ]
         if(this.query == '') {
           this.paginationConfig.params.keywords = undefined
           this.pagenationEmptyText = NO_REACTED_RESOURCE
