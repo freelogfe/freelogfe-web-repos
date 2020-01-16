@@ -38,15 +38,11 @@
     "resetPassword": {
       "title": "Freelog 找回密码",
       "heads": ["忘记密码？", "请填写注册时使用的手机号/邮箱以便接收验证码，验证成功后可以重置您的密码"],
-      "loginName": "账号",
+      "loginName": "用户名/手机号/邮箱",
       "loginNamePlaceholder": "请输入手机号或邮箱",
       "password": "新密码",
       "backToLoginTexts": ["返回登录", "{time}s后返回登录界面；", "立即登录"],
       "registerNewUser": "注册新账户",
-      "verifyCodeStatus": [
-        "验证中...",
-        "下一步"
-      ],
       "resetSuccess": "修改成功",
       "authCodeInputTip": "请输入验证码",
       "sendingText": "发送中...",
@@ -54,6 +50,7 @@
       "timerText": "{time}秒后重发",
       "checkcodeBtnText": "获取验证码",
       "verifyCode": "验证码",
+      "resetPasswordBtns": [ "重设中...", "重设密码"],
       "successMsg": "重置密码成功",
       "errorTitle": "发生错误",
       "defaultErrorMsg": "出现异常，请稍后再试",
@@ -147,15 +144,11 @@
     "resetPassword": {
       "title": "Freelog Retrieve password",
       "heads": ["Forgot password?", "Please fill in the mobile phone number/email address used during registration to receive the verification code. After successful verification, you can reset your password"],
-      "loginName": "Account",
+      "loginName": "Username/Mobile/Email",
       "loginNamePlaceholder": "Phone number or email",
       "password": "password",
       "backToLoginTexts": ["back to login", "Return to the login interface after {time}s;", "Login immediately"],
       "registerNewUser": "register a new user",
-      "verifyCodeStatus": [
-        "Verifying...",
-        "Next step"
-      ],
       "resetSuccess": "update successfully",
       "authCodeInputTip": "enter check code",
       "sendingText": "sending",
@@ -163,6 +156,7 @@
       "timerText": "Resend after {time} seconds",
       "checkcodeBtnText": "Get verification code",
       "verifyCode": "verification code",
+      "resetPasswordBtns": [ "Reseting...", "Reset Password" ],
       "successMsg": "Password reset successful",
       "errorTitle": "Error Situation",
       "defaultErrorMsg": "An exception has occurred. Please try again later",

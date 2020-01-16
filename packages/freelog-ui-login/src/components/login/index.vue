@@ -11,10 +11,10 @@
         <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
       </div>
       <el-form class="login-form" auto-complete="off" :model="model" :rules="rules" ref="loginForm">
-        <el-form-item prop="loginName" :label="$t('loginName')">
+        <el-form-item prop="loginName" :label="$t('login.loginName')">
           <el-input type="text" name="loginName" v-model="model.loginName"></el-input>
         </el-form-item>
-        <el-form-item prop="password" class="login-password" :label="$('password')">
+        <el-form-item prop="password" class="login-password" :label="$t('login.password')">
           <a class="user-password" :href="resetPwLink">{{$t('login.resetPW')}}</a>
           <el-input type="password" name="password" v-model="model.password" @keyup.native.enter="submit('loginForm')"
           ></el-input>
@@ -24,12 +24,11 @@
             {{ loading ? $t('login.loginStatus[0]') : $t('login.loginStatus[1]') }}
           </el-button>
         </el-form-item>
-        <el-form-item class="login-sc-operation">
-          <!-- <el-checkbox v-model="rememberUser">{{$t('login.rememberUser')}}</el-checkbox> -->
-          {{$t('login.newUserText')}}
-          <a :href="signUpLink">{{$t('login.signup')}}</a>
-        </el-form-item>
       </el-form>
+    </div>
+    <div class="login-sc-operation">
+      {{$t('login.newUserText')}}
+      <a :href="signUpLink">{{$t('login.signup')}}</a>
     </div>
   </section>
 </template>
@@ -203,9 +202,6 @@ export default {
   width: 550px; height: auto;
 
   .login-body {
-    padding: 30px 75px 10px 75px; border: 1px solid #F0F0F0; border-radius: 10px;
-    background: #fff; background-clip: padding-box;
-
     .login-error-box {
       .el-icon-close {
         position: absolute; top: 4px; right: 4px; z-index: 10;
@@ -221,14 +217,16 @@ export default {
     .login-password {
       .user-password {
         position: absolute; top: 0; right: 0; z-index: 10;
-        line-height: 35px; color: #297CBB;
+        line-height: 26px; color: #297CBB;
       }
     }
-    .login-btns { margin: 50px 0 34px; text-align: center; }
-    .login-sc-operation {
-      line-height: 20px; font-size: 14px; font-weight: 400; text-align: center; color: #666;
-      a { color: #409EFF; }
-    }
+    .login-btns { margin: 40px 0 ; text-align: center; }
+  }
+  .login-sc-operation {
+    margin-top: 30px;
+    line-height: 20px; font-size: 14px; font-weight: 400; 
+    text-align: center; color: #666;
+    a { color: #409EFF; }
   }
 }
 
