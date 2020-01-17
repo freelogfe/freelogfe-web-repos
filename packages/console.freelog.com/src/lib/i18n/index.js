@@ -19,7 +19,7 @@ function setI18nLanguage(lang) {
 export function loadLanguageAsync(lang) {
   if (i18n.locale !== lang) {
     if (!loadedLanguages.includes(lang)) {
-      return import(/* webpackChunkName: "lang-[request]" */ `./locales/${lang}`).then(msgs => {
+      return import(/* webpackChunkName: "lang-[request]" */ `../../../../freelog-i18n/console/${lang}`).then(msgs => {
         i18n.setLocaleMessage(lang, msgs.default)
         loadedLanguages.push(lang)
         return setI18nLanguage(lang)
