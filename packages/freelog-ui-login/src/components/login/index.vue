@@ -14,7 +14,7 @@
         <el-form-item prop="loginName" :label="$t('loginName')">
           <el-input type="text" name="loginName" v-model="model.loginName"></el-input>
         </el-form-item>
-        <el-form-item prop="password" class="login-password" :label="$('password')">
+        <el-form-item prop="password" class="login-password" :label="$t('password')">
           <a class="user-password" :href="resetPwLink">{{$t('login.resetPW')}}</a>
           <el-input type="password" name="password" v-model="model.password" @keyup.native.enter="submit('loginForm')"
           ></el-input>
