@@ -14,23 +14,23 @@ import ToolsViews from '@/views/tools';
 const container = resolve => require.ensure([], () => resolve(require('@/views/layout/container.vue')), 'common')
 const layout = resolve => require.ensure([], () => resolve(require('@/views/layout/layout.vue')), 'common')
 const error = resolve => require.ensure([], () => resolve(require('@/views/error.vue')), 'common')
-const aboutView = resolve => require.ensure([], () => resolve(require('@/views/about/index.vue')), 'other')
-const helpView = resolve => require.ensure([], () => resolve(require('@/views/help/index.vue')), 'other')
+// const aboutView = resolve => require.ensure([], () => resolve(require('@/views/about/index.vue')), 'other')
+// const helpView = resolve => require.ensure([], () => resolve(require('@/views/help/index.vue')), 'other')
 const mainView = resolve => require.ensure([], () => resolve(require('@/views/main/index.vue')), 'index')
 const releaseManagementView = resolve => require.ensure([], () => resolve(require('@/views/main/release-management.vue')), 'release-management')
 const marketView = resolve => require.ensure([], () => resolve(require('@/views/market/index.vue')), 'index')
-const userView = resolve => require.ensure([], () => resolve(require('@/views/user/setting/index.vue')), 'user')
+// const userView = resolve => require.ensure([], () => resolve(require('@/views/user/setting/index.vue')), 'user')
 
 export const views = {
     layout,
     container,
-    aboutView,
-    helpView,
+    // aboutView,
+    // helpView,
     error,
     mainView,
     releaseManagementView,
     marketView,
-    userView,
+    // userView,
     ...ResourceViews,
     ...NodeViews,
     ...ReleaseViews,
@@ -41,13 +41,13 @@ export const views = {
 export default {
     layout,
     container,
-    aboutView,
-    helpView,
+    // aboutView,
+    // helpView,
     error,
     mainView,
     releaseManagementView,
     marketView,
-    userView,
+    // userView,
     ...ResourceViews,
     ...MockViews,
     ...alphaTestViews,

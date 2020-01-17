@@ -37,4 +37,14 @@ export default {
     mockResourcePool: 'Mock resource pool',
     createMockResource: 'Create mock resource',
     manageMockResource: 'Manage mock resource',
+
+    helpView: 'Help Center',
+    aboutView: 'About',
+    alphaTest: 'Alpha Test',
+    testPresentableInfo: 'Test Presentable Info',
+    testNodeManager: 'Test Node Manager',
+    presentableInfo: 'Presentable Info',
+    releaseInfo: 'Release Info',
+    resourceInfo : 'Resource Info',
+    mockResourceInfo: 'Mock Resource Info',
 };

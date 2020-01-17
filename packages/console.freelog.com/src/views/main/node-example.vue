@@ -1,22 +1,22 @@
-<i18n src="./main.json"></i18n>
+<!--<i18n src="./main.json"></i18n>-->
 <template>
   <div class="f-pb-presentaion" v-loading="loading" element-loading-background="#fafbfb">
     <div class="f-pb-p-tags-box" v-if="pbTags.length">
-      <el-button type="text" size="small" :class="{'selected': selectedTag.length === 0}" @click="emptySelectedTag">{{$t('pbTags[0]')}}</el-button>
+      <el-button type="text" size="small" :class="{'selected': selectedTag.length === 0}" @click="emptySelectedTag">{{$t('main.pbTags[0]')}}</el-button>
       <el-button
         size="small"
-        type="text" 
-        v-for="tag in pbTags" :key="tag" 
+        type="text"
+        v-for="tag in pbTags" :key="tag"
         :class="{'selected': selectedTag.indexOf(tag) !== -1}"
         @click="tapFilterTag(tag)">{{ tag }}
       </el-button>
     </div>
     <div class="f-pb-p-list">
-      <el-card 
-        class="f-pb-p-item" 
+      <el-card
+        class="f-pb-p-item"
         shadow="never"
-        :body-style="{ padding: 0 }" 
-        v-for="(pb, index) in pbMdList" 
+        :body-style="{ padding: 0 }"
+        v-for="(pb, index) in pbMdList"
         :key="'pb' + index"
         v-show="targetPbMdList.indexOf(pb.presentableId) > -1">
         <el-image class="f-pb-p-img" :src="pb.previewImgUrl" :preview-src-list="pb.previewImages || pb.releaseInfo.previewImages || []" fit="contain"></el-image>
@@ -28,24 +28,24 @@
             </el-tag>
           </div>
           <div class="f-pb-i-intro">
-            {{pb.releaseInfo && pb.releaseInfo.intro !== '' ? pb.releaseInfo.intro : $t('releaseEmptyIntro')}}
+            {{pb.releaseInfo && pb.releaseInfo.intro !== '' ? pb.releaseInfo.intro : $t('main.releaseEmptyIntro')}}
           </div>
           <div class="f-pb-p-i-btn-group"></div>
           <div class="f-pb-p-i-demo-btn" :class="{'disabled': !pb.demoSite}" @click="tapDemoPreviewBtn(pb.demoSite)">
-            <a :href="pb.demoSite" target="_blank"><i class="el-icon-caret-right"></i>{{$t('pbDemo')}}</a>
+            <a :href="pb.demoSite" target="_blank"><i class="el-icon-caret-right"></i>{{$t('main.pbDemo')}}</a>
           </div>
           <div class="f-pb-p-i-footer">
             <el-button type="text" size="mini" class="f-pb-p-i-auth-btn" v-if="pb.pbReleaseDetailPageUrl">
-              <a :href="pb.pbReleaseDetailPageUrl" target="_blank">{{$t('useTheTheme')}}</a>
+              <a :href="pb.pbReleaseDetailPageUrl" target="_blank">{{$t('main.useTheTheme')}}</a>
             </el-button>
             <div class="f-pb-p-usage-btn" @click="tapViewUsageBtn(index)">
-              {{pb.mdBoxVisible ? $t('pbUsageBtns[0]') : $t('pbUsageBtns[1]') }} 
+              {{pb.mdBoxVisible ? $t('main.pbUsageBtns[0]') : $t('main.pbUsageBtns[1]') }}
               <i class="el-icon-caret-bottom" :class="{'rotate180': pb.mdBoxVisible}"></i>
             </div>
           </div>
         </div>
         <div class="f-pb-p-usage">
-          <div class="f-pb-p-usage-content" :class="{'visible': pb.mdBoxVisible}" :style="{ height: pb.usageMdBoxheight }"> 
+          <div class="f-pb-p-usage-content" :class="{'visible': pb.mdBoxVisible}" :style="{ height: pb.usageMdBoxheight }">
             <div class="f-pb-p-u-md-box" :ref="pb.pbMdBoxRef"></div>
           </div>
         </div>
@@ -97,7 +97,7 @@ export default {
           const tmp = this.pbDemoPreviewSiteMap[releaseInfo.releaseName]
           if (tmp) {
             p.PB_releaseName = tmp['PB-releaseName']
-            const releaseName = encodeURIComponent(p.PB_releaseName) 
+            const releaseName = encodeURIComponent(p.PB_releaseName)
             const host = window.FreelogApp.Env.isTest ? 'console.testfreelog.com' : 'console.freelog.com'
             p.pbReleaseDetailPageUrl = `//${host}/release/detail?releaseName=${releaseName}`
             p.demoSite = tmp['PB-demo-site']
@@ -108,7 +108,7 @@ export default {
     }
   },
   created() {
-    
+
   },
   mounted() {
     this.fetchPbMarkdownList()
@@ -120,17 +120,17 @@ export default {
       const refPbUsagePrefix = 'pbUsage'
       this.loading = true
       return this.$axios.get('/v1/presentables/authList', {
-          params: { 
+          params: {
             nodeId: this.pbDemosNodeId,
-            tags: tag, 
-            isLoadingResourceInfo: 1 
+            tags: tag,
+            isLoadingResourceInfo: 1
           }
         })
         .then(resp => {
           return resp.data
         })
         .then(res => {
-          
+
           if(res.errcode === 0) {
             this.pbMdList = res.data.dataList.map((p, index) => {
               const { userDefinedTags, releaseInfo: { previewImages = [], releaseId, version } } = p
@@ -142,7 +142,7 @@ export default {
                   return false
                 }
               })
-              
+
               p.previewImgUrl = 'http://test-frcdn.oss-cn-shenzhen.aliyuncs.com/console/public/img/resource.jpg'
               if(previewImages.length) {
                 p.previewImgUrl = previewImages[0]
@@ -153,13 +153,13 @@ export default {
               this.renderPbMarkdown(p)
               return p
             })
-            
+
             this.pbTags = [...this.pbTagsSet]
           }
         })
         .catch(e => console.log(e))
         .finally(() => (this.loading = false))
-      
+
     },
     renderPbMarkdown(presentable) {
       const { presentableId, pbMdBoxRef } = presentable
@@ -167,8 +167,8 @@ export default {
         .then(() => {
           const markdownData = this.pbMdDataMap[presentableId]
           const container = this.$refs[pbMdBoxRef] ?this.$refs[pbMdBoxRef][0] : null
-          
-          if(!markdownData || container == null) return 
+
+          if(!markdownData || container == null) return
           var markdownParser = new MarkdownParser({
             showToc: false,
             container,
@@ -181,7 +181,7 @@ export default {
                 if (typeof data === 'string') {
                   $el.src = ''
                 } else {
-  
+
                 }
               }
               console.log('renderImageError', arguments)
@@ -197,11 +197,11 @@ export default {
     },
     fetchDemoPreviewSiteData() {
       return this.$axios.get('/v1/presentables/authList', {
-          params: { 
+          params: {
             nodeId: this.pbDemosNodeId,
-            resourceType: 'json', 
-            tags: 'demo-site', 
-            pageSize: 99 
+            resourceType: 'json',
+            tags: 'demo-site',
+            pageSize: 99
           }
         })
         .then(resp => resp.data)
@@ -291,11 +291,11 @@ export default {
 <style lang="less">
 @import '../../styles/variables.less';
 .f-pb-presentaion {
-  width: @main-content-width-1190; min-height: 60vh; margin: auto; 
+  width: @main-content-width-1190; min-height: 60vh; margin: auto;
   .f-pb-p-tags-box {
     margin: 10px 20px 0; padding-bottom: 25px; border-bottom: 1px solid #E3E3E3; text-align: center;
     .el-button {
-      margin: 10px 3px 0; padding: 4px 9px; 
+      margin: 10px 3px 0; padding: 4px 9px;
       color: #999; cursor: pointer;
       &.selected {
         margin: 0 5px; border-radius:4px;
@@ -319,11 +319,11 @@ export default {
 
   .f-pb-p-info {
     position: relative;
-    min-height: @imgHeight ; padding-left: @imgWidth + 20; 
+    min-height: @imgHeight ; padding-left: @imgWidth + 20;
     .f-pb-p-i-name { font-size: 18px; font-weight: 600; color: #333; }
     .f-pb-p-i-tags {
       margin-top: 20px;
-      .el-tag { 
+      .el-tag {
         height: 20px; margin-right: 10px; margin-bottom: 10px; padding: 0 5px; border-color: #EFEFEF; border-radius: 2px;
         line-height: 20px; font-size: 12px; background-color: #EFEFEF; color: #666;
       }
@@ -333,8 +333,8 @@ export default {
       overflow: hidden;
       font-size: 14px; color: #333;
     }
-    .f-pb-p-i-demo-btn { 
-      position: absolute; top: 0; right: 0; z-index: 10; 
+    .f-pb-p-i-demo-btn {
+      position: absolute; top: 0; right: 0; z-index: 10;
       padding: 4px 16px 4px 13px; border: 1px solid #B8D6F6; border-radius: 20px;
       font-size: 14px; color: #666; cursor: pointer;
       span { margin-right: 30px; }
@@ -354,14 +354,14 @@ export default {
         display: inline-block; margin-left: 27px; cursor: pointer;
         font-size: 14px; color: #999;
         &:hover { font-weight: 500; color: #409EFF; }
-        a { 
-          font-weight: 400; color: #999; 
+        a {
+          font-weight: 400; color: #999;
           &:hover { font-weight: 500; color: #409EFF; }
         }
         .el-icon-caret-bottom {
           transition: all .2s;
           &.rotate180 {
-            transform: rotate(180deg); 
+            transform: rotate(180deg);
           }
         }
       }
@@ -381,15 +381,15 @@ export default {
       height: 0; transition: height .2s; background-color: #fff;
       .f-pb-p-u-md-box {
         visibility: hidden;
-        padding: 20px; 
+        padding: 20px;
       }
-      &.visible { 
+      &.visible {
         margin-bottom: 20px;
         .f-pb-p-u-md-box { visibility: visible; }
       }
     }
-  } 
-  
+  }
+
 
   @media screen and (max-width: 768px){
     .f-pb-p-tags-box {
@@ -409,7 +409,7 @@ export default {
         .f-pb-p-info {
           position: relative; min-height: inherit; padding: 10px 0;
           .f-pb-p-i-tags {
-            margin: 8px 0; 
+            margin: 8px 0;
             .el-tag{
               margin-right: 3px; margin-bottom: 2px; transform: scale(0.9);
             }
@@ -421,10 +421,10 @@ export default {
             .f-pb-p-i-auth-btn { display: none; }
           }
         }
-        .f-pb-p-usage { 
-          margin-top: 5px; 
-          .f-pb-p-u-btn-bar { 
-            font-size: 13px; line-height: 32px; 
+        .f-pb-p-usage {
+          margin-top: 5px;
+          .f-pb-p-u-btn-bar {
+            font-size: 13px; line-height: 32px;
             background-color: #fff; color: #409EFF;
           }
         }

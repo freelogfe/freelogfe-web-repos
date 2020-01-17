@@ -1,8 +1,8 @@
-<i18n src="./main.json"></i18n>
+<!--<i18n src="./main.json"></i18n>-->
 <template>
   <section class="index-main-container">
 		<el-tabs class="main-c-tabs" v-model="activeTabName" @tab-click="exchangeActiveTabName">
-			<el-tab-pane :label="$t('tabs[0]')" :name="tabs[0].name" lazy>
+			<el-tab-pane :label="$t('main.tabs[0]')" :name="tabs[0].name" lazy>
 				<div class="resource-types-bar">
 					<el-button
 						type="text"
@@ -11,7 +11,7 @@
 						:key="item.value"
 						@click="exchangeSelectedResourceType(item.value)">{{item.label | pageBuildFilter}}</el-button>
 						<!-- prefix-icon -->
-					<el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" :placeholder="$t('releaseSearchPlaceholder')"
+					<el-input class="search-input" size="medium" ref="input" v-model="searchInputStr" :placeholder="$t('main.releaseSearchPlaceholder')"
 						:class="{ 'focus': isInputFocus }"
 						:style="{width: '160px'}"
 						@focus="focusHandler"
@@ -42,7 +42,7 @@
 					</lazy-list-view>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane :label="$t('tabs[1]')" :name="tabs[1].name" lazy>
+			<el-tab-pane :label="$t('main.tabs[1]')" :name="tabs[1].name" lazy>
 				<node-example></node-example>
 			</el-tab-pane>
   		</el-tabs>

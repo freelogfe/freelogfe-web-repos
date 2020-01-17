@@ -7,6 +7,8 @@ import node from './node';
 import layout from './layout';
 import resource from './resource';
 import release from './release';
+import policy from './policy';
+import main from './main';
 
 export default {
 
@@ -25,23 +27,23 @@ export default {
         schemeStatus: '授权方案状态'
     },
 
-    policy: {
-        authTarget: 'authorized target',
-        checked: 'verification pass',
-        tplName: 'policy template name',
-        policyType: 'policy template type',
-        tplDesc: 'policy template content',
-        inputTip: 'input your policy here',
-        checkBtnText: 'verify policy',
-        state: 'status',
-        createDate: 'creation date',
-        types: {
-            resource: 'resource policy template',
-            user: 'user policy template'
-        },
-
-        statesMap: ['normal', 'deleted']
-    },
+    // policy: {
+    //     authTarget: 'authorized target',
+    //     checked: 'verification pass',
+    //     tplName: 'policy template name',
+    //     policyType: 'policy template type',
+    //     tplDesc: 'policy template content',
+    //     inputTip: 'input your policy here',
+    //     checkBtnText: 'verify policy',
+    //     state: 'status',
+    //     createDate: 'creation date',
+    //     types: {
+    //         resource: 'resource policy template',
+    //         user: 'user policy template'
+    //     },
+    //
+    //     statesMap: ['normal', 'deleted']
+    // },
 
     // release: {
     //     myReleases: 'My releases',
@@ -258,12 +260,12 @@ export default {
         noFavorResources: 'no favorite resource'
     },
 
-    aboutView: {
-        about: 'About'
-    },
-    helpView: {
-        title: 'Help Center'
-    },
+    // aboutView: {
+    //     about: 'About'
+    // },
+    // helpView: {
+    //     title: 'Help Center'
+    // },
 
     common,
     components,
@@ -274,5 +276,6 @@ export default {
     layout,
     resource,
     release,
-
+    policy,
+    main,
 }

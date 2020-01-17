@@ -23,7 +23,7 @@ export default {
         breadCrumb: [
             {
                 to: '/release-management/release/list',
-                text: '我的发行',
+                text: i18n.t('routes.myReleases'),
             },
             {
                 text: i18n.t('routes.createRelease'),
@@ -60,17 +60,17 @@ export default {
       meta: {
         requiresAuth: true,
         hideFooter: true,
-        // title: i18n.t('routes.releaseManager'),
-        title: '发行信息',
+        title: i18n.t('routes.releaseInfo'),
+        // title: '发行信息',
         type: 'release',
         theme: 'white',
           breadCrumb: [
               {
                   to: '/release-management/release/list',
-                  text: '我的发行',
+                  text: i18n.t('routes.myReleases'),
               },
               {
-                  text: '发行信息',
+                  text: i18n.t('routes.releaseInfo'),
               },
           ]
       },

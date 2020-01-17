@@ -42,7 +42,7 @@ const routerConfig = {
     routes: [
         {
             path: '/',
-            meta: {title: i18n.t('resource.market')},
+            meta: {title: i18n.t('routes.releaseMarket')},
             component: Views.layout,
             children: [
                 resourceRoute,
@@ -51,33 +51,33 @@ const routerConfig = {
                 mockRoute,
                 alphaTestRoute,
                 batchOperationRoute,
-                {
-                    path: 'about',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: `${i18n.t('aboutView.about')}freelog`
-                    },
-                    component: Views.aboutView
-                },
-                {
-                    path: 'setting',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: true,
-                        title: i18n.t('routes.accountSetting')
-                    },
-                    component: Views.userView
-                },
-                {
-                    path: 'help',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: i18n.t('helpView.title')
-                    },
-                    component: Views.helpView
-                },
+                // {
+                //     path: 'about',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: `${i18n.t('routes.aboutView')}freelog`
+                //     },
+                //     component: Views.aboutView
+                // },
+                // {
+                //     path: 'setting',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: true,
+                //         title: i18n.t('routes.accountSetting')
+                //     },
+                //     component: Views.userView
+                // },
+                // {
+                //     path: 'help',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: i18n.t('routes.title')
+                //     },
+                //     component: Views.helpView
+                // },
                 {
                     path: 'market',
                     hidden: true,
@@ -115,7 +115,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('release.management'),
+                        title: i18n.t('routes.releaseManager'),
                         theme: 'white',
                         hideFooter: true,
                     },

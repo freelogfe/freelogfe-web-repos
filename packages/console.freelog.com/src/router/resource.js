@@ -27,7 +27,7 @@ export default {
                 breadCrumb: [
                     {
                         to: '/release-management/resource/list',
-                        text: '我的资源',
+                        text: i18n.t('routes.myResources'),
                     },
                     {
                         text: i18n.t('routes.createResource'),
@@ -42,36 +42,23 @@ export default {
 
             meta: {
                 requiresAuth: true,
-                // title: i18n.t('routes.resourceManager'),
-                title: '资源信息',
+                title: i18n.t('routes.resourceInfo'),
+                // title: '资源信息',
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
                 breadCrumb: [
                     {
                         to: '/release-management/resource/list',
-                        text: '我的资源',
+                        text: i18n.t('routes.myResources'),
                     },
                     {
-                        text: '资源信息',
+                        text: i18n.t('routes.resourceInfo'),
                     },
                 ]
             },
             component: Views.resourceNew,
         },
-        // {
-        //     path: 'create',
-        //     redirect: 'editor',
-        //     // hidden: true,
-        //     // meta: {
-        //     //     requiresAuth: true,
-        //     //     title: i18n.t('routes.createResource'),
-        //     //     type: 'resource',
-        //     //     theme: 'gray',
-        //     //     hideFooter: true,
-        //     // },
-        //     // component: Views.resourceCreator,
-        // },
         {
             path: 'list',
             meta: {
@@ -82,37 +69,5 @@ export default {
             },
             component: Views.resourceList
         },
-        // {
-        //     path: 'policy_tpl',
-        //     hidden: true,
-        //     meta: {
-        //         requiresAuth: true,
-        //         type: 'resource'
-        //     },
-        //     component: Views.container,
-        //     redirect: '/resource/policy_tpl/list',
-        //     children: [
-        //         {
-        //             path: 'create',
-        //             hidden: true,
-        //             meta: {
-        //                 requiresAuth: true,
-        //                 title: i18n.t('routes.createResourcePolicyTpl'),
-        //                 type: 'resource'
-        //             },
-        //             component: Views.policyTplCreator
-        //         },
-        //         {
-        //             path: 'detail',
-        //             hidden: true,
-        //             meta: {
-        //                 requiresAuth: true,
-        //                 title: i18n.t('routes.resourcePolicyTplDetail'),
-        //                 type: 'resource'
-        //             },
-        //             component: Views.policyTplDetail
-        //         }
-        //     ]
-        // }
     ]
 }
