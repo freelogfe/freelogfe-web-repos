@@ -42,7 +42,7 @@ export default {
     layout,
     container,
     // aboutView,
-    helpView,
+    // helpView,
     error,
     mainView,
     releaseManagementView,
