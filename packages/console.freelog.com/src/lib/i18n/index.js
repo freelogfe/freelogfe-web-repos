@@ -1,6 +1,6 @@
 import { Vue, initI18n } from '@freelog/freelog-common-lib'
-import en from './locales/en'
-import cn from './locales/zh-CN'
+import en from '../../../../freelog-i18n/console/en';
+import cn from '../../../../freelog-i18n/console/zh-CN';
 import axios from '../axios'
 
 // ElementLocale.i18n((key, value) => i18n.t(key, value))
