@@ -1,11 +1,11 @@
-export default {
-  name: 'help-view',
-
-  data() {
-    return {
-    }
-  },
-
-  methods: {
-  }
-}
+// export default {
+//   name: 'help-view',
+//
+//   data() {
+//     return {
+//     }
+//   },
+//
+//   methods: {
+//   }
+// }

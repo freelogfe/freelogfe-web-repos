@@ -51,33 +51,33 @@ const routerConfig = {
                 mockRoute,
                 alphaTestRoute,
                 batchOperationRoute,
-                {
-                    path: 'about',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: `${i18n.t('routes.aboutView')}freelog`
-                    },
-                    component: Views.aboutView
-                },
-                {
-                    path: 'setting',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: true,
-                        title: i18n.t('routes.accountSetting')
-                    },
-                    component: Views.userView
-                },
-                {
-                    path: 'help',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: i18n.t('routes.title')
-                    },
-                    component: Views.helpView
-                },
+                // {
+                //     path: 'about',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: `${i18n.t('routes.aboutView')}freelog`
+                //     },
+                //     component: Views.aboutView
+                // },
+                // {
+                //     path: 'setting',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: true,
+                //         title: i18n.t('routes.accountSetting')
+                //     },
+                //     component: Views.userView
+                // },
+                // {
+                //     path: 'help',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: i18n.t('routes.title')
+                //     },
+                //     component: Views.helpView
+                // },
                 {
                     path: 'market',
                     hidden: true,
