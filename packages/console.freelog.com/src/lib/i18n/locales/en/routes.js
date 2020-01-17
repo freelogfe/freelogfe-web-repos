@@ -37,4 +37,8 @@ export default {
     mockResourcePool: 'Mock resource pool',
     createMockResource: 'Create mock resource',
     manageMockResource: 'Manage mock resource',
+
+    helpView: 'Help Center',
+    aboutView: 'About',
+    // releaseMarket: 'Release Market',
 };

@@ -258,12 +258,12 @@ export default {
         noFavorResources: 'no favorite resource'
     },
 
-    aboutView: {
-        about: 'About'
-    },
-    helpView: {
-        title: 'Help Center'
-    },
+    // aboutView: {
+    //     about: 'About'
+    // },
+    // helpView: {
+    //     title: 'Help Center'
+    // },
 
     common,
     components,

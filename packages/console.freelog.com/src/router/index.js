@@ -42,7 +42,7 @@ const routerConfig = {
     routes: [
         {
             path: '/',
-            meta: {title: i18n.t('resource.market')},
+            meta: {title: i18n.t('routes.releaseMarket')},
             component: Views.layout,
             children: [
                 resourceRoute,
@@ -56,7 +56,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: `${i18n.t('aboutView.about')}freelog`
+                        title: `${i18n.t('routes.aboutView')}freelog`
                     },
                     component: Views.aboutView
                 },
@@ -74,7 +74,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('helpView.title')
+                        title: i18n.t('routes.title')
                     },
                     component: Views.helpView
                 },
@@ -115,7 +115,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('release.management'),
+                        title: i18n.t('routes.releaseManager'),
                         theme: 'white',
                         hideFooter: true,
                     },

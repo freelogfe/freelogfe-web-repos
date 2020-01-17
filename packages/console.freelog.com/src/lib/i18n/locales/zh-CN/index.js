@@ -259,12 +259,12 @@ export default {
         noFavorResources: '未收藏资源'
     },
 
-    aboutView: {
-        about: '关于'
-    },
-    helpView: {
-        title: '帮助中心'
-    },
+    // aboutView: {
+    //     about: '关于'
+    // },
+    // helpView: {
+    //     title: '帮助中心'
+    // },
 
     //
     common,
