@@ -15,10 +15,10 @@
           <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
         </div>
         <el-form class="reset-password-form" auto-complete="off" :model="model" :rules="rules" ref="formRef">
-          <el-form-item prop="loginName" :label="'手机号/邮箱'">
+          <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
             <el-input type="text" v-model="model.loginName"></el-input>
           </el-form-item>
-          <el-form-item prop="authCode" :label="'验证码'">
+          <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
             <div>
               <el-input type="text" v-model="model.authCode" style="width: 280px"></el-input>
               <el-button class="vcode-btn" style="width: 110px"
@@ -28,11 +28,14 @@
               </el-button>
             </div>
           </el-form-item>
+          <el-form-item prop="password" :label="$t('resetPassword.password')">
+            <el-input type="password" v-model="model.password"></el-input>
+          </el-form-item>
           <el-form-item class="reset-password-btns">
             <el-button type="primary"
                       style="width: 100%;"
                       :loading="loading"
-                      @click="submit('formRef')">{{ loading ? $t('resetPassword.verifyCodeStatus[0]') : $t('resetPassword.verifyCodeStatus[1]') }}
+                      @click="submit('formRef')">{{ loading ? $t('resetPassword.resetPasswordBtns[0]') : $t('resetPassword.resetPasswordBtns[1]') }}
             </el-button>
           </el-form-item>
         </el-form>
@@ -42,7 +45,7 @@
         <a :href="signupLink">{{$t('resetPassword.registerNewUser')}}</a>
       </div>
     </template>
-    <div class="reset-password-success-box" v-if="step === steps[2]">
+    <div class="reset-password-success-box" v-if="step === steps[1]">
       <div><i class="freelog fl-icon-shenqingchenggong"></i></div>
       <p class="reset-pw-success-msg">{{$t('resetPassword.successMsg')}}</p>
       <p class="reset-pw-success-footer">
@@ -77,11 +80,11 @@ export default ResetView
     }
 
     .reset-password-btns {
-      margin: 50px 0 60px; text-align: center;
+      margin: 40px 0 20px; text-align: center;
     }
 
     .reset-password-footer {
-      margin-top: 40px; text-align: center;
+      margin-top: 30px; text-align: center;
       a { margin: 0 20px; font-size: 14px; color: #666666; }
     }
 
@@ -96,7 +99,7 @@ export default ResetView
     }
 
     .reset-password-success-box {
-      width: 490px; margin: 220px auto; padding: 22px 0 40px;  border: 1px solid #F0F0F0; border-radius: 10px;
+      width: 490px; margin: 30% auto; padding: 22px 0 40px;  border: 1px solid #F0F0F0; border-radius: 10px;
       background-color: #fff; text-align: center;
       .fl-icon-shenqingchenggong { font-size: 76px; color: #7ED321; }
       .reset-pw-success-msg {

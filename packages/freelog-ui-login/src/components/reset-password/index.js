@@ -2,6 +2,8 @@ import { isSafeUrl } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
 import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
 
+const steps = ['authCode', 'success']
+const remainTimer = 3
 export default {
   name: 'f-reset-password',
 
@@ -14,9 +16,12 @@ export default {
       ],
       authCode: [
         { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
       ]
     }
-    console.log(' this.$route.query.result', this.$route.query.result)
+    
     return {
       model: {
         loginName: '',
@@ -32,9 +37,9 @@ export default {
       loginLink: LOGIN_PATH,
       signupLink: SIGN_PATH,
       valid: false,
-      steps: ['authCode', 'reset', 'success'],
-      step: this.$route.query.result ? this.$route.query.result : 'authCode',
-      remainTimer: 5
+      steps,
+      step: steps[0],
+      remainTimer,
     }
   },
 
@@ -61,7 +66,7 @@ export default {
       if (this.step === 'success') {
         this.goToLoginAfterCountdown()
       }
-    }
+    },
   },
 
   mounted() {
@@ -86,9 +91,10 @@ export default {
 
         this.$axios.post('/v1/userinfos/resetPassword', this.model).then((res) => {
           if (res.data.errcode === 0) {
-            this.$message.success(this.$t('resetPassword.resetSuccess'))
-            let redirect = this.$route.query.redirect
-            this.$router.push({ path: LOGIN_PATH, query: { redirect } })
+            this.step = this.steps[1]
+            // this.$message.success(this.$t('resetPassword.resetSuccess'))
+            // let redirect = this.$route.query.redirect
+            // this.$router.push({ query: { redirect } })
           } else {
             this.error = { title: '', message: res.data.msg }
           }
@@ -129,7 +135,7 @@ export default {
       })
     },
     goToLoginAfterCountdown() {
-      this.remainTimer = 5 
+      this.remainTimer = remainTimer
       const timer = setInterval(() => {
         this.remainTimer--
         if (this.remainTimer === 0) {

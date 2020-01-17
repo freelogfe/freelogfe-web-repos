@@ -564,7 +564,7 @@ export default {
 			position: relative;
 		}
 		.mr-rb-btns-box {
-			position: absolute; bottom: 10px; right: 20px; z-index: 100;
+			position: absolute; bottom: 20px; right: 30px; z-index: 100;
 			text-align: right;
 		}
 		.mr-rb-cancel-btn { margin-right: 10px; color: #999; }
@@ -595,7 +595,7 @@ export default {
 		.CodeMirror {
 			height: 480px; padding-bottom: 45px; border-radius: 4px;
 			pre { line-height: 1.8; }
-			.CodeMirror-scroll { margin-right: 0; padding-bottom: 45px; }
+			.CodeMirror-scroll { overflow: auto !important; margin-right: 0; padding-bottom: 45px; }
 		}
 		.el-textarea__inner {
 			padding: 20px; line-height: 2;

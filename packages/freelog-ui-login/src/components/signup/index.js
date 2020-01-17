@@ -72,14 +72,14 @@ export default {
       sending: false,
       waitingTimer: 0,
       loginLink: LOGIN_PATH,
-      registerTypes: [ 'iphone', 'email' ],
-      selectedRegisterType: 'iphone'
+      registerTypes: [ 'loginIphone', 'loginEmail' ],
+      selectedRegisterType: 'loginIphone'
     }
   },
 
   computed: {
     disabledCheckCodeBtn() {
-      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName))
+      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone))
     },
     accountType() {
       var type = ''
@@ -114,10 +114,10 @@ export default {
           $input.blur()
         }
       })
-      if (this.selectedRegisterType === 'iphone') {
+      if (this.selectedRegisterType === this.registerTypes[0]) {
         this.model.loginIphone = this.model.loginEmail
       }
-      if (this.selectedRegisterType === 'email') {
+      if (this.selectedRegisterType === this.registerTypes[1]) {
         this.model.loginEmail = this.model.loginIphone
       }
     }
@@ -131,6 +131,20 @@ export default {
   },
 
   methods: {
+    getLoginName() {
+      switch(this.selectedRegisterType) {
+        case this.registerTypes[0]: {
+          this.model.loginName = this.model.loginIphone
+          break
+        }
+        case this.registerTypes[1]: {
+          this.model.loginName = this.model.loginEmail
+          break
+        }
+        default:
+      }
+      return this.model.loginName
+    },
     submit(ref) {
       if (this.loading) {
         return
@@ -147,13 +161,11 @@ export default {
         const data = {}
 
         Object.keys(this.model).forEach((key) => {
-          if (key !== 'checkPassword') {
+          if (key !== 'checkPassword' && this.registerTypes.indexOf(key) === -1) {
             data[key] = this.model[key]
-            if((key === 'loginIphone' || key === 'loginEmail') && this.model[key] !== '') {
-              data['loginName'] = this.model[key]
-            }
           }
         })
+        data['loginName'] = this.getLoginName()
 
         this.$axios.post('/v1/userinfos/register', data)
           .then((res) => {
@@ -186,7 +198,7 @@ export default {
       })
     },
     sendCheckCodeNotifyHandler() {
-      if (this.sending || !this.model.loginName) return
+      if (this.sending || !this.getLoginName()) return
 
       // if (!this.model.password) {
       //   return this.$message.error(this.$t('signup.passwordInputTip'))

@@ -63,11 +63,11 @@
                     @click="submit('signupForm')">{{ loading ? $t('signup.signupingText') : $t('signup.signupedText') }}
           </el-button>
         </el-form-item>
-        <el-form-item class="signup-to-login">
-          {{$t('signup.loginTexts[0]')}}
-          <a :href="loginLink">{{$t('signup.loginTexts[1]')}}</a>
-        </el-form-item>
       </el-form>
+    </div>
+    <div class="signup-to-login">
+      {{$t('signup.loginTexts[0]')}}
+      <a :href="loginLink">{{$t('signup.loginTexts[1]')}}</a>
     </div>
     
   </section>
