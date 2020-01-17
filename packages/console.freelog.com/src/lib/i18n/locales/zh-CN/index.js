@@ -8,6 +8,7 @@ import layout from './layout';
 import resource from './resource';
 import release from './release';
 import policy from './policy';
+import main from './main';
 
 export default {
     header: {
@@ -278,4 +279,5 @@ export default {
     resource,
     release,
     policy,
+    main,
 }
