@@ -41,4 +41,11 @@ export default {
 
     helpView: '帮助中心',
     aboutView: '关于',
+    alphaTest: '内测',
+    testPresentableInfo: '测试展品信息',
+    testNodeManager: '测试节点管理',
+    presentableInfo: '测试展品信息',
+    releaseInfo: '发行信息',
+    resourceInfo: '资源信息',
+    mockResourceInfo: '模拟资源信息',
 };

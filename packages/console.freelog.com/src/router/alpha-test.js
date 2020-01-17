@@ -7,7 +7,7 @@ export default {
     path: 'alpha-test',
     meta: {
         requiresAuth: true,
-        title: i18n.t('routes.resourceSystem'),
+        title: i18n.t('routes.alphaTest'),
         hideFooter: true,
     },
     component: Views.container,
@@ -17,7 +17,7 @@ export default {
             path: 'result',
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.mockResourcePool'),
+                title: i18n.t('routes.alphaTest'),
                 type: '',
                 hideFooter: true,
             },
@@ -27,7 +27,7 @@ export default {
             path: 'input',
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.mockResourcePool'),
+                title: i18n.t('routes.alphaTest'),
                 type: '',
                 hideFooter: true,
             },
@@ -37,7 +37,7 @@ export default {
             path: 'apply',
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.mockResourcePool'),
+                title: i18n.t('routes.alphaTest'),
                 type: '',
                 hideFooter: true,
             },
@@ -47,7 +47,7 @@ export default {
             path: 'success',
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.mockResourcePool'),
+                title: i18n.t('routes.alphaTest'),
                 type: '',
                 hideFooter: true,
             },

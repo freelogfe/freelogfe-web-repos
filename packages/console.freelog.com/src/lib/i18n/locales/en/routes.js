@@ -40,5 +40,11 @@ export default {
 
     helpView: 'Help Center',
     aboutView: 'About',
-    // releaseMarket: 'Release Market',
+    alphaTest: 'Alpha Test',
+    testPresentableInfo: 'Test Presentable Info',
+    testNodeManager: 'Test Node Manager',
+    presentableInfo: 'Presentable Info',
+    releaseInfo: 'Release Info',
+    resourceInfo : 'Resource Info',
+    mockResourceInfo: 'Mock Resource Info',
 };

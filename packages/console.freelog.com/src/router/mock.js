@@ -9,7 +9,7 @@ export default {
     path: 'mock',
     meta: {
         requiresAuth: true,
-        title: i18n.t('routes.resourceSystem'),
+        title: i18n.t('routes.mockResourcePool'),
         hideFooter: true,
     },
     component: Views.container,
@@ -54,8 +54,8 @@ export default {
             meta: {
                 requiresAuth: true,
                 // title: i18n.t('routes.createResource'),
-                // title: i18n.t('routes.manageMockResource'),
-                title: '模拟资源信息',
+                title: i18n.t('routes.mockResourceInfo'),
+                // title: '模拟资源信息',
                 theme: 'gray',
                 hideFooter: true,
             },
