@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/ui-login.json"></i18n>
+<!--<i18n src="../../i18n-locales/ui-login.json"></i18n>-->
 <template>
   <section class="signup-section"
            v-loading="logining"
