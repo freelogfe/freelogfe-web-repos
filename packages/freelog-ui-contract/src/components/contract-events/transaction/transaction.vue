@@ -1,4 +1,4 @@
-<i18n src="../../../i18n-locales/transaction.json"></i18n>
+<!--<i18n src="../../../i18n-locales/transaction.json"></i18n>-->
 <template>
   <div class="transaction-wrap">
 

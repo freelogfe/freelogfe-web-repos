@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/contract-detail.json"></i18n>
+<!--<i18n src="../../i18n-locales/contract-detail.json"></i18n>-->
 <template>
   <div class="contract-detail-content-wrapper" >
     <template v-if="contract && (contract.status === 2 || contract.status === 4)">
@@ -28,7 +28,10 @@
 </template>
 
 <script>
-  import { beautifyPolicy, highlightPolicy } from '@freelog/freelog-policy-lang'
+  import { beautifyPolicy, highlightPolicy } from '@freelog/freelog-policy-lang';
+  import en from '../../../../freelog-i18n/ui-contract/en';
+  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
+
   import {
     LicenseEvent,
     TransactionEvent,
@@ -38,6 +41,12 @@
 
   export default {
     name: 'f-contract-detail',
+    i18n: {
+      messages: {
+        en,
+        'zh-CN': zhCN,
+      }
+    },
     props: {
       contract: {
         // type: Object,

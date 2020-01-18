@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/contractSigning.json"></i18n>
+<!--<i18n src="../../i18n-locales/contractSigning.json"></i18n>-->
 <template>
   <div class="ss-content">
     <template v-if="type ==='single'">
@@ -23,9 +23,17 @@
   import resourceContract from './signing-box.vue'
   import { getContractState, } from './common.js'
   import { getUserInfo } from "../../utils.js"
+  import en from '../../../../freelog-i18n/ui-contract/en';
+  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
 
   export default {
     name: 'f-contract-signing-single',
+    i18n: {
+      messages: {
+        en,
+        'zh-CN': zhCN,
+      }
+    },
     components: {
       resourceContract,
     },

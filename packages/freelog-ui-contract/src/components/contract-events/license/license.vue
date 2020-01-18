@@ -1,4 +1,4 @@
-<i18n src="../../../i18n-locales/license.json"></i18n>
+<!--<i18n src="../../../i18n-locales/license.json"></i18n>-->
 <template>
   <div class="license-event-wrap">
     <el-form label-position="left" class="small-el-form" :label-width="formLabelWidth" :model="contractDetail">
