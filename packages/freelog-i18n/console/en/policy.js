@@ -27,4 +27,15 @@ export default {
     alter: 'Alter',
     cancel: 'Cancel',
 
+    in2To40Length: 'In 2 to 40 length',
+    descriptionRequired: 'Required',
+    templateRequired: 'Required',
+
+    resourceTemplate: 'Template',
+    userTemplate: 'User Template',
+    normal: 'Normal',
+    deleted: 'Deleted',
+    policyTemplate: 'Template',
+    unknown: 'Unknown',
+
 };

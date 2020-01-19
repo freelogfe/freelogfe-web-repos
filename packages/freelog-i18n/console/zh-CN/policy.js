@@ -26,4 +26,15 @@ export default {
     alter: '修改',
     cancel: '取消',
 
+    in2To40Length: '长度在 2 到 40 个字符',
+    descriptionRequired: '模板描述必填',
+    templateRequired: '策略模板内容必填',
+
+    resourceTemplate: '资源策略模板',
+    userTemplate: '用户策略模板',
+    normal: '正常',
+    deleted: '已删除',
+    policyTemplate: '策略模板',
+    unknown: '未知'
+
 };
