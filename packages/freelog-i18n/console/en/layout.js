@@ -20,5 +20,6 @@ export default {
     logout: 'Logout',
 
     // Footer
+    ICP: 'Guangdong ICP 17,085,716th - 1',
 
 };

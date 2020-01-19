@@ -20,5 +20,6 @@ export default {
     logout: '登出',
 
     // Footer
+    ICP: '粤ICP备17085716号-1',
 
 };
