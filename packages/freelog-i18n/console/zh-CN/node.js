@@ -211,4 +211,13 @@ export default {
     latestVersion: '最新版本',
 
     addRuleSuccess: '添加规则成功',
+
+    tabsHeader: {
+        authorization: '授权管理',
+        authorizationChain: '授权链',
+        pending: '待执行',
+        active: '生效中',
+        termination: '合约终止',
+    },
+
 };
