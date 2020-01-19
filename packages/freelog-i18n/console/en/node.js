@@ -208,4 +208,6 @@ export default {
     details: 'Details',
 
     latestVersion: 'Latest Version',
+
+    addRuleSuccess: 'Success',
 };

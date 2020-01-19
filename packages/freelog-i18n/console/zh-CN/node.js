@@ -209,4 +209,6 @@ export default {
     details: '详情',
 
     latestVersion: '最新版本',
+
+    addRuleSuccess: '添加规则成功',
 };
