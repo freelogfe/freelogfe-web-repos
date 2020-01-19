@@ -152,4 +152,6 @@ export default {
     createData: '创建日期',
     contractInfo: '合同信息',
 
+    licensingFailed: '授权方案获取失败！',
+
 };

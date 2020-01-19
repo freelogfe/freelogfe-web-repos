@@ -142,4 +142,6 @@ export default {
     createData: 'Create Data',
     contractInfo: 'Contract Info',
 
+    licensingFailed: 'Licensing Scheme gets failed!',
+
 };
