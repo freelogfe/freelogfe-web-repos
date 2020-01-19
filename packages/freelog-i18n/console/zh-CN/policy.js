@@ -12,5 +12,10 @@ export default {
         resource: '资源策略模板',
         user: '用户策略模板'
     },
-    statesMap: ['正常', '已删除']
+    statesMap: ['正常', '已删除'],
+
+    createTemplate: '创建新策略模板',
+    templateName: '模板名称',
+    status: '状态'
+
 };

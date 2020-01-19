@@ -13,5 +13,9 @@ export default {
         user: 'user policy template'
     },
 
-    statesMap: ['normal', 'deleted']
+    statesMap: ['normal', 'deleted'],
+
+    createTemplate: 'Create',
+    templateName: 'Name',
+    status: 'Status',
 };

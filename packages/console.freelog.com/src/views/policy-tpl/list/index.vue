@@ -2,7 +2,7 @@
   <section>
     <div class="top-sec">
       <router-link class="route-link" :to="getCreateLink">
-        <el-button type="primary">创建新策略模板</el-button>
+        <el-button type="primary">{{$t('policy.createTemplate')}}</el-button>
       </router-link>
     </div>
     <table-view class="policy-tpl-list" :loader="loader()">
@@ -13,11 +13,11 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="模板名称">
+        :label="$t('policy.templateName')">
       </el-table-column>
       <el-table-column
         align="center"
-        label="状态">
+        :label="$t('policy.status')">
         <template slot-scope="scope">
           {{resolveStatus(scope.row.status)}}
         </template>
