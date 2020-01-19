@@ -29,7 +29,7 @@
         <template slot-scope="scope">
           <el-button
             size="small"
-            @click="handleEdit(scope.row)">详情
+            @click="handleEdit(scope.row)">{{$t('policy.details')}}
           </el-button>
         </template>
       </el-table-column>

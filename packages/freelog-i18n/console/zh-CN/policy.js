@@ -16,6 +16,14 @@ export default {
 
     createTemplate: '创建新策略模板',
     templateName: '模板名称',
-    status: '状态'
+    status: '状态',
+    details: '详情',
+
+    templateDescription: '策略模板描述',
+    templateType: '策略模板类型',
+    policy: '策略',
+    save: '保存',
+    alter: '修改',
+    cancel: '取消',
 
 };

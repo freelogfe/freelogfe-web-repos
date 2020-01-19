@@ -18,4 +18,13 @@ export default {
     createTemplate: 'Create',
     templateName: 'Name',
     status: 'Status',
+    details: 'Details',
+
+    templateDescription: 'Description',
+    templateType: 'Type',
+    policy: 'Policy',
+    save: 'Save',
+    alter: 'Alter',
+    cancel: 'Cancel',
+
 };
