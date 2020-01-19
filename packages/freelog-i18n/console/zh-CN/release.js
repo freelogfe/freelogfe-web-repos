@@ -145,4 +145,11 @@ export default {
     tips2: [ '该发行为基础上抛', '以下策略可进行新的签约', '此发行存在历史签约，可直接使用' ],
 
     // "historicVersion": "历史版本"
+    noValidContract: '未获取到有效的合同信息',
+    contractDetails: '合约详情',
+    releaseName: '发行名称',
+    resourceType: '资源类型',
+    createData: '创建日期',
+    contractInfo: '合同信息',
+
 };
