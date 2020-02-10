@@ -130,4 +130,8 @@ export default {
     // UploadCover
     crop: 'Crop',
     coverMoreThan: 'Cover no more than 5M',
+
+    "enableBtnText": "enable",
+    "disableBtnText": "disable",
+    "status": [ "Already topped", "Already disabled", "Already enabled" ]
 };

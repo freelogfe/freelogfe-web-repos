@@ -130,4 +130,8 @@ export default {
     // UploadCover
     crop: '裁剪',
     coverMoreThan: '封面图片不能超过5M',
+
+    "enableBtnText": "启用",
+    "disableBtnText": "停用",
+    "status": [ "已置顶", "已停用", "已启用" ]
 };
