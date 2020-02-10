@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/contractSigning.json"></i18n>
+<!--<i18n src="../../i18n-locales/contractSigning.json"></i18n>-->
 <template>
   <el-dialog
           :close-on-click-modal="false"
@@ -23,9 +23,17 @@
 <script>
 
   import ContractSigningMulti from './signing-multi.vue'
+  import en from '../../../../freelog-i18n/ui-contract/en';
+  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
 
   export default {
     name: 'f-contract-signing-dialog',
+    i18n: {
+      messages: {
+        en,
+        'zh-CN': zhCN,
+      }
+    },
     components: { ContractSigningMulti },
     props: {
       visible: {

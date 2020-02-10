@@ -59,32 +59,32 @@
 
     export default {
         name: "SignedContract",
-        i18n: {
-            messages: {
-                en: {
-                    pending: 'Pending',
-                    active: 'Active',
-                    termination: 'Termination',
-                    paused: 'Paused',
-                    used: 'Used',
-                    use: 'Use',
-                    pause: 'Pause',
-                    contract: 'Contract ',
-                    signingTime: 'Signing Time: ',
-                },
-                'zh-CN': {
-                    pending: '待执行',
-                    active: '生效中',
-                    termination: '合约终止',
-                    paused: '已搁置',
-                    used: '已应用',
-                    use: '应用',
-                    pause: '搁置',
-                    contract: '合约',
-                    signingTime: '签约时间：'
-                },
-            }
-        },
+        // i18n: {
+        //     messages: {
+        //         en: {
+        //             pending: 'Pending',
+        //             active: 'Active',
+        //             termination: 'Termination',
+        //             paused: 'Paused',
+        //             used: 'Used',
+        //             use: 'Use',
+        //             pause: 'Pause',
+        //             contract: 'Contract ',
+        //             signingTime: 'Signing Time: ',
+        //         },
+        //         'zh-CN': {
+        //             pending: '待执行',
+        //             active: '生效中',
+        //             termination: '合约终止',
+        //             paused: '已搁置',
+        //             used: '已应用',
+        //             use: '应用',
+        //             pause: '搁置',
+        //             contract: '合约',
+        //             signingTime: '签约时间：'
+        //         },
+        //     }
+        // },
         props: {
             name: {
                 type: String,

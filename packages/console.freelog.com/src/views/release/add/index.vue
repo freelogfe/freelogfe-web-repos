@@ -123,7 +123,7 @@
               this.releaseScheme = res.data
             }
           })
-          .catch(e => this.$error.showErrorMessage('授权方案获取失败！'))
+          .catch(e => this.$error.showErrorMessage(this.$t('release.licensingFailed')))
       },
       formatReleaseData() {
         this.newVersion = this.getNewVersion()

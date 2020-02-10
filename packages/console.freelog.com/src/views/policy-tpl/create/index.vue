@@ -2,7 +2,7 @@
   <section>
     <el-form :model="data" label-width="120px" :rules="rules" class="input-form" ref="createForm">
       <el-form-item :label="$t('policy.tplName')" prop="name" required>
-        <el-input v-model="data.name"></el-input>
+        <el-input v-model="data.name"/>
       </el-form-item>
       <el-form-item :label="$t('policy.tplDesc')" prop="template" required>
         <el-input type="textarea"

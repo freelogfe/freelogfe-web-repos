@@ -134,4 +134,14 @@ export default {
     signStatus: [ 'Already signed' ],
     contractStatus: [ 'Executing', 'In effect', 'Termination of contract', 'Upcast' ],
     tips2: [ 'The release has been upcasted', 'The following policies are available for new signings', 'This issue has a historical contract and can be used directly.' ],
+
+    noValidContract: 'No Valid Contract',
+    contractDetails: 'Details',
+    releaseName: 'Name',
+    resourceType: 'Type',
+    createData: 'Create Data',
+    contractInfo: 'Contract Info',
+
+    licensingFailed: 'Licensing Scheme gets failed!',
+
 };

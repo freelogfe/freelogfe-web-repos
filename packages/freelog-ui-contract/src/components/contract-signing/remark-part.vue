@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/contractSigning.json"></i18n>
+<!--<i18n src="../../i18n-locales/contractSigning.json"></i18n>-->
 <template>
   <div class="rcb-remark" >
     <div class="rcb-r-left">
@@ -27,8 +27,17 @@
 </template>
 
 <script>
+  import en from '../../../../freelog-i18n/ui-contract/en';
+  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
+
   export default {
     name: 'contract-remark',
+    i18n: {
+      messages: {
+        en,
+        'zh-CN': zhCN,
+      }
+    },
     props: {
       contract: {
         type: Object

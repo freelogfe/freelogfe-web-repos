@@ -1,4 +1,4 @@
-<i18n src="../../i18n-locales/contractSigning.json"></i18n>
+<!--<i18n src="../../i18n-locales/contractSigning.json"></i18n>-->
 <template>
   <div v-if="isRender">
     <div class="cutoff-line"></div>
@@ -35,9 +35,17 @@
 
   import { getContractState, } from './common.js'
   import { getUserInfo } from "../../utils.js"
+  import en from '../../../../freelog-i18n/ui-contract/en';
+  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
 
   export default {
     name: 'contract-signing-multi',
+    i18n: {
+      messages: {
+        en,
+        'zh-CN': zhCN,
+      }
+    },
     components: {
       ContractSigningSingle,
     },

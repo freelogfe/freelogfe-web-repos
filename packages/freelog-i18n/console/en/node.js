@@ -208,4 +208,14 @@ export default {
     details: 'Details',
 
     latestVersion: 'Latest Version',
+
+    addRuleSuccess: 'Success',
+
+    tabsHeader: {
+        authorization: 'Authorization',
+        authorizationChain: 'Chain',
+        pending: 'Pending',
+        active: 'Active',
+        termination: 'Termination',
+    },
 };

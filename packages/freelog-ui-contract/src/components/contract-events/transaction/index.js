@@ -1,7 +1,15 @@
 import ACCOUNT_CONFIG from '../../../config/account-types'
+import en from '../../../../../freelog-i18n/ui-contract/en';
+import zhCN from '../../../../../freelog-i18n/ui-contract/zh-CN';
 
 export default {
   name: 'transaction-event',
+  i18n: {
+    messages: {
+      en,
+      'zh-CN': zhCN,
+    }
+  },
   props: {
     contractDetail: {type: Object},
     params: {type: Object},

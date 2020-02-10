@@ -193,7 +193,7 @@
                 this.pushRuleSuccess(res.data.data);
             },
             pushRuleSuccess(result) {
-                this.$message.success('添加规则成功');
+                this.$message.success(this.$i18n('node.addRuleSuccess'));
                 this.$emit('success', result);
                 this.elDialogVisible = false;
                 this.dialogVisible = false;
