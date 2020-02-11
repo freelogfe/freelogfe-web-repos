@@ -1,8 +1,8 @@
-<i18n src="./tools.i18n.json"></i18n>
+<!--<i18n src="./tools.i18n.json"></i18n>-->
 <template>
   <div class="tool-release-list">
     <div class="trl-header">
-      <h3><span>{{$t('releaseListTitle')}}</span></h3>
+      <h3><span>{{$t('tools.releaseListTitle')}}</span></h3>
       <div class="trl-btn-group">
         <template v-if="selectedReleases.length">
           <el-button type="success" @click="batchCreatePresentables">批量创建节点发行</el-button>
@@ -20,7 +20,7 @@
               :selectionChangeHandler="handleSelectionChange">
       <template slot="list">
         <el-table-column type="selection" width="45"></el-table-column>
-        <el-table-column :label="$t('releaseList.name')">
+        <el-table-column :label="$t('tools.releaseList.name')">
           <template slot-scope="scope">
             <div class="trl-item-name-box" @click="goToReleaseDetail(scope.row)">
               <el-button type="primary" size="mini">{{scope.row.latestVersion.version}}</el-button>
@@ -28,11 +28,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('releaseList.type')" width="160">
+        <el-table-column :label="$t('tools.releaseList.type')" width="160">
           <template slot="header" slot-scope="scope">
             <el-dropdown class="trl-types" @command="handleSelectType">
               <span class="el-dropdown-link">
-                {{$t('releaseList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+                {{$t('tools.releaseList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -43,11 +43,11 @@
             <div class="trl-item-type"> {{scope.row.resourceType}}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('releaseList.policyTpls')" width="160">
+        <el-table-column :label="$t('tools.releaseList.policyTpls')" width="160">
           <template slot-scope="scope">
             <div>
-              <el-radio class="p-tpl-radio" 
-                v-model="scope.row.presentablePolicyType" 
+              <el-radio class="p-tpl-radio"
+                v-model="scope.row.presentablePolicyType"
                 v-for="tpl in presentablePolicyTpls"
                 :key="tpl.type"
                 :label="tpl.type">{{tpl.name}}</el-radio>
@@ -57,21 +57,21 @@
         <el-table-column label="节点选择" width="160">
           <template slot-scope="scope">
             <el-select class="trl-node-select" v-model="scope.row.checkedNodeId" placeholder="请选择签约节点">
-              <el-option 
-                v-for="node in nodes" 
-                :key="node.nodeId" 
+              <el-option
+                v-for="node in nodes"
+                :key="node.nodeId"
                 :disabled="scope.row.rSubordinateNodesIds.indexOf(node.nodeId) !== -1"
-                :label="node.nodeName + (scope.row.rSubordinateNodesIds.indexOf(node.nodeId) !== -1 ? '（已签约）':'')" 
+                :label="node.nodeName + (scope.row.rSubordinateNodesIds.indexOf(node.nodeId) !== -1 ? '（已签约）':'')"
                 :value="node.nodeId"></el-option>
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('releaseList.operate')" width="145">
+        <el-table-column :label="$t('tools.releaseList.operate')" width="145">
           <template slot-scope="scope">
             <router-link :to="scope.row._toMangeDetailLink">
-              <el-button class="trl-item-edit-btn" size="mini">{{$t('releaseList.editBtnText')}}</el-button>
+              <el-button class="trl-item-edit-btn" size="mini">{{$t('tools.releaseList.editBtnText')}}</el-button>
             </router-link>
-            <el-button class="trl-item-create-btn" type="primary" size="mini" v-if="scope.row.checkedNodeId !== ''" @click="createPresentable(scope.row)">{{$t('releaseList.createBtnText')}}</el-button>
+            <el-button class="trl-item-create-btn" type="primary" size="mini" v-if="scope.row.checkedNodeId !== ''" @click="createPresentable(scope.row)">{{$t('tools.releaseList.createBtnText')}}</el-button>
           </template>
         </el-table-column>
       </template>
@@ -185,7 +185,7 @@
               break
             }
           }
-          
+
           release.checkedNodeId = ''
           release.isOnline = isOnline
           release._toDetailLink = release.releaseId ? `/release/detail/${releaseId}?version=${latestVersion.version}` : ''
@@ -256,7 +256,7 @@
                 if(count === i) {
                   this.refreshReleasesList()
                 }
-              }) 
+              })
           })
         }
       },
@@ -264,15 +264,15 @@
         const { checkedNodeId: nodeId, presentablePolicyType, policies, username, latestVersion, releaseId, releaseName } = release
         const presentableName = releaseName.replace(new RegExp(`${username}/`, 'i'), '').replace(/(\s*)/g, '')
         const { name: policyName, template } = this.policyTplsMap[presentablePolicyType]
-        
+
         const resolveReleases = this.getResolveReleases(release)
         const data = {
-          presentableName, nodeId, releaseId, 
+          presentableName, nodeId, releaseId,
           policies: [ { policyName, policyText: window.btoa(template) } ],
           version: latestVersion.version,
           resolveReleases,
         }
-        
+
         return this.$services.PresentablesService.post(data)
                 .then(res => res.data)
                 .then(res => {
@@ -323,7 +323,7 @@
       handleSelectionChange(selections) {
         this.selectedReleases = selections
       },
-      
+
     }
   }
 </script>
@@ -333,13 +333,13 @@
   .trl-header {
     position: relative; background-color: #f5f5f5;
 
-    h3 { 
+    h3 {
       height: 72px;  padding: 0 20px;
       span { line-height: 72px; font-size: 16px; }
     }
     .trl-btn-group {
       position: absolute; top: 0; right: 0;
-      padding: 15px 20px; border-bottom: 1px solid #eee;  
+      padding: 15px 20px; border-bottom: 1px solid #eee;
     }
   }
 
@@ -348,7 +348,7 @@
     transform: translateX(-8px);
 
     .el-button { width: 62px; padding: 4px 6px; transform: scale(.7); }
-    
+
     .trl-item-name {
       font-weight: 600;
       &:hover {
@@ -356,12 +356,12 @@
       }
     }
   }
-  
-  .trl-item-name, 
-  .trl-item-type, 
+
+  .trl-item-name,
+  .trl-item-type,
   .trl-item-policy-row1,
   .trl-item-no-policy,
-  .trl-item-date-row1, 
+  .trl-item-date-row1,
   .trl-item-online,
   .trl-item-offline {
     font-size: 14px; line-height: 22px; color: #000;
@@ -398,7 +398,7 @@
   .trl-item-offline {
     color: #BFBFBF;
   }
-  
+
   .trl-item-edit-btn, .trl-item-detail-btn, .trl-item-cancel-favor-btn, .trl-item-create-btn {
     padding: 4px 8px; margin-right: 8px; margin-left: 0;
   }

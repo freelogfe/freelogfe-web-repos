@@ -1,10 +1,10 @@
-<i18n src="./tools.i18n.json"></i18n>
+<!--<i18n src="./tools.i18n.json"></i18n>-->
 <template>
   <div class="tool-resource-list">
     <div class="trl-header">
       <el-dropdown class="trl-status-select" @command="handleSelectReleaseStatus">
         <h3 class="el-dropdown-link">
-          <span>{{$t('resourceListTitle')}}</span> {{releaseStatus[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
+          <span>{{$t('tools.resourceListTitle')}}</span> {{releaseStatus[selectedReleaseStatus].label}}<i class="el-icon-caret-bottom"></i>
         </h3>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-for="item in releaseStatus" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -16,7 +16,7 @@
         <el-button type="success" @click="batchCreateReleases">批量创建新发行</el-button>
       </div>
     </div>
-    
+
     <f-pagination class="resource-list-table"
               ref="resourcesListRef"
               :config="tableConfig"
@@ -26,7 +26,7 @@
               :selectionChangeHandler="handleSelectionChange">
       <template slot="list">
         <el-table-column type="selection" width="45" :selectable="(row) => row.systemMeta.dependencies.length === 0"></el-table-column>
-        <el-table-column :label="$t('resourceList.name')">
+        <el-table-column :label="$t('tools.resourceList.name')">
           <template slot-scope="scope">
             <div class="r-l-item-name-box">
               <div class="r-l-item-name" v-if="!scope.row.isEdittingName">
@@ -38,11 +38,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('resourceList.type')" width="176">
+        <el-table-column :label="$t('tools.resourceList.type')" width="176">
           <template slot="header" slot-scope="scope">
             <el-dropdown class="r-l-types-select" @command="handleSelectType">
               <span class="el-dropdown-link">
-                {{$t('resourceList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+                {{$t('tools.resourceList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -66,34 +66,34 @@
         <el-table-column class="trl-tpls" label="发行策略模版" width="140" v-if="selectedReleaseStatus === 0">
           <template slot-scope="scope">
             <div class="trl-tpls" :class="{'disabled': scope.row.systemMeta.dependencies.length > 0}">
-              <el-radio class="p-tpl-radio" 
-                v-model="scope.row.releasePolicyType" 
+              <el-radio class="p-tpl-radio"
+                v-model="scope.row.releasePolicyType"
                 v-for="tpl in releasePolicyTpls"
                 :key="tpl.type"
                 :label="tpl.type">{{tpl.name}}</el-radio>
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('resourceList.operate')" width="240">
+        <el-table-column :label="$t('tools.resourceList.operate')" width="240">
           <template slot-scope="scope">
-            <!-- <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('resourceList.releaseBtnText')}}</el-button> -->
+            <!-- <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('tools.resourceList.releaseBtnText')}}</el-button> -->
             <router-link :to="scope.row._toDetailLink">
-              <el-button class="r-l-item-detail-btn" size="mini">{{$t('resourceList.detailBtnText')}}</el-button>
+              <el-button class="r-l-item-detail-btn" size="mini">{{$t('tools.resourceList.detailBtnText')}}</el-button>
             </router-link>
-            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('resourceList.releaseBtnText')}}</el-button>
-            <el-button class="r-l-item-save-btn" size="mini" @click="tapSaveBtn(scope.row)">{{$t('resourceList.saveBtnText')}}</el-button>
+            <el-button class="r-l-item-release-btn" size="mini" @click="tapRelease(scope.row)">{{$t('tools.resourceList.releaseBtnText')}}</el-button>
+            <el-button class="r-l-item-save-btn" size="mini" @click="tapSaveBtn(scope.row)">{{$t('tools.resourceList.saveBtnText')}}</el-button>
           </template>
         </el-table-column>
       </template>
     </f-pagination>
-    
+
     <el-dialog width="750px" top="10vh" center :visible.sync="isShowReleaseSearchDialog">
-      <release-search 
+      <release-search
         :release-source="targetReleaseResource"
-        :tabLayout="['my-release']" 
+        :tabLayout="['my-release']"
         @add="releaseSearchHandler"></release-search>
       <div class="" slot="footer">
-        <el-button round type="primary" class="create-release-btn" @click="tapCreateNewReleaseBtn">{{$t('createNewReleaseText')}}</el-button>
+        <el-button round type="primary" class="create-release-btn" @click="tapCreateNewReleaseBtn">{{$t('tools.createNewReleaseText')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -136,8 +136,8 @@
         resourceMapReleases: {},
         selectedType: qResourceType != null ? qResourceType : 'all',
         releaseStatus: [
-          { label: $i18n.t('resourceList.releaseStatus[0]'), value: 0 }, 
-          { label: $i18n.t('resourceList.releaseStatus[1]'), value: 1 }, 
+          { label: $i18n.t('resourceList.releaseStatus[0]'), value: 0 },
+          { label: $i18n.t('resourceList.releaseStatus[1]'), value: 1 },
           { label: $i18n.t('resourceList.releaseStatus[2]'), value: 2 }
         ],
         selectedReleaseStatus: 0,
@@ -332,7 +332,7 @@
                 if(count === i) {
                   this.refreshResourcesList()
                 }
-              }) 
+              })
           })
         }else {
           this.$message.warning('请先选择需更新的资源')
@@ -354,7 +354,7 @@
                 if(count === i) {
                   this.refreshResourcesList()
                 }
-              }) 
+              })
           })
         }else {
           this.$message.warning('请先选择需发行的资源')
@@ -369,8 +369,8 @@
   .trl-header {
     height: 72px;
     background-color: #f5f5f5;
-    .trl-status-select { 
-      display: inline-block; 
+    .trl-status-select {
+      display: inline-block;
       margin-top: 36px; transform: translateY(-50%);
       .el-dropdown-link {
         padding: 0 20px; font-size: 16px; color: #409eff;
@@ -379,8 +379,8 @@
     }
     .trl-btn-group {
       float: right;
-      padding: 15px 20px; border-bottom: 1px solid #eee; 
-      
+      padding: 15px 20px; border-bottom: 1px solid #eee;
+
     }
   }
 
@@ -393,9 +393,9 @@
       font-weight: 600;
     }
   }
-  
-  .r-l-item-name, 
-  .r-l-item-type, 
+
+  .r-l-item-name,
+  .r-l-item-type,
   .r-l-item-updateDate{
     font-size: 14px; line-height: 22px; color: #000;
   }
@@ -427,7 +427,7 @@
   .r-l-item-createDate {
     font-size: 12px; line-height: 17px; color: #BFBFBF;
   }
-  
+
   .r-l-item-release-btn, .r-l-item-save-btn, .r-l-item-detail-btn {
     padding: 4px 10px; margin-left: 0; margin-right: 5px;
   }
