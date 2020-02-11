@@ -1,4 +1,3 @@
-<!--<i18n src="../../i18n-locales/ui-login.json"></i18n>-->
 <template>
   <section class="reset-password-section">
     <template v-if="step === steps[0]">

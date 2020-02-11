@@ -192,7 +192,8 @@
 </script>
 
 <style lang="less">
-  @import "../style/loading.less";
+  @import "../styles/reset.css";
+  @import "../styles/loading.less";
   @import "./pagebuild.less";
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;

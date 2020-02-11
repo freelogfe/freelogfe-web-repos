@@ -1,4 +1,3 @@
-<!--<i18n src="../../i18n-locales/ui-login.json"></i18n>-->
 <template>
   <section class="login-section">
     <header>
@@ -44,8 +43,8 @@ import {
 } from "../../constant";
 import FToast from "../toast/index.vue";
 import {validateLoginName} from '../../validator'
-import en from '../../../../freelog-i18n/ui-login/en';
-import zhCN from '../../../../freelog-i18n/ui-login/zh-CN';
+import en from '@freelog/freelog-i18n/ui-login/en';
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
 export default {
   name: "f-login",

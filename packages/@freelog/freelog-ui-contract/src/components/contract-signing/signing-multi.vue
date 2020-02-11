@@ -35,8 +35,8 @@
 
   import { getContractState, } from './common.js'
   import { getUserInfo } from "../../utils.js"
-  import en from '../../../../freelog-i18n/ui-contract/en';
-  import zhCN from '../../../../freelog-i18n/ui-contract/zh-CN';
+  import en from '@freelog/freelog-i18n/ui-contract/en';
+  import zhCN from '@freelog/freelog-i18n/ui-contract/zh-CN';
 
   export default {
     name: 'contract-signing-multi',

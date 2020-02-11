@@ -1,8 +1,8 @@
 import { isSafeUrl } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
 import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
-import en from '../../../../freelog-i18n/ui-login/en';
-import zhCN from '../../../../freelog-i18n/ui-login/zh-CN';
+import en from '@freelog/freelog-i18n/ui-login/en';
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
 const steps = ['authCode', 'success']
 const remainTimer = 3

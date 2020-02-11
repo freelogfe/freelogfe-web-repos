@@ -1,8 +1,8 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
 import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
-import en from '../../../../freelog-i18n/ui-login/en';
-import zhCN from '../../../../freelog-i18n/ui-login/zh-CN';
+import en from '@freelog/freelog-i18n/ui-login/en';
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
 export default {
   name: 'f-signup',

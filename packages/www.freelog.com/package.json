@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@freelog/freelog-common-lib": "0.1.0",
+    "@freelog/freelog-i18n": "^0.1.0",
     "@freelog/freelog-ui-contract": "0.0.14",
     "@freelog/freelog-ui-login": "0.1.0",
     "core-js": "^2.6.5",

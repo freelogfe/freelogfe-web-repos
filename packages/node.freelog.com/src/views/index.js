@@ -15,6 +15,9 @@ new Vue({
   methods: {},
   render: h => h(App)
 })
+window.f_common_lib = {
+  Vue
+}
 
 
 

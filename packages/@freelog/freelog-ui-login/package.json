@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@freelog/freelog-i18n": "^0.1.0"
+  },
   "peerDependencies": {
     "vue": "^2.5.17",
     "element-ui": "^2.4.8",
