@@ -1,19 +1,19 @@
-<i18n src="../policyList.json"></i18n>
+<!--<i18n src="../policyList.json"></i18n>-->
 <template>
   <!--        v-for="(policy, index) in formatedPolicyList"-->
   <div class="p-l-item">
     <div class="p-l-item-head">
       <div class="p-l-status p-l-s-top" v-show="false">
         <i class="el-icon-download"></i>
-        {{$t('status[0]')}}
+        {{$t('components.status[0]')}}
       </div>
       <div class="p-l-status p-l-s-disabled" v-show="policy.status == 0">
         <i class="el-icon-error"></i>
-        {{$t('status[1]')}}
+        {{$t('components.status[1]')}}
       </div>
       <div class="p-l-status p-l-s-active" v-show="policy.status == 1">
         <i class="el-icon-success"></i>
-        {{$t('status[2]')}}
+        {{$t('components.status[2]')}}
       </div>
     </div>
 
@@ -32,8 +32,8 @@
       </span>
 
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-if="policy.status == 0" :command="1">{{$t('enableBtnText')}}</el-dropdown-item>
-        <el-dropdown-item v-if="policy.status == 1" :command="0">{{$t('disableBtnText')}}</el-dropdown-item>
+        <el-dropdown-item v-if="policy.status == 0" :command="1">{{$t('components.enableBtnText')}}</el-dropdown-item>
+        <el-dropdown-item v-if="policy.status == 1" :command="0">{{$t('components.disableBtnText')}}</el-dropdown-item>
         <!--<el-dropdown-item :command="index + '-' + 2">置顶</el-dropdown-item>-->
       </el-dropdown-menu>
     </el-dropdown>

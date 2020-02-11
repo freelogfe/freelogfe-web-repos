@@ -1,4 +1,4 @@
-<i18n src="../policyList.json"></i18n>
+<!--<i18n src="../policyList.json"></i18n>-->
 <template>
   <div class="policy-list">
     <div class="policy-list-wrapper">
@@ -19,8 +19,8 @@
             <el-dropdown size="small" @command="handleCommand">
               <span class="el-dropdown-link"><i class="el-icon-more"></i></span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-if="policy.status == 0" :command="`${index}-1`">{{$t('enableBtnText')}}</el-dropdown-item>
-                <el-dropdown-item v-if="policy.status == 1" :command="`${index}-0`">{{$t('disableBtnText')}}</el-dropdown-item>
+                <el-dropdown-item v-if="policy.status == 0" :command="`${index}-1`">{{$t('components.enableBtnText')}}</el-dropdown-item>
+                <el-dropdown-item v-if="policy.status == 1" :command="`${index}-0`">{{$t('components.disableBtnText')}}</el-dropdown-item>
                 <!--<el-dropdown-item :command="index + '-' + 2">置顶</el-dropdown-item>-->
               </el-dropdown-menu>
             </el-dropdown>
@@ -289,8 +289,8 @@ export default {
   .p-l-card {
     display: inline-block; box-sizing: border-box;
     width: 275px; height: 210px; padding: 9px; border-radius: 4px;
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); 
-		
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+
 		&.disabled { color: #CACACA; }
 		.p-l-status {
       display: inline-block;
@@ -332,8 +332,8 @@ export default {
     padding-right: 100px;
     text-align: right; cursor: pointer;
 
-		.pll-nav-btn { 
-			color: #666; 
+		.pll-nav-btn {
+			color: #666;
 			&:hover { color: #000; }
 		}
     li {

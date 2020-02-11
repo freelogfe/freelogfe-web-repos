@@ -1,9 +1,9 @@
-<i18n src="./tools.i18n.json"></i18n>
+<!--<i18n src="./tools.i18n.json"></i18n>-->
 <template>
   <div class="tool-presentables-list">
     <div class="tpl-header">
       <h3>
-        <span>{{$t('presentablesListTitle')}}</span>
+        <span>{{$t('tools.presentablesListTitle')}}</span>
         <el-select class="tpl-node-select" v-model="checkedNodeId" placeholder="请选择节点">
           <el-option v-for="node in nodes" :key="node.nodeId" :label="node.nodeName" :value="node.nodeId"></el-option>
         </el-select>
@@ -24,7 +24,7 @@
                 :selectionChangeHandler="handleSelectionChange">
         <template slot="list">
           <el-table-column type="selection" width="45"></el-table-column>
-          <el-table-column :label="$t('presentablesList.name')">
+          <el-table-column :label="$t('tools.presentablesList.name')">
             <template slot-scope="scope">
               <div class="tpl-item-name-box">
                 <el-button type="primary" size="mini">{{scope.row.releaseInfo.version}}</el-button>
@@ -36,11 +36,11 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('presentablesList.type')" width="160">
+          <el-table-column :label="$t('tools.presentablesList.type')" width="160">
             <template slot="header" slot-scope="scope">
               <el-dropdown class="tpl-types" @command="handleSelectType">
                 <span class="el-dropdown-link">
-                  {{$t('presentablesList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
+                  {{$t('tools.presentablesList.type')}} {{selectedType === 'all' ? '': ` ${selectedType}`}}<i class="el-icon-caret-bottom"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="item in resourceTypes" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
@@ -51,24 +51,24 @@
               <div class="trl-item-type"> {{scope.row.releaseInfo.resourceType}}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('presentablesList.tags')" width="180">
+          <el-table-column :label="$t('tools.presentablesList.tags')" width="180">
             <template slot-scope="scope">
               <tags :value="scope.row.userDefinedTags" actionText="新标签" @input="(tags) => tagsChangeHandler(scope.row, tags)"></tags>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('presentablesList.onlineStatus')" width="80"> 
+          <el-table-column :label="$t('tools.presentablesList.onlineStatus')" width="80">
             <template slot-scope="scope">
-              <el-switch 
+              <el-switch
                 v-model="scope.row.lineStatus" @change="onlineChangeHandler(scope.row)"
                 active-color="#13ce66" inactive-color="#ff4949"
                 active-value="online" inactive-value="offline"></el-switch>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('presentablesList.operate')" width="140">
+          <el-table-column :label="$t('tools.presentablesList.operate')" width="140">
             <template slot-scope="scope">
               <div class="tpl-row-btns">
-                <el-button size="mini" @click="tapUpgradeBtn(scope.row)">{{$t('presentablesList.upgradeBtnText')}}</el-button>
-                <el-button size="mini" @click="tapSaveBtn(scope.row)" v-if="scope.row.isChangePresentable">{{$t('presentablesList.saveBtnText')}}</el-button>
+                <el-button size="mini" @click="tapUpgradeBtn(scope.row)">{{$t('tools.presentablesList.upgradeBtnText')}}</el-button>
+                <el-button size="mini" @click="tapSaveBtn(scope.row)" v-if="scope.row.isChangePresentable">{{$t('tools.presentablesList.saveBtnText')}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -159,7 +159,7 @@
         if (!list || !list.length) {
           return []
         }
-        
+
         list = list.map(presentable => {
           presentable.isEdittingName = false
           presentable.isChangePresentable = false
@@ -189,7 +189,7 @@
       },
       updatePresentable(presentable) {
         const { presentableName, userDefinedTags, releaseInfo: { releaseId } } = presentable
-        
+
         return this.$services.PresentablesService.put(presentable.presentableId, {
           presentableName, userDefinedTags
         })
@@ -268,14 +268,14 @@
   .tpl-header {
     position: relative; background-color: #f5f5f5;
 
-    h3 { 
+    h3 {
       height: 72px;  padding: 0 20px;
       span { line-height: 72px; font-size: 16px; }
       .tpl-node-select { display: inline-block; margin: 0 12px; }
     }
     .tpl-btn-group {
       position: absolute; top: 0; right: 0;
-      padding: 15px 20px; border-bottom: 1px solid #eee;  
+      padding: 15px 20px; border-bottom: 1px solid #eee;
     }
   }
 
@@ -284,9 +284,9 @@
     transform: translateX(-8px);
 
     .el-button { width: 62px; padding: 4px 6px; transform: scale(.7); }
-    
-    .tpl-item-name { 
-      font-weight: 600; 
+
+    .tpl-item-name {
+      font-weight: 600;
       a {
         color: #333;
         &:hover { text-decoration: underline; }
@@ -299,7 +299,7 @@
       padding: 4px 10px; margin-left: 0; margin-right: 8px;
     }
   }
-  
+
 }
 
 </style>
@@ -318,7 +318,7 @@
         .el-icon-close { right: 0; }
       }
     }
-    
+
   }
   .tpl-node-select {
     .el-input__inner { height: 34px; line-height: 34px; font-size: 12px; }
