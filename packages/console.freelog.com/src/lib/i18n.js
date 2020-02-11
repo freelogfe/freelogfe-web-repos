@@ -1,7 +1,7 @@
-import { Vue, initI18n } from '@freelog/freelog-common-lib'
-import en from '../../../../freelog-i18n/console/en';
-import cn from '../../../../freelog-i18n/console/zh-CN';
-import axios from '../axios'
+import { initI18n } from '@freelog/freelog-common-lib'
+import en from '../../../freelog-i18n/console/en';
+import cn from '../../../freelog-i18n/console/zh-CN';
+import axios from './axios'
 
 // ElementLocale.i18n((key, value) => i18n.t(key, value))
 // https://kazupon.github.io/vue-i18n/dynamic.html
@@ -19,7 +19,7 @@ function setI18nLanguage(lang) {
 export function loadLanguageAsync(lang) {
   if (i18n.locale !== lang) {
     if (!loadedLanguages.includes(lang)) {
-      return import(/* webpackChunkName: "lang-[request]" */ `../../../../freelog-i18n/console/${lang}`).then(msgs => {
+      return import(/* webpackChunkName: "lang-[request]" */ `../../../freelog-i18n/console/${lang}`).then(msgs => {
         i18n.setLocaleMessage(lang, msgs.default)
         loadedLanguages.push(lang)
         return setI18nLanguage(lang)

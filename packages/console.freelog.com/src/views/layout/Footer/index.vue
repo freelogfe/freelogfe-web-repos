@@ -1,8 +1,8 @@
 <template>
   <footer v-if="isShowFooter" class="app-footer">
     <ul class="freelog-info">
-      <li><a href="/about">{{ $t('aboutView.about') }} freelog</a></li>
-      <li><a href="/help">{{ $t('helpView.title') }}</a></li>
+      <li><a href="/about">{{ $t('routes.aboutView') }} freelog</a></li>
+      <li><a href="/help">{{ $t('routes.helpView') }}</a></li>
       <li><a href="http://www.miibeian.gov.cn" target="_blank">{{$t('layout.ICP')}}</a></li>
       <li><b>Copyright© {{year}} {{ $t('company.name')}} freelog.com{{$t('company.copyright')}}</b></li>
     </ul>

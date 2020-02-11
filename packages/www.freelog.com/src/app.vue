@@ -13,6 +13,7 @@ export default {
 </script>
 
 <style lang="less" type="text/less">
+  @import "./styles/reset.css";
   @import "./styles/global.less";
   @import "app.less";
 </style>

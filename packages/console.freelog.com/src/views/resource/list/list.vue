@@ -13,7 +13,7 @@
             <div class="r-l-item-name-box">
               <img
                 class="r-l-item__img"
-                :class="{'resource-default-preview':!previewImage}"
+                :class="{'resource-default-preview':!scope.row.previewImage}"
                 :src="scope.row.previewImage" />
               <div class="r-l-item-name" :title="scope.row.aliasName">{{scope.row.aliasName}}</div>
             </div>

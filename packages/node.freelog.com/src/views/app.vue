@@ -192,6 +192,7 @@
 </script>
 
 <style lang="less">
+  @import "../style/loading.less";
   @import "./pagebuild.less";
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
@@ -200,3 +201,5 @@
     opacity: 0;
   }
 </style>
+
+Continuous Integration, Delivery & Deployment (CI/CD)

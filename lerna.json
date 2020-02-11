@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/*"
+    "packages/*",
+    "packages/@freelog/freelog-*"
   ],
   "version": "independent"
 }

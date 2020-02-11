@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "peerDependencies": {
+    "vue": "^2.5.17",
+    "element-ui": "^2.4.8",
+    "axios": "^0.18.0"
+  }
 }

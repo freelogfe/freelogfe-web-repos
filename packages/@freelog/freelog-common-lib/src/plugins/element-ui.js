@@ -40,11 +40,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+import { getEnvLanguage } from '../initEnv'
 
+export { ElementUI }
 export default {
   install: function(Vue) {
-    const isCN = window.FreelogApp.Env.leaguage === 'zh-CN'
-    Vue.use(ElementUI, { locale: isCN ? zhLocale : enLocale })
+    Vue.use(ElementUI, { locale: getEnvLanguage() === 'zh-CN' ? zhLocale : enLocale })
   }
 }
 

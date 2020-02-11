@@ -102,7 +102,7 @@
             class="my-r-search-dialog"
             :append-to-body="true"
             center
-            :title="$t('dialogTitle')"
+            :title="$t('release.dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
         >

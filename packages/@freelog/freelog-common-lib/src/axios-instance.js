@@ -15,5 +15,6 @@ function getBaseURL() {
   })
 }
 
+export { axios }
 export default instance
 

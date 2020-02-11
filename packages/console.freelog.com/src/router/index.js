@@ -7,6 +7,7 @@
  */
 import Router from 'vue-router'
 import {Vue} from '@freelog/freelog-common-lib'
+
 import Views from '@/views/index'
 import nodeRoute from './node'
 import resourceRoute from './resource'
@@ -14,9 +15,9 @@ import mockRoute from './mock'
 import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
-import i18n from '@/lib/i18n'
+
+import { i18nStance } from '@/lib/index'
 import {getCookieLocale, getUserInfoFromLocalStorage} from "../lib/utils";
-// import i18n from '@/lib/i18n'
 
 Vue.use(Router)
 
@@ -42,7 +43,7 @@ const routerConfig = {
     routes: [
         {
             path: '/',
-            meta: {title: i18n.t('routes.releaseMarket')},
+            meta: {title: i18nStance.t('routes.releaseMarket')},
             component: Views.layout,
             children: [
                 resourceRoute,
@@ -56,7 +57,7 @@ const routerConfig = {
                 //     hidden: true,
                 //     meta: {
                 //         requiresAuth: false,
-                //         title: `${i18n.t('routes.aboutView')}freelog`
+                //         title: `${i18nStance.t('routes.aboutView')}freelog`
                 //     },
                 //     component: Views.aboutView
                 // },
@@ -65,7 +66,7 @@ const routerConfig = {
                 //     hidden: true,
                 //     meta: {
                 //         requiresAuth: true,
-                //         title: i18n.t('routes.accountSetting')
+                //         title: i18nStance.t('routes.accountSetting')
                 //     },
                 //     component: Views.userView
                 // },
@@ -74,7 +75,7 @@ const routerConfig = {
                 //     hidden: true,
                 //     meta: {
                 //         requiresAuth: false,
-                //         title: i18n.t('routes.title')
+                //         title: i18nStance.t('routes.title')
                 //     },
                 //     component: Views.helpView
                 // },
@@ -83,7 +84,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('routes.releaseMarket'),
+                        title: i18nStance.t('routes.releaseMarket'),
                         theme: 'gray',
                         hideFooter: true,
                     },
@@ -94,7 +95,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('routes.releaseMarket'),
+                        title: i18nStance.t('routes.releaseMarket'),
                         theme: 'gray'
                     },
                     component: Views.mainView
@@ -104,7 +105,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('routes.nodeExamples'),
+                        title: i18nStance.t('routes.nodeExamples'),
                         theme: 'gray',
                         hideFooter: true,
                     },
@@ -115,7 +116,7 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('routes.releaseManager'),
+                        title: i18nStance.t('routes.releaseManager'),
                         theme: 'white',
                         hideFooter: true,
                     },
@@ -166,7 +167,7 @@ router.beforeEach((to, from, next) => {
     // if (cookieLocale){
     // if (locale){
         // localeCookie = cookieLocale.replace('locale=', '');
-        // i18n.locale = locale;
+        // i18nStance.locale = locale;
     // }
 
     if (to.meta.isSkipAlphaTest) {
