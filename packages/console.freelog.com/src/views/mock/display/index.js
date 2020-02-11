@@ -1,7 +1,7 @@
 import {axios} from "@/lib";
 import querystring from 'querystring';
 import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
 import {mapGetters} from "vuex";
 
 export default {

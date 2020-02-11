@@ -9,7 +9,7 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
 import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {

@@ -6,7 +6,7 @@ import PolicyEditor from '@/components/PolicyEditor/index.vue';
 import PolicyList from '@/components/PolicyList/list/index.vue';
 import ContractManager from '@/components/ContractManager/index.vue';
 import ReleaseEditorContract from '@/views/release/contract/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
 import ConfirmInput from "../test-manager-resource/ConfirmInput";
 import ModuleBlock from "../test-manager-resource/ModuleBlock";
 import BlockItem from "../test-manager-resource/BlockItem";
