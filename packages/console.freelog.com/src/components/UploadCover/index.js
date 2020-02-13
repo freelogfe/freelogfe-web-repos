@@ -12,11 +12,11 @@ export default {
         // 上传图片成功后回调，将图片 url 传出
         onUploaded: Function,
         width: {
-            type: Number,
+            type: [String, Number],
             default: 200,
         },
         height: {
-            type: Number,
+            type: [String, Number],
             default: 150,
         },
         textVisible: {

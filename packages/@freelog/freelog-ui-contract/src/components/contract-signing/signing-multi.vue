@@ -65,7 +65,8 @@
         contracts: [],                  // 所有presentable的默认合同
         defaultContract: null,
         dContractType: '',
-        dContractTagName: ''
+        dContractTagName: '',
+        resourceIdContractMap: {}
       }
     },
     computed: {
@@ -117,10 +118,10 @@
         var map = {}
 
         this.contracts.forEach(contract => {
-          if(this.selectedReleaseId === contract.resourceId) {
+          if(this.selectedReleaseId === contract.targetId) {
             this.defaultContract = contract
           }
-          map[contract.resourceId] = contract
+          map[contract.targetId] = contract
         })
         this.resourceIdContractMap = map
 
@@ -128,7 +129,7 @@
       },
       resolvePretentableContract() {
         this.presentableList.forEach(p => {
-          p.c_contract = this.resourceIdContractMap[p.resourceId] || null
+          p.c_contract = this.resourceIdContractMap[p.presentableId] || null
           this.resolvePresentableC_Contract(p)
         })
       },

@@ -165,6 +165,7 @@
         coverImageUrl: this.release.previewImages[0] || defualtImageUrl,
         editTmpPolicy: { policyName:  $i18n.t('release.tips1[3]'), policyText: '' },
         tempEditingIntro: this.release.intro,
+        releaseState: 0,
         releaseStateText: '',
         isShowEditPolicy: false,
         isEditingIntro: false,

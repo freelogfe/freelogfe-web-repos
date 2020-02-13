@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="r-e-c-empty-box" v-else>
-      {{i18n.t('release.noValidContract')}}
+      {{$t('release.noValidContract')}}
     </div>
     <transition name="fade">
       <div class="release-editor-box" v-if="contractDetail" v-show="isShowDetailContract">
@@ -32,28 +32,28 @@
                   :name="p.policyName"
           >
             <div class="r-e-info">
-              <h4>{{i18n.t('release.contractDetails')}}</h4>
+              <h4>{{$t('release.contractDetails')}}</h4>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.releaseName')}}</span>{{targetData.label}}
+                <span class="r-e-i-label">{{$t('release.releaseName')}}</span>{{targetData.label}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.resourceType')}}</span>{{targetData.resourceType | pageBuildFilter}}
+                <span class="r-e-i-label">{{$t('release.resourceType')}}</span>{{targetData.resourceType | pageBuildFilter}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.createData')}}</span>{{contractDetail.createDate | fmtDate}}
+                <span class="r-e-i-label">{{$t('release.createData')}}</span>{{contractDetail.createDate | fmtDate}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.contractID')}}</span>{{contractDetail.contractId}}
+                <span class="r-e-i-label">{{$t('release.contractID')}}</span>{{contractDetail.contractId}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.partyA')}}</span>{{contractDetail.partyOne}}
+                <span class="r-e-i-label">{{$t('release.partyA')}}</span>{{contractDetail.partyOne}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">{{i18n.t('release.partyB')}}</span>{{contractDetail.partyTwo}}
+                <span class="r-e-i-label">{{$t('release.partyB')}}</span>{{contractDetail.partyTwo}}
               </div>
             </div>
             <div class="r-e-c-detail">
-              <h4>{{i18n.t('release.contractInfo')}}</h4>
+              <h4>{{$t('release.contractInfo')}}</h4>
               <div class="r-e-c-cont">
                 <contract-detail
                         class="contract-policy-content"
