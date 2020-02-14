@@ -49,4 +49,12 @@ export default (Vue) => {
     value += `x-oss-process=style/${isSupportWebp ? 'webp' : 'jpg'}_image`
     return value
   })
+
+  Vue.filter('pageBuildFilter', function (value) {
+    if (!value) return '';
+    if (value === 'page_build') {
+        return 'theme';
+    }
+    return value;
+  })
 }

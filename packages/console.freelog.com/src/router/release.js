@@ -2,7 +2,6 @@
 import Views from '@/views'
 import i18n from '../lib/i18n'
 
-
 export default {
   name: 'release',
   path: 'release',
@@ -20,9 +19,29 @@ export default {
         hideFooter: true,
         title: i18n.t('routes.createRelease'),
         type: 'release',
-        theme: 'white'
+        theme: 'white',
+        breadCrumb: [
+            {
+                to: '/release-management/release/list',
+                text: i18n.t('routes.myReleases'),
+            },
+            {
+                text: i18n.t('routes.createRelease'),
+            },
+        ]
       },
       component: Views.releaseCreator,
+    },
+    {
+      path: 'detail',
+      hidden: true,
+      meta: {
+        requiresAuth: true,
+        title: i18n.t('routes.releaseDetail'),
+        type: 'release',
+        theme: 'white'
+      },
+      component: Views.releaseDetail
     },
     {
       path: 'detail/:releaseId',
@@ -41,9 +60,19 @@ export default {
       meta: {
         requiresAuth: true,
         hideFooter: true,
-        title: i18n.t('routes.releaseManager'),
+        title: i18n.t('routes.releaseInfo'),
+        // title: '发行信息',
         type: 'release',
-        theme: 'white'
+        theme: 'white',
+          breadCrumb: [
+              {
+                  to: '/release-management/release/list',
+                  text: i18n.t('routes.myReleases'),
+              },
+              {
+                  text: i18n.t('routes.releaseInfo'),
+              },
+          ]
       },
       component: Views.releaseEditor
     },
@@ -63,7 +92,8 @@ export default {
       meta: {
         requiresAuth: true,
         title: i18n.t('routes.myReleases'),
-        type: 'release'
+        type: 'release',
+        theme: 'white'
       },
       component: Views.releaseList
     },
@@ -72,7 +102,8 @@ export default {
       meta: {
         requiresAuth: true,
         title: i18n.t('routes.myCollections'),
-        type: 'release'
+        type: 'release',
+        theme: 'white'
       },
       component: Views.releaseCollections
     },

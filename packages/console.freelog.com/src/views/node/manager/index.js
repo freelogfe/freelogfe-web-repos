@@ -1,15 +1,17 @@
 import clipboard from '@/components/clipboard/index.vue';
 import PolicyTabs from '@/components/PolicyTabs/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
+import NodeHeader from '../components/NodeHeader.vue';
 
 let searchInputDelay = null;
 
 export default {
     name: 'manager',
-    i18n,
+    // i18n,
     components: {
         clipboard,
-        PolicyTabs
+        PolicyTabs,
+        NodeHeader,
     },
     data() {
         return {
@@ -24,20 +26,21 @@ export default {
             },
             // 是否是页面样式
             isPageStyle: this.$route.query.isPageStyle && this.$route.query.isPageStyle === 'true',
+            // isPageStyle: true,
             // 筛选『全部』和『待处理』
-            filterTodo: '全部',
+            filterTodo: this.$t('all'),
             // 筛选搜索框
             filterSearch: '',
             // 表格数据
-            tableData: [],
+            tableData: null,
             // 类型可选项
-            allTypes: [this.$t('allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
+            allTypes: [this.$t('node.allType'), 'json', 'widget', 'image', 'audio', 'markdown', 'reveal_slide', 'license', 'video', 'catalog'],
             // 已选类型
-            selectedType: this.$t('allType'),
+            selectedType: this.$t('node.allType'),
             // 状态可以选项
-            allState: [this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')],
+            allState: [this.$t('node.allState'), this.$t('node.online'), this.$t('node.noOnline'), this.$t('node.contractException')],
             // 已选状态
-            selectedState: this.$t('allState'),
+            selectedState: this.$t('node.allState'),
 
             // 当前页码
             currentPage: 1,
@@ -63,9 +66,11 @@ export default {
                 'webkitHidden' in document ? 'webkitHidden' :
                     'mozHidden' in document ? 'mozHidden' :
                         null;
+            // console.log(hiddenProperty, 'hiddenPropertyhiddenProperty');
             // 不同浏览器的事件名
             const visibilityChangeEvent = hiddenProperty.replace(/hidden/i, 'visibilitychange');
             const onVisibilityChange = () => {
+                // console.log('111111');
                 if (document[hiddenProperty]) {
                     // 窗口隐藏
                     // console.log(Date(), 'hidden');
@@ -83,6 +88,9 @@ export default {
          * @param bool
          */
         switchIsPageStyle(bool) {
+            if (this.isPageStyle === bool) {
+                return;
+            }
             this.isPageStyle = bool;
             // console.log(this.$router, '!@#$@#!$');
             // console.log(this.$route, '!@#$@#!$');
@@ -113,7 +121,7 @@ export default {
                 nodeId: this.$route.params.nodeId,
                 page: this.currentPage,
                 pageSize: this.pageSize,
-                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === this.$t('allType') ? undefined : this.selectedType),
+                resourceType: this.isPageStyle ? 'page_build' : (this.selectedType === this.$t('node.allType') ? undefined : this.selectedType),
                 isOnline: this.stateTextToValue(this.selectedState),
                 keywords: this.filterSearch || undefined,
                 omitResourceType: this.isPageStyle ? undefined : 'page_build',
@@ -151,6 +159,22 @@ export default {
                 this.tableData[i].isAuth = res1.data.data[i].authResult.isAuth;
             }
         },
+        /**
+         * 修改使用版本
+         * @param value
+         * @param row
+         * @returns {Promise<any>}
+         */
+        async onVersionChange(value, row) {
+            // console.log(value, row, '1234233');
+            const presentableId = row.presentableId;
+            const {data: {errcode}} = await this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: value});
+            if (errcode !== 0) {
+                return this.$message.error('更新版本失败！')
+            }
+            this.$message.success('更新版本成功！');
+            row.releaseInfo.version = value;
+        },
 
         /**
          * 格式化策略
@@ -175,11 +199,11 @@ export default {
             //this.$t('allState'), this.$t('online'), this.$t('noOnline'), this.$t('contractException')
             //'全部状态', '已上线', '未上线', '合约异常'
             switch (text) {
-                case this.$t('allState'):
+                case this.$t('node.allState'):
                     return 2;
-                case this.$t('online'):
+                case this.$t('node.online'):
                     return 1;
-                case this.$t('noOnline'):
+                case this.$t('node.noOnline'):
                     return 0;
                 default:
                     return 2;
@@ -239,10 +263,10 @@ export default {
             // console.log(item, 'IYOIUHJLKJN');
             if (item.isOnline === 0) {
                 if (!item.policies || item.policies.length === 0) {
-                    return this.$message.error(this.$t('cannotOnline.noPolicy'));
+                    return this.$message.error(this.$t('node.cannotOnline.noPolicy'));
                 }
                 if (!item.isAuth) {
-                    return this.$message.error(this.$t('cannotOnline.exceptions'));
+                    return this.$message.error(this.$t('node.cannotOnline.exceptions'));
                 }
             }
             const res = await this.$axios.put(`/v1/presentables/${item.presentableId}/switchOnlineState`, {
@@ -252,44 +276,78 @@ export default {
             if (res.data.errcode !== 0) {
                 return this.$message.error(res.data.msg);
             }
-            item.isOnline === 0 ? this.$message.success('上线成功') : this.$message.success('下线成功');
+            item.isOnline === 0 ? this.$message.success(item.releaseInfo.resourceType === 'page_build' ? '激活成功' : '上线成功') : this.$message.success('下线成功');
             // item.isOnline = item.isOnline === 0 ? 1 : 0;
             this.handleTableData();
         },
-        upgradePresentable(presentable) {
-            const {presentableId, releaseInfo: {version, releaseId}} = presentable
-            this.$services.ReleaseService.get(releaseId)
-                .then(res => res.data)
-                .then(res => {
-                    var _version = version
-                    if (res.errcode === 0) {
-                        const {latestVersion} = res.data
-                        _version = latestVersion.version
-                    }
-                    return _version
-                })
-                .then(version => {
-                    return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {
-                        version
-                    })
-                })
-                .then(res => res.data)
-                .then(res => {
-                    if (res.errcode === 0) {
-                        this.$message({type: 'success', message: '升级成功！'})
-                    } else {
-                        this.$message({type: 'error', message: '升级失败！'})
-                    }
-                })
-                .catch(this.$error.showErrorMessage)
+        // upgradePresentable(presentable) {
+        //     const {presentableId, releaseInfo: {version, releaseId}} = presentable
+        //     this.$services.ReleaseService.get(releaseId)
+        //         .then(res => res.data)
+        //         .then(res => {
+        //             var _version = version
+        //             if (res.errcode === 0) {
+        //                 const {latestVersion} = res.data
+        //                 _version = latestVersion.version
+        //             }
+        //             return _version
+        //         })
+        //         .then(_v => {
+        //             return this.$services.PresentablesService.put(`${presentableId}/switchPresentableVersion`, {version: _v})
+        //         })
+        //         .then(res => res.data)
+        //         .then(res => {
+        //             if (res.errcode === 0) {
+        //                 this.$message({type: 'success', message: '升级成功！'})
+        //             } else {
+        //                 this.$message({type: 'error', message: '升级失败！'})
+        //             }
+        //         })
+        //         .catch(this.$error.showErrorMessage)
+        // },
+        /**
+         * 处理操作
+         * @param e
+         * @param row
+         */
+        handleOperation(e, row) {
+            if (e === 'edit') {
+                this.goToEditPage(row.presentableId);
+            }
+            // else if (e === 'upgrade') {
+            //     this.upgradePresentable(row);
+            // }
+            else if (e === 'online') {
+                this.onLineAndOffLine(row);
+            }
         }
+        /**
+         * 去来源编辑页
+         */
+        // goToOrigin(originInfo) {
+        //     // console.log(originInfo, 'originInfooriginInfo');
+        //     let url = '';
+        //     if (originInfo.type === 'presentable') {
+        //         url = `/node/manager-release/${originInfo.id}`;
+        //     }
+        //
+        //     if (originInfo.type === 'mock') {
+        //         url = `/mock/update/${originInfo.id}`;
+        //     }
+        //
+        //     if (originInfo.type === 'release') {
+        //         url = `/release/detail/${originInfo.id}?version=${originInfo.version}`;
+        //     }
+        //
+        //     window.open(url);
+        // },
     },
 
     watch: {
         isPageStyle() {
             this.filterSearch = '';
-            this.selectedType = this.$t('allType');
-            this.selectedState = this.$t('allState');
+            this.selectedType = this.$t('node.allType');
+            this.selectedState = this.$t('node.allState');
             this.currentPage = 1;
             this.pageSize = 10;
             this.handleTableData();

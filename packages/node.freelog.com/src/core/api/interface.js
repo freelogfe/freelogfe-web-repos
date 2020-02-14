@@ -1,79 +1,114 @@
-import { resolveSubResourceDataUrl, resolveSubReleaseInfoUrl } from './resolveUrl'
+import { resolveSubDependDataUrl, resolveSubDependInfoUrl } from './resolveUrl'
 import { throwError, createError } from '../exceptions/throwError'
 import { EXCEPTION_AUTH } from '../exceptions/names'
 import { injectCodeResource } from '../helpers/index'
 
-var _fetch = null
+const HEADERS_FREELOG_SUB_DEPENDENCIES = 'freelog-sub-dependencies'
+
+var _fetch = window.fetch
 export default function init(fetch) {
   _fetch = fetch
 }
 
 /**
- * 获取节点的presentables列表
+ * 分页获取节点Presentable列表
+ * @param {Object} params 
  */
-export function fetchPresentablesList(params = {}) {
-  return _fetch('/v1/presentables', { data: params })
-          .then(resp => resp.json())
+export function pagingGetPresentables(params) {
+  return _fetch('/v1/presentables/authList', { data: params })
+    .then(resp => resp.json())
+    .then(res => {
+      if(res.errcode === 0 && res.data.dataList) {
+        res.data.dataList = res.data.dataList.map(p => {
+          const authResult = p.authResult  
+          const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
+          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          return p
+        })
+      }
+      return res
+    })
 }
 
 /**
- * 获取单个presentable的详情
+ * 获取单个presentable
+ * @param {String} presentableId 
  */
-export function fetchPresentableInfo(presentableId) {
-  return _fetch(`/v1/presentables/${presentableId}`)
-          .then(resp => resp.json())
-}
-
-function fetchPresentableResource(target, params = {}) {
-  return _fetch(`/v1/auths/presentables/${target}`, { data: params })
-}
-
-/**
- * 获取节点资源的数据内容
- */
-export function fetchPresentableResourceData(presentableId, params) {
-  return fetchPresentableResource(`${presentableId}.file`, params)
-}
-
-/**
- * 获取节点资源的授权信息
- */
-export function fetchPresentableResourceInfo(presentableId, params) {
-  return fetchPresentableResource(`${presentableId}.info`, params)
+export function getPresentable(presentableId) {
+  return _fetch(`/v1/presentable/${presentableId}/info`)
     .then(resp => resp.json())
 }
 
 /**
- * 获取节点资源的授权信息
+ * 获取单个presentable授权
+ * @param {string} presentableId  
  */
-export function fetchPresentableAuth(presentableId, params) {
-  return fetchPresentableResource(`${presentableId}.auth`, params)
+export function getPresentableAuth(presentableId) {
+  var subReleases = []
+  return _fetch(`/v1/presentable/${presentableId}/auth`)
     .then(resp => resp.json())
+    .then(res => {
+      if(res.errcode === 0 && res.data) {
+        const fSubReleases = res.data[HEADERS_FREELOG_SUB_DEPENDENCIES]
+        res.data.subReleases = resolveSubDependencies(fSubReleases)
+      }
+      return res
+    })
+}
+
+function resolveSubDependencies(fSubDependencies) {
+  var subDependencies = Buffer.from(fSubDependencies,'base64').toString('utf-8')
+  subDependencies = JSON.parse(subDependencies) 
+  return subDependencies
 }
 
 /**
- * 获取presentable依赖的子发行的数据内容
+ * 获取单个presentable资源数据
+ * @param {string} presentableId  
  */
-export function fetchSubReleaseData({presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+export function getPresentableData(presentableId) {
+  return _fetch(`/v1/presentable/${presentableId}/data`)
+}
+
+/**
+ * 通过releaseNames或relealseIds批量获取节点Presentable
+ * @param {Object} params 
+ */
+export function batchGetPresentables(params) {
+  const nodeId = window.__auth_info__.__auth_node_id__
+  return _fetch(`/v1/${nodeId}/presentables/authList`, { data: params })
+    .then(resp => resp.json())
+    .then(res => {
+      if(res.errcode === 0 && res.data.dataList) {
+        res.data.dataList = res.data.dataList.map(p => {
+          const authResult = p.authResult  
+          const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
+          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          return p
+        })
+      }
+      return res
+    })
+}
+
+/**
+ * 获取presentable子依赖的数据内容
+ */
+export function getPresnetableSubDependData(presentableId, subDependId, entityNid) {
+  const url = resolveSubDependDataUrl(presentableId, subDependId, entityNid)
   return _fetch(url)
 }
 
 /**
- * 获取presentable依赖的子发行信息
+ * 获取presentable子依赖的信息
  */
-export function fetchSubResource({ presentableId, subReleaseId, version }) {
-  const url = resolveSubReleaseInfoUrl({presentableId, subReleaseId, version})
+export function getPresnetableSubDependInfo(presentableId, subDependId, entityNid) {
+  const url = resolveSubDependInfoUrl({presentableId, subDependId, entityNid})
   return _fetch(url).then(resp => resp.json())
 }
 
-export function fetchSubResourceData({ presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
-  return _fetch(url)
-}
-
-export function requireSubResource({ presentableId, subReleaseId, version }) {
-  const url = resolveSubResourceDataUrl({ presentableId, subReleaseId, version })
+export function requireSubDepend(presentableId, subDependId, entityNid) {
+  const url = resolveSubDependDataUrl(presentableId, subDependId, entityNid)
   var type
   return _fetch(url)
     .then(resp => {

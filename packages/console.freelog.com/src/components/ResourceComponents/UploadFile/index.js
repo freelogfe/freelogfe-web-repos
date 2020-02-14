@@ -1,31 +1,32 @@
 import CryptoJS from 'crypto-js';
+import path from 'path';
 
 export default {
     name: 'UploadFile',
-    i18n: { // `i18n` 选项，为组件设置语言环境信息
-        messages: {
-            en: {
-                uploadResource: 'Upload Resource',
-                noMoreThan50m: 'Resources maximum of no more than 50m',
-                uploadSuccess: 'Success',
-                sureDelete: 'Sure delete a resource file ?',
-                cancel: 'Cancel',
-                confirm: 'Confirm',
-                reselect: 'Reselect',
-                resourceDuplicated: 'The resource already exists, cannot be duplicated to create'
-            },
-            'zh-CN': {
-                uploadResource: '上传资源',
-                noMoreThan50m: '资源最大不超过50M',
-                uploadSuccess: '上传成功',
-                sureDelete: '确定删除资源文件？',
-                cancel: '取消',
-                confirm: '确定',
-                reselect: '重新选择',
-                resourceDuplicated: '该资源已存在，不能重复创建',
-            },
-        }
-    },
+    // i18n: { // `i18n` 选项，为组件设置语言环境信息
+    //     messages: {
+    //         en: {
+    //             uploadResource: 'Upload Resource',
+    //             noMoreThan50m: 'Resources maximum of no more than 50m',
+    //             uploadSuccess: 'Success',
+    //             sureDelete: 'Sure delete a resource file ?',
+    //             cancel: 'Cancel',
+    //             confirm: 'Confirm',
+    //             reselect: 'Reselect',
+    //             resourceDuplicated: 'The resource already exists, cannot be duplicated to create'
+    //         },
+    //         'zh-CN': {
+    //             uploadResource: '上传资源',
+    //             noMoreThan50m: '资源最大不超过50M',
+    //             uploadSuccess: '上传成功',
+    //             sureDelete: '确定删除资源文件？',
+    //             cancel: '取消',
+    //             confirm: '确定',
+    //             reselect: '重新选择',
+    //             resourceDuplicated: '该资源已存在，不能重复创建',
+    //         },
+    //     }
+    // },
     props: {
         // 保证资源不能与现有资源重复
         noRepeat: {
@@ -45,6 +46,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             },
         },
         // fileURL: {
@@ -141,18 +143,25 @@ export default {
          */
         async beforeUpload(file) {
             // console.log(file, '123412341234213423');
+            // console.log(this.fileType === 'image', 'this.fileType');
+            // console.log(!(file.type.startsWith('image')), 'file.type');
+            if (this.fileType === 'image' && !(file.type.startsWith('image'))) {
+                // console.log('##########');
+                this.errorText = '请上传图片格式';
+                throw new Error(this.errorText);
+            }
 
             if (file.size > 52428800) {
-                this.errorText = '资源最大不超过50M';
-                throw new Error();
+                this.errorText = this.$t('components.noMoreThan50m');
+                throw new Error(this.errorText);
             }
 
             if (this.noRepeat) {
                 const hash = await getSHA1Hash(file);
                 const res = await this.$axios.get(`/v1/resources/${hash}`);
                 if (res.data.data) {
-                    this.errorText = this.$t('resourceDuplicated');
-                    throw new Error();
+                    this.errorText = this.$t('components.resourceDuplicated');
+                    throw new Error(this.errorText);
                 }
             }
 
@@ -161,6 +170,7 @@ export default {
                 sha1: '',
                 name: file.name,
                 size: file.size,
+                uploading: true,
             });
             this.percentage = 0;
         },
@@ -171,7 +181,7 @@ export default {
          */
         onProgress(event, file) {
             // console.log(event.percent, '11111111111');
-            this.percentage = Math.ceil(event.percent);
+            this.percentage = Math.ceil(event.percent * .95);
         },
         /**
          * 文件上传成功时的钩子
@@ -179,11 +189,16 @@ export default {
          */
         onSuccess(response) {
             // console.log(response, 'responseresponseresponse');
+            if (response.ret !== 0 || response.errcode !== 0) {
+                this.deleteUploadedFile();
+                return this.$message.error(response.msg);
+            }
             this.percentage = 100;
             this.onFileInfoChange({
                 ...this.fileInfo,
                 fileID: response.data.uploadFileId,
                 sha1: response.data.sha1,
+                uploading: false,
             });
         },
         /**
@@ -203,6 +218,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             });
         },
         /**

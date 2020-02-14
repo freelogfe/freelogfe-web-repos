@@ -1,9 +1,9 @@
 <template>
   <div class="release-editor-contract-wrapper" v-loading="isloading">
     <div class="r-e-c-tags">
-      <i class="el-icon-setting success"></i>
-      <i class="el-icon-setting error"></i>
-      <i class="el-icon-setting warning"></i>
+      <i class="el-icon-setting success"/>
+      <i class="el-icon-setting error"/>
+      <i class="el-icon-setting warning"/>
     </div>
     <div class="r-e-c-tree" v-if="cTreeData && contracts.length">
       <div class="r-e-c-btn">{{release.releaseName}}</div>
@@ -15,15 +15,15 @@
                 :activeKey.sync="activeKey"
                 @activate="showDetailContract"
                 @inactivate="hideDetailContract"
-        ></contract-tree>
+        />
       </div>
     </div>
     <div class="r-e-c-empty-box" v-else>
-      未获取到有效的合同信息
+      {{$t('release.noValidContract')}}
     </div>
     <transition name="fade">
       <div class="release-editor-box" v-if="contractDetail" v-show="isShowDetailContract">
-        <i class="el-icon-close" @click="hideDetailContract"></i>
+        <i class="el-icon-close" @click="hideDetailContract"/>
         <el-tabs class="rec-tab" v-model="activeContractTab" @tab-click="exchangeContractTab" type="border-card">
           <el-tab-pane
                   v-for="(p, index) in targetData.policies"
@@ -32,35 +32,35 @@
                   :name="p.policyName"
           >
             <div class="r-e-info">
-              <h4>合约详情</h4>
+              <h4>{{$t('release.contractDetails')}}</h4>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">发行名称</span>{{targetData.label}}
+                <span class="r-e-i-label">{{$t('release.releaseName')}}</span>{{targetData.label}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">资源类型</span>{{targetData.resourceType}}
+                <span class="r-e-i-label">{{$t('release.resourceType')}}</span>{{targetData.resourceType | pageBuildFilter}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">创建日期</span>{{contractDetail.createDate | fmtDate}}
+                <span class="r-e-i-label">{{$t('release.createData')}}</span>{{contractDetail.createDate | fmtDate}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">合同ID</span>{{contractDetail.contractId}}
+                <span class="r-e-i-label">{{$t('release.contractID')}}</span>{{contractDetail.contractId}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">甲方</span>{{contractDetail.partyOne}}
+                <span class="r-e-i-label">{{$t('release.partyA')}}</span>{{contractDetail.partyOne}}
               </div>
               <div class="r-e-info-row">
-                <span class="r-e-i-label">乙方</span>{{contractDetail.partyTwo}}
+                <span class="r-e-i-label">{{$t('release.partyB')}}</span>{{contractDetail.partyTwo}}
               </div>
             </div>
             <div class="r-e-c-detail">
-              <h4>合同信息</h4>
+              <h4>{{$t('release.contractInfo')}}</h4>
               <div class="r-e-c-cont">
                 <contract-detail
                         class="contract-policy-content"
                         :contract.sync="contractDetail"
                         :policyText="contractDetail.contractClause.policyText"
                         @update-contract="updateContractAfterEvent"
-                ></contract-detail>
+                />
               </div>
             </div>
           </el-tab-pane>
@@ -137,7 +137,7 @@
             tmpTreeData[firstLevelNodeIndex] = this.getTreeNode(rtData[i], key + i)
           }
           this.releaseIdNameMap[releaseId] = releaseName
-          
+
           baseUpcastReleases.forEach((item) => {
             if(item.contracts && item.contracts.length > 0) {
               let tmpNode = this.getTreeNode(item, key + i)

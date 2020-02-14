@@ -5,14 +5,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const baseConfig = require('./webpack.base')
-const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
-const commonFileName = 'freelog-common'
+// const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
+// const commonFileName = 'freelog-common'
 
 module.exports = merge(baseConfig, {
 
-  entry: {
-    [commonFileName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
-  },
+  // entry: {
+  //   [commonFileName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
+  // },
 
   output: {
     publicPath: '/',
@@ -50,8 +50,8 @@ module.exports = merge(baseConfig, {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
-      excludeChunks: [ commonFileName ],
-      commonLibUrl: `/${commonFileName}.js`
+      // excludeChunks: [ commonFileName ],
+      // commonLibUrl: `/${commonFileName}.js`
     }),
   ],
 })

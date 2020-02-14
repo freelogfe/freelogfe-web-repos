@@ -7,12 +7,17 @@
  */
 import Router from 'vue-router'
 import {Vue} from '@freelog/freelog-common-lib'
+
 import Views from '@/views/index'
 import nodeRoute from './node'
 import resourceRoute from './resource'
 import mockRoute from './mock'
+import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
-import i18n from '../lib/i18n'
+import batchOperationRoute from './batch-operation'
+
+import { i18nStance } from '@/lib/index'
+import {getCookieLocale, getUserInfoFromLocalStorage} from "../lib/utils";
 
 Vue.use(Router)
 
@@ -38,46 +43,48 @@ const routerConfig = {
     routes: [
         {
             path: '/',
-            meta: {title: i18n.t('resource.market')},
+            meta: {title: i18nStance.t('routes.releaseMarket')},
             component: Views.layout,
             children: [
                 resourceRoute,
                 nodeRoute,
                 releaseRoute,
                 mockRoute,
-                {
-                    path: 'about',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: `${i18n.t('aboutView.about')}freelog`
-                    },
-                    component: Views.aboutView
-                },
-                {
-                    path: 'setting',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: true,
-                        title: i18n.t('routes.accountSetting')
-                    },
-                    component: Views.userView
-                },
-                {
-                    path: 'help',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: false,
-                        title: i18n.t('helpView.title')
-                    },
-                    component: Views.helpView
-                },
+                alphaTestRoute,
+                batchOperationRoute,
+                // {
+                //     path: 'about',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: `${i18nStance.t('routes.aboutView')}freelog`
+                //     },
+                //     component: Views.aboutView
+                // },
+                // {
+                //     path: 'setting',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: true,
+                //         title: i18nStance.t('routes.accountSetting')
+                //     },
+                //     component: Views.userView
+                // },
+                // {
+                //     path: 'help',
+                //     hidden: true,
+                //     meta: {
+                //         requiresAuth: false,
+                //         title: i18nStance.t('routes.title')
+                //     },
+                //     component: Views.helpView
+                // },
                 {
                     path: 'market',
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('resource.market'),
+                        title: i18nStance.t('routes.releaseMarket'),
                         theme: 'gray',
                         hideFooter: true,
                     },
@@ -88,10 +95,32 @@ const routerConfig = {
                     hidden: true,
                     meta: {
                         requiresAuth: false,
-                        title: i18n.t('resource.market'),
+                        title: i18nStance.t('routes.releaseMarket'),
                         theme: 'gray'
                     },
                     component: Views.mainView
+                },
+                {
+                    path: '/main/node-examples',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: false,
+                        title: i18nStance.t('routes.nodeExamples'),
+                        theme: 'gray',
+                        hideFooter: true,
+                    },
+                    component: Views.mainView
+                },
+                {
+                    path: '/release-management/*',
+                    hidden: true,
+                    meta: {
+                        requiresAuth: false,
+                        title: i18nStance.t('routes.releaseManager'),
+                        theme: 'white',
+                        hideFooter: true,
+                    },
+                    component: Views.releaseManagementView
                 }
             ]
         },
@@ -125,3 +154,38 @@ export function registerNotFoundRouete() {
 }
 
 export default router
+
+router.beforeEach((to, from, next) => {
+    // ...
+    // console.log(to, from, 'to, from');
+    // const cookieLocale = document.cookie.split(';').map(i => i.trim()).find(i => i.startsWith('locale='));
+
+    // let localeCookie = '';
+
+    // const locale = getCookieLocale();
+
+    // if (cookieLocale){
+    // if (locale){
+        // localeCookie = cookieLocale.replace('locale=', '');
+        // i18nStance.locale = locale;
+    // }
+
+    if (to.meta.isSkipAlphaTest) {
+        return next();
+    }
+
+    if (!to.path.startsWith('/alpha-test') && (getUserInfoFromLocalStorage() || {userType: 0}).userType !== 1) {
+        return next({
+            path: '/alpha-test',
+            replace: true,
+        });
+    }
+
+    if (to.path.startsWith('/alpha-test') && (getUserInfoFromLocalStorage() || {userType: 0}).userType === 1) {
+        return next({
+            path: '/',
+            replace: true,
+        });
+    }
+    next();
+});

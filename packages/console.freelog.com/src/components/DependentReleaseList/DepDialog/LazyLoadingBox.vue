@@ -1,12 +1,12 @@
 <template>
-    <div ref="boxRef" style="margin: 0 90px; height: 100%; overflow-y: auto;">
-        <slot></slot>
+    <div ref="boxRef" style="height: 100%; overflow-y: auto;">
+        <slot/>
         <div
             ref="loadingRef"
             style="font-size: 14px; color: #999; text-align: center; line-height: 40px; padding-top: 10px;"
         >
             <span v-show="!end">{{$t('loading')}}</span>
-            <span v-show="end">{{$t('end')}}</span>
+            <span v-show="end">{{endText || $t('end')}}</span>
         </div>
     </div>
 </template>
@@ -31,6 +31,7 @@
                 type: Boolean,
                 default: false,
             },
+            endText: String,
         },
         data() {
             return {

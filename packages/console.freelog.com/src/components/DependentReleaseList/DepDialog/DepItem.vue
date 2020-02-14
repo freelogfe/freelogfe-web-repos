@@ -10,7 +10,7 @@
                     style="background-color: #cdcdcd; border-radius: 2px; color: #fff; font-size: 12px; padding: 2px 9px;">{{$t('noOnline')}}</span>
             </div>
             <div style="font-size: 14px; color: #999;">
-                <span>{{type}}</span>
+                <span>{{type | pageBuildFilter}}</span>
                 <span v-if="!!version"> | v{{version}}</span>
                 <span> | {{date}}</span>
             </div>
@@ -51,7 +51,7 @@
                     remove: 'Remove'
                 },
                 'zh-CN': {
-                    noOnline: 'No Online',
+                    noOnline: '未上线',
                     added: '已添加',
                     add: '加入',
                     remove: '移除',

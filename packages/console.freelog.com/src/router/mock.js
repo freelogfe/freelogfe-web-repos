@@ -9,7 +9,7 @@ export default {
     path: 'mock',
     meta: {
         requiresAuth: true,
-        title: i18n.t('routes.resourceSystem'),
+        title: i18n.t('routes.mockResourcePool'),
         hideFooter: true,
     },
     component: Views.container,
@@ -33,8 +33,18 @@ export default {
             meta: {
                 requiresAuth: true,
                 title: i18n.t('routes.createMockResource'),
+                // title: '模拟资源信息',
                 theme: 'gray',
                 hideFooter: true,
+                // breadCrumb: [
+                //     {
+                //         to: '/release-management/release/list',
+                //         text: '我的发行',
+                //     },
+                //     {
+                //         text: i18n.t('routes.createRelease'),
+                //     },
+                // ]
             },
             component: Views.mockEditor,
         },
@@ -44,7 +54,8 @@ export default {
             meta: {
                 requiresAuth: true,
                 // title: i18n.t('routes.createResource'),
-                title: i18n.t('routes.manageMockResource'),
+                title: i18n.t('routes.mockResourceInfo'),
+                // title: '模拟资源信息',
                 theme: 'gray',
                 hideFooter: true,
             },

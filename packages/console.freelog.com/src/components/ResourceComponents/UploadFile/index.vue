@@ -5,16 +5,17 @@
             style="background-color: #fafbfb; padding: 0 10px; display: flex; align-items: center; justify-content: space-between;">
             <div style="line-height: 46px; font-size: 14px; color: #333; display: flex; align-items: center;">
                 <!-- {{fileType}} -->
-                <i class="resource-default-preview" style="width: 20px; height: 20px;"></i>
+                <i class="resource-default-preview" style="width: 20px; height: 20px;"/>
                 <span style="padding-right: 70px; padding-left: 10px;">{{fileInfo.name}}</span>
                 <span>{{fileSize}}</span>
             </div>
             <a
                 @click="onFileInfoChange"
                 class="el-icon-circle-close"
-            ></a>
+            />
         </div>
 
+        <!--        :accept="accept"-->
         <el-upload
             v-show="!fileInfo.name"
             :action="uploadResourceFileAction"
@@ -30,12 +31,12 @@
             <el-button
                 ref="sourceUploadButton"
                 @click="onClickButton"
-            >{{$t('uploadResource')}}
+            >{{$t('components.uploadResource')}}
             </el-button>
             <span
                 slot="tip"
                 style="font-size: 13px; color: #afafaf; padding-left: 20px; display: inline-block; vertical-align: bottom;"
-            ><small>•</small> {{$t('noMoreThan50m')}}</span>
+            ><small>•</small> {{$t('components.noMoreThan50m')}}</span>
         </el-upload>
 
         <div v-if="percentage !== null" style="display: flex;">
@@ -51,7 +52,7 @@
                 >
                     <div style="display: flex; align-items: center;">
                         <!-- {{fileType}} -->
-                        <i class="resource-default-preview" style="width: 20px; height: 20px;"></i>
+                        <i class="resource-default-preview" style="width: 20px; height: 20px;"/>
                         <span style="padding-left: 10px;">{{fileInfo.name}}</span>
                     </div>
                     <span>{{fileSize}}</span>
@@ -64,7 +65,7 @@
                         color="#409eff"
                         :show-text="false"
                         style="flex-shrink: 1; width: 100%;"
-                    ></el-progress>
+                    />
                     <div
                         style="width: 130px;box-sizing: border-box;flex-shrink: 0;padding-left: 10px;color: #3f9cfd;font-size: 14px;font-weight: 600;"
                     >
@@ -77,7 +78,7 @@
                         <a
                             @click="deleteUploadedFile"
                             class="el-icon-circle-close"
-                        ></a>
+                        />
                     </span>
 
                         <div
@@ -87,8 +88,8 @@
                             <i
                                 style="font-size: 20px; color: #5cd217;"
                                 class="el-icon-circle-check"
-                            ></i>
-                            <span style="font-size: 13px; color: #333;">{{$t('uploadSuccess')}}</span>
+                            />
+                            <span style="font-size: 13px; color: #333;">{{$t('components.uploadSuccess')}}</span>
 
                             <el-popover
                                 placement="top"
@@ -97,7 +98,7 @@
                             >
                                 <div style="height: 10px;"></div>
                                 <p style="font-size: 14px; color: #333; font-weight: 600; text-align: center;">
-                                    {{$t('sureDelete')}}</p>
+                                    {{$t('components.sureDelete')}}</p>
                                 <div style="height: 10px;"></div>
                                 <div style="text-align: center; margin: 0;">
                                     <el-button
@@ -105,20 +106,20 @@
                                         size="mini"
                                         type="text"
                                         @click="deleteUploadedFileCancel"
-                                    >{{$t('cancel')}}
+                                    >{{$t('components.cancel')}}
                                     </el-button>
                                     <el-button
                                         type="danger"
                                         size="mini"
                                         @click="deleteUploadedFile"
-                                    >{{$t('confirm')}}
+                                    >{{$t('components.confirm')}}
                                     </el-button>
                                 </div>
                                 <!--                                                            @click="clearUploadedResourceInfo"-->
                                 <a
                                     slot="reference"
                                     class="el-icon-circle-close"
-                                ></a>
+                                />
                             </el-popover>
                         </div>
                     </div>
@@ -138,7 +139,7 @@
                 <i
                     class="el-icon-warning"
                     style="color: #FFC000; font-size: 20px;"
-                ></i>
+                />
                 <span style="font-size: 14px; color: #333; font-weight: 600; padding-left: 10px;"> {{errorText}}</span>
             </div>
             <div style="height: 40px;"></div>
@@ -147,7 +148,7 @@
                     type="text"
                     style="color: #999;"
                     @click="hideUploadErrorDialog"
-                >{{$t('cancel')}}
+                >{{$t('components.cancel')}}
                 </el-button>
                 &nbsp;&nbsp;&nbsp;
                 <el-button
@@ -155,7 +156,7 @@
                     plain
                     round
                     @click="onClickUpload"
-                >{{$t('reselect')}}
+                >{{$t('components.reselect')}}
                 </el-button>
             </div>
         </el-dialog>

@@ -24,6 +24,15 @@ export default {
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
+                breadCrumb: [
+                    {
+                        to: '/release-management/resource/list',
+                        text: i18n.t('routes.myResources'),
+                    },
+                    {
+                        text: i18n.t('routes.createResource'),
+                    },
+                ]
             },
             component: Views.resourceNew,
         },
@@ -33,117 +42,32 @@ export default {
 
             meta: {
                 requiresAuth: true,
-                title: i18n.t('routes.resourceManager'),
+                title: i18n.t('routes.resourceInfo'),
+                // title: '资源信息',
                 type: 'resource',
                 theme: 'gray',
                 hideFooter: true,
+                breadCrumb: [
+                    {
+                        to: '/release-management/resource/list',
+                        text: i18n.t('routes.myResources'),
+                    },
+                    {
+                        text: i18n.t('routes.resourceInfo'),
+                    },
+                ]
             },
             component: Views.resourceNew,
-        },
-        {
-            path: 'policy_tpl/list',
-            meta: {
-                requiresAuth: true,
-                title: i18n.t('routes.resourcePolicyTplList'),
-                type: 'resource'
-            },
-            component: Views.policyTplList
-        },
-        {
-            path: 'create',
-            redirect: 'editor',
-            // hidden: true,
-            // meta: {
-            //     requiresAuth: true,
-            //     title: i18n.t('routes.createResource'),
-            //     type: 'resource',
-            //     theme: 'gray',
-            //     hideFooter: true,
-            // },
-            // component: Views.resourceCreator,
-        },
-        {
-            path: 're-edit',
-            meta: {
-                requiresAuth: true,
-                // title: i18n.t('routes.resourcePolicyTplList'),
-                title: i18n.t('routes.resourcePolicyTplList'),
-                type: 'resource',
-                hideFooter: true,
-                theme: 'gray'
-            },
-            component: Views.resourceReEditor,
-        },
-        {
-            path: 'edit/:resourceId',
-            hidden: true,
-            meta: {
-                requiresAuth: true,
-                title: i18n.t('routes.updateResource'),
-                type: 'resource',
-                theme: 'gray',
-                hideSidebar: true
-            },
-            component: Views.resourceEditor,
         },
         {
             path: 'list',
             meta: {
                 requiresAuth: true,
                 title: i18n.t('routes.myResources'),
-                type: 'resource'
+                type: 'resource',
+                theme: 'white'
             },
             component: Views.resourceList
         },
-        {
-            path: 'detail',
-            hidden: true,
-            redirect: '/resource/list',
-        },
-        {
-            path: 'detail/:resourceId',
-            redirect: 'editor/:resourceId',
-            hidden: true,
-            meta: {
-                requiresAuth: true,
-                title: i18n.t('routes.resourceDetail'),
-                type: 'resource',
-                theme: 'gray',
-                hideFooter: true
-            },
-            component: Views.resourceDetail
-        },
-        {
-            path: 'policy_tpl',
-            hidden: true,
-            meta: {
-                requiresAuth: true,
-                type: 'resource'
-            },
-            component: Views.container,
-            redirect: '/resource/policy_tpl/list',
-            children: [
-                {
-                    path: 'create',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: true,
-                        title: i18n.t('routes.createResourcePolicyTpl'),
-                        type: 'resource'
-                    },
-                    component: Views.policyTplCreator
-                },
-                {
-                    path: 'detail',
-                    hidden: true,
-                    meta: {
-                        requiresAuth: true,
-                        title: i18n.t('routes.resourcePolicyTplDetail'),
-                        type: 'resource'
-                    },
-                    component: Views.policyTplDetail
-                }
-            ]
-        }
     ]
 }

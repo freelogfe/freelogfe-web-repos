@@ -1,17 +1,12 @@
-
-
-import '../style/loading.less'
-import '@freelog/freelog-common-lib/lib/freelog-common.css'
-
 import { Vue } from '@freelog/freelog-common-lib'
 import contractUIPlugin from '@freelog/freelog-ui-contract'
 import initLogin from '@freelog/freelog-ui-login'
 
 import App from './app.vue'
-import i18n from '@/lib/i18n/index'
+import i18n from '@/i18n/index'
 
 Vue.use(contractUIPlugin)
-initLogin({ Vue, isRegisterRouter: false })
+initLogin({ Vue, isRegisterRouter: false, i18n })
 
 Vue.config.devtools = true
 new Vue({
@@ -20,6 +15,9 @@ new Vue({
   methods: {},
   render: h => h(App)
 })
+window.f_common_lib = {
+  Vue
+}
 
 
 

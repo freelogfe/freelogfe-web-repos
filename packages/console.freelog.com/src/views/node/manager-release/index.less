@@ -1,0 +1,73 @@
+.manager-release {
+    width: @main-content-width-1190;
+    margin: 0 auto;
+
+    .manager-release__state {
+        display: flex;
+        align-items: center;
+
+        label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+            padding-right: 40px;
+        }
+
+        a {
+            display: inline-block;
+            line-height: 28px;
+            background-color: #409eff;
+            color: #fff;
+            width: 60px;
+            text-align: center;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
+    .manager-release__version {
+        display: block;
+        width: 700px;
+        background-color: #fafbfb;
+        font-weight: 600;
+    }
+
+    .manager-release__policy {
+        display: flex;
+        align-items: center;
+
+        .manager-release__policy__warning {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+
+            i {
+                font-size: 20px;
+                color: #ffc210;
+            }
+        }
+
+        .manager-release__policy__list {
+            width: 100%;
+        }
+    }
+
+}
+
+//.manager-release-header {
+//    width: @main-content-width-1190;
+//    display: flex;
+//}
+
+@media screen and (max-width: 1250px) {
+    //.manager-release-header {
+    //    width: @main-content-width-990;
+    //    display: flex;
+    //}
+    //.manager-release-body {
+    //    width: @main-content-width-990;
+    //    margin: 0 auto;
+    //}
+}

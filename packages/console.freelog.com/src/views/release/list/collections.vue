@@ -1,12 +1,21 @@
+<!--<i18n src="./release-list.i18n.json"></i18n>-->
 <template>
   <section class="my-collections">
     <div class="m-c-header clearfix">
-      <router-link :to="releasesMarketLink">
-        <el-button size="medium" type="primary" class="m-c-go-to-market">前往发行市场</el-button>
-      </router-link>
       <div class="right-tool-bar-wrap">
-        <search-input @search="searchHandler" showInputImmediately></search-input>
+        <el-input class="search-input" size="medium" ref="input" v-model="searchInputStr"
+          :class="{ 'focus': isInputFocus }"
+          :style="{width: '300px'}"
+          @focus="focusHandler"
+          @blur="blurHandler"
+          @keyup.enter.native="searchHandler(searchInputStr)">
+          <i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
+        </el-input>
+        <!-- <search-input @search="searchHandler" showInputImmediately></search-input> -->
       </div>
+      <router-link :to="releasesMarketLink">
+        <el-button size="medium" type="warning" class="m-c-go-to-market">{{$t('release.goToMarket')}}</el-button>
+      </router-link>
     </div>
     <release-items-list type='myCollections' :query="queryInput"></release-items-list>
   </section>
@@ -22,7 +31,9 @@ export default {
     return {
       resourceList: [],
       queryInput: '',
-      releasesMarketLink: '/'
+      releasesMarketLink: '/',
+			searchInputStr: '',
+			isInputFocus: false,
     }
   },
   components: {
@@ -31,6 +42,12 @@ export default {
   },
 
   methods: {
+		focusHandler() {
+			this.isInputFocus = true
+		},
+		blurHandler() {
+			this.isInputFocus = false
+		},
     searchHandler(str) {
       this.queryInput = str
     },
@@ -46,16 +63,16 @@ export default {
   .my-collections {
     width: @main-content-width-1190;
     margin: auto;
-    padding-top: 50px;
-    padding-left: 50px;
+    padding-top: 30px;
   }
   .m-c-header {
-    margin-bottom: 40px;
+    margin-bottom: 28px; text-align: right;
     .m-c-go-to-market {
-      width:160px; border-radius: 2px;
+      width: 120px; margin-left: 18px; border-radius: 2px; border-color: #F6BE25;
+      background-color: #F6BE25; color: #fff;
     }
     .right-tool-bar-wrap {
-      float: right;
+      display: inline-block;
     }
   }
   @media screen and (max-width: 1250px){
@@ -63,4 +80,8 @@ export default {
       width: @main-content-width-990;
     }
   }
+</style>
+
+<style lang="less">
+
 </style>

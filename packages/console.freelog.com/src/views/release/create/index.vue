@@ -1,3 +1,4 @@
+<!--<i18n src="./create.i18n.json"></i18n>-->
 <template>
   <div id="release-create" v-loading="resourceDetail === null" v-if="resourceDetail !== null">
     <el-form class="r-c-w-cont" ref="createReleaseForm" :model="formData" :rules="rules">
@@ -10,17 +11,18 @@
             <img class="resource-default-preview" alt="" />
             <span>{{resourceDetail.aliasName}}</span>
             <div class="rcw-info">
-              {{resourceDetail.resourceType}} | {{resourceDetail.updateDate | fmtDate}}
+              {{resourceDetail.resourceType | pageBuildFilter}} | {{resourceDetail.updateDate | fmtDate}}
             </div>
           </h2>
           <p class="rcw-intro">
-            {{resourceDetail.intro || '暂无资源描述'}}
+            {{resourceDetail.intro || $t('release.noDesc')}}
           </p>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-name">
-        <h3>发行名称<span>·发行名称一旦则创建不可修改</span></h3>
+        <h3>{{$t('release.name')}}<span>·{{$t('release.tips[0]')}}</span></h3>
         <el-form-item prop="releaseName" class="cont">
+          <span>*</span>
           {{session.user.username}} /
           <el-input
                   autofocus
@@ -31,11 +33,11 @@
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-cover">
-        <h3>发行封面</h3>
+        <h3>{{$t('release.cover')}}</h3>
         <UploadCover :imageUrl="coverImageUrl" :onUploaded="uploadCoverSuccess"></UploadCover>
       </div>
       <div class="r-c-w-row r-c-w-upcast" v-if="depReleasesList.length">
-        <h3>基础上抛<span>·方案中所选上抛将会成为基础上抛</span></h3>
+        <h3>{{$t('release.basicUpcast')}}<span>·{{$t('release.tips[1]')}}</span></h3>
         <div class="cont">
           <div
                   class="upcast-release-item"
@@ -43,18 +45,18 @@
                   :key="'upcast-release-' + index"
           ><i class="el-icon-back"></i>{{item.releaseName}}
           </div>
-          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">暂无基础上抛</div>
+          <div class="no-upcase-releases" v-if="baseUpcastReleases.length === 0">{{$t('release.noBasicUpcast')}}</div>
         </div>
       </div>
       <div class="r-c-w-row r-c-w-version">
-        <h3>版本号</h3>
+        <h3>{{$t('release.version')}}</h3>
         <el-form-item prop="version" class="cont">
-          <i>*</i>
+          <span>*</span>
           <el-input v-model="formData.version"></el-input>
         </el-form-item>
       </div>
       <div class="r-c-w-row r-c-w-scheme" v-if="depReleasesList.length">
-        <h3>方案</h3>
+        <h3>{{$t('release.scheme')}}</h3>
         <div class="cont">
           <scheme-manage
                   type="create"
@@ -68,8 +70,8 @@
     </el-form>
     <div class="r-c-w-footer">
       <div class="body">
-        <div class="cancel" @click="cancelCreateRelease">取消创建</div>
-        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">创建发行</el-button>
+        <div class="cancel" @click="cancelCreateRelease">{{$t('release.cancelBtnText')}}</div>
+        <el-button class="create" type="primary" size="small" round @click="createRelease('createReleaseForm')">{{$t('release.cancelCreateBtnText')}}</el-button>
       </div>
     </div>
   </div>
@@ -79,25 +81,27 @@
   import UploadCover from '@/components/UploadCover/index.vue'
   import SchemeManage from '../scheme/index.vue'
   import {mapGetters} from 'vuex'
+  import config from '@/config/index'
 
   export default {
     name: 'release-creator',
     components: { SchemeManage, UploadCover },
     data() {
+      const $i18n = this.$i18n
       const validateName = (rule, value, callback) => {
         if(value.length < 1 || value.length > 60) {
-          callback('长度必须在 1–60 字符之间')
-        }else if(/^[^\/\\\:\*\?\"\<\>\|\!]+$/.test(value)) {
+          callback($i18n.t('release.messages[0]'))
+        }else if(config['COMMON_NAME_REGEXP'].test(value)) {
           callback()
         }else {
-          callback('不能包含空格和以下字符：\ / : * ? " < > |')
+          callback($i18n.t('release.messages[1]') + '：\ / : * ? " < > | @ # $')
         }
       }
       const validateVersion = (rule, value, callback) => {
         if(/^\d+\.\d+.\d+$/.test(value)) {
           callback()
         }else {
-          callback(new Error('版本号格式有误！'))
+          callback(new Error($i18n.t('release.messages[2]')))
         }
       }
 
@@ -111,11 +115,11 @@
         },
         rules: {
           releaseName: [
-            { required: true, message: '发行名不能为空！', trigger: 'blur'},
+            { required: true, message: $i18n.t('release.messages[3]'), trigger: 'blur'},
             { validator: validateName, trigger: 'blur' }
           ],
           version: [
-            { required: true, message: '版本号不能为空！', trigger: 'blur'},
+            { required: true, message: $i18n.t('release.messages[4]'), trigger: 'blur'},
             { validator: validateVersion, trigger: 'blur' }
           ]
         },
@@ -170,7 +174,7 @@
         return data
       },
       createRelease(formName) {
-
+        const $i18n = this.$i18n
         this.$refs[formName].validate((valid) => {
           if (valid) {
             const formData = this.getFormData()
@@ -178,7 +182,7 @@
               .then(res => res.data)
               .then(res => {
                 if (res.errcode === 0 && res.data) {
-                  this.$message({type: 'success', message: '发行创建成功！'})
+                  this.$message({type: 'success', message: $i18n.t('release.messages[5]')})
                   if (res.data.releaseId) {
                     this.$router.push(`/release/edit/${res.data.releaseId}`)
                   }
@@ -212,7 +216,7 @@
         .catch(e => this.$message({type: 'error', message: e.toString()}))
       }
 
-    }
+    },
   }
 </script>
 
@@ -228,7 +232,7 @@
   }
 
   #release-create {
-    padding-left: 50px;
+    /*padding-left: 50px;*/
 
     .r-c-w-cont {
       width: @main-content-width-1190;
@@ -265,11 +269,11 @@
         img { display: block; width: 100%; height: 100%; }
       }
       .cont {
-        h2 { 
+        h2 {
           display: flex; align-items: center;
-          font-size: 16px; 
+          font-size: 16px;
           img { width: 40px; height: 30px; margin-right: 16px; }
-          span { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-right: 14px; } 
+          span { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-right: 14px; }
         }
       }
       .rcw-info {
@@ -287,6 +291,10 @@
       .cont {
         font-size: 18px;
         color: #333;
+      }
+      span {
+        margin-right: 5px;
+        color: #FA686D;
       }
 
       .el-input {
@@ -328,7 +336,7 @@
         align-items: center;
       }
 
-      i {
+      span {
         margin-right: 5px;
         color: #FA686D;
       }

@@ -1,12 +1,13 @@
+<!--<i18n src="./scheme.i18n.json"></i18n>-->
 <template>
   <div class="scheme-manage-wrapper" v-loading="isLoading">
     <div class="s-m-w-tags">
       <template v-if="type !== 'create'">
-        <span><i class="contract-status status-2"></i>待执行</span>
-        <span><i class="contract-status status-4"></i>生效中</span>
-        <span><i class="contract-status status-6"></i>合同终止</span>
+        <span><i class="contract-status status-2"></i>{{$t('release.contractStatus[0]')}}</span>
+        <span><i class="contract-status status-4"></i>{{$t('release.contractStatus[1]')}}</span>
+        <span><i class="contract-status status-6"></i>{{$t('release.contractStatus[2]')}}</span>
       </template>
-      <span><i class="el-icon-top"></i>上报解决</span>
+      <span><i class="el-icon-top"></i>{{$t('release.contractStatus[3]')}}</span>
     </div>
     <div class="cont clearfix">
       <div class="s-m-w-c-left">
@@ -25,7 +26,7 @@
                   :key="'dep-item-'+_index"
                   is-scond-level
                   :release="urItem"
-                  :is-active="selectedRelease.releaseId === rItem.releaseId"
+                  :is-active="selectedRelease.releaseId === urItem.releaseId"
                   :resolveStatus="urItem.resolveStatus"
                   :contractsMap="contractsMap"
                   @exchange-item="exchangeSelectedRelease"></release-depend-item>
@@ -35,7 +36,7 @@
         <template v-if="type === 'create'">
           <div class="s-m-w-c-upcast-box">
             <div class="s-m-w-c-ub-head">
-              <el-radio v-model="isSelectedReleaesUpcast" :label="true">上抛</el-radio>  
+              <el-radio v-model="isSelectedReleaesUpcast" :label="true">{{$t('release.upcast')}}</el-radio>
               <el-tooltip placement="right" effect="light">
                 <i class="el-icon-info" :class="[{ 'selected': isSelectedReleaesUpcast }]"></i>
                 <div class="s-m-w-c-ubh-tip" slot="content">
@@ -51,7 +52,7 @@
           </div>
           <div class="s-m-w-c-p-wrapper" :class="[{ 'disabled': isSelectedReleaesUpcast }]">
             <div class="s-m-w-c-head">
-               <el-radio v-model="isSelectedReleaesUpcast" :label="false">签约</el-radio>  
+               <el-radio v-model="isSelectedReleaesUpcast" :label="false">{{$t('release.signContractBtnText')}}</el-radio>
                <el-tooltip placement="right" effect="light">
                 <div class="s-m-w-c-ubh-tip" slot="content">
                   作为被授权方，如果您满足且接受授权方的授权策略，则可以选择和授权方签约。授权双方之间存在一个按照未来发生的事件改变资源授权状态的机制，称之为合约。
@@ -73,7 +74,7 @@
                 <div class="p-name" :class="[type]" @click="selectPolicy(tmpNoSignedPolicies, policy, index)">
                   <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                   <i class="el-icon-check" v-else></i>
-                  {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>  
+                  {{policy.policyName}}<span v-if="policy.status === 0">（{{$t('release.offline')}}）</span>
                 </div>
                 <div class="p-detail">
                   <pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre>
@@ -82,24 +83,29 @@
             </div>
           </div>
         </template>
-        <template v-else>  
+        <template v-else>
           <div class="s-m-w-c-p-wrapper" :class="[{ 'disabled': isSelectedReleaesUpcast }]">
             <template v-if="tmpSignedPolicies.length">
               <div class="s-m-w-c-head">
                 <div class="p-auth-info" v-if="selectedRelease.contracts && selectedRelease.contracts.length > 0">
                   <div>
-                    <label>授权方：</label> 
+                    <label>{{$t('release.partyA')}}：</label>
                     <router-link :to="`/release/detail/${selectedRelease.releaseId}?version=${selectedRelease.latestVersion.version}`">
                       {{selectedRelease.releaseName}}
-                    </router-link> 
+                    </router-link>
                   </div>
-                  <div><label>被授权方：</label><span>{{release.releaseName}}</span></div>
+                  <div><label>{{$t('release.partyB')}}：</label><span>{{release.releaseName}}</span></div>
                 </div>
               </div>
-              <h4 class="s-m-w-c-p-title">已签约</h4> 
+              <h4 class="s-m-w-c-p-title">
+                {{type !== 'edit' ? $t('release.signedContracts') : $t('release.signStatus[0]')}}
+                <el-tooltip placement="right" :content="$t('release.tips2[2]')" v-if="type !== 'edit'" >
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </h4>
               <div
                 class="s-m-w-c-policy"
-                :class="{ 
+                :class="{
                   'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]),
                   'disabled': policy.isEnbledContract === false
                 }"
@@ -115,16 +121,16 @@
                       {{policy.policyName}}
                       <span class="contract-status" :class="['status-'+contractsMap[policy.contractId].status]">{{contractsMap[policy.contractId].statusTip}}</span>
                       <el-dropdown class="p-enabled-btn" @command="toggleEnabledContract" v-if="type === 'edit'">
-                        <span>{{ policy.isEnbledContract ? '已应用' : '已搁置'}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                        <span>{{ policy.isEnbledContract ? $t('release.policyStatus[0]') : $t('release.policyStatus[1]')}}<i class="el-icon-arrow-down el-icon--right"></i></span>
                         <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item :command="index+'-1'">应用</el-dropdown-item>
-                          <el-dropdown-item :command="index+'-0'">搁置</el-dropdown-item>
+                          <el-dropdown-item :command="index+'-1'" v-if="!policy.isEnbledContract">{{$t('release.applyBtnText')}}</el-dropdown-item>
+                          <el-dropdown-item :command="index+'-0'" v-else>{{$t('release.layAsideBtnText')}}</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
                     </div>
                     <div class="p-auth-info">
-                      <span>合同ID：{{policy.contractId}}</span>
-                      <span>签约时间：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
+                      <span>{{$t('release.contractID')}}：{{policy.contractId}}</span>
+                      <span>{{$t('release.signingDate')}}：{{contractsMap[policy.contractId].updateDate | fmtDate}}</span>
                     </div>
                     <div class="p-detail">
                       <contract-detail
@@ -137,12 +143,20 @@
               </div>
             </template>
             <template v-if="tmpNoSignedPolicies.length">
-              <h4 class="s-m-w-c-p-title"> {{isSelectedReleaesUpcast ? '该发行已上抛' : '以下策略可进行新的签约'}} </h4>
+              <h4 class="s-m-w-c-p-title">
+                {{isSelectedReleaesUpcast ? $t('release.tips2[0]') : $t('release.tips2[1]')}}
+                <el-tooltip placement="right" effect="light">
+                  <i class="el-icon-info"></i>
+                  <div class="s-m-w-c-ubh-tip" slot="content">
+                    基础上抛是在发行的第一个版本的授权方案中被上抛的依赖。基础上抛贯穿发行的所有版本，发行中新版本上抛的依赖都不能超过基础上抛的范围。
+                  </div>
+                </el-tooltip>
+              </h4>
               <div
-                      class="s-m-w-c-policy"
-                      :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"
-                      v-for="(policy, index) in tmpNoSignedPolicies"
-                      :key="'p-' + index"
+                class="s-m-w-c-policy"
+                :class="{ 'offline': policy.status === 0 && !(contractsMap && contractsMap[policy.contractId]) }"
+                v-for="(policy, index) in tmpNoSignedPolicies"
+                :key="'p-' + index"
               >
                 <div class="smw-c-p-box">
                   <div class="p-name" :class="[type]" @click="selectPolicy(tmpNoSignedPolicies, policy, index)">
@@ -150,8 +164,8 @@
                           <span class="p-n-check-box" v-if="!policy.isSelected"></span>
                         <i class="el-icon-check" v-else></i>
                       </template>
-                    {{policy.policyName}}<span v-if="policy.status === 0">（已下线）</span>
-                    <div class="p-signed-btn" @click="policySignImmediately(policy)" v-if="type === 'edit'">签约</div>
+                    {{policy.policyName}}<span v-if="policy.status === 0">（{{$t('release.offline')}}）</span>
+                    <div class="p-signed-btn" @click="policySignImmediately(policy)" v-if="type === 'edit'">{{$t('release.signContractBtnText')}}</div>
                   </div>
                   <div class="p-detail"><pre class="p-segment-text" >{{fmtPolicyTextList(policy)}}</pre></div>
                 </div>
@@ -176,13 +190,13 @@
 
 <style lang="less">
   .s-m-w-c-ubh-tip{
-    width: 420px; padding: 10px; 
+    width: 420px; padding: 10px;
 
     ul {
       margin-top: 15px; list-style-type: disc;
       li { margin-left: 15px; line-height: 20px; color: #333; }
     }
-  } 
+  }
   // .el-tooltip__popper.is-light {
   //   border-color: #fff;
   //   box-shadow: 1px 1px 3px rgba(0,0,0,.3);

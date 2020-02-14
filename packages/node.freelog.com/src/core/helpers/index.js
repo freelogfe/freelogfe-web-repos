@@ -30,10 +30,11 @@ export function createScript(url) {
 
 export function createCssLink(href, type) {
   return new Promise((resolve, reject) => {
+    
     const link = document.createElement('link')
-    link.ref = 'stylesheet'
-    link.type = type || 'text/css'
     link.href = href
+    link.rel = 'stylesheet'
+    link.type = type || 'text/css'
     link.onload = resolve
     link.onerror = reject
     document.getElementsByTagName('head').item(0).appendChild(link)

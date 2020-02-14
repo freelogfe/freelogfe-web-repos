@@ -1,26 +1,31 @@
 <template>
     <LazyLoadingBox
         :end="dataEnd"
+        :endText="(data && data.length === 0) ? $t('noConditions') : ''"
         @toBottom="toBottom"
     >
-        <div style="height: 40px;"></div>
-        <el-input
-            v-model="input"
-            :placeholder="$t('pleaseEnter')"
-        ></el-input>
-        <div style="height: 30px;"></div>
+        <div style="padding: 0 90px;">
+            <div style="height: 40px;"></div>
+            <el-input
+                v-model="input"
+                :placeholder="$t('pleaseEnter')"
+            >
+                <i slot="prefix" class="el-input__icon el-icon-search"/>
+            </el-input>
+            <div style="height: 30px;"></div>
 
-        <DepItem
-            v-for="i in data"
-            :name="i.name"
-            :isOnline="i.isOnline"
-            :type="i.type"
-            :version="i.version"
-            :date="i.date"
-            @click="$emit('add', i)"
-            :showRemove="exists.includes(i.id)"
-            @remove="$emit('remove', i)"
-        />
+            <DepItem
+                v-for="i in data"
+                :name="i.name"
+                :isOnline="i.isOnline"
+                :type="i.type"
+                :version="i.version"
+                :date="i.date"
+                @click="$emit('add', i)"
+                :showRemove="exists.includes(i.id)"
+                @remove="$emit('remove', i)"
+            />
+        </div>
     </LazyLoadingBox>
 </template>
 
@@ -33,10 +38,12 @@
         i18n: { // `i18n` 选项，为组件设置语言环境信息
             messages: {
                 en: {
-                    pleaseEnter: 'Please enter'
+                    pleaseEnter: 'Please enter',
+                    noConditions: 'Does not meet the conditions of release',
                 },
                 'zh-CN': {
-                    pleaseEnter: '请输入内容'
+                    pleaseEnter: '请输入内容',
+                    noConditions: '没有符合条件的发行',
                 },
             }
         },
@@ -96,6 +103,7 @@
                         type: i.latestVersion.resourceInfo.resourceType,
                         version: i.latestVersion.version,
                         date: i.updateDate.split('T')[0],
+                        versions: i.resourceVersions.map(i => i.version),
                         // disabled: false,
                     }))
                 ].filter(i => i.id !== this.currentID && i.isOnline);

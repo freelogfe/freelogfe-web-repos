@@ -4,13 +4,15 @@
       <el-form-item prop="nodeDomain" class="node-creator-input-item">
         <input type="text" v-model="dataForm.nodeDomain"
                class="node-creator-input"
-               :placeholder="$t('node.createPlaceholders.domain')">
+               :placeholder="$t('node.createPlaceholders.domain')" 
+               @change="toLowerCase"
+               @blur="trimNodeDomain">
         <span class="node-domain-postfix">{{domainPostfix}}</span>
       </el-form-item>
       <el-form-item prop="nodeName" class="node-creator-input-item">
         <input type="text" v-model="dataForm.nodeName"
                class="node-creator-input"
-               :placeholder="$t('node.createPlaceholders.name')">
+               :placeholder="$t('node.createPlaceholders.name')" @blur="trimNodeName">
       </el-form-item>
       <el-form-item class="ft-btns">
         <el-button class="ft-btn" round @click="goBackHandler">{{$t('common.cancel')}}</el-button>

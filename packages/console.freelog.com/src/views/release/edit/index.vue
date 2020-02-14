@@ -1,3 +1,4 @@
+<!--<i18n src="./edit.i18n.json"></i18n>-->
 <template>
   <div class="release-editor-wrapper" v-if="release !== null">
     <release-editor-layout :release.sync="release" :selectedVersion="selectedVersion" type="edit">
@@ -6,7 +7,7 @@
           <div class="re-wvb-header clearfix">
             <div class="rew-v-selector">
               <div class="rew-v-version-box">
-                <span class="rew-v-b-version">版本{{release.resourceVersions[selectedVersionIndex].version}}</span>
+                <span class="rew-v-b-version">{{$t('release.version')}}{{release.resourceVersions[selectedVersionIndex].version}}</span>
                 <span class="rew-v-b-name">
                   <router-link
                           target="_blank"
@@ -30,11 +31,11 @@
                 </ul>
               </div>
             </div>
-            <div class="r-e-w-v-add-btn" @click="showResourceDialog">新增版本</div>
+            <div class="r-e-w-v-add-btn" @click="showResourceDialog">{{$t('release.addBtnText')}}</div>
           </div>
           <div class="r-e-w-v-scheme" v-if="depReleasesList.length > 0">
             <el-tabs v-model="vTabActiveName" type="card" :closable="false" @tab-click="exchangeVTab">
-              <el-tab-pane label="授权管理" name="scheme">
+              <el-tab-pane :label="$t('release.authManagement')" name="scheme">
                 <scheme-manage
                         type="edit"
                         :release="release"
@@ -48,7 +49,7 @@
                         :contracts.sync="contracts"
                 ></scheme-manage>
               </el-tab-pane>
-              <el-tab-pane label="授权链" name="contract">
+              <el-tab-pane :label="$t('release.contract')" name="contract">
                 <release-editor-contract
                         :release="release"
                         :depReleasesDetailList="depReleasesDetailList"
@@ -63,11 +64,11 @@
     <el-dialog
             class="r-e-w-search-dialog"
             center
-            title="我的资源"
+            :title="$t('release.dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
     >
-      <resource-search @select-resource="addNewVersion"></resource-search>
+      <resource-search :searchResourceType="release.resourceType" @select-resource="addNewVersion"></resource-search>
     </el-dialog>
   </div>
 </template>
@@ -213,7 +214,7 @@
     .r-e-w-search-dialog {
       .el-dialog__body {
         overflow: auto;
-        height: 300px; margin: 0 20px; padding: 20px 50px 0; border-top: 1px solid #D8D8D8;
+        height: 300px; margin: 0 20px; padding: 20px 45px 0; border-top: 1px solid #D8D8D8;
 
         .el-input__inner { padding-left: 30px; }
       }

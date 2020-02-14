@@ -22,9 +22,9 @@ module.exports = {
     'fs': 'empty'
   },
 
-  externals : {
-    '@freelog/freelog-common-lib': 'f_common_lib'
-  },
+  // externals : {
+  //   '@freelog/freelog-common-lib': 'f_common_lib'
+  // },
 
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -67,7 +67,7 @@ module.exports = {
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'pagebuild/plubic/css/pagebuild.css'
+      filename: 'plubic/css/pagebuild.css'
     }),
     new VueLoaderPlugin(),
   ],

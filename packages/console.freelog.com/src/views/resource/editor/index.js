@@ -8,12 +8,13 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
 import ReleasedItem from "./ReleasedItem";
+import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {
     name: 'editor',
-    i18n,
+    // i18n,
     components: {
         ReleasedItem,
         SmallTitle,
@@ -45,6 +46,7 @@ export default {
                 sha1: '',
                 name: '',
                 size: 0,
+                uploading: false,
             },
 
             // 资源名称
@@ -72,6 +74,8 @@ export default {
             isShowReleaseSearchDialog: false,
             // 临时存放的 新建的资源 ID
             tmpRreatedResourceID: '',
+            // 创建或保存的资源Data
+            targetResourceData: null
         };
     },
     mounted() {
@@ -108,7 +112,7 @@ export default {
             // console.log(this.releasedList, 'this.releasedListthis.releasedList');
         },
         /**
-         * 当为更新 mock 资源时，初始化数据
+         * 当为更新资源时，初始化数据
          * @return {Promise<void>}
          */
         async initDataByResourceId() {
@@ -117,37 +121,47 @@ export default {
                 return;
             }
             const res = await this.$axios.get(`/v1/resources/${resourceId}`);
-            // return;
-            // console.log(res.data.data, 'res.data.datares.data.data');
+            if (res.data.ret !== 0 || res.data.ret !== 0) {
+                return this.message.error(res.data.msg);
+            }
             const result = res.data.data;
-            // this.resourceType = result.resourceType;
-            // this.uploadFileInfo = {
-            //     fileID: '',
-            //     sha1: '',
-            //     name: result.systemMeta.filename,
-            //     size: result.systemMeta.fileSize,
-            // };
+            this.resourceType = result.resourceType;
             this.resourceName = result.aliasName;
-            // this.coverURL = result.previewImages[0] || '';
-            // this.depList = [
-            //     ...result.systemMeta.dependencyInfo.releases.map(i => ({
-            //         id: i.releaseId,
-            //         name: i.releaseName,
-            //         version: i.versionRange,
-            //     })),
-            //     ...result.systemMeta.dependencyInfo.mocks.map(i => ({
-            //         id: i.mockResourceId,
-            //         name: i.mockResourceName,
-            //     })),
-            // ];
-            this.depList = result.systemMeta.dependencies.map(i => ({
-                id: i.releaseId,
-                name: i.releaseName,
-                version: i.versionRange,
-            }));
-            // console.log(this.depList, 'this.depList');
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
+
+            // this.depList = result.systemMeta.dependencies.map(i => ({
+            //     id: i.releaseId,
+            //     name: i.releaseName,
+            //     version: i.versionRange,
+            // }));
+
+            const releaseIds = result.systemMeta.dependencies.map(i => i.releaseId).join(',');
+            if (!releaseIds) {
+                return;
+            }
+            const res1 = await this.$axios.get(`/v1/releases/list?releaseIds=${releaseIds}`);
+
+            // console.log(res1, 'res1res1');
+            if (res1.data.ret !== 0 || res1.data.ret !== 0) {
+                return this.message.error(res1.data.msg);
+            }
+
+            const result1 = res1.data.data;
+            this.depList = result1.map(i => {
+                const version = result.systemMeta.dependencies.find(j => j.releaseId === i.releaseId).versionRange;
+                return {
+                    date: i.createDate.split('T')[0],
+                    id: i.releaseId,
+                    isOnline: i.status === 1,
+                    name: i.releaseName,
+                    type: i.resourceType,
+                    // version: i.resourceVersions[0].version,
+                    version,
+                    versions: i.resourceVersions.map(k => k.version),
+                };
+            });
+            // console.log(this.depList, 'this.depList');
         },
 
         /**
@@ -251,6 +265,11 @@ export default {
          */
         async submit() {
 
+            if (this.uploadFileInfo.uploading) {
+                this.$message.error(this.$t('fileUploading'));
+                throw new Error('文件正在上传中');
+            }
+
             if (!this.isUpdateResource) {
                 if (!this.resourceType) {
                     this.$message.error(this.$t('pleaseSelectAResourceType'));
@@ -269,9 +288,9 @@ export default {
                 throw new Error('请输入资源名称');
             }
 
-            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
-                throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > |`);
+            if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
+                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
+                throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
@@ -298,17 +317,21 @@ export default {
             if (!this.isUpdateResource) {
                 const res = await this.$axios.post('/v1/resources', params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('creationFailed'));
+                    this.$message.error(res.data.msg);
+                    throw new Error(this.$t('creationFailed'));
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
+                this.targetResourceData = res.data.data
                 return res.data.data.resourceId;
             } else {
                 const {resourceId} = this.$route.params;
                 const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('saveFailed'));
+                    this.$message.error(res.data.msg);
+                    throw new Error(this.$t('saveFailed'));
                 }
-                this.$message.success(this.$t('saveSuccess'));
+                this.targetResourceData = res.data.data
+                this.$message.success('保存成功');
                 return res.data.data.resourceId;
             }
 
@@ -331,8 +354,10 @@ export default {
             }
             const resourceId = await this.submit();
             if (!bool) {
-                return this.$router.replace(`/resource/list`);
-                // return ;
+                if (!this.$route.params.resourceId) {
+                    this.$router.replace(`/resource/editor/${resourceId}`);
+                }
+                return;
             }
             this.tmpRreatedResourceID = resourceId;
             this.isShowReleaseSearchDialog = true;
@@ -341,6 +366,7 @@ export default {
          * 创建发行
          */
         createRelease(releaseInfo) {
+            // console.log(releaseInfo, 'releaseInforeleaseInfo');
             // 如果是 创建新发行
             if (!releaseInfo) {
                 // console.log(this.tmpRreatedResourceID, 'this.tmpRreatedResourceIDthis.tmpRreatedResourceID');
@@ -369,7 +395,9 @@ export default {
         isShowReleaseSearchDialog(val) {
             // console.log(val, 'val');
             if (val === false) {
-                this.$router.replace(`/resource/list`);
+                if (!this.$route.params.resourceId) {
+                    this.$router.replace(`/resource/editor/${this.tmpRreatedResourceID}`);
+                }
             }
         }
     }

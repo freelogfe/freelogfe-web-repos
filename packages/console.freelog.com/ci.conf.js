@@ -32,7 +32,7 @@ module.exports = {
     branch: 'master',
     env: 'test',
     bucket: 'test-frcdn',
-    // cmd: `npm run build:test`,
+    cmd: `npm run build:test`,
     path: targetPath
   }],
   after() {

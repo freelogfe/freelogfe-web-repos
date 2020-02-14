@@ -2,12 +2,12 @@
   <div class="release-item">
     <div class="r-i-name">{{release.releaseName}}</div>
     <div class="r-i-row">
-      <span class="r-i-type">{{release.resourceType}}</span>
+      <span class="r-i-type">{{release.resourceType | pageBuildFilter}}</span>
       <span v-if="!!release.latestVersion" class="r-i-version">{{release.latestVersion && release.latestVersion.version}}</span>
       <span class="r-i-date">{{release.updateDate | fmtDate}}</span>
-      <strong v-if="isHistoricalRelease">历史版本</strong>
+      <strong v-if="isHistoricalRelease">{{$t('release.search.historicVersion')}}</strong>
     </div>
-    <el-button class="add-release-btn" :class="{ 'disabled': isHistoricalRelease }" @click="addToRelease">{{$t('search.addBtn')}}</el-button>
+    <el-button class="add-release-btn" :class="{ 'disabled': isHistoricalRelease }" @click="addToRelease">{{$t('release.search.addBtn')}}</el-button>
   </div>
 </template>
 

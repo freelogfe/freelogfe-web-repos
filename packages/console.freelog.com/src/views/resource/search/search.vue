@@ -12,12 +12,12 @@
     <lazy-list-view :list="searchResources"
                     ref="searchView"
                     class="r-e-w-s-resource-list"
-                    :height="60" 
+                    :height="60"
                     :fetch="searchDataHandler">
       <template slot-scope="scope">
         <div class="r-e-w-s-r-item">
           <span class="r-e-w-s-r-name">{{scope.data.aliasName}}</span>
-          <span class="r-e-w-s-r-type">{{scope.data.resourceType}}</span>
+          <span class="r-e-w-s-r-type">{{scope.data.resourceType | pageBuildFilter}}</span>
           <span class="r-e-w-s-r-date">{{scope.data.createDate | fmtDate}}</span>
           <span class="r-e-w-s-r-relase" v-if="resourceMapReleases[scope.data.resourceId]">已有发行</span>
           <span class="r-e-w-s-r-select-btn" @click="selectResource(scope.data)">选择</span>
@@ -32,6 +32,12 @@
 import LazyListView from '@/components/LazyListView/index.vue'
 export default {
   name: 'resource-search',
+  props: {
+    searchResourceType: {
+      type: String,
+      default: ''
+    } 
+  },
   components: {
     LazyListView
   },
@@ -65,16 +71,18 @@ export default {
       //   return Promise.resolve({ canLoadMore: false })
       // }
       // this.isFirstSearch = false
+      let params = Object.assign({
+        keywords: encodeURIComponent(this.searchInput),
+        page,
+        pageSize,
+        isSelf: 1,
+        projection: this.resourceProjection
+      }, this.searchScope)
+      if (this.searchResourceType !== '') {
+        params = Object.assign(params, { resourceType: this.searchResourceType })
+      }
       // 空输入时，即查询所有属于我的资源
-      return this.$services.ResourceService.get({
-        params: Object.assign({
-          keywords: encodeURIComponent(this.searchInput),
-          page,
-          pageSize,
-          isSelf: 1,
-          projection: this.resourceProjection
-        }, this.searchScope)
-      }).then((res) => {
+      return this.$services.ResourceService.get({ params }).then((res) => {
         const data = res.getData() || {}
         if (res.data.errcode === 0) {
           this.searchResources = this.searchResources.concat(data.dataList)
@@ -124,7 +132,7 @@ export default {
   .r-e-w-s-r-type, .r-e-w-s-r-date { font-size: 12px; color: #999; }
   .r-e-w-s-r-type{ width: 80px; }
   .r-e-w-s-r-date{ width: 72px; }
-  .r-e-w-s-r-relase{ 
+  .r-e-w-s-r-relase{
     padding: 0 5px; border-radius: 3px;
     font-size: 12px; background-color: #67C23A; color: #fff;
   }

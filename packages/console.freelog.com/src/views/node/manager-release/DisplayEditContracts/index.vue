@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <TabsHeader v-model="activeTab"></TabsHeader>
+        <TabsHeader v-model="activeTab"/>
 
         <div
             v-show="activeTab === 'contract'"
@@ -11,10 +11,11 @@
             <div style="width: 320px; flex-shrink: 0;">
                 <!-- 发行列表 -->
                 <div v-for="(item, index) in dataSource">
-                    <NavTitle v-if="index === 0">{{$t('currentRelease')}}</NavTitle>
-                    <NavTitle v-if="index === 1">{{$t('throwingRelease')}}</NavTitle>
+                    <NavTitle v-if="index === 0">{{$t('node.currentRelease')}}</NavTitle>
+                    <NavTitle v-if="index === 1">{{$t('node.throwingRelease')}}</NavTitle>
 
                     <NavItem
+                        @gotoDetails="gotoDetails(item.releaseId, item.release.resourceVersions[0].version)"
                         @click="activatedIndex = index"
                         :activated="activatedIndex === index"
                         :title="item.releaseName"
@@ -22,7 +23,7 @@
                         :version="item.release.resourceVersions[0].version"
                         :date="item.release.updateDate.split('T')[0]"
                         :tags="item.children.filter(i => i.contract && !i.disabled).map(i => ({policyName: i.policy.policyName, status: i.contract.status}))"
-                    ></NavItem>
+                    />
                 </div>
                 <div style="height: 25px;"></div>
             </div>
@@ -37,18 +38,18 @@
                         style="color: #333; font-size: 14px; background-color: #fafbfb; padding: 15px;"
                     >
                         <div style="padding-bottom: 5px; display: flex;">
-                            <div style="flex-shrink: 0;">{{$t('authorizer')}}</div>
+                            <div style="flex-shrink: 0;">{{$t('node.authorizer')}}</div>
                             <div style="width: 100%; flex-shrink: 1; white-space: normal;">
                                 {{dataSource[activatedIndex].releaseName}}
                             </div>
                         </div>
                         <div style="display: flex;">
-                            <div style="flex-shrink: 0;">{{$t('authorized')}}</div>
+                            <div style="flex-shrink: 0;">{{$t('node.authorized')}}</div>
                             <div style="width: 100%; flex-shrink: 1; white-space: normal;">{{nodeInfo.nodeName}}</div>
                         </div>
                     </div>
 
-                    <ContractsContainer :title="$t('contracted')">
+                    <ContractsContainer :title="$t('node.contracted')">
                         <!-- 已签约列表 -->
                         <div
                             style="position: relative;"
@@ -56,20 +57,21 @@
                         >
                             <div v-if="index !== 0" style="height: 15px;"></div>
                             <!-- :unique="dataSource[activatedIndex].children.filter(i => i.contract && !i.disabled).length === 1 && !item.disabled" -->
+<!--                            :name="[...item.contract.contractName.split('-')].pop()"-->
                             <SignedContract
-                                :name="item.contract.contractName.split('/')[1]"
+                                :name="item.contract.contractName"
                                 :status="item.contract.status"
                                 :contractId="item.contract.contractId"
                                 :data="item.contract.createDate.split('T')[0]"
                                 :contract="item.contract"
                                 :disabled="!!item.disabled"
                                 @command="item.disabled ? signPolicy(item.policy.policyId): breakSignPolicy(item.policy.policyId)"
-                            ></SignedContract>
+                            />
                         </div>
                     </ContractsContainer>
 
                     <ContractsContainer
-                        :title="$t('availableSigning')"
+                        :title="$t('node.availableSigning')"
                         v-if="dataSource[activatedIndex].children.filter(i => !i.contract).length > 0"
                     >
                         <!-- 可签约列表 -->
@@ -79,7 +81,7 @@
                                 :policyName="item.policy.policyName"
                                 :policyText="item.policy.policyText"
                                 @add="signPolicy(item.policy.policyId, true)"
-                            ></UnsignedContract>
+                            />
                         </div>
                     </ContractsContainer>
                 </div>
@@ -91,7 +93,7 @@
             :release="{releaseName: this.presentableName}"
             :depReleasesDetailList="depReleasesDetailList"
             :contracts="contracts"
-        ></ReleaseEditorContract>
+        />
     </div>
 </template>
 

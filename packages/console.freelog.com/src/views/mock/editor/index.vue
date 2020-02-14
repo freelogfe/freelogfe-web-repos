@@ -1,18 +1,37 @@
 <template>
-    <div class="mock-resource-editor" style="margin: 0 auto;">
+    <div class="mock-editor">
+
+        <div
+            style="margin: 0 auto; width: 1190px;"
+        >
+            <BreadCrumb
+                v-if="!!$route.params.bucketName"
+                :list="[
+                    {text: '模拟资源池', to: `/mock/display?activatedBucketName=${$route.params.bucketName}`},
+                    {text: '创建模拟资源'}
+                ]"
+            />
+            <BreadCrumb
+                v-else
+                :list="[
+                    {text: '模拟资源池', to: `/mock/display?activatedBucketName=${bucketName}`},
+                    {text: '模拟资源信息'}
+                ]"
+            />
+        </div>
 
         <HeaderAlert/>
 
-        <BlockBody :tilte="$t('resourceUpload')">
+        <BlockBody :tilte="$t('mock.resourceUpload')">
 
-            <SmallTitle>{{$t('resourceType')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceType')}}</SmallTitle>
 
-            <div style="padding-left: 40px;">
+            <div class="mock-editor__type">
                 <el-select
-                    style="width: 160px; line-height: 38px;"
+                    class="mock-editor__type__select"
                     v-model="resourceType"
                     @change="onChangeResourceType"
-                    :placeholder="$t('resourceType')"
+                    :placeholder="$t('mock.resourceType')"
                     allow-create
                     filterable
                     :disabled="!!this.uploadFileInfo.name"
@@ -20,26 +39,25 @@
                     <el-option
                         v-for="item in resourceTypes"
                         :key="item"
-                        :label="item"
+                        :label="item | pageBuildFilter"
                         :value="item">
                     </el-option>
 
                 </el-select>
 
                 <div
-                    style="font-size: 13px; padding-left: 20px; display: inline-block; vertical-align: bottom;"
                     :style="{color: resourceTypeTip? 'red': '#afafaf'}"
-                    class="animated"
+                    class="animated mock-editor__type__tip"
                     :class="{shake: resourceTypeTip}"
                 >
                     <small>•</small>
-                    {{$t('beforeUpload')}}
+                    {{$t('mock.beforeUpload')}}
                 </div>
             </div>
 
-            <SmallTitle>{{$t('resourceFile')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceFile')}}</SmallTitle>
 
-            <div style="padding-left: 40px; padding-right: 40px;">
+            <div class="mock-editor__upload">
                 <UploadFile
                     :fileType="resourceType"
                     :fileInfo="uploadFileInfo"
@@ -48,25 +66,27 @@
                 />
             </div>
 
-            <SmallTitle>{{$t('resourceName')}}</SmallTitle>
+            <SmallTitle>{{$t('mock.resourceName')}}</SmallTitle>
 
-            <div style="padding-left: 40px;">
+            <div class="mock-editor__name">
                 <el-input
                     :disabled="isUpdateResource"
                     :minlength="1"
                     :maxlength="60"
                     v-model="resourceName"
-                    :placeholder="$t('enterResourceName')"
-                    style="width: 590px;"
-                ></el-input>
+                    :placeholder="$t('mock.enterResourceName')"
+                    class="mock-editor__name__input"
+                />
 
-                <span style="color: #c3c3c3; font-size: 14px; font-weight: 500; padding-left: 10px;">{{resourceName.length}}/60</span>
+                <span
+                    class="mock-editor__name__length"
+                >{{resourceName.length}}/60</span>
             </div>
 
             <div style="height: 20px;"></div>
         </BlockBody>
 
-        <BlockBody :tilte="$t('dependency')">
+        <BlockBody :tilte="$t('mock.dependency')">
             <DependentReleaseList
                 :dataSource="depList"
                 :mockDataSource="depMockList"
@@ -77,15 +97,15 @@
             />
         </BlockBody>
 
-        <BlockBody :tilte="$t('description')">
+        <BlockBody :tilte="$t('mock.description')">
             <!--            ref="editor"-->
             <!--             v-model="formData.description"-->
             <!--            :config="editorConfig"-->
             <!--            @load="imgUploadSuccessHandler"-->
             <RichEditor
-                style="box-sizing: border-box; margin: 0;"
+                class="mock-editor__description"
                 width="100%"
-                :placeholder="$t('enterDescription')"
+                :placeholder="$t('mock.enterDescription')"
                 v-model="description"
             >
             </RichEditor>
@@ -95,22 +115,22 @@
             <div style="height: 35px;"></div>
             <el-button
                 round
-                style="background-color: #ececec; color: #666666; border: none;"
+                class="mock-editor__meta__button"
                 size="medium"
                 @click="showMetaInput"
-            ><i class="el-icon-plus" style="font-weight: 600;"></i> {{$t('addMeta')}}
+            ><i class="el-icon-plus"/> {{$t('mock.addMeta')}}
             </el-button>
         </div>
 
         <BlockBody
             v-if="visibleMetaInput"
-            :tilte="$t('metaInfo')">
+            :tilte="$t('mock.metaInfo')">
             <!-- meta 输入框 -->
             <!--            v-model="meta"-->
             <!--            @validate="checkMetaValid"-->
-            <!--            :placeholder="$t('resourceEditView.inputMetaTip')"-->
+            <!--            :placeholder="$t('mock.resourceEditView.inputMetaTip')"-->
             <div style="padding: 20px;">
-                <div style="border: 1px solid #E6E6E6;">
+                <div class="mock-editor__meta__input">
                     <MetaInfoInput
                         @validate="checkMetaValid"
                         v-model="metaInfo"
@@ -122,22 +142,23 @@
         <div style="height: 145px;"></div>
 
         <div
-            style="display: flex; align-items: center; justify-content: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #fff; height: 80px; box-shadow:0 -2px 5px 0 rgba(0,0,0,0.1);">
-            <div style="width: 1200px; text-align: right;">
+            class="mock-editor__footer"
+        >
+            <div class="mock-editor__footer__box">
                 <el-button
                     size="medium"
                     round
-                    style="color: #999999;"
+                    class="mock-editor__footer__box__cancel"
                     type="text"
                     @click="goBack"
-                >{{isUpdateResource ? $t('cancel'): $t('cancelCreating')}}
+                >{{isUpdateResource ? $t('mock.cancel'): $t('mock.cancelCreating')}}
                 </el-button>
                 <el-button
                     size="medium"
                     round
                     type="primary"
                     @click="submit"
-                >{{isUpdateResource ? $t('save'): $t('completeCreating')}}
+                >{{isUpdateResource ? $t('mock.save'): $t('mock.completeCreating')}}
                 </el-button>
             </div>
         </div>

@@ -1,16 +1,18 @@
+<!--<i18n src="./edit.i18n.json"></i18n>-->
 <template>
   <div class="release-editor-layout" v-if="release !== null">
     <div class="r-e-l-header clearfix">
       <div class="r-e-l-main-content">
         <div class="preview-box">
-          <UploadCover 
+          <UploadCover
             width="100"
             height="75"
+            multiple
             :imageUrl="coverImageUrl"
             :textVisible="false"
             :onUploaded="uploadCoverSuccess"
           ></UploadCover>
-          <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" >
+          <!-- <img :src="release.previewImages[0]" alt="" :class="{'resource-default-preview':!release.previewImages[0]}" > -->
         </div>
         <div class="cont">
           <div class="r-e-l-name">
@@ -27,25 +29,30 @@
                       type="text"
                       maxlength="100"
                       v-model="tmpReleaseName"
-                      placeholder="请输入发行名称"></el-input>
-              <el-button size="small" round type="primary" class="r-e-l-name-save" @click="saveEditName">保存</el-button>
-              <el-button size="small" round class="r-e-l-name-cancel" @click="cancelEditName">取消</el-button>
+                      :placeholder="$t('release.namePlaceholder')"></el-input>
+              <el-button size="small" round type="primary" class="r-e-l-name-save" @click="saveEditName">{{$t('release.save')}}</el-button>
+              <el-button size="small" round class="r-e-l-name-cancel" @click="cancelEditName">{{$t('release.cancelBtnText')}}</el-button>
             </template>
             <span class="r-e-l-version">{{selectedVersion || release.latestVersion.version}}</span>
-            <div class="r-e-l-state" v-if="releaseState !=1">
-              <el-tooltip :content="releaseStateText" placement="bottom" effect="light">
-                <i class="el-icon-warning"></i>
-              </el-tooltip>
-              未上线
+            <div class="r-e-l-state" >
+              <template v-if="releaseState === 1">
+                {{$t('release.online')}}
+              </template>
+              <template v-else>
+                <el-tooltip :content="releaseStateText" placement="bottom" effect="light">
+                  <i class="el-icon-warning"></i>
+                </el-tooltip>
+                {{$t('release.notOnline')}}
+              </template>
             </div>
           </div>
           <div class="r-e-l-info">
-            <span class="r-i-type">{{release.resourceType}}</span>
+            <span class="r-i-type">{{release.resourceType | pageBuildFilter}}</span>
             <span class="r-i-date">{{release.updateDate | fmtDate}}</span>
-            <span class="r-i-version">发行ID {{release.releaseId}}</span>
+            <span class="r-i-version">{{$t('release.releaseId')}} {{release.releaseId}}</span>
           </div>
           <div class="r-e-l-upcast" v-if="release.baseUpcastReleases.length > 0">
-            <strong>基础上抛</strong>
+            <strong>{{$t('release.basicUpcast')}}</strong>
             <span
                     class="upcast-release-item"
                     v-for="(item, index) in release.baseUpcastReleases"
@@ -57,16 +64,16 @@
     </div>
     <div class="r-e-l-main-content">
       <div class="r-e-l-row r-e-l-release" :class="{ 'tuck-up': isTuckUpRelease }">
-        <h3>发行相关 <i class="el-icon-arrow-up" @click="isTuckUpRelease = !isTuckUpRelease"></i></h3>
+        <h3>{{$t('release.aboutRelease')}} <i class="el-icon-arrow-up" @click="isTuckUpRelease = !isTuckUpRelease"></i></h3>
         <div class="cont">
           <div class="r-e-w-release-intro">
             <h4>
-              发行简介
+              {{$t('release.releaseIntro')}}
               <div class="r-e-w-btn-group">
-                <el-button type="primary" class="edit" size="mini" round v-if="!isEditingIntro && release.intro !== ''" @click="editIntroHandler">编辑</el-button>
+                <el-button type="primary" class="edit" size="mini" round v-if="!isEditingIntro && release.intro !== ''" @click="editIntroHandler">{{$t('release.editBtnText')}}</el-button>
                 <template v-if="isEditingIntro">
-                  <el-button type="primary" class="save" size="small" round @click="saveIntroHandler">保存</el-button>
-                  <el-button class="cnacel" size="small" round @click="cancelEditHandler">取消</el-button>
+                  <el-button type="primary" class="save" size="small" round @click="saveIntroHandler">{{$t('release.save')}}</el-button>
+                  <el-button class="cnacel" size="small" round @click="cancelEditHandler">{{$t('release.cancelBtnText')}}</el-button>
                 </template>
               </div>
             </h4>
@@ -75,29 +82,29 @@
             </div>
             <template v-else>
               <div class="r-e-w-edit-add-btn" v-if="release.intro === ''" @click="editIntroHandler">
-                添加简介
+                {{$t('release.addIntroBtnText')}}
               </div>
               <p v-else>{{release.intro}}</p>
             </template>
           </div>
           <div class="r-e-w-release-policy">
             <h4>
-              策略
-              <el-tooltip class="r-e-w-r-p-tip" effect="light" content="无策略的发行不会出现在市场中" placement="right" v-if="release.policies.length === 0 && !isShowEditPolicy">
+              {{$t('release.policy')}}
+              <!-- <el-tooltip class="r-e-w-r-p-tip" effect="light" :content="$t('tips[0]')" placement="right" v-if="release.policies.length === 0 && !isShowEditPolicy">
                 <i class="el-icon-warning"></i>
               </el-tooltip>
               <div class="r-e-w-btn-group" v-else>
                 <el-button type="primary" class="add" size="mini" round v-if="!isShowEditPolicy"  @click="addPolicyHandler"><i class="el-icon-plus"></i></el-button>
                 <template v-else>
-                  <el-button type="primary" class="save" size="small" round @click="savePolicyHandler">保存</el-button>
-                  <el-button class="cnacel" size="small" round @click="cancelPolicyHandler">取消</el-button>
+                  <el-button type="primary" class="save" size="small" round @click="savePolicyHandler">{{$t('saveBtnText')}}</el-button>
+                  <el-button class="cnacel" size="small" round @click="cancelPolicyHandler">{{$t('cancelBtnText')}}</el-button>
                 </template>
-              </div>
+              </div> -->
             </h4>
             <div style="position: relative;">
               <template v-if="!isShowEditPolicy">
                 <div class="r-e-w-r-policy-add-btn" v-if="release.policies.length === 0"  @click="addPolicyHandler">
-                  添加策略
+                  {{$t('release.addPolicyBtnText')}}
                 </div>
                 <div class="r-e-w-r-p-list" v-else>
                   <policy-list
@@ -108,17 +115,19 @@
                 </div>
               </template>
               <policy-editor
-                      :showFooterBtns="false"
+                      show-footer-btns
                       :policy="editTmpPolicy"
                       class="r-e-w-r-p-editor"
                       v-if="isShowEditPolicy"
+                      @save="savePolicyHandler"
+                      @cancel="cancelPolicyHandler"
               ></policy-editor>
             </div>
           </div>
         </div>
       </div>
       <div class="r-e-l-row r-e-l-r-version" :class="{ 'tuck-up': isTuckUpVersion }">
-        <h3>版本相关 <i class="el-icon-arrow-up" @click="isTuckUpVersion = !isTuckUpVersion"></i></h3>
+        <h3>{{$t('release.aboutVersion')}} <i class="el-icon-arrow-up" @click="isTuckUpVersion = !isTuckUpVersion"></i></h3>
         <div class="cont">
           <slot name="about-version"></slot>
         </div>
@@ -134,8 +143,7 @@
   import PolicyList from '@/components/PolicyList/list/index.vue'
   import policy from "../../../services/policy"
 
-  const defualtImageUrl = 'http://console.testfreelog.com/public/img/resource.jpg'
-  const releaseStateTexts = [ "未添加策略", "策略已停用" ]
+  const defualtImageUrl = '//frcdn.oss-cn-shenzhen.aliyuncs.com/console/img/resource.d29ef4da.jpg'
 
   export default {
     name: 'release-editor-layout',
@@ -150,12 +158,14 @@
     },
 
     data() {
+      const $i18n = this.$i18n
       return {
         tmpReleaseName: '',
         isEditingReleaseName: false,
         coverImageUrl: this.release.previewImages[0] || defualtImageUrl,
-        editTmpPolicy: { policyName: '未命名策略', policyText: '' },
+        editTmpPolicy: { policyName:  $i18n.t('release.tips1[3]'), policyText: '' },
         tempEditingIntro: this.release.intro,
+        releaseState: 0,
         releaseStateText: '',
         isShowEditPolicy: false,
         isEditingIntro: false,
@@ -185,15 +195,24 @@
             return data
           }).catch(this.$error.showErrorMessage)
       },
-      uploadCoverSuccess(url) {
+      uploadCoverSuccess(urls) {
+        var previewImages, coverImageUrl
+        if(typeof urls === 'string') {
+          previewImages = [ urls ]
+          coverImageUrl = urls
+        }else {
+          previewImages = urls
+          coverImageUrl = urls[0]
+        }
         this.updateRelease({
-          previewImages: [url]
-        }, '封面更新成功！')
+          previewImages,
+        }, this.$i18n.t('release.messages2[0]'))
         .then(() => {
-          this.coverImageUrl = url
+          this.coverImageUrl = coverImageUrl
         })
       },
       savePolicyHandler() {
+        const $i18n = this.$i18n
         const { policyName, policyText } = this.editTmpPolicy
 
         this.updateRelease({
@@ -202,9 +221,9 @@
               policyName, policyText: window.btoa(policyText)
             }]
           }
-        }, '策略添加成功！')
+        }, $i18n.t('release.messages2[1]'))
           .then(() => {
-            this.editTmpPolicy = { policyName: '未命名策略', policyText: '' }
+            this.editTmpPolicy = { policyName: $i18n.t('release.tips1[3]'), policyText: '' }
             this.isShowEditPolicy = false
           })
       },
@@ -221,10 +240,11 @@
           }
         })
           .then(() => {
+            const $i18n = this.$i18n
             if(policy.status === 1) {
-              this.$message({type: 'success', message: `策略"${policy.policyName}"已启用！`})
+              this.$message({type: 'success', message: `${$i18n.t('release.policy')}(${policy.policyName})${$i18n.t('release.enabled')}！`})
             }else if(policy.status === 0){
-              this.$message({type: 'warning', message: `策略"${policy.policyName}"已停用！`})
+              this.$message({type: 'warning', message: `${$i18n.t('release.policy')}(${policy.policyName})${$i18n.t('release.disabled')}！`})
             }
           })
       },
@@ -237,7 +257,8 @@
         this.tempEditingIntro = ''
       },
       saveIntroHandler() {
-        var successMsg = this.release.intro === '' ? '发行简介添加成功！' : '发行简介更新成功！'
+        const $i18n = this.$i18n
+        var successMsg = this.release.intro === '' ? $i18n.t('release.messages2[2]') : $i18n.t('release.messages2[3]')
         const intro = this.tempEditingIntro.replace(/^(\s*)|(\s*)$/g, '')
         this.updateRelease({ intro }, successMsg)
           .then(() => {
@@ -251,7 +272,7 @@
       saveEditName() {
         this.updateRelease({
           "releaseName": this.tmpReleaseName,
-        }, '发行名称更新成功！')
+        }, this.$i18n.t('release.messages2[4]'))
         .then((data) => {
           this.isEditingReleaseName = false
         })
@@ -261,6 +282,7 @@
         this.isEditingReleaseName = false
       },
       checkReleaseState() {
+        const releaseStateTexts = [ this.$i18n.t('release.tips1[1]'), this.$i18n.t('release.tips1[2]') ]
         const policies = this.release.policies
         const leng = policies.length
         if(leng > 0) {
@@ -296,10 +318,13 @@
 <style lang="less" type="text/less">
 .release-editor-layout {
   .preview-box {
-    #upload-cover {
+    .avatar-uploader {
       .el-upload {
-          border: none; border-radius: 2px;
-        }
+        border: none; border-radius: 2px;
+      }
+      .el-upload-dragger {
+        overflow: initial; border-width: 0;
+      }
     }
   }
 }

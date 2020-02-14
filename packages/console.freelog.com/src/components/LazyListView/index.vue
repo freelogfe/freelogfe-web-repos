@@ -13,9 +13,9 @@
                 :key="index"
                 class="show-up"
             >
-                <slot :data="item"></slot>
+                <slot :data="item"/>
             </li>
-            <slot name="append"></slot>
+            <slot name="append"/>
         </ul>
         <slot
             name="empty"
@@ -30,7 +30,7 @@
                 :element-loading-text="$t('components.lazyListView.loadingTip')"
                 element-loading-background="rgba(0,0,0,0)"
                 v-loading="isLoading > 0"
-            ></div>
+            />
         </slot>
     </div>
 </template>

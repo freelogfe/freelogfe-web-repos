@@ -3,16 +3,18 @@ import SmallTitle from '@/components/ResourceComponents/SmallTitle.vue';
 import DepList from '@/components/ResourceComponents/DepList.vue';
 import HeaderAlert from '@/components/ResourceComponents/HeaderAlert.vue';
 import UploadFile from '@/components/ResourceComponents/UploadFile/index.vue';
+import BreadCrumb from '@/components/BreadCrumb/index.vue';
 // import UploadCover from '@/components/ResourceComponents/UploadCover/index.vue';
 import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
-import i18n from './i18n';
+// import i18n from './i18n';
+import {COMMON_NAME_REGEXP} from '@/config/regexp';
 
 export default {
     name: 'editor',
-    i18n,
+    // i18n,
 
     components: {
         SmallTitle,
@@ -25,10 +27,13 @@ export default {
         MetaInfoInput,
         HeaderAlert,
         DependentReleaseList,
+        BreadCrumb
     },
 
     data() {
         return {
+            bucketName: '',
+
             isUpdateResource: !!this.$route.params.mockResourceId,
             // 资源类型选项
             resourceTypes: ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'],
@@ -87,6 +92,7 @@ export default {
             const res = await this.$axios.get(`/v1/resources/mocks/${mockResourceId}`);
             // console.log(res.data.data, 'res.data.datares.data.data');
             const result = res.data.data;
+            this.bucketName = result.bucketName;
             this.resourceType = result.resourceType;
             this.uploadFileInfo = {
                 fileID: '',
@@ -96,7 +102,7 @@ export default {
             };
             this.resourceName = result.name;
             // this.coverURL = result.previewImages[0] || '';
-            this.depList = result.systemMeta.dependencyInfo.releases.map(i => ({
+            const depList = result.systemMeta.dependencyInfo.releases.map(i => ({
                 id: i.releaseId,
                 name: i.releaseName,
                 version: i.versionRange,
@@ -110,16 +116,21 @@ export default {
 
             const res2 = await this.$axios.get('/v1/releases/list', {
                 params: {
-                    releaseIds: this.depList.map(i => i.id).join(','),
+                    releaseIds: depList.map(i => i.id).join(','),
                 }
             });
             // console.log(res2, 'res2res2res2res2');
-            this.depList = res2.data.data.map(i => ({
-                id: i.releaseId,
-                name: i.releaseName,
-                version: i.latestVersion.version,
-                isOnline: i.status === 1,
-            }));
+            this.depList = res2.data.data.map(i => {
+                const version = depList.find(j => j.id === i.releaseId).version;
+                return {
+                    id: i.releaseId,
+                    name: i.releaseName,
+                    // version: i.latestVersion.version,
+                    version,
+                    versions: i.resourceVersions.map(k => k.version),
+                    isOnline: i.status === 1,
+                };
+            });
         },
 
         /**
@@ -236,6 +247,10 @@ export default {
                 return this.$message.error(this.$t('pleaseSelectAResourceType'));
             }
 
+            if (this.uploadFileInfo.uploading) {
+                return this.$message.error(this.$t('fileUploading'));
+            }
+
             if (!this.uploadFileInfo.name) {
                 return this.$message.error(this.$t('pleaseUploadFiles'));
             }
@@ -245,8 +260,9 @@ export default {
                 return this.$message.error(this.$t('pleaseEnterAResourceName'));
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
-            if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
-                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > |`);
+            // if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
+            if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
+                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
@@ -273,7 +289,7 @@ export default {
             if (bucketName) {
                 const res = await this.$axios.post('/v1/resources/mocks', params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('creationFailed'));
+                    return this.$message.error(res.data.msg);
                 }
                 this.$message.success(this.$t('createdSuccessfully'));
                 return this.$router.replace(`/mock/update/${res.data.data.mockResourceId}`);
@@ -294,6 +310,15 @@ export default {
         goBack() {
             this.$router.back();
         },
-    }
+    },
+    // filters: {
+    //     pageBuildFilter: function (value) {
+    //         if (!value) return '';
+    //         if (value === 'page_build') {
+    //             return 'theme';
+    //         }
+    //         return value;
+    //     }
+    // }
 
 }

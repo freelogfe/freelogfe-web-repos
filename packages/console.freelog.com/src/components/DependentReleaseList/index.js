@@ -81,10 +81,15 @@ export default {
             );
         },
         addARelease(item) {
-            // console.log(item, 'ASDFASDCDSARFW');
+            console.log(item, 'ASDFASDCDSARFW');
             this.$emit('onChange', [
                 ...this.dataSource,
-                item,
+                {
+                    ...item,
+                    // version: '^' + item.version,
+                    version: (item.versions && item.versions.length > 0) ? '^' + item.versions[item.versions.length - 1] : '',
+                    // customVersion: false,
+                },
             ]);
         },
         addAMock(item) {

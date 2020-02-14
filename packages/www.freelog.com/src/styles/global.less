@@ -1,12 +1,25 @@
-#app{
-  //font-family: arial, Hiragino Sans GB, Microsoft Yahei;
-  font-family: 'Helvetica Neue', 'PingFang SC', 'microsoft yahei', arial, sans-serif;
+
+html body {
+  font: 12px/1.5  tahoma, arial;
+  * {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+      'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+
+[class^="el-icon-fa"], [class*=" el-icon-fa"] {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome !important;
+  font-size: inherit;
+  text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+color: #333333;
+}
 
 html {
-  background-color: #d3d3d32b;
+  background-color: #fff;
 }
 
 body {
@@ -24,6 +37,8 @@ i {
   font-style: normal;
 }
 
+ul, ol{ list-style: none; }
+
 @import url("../../node_modules/font-awesome/less/font-awesome");
 @import url("../../node_modules/font-awesome/css/font-awesome.css");
 @fa-css-prefix: el-icon-fa;
@@ -37,20 +52,6 @@ i {
   }
 }
 
-.app-footer {
-  text-align: center;
-  padding: 20px 0;
-  margin-top: 60px;
-  color: #6c6c6c;
-  font-size: 14px;
-  li {
-    display: inline-block;
-    margin: 0 20px;
-    a {
-      color: #6c6c6c;
-    }
-  }
-}
 
 .freelog-app-loading {
   &:before {

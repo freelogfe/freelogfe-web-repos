@@ -14,7 +14,7 @@
     <!--<tool-bar ref="toolbar"></tool-bar>-->
     <transition name="fade">
       <div class="pb-login-dialog" v-if="loginDialogVisible">
-        <FLogin class="pb-l-d-comp"></FLogin>
+        <FLogin class="pb-l-d-comp" show-close @close-dialog="loginDialogVisible = false"></FLogin>
       </div>
     </transition>
   </div>
@@ -23,6 +23,7 @@
 
 <script>
   import { FLogin } from '@freelog/freelog-ui-login'
+  import { ContractSigningDialog } from '@freelog/freelog-ui-contract'
   import { noop } from '../core/utils/util'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../core/events/names'
 
@@ -42,7 +43,7 @@
       }
     },
     components: {
-      FLogin
+      FLogin, ContractSigningDialog
     },
 
     computed: {
@@ -124,6 +125,7 @@
       },
 
       showAuthDialog({presentableList, activePresentableId, callback = noop}) {
+        
         if (typeof callback === 'function'){
           authCallback = callback
         }
@@ -190,6 +192,8 @@
 </script>
 
 <style lang="less">
+  @import "../styles/reset.css";
+  @import "../styles/loading.less";
   @import "./pagebuild.less";
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
@@ -198,3 +202,5 @@
     opacity: 0;
   }
 </style>
+
+Continuous Integration, Delivery & Deployment (CI/CD)

@@ -3,7 +3,7 @@
     <div class="node-content" :class="[data.contractType]">
       <div class="node-key" :class="{'active': data.key === activeKey}" @click="tapNodeKey(data)">
         <i class="el-icon-tickets">
-          <i class="el-icon-setting"></i>
+          <i class="el-icon-setting"/>
         </i>
       </div>
       <div class="node-label" @click="tapNodeContent(data)">{{data.label}}</div>
@@ -16,7 +16,7 @@
                 :activeKey.sync="childActiveKey"
                 @activate="showContract"
                 @inactivate="hideContract"
-        ></contract-tree>
+        />
       </div>
     </transition>
   </div>

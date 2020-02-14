@@ -1,18 +1,26 @@
+<!--<i18n src="./release-list.i18n.json"></i18n>-->
 <template>
   <section class="my-releases">
     <div class="m-r-header clearfix">
-      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">创建发行</el-button>
       <div class="right-tool-bar-wrap">
-        <search-input @search="searchHandler" showInputImmediately></search-input>
+        <el-input class="search-input" size="medium" ref="input" v-model="searchInputStr"
+          :class="{ 'focus': isInputFocus }"
+          :style="{width: '300px'}"
+          @focus="focusHandler"
+          @blur="blurHandler"
+          @keyup.enter.native="searchHandler(searchInputStr)">
+          <i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
+        </el-input>
       </div>
+      <el-button size="medium" type="primary" class="m-r-create-btn" @click="resourceDialogVisible = true">{{$t('release.createBtnText')}}</el-button>
     </div>
-    
+
     <release-items-list type="myReleases" :query="queryInput"></release-items-list>
 
     <el-dialog
             class="my-r-search-dialog"
             center
-            title="我的资源"
+            :title="$t('release.dialogTitle')"
             width="640px"
             :visible.sync="resourceDialogVisible"
     >
@@ -34,9 +42,12 @@ export default {
       resourceList: [],
       curTabName: 'self',
       queryInput: '',
-      resourceDialogVisible: false
+			searchInputStr: '',
+			isInputFocus: false,
+      resourceDialogVisible: false,
     }
   },
+
   components: {
     ReleaseItemsList,
     SearchInput,
@@ -44,12 +55,18 @@ export default {
   },
 
   methods: {
+		focusHandler() {
+			this.isInputFocus = true
+		},
+		blurHandler() {
+			this.isInputFocus = false
+		},
     searchHandler(str) {
       this.queryInput = str
     },
     createNewRelease(resource) {
       this.$router.push(`/release/create?resourceId=${resource.resourceId}`)
-    }
+    },
   },
 
   mounted() {
@@ -62,16 +79,15 @@ export default {
   .my-releases {
     width: @main-content-width-1190;
     margin: auto;
-    padding-top: 50px;
-    padding-left: 50px;
+    padding-top: 30px;
   }
   .m-r-header {
-    margin-bottom: 40px;
+    margin-bottom: 28px; text-align: right;
     .m-r-create-btn {
-      width:160px; border-radius: 2px;
+      width: 120px; margin-left: 18px; border-radius: 2px;
     }
     .right-tool-bar-wrap {
-      float: right;
+      display: inline-block;
     }
   }
   @media screen and (max-width: 1250px){
@@ -85,10 +101,11 @@ export default {
 .my-r-search-dialog {
   .el-dialog__body {
     overflow: auto;
-    height: 300px; margin: 0 20px; padding: 20px 50px 0; border-top: 1px solid #D8D8D8;
+    height: 300px; margin: 0 20px; padding: 20px 45px 0; border-top: 1px solid #D8D8D8;
 
     .el-input__inner { padding-left: 30px; }
   }
 }
+
 </style>
 

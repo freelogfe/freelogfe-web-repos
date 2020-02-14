@@ -1,120 +1,157 @@
 <template>
     <div class="manager-release">
+
         <div
-            style="background-color: #fafbfb; height: 135px; display: flex; align-items: center; justify-content: center;">
-            <div class="manager-release-header">
-                <img
-                    :src="releaseInfo.previewImages || undefined"
-                    style="width: 100px; height: 75px; flex-shrink: 0;"
-                    class="resource-default-preview"
-                />
-                <div
-                    style="height: 75px; width: 100%; flex-shrink: 1; display: flex; flex-direction: column; justify-content: space-between; padding-left: 20px;">
-                    <div style="display: flex; align-items: center;">
-                        <span
-                            style="font-size: 24px; color: #333; padding-right: 15px;">{{releaseInfo.releaseName}}</span>
-                        <span
-                            style="background-color: #d8d8d8; border-radius: 2px; line-height: 24px; color: #fff; padding: 0 5px; display: inline-block; font-size: 14px;">v{{releaseInfo.version}}</span>
-                    </div>
-                    <div style="font-size: 14px; color: #999;">
-                        <span>{{$t('type')}} {{releaseInfo.resourceType}}</span>
-                        <span style="padding: 0 5px;">|</span>
-                        <span>{{$t('signingTime')}} {{releaseInfo.createDate}}</span>
-                    </div>
-                </div>
-            </div>
+            style="margin: 0 auto; width: 1190px;"
+        >
+            <BreadCrumb
+                :list="[
+                    {text: releaseInfo.resourceType === 'page_build' ? $t('node.nodePageStyle') : $t('node.presentableManagement'), to: `/node/manager/${nodeId}`},
+                    {text: $t('node.presentableInfo')}
+                ]"
+            />
         </div>
 
-        <div class="manager-release-body">
+        <div style="height: 30px;"></div>
 
-            <ContentBlock :title="$t('nodeReleaseTitle')">
-                <DisplayOrInput
-                    v-model="presentableName"
-                />
-            </ContentBlock>
+        <OverviewHeader
+            v-if="!!releaseInfo"
+            :theID="releaseInfo.theID"
+            :previewSrc="releaseInfo.previewImages || undefined"
+            :title="releaseInfo.releaseName"
+            :type="'release'"
+            :resourceType="releaseInfo.resourceType | pageBuildFilter"
+            :version="releaseInfo.version"
+            :content="releaseInfo.intro"
+        />
+        <ModuleBlock>
 
-            <ContentBlock :title="$t('tags')">
-                <FreelogTags
-                    :actionText="$t('newTag')"
-                    v-model="userDefinedTags"
-                ></FreelogTags>
-            </ContentBlock>
-
-            <ContentBlock :title="$t('policies')">
-
-                <template v-slot:right>
-                    <template v-if="isShowEditPolicy">
-                        <el-button
-                            size="mini"
-                            round
-                            @click="switchShowEditPolicy(false)"
-                        >{{$t('cancel')}}
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            type="primary"
-                            round
-                            style="margin-left: 10px;"
-                            @click="saveANewPolicy"
-                        >{{$t('save')}}
-                        </el-button>
-                    </template>
-                    <div v-if="!isShowEditPolicy && policies.length > 0"
-                         style="height: 28px; display: flex; align-items: center;">
-                        <a
-                            style="width: 26px; height: 20px; align-items: center; justify-content: center; background-color: #409eff; border-radius: 10px; text-align: center;"
-                            @click="switchShowEditPolicy(true)"
-                        >
-                            <i class="el-icon-plus" style="font-weight: bolder; color: #fff; font-size: 12px;"></i>
-                        </a>
-                    </div>
-                    <el-popover
-                        v-if="!isShowEditPolicy && policies.length === 0"
-                        placement="top"
-                        trigger="hover"
-                        :content="$t('noPolicyNotAppear')"
+            <BlockItem :label="$t('node.status')">
+                <template v-if="releaseInfo.resourceType === 'page_build'">
+                    <div
+                        v-show="!isOnline"
+                        class="manager-release__state"
                     >
-                        <div style="height: 28px; display: flex; align-items: center;" slot="reference">
-                            <i
-                                class="el-icon-warning"
-                                style="font-size: 20px; color: #ffc210;"
-                            ></i>
-                        </div>
-                    </el-popover>
+                        <label>{{$t('node.inactive')}}</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >{{$t('node.active')}}</a>
+                    </div>
+                    <div
+                        v-show="isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>{{$t('node.activated')}}</label>
+                        <!--                    <a-->
+                        <!--                        @click="onLineAndOffLine"-->
+                        <!--                    >下线</a>-->
+                    </div>
                 </template>
+                <template v-else>
+                    <div
+                        v-show="!isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>{{$t('node.noOnline')}}</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >{{$t('node.action.online')}}</a>
+                    </div>
+                    <div
+                        v-show="isOnline"
+                        class="manager-release__state"
+                    >
+                        <label>{{$t('node.online')}}</label>
+                        <a
+                            @click="onLineAndOffLine"
+                        >{{$t('node.action.downline')}}</a>
+                    </div>
+                </template>
+            </BlockItem>
 
+            <BlockItem :label="$t('node.presentableName')">
+                <ConfirmInput
+                    :value="presentableName"
+                    @confirmChange="confirmChange"
+                />
+            </BlockItem>
+
+            <BlockItem
+                :label="$t('node.displayVersion')"
+                v-if="versions.length !== 0"
+            >
+                <el-select
+                    v-model="versionValue"
+                    class="manager-release__version"
+                >
+                    <el-option
+                        v-for="item in versions"
+                        :key="item"
+                        :label="item"
+                        :value="item">
+                    </el-option>
+                </el-select>
+            </BlockItem>
+
+            <BlockItem :label="$t('node.tags')">
+                <div style="height: 5px;"></div>
+                <FreelogTags
+                    v-model="userDefinedTags"
+                />
+            </BlockItem>
+
+            <BlockItem :label="$t('node.authorizationPolicy')">
                 <template v-if="!isShowEditPolicy">
                     <div
                         v-if="policies.length === 0"
+                        class="manager-release__policy"
                     >
                         <el-button
                             @click="switchShowEditPolicy(true)"
-                            size="small"
                             type="primary"
-                        >{{$t('addPolicy')}}
+                            size="small"
+                        >{{$t('node.addPolicy')}}
                         </el-button>
+                        <el-popover
+                            placement="top"
+                            trigger="hover"
+                            :content="$t('node.noPolicyNotAppear')"
+                        >
+                            <div
+                                slot="reference"
+                                class="manager-release__policy__warning"
+                            >
+                                <i
+                                    class="el-icon-warning"
+                                />
+                            </div>
+                        </el-popover>
                     </div>
-                    <div v-else>
-                        <!-- @add-policy="addPolicyHandler" -->
-                        <PolicyList
-                            :policyList="policies"
-                            @update-policies="updatePolicies"
-                        ></PolicyList>
-                    </div>
+                    <PolicyList
+                        v-if="policies.length > 0"
+                        class="manager-release__policy__list"
+                        @add-policy="switchShowEditPolicy(true)"
+                        :policyList="policies"
+                        @update-policies="updatePolicies"
+                    />
+                    <!--                        </div>-->
                 </template>
                 <!--                :policy="editTmpPolicy"-->
                 <PolicyEditor
                     :policy="newPolicie"
-                    :showFooterBtns="false"
+                    :showFooterBtns="true"
                     class="r-e-w-r-p-editor"
                     v-if="isShowEditPolicy"
-                ></PolicyEditor>
-            </ContentBlock>
+                    @save="saveANewPolicy"
+                    @cancel="switchShowEditPolicy(false)"
+                />
+            </BlockItem>
+        </ModuleBlock>
 
-            <ContentBlock :title="$t('authorization')">
-                <DisplayEditContracts/>
-            </ContentBlock>
-        </div>
+        <ContentBlock :title="$t('node.authorization')">
+            <DisplayEditContracts/>
+        </ContentBlock>
+        <!--        </div>-->
         <div style="height: 65px;"></div>
     </div>
 </template>
@@ -122,33 +159,13 @@
 <script>
     import ManagerRelease from './index.js';
 
+
     export default ManagerRelease;
 </script>
 
 <style lang="less" scoped>
     @import '../../../styles/variables.less';
-
-    .manager-release-header {
-        width: @main-content-width-1190;
-        display: flex;
-    }
-
-    .manager-release-body {
-        width: @main-content-width-1190;
-        margin: 0 auto;
-    }
-
-    @media screen and (max-width: 1250px) {
-        .manager-release-header {
-            width: @main-content-width-990;
-            display: flex;
-        }
-
-        .manager-release-body {
-            width: @main-content-width-990;
-            margin: 0 auto;
-        }
-    }
+    @import "index";
 
 </style>
 

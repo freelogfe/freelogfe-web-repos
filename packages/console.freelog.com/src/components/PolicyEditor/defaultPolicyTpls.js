@@ -20,10 +20,12 @@ const PresentableFreePolicy = `for public:
 
 export const release = [
   {
+    type: 'free',
     template: ReleaseFreePolicy,
     name: i18n.t('components.policyEditor.defaultPolicyNames.free')
   },
   {
+    type: 'charge',
     template: `for public:
   escrow account acct
   custom event acceptor.customEvent
@@ -49,24 +51,27 @@ export const release = [
 
 export const presentable = [
   {
+    type: 'free',
     template: PresentableFreePolicy,
     name: i18n.t('components.policyEditor.defaultPolicyNames.free')
   },
   {
-    template: `for public:
-  escrow account acct
-  custom event acceptor.customEvent
+    type: 'charge',
+    template: `
+    for public:
+      escrow account acct
+      custom event acceptor.customEvent
 
-  initial:
-    proceed to auth on acct exceed 1 feather
-  auth:
-    presentable
-    active
-    proceed to refund on acct.confiscated
-  refund:
-    proceed to finish on acct.refunded
-  finish:
-    terminate`,
+      initial:
+        proceed to auth on acct exceed 1 feather
+      auth:
+        presentable
+        active
+        proceed to refund on acct.confiscated
+      refund:
+        proceed to finish on acct.refunded
+      finish:
+        terminate`,
     name: i18n.t('components.policyEditor.defaultPolicyNames.charge')
   }
 ]

@@ -1,9 +1,10 @@
+
 <template>
   <div class="releases-search-wrapper">
     <el-tabs v-model="activeName">
 
       <!-- 全局搜索 -->
-      <el-tab-pane v-if="tabLayout.indexOf('search') !== -1" :label="$t('search.searchTitle')" name="search">
+      <el-tab-pane v-if="tabLayout.indexOf('search') !== -1" :label="$t('release.search.searchTitle')" name="search">
         <div class="search-input-area">
           <el-input v-model="searchInput"
                     class="search-release-input"
@@ -11,7 +12,7 @@
                     ref="searchInputRef"
                     @clear="clearSearchInputHandler"
                     @keyup.native.enter="searchHandler"
-                    :placeholder="$t('search.placeholder')"></el-input>
+                    :placeholder="$t('release.search.placeholder')"></el-input>
         </div>
         <lazy-list-view :list="searchReleases"
                         ref="searchView"
@@ -27,7 +28,7 @@
         </lazy-list-view>
       </el-tab-pane>
 
-      <el-tab-pane v-if="tabLayout.indexOf('my-release') !== -1" :label="$t('search.myRelease')" name="my-release">
+      <el-tab-pane v-if="tabLayout.indexOf('my-release') !== -1" :label="$t('release.search.myRelease')" name="my-release">
         <lazy-list-view :list="myReleases" class="search-release-list" :height="60" :fetch="fetchMyData">
           <template slot-scope="scope">
             <release-item
@@ -36,10 +37,12 @@
                     :release="scope.data"
                     @add="addToReleaseHandler"></release-item>
           </template>
-          <div class="no-release-items" slot="empty">{{$t('search.noFavorReleases')}}</div>
+<!--          <div class="no-release-items" slot="empty">{{$t('release.search.noFavorReleases')}}</div>-->
+          <div class="no-release-items" slot="empty">暂无相同类型发行</div>
         </lazy-list-view>
       </el-tab-pane>
-      <el-tab-pane v-if="tabLayout.indexOf('favor') !== -1" :label="$t('search.favorTitle')" name="favor">
+
+      <el-tab-pane v-if="tabLayout.indexOf('favor') !== -1" :label="$t('release.search.favorTitle')" name="favor">
         <lazy-list-view :list="favorReleases" class="search-release-list" :height="60" :fetch="fetchFavorData">
           <template slot-scope="scope">
             <release-item
@@ -48,7 +51,7 @@
                     :release="scope.data"
                     @add="addToReleaseHandler"></release-item>
           </template>
-          <div class="no-release-items" slot="empty">{{$t('search.noFavorReleases')}}</div>
+          <div class="no-release-items" slot="empty">{{$t('release.search.noFavorReleases')}}</div>
         </lazy-list-view>
       </el-tab-pane>
 
@@ -65,7 +68,7 @@
                   clearable
                   ref="mockSearchInputRef"
                   @keyup.native.enter="mockSearchHandler"
-                  :placeholder="$t('search.placeholder')">
+                  :placeholder="$t('release.search.placeholder')">
           </el-input>
         </div>
         <!--                :fetch="mockSearchReleases"-->
@@ -106,6 +109,9 @@
       type: {
         type: String,
         default: 'release'
+      },
+      releaseSource: {
+        type: Object
       },
       historicalReleases: {
         type: Array,
@@ -185,7 +191,8 @@
             dataList: []
           })
         }
-        return this.myLoader({page, isSelf: 1}).then((data) => {
+        const params = Object.assign({page, isSelf: 1}, { resourceType: this.releaseSource ? this.releaseSource.resourceType : null })
+        return this.myLoader(params).then((data) => {
           this.myReleases = this.myReleases.concat(data.dataList)
           if (data.dataList.length < pageSize) {
             data.canLoadMore = false
@@ -318,7 +325,7 @@
   .releases-search-wrapper {
     .el-tabs__content {
       overflow: auto;
-      min-height: 260px; height: 360px;  
+      min-height: 260px; height: 360px;
     }
     .search-input-area {
       margin: 20px 0;

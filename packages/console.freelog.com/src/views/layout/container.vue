@@ -1,6 +1,6 @@
 <template>
   <transition name="content">
-    <router-view :key="key"></router-view>
+    <router-view :key="key"/>
   </transition>
 </template>
 
