@@ -1,4 +1,4 @@
-export default {
+{
     "createBtnText": "Create Resource",
     "createNewReleaseText": "Create a New Release",
     "resourceListTitle": "Resource List",
@@ -51,4 +51,4 @@ export default {
         "upgradeBtnText": "upgrade",
         "editBtnText": "edit"
     }
-};
+}
