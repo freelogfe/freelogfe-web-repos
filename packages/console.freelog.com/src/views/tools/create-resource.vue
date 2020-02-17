@@ -26,7 +26,7 @@
 <!--</template>-->
 
 <!--<script>-->
-<!--import { RESOURCE_TYPES } from '@/config/resource.js'-->
+<!--import { RESOURCE_TYPES } from '@/config/resource.json'-->
 <!--export default {-->
 <!--  name: "batch-operation",-->
 <!--  data() {-->

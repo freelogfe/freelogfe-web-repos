@@ -8,7 +8,7 @@ module.exports = {
   },
   crossorigin: 'anonymous',
   configureWebpack: {
-    entry: "./examples/main.js",
+    entry: "./examples/main.json",
     resolve: {
       extensions: ['.js', '.vue', '.json'],
       alias: {

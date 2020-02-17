@@ -2,7 +2,7 @@
   <div id="f-operation">
     <div class="fo-main-content">
       <el-steps :active="activeIndex" finish-status="finish" simple style="margin-bottom: 50px;">
-        <el-step 
+        <el-step
           class="fo-step-item"
           v-for="(step, index) in stepList"
           :key="'step' + index"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { RESOURCE_TYPES } from '@/config/resource.js'
+import { RESOURCE_TYPES } from '@/config/resource.json'
 export default {
   name: "batch-operation",
   data() {
@@ -76,7 +76,7 @@ export default {
         }else {
           this.$services.resource.post({
             uploadFileId,
-            aliasName: fileName, 
+            aliasName: fileName,
             description: "",
             dependencies: []
           })
@@ -131,7 +131,7 @@ export default {
         this.$message.error('请先添加文件')
         return
       }
-      
+
       this.$confirm(`资源类型为${resourceType}, 是否继续?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -150,26 +150,26 @@ export default {
 
 <style lang="less" scoped>
   @import '../../styles/variables.less';
-  #f-operation {   
+  #f-operation {
     padding-top: 20px;
 
     .fo-main-content{
       width: @main-content-width-1190;
       margin: auto;
-      
+
       .fo-resource-list-box, .fo-release-list-box, .fo-presentables-list-box {
         display: none; padding: 0 0 30px;
         &.visible {
           display: block;
         }
-      } 
+      }
       .upload-operation-box {
         width: 500px; margin: 0 auto 20px;
         .fo-upload-select {
           margin-right: 10px;
         }
       }
-      
+
       .fo-upload-wrapper {
         padding: 20px 0; text-align: center;
         .upload-box {
@@ -178,7 +178,7 @@ export default {
       }
     }
   }
-  
+
 
   @media screen and (max-width: 1250px) {
     .fo-main-content{
@@ -199,7 +199,7 @@ export default {
       }
       .el-upload-list {
         text-align: left;
-        .el-upload-list__item { 
+        .el-upload-list__item {
           &:first-child { margin-top: 5px; }
         }
       }
