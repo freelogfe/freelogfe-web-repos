@@ -1,10 +1,10 @@
-import common from './common';
-import components from './components';
+import common from './common.json';
+import components from './components.json';
 import routes from './routes';
 
 import mock from './mock';
 import node from './node';
-import layout from './layout';
+import layout from './layout.json';
 import resource from './resource';
 import release from './release';
 import policy from './policy';
