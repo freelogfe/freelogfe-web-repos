@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { RESOURCE_TYPES } from '@/config/resource.json'
+import { RESOURCE_TYPES } from '@/config/resource.js'
 export default {
   name: "batch-operation",
   data() {

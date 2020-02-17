@@ -6,7 +6,7 @@ const srcDir = path.resolve(__dirname, '../src')
 
 module.exports = {
   entry: {
-    'app': path.resolve(__dirname, '../src/main.json')
+    'app': path.resolve(__dirname, '../src/main.js')
   },
 
   output: {
