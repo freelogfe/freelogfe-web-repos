@@ -1,17 +1,1 @@
-{
-  "tabs": [
-    "Release Market",
-    "Node Examples"
-  ],
-  "releaseSearchPlaceholder": "Search for custom types",
-  "releaseEmptyIntro": "No detailed description...",
-  "pbTags": [
-    "all"
-  ],
-  "pbDemo": "Demo preview",
-  "useTheTheme": "Use the theme now",
-  "pbUsageBtns": [
-    "Expand",
-    "See how to use"
-  ]
-}
+{"releaseSearchPlaceholder":"Search for custom types","tabs":["Release Market","Node Examples"],"releaseEmptyIntro":"No detailed description...","pbTags":["all"],"pbDemo":"Demo preview","useTheTheme":"Use the theme now","pbUsageBtns":["Expand","See how to use"],"test":{"022":"54321"}}
