@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const instance = axios.create({
   baseURL: getBaseURL(),
-  timeout: 1e4,
+  timeout: 15e3,
   withCredentials: true,
   headers: {
     // 'X-Requested-With': 'XMLHttpRequest'
