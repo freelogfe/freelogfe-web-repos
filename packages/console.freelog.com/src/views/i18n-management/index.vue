@@ -13,10 +13,10 @@
       </div>
       <el-button-group>
         <el-button 
-          :type="item.value === mode ? 'primary' : 'default'" 
+          :type="item.mode === mode ? 'primary' : 'default'" 
           v-for="item in modes" 
-          :key="item.value"
-          @click="mode = item.value">
+          :key="item.mode"
+          @click="mode = item.mode">
           {{item.label}}
           <i :class="[item.icon]"></i>
         </el-button>
@@ -34,6 +34,9 @@
             <i class="el-icon-circle-plus-outline" v-show="!isPushing"></i>
           </el-button>
         </el-badge>
+        <div class="imc-github-user" v-if="githubUser != null">
+          Signed in as <a :href="githubUser.html_url">{{githubUser.login}}</a> 
+        </div>
         <div class="imc-repos-commit-box">
           <p>Commit Message: <span style="color: #F56C6C;" v-if="commitMsg === ''">不能为空</span></p>
           <el-input type="textarea" :rows="2" v-model="commitMsg"></el-input>
@@ -49,6 +52,9 @@
           <el-button type="primary" size="mini" :disabled="commitMsg === ''" @click="commitAndPushChanges">提交</el-button>
         </div>
       </el-popover>
+      <!-- <el-button type="primary" v-if="showGithubOAuthBtn">
+        <a :href="githubOAuthUrl">GitHub oAuth</a>
+      </el-button> -->
     </div>
     <div class="i-m-main-content" v-if="selectedRepository != null">
       <component 
@@ -64,6 +70,7 @@
 <script>
 import FileEditView from './file-edit.vue'
 import ModuleEditView from './module-edit.vue'
+import NamespaceEditView from './namespace-edit.vue'
 import { codemirror, codeMirrorOptions } from '@/lib/codemirror'
 import 'codemirror/mode/javascript/javascript'
 import objectPath from 'object-path'
@@ -72,7 +79,7 @@ const throttle = require('lodash/throttle')
 const cacheJSONString = {}
 export default {
   name: 'i18n-manament-home',
-	components: { codemirror, FileEditView, ModuleEditView },
+	components: { codemirror, FileEditView, ModuleEditView, NamespaceEditView },
   data() {
     return {
       trackedRepositories: [],
@@ -81,28 +88,32 @@ export default {
       selectedReposChanges: [],
       targetReposChangesText: '提交变更',
       modes: [
-        { value: 'file-edit', label: '文件编辑模式', icon: 'el-icon-files' }, 
-        { value: 'module-edit', label: '模块编辑模式', icon: 'el-icon-edit-outline' }
+        { id: 'FileEditView', mode: 'file-edit', label: '文件编辑模式', icon: 'el-icon-files' }, 
+        { id: 'ModuleEditView', mode: 'module-edit', label: '模块编辑模式', icon: 'el-icon-edit-outline' }, 
+        { id: 'NamespaceEditView', mode: 'namespace-edit', label: 'Key Edit Mode', icon: 'el-icon-edit-outline' }
       ],
-      mode: 'module-edit',
-      subComponents: [ 'FileEditView', 'ModuleEditView' ],
+      mode: 'namespace-edit',
       showUpdatePopover: false,
       showEmptyCommitError: false,
       commitMsg: '',
-      isPushing: false
+      isPushing: false,
+      showGithubOAuthBtn: false,
+      githubUser: null
     }
   },
   computed: {
     targetComponentId() {
-      switch(this.mode) {
-        case 'file-edit': {
-          return this.subComponents[0]
-        }
-        case 'module-edit': {
-          return this.subComponents[1]
+      const leng = this.modes.length
+      for (let i = 0; i < leng; i++) {
+        if (this.mode === this.modes[i].mode) {
+          return this.modes[i].id
         }
       }
-    }
+      return ''
+    },
+    githubOAuthUrl() {
+      return `https://github.com/login/oauth/authorize?client_id=874c97335a3e4df726af&redirect_uri=${encodeURIComponent(window.location.href)}`
+    },
   },
   methods: {
     async fetchTrackedRepositories() {
@@ -150,12 +161,15 @@ export default {
       console.log(this.commitMsg, changes)
       try {
         this.isPushing = true
+        const accessToken = localStorage.getItem('github_access_toekn')
         const result = await this.$axios.post('//i18n.testfreelog.com/v1/i18n/trackedRepository/changes/push', {
           repositoryName: this.selectedReposName,
-          commitMsg: this.commitMsg
+          commitMsg: this.commitMsg,
+          accessToken: accessToken,
         }, { timeout: 30e3 }).then(res => res.data)
         if (result.errcode === 0) {
           this.showUpdatePopover = false
+          this.selectedReposChanges = []
           this.$message.success('提交成功！')
         } else {
           this.$message.error(result.msg)
@@ -165,12 +179,37 @@ export default {
         console.log('commitAndPushChanges - e', e)
       } finally {
         this.isPushing = false
-      }
-        
+      }  
     },
+    async getGithubUserInfo () {
+      const accessToken = localStorage.getItem('github_access_toekn')
+      if (accessToken != null) {
+        const result = await this.$axios.get(`/v1/i18n/getGithubUserInfo?accessToken=${accessToken}`).then(res => res.data)
+        if (result.errcode === 0) {
+          this.githubUser = result.data
+          return 
+        }
+      }
+      this.showGithubOAuthBtn = true
+    },
+    async refreshGithubAccessToken() {
+      if (this.$route.query.code) {
+        const result = await this.$axios.post('/v1/i18n/getGithubAccessToken', {
+          client_id: '874c97335a3e4df726af',
+          client_secret: '3009d76fc4b7ed4914cfa57019166e8d764625fe',
+          code: this.$route.query.code
+        }).then(res => res.data)
+        if (result.errcode === 0) {
+          localStorage.setItem('github_access_toekn', result.data.access_token) 
+          return result.data.access_token
+        }
+      }
+    }
   },
-  mounted() {
+  async mounted() {
     this.fetchTrackedRepositories()
+    await this.refreshGithubAccessToken()
+    await this.getGithubUserInfo()
   },
 }
 </script>
@@ -206,7 +245,10 @@ export default {
     }
   }
 }
-
+.imc-github-user {
+  margin-bottom: 10px;
+  a { text-decoration: underline; }
+}
 .imc-repos-commit-box { 
   margin-bottom: 15px;
   p { margin-bottom: 10px; }
