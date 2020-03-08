@@ -266,35 +266,35 @@ export default {
         async submit() {
 
             if (this.uploadFileInfo.uploading) {
-                this.$message.error(this.$t('fileUploading'));
+                this.$message.error(this.$t('resource.fileUploading'));
                 throw new Error('文件正在上传中');
             }
 
             if (!this.isUpdateResource) {
                 if (!this.resourceType) {
-                    this.$message.error(this.$t('pleaseSelectAResourceType'));
+                    this.$message.error(this.$t('resource.pleaseSelectAResourceType'));
                     throw new Error('请选择资源类型');
                 }
 
                 if (!this.uploadFileInfo.name) {
-                    this.$message.error(this.$t('pleaseUploadFiles'));
+                    this.$message.error(this.$t('resource.pleaseUploadFiles'));
                     throw new Error('请上传文件');
                 }
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                this.$message.error(this.$t('pleaseEnterAResourceName'));
+                this.$message.error(this.$t('resource.pleaseEnterAResourceName'));
                 throw new Error('请输入资源名称');
             }
 
             if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
-                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
+                this.$message.error(`${this.$t('resource.resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
                 throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
-                this.$message.error(`meta JSON${this.$t('formattingErrors')}`);
+                this.$message.error(`meta JSON${this.$t('resource.formattingErrors')}`);
                 throw new Error('meta JSON格式有误');
             }
 
@@ -318,9 +318,9 @@ export default {
                 const res = await this.$axios.post('/v1/resources', params);
                 if (res.data.errcode !== 0) {
                     this.$message.error(res.data.msg);
-                    throw new Error(this.$t('creationFailed'));
+                    throw new Error(this.$t('resource.creationFailed'));
                 }
-                this.$message.success(this.$t('createdSuccessfully'));
+                this.$message.success(this.$t('resource.createdSuccessfully'));
                 this.targetResourceData = res.data.data
                 return res.data.data.resourceId;
             } else {
@@ -328,7 +328,7 @@ export default {
                 const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
                 if (res.data.errcode !== 0) {
                     this.$message.error(res.data.msg);
-                    throw new Error(this.$t('saveFailed'));
+                    throw new Error(this.$t('resource.saveFailed'));
                 }
                 this.targetResourceData = res.data.data
                 this.$message.success('保存成功');
@@ -350,7 +350,7 @@ export default {
          */
         async onSubmitButtonClick(bool) {
             if (bool && this.depList.some(i => !i.isOnline)) {
-                return this.$message.error(this.$t('releaseAreNotOnline'));
+                return this.$message.error(this.$t('resource.releaseAreNotOnline'));
             }
             const resourceId = await this.submit();
             if (!bool) {
@@ -379,7 +379,7 @@ export default {
             } else {
                 this.$message({
                     type: 'warning',
-                    message: this.$t('selectedTypeMustBeRelease') + this.resourceType
+                    message: this.$t('resource.selectedTypeMustBeRelease') + this.resourceType
                 })
             }
             // console.log(releaseInfo, 'releaseInforeleaseInforeleaseInforeleaseInfo');
