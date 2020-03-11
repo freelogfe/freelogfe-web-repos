@@ -62,6 +62,7 @@ export default ResetView
 </script>
 
 <style lang="less" scoped>
+  @import "../../styles/mixin.less";
   .reset-password-section {
     header {
       .reset-password-intro { 
@@ -109,6 +110,19 @@ export default ResetView
         font-size: 14px; color: #999; 
         a { color: #409EFF; } 
       }
+    }
+
+    .reset-password-error-box {
+      .error-box()
+    }
+  }
+</style>
+
+<style lang="less">
+  @import "../../styles/mixin.less";
+  .reset-password-section {
+    .el-alert {  
+      .error-alert()
     }
   }
 </style>

@@ -21,7 +21,7 @@
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
                     <!-- <a @click="gotoUserProfile">个人中心</a> -->
-                    <router-link to="/login" >{{$t('navTop[1]')}}</router-link>
+                    <a @click="logout">{{$t('navTop[1]')}}</a>
                 </div>
             </a>
         </div>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+    import { logout } from '@freelog/freelog-ui-login'
 
     export default {
         name: "index",
@@ -94,6 +95,9 @@
                         window.location.reload();
                     }).catch(() => {
                 })
+            },
+            logout() {
+                logout().catch(this.$error.showErrorMessage)
             },
         }
     }

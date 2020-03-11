@@ -80,7 +80,7 @@
 		"loginEmailPlaceholder": "请输入邮箱地址",
 		"emptyEmailTip": "邮箱地址不能为空",
 		"username": "用户名",
-		"usernamePlaceholder": null,
+		"usernamePlaceholder": "请输入用户名称（1-30个字符、数字或-）",
 		"password": "密码",
 		"passwordPlaceholder": "密码必须包含数字和字母；且由6-24个字符组成",
 		"checkPassword": "确认密码",

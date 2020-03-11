@@ -33,18 +33,19 @@
 </template>
 
 <script>
-import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils";
+import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils"
 import {
   SIGN_PATH,
   RESET_PASSWORD_PATH,
   LOGIN_NAME,
   USER_SESSION,
   LAST_AUTH_INFO
-} from "../../constant";
-import FToast from "../toast/index.vue";
+} from "../../constant"
+import { loginSuccessHandler } from '../../login'
 import {validateLoginName} from '../../validator'
-import en from '@freelog/freelog-i18n/ui-login/en';
-import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
+import en from '@freelog/freelog-i18n/ui-login/en'
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
+import FToast from "../toast/index.vue"
 
 export default {
   name: "f-login",
@@ -72,15 +73,14 @@ export default {
         {
           required: true,
           message: $i18n.t("login.validateErrors.loginName_empty"),
-          trigger: "blur"
+          trigger: "change"
         },
-        { validator: validateLoginName.bind(this), trigger: "blur" }
       ],
       password: [
         {
           required: true,
           message: $i18n.t("login.ruleMessages[1]"),
-          trigger: "blur"
+          trigger: "change"
         },
         { min: 6, message: $i18n.t("login.ruleMessages[2]"), trigger: "blur" }
       ]
@@ -139,13 +139,13 @@ export default {
           isRememer: this.rememberUser ? 1 : 0
         })
 
-        this.fetchLogin(data).then(userInfo => {
-          this.afterLogin(userInfo)
+        this.loginRequest(data).then(userInfo => {
+          loginSuccessHandler(userInfo, this.$route.query.redirect)
+          this.$emit("after-login-success")
         })
       })
     },
-    fetchLogin(data) {
-      this.error = null
+    loginRequest(data) {
       this.loading = true
       return this.$axios
         .post("/v1/passport/login", data)
@@ -159,66 +159,41 @@ export default {
           return Promise.reject(res.data.msg)
         })
         .catch(err => {
-          console.log(err);
           this.$emit("after-login-fail")
           const $i18n = this.$i18n
+          let errMsg = ''
           if (typeof err === "string") {
-            this.error = { title: "", message: err }
+            errMsg = err
           } else {
-            this.error = {
-              title: $i18n.t("login.errorTitle"),
-              message: err.response.errorMsg || $i18n.t("login.errors[0]")
-            }
+            errMsg = err.response.errorMsg || $i18n.t("login.errors[0]")
             switch (err.response && err.response.status) {
               case 401:
-                this.error.message = $i18n.t("login.errors[1]")
+                errMsg = $i18n.t("login.errors[1]")
                 break
               case 500:
-                this.error.message = $i18n.t("login.errors[2]")
+                errMsg = $i18n.t("login.errors[2]")
                 break
               default:
-                this.error.message = $i18n.t("login.errors[3]")
+                errMsg = $i18n.t("login.errors[3]")
             }
           }
+          this.$message.error(errMsg)
           this.loading = false
         })
     },
-    afterLogin(userInfo) {
-      if (userInfo == null) return 
-      this.$emit("after-login-success")
-      const win = window
-      setItemForStorage(USER_SESSION, userInfo)
-      setItemForStorage(LOGIN_NAME, userInfo.loginName)
-      const lastAuthInfo = getItemFromStorage(LAST_AUTH_INFO)
-      var targetLink = '/'
-      if(lastAuthInfo && lastAuthInfo.userId === userInfo.userId) {
-        const redirect = this.$route.query.redirect
-        if (isSafeUrl(redirect)) {
-          targetLink = redirect
-        }
-      }
-      window.location.replace(targetLink)
-    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../styles/mixin.less";
 .login-section {
   position: relative;
   width: 550px; height: auto;
 
   .login-body {
     .login-error-box {
-      .el-icon-close {
-        position: absolute; top: 4px; right: 4px; z-index: 10;
-        padding: 6px;
-        font-size: 16px; cursor: pointer;
-      }
-      .el-alert { 
-        margin-top: 10px; margin-bottom: 20px; padding: 16px 20px 20px; border: 1px solid #ECBCBC; 
-        background-color: #F7ECEC;
-      }
+      .error-box()
     }
 
     .login-password {
@@ -252,15 +227,13 @@ export default {
 </style>
 
 <style lang="less">
-  .el-alert {  
-    .el-alert__content {
-      padding-right: 12px;
-      font-size: 14px;
-      .el-alert__description {
-        font-size: 14px; color: #DA3F3F;
-      }
+  @import "../../styles/mixin.less";
+  .login-section {
+    .el-alert {  
+      .error-alert()
     }
   }
+  
   @media screen and (max-width: 768px) {
     .login-section {
       .login-sc-operation {

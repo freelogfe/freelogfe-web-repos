@@ -8,6 +8,12 @@ const steps = ['authCode', 'success']
 const remainTimer = 3
 export default {
   name: 'f-reset-password',
+  props: {
+    showClose: {
+      type: Boolean,
+      default: false
+    }
+  },
   i18n: {
     messages: {
       en,
@@ -93,8 +99,6 @@ export default {
         if (!valid) {
           return
         }
-
-        this.error = null
         this.loading = true
 
         this.$axios.post('/v1/userinfos/resetPassword', this.model).then((res) => {
@@ -104,23 +108,25 @@ export default {
             // let redirect = this.$route.query.redirect
             // this.$router.push({ query: { redirect } })
           } else {
-            this.error = { title: '', message: res.data.msg }
+            this.$message.error(res.data.msg)
           }
           this.loading = false
         }).catch((err) => {
           this.loading = false
-          this.error = { title: this.$t('resetPassword.errorTitle'), message: this.$t('resetPassword.defaultErrorMsg') }
+          let errMsg = ''
+          errMsg = this.$t('resetPassword.defaultErrorMsg')
 
           switch (err.response && err.response.status) {
             case 401:
-              this.error.message = this.$t('resetPassword.identifyError')
+              errMsg = this.$t('resetPassword.identifyError')
               break
             case 500:
-              this.error.message = this.$t('resetPassword.serverError')
+              errMsg = this.$t('resetPassword.serverError')
               break
             default:
-              this.error.message = this.$t('resetPassword.appError')
+              errMsg = this.$t('resetPassword.appError')
           }
+          this.$message.error(errMsg)
         })
       })
     },

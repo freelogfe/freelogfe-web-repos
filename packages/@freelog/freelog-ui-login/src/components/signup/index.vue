@@ -9,7 +9,7 @@
     <div class="signup-body">
       <div class="signup-error-box">
         <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
-        <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
+        <el-alert type="error" @close="closeErrorElert" :title="error.title" :description="error.message" v-if="error" />
       </div>
       <el-form class="signup-form" auto-complete="off" :model="model" :rules="rules" ref="signupForm">
         <el-form-item prop="username" :label="$t('signup.username')">
@@ -83,6 +83,7 @@ export default SignupView
 </style>
 
 <style lang="less">
+@import "../../styles/mixin.less";
 .signup-section {
   .signup-register-type-box {
     .signup-radios {
@@ -93,5 +94,12 @@ export default SignupView
     }
   }
 }
+
+.signup-section {
+  .el-alert {  
+    .error-alert()
+  }
+}
+
   
 </style>
