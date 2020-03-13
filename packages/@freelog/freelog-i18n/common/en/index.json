@@ -2,5 +2,6 @@
 	"no_description": "No description provided.",
 	"password_include": "Make sure it's at least including a number and a letter.",
 	"password_length": "Make sure it's including 6- 8 characters.",
-	"not_verified_contact": "That mobile phone number / email address is not associated with a  user account. "
+	"not_verified_contact": "That mobile phone number / email address is not associated with a  user account. ",
+	"wrong_verified_code": "The code you entered is incorrect. "
 }
