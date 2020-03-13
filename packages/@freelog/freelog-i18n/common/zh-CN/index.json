@@ -1,3 +1,4 @@
 {
-	"no_description": "暂无简介"
+	"no_description": "暂无简介",
+	"password_include": "密码必须包含数字和字母"
 }

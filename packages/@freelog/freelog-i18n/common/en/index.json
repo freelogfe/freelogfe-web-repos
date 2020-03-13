@@ -1,3 +1,4 @@
 {
-	"no_description": "No description provided."
+	"no_description": "No description provided.",
+	"password_include": "Make sure it's at least including a number and a letter."
 }
