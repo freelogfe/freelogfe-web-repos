@@ -19,10 +19,9 @@
           </el-form-item>
           <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
             <div>
-              <el-input type="text" v-model="model.authCode" style="width: 280px"></el-input>
+              <el-input ref="authCodeInput" type="text" v-model="model.authCode" style="width: 280px"></el-input>
               <el-button class="vcode-btn" style="width: 110px"
-                        @click="sendCheckCodeNotifyHandler"
-                        :disabled="disabledCheckCodeBtn">
+                        @click="sendCheckCodeNotifyHandler">
                 {{vcodeBtnText}}
               </el-button>
             </div>

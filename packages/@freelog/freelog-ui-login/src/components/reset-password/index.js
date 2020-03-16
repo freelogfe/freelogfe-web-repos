@@ -1,6 +1,6 @@
 import { isSafeUrl } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
-import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
+import { EMAIL_REG, PHONE_REG, validateLoginName, validatePassword } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en';
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
@@ -25,14 +25,18 @@ export default {
     // form validate rules
     const rules = {
       loginName: [
-        { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'blur' },
-        { validator: validateLoginName.bind(this), trigger: 'blur' }
+        { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'change' },
+        // { validator: validateLoginName.bind(this), trigger: 'blur' },
       ],
       authCode: [
-        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'change' },
+        { min: 6, max: 6, message: this.$t('signup.authCodeLengthRule'), trigger: 'blur' },
       ],
       password: [
-        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
+        { required: true, message: this.$t('resetPassword.inputPasswordTip'), trigger: 'change' },
+        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
+        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
+        { validator: validatePassword.bind(this), trigger: 'blur' },
       ]
     }
     
@@ -131,6 +135,12 @@ export default {
       })
     },
     sendCheckCodeNotifyHandler() {
+      this.$refs.authCodeInput.focus()
+      this.$refs.authCodeInput.blur()
+      if (!(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName))) {
+        this.$message.error(this.$t('resetPassword.wrongLoginName'))
+        return 
+      }
       if (this.sending || !this.model.loginName) return
 
       this.sending = true
