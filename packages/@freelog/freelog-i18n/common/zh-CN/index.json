@@ -4,5 +4,6 @@
 	"password_length": "密码长度必须为6-24个字符",
 	"not_verified_contact": "该手机号码/电子邮箱没有关联任何用户账户，无法用于重设密码。",
 	"wrong_verified_code": "验证码错误",
-	"test00": ""
+	"test00": "",
+	"wrong_username_password": "账户或密码错误"
 }
