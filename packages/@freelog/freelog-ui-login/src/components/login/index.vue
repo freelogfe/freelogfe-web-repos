@@ -42,7 +42,7 @@ import {
   LAST_AUTH_INFO
 } from "../../constant"
 import { loginSuccessHandler } from '../../login'
-import {validateLoginName} from '../../validator'
+import { EMAIL_REG, PHONE_REG } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 import FToast from "../toast/index.vue"
@@ -82,7 +82,7 @@ export default {
           message: $i18n.t("login.ruleMessages[1]"),
           trigger: "change"
         },
-        { min: 6, message: $i18n.t("login.ruleMessages[2]"), trigger: "blur" }
+        // { min: 6, message: $i18n.t("login.ruleMessages[2]"), trigger: "blur" }
       ]
     };
     const loginName = window.localStorage.getItem("loginName") || "";
@@ -128,21 +128,41 @@ export default {
       }
       return link
     },
-    submit(ref) {
-      const self = this
-      this.$refs[ref].validate(valid => {
-        if (!valid) {
-          return
+    validate(loginName, password) {
+      var errMsgs = [] 
+      if (loginName === '') {
+        errMsgs.push(this.$t('login.validateErrors.loginName_empty'))
+      } else {
+        if (!EMAIL_REG.test(loginName) && !PHONE_REG.test(loginName)) {
+          errMsgs.push(this.$t('login.validateErrors.loginName'))
         }
+      }
+      if (password.length < 6) {
+        if (password === '') {
+          errMsgs.push(this.$t('login.ruleMessages[1]'))
+        } else {
+          errMsgs.push(this.$t('login.ruleMessages[2]'))
+        }
+      }
+      
+      if (errMsgs.length > 0) {
+        this.$message.error(errMsgs[0])
+        return false
+      } else {
+        return true
+      }
+    },
+    submit(ref) {
+      const { loginName, password } = this.model
+      if (!this.validate(loginName, password)) return 
+      const data = {
+        loginName, password,
+        isRememer: this.rememberUser ? 1 : 0
+      }
 
-        const data = Object.assign(this.model, {
-          isRememer: this.rememberUser ? 1 : 0
-        })
-
-        this.loginRequest(data).then(userInfo => {
-          loginSuccessHandler(userInfo, this.$route.query.redirect)
-          this.$emit("after-login-success")
-        })
+      this.loginRequest(data).then(userInfo => {
+        loginSuccessHandler(userInfo, this.$route.query.redirect)
+        this.$emit("after-login-success")
       })
     },
     loginRequest(data) {

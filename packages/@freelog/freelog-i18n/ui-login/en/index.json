@@ -41,6 +41,7 @@
       "Please fill in the mobile phone number/email address used during registration to receive the verification code. After successful verification, you can reset your password"
     ],
     "loginName": "Username/Mobile/Email",
+		"wrongLoginName": "Account format error: please enter the correct mobile phone number or email",
     "loginNamePlaceholder": "Phone number or email",
     "password": "password",
     "backToLoginTexts": [
@@ -97,7 +98,9 @@
     "checkPasswordInputTip": "Enter your password again",
     "inconsistentPasswordTip": "inconsistent password",
     "authCodeInputTip": "enter check code",
-    "passwordLengthRule": "At least 6 characters in length",
+		"authCodeLengthRule": "The length of the verification code is 6 characters",
+		"passwordLengthRule1": "At least 6 characters in length",
+		"passwordLengthRule2": "At most 6 characters in length",
     "sendingText": "sending",
     "timerText": "Resend after {time} seconds",
     "checkcodeBtnText": "Get verification code",

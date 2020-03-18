@@ -24,7 +24,7 @@
 		"ruleMessages": [
 			"请输入账号",
 			"请输入密码",
-			"长度至少6个字符"
+			"密码长度至少6个字符"
 		],
 		"errorTitle": "发生错误",
 		"errors": [
@@ -40,7 +40,8 @@
 			"忘记密码？",
 			"请填写注册时使用的手机号/邮箱以便接收验证码，验证成功后可以重置您的密码"
 		],
-		"loginName": "用户名/手机号/邮箱",
+		"loginName": "手机号/邮箱",
+		"wrongLoginName": "账号格式有误：请输入正确的手机号或邮箱",
 		"loginNamePlaceholder": "请输入手机号或邮箱",
 		"password": "新密码",
 		"backToLoginTexts": [
@@ -97,7 +98,9 @@
 		"checkPasswordInputTip": "请再次输入密码",
 		"inconsistentPasswordTip": "两次输入密码不一致",
 		"authCodeInputTip": "请输入验证码",
-		"passwordLengthRule": "长度至少6个字符",
+		"authCodeLengthRule": "验证码长度为6个字符",
+		"passwordLengthRule1": "长度至少6个字符",
+		"passwordLengthRule2": "长度至多24个字符",
 		"sendingText": "发送中...",
 		"timerText": "{time}秒后重发",
 		"checkcodeBtnText": "获取验证码",

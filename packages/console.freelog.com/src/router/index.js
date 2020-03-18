@@ -15,7 +15,6 @@ import mockRoute from './mock'
 import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
-import i18nManagementRoute from './i18n-management'
 
 import { i18nStance } from '@/lib/index'
 import {getCookieLocale, getUserInfoFromLocalStorage} from "../lib/utils";
@@ -53,7 +52,6 @@ const routerConfig = {
                 mockRoute,
                 alphaTestRoute,
                 batchOperationRoute,
-                i18nManagementRoute,
                 // {
                 //     path: 'about',
                 //     hidden: true,

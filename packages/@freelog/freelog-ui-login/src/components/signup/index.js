@@ -1,6 +1,6 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
-import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
+import {validateLoginIphone, validateLoginEmail, validateUsername, validatePassword, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
 import { loginSuccessHandler } from '../../login'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
@@ -21,17 +21,6 @@ export default {
   },
 
   data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('signup.passwordInputTip')))
-      } else {
-        if (this.model.checkPassword !== '') {
-          this.$refs.signupForm.validateField('checkPassword')
-        }
-        callback()
-      }
-    }
-
     const validateCheckPassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('signup.checkPasswordInputTip')))
@@ -44,29 +33,31 @@ export default {
 
     const rules = {
       loginIphone: [
-        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change'},
-        {validator: validateLoginIphone.bind(this), trigger: 'blur'}
+        { required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change' },
+        { validator: validateLoginIphone.bind(this), trigger: 'blur'}
       ],
       loginEmail: [
-        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change'},
-        {validator: validateLoginEmail.bind(this), trigger: 'change'}
+        { required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change' },
+        { validator: validateLoginEmail.bind(this), trigger: 'blur'}
       ],
       username: [
-        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change'},
-        {validator: validateUsername.bind(this), trigger: 'blur'}
+        { required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change' },
+        { validator: validateUsername.bind(this), trigger: 'blur'}
       ],
       password: [
-        {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change'},
-        {validator: validatePassword, trigger: 'blur'},
-        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
+        { required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change' },
+        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
+        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
+        { validator: validatePassword.bind(this), trigger: 'blur' },
       ],
       checkPassword: [
-        {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change'},
-        {validator: validateCheckPassword},
-        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
+        { required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change' },
+        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
+        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
       ],
       authCode: [
-        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change'},
+        { required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change' },
+        { min: 6, max: 6, message: this.$t('signup.authCodeLengthRule'), trigger: 'blur' }
       ]
     }
     const model = {
@@ -131,9 +122,11 @@ export default {
       })
       if (this.selectedRegisterType === this.registerTypes[0]) {
         this.model.loginIphone = this.model.loginEmail
+        this.model.loginEmail = ''
       }
       if (this.selectedRegisterType === this.registerTypes[1]) {
         this.model.loginEmail = this.model.loginIphone
+        this.model.loginIphone = ''
       }
     }
   },
@@ -196,7 +189,7 @@ export default {
             password: data['password'],
             isRemember: 1
           })
-          loginSuccessHandler(userInfo, this.$route.query.redirect)
+          loginSuccessHandler(userInfo)
         } catch(e) {
           this.$router.push(LOGIN_PATH)
           console.error(e)
