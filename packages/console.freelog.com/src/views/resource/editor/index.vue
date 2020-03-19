@@ -176,6 +176,8 @@
             </div>
         </div>
 
+        <CreateReleaseModal v-if="true"/>
+
         <el-dialog
             width="750px"
             top="10vh"
