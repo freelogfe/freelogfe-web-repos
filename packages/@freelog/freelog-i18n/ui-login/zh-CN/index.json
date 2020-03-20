@@ -19,7 +19,8 @@
 			"email": "输入格式有误，请输入正确的邮箱",
 			"loginName": "账号格式有误",
 			"loginName_empty": "账号不能为空",
-			"password_empty": "密码不能为空"
+			"password_empty": "密码不能为空",
+			"wrong_username_password": "账户或密码错误"
 		},
 		"ruleMessages": [
 			"请输入账号",

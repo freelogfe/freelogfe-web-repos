@@ -19,7 +19,8 @@
       "email": "The account format is incorrect，Please enter your email address",
       "loginName": "Account format error",
       "loginName_empty": "Account cannot be empty",
-      "password_empty": "Password cannot be empty"
+      "password_empty": "Password cannot be empty",
+			"wrong_username_password": "Wrong account or password"
     },
     "ruleMessages": [
       "please enter the account",

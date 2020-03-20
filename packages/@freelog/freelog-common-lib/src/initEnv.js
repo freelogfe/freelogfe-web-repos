@@ -15,6 +15,9 @@ export default function initEnv() {
 }
 
 export function getEnvType() {
+  if (location.port !== '') {
+    return 'dev'
+  }
   const host = window.location.host
   if (/^localhost/.test(host) || /^\d+\.\d+\.\d+\.\d+/.test(host)) {
     // 是否为本地开发环境

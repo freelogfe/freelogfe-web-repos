@@ -146,7 +146,7 @@ export default {
       }
       
       if (errMsgs.length > 0) {
-        this.$message.error(errMsgs[0])
+        // this.$message.error(errMsgs[0])
         return false
       } else {
         return true
@@ -154,7 +154,10 @@ export default {
     },
     submit(ref) {
       const { loginName, password } = this.model
-      if (!this.validate(loginName, password)) return 
+      if (!this.validate(loginName, password)) {
+        this.$message.error(this.$t('login.validateErrors.wrong_username_password'))
+        return 
+      } 
       const data = {
         loginName, password,
         isRememer: this.rememberUser ? 1 : 0
