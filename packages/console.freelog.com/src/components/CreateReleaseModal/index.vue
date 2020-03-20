@@ -18,21 +18,30 @@
             </div>
 
             <div class="body">
-<!--                :end="dataEnd"-->
-<!--                :endText="(data && data.length === 0) ? $t('noConditions') : ''"-->
-<!--                @toBottom="toBottom"-->
+
                 <LazyLoadingBox
-                    v-if="true"
+                    v-if="totalItem !== 0"
+                    :end="isEnd"
+                    @toBottom="loadingMore"
                 >
-                    <div class="release">
+                    <div v-for="data in dataList" class="release">
                         <div>
-                            <div style="color: #222; font-weight: 600; font-size: 14px;">我的发行1</div>
+                            <div style="color: #222; font-weight: 600; font-size: 14px;">
+                                {{data.releaseName.replace(data.username + '/', '')}}
+                            </div>
                             <div style="height: 5px;"/>
-                            <div style="font-size: 12px; color: #999;">markdown | 2019-02-10</div>
+                            <div style="font-size: 12px; color: #999;">{{data.resourceType | pageBuildFilter}} |
+                                {{data.updateDate.split('T')[0]}}
+                            </div>
                         </div>
                         <AddButton/>
                     </div>
                 </LazyLoadingBox>
+
+                <div
+                    style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"
+                    v-if="totalItem === 0"
+                >您还没有对应的发行</div>
             </div>
         </div>
     </div>
@@ -47,6 +56,60 @@
         components: {
             AddButton,
             LazyLoadingBox,
+        },
+        props: {
+            // filter 的资源类型
+            resourceType: {
+                type: String,
+                default: 'json',
+            },
+            // 需要指定禁用的release
+            disabledReleaseIDs: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            },
+        },
+        data() {
+            return {
+                page: 1,
+                dataList: [],
+                isEnd: false,
+                totalItem: -1,
+            };
+        },
+        mounted() {
+            document.body.style.overflowY = 'hidden';
+            this.loadData();
+        },
+        methods: {
+            async loadData() {
+                const params = {
+                    page: this.page,
+                    pageSize: 10,
+                    isSelf: 1,
+                    resourceType: this.resourceType
+                };
+                const {data} = await this.$axios.get('/v1/releases', {
+                    params,
+                });
+                // console.log(data, 'responseresponse');
+                if (data.ret !== 0 || data.errcode !== 0) {
+                    return this.$message.error(data.msg);
+                }
+
+                this.dataList = [
+                    ...this.dataList,
+                    ...data.data.dataList,
+                ];
+                this.totalItem = data.data.totalItem;
+                this.isEnd = this.page * 10 >= data.data.totalItem;
+            },
+            loadingMore() {
+                this.page += 1;
+                this.loadData();
+            },
         }
     }
 </script>
@@ -110,6 +173,7 @@
 
                 flex-shrink: 1;
                 height: 100%;
+                overflow: hidden;
 
                 .release {
                     padding: 12px 0;
