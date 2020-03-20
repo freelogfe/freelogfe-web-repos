@@ -10,9 +10,20 @@
                     </a>
                 </div>
 
-                <template v-if="totalItem !== 0">
+                <template v-if="!noDate">
                     <div style="height: 30px;"/>
-                    <div style="display: flex; justify-content: flex-end;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <el-input
+                            v-model="input"
+                            placeholder="请输入内容"
+                            size="small"
+                            style="width: 240px;"
+                        >
+                            <i
+                                class="el-input__icon el-icon-search"
+                                slot="prefix"
+                            />
+                        </el-input>
                         <a
                             class="create-new"
                             @click="$emit('createNew')"
@@ -25,7 +36,7 @@
             <div class="body">
 
                 <div
-                    v-if="totalItem === 0"
+                    v-if="noDate"
                     style="text-align: center;"
                 >
                     <div style="height: 140px;"/>
@@ -40,14 +51,20 @@
                 </div>
 
                 <LazyLoadingBox
-                    v-if="totalItem !== 0"
+                    v-if="!noDate"
                     :end="isEnd"
                     @toBottom="loadingMore"
+                    :endText="(dataList || []).length !== 0 ? '' : '无搜索结果'"
                 >
                     <div v-for="data in dataList" class="release">
                         <div>
-                            <div style="color: #222; font-weight: 600; font-size: 14px;">
-                                {{data.releaseName.replace(data.username + '/', '')}}
+                            <div
+                                style="color: #222; font-weight: 600; font-size: 14px; display: flex; align-items: center;">
+                                <span>{{data.releaseName.replace(data.username + '/', '')}}</span>
+                                <label
+                                    style="background-color: #FFAB00; color: #fff; font-size: 12px; line-height: 20px; border-radius: 10px; padding: 0 8px; margin-left: 10px;"
+                                    v-if="disabledReleaseIDs.includes(data.releaseId)"
+                                >历史发行</label>
                             </div>
                             <div style="height: 5px;"/>
                             <div style="font-size: 12px; color: #999;">{{data.resourceType | pageBuildFilter}} |
@@ -97,9 +114,11 @@
         },
         data() {
             return {
+                input: '',
                 page: 1,
                 dataList: [],
                 isEnd: false,
+                noDate: false,
                 totalItem: -1,
             };
         },
@@ -113,7 +132,8 @@
                     page: this.page,
                     pageSize: 10,
                     isSelf: 1,
-                    resourceType: this.showType
+                    resourceType: this.showType,
+                    keywords: encodeURIComponent(this.input),
                 };
                 const {data} = await this.$axios.get('/v1/releases', {
                     params,
@@ -127,13 +147,20 @@
                     ...this.dataList,
                     ...data.data.dataList,
                 ];
-                this.totalItem = data.data.totalItem;
+                this.noDate = data.data.totalItem === 0 && this.input === '';
                 this.isEnd = this.page * 10 >= data.data.totalItem;
             },
             loadingMore() {
                 this.page += 1;
                 this.loadData();
             },
+        },
+        watch: {
+            input() {
+                this.page = 1;
+                this.dataList = [];
+                this.loadData();
+            }
         }
     }
 </script>
