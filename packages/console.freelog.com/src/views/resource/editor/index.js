@@ -8,6 +8,7 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
+import CreateReleaseModal from '@/components/CreateReleaseModal/index.vue';
 // import i18n from './i18n';
 import ReleasedItem from "./ReleasedItem";
 import {COMMON_NAME_REGEXP} from '@/config/regexp';
@@ -26,6 +27,7 @@ export default {
         RichEditor,
         MetaInfoInput,
         // HeaderAlert,
+        CreateReleaseModal,
     },
 
     data() {

@@ -244,29 +244,29 @@ export default {
          */
         async submit() {
             if (!this.resourceType) {
-                return this.$message.error(this.$t('pleaseSelectAResourceType'));
+                return this.$message.error(this.$t('mock.pleaseSelectAResourceType'));
             }
 
             if (this.uploadFileInfo.uploading) {
-                return this.$message.error(this.$t('fileUploading'));
+                return this.$message.error(this.$t('mock.fileUploading'));
             }
 
             if (!this.uploadFileInfo.name) {
-                return this.$message.error(this.$t('pleaseUploadFiles'));
+                return this.$message.error(this.$t('mock.pleaseUploadFiles'));
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                return this.$message.error(this.$t('pleaseEnterAResourceName'));
+                return this.$message.error(this.$t('mock.pleaseEnterAResourceName'));
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
             // if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
             if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
-                return this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
+                return this.$message.error(`${this.$t('mock.resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
-                return this.$message.error('meta JSON' + this.$t('formattingErrors'));
+                return this.$message.error('meta JSON' + this.$t('mock.formattingErrors'));
             }
 
             const {bucketName, mockResourceId} = this.$route.params;
@@ -291,16 +291,16 @@ export default {
                 if (res.data.errcode !== 0) {
                     return this.$message.error(res.data.msg);
                 }
-                this.$message.success(this.$t('createdSuccessfully'));
+                this.$message.success(this.$t('mock.createdSuccessfully'));
                 return this.$router.replace(`/mock/update/${res.data.data.mockResourceId}`);
             }
 
             if (mockResourceId) {
                 const res = await this.$axios.put(`/v1/resources/mocks/${mockResourceId}`, params);
                 if (res.data.errcode !== 0) {
-                    return this.$message.error(this.$t('saveFailed'));
+                    return this.$message.error(this.$t('mock.saveFailed'));
                 }
-                this.$message.success(this.$t('saveSuccess'));
+                this.$message.success(this.$t('mock.saveSuccess'));
             }
 
         },
