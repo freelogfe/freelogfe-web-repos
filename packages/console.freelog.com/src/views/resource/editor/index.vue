@@ -176,30 +176,38 @@
             </div>
         </div>
 
-        <CreateReleaseModal v-if="true"/>
 
-        <el-dialog
-            width="750px"
-            top="10vh"
-            center
-            :visible.sync="isShowReleaseSearchDialog"
-        >
-            <!--            :historicalReleases="releasesList"-->
-            <release-search
-                :release-source="targetResourceData"
-                :tabLayout="['my-release']"
-                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"
-                @add="createRelease"
-            />
-            <div slot="footer">
-                <el-button
-                    round
-                    type="primary"
-                    class="create-release-btn"
-                    @click="createRelease()">{{$t('resource.createANewRelease')}}
-                </el-button>
-            </div>
-        </el-dialog>
+        <CreateReleaseModal
+            v-if="isShowReleaseSearchDialog"
+            @close="isShowReleaseSearchDialog = false"
+            :disabledReleaseIDs="this.releasedList.map(i => i.id)"
+            @addRelease="createRelease"
+            @createNew="createRelease"
+            :showType="resourceType"
+        />
+
+<!--        <el-dialog-->
+<!--            width="750px"-->
+<!--            top="10vh"-->
+<!--            center-->
+<!--            :visible="false"-->
+<!--        >-->
+<!--            &lt;!&ndash;            :historicalReleases="releasesList"&ndash;&gt;-->
+<!--            <release-search-->
+<!--                :release-source="targetResourceData"-->
+<!--                :tabLayout="['my-release']"-->
+<!--                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"-->
+<!--                @add="createRelease"-->
+<!--            />-->
+<!--            <div slot="footer">-->
+<!--                <el-button-->
+<!--                    round-->
+<!--                    type="primary"-->
+<!--                    class="create-release-btn"-->
+<!--                    @click="createRelease()">{{$t('resource.createANewRelease')}}-->
+<!--                </el-button>-->
+<!--            </div>-->
+<!--        </el-dialog>-->
     </div>
 </template>
 

@@ -39,7 +39,7 @@
                         </div>
                         <AddButton
                             :disabled="disabledReleaseIDs.includes(data.releaseId)"
-                            @click="$emit('addRelease', data.releaseId)"
+                            @click="$emit('addRelease', data)"
                         />
                     </div>
                 </LazyLoadingBox>
@@ -66,7 +66,7 @@
         },
         props: {
             // filter 的资源类型
-            resourceType: {
+            showType: {
                 type: String,
                 default: 'json',
             },
@@ -96,7 +96,7 @@
                     page: this.page,
                     pageSize: 10,
                     isSelf: 1,
-                    resourceType: this.resourceType
+                    resourceType: this.showType
                 };
                 const {data} = await this.$axios.get('/v1/releases', {
                     params,
