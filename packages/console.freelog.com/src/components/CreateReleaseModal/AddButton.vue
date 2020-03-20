@@ -1,10 +1,19 @@
 <template>
-    <a class="">加入</a>
+    <a
+        :class="{disabled: disabled}"
+        @click="!disabled && $emit('click')"
+    >加入</a>
 </template>
 
 <script>
     export default {
-        name: "AddButton"
+        name: "AddButton",
+        props: {
+            disabled: {
+                type: Boolean,
+                default: false,
+            },
+        }
     }
 </script>
 
@@ -29,7 +38,7 @@
             opacity: .4;
             cursor: not-allowed;
 
-            &:hover{
+            &:hover {
                 background-color: rgba(39, 132, 255, .1);
                 color: #2784FF;
             }

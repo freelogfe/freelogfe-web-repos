@@ -3,16 +3,19 @@
         <div class="box">
             <div class="header">
                 <div class="title">
-                    <div></div>
+                    <div/>
                     <div>创建发行</div>
-                    <a style="cursor: pointer;">
+                    <a style="cursor: pointer;" @click="$emit('close')">
                         <i style="font-size: 12px; color: #333;" class="el-icon-close"></i>
                     </a>
                 </div>
 
                 <div style="height: 30px;"/>
                 <div style="display: flex; justify-content: flex-end;">
-                    <a class="create-new">创建新发行</a>
+                    <a
+                        class="create-new"
+                        @click="$emit('createNew')"
+                    >创建新发行</a>
                 </div>
                 <div style="height: 20px;"/>
             </div>
@@ -34,14 +37,18 @@
                                 {{data.updateDate.split('T')[0]}}
                             </div>
                         </div>
-                        <AddButton/>
+                        <AddButton
+                            :disabled="disabledReleaseIDs.includes(data.releaseId)"
+                            @click="$emit('addRelease', data.releaseId)"
+                        />
                     </div>
                 </LazyLoadingBox>
 
                 <div
                     style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"
                     v-if="totalItem === 0"
-                >您还没有对应的发行</div>
+                >您还没有对应的发行
+                </div>
             </div>
         </div>
     </div>
