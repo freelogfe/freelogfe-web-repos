@@ -180,7 +180,7 @@
         <CreateReleaseModal
             v-if="isShowReleaseSearchDialog"
             @close="isShowReleaseSearchDialog = false"
-            :disabledReleaseIDs="this.releasedList.map(i => i.id)"
+            :disabledReleaseIDs="releasedList.map(i => i.id)"
             @addRelease="createRelease"
             @createNew="createRelease"
             :showType="resourceType"
