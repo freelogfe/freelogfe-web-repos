@@ -10,17 +10,34 @@
                     </a>
                 </div>
 
-                <div style="height: 30px;"/>
-                <div style="display: flex; justify-content: flex-end;">
-                    <a
-                        class="create-new"
-                        @click="$emit('createNew')"
-                    >创建新发行</a>
-                </div>
-                <div style="height: 20px;"/>
+                <template v-if="totalItem !== 0">
+                    <div style="height: 30px;"/>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <a
+                            class="create-new"
+                            @click="$emit('createNew')"
+                        >创建新发行</a>
+                    </div>
+                    <div style="height: 20px;"/>
+                </template>
             </div>
 
             <div class="body">
+
+                <div
+                    v-if="totalItem === 0"
+                    style="text-align: center;"
+                >
+                    <div style="height: 140px;"/>
+                    <div style="font-size: 20px; color: #222;">第一次发行资源？</div>
+                    <div style="height: 30px;"/>
+                    <div style="color: #666; font-size: 14px;">资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。</div>
+                    <div style="height: 40px;"/>
+                    <a
+                        class="create-first"
+                        @click="$emit('createNew')"
+                    >创建我的第一个发行</a>
+                </div>
 
                 <LazyLoadingBox
                     v-if="totalItem !== 0"
@@ -44,11 +61,11 @@
                     </div>
                 </LazyLoadingBox>
 
-                <div
-                    style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"
-                    v-if="totalItem === 0"
-                >您还没有对应的发行
-                </div>
+                <!--                <div-->
+                <!--                    style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"-->
+                <!--                    v-if="totalItem === 0"-->
+                <!--                >您还没有对应的发行-->
+                <!--                </div>-->
             </div>
         </div>
     </div>
@@ -181,6 +198,22 @@
                 flex-shrink: 1;
                 height: 100%;
                 overflow: hidden;
+
+                .create-first {
+                    line-height: 50px;
+                    padding: 0 30px;
+                    background-color: #2784FF;
+                    color: #fff;
+                    display: inline-block;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #529DFF;
+                    }
+                }
 
                 .release {
                     padding: 12px 0;
