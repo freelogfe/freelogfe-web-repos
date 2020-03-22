@@ -59,13 +59,13 @@
             <SmallTitle>{{$t('resource.resourceFile')}}</SmallTitle>
 
             <div
-                v-if="isUpdateResource"
+                v-if="isUpdateResource && !!fileSystemInfo"
                 style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"
             >
                 <div>wx20190115-144233@2x.png</div>
                 <div>
-                    <span style="padding-right: 40px;">290 KB</span>
-                    <a><i class="el-icon-download"></i></a>
+                    <span style="padding-right: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
+                    <a :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"><i class="el-icon-download"/></a>
                 </div>
             </div>
 
