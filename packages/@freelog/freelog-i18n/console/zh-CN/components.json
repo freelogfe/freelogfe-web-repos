@@ -132,5 +132,16 @@
     "已置顶",
     "已停用",
     "已启用"
-  ]
+  ],
+  "CreateReleaseModal": {
+    "createRelease": "创建发行",
+    "pleaseInput": "请输入内容",
+    "createNewRelease": "创建新发行",
+    "firstResources": "第一次发行资源？",
+    "asNewRelease": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
+    "createFirst": "创建我的第一个发行",
+    "noResult": "无搜索结果",
+    "history": "历史发行",
+    "update": "更新"
+  }
 }
