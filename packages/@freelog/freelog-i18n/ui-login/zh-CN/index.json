@@ -117,7 +117,10 @@
 			"username_empty": "用户名称不能为空",
 			"iphone": "",
 			"iphone_empty": "手机号不能为空",
-			"email_empty": "邮箱地址不能为空"
+			"email_empty": "邮箱地址不能为空",
+			"iphone_registered": "电话号码已被注册",
+			"Email_registered": "邮箱地址已被注册",
+			"verifyCode_wrong": "验证码输入错误"
 		}
 	}
 }

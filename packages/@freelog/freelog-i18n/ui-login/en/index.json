@@ -117,7 +117,10 @@
       "username_empty": "User name cannot be empty",
       "iphone": "",
       "iphone_empty": "Phone number cannot be empty",
-      "email_empty": "Email address cannot be empty"
+      "email_empty": "Email address cannot be empty",
+			"iphone_registered": "The phone number has been registered",
+      "Email_registered": "The email address has been registered",
+			"verifyCode_wrong": "Error in captcha input"
     }
   }
 }

@@ -52,8 +52,6 @@ export default {
       sending: false,
       waitingTimer: 0,
       readonly: true,
-      loginLink: LOGIN_PATH,
-      signupLink: SIGN_PATH,
       valid: false,
       steps,
       step: steps[0],
@@ -62,6 +60,12 @@ export default {
   },
 
   computed: {
+    loginLink() {
+      return this.resolveLink(LOGIN_PATH)
+    },
+    signupLink() {
+      return this.resolveLink(SIGN_PATH)
+    },
     disabledCheckCodeBtn() {
       return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName))
     },
@@ -98,6 +102,19 @@ export default {
   },
 
   methods: {
+    resolveLink(path) {
+      var link = `${path}`
+      if (this.$route != null) {
+        const { redirect } = this.$route.query
+        if (isSafeUrl(redirect)) {
+          link = `${link}?redirect=${redirect}`
+        }
+      }else {
+        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
+        link = `${hostName}${link}`
+      }
+      return link
+    },
     submit(ref) {
       this.$refs[ref].validate((valid) => {
         if (!valid) {
