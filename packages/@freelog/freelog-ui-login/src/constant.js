@@ -1,5 +1,6 @@
 export const LOGIN_PATH = '/login'
 export const SIGN_PATH = '/signup'
+export const USER_CENTER_PATH = '/user/profile'
 export const RESET_PASSWORD_PATH = '/reset-password'
 export const HOME_PATH = '/'
 export const LAST_AUTH_INFO = 'last_auth_info'

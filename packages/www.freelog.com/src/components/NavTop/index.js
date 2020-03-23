@@ -1,5 +1,5 @@
 import {mapGetters} from 'vuex'
-import { logout, LOGIN_PATH } from '@freelog/freelog-ui-login'
+import { LOGIN_PATH } from '@freelog/freelog-ui-login'
 
 import HeaderTools from './HeaderTools/index.vue';
 
@@ -67,9 +67,6 @@ export default {
             })
           }
         })
-    },
-    logout() {
-      logout().catch(this.$error.showErrorMessage)
     },
   }
 }
