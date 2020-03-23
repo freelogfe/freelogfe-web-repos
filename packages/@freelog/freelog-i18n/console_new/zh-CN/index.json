@@ -1,7 +1,8 @@
 {
-	"create_my_first_release ": "Create new release",
+	"create_my_first_release ": "查看发行详情",
 	"create_release_popup_empty": "Release a resource as the first version of a complete new release, or a new version of a exist release.\n",
 	"file_exist": "The file of same name already exists.",
 	"replace_file": "Replace",
-	"file_size_exceed": "Data file can not exceed 5MB"
+	"file_size_exceed": "Data file can not exceed 5MB",
+	"check_release_details": ""
 }
