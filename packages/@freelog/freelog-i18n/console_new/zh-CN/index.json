@@ -4,5 +4,5 @@
 	"file_exist": "The file of same name already exists.",
 	"replace_file": "Replace",
 	"file_size_exceed": "Data file can not exceed 5MB",
-	"check_release_details": ""
+	"check_release_details": "查看发行详情"
 }
