@@ -2,7 +2,7 @@
     <a
         :class="{disabled: disabled}"
         @click="!disabled && $emit('click')"
-    >加入</a>
+    >更新</a>
 </template>
 
 <script>

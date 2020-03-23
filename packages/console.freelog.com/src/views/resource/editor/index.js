@@ -32,6 +32,7 @@ export default {
 
     data() {
         return {
+            qiOrigin: window.FreelogApp.Env.qiOrigin,
             isUpdateResource: !!this.$route.params.resourceId,
             // 历史发行
             releasedList: [],
@@ -50,6 +51,9 @@ export default {
                 size: 0,
                 uploading: false,
             },
+
+            // 服务端获取的资源原始信息
+            fileSystemInfo: null,
 
             // 资源名称
             resourceName: '',
@@ -131,6 +135,7 @@ export default {
             this.resourceName = result.aliasName;
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
+            this.fileSystemInfo = result.systemMeta;
 
             // this.depList = result.systemMeta.dependencies.map(i => ({
             //     id: i.releaseId,
@@ -402,5 +407,22 @@ export default {
                 }
             }
         }
-    }
+    },
+    filters: {
+        fileSizeFilter(bytes) {
+            if (bytes === 0) {
+                return '0 B';
+            }
+
+            const k = 1024;
+
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+            // return (bytes / Math.pow(k, i)) + ' ' + sizes[i];
+            //toPrecision(3) 后面保留一位小数，如1.0GB
+            return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+        }
+    },
 }
