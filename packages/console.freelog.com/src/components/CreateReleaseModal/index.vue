@@ -126,6 +126,9 @@
             document.body.style.overflowY = 'hidden';
             this.loadData();
         },
+        beforeDestroy() {
+            document.body.style.overflowY = 'inherit';
+        },
         methods: {
             async loadData() {
                 const params = {
