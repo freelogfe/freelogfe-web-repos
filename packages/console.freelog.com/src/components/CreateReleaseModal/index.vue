@@ -1,6 +1,6 @@
 <template>
     <div class="create-release-modal">
-        <div class="box">
+        <div class="box" :style="{height: dataList && !noDate ? '680px': '380px'}">
             <div class="header">
                 <div class="title">
                     <div/>
@@ -39,7 +39,7 @@
                     v-if="noDate"
                     style="text-align: center;"
                 >
-                    <div style="height: 140px;"/>
+                    <div style="height: 70px;"/>
                     <div style="font-size: 20px; color: #222;">第一次发行资源？</div>
                     <div style="height: 30px;"/>
                     <div style="color: #666; font-size: 14px;">资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。</div>
@@ -56,7 +56,7 @@
                     @toBottom="loadingMore"
                     :endText="(dataList || []).length !== 0 ? '' : '无搜索结果'"
                 >
-                    <div v-for="data in dataList" class="release">
+                    <div v-for="data in (dataList || [])" class="release">
                         <div>
                             <div
                                 style="color: #222; font-weight: 600; font-size: 14px; display: flex; align-items: center;">
@@ -116,7 +116,7 @@
             return {
                 input: '',
                 page: 1,
-                dataList: [],
+                dataList: null,
                 isEnd: false,
                 noDate: false,
                 totalItem: -1,
@@ -147,7 +147,7 @@
                 }
 
                 this.dataList = [
-                    ...this.dataList,
+                    ...(this.dataList || []),
                     ...data.data.dataList,
                 ];
                 this.noDate = data.data.totalItem === 0 && this.input === '';
@@ -183,7 +183,7 @@
 
         .box {
             width: 640px;
-            height: 680px;
+            height: 380px;
             background-color: #fff;
             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.4);
             border-radius: 6px;
