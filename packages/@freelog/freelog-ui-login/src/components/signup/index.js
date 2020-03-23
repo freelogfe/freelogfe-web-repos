@@ -77,13 +77,15 @@ export default {
       readonly: true,
       sending: false,
       waitingTimer: 0,
-      loginLink: LOGIN_PATH,
       registerTypes: [ 'loginIphone', 'loginEmail' ],
       selectedRegisterType: 'loginIphone'
     }
   },
 
   computed: {
+    loginLink() {
+      return this.resolveLink(LOGIN_PATH)
+    },
     disabledCheckCodeBtn() {
       return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone))
     },
@@ -153,6 +155,19 @@ export default {
       }
       return this.model.loginName
     },
+    resolveLink(path) {
+      var link = `${path}`
+      if (this.$route != null) {
+        const { redirect } = this.$route.query
+        if (isSafeUrl(redirect)) {
+          link = `${link}?redirect=${redirect}`
+        }
+      }else {
+        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
+        link = `${hostName}${link}`
+      }
+      return link
+    },
     async submit(ref) {
       if (this.loading) return
 
@@ -189,7 +204,7 @@ export default {
             password: data['password'],
             isRemember: 1
           })
-          loginSuccessHandler(userInfo)
+          loginSuccessHandler(userInfo, this.$route.query.redirect)
         } catch(e) {
           this.$router.push(LOGIN_PATH)
           console.error(e)
