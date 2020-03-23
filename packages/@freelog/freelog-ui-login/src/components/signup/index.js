@@ -30,15 +30,23 @@ export default {
         callback()
       }
     }
+    const _validateLoginIphone = (...args) => {
+      this.IphoneErrorMsg = ''
+      validateLoginIphone.apply(this, args)
+    }
+    const _validateLoginEmail = (...args) => {
+      this.EmailErrorMsg = ''
+      validateLoginEmail.apply(this, args)
+    }
 
     const rules = {
       loginIphone: [
         { required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change' },
-        { validator: validateLoginIphone.bind(this), trigger: 'blur'}
+        { validator: _validateLoginIphone.bind(this), trigger: 'blur'}
       ],
       loginEmail: [
         { required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change' },
-        { validator: validateLoginEmail.bind(this), trigger: 'blur'}
+        { validator: _validateLoginEmail.bind(this), trigger: 'blur'}
       ],
       username: [
         { required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change' },
@@ -78,7 +86,10 @@ export default {
       sending: false,
       waitingTimer: 0,
       registerTypes: [ 'loginIphone', 'loginEmail' ],
-      selectedRegisterType: 'loginIphone'
+      selectedRegisterType: 'loginIphone',
+      EmailErrorMsg: '',
+      IphoneErrorMsg: '',
+      authCodeErrorMsg: ''
     }
   },
 
@@ -169,6 +180,7 @@ export default {
       return link
     },
     async submit(ref) {
+      this.authCodeErrorMsg = ''
       if (this.loading) return
 
       const validPromise = new Promise(resolve => {
@@ -210,7 +222,15 @@ export default {
           console.error(e)
         }
       } else {
-        this.$message.error(res.msg)
+        switch(res.errcode) {
+          case 100: {
+            this.authCodeErrorMsg = this.$t('signup.validateErrors.verifyCode_wrong')
+            break
+          }
+          default: {
+            this.$message.error(res.msg)
+          }
+        }
       }
       this.loading = false
     },
@@ -239,7 +259,19 @@ export default {
         if (ret === 0 && errcode === 0) {
           this.waitingTimer = 60
         } else {
-          this.$message.error(msg)
+          switch(errcode) {
+            case 100: {
+              if (this.selectedRegisterType === this.registerTypes[0]) {
+                this.IphoneErrorMsg = this.$t('signup.validateErrors.iphone_registered')
+              } else {
+                this.EmailErrorMsg = this.$t('signup.validateErrors.Email_registered')
+              }
+              break
+            }
+            default: {
+              this.$message.error(msg)
+            }
+          }
         }
       })
       .catch(e => this.$message.error(e))

@@ -21,16 +21,16 @@
             <el-radio v-model="selectedRegisterType" :label="registerTypes[0]">{{$t('signup.loginIphone')}}</el-radio>
             <el-radio v-model="selectedRegisterType" :label="registerTypes[1]">{{$t('signup.loginEmail')}}</el-radio>
           </div>
-          <el-form-item prop="loginIphone" :label="$t('signup.registerType')" v-if="registerTypes[0] === selectedRegisterType">
+          <el-form-item prop="loginIphone" :label="$t('signup.registerType')" :error="IphoneErrorMsg" v-if="registerTypes[0] === selectedRegisterType">
             <el-input ref="iphone" v-model="model.loginIphone" :placeholder="$t('signup.loginIphonePlaceholder')">
             </el-input>
           </el-form-item>
-          <el-form-item prop="loginEmail" :label="$t('signup.registerType')" v-if="registerTypes[1] === selectedRegisterType">
+          <el-form-item prop="loginEmail" :label="$t('signup.registerType')" :error="EmailErrorMsg" v-if="registerTypes[1] === selectedRegisterType">
             <el-input ref="email" v-model="model.loginEmail" :placeholder="$t('signup.loginEmailPlaceholder')">
             </el-input>
           </el-form-item>
         </div>
-        <el-form-item prop="authCode" :label="$t('signup.verifyCode')">
+        <el-form-item prop="authCode" :label="$t('signup.verifyCode')" :error="authCodeErrorMsg">
           <el-input v-model="model.authCode"
                     style="width: 280px"
                     :placeholder="$t('signup.verifyCodePlaceholder')"></el-input>
