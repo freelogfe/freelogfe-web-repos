@@ -4,5 +4,5 @@
 	"file_exist": "存在同名文件",
 	"replace_file": "替换",
 	"file_size_exceed": "数据文件不能超过5MB",
-	"check_release_details": ""
+	"check_release_details": "More details"
 }
