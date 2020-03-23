@@ -34,7 +34,8 @@ export function loginSuccessHandler(userInfo, redirect) {
 	setItemForStorage(USER_SESSION, userInfo)
 	setItemForStorage(LOGIN_NAME, userInfo.loginName)
 	// setItemForStorage(LAST_AUTH_INFO, { userId: userInfo.userId })
-	var targetLink = `//www.${window.FreelogApp.Env.mainDomain}${USER_CENTER_PATH}`
+	// var targetLink = `//www.${window.FreelogApp.Env.mainDomain}${USER_CENTER_PATH}`
+	var targetLink = HOME_PATH
 	if(lastAuthInfo && lastAuthInfo.userId === userInfo.userId) {
 		if (isSafeUrl(redirect)) {
 			targetLink = redirect
@@ -43,5 +44,4 @@ export function loginSuccessHandler(userInfo, redirect) {
 		}
 	}
 	window.location.replace(targetLink)
-	// window.location.href = targetLink
 }
