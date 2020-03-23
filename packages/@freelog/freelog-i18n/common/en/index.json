@@ -4,6 +4,6 @@
 	"password_length": "Make sure it's including 6- 8 characters.",
 	"not_verified_contact": "That mobile phone number / email address is not associated with a  user account. ",
 	"wrong_verified_code": "The code you entered is incorrect. ",
-	"test00": "",
+	"test00": "test",
 	"wrong_username_password": "Incorrect account or password"
 }
