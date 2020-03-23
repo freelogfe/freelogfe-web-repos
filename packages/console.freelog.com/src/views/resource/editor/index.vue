@@ -56,7 +56,18 @@
                 </div>
             </div>
 
-            <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceFile')}}</SmallTitle>
+            <SmallTitle>{{$t('resource.resourceFile')}}</SmallTitle>
+
+            <div
+                v-if="isUpdateResource && !!fileSystemInfo"
+                style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"
+            >
+                <div>{{resourceName}}</div>
+                <div>
+                    <span style="padding-right: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
+                    <a :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"><i class="el-icon-download"/></a>
+                </div>
+            </div>
 
             <div
                 v-if="!isUpdateResource"
@@ -176,28 +187,38 @@
             </div>
         </div>
 
-        <el-dialog
-            width="750px"
-            top="10vh"
-            center
-            :visible.sync="isShowReleaseSearchDialog"
-        >
-            <!--            :historicalReleases="releasesList"-->
-            <release-search
-                :release-source="targetResourceData"
-                :tabLayout="['my-release']"
-                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"
-                @add="createRelease"
-            />
-            <div slot="footer">
-                <el-button
-                    round
-                    type="primary"
-                    class="create-release-btn"
-                    @click="createRelease()">{{$t('resource.createANewRelease')}}
-                </el-button>
-            </div>
-        </el-dialog>
+
+        <CreateReleaseModal
+            v-if="isShowReleaseSearchDialog"
+            @close="isShowReleaseSearchDialog = false"
+            :disabledReleaseIDs="releasedList.map(i => i.id)"
+            @addRelease="createRelease"
+            @createNew="createRelease"
+            :showType="resourceType"
+        />
+
+        <!--        <el-dialog-->
+        <!--            width="750px"-->
+        <!--            top="10vh"-->
+        <!--            center-->
+        <!--            :visible="false"-->
+        <!--        >-->
+        <!--            &lt;!&ndash;            :historicalReleases="releasesList"&ndash;&gt;-->
+        <!--            <release-search-->
+        <!--                :release-source="targetResourceData"-->
+        <!--                :tabLayout="['my-release']"-->
+        <!--                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"-->
+        <!--                @add="createRelease"-->
+        <!--            />-->
+        <!--            <div slot="footer">-->
+        <!--                <el-button-->
+        <!--                    round-->
+        <!--                    type="primary"-->
+        <!--                    class="create-release-btn"-->
+        <!--                    @click="createRelease()">{{$t('resource.createANewRelease')}}-->
+        <!--                </el-button>-->
+        <!--            </div>-->
+        <!--        </el-dialog>-->
     </div>
 </template>
 

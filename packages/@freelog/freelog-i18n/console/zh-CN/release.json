@@ -188,5 +188,17 @@
   "resourceType": "资源类型",
   "createData": "创建日期",
   "contractInfo": "合同信息",
-  "licensingFailed": "授权方案获取失败！"
+  "licensingFailed": "授权方案获取失败！",
+
+  "search": {
+    "addBtn": "加入",
+    "placeholder": "输入发行名称",
+    "resourcePlaceholder": "输入资源名称",
+    "myRelease": "我的发行",
+    "noMyReleases": "暂无发行",
+    "favorTitle": "收藏发行",
+    "noFavorReleases": "暂无收藏发行",
+    "historicVersion": "历史版本",
+    "searchTitle": "全局搜索"
+  }
 }

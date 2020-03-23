@@ -116,6 +116,7 @@
 <script>
     import ToolSearch from './ToolSearch';
     import ResourceSearch from '@/views/resource/search/search.vue'
+    import { logout, LOGIN_PATH } from '@freelog/freelog-ui-login'
     import {getCookieLocale, getUserInfoFromLocalStorage} from '@/lib/utils';
 
     export default {
@@ -200,16 +201,9 @@
                 // this.$router.
                 window.open(`/release/create?resourceId=${resource.resourceId}`);
             },
-            async logout() {
-                const {data} = await this.$axios.get('/v1/passport/logout');
-                // console.log(data, 'DDDDDDDDD');
-                if (data.ret !== 0 || data.errcode !== 0) {
-                    return this.$message.error(data.msg);
-                }
-                window.localStorage.removeItem('user_session');
-                // if (data)
-                this.$router.push('/login');
-            }
+            logout() {
+                logout().catch(this.$error.showErrorMessage)
+            },
         }
     }
 </script>

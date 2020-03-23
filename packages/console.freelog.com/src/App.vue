@@ -10,6 +10,7 @@
 import './styles/reset.css'
 import './styles/animate.css'
 import './styles/global.less'
+import './styles/element-ui.less'
 
 export default {
   name: 'app',
@@ -25,7 +26,4 @@ export default {
     position: relative;
     height: 100%;
   }
-</style>
-<style lang="less" type="text/less">
-  @import './styles/element-ui.less';
 </style>

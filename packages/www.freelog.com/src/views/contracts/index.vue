@@ -12,7 +12,7 @@
 						@focus="focusHandler"
 						@blur="blurHandler"
 						@keyup.enter.native="searchHandler(searchInputStr)">
-						<i class="freelog fl-icon-content" :slot="isInputFocus ? 'suffix' : 'prefix'" @click="searchHandler(searchInputStr)"></i>
+						<i class="freelog fl-icon-content" slot="suffix" @click="searchHandler(searchInputStr)"></i>
 					</el-input>
     </div>
     <fl-pagination class="my-contracts-list"

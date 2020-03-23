@@ -67,17 +67,7 @@
     "manageDetail": "Management Detail",
     "detail": "detail"
   },
-  "search": {
-    "resourcePlaceholder": "Enter the resource name",
-    "myRelease": "My releases",
-    "noMyReleases": "no releases",
-    "noFavorReleases": "no favorite releases",
-    "addBtn": "add",
-    "placeholder": "Enter the release name",
-    "historicVersion": "Historic version",
-    "searchTitle": "search release",
-    "favorTitle": "favorite releases"
-  },
+
   "axios": {
     "unAuthError": "unauthorized!",
     "forbidden": "Forbidden - no access",

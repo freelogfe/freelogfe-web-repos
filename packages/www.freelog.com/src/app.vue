@@ -15,5 +15,6 @@ export default {
 <style lang="less" type="text/less">
   @import "./styles/reset.css";
   @import "./styles/global.less";
+  @import './styles/element-ui.less';
   @import "app.less";
 </style>
