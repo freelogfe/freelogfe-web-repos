@@ -1,10 +1,10 @@
 <template>
     <div class="create-release-modal">
-        <div class="box">
+        <div class="box" :style="{height: dataList && dataList.length > 0  ? '680px': '380px'}">
             <div class="header">
                 <div class="title">
                     <div/>
-                    <div>{{$t('components.CreateReleaseModal.createRelease')}}</div>
+                    <div>{{$t('create_release')}}</div>
                     <a style="cursor: pointer;" @click="$emit('close')">
                         <i style="font-size: 12px; color: #333;" class="el-icon-close"/>
                     </a>
@@ -15,7 +15,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <el-input
                             v-model="input"
-                            :placeholder="$t('components.CreateReleaseModal.pleaseInput')"
+                            :placeholder="$t('search_release')"
                             size="small"
                             style="width: 240px;"
                         >
@@ -27,7 +27,7 @@
                         <a
                             class="create-new"
                             @click="$emit('createNew')"
-                        >{{$t('components.CreateReleaseModal.createNewRelease')}}</a>
+                        >{{$t('create_new_release')}}</a>
                     </div>
                     <div style="height: 20px;"/>
                 </template>
@@ -39,23 +39,22 @@
                     v-if="noDate"
                     style="text-align: center;"
                 >
-
-                    <div style="height: 30px;"/>
-                    <div style="color: #666; font-size: 14px;">{{$t('components.CreateReleaseModal.asNewRelease')}}</div>
+                    <div style="height: 80px;"/>
+                    <div style="color: #666; font-size: 14px;">{{$t('create_release_popup_empty')}}</div>
                     <div style="height: 40px;"/>
                     <a
                         class="create-first"
                         @click="$emit('createNew')"
-                    >{{$t('components.CreateReleaseModal.createFirst')}}</a>
+                    >{{$t('create_my_first_release')}}</a>
                 </div>
 
+                <!--                :endText="(dataList || []).length !== 0 ? '' : $t('components.CreateReleaseModal.noResult')"-->
                 <LazyLoadingBox
                     v-if="!noDate"
                     :end="isEnd"
                     @toBottom="loadingMore"
-                    :endText="(dataList || []).length !== 0 ? '' : $t('components.CreateReleaseModal.noResult')"
                 >
-                    <div v-for="data in dataList" class="release">
+                    <div v-for="data in (dataList || [])" class="release">
                         <div>
                             <div
                                 style="color: #222; font-weight: 600; font-size: 14px; display: flex; align-items: center;">
@@ -115,7 +114,7 @@
             return {
                 input: '',
                 page: 1,
-                dataList: [],
+                dataList: null,
                 isEnd: false,
                 noDate: false,
                 totalItem: -1,
@@ -143,7 +142,7 @@
                 }
 
                 this.dataList = [
-                    ...this.dataList,
+                    ...(this.dataList || []),
                     ...data.data.dataList,
                 ];
                 this.noDate = data.data.totalItem === 0 && this.input === '';

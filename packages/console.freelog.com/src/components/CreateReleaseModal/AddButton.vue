@@ -2,7 +2,7 @@
     <a
         :class="{disabled: disabled}"
         @click="!disabled && $emit('click')"
-    >{{$t('components.CreateReleaseModal.update')}}</a>
+    >{{$t('update')}}</a>
 </template>
 
 <script>

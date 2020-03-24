@@ -132,5 +132,8 @@
     "已置顶",
     "已停用",
     "已启用"
-  ]
+  ],
+  "CreateReleaseModal": {
+    "history": "历史发行"
+  }
 }
