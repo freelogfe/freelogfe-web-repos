@@ -62,7 +62,7 @@ export default {
             // 策略列表
             policies: [],
             // 新建的策略
-            newPolicie: {policyName: this.$t('components.policyList.unnamedPolicy'), policyText: ''},
+            newPolicie: {policyName: this.$t('unnamedPolicy'), policyText: ''},
 
             // 当前底部激活的是哪个 tabs
             activeTab: 'contract',
@@ -155,7 +155,7 @@ export default {
          */
         switchShowEditPolicy(bool) {
             this.isShowEditPolicy = bool;
-            this.newPolicie = {policyName: this.$t('components.policyList.unnamedPolicy'), policyText: ''};
+            this.newPolicie = {policyName: this.$t('unnamedPolicy'), policyText: ''};
         },
         /**
          * 保存一个新策略
@@ -191,7 +191,7 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('node.addPolicySuccess'));
+            this.$message.success(this.$t('addPolicySuccess'));
         },
         /**
          * 更新一个策略的状态

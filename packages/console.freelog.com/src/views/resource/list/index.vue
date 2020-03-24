@@ -18,39 +18,26 @@
       </router-link>
     </div>
 
-    <resource-items-list
-        :query="queryInput"
-        @release="showReleaseDialog"
-    />
+    <resource-items-list :query="queryInput" @release="showReleaseDialog"></resource-items-list>
 
-      <CreateReleaseModal
-          v-if="isShowReleaseSearchDialog"
-          @close="isShowReleaseSearchDialog = false"
-          :disabledReleaseIDs="targetReleaseResource.releaseList.map(i => i.releaseId)"
-          @addRelease="releaseSearchHandler"
-          @createNew="createNewRelease"
-          :showType="resourceType"
-      />
-
-<!--    <el-dialog width="750px"-->
-<!--               top="10vh"-->
-<!--               center-->
-<!--               :visible.sync="isShowReleaseSearchDialog">-->
-<!--      <release-search-->
-<!--        :release-source="targetReleaseResource"-->
-<!--        :tabLayout="['my-release']"-->
-<!--        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []"-->
-<!--        @add="releaseSearchHandler"></release-search>-->
-<!--      <div class="" slot="footer">-->
-<!--        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('resource.createNewReleaseText')}}</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
+    <el-dialog width="750px"
+               top="10vh"
+               center
+               :visible.sync="isShowReleaseSearchDialog">
+      <release-search
+        :release-source="targetReleaseResource"
+        :tabLayout="['my-release']"
+        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []"
+        @add="releaseSearchHandler"></release-search>
+      <div class="" slot="footer">
+        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('resource.createNewReleaseText')}}</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 
 <script>
 import SearchInput from '@/components/SearchInput/index.vue'
-import CreateReleaseModal from '@/components/CreateReleaseModal/index.vue'
 import CONFIG from '@/config/index'
 import ResourceItemsList from './list.vue'
 import ReleaseSearch from '@/views/release/search/index.vue'
@@ -68,14 +55,12 @@ export default {
 			isInputFocus: false,
       isShowReleaseSearchDialog: false,
       targetReleaseResource: null,
-        resourceType: '',
     }
   },
   components: {
     ResourceItemsList,
     SearchInput,
-    ReleaseSearch,
-      CreateReleaseModal,
+    ReleaseSearch
   },
 
   mounted() {
@@ -93,8 +78,6 @@ export default {
       // this.$message.warning('todo')
     },
     showReleaseDialog(resource) {
-		    // console.log(resource, 'resource');
-		    this.resourceType = resource.resourceType;
       this.isShowReleaseSearchDialog = true
       this.targetReleaseResource = resource
     },

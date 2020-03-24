@@ -6,7 +6,7 @@
         >
             <BreadCrumb
                 :list="[
-                    {text: releaseInfo.resourceType === 'page_build' ? $t('node.nodePageStyle') : $t('node.presentableManagement'), to: `/node/manager/${nodeId}?isPageStyle=${(releaseInfo.resourceType === 'page_build').toString()}`},
+                    {text: releaseInfo.resourceType === 'page_build' ? $t('node.nodePageStyle') : $t('node.presentableManagement'), to: `/node/manager/${nodeId}`},
                     {text: $t('node.presentableInfo')}
                 ]"
             />

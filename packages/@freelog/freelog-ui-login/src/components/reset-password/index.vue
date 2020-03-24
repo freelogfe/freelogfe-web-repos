@@ -19,9 +19,10 @@
           </el-form-item>
           <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
             <div>
-              <el-input ref="authCodeInput" type="text" v-model="model.authCode" style="width: 280px"></el-input>
+              <el-input type="text" v-model="model.authCode" style="width: 280px"></el-input>
               <el-button class="vcode-btn" style="width: 110px"
-                        @click="sendCheckCodeNotifyHandler">
+                        @click="sendCheckCodeNotifyHandler"
+                        :disabled="disabledCheckCodeBtn">
                 {{vcodeBtnText}}
               </el-button>
             </div>
@@ -61,7 +62,6 @@ export default ResetView
 </script>
 
 <style lang="less" scoped>
-  @import "../../styles/mixin.less";
   .reset-password-section {
     header {
       .reset-password-intro { 
@@ -109,19 +109,6 @@ export default ResetView
         font-size: 14px; color: #999; 
         a { color: #409EFF; } 
       }
-    }
-
-    .reset-password-error-box {
-      .error-box()
-    }
-  }
-</style>
-
-<style lang="less">
-  @import "../../styles/mixin.less";
-  .reset-password-section {
-    .el-alert {  
-      .error-alert()
     }
   }
 </style>

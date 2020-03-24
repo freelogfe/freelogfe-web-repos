@@ -164,10 +164,6 @@ const notFoundRouteConfig = {
   component: ErrorView,
 }
 const router = new Router(routerConfig)
-router.afterEach((route) => {
-  const title = route.meta.title !== '' ? route.meta.title + ' - Freelog' : 'Freelog'
-  document.title = title
-})
 export function registerNotFoundRouete() {
   // 延迟执行挂载404页面路由
   setTimeout(() => {
