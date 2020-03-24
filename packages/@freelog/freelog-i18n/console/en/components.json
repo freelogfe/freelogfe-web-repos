@@ -132,5 +132,8 @@
     "Already topped",
     "Already disabled",
     "Already enabled"
-  ]
+  ],
+  "CreateReleaseModal": {
+    "history": "history"
+  }
 }

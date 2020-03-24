@@ -1,12 +1,16 @@
 <template>
     <div class="create-release-modal">
-        <div class="box" :style="{height: dataList && !noDate ? '680px': '380px'}">
+<!--<<<<<<< HEAD-->
+<!--        <div class="box" :style="{height: dataList && !noDate ? '680px': '380px'}">-->
+<!--=======-->
+        <div class="box" :style="{height: dataList && dataList.length > 0  ? '680px': '380px'}">
+<!--&gt;>>>>>> dev-->
             <div class="header">
                 <div class="title">
                     <div/>
-                    <div>创建发行</div>
+                    <div>{{$t('create_release')}}</div>
                     <a style="cursor: pointer;" @click="$emit('close')">
-                        <i style="font-size: 12px; color: #333;" class="el-icon-close"></i>
+                        <i style="font-size: 12px; color: #333;" class="el-icon-close"/>
                     </a>
                 </div>
 
@@ -15,7 +19,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <el-input
                             v-model="input"
-                            placeholder="请输入内容"
+                            :placeholder="$t('search_release')"
                             size="small"
                             style="width: 240px;"
                         >
@@ -27,7 +31,7 @@
                         <a
                             class="create-new"
                             @click="$emit('createNew')"
-                        >创建新发行</a>
+                        >{{$t('create_new_release')}}</a>
                     </div>
                     <div style="height: 20px;"/>
                 </template>
@@ -39,22 +43,27 @@
                     v-if="noDate"
                     style="text-align: center;"
                 >
-                    <div style="height: 70px;"/>
-                    <div style="font-size: 20px; color: #222;">第一次发行资源？</div>
-                    <div style="height: 30px;"/>
-                    <div style="color: #666; font-size: 14px;">资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。</div>
+<!--<<<<<<< HEAD-->
+<!--                    <div style="height: 70px;"/>-->
+<!--                    <div style="font-size: 20px; color: #222;">第一次发行资源？</div>-->
+<!--                    <div style="height: 30px;"/>-->
+<!--                    <div style="color: #666; font-size: 14px;">资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。</div>-->
+<!--=======-->
+                    <div style="height: 80px;"/>
+                    <div style="color: #666; font-size: 14px;">{{$t('create_release_popup_empty')}}</div>
+<!--&gt;>>>>>> dev-->
                     <div style="height: 40px;"/>
                     <a
                         class="create-first"
                         @click="$emit('createNew')"
-                    >创建我的第一个发行</a>
+                    >{{$t('create_my_first_release')}}</a>
                 </div>
 
+                <!--                :endText="(dataList || []).length !== 0 ? '' : $t('components.CreateReleaseModal.noResult')"-->
                 <LazyLoadingBox
                     v-if="!noDate"
                     :end="isEnd"
                     @toBottom="loadingMore"
-                    :endText="(dataList || []).length !== 0 ? '' : '无搜索结果'"
                 >
                     <div v-for="data in (dataList || [])" class="release">
                         <div>
@@ -64,7 +73,7 @@
                                 <label
                                     style="background-color: #FFAB00; color: #fff; font-size: 12px; line-height: 20px; border-radius: 10px; padding: 0 8px; margin-left: 10px;"
                                     v-if="disabledReleaseIDs.includes(data.releaseId)"
-                                >历史发行</label>
+                                >{{$t('components.CreateReleaseModal.history')}}</label>
                             </div>
                             <div style="height: 5px;"/>
                             <div style="font-size: 12px; color: #999;">{{data.resourceType | pageBuildFilter}} |

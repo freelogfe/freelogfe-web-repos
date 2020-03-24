@@ -58,16 +58,16 @@
 
             <SmallTitle>{{$t('resource.resourceFile')}}</SmallTitle>
 
-            <div
-                v-if="isUpdateResource && !!fileSystemInfo"
-                style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"
-            >
-                <div>{{resourceName}}</div>
-                <div>
-                    <span style="padding-right: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
-                    <a :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"><i class="el-icon-download"/></a>
-                </div>
-            </div>
+            <!--            <div-->
+            <!--                v-if="isUpdateResource && !!fileSystemInfo"-->
+            <!--                style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"-->
+            <!--            >-->
+            <!--                <div>{{resourceName}}</div>-->
+            <!--                <div>-->
+            <!--                    <span style="padding-right: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>-->
+            <!--                    <a :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"><i class="el-icon-download"/></a>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div
                 v-if="!isUpdateResource"
@@ -84,21 +84,34 @@
 
             <SmallTitle>{{$t('resource.resourceName')}}</SmallTitle>
 
-            <div
-                class="resource-editor__name"
-            >
-                <!--                :disabled="isUpdateResource"-->
-                <el-input
-                    :minlength="1"
-                    :maxlength="60"
-                    v-model="resourceName"
-                    :placeholder="$t('resource.enterResourceName')"
-                    class="resource-editor__name__input"
-                />
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div
+                    class="resource-editor__name"
+                >
+                    <!--                :disabled="isUpdateResource"-->
+                    <el-input
+                        :minlength="1"
+                        :maxlength="60"
+                        v-model="resourceName"
+                        :placeholder="$t('resource.enterResourceName')"
+                        class="resource-editor__name__input"
+                    />
 
-                <span
-                    class="resource-editor__name__length"
-                >{{resourceName.length}}/60</span>
+                    <span
+                        class="resource-editor__name__length"
+                    >{{resourceName.length}}/60</span>
+                </div>
+
+                <div v-if="!!fileSystemInfo" style="padding-right: 35px; color: #333; font-size: 14px; font-weight: 600;">
+                    <a
+                        :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"
+                        style="color: #333;"
+                    >
+                        <i class="el-icon-download"/>
+                        <span style="padding-left: 2px;">{{$t('resource.list.downloadBtnText')}}</span>
+                    </a>
+                    <span style="padding-left: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
+                </div>
             </div>
 
             <div style="height: 20px;"></div>

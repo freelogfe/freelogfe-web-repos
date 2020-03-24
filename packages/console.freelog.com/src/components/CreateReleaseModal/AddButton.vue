@@ -2,7 +2,7 @@
     <a
         :class="{disabled: disabled}"
         @click="!disabled && $emit('click')"
-    >更新</a>
+    >{{$t('update')}}</a>
 </template>
 
 <script>
