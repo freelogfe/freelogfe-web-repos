@@ -1,0 +1,29 @@
+
+.error-box() {
+  .el-icon-close {
+    position: absolute; top: 4px; right: 4px; z-index: 10;
+    padding: 6px;
+    font-size: 16px; cursor: pointer;
+  }
+  .el-alert { 
+    margin-top: 10px; margin-bottom: 20px; padding: 16px 20px 20px; border: 1px solid #ECBCBC; 
+    background-color: #F7ECEC;
+  }
+}
+
+.error-alert() {
+  .el-alert__content {
+    padding-right: 12px;
+    font-size: 14px;
+    .el-alert__description {
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      font-size: 14px; color: #DA3F3F;
+    }
+  }
+}
+
+.text-ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

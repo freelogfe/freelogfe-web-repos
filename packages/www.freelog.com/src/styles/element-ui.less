@@ -1,0 +1,22 @@
+.small-el-form.el-form .el-form-item {
+  margin-bottom: 9px;
+  .el-form-item__label,
+  .el-form-item__content {
+    line-height: 24px;
+  }
+
+  &.flex-grid {
+    display: flex;
+    align-items: center;
+    .el-form-item__content {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+.el-message--error {
+  max-width: 720px;
+  .el-message__content {
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+}
