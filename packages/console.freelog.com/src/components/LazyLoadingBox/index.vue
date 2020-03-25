@@ -1,5 +1,5 @@
 <template>
-    <div ref="boxRef" style="height: 100%; overflow-y: auto;">
+    <div ref="boxRef" style="height: 100%; overflow-y: auto; box-sizing: border-box;">
         <slot/>
         <div
             ref="loadingRef"
