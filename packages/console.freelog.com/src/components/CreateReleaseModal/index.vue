@@ -54,7 +54,7 @@
                     :end="isEnd"
                     @toBottom="loadingMore"
                 >
-                    <div style="padding: 0 30px;">
+                    <div style="padding: 0 40px;">
                         <div v-for="data in (dataList || [])" class="release">
                             <div>
                                 <div
@@ -192,7 +192,7 @@
 
             .header {
                 flex-shrink: 0;
-                padding: 0 30px;
+                padding: 0 40px;
 
                 .title {
                     display: flex;
@@ -229,7 +229,7 @@
 
                 .create-first {
                     line-height: 50px;
-                    padding: 0 30px;
+                    padding: 0 40px;
                     background-color: #2784FF;
                     color: #fff;
                     display: inline-block;
