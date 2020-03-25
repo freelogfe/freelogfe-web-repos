@@ -45,7 +45,7 @@
 		"end": "Last Page",
 		"prev": "Previous Page",
 		"next": "Next Page",
-		"bar": "",
+		"bar": "bar",
 		"total": "A total of "
 	},
 	"cropImage": {
