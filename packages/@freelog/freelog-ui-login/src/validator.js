@@ -2,7 +2,6 @@
 export const EMAIL_REG = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
 export const PHONE_REG = /^1[34578]\d{9}$/
 export const USERNAME_REG = /^(?!-)[A-Za-z0-9-]{1,30}(?<!-)$/
-export const PASSWORD_REG = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,24}$/
 export function validateUsername(rule, value, callback) {
   if (value) {
     if (value.length > 30) {
@@ -13,7 +12,7 @@ export function validateUsername(rule, value, callback) {
       callback()
     }
   } else {
-    callback()
+    callback(new Error(this.$t('signup.validateErrors.username_empty')))
   }
 }
 
@@ -25,7 +24,7 @@ export const validateLoginName = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback()
+    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
   }
 }
 
@@ -37,7 +36,7 @@ export const validateLoginIphone = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback()
+    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
   }
 }
 
@@ -49,18 +48,8 @@ export const validateLoginEmail = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback()
+    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
   }
-}
-
-export const validatePassword = function (rule, value, callback) {
-  if (value) {
-    if (!PASSWORD_REG.test(value)) {
-      callback(new Error(this.$t('signup.passwordPlaceholder')))
-      return 
-    }
-  } 
-  callback()
 }
 
 

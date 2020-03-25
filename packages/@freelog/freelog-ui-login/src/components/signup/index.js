@@ -1,18 +1,11 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
-import {validateLoginIphone, validateLoginEmail, validateUsername, validatePassword, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
-import { loginSuccessHandler } from '../../login'
-import en from '@freelog/freelog-i18n/ui-login/en'
-import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
+import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
+import en from '@freelog/freelog-i18n/ui-login/en';
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
 export default {
   name: 'f-signup',
-  props: {
-    showClose: {
-      type: Boolean,
-      default: false
-    }
-  },
   i18n: {
     messages: {
       en,
@@ -21,6 +14,17 @@ export default {
   },
 
   data() {
+    const validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('signup.passwordInputTip')))
+      } else {
+        if (this.model.checkPassword !== '') {
+          this.$refs.signupForm.validateField('checkPassword')
+        }
+        callback()
+      }
+    }
+
     const validateCheckPassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('signup.checkPasswordInputTip')))
@@ -30,42 +34,32 @@ export default {
         callback()
       }
     }
-    const _validateLoginIphone = (...args) => {
-      this.IphoneErrorMsg = ''
-      validateLoginIphone.apply(this, args)
-    }
-    const _validateLoginEmail = (...args) => {
-      this.EmailErrorMsg = ''
-      validateLoginEmail.apply(this, args)
-    }
 
     const rules = {
       loginIphone: [
-        { required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change' },
-        { validator: _validateLoginIphone.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'blur'},
+        {validator: validateLoginIphone.bind(this), trigger: 'blur'}
       ],
       loginEmail: [
-        { required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change' },
-        { validator: _validateLoginEmail.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'blur'},
+        {validator: validateLoginEmail.bind(this), trigger: 'blur'}
       ],
       username: [
-        { required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change' },
-        { validator: validateUsername.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'blur'},
+        {validator: validateUsername.bind(this), trigger: 'blur'}
       ],
       password: [
-        { required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change' },
-        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
-        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
-        { validator: validatePassword.bind(this), trigger: 'blur' },
+        {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'blur'},
+        {validator: validatePassword, trigger: 'blur'},
+        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       checkPassword: [
-        { required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change' },
-        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
-        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
+        {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'blur'},
+        {validator: validateCheckPassword, trigger: 'blur'},
+        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       authCode: [
-        { required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change' },
-        { min: 6, max: 6, message: this.$t('signup.authCodeLengthRule'), trigger: 'blur' }
+        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'blur'},
       ]
     }
     const model = {
@@ -85,18 +79,13 @@ export default {
       readonly: true,
       sending: false,
       waitingTimer: 0,
+      loginLink: LOGIN_PATH,
       registerTypes: [ 'loginIphone', 'loginEmail' ],
-      selectedRegisterType: 'loginIphone',
-      EmailErrorMsg: '',
-      IphoneErrorMsg: '',
-      authCodeErrorMsg: ''
+      selectedRegisterType: 'loginIphone'
     }
   },
 
   computed: {
-    loginLink() {
-      return this.resolveLink(LOGIN_PATH)
-    },
     disabledCheckCodeBtn() {
       return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone))
     },
@@ -135,11 +124,9 @@ export default {
       })
       if (this.selectedRegisterType === this.registerTypes[0]) {
         this.model.loginIphone = this.model.loginEmail
-        this.model.loginEmail = ''
       }
       if (this.selectedRegisterType === this.registerTypes[1]) {
         this.model.loginEmail = this.model.loginIphone
-        this.model.loginIphone = ''
       }
     }
   },
@@ -166,87 +153,64 @@ export default {
       }
       return this.model.loginName
     },
-    resolveLink(path) {
-      var link = `${path}`
-      if (this.$route != null) {
-        const { redirect } = this.$route.query
-        if (isSafeUrl(redirect)) {
-          link = `${link}?redirect=${redirect}`
-        }
-      }else {
-        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
-        link = `${hostName}${link}`
+    submit(ref) {
+      if (this.loading) {
+        return
       }
-      return link
-    },
-    async submit(ref) {
-      this.authCodeErrorMsg = ''
-      if (this.loading) return
 
-      const validPromise = new Promise(resolve => {
-        this.$refs[ref].validate((valid) => {
-          resolve(valid)
+      this.$refs[ref].validate((valid) => {
+        if (!valid) {
+          return
+        }
+
+        this.error = null
+        this.loading = true
+
+        const data = {}
+
+        Object.keys(this.model).forEach((key) => {
+          if (key !== 'checkPassword' && this.registerTypes.indexOf(key) === -1) {
+            data[key] = this.model[key]
+          }
         })
-      })
-      const valid = await validPromise
-      // 检验不通过
-      if (!valid) return 
-      
-      this.loading = true
-      const data = {}
-      Object.keys(this.model).forEach((key) => {
-        if (key !== 'checkPassword' && this.registerTypes.indexOf(key) === -1) {
-          data[key] = this.model[key]
-        }
-      })
-      data['loginName'] = this.getLoginName()
-      try {
-        var res = await this.$axios.post('/v1/userinfos/register', data).then(res => res.data)
-      } catch (e) {
-        this.$message.error(this.$t('signup.serverError'))
-        return 
-      }
-      if (res.errcode === 0) {
-        if(res.data) {
-          window.localStorage.setItem('loginName', res.data.loginName)
-        }
-        try {
-          const userInfo = await this.loginRequest({
-            loginName: data['loginName'],
-            password: data['password'],
-            isRemember: 1
+        data['loginName'] = this.getLoginName()
+
+        this.$axios.post('/v1/userinfos/register', data)
+          .then((res) => {
+            if (res.data.errcode === 0) {
+              // this.$message.success(this.$t('signup.registerSuccess'))
+              if(res.data.data) {
+                window.localStorage.setItem('loginName', res.data.data.loginName)
+              }
+              
+              this.$router.push(LOGIN_PATH)
+            } else {
+              this.$message.error(res.data.msg)
+            }
+            this.loading = false
           })
-          loginSuccessHandler(userInfo, this.$route.query.redirect)
-        } catch(e) {
-          this.$router.push(LOGIN_PATH)
-          console.error(e)
-        }
-      } else {
-        switch(res.errcode) {
-          case 100: {
-            this.authCodeErrorMsg = this.$t('signup.validateErrors.verifyCode_wrong')
-            break
-          }
-          default: {
-            this.$message.error(res.msg)
-          }
-        }
-      }
-      this.loading = false
-    },
-    loginRequest(data) {
-      return this.$axios.post("/v1/passport/login", data).then(res => res.data)
-        .then(res => {
-          if (res.ret === 0 && res.errcode === 0) {
-            var userInfo = res.data
-            userInfo.loginName = data.loginName
-            return Promise.resolve(userInfo)
-          }
-          return Promise.reject(res.msg)
-        })
+          .catch((err) => {
+            this.error = {title: this.$t('signup.errorTitle'), message: this.$t('signup.defaultErrorMsg')}
+            switch (err.response && err.response.status) {
+              case 401:
+                this.error.message = this.$t('signup.identifyError')
+                break
+              case 500:
+                this.error.message = this.$t('signup.serverError')
+                break
+              default:
+                this.error.message = this.$t('signup.appError')
+            }
+            this.loading = false
+          })
+      })
     },
     sendCheckCodeNotifyHandler() {
       if (this.sending || !this.getLoginName()) return
+
+      // if (!this.model.password) {
+      //   return this.$message.error(this.$t('signup.passwordInputTip'))
+      // }
 
       this.sending = true
       this.$axios.post(`/v1/message/send`, {
@@ -259,22 +223,12 @@ export default {
         if (ret === 0 && errcode === 0) {
           this.waitingTimer = 60
         } else {
-          switch(errcode) {
-            case 100: {
-              if (this.selectedRegisterType === this.registerTypes[0]) {
-                this.IphoneErrorMsg = this.$t('signup.validateErrors.iphone_registered')
-              } else {
-                this.EmailErrorMsg = this.$t('signup.validateErrors.Email_registered')
-              }
-              break
-            }
-            default: {
-              this.$message.error(msg)
-            }
-          }
+          this.$message.error(msg)
         }
       })
-      .catch(e => this.$message.error(e))
     },
+    refreshVcodeHandler() {
+      this.t = +new Date()
+    }
   }
 }

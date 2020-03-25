@@ -30,13 +30,6 @@ module.exports = merge(baseConfig, {
     host: '0.0.0.0',
     inline: false,
     port: 8880,
-    proxy: {
-      "/v1": {
-        target: "http://qi.testfreelog.com",
-        secure: false, 
-        changeOrigin: true,
-      }
-    }
   },
 
   devtool: 'cheap-eval-source-map',

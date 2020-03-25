@@ -67,7 +67,17 @@
     "manageDetail": "管理详情",
     "detail": "查看详情"
   },
-
+  "search": {
+    "addBtn": "加入",
+    "placeholder": "输入发行名称",
+    "resourcePlaceholder": "输入资源名称",
+    "myRelease": "我的发行",
+    "noMyReleases": "暂无发行",
+    "favorTitle": "收藏发行",
+    "noFavorReleases": "暂无收藏发行",
+    "historicVersion": "历史版本",
+    "searchTitle": "全局搜索"
+  },
   "axios": {
     "unAuthError": "未授权！",
     "forbidden": "forbidden-禁止访问",
