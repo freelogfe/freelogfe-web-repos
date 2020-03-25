@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <SmallTitle>{{$t('resource.resourceFile')}}</SmallTitle>
+            <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceFile')}}</SmallTitle>
 
             <!--            <div-->
             <!--                v-if="isUpdateResource && !!fileSystemInfo"-->
@@ -107,7 +107,7 @@
                         :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"
                         style="color: #333;"
                     >
-                        <i class="el-icon-download"/>
+                        <i class="freelog fl-icon-export"/>
                         <span style="padding-left: 2px;">{{$t('resource.list.downloadBtnText')}}</span>
                     </a>
                     <span style="padding-left: 40px;">{{fileSystemInfo.fileSize | fileSizeFilter}}</span>
