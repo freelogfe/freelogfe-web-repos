@@ -11,7 +11,7 @@
                 <i
                     style="font-size: 18px;"
                     :style="{color: !this.isLock ? '#f02323': '#666'}"
-                    :class="this.isLock ? 'el-icon-goods': 'el-icon-remove'"
+                    :class="this.isLock ? 'freelog fl-icon-suoding': 'el-icon-remove'"
                 />
             </a>
             <span style="padding-left: 15px; font-size: 14px; color: #333; font-weight: 500;">{{this.name}}</span>

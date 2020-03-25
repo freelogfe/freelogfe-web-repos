@@ -62,7 +62,7 @@ export default {
             // 策略列表
             policies: [],
             // 新建的策略
-            newPolicie: {policyName: this.$t('unnamedPolicy'), policyText: ''},
+            newPolicie: {policyName: this.$t('node.unnamedPolicy'), policyText: ''},
 
             // 当前底部激活的是哪个 tabs
             activeTab: 'contract',
@@ -155,7 +155,7 @@ export default {
          */
         switchShowEditPolicy(bool) {
             this.isShowEditPolicy = bool;
-            this.newPolicie = {policyName: this.$t('unnamedPolicy'), policyText: ''};
+            this.newPolicie = {policyName: this.$t('node.unnamedPolicy'), policyText: ''};
         },
         /**
          * 保存一个新策略
@@ -191,7 +191,7 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('addPolicySuccess'));
+            this.$message.success(this.$t('node.addPolicySuccess'));
         },
         /**
          * 更新一个策略的状态
@@ -217,7 +217,7 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('updatedPolicySuccessfully'));
+            this.$message.success(this.$t('node.updatedPolicySuccessfully'));
         },
         /**
          * presentableName 变化
@@ -228,7 +228,7 @@ export default {
             this.updatePresentable({
                 presentableName: value,
             });
-            this.$message.success(this.$t('titleUpdateSuccessful'));
+            this.$message.success(this.$t('node.titleUpdateSuccessful'));
         },
         /**
          * 上线和下线
@@ -291,7 +291,7 @@ export default {
             this.updatePresentable({
                 userDefinedTags: val,
             });
-            this.$message.success(this.$t('tagUpdatedSuccessfully'));
+            this.$message.success(this.$t('node.tagUpdatedSuccessfully'));
         },
         versionValue(val, old) {
             if (old === null) {
@@ -301,7 +301,7 @@ export default {
             // this.updatePresentable({
             //     version: val,
             // });
-            // this.$message.success(this.$t('tagUpdatedSuccessfully'));
+            // this.$message.success(this.$t('node.tagUpdatedSuccessfully'));
         }
     },
     computed: {
