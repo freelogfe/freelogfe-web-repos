@@ -233,9 +233,9 @@ export default {
             try {
                 await this.updateSignPolicy(policyIDs);
                 if (newSign) {
-                    this.$message.success(this.$t('agencySuccess'));
+                    this.$message.success(this.$t('node.agencySuccess'));
                 } else {
-                    this.$message.success(this.$t('success'));
+                    this.$message.success(this.$t('node.success'));
                 }
             } catch (e) {
                 console.error(e);
@@ -254,7 +254,7 @@ export default {
                 .filter(j => j !== policyId);
             try {
                 await this.updateSignPolicy(policyIDs);
-                this.$message.success(this.$t('success'));
+                this.$message.success(this.$t('node.success'));
             } catch (e) {
                 console.log(e);
             }
@@ -266,7 +266,7 @@ export default {
          */
         async updateSignPolicy(policyIDs) {
             if (policyIDs.length === 0) {
-                this.$message.error(this.$t('onlyOneContract'));
+                this.$message.error(this.$t('node.onlyOneContract'));
                 throw new Error('当前授权方案中只有一个合约');
             }
             // this.isSignDirty = false;
