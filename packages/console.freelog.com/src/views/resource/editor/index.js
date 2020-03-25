@@ -8,6 +8,7 @@ import ReleaseSearch from '@/views/release/search/index.vue';
 import RichEditor from '@/components/RichEditor/index.vue';
 import MetaInfoInput from '@/components/MetaInfoInput/index.vue';
 import DependentReleaseList from '@/components/DependentReleaseList/index.vue';
+import CreateReleaseModal from '@/components/CreateReleaseModal/index.vue';
 // import i18n from './i18n';
 import ReleasedItem from "./ReleasedItem";
 import {COMMON_NAME_REGEXP} from '@/config/regexp';
@@ -26,10 +27,12 @@ export default {
         RichEditor,
         MetaInfoInput,
         // HeaderAlert,
+        CreateReleaseModal,
     },
 
     data() {
         return {
+            qiOrigin: window.FreelogApp.Env.qiOrigin,
             isUpdateResource: !!this.$route.params.resourceId,
             // 历史发行
             releasedList: [],
@@ -48,6 +51,9 @@ export default {
                 size: 0,
                 uploading: false,
             },
+
+            // 服务端获取的资源原始信息
+            fileSystemInfo: null,
 
             // 资源名称
             resourceName: '',
@@ -129,6 +135,7 @@ export default {
             this.resourceName = result.aliasName;
             this.description = result.description;
             this.metaInfo = JSON.stringify(result.meta);
+            this.fileSystemInfo = result.systemMeta;
 
             // this.depList = result.systemMeta.dependencies.map(i => ({
             //     id: i.releaseId,
@@ -266,35 +273,35 @@ export default {
         async submit() {
 
             if (this.uploadFileInfo.uploading) {
-                this.$message.error(this.$t('fileUploading'));
+                this.$message.error(this.$t('resource.fileUploading'));
                 throw new Error('文件正在上传中');
             }
 
             if (!this.isUpdateResource) {
                 if (!this.resourceType) {
-                    this.$message.error(this.$t('pleaseSelectAResourceType'));
+                    this.$message.error(this.$t('resource.pleaseSelectAResourceType'));
                     throw new Error('请选择资源类型');
                 }
 
                 if (!this.uploadFileInfo.name) {
-                    this.$message.error(this.$t('pleaseUploadFiles'));
+                    this.$message.error(this.$t('resource.pleaseUploadFiles'));
                     throw new Error('请上传文件');
                 }
             }
 
             this.resourceName = this.resourceName.trim();
             if (!this.resourceName) {
-                this.$message.error(this.$t('pleaseEnterAResourceName'));
+                this.$message.error(this.$t('resource.pleaseEnterAResourceName'));
                 throw new Error('请输入资源名称');
             }
 
             if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
-                this.$message.error(`${this.$t('resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
+                this.$message.error(`${this.$t('resource.resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
                 throw new Error(`资源的名称不能包含空格和以下字符：\\ / : * ? " < > | @ # $`);
             }
 
             if (this.metaValidError) {
-                this.$message.error(`meta JSON${this.$t('formattingErrors')}`);
+                this.$message.error(`meta JSON${this.$t('resource.formattingErrors')}`);
                 throw new Error('meta JSON格式有误');
             }
 
@@ -318,9 +325,9 @@ export default {
                 const res = await this.$axios.post('/v1/resources', params);
                 if (res.data.errcode !== 0) {
                     this.$message.error(res.data.msg);
-                    throw new Error(this.$t('creationFailed'));
+                    throw new Error(this.$t('resource.creationFailed'));
                 }
-                this.$message.success(this.$t('createdSuccessfully'));
+                this.$message.success(this.$t('resource.createdSuccessfully'));
                 this.targetResourceData = res.data.data
                 return res.data.data.resourceId;
             } else {
@@ -328,7 +335,7 @@ export default {
                 const res = await this.$axios.put(`/v1/resources/${resourceId}`, params);
                 if (res.data.errcode !== 0) {
                     this.$message.error(res.data.msg);
-                    throw new Error(this.$t('saveFailed'));
+                    throw new Error(this.$t('resource.saveFailed'));
                 }
                 this.targetResourceData = res.data.data
                 this.$message.success('保存成功');
@@ -350,7 +357,7 @@ export default {
          */
         async onSubmitButtonClick(bool) {
             if (bool && this.depList.some(i => !i.isOnline)) {
-                return this.$message.error(this.$t('releaseAreNotOnline'));
+                return this.$message.error(this.$t('resource.releaseAreNotOnline'));
             }
             const resourceId = await this.submit();
             if (!bool) {
@@ -379,7 +386,7 @@ export default {
             } else {
                 this.$message({
                     type: 'warning',
-                    message: this.$t('selectedTypeMustBeRelease') + this.resourceType
+                    message: this.$t('resource.selectedTypeMustBeRelease') + this.resourceType
                 })
             }
             // console.log(releaseInfo, 'releaseInforeleaseInforeleaseInforeleaseInfo');
@@ -400,5 +407,22 @@ export default {
                 }
             }
         }
-    }
+    },
+    filters: {
+        fileSizeFilter(bytes) {
+            if (bytes === 0) {
+                return '0 B';
+            }
+
+            const k = 1024;
+
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+            // return (bytes / Math.pow(k, i)) + ' ' + sizes[i];
+            //toPrecision(3) 后面保留一位小数，如1.0GB
+            return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+        }
+    },
 }
