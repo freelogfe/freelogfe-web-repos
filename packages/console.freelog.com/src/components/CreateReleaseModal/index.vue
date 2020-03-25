@@ -54,25 +54,27 @@
                     :end="isEnd"
                     @toBottom="loadingMore"
                 >
-                    <div v-for="data in (dataList || [])" class="release">
-                        <div>
-                            <div
-                                style="color: #222; font-weight: 600; font-size: 14px; display: flex; align-items: center;">
-                                <span>{{data.releaseName.replace(data.username + '/', '')}}</span>
-                                <label
-                                    style="background-color: #FFAB00; color: #fff; font-size: 12px; line-height: 20px; border-radius: 10px; padding: 0 8px; margin-left: 10px;"
-                                    v-if="disabledReleaseIDs.includes(data.releaseId)"
-                                >{{$t('components.CreateReleaseModal.history')}}</label>
+                    <div style="padding: 0 30px;">
+                        <div v-for="data in (dataList || [])" class="release">
+                            <div>
+                                <div
+                                    style="color: #222; font-weight: 600; font-size: 14px; display: flex; align-items: center;">
+                                    <span>{{data.releaseName.replace(data.username + '/', '')}}</span>
+                                    <label
+                                        style="background-color: #FFAB00; color: #fff; font-size: 12px; line-height: 20px; border-radius: 10px; padding: 0 8px; margin-left: 10px;"
+                                        v-if="disabledReleaseIDs.includes(data.releaseId)"
+                                    >{{$t('components.CreateReleaseModal.history')}}</label>
+                                </div>
+                                <div style="height: 5px;"/>
+                                <div style="font-size: 12px; color: #999;">{{data.resourceType | pageBuildFilter}} |
+                                    {{data.updateDate.split('T')[0]}}
+                                </div>
                             </div>
-                            <div style="height: 5px;"/>
-                            <div style="font-size: 12px; color: #999;">{{data.resourceType | pageBuildFilter}} |
-                                {{data.updateDate.split('T')[0]}}
-                            </div>
+                            <AddButton
+                                :disabled="disabledReleaseIDs.includes(data.releaseId)"
+                                @click="$emit('addRelease', data)"
+                            />
                         </div>
-                        <AddButton
-                            :disabled="disabledReleaseIDs.includes(data.releaseId)"
-                            @click="$emit('addRelease', data)"
-                        />
                     </div>
                 </LazyLoadingBox>
 
@@ -182,7 +184,7 @@
             background-color: #fff;
             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.4);
             border-radius: 6px;
-            padding: 20px 30px;
+            padding: 20px 0;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -190,6 +192,7 @@
 
             .header {
                 flex-shrink: 0;
+                padding: 0 30px;
 
                 .title {
                     display: flex;
