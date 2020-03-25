@@ -43,10 +43,10 @@ export function loadLanguageAsync(lang) {
 export default initI18n({
     cn: {
         ...cn,
-        ...console_new_en,
+        ...console_new_cn,
     },
     en: {
         ...en,
-        ...console_new_cn,
+        ...console_new_en,
     }
 })

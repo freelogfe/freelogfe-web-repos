@@ -33,19 +33,18 @@
 </template>
 
 <script>
-import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils"
+import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils";
 import {
   SIGN_PATH,
   RESET_PASSWORD_PATH,
   LOGIN_NAME,
   USER_SESSION,
   LAST_AUTH_INFO
-} from "../../constant"
-import { loginSuccessHandler } from '../../login'
-import { EMAIL_REG, PHONE_REG } from '../../validator'
-import en from '@freelog/freelog-i18n/ui-login/en'
-import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
-import FToast from "../toast/index.vue"
+} from "../../constant";
+import FToast from "../toast/index.vue";
+import {validateLoginName} from '../../validator'
+import en from '@freelog/freelog-i18n/ui-login/en';
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
 export default {
   name: "f-login",
@@ -73,16 +72,17 @@ export default {
         {
           required: true,
           message: $i18n.t("login.validateErrors.loginName_empty"),
-          trigger: "change"
+          trigger: "blur"
         },
+        { validator: validateLoginName.bind(this), trigger: "blur" }
       ],
       password: [
         {
           required: true,
           message: $i18n.t("login.ruleMessages[1]"),
-          trigger: "change"
+          trigger: "blur"
         },
-        // { min: 6, message: $i18n.t("login.ruleMessages[2]"), trigger: "blur" }
+        { min: 6, message: $i18n.t("login.ruleMessages[2]"), trigger: "blur" }
       ]
     };
     const loginName = window.localStorage.getItem("loginName") || "";
@@ -128,47 +128,24 @@ export default {
       }
       return link
     },
-    validate(loginName, password) {
-      var errMsgs = [] 
-      if (loginName === '') {
-        errMsgs.push(this.$t('login.validateErrors.loginName_empty'))
-      } else {
-        if (!EMAIL_REG.test(loginName) && !PHONE_REG.test(loginName)) {
-          errMsgs.push(this.$t('login.validateErrors.loginName'))
-        }
-      }
-      if (password.length < 6) {
-        if (password === '') {
-          errMsgs.push(this.$t('login.ruleMessages[1]'))
-        } else {
-          errMsgs.push(this.$t('login.ruleMessages[2]'))
-        }
-      }
-      
-      if (errMsgs.length > 0) {
-        // this.$message.error(errMsgs[0])
-        return false
-      } else {
-        return true
-      }
-    },
     submit(ref) {
-      const { loginName, password } = this.model
-      if (!this.validate(loginName, password)) {
-        this.$message.error(this.$t('login.validateErrors.wrong_username_password'))
-        return 
-      } 
-      const data = {
-        loginName, password,
-        isRememer: this.rememberUser ? 1 : 0
-      }
+      const self = this
+      this.$refs[ref].validate(valid => {
+        if (!valid) {
+          return
+        }
 
-      this.loginRequest(data).then(userInfo => {
-        loginSuccessHandler(userInfo, this.$route.query.redirect)
-        this.$emit("after-login-success")
+        const data = Object.assign(this.model, {
+          isRememer: this.rememberUser ? 1 : 0
+        })
+
+        this.fetchLogin(data).then(userInfo => {
+          this.afterLogin(userInfo)
+        })
       })
     },
-    loginRequest(data) {
+    fetchLogin(data) {
+      this.error = null
       this.loading = true
       return this.$axios
         .post("/v1/passport/login", data)
@@ -182,41 +159,66 @@ export default {
           return Promise.reject(res.data.msg)
         })
         .catch(err => {
+          console.log(err);
           this.$emit("after-login-fail")
           const $i18n = this.$i18n
-          let errMsg = ''
           if (typeof err === "string") {
-            errMsg = err
+            this.error = { title: "", message: err }
           } else {
-            errMsg = err.response.errorMsg || $i18n.t("login.errors[0]")
+            this.error = {
+              title: $i18n.t("login.errorTitle"),
+              message: err.response.errorMsg || $i18n.t("login.errors[0]")
+            }
             switch (err.response && err.response.status) {
               case 401:
-                errMsg = $i18n.t("login.errors[1]")
+                this.error.message = $i18n.t("login.errors[1]")
                 break
               case 500:
-                errMsg = $i18n.t("login.errors[2]")
+                this.error.message = $i18n.t("login.errors[2]")
                 break
               default:
-                errMsg = $i18n.t("login.errors[3]")
+                this.error.message = $i18n.t("login.errors[3]")
             }
           }
-          this.$message.error(errMsg)
           this.loading = false
         })
     },
+    afterLogin(userInfo) {
+      if (userInfo == null) return 
+      this.$emit("after-login-success")
+      const win = window
+      setItemForStorage(USER_SESSION, userInfo)
+      setItemForStorage(LOGIN_NAME, userInfo.loginName)
+      const lastAuthInfo = getItemFromStorage(LAST_AUTH_INFO)
+      var targetLink = '/'
+      if(lastAuthInfo && lastAuthInfo.userId === userInfo.userId) {
+        const redirect = this.$route.query.redirect
+        if (isSafeUrl(redirect)) {
+          targetLink = redirect
+        }
+      }
+      window.location.replace(targetLink)
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-@import "../../styles/mixin.less";
 .login-section {
   position: relative;
   width: 550px; height: auto;
 
   .login-body {
     .login-error-box {
-      .error-box()
+      .el-icon-close {
+        position: absolute; top: 4px; right: 4px; z-index: 10;
+        padding: 6px;
+        font-size: 16px; cursor: pointer;
+      }
+      .el-alert { 
+        margin-top: 10px; margin-bottom: 20px; padding: 16px 20px 20px; border: 1px solid #ECBCBC; 
+        background-color: #F7ECEC;
+      }
     }
 
     .login-password {
@@ -250,13 +252,15 @@ export default {
 </style>
 
 <style lang="less">
-  @import "../../styles/mixin.less";
-  .login-section {
-    .el-alert {  
-      .error-alert()
+  .el-alert {  
+    .el-alert__content {
+      padding-right: 12px;
+      font-size: 14px;
+      .el-alert__description {
+        font-size: 14px; color: #DA3F3F;
+      }
     }
   }
-  
   @media screen and (max-width: 768px) {
     .login-section {
       .login-sc-operation {
