@@ -95,14 +95,21 @@
                         v-model="resourceName"
                         :placeholder="$t('resource.enterResourceName')"
                         class="resource-editor__name__input"
-                    />
+                    >
+<!--                        <div slot="suffix" style="height: 100%;">-->
+                        <span
+                            slot="suffix"
+                            style="line-height: 38px; padding-right: 6px;"
+                            class="resource-editor__name__length"
+                        >{{resourceName.length}}/60</span>
+<!--                        </div>-->
+                    </el-input>
 
-                    <span
-                        class="resource-editor__name__length"
-                    >{{resourceName.length}}/60</span>
+
                 </div>
 
-                <div v-if="!!fileSystemInfo" style="padding-right: 35px; color: #333; font-size: 14px; font-weight: 600;">
+                <div v-if="!!fileSystemInfo"
+                     style="padding-right: 35px; color: #333; font-size: 14px; font-weight: 600;">
                     <a
                         :href="`${qiOrigin}/v1/resources/${fileSystemInfo.sha1}/download`"
                         style="color: #333;"
