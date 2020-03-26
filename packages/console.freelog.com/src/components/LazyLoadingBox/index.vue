@@ -66,9 +66,9 @@
 <style scoped lang="less">
     .lazy-loading-box {
         height: 100%;
-        overflow: scroll;
+        overflow-y: scroll;
         overflow-y: overlay;
         box-sizing: border-box;
-        overflow-x: hidden;
+        /*overflow-x: hidden;*/
     }
 </style>
