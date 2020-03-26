@@ -197,15 +197,15 @@ export default {
          * 更新一个策略的状态
          * @param policie
          */
-        async updatePolicies(policie) {
+        async updatePolicies(policy) {
             // console.log(policie, 'policiespoliciespoliciespolicies');
             const res = await this.updatePresentable({
                 policyInfo: {
                     updatePolicies: [
                         {
-                            policyId: policie.policyId,
-                            policyName: policie.policyName,
-                            status: policie.status,
+                            policyId: policy.policyId,
+                            policyName: policy.policyName,
+                            status: policy.status,
                         },
                     ],
                 },
@@ -217,7 +217,13 @@ export default {
             }
             this.isShowEditPolicy = false;
             this.policies = res.data.data.policies;
-            this.$message.success(this.$t('node.updatedPolicySuccessfully'));
+            // this.$message.success(this.$t('node.updatedPolicySuccessfully'));
+
+            if(policy.status === 1) {
+                this.$message({type: 'success', message: `${this.$t('release.policy')}(${policy.policyName})${this.$t('release.enabled')}！`});
+            }else if(policy.status === 0){
+                this.$message({type: 'warning', message: `${this.$t('release.policy')}(${policy.policyName})${this.$t('release.disabled')}！`});
+            }
         },
         /**
          * presentableName 变化
