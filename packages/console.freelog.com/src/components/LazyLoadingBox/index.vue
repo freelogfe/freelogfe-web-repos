@@ -1,5 +1,5 @@
 <template>
-    <div ref="boxRef" style="height: 100%; overflow-y: auto; box-sizing: border-box;">
+    <div ref="boxRef" class="lazy-loading-box">
         <slot/>
         <div
             ref="loadingRef"
@@ -63,6 +63,11 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+    .lazy-loading-box {
+        height: 100%;
+        overflow: scroll;
+        overflow-y: overlay;
+        box-sizing: border-box;
+    }
 </style>
