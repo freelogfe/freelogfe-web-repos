@@ -69,5 +69,6 @@
         overflow: scroll;
         overflow-y: overlay;
         box-sizing: border-box;
+        overflow-x: hidden;
     }
 </style>
