@@ -145,14 +145,14 @@
             class="mock-editor__footer"
         >
             <div class="mock-editor__footer__box">
-                <el-button
-                    size="medium"
-                    round
-                    class="mock-editor__footer__box__cancel"
-                    type="text"
-                    @click="goBack"
-                >{{isUpdateResource ? $t('mock.cancel'): $t('mock.cancelCreating')}}
-                </el-button>
+<!--                <el-button-->
+<!--                    size="medium"-->
+<!--                    round-->
+<!--                    class="mock-editor__footer__box__cancel"-->
+<!--                    type="text"-->
+<!--                    @click="goBack"-->
+<!--                >{{isUpdateResource ? $t('mock.cancel'): $t('mock.cancelCreating')}}-->
+<!--                </el-button>-->
                 <el-button
                     size="medium"
                     round
