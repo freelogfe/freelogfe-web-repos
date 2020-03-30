@@ -7,15 +7,15 @@
             <BreadCrumb
                 v-if="!!$route.params.bucketName"
                 :list="[
-                    {text: '模拟资源池', to: `/mock/display?activatedBucketName=${$route.params.bucketName}`},
-                    {text: '创建模拟资源'}
+                    {text: $t('mock.mockPool'), to: `/mock/display?activatedBucketName=${$route.params.bucketName}`},
+                    {text: $t('mock.createMockResource')}
                 ]"
             />
             <BreadCrumb
                 v-else
                 :list="[
-                    {text: '模拟资源池', to: `/mock/display?activatedBucketName=${bucketName}`},
-                    {text: '模拟资源信息'}
+                    {text: $t('mock.mockPool'), to: `/mock/display?activatedBucketName=${bucketName}`},
+                    {text: $t('mock.mockResourceInfo')}
                 ]"
             />
         </div>

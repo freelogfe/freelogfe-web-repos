@@ -60,5 +60,9 @@
   "releaseAreNotOnline": "Have relied on in the not Online release",
   "selectedTypeMustBeRelease": "The selected resource type must be ",
   "saveFailed": "Save Failed",
-  "saveSuccess": "Save Success"
+  "saveSuccess": "Save Success",
+
+  "mockPool": "Mock Pool",
+  "createMockResource": "Create Mock Resource",
+  "mockResourceInfo": "Mock Resource Info"
 }

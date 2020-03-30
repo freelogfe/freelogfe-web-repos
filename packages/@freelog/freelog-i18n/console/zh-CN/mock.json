@@ -55,5 +55,9 @@
   "creationFailed": "创建失败",
   "createdSuccessfully": "创建成功",
   "saveFailed": "保存失败",
-  "saveSuccess": "保存成功"
+  "saveSuccess": "保存成功",
+
+  "mockPool": "模拟资源池",
+  "createMockResource": "创建模拟资源",
+  "mockResourceInfo": "模拟资源信息"
 }
