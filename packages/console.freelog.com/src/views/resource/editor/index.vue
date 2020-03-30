@@ -183,14 +183,14 @@
             class="resource-editor__footer"
         >
             <div class="resource-editor__footer__box">
-                <el-button
-                    size="medium"
-                    round
-                    class="resource-editor__footer__box__cancel"
-                    type="text"
-                    @click="goBack"
-                >{{isUpdateResource ? $t('resource.cancel'): $t('resource.cancelCreating')}}
-                </el-button>
+<!--                <el-button-->
+<!--                    size="medium"-->
+<!--                    round-->
+<!--                    class="resource-editor__footer__box__cancel"-->
+<!--                    type="text"-->
+<!--                    @click="goBack"-->
+<!--                >{{isUpdateResource ? $t('resource.cancel'): $t('resource.cancelCreating')}}-->
+<!--                </el-button>-->
                 <el-button
                     size="medium"
                     round
@@ -217,28 +217,6 @@
             :showType="resourceType"
         />
 
-        <!--        <el-dialog-->
-        <!--            width="750px"-->
-        <!--            top="10vh"-->
-        <!--            center-->
-        <!--            :visible="false"-->
-        <!--        >-->
-        <!--            &lt;!&ndash;            :historicalReleases="releasesList"&ndash;&gt;-->
-        <!--            <release-search-->
-        <!--                :release-source="targetResourceData"-->
-        <!--                :tabLayout="['my-release']"-->
-        <!--                :historicalReleases="this.releasedList.map(i => ({releaseId: i.id}))"-->
-        <!--                @add="createRelease"-->
-        <!--            />-->
-        <!--            <div slot="footer">-->
-        <!--                <el-button-->
-        <!--                    round-->
-        <!--                    type="primary"-->
-        <!--                    class="create-release-btn"-->
-        <!--                    @click="createRelease()">{{$t('resource.createANewRelease')}}-->
-        <!--                </el-button>-->
-        <!--            </div>-->
-        <!--        </el-dialog>-->
     </div>
 </template>
 
