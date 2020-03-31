@@ -36,7 +36,7 @@
 
 <script>
     import DepItem from './DepItem.vue';
-    import LazyLoadingBox from './LazyLoadingBox.vue';
+    import LazyLoadingBox from '@/components/LazyLoadingBox/index.vue';
 
     export default {
         name: "Mock",

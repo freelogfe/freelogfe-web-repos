@@ -1,10 +1,6 @@
 <template>
     <div class="create-release-modal">
-<!--<<<<<<< HEAD-->
-<!--        <div class="box" :style="{height: dataList && !noDate ? '680px': '380px'}">-->
-<!--=======-->
         <div class="box" :style="{height: dataList && dataList.length > 0  ? '680px': '380px'}">
-<!--&gt;>>>>>> dev-->
             <div class="header">
                 <div class="title">
                     <div/>
@@ -43,15 +39,8 @@
                     v-if="noDate"
                     style="text-align: center;"
                 >
-<!--<<<<<<< HEAD-->
-<!--                    <div style="height: 70px;"/>-->
-<!--                    <div style="font-size: 20px; color: #222;">第一次发行资源？</div>-->
-<!--                    <div style="height: 30px;"/>-->
-<!--                    <div style="color: #666; font-size: 14px;">资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。</div>-->
-<!--=======-->
                     <div style="height: 80px;"/>
                     <div style="color: #666; font-size: 14px;">{{$t('create_release_popup_empty')}}</div>
-<!--&gt;>>>>>> dev-->
                     <div style="height: 40px;"/>
                     <a
                         class="create-first"
@@ -59,7 +48,6 @@
                     >{{$t('create_my_first_release')}}</a>
                 </div>
 
-                <!--                :endText="(dataList || []).length !== 0 ? '' : $t('components.CreateReleaseModal.noResult')"-->
                 <LazyLoadingBox
                     v-if="!noDate"
                     :end="isEnd"
@@ -89,11 +77,6 @@
                     </div>
                 </LazyLoadingBox>
 
-                <!--                <div-->
-                <!--                    style="line-height: 300px; font-size: 16px; color: #333; text-align: center;"-->
-                <!--                    v-if="totalItem === 0"-->
-                <!--                >您还没有对应的发行-->
-                <!--                </div>-->
             </div>
         </div>
     </div>
