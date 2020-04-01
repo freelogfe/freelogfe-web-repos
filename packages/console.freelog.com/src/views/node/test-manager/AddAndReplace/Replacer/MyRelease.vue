@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import LazyLoadingBox from '@/components/DependentReleaseList/DepDialog/LazyLoadingBox.vue';
+    import LazyLoadingBox from '@/components/LazyLoadingBox/index.vue';
     import Item from './Item.vue';
 
     export default {
