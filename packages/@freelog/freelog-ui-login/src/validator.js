@@ -52,5 +52,4 @@ export const validateLoginEmail = function (rule, value, callback) {
   }
 }
 
-
 export default validateLoginName

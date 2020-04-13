@@ -1,6 +1,6 @@
 import { isSafeUrl } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
-import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
+import {EMAIL_REG, PHONE_REG, validateLoginName, checkLoginName1 } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en';
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
@@ -16,14 +16,34 @@ export default {
   },
 
   data() {
+    const checkLoginName = function (rule, value, callback) {
+      if (value && (EMAIL_REG.test(value) || PHONE_REG.test(value))) {
+        this.$axios(`/v1/userinfos/detail?keywords=${value}`)
+          .then(res => res.data)
+          .then(res => {
+            if (res.data == null) {
+              this.isNonExistentName = true
+              callback(new Error(this.$t('resetPassword.nonExistentName')))
+            } else {
+              this.isNonExistentName = false
+              callback()
+            }
+          })
+          .catch(e => callback())
+      } else {
+        callback()
+      }
+    }
     // form validate rules
     const rules = {
       loginName: [
         { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'blur' },
-        { validator: validateLoginName.bind(this), trigger: 'blur' }
+        { validator: validateLoginName.bind(this), trigger: 'blur' },
+        { validator: checkLoginName.bind(this), trigger: 'blur' }
       ],
       authCode: [
-        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' },
+        { min: 6, max: 6, message: this.$t('resetPassword.wrongVerifyCode'), trigger: 'blur' },
       ],
       password: [
         { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
@@ -38,6 +58,7 @@ export default {
       },
       rules,
       error: null,
+      isNonExistentName: false,
       loading: false,
       sending: false,
       waitingTimer: 0,
@@ -53,7 +74,7 @@ export default {
 
   computed: {
     disabledCheckCodeBtn() {
-      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName))
+      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName)) || this.isNonExistentName
     },
     vcodeBtnText() {
       if (this.sending) {
@@ -151,6 +172,7 @@ export default {
           window.location.href = LOGIN_PATH
         }
       }, 1e3)
-    }
+    },
+    showClose() {}
   }
 }

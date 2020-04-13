@@ -14,6 +14,55 @@ export default {
   },
 
   data() {
+    const checkUserName = function (rule, value, callback) {
+      if (value && (USERNAME_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentUserName')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+    const checkLoginEmail = function (rule, value, callback) {
+      if (value && (EMAIL_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentEmail')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+    const checkLoginpPhone = function (rule, value, callback) {
+      if (value && (PHONE_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentIphone')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+
     const validatePassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('signup.passwordInputTip')))
@@ -38,15 +87,18 @@ export default {
     const rules = {
       loginIphone: [
         {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'blur'},
-        {validator: validateLoginIphone.bind(this), trigger: 'blur'}
+        {validator: validateLoginIphone.bind(this), trigger: 'blur'},
+        {validator: checkLoginpPhone.bind(this), trigger: 'blur'},
       ],
       loginEmail: [
         {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'blur'},
-        {validator: validateLoginEmail.bind(this), trigger: 'blur'}
+        {validator: validateLoginEmail.bind(this), trigger: 'blur'},
+        {validator: checkLoginEmail.bind(this), trigger: 'blur'},
       ],
       username: [
         {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'blur'},
-        {validator: validateUsername.bind(this), trigger: 'blur'}
+        {validator: validateUsername.bind(this), trigger: 'blur'},
+        {validator: checkUserName.bind(this), trigger: 'blur'}
       ],
       password: [
         {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'blur'},
@@ -60,6 +112,7 @@ export default {
       ],
       authCode: [
         {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'blur'},
+        {min: 6, max: 6, message: this.$t('signup.wrongVerifyCode'), trigger: 'blur'},
       ]
     }
     const model = {
@@ -78,6 +131,7 @@ export default {
       logining: false,
       readonly: true,
       sending: false,
+      disabledCheckCode: false,
       waitingTimer: 0,
       loginLink: LOGIN_PATH,
       registerTypes: [ 'loginIphone', 'loginEmail' ],
@@ -87,7 +141,7 @@ export default {
 
   computed: {
     disabledCheckCodeBtn() {
-      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone))
+      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone)) || this.disabledCheckCode
     },
     accountType() {
       var type = ''
@@ -139,6 +193,16 @@ export default {
   },
 
   methods: {
+    fetchUserInfo(value) {
+      return  this.$axios(`/v1/userinfos/detail?keywords=${value}`).then(res => res.data)
+                .then(res => {
+                  if (res.data == null) {
+                    return 0
+                  } else {
+                    return 1
+                  }
+                }).catch(e => 0)
+    },
     getLoginName() {
       switch(this.selectedRegisterType) {
         case this.registerTypes[0]: {

@@ -9,10 +9,10 @@
         </h2>
       </header>
       <div class="reset-password-body">
-        <div class="reset-password-error-box">
+        <!-- <div class="reset-password-error-box">
           <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
           <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
-        </div>
+        </div> -->
         <el-form class="reset-password-form" auto-complete="off" :model="model" :rules="rules" ref="formRef">
           <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
             <el-input type="text" v-model="model.loginName"></el-input>

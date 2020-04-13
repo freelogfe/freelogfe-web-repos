@@ -7,10 +7,10 @@
       <h2 class="heading" :class="{ 'show-error': error }">{{$t('signup.head')}}</h2>
     </header>
     <div class="signup-body">
-      <div class="signup-error-box">
+      <!-- <div class="signup-error-box">
         <i class="el-icon-close" v-if="showClose" @click="tapCloseBtn"></i>
         <el-alert type="error" :title="error.title" :description="error.message" v-if="error" />
-      </div>
+      </div> -->
       <el-form class="signup-form" auto-complete="off" :model="model" :rules="rules" ref="signupForm">
         <el-form-item prop="username" :label="$t('signup.username')">
           <el-input type="text" v-model="model.username" :placeholder="$t('signup.usernamePlaceholder')">

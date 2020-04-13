@@ -41,6 +41,7 @@
 			"请填写注册时使用的手机号/邮箱以便接收验证码，验证成功后可以重置您的密码"
 		],
 		"loginName": "用户名/手机号/邮箱",
+		"nonExistentName": "用户账号不存在",
 		"loginNamePlaceholder": "请输入手机号或邮箱",
 		"password": "新密码",
 		"backToLoginTexts": [
@@ -56,6 +57,7 @@
 		"timerText": "{time}秒后重发",
 		"checkcodeBtnText": "获取验证码",
 		"verifyCode": "验证码",
+		"wrongVerifyCode": "验证码为6位数字",
 		"resetPasswordBtns": [
 			"重设中...",
 			"重设密码"
@@ -74,13 +76,16 @@
 		"registerType": "注册方式",
 		"loginName": "账号",
 		"loginIphone": "手机号",
+		"existentIphone": "手机号已被注册",
 		"loginEmail": "邮箱地址",
+		"existentEmail": "邮箱地址已被注册",
 		"loginIphonePlaceholder": "请输入11位手机号",
 		"emptyIphoneTip": "手机号不能为空",
 		"loginEmailPlaceholder": "请输入邮箱地址",
 		"emptyEmailTip": "邮箱地址不能为空",
 		"username": "用户名",
-		"usernamePlaceholder": null,
+		"existentUserName": "用户名已存在",
+		"usernamePlaceholder": "请输入用户名称（1-30个字符、数字或-）",
 		"password": "密码",
 		"passwordPlaceholder": "密码必须包含数字和字母；且由6-24个字符组成",
 		"checkPassword": "确认密码",
@@ -113,7 +118,8 @@
 			"username_empty": "用户名称不能为空",
 			"iphone": "",
 			"iphone_empty": "手机号不能为空",
-			"email_empty": "邮箱地址不能为空"
+			"email_empty": "邮箱地址不能为空",
+			"wrongVerifyCode": "验证码为6位数字"
 		}
 	}
 }

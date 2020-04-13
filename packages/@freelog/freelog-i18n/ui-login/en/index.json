@@ -41,6 +41,7 @@
       "Please fill in the mobile phone number/email address used during registration to receive the verification code. After successful verification, you can reset your password"
     ],
     "loginName": "Username/Mobile/Email",
+		"nonExistentName": "The user account does not exist",
     "loginNamePlaceholder": "Phone number or email",
     "password": "password",
     "backToLoginTexts": [
@@ -56,6 +57,7 @@
     "timerText": "Resend after {time} seconds",
     "checkcodeBtnText": "Get verification code",
     "verifyCode": "verification code",
+		"wrongVerifyCode": "The verification code is 6 digits",
     "resetPasswordBtns": [
       "Reseting...",
       "Reset Password"
@@ -80,6 +82,7 @@
     "loginEmailPlaceholder": "Please enter email address",
     "emptyEmailTip": "The email address cannot be empty",
     "username": "username",
+		"existentUserName": "The user name already exists",
     "usernamePlaceholder": "Please enter a user username (1-30 letters, numbers and \"-\")",
     "password": "password",
     "passwordPlaceholder": "Passwords must contain Numbers and letters; And is composed of 6-24 characters",
@@ -113,7 +116,8 @@
       "username_empty": "User name cannot be empty",
       "iphone": "",
       "iphone_empty": "Phone number cannot be empty",
-      "email_empty": "Email address cannot be empty"
+      "email_empty": "Email address cannot be empty",
+			"wrongVerifyCode": "验证码为6位数字"
     }
   }
 }
