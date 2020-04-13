@@ -1,6 +1,6 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
-import {validateLoginIphone, validateLoginEmail, validateUsername, validatePassword, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
+import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
 import { loginSuccessHandler } from '../../login'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
@@ -21,6 +21,66 @@ export default {
   },
 
   data() {
+    const checkUserName = (rule, value, callback) => {
+      if (value && (USERNAME_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentUserName')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+    const checkLoginEmail = (rule, value, callback) => {
+      if (value && (EMAIL_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentEmail')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+    const checkLoginpPhone = (rule, value, callback) => {
+      if (value && (PHONE_REG.test(value))) {
+        this.fetchUserInfo(value)
+          .then(res => {
+            if (res === 1) {
+              this.disabledCheckCode = true
+              callback(new Error(this.$t('signup.existentIphone')))
+            } else {
+              this.disabledCheckCode = false
+              callback()
+            }
+          })
+      } else {
+        callback()
+      }
+    }
+
+    const validatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('signup.passwordInputTip')))
+      } else {
+        if (this.model.checkPassword !== '') {
+          this.$refs.signupForm.validateField('checkPassword')
+        }
+        callback()
+      }
+    }
+
     const validateCheckPassword = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('signup.checkPasswordInputTip')))
@@ -41,31 +101,32 @@ export default {
 
     const rules = {
       loginIphone: [
-        { required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change' },
-        { validator: _validateLoginIphone.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change'},
+        {validator: validateLoginIphone.bind(this), trigger: 'blur'},
+        {validator: checkLoginpPhone.bind(this), trigger: 'blur'},
       ],
       loginEmail: [
-        { required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change' },
-        { validator: _validateLoginEmail.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change'},
+        {validator: validateLoginEmail.bind(this), trigger: 'change'},
+        {validator: checkLoginEmail.bind(this), trigger: 'blur'},
       ],
       username: [
-        { required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change' },
-        { validator: validateUsername.bind(this), trigger: 'blur'}
+        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change'},
+        {validator: validateUsername.bind(this), trigger: 'blur'},
+        {validator: checkUserName.bind(this), trigger: 'blur'},
       ],
       password: [
-        { required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change' },
-        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
-        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
-        { validator: validatePassword.bind(this), trigger: 'blur' },
+        {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change'},
+        {validator: validatePassword, trigger: 'blur'},
+        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       checkPassword: [
-        { required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change' },
-        { min: 6, message: this.$t('signup.passwordLengthRule1'), trigger: 'blur' },
-        { max: 24, message: this.$t('signup.passwordLengthRule2'), trigger: 'blur' },
+        {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change'},
+        {validator: validateCheckPassword},
+        {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       authCode: [
-        { required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change' },
-        { min: 6, max: 6, message: this.$t('signup.authCodeLengthRule'), trigger: 'blur' }
+        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change'},
       ]
     }
     const model = {
@@ -84,6 +145,7 @@ export default {
       logining: false,
       readonly: true,
       sending: false,
+      disabledCheckCode: false,
       waitingTimer: 0,
       registerTypes: [ 'loginIphone', 'loginEmail' ],
       selectedRegisterType: 'loginIphone',
@@ -94,11 +156,8 @@ export default {
   },
 
   computed: {
-    loginLink() {
-      return this.resolveLink(LOGIN_PATH)
-    },
     disabledCheckCodeBtn() {
-      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone))
+      return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone)) || this.disabledCheckCode
     },
     accountType() {
       var type = ''
@@ -152,6 +211,16 @@ export default {
   },
 
   methods: {
+    fetchUserInfo(value) {
+      return  this.$axios(`/v1/userinfos/detail?keywords=${value}`).then(res => res.data)
+                .then(res => {
+                  if (res.data == null) {
+                    return 0
+                  } else {
+                    return 1
+                  }
+                }).catch(e => 0)
+    },
     getLoginName() {
       switch(this.selectedRegisterType) {
         case this.registerTypes[0]: {
@@ -166,21 +235,7 @@ export default {
       }
       return this.model.loginName
     },
-    resolveLink(path) {
-      var link = `${path}`
-      if (this.$route != null) {
-        const { redirect } = this.$route.query
-        if (isSafeUrl(redirect)) {
-          link = `${link}?redirect=${redirect}`
-        }
-      }else {
-        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
-        link = `${hostName}${link}`
-      }
-      return link
-    },
     async submit(ref) {
-      this.authCodeErrorMsg = ''
       if (this.loading) return
 
       const validPromise = new Promise(resolve => {
@@ -222,15 +277,7 @@ export default {
           console.error(e)
         }
       } else {
-        switch(res.errcode) {
-          case 100: {
-            this.authCodeErrorMsg = this.$t('signup.validateErrors.verifyCode_wrong')
-            break
-          }
-          default: {
-            this.$message.error(res.msg)
-          }
-        }
+        this.$message.error(res.msg)
       }
       this.loading = false
     },

@@ -35,10 +35,11 @@
 			"Information & Account"
 		]
 	},
-	"navTop": [
-		"Go to console",
-		"Log out"
-	],
+	"navTop": {
+		"goToConsole": "Go to consol",
+		"logout": "Logout",
+		"closedBeta": "Test"
+	},
 	"pagination": {
 		"emptyText": "No data",
 		"start": "First Page",

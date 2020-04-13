@@ -42,7 +42,7 @@ import {
   LAST_AUTH_INFO
 } from "../../constant"
 import { loginSuccessHandler } from '../../login'
-import { EMAIL_REG, PHONE_REG } from '../../validator'
+import {validateLoginName} from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 import FToast from "../toast/index.vue"
@@ -158,15 +158,15 @@ export default {
         this.$message.error(this.$t('login.validateErrors.wrong_username_password'))
         return 
       } 
-      const data = {
-        loginName, password,
-        isRememer: this.rememberUser ? 1 : 0
-      }
+        const data = Object.assign(this.model, {
+          isRememer: this.rememberUser ? 1 : 0
+        })
 
-      this.loginRequest(data).then(userInfo => {
-        loginSuccessHandler(userInfo, this.$route.query.redirect)
-        this.$emit("after-login-success")
-      })
+        this.loginRequest(data).then(userInfo => {
+          loginSuccessHandler(userInfo, this.$route.query.redirect)
+          this.$emit("after-login-success")
+        })
+
     },
     loginRequest(data) {
       this.loading = true
