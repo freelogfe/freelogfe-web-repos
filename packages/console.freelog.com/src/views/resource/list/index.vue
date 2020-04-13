@@ -18,6 +18,7 @@
             </router-link>
         </div>
 
+
         <resource-items-list
             :query="queryInput"
             @release="showReleaseDialog"
@@ -32,19 +33,6 @@
             :showType="resourceType"
         />
 
-        <!--    <el-dialog width="750px"-->
-        <!--               top="10vh"-->
-        <!--               center-->
-        <!--               :visible.sync="isShowReleaseSearchDialog">-->
-        <!--      <release-search-->
-        <!--        :release-source="targetReleaseResource"-->
-        <!--        :tabLayout="['my-release']"-->
-        <!--        :historicalReleases="targetReleaseResource ? targetReleaseResource.releaseList : []"-->
-        <!--        @add="releaseSearchHandler"></release-search>-->
-        <!--      <div class="" slot="footer">-->
-        <!--        <el-button round type="primary" class="create-release-btn" @click="createNewRelease">{{$t('resource.createNewReleaseText')}}</el-button>-->
-        <!--      </div>-->
-        <!--    </el-dialog>-->
     </section>
 </template>
 

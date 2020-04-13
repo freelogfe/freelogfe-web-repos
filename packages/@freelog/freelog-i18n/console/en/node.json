@@ -69,7 +69,7 @@
     "top": "Top",
     "upgrade": "Upgrade",
     "online": "Online",
-    "downline": "Downline"
+    "downline": "Offline"
   },
   "cannotOnline": {
     "noPolicy": "Cannot be on the line : No authorization policy is available",
@@ -133,7 +133,7 @@
   "notYetAuthorization": "Not yet tested authorization",
   "detail": "Detail",
   "delete": "Delete",
-  "downlineSuccess": "Downline success",
+  "downlineSuccess": " Removed from the node successfully",
   "onlineSuccess": "Online success",
   "deletedSuccess": "Deleted Success",
   "setVersionSuccess": "Set the version successfully",
@@ -234,5 +234,4 @@
   "use": "Use",
   "pause": "Pause",
   "contract": "Contract "
-
 }

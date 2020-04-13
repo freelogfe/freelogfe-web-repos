@@ -58,6 +58,7 @@
 
             <SmallTitle v-if="!isUpdateResource">{{$t('resource.resourceFile')}}</SmallTitle>
 
+
             <!--            <div-->
             <!--                v-if="isUpdateResource && !!fileSystemInfo"-->
             <!--                style="line-height: 46px; display: flex; align-items: center; justify-content: space-between; margin: 0 34px; background-color: #FAFBFB; font-size: 14px; color: #333; padding: 0 20px;"-->

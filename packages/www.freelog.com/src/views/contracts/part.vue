@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="part-release" v-if="viewType === 'release' && releaseInfo != null" >
-      <el-image style="width: 32px; height: 24px" :src="releaseInfo.previewImages && releaseInfo.previewImages[0] ? releaseInfo.previewImages[0] : '//test-frcdn.oss-cn-shenzhen.aliyuncs.com/console/public/img/resource.jpg'" :fit="fit"></el-image>
+      <el-image style="width: 32px; height: 24px" :src="releaseInfo.previewImages && releaseInfo.previewImages[0] ? releaseInfo.previewImages[0] : '//test-frcdn.oss-cn-shenzhen.aliyuncs.com/console/public/img/resource.jpg'" fit="fit"></el-image>
       <p>
         {{releaseInfo.releaseName}}
         <router-link v-if="isOwner" :to="`//console.${mainDomain}/release/edit/${releaseInfo.releaseId}`" target="_blank">管理</router-link>
