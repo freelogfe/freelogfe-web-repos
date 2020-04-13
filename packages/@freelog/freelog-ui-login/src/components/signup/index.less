@@ -1,4 +1,10 @@
+@import "../../styles/mixin.less";
+
 .signup-section {
+
+  .signup-error-box {
+    .error-box()
+  }
 
   .vcode-btn {
     margin-left: 4px; padding: 12px 0;
@@ -32,6 +38,7 @@
     line-height: 20px; font-size: 14px; color: #666; text-align: center; 
     a { color: #409EFF; }
   }
+
   .signup-register-type-box {
     position: relative;
     .signup-radios {

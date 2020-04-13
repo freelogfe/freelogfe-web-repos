@@ -12,7 +12,7 @@ export function validateUsername(rule, value, callback) {
       callback()
     }
   } else {
-    callback(new Error(this.$t('signup.validateErrors.username_empty')))
+    callback()
   }
 }
 
@@ -24,7 +24,7 @@ export const validateLoginName = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
+    callback()
   }
 }
 
@@ -36,7 +36,7 @@ export const validateLoginIphone = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
+    callback()
   }
 }
 
@@ -48,8 +48,9 @@ export const validateLoginEmail = function (rule, value, callback) {
       callback()
     }
   } else {
-    callback(new Error(this.$t('login.validateErrors.loginName_empty')))
+    callback()
   }
 }
+
 
 export default validateLoginName

@@ -1,11 +1,18 @@
 import {isSafeUrl} from '../../utils'
 import { LOGIN_PATH } from '../../constant'
 import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
-import en from '@freelog/freelog-i18n/ui-login/en';
-import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
+import { loginSuccessHandler } from '../../login'
+import en from '@freelog/freelog-i18n/ui-login/en'
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 
 export default {
   name: 'f-signup',
+  props: {
+    showClose: {
+      type: Boolean,
+      default: false
+    }
+  },
   i18n: {
     messages: {
       en,
@@ -14,7 +21,7 @@ export default {
   },
 
   data() {
-    const checkUserName = function (rule, value, callback) {
+    const checkUserName = (rule, value, callback) => {
       if (value && (USERNAME_REG.test(value))) {
         this.fetchUserInfo(value)
           .then(res => {
@@ -30,7 +37,7 @@ export default {
         callback()
       }
     }
-    const checkLoginEmail = function (rule, value, callback) {
+    const checkLoginEmail = (rule, value, callback) => {
       if (value && (EMAIL_REG.test(value))) {
         this.fetchUserInfo(value)
           .then(res => {
@@ -46,7 +53,7 @@ export default {
         callback()
       }
     }
-    const checkLoginpPhone = function (rule, value, callback) {
+    const checkLoginpPhone = (rule, value, callback) => {
       if (value && (PHONE_REG.test(value))) {
         this.fetchUserInfo(value)
           .then(res => {
@@ -86,33 +93,32 @@ export default {
 
     const rules = {
       loginIphone: [
-        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'blur'},
+        {required: true, message: this.$t('signup.emptyIphoneTip'), trigger: 'change'},
         {validator: validateLoginIphone.bind(this), trigger: 'blur'},
         {validator: checkLoginpPhone.bind(this), trigger: 'blur'},
       ],
       loginEmail: [
-        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'blur'},
-        {validator: validateLoginEmail.bind(this), trigger: 'blur'},
+        {required: true, message: this.$t('signup.emptyEmailTip'), trigger: 'change'},
+        {validator: validateLoginEmail.bind(this), trigger: 'change'},
         {validator: checkLoginEmail.bind(this), trigger: 'blur'},
       ],
       username: [
-        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'blur'},
+        {required: true, message: this.$t('signup.validateErrors.username_empty'), trigger: 'change'},
         {validator: validateUsername.bind(this), trigger: 'blur'},
-        {validator: checkUserName.bind(this), trigger: 'blur'}
+        {validator: checkUserName.bind(this), trigger: 'blur'},
       ],
       password: [
-        {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'blur'},
+        {required: true, message: this.$t('signup.passwordInputTip'), trigger: 'change'},
         {validator: validatePassword, trigger: 'blur'},
         {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       checkPassword: [
-        {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'blur'},
-        {validator: validateCheckPassword, trigger: 'blur'},
+        {required: true, message: this.$t('signup.checkPasswordPlaceholder'), trigger: 'change'},
+        {validator: validateCheckPassword},
         {min: 6, message: this.$t('signup.passwordLengthRule'), trigger: 'blur'}
       ],
       authCode: [
-        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'blur'},
-        {min: 6, max: 6, message: this.$t('signup.wrongVerifyCode'), trigger: 'blur'},
+        {required: true, message: this.$t('signup.authCodeInputTip'), trigger: 'change'},
       ]
     }
     const model = {
@@ -140,7 +146,7 @@ export default {
   },
 
   computed: {
-    disabledCheckCodeBtn() {
+    disabledCheckCodeBtn() {      
       return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginEmail) || PHONE_REG.test(this.model.loginIphone)) || this.disabledCheckCode
     },
     accountType() {
@@ -217,64 +223,65 @@ export default {
       }
       return this.model.loginName
     },
-    submit(ref) {
-      if (this.loading) {
-        return
-      }
+    async submit(ref) {
+      if (this.loading) return
 
-      this.$refs[ref].validate((valid) => {
-        if (!valid) {
-          return
-        }
-
-        this.error = null
-        this.loading = true
-
-        const data = {}
-
-        Object.keys(this.model).forEach((key) => {
-          if (key !== 'checkPassword' && this.registerTypes.indexOf(key) === -1) {
-            data[key] = this.model[key]
-          }
+      const validPromise = new Promise(resolve => {
+        this.$refs[ref].validate((valid) => {
+          resolve(valid)
         })
-        data['loginName'] = this.getLoginName()
-
-        this.$axios.post('/v1/userinfos/register', data)
-          .then((res) => {
-            if (res.data.errcode === 0) {
-              // this.$message.success(this.$t('signup.registerSuccess'))
-              if(res.data.data) {
-                window.localStorage.setItem('loginName', res.data.data.loginName)
-              }
-              
-              this.$router.push(LOGIN_PATH)
-            } else {
-              this.$message.error(res.data.msg)
-            }
-            this.loading = false
-          })
-          .catch((err) => {
-            this.error = {title: this.$t('signup.errorTitle'), message: this.$t('signup.defaultErrorMsg')}
-            switch (err.response && err.response.status) {
-              case 401:
-                this.error.message = this.$t('signup.identifyError')
-                break
-              case 500:
-                this.error.message = this.$t('signup.serverError')
-                break
-              default:
-                this.error.message = this.$t('signup.appError')
-            }
-            this.loading = false
-          })
       })
+      const valid = await validPromise
+      // 检验不通过
+      if (!valid) return 
+      
+      this.loading = true
+      const data = {}
+      Object.keys(this.model).forEach((key) => {
+        if (key !== 'checkPassword' && this.registerTypes.indexOf(key) === -1) {
+          data[key] = this.model[key]
+        }
+      })
+      data['loginName'] = this.getLoginName()
+      try {
+        var res = await this.$axios.post('/v1/userinfos/register', data).then(res => res.data)
+      } catch (e) {
+        this.$message.error(this.$t('signup.serverError'))
+        return 
+      }
+      if (res.errcode === 0) {
+        if(res.data) {
+          window.localStorage.setItem('loginName', res.data.loginName)
+        }
+        try {
+          const userInfo = await this.loginRequest({
+            loginName: data['loginName'],
+            password: data['password'],
+            isRemember: 1
+          })
+          loginSuccessHandler(userInfo, this.$route.query.redirect)
+        } catch(e) {
+          this.$router.push(LOGIN_PATH)
+          console.error(e)
+        }
+      } else {
+        this.$message.error(res.msg)
+      }
+      this.loading = false
+    },
+    loginRequest(data) {
+      return this.$axios.post("/v1/passport/login", data).then(res => res.data)
+        .then(res => {
+          if (res.ret === 0 && res.errcode === 0) {
+            var userInfo = res.data
+            userInfo.loginName = data.loginName
+            return Promise.resolve(userInfo)
+          }
+          return Promise.reject(res.msg)
+        })
     },
     sendCheckCodeNotifyHandler() {
       if (this.sending || !this.getLoginName()) return
-
-      // if (!this.model.password) {
-      //   return this.$message.error(this.$t('signup.passwordInputTip'))
-      // }
 
       this.sending = true
       this.$axios.post(`/v1/message/send`, {
@@ -290,9 +297,7 @@ export default {
           this.$message.error(msg)
         }
       })
+      .catch(e => this.$message.error(e))
     },
-    refreshVcodeHandler() {
-      this.t = +new Date()
-    }
   }
 }

@@ -1,6 +1,6 @@
 import { isSafeUrl } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
-import {EMAIL_REG, PHONE_REG, validateLoginName, checkLoginName1 } from '../../validator'
+import {EMAIL_REG, PHONE_REG, validateLoginName} from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en';
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN';
 
@@ -8,6 +8,12 @@ const steps = ['authCode', 'success']
 const remainTimer = 3
 export default {
   name: 'f-reset-password',
+  props: {
+    showClose: {
+      type: Boolean,
+      default: false
+    }
+  },
   i18n: {
     messages: {
       en,
@@ -16,7 +22,7 @@ export default {
   },
 
   data() {
-    const checkLoginName = function (rule, value, callback) {
+    const checkLoginName = (rule, value, callback) => {
       if (value && (EMAIL_REG.test(value) || PHONE_REG.test(value))) {
         this.$axios(`/v1/userinfos/detail?keywords=${value}`)
           .then(res => res.data)
@@ -34,6 +40,7 @@ export default {
         callback()
       }
     }
+
     // form validate rules
     const rules = {
       loginName: [
@@ -44,6 +51,7 @@ export default {
       authCode: [
         { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' },
         { min: 6, max: 6, message: this.$t('resetPassword.wrongVerifyCode'), trigger: 'blur' },
+
       ],
       password: [
         { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
@@ -58,9 +66,9 @@ export default {
       },
       rules,
       error: null,
-      isNonExistentName: false,
       loading: false,
       sending: false,
+      isNonExistentName: false,
       waitingTimer: 0,
       readonly: true,
       loginLink: LOGIN_PATH,
@@ -114,8 +122,6 @@ export default {
         if (!valid) {
           return
         }
-
-        this.error = null
         this.loading = true
 
         this.$axios.post('/v1/userinfos/resetPassword', this.model).then((res) => {
@@ -125,23 +131,25 @@ export default {
             // let redirect = this.$route.query.redirect
             // this.$router.push({ query: { redirect } })
           } else {
-            this.error = { title: '', message: res.data.msg }
+            this.$message.error(res.data.msg)
           }
           this.loading = false
         }).catch((err) => {
           this.loading = false
-          this.error = { title: this.$t('resetPassword.errorTitle'), message: this.$t('resetPassword.defaultErrorMsg') }
+          let errMsg = ''
+          errMsg = this.$t('resetPassword.defaultErrorMsg')
 
           switch (err.response && err.response.status) {
             case 401:
-              this.error.message = this.$t('resetPassword.identifyError')
+              errMsg = this.$t('resetPassword.identifyError')
               break
             case 500:
-              this.error.message = this.$t('resetPassword.serverError')
+              errMsg = this.$t('resetPassword.serverError')
               break
             default:
-              this.error.message = this.$t('resetPassword.appError')
+              errMsg = this.$t('resetPassword.appError')
           }
+          this.$message.error(errMsg)
         })
       })
     },
@@ -172,7 +180,6 @@ export default {
           window.location.href = LOGIN_PATH
         }
       }, 1e3)
-    },
-    showClose() {}
+    }
   }
 }
