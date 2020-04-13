@@ -44,17 +44,17 @@ export default {
     // form validate rules
     const rules = {
       loginName: [
-        { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'blur' },
+        { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'change' },
         { validator: validateLoginName.bind(this), trigger: 'blur' },
         { validator: checkLoginName.bind(this), trigger: 'blur' }
       ],
       authCode: [
-        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' },
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'change' },
         { min: 6, max: 6, message: this.$t('resetPassword.wrongVerifyCode'), trigger: 'blur' },
 
       ],
       password: [
-        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'blur' }
+        { required: true, message: this.$t('resetPassword.authCodeInputTip'), trigger: 'change' }
       ]
     }
     
