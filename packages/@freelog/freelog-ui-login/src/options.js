@@ -1,3 +1,4 @@
+import { LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
 const options = {
 	Vue: null,
 	i18n: null,
@@ -15,6 +16,7 @@ const options = {
 	isListenWindowVisibility: true,
 	checkIsAuthException(response) {
 		const { data } = response
+		if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) !== -1) return 
 		return [28, 30].indexOf(data.errcode) > -1
 	}
 }

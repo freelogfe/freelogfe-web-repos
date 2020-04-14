@@ -42,7 +42,7 @@ import {
   LAST_AUTH_INFO
 } from "../../constant"
 import { loginSuccessHandler } from '../../login'
-import {validateLoginName} from '../../validator'
+import { validateLoginName, EMAIL_REG } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 import FToast from "../toast/index.vue"

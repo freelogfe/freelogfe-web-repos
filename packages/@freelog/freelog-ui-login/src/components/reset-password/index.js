@@ -195,6 +195,7 @@ export default {
       })
     },
     goToLoginAfterCountdown() {
+      return 
       this.remainTimer = remainTimer
       const timer = setInterval(() => {
         this.remainTimer--

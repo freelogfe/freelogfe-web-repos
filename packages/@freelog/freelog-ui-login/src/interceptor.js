@@ -15,7 +15,7 @@ export default function addAxiosInterceptorHandler(options) {
 					return new Promise(resolve => {
 						setTimeout(() => {
 							resolve(response)
-						}, 3e3)
+						}, 3e2)
 					})
 				}
 			} 
