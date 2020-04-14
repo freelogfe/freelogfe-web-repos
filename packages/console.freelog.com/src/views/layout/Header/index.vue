@@ -1,5 +1,5 @@
 <template>
-    <header class="nav-header">
+    <header class="nav-header" style="background-color: transparent;">
         <div class="brand">
             <router-link to="/" class="">
                 <i

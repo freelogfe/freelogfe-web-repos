@@ -2,6 +2,9 @@
 <!--    <div :class="[sidebar.openSidebar?'': 'collapse-sidebar']">-->
     <div>
         <fl-header/>
+                <div class="frosted"/>
+                <div class="frosted"
+                     style="right: 0; left: 50%; background-color: rgba(0,0,0,0.72);"/>
         <!--        <fl-sidebar/>-->
         <section class="main" :class="themeCls">
             <div style="height: 60px;"/>
@@ -105,5 +108,16 @@
         .content, .footer-wrap {
             margin-left: 30px;
         }
+    }
+
+    .frosted {
+        position: fixed;
+        top: 0;
+        right: 50%;
+        left: 0;
+        height: 60px;
+        backdrop-filter: saturate(180%) blur(20px);
+        background-color: rgba(255, 255, 255, 0.72);
+        z-index: 999;
     }
 </style>
