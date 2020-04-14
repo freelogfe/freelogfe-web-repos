@@ -12,7 +12,6 @@
                 style="margin-left: 45px;"
             />
         </div>
-
         <HeaderTools/>
     </header>
 </template>
