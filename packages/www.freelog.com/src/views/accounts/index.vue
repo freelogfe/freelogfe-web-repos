@@ -165,7 +165,7 @@ export default {
     },
     gotoCreateAccountHandler(account) {
       this.gotoAccountActionView({
-        route: 'accountCreate',
+        route: 'createAccount',
         query: {
           currencyType: account.currencyType
         }

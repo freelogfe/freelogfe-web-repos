@@ -5,7 +5,7 @@
         </div>
 
         <div class="header-tools__col" style="padding-left: 0;">
-            <a class="header-tool__avatar">
+            <a class="header-tool__avatar" v-if="userInfo">
                 <div class="">
                     <img :src="userInfo && userInfo.headImage" alt="" />
                     <label class="closed-beta-tag" v-if="userInfo.userType === 1">{{$t('navTop.closedBeta')}}</label>
