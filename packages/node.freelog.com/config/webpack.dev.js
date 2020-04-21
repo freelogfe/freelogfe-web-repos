@@ -5,14 +5,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const baseConfig = require('./webpack.base')
-// const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
-// const tmpName = 'freelog-common'
+const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
+const tmpName = 'freelog-common'
 
 module.exports = merge(baseConfig, {
 
-  // entry: {
-  //   [tmpName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
-  // },
+  entry: {
+    [tmpName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
+  },
 
   output: {
     publicPath: '/'
@@ -38,9 +38,9 @@ module.exports = merge(baseConfig, {
     rules: [{
       test: /\.(less|css)$/,
       use: [
-        // 'style-loader',
-        // 'vue-style-loader',
-        MiniCssExtractPlugin.loader,
+        'style-loader',
+        'vue-style-loader',
+        // MiniCssExtractPlugin.loader,
         'css-loader',
         'less-loader',
       ]

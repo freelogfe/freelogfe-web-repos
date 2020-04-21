@@ -9,9 +9,9 @@ const path = require('path')
 const minimist = require('minimist')
 const argv = minimist(process.argv.slice(2))
 
-const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
+// const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
+// const tmpName = 'freelog-common'
 const staticDomain = argv.env === 'prod' ? '//static.freelog.com' :  '//static.testfreelog.com'
-const tmpName = 'freelog-common'
 
 module.exports = merge(baseConfig, {
   mode: 'production',
@@ -47,16 +47,16 @@ module.exports = merge(baseConfig, {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
-      excludeChunks: [ tmpName ],
-      commonLibUrl: function getUrl() {
-        var fileName = `${tmpName}.js`
-        if(commonLibPkgJson && commonLibPkgJson.main) {
-          fileName = commonLibPkgJson.main.split('/').pop()
-        }else {
-          throw new Error('wrong freelog-common-lib package.json')
-        }
-        return `${staticDomain}/${tmpName}/${fileName}`
-      }(),
+      // excludeChunks: [ tmpName ],
+      // commonLibUrl: function getUrl() {
+      //   var fileName = `${tmpName}.js`
+      //   if(commonLibPkgJson && commonLibPkgJson.main) {
+      //     fileName = commonLibPkgJson.main.split('/').pop()
+      //   }else {
+      //     throw new Error('wrong freelog-common-lib package.json')
+      //   }
+      //   return `${staticDomain}/${tmpName}/${fileName}`
+      // }(),
     }),
   ],
 })

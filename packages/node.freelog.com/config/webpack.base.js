@@ -8,7 +8,7 @@ const srcDir = path.resolve(__dirname, '../src')
 
 module.exports = {
   entry: {
-    'pagebuild-core': path.resolve(__dirname, '../src/core/index.js'),
+    'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
     'pagebuild-app': path.resolve(__dirname, '../src/views/index.js')
   },
 
@@ -27,7 +27,7 @@ module.exports = {
   // },
 
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: [ ".ts", ".tsx", '.js', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@': srcDir,
@@ -37,9 +37,18 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader'
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: [{
+          loader: 'babel-loader',
+        },{
+          loader: 'source-map-loader',
+        }]
       },
       {
         test: /\.vue$/,

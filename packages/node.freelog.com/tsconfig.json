@@ -1,0 +1,20 @@
+{ 
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "outDir": "./built",
+    "removeComments": true,
+    "target": "ES5"
+  },
+  "include": [
+    "./src/_core/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules*",
+    "test"
+  ]
+}
