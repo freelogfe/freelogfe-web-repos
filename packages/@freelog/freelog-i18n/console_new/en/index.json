@@ -8,5 +8,21 @@
 	"create_release": "Create release",
 	"create_new_release": "Create new release",
 	"update": "Update",
-	"search_release": "Search release"
+	"search_release": "Search release",
+	"object": "Object",
+	"capacity ": "Capacity",
+	"object_quantity": "Object",
+	"task_list": "Task",
+	"upload_failed": "Upload failed",
+	"canceled": "Canceled",
+	"upload": "Upload",
+	"task_quantity": "Total {TaskQuantity}",
+	"userdata_empty": " None",
+	"upload_userdata": "Upload",
+	"privacity": "Privacy",
+	"display_userdata_in_storage": "Dispaly system bucket .NodeData",
+	"userdata_used_storage": "Your stored node data are currently using 5.6 MB of storage. ",
+	"storage": "",
+	"used_storage": "Storage",
+	"enter_nodedata": "Enter .NodeData"
 }

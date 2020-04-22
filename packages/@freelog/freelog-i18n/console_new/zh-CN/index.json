@@ -8,5 +8,21 @@
 	"create_release": "创建发行",
 	"create_new_release": "创建新发行",
 	"update": "更新",
-	"search_release": "搜索发行"
+	"search_release": "搜索发行",
+	"object": "对象",
+	"capacity ": "容量",
+	"object_quantity": "对象",
+	"task_list": "任务列表",
+	"upload_failed": "上传失败",
+	"canceled": "已取消",
+	"upload": "上传",
+	"task_quantity": "共{TaskQuantity}条",
+	"userdata_empty": " 暂无",
+	"upload_userdata": "上传",
+	"privacity": "隐私",
+	"display_userdata_in_storage": "在存储空间中显示.NodeData",
+	"userdata_used_storage": "您的节点用户数据目前已经使用了{NodeDataUsedStorage}存储空间。",
+	"storage": "",
+	"used_storage": "容量",
+	"enter_nodedata": "进入.NodeData"
 }
