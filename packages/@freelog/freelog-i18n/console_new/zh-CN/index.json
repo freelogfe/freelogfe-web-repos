@@ -24,5 +24,7 @@
 	"userdata_used_storage": "您的节点用户数据目前已经使用了{NodeDataUsedStorage}存储空间。",
 	"storage": "",
 	"used_storage": "容量",
-	"enter_nodedata": "进入 .NodeData"
+	"enter_nodedata": "进入 .NodeData",
+	"node_data": "节点用户数据",
+	"manage_data": "管理数据"
 }
