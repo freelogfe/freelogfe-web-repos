@@ -26,5 +26,6 @@
 	"used_storage": "Storage",
 	"enter_nodedata": "Enter .NodeData",
 	"node_data": "节点用户数据",
-	"manage_data": "Manage data"
+	"manage_data": "Manage data",
+	"last_used": "Last used"
 }
