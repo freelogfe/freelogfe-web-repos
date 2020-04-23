@@ -4,9 +4,13 @@ import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
 // import i18n from './i18n';
 import {mapGetters} from "vuex";
 
+import Navs from './Navs.vue';
+
 export default {
     // i18n,
     components: {
+        // NavTitle,
+        Navs,
         CreateBucketDialog,
     },
     // name: "index",
