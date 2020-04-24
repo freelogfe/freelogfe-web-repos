@@ -4,40 +4,11 @@
         :style="styleObject"
     >
 
-        <!-- 左侧 bucket 列表 -->
-        <div class="mock-list__buckets">
-            <div style="height: 80px;"></div>
-
-            <!-- buckets 标题 -->
-            <div class="mock-list__buckets__title">
-                <div class="mock-list__buckets__title__content">
-                    <div>
-                        <span>Bucket{{$t('mock.list')}}</span>
-                        <span style="padding-left: 10px;">{{(bucketsList || []).length}}/5</span>
-                    </div>
-                    <el-button
-                        v-if="(bucketsList || []).length < 5"
-                        icon="el-icon-plus"
-                        circle
-                        size="small"
-                        @click="dialogVisible=true"
-                    />
-                </div>
-                <div style="height: 10px;"></div>
-            </div>
-
-            <!-- buckets 列表 -->
-            <div class="mock-list__buckets__list">
-                <a
-                    href="javascript:"
-                    v-for="(bucket, index) in (bucketsList || [])"
-                    :key="bucket.bucketId"
-                    class="mock-list__buckets__list__item"
-                    :class="{'mock-list__buckets__list__item_active': $route.query.activatedBucketName === bucket.bucketName}"
-                    @click="onChangeBucketActiveIndex(bucket)"
-                >{{bucket.bucketName}}</a>
-            </div>
-        </div>
+        <Navs
+            :buckets="bucketsList"
+            @onChangeActive="onChangeBucketActiveIndex"
+            @addBucket="dialogVisible=true"
+        />
 
         <!-- 右侧内容区 -->
         <div class="mock-list__mocks">
@@ -61,7 +32,7 @@
             </div>
 
             <!-- 有 bucket 时显示 -->
-<!--            v-if="bucketsList && bucketsList.length > 0"-->
+            <!--            v-if="bucketsList && bucketsList.length > 0"-->
             <div
                 class="mock-list__mocks_non-empty"
                 v-if="!!activatedBucket"
@@ -69,7 +40,8 @@
                 <div class="mock-list__mocks_non-empty__header">
                     <div class="mock-list__mocks_non-empty__header__info">
                         <div>{{$t('mock.mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
-                        <div>{{$t('mock.creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
+                        <div>
+                            {{$t('mock.creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
                         </div>
                         <div>
                             {{$t('mock.used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
@@ -259,7 +231,8 @@
 
                             </el-table-column>
                         </el-table>
-                        <div style="padding: 10px 0; display: flex; justify-content: flex-end;">
+                        <div v-if="mockTotalItem > 10"
+                             style="padding: 10px 0; display: flex; justify-content: flex-end;">
                             <el-pagination
                                 :current-page="mockCurrentPage"
                                 :page-sizes="[10, 20, 30, 40, 50]"
