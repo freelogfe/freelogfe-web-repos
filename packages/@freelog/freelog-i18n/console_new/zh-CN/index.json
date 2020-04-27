@@ -27,5 +27,7 @@
 	"enter_nodedata": "进入 .NodeData",
 	"node_data": "节点用户数据",
 	"manage_data": "管理数据",
-	"last_used": "上次访问"
+	"last_used": "上次访问",
+	"policy_name_exists": "该授权策略名称在当前资源的中已存在。",
+	"policy_name_length": "授权策略名称不能超过30字符。"
 }

@@ -27,5 +27,7 @@
 	"enter_nodedata": "Enter .NodeData",
 	"node_data": "节点用户数据",
 	"manage_data": "Manage data",
-	"last_used": "Last used"
+	"last_used": "Last used",
+	"policy_name_exists": "The policy name already exists on this resource.",
+	"policy_name_length": "Make sure it's not more than 30 characters."
 }
