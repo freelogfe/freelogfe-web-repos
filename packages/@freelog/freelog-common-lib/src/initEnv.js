@@ -15,7 +15,7 @@ export default function initEnv() {
 }
 
 export function getEnvType() {
-  if (location.port !== '') {
+  if (window.location.port !== '') {
     return 'dev'
   }
   const host = window.location.host

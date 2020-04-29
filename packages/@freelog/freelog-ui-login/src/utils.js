@@ -67,3 +67,17 @@ function parseJWT(jwtStr) {
 		return userInfo
 	}
 }
+
+export function resolveLink(path, $route) {
+  var link = `${path}`
+  if ($route != null) {
+    const { redirect } = $route.query
+    if (isSafeUrl(redirect)) {
+      link = `${link}?redirect=${encodeURIComponent(redirect)}`
+    }
+  }else {
+    const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
+    link = `${hostName}${link}?redirect=${encodeURIComponent(window.location.href)}`
+  }
+  return link
+}

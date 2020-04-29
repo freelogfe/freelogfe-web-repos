@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="f-ui-login-page">
 		<Login></Login>	
 	</div>
 </template>
@@ -12,7 +12,13 @@ export default {
 }
 </script>
 
+<style lang="less" scoped>
+</style>
+
 <style lang="less">
-  @import './index.less';
+@import "../styles/mixin.less";
+.f-ui-login-page {
+  .ui-login-page();
+}
 </style>
 

@@ -28,9 +28,9 @@
 </template>
 
 <script>
-  import { beautifyPolicy, highlightPolicy } from '@freelog/freelog-policy-lang';
-  import en from '@freelog/freelog-i18n/ui-contract/en';
-  import zhCN from '@freelog/freelog-i18n/ui-contract/zh-CN';
+  import { beautifyPolicy, highlightPolicy } from '@freelog/freelog-policy-lang'
+  import en from '@freelog/freelog-i18n/ui-contract/en'
+  import zhCN from '@freelog/freelog-i18n/ui-contract/zh-CN'
 
   import {
     LicenseEvent,
@@ -41,6 +41,10 @@
 
   export default {
     name: 'f-contract-detail',
+    components: {
+      TransactionEvent, LicenseEvent,
+      // EscrowConfiscate,
+    },
     i18n: {
       messages: {
         en,
@@ -55,10 +59,6 @@
       policyText: {
         type: String
       },
-    },
-    components: {
-      TransactionEvent, LicenseEvent,
-      // EscrowConfiscate,
     },
     data() {
       return {

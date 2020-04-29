@@ -16,8 +16,9 @@ Vue.use(elementUiPlugin)
 Vue.use(axiosPlugin)
 
 export {
-  Vue, axios, ElementUI, 
-  axiosInstance, storage, cookieStore, sessionStore,
-  elementUiPlugin, axiosPlugin, 
+  Vue, 
+  storage, cookieStore, sessionStore,
+  ElementUI, elementUiPlugin,
+  axios, axiosInstance,  axiosPlugin, 
   initI18n, initEnv
 }

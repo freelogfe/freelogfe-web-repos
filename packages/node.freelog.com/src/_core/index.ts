@@ -1,24 +1,23 @@
 
-import EventCenter from './events/index'
-import * as pbEventNames from './events/pb-event-names'
-import { setStyle } from './dom'
-import initEnv, { Env } from './initEnv'
-import initQI, { QI } from './initQI'
-import initWidgets from './pb-parser'
+import '../app/styles/reset.css'
+import '../app/styles/loading.less'
+// import '../app/styles/pagebuild.less'
 
-interface loading {
-  show(): void;
-  hide(): void;
-}
+import initEnv, { IEnv } from './initEnv'
+import initQI, { IFreelogQuery } from './initQI'
+import initLoading, { ILoading } from './initLoading'
+import initWidgets from './pb-parser'
+import EventCenter from './events/index'
+import { HANDLE_INVALID_RESPONSE, HANDLE_INVALID_AUTH, GO_TO_LOGIN, REPORT_ERROR, SHOW_AUTH_DIALOG, NOTIFY_NODE, SHOW_ERROR_MESSAGE } from './events/pb-event-names'
 
 interface FreelogApp {
-  QI: QI;
-  Env: Env;
-  $loading: loading;
-  on(event: string, fn: () => any): any;
-  off(event?: string, fn?: () => any): any;
-  once(event: string, fn: () => any): any;
-  trigger(event: string): any;
+  QI: IFreelogQuery;
+  Env: IEnv;
+  $loading: ILoading;
+  on(event: string, fn: () => any): EventCenter
+  off(event?: string, fn?: () => any): EventCenter
+  once(event: string, fn: () => any): EventCenter
+  trigger(event: string): EventCenter
 }
 
 initGlobalApi()
@@ -34,16 +33,16 @@ function initGlobalApi(): void {
     once: EventCenter.prototype.once.bind(eventInstance),
     trigger: EventCenter.prototype.emit.bind(eventInstance),
     off(event: string, fn?: () => any): EventCenter {
-      const names: plainObject = pbEventNames
+      const pbEventNames: plainObject = { HANDLE_INVALID_RESPONSE, HANDLE_INVALID_AUTH, GO_TO_LOGIN, REPORT_ERROR, SHOW_AUTH_DIALOG, NOTIFY_NODE, SHOW_ERROR_MESSAGE }
       if(arguments.length === 0) {
         for(let name in eventInstance._events) {
-          if(!names[name]) {
+          if(!pbEventNames[name]) {
             Reflect.deleteProperty(eventInstance._events, name)
           }
         }
         return eventInstance
       }
-      if(arguments.length === 1 && names[event]) {
+      if(arguments.length === 1 && pbEventNames[event]) {
         console.info(`This event({event}) can't be offed`)
         return eventInstance
       }
@@ -53,18 +52,3 @@ function initGlobalApi(): void {
   window.FreelogApp = FreelogApp
 } 
 
-function initLoading(): loading {
-  var $loading: HTMLElement = document.querySelector('#f-loading')
-  return {
-    show(){
-      if($loading) {
-        setStyle($loading, 'display', 'block')
-      }
-    },
-    hide(){
-      if($loading) {
-        setStyle($loading, 'display', 'none')
-      }
-    }
-  }
-}

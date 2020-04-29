@@ -41,7 +41,7 @@
 			"忘记密码？",
 			"请填写注册时使用的手机号/邮箱以便接收验证码，验证成功后可以重置您的密码"
 		],
-		"loginName": "用户名/手机号/邮箱",
+		"loginName": "手机号/邮箱",
 		"nonExistentName": "用户账号不存在",
 		"loginNamePlaceholder": "请输入手机号或邮箱",
 		"password": "新密码",

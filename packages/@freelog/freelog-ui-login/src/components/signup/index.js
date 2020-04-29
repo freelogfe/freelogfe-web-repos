@@ -1,4 +1,4 @@
-import {isSafeUrl} from '../../utils'
+import { resolveLink } from '../../utils'
 import { LOGIN_PATH } from '../../constant'
 import {validateLoginIphone, validateLoginEmail, validateUsername, USERNAME_REG, EMAIL_REG, PHONE_REG} from '../../validator'
 import { loginSuccessHandler } from '../../login'
@@ -180,7 +180,10 @@ export default {
       }
 
       return this.$t('signup.checkcodeBtnText')
-    }
+    },
+    loginLink() {
+      return resolveLink(LOGIN_PATH, this.$route)
+    },
   },
 
   watch: {

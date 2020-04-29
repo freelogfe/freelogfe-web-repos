@@ -1,5 +1,5 @@
 <template>
-  <section class="reset-password-section">
+  <section class="f-ui-reset-password-section">
     <template v-if="step === steps[0]">
       <header>
         <div class="h-logo" ><i class="freelog fl-icon-logo-freelog" /></div>
@@ -15,7 +15,7 @@
         </div>
         <el-form class="reset-password-form" auto-complete="off" :model="model" :rules="rules" ref="formRef">
           <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
-            <el-input type="text" v-model="model.loginName"></el-input>
+            <el-input type="text" v-model="model.loginName" :placeholder="$t('resetPassword.loginNamePlaceholder')"></el-input>
           </el-form-item>
           <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
             <div>
@@ -62,7 +62,7 @@ export default ResetView
 
 <style lang="less" scoped>
   @import "../../styles/mixin.less";
-  .reset-password-section {
+  .f-ui-reset-password-section {
     header {
       .reset-password-intro { 
         margin-top: 10px; margin-bottom: 30px;
@@ -119,9 +119,16 @@ export default ResetView
 
 <style lang="less">
   @import "../../styles/mixin.less";
-  .reset-password-section {
+  .f-ui-reset-password-section {
+    .ui-login-section();
+    .reset-password-body {
+      .ui-login-body();
+    }
     .el-alert {  
       .error-alert()
     }
+  }
+  .el-form-item.is-error {
+    .ui-login-form-item-error()
   }
 </style>

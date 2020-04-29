@@ -52,7 +52,7 @@ export default function fPerformanceReport (options) {
       // Doc请求耗时
       doct: +(timing.responseEnd - timing.requestStart).toFixed(2),
       // Firstbyte首包加载耗时
-      fbt: +(timing.responseStart - timing.requestStart).toFixed(2),
+      ttfbt: +(timing.responseStart - timing.requestStart).toFixed(2),
       // FP: First paint, 首次渲染 或 白屏耗时
       fpt: +(timing.responseEnd - timing.fetchStart).toFixed(2),
       // TTI：Time to Interact，首次可交互 耗时	
