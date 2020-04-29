@@ -13,7 +13,19 @@ const _fetch: qiFetchFn = createQIFetch({
   baseURL: getQIoringin(),
   timeout: 30000,
   data: { nodeId, nodeType }
-})
+});
+
+export async function getUserNodeDate() {
+  return {
+    backgroundColor: '#fff',
+  };
+}
+
+export async function setUserNodeDate(color: string) {
+  return {
+    backgroundColor: color,
+  };
+}
 
 /**
  * 分页获取节点Presentable列表
