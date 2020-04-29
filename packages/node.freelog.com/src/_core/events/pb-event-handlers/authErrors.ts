@@ -13,12 +13,12 @@ interface authErrorData {
   'freelog-entity-nid': string
 }
 
-interface handleAuthErrorOpts {
+export interface IHandleAuthErrorOpts {
   response: authErrorData
   [key: string]: any
 }
 type handleAuthCallback = (...args: Array<any>) => any
-export function handleAuthError(options: handleAuthErrorOpts, callback: handleAuthCallback): void {
+export function handleAuthError(options: IHandleAuthErrorOpts, callback: handleAuthCallback): void {
   const response: authErrorData = options.response
 
   let presentableInfo

@@ -1,5 +1,5 @@
 <template>
-  <section class="login-section">
+  <section class="f-ui-login-section">
     <header>
       <div class="h-logo" ><i class="freelog fl-icon-logo-freelog" /></div>
       <h2 class="heading" :class="{ 'show-error': error }">{{$t('login.head')}}</h2>
@@ -33,16 +33,10 @@
 </template>
 
 <script>
-import { isSafeUrl, setItemForStorage, getItemFromStorage } from "../../utils"
-import {
-  SIGN_PATH,
-  RESET_PASSWORD_PATH,
-  LOGIN_NAME,
-  USER_SESSION,
-  LAST_AUTH_INFO
-} from "../../constant"
+import { resolveLink, setItemForStorage, getItemFromStorage } from "../../utils"
+import { SIGN_PATH, RESET_PASSWORD_PATH, LOGIN_NAME, USER_SESSION, LAST_AUTH_INFO } from "../../constant"
 import { loginSuccessHandler } from '../../login'
-import { validateLoginName, EMAIL_REG } from '../../validator'
+import { validateLoginName, EMAIL_REG, PHONE_REG } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en'
 import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 import FToast from "../toast/index.vue"
@@ -101,32 +95,18 @@ export default {
 
   computed: {
     resetPwLink() {
-      return this.resolveLink(RESET_PASSWORD_PATH)
+      return resolveLink(RESET_PASSWORD_PATH, this.$route)
     },
     signUpLink() {
-      return this.resolveLink(SIGN_PATH)
+      return resolveLink(SIGN_PATH, this.$route)
     }
   },
 
-  mounted() {
-  },
+  mounted() {},
 
   methods: {
     tapCloseBtn() {
       this.$emit('close-dialog')
-    },
-    resolveLink(path) {
-      var link = `${path}`
-      if (this.$route != null) {
-        const { redirect } = this.$route.query
-        if (isSafeUrl(redirect)) {
-          link = `${link}?redirect=${redirect}`
-        }
-      }else {
-        const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
-        link = `${hostName}${link}`
-      }
-      return link
     },
     validate(loginName, password) {
       var errMsgs = [] 
@@ -158,31 +138,29 @@ export default {
         this.$message.error(this.$t('login.validateErrors.wrong_username_password'))
         return 
       } 
-        const data = Object.assign(this.model, {
-          isRememer: this.rememberUser ? 1 : 0
-        })
-
-        this.loginRequest(data).then(userInfo => {
-          loginSuccessHandler(userInfo, this.$route.query.redirect)
-          this.$emit("after-login-success")
-        })
-
+      const data = Object.assign(this.model, {
+        isRememer: this.rememberUser ? 1 : 0
+      })
+      this.loginRequest(data)
     },
     loginRequest(data) {
       this.loading = true
-      return this.$axios
-        .post("/v1/passport/login", data)
+      return this.$axios.post("/v1/passport/login", data)
         .then(res => {
           this.loading = false
           if (res.data.ret === 0 && res.data.errcode === 0) {
             var userInfo = res.data.data
             userInfo.loginName = data.loginName
-            return Promise.resolve(userInfo)
+            if (this.$route) {
+              loginSuccessHandler(userInfo, this.$route.query.redirect)
+            }
+            this.$emit("onLoginSuccess")
+          } else {
+            return Promise.reject(res.data.msg)
           }
-          return Promise.reject(res.data.msg)
         })
         .catch(err => {
-          this.$emit("after-login-fail")
+          this.$emit("onLoginFailed")
           const $i18n = this.$i18n
           let errMsg = ''
           if (typeof err === "string") {
@@ -210,7 +188,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../../styles/mixin.less";
-.login-section {
+.f-ui-login-section {
   position: relative;
   width: 550px; height: auto;
 
@@ -236,7 +214,7 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .login-section {
+  .f-ui-login-section {
     box-sizing: border-box; width: 90%; min-width: 320px; max-width: 550px;
     .heading {
       margin-bottom: 20px; font-size: 26px;
@@ -250,15 +228,28 @@ export default {
 </style>
 
 <style lang="less">
+  .f-ui-login-section {
+    .ui-login-section();
+    .login-body {
+      .ui-login-body();
+    }
+  }
+  .f-ui-login-section .login-body{
+      .el-form-item__label {
+        &::before { display: none; }
+      }
+    }
   @import "../../styles/mixin.less";
-  .login-section {
+  .f-ui-login-section {
     .el-alert {  
       .error-alert()
     }
   }
-  
+  .el-form-item.is-error {
+    .ui-login-form-item-error()
+  }
   @media screen and (max-width: 768px) {
-    .login-section {
+    .f-ui-login-section {
       .login-sc-operation {
         .el-form-item__content {
           line-height: 28px;

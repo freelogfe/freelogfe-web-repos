@@ -1,5 +1,5 @@
 {
-  "presets": ["@babel/env"],
+  "presets": ["@babel/preset-env"],
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
     "@babel/transform-arrow-functions",
@@ -7,6 +7,13 @@
     ["@babel/transform-async-to-generator", {
       "module": "bluebird",
       "method": "coroutine"
-    }]
+    }],
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
   ]
 }

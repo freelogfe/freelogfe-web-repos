@@ -11,7 +11,7 @@ const nodeType: string = getNodeType()
 
 const _fetch: qiFetchFn = createQIFetch({
   baseURL: getQIoringin(),
-  timeout: 1000,
+  timeout: 30000,
   data: { nodeId, nodeType }
 })
 
@@ -69,15 +69,15 @@ export async function getPresentableAuth(presentableId: string): Promise<any> {
     })
 }
 
-export interface subDependency {
+export interface ISubDependency {
   entityNid?: string
   id: string
   name: string
   resourceType: string
   type: string
 }
-function resolveSubDependencies(fSubDependencies: string): Array<subDependency> {
-  var subDependencies: Array<subDependency> = []
+function resolveSubDependencies(fSubDependencies: string): Array<ISubDependency> {
+  var subDependencies: Array<ISubDependency> = []
   try {
     const subDependenciesString: string = Buffer.from(fSubDependencies,'base64').toString('utf-8')
     subDependencies = JSON.parse(subDependenciesString)

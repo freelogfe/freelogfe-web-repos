@@ -1,5 +1,5 @@
 <template>
-  <section class="signup-section"
+  <section class="f-ui-signup-section"
            v-loading="logining"
            :element-loading-text="$t('signup.loadingText')">
     <header>
@@ -79,27 +79,30 @@ export default SignupView
 </script>
 
 <style lang="less" scoped>
-  @import "index.less";
+  @import "./index.less";
 </style>
 
 <style lang="less">
-@import "../../styles/mixin.less";
-.signup-section {
-  .signup-register-type-box {
-    .signup-radios {
-      .is-checked {
-        .el-radio__label { color: #409EFF; }
+  @import "../../styles/mixin.less";
+  .f-ui-signup-section {
+    .ui-login-section();
+		.signup-body {
+			.ui-login-body();
+		}
+    .el-alert {  
+      .error-alert()
+    }
+    .signup-register-type-box {
+      .signup-radios {
+        .is-checked {
+          .el-radio__label { color: #409EFF; }
+        }
+        .el-radio__label { padding-left: 7px; font-size: 12px; color: #666; }
       }
-      .el-radio__label { padding-left: 7px; font-size: 12px; color: #666; }
     }
   }
-}
-
-.signup-section {
-  .el-alert {  
-    .error-alert()
-  }
-}
-
   
+  .el-form-item.is-error {
+    .ui-login-form-item-error()
+  }
 </style>

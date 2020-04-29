@@ -1,30 +1,30 @@
 import { createScript, createCssLink } from './helpers'
 import { resolveSubDependDataUrl } from './api/resolveUrl'
-import { subDependency } from './api'
+import { showLoading, hideLoading } from './initLoading'
+import { ISubDependency } from './api'
 
-interface authInfo {
-  __auth_user_id__: number;
-  __auth_node_id__: number;
-  __auth_node_name__?: string;
-  __page_build_id?: string;
-  __page_build_entity_id?: string;
-  __page_build_sub_releases?: Array<subDependency>;
-  __auth_error_info__?: plainObject;
+interface IAuthInfo {
+  __auth_user_id__: number
+  __auth_node_id__: number
+  __auth_node_name__?: string
+  __page_build_id?: string
+  __page_build_entity_id?: string
+  __page_build_sub_releases?: Array<ISubDependency>
+  __auth_error_info__?: plainObject
 }
 
 export default function initWidgets(): void {
-  const FreelogApp = window.FreelogApp
-  FreelogApp.$loading.show()
-  const authInfo = window.__auth_info__
+  showLoading()
+  const authInfo = window.__auth_info__ as IAuthInfo
   const authErrorData = authInfo && authInfo.__auth_error_info__
 
   if (!authErrorData) {
     loadWidgets()
-      .then(FreelogApp.$loading.hide)
+      .then(hideLoading)
       .catch(e => {
         // widget加载失败 EXCEPTION_LOADWIDGET
         console.error(e.toString())
-        FreelogApp.$loading.hide()
+        hideLoading()
       })
   } else {
     /**
@@ -32,7 +32,7 @@ export default function initWidgets(): void {
      * 显示PB异常页及授权按钮，待授权问题解决后刷新页面
      */
     // throwException('PB授权未通过', EXCEPTION_PB_AUTH)
-    FreelogApp.$loading.hide()
+    hideLoading()
   }
 }
 
@@ -45,7 +45,7 @@ function loadWidgets(): Promise<any> {
       __page_build_sub_releases, 
       __page_build_id, 
       __page_build_entity_id, 
-    } = window.__auth_info__ as authInfo
+    } = window.__auth_info__ as IAuthInfo
 
     __page_build_sub_releases
       .forEach(subRelease => {

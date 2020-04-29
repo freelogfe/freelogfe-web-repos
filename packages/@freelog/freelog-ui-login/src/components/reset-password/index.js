@@ -1,4 +1,4 @@
-import { isSafeUrl } from '../../utils'
+import { resolveLink } from '../../utils'
 import { LOGIN_PATH, SIGN_PATH } from '../../constant'
 import { EMAIL_REG, PHONE_REG, validateLoginName, validatePassword } from '../../validator'
 import en from '@freelog/freelog-i18n/ui-login/en';
@@ -23,29 +23,29 @@ export default {
 
   data() {
     const checkLoginName = (rule, value, callback) => {
-      if (value && (EMAIL_REG.test(value) || PHONE_REG.test(value))) {
-        this.$axios(`/v1/userinfos/detail?keywords=${value}`)
-          .then(res => res.data)
-          .then(res => {
-            if (res.data == null) {
-              this.isNonExistentName = true
-              callback(new Error(this.$t('resetPassword.nonExistentName')))
-            } else {
-              this.isNonExistentName = false
-              callback()
-            }
-          })
-          .catch(e => callback())
-      } else {
+      if (value === '') {
         callback()
+        return 
       }
+      this.$axios(`/v1/userinfos/detail?keywords=${value}`)
+        .then(res => res.data)
+        .then(res => {
+          if (res.data == null) {
+            this.isNonExistentName = true
+            callback(new Error(this.$t('resetPassword.nonExistentName')))
+          } else {
+            this.isNonExistentName = false
+            callback()
+          }
+        })
+        .catch(e => callback())
     }
 
     // form validate rules
     const rules = {
       loginName: [
         { required: true, message: this.$t('resetPassword.loginNamePlaceholder'), trigger: 'change' },
-        { validator: validateLoginName.bind(this), trigger: 'blur' },
+        // { validator: validateLoginName.bind(this), trigger: 'blur' },
         { validator: checkLoginName.bind(this), trigger: 'blur' }
       ],
       authCode: [
@@ -80,10 +80,10 @@ export default {
 
   computed: {
     loginLink() {
-      return this.resolveLink(LOGIN_PATH)
+      return resolveLink(LOGIN_PATH, this.$route)
     },
     signupLink() {
-      return this.resolveLink(SIGN_PATH)
+      return resolveLink(SIGN_PATH, this.$route)
     },
     disabledCheckCodeBtn() {
       return this.waitingTimer> 0 || !(EMAIL_REG.test(this.model.loginName) || PHONE_REG.test(this.model.loginName)) || this.isNonExistentName
@@ -130,7 +130,7 @@ export default {
         }
       }else {
         const hostName = `${window.location.protocol}//www.${window.FreelogApp.Env.mainDomain}`
-        link = `${hostName}${link}`
+        link = `${hostName}${link}?redirect=${encodeURIComponent(window.location.href)}`
       }
       return link
     },

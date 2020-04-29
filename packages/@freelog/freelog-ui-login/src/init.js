@@ -14,7 +14,8 @@ import defualtOptions, { checkOptions } from './options'
 import initCode, { runAuthenticationHandler, checkLoginStatus } from './core'
 import { goToLoginPage } from './login'
 
-import loginLocales from './i18n-locales/ui-login.json'
+import en from '@freelog/freelog-i18n/ui-login/en'
+import zhCN from '@freelog/freelog-i18n/ui-login/zh-CN'
 
 var isNeedCheckLoginStatus = true
 export default function init(options) {
@@ -53,6 +54,7 @@ function registerComponent(options) {
 }
 
 function registerRouter(options) {
+	const loginLocales =  { en, cn: zhCN, 'zh-CN': zhCN } 
 	const locale = loginLocales[options.i18n.locale]
 	const routes = [{
 		path: LOGIN_PATH,

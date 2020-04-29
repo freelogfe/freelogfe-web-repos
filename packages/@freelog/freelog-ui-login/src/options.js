@@ -16,8 +16,9 @@ const options = {
 	isListenWindowVisibility: true,
 	checkIsAuthException(response) {
 		const { data } = response
-		if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) !== -1) return 
-		return [28, 30].indexOf(data.errcode) > -1
+		if([LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH].indexOf(window.location.pathname) !== -1) return false
+		return false
+		// return [28, 30].indexOf(data.errcode) > -1
 	}
 }
 

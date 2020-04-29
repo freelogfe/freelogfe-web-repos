@@ -13,9 +13,10 @@ import {
   getPresnetableSubDependInfo,
   requireSubDepend,
 } from './api'
+import { getUserInfo } from '@freelog/freelog-ui-login/src/core'
 
 type fetchFn = (url: string, options: QIFetchOpts) => Promise <any>
-export interface QI {
+export interface IFreelogQuery {
   create(opts: QIFetchOpts): any
   get: qiFetchFn
   delete: qiFetchFn
@@ -26,7 +27,7 @@ export interface QI {
   resolveSubDependDataUrl(presentableId: string, subDependId: string, entityNid: string): string
   resolveSubDependInfoUrl(presentableId: string, subDependId: string, entityNid: string): string
   resolvePresentableDataUrl(presentableId: string): string
-  // getUserInfo(url: string): any
+  getUserInfo(url: string): any
   // checkUserIsLogin(url: string): Promise <any>
   pagingGetPresentables(params: pagingGetPresentablesParams): Promise <any>
   getPresentable(presentableId: string): Promise <any>
@@ -38,7 +39,7 @@ export interface QI {
   requireSubDepend(presentableId: string, subDependId: string, entityNid: string): Promise <any>
 }
 
-export default function initQI(): QI {
+export default function initQI(): IFreelogQuery {
   const fetch: qiFetchFn = createQIFetch({
     baseURL: getQIoringin(),
   })
@@ -72,6 +73,7 @@ export default function initQI(): QI {
     getPresnetableSubDependData,
     getPresnetableSubDependInfo,
     requireSubDepend,
+    getUserInfo,
   }
 }
  

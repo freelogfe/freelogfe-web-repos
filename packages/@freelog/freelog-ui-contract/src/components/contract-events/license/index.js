@@ -1,5 +1,5 @@
-import en from '@freelog/freelog-i18n/ui-contract/en';
-import zhCN from '@freelog/freelog-i18n/ui-contract/zh-CN';
+import en from '@freelog/freelog-i18n/ui-contract/en'
+import zhCN from '@freelog/freelog-i18n/ui-contract/zh-CN'
 
 export default {
   name: 'license-event',

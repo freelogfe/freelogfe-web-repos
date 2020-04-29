@@ -4,9 +4,7 @@
     <template v-if="type ==='single'">
       <div class="ss-cont-header">
         {{presentableName}}
-        <span
-                :class="['sc-tag', `sc-tag-${dContractType}`]"
-        >{{dContractTagName}}</span>
+        <span :class="['sc-tag', `sc-tag-${dContractType}`]">{{dContractTagName}}</span>
       </div>
     </template>
     <template>

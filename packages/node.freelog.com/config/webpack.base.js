@@ -5,16 +5,17 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 const srcDir = path.resolve(__dirname, '../src')
 
-
 module.exports = {
   entry: {
     'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
-    'pagebuild-app': path.resolve(__dirname, '../src/views/index.js')
+    // 'pagebuild-core': path.resolve(__dirname, '../src/core/index.js'),
+    'pagebuild-app': path.resolve(__dirname, '../src/app/index.js')
   },
 
   output: {
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    // chunkFilename: '[name].js',
+    chunkFilename: 'public/[name].js',
     path: path.resolve(__dirname, '../dist')
   },
 
@@ -65,7 +66,7 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192,
+              limit: 81920,
               name: 'assets/[name].[ext]'
             }
           }
@@ -75,9 +76,6 @@ module.exports = {
   },
 
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'plubic/css/pagebuild.css'
-    }),
     new VueLoaderPlugin(),
   ],
 }

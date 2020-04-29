@@ -1,8 +1,14 @@
 
 const merge = require('webpack-merge')
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin')
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin')
 
 const baseConfig = require('./webpack.base')
 const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
@@ -11,7 +17,7 @@ const tmpName = 'freelog-common'
 module.exports = merge(baseConfig, {
 
   entry: {
-    [tmpName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
+    // [tmpName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
   },
 
   output: {
@@ -38,8 +44,14 @@ module.exports = merge(baseConfig, {
     rules: [{
       test: /\.(less|css)$/,
       use: [
-        'style-loader',
-        'vue-style-loader',
+        // 'style-loader',
+        // 'vue-style-loader',
+        {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '/public/',
+          }
+        },
         // MiniCssExtractPlugin.loader,
         'css-loader',
         'less-loader',
@@ -52,6 +64,15 @@ module.exports = merge(baseConfig, {
       template: path.resolve(__dirname, '../public/index.html'),
       // excludeChunks: [ tmpName ],
       // commonLibUrl: `/${tmpName}.js`
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css', 
+      chunkFilename: 'public/[id].css',
+    }),
+    new ResourceHintWebpackPlugin(),
+    new StyleExtHtmlWebpackPlugin({
+      minify: true,
+      chunks: ['pagebuild-core']
     }),
   ],
 })

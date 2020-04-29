@@ -1,8 +1,16 @@
-html {
-  background-color: #d3d3d32b;
-}
+@import "//at.alicdn.com/t/font_1522685_hypug9pl8b.css";
 
-body {
+// html { background-color: #d3d3d32b; }
+html { background-color: #fff; }
+
+html body {
+  font: 12px/1.5  tahoma, arial; color: #333333;
+  * {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+      'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+
   [class^="el-icon-fa"], [class*=" el-icon-fa"] {
     display: inline-block;
     font: normal normal normal 14px/1 FontAwesome !important;
@@ -10,7 +18,13 @@ body {
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  };
+  }
+}
+
+#js-page-container { min-height: 0; }
+#app-auth{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .clearfix {
@@ -19,17 +33,6 @@ body {
     clear: both;
     display: block;
   }
-}
-
-#js-page-container {
-  min-height: 80vh;
-}
-
-#app-auth{
-  //font-family: arial, Hiragino Sans GB, Microsoft Yahei;
-  font-family: 'Helvetica Neue', 'PingFang SC', 'microsoft yahei', arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .app-footer {
@@ -97,10 +100,33 @@ body {
   }
 }
 
-.pb-exceptions {
-  display: flex;
-  width: 100vw; height: 100vh;
-  justify-content: center; align-items: center;
+.pb-exception {
+  // min-height: 0;
+  .pb-exception-head {
+    display: flex; justify-content: center; align-items: center;
+    margin-bottom: 10px;
+  }
+  .pb-exception-img {
+    width: 280px; height: 280px;
+    background-image: url(../../assets/images/Sign_a_contract.png); 
+    background-size: 100% 100%; background-repeat: no-repeat;
+    &.signed { background-image: url(../../assets/images/Pending.png);  }
+  }
+  .pb-exception-msg {
+    width: 290px; margin-left: 60px;
+    font-size: 16px; color: #2C3643;
+  }
+}
+  
+.f-ui-login-section.pb-l-d-comp {
+  padding: 20px 0 30px; border-radius: 10px;
+  background-color: #fff;
+  .login-body {
+    padding-top: 10px; padding-bottom: 0; border-color: transparent; border-radius: 0;
+    background-color: transparent;
+
+  }
+  .login-sc-operation { margin-top: 0; }
 }
 
 .pb-login-dialog {

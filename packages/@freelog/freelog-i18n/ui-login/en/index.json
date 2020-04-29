@@ -41,8 +41,7 @@
       "Forgot password?",
       "Please fill in the mobile phone number/email address used during registration to receive the verification code. After successful verification, you can reset your password"
     ],
-    "loginName": "Username/Mobile/Email",
-
+    "loginName": "Mobile/Email",
 		"nonExistentName": "The user account does not exist",
     "loginNamePlaceholder": "Phone number or email",
     "password": "password",
