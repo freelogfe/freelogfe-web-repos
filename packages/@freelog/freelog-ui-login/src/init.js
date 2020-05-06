@@ -23,9 +23,11 @@ export default function init(options) {
 	// 审查参数
 	checkOptions(options)
 	// UI组件注册
-	registerComponent(options)
-	// 初始化toast组件
-	initToast(options.Vue)
+	if (options.isRegisterComponents) {
+		registerComponent(options.Vue)
+		// 初始化toast组件
+		initToast(options.Vue)
+	}
 	// 添加请求响应拦截器：处理授权认证问题
 	if (options.isAddResponseInterceptor) {
 		addAxiosInterceptorHandler(options)
@@ -46,11 +48,12 @@ export default function init(options) {
 	}
 }
 
-function registerComponent(options) {
-	const Vue = options.Vue
-	Vue.component(FLogin.name, FLogin)
-	Vue.component(FSignup.name, FSignup)
-	Vue.component(FResetPassword.name, FResetPassword)
+function registerComponent(Vue) {
+	if (Vue) {
+		Vue.component(FLogin.name, FLogin)
+		Vue.component(FSignup.name, FSignup)
+		Vue.component(FResetPassword.name, FResetPassword)
+	}
 }
 
 function registerRouter(options) {

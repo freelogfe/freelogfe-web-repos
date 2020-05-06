@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import i18n from '@/i18n/index'
   import { getUserInfo, checkLoginStatus } from '@freelog/freelog-ui-login/src/core'
   import EventCenter from '../../_core/events/index'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../pb-events/name'
@@ -38,7 +40,10 @@
     },
     components: {
       FAuthBox: () => import('./components/auth-box.vue'),
-      FLogin: () => import('@freelog/freelog-ui-login/src/components/login/index.vue'),
+      FLogin: () => import('@freelog/freelog-ui-login').then(({ default: initLogin,  FLogin,  }) => {
+        initLogin({ Vue, isRegisterRouter: false, isRegisterComponents: false, i18n })
+        return FLogin
+      }),
     },
     computed: {},
     async mounted() {
@@ -67,7 +72,7 @@
           window.FreelogApp.on(GO_TO_LOGIN, this.showLoginDialog)
         }
       },
-      showLoginDialog() {
+      async showLoginDialog() {
         this.loginDialogVisible = true
       },
       toggleToolBar() {
