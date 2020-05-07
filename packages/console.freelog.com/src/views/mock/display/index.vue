@@ -8,10 +8,12 @@
             :buckets="bucketsList"
             @onChangeActive="onChangeBucketActiveIndex"
             @addBucket="dialogVisible=true"
+            @showNodeData="onClickShowNodeData"
         />
 
         <!-- 右侧内容区 -->
         <div class="mock-list__mocks">
+            <NodeData v-show="$route.query.nodeData"/>
 
             <!-- 有 bucket 时显示 -->
             <!--            v-if="bucketsList && bucketsList.length > 0"-->
