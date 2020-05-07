@@ -13,113 +13,79 @@
         <!-- 右侧内容区 -->
         <div class="mock-list__mocks">
 
-            <!-- 没有 bucket 时显示-->
-            <div
-                class="mock-list__mocks_empty"
-                v-if="bucketsList && bucketsList.length === 0"
-            >
-                <div class="mock-list__mocks_empty__content">
-                    <h3>{{$t('mock.startingFromFreelog')}}</h3>
-                    <div style="height: 60px;"></div>
-                    <p>{{$t('mock.freelogMockResourcePool')}}</p>
-                    <div style="height: 60px;"></div>
-                    <el-button
-                        @click="dialogVisible=true"
-                        type="primary"
-                    >{{$t('mock.createBucket')}}
-                    </el-button>
-                </div>
-            </div>
-
             <!-- 有 bucket 时显示 -->
             <!--            v-if="bucketsList && bucketsList.length > 0"-->
             <div
                 class="mock-list__mocks_non-empty"
                 v-if="!!activatedBucket"
             >
-                <div class="mock-list__mocks_non-empty__header">
-                    <div class="mock-list__mocks_non-empty__header__info">
-                        <div>{{$t('mock.mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
-                        <div>
-                            {{$t('mock.creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
-                        </div>
-                        <div>
-                            {{$t('mock.used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
-                            <el-progress
-                                :percentage="Math.floor(activatedBucket.totalFileSize / 2147483648 * 100) / 100"
-                                :show-text="false"
-                                style="width: 120px;"
-                            />
-                        </div>
+                <div class="mock-list__mocks_non-empty__header"
+                     style="padding: 30px 0; display: flex; align-items: center;">
+                    <span style="font-size: 14px; color: #222;">对象 {{mockTotalItem}}</span>
+                    <div style="display: flex;">
+                        <el-popover
+                            placement="top"
+                            width="(mockTableData && mockTableData.length === 0) ? 360 : 274"
+                            v-model="deleteBucketPopoverShow"
+                        >
+                            <template v-if="mockTableData && mockTableData.length === 0">
+                                <div style="height: 30px;"></div>
+                                <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
+                                    {{$t('mock.confirmDeletion')}}</p>
+                                <div style="height: 25px;"></div>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <el-button
+                                        size="small"
+                                        type="text"
+                                        style="padding-left: 20px; padding-right: 20px; color: #999;"
+                                        @click="controlDeleteBucketPopoverShow(false)"
+                                    >{{$t('mock.cancel')}}
+                                    </el-button>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        @click="removeABucketByAPI"
+                                    >{{$t('mock.confirm')}}
+                                    </el-button>
+                                </div>
+                                <div style="height: 8px;"></div>
+                            </template>
+                            <template v-if="mockTableData && mockTableData.length > 0">
+                                <div style="height: 30px;"></div>
+                                <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
+                                    {{$t('mock.doesNotRemove')}}</p>
+                                <div style="height: 25px;"></div>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <el-button
+                                        size="small"
+                                        type="primary"
+                                        plain
+                                        @click="controlDeleteBucketPopoverShow(false)"
+                                    >{{$t('mock.confirm')}}
+                                    </el-button>
+                                </div>
+                                <div style="height: 8px;"></div>
+                            </template>
+
+<!--                            <el-button-->
+<!--                                type="danger"-->
+<!--                                plain-->
+<!--                                slot="reference"-->
+<!--                                size="small"-->
+<!--                                icon="el-icon-delete"-->
+<!--                                style="border-radius: 2px;"-->
+<!--                            >{{$t('mock.deleteBucket')}}-->
+<!--                            </el-button>-->
+                            <a slot="reference" style="width: 56px; height: 38px; border-radius: 4px; background-color: #FDEBEC; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <i style="color: #EE4040; font-size: 16px;" class="el-icon-delete"></i>
+                            </a>
+                        </el-popover>
+
+                        <div style="width: 20px;"></div>
+                        <router-link :to="'/mock/create/' + activatedBucket.bucketName" style="width: 56px; height: 38px; border-radius: 4px; background-color: #EDF6FF; display: flex; align-items: center; justify-content: center;">
+                            <i style="color: #409EFF; font-size: 16px;" class="el-icon-delete"></i>
+                        </router-link>
                     </div>
-
-                    <el-popover
-                        placement="top"
-                        width="(mockTableData && mockTableData.length === 0) ? 360 : 274"
-                        v-model="deleteBucketPopoverShow"
-                    >
-                        <template v-if="mockTableData && mockTableData.length === 0">
-                            <div style="height: 30px;"></div>
-                            <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('mock.confirmDeletion')}}</p>
-                            <div style="height: 25px;"></div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <el-button
-                                    size="small"
-                                    type="text"
-                                    style="padding-left: 20px; padding-right: 20px; color: #999;"
-                                    @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('mock.cancel')}}
-                                </el-button>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                    @click="removeABucketByAPI"
-                                >{{$t('mock.confirm')}}
-                                </el-button>
-                            </div>
-                            <div style="height: 8px;"></div>
-                        </template>
-                        <template v-if="mockTableData && mockTableData.length > 0">
-                            <div style="height: 30px;"></div>
-                            <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('mock.doesNotRemove')}}</p>
-                            <div style="height: 25px;"></div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <el-button
-                                    size="small"
-                                    type="primary"
-                                    plain
-                                    @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('mock.confirm')}}
-                                </el-button>
-                            </div>
-                            <div style="height: 8px;"></div>
-                        </template>
-
-                        <el-button
-                            type="danger"
-                            plain
-                            slot="reference"
-                            size="small"
-                            icon="el-icon-delete"
-                            style="border-radius: 2px;"
-                        >{{$t('mock.deleteBucket')}}
-                        </el-button>
-                    </el-popover>
-
-                </div>
-
-                <div class="mock-list__mocks_non-empty__create">
-                    <router-link
-                        :to="'/mock/create/' + activatedBucket.bucketName"
-                        class="nav-link ls-nav-link"
-                        target="_blank"
-                    >
-                        <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                            {{$t('mock.createMock')}}
-                        </el-button>
-                    </router-link>
                 </div>
 
                 <div class="mock-list__mocks_non-empty__body">
@@ -140,28 +106,25 @@
                             :data="mockTableData"
                             style="width: 100%">
                             <el-table-column
-                                prop="preview"
-                                label=""
-                                width="70">
+                                prop="name"
+                                :label="'资源名称'"
+                                min-width="180">
                                 <template slot-scope="scope">
-                                    <div
-                                        style="width: 40px; height: 36px;"
-                                        class="resource-default-preview"
-                                    >
-                                        <img
-                                            style="width: 100%; height: 100%;"
-                                            v-if="scope.row.previewImages && scope.row.previewImages.length > 0"
-                                            :src="scope.row.previewImages[0]"
-                                            alt=""
-                                        />
-                                        <!--                                        <span v-if="scope.previewImages"></span>-->
+                                    <div style="display: flex; align-items: center;">
+                                        <div
+                                            style="width: 40px; height: 36px;"
+                                            class="resource-default-preview"
+                                        >
+                                            <img
+                                                style="width: 100%; height: 100%;"
+                                                v-if="scope.row.previewImages && scope.row.previewImages.length > 0"
+                                                :src="scope.row.previewImages[0]"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <span style="padding-left: 10px;">{{scope.row.name}}</span>
                                     </div>
                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="name"
-                                :label="$t('mock.table.name')"
-                                min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="type"
