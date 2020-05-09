@@ -38,13 +38,13 @@
 	"limit_resource_image_format": "We only support PNG, GIF, or JPG pictures.",
 	"limit_resource_image_size": "File can not exceed 5MB",
 	"freelog_versioning": "Version number sould follow the Semantic Versioning Specification.",
-	"authorization_issue_offline_resource": "The resource is offline, which can not get authorization.",
+	"authorization_issue_offline_resource": "The resource is offline and not available for authorization.",
 	"authorization_issue_circular_reply": "We do not suppot authorization of circular reply.",
 	"error_custom_meta": "Syntax error. Custom meta should follow ",
 	"reselect": "Reselect",
 	"check_it": "Check it",
 	"alarm_data_cover": "Are you sure to import the new object? The setting in Rely and Custom meta may be covered.",
 	"import": "Import",
-	"alarm_resource_not_available": "",
-	"alarm_resource_authorization_abnormal": "The resource is offline and not available for authorization."
+	"alarm_resource_not_available": "The upcast resource is offline and not available for authorization.",
+	"alarm_resource_authorization_abnormal": "The authorization of this resource is abnormal, please be caution in contracting."
 }
