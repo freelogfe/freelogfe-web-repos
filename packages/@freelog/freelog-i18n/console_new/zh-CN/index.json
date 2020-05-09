@@ -42,5 +42,9 @@
 	"authorization_issue_circular_reply": "该资源未上线，无法获取授权",
 	"error_custom_meta": "语法有误。自定义属性编写应符合JSON语法规则。",
 	"reselect": "重新选择",
-	"check_it": "查看"
+	"check_it": "查看",
+	"alarm_data_cover": "导入新的对象可能导致依赖、自定义属性等模块信息被覆盖，确认导入吗？",
+	"import": "导入",
+	"alarm_resource_not_available": "该资源授权链异常，请谨慎签约。",
+	"alarm_resource_authorization_abnormal": "资源未上线，无法签约"
 }
