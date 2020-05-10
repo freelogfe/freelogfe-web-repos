@@ -42,7 +42,7 @@
                 >
 
                     <div style="height: 80px;"/>
-                    <div style="color: #666; font-size: 14px;">{{$t('create_release_popup_empty')}}</div>
+                    <div style="color: #666; font-size: 14px; padding: 0 60px;">{{$t('create_release_popup_empty')}}</div>
                     <div style="height: 40px;"/>
                     <a
                         class="create-first"

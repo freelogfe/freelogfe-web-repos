@@ -8,15 +8,13 @@ const srcDir = path.resolve(__dirname, '../src')
 module.exports = {
   entry: {
     'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
-    // 'pagebuild-core': path.resolve(__dirname, '../src/core/index.js'),
     'pagebuild-app': path.resolve(__dirname, '../src/app/index.js')
   },
 
   output: {
     filename: '[name].js',
-    // chunkFilename: '[name].js',
     chunkFilename: 'public/[name].js',
-    path: path.resolve(__dirname, '../dist')
+    path: path.resolve(__dirname, '../dist'),
   },
 
   node: {
@@ -66,7 +64,7 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 81920,
+              limit: 8192,
               name: 'assets/[name].[ext]'
             }
           }

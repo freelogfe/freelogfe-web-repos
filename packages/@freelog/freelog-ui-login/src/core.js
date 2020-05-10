@@ -8,6 +8,7 @@ var lastCheckedUserInfo = null
 var axiosInstance = null
 var router = null
 export default function initCode(options) {
+	console.log(options.Vue.axios.get)
 	axiosInstance = options.axiosInstance || options.Vue.axios
 	router = options.router
 	lastCheckedUserInfo = getAuthInfoByCookie()
@@ -30,10 +31,7 @@ export function logout() {
 		})
 }
 
-/**
- * 获取用户信息
- * @return Promise
- */
+// 获取用户信息
 export function getUserInfo() {
 	const authInfo = getAuthInfoByCookie()
 	if(authInfo === null || !authInfo.userId) {

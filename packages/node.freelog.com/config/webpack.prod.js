@@ -26,14 +26,36 @@ module.exports = merge(baseConfig, {
   },
 
   module: {
-    rules: [{
-      test: /\.(less|css)$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'less-loader',
-      ]
-    }]
+    rules: [
+      {
+        test: /\.(less|css)$/,
+        exclude: [
+          /element-ui/,
+          /@freelog\/freelog-ui-login/,
+          /src\/app\/styles/,
+        ],
+        use: [
+          'style-loader',
+          'vue-style-loader',
+          // MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      },
+      {
+        test: /\.(less|css)$/,
+        include: [
+          /element-ui/,
+          /@freelog\/freelog-ui-login/,
+          /src\/app\/styles/,
+        ],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      }
+    ]
   },
 
   optimization: {

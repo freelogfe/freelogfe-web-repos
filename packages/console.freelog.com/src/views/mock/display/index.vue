@@ -8,28 +8,12 @@
             :buckets="bucketsList"
             @onChangeActive="onChangeBucketActiveIndex"
             @addBucket="dialogVisible=true"
+            @showNodeData="onClickShowNodeData"
         />
 
         <!-- 右侧内容区 -->
         <div class="mock-list__mocks">
-
-            <!-- 没有 bucket 时显示-->
-            <div
-                class="mock-list__mocks_empty"
-                v-if="bucketsList && bucketsList.length === 0"
-            >
-                <div class="mock-list__mocks_empty__content">
-                    <h3>{{$t('mock.startingFromFreelog')}}</h3>
-                    <div style="height: 60px;"></div>
-                    <p>{{$t('mock.freelogMockResourcePool')}}</p>
-                    <div style="height: 60px;"></div>
-                    <el-button
-                        @click="dialogVisible=true"
-                        type="primary"
-                    >{{$t('mock.createBucket')}}
-                    </el-button>
-                </div>
-            </div>
+            <NodeData v-show="$route.query.nodeData"/>
 
             <!-- 有 bucket 时显示 -->
             <!--            v-if="bucketsList && bucketsList.length > 0"-->
@@ -37,89 +21,64 @@
                 class="mock-list__mocks_non-empty"
                 v-if="!!activatedBucket"
             >
-                <div class="mock-list__mocks_non-empty__header">
-                    <div class="mock-list__mocks_non-empty__header__info">
-                        <div>{{$t('mock.mockQuantity')}}<span>{{activatedBucket.resourceCount}}</span></div>
-                        <div>
-                            {{$t('mock.creationTime')}}<span>{{transformToDateString(activatedBucket.createDate)}}</span>
-                        </div>
-                        <div>
-                            {{$t('mock.used')}}<span>{{Math.floor(activatedBucket.totalFileSize / 1073741824 * 100) / 100}}GB/2GB</span>
-                            <el-progress
-                                :percentage="Math.floor(activatedBucket.totalFileSize / 2147483648 * 100) / 100"
-                                :show-text="false"
-                                style="width: 120px;"
-                            />
-                        </div>
+                <div class="mock-list__mocks_non-empty__header"
+                     style="padding: 30px 0; display: flex; align-items: center;">
+                    <span style="font-size: 14px; color: #222;">对象 {{mockTotalItem}}</span>
+                    <div style="display: flex;">
+                        <el-popover
+                            placement="top"
+                            width="(mockTableData && mockTableData.length === 0) ? 360 : 274"
+                            v-model="deleteBucketPopoverShow"
+                        >
+                            <template v-if="mockTableData && mockTableData.length === 0">
+                                <div style="height: 30px;"></div>
+                                <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
+                                    {{$t('mock.confirmDeletion')}}</p>
+                                <div style="height: 25px;"></div>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <el-button
+                                        size="small"
+                                        type="text"
+                                        style="padding-left: 20px; padding-right: 20px; color: #999;"
+                                        @click="controlDeleteBucketPopoverShow(false)"
+                                    >{{$t('mock.cancel')}}
+                                    </el-button>
+                                    <el-button
+                                        type="danger"
+                                        size="small"
+                                        @click="removeABucketByAPI"
+                                    >{{$t('mock.confirm')}}
+                                    </el-button>
+                                </div>
+                                <div style="height: 8px;"></div>
+                            </template>
+                            <template v-if="mockTableData && mockTableData.length > 0">
+                                <div style="height: 30px;"></div>
+                                <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
+                                    {{$t('mock.doesNotRemove')}}</p>
+                                <div style="height: 25px;"></div>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <el-button
+                                        size="small"
+                                        type="primary"
+                                        plain
+                                        @click="controlDeleteBucketPopoverShow(false)"
+                                    >{{$t('mock.confirm')}}
+                                    </el-button>
+                                </div>
+                                <div style="height: 8px;"></div>
+                            </template>
+
+                            <a slot="reference" style="width: 56px; height: 38px; border-radius: 4px; background-color: #FDEBEC; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <i style="color: #EE4040; font-size: 16px;" class="el-icon-delete"></i>
+                            </a>
+                        </el-popover>
+
+                        <div style="width: 20px;"></div>
+                        <router-link :to="'/mock/create/' + activatedBucket.bucketName" style="width: 56px; height: 38px; border-radius: 4px; background-color: #EDF6FF; display: flex; align-items: center; justify-content: center;">
+                            <i style="color: #409EFF; font-size: 16px;" class="el-icon-delete"></i>
+                        </router-link>
                     </div>
-
-                    <el-popover
-                        placement="top"
-                        width="(mockTableData && mockTableData.length === 0) ? 360 : 274"
-                        v-model="deleteBucketPopoverShow"
-                    >
-                        <template v-if="mockTableData && mockTableData.length === 0">
-                            <div style="height: 30px;"></div>
-                            <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('mock.confirmDeletion')}}</p>
-                            <div style="height: 25px;"></div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <el-button
-                                    size="small"
-                                    type="text"
-                                    style="padding-left: 20px; padding-right: 20px; color: #999;"
-                                    @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('mock.cancel')}}
-                                </el-button>
-                                <el-button
-                                    type="danger"
-                                    size="small"
-                                    @click="removeABucketByAPI"
-                                >{{$t('mock.confirm')}}
-                                </el-button>
-                            </div>
-                            <div style="height: 8px;"></div>
-                        </template>
-                        <template v-if="mockTableData && mockTableData.length > 0">
-                            <div style="height: 30px;"></div>
-                            <p style="text-align: center; font-size: 14px; font-weight: 600; color: #333;">
-                                {{$t('mock.doesNotRemove')}}</p>
-                            <div style="height: 25px;"></div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <el-button
-                                    size="small"
-                                    type="primary"
-                                    plain
-                                    @click="controlDeleteBucketPopoverShow(false)"
-                                >{{$t('mock.confirm')}}
-                                </el-button>
-                            </div>
-                            <div style="height: 8px;"></div>
-                        </template>
-
-                        <el-button
-                            type="danger"
-                            plain
-                            slot="reference"
-                            size="small"
-                            icon="el-icon-delete"
-                            style="border-radius: 2px;"
-                        >{{$t('mock.deleteBucket')}}
-                        </el-button>
-                    </el-popover>
-
-                </div>
-
-                <div class="mock-list__mocks_non-empty__create">
-                    <router-link
-                        :to="'/mock/create/' + activatedBucket.bucketName"
-                        class="nav-link ls-nav-link"
-                        target="_blank"
-                    >
-                        <el-button type="primary" style="border-radius: 2px; background-color: #409EFF;">
-                            {{$t('mock.createMock')}}
-                        </el-button>
-                    </router-link>
                 </div>
 
                 <div class="mock-list__mocks_non-empty__body">
@@ -140,28 +99,25 @@
                             :data="mockTableData"
                             style="width: 100%">
                             <el-table-column
-                                prop="preview"
-                                label=""
-                                width="70">
+                                prop="name"
+                                :label="'资源名称'"
+                                min-width="180">
                                 <template slot-scope="scope">
-                                    <div
-                                        style="width: 40px; height: 36px;"
-                                        class="resource-default-preview"
-                                    >
-                                        <img
-                                            style="width: 100%; height: 100%;"
-                                            v-if="scope.row.previewImages && scope.row.previewImages.length > 0"
-                                            :src="scope.row.previewImages[0]"
-                                            alt=""
-                                        />
-                                        <!--                                        <span v-if="scope.previewImages"></span>-->
+                                    <div style="display: flex; align-items: center;">
+                                        <div
+                                            style="width: 40px; height: 36px;"
+                                            class="resource-default-preview"
+                                        >
+                                            <img
+                                                style="width: 100%; height: 100%;"
+                                                v-if="scope.row.previewImages && scope.row.previewImages.length > 0"
+                                                :src="scope.row.previewImages[0]"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <span style="padding-left: 10px;">{{scope.row.name}}</span>
                                     </div>
                                 </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="name"
-                                :label="$t('mock.table.name')"
-                                min-width="180">
                             </el-table-column>
                             <el-table-column
                                 prop="type"
@@ -255,73 +211,6 @@
             @cancel="dialogVisible=false"
             @success="createBucketSuccess"
         />
-        <!--        <div class="mock-list__border-dialog">-->
-        <!--            &lt;!&ndash; 添加 bucket 弹窗 &ndash;&gt;-->
-        <!--            <el-dialog-->
-        <!--                :close-on-click-modal="false"-->
-        <!--                :title="$t('newBucket')"-->
-        <!--                :visible.sync="dialogVisible"-->
-        <!--                width="700px"-->
-        <!--            >-->
-        <!--                <div style="height: 17px"></div>-->
-        <!--                <div class="dialog-body">-->
-        <!--                    <div style="width: 490px;">-->
-        <!--                        <p>• {{$t('createdMayNotBeModified')}}</p>-->
-        <!--                        <p>• {{$t('provide2GBStorage')}}</p>-->
-        <!--                        <div style="height: 21px;"></div>-->
-        <!--                        &lt;!&ndash;          v-model="input"&ndash;&gt;-->
-        <!--                        <div style="display: flex;">-->
-        <!--                            <el-input-->
-        <!--                                v-model="bucketNameInputValue"-->
-        <!--                                :placeholder="$t('bucketName')"-->
-        <!--                                style="flex-shrink: 1;"-->
-        <!--                            >-->
-        <!--                            </el-input>-->
-        <!--                            <span style="line-height: 46px; display: inline-block; flex-shrink: 0; padding: 0 10px;"-->
-        <!--                                  slot="suffix">{{bucketNameInputValue.length}}/63</span>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-
-        <!--                &lt;!&ndash; 错误提示区域 &ndash;&gt;-->
-        <!--                <div-->
-        <!--                    style="height: 99px; line-height: 25px; padding: 5px 0; color: #f54242;"-->
-        <!--                >-->
-        <!--                    <div-->
-        <!--                        style="width: 490px; margin: 0 auto;"-->
-        <!--                        class="animated"-->
-        <!--                        :class="{shake: !!bucketNameInputValueError}"-->
-        <!--                    >-->
-        <!--                        <template v-if="bucketNameInputValueError === true">-->
-        <!--                            <p>{{$t('includeOnly')}}</p>-->
-        <!--                            <p>{{$t('startAndEnd')}}</p>-->
-        <!--                            <p>{{$t('between1To63Characters')}}</p>-->
-        <!--                        </template>-->
-        <!--                        <template v-if="bucketNameInputValueError !==true && !!bucketNameInputValueError">-->
-        <!--                            <p>{{bucketNameInputValueError}}</p>-->
-        <!--                        </template>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-
-        <!--                &lt;!&ndash; dialog 底部按钮 &ndash;&gt;-->
-        <!--                <span-->
-        <!--                    slot="footer"-->
-        <!--                    class="dialog-footer"-->
-        <!--                >-->
-        <!--                <el-button-->
-        <!--                    style="color: #999999"-->
-        <!--                    type="text"-->
-        <!--                    @click="hideNewBucketDialog"-->
-        <!--                >{{$t('cancel')}}</el-button>-->
-        <!--                <el-button-->
-        <!--                    type="primary"-->
-        <!--                    style="margin-left: 20px; width: 90px; padding-left: 0; padding-right: 0;"-->
-        <!--                    round-->
-        <!--                    @click="createNewBucketByAPI"-->
-        <!--                >{{$t('confirm')}}</el-button>-->
-        <!--            </span>-->
-        <!--            </el-dialog>-->
-        <!--        </div>-->
 
         <div class="mock-list__noheader-dialog">
             <el-dialog
@@ -382,52 +271,6 @@
     }
 
     .mock-list {
-        /*.mock-list__border-dialog {*/
-        /*    .el-dialog {*/
-        /*        border-radius: 10px;*/
-
-        /*        .el-dialog__header {*/
-        /*            padding-bottom: 6px;*/
-        /*            padding-top: 6px;*/
-        /*            text-align: center;*/
-        /*            border-bottom: 1px solid #d8d8d8;*/
-
-        /*            .el-dialog__title {*/
-        /*                line-height: 38px;*/
-        /*                color: #333;*/
-        /*                font-size: 14px;*/
-        /*            }*/
-
-        /*            .el-dialog__headerbtn {*/
-        /*                top: 15px*/
-        /*            }*/
-        /*        }*/
-
-        /*        .el-input__inner {*/
-        /*            border: 1px solid #979797;*/
-        /*            height: 46px;*/
-        /*            line-height: 45px;*/
-        /*        }*/
-        /*    }*/
-
-        /*    !*.mock-list__mocks_non-empty__body_table {*!*/
-        /*    !*    .el-table {*!*/
-        /*    !*        overflow: auto !important;*!*/
-
-        /*    !*        .el-table__body-wrapper {*!*/
-        /*    !*            overflow: auto;*!*/
-        /*    !*        }*!*/
-        /*    !*    }*!*/
-        /*    !*}*!*/
-
-        /*    .el-dialog__footer {*/
-        /*        display: flex;*/
-        /*        align-items: center;*/
-        /*        justify-content: center;*/
-        /*        padding-bottom: 45px;*/
-        /*        padding-top: 0;*/
-        /*    }*/
-        /*}*/
 
         .mock-list__noheader-dialog {
             .el-dialog__header {

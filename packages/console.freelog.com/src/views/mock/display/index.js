@@ -5,12 +5,14 @@ import CreateBucketDialog from '@/components/CreateBucketDialog/index.vue';
 import {mapGetters} from "vuex";
 
 import Navs from './Navs.vue';
+import NodeData from './NodeData.vue';
 
 export default {
     // i18n,
     components: {
         // NavTitle,
         Navs,
+        NodeData,
         CreateBucketDialog,
     },
     // name: "index",
@@ -77,12 +79,12 @@ export default {
          * @returns {Promise<void>}
          */
         // async initBucketsByAPI(bool) {
-            // const {data} = await axios.get('/v1/resources/mocks/buckets');
-            // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
-            // this.bucketsList = data.data;
-            // if (bool) {
-            //     this.activeBucketIndex = data.data.length - 1
-            // }
+        // const {data} = await axios.get('/v1/resources/mocks/buckets');
+        // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
+        // this.bucketsList = data.data;
+        // if (bool) {
+        //     this.activeBucketIndex = data.data.length - 1
+        // }
         // },
         async createBucketSuccess(bucket) {
             // console.log('######');
@@ -105,6 +107,17 @@ export default {
                 path: '/mock/display',
                 query: {
                     activatedBucketName: (bucket && bucket.bucketName) || '',
+                }
+            });
+        },
+        /**
+         * 显示 Nodedata
+         */
+        onClickShowNodeData() {
+            this.$router.push({
+                path: '/mock/display',
+                query: {
+                    nodeData: true,
                 }
             });
         },

@@ -21,7 +21,7 @@ module.exports = merge(baseConfig, {
   },
 
   output: {
-    publicPath: '/'
+    publicPath: '/',
   },
 
   mode: 'development',

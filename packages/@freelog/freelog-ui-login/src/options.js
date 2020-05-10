@@ -10,6 +10,8 @@ const options = {
 	router: null,
 	// 是否注册路由
 	isRegisterRouter: true,
+	// 是否注册组件
+	isRegisterComponents: true,
 	// 进入路由之前是否验证身份授权
 	isAuthenticationBeforeRoute: true,
 	// 是否监听当前窗口的显隐状态变化，是则当状态变化时重新验证用户信息
