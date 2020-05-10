@@ -1,5 +1,6 @@
 { 
   "compilerOptions": {
+    "allowJs": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
@@ -7,6 +8,7 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "./built",
     "removeComments": true,
+    "sourceMap": true,
     "target": "ES5"
   },
   "include": [

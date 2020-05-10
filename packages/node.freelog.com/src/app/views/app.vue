@@ -6,22 +6,17 @@
    
     <transition name="fade">
       <div class="pb-login-dialog" v-if="loginDialogVisible">
-        <FLogin 
+        <f-login 
           class="pb-l-d-comp" 
           @close-dialog="loginDialogVisible = false"
-          @onLoginSuccess="loginSuccessHandler"></FLogin>
+          @onLoginSuccess="loginSuccessHandler"></f-login>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import i18n from '@/i18n/index'
-  import { getUserInfo, checkLoginStatus } from '@freelog/freelog-ui-login/src/core'
-  import EventCenter from '../../_core/events/index'
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../pb-events/name'
-  // import FAuthBox from './components/auth-box.vue'
 
   export default {
     data() {
@@ -40,10 +35,6 @@
     },
     components: {
       FAuthBox: () => import('./components/auth-box.vue'),
-      FLogin: () => import('@freelog/freelog-ui-login').then(({ default: initLogin,  FLogin,  }) => {
-        initLogin({ Vue, isRegisterRouter: false, isRegisterComponents: false, i18n })
-        return FLogin
-      }),
     },
     computed: {},
     async mounted() {
@@ -86,12 +77,6 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '../styles/pagebuild.less';
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
-  }
 </style>

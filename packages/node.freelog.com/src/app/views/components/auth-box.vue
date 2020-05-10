@@ -20,7 +20,7 @@
 
 <script>
 import { GO_TO_LOGIN, SHOW_AUTH_DIALOG } from '../../pb-events/name'
-import { getUserInfo, checkLoginStatus } from '@freelog/freelog-ui-login/src/core'
+import { checkLoginStatus } from '@freelog/freelog-ui-login/src/core'
 import FSignPolicyList from './sign-policy-list.vue'
 import ContractSigningDialog from '@freelog/freelog-ui-contract/src/components/contract-signing/contract-signing-dialog.vue'
 

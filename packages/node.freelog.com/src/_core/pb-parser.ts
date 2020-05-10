@@ -13,42 +13,35 @@ interface IAuthInfo {
   __auth_error_info__?: plainObject
 }
 
-export default function initWidgets(): void {
-  showLoading()
+export const AllWidgetsLoaded = 'allWidgetsLoaded'
+export default async function initWidgets(): Promise<void> {
   const authInfo = window.__auth_info__ as IAuthInfo
   const authErrorData = authInfo && authInfo.__auth_error_info__
-
-  if (!authErrorData) {
-    loadWidgets()
-      .then(hideLoading)
-      .catch(e => {
-        // widget加载失败 EXCEPTION_LOADWIDGET
-        console.error(e.toString())
-        hideLoading()
-      })
-  } else {
-    /**
-     * 授权异常
-     * 显示PB异常页及授权按钮，待授权问题解决后刷新页面
-     */
-    // throwException('PB授权未通过', EXCEPTION_PB_AUTH)
+  try {
+    if (!authErrorData) {
+      showLoading()
+      await loadWidgets()
+      window.FreelogApp.trigger(AllWidgetsLoaded)
+    }
+  } catch(e) {
+    console.error(e.toString())
+  } finally {
     hideLoading()
   }
 }
 
-function loadWidgets(): Promise<any> {
-  const promises: Promise<any> [] = []
-  
-  if (window.__auth_info__) {
-    const vis: { [propName: string]: boolean } = {}
-    const { 
-      __page_build_sub_releases, 
-      __page_build_id, 
-      __page_build_entity_id, 
-    } = window.__auth_info__ as IAuthInfo
-
-    __page_build_sub_releases
-      .forEach(subRelease => {
+async function loadWidgets(): Promise<any> {
+  return new Promise(resolve => {
+    const promises: Promise<any> [] = []
+    if (window.__auth_info__) {
+      const vis: { [propName: string]: boolean } = {}
+      const { 
+        __page_build_sub_releases, 
+        __page_build_id, 
+        __page_build_entity_id, 
+      } = window.__auth_info__ as IAuthInfo
+      
+      for (const subRelease of __page_build_sub_releases) {
         const { resourceType, id: subReleaseId } = subRelease
         if (!vis[subReleaseId]) {
           vis[subReleaseId] = true
@@ -63,12 +56,26 @@ function loadWidgets(): Promise<any> {
               promises.push(createCssLink(url))
               break
             }
-            default: { }
+            default: {}
           }
         }
-      })
-  }
-  
-  return Promise.all(promises)
+      }
+    }
+    
+    let count = promises.length
+    if (count === 0){ 
+      resolve()
+    } else {
+      for (const p of promises) {
+        p.finally(() => {
+          count--
+          if (count === 0) {
+            resolve()
+          }
+        })
+      }
+    }
+  })
 }
+
 
