@@ -41,29 +41,45 @@ module.exports = merge(baseConfig, {
   devtool: 'cheap-eval-source-map',
 
   module: {
-    rules: [{
-      test: /\.(less|css)$/,
-      use: [
-        // 'style-loader',
-        // 'vue-style-loader',
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: '/public/',
-          }
-        },
-        // MiniCssExtractPlugin.loader,
-        'css-loader',
-        'less-loader',
-      ]
-    }]
+    rules: [
+      {
+        test: /\.(less|css)$/,
+        exclude: [
+          /element-ui/,
+          /@freelog\/freelog-ui-login/,
+          /src\/app\/styles/,
+        ],
+        use: [
+          'style-loader',
+          'vue-style-loader',
+          // MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      },
+      {
+        test: /\.(less|css)$/,
+        include: [
+          /element-ui/,
+          /@freelog\/freelog-ui-login/,
+          /src\/app\/styles/,
+        ],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ]
+      }
+    ]
   },
 
   plugins: [
     new HtmlWebpackPlugin({
+      preload: ['**/*.*'],
+      inject: 'body',
+      filename: 'pagebuild.html',
       template: path.resolve(__dirname, '../public/index.html'),
-      // excludeChunks: [ tmpName ],
-      // commonLibUrl: `/${tmpName}.js`
+      chunks: ['pagebuild-app', 'pagebuild-core']
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css', 

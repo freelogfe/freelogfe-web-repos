@@ -8,7 +8,6 @@ var lastCheckedUserInfo = null
 var axiosInstance = null
 var router = null
 export default function initCode(options) {
-	console.log(options.Vue.axios.get)
 	axiosInstance = options.axiosInstance || options.Vue.axios
 	router = options.router
 	lastCheckedUserInfo = getAuthInfoByCookie()
