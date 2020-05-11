@@ -79,4 +79,34 @@
 
 <style lang="less" scoped>
   @import '../styles/pagebuild.less';
+  .pb-login-dialog {
+    overflow: auto;
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, .6);
+
+    .pb-l-d-comp {
+      margin: 20vh auto 0 auto; box-shadow: none;
+    }
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+</style>
+
+<style lang="less">
+.f-ui-login-section.pb-l-d-comp {
+  padding: 20px 0 30px; border-radius: 10px;
+  background-color: #fff;
+  .login-body {
+    padding-top: 10px; padding-bottom: 0; border-color: transparent; border-radius: 0;
+    background-color: transparent;
+
+  }
+  .login-sc-operation { margin-top: 0; }
+}
 </style>

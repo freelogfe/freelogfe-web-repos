@@ -1,7 +1,6 @@
 
 import '../app/styles/reset.css'
-import '../app/styles/loading.less'
-// import '../app/styles/pagebuild.less'
+import '../app/styles/global.less'
 
 import initEnv, { IEnv } from './initEnv'
 import initQI, { IFreelogQuery } from './initQI'

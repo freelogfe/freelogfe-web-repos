@@ -164,14 +164,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.f-sign-policy-list {
-  max-height: 400px; overflow: auto;
-}
+// .f-sign-policy-list {
+//   max-height: 400px; overflow: auto;
+// }
 .list-enter-active {
   transition: all .3s;
 }
-.list-enter
-/* .list-leave-active for below version 2.1.8 */ {
+.list-enter {
   opacity: 0;
   transform: translateX(50px);
 }

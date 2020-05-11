@@ -21,13 +21,13 @@ export default async function initWidgets(): Promise<void> {
     if (!authErrorData) {
       showLoading()
       await loadWidgets()
+      hideLoading()
       window.FreelogApp.trigger(AllWidgetsLoaded)
     }
   } catch(e) {
-    console.error(e.toString())
-  } finally {
     hideLoading()
-  }
+    console.error(e.toString())
+  } 
 }
 
 async function loadWidgets(): Promise<any> {
