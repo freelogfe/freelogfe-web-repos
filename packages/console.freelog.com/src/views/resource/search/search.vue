@@ -7,7 +7,7 @@
             ref="searchInputRef"
             @clear="clearSearchInputHandler"
             @keyup.native.enter="searchHandler"
-            :placeholder="$t('release.search.resourcePlaceholder')"
+            :placeholder="$t('resource.pleaseEnterAResourceName')"
     ></el-input>
     <lazy-list-view :list="searchResources"
                     ref="searchView"

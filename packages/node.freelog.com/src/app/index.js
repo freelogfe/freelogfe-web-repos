@@ -2,14 +2,19 @@ import Vue from 'vue'
 import App from './views/app.vue'
 import i18n from '@/i18n/index'
 
-import axiosPlugin from '@freelog/freelog-common-lib/src/plugins/axios'
+import axiosPlugin, { axios } from '@freelog/freelog-common-lib/src/plugins/axios'
 import elementUIPlugin from './elementUI-plugins'
 import initLogin from '@freelog/freelog-ui-login'
 
+window.f_common_lib = {
+  Vue
+}
+window.Vue = Vue
+window.axios = axios
+
 Vue.use(elementUIPlugin)
 Vue.use(axiosPlugin)
-
-Vue.config.devtools = true
+// Vue.config.devtools = true
 initLogin({ Vue, i18n, isRegisterRouter: false })
 new Vue({
   el: '#app-auth',
@@ -17,9 +22,3 @@ new Vue({
   methods: {},
   render: h => h(App)
 })
-
-window.f_common_lib = {
-  Vue
-}
-
-window.Vue = Vue

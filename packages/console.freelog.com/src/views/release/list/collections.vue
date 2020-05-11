@@ -68,7 +68,7 @@ export default {
   .m-c-header {
     margin-bottom: 28px; text-align: right;
     .m-c-go-to-market {
-      width: 120px; margin-left: 18px; border-radius: 2px; border-color: #F6BE25;
+      min-width: 120px; margin-left: 18px; border-radius: 2px; border-color: #F6BE25;
       background-color: #F6BE25; color: #fff;
     }
     .right-tool-bar-wrap {

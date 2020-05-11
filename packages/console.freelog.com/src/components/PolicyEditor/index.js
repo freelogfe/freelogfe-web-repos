@@ -62,7 +62,12 @@ export default {
     policy() {
       this.policyForm.policyName = this.policy.policyName
       this.resolvePolicy(this.policy)
-    }
+    },
+    'policyForm.policyName': function () {
+      this.$refs['policyForm'].validateField('policyName', (str) => {
+        this.isValidPolicyName = str === ''
+      })
+    },
   },
   mounted() {
     this.resolvePolicy(this.policy)

@@ -1,6 +1,6 @@
 <template>
 <!--    <div :class="[sidebar.openSidebar?'': 'collapse-sidebar']">-->
-    <div>
+    <div :class="localeCls">
         <fl-header/>
         <!--        <fl-sidebar/>-->
         <section class="main" :class="themeCls">
@@ -45,6 +45,10 @@
                     return `${this.$route.meta.theme}-theme`
                 }
                 return ''
+            },
+            localeCls() {
+                const locale = localStorage.getItem('locale')
+                return locale ? locale : 'zh-CN'
             },
             // key(){
             //   return `layout-${this.$route.path}`

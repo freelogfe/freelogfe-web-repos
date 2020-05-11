@@ -17,14 +17,11 @@
           <el-form-item prop="loginName" :label="$t('resetPassword.loginName')">
             <el-input type="text" v-model="model.loginName" :placeholder="$t('resetPassword.loginNamePlaceholder')"></el-input>
           </el-form-item>
-          <el-form-item prop="authCode" :label="$t('resetPassword.verifyCode')">
-            <div>
-              <el-input ref="authCodeInput" type="text" v-model="model.authCode" style="width: 280px"></el-input>
-              <el-button class="vcode-btn" style="width: 110px"
-                        @click="sendCheckCodeNotifyHandler">
-                {{vcodeBtnText}}
-              </el-button>
-            </div>
+          <el-form-item prop="authCode" class="rp-authcode-box" :label="$t('resetPassword.verifyCode')">
+            <el-input ref="authCodeInput" type="text" v-model="model.authCode" ></el-input>
+            <el-button class="vcode-btn" @click="sendCheckCodeNotifyHandler">
+              {{vcodeBtnText}}
+            </el-button>
           </el-form-item>
           <el-form-item prop="password" :label="$t('resetPassword.password')">
             <el-input type="password" v-model="model.password"></el-input>
@@ -71,7 +68,7 @@ export default ResetView
     }
 
     .vcode-btn {
-      margin-left: 4px; padding: 12px 0;
+      min-width: 110px; margin-left: 4px; padding: 12px 6px;
       background-color: #409EFF; color: #fff;
       &.is-disabled {
         background-color: #CCCCCC; color: #fff;
@@ -127,8 +124,13 @@ export default ResetView
     .el-alert {  
       .error-alert()
     }
+    .rp-authcode-box .el-form-item__content{
+      display: flex;
+      .el-input { flex: 1; }
+    }
   }
   .el-form-item.is-error {
     .ui-login-form-item-error()
   }
+
 </style>
