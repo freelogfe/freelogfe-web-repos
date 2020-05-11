@@ -113,9 +113,9 @@ export default {
       if (loginName === '') {
         errMsgs.push(this.$t('login.validateErrors.loginName_empty'))
       } else {
-        if (!EMAIL_REG.test(loginName) && !PHONE_REG.test(loginName)) {
-          errMsgs.push(this.$t('login.validateErrors.loginName'))
-        }
+        // if (!EMAIL_REG.test(loginName) && !PHONE_REG.test(loginName)) {
+        //   errMsgs.push(this.$t('login.validateErrors.loginName'))
+        // }
       }
       if (password.length < 6) {
         if (password === '') {
@@ -199,7 +199,7 @@ export default {
 
     .login-password {
       .user-password {
-        position: absolute; top: 0; right: 0; z-index: 10;
+        position: absolute; top: -25px; right: 0; z-index: 10;
         line-height: 26px; color: #297CBB;
       }
     }

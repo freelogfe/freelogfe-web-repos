@@ -1,4 +1,4 @@
-import instance from "../axios-instance"
+import instance, { axios } from "../axios-instance"
 
 const axiosPlugin = {
   install(Vue) {
@@ -11,4 +11,5 @@ const axiosPlugin = {
     })
   }
 }
+export { axios }
 export default axiosPlugin

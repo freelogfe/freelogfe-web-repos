@@ -114,7 +114,7 @@
     .m-r-header {
         margin-bottom: 28px; text-align: right;
         .m-r-create-btn {
-            width:120px; margin-left: 18px; border-radius: 2px;
+            min-width: 120px; margin-left: 18px; border-radius: 2px;
         }
         .right-tool-bar-wrap {
             display: inline-block;

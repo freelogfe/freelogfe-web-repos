@@ -30,15 +30,10 @@
             </el-input>
           </el-form-item>
         </div>
-        <el-form-item prop="authCode" :label="$t('signup.verifyCode')" :error="authCodeErrorMsg">
-          <el-input v-model="model.authCode"
-                    style="width: 280px"
-                    :placeholder="$t('signup.verifyCodePlaceholder')"></el-input>
+        <el-form-item prop="authCode" class="signup-authcode-box" :label="$t('signup.verifyCode')" :error="authCodeErrorMsg">
+          <el-input v-model="model.authCode" :placeholder="$t('signup.verifyCodePlaceholder')"></el-input>
           <div class="check-code-wrap">
-            <el-button class="vcode-btn"
-                      style="width: 110px"
-                      @click="sendCheckCodeNotifyHandler"
-                      :disabled="disabledCheckCodeBtn">
+            <el-button class="vcode-btn" @click="sendCheckCodeNotifyHandler" :disabled="disabledCheckCodeBtn">
               {{vcodeBtnText}}
             </el-button>
           </div>
@@ -68,7 +63,6 @@
       {{$t('signup.loginTexts[0]')}}
       <a :href="loginLink">{{$t('signup.loginTexts[1]')}}</a>
     </div>
-    
   </section>
 </template>
 
@@ -99,6 +93,10 @@ export default SignupView
         }
         .el-radio__label { padding-left: 7px; font-size: 12px; color: #666; }
       }
+    }
+    .signup-authcode-box .el-form-item__content{
+      display: flex;
+      .el-input { flex: 1; }
     }
   }
   

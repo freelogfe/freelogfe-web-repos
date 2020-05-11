@@ -4,7 +4,6 @@ export default function fPerformanceReport (options) {
   }
   const opts = Object.assign(defaultOpts, options)
   
-  console.log(opts)
   window.addEventListener('beforeunload', unloadHandler, false)
 
   // 数据上报
