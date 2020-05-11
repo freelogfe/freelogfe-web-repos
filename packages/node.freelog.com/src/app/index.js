@@ -5,6 +5,7 @@ import i18n from '@/i18n/index'
 import axiosPlugin, { axios } from '@freelog/freelog-common-lib/src/plugins/axios'
 import elementUIPlugin from './elementUI-plugins'
 import initLogin from '@freelog/freelog-ui-login'
+import fReport from '@freelog/freelog-report'
 
 window.f_common_lib = {
   Vue
@@ -21,4 +22,8 @@ new Vue({
   i18n,
   methods: {},
   render: h => h(App)
+})
+
+fReport.performanceReport({
+  reportUrl: 'http://report.testfreelog.com/v1/report/performance'
 })

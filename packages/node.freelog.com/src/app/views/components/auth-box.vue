@@ -1,8 +1,8 @@
 <template>
   <div class="f-auth-box">
-    <div class="pb-exception-head">
-      <div class="pb-exception-img" :class="{ 'signed': authDefaultContract != null }"></div>
-      <div class="pb-exception-msg">{{authDefaultContract == null ? '您与当前节点无授权关系，若继续浏览，需要选择下方策略与节点进行签约' : '您有待执行的合约，若继续浏览节点，请执行合约'}}</div>
+    <div class="f-auth-exception-head">
+      <div class="f-auth-exception-img" :class="{ 'signed': authDefaultContract != null }"></div>
+      <div class="f-auth-exception-msg">{{authDefaultContract == null ? '您与当前节点无授权关系，若继续浏览，需要选择下方策略与节点进行签约' : '您有待执行的合约，若继续浏览节点，请执行合约'}}</div>
     </div>
     <f-sign-policy-list 
       :policies="authPresentablePolicies" 
@@ -73,8 +73,10 @@ export default {
     },
   },
   watch: {},
-  mounted() {
-    this.init()
+  async mounted() {
+    window.FreelogApp.$loading.show()
+    await this.init()
+    window.FreelogApp.$loading.hide()
   },
   methods: {
     async init() {
@@ -241,8 +243,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .f-auth-box {
   width: 750px; margin: auto;
+  .f-auth-exception-head {
+    display: flex; justify-content: center; align-items: center;
+    margin-bottom: 10px;
+  }
+  .f-auth-exception-img {
+    width: 280px; height: 280px;
+    background-image: url(../../../assets/images/Sign_a_contract.png); 
+    background-size: 100% 100%; background-repeat: no-repeat;
+    &.signed { background-image: url(../../../assets/images/Pending.png);  }
+  }
+  .f-auth-exception-msg {
+    width: 290px; margin-left: 60px;
+    font-size: 16px; color: #2C3643;
+  }
 }
 .f-sign-btns-bar {
   margin-top: 30px; text-align: center;

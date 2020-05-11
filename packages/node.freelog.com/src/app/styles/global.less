@@ -1,0 +1,48 @@
+// html { background-color: #d3d3d32b; }
+html { background-color: #fff; }
+
+html body {
+  font: 12px/1.5  tahoma, arial; color: #333333;
+  * {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+      'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+
+  [class^="el-icon-fa"], [class*=" el-icon-fa"] {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome !important;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+#js-page-container { min-height: 0; }
+#app-auth{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.clearfix {
+  &:after {
+    content: ' ';
+    clear: both;
+    display: block;
+  }
+}
+
+.app-footer {
+  display: none;
+  margin-top: 60px; padding: 20px 0;
+  font-size: 14px; color: #6c6c6c; text-align: center;
+
+  li {
+    display: inline-block;
+    margin: 0 20px;
+    a { color: #6c6c6c; }
+  }
+}
+
+@import './loading.less';

@@ -71,7 +71,7 @@ module.exports = merge(baseConfig, {
     new HtmlWebpackPlugin({
       preload: ['**/*.*'],
       inject: 'body',
-      filename: 'pagebuild.html',
+      filename: 'index.html',
       template: path.resolve(__dirname, '../public/index.html'),
       chunks: ['pagebuild-app', 'pagebuild-core']
       // excludeChunks: [ tmpName ],
