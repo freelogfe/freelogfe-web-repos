@@ -1,7 +1,11 @@
 <template>
     <div class="create-release-modal">
 
-        <div class="box" :style="{height: dataList && dataList.length > 0  ? '680px': '380px'}"><!--&gt;>>>>>> dev-->
+        <div
+            class="box"
+            :style="{height: noDate ? '380px' : '680px'}"
+            style="max-height: 90%;"
+        >
             <div class="header">
                 <div class="title">
                     <div/>
@@ -42,7 +46,8 @@
                 >
 
                     <div style="height: 80px;"/>
-                    <div style="color: #666; font-size: 14px; padding: 0 60px;">{{$t('create_release_popup_empty')}}</div>
+                    <div style="color: #666; font-size: 14px; padding: 0 60px;">{{$t('create_release_popup_empty')}}
+                    </div>
                     <div style="height: 40px;"/>
                     <a
                         class="create-first"
@@ -207,11 +212,12 @@
                     line-height: 32px;
                     border-radius: 4px;
                     text-align: center;
-                    width: 100px;
+                    /*min-width: 100px;*/
                     color: #fff;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
+                    padding: 0 15px;
 
                     &:hover {
                         background: #529DFF;
