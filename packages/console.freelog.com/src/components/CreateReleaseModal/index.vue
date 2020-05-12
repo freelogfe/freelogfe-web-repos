@@ -4,7 +4,7 @@
         <div
             class="box"
             :style="{height: noDate ? '380px' : '680px'}"
-            style="max-height: 100%;"
+            style="max-height: 90%;"
         >
             <div class="header">
                 <div class="title">
@@ -212,11 +212,12 @@
                     line-height: 32px;
                     border-radius: 4px;
                     text-align: center;
-                    width: 100px;
+                    min-width: 100px;
                     color: #fff;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
+                    padding: 0 15px;
 
                     &:hover {
                         background: #529DFF;
