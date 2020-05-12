@@ -77,8 +77,8 @@ module.exports = merge(baseConfig, {
       // excludeChunks: [ tmpName ],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css', 
-      chunkFilename: 'public/[id].css',
+      filename: '[name].[contenthash].css', 
+      chunkFilename: 'public/[id].[contenthash].css',
     }),
     new ResourceHintWebpackPlugin(),
     new StyleExtHtmlWebpackPlugin({
