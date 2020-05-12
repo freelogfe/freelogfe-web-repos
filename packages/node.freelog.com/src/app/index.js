@@ -6,22 +6,27 @@ import axiosPlugin, { axios } from '@freelog/freelog-common-lib/src/plugins/axio
 import elementUIPlugin from './elementUI-plugins'
 import initLogin from '@freelog/freelog-ui-login'
 import fReport from '@freelog/freelog-report'
+import { FREELOG_APP_MOUNTED } from '../_core/events/pb-event-names'
 
 window.f_common_lib = {
-  Vue
+  Vue, axios
 }
 window.Vue = Vue
 window.axios = axios
 
 Vue.use(elementUIPlugin)
 Vue.use(axiosPlugin)
-// Vue.config.devtools = true
 initLogin({ Vue, i18n, isRegisterRouter: false })
 new Vue({
   el: '#app-auth',
   i18n,
   methods: {},
-  render: h => h(App)
+  render: h => h(App),
+  mounted() {
+    if (window.FreelogApp) {
+      window.FreelogApp.trigger(FREELOG_APP_MOUNTED)
+    }
+  },
 })
 
 fReport.performanceReport({

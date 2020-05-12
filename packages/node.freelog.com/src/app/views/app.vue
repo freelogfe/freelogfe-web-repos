@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../pb-events/name'
+  import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../../_core/events/pb-event-names'
 
   export default {
     data() {

@@ -1,28 +1,28 @@
 import { toArray } from '../utils'
 
 export default class EventCenter {
-  _events: plainObject;
+  _events: any;
   constructor() {
     this._events = Object.create(null)
   }
 
-  on(event: string, fn: () => any): this {
+  on(event: string | symbol, fn: () => any): this {
     (this._events[event] || (this._events[event] = [])).push(fn)
     return this
   }
 
-  once(event: string, fn: () => any): this {
+  once(event: string | symbol, fn: () => any): this {
     const self = this
     function on() {
       self.off(event, on)
-      fn.apply(self, arguments)
+      on.fn.apply(self, arguments)
     }
     on.fn = fn
     self.on(event, on)
     return self
   }
 
-  off(event: string, fn: () => any): this {
+  off(event: string | symbol, fn: () => any): this {
     const self = this
     // all
     if (!arguments.length) {
@@ -53,11 +53,11 @@ export default class EventCenter {
     return self
   }
 
-  emit(event: string, ...args: Array<any>): this {
+  emit(event: string | symbol, ...args: Array<any>): this {
     let cbs = this._events[event]
     if (cbs) {
       cbs = cbs.length > 1 ? toArray(cbs) : cbs
-      const info = `event handler for "${event}"`
+      const info = `event handler for "${event.toString()}"`
       cbs.forEach((handler: (...rest: any []) => void) => {
         try {
           handler(...args)
