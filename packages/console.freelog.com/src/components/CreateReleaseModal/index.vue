@@ -212,7 +212,7 @@
                     line-height: 32px;
                     border-radius: 4px;
                     text-align: center;
-                    min-width: 100px;
+                    /*min-width: 100px;*/
                     color: #fff;
                     font-size: 14px;
                     font-weight: 600;
