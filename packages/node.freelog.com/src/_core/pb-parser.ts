@@ -32,7 +32,7 @@ export default async function initWidgets(): Promise<void> {
 
 async function loadWidgets(): Promise<any> {
   return new Promise(resolve => {
-    const promises: Promise<any> [] = []
+      const resources: plainObject [] = []
     if (window.__auth_info__) {
       const vis: { [propName: string]: boolean } = {}
       const { 
@@ -49,11 +49,11 @@ async function loadWidgets(): Promise<any> {
           switch (resourceType) {
             case 'widget':
             case 'js': {
-              promises.push(createScript(url))
+              resources.push({ type: 'js', url })
               break
             }
             case 'css': {
-              promises.push(createCssLink(url))
+              resources.push({ type: 'css', url })
               break
             }
             default: {}
@@ -61,7 +61,15 @@ async function loadWidgets(): Promise<any> {
         }
       }
     }
-    
+
+    sortResources(resources)
+    const promises: Promise<any> [] = resources.map(item => {
+      switch(item.type) {
+        case 'css': return createCssLink(item.url)
+        case 'js': return createScript(item.url)
+        default: return Promise.resolve()
+      }
+    })
     let count = promises.length
     if (count === 0){ 
       resolve()
@@ -76,6 +84,10 @@ async function loadWidgets(): Promise<any> {
       }
     }
   })
+}
+
+function sortResources(resources: plainObject []): void {
+  resources.sort(r => r.type === 'css' ? -1 : 1)
 }
 
 
