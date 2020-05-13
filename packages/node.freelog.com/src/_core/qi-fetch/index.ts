@@ -54,7 +54,7 @@ async function qiFetch(opts: QIFetchOpts): Promise<any> {
     if(opts.method === 'get'){
       opts.url = complementQueryString(opts.url, opts.data)
     }else {
-      opts.body = opts.data
+      opts.body = opts.body || opts.data
     }
     Reflect.deleteProperty(opts, 'data')
   }
