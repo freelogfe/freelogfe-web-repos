@@ -1,5 +1,5 @@
 {
-	"create_my_first_release ": "创建新发行",
+	"create_my_first_release ": "该展品名称在当前节点已使用。",
 	"create_release_popup_empty": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
 	"file_exist": "存在同名文件",
 	"replace_file": "替换",
@@ -46,5 +46,8 @@
 	"alarm_data_cover": "导入新的对象可能导致依赖、自定义属性等模块信息被覆盖，确认导入吗？",
 	"import": "导入",
 	"alarm_resource_not_available": "上抛资源已下线，无法获取授权。",
-	"alarm_resource_authorization_abnormal": "该资源授权链异常，请谨慎签约。"
+	"alarm_resource_authorization_abnormal": "该资源授权链异常，请谨慎签约。",
+	"naming_convention_exhibits_name": "",
+	"naming_convention_group_name": "",
+	"exhibits_name_exist": "该展品名称在当前节点已使用，请重新输入。"
 }
