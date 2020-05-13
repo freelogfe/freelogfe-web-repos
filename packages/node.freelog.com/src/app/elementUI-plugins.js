@@ -1,4 +1,7 @@
-import { Button, Checkbox, Form, FormItem, Input, Option, Select,Tooltip,  Message, MessageBox, Dialog, Loading } from 'element-ui'
+import { 
+  Button, Checkbox, Form, FormItem, Input, Option, Select,Tooltip,  
+  Message, MessageBox, Dialog, Loading 
+} from 'element-ui'
 
 export default {
   install: function(Vue) {
