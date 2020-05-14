@@ -1,6 +1,7 @@
 declare module '@freelog/freelog-ui-login/src/core' {
   export function getUserInfo(): Promise<any>
 }
+declare module '@freelog/freelog-ui-login/src/shared/getUserInfo'
 
 declare module '@freelog/freelog-common-lib/src/initEnv' {
   export function getEnvType(): string 

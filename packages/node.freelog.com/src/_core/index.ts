@@ -1,11 +1,6 @@
-
-import '../app/styles/reset.css'
-import '../app/styles/global.less'
-
 import initEnv, { IEnv } from './initEnv'
 import initQI, { IFreelogQuery } from './initQI'
 import initLoading, { ILoading } from './initLoading'
-import initWidgets from './pb-parser'
 import initLifeCycle, { IFAppLifeCycle } from './lifecycle'
 import EventCenter from './events/index'
 import { HANDLE_INVALID_RESPONSE, HANDLE_INVALID_AUTH, GO_TO_LOGIN, REPORT_ERROR, SHOW_AUTH_DIALOG, NOTIFY_NODE, SHOW_ERROR_MESSAGE } from './events/pb-event-names'
@@ -21,10 +16,7 @@ interface FreelogApp {
   trigger(event: string): EventCenter
 }
 
-initGlobalApi()
-initWidgets()
-
-function initGlobalApi(): void {
+export default function initGlobalApi(): void {
   const eventInstance = new EventCenter()
   const FreelogApp: FreelogApp = {
     QI: initQI(),
@@ -55,3 +47,4 @@ function initGlobalApi(): void {
   window.FreelogApp = FreelogApp
 } 
 
+initGlobalApi()

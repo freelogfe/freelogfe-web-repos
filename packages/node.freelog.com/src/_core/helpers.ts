@@ -20,7 +20,8 @@ export function createScript(url: string): Promise<any> {
     script.src = url
     script.onload = resolve
     script.onerror = reject
-    script.async = true
+    // script.async = true
+    script.defer = true
     document.getElementsByTagName('head').item(0).appendChild(script)
   })
 }

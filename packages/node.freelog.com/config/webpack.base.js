@@ -5,16 +5,19 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 const srcDir = path.resolve(__dirname, '../src')
 
+const minimist = require('minimist')
+const argv = minimist(process.argv.slice(2))
+const staticDomain = argv.env === 'prod' ? '//static.freelog.com' :  '//static.testfreelog.com'
+
 module.exports = {
   entry: {
-    'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
+    // 'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
     'pagebuild-app': path.resolve(__dirname, '../src/app/index.js')
   },
 
   output: {
-    filename: '[name].js',
-    chunkFilename: 'public/[name].js',
     path: path.resolve(__dirname, '../dist'),
+    publicPath: `${staticDomain}/pagebuild/`,
   },
 
   node: {

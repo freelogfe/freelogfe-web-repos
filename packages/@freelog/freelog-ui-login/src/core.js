@@ -1,6 +1,8 @@
 import { LAST_AUTH_INFO, MESSAGE_TO_NEW_USER, USER_SESSION, LOGIN_PATH, RESET_PASSWORD_PATH, SIGN_PATH, HOME_PATH } from './constant'
 import { goToLoginPage, goToHomePage } from './login'
-import { getItemFromStorage, setItemForStorage, getAuthInfoByCookie } from './utils'
+import { getItemFromStorage, setItemForStorage } from './utils'
+import getAuthInfoByCookie from './shared/getAuthInfoByCookie'
+import getUserInfo from './shared/getUserInfo'
 
 import Toast from './components/toast/toast'
 
@@ -28,45 +30,6 @@ export function logout() {
 				return Promise.reject()
 			}
 		})
-}
-
-// 获取用户信息
-export function getUserInfo() {
-	const authInfo = getAuthInfoByCookie()
-	if(authInfo === null || !authInfo.userId) {
-		// 删除用户信息的缓存：防止用户授权过时，仍能拿到用户信息
-		window.localStorage.removeItem(USER_SESSION)
-		return Promise.resolve(null)
-	}
-
-	try {
-		var userSession = getItemFromStorage(USER_SESSION)
-		if(typeof userSession !== 'object') {
-			throw userSession
-		}
-	}catch(e) {
-		console.log('getUserInfo:', e)
-		userSession = null
-	}
-
-	if(userSession !== null && authInfo.userId === userSession.userId) {
-		return Promise.resolve(userSession)
-	}else {
-		let promise
-		if (authInfo.userId) {
-			promise = axiosInstance.get(`/v1/userinfos/${authInfo.userId}`)
-		} else {
-			promise = axiosInstance.get('/v1/userinfos/current')
-		}
-		return promise.then(res => res.data).then((res) => {
-			if (res.errcode === 0) {
-				setItemForStorage(USER_SESSION, res.data)
-				return res.data
-			}else {
-				return null
-			}
-		})
-	}
 }
 
 // 获取当前用户登录状态

@@ -1,3 +1,5 @@
+
+import getUserInfo from '@freelog/freelog-ui-login/src/shared/getUserInfo'
 import createQIFetch, { QIFetchOpts, qiFetchFn } from './qi-fetch/index'
 import { getQIoringin } from './initEnv'
 import { resolveSubDependDataUrl, resolveSubDependInfoUrl, resolvePresentableDataUrl } from './api/resolveUrl'
@@ -15,7 +17,7 @@ import {
   getPresnetableSubDependInfo,
   requireSubDepend,
 } from './api'
-import { getUserInfo } from '@freelog/freelog-ui-login/src/core'
+
 
 type fetchFn = (url: string, options: QIFetchOpts) => Promise <any>
 export interface IFreelogQuery {

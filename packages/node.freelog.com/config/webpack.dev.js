@@ -21,7 +21,8 @@ module.exports = merge(baseConfig, {
   },
 
   output: {
-    publicPath: '/',
+    filename: '[name].js',
+    chunkFilename: 'public/[name].js',
   },
 
   mode: 'development',
@@ -45,8 +46,6 @@ module.exports = merge(baseConfig, {
       {
         test: /\.(less|css)$/,
         exclude: [
-          /element-ui/,
-          /@freelog\/freelog-ui-login/,
           /src\/app\/styles/,
         ],
         use: [
@@ -60,8 +59,6 @@ module.exports = merge(baseConfig, {
       {
         test: /\.(less|css)$/,
         include: [
-          /element-ui/,
-          /@freelog\/freelog-ui-login/,
           /src\/app\/styles/,
         ],
         use: [
