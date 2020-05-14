@@ -10,10 +10,6 @@ const baseConfig = require('./webpack.base')
 const merge = require('webpack-merge')
 const path = require('path')
 
-const minimist = require('minimist')
-const argv = minimist(process.argv.slice(2))
-const staticDomain = argv.env === 'prod' ? '//static.freelog.com' :  '//static.testfreelog.com'
-
 module.exports = merge(baseConfig, {
   mode: 'production',
 
@@ -21,8 +17,6 @@ module.exports = merge(baseConfig, {
     filename: '[name].[contenthash].js',
     chunkFilename: 'public/[name].[chunkhash].js',
     crossOriginLoading: 'anonymous',
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: `${staticDomain}/pagebuild/`,
   },
 
   module: {
@@ -30,14 +24,11 @@ module.exports = merge(baseConfig, {
       {
         test: /\.(less|css)$/,
         exclude: [
-          /element-ui/,
-          /@freelog\/freelog-ui-login/,
           /src\/app\/styles/,
         ],
         use: [
           'style-loader',
           'vue-style-loader',
-          // MiniCssExtractPlugin.loader,
           'css-loader',
           'less-loader',
         ]
@@ -45,8 +36,6 @@ module.exports = merge(baseConfig, {
       {
         test: /\.(less|css)$/,
         include: [
-          /element-ui/,
-          /@freelog\/freelog-ui-login/,
           /src\/app\/styles/,
         ],
         use: [
@@ -69,22 +58,21 @@ module.exports = merge(baseConfig, {
 
   plugins: [
     new HtmlWebpackPlugin({
-      preload: ['**/*.*'],
       inject: 'body',
       filename: 'index.html',
       template: path.resolve(__dirname, '../public/index.html'),
-      chunks: ['pagebuild-app', 'pagebuild-core']
+      chunks: ['pagebuild-app']
       // excludeChunks: [ tmpName ],
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css', 
       chunkFilename: 'public/[id].[contenthash].css',
     }),
-    new ResourceHintWebpackPlugin(),
     new StyleExtHtmlWebpackPlugin({
       minify: true,
-      chunks: ['pagebuild-core']
+      chunks: ['pagebuild-app']
     }),
+    // new ResourceHintWebpackPlugin(),
     // new ScriptExtHtmlWebpackPlugin({
     //   // inline: ['pagebuild-core'],  
     //   prefetch: ['pagebuild-app', 'pagebuild-core']
