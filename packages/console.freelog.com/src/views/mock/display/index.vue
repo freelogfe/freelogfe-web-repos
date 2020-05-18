@@ -5,7 +5,8 @@
     >
 
         <Navs
-            :buckets="bucketsList"
+            :buckets="bucketsList.filter(i => i.bucketType === 1)"
+            :nodeData="bucketsList.filter(i => i.bucketType === 2)"
             @onChangeActive="onChangeBucketActiveIndex"
             @addBucket="dialogVisible=true"
             @showNodeData="onClickShowNodeData"
@@ -69,13 +70,15 @@
                                 <div style="height: 8px;"></div>
                             </template>
 
-                            <a slot="reference" style="width: 56px; height: 38px; border-radius: 4px; background-color: #FDEBEC; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <a slot="reference"
+                               style="width: 56px; height: 38px; border-radius: 4px; background-color: #FDEBEC; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                 <i style="color: #EE4040; font-size: 16px;" class="el-icon-delete"></i>
                             </a>
                         </el-popover>
 
                         <div style="width: 20px;"></div>
-                        <router-link :to="'/mock/create/' + activatedBucket.bucketName" style="width: 56px; height: 38px; border-radius: 4px; background-color: #EDF6FF; display: flex; align-items: center; justify-content: center;">
+                        <router-link :to="'/mock/create/' + activatedBucket.bucketName"
+                                     style="width: 56px; height: 38px; border-radius: 4px; background-color: #EDF6FF; display: flex; align-items: center; justify-content: center;">
                             <i style="color: #409EFF; font-size: 16px;" class="el-icon-delete"></i>
                         </router-link>
                     </div>

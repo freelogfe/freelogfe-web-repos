@@ -132,7 +132,7 @@
                 const params = {
                     bucketName: this.bucketNameInputValue,
                 };
-                const {data} = await this.$axios.post('/v1/resources/mocks/buckets', params);
+                const {data} = await this.$axios.post('/v1/storages/buckets', params);
 
                 if (data.errcode !== 0) {
                     this.bucketNameInputValueError = data.msg;

@@ -60,32 +60,19 @@ export default {
     computed: {
         // 当前已激活的 bucket
         activatedBucket: function () {
-            // console.log(this.$route);
-            return this.bucketsList && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
-            // return this.bucketsList && this.bucketsList.find(i => );
+            return this.bucketsList
+                && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
         },
         ...mapGetters({
-            // nodes: 'nodes',
-            // buckets: 'bucketsList',
             bucketsList: 'buckets',
         }),
     },
     mounted() {
         this.handleMockData();
+        // this.$axios.put(`/v1/storages/buckets/.UserNodeData/objects/${80000029}`, {
+        // });
     },
     methods: {
-        /**
-         * 通过 服务端 API 获取 buckets 数据，并初始化 buckets
-         * @returns {Promise<void>}
-         */
-        // async initBucketsByAPI(bool) {
-        // const {data} = await axios.get('/v1/resources/mocks/buckets');
-        // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
-        // this.bucketsList = data.data;
-        // if (bool) {
-        //     this.activeBucketIndex = data.data.length - 1
-        // }
-        // },
         async createBucketSuccess(bucket) {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
@@ -136,33 +123,6 @@ export default {
             // this.bucketNameInputValue = '';
             // this.bucketNameInputValueError = '';
         },
-        // /**
-        //  * 向服务端 API 发起，新建 bucket 的请求
-        //  */
-        // async createNewBucketByAPI() {
-        //
-        //     this.bucketNameInputValueError = false;
-        //
-        //     if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(this.bucketNameInputValue)) {
-        //         setTimeout(() => this.bucketNameInputValueError = true);
-        //         return;
-        //     }
-        //     this.bucketNameInputValueError = '';
-        //
-        //     const params = {
-        //         bucketName: this.bucketNameInputValue,
-        //     };
-        //     const {data} = await axios.post('/v1/resources/mocks/buckets', params);
-        //
-        //     if (data.errcode !== 0) {
-        //         this.bucketNameInputValueError = data.msg;
-        //         return;
-        //     }
-        //     this.$message.success(this.$t('successfullyCreated'));
-        //     this.hideNewBucketDialog();
-        //     await this.initBucketsByAPI(true);
-        //     // this.activeBucketIndex = this.bucketsList.length - 1;
-        // },
         /**
          * 向 API 发起请求，删除当前激活的 bucket
          * @returns {Promise<void>}
@@ -276,20 +236,6 @@ export default {
                     // });
                 });
         },
-        /**
-         * 正式生成正式资源
-         */
-        // async buildFormalResources() {
-        //     const params = {
-        //         resourceAliasName: row.name,
-        //     };
-        //     const res1 = await this.$axios.post(`/v1/resources/mocks/${row.mockResourceId}/convert`, params);
-        //
-        //     if (res1.data.errcode === 0) {
-        //
-        //     }
-        // },
-
 
         /**
          * 向 API 发起请求，根据 mockID 删除一个 mock

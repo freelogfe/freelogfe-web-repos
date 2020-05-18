@@ -47,12 +47,21 @@
 
             <!-- buckets 列表 -->
             <div class="mock-list__buckets__list">
+                <!--                <a-->
+                <!--                    v-for="(bucket, index) in (nodeData || [])"-->
+                <!--                    @click="$emit('showNodeData')"-->
+                <!--                    href="javascript:"-->
+                <!--                    class="mock-list__buckets__list__item"-->
+                <!--                    :class="{'mock-list__buckets__list__item_active': !!$route.query.nodeData}"-->
+                <!--                >.Nodedata</a>-->
                 <a
-                    @click="$emit('showNodeData')"
                     href="javascript:"
+                    v-for="(bucket, index) in (nodeData || [])"
+                    :key="bucket.bucketId"
                     class="mock-list__buckets__list__item"
-                    :class="{'mock-list__buckets__list__item_active': !!$route.query.nodeData}"
-                >.Nodedata</a>
+                    :class="{'mock-list__buckets__list__item_active': $route.query.activatedBucketName === bucket.bucketName}"
+                    @click="$emit('onChangeActive',bucket)"
+                >{{bucket.bucketName}}</a>
             </div>
         </div>
 
@@ -79,6 +88,10 @@
                 type: Array,
                 default: [],
             },
+            nodeData: {
+                type: Array,
+                default: [],
+            }
         },
 
     }
@@ -89,7 +102,7 @@
         width: 280px;
         flex-shrink: 0;
         background-color: #fff;
-        box-shadow:1px 0 0 0 rgba(229,229,229,1);
+        box-shadow: 1px 0 0 0 rgba(229, 229, 229, 1);
         border-right: 1px solid #E5E5E5;
 
         .mock-list__buckets__title {
