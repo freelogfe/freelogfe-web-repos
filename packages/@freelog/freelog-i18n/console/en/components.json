@@ -135,5 +135,16 @@
   ],
   "CreateReleaseModal": {
     "history": "history"
+  },
+  "CreateBucketDialog": {
+    "newBucket": "New Bucket",
+    "createdMayNotBeModified": "Please note the name of the storage space but created may not be modified",
+    "provide2GBStorage": "Freelog provide 2GB of free storage space for each user",
+    "bucketName": "Bucket Name",
+    "includeOnly": "Include lowercase letters, numbers and dashes only (-);",
+    "startAndEnd": "Start and end must be in lowercase letters or numbers;",
+    "between1To63Characters": "The length must be between 1 - 63 characters.",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   }
 }

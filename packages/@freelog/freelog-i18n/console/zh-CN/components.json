@@ -135,5 +135,16 @@
   ],
   "CreateReleaseModal": {
     "history": "历史发行"
+  },
+  "CreateBucketDialog": {
+    "newBucket": "新建Bucket",
+    "createdMayNotBeModified": "请注意存储空间的名称一但创建则不可修改",
+    "provide2GBStorage": "Freelog为每个用户提供2GB的免费存储空间",
+    "bucketName": "Bucket名称",
+    "includeOnly": "只能包括小写字母、数字和短横线（-）；",
+    "startAndEnd": "必须以小写字母或者数字开头和结尾；",
+    "between1To63Characters": "长度必须在 1–63 字符之间。",
+    "confirm": "确定",
+    "cancel": "取消"
   }
 }
