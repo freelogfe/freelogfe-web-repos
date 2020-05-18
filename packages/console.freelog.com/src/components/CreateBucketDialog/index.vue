@@ -75,32 +75,6 @@
 
     export default {
         name: "index",
-        // i18n: {
-        //     messages: {
-        //         en: {
-        //             newBucket: 'New Bucket',
-        //             createdMayNotBeModified: 'Please note the name of the storage space but created may not be modified',
-        //             provide2GBStorage: 'Freelog provide 2GB of free storage space for each user',
-        //             bucketName: 'Bucket Name',
-        //             includeOnly: 'Include lowercase letters, numbers and dashes only (-);',
-        //             startAndEnd: 'Start and end must be in lowercase letters or numbers;',
-        //             between1To63Characters: 'The length must be between 1 - 63 characters.',
-        //             confirm: 'Confirm',
-        //             cancel: 'Cancel',
-        //         },
-        //         'zh-CN': {
-        //             newBucket: '新建Bucket',
-        //             createdMayNotBeModified: '请注意存储空间的名称一但创建则不可修改',
-        //             provide2GBStorage: 'Freelog为每个用户提供2GB的免费存储空间',
-        //             bucketName: 'Bucket名称',
-        //             includeOnly: '只能包括小写字母、数字和短横线（-）；',
-        //             startAndEnd: '必须以小写字母或者数字开头和结尾；',
-        //             between1To63Characters: '长度必须在 1–63 字符之间。',
-        //             confirm: '确定',
-        //             cancel: '取消',
-        //         },
-        //     }
-        // },
         props: {
             visible: {
                 type: Boolean,
@@ -194,16 +168,6 @@
                 line-height: 45px;
             }
         }
-
-        /*.mock-list__mocks_non-empty__body_table {*/
-        /*    .el-table {*/
-        /*        overflow: auto !important;*/
-
-        /*        .el-table__body-wrapper {*/
-        /*            overflow: auto;*/
-        /*        }*/
-        /*    }*/
-        /*}*/
 
         .el-dialog__footer {
             display: flex;

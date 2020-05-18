@@ -24,18 +24,8 @@ export default {
                 minHeight: (window.innerHeight - 60) + 'px',
             },
 
-            // 『bucket 列表』
-            // bucketsList: null,
-            // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
-            // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
-            // activeBucketIndex: 0,
-
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
-            // 『新建 bucket 弹窗』中的 『输入框』value
-            // bucketNameInputValue: '',
-            // 『新建 bucket 弹窗』中的错误提示信息
-            // bucketNameInputValueError: '',
 
             // 『mock 表格』数据
             mockTableData: null,
@@ -48,8 +38,6 @@ export default {
 
             // 删除Bucket的面板是否显示
             deleteBucketPopoverShow: false,
-            // 删除mock资源的提示框是否显示
-            // deleteMockDialogShow: false,
             // 要删除的mock ID
             deleteMockID: '',
 
@@ -69,8 +57,6 @@ export default {
     },
     mounted() {
         this.handleMockData();
-        // this.$axios.put(`/v1/storages/buckets/.UserNodeData/objects/${80000029}`, {
-        // });
     },
     methods: {
         async createBucketSuccess(bucket) {
@@ -87,9 +73,6 @@ export default {
          * @param bucket
          */
         onChangeBucketActiveIndex(bucket) {
-            // 将激活的索引放到本地，方便再次进入页面时选中
-            // window.sessionStorage.setItem('activeBucketIndex', index);
-            // this.activeBucketIndex = index;
             this.$router.push({
                 path: '/mock/display',
                 query: {
@@ -108,20 +91,11 @@ export default {
                 }
             });
         },
-
-        /**
-         * 显示『新建 bucket』弹窗
-         */
-        // showNewBucketDialog() {
-        //     this.dialogVisible = true;
-        // },
         /**
          * 隐藏『新建 bucket』弹窗
          */
         hideNewBucketDialog() {
             this.dialogVisible = false;
-            // this.bucketNameInputValue = '';
-            // this.bucketNameInputValueError = '';
         },
         /**
          * 向 API 发起请求，删除当前激活的 bucket
@@ -136,16 +110,10 @@ export default {
                 return this.errorMessage(data.msg);
             }
             this.$message.success(this.$t('successfullyDeleted'));
-            // 从 bucket 列表中 移除当前 bucket
-            // this.bucketsList.splice(this.activeBucketIndex, 1);
-            // this.bucketsList = this.bucketsList.filter(i => i.bucketName !== this.$route.query.activatedBucketName);
             await this.$store.dispatch('loadBuckets');
             this.controlDeleteBucketPopoverShow(false);
 
-            // await null;
-            console.log('########');
             this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
-            // this.initBucketsByAPI();
         },
         /**
          * 处理展示 mock table
@@ -158,16 +126,18 @@ export default {
             const params = {
                 page: this.mockCurrentPage,
                 pageSize: this.mockPageSize,
-                bucketName: this.activatedBucket.bucketName,
+                // bucketName: this.activatedBucket.bucketName,
                 // keywords: '',
                 // resourceType: '',
                 // projection: '',
             };
             const str = querystring.stringify(params);
-            const {data} = await axios.get(`/v1/resources/mocks?${str}`);
+            // const {data} = await axios.get(`/v1/resources/mocks?${str}`);
+            const {data} = await axios.get(`/v1/storages/buckets/${this.activatedBucket.bucketName}/objects`);
             this.mockTableData = data.data.dataList.map((i) => ({
                 mockResourceId: i.mockResourceId,
                 name: i.name,
+                objectName: i.objectName,
                 type: i.resourceType,
                 previewImages: i.previewImages,
                 size: humanizeSize(i.systemMeta.fileSize),
@@ -242,12 +212,8 @@ export default {
          * @param mockResourceId
          */
         async removeAMockByAPI(mockResourceId) {
-            // console.log(mockResourceId, 'mockResourceId');
             const {data} = await axios.delete(`/v1/resources/mocks/${mockResourceId}`);
-            // console.log(data, 'aadsfaewazxdf');
-            // this.mockTotalItem = this.mockTotalItem - 1;
             this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize) || 1);
-            // console.log(this.mockCurrentPage, 'this.mockCurrentPagethis.mockCurrentPage');
             this.handleMockData();
         },
 
@@ -256,7 +222,6 @@ export default {
          * @param currentPage
          */
         onCurrentPageChange(currentPage) {
-            // console.log(currentPage, 'currentPagecurrentPage');
             this.mockCurrentPage = currentPage;
         },
         /**
@@ -264,7 +229,6 @@ export default {
          * @param pageSize
          */
         onPageSizeChange(pageSize) {
-            // console.log(pageSize, 'pageSizepageSizepageSize');
             this.mockPageSize = pageSize;
             this.mockCurrentPage = 1;
         },
@@ -283,9 +247,6 @@ export default {
          */
         transformToDateString(str) {
             const date = new Date(str);
-            // console.log(date.getFullYear(), 'getFullYear');
-            // console.log(date.getMonth(), 'getMonth');
-            // console.log(date.getDate(), 'getDate');
             return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
         },
         /**
@@ -299,8 +260,6 @@ export default {
          * 显示删除 mock 提示框
          */
         showDeleteMockDialog(mockResourceId) {
-            // this.deleteMockDialogShow = true;
-            // this.removeAMockByAPI(mockResourceId);
             this.deleteMockID = mockResourceId;
         },
         /**

@@ -14,7 +14,10 @@
 
         <!-- 右侧内容区 -->
         <div class="mock-list__mocks">
-            <NodeData v-show="$route.query.nodeData"/>
+            <NodeData
+                v-show="$route.query.activatedBucketName === '.UserNodeData'"
+                :data="mockTableData"
+            />
 
             <!-- 有 bucket 时显示 -->
             <!--            v-if="bucketsList && bucketsList.length > 0"-->
