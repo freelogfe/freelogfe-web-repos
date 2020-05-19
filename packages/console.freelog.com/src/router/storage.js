@@ -5,15 +5,15 @@ import Views from '@/views'
 import i18n from '../lib/i18n'
 
 export default {
-    name: 'mock',
-    path: 'mock',
+    name: 'storage',
+    path: 'storage',
     meta: {
         requiresAuth: true,
         title: i18n.t('routes.mockResourcePool'),
         hideFooter: true,
     },
     component: Views.container,
-    redirect: '/mock/display',
+    redirect: '/storage/display',
     children: [
         {
             path: 'display',
@@ -25,7 +25,7 @@ export default {
                 type: 'resource',
                 hideFooter: true,
             },
-            component: Views.mockDisplay
+            component: Views.storageDisplay
         },
         {
             path: 'create/:bucketName',
@@ -46,7 +46,7 @@ export default {
                 //     },
                 // ]
             },
-            component: Views.mockEditor,
+            component: Views.storageEditor,
         },
         {
             path: 'update/:mockResourceId',
@@ -59,7 +59,7 @@ export default {
                 theme: 'gray',
                 hideFooter: true,
             },
-            component: Views.mockEditor,
+            component: Views.storageEditor,
         },
     ]
 }

@@ -75,7 +75,7 @@ export default {
          */
         onChangeBucketActiveIndex(bucket) {
             this.$router.push({
-                path: '/mock/display',
+                path: '/storage/display',
                 query: {
                     activatedBucketName: (bucket && bucket.bucketName) || '',
                 }
