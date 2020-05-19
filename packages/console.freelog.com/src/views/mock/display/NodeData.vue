@@ -35,11 +35,17 @@
                 prop="size"
                 :label="$t('mock.table.size')"
                 min-width="180">
+                <template slot-scope="scope">
+                    {{scope.row.systemMeta.fileSize | humanizeSize}}
+                </template>
             </el-table-column>
             <el-table-column
                 prop="date"
                 :label="$t('mock.table.date')"
                 min-width="180">
+                <template slot-scope="scope">
+                    {{scope.row.createDate | momentFormat}}
+                </template>
             </el-table-column>
             <el-table-column
                 prop="action"
@@ -58,26 +64,10 @@
 
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
-                                <router-link
-                                    target="_blank"
-                                    :to="'/mock/update/' + scope.row.mockResourceId"
-                                >
-                                    <a
-                                        style="display: block; width: 100%; height: 100%; color: #333;"
-                                    >{{$t('mock.edit')}}</a>
-                                </router-link>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
                                 <a
-                                    @click="downloadAMockByAPI(scope.row.mockResourceId)"
+                                    @click="$emit('download', scope.row)"
                                     style="display: block; width: 100%; height: 100%; color: #333;"
                                 >{{$t('mock.downloadResourceFile')}}</a>
-                            </el-dropdown-item>
-                            <el-dropdown-item>
-                                <a
-                                    @click="buildFormalResourcesConfirm(scope.row)"
-                                    style="display: block; width: 100%; height: 100%; color: #333;"
-                                >{{$t('mock.generateFormalResources')}}</a>
                             </el-dropdown-item>
                             <el-dropdown-item>
                                 <a
@@ -122,6 +112,8 @@
             handleData() {
 
             },
+
+
         }
     }
 </script>

@@ -6,6 +6,7 @@ import {mapGetters} from "vuex";
 
 import Navs from './Navs.vue';
 import NodeData from './NodeData.vue';
+import StorageObject from './StorageObject.vue';
 
 export default {
     // i18n,
@@ -13,6 +14,7 @@ export default {
         // NavTitle,
         Navs,
         NodeData,
+        StorageObject,
         CreateBucketDialog,
     },
     // name: "index",
@@ -36,8 +38,7 @@ export default {
             // 『mock 表格』总条数
             mockTotalItem: 0,
 
-            // 删除Bucket的面板是否显示
-            deleteBucketPopoverShow: false,
+
             // 要删除的mock ID
             deleteMockID: '',
 
@@ -111,7 +112,7 @@ export default {
             }
             this.$message.success(this.$t('successfullyDeleted'));
             await this.$store.dispatch('loadBuckets');
-            this.controlDeleteBucketPopoverShow(false);
+            // this.controlDeleteBucketPopoverShow(false);
 
             this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
         },
@@ -126,34 +127,18 @@ export default {
             const params = {
                 page: this.mockCurrentPage,
                 pageSize: this.mockPageSize,
-                // bucketName: this.activatedBucket.bucketName,
-                // keywords: '',
-                // resourceType: '',
-                // projection: '',
             };
             const str = querystring.stringify(params);
-            // const {data} = await axios.get(`/v1/resources/mocks?${str}`);
             const {data} = await axios.get(`/v1/storages/buckets/${this.activatedBucket.bucketName}/objects`);
-            this.mockTableData = data.data.dataList.map((i) => ({
-                mockResourceId: i.mockResourceId,
-                name: i.name,
-                objectName: i.objectName,
-                type: i.resourceType,
-                previewImages: i.previewImages,
-                size: humanizeSize(i.systemMeta.fileSize),
-                date: i.createDate.split('T')[0],
-                sha1: i.sha1,
-                systemMeta: i.systemMeta,
-            }));
-            // console.log(this.mockTableData, 'this.mockTableDatathis.mockTableData');
+            this.mockTableData = data.data.dataList;
             this.mockTotalItem = data.data.totalItem;
         },
         /**
-         * 下载一个 mock 资源
-         * @param mockResourceId
+         * 下载一个 fileObject 资源
+         * @param fileObject
          */
-        downloadAMockByAPI(mockResourceId) {
-            window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/resources/mocks/${mockResourceId}/download`;
+        downloadObject(fileObject) {
+            window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/storages/buckets/${fileObject.bucketName}/objects/${fileObject.objectName}/file`;
         },
 
         /**
@@ -242,20 +227,12 @@ export default {
         },
 
         /**
-         * 将服务端的日期格式转换成显示日期
-         * @param str
-         */
-        transformToDateString(str) {
-            const date = new Date(str);
-            return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-        },
-        /**
          * 控制 『删除 bucket 的面板是否显示』
          * @param {boolean} bool
          */
-        controlDeleteBucketPopoverShow(bool) {
-            this.deleteBucketPopoverShow = bool;
-        },
+        // controlDeleteBucketPopoverShow(bool) {
+        //     this.deleteBucketPopoverShow = bool;
+        // },
         /**
          * 显示删除 mock 提示框
          */
@@ -298,22 +275,5 @@ export default {
     }
 }
 
-function humanizeSize(number) {
-    const UNITS = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-    if (!number) {
-        return '';
-    }
-
-    if (number < 1) {
-        return `${number} B`;
-    }
-
-    const algorithm = 1024;
-    const exponent = Math.min(Math.floor(Math.log(number) / Math.log(algorithm)), UNITS.length - 1);
-    number = Number((number / Math.pow(algorithm, exponent)).toPrecision(2));
-    const unit = UNITS[exponent];
-
-    return `${number} ${unit}`;
-}
 
