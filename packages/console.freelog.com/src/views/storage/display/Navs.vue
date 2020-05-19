@@ -65,14 +65,14 @@
             </div>
         </div>
 
-        <div style="padding-left: 40px;">
+        <div style="padding-left: 40px;" v-if="!!spaceStatistics">
             <el-progress
-                :percentage="38"
+                :percentage="spaceStatistics.totalFileSize / (2 * 1024 * 1024 * 1024) * 100"
                 :show-text="false"
                 style="width: 200px;"
             />
             <div style="height: 5px;"/>
-            <span>{{Math.floor(12342343 / 1073741824 * 100) / 100}}GB/2GB</span>
+            <span>{{spaceStatistics.totalFileSize | humanizeSize}} / 2 GB</span>
             <div style="height: 50px;"/>
         </div>
     </div>
@@ -91,8 +91,26 @@
             nodeData: {
                 type: Array,
                 default: [],
-            }
+            },
         },
+
+        data() {
+            return {
+                spaceStatistics: null,
+            };
+        },
+
+        mounted() {
+            this.handleSpaceStatisticsDate();
+        },
+
+        methods: {
+            async handleSpaceStatisticsDate() {
+                const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
+                console.log(data, 'DDDDDDD');
+                this.spaceStatistics = data.data;
+            }
+        }
 
     }
 </script>

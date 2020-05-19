@@ -185,9 +185,9 @@
             };
         },
         mounted() {
-            setTimeout(() => {
-                console.log(this.data, '#####');
-            }, 3000);
+            // setTimeout(() => {
+            //     console.log(this.data, '#####');
+            // }, 3000);
         },
         methods: {},
     }

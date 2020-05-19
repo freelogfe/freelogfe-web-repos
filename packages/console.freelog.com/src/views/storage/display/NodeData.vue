@@ -102,9 +102,9 @@
         },
 
         mounted() {
-            setTimeout(() => {
-                console.log(this.data, 'data');
-            }, 3000);
+            // setTimeout(() => {
+            //     console.log(this.data, 'data');
+            // }, 3000);
 
         },
 
