@@ -37,14 +37,16 @@
                             v-if="$route.query.activatedBucketName === '.UserNodeData'"
                             :data="mockTableData"
                             @download="downloadObject"
-                            @removeBucket=""
+                            @delete="showDeleteMockDialog"
+                            :total="mockTotalItem"
                         />
 
                         <StorageObject
                             v-else
                             :data="mockTableData"
                             @download="downloadObject"
-                            @removeBucket=""
+                            @delete="showDeleteMockDialog"
+                            :total="mockTotalItem"
                         />
 
                         <div v-if="mockTotalItem > 10"
@@ -74,7 +76,7 @@
 
         <div class="mock-list__noheader-dialog">
             <el-dialog
-                :visible="!!deleteMockID"
+                :visible="!!deleteObject"
                 width="30%"
                 :show-close="false"
                 :close-on-click-modal="false"
@@ -88,7 +90,7 @@
                     <el-button
                         type="text"
                         style="padding: 0 20px; color: #999;"
-                        @click="hideDeleteMockDialog"
+                        @click="deleteObject = null"
                     >{{$t('mock.cancel')}}
                     </el-button>
                     <el-button

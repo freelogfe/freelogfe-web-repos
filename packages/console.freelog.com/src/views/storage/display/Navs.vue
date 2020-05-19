@@ -107,7 +107,7 @@
         methods: {
             async handleSpaceStatisticsDate() {
                 const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
-                console.log(data, 'DDDDDDD');
+                // console.log(data, 'DDDDDDD');
                 this.spaceStatistics = data.data;
             }
         }

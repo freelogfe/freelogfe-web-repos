@@ -2,7 +2,7 @@
     <div>
         <div class="mock-list__mocks_non-empty__header"
              style="padding: 30px 0; display: flex; align-items: center;">
-            <span style="font-size: 14px; color: #222;">对象 0</span>
+            <span style="font-size: 14px; color: #222;">对象 {{total}}</span>
             <div style="display: flex;">
                 <el-popover
                     placement="top"
@@ -130,7 +130,7 @@
                             <el-dropdown-item>
                                 <router-link
                                     target="_blank"
-                                    :to="'/mock/update/' + scope.row.mockResourceId"
+                                    :to="'/bucket/update/' + scope.row.mockResourceId"
                                 >
                                     <a
                                         style="display: block; width: 100%; height: 100%; color: #333;"
@@ -151,7 +151,7 @@
                             </el-dropdown-item>
                             <el-dropdown-item>
                                 <a
-                                    @click="showDeleteMockDialog(scope.row.mockResourceId)"
+                                    @click="$emit('delete', scope.row)"
                                     style="color: #EE4040; display: block; width: 100%; height: 100%;"
                                 >{{$t('mock.delete')}}</a>
                             </el-dropdown-item>
@@ -176,6 +176,10 @@
             bucketInfo: {
                 type: Object || null,
                 default: null
+            },
+            total: {
+                type: Number,
+                default: 0,
             }
         },
         data() {

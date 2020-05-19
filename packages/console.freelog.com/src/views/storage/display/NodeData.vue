@@ -2,7 +2,7 @@
     <div class="node-data">
         <div class="node-data__header"
              style="">
-            <span style="font-size: 14px; color: #222;">对象 0</span>
+            <span style="font-size: 14px; color: #222;">对象 {{total}}</span>
             <el-button type="primary" style="height: 38px;">上传</el-button>
         </div>
 
@@ -71,7 +71,7 @@
                             </el-dropdown-item>
                             <el-dropdown-item>
                                 <a
-                                    @click="showDeleteMockDialog(scope.row.mockResourceId)"
+                                    @click="$emit('delete', scope.row)"
                                     style="color: #EE4040; display: block; width: 100%; height: 100%;"
                                 >{{$t('mock.delete')}}</a>
                             </el-dropdown-item>
@@ -92,6 +92,10 @@
             data: {
                 type: Array || null,
                 default: null,
+            },
+            total: {
+                type: Number,
+                default: 0,
             }
         },
 

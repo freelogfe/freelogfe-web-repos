@@ -39,8 +39,8 @@ export default {
             mockTotalItem: 0,
 
 
-            // 要删除的mock ID
-            deleteMockID: '',
+            // 要删除的对象
+            deleteObject: null,
 
             // 临时储存需要生成的资源信息
             tmpNeedBuildResource: null,
@@ -86,7 +86,7 @@ export default {
          */
         onClickShowNodeData() {
             this.$router.push({
-                path: '/mock/display',
+                path: '/storage/display',
                 query: {
                     nodeData: true,
                 }
@@ -194,10 +194,11 @@ export default {
 
         /**
          * 向 API 发起请求，根据 mockID 删除一个 mock
-         * @param mockResourceId
+         * @param deleteObject
          */
-        async removeAMockByAPI(mockResourceId) {
-            const {data} = await axios.delete(`/v1/resources/mocks/${mockResourceId}`);
+        async removeAMockByAPI() {
+            const {data} = await axios.delete(`/v1/storages/buckets/${this.deleteObject.bucketName}/objects/${this.deleteObject.objectName}`);
+
             this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize) || 1);
             this.handleMockData();
         },
@@ -236,14 +237,15 @@ export default {
         /**
          * 显示删除 mock 提示框
          */
-        showDeleteMockDialog(mockResourceId) {
-            this.deleteMockID = mockResourceId;
+        showDeleteMockDialog(deleteObject) {
+            this.deleteObject = deleteObject;
         },
         /**
          * 正式删除一个 mock
          */
         async deleteAMock() {
-            await this.removeAMockByAPI(this.deleteMockID);
+            await this.removeAMockByAPI();
+            this.deleteObject = null;
             this.$message({
                 customClass: 'message-class',
                 duration: 1500,
