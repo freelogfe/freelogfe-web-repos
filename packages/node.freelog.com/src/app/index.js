@@ -9,9 +9,9 @@ import initWidgets from '../_core/pb-parser.ts'
 import fReport from '@freelog/freelog-report'
 
 window.Vue = Vue
+window.axios = axios
 initWidgets()
 window.addEventListener('DOMContentLoaded', async () => {
-  console.log('DOMContentLoaded --')
   const mountApp = (await import('./app.js')).default
   mountApp(Vue, axios)
 })

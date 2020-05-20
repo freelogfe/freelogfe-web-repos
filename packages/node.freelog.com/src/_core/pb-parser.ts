@@ -33,7 +33,7 @@ export default async function initWidgets(): Promise<void> {
 async function loadWidgets(): Promise<any> {
   return new Promise(resolve => {
     const promises: Promise<any> [] = []
-    if (window.__auth_info__) {
+    if (window.__auth_info__ && window.__auth_info__.__page_build_sub_releases) {
       const vis: { [propName: string]: boolean } = {}
       const { 
         __page_build_sub_releases, 
