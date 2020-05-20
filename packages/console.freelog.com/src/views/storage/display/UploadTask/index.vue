@@ -33,16 +33,18 @@
                     <a><i class="el-icon-close" style="font-size: 16px; color: #333;"/></a>
                 </div>
             </div>
+
+            <div style="padding: 15px 0 0; display: flex; flex-direction: row-reverse; align-items: center;">
+                <div style="font-size: 14px; color: #222;">
+                    <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">1</a>
+                    <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">2</a>
+                </div>
+                <span style="color: #222222; font-size: 14px; padding-bottom: 2px; padding-right: 10px;">共7条</span>
+            </div>
+            <div style="height: 15px;"/>
         </div>
 
-        <div style="padding: 15px 30px 0; display: flex; flex-direction: row-reverse; align-items: center;">
-            <div style="font-size: 14px; color: #222;">
-                <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">1</a>
-                <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">2</a>
-            </div>
-            <span style="color: #222222; font-size: 14px; padding-bottom: 2px; padding-right: 10px;">共7条</span>
-        </div>
-        <div style="height: 15px;"/>
+
     </div>
 </template>
 
