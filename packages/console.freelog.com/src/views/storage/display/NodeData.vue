@@ -3,7 +3,10 @@
         <div class="node-data__header"
              style="">
             <span style="font-size: 14px; color: #222;">对象 {{total}}</span>
-            <el-button type="primary" style="height: 38px;">上传</el-button>
+            <Uploader>
+                <el-button type="primary" style="height: 38px;">上传</el-button>
+            </Uploader>
+
         </div>
 
         <el-table
@@ -85,8 +88,14 @@
 </template>
 
 <script>
+    import Uploader from './Uploader.vue';
+
     export default {
         name: "NodeData",
+
+        components: {
+            Uploader,
+        },
 
         props: {
             data: {

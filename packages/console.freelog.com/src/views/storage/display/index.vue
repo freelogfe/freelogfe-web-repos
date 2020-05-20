@@ -101,6 +101,7 @@
                 </div>
             </el-dialog>
         </div>
+        <UploadTask/>
     </div>
 
 </template>
