@@ -10,20 +10,17 @@
         >
             <slot></slot>
         </el-upload>
-        <div
-            style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0; z-index: 1000;">
-
-
+        <div v-if="tasks.length > 0" style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0; z-index: 1000;">
             <div
                 style="height: 50px; display: flex; justify-content: space-between; align-items: center;padding: 0 20px;">
                 <span style="font-size: 14px; color: #222;">任务列表</span>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: space-between;">
-                    <a><i class="el-icon-minus" style="font-size: 14px; color: #979797;"/></a>
+                    <a @click="minimize = !minimize"><i class="el-icon-minus" style="font-size: 14px; color: #979797;"/></a>
                     <a><i class="el-icon-close" style="font-size: 14px; color: #979797;"/></a>
                 </div>
             </div>
 
-            <div style="padding: 0 30px; border-top: 1px solid #E5E5E5;">
+            <div v-if="!minimize" style="padding: 0 30px; border-top: 1px solid #E5E5E5;">
                 <div v-for="task in tasks"
                      style="height: 63px; border-bottom: 1px solid #E5E5E5; align-items: center; display: flex; justify-content: space-between;">
                     <div style="width: 310px; flex-shrink: 0; flex-grow: 0">
@@ -104,6 +101,7 @@
         data() {
             return {
                 tasks: [],
+                minimize: false,
             };
         },
         methods: {
@@ -120,19 +118,49 @@
                         sha1: hash,
                     }
                 });
-                console.log(fileIsExist, 'fileIsExist');
+
+                if (fileIsExist.data) {
+                    return this.relate(file, hash)
+                }
 
                 const {data: nameIsExist} = await this.$axios.get(`/v1/storages/buckets/.UserNodeData/objects/${file.name}`);
                 console.log(nameIsExist, 'nameIsExist');
 
-                // this.upload(file.raw, file.name.replace(/\.ncfg$/, ''))
                 const task = {
                     ...file,
                     progressEvent: null,
                 };
 
-                this.updateTasks(task);
-                this.upload(task);
+                if (!nameIsExist.data) {
+                    this.updateTasks(task);
+                    this.upload(task);
+                    return;
+                }
+
+                this.$confirm('存在同名文件, 是否继续?', '提示', {
+                    confirmButtonText: '替换',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.updateTasks(task);
+                    this.upload(task);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消替换'
+                    });
+                });
+            },
+
+            async relate(file, sha1) {
+                const form = new FormData();
+
+                form.append('nodeDomain', file.name.replace(/\.ncfg$/, ''));
+                form.append('sha1', sha1);
+
+                const {data} = await this.$axios.post('/v1/storages/buckets/.UserNodeData/objects', form);
+                console.log(data, 'DDDDD');
+                this.$message.success('关联成功');
             },
 
             async upload(task) {
@@ -142,7 +170,7 @@
                 form.append('file', task.raw);
 
                 const CancelToken = axios.CancelToken;
-                console.log(CancelToken, 'CancelTokenCancelToken');
+                // console.log(CancelToken, 'CancelTokenCancelToken');
                 const source = CancelToken.source();
 
                 const options = {
