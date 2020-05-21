@@ -7,8 +7,8 @@ import {mapGetters} from "vuex";
 import Navs from './Navs.vue';
 import NodeData from './NodeData.vue';
 import StorageObject from './StorageObject.vue';
-import Uploader from './Uploader.vue';
-import UploadTask from './UploadTask/index.vue';
+// import Uploader from './Uploader.vue';
+// import UploadTask from './UploadTask/index.vue';
 
 export default {
     // i18n,
@@ -18,8 +18,8 @@ export default {
         NodeData,
         StorageObject,
         CreateBucketDialog,
-        Uploader,
-        UploadTask,
+        // Uploader,
+        // UploadTask,
     },
     // name: "index",
     data() {

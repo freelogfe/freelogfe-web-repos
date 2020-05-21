@@ -3,9 +3,9 @@
         <div class="node-data__header"
              style="">
             <span style="font-size: 14px; color: #222;">对象 {{total}}</span>
-            <Uploader>
+            <UploadTask>
                 <el-button type="primary" style="height: 38px;">上传</el-button>
-            </Uploader>
+            </UploadTask>
 
         </div>
 
@@ -88,13 +88,13 @@
 </template>
 
 <script>
-    import Uploader from './Uploader.vue';
+    import UploadTask from './UploadTask/index.vue';
 
     export default {
         name: "NodeData",
 
         components: {
-            Uploader,
+            UploadTask,
         },
 
         props: {
