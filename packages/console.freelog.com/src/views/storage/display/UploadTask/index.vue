@@ -11,7 +11,7 @@
             <slot></slot>
         </el-upload>
         <div
-            style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0;">
+            style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0; z-index: 1000;">
 
 
             <div
@@ -33,7 +33,7 @@
                     <div
                         style="width: 200px; flex-shrink: 0; flex-grow: 0; display: flex; align-items: center;">
                         <span
-                            v-show="task.status === 'success'"
+                            v-if="task.status === 'success'"
                             style="font-size: 14px; color: #222;"
                         >已完成</span>
                         <template
@@ -47,13 +47,13 @@
                             />
                         </template>
                         <span
-                            v-show="task.status === 'fail'"
+                            v-if="task.status === 'fail'"
                             style="color: #EE4040; font-size: 14px;"
                         >上传失败</span>
                     </div>
                     <div style="width: 20px; flex-shrink: 0; flex-grow: 0">
                         <a
-                            v-show="task.status === 'ready'"
+                            v-if="task.status === 'ready'"
                             @click="cancelTask(task.cancel)"
                         >
                             <i
@@ -62,7 +62,7 @@
                             />
                         </a>
                         <a
-                            v-show="task.status === 'fail'"
+                            v-if="task.status === 'fail'"
                             @click="upload({...task, status: 'ready'})"
                         >
                             <i
@@ -72,7 +72,7 @@
                         </a>
                         <i
                             style="color: #44C28C;"
-                            v-show="task.status === 'success'"
+                            v-if="task.status === 'success'"
                             class="freelog fl-icon-shenqingchenggong"
                         />
                     </div>
