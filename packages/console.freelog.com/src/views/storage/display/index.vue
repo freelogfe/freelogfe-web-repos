@@ -24,12 +24,12 @@
             >
 
                 <div class="mock-list__mocks_non-empty__body">
-                    <div
-                        v-if="mockTableData && mockTableData.length === 0"
-                        class="mock-list__mocks_non-empty__body_null"
-                    >
-                        <p>{{$t('mock.notCreatedAnyMock')}}</p>
-                    </div>
+<!--                    <div-->
+<!--                        v-if="mockTableData && mockTableData.length === 0"-->
+<!--                        class="mock-list__mocks_non-empty__body_null"-->
+<!--                    >-->
+<!--                        <p>{{$t('mock.notCreatedAnyMock')}}</p>-->
+<!--                    </div>-->
 
                     <!--                    v-if="mockTableData && mockTableData.length > 0"-->
                     <div class="mock-list__mocks_non-empty__body_table">
