@@ -92,24 +92,28 @@
                 type: Array,
                 default: [],
             },
+            spaceStatistics: {
+                type: Object | null,
+                default: null,
+            }
         },
 
         data() {
             return {
-                spaceStatistics: null,
+                // spaceStatistics: null,
             };
         },
 
         mounted() {
-            this.handleSpaceStatisticsDate();
+            // this.handleSpaceStatisticsDate();
         },
 
         methods: {
-            async handleSpaceStatisticsDate() {
-                const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
-                // console.log(data, 'DDDDDDD');
-                this.spaceStatistics = data.data;
-            }
+            // async handleSpaceStatisticsDate() {
+            //     const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
+            //     // console.log(data, 'DDDDDDD');
+            //     this.spaceStatistics = data.data;
+            // }
         }
 
     }

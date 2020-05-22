@@ -10,7 +10,8 @@
         >
             <slot></slot>
         </el-upload>
-        <div v-if="tasks.length > 0" style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0; z-index: 1000;">
+        <div v-if="tasks.length > 0"
+             style="width: 600px; background-color: #fff; position: fixed; bottom: 24px; right: 24px; box-shadow:0 5px 10px 0 rgba(0,0,0,0.2); border-radius:4px 4px 0 0; z-index: 1000;">
             <div
                 style="height: 50px; display: flex; justify-content: space-between; align-items: center;padding: 0 20px;">
                 <span style="font-size: 14px; color: #222;">任务列表</span>
@@ -106,10 +107,19 @@
         },
         methods: {
             async onChange(file, fileList) {
-                console.log(file, 'file');
+                // console.log(file, 'file');
                 if (file.size > 52428800) {
                     return console.log('不超过5M');
                 }
+
+                const {data: nameIsExist} = await this.$axios.get(`/v1/storages/buckets/.UserNodeData/objects/${file.name}`);
+                // console.log(nameIsExist, 'nameIsExist');
+
+                const task = {
+                    ...file,
+                    progressEvent: null,
+                };
+
 
                 const hash = await getSHA1Hash(file.raw);
 
@@ -119,19 +129,12 @@
                     }
                 });
 
-                if (fileIsExist.data) {
-                    return this.relate(file, hash)
-                }
-
-                const {data: nameIsExist} = await this.$axios.get(`/v1/storages/buckets/.UserNodeData/objects/${file.name}`);
-                console.log(nameIsExist, 'nameIsExist');
-
-                const task = {
-                    ...file,
-                    progressEvent: null,
-                };
-
                 if (!nameIsExist.data) {
+
+                    if (fileIsExist.data) {
+                        return this.relate(file, hash)
+                    }
+
                     this.updateTasks(task);
                     this.upload(task);
                     return;
@@ -142,6 +145,11 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+
+                    if (fileIsExist.data) {
+                        return this.relate(file, hash)
+                    }
+
                     this.updateTasks(task);
                     this.upload(task);
                 }).catch(() => {
@@ -159,7 +167,8 @@
                 form.append('sha1', sha1);
 
                 const {data} = await this.$axios.post('/v1/storages/buckets/.UserNodeData/objects', form);
-                console.log(data, 'DDDDD');
+                console.log('*******');
+                this.$emit('addObjectSuccess');
                 this.$message.success('关联成功');
             },
 
@@ -202,6 +211,8 @@
                         ...task,
                         status: 'success',
                     });
+
+                    this.$emit('addObjectSuccess');
                 } catch (e) {
                     // return console.error(e);
                     this.updateTasks({

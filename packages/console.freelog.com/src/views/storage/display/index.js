@@ -48,6 +48,8 @@ export default {
 
             // 临时储存需要生成的资源信息
             tmpNeedBuildResource: null,
+
+            spaceStatistics: null,
         };
     },
     computed: {
@@ -61,9 +63,17 @@ export default {
         }),
     },
     mounted() {
-        this.handleMockData();
+
+        this.freshData();
     },
     methods: {
+
+        freshData() {
+            // console.log('#########');
+            this.handleMockData();
+            this.handleSpaceStatisticsDate();
+        },
+
         async createBucketSuccess(bucket) {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
@@ -119,6 +129,11 @@ export default {
             // this.controlDeleteBucketPopoverShow(false);
 
             this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
+        },
+        async handleSpaceStatisticsDate() {
+            const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
+            // console.log(data, 'DDDDDDD');
+            this.spaceStatistics = data.data;
         },
         /**
          * 处理展示 mock table
@@ -204,7 +219,8 @@ export default {
             const {data} = await axios.delete(`/v1/storages/buckets/${this.deleteObject.bucketName}/objects/${this.deleteObject.objectName}`);
 
             this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize) || 1);
-            this.handleMockData();
+            // this.handleMockData();
+            this.freshData();
         },
 
         /**

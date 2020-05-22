@@ -3,7 +3,7 @@
         <div class="node-data__header"
              style="">
             <span style="font-size: 14px; color: #222;">对象 {{total}}</span>
-            <UploadTask>
+            <UploadTask  @addObjectSuccess="$emit('addObjectSuccess')">
                 <el-button type="primary" style="height: 38px;">上传</el-button>
             </UploadTask>
 

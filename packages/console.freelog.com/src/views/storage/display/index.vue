@@ -10,6 +10,7 @@
             @onChangeActive="onChangeBucketActiveIndex"
             @addBucket="dialogVisible=true"
             @showNodeData="onClickShowNodeData"
+            :spaceStatistics="spaceStatistics"
         />
 
         <!-- 右侧内容区 -->
@@ -39,6 +40,7 @@
                             @download="downloadObject"
                             @delete="showDeleteMockDialog"
                             :total="mockTotalItem"
+                            @addObjectSuccess="freshData"
                         />
 
                         <StorageObject
