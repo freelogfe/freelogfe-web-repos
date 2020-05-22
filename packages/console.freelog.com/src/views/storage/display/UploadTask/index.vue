@@ -22,7 +22,7 @@
             </div>
 
             <div v-if="!minimize" style="padding: 0 30px; border-top: 1px solid #E5E5E5;">
-                <div v-for="task in tasks"
+                <div v-for="task in showTasks"
                      style="height: 63px; border-bottom: 1px solid #E5E5E5; align-items: center; display: flex; justify-content: space-between;">
                     <div style="width: 310px; flex-shrink: 0; flex-grow: 0">
                         <div style="font-size: 14px; color: #222;">{{task.name}}</div>
@@ -78,10 +78,14 @@
 
                 <div style="padding: 15px 0 0; display: flex; flex-direction: row-reverse; align-items: center;">
                     <div style="font-size: 14px; color: #222;">
-                        <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">1</a>
-                        <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">2</a>
+                        <a v-for="page in paginationPages"
+                           @click="paginationCurrent = page"
+                           style="line-height: 20px; width: 20px; text-align: center; display: inline-block; cursor: pointer;"
+                           :style="{'color': page === paginationCurrent? '#2784FF' : 'inherit'}"
+                        >{{page}}</a>
+                        <!--                        <a style="line-height: 20px; width: 20px; text-align: center; display: inline-block;">page</a>-->
                     </div>
-                    <span style="color: #222222; font-size: 14px; padding-bottom: 2px; padding-right: 10px;">共7条</span>
+                    <span style="color: #222222; font-size: 14px; padding-bottom: 2px; padding-right: 10px;">共{{paginationTotal}}条</span>
                 </div>
                 <div style="height: 15px;"/>
             </div>
@@ -103,6 +107,7 @@
             return {
                 tasks: [],
                 minimize: false,
+                paginationCurrent: 1,
             };
         },
         methods: {
@@ -167,7 +172,7 @@
                 form.append('sha1', sha1);
 
                 const {data} = await this.$axios.post('/v1/storages/buckets/.UserNodeData/objects', form);
-                console.log('*******');
+                // console.log('*******');
                 this.$emit('addObjectSuccess');
                 this.$message.success('关联成功');
             },
@@ -227,7 +232,7 @@
                 const t = this.tasks.find(i => i.uid === task.uid);
 
                 if (!t) {
-                    return this.tasks.push(task);
+                    return this.tasks.unshift(task);
                 }
 
                 const {loaded, total} = task.progressEvent;
@@ -240,6 +245,19 @@
 
             cancelTask(cancel) {
                 cancel && cancel('Operation canceled by the user.');
+            }
+        },
+
+        computed: {
+            paginationTotal() {
+                return this.tasks.length;
+            },
+            paginationPages() {
+                const pages = Math.ceil(this.tasks.length / 5);
+                return Array(pages).fill(null).map((i, j) => j + 1);
+            },
+            showTasks() {
+                return this.tasks.slice((this.paginationCurrent - 1) * 5, this.paginationCurrent * 5)
             }
         }
     }

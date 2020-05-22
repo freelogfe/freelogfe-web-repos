@@ -75,10 +75,10 @@ export default (Vue) => {
 
         const algorithm = 1024;
         const exponent = Math.min(Math.floor(Math.log(number) / Math.log(algorithm)), UNITS.length - 1);
-        number = Number((number / Math.pow(algorithm, exponent)).toPrecision(2));
+        const num = Number((number / Math.pow(algorithm, exponent)).toPrecision(2));
         const unit = UNITS[exponent];
 
-        return `${number} ${unit}`;
+        return `${num} ${unit}`;
     });
 
     Vue.filter('momentFormat', function (data) {
