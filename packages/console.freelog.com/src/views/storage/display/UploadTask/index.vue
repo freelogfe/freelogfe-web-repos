@@ -206,6 +206,7 @@
                 try {
                     const {data} = await this.$axios(options);
                     if (data.ret !== 0 || data.errcode !== 0) {
+                        this.$message.error(data.msg);
                         return this.updateTasks({
                             ...task,
                             status: 'fail',
@@ -220,6 +221,7 @@
                     this.$emit('addObjectSuccess');
                 } catch (e) {
                     // return console.error(e);
+                    // this.$message.error(e);
                     this.updateTasks({
                         ...task,
                         status: 'fail',
