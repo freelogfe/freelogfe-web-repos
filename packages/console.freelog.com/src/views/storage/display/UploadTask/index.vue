@@ -17,7 +17,7 @@
                 <span style="font-size: 14px; color: #222;">任务列表</span>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: space-between;">
                     <a @click="minimize = !minimize"><i class="el-icon-minus" style="font-size: 14px; color: #979797;"/></a>
-                    <a><i class="el-icon-close" style="font-size: 14px; color: #979797;"/></a>
+                    <a @click="closeTaskList"><i class="el-icon-close" style="font-size: 14px; color: #979797;"/></a>
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                         />
                     </div>
                 </div>
-
+<!--                <div>{{tasks}}</div>-->
                 <div style="padding: 15px 0 0; display: flex; flex-direction: row-reverse; align-items: center;">
                     <div style="font-size: 14px; color: #222;">
                         <a v-for="page in paginationPages"
@@ -247,7 +247,36 @@
 
             cancelTask(cancel) {
                 cancel && cancel('Operation canceled by the user.');
-            }
+            },
+
+            closeTaskList() {
+                const performedTasks = this.tasks.filter(i => i.status === 'ready');
+
+                if (performedTasks.length === 0) {
+                    return this.tasks = [];
+                }
+                this.$confirm('有正在执行的上传任务, 是否全部停止上传?', '提示', {
+                    confirmButtonText: '停止',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    for (const t of performedTasks) {
+                        t.cancel && t.cancel();
+                    }
+                    setTimeout(() => {
+                        this.tasks = [];
+                    }, 30);
+
+
+                }).catch(() => {
+                    console.log('#######');
+                    // this.$message({
+                    //     type: 'info',
+                    //     message: '已取消替换'
+                    // });
+                });
+            },
         },
 
         computed: {
