@@ -18,9 +18,8 @@
         name: "Uploader",
         methods: {
             async onChange(file, fileList) {
-                console.log(file, 'file');
-                if (file.size > 52428800) {
-                    return console.log('不超过5M');
+                if (file.size > 524288) {
+                    return console.log('不超过 512 KB');
                 }
 
                 const hash = await getSHA1Hash(file.raw);
@@ -30,10 +29,10 @@
                         sha1: hash,
                     }
                 });
-                console.log(fileIsExist, 'fileIsExist');
+                // console.log(fileIsExist, 'fileIsExist');
 
                 const {data: nameIsExist} = await this.$axios.get(`/v1/storages/buckets/.UserNodeData/objects/${file.name}`);
-                console.log(nameIsExist, 'nameIsExist');
+                // console.log(nameIsExist, 'nameIsExist');
 
                 this.upload(file.raw, file.name.replace(/\.ncfg$/, ''))
             },
@@ -55,7 +54,7 @@
                 };
 
                 const {data} = await this.$axios(options);
-                console.log(data, 'DDDDDDD');
+                // console.log(data, 'DDDDDDD');
             }
         }
     }
