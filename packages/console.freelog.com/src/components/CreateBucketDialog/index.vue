@@ -3,7 +3,7 @@
         <!-- 添加 bucket 弹窗 -->
         <el-dialog
             :close-on-click-modal="false"
-            :title="$t('newBucket')"
+            :title="$t('components.CreateBucketDialog.newBucket')"
             :visible="visible"
             width="700px"
             @close="onClose"
@@ -13,14 +13,14 @@
             <div style="height: 17px"></div>
             <div class="dialog-body">
                 <div style="width: 490px;">
-                    <p>• {{$t('createdMayNotBeModified')}}</p>
-                    <p>• {{$t('provide2GBStorage')}}</p>
+                    <p>• {{$t('components.CreateBucketDialog.createdMayNotBeModified')}}</p>
+                    <p>• {{$t('components.CreateBucketDialog.provide2GBStorage')}}</p>
                     <div style="height: 21px;"></div>
                     <!--          v-model="input"-->
                     <div style="display: flex;">
                         <el-input
                             v-model="bucketNameInputValue"
-                            :placeholder="$t('bucketName')"
+                            :placeholder="$t('components.CreateBucketDialog.bucketName')"
                             style="flex-shrink: 1;"
                         >
                         </el-input>
@@ -40,9 +40,9 @@
                     :class="{shake: !!bucketNameInputValueError}"
                 >
                     <template v-if="bucketNameInputValueError === true">
-                        <p>{{$t('includeOnly')}}</p>
-                        <p>{{$t('startAndEnd')}}</p>
-                        <p>{{$t('between1To63Characters')}}</p>
+                        <p>{{$t('components.CreateBucketDialog.includeOnly')}}</p>
+                        <p>{{$t('components.CreateBucketDialog.startAndEnd')}}</p>
+                        <p>{{$t('components.CreateBucketDialog.between1To63Characters')}}</p>
                     </template>
                     <template v-if="bucketNameInputValueError !==true && !!bucketNameInputValueError">
                         <p>{{bucketNameInputValueError}}</p>
@@ -59,13 +59,13 @@
                     style="color: #999999"
                     type="text"
                     @click="onClose"
-                >{{$t('cancel')}}</el-button>
+                >{{$t('components.CreateBucketDialog.cancel')}}</el-button>
                 <el-button
                     type="primary"
                     style="margin-left: 20px; width: 90px; padding-left: 0; padding-right: 0;"
                     round
                     @click="createNewBucketByAPI"
-                >{{$t('confirm')}}</el-button>
+                >{{$t('components.CreateBucketDialog.confirm')}}</el-button>
             </span>
         </el-dialog>
 <!--    </div>-->
@@ -75,32 +75,6 @@
 
     export default {
         name: "index",
-        i18n: {
-            messages: {
-                en: {
-                    newBucket: 'New Bucket',
-                    createdMayNotBeModified: 'Please note the name of the storage space but created may not be modified',
-                    provide2GBStorage: 'Freelog provide 2GB of free storage space for each user',
-                    bucketName: 'Bucket Name',
-                    includeOnly: 'Include lowercase letters, numbers and dashes only (-);',
-                    startAndEnd: 'Start and end must be in lowercase letters or numbers;',
-                    between1To63Characters: 'The length must be between 1 - 63 characters.',
-                    confirm: 'Confirm',
-                    cancel: 'Cancel',
-                },
-                'zh-CN': {
-                    newBucket: '新建Bucket',
-                    createdMayNotBeModified: '请注意存储空间的名称一但创建则不可修改',
-                    provide2GBStorage: 'Freelog为每个用户提供2GB的免费存储空间',
-                    bucketName: 'Bucket名称',
-                    includeOnly: '只能包括小写字母、数字和短横线（-）；',
-                    startAndEnd: '必须以小写字母或者数字开头和结尾；',
-                    between1To63Characters: '长度必须在 1–63 字符之间。',
-                    confirm: '确定',
-                    cancel: '取消',
-                },
-            }
-        },
         props: {
             visible: {
                 type: Boolean,
@@ -132,7 +106,7 @@
                 const params = {
                     bucketName: this.bucketNameInputValue,
                 };
-                const {data} = await this.$axios.post('/v1/resources/mocks/buckets', params);
+                const {data} = await this.$axios.post('/v1/storages/buckets', params);
 
                 if (data.errcode !== 0) {
                     this.bucketNameInputValueError = data.msg;
@@ -194,16 +168,6 @@
                 line-height: 45px;
             }
         }
-
-        /*.mock-list__mocks_non-empty__body_table {*/
-        /*    .el-table {*/
-        /*        overflow: auto !important;*/
-
-        /*        .el-table__body-wrapper {*/
-        /*            overflow: auto;*/
-        /*        }*/
-        /*    }*/
-        /*}*/
 
         .el-dialog__footer {
             display: flex;

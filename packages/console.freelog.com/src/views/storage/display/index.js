@@ -6,6 +6,9 @@ import {mapGetters} from "vuex";
 
 import Navs from './Navs.vue';
 import NodeData from './NodeData.vue';
+import StorageObject from './StorageObject.vue';
+// import Uploader from './Uploader.vue';
+// import UploadTask from './UploadTask/index.vue';
 
 export default {
     // i18n,
@@ -13,7 +16,10 @@ export default {
         // NavTitle,
         Navs,
         NodeData,
+        StorageObject,
         CreateBucketDialog,
+        // Uploader,
+        // UploadTask,
     },
     // name: "index",
     data() {
@@ -24,18 +30,8 @@ export default {
                 minHeight: (window.innerHeight - 60) + 'px',
             },
 
-            // 『bucket 列表』
-            // bucketsList: null,
-            // bucket 列表』中被激活的 bucket，在 bucket 列表中的索引
-            // activeBucketIndex: Number(window.sessionStorage.getItem('activeBucketIndex') || 0),
-            // activeBucketIndex: 0,
-
             // 『新建 bucket 弹窗』 是否显示
             dialogVisible: false,
-            // 『新建 bucket 弹窗』中的 『输入框』value
-            // bucketNameInputValue: '',
-            // 『新建 bucket 弹窗』中的错误提示信息
-            // bucketNameInputValueError: '',
 
             // 『mock 表格』数据
             mockTableData: null,
@@ -46,46 +42,38 @@ export default {
             // 『mock 表格』总条数
             mockTotalItem: 0,
 
-            // 删除Bucket的面板是否显示
-            deleteBucketPopoverShow: false,
-            // 删除mock资源的提示框是否显示
-            // deleteMockDialogShow: false,
-            // 要删除的mock ID
-            deleteMockID: '',
+
+            // 要删除的对象
+            deleteObject: null,
 
             // 临时储存需要生成的资源信息
             tmpNeedBuildResource: null,
+
+            spaceStatistics: null,
         };
     },
     computed: {
         // 当前已激活的 bucket
         activatedBucket: function () {
-            // console.log(this.$route);
-            return this.bucketsList && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
-            // return this.bucketsList && this.bucketsList.find(i => );
+            return this.bucketsList
+                && this.bucketsList.find(i => i.bucketName === this.$route.query.activatedBucketName);
         },
         ...mapGetters({
-            // nodes: 'nodes',
-            // buckets: 'bucketsList',
             bucketsList: 'buckets',
         }),
     },
     mounted() {
-        this.handleMockData();
+
+        this.freshData();
     },
     methods: {
-        /**
-         * 通过 服务端 API 获取 buckets 数据，并初始化 buckets
-         * @returns {Promise<void>}
-         */
-        // async initBucketsByAPI(bool) {
-        // const {data} = await axios.get('/v1/resources/mocks/buckets');
-        // console.log(data, 'datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata');
-        // this.bucketsList = data.data;
-        // if (bool) {
-        //     this.activeBucketIndex = data.data.length - 1
-        // }
-        // },
+
+        freshData() {
+            // console.log('#########');
+            this.handleMockData();
+            this.handleSpaceStatisticsDate();
+        },
+
         async createBucketSuccess(bucket) {
             // console.log('######');
             this.$message.success(this.$t('successfullyCreated'));
@@ -100,11 +88,8 @@ export default {
          * @param bucket
          */
         onChangeBucketActiveIndex(bucket) {
-            // 将激活的索引放到本地，方便再次进入页面时选中
-            // window.sessionStorage.setItem('activeBucketIndex', index);
-            // this.activeBucketIndex = index;
             this.$router.push({
-                path: '/mock/display',
+                path: '/storage/display',
                 query: {
                     activatedBucketName: (bucket && bucket.bucketName) || '',
                 }
@@ -115,54 +100,18 @@ export default {
          */
         onClickShowNodeData() {
             this.$router.push({
-                path: '/mock/display',
+                path: '/storage/display',
                 query: {
                     nodeData: true,
                 }
             });
         },
-
-        /**
-         * 显示『新建 bucket』弹窗
-         */
-        // showNewBucketDialog() {
-        //     this.dialogVisible = true;
-        // },
         /**
          * 隐藏『新建 bucket』弹窗
          */
         hideNewBucketDialog() {
             this.dialogVisible = false;
-            // this.bucketNameInputValue = '';
-            // this.bucketNameInputValueError = '';
         },
-        // /**
-        //  * 向服务端 API 发起，新建 bucket 的请求
-        //  */
-        // async createNewBucketByAPI() {
-        //
-        //     this.bucketNameInputValueError = false;
-        //
-        //     if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(this.bucketNameInputValue)) {
-        //         setTimeout(() => this.bucketNameInputValueError = true);
-        //         return;
-        //     }
-        //     this.bucketNameInputValueError = '';
-        //
-        //     const params = {
-        //         bucketName: this.bucketNameInputValue,
-        //     };
-        //     const {data} = await axios.post('/v1/resources/mocks/buckets', params);
-        //
-        //     if (data.errcode !== 0) {
-        //         this.bucketNameInputValueError = data.msg;
-        //         return;
-        //     }
-        //     this.$message.success(this.$t('successfullyCreated'));
-        //     this.hideNewBucketDialog();
-        //     await this.initBucketsByAPI(true);
-        //     // this.activeBucketIndex = this.bucketsList.length - 1;
-        // },
         /**
          * 向 API 发起请求，删除当前激活的 bucket
          * @returns {Promise<void>}
@@ -176,16 +125,15 @@ export default {
                 return this.errorMessage(data.msg);
             }
             this.$message.success(this.$t('successfullyDeleted'));
-            // 从 bucket 列表中 移除当前 bucket
-            // this.bucketsList.splice(this.activeBucketIndex, 1);
-            // this.bucketsList = this.bucketsList.filter(i => i.bucketName !== this.$route.query.activatedBucketName);
             await this.$store.dispatch('loadBuckets');
-            this.controlDeleteBucketPopoverShow(false);
+            // this.controlDeleteBucketPopoverShow(false);
 
-            // await null;
-            console.log('########');
             this.onChangeBucketActiveIndex(this.bucketsList[0] || null);
-            // this.initBucketsByAPI();
+        },
+        async handleSpaceStatisticsDate() {
+            const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
+            // console.log(data, 'DDDDDDD');
+            this.spaceStatistics = data.data;
         },
         /**
          * 处理展示 mock table
@@ -198,32 +146,18 @@ export default {
             const params = {
                 page: this.mockCurrentPage,
                 pageSize: this.mockPageSize,
-                bucketName: this.activatedBucket.bucketName,
-                // keywords: '',
-                // resourceType: '',
-                // projection: '',
             };
             const str = querystring.stringify(params);
-            const {data} = await axios.get(`/v1/resources/mocks?${str}`);
-            this.mockTableData = data.data.dataList.map((i) => ({
-                mockResourceId: i.mockResourceId,
-                name: i.name,
-                type: i.resourceType,
-                previewImages: i.previewImages,
-                size: humanizeSize(i.systemMeta.fileSize),
-                date: i.createDate.split('T')[0],
-                sha1: i.sha1,
-                systemMeta: i.systemMeta,
-            }));
-            // console.log(this.mockTableData, 'this.mockTableDatathis.mockTableData');
+            const {data} = await axios.get(`/v1/storages/buckets/${this.activatedBucket.bucketName}/objects`);
+            this.mockTableData = data.data.dataList;
             this.mockTotalItem = data.data.totalItem;
         },
         /**
-         * 下载一个 mock 资源
-         * @param mockResourceId
+         * 下载一个 fileObject 资源
+         * @param fileObject
          */
-        downloadAMockByAPI(mockResourceId) {
-            window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/resources/mocks/${mockResourceId}/download`;
+        downloadObject(fileObject) {
+            window.location.href = `${window.location.origin.replace('console', 'qi')}/v1/storages/buckets/${fileObject.bucketName}/objects/${fileObject.objectName}/file`;
         },
 
         /**
@@ -276,33 +210,17 @@ export default {
                     // });
                 });
         },
-        /**
-         * 正式生成正式资源
-         */
-        // async buildFormalResources() {
-        //     const params = {
-        //         resourceAliasName: row.name,
-        //     };
-        //     const res1 = await this.$axios.post(`/v1/resources/mocks/${row.mockResourceId}/convert`, params);
-        //
-        //     if (res1.data.errcode === 0) {
-        //
-        //     }
-        // },
-
 
         /**
          * 向 API 发起请求，根据 mockID 删除一个 mock
-         * @param mockResourceId
+         * @param deleteObject
          */
-        async removeAMockByAPI(mockResourceId) {
-            // console.log(mockResourceId, 'mockResourceId');
-            const {data} = await axios.delete(`/v1/resources/mocks/${mockResourceId}`);
-            // console.log(data, 'aadsfaewazxdf');
-            // this.mockTotalItem = this.mockTotalItem - 1;
+        async removeAMockByAPI() {
+            const {data} = await axios.delete(`/v1/storages/buckets/${this.deleteObject.bucketName}/objects/${this.deleteObject.objectName}`);
+
             this.mockCurrentPage = Math.min(this.mockCurrentPage, Math.ceil((this.mockTotalItem - 1) / this.mockPageSize) || 1);
-            // console.log(this.mockCurrentPage, 'this.mockCurrentPagethis.mockCurrentPage');
-            this.handleMockData();
+            // this.handleMockData();
+            this.freshData();
         },
 
         /**
@@ -310,7 +228,6 @@ export default {
          * @param currentPage
          */
         onCurrentPageChange(currentPage) {
-            // console.log(currentPage, 'currentPagecurrentPage');
             this.mockCurrentPage = currentPage;
         },
         /**
@@ -318,7 +235,6 @@ export default {
          * @param pageSize
          */
         onPageSizeChange(pageSize) {
-            // console.log(pageSize, 'pageSizepageSizepageSize');
             this.mockPageSize = pageSize;
             this.mockCurrentPage = 1;
         },
@@ -332,36 +248,24 @@ export default {
         },
 
         /**
-         * 将服务端的日期格式转换成显示日期
-         * @param str
-         */
-        transformToDateString(str) {
-            const date = new Date(str);
-            // console.log(date.getFullYear(), 'getFullYear');
-            // console.log(date.getMonth(), 'getMonth');
-            // console.log(date.getDate(), 'getDate');
-            return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-        },
-        /**
          * 控制 『删除 bucket 的面板是否显示』
          * @param {boolean} bool
          */
-        controlDeleteBucketPopoverShow(bool) {
-            this.deleteBucketPopoverShow = bool;
-        },
+        // controlDeleteBucketPopoverShow(bool) {
+        //     this.deleteBucketPopoverShow = bool;
+        // },
         /**
          * 显示删除 mock 提示框
          */
-        showDeleteMockDialog(mockResourceId) {
-            // this.deleteMockDialogShow = true;
-            // this.removeAMockByAPI(mockResourceId);
-            this.deleteMockID = mockResourceId;
+        showDeleteMockDialog(deleteObject) {
+            this.deleteObject = deleteObject;
         },
         /**
          * 正式删除一个 mock
          */
         async deleteAMock() {
-            await this.removeAMockByAPI(this.deleteMockID);
+            await this.removeAMockByAPI();
+            this.deleteObject = null;
             this.$message({
                 customClass: 'message-class',
                 duration: 1500,
@@ -393,22 +297,5 @@ export default {
     }
 }
 
-function humanizeSize(number) {
-    const UNITS = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-    if (!number) {
-        return '';
-    }
-
-    if (number < 1) {
-        return `${number} B`;
-    }
-
-    const algorithm = 1024;
-    const exponent = Math.min(Math.floor(Math.log(number) / Math.log(algorithm)), UNITS.length - 1);
-    number = Number((number / Math.pow(algorithm, exponent)).toPrecision(2));
-    const unit = UNITS[exponent];
-
-    return `${number} ${unit}`;
-}
 

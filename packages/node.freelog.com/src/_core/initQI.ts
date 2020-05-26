@@ -38,8 +38,8 @@ export interface IFreelogQuery {
   getPresentableAuth(presentableId: string): Promise <any>
   getPresentableData(presentableId: string): Promise <Response>
   batchGetPresentables(params: batchGetPresentablesParams): Promise <any>
-  getUserNodeDate(): Promise<any>;
-  setUserNodeDate(color: string): void;
+  getUserNodeDate(params: {fields: string;}): Promise<object>;
+  setUserNodeDate(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>;
   getPresnetableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise <Response>
   getPresnetableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise <any>
   requireSubDepend(presentableId: string, subDependId: string, entityNid: string): Promise <any>
@@ -84,4 +84,3 @@ export default function initQI(): IFreelogQuery {
     getUserInfo,
   }
 }
- 

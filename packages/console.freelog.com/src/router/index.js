@@ -11,7 +11,7 @@ import {Vue} from '@freelog/freelog-common-lib'
 import Views from '@/views/index'
 import nodeRoute from './node'
 import resourceRoute from './resource'
-import mockRoute from './mock'
+import storageRoute from './storage'
 import alphaTestRoute from './alpha-test'
 import releaseRoute from './release'
 import batchOperationRoute from './batch-operation'
@@ -49,7 +49,7 @@ const routerConfig = {
                 resourceRoute,
                 nodeRoute,
                 releaseRoute,
-                mockRoute,
+                storageRoute,
                 alphaTestRoute,
                 batchOperationRoute,
                 // {

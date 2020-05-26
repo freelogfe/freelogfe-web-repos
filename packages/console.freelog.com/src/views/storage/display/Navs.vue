@@ -47,23 +47,32 @@
 
             <!-- buckets 列表 -->
             <div class="mock-list__buckets__list">
+                <!--                <a-->
+                <!--                    v-for="(bucket, index) in (nodeData || [])"-->
+                <!--                    @click="$emit('showNodeData')"-->
+                <!--                    href="javascript:"-->
+                <!--                    class="mock-list__buckets__list__item"-->
+                <!--                    :class="{'mock-list__buckets__list__item_active': !!$route.query.nodeData}"-->
+                <!--                >.Nodedata</a>-->
                 <a
-                    @click="$emit('showNodeData')"
                     href="javascript:"
+                    v-for="(bucket, index) in (nodeData || [])"
+                    :key="bucket.bucketId"
                     class="mock-list__buckets__list__item"
-                    :class="{'mock-list__buckets__list__item_active': !!$route.query.nodeData}"
-                >.Nodedata</a>
+                    :class="{'mock-list__buckets__list__item_active': $route.query.activatedBucketName === bucket.bucketName}"
+                    @click="$emit('onChangeActive',bucket)"
+                >{{bucket.bucketName}}</a>
             </div>
         </div>
 
-        <div style="padding-left: 40px;">
+        <div style="padding-left: 40px;" v-if="!!spaceStatistics">
             <el-progress
-                :percentage="38"
+                :percentage="spaceStatistics.totalFileSize / (2 * 1024 * 1024 * 1024) * 100"
                 :show-text="false"
                 style="width: 200px;"
             />
             <div style="height: 5px;"/>
-            <span>{{Math.floor(12342343 / 1073741824 * 100) / 100}}GB/2GB</span>
+            <span>{{spaceStatistics.totalFileSize | humanizeSize}} / 2 GB</span>
             <div style="height: 50px;"/>
         </div>
     </div>
@@ -79,7 +88,33 @@
                 type: Array,
                 default: [],
             },
+            nodeData: {
+                type: Array,
+                default: [],
+            },
+            spaceStatistics: {
+                type: Object | null,
+                default: null,
+            }
         },
+
+        data() {
+            return {
+                // spaceStatistics: null,
+            };
+        },
+
+        mounted() {
+            // this.handleSpaceStatisticsDate();
+        },
+
+        methods: {
+            // async handleSpaceStatisticsDate() {
+            //     const {data} = await this.$axios.get(`/v1/storages/buckets/spaceStatistics`);
+            //     // console.log(data, 'DDDDDDD');
+            //     this.spaceStatistics = data.data;
+            // }
+        }
 
     }
 </script>
@@ -89,7 +124,7 @@
         width: 280px;
         flex-shrink: 0;
         background-color: #fff;
-        box-shadow:1px 0 0 0 rgba(229,229,229,1);
+        box-shadow: 1px 0 0 0 rgba(229, 229, 229, 1);
         border-right: 1px solid #E5E5E5;
 
         .mock-list__buckets__title {

@@ -180,24 +180,6 @@ export default {
             this.visibleDepDialog = true;
         },
         /**
-         * 添加依赖
-         */
-        // addDep(dep) {
-        //     // console.log(dep, 'debpdebpdebpdebpdebpdebp');
-        //     //
-        //     if (this.depList.some(i => dep.releaseId === i.id)) {
-        //         return this.$message.error('不能重复添加依赖资源');
-        //     }
-        //
-        //     this.visibleDepDialog = false;
-        //     this.depList.push({
-        //         id: dep.releaseId,
-        //         name: dep.releaseName,
-        //         // 有版本号为正式资源，否则为 mock 资源
-        //         version: dep.latestVersion ? dep.latestVersion.version : undefined,
-        //     });
-        // },
-        /**
          * 依赖列表变化时
          */
         onChangeDeps(deps) {
@@ -210,20 +192,6 @@ export default {
             // console.log(mocks, 'mock');
             this.depMockList = mocks;
         },
-
-        /**
-         * 描述的 富文本框 上传图片成功
-         */
-        // descriptionImgUploadSuccess(detail) {
-        //     console.log(detail, 'detaildetaildetail');
-        //     const data = detail.data;
-        //     const editor = this.$refs.editor;
-        //     if (data.errcode === 0) {
-        //         editor.insertImg(data.data);
-        //     } else {
-        //         this.$message.error(data.msg);
-        //     }
-        // },
 
         /**
          * 显示 meta 输入框
@@ -260,7 +228,6 @@ export default {
                 return this.$message.error(this.$t('mock.pleaseEnterAResourceName'));
             }
             //不能包含空格和以下字符：\ / : * ? " < > |
-            // if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s)).{1,60}$/.test(this.resourceName)) {
             if (!COMMON_NAME_REGEXP.test(this.resourceName)) {
                 return this.$message.error(`${this.$t('mock.resourceNamesCannotContain')}\\ / : * ? " < > | @ # $`);
             }
@@ -270,8 +237,6 @@ export default {
             }
 
             const {bucketName, mockResourceId} = this.$route.params;
-            // console.log(this.depList, 'this.depListthis.depListthis.depListthis.depList');
-            // console.log(this.depMockList, 'this.depListthis.depListthis.depListthis.depList');
             const params = {
                 bucketName,
                 resourceType: this.resourceType,
@@ -287,7 +252,7 @@ export default {
             };
 
             if (bucketName) {
-                const res = await this.$axios.post('/v1/resources/mocks', params);
+                const res = await this.$axios.post('/storages/buckets/{bucketName}/objects', params);
                 if (res.data.errcode !== 0) {
                     return this.$message.error(res.data.msg);
                 }
@@ -311,14 +276,5 @@ export default {
             this.$router.back();
         },
     },
-    // filters: {
-    //     pageBuildFilter: function (value) {
-    //         if (!value) return '';
-    //         if (value === 'page_build') {
-    //             return 'theme';
-    //         }
-    //         return value;
-    //     }
-    // }
 
 }

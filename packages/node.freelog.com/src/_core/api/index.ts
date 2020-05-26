@@ -15,21 +15,31 @@ const _fetch: qiFetchFn = createQIFetch({
   data: { nodeId, nodeType }
 });
 
-export async function getUserNodeDate() {
+export async function getUserNodeDate({fields}: {fields: string;}): Promise<object> {
   return {
-    backgroundColor: '#fff',
+    nodeId,
+    fields,
   };
 }
 
-export async function setUserNodeDate(color: string) {
-  return {
-    backgroundColor: color,
-  };
+export async function setUserNodeDate({removeFields = [],appendOrReplaceObject= {}}: {removeFields?: string[]; appendOrReplaceObject?: object;}) {
+  // return {
+  //   backgroundColor: color,
+  // };
+  return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}`, {
+    method: 'put',
+    data: {
+      removeFields,
+      appendOrReplaceObject
+    },
+  });
+
+  // return res
 }
 
 /**
  * 分页获取节点Presentable列表
- * @param {Object} params 
+ * @param {Object} params
  */
 export interface pagingGetPresentablesParams {
   nodeId?: string
@@ -46,7 +56,7 @@ export async function pagingGetPresentables(params: pagingGetPresentablesParams 
     .then(res => {
       if(res.errcode === 0 && res.data.dataList) {
         res.data.dataList = res.data.dataList.map((p: plainObject) => {
-          const authResult = p.authResult  
+          const authResult = p.authResult
           const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
           p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
           return p
@@ -58,7 +68,7 @@ export async function pagingGetPresentables(params: pagingGetPresentablesParams 
 
 /**
  * 获取单个presentable
- * @param {String} presentableId 
+ * @param {String} presentableId
  */
 export async function getPresentable(presentableId: string): Promise<any> {
   return _fetch(`/v1/presentable/${presentableId}/info`)
@@ -67,7 +77,7 @@ export async function getPresentable(presentableId: string): Promise<any> {
 
 /**
  * 获取单个presentable授权
- * @param {string} presentableId  
+ * @param {string} presentableId
  */
 export async function getPresentableAuth(presentableId: string): Promise<any> {
   return _fetch(`/v1/presentable/${presentableId}/auth`)
@@ -96,12 +106,12 @@ function resolveSubDependencies(fSubDependencies: string): Array<ISubDependency>
   } catch(e) {
     console.error(e)
   }
-  return subDependencies 
+  return subDependencies
 }
 
 /**
  * 获取单个presentable资源数据
- * @param {string} presentableId  
+ * @param {string} presentableId
  */
 export async function getPresentableData(presentableId: string): Promise<Response> {
   return _fetch(`/v1/presentable/${presentableId}/data`)
@@ -109,7 +119,7 @@ export async function getPresentableData(presentableId: string): Promise<Respons
 
 /**
  * 通过releaseNames或relealseIds批量获取节点Presentable
- * @param {Object} params 
+ * @param {Object} params
  */
 export interface batchGetPresentablesParams {
   releaseNames: string
@@ -122,7 +132,7 @@ export async function batchGetPresentables(params?: batchGetPresentablesParams):
     .then(res => {
       if(res.errcode === 0 && res.data.dataList) {
         res.data.dataList = res.data.dataList.map((p: plainObject) => {
-          const authResult = p.authResult  
+          const authResult = p.authResult
           const fSubDependencies: string = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
           p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
           return p

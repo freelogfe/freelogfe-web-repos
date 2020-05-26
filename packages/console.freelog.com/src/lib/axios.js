@@ -4,7 +4,7 @@
  */
 // cors bug :https://github.com/axios/axios/issues/891
 
-import { axiosInstance } from '@freelog/freelog-common-lib'
+import { axiosInstance, axios } from '@freelog/freelog-common-lib'
 import store from '@/store'
 import i18n from './i18n'
 
@@ -58,3 +58,6 @@ axiosInstance.interceptors.response.use(
 )
 
 export default axiosInstance
+export {
+    axios,
+}
