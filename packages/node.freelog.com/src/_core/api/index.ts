@@ -15,11 +15,11 @@ const _fetch: qiFetchFn = createQIFetch({
   data: { nodeId, nodeType }
 });
 
-export async function getUserNodeDate({fields}: {fields: string;}): Promise<object> {
-  return {
-    nodeId,
-    fields,
-  };
+export async function getUserNodeDate({fields= ''}: {fields: string;}): Promise<object> {
+  if (!fields) {
+    return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick`, {});
+  }
+  return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick?fields=${fields}`, {});
 }
 
 export async function setUserNodeDate({removeFields = [],appendOrReplaceObject= {}}: {removeFields?: string[]; appendOrReplaceObject?: object;}) {
