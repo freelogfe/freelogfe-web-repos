@@ -15,7 +15,7 @@ const _fetch: qiFetchFn = createQIFetch({
   data: { nodeId, nodeType }
 });
 
-export async function getUserNodeDate({fields}: {fields: object;}): Promise<object> {
+export async function getUserNodeDate({fields}: {fields: string;}): Promise<object> {
   return {
     nodeId,
     fields,

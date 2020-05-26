@@ -38,7 +38,7 @@ export interface IFreelogQuery {
   getPresentableAuth(presentableId: string): Promise <any>
   getPresentableData(presentableId: string): Promise <Response>
   batchGetPresentables(params: batchGetPresentablesParams): Promise <any>
-  getUserNodeDate(params: {fields: object;}): Promise<object>;
+  getUserNodeDate(params: {fields: string;}): Promise<object>;
   setUserNodeDate(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>;
   getPresnetableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise <Response>
   getPresnetableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise <any>
