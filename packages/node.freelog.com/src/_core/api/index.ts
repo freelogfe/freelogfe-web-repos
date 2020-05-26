@@ -15,7 +15,7 @@ const _fetch: qiFetchFn = createQIFetch({
   data: { nodeId, nodeType }
 });
 
-export async function getUserNodeDate({fields= ''}: {fields: string;}): Promise<object> {
+export async function getUserNodeDate({fields= ''}: {fields: string;} = {fields: ''}): Promise<object> {
   if (!fields) {
     return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick`, {});
   }
