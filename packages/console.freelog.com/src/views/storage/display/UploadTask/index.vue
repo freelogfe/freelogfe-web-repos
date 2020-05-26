@@ -16,8 +16,8 @@
                 style="height: 50px; display: flex; justify-content: space-between; align-items: center;padding: 0 20px;">
                 <span style="font-size: 14px; color: #222;">任务列表</span>
                 <div style="width: 40px; display: flex; align-items: center; justify-content: space-between;">
-                    <a @click="minimize = !minimize"><i class="el-icon-minus" style="font-size: 14px; color: #979797;"/></a>
-                    <a @click="closeTaskList"><i class="el-icon-close" style="font-size: 14px; color: #979797;"/></a>
+                    <a style="cursor: pointer;" @click="minimize = !minimize"><i class="el-icon-minus" style="font-size: 14px; color: #979797;"/></a>
+                    <a style="cursor: pointer;" @click="closeTaskList"><i class="el-icon-close" style="font-size: 14px; color: #979797;"/></a>
                 </div>
             </div>
 
@@ -113,8 +113,8 @@
         methods: {
             async onChange(file, fileList) {
                 // console.log(file, 'file');
-                if (file.size > 52428800) {
-                    return console.log('不超过5M');
+                if (file.size > 524288) {
+                    return this.$message.warning('文件大小不超过 512 KB');
                 }
 
                 const {data: nameIsExist} = await this.$axios.get(`/v1/storages/buckets/.UserNodeData/objects/${file.name}`);
