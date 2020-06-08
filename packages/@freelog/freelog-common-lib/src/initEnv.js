@@ -18,11 +18,11 @@ export function getEnvType() {
   if (window.location.port !== '') {
     return 'dev'
   }
-  const host = window.location.host
-  if (/^localhost/.test(host) || /^\d+\.\d+\.\d+\.\d+/.test(host)) {
+  const hostname = window.location.hostname
+  if (/^localhost/.test(hostname) || /^\d+\.\d+\.\d+\.\d+/.test(hostname)) {
     // 是否为本地开发环境
     return 'dev'
-  } else if (/testfreelog\.com/.test(host)) {
+  } else if (/testfreelog\.com/.test(hostname)) {
     // 是否为本地开发环境
     return 'test'
   } else {
@@ -49,11 +49,12 @@ export function getEnvLanguage() {
 }
 
 export function getMainDomain() {
-  return window.location.host.split('.').slice(-2).join('.')
+  return getEnvType() === 'prod' ? 'freelog.com' : 'testfreelog.com'
 }
 
 export function getQIoringin() {
-  return getEnvType() !== 'prod' ? '//qi.testfreelog.com' : '//qi.freelog.com'
+  const envType = getEnvType()
+  return envType === 'dev' ? window.location.origin : envType === 'prod' ? '//qi.testfreelog.com' : '//qi.freelog.com'
 }
 
 export function getNodeType() {

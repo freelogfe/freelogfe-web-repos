@@ -43,7 +43,12 @@ export function isObject(val: any): boolean {
 }
 
 export function isFunction(val: any): boolean {
-  return toString(val) === '[object Function]'
+  var asyncTag = '[object AsyncFunction]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]'
+  const tag = toString(val)
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag
 }
 
 export function isArray(val: any): boolean {

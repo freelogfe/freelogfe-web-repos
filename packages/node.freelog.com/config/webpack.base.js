@@ -11,22 +11,21 @@ const staticDomain = argv.env === 'prod' ? '//static.freelog.com' :  '//static.t
 
 module.exports = {
   entry: {
-    // 'pagebuild-core': path.resolve(__dirname, '../src/_core/index.ts'),
-    'pagebuild-app': path.resolve(__dirname, '../src/app/index.js')
+    'pagebuild-app': path.resolve(__dirname, '../src/index'),
+    'pagebuild-auth': path.resolve(__dirname, '../src/app/app.js')
   },
 
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: `${staticDomain}/pagebuild/`,
+    library: `[name]`,
+    libraryTarget: 'umd',
+    jsonpFunction: `webpackJsonp_[name]`,
   },
 
   node: {
     'fs': 'empty'
   },
-
-  // externals : {
-  //   '@freelog/freelog-common-lib': 'f_common_lib'
-  // },
 
   resolve: {
     extensions: [ ".ts", ".tsx", '.js', '.vue', '.json'],

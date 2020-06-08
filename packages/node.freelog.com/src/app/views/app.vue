@@ -1,13 +1,14 @@
 <template>
   <div class="pb-app">
-    <div class="pb-exception" v-if="isShowPbException">
-      <f-auth-box :pbAuthErrorData="pbAuthErrorData"></f-auth-box>
+    <div v-if="authHandlerBoxVisible">
+      <f-auth-handler-box :pbAuthErrorData="pbAuthErrorData"></f-auth-handler-box>
     </div>
    
     <transition name="fade">
       <div class="pb-login-dialog" v-if="loginDialogVisible">
         <f-login 
           class="pb-l-d-comp" 
+          showClose 
           @close-dialog="loginDialogVisible = false"
           @onLoginSuccess="loginSuccessHandler"></f-login>
       </div>
@@ -22,19 +23,20 @@
     data() {
       return {
         isShowToolBar: false,
-        isShowPbException: false,
         isLogin: false,
         isShowDialog: false,
+        authHandlerBoxVisible: false,
         loadContractDialog: false,
         pbExceptionMsg: '',
         pbAuthErrorData: null,
         scAuthPresentableList: [],
         activePresentableIndex: 0,
-        loginDialogVisible: false
+        loginDialogVisible: false,
+        isLoadedPBAuthDialog: false
       }
     },
     components: {
-      FAuthBox: () => import('./components/auth-box.vue'),
+      FAuthHandlerBox: () => import('./components/auth-handler-box.vue'),
     },
     computed: {},
     async mounted() {
@@ -50,7 +52,7 @@
          */
         const authErrorData = window.__auth_info__ && window.__auth_info__.__auth_error_info__
         if(authErrorData) {
-          this.isShowPbException = true
+          this.authHandlerBoxVisible = true
           this.pbAuthErrorData = authErrorData
         }
       },
@@ -60,7 +62,9 @@
          * 开发者可通过api - window.FreelogApp.trigger 触发事件并唤起对应视图
          */
         if(window.FreelogApp.on) {
-          window.FreelogApp.on(GO_TO_LOGIN, this.showLoginDialog)
+          window.FreelogApp
+            .on(GO_TO_LOGIN, this.showLoginDialog)
+            .once(SHOW_AUTH_DIALOG, () => (this.authHandlerBoxVisible = true))
         }
       },
       async showLoginDialog() {

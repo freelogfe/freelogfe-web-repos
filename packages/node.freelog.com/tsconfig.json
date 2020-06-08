@@ -11,11 +11,10 @@
     "sourceMap": true,
     "target": "ES5"
   },
-  "include": [
-    "./src/_core/**/*"
-  ],
   "exclude": [
-    "dist",
+    "dist", "typings*",
+    "src/i18n*",
+    "src/app*",
     "node_modules*",
     "test"
   ]

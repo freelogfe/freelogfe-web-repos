@@ -11,18 +11,15 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin')
 
 const baseConfig = require('./webpack.base')
-const commonLibPkgJson = require('@freelog/freelog-common-lib/package.json')
-const tmpName = 'freelog-common'
 
 module.exports = merge(baseConfig, {
 
-  entry: {
-    // [tmpName]: path.resolve(__dirname, '../node_modules/@freelog/freelog-common-lib/', commonLibPkgJson.main)
-  },
+  entry: {},
 
   output: {
     filename: '[name].js',
     chunkFilename: 'public/[name].js',
+    crossOriginLoading: 'anonymous',
   },
 
   mode: 'development',
@@ -72,21 +69,21 @@ module.exports = merge(baseConfig, {
 
   plugins: [
     new HtmlWebpackPlugin({
-      preload: ['**/*.*'],
       inject: 'body',
       filename: 'pagebuild.html',
       template: path.resolve(__dirname, '../public/index.html'),
-      chunks: ['pagebuild-app', 'pagebuild-core']
+      // excludeChunks: [ 'pagebuild-auth' ],
+      chunks: [ 'pagebuild-app' ]
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css', 
       chunkFilename: 'public/[id].css',
     }),
-    new ResourceHintWebpackPlugin(),
-    new StyleExtHtmlWebpackPlugin({
-      minify: true,
-      chunks: ['pagebuild-core']
-    }),
+    // new ResourceHintWebpackPlugin(),
+    // new StyleExtHtmlWebpackPlugin({
+    //   minify: true,
+    //   chunks: ['pagebuild-core']
+    // }),
   ],
 })
 

@@ -1,3 +1,7 @@
+
+
+import Vue from 'vue'
+import axios from 'axios'
 import App from './views/app.vue'
 import i18n from '@/i18n/index'
 
@@ -6,13 +10,18 @@ import elementUIPlugin from './elementUI-plugins'
 import initLogin from '@freelog/freelog-ui-login'
 import { FREELOG_APP_MOUNTED } from '../_core/events/pb-event-names'
 
-export default function mountApp(Vue, axios) {
-  Vue.use(elementUIPlugin)
-  Vue.use(axiosPlugin, axios)
+Vue.use(elementUIPlugin)
+Vue.use(axiosPlugin, axios)
 
-  initLogin({ Vue, i18n, isRegisterRouter: false })
+initLogin({ Vue, i18n, isRegisterRouter: false })
+
+
+export async function bootstrap() {}
+export async function mount({ appRootElement }) {
+  const selector = '#app-auth'
+  const el = appRootElement && appRootElement.querySelector ? appRootElement.querySelector(selector) : document.querySelector(selector)
   new Vue({
-    el: '#app-auth',
+    el,
     i18n,
     methods: {},
     render: h => h(App),
@@ -23,3 +32,4 @@ export default function mountApp(Vue, axios) {
     },
   })
 }
+export async function unmount() {}

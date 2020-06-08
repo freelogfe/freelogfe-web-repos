@@ -54,15 +54,23 @@ module.exports = merge(baseConfig, {
       new TerserPlugin(),
       new OptimizeCSSAssetsPlugin({})
     ],
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+          minChunks: 2
+        }
+      }
+    },
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      inject: 'body',
       filename: 'index.html',
       template: path.resolve(__dirname, '../public/index.html'),
-      chunks: ['pagebuild-app']
-      // excludeChunks: [ tmpName ],
+      chunks: [ 'pagebuild-app', 'vendors' ],
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css', 
