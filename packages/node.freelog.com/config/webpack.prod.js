@@ -64,8 +64,15 @@ module.exports = merge(baseConfig, {
       chunks: ['pagebuild-app']
       // excludeChunks: [ tmpName ],
     }),
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      filename: 'index.dev.html',
+      template: path.resolve(__dirname, '../public/index.dev.html'),
+      chunks: ['pagebuild-app']
+      // excludeChunks: [ tmpName ],
+    }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css', 
+      filename: '[name].[contenthash].css',
       chunkFilename: 'public/[id].[contenthash].css',
     }),
     new StyleExtHtmlWebpackPlugin({
@@ -74,7 +81,7 @@ module.exports = merge(baseConfig, {
     }),
     // new ResourceHintWebpackPlugin(),
     // new ScriptExtHtmlWebpackPlugin({
-    //   // inline: ['pagebuild-core'],  
+    //   // inline: ['pagebuild-core'],
     //   prefetch: ['pagebuild-app', 'pagebuild-core']
     // })
   ],
