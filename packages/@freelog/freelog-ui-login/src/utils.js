@@ -19,6 +19,7 @@ export function isSafeUrl(url) {
 
 export function getItemFromStorage(name) {
   const value = window.localStorage.getItem(name)
+  if (value == null) return null
   try{
     var oJSON = JSON.parse(value)
   }catch(e) {

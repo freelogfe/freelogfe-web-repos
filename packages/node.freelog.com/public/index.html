@@ -16,15 +16,14 @@
   <link rel="shortcut icon" href="/public/logo-feather.svg" type="image/x-icon" />
 </head>
 <body>
-  <noscript>
-    <strong>We're sorry but awesome-vue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-  </noscript>
   {{authInfoFragment | safe}}
   <div id="wrapper">
     <div id="js-page-container">
       {{pbFragment | safe}}
     </div>
-    <div id="app-auth"></div>
+    <div id="app-container">
+      <div id="app-auth"></div>
+    </div>
     <div id="f-loading">
       <div class="box fl-logo">Freelog</div>
       <ul>
