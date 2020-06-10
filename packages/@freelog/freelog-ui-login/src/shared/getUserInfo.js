@@ -13,15 +13,14 @@ export default function getUserInfo() {
 
 	try {
 		var userSession = getItemFromStorage(USER_SESSION)
-		if(typeof userSession !== 'object') {
+		if(userSession != null && typeof userSession !== 'object') {
 			throw userSession
 		}
-	}catch(e) {
-		console.log('getUserInfo:', e)
+	} catch (e) {
 		userSession = null
 	}
 
-	if(userSession !== null && authInfo.userId === userSession.userId) {
+	if(userSession != null && authInfo.userId === userSession.userId) {
 		return Promise.resolve(userSession)
 	}else {
 		return window.fetch(`/v1/userinfos/${authInfo.userId}`, { credentials: 'include' })
