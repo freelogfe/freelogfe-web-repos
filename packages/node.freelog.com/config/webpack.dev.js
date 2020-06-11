@@ -67,6 +67,21 @@ module.exports = merge(baseConfig, {
     ]
   },
 
+  optimization: {
+    concatenateModules: true,
+    nodeEnv: 'development',
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+          minChunks: 2
+        }
+      }
+    },
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
       inject: 'body',

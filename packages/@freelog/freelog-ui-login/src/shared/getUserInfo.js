@@ -23,7 +23,7 @@ export default function getUserInfo() {
 	if(userSession != null && authInfo.userId === userSession.userId) {
 		return Promise.resolve(userSession)
 	}else {
-		return window.fetch(`/v1/userinfos/${authInfo.userId}`, { credentials: 'include' })
+		return window.fetch(`${window.FreelogApp.Env.qiOrigin}/v1/userinfos/${authInfo.userId}`, { credentials: 'include' })
 			.then(resp => resp.json())
 			.then((res) => {
 				if (res.errcode === 0) {

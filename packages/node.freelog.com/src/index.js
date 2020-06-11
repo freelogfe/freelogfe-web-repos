@@ -4,22 +4,14 @@ import './app/styles/global.less'
 import './_core/index'
 import fReport from '@freelog/freelog-report'
 
-const FreelogApp = window.FreelogApp
-const { Env: { type: envType, mainDomain } } = FreelogApp
-
-FreelogApp.loadMicroApp({
-  name: 'pagebuild-auth',
+const __PAGEBUILD_AUTH__ = 'pagebuild-auth'
+const { Env: { type: envType, mainDomain }, loadMicroApp } = window.FreelogApp
+const pbAuthContentHash = getPagebuildAuthContentHash(window.__appOutputFilenames__, __PAGEBUILD_AUTH__)
+loadMicroApp({
+  name: __PAGEBUILD_AUTH__,
   container: '#app-container',
-  scripts: [ `//static.${mainDomain}/pagebuild/pagebuild-auth.js` ],
+  scripts: [ `//static.${mainDomain}/pagebuild/pagebuild-auth.${pbAuthContentHash}.js` ],
 })
-
-async function loadFreelogAuthApp() {}
-
-if (document.readyState === 'loading') {  // 此时加载尚未完成
-  document.addEventListener('DOMContentLoaded', loadFreelogAuthApp)
-} else {  // 此时`DOMContentLoaded` 已经被触发
-  loadFreelogAuthApp()
-}
 
 if (envType !== 'dev') {
   // 页面性能数据采集
@@ -28,6 +20,8 @@ if (envType !== 'dev') {
   })
 } 
 
-export function pagebuildApp() {}
-
-
+function getPagebuildAuthContentHash(outputFilenames, appName) {
+  outputFilenames = Buffer.from(outputFilenames, 'base64').toString('utf-8')
+  outputFilenames = JSON.parse(outputFilenames)
+  return outputFilenames[appName]
+}

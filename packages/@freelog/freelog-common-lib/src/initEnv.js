@@ -54,7 +54,7 @@ export function getMainDomain() {
 
 export function getQIoringin() {
   const envType = getEnvType()
-  return envType === 'dev' ? window.location.origin : envType === 'prod' ? '//qi.testfreelog.com' : '//qi.freelog.com'
+  return envType === 'dev' ? window.location.origin : envType === 'prod' ? '//qi.freelog.com' : '//qi.testfreelog.com'
 }
 
 export function getNodeType() {

@@ -10,11 +10,19 @@ const baseConfig = require('./webpack.base')
 const merge = require('webpack-merge')
 const path = require('path')
 
+const APP_PAGEBUILD_AUTH = 'pagebuild-auth'
+const appOutputFilenames = {}
 module.exports = merge(baseConfig, {
   mode: 'production',
 
   output: {
-    filename: '[name].[contenthash].js',
+    // filename: '[name].[contenthash].js',
+    filename(pathData, assetInfo) {
+      const { contentHashType, chunk: { name, contentHash } } = pathData
+      const _contentHash = JSON.parse(JSON.stringify(contentHash))
+      appOutputFilenames[name] = contentHash['javascript']
+      return '[name].[contenthash].js'
+    },
     chunkFilename: 'public/[name].[chunkhash].js',
     crossOriginLoading: 'anonymous',
   },
@@ -68,16 +76,18 @@ module.exports = merge(baseConfig, {
 
   plugins: [
     new HtmlWebpackPlugin({
+      inject: 'body',
       filename: 'index.html',
       template: path.resolve(__dirname, '../public/index.html'),
       chunks: [ 'pagebuild-app', 'vendors' ],
+      templateParameters: fnTplParameters,
     }),
     new HtmlWebpackPlugin({
       inject: 'body',
       filename: 'index.dev.html',
       template: path.resolve(__dirname, '../public/index.dev.html'),
-      chunks: ['pagebuild-app']
-      // excludeChunks: [ tmpName ],
+      chunks: ['pagebuild-app', 'vendors' ],
+      templateParameters: fnTplParameters,
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -89,9 +99,14 @@ module.exports = merge(baseConfig, {
     }),
     // new ResourceHintWebpackPlugin(),
     // new ScriptExtHtmlWebpackPlugin({
-    //   // inline: ['pagebuild-core'],
+    //   inline: ['pagebuild-core'],
     //   prefetch: ['pagebuild-app', 'pagebuild-core']
     // })
   ],
 })
+
+function fnTplParameters(compilation, assets, assetTags, options) {
+  const str = JSON.stringify(appOutputFilenames)
+  return { appOutputFilenames: Buffer.from(str, 'utf-8').toString('base64') }
+}
 
