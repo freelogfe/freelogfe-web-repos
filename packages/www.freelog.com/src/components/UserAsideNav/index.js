@@ -1,7 +1,9 @@
 import { mapGetters } from 'vuex'
+import CropImage from '@/components/CropImage/index.vue'
 
 export default {
   name: 'user-aside-nav',
+  components: { CropImage },
   data() {
     return {
       activeNavName: 'my-profile',
@@ -18,18 +20,30 @@ export default {
           name: 'my-profile',
           link: 'profile'
         }
-      ]
+      ],
+      showImageCropUploader: false,
+      avatarCls: '',
+      avatarUrl: ''
     }
   },
 
-  computed: mapGetters({
-    user: 'session'
-  }),
+  computed: {
+    ...mapGetters({
+      session: 'session',
+      user: 'session'
+    })
+  },
 
   watch: {
     $route() {
       this.resolveCurrentNav()
-    }
+    },
+    'session.avatarUrl': function avatarUrl() {
+      if (this.session.avatarUrl) {
+        this.avatarCls = ''
+        this.avatarUrl = this.session.avatarUrl
+      }
+    },
   },
 
   mounted() {
@@ -72,6 +86,14 @@ export default {
     gotoMyProfile() {
       this.activeNavName = 'my-profile'
       this.changePanel()
-    }
+    },
+    imgErrorHandler() {
+      this.avatarCls = 'not-found-img'
+      this.$store.dispatch('changeAvatar', '')
+    },
+    uploadSuccessHandler() {
+      this.$store.dispatch('changeAvatar')
+      this.showImageCropUploader = false
+    },
   }
 }

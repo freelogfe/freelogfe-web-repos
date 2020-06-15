@@ -10,14 +10,14 @@
             <img :src="imageUrl" crossOrigin="anonymous" class="avatar" ref="avatarRef" alt="">
           </div>
           <el-upload
-                  :action="updateAction"
-                  class="avatar-uploader"
-                  :with-credentials="true"
-                  ref="uploader"
-                  :auto-upload="false"
-                  :show-file-list="false"
-                  :on-change="changeImageHandler"
-                  :on-success="handleAvatarSuccess">
+            :action="updateAction"
+            class="avatar-uploader"
+            :with-credentials="true"
+            ref="uploader"
+            :auto-upload="false"
+            :show-file-list="false"
+            :on-change="changeImageHandler"
+            :on-success="handleAvatarSuccess">
             <el-button v-if="imageUrl">{{$t('cropImage.imageReupload')}}</el-button>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>

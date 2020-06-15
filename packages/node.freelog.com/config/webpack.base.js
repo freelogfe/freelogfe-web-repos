@@ -9,13 +9,21 @@ const minimist = require('minimist')
 const argv = minimist(process.argv.slice(2))
 const staticDomain = argv.env === 'prod' ? '//static.freelog.com' :  '//static.testfreelog.com'
 
-module.exports = {
+const APP_PAGEBUILD_AUTH = 'pagebuild-auth'
+const appOutputFilenames = {}
+const webpackConfig = {
   entry: {
     'pagebuild-app': path.resolve(__dirname, '../src/index'),
     'pagebuild-auth': path.resolve(__dirname, '../src/app/app.js')
   },
 
   output: {
+    filename: (pathData) => {
+      const { contentHashType, chunk: { name, contentHash } } = pathData
+      const _contentHash = JSON.parse(JSON.stringify(contentHash))
+      appOutputFilenames[name] = contentHash['javascript']
+      return '[name].js'
+    },
     path: path.resolve(__dirname, '../dist'),
     publicPath: `${staticDomain}/pagebuild/`,
     library: `[name]`,
@@ -76,6 +84,26 @@ module.exports = {
   },
 
   plugins: [
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      filename: 'index.html',
+      template: path.resolve(__dirname, '../public/index.html'),
+      chunks: [ 'pagebuild-app', 'vendors' ],
+      templateParameters: fnTplParameters,
+    }),
+    new HtmlWebpackPlugin({
+      inject: 'body',
+      filename: 'index.dev.html',
+      template: path.resolve(__dirname, '../public/index.dev.html'),
+      chunks: ['pagebuild-app', 'vendors' ],
+      templateParameters: fnTplParameters,
+    }),
     new VueLoaderPlugin(),
   ],
+}
+module.exports = webpackConfig
+
+function fnTplParameters(compilation, assets, assetTags, options) {
+  const str = JSON.stringify(appOutputFilenames)
+  return { appOutputFilenames: Buffer.from(str, 'utf-8').toString('base64') }
 }

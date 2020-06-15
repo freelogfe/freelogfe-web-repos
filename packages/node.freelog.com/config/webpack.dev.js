@@ -83,13 +83,6 @@ module.exports = merge(baseConfig, {
   },
 
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: 'body',
-      filename: 'pagebuild.html',
-      template: path.resolve(__dirname, '../public/index.html'),
-      // excludeChunks: [ 'pagebuild-auth' ],
-      chunks: [ 'pagebuild-app' ]
-    }),
     new MiniCssExtractPlugin({
       filename: '[name].css', 
       chunkFilename: 'public/[id].css',
