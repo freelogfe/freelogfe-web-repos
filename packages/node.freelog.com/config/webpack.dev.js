@@ -17,7 +17,12 @@ module.exports = merge(baseConfig, {
   entry: {},
 
   output: {
-    filename: '[name].js',
+    filename: (...props) => {
+      if (typeof filename === 'function') {
+        baseConfig.output.filename.apply(this, props)
+      }
+      return '[name].js'
+    }, 
     chunkFilename: 'public/[name].js',
     crossOriginLoading: 'anonymous',
   },

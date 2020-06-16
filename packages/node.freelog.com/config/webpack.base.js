@@ -18,11 +18,11 @@ const webpackConfig = {
   },
 
   output: {
-    filename: (pathData) => {
+    filename: (pathData, ...args) => {
       const { contentHashType, chunk: { name, contentHash } } = pathData
       const _contentHash = JSON.parse(JSON.stringify(contentHash))
       appOutputFilenames[name] = contentHash['javascript']
-      return '[name].js'
+      return '[name].[contenthash].js'
     },
     path: path.resolve(__dirname, '../dist'),
     publicPath: `${staticDomain}/pagebuild/`,

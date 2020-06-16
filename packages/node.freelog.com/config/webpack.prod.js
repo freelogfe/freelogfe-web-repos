@@ -10,11 +10,18 @@ const baseConfig = require('./webpack.base')
 const merge = require('webpack-merge')
 const path = require('path')
 
+const filename = baseConfig.output.filename
 const webpackConfig = merge(baseConfig, {
   mode: 'production',
 
   output: {
-    filename: '[name].[contenthash].js',
+    // filename: '[name].[contenthash].js',
+    filename: (...props) => {
+      if (typeof filename === 'function') {
+        baseConfig.output.filename.apply(this, props)
+      }
+      return '[name].[contenthash].js'
+    }, 
     chunkFilename: 'public/[name].[chunkhash].js',
     crossOriginLoading: 'anonymous',
   },
@@ -54,16 +61,16 @@ const webpackConfig = merge(baseConfig, {
       new TerserPlugin(),
       new OptimizeCSSAssetsPlugin({})
     ],
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-          minChunks: 2
-        }
-      }
-    },
+    // splitChunks: {
+    //   cacheGroups: {
+    //     commons: {
+    //       test: /[\\/]node_modules[\\/]/,
+    //       name: 'vendors',
+    //       chunks: 'all',
+    //       minChunks: 4
+    //     }
+    //   }
+    // },
   },
 
   plugins: [
