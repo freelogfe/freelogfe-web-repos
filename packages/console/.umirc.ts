@@ -18,7 +18,7 @@ const config: IConfig =  {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      title: 'umi-reference',
+      title: 'console',
       dll: false,
       locale: {
         enable: true,
