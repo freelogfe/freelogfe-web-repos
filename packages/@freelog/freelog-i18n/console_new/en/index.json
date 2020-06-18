@@ -62,5 +62,9 @@
 	"latest_version": "",
 	"update_resource": "",
 	"edit_resource": "",
-	"resource_details": ""
+	"resource_details": "",
+	"node_manage": "",
+	"contract_manage": "",
+	"my_resources": "",
+	"my_collections": ""
 }
