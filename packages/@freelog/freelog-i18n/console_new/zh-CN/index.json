@@ -22,7 +22,7 @@
 	"privacity": "隐私",
 	"display_userdata_in_storage": "在存储空间中显示.NodeData",
 	"userdata_used_storage": "您的节点用户数据目前已经使用了{NodeDataUsedStorage}存储空间。",
-	"storage": "",
+	"storage": "存储空间\n",
 	"used_storage": "容量",
 	"enter_nodedata": "进入 .NodeData",
 	"node_data": "节点用户数据",
@@ -38,7 +38,7 @@
 	"limit_resource_image_format": "图片格式仅支持jpg、png、gif。",
 	"limit_resource_image_size": "图片不能超过5M",
 	"freelog_versioning": "版本号必须采用 X.Y.Z 的格式，其中 X、Y 和 Z 为非负的整数，且禁止在数字前方补零。标识符必须由 ASCII 字母数字和连接号 [0-9A-Za-z-] 组成，且禁止留白。同一个资源的版本号必须唯一，且必须按升序增加。",
-	"authorization_issue_offline_resource": "该资源未上线，无法签约。",
+	"authorization_issue_offline_resource": "该资源已下线，无法签约。",
 	"authorization_issue_circular_reply": "循环依赖不支持授权。",
 	"error_custom_meta": "语法有误。自定义属性编写应符合JSON语法规则。",
 	"reselect": "重新选择",
@@ -67,5 +67,6 @@
 	"contract_manage": "",
 	"my_resources": "",
 	"my_collections": "",
-	"search_resource": ""
+	"search_resource": "",
+	"alarm_plan_not_available": ""
 }
