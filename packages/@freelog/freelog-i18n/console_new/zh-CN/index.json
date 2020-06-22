@@ -148,5 +148,15 @@
 	"contract_state_end": "",
 	"authorized_party": "",
 	"contract_signed_time": "",
-	"contract_name": ""
+	"contract_name": "",
+	"used_contract": "",
+	"sign_contract_confirm": "",
+	"shelve_contract_confirm": "",
+	"shelve_contract": "",
+	"release_date": "",
+	"object_id": "",
+	"relationship_status_good": "",
+	"version_authorization_map": "",
+	"version_relationship_map": "",
+	"version_maps": ""
 }

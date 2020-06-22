@@ -7,5 +7,7 @@
 	"test00": "test",
 	"wrong_username_password": "Incorrect account or password",
 	"remove": "Remove",
-	"saved_successfully": ""
+	"saved_successfully": "",
+	"cancel": "",
+	"relationship_status_pending": ""
 }
