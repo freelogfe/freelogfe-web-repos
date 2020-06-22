@@ -1,14 +1,15 @@
-import { IConfig } from 'umi-types';
+import {IConfig} from 'umi-types';
 
 // ref: https://umijs.org/config/
-const config: IConfig =  {
+const config: IConfig = {
   treeShaking: true,
   routes: [
     {
       path: '/',
-      component: '../layouts/index',
+      // component: '../layouts/index',
       routes: [
-        { path: '/', component: '../pages/index' }
+        {exact: true, path: '/', component: '../pages/index'},
+        {exact: true, path: '/ui-example', component: '../pages/ui-example'},
       ]
     }
   ],
@@ -17,7 +18,7 @@ const config: IConfig =  {
     ['umi-plugin-react', {
       antd: true,
       dva: true,
-      dynamicImport: { webpackChunkName: true },
+      dynamicImport: {webpackChunkName: true},
       title: 'console',
       dll: false,
       locale: {
@@ -35,6 +36,21 @@ const config: IConfig =  {
       },
     }],
   ],
-}
+  'theme': {
+    'primary-color': '#2784FF',
+    'height-base': '38px',
+    'height-lg': '50px',
+    'height-sm': '32px',
+    'border-radius-base': '4px',
+    'border-color-base': '#E4E7EB',
+    'input-icon-color': '#8E8E93',
+    'text-color': '#222',
+    'input-placeholder-color': '#C4C4C4',
+    'input-hover-border-color': '#CBCBCB',
+    'input-icon-hover-color': '#B4B4B4',
+    'disabled-bg': '#F7F7F7',
+    'disabled-color': '#C4C4C4',
+  },
+};
 
 export default config;
