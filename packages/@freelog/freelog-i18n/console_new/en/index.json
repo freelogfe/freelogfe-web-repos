@@ -70,7 +70,7 @@
 	"search_resource": "Search resource",
 	"alarm_plan_not_available": "This plan is not available for authorization.",
 	"remove_from_collection": "Remove",
-	"create_new_resource": "",
+	"create_new_resource": "Create a new resource",
 	"create": "Create",
 	"save_as_draft": "Save as draft",
 	"hint_enter_resource_name": "Resource name",
@@ -160,5 +160,6 @@
 	"version_relationship_map": "Version health",
 	"version_maps": "Version Status",
 	"reusable_contract": "Reusable contract",
-	"licensee": "Licensee"
+	"licensee": "Licensee",
+	"licencee_contract": ""
 }

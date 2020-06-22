@@ -70,7 +70,7 @@
 	"search_resource": "搜索资源",
 	"alarm_plan_not_available": "该授权策略已下线，无法签约。",
 	"remove_from_collection": "取消收藏",
-	"create_new_resource": "",
+	"create_new_resource": "新建资源",
 	"create": "创建",
 	"save_as_draft": "暂存为草稿",
 	"hint_enter_resource_name": "资源名称",
@@ -160,5 +160,6 @@
 	"version_relationship_map": "版本健康状态",
 	"version_maps": "版本状态",
 	"reusable_contract": "可复用的合约",
-	"licensee": "乙方"
+	"licensee": "乙方",
+	"licencee_contract": "被授权合约"
 }
