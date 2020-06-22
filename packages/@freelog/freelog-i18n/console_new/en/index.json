@@ -162,5 +162,6 @@
 	"reusable_contract": "Reusable contract",
 	"licensee": "Licensee",
 	"licencee_contract": "",
-	"info_basic_upcast": "Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list."
+	"info_basic_upcast": "Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list.",
+	"relationship_status_abnormal": "Abnormal"
 }
