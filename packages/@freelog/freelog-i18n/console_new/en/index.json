@@ -139,7 +139,7 @@
 	"hint_add_authorization_plan": "Without any active authorization plan, the resource will not show inthe resource market.",
 	"add_authorization_plan": "Add a authorization plan now",
 	"blank_authorizing_contract_list": "Your authorization contract will show up here",
-	"authorizing_contracts": "Licensing Contract",
+	"authorizing_contracts": "Licensor Contract",
 	"enabled": "enabled",
 	"disabled": "disabled",
 	"contract_state": "Contract state",
@@ -161,5 +161,6 @@
 	"version_maps": "Version Status",
 	"reusable_contract": "Reusable contract",
 	"licensee": "Licensee",
-	"licencee_contract": ""
+	"licencee_contract": "",
+	"info_basic_upcast": "Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list."
 }
