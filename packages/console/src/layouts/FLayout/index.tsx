@@ -7,14 +7,14 @@ import {PlusOutlined, SearchOutlined} from '@ant-design/icons';
 import FButton from '@/components/FButton';
 import FInput from '@/components/FInput';
 
-const {Header} = Layout;
+const {Header, Content, Footer} = Layout;
 
 export default function (props: any) {
   return (
     <Layout>
       <Header className={styles.header}>
         <div className={styles.headerLeft}>
-          <i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
+          <a className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
           <div className={styles.MenuBar}>
             <a className={styles.Menu}>发现</a>
             <a className={styles.Menu}>存储空间</a>
@@ -24,14 +24,11 @@ export default function (props: any) {
           </div>
         </div>
         <div className={styles.headerRight}>
-          {/*<Button type="primary" >*/}
-          {/*  创建资源*/}
-          {/*</Button>*/}
           <FInput
             className={styles.FInput}
             placeholder="Search in Freelog"
             prefix={<SearchOutlined/>}
-            disabled={true}
+            // disabled={true}
           />
 
           <FButton
@@ -46,6 +43,10 @@ export default function (props: any) {
           </a>
         </div>
       </Header>
+      <Content style={{padding: '0 50px'}}>
+        <FMenu/>
+      </Content>
+      <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
     </Layout>
   );
 }

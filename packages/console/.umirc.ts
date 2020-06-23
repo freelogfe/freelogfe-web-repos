@@ -41,15 +41,27 @@ const config: IConfig = {
     'height-base': '38px',
     'height-lg': '50px',
     'height-sm': '32px',
+    'outline-blur-size': 0,
+    'outline-width': 0,
+    'outline-color': 'transparent',
+    'outline-fade': 0,
+    'disabled-bg': '#F7F7F7',
+    'disabled-color': '#C4C4C4',
     'border-radius-base': '4px',
     'border-color-base': '#E4E7EB',
-    'input-icon-color': '#8E8E93',
+
     'text-color': '#222',
+    'input-icon-color': '#8E8E93',
     'input-placeholder-color': '#C4C4C4',
     'input-hover-border-color': '#CBCBCB',
     'input-icon-hover-color': '#B4B4B4',
-    'disabled-bg': '#F7F7F7',
-    'disabled-color': '#C4C4C4',
+
+    'menu-item-vertical-margin': 0,
+    'menu-item-boundary-margin': 0,
+    'menu-item-padding': '0 70px 0 20px',
+    'menu-item-active-bg': '#2784FF',
+    'menu-highlight-color': '#fff',
+
   },
 };
 
