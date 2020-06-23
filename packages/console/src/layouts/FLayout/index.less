@@ -1,10 +1,19 @@
+.Layout {
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  align-items: stretch;
+  //align-content: stretch;
+  width: 100%;
+}
+
 .header {
-  height: 70px;
-  background-color: #FFF;
+  //height: 70px;
+  //background-color: #FFF;
   line-height: inherit;
   display: flex;
   align-items: center;
-  padding: 0 40px;
+  //padding: 0 40px;
   justify-content: space-between;
 }
 
@@ -28,6 +37,7 @@
   padding: 0 15px;
   line-height: 70px;
   color: #222;
+  //height: 68px;
 
   &:hover {
     color: #2784FF;
@@ -39,7 +49,12 @@
   height: 100%;
   align-items: center;
   width: auto;
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
 }
+
 
 .avatar {
   height: 100%;
@@ -64,4 +79,19 @@
 .FInput {
   margin-right: 30px;
   width: 200px;
+}
+
+.create {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.Content {
+  min-width: 1100px;
+  max-width: 1400px;
+  width: 100%;
+  //background-color: #2784FF;
+  height: 600px;
+  align-self: center;
 }
