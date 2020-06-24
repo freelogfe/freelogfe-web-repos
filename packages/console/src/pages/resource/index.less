@@ -1,0 +1,43 @@
+.Tabs {
+  background-color: #FAFBFC;
+
+  & > div:first-child {
+    &::before {
+      border-bottom-color: #E4E7EB;
+    }
+
+    & > div:first-child {
+      justify-content: center;
+
+      & > div {
+        & > button {
+          font-weight: 400 ;
+        }
+      }
+
+    }
+  }
+}
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.filterLeft {
+  display: flex;
+  align-items: center;
+
+}
+
+.filterRight {
+  //color: transparent;
+}
+
+.FInput {
+  width: 400px;
+  margin-right: 20px;
+}
+

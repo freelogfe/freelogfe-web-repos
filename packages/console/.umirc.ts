@@ -10,6 +10,7 @@ const config: IConfig = {
       routes: [
         {exact: true, path: '/', component: '../pages/index'},
         {exact: true, path: '/ui-example', component: '../pages/ui-example'},
+        {exact: true, path: '/resource', component: '../pages/resource'},
       ]
     }
   ],
@@ -53,6 +54,12 @@ const config: IConfig = {
     // 'box-shadow-base': '0 2px 5px 0 rgba(0,0,0,0.2)',
     'text-color': '#222',
     'body-background': '#FAFBFC',
+    'shadow-1-up': 'none',
+    'shadow-1-down': 'none',
+    'shadow-1-left': 'none',
+    'shadow-1-right': 'none',
+    'shadow-2': 'none',
+    'shadow-color': 'transparent',
 
     'layout-body-background': '#FAFBFC',
     'layout-header-background': '#FFF',
@@ -71,6 +78,16 @@ const config: IConfig = {
     'menu-item-active-bg': '#2784FF',
     'menu-highlight-color': '#fff',
 
+    'tabs-horizontal-margin': '0 100px 0 0',
+    'tabs-horizontal-margin-rtl': '0 0 0 100px',
+    'tabs-horizontal-padding-lg': '18px 0',
+    'tabs-bar-margin': 0,
+
+    'btn-shadow': 'none',
+    'btn-primary-shadow': 'none',
+    'btn-text-shadow': 'none',
+
+    'pagination-font-weight-active': 400,
   },
 };
 

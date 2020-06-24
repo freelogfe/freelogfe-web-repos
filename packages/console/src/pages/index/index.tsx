@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from './index.less';
-import Flayout from '@/layouts/FLayout';
+import FLayout from '@/layouts/FLayout';
 
-export default function() {
+export default function () {
   return (
-    <Flayout/>
+    <FLayout>
+      <h1>首页</h1>
+    </FLayout>
   );
 }

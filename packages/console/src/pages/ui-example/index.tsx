@@ -1,8 +1,8 @@
 import * as React from 'react';
-import FMenu from '@/components/FMenu';
+// import FMenu from '@/components/FMenu';
 
 export default function () {
   return (
-    <FMenu/>
+    <div>1234</div>
   );
 }

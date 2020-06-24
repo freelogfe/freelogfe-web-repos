@@ -3,19 +3,16 @@ import {Button} from 'antd';
 import styles from './index.less';
 import {ButtonProps} from "antd/lib/button/button";
 
-export default function ({children, shape, ...props}: ButtonProps) {
+export default function ({children, shape, type = 'primary', ...props}: ButtonProps) {
   if (shape === 'circle') {
     return (<Button
       shape={shape}
       className={styles.Button}
+      type={type}
       {...props}
-    >
-      {children}
-    </Button>);
+    >{children}</Button>);
   }
   return (
-    <Button {...props}>
-      {children}
-    </Button>
-  )
+    <Button type={type} {...props}>{children}</Button>
+  );
 }

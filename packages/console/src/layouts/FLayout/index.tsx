@@ -31,7 +31,11 @@ const create = [
   },
 ];
 
-export default function (props: any) {
+interface FLayoutProps {
+  children: React.ReactNode | React.ReactNodeArray;
+}
+
+export default function ({children}: FLayoutProps) {
   return (
     <Layout className={styles.Layout}>
       <Header className={styles.header}>
@@ -50,7 +54,7 @@ export default function (props: any) {
         <div className={styles.headerRight}>
           <FInput
             className={styles.FInput}
-            placeholder="Search in Freelog"
+            // placeholder="Search in Freelog"
             size="small"
             theme="dark"
             // disabled={true}
@@ -73,6 +77,7 @@ export default function (props: any) {
         </div>
       </Header>
       <Content className={styles.Content}>
+        <div>{children}</div>
       </Content>
       {/*<Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>*/
       }
