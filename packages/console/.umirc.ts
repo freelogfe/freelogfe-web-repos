@@ -39,8 +39,8 @@ const config: IConfig = {
   ],
   'theme': {
     'primary-color': '#2784FF',
-    'height-base': '38px',
     'height-lg': '50px',
+    'height-base': '38px',
     'height-sm': '32px',
     'outline-blur-size': 0,
     'outline-width': 0,
@@ -88,6 +88,9 @@ const config: IConfig = {
     'btn-text-shadow': 'none',
 
     'pagination-font-weight-active': 400,
+    'pagination-item-size': '32px',
+    // 'agination-item-size-sm': '32px',
+    'pagination-item-bg-active': '#2784FF',
   },
 };
 

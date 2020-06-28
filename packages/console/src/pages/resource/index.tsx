@@ -7,6 +7,7 @@ import FButton from '@/components/FButton';
 import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
+import FPagination from '@/components/FPagination';
 
 const {TabPane} = Tabs;
 
@@ -76,6 +77,9 @@ export default function () {
         <div style={{width: 280}}/>
         <div style={{width: 280}}/>
       </div>
+      <div style={{height: 10}}/>
+      <FPagination className={styles.FPagination}/>
+      <div style={{height: 100}}/>
     </FLayout>
   );
 }
