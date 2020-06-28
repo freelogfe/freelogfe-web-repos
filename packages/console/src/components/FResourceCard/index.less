@@ -1,0 +1,79 @@
+.FResourceCard {
+  width: 280px;
+  height: 314px;
+  padding: 20px;
+  border-radius: 4px;
+  display: inline-block;
+
+  &:hover {
+    background-color: #fff;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+
+    nav {
+      opacity: 1;
+    }
+  }
+}
+
+.Cover {
+  //background: url(~@/assets/default-resource-cover.jpg);
+  background: url(../../assets/default-resource-cover.jpg);
+  width: 240px;
+  height: 180px;
+  background-size: 100%;
+  position: relative;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.CoverMask {
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.CoverMaskNav {
+  & > a {
+    color: #fff;
+  }
+}
+
+.Divider {
+  margin: 0 10px;
+}
+
+.Status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.Meta {
+
+}
+
+.MetaInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.MetaFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > a {
+    color: #666666;
+    font-size: 12px;
+  }
+}

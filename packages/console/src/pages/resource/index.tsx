@@ -6,6 +6,7 @@ import FInput from '@/components/FInput';
 import FButton from '@/components/FButton';
 import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
+import FResourceCard from '@/components/FResourceCard';
 
 const {TabPane} = Tabs;
 
@@ -52,6 +53,28 @@ export default function () {
           <FInput theme="dark" className={styles.FInput}/>
           <FButton type="primary">创建资源</FButton>
         </div>
+      </div>
+
+      <div className={styles.Content}>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard className={styles.FResourceCard}/>
+        <div style={{width: 280}}/>
+        <div style={{width: 280}}/>
+        <div style={{width: 280}}/>
+        <div style={{width: 280}}/>
+        <div style={{width: 280}}/>
+        <div style={{width: 280}}/>
       </div>
     </FLayout>
   );
