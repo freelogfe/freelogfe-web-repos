@@ -24,6 +24,7 @@ body {
 
     &:hover {
       border-color: #2784FF;
+
       a {
         color: #666;
       }
@@ -34,8 +35,19 @@ body {
 
       a {
         color: #fff;
+        //background-color: inherit;
       }
     }
   }
 }
 
+.ant-select-dropdown {
+  //.ant-select-dropdown-placement-topLeft
+  //background: #FFFFFF;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
+  //border-radius: 4px;
+
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    color: #fff;
+  }
+}

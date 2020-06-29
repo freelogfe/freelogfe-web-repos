@@ -91,6 +91,9 @@ const config: IConfig = {
     'pagination-item-size': '32px',
     // 'agination-item-size-sm': '32px',
     'pagination-item-bg-active': '#2784FF',
+    'select-item-selected-font-weight': 400,
+    'select-item-selected-bg': 'inherit',
+    'select-item-active-bg': '#2784FF',
   },
 };
 

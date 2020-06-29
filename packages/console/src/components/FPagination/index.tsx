@@ -14,7 +14,7 @@ export default function ({className}: any) {
         // onChange={handleChange}
       >
         <Option value={10}>10条/页</Option>
-        <Option value={20}>20条/页</Option>
+        <Option disabled={true} value={20}>20条/页</Option>
         <Option value={30}>30条/页</Option>
         <Option value={40}>40条/页</Option>
         <Option value={50}>50条/页</Option>
