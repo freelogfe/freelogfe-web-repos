@@ -8,8 +8,8 @@ import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
-
-const {TabPane} = Tabs;
+import FAffixTabs from '@/components/FAffixTabs';
+import stringMatching = jasmine.stringMatching;
 
 const types = [{
   children: '全部',
@@ -19,20 +19,21 @@ const types = [{
   id: 2,
 }];
 
+const navs = [
+  {
+    id: 1,
+    text: '我的资源',
+  },
+  {
+    id: 2,
+    text: '我的收藏',
+  },
+];
+
 export default function () {
   return (
     <FLayout>
-      <Affix offsetTop={0}>
-        <Tabs
-          defaultActiveKey="1"
-          size="large"
-          className={styles.Tabs}
-          // onChange={callback}
-        >
-          <TabPane tab="我的资源" key="1"/>
-          <TabPane tab="我的收藏" key="2"/>
-        </Tabs>
-      </Affix>
+      <FAffixTabs tabs={navs}/>
 
       <div className={styles.filter}>
         <div className={styles.filterLeft}>
