@@ -58,19 +58,19 @@ export default function () {
       </div>
 
       <div className={styles.Content}>
-        <FResourceCard isFavorite={true} className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
+        <FResourceCard type="resource" className={styles.FResourceCard}/>
+        <FResourceCard type="resource" className={styles.FResourceCard}/>
+        <FResourceCard type="resource" className={styles.FResourceCard}/>
+        <FResourceCard type="resource" className={styles.FResourceCard}/>
+        <FResourceCard type="resource" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard type="favorite" className={styles.FResourceCard}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
