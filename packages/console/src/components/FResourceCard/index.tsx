@@ -23,7 +23,7 @@ export default function ({className}: any) {
           </div>
         </nav>
 
-        <Status className={styles.Status}/>
+        <Status normal={true} className={styles.Status}/>
       </div>
 
       <div className={styles.Meta}>
