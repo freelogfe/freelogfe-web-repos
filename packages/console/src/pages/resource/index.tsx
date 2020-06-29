@@ -57,6 +57,7 @@ export default function () {
       </div>
 
       <div className={styles.Content}>
+        <FResourceCard isFavorite={true} className={styles.FResourceCard}/>
         <FResourceCard className={styles.FResourceCard}/>
         <FResourceCard className={styles.FResourceCard}/>
         <FResourceCard className={styles.FResourceCard}/>
@@ -69,13 +70,10 @@ export default function () {
         <FResourceCard className={styles.FResourceCard}/>
         <FResourceCard className={styles.FResourceCard}/>
         <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <div style={{width: 280}}/>
-        <div style={{width: 280}}/>
-        <div style={{width: 280}}/>
-        <div style={{width: 280}}/>
-        <div style={{width: 280}}/>
-        <div style={{width: 280}}/>
+        <div className={styles.bottomPadding}/>
+        <div className={styles.bottomPadding}/>
+        <div className={styles.bottomPadding}/>
+        <div className={styles.bottomPadding}/>
       </div>
       <div style={{height: 10}}/>
       <FPagination className={styles.FPagination}/>

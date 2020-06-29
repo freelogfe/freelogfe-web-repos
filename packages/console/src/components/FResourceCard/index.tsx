@@ -6,7 +6,12 @@ import {FContent} from '@/components/FText';
 
 import styles from './index.less';
 
-export default function ({className}: any) {
+interface Interface {
+  isFavorite?: boolean;
+  className?: string;
+}
+
+export default function ({className = '', isFavorite = false}: Interface) {
   return (
     <div className={styles.FResourceCard + ' ' + className}>
       <div className={styles.Cover}>
@@ -15,11 +20,21 @@ export default function ({className}: any) {
 
         <nav className={styles.CoverMask}>
           <div className={styles.CoverMaskNav}>
-            <a href="#">资源详情</a>
-            <Divider className={styles.Divider} type="vertical"/>
-            <a href="#">编辑</a>
-            <Divider className={styles.Divider} type="vertical"/>
-            <a href="#">更新版本</a>
+            {
+              isFavorite
+                ? (
+                  <a href="#">取消收藏</a>
+                )
+                : (
+                  <>
+                    <a href="#">资源详情</a>
+                    <Divider className={styles.Divider} type="vertical"/>
+                    <a href="#">编辑</a>
+                    <Divider className={styles.Divider} type="vertical"/>
+                    <a href="#">更新版本</a>
+                  </>
+                )
+            }
           </div>
         </nav>
 

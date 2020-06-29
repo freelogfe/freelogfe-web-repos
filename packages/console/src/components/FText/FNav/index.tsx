@@ -3,10 +3,11 @@ import styles from './index.less';
 
 interface FNavProps {
   text: string;
-  type?: 'normal' | 'active';
+  // type?: 'normal' | 'active';
+  className?: string;
 }
 
 // TODO:
-export default function ({text, type = 'normal'}: FNavProps) {
-  return (<div className={styles.text + ' ' + styles[type]}>{text}</div>);
+export default function ({text, className}: FNavProps) {
+  return (<a className={styles.text + ' ' + className}>{text}</a>);
 }
