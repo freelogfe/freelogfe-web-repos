@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 import {Layout, Dropdown} from 'antd';
+import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {PlusOutlined} from '@ant-design/icons';
@@ -30,6 +31,14 @@ const create = [
     id: 2
   },
 ];
+
+const types = [{
+  id: 1,
+  children: '中文'
+}, {
+  id: 2,
+  children: 'English'
+}];
 
 interface FLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -79,8 +88,19 @@ export default function ({children}: FLayoutProps) {
       <Content className={styles.Content}>
         <div>{children}</div>
       </Content>
-      {/*<Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>*/
-      }
+      <Footer className={styles.Footer}>
+        <div>
+          <div>关于freelog</div>
+          <div style={{width: 30}}/>
+          <Dropdown overlay={<FMenu dataSource={types}/>}>
+            <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
+          </Dropdown>
+          <div style={{width: 120}}/>
+          <span>粤ICP备17085716号-1</span>
+          <div style={{width: 30}}/>
+          <span>Copyright© 2020 freelog freelog.com版权所有</span>
+        </div>
+      </Footer>
     </Layout>
   );
 }
