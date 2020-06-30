@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FLayout from '@/layouts/FLayout';
-import {Tabs, Affix, Dropdown} from 'antd';
+import {Dropdown} from 'antd';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FButton from '@/components/FButton';
@@ -9,7 +9,6 @@ import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import FAffixTabs from '@/components/FAffixTabs';
-import stringMatching = jasmine.stringMatching;
 
 const types = [{
   children: '全部',

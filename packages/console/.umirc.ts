@@ -4,15 +4,22 @@ import {IConfig} from 'umi-types';
 const config: IConfig = {
   treeShaking: true,
   routes: [
+    // {
+    // path: '/',
+    // component: '../layouts/index',
+    // routes: [
+    {exact: true, path: '/', component: '../pages/index'},
+    {exact: true, path: '/ui-example', component: '../pages/ui-example'},
     {
-      path: '/',
-      // component: '../layouts/index',
+      path: '/resource',
+      // exact: true,
       routes: [
-        {exact: true, path: '/', component: '../pages/index'},
-        {exact: true, path: '/ui-example', component: '../pages/ui-example'},
-        {exact: true, path: '/resource', component: '../pages/resource'},
+        {exact: true, path: '.', component: '../pages/resource'},
+        {exact: true, path: 'creator', component: '../pages/resource/creator'},
       ]
-    }
+    },
+    // ]
+    // }
   ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
