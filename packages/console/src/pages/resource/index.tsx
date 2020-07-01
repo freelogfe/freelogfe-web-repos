@@ -77,7 +77,6 @@ export default function () {
       </div>
       <div style={{height: 10}}/>
       <FPagination className={styles.FPagination}/>
-      <div style={{height: 100}}/>
     </FLayout>
   );
 }

@@ -62,7 +62,7 @@ export default function () {
         <Button className={styles.loadMore}>加载更多</Button>
       </div>
 
-      <div style={{height: 200}}/>
+      <div style={{height: 100}}/>
     </FLayout>
   );
 }

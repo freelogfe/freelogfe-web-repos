@@ -75,6 +75,5 @@ export default function () {
         <LabelEditor/>
       </FEditorCard>
     </div>
-    <div style={{height: 100}}/>
   </FLayout>);
 }

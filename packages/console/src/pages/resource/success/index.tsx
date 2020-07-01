@@ -16,6 +16,5 @@ export default function () {
       <div style={{height: 20}}/>
       <FNormalButton>为资源创建第一个版本</FNormalButton>
     </div>
-    <div style={{height: 100}}/>
   </FLayout>)
 }

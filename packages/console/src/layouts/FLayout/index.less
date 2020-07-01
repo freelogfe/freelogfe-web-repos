@@ -120,5 +120,50 @@
     }
   }
 
+}
 
+.leftRight {
+  display: flex;
+  align-items: stretch;
+}
+
+.Slider {
+  background-color: transparent;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+
+  & > div:first-child {
+    height: 40px;
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  & > div:last-child {
+    //border-right: 1px solid #E4E7EB;
+    border-right: 1px solid red;
+    flex-shrink: 1;
+    height: 100%;
+    width: 100%;
+    background-color: #44C28C;
+  }
+}
+
+.rightContent {
+  width: 100%;
+  padding: 0 40px;
+  display: flex;
+  justify-content: center;
+  min-height: 600px;
+  //align-self: center;
+  flex-shrink: 1;
+
+  & > div {
+    min-width: 980px;
+    max-width: 1400px;
+    width: 100%;
+
+    background-color: #AED0FF;
+  }
 }

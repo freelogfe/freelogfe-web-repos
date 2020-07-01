@@ -33,7 +33,7 @@ export default function ({theme = 'normal', ...props}: FNormalButtonProps) {
       {...props}
     />);
   }
-  
+
   return (<Button
     type="primary"
     {...props}

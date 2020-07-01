@@ -17,6 +17,7 @@ const config: IConfig = {
         {exact: true, path: '.', component: '../pages/resource'},
         {exact: true, path: 'creator', component: '../pages/resource/creator'},
         {exact: true, path: 'success', component: '../pages/resource/success'},
+        {exact: true, path: 'version', component: '../pages/resource/version'},
       ]
     },
     // ]
