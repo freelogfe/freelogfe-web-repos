@@ -11,10 +11,11 @@ import {
   getPresentableData,
   batchGetPresentablesParams,
   batchGetPresentables,
-  getUserNodeDate,
-  setUserNodeDate,
+  getUserNodeData,
+  setUserNodeData,
   getPresnetableSubDependData,
   getPresnetableSubDependInfo,
+  requireResource,
   requireSubDepend,
 } from './api'
 
@@ -38,10 +39,11 @@ export interface IFreelogQuery {
   getPresentableAuth(presentableId: string): Promise <any>
   getPresentableData(presentableId: string): Promise <Response>
   batchGetPresentables(params: batchGetPresentablesParams): Promise <any>
-  getUserNodeDate(params: {fields: string;}): Promise<object>;
-  setUserNodeDate(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>;
-  getPresnetableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise <Response>
-  getPresnetableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise <any>
+  getUserNodeData(params: {fields: string;}): Promise<object>
+  setUserNodeData(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>
+  getPresentableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise <Response>
+  getPresentableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise <any>
+  requireResource(presentableId: string): Promise<any>
   requireSubDepend(presentableId: string, subDependId: string, entityNid: string): Promise <any>
 }
 
@@ -72,14 +74,15 @@ export default function initQI(): IFreelogQuery {
     resolveSubDependInfoUrl,
     resolvePresentableDataUrl,
     pagingGetPresentables,
-    getUserNodeDate,
-    setUserNodeDate,
+    getUserNodeData,
+    setUserNodeData,
     getPresentable,
     getPresentableAuth,
     getPresentableData,
     batchGetPresentables,
     getPresnetableSubDependData,
     getPresnetableSubDependInfo,
+    requireResource,
     requireSubDepend,
     getUserInfo,
   }

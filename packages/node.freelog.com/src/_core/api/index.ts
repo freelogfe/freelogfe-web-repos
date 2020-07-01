@@ -1,6 +1,6 @@
 import createQIFetch, { qiFetchFn } from '../qi-fetch/index'
 import { getQIoringin, getNodeType } from '../initEnv'
-import { resolveSubDependDataUrl, resolveSubDependInfoUrl } from './resolveUrl'
+import { resolveSubDependDataUrl, resolveSubDependInfoUrl, resolvePresentableDataUrl } from './resolveUrl'
 import { injectCodeResource } from '../helpers'
 
 const HEADERS_FREELOG_SUB_DEPENDENCIES = 'freelog-sub-dependencies'
@@ -15,14 +15,14 @@ const _fetch: qiFetchFn = createQIFetch({
   data: { nodeId, nodeType }
 });
 
-export async function getUserNodeDate({fields= ''}: {fields: string;} = {fields: ''}): Promise<object> {
+export async function getUserNodeData({fields= ''}: {fields: string;} = {fields: ''}): Promise<object> {
   if (!fields) {
     return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick`, {});
   }
   return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick?fields=${fields}`, {});
 }
 
-export async function setUserNodeDate({removeFields = [],appendOrReplaceObject= {}}: {removeFields?: string[]; appendOrReplaceObject?: object;}) {
+export async function setUserNodeData({removeFields = [],appendOrReplaceObject= {}}: {removeFields?: string[]; appendOrReplaceObject?: object;}) {
   // return {
   //   backgroundColor: color,
   // };
@@ -58,7 +58,7 @@ export async function pagingGetPresentables(params: pagingGetPresentablesParams 
         res.data.dataList = res.data.dataList.map((p: plainObject) => {
           const authResult = p.authResult
           const fSubDependencies = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
-          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          p.authResult.subDependencies = resolveSubDependencies(fSubDependencies)
           return p
         })
       }
@@ -85,7 +85,7 @@ export async function getPresentableAuth(presentableId: string): Promise<any> {
     .then(res => {
       if(res.errcode === 0 && res.data) {
         const fSubReleases: string = res.data[HEADERS_FREELOG_SUB_DEPENDENCIES]
-        res.data.subReleases = resolveSubDependencies(fSubReleases)
+        res.data.subDependencies = resolveSubDependencies(fSubReleases)
       }
       return res
     })
@@ -134,7 +134,7 @@ export async function batchGetPresentables(params?: batchGetPresentablesParams):
         res.data.dataList = res.data.dataList.map((p: plainObject) => {
           const authResult = p.authResult
           const fSubDependencies: string = authResult[HEADERS_FREELOG_SUB_DEPENDENCIES]
-          p.authResult.subReleases = resolveSubDependencies(fSubDependencies)
+          p.authResult.subDependencies = resolveSubDependencies(fSubDependencies)
           return p
         })
       }
@@ -158,18 +158,26 @@ export async function getPresnetableSubDependInfo(presentableId: string, subDepe
   return _fetch(url).then(resp => resp.json())
 }
 
+export async function requireResource(presentableId: string): Promise<any> {
+  const url: string = resolvePresentableDataUrl(presentableId)
+  return loadResource(url)
+}
+
 export async function requireSubDepend(presentableId: string, subDependId: string, entityNid: string): Promise<any> {
   const url: string = resolveSubDependDataUrl(presentableId, subDependId, entityNid)
+  return loadResource(url)
+}
+
+async function loadResource(url: string): Promise<any> {
   var type: string
-  return _fetch(url)
-    .then(resp => {
-      const contentType: string = resp.headers.get('content-type')
-      if (/css/.test(contentType)) {
-        type = 'text/css'
-      } else if (/javascript/.test(contentType)) {
-        type = 'text/javascript'
-      }
-      return resp.text()
-    })
-    .then(data => injectCodeResource(data, type))
+  const response = await _fetch(url)
+  const contentType: string = response.headers.get('content-type')
+  if (/css/.test(contentType)) {
+    type = 'text/css'
+  }
+  else if (/javascript/.test(contentType)) {
+    type = 'text/javascript'
+  }
+  const data = response.text()
+  await injectCodeResource(data, type)
 }
