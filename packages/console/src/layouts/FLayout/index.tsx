@@ -5,7 +5,7 @@ import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {PlusOutlined} from '@ant-design/icons';
-import FButton from '@/components/FButton';
+import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 
 const {Header, Content, Footer} = Layout;
@@ -71,10 +71,7 @@ export default function ({children}: FLayoutProps) {
 
           <Dropdown overlay={<FMenu dataSource={create}/>}>
             <a className={styles.create}>
-              <FButton
-                type="primary"
-                shape="circle"
-                icon={<PlusOutlined/>}
+              <FCircleButton
                 // disabled={true}
               />
             </a>

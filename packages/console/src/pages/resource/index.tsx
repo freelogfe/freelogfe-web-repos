@@ -3,7 +3,7 @@ import FLayout from '@/layouts/FLayout';
 import {Dropdown} from 'antd';
 import styles from './index.less';
 import FInput from '@/components/FInput';
-import FButton from '@/components/FButton';
+import {FNormalButton} from '@/components/FButton';
 import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
@@ -52,7 +52,7 @@ export default function () {
         </div>
         <div className={styles.filterRight}>
           <FInput theme="dark" className={styles.FInput}/>
-          <FButton type="primary">创建资源</FButton>
+          <FNormalButton type="primary">创建资源</FNormalButton>
         </div>
       </div>
 

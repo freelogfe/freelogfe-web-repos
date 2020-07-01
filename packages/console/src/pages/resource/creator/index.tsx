@@ -6,7 +6,8 @@ import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import FUploadImage from '@/components/FUploadImage';
-import {Input} from 'antd';
+import {Input, Button} from 'antd';
+import {PlusOutlined} from '@ant-design/icons';
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 
@@ -52,10 +53,16 @@ export default function () {
 
       <FEditorCard title={'资源封面'}>
         <div className={styles.cover}>
-          <FUploadImage/>
+          <FUploadImage>
+            <a className={styles.FUploadImageChildren}>
+              <div>
+                <Button type="primary" shape="circle" icon={<PlusOutlined/>}/>
+              </div>
+            </a>
+          </FUploadImage>
           <div className={styles.coverTip}>
-              <FContent type="additional2" text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；'}/>
-              <FContent type="additional2" text={'未上传封面时，默认使用系统封面。'}/>
+            <FContent type="additional2" text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；'}/>
+            <FContent type="additional2" text={'未上传封面时，默认使用系统封面。'}/>
           </div>
         </div>
       </FEditorCard>
