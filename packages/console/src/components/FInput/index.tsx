@@ -11,7 +11,8 @@ interface FInputProps extends InputProps {
 export default function ({theme = 'light', className = '', ...props}: FInputProps) {
   if (theme === 'dark') {
     return (<Input
-      prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
+      // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
+      prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
       className={[styles.Input, theme === 'dark' ? styles.dark : '', className].join(' ')}
       {...props}
     />)

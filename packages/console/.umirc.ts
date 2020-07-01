@@ -16,6 +16,7 @@ const config: IConfig = {
       routes: [
         {exact: true, path: '.', component: '../pages/resource'},
         {exact: true, path: 'creator', component: '../pages/resource/creator'},
+        {exact: true, path: 'success', component: '../pages/resource/success'},
       ]
     },
     // ]
@@ -44,7 +45,7 @@ const config: IConfig = {
       },
     }],
   ],
-  'theme': {
+  theme: {
     'primary-color': '#2784FF',
     'height-lg': '50px',
     'height-base': '38px',

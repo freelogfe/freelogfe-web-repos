@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Divider, Tag} from 'antd';
 import Status from './Status';
 import Policy from './Policy';
-import {FContent} from '@/components/FText';
+import {FContentText} from '@/components/FText';
 
 import styles from './index.less';
 
@@ -48,11 +48,11 @@ export default function ({className = '', type = 'market'}: Interface) {
 
       <div className={styles.Meta}>
         <div style={{height: '12px'}}/>
-        <FContent text={'这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这'}/>
+        <FContentText text={'这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这'}/>
         <div style={{height: '6px'}}/>
         <div className={styles.MetaInfo}>
-          <FContent type="additional1" text={'image'}/>
-          <FContent type="additional1" text={'最新版本 1.0.10'}/>
+          <FContentText type="additional1" text={'image'}/>
+          <FContentText type="additional1" text={'最新版本 1.0.10'}/>
         </div>
         <div style={{height: '15px'}}/>
         <div className={styles.MetaFooter}>

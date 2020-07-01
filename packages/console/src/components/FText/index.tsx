@@ -1,9 +1,11 @@
-import FContent from './FContent';
-import FNav from './FNav';
-import FTitle from './FTitle';
+import FContentText from './FContentText';
+import FNavText from './FNavText';
+import FTitleText from './FTitleText';
+import FTipText from './FTipText';
 
 export {
-  FContent,
-  FNav,
-  FTitle,
+  FContentText,
+  FNavText,
+  FTitleText,
+  FTipText,
 };
