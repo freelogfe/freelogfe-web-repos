@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
+import shared from '../shared.less';
 
 interface FTitleProps {
   text: string;
@@ -8,7 +9,7 @@ interface FTitleProps {
 }
 
 export default function ({text, type = 'h1', singleRow = false}: FTitleProps) {
-  const singleRowClassName = singleRow ? styles.singleRow : '';
+  const singleRowClassName = singleRow ? shared.singleRow : '';
   const finalClassName = [singleRowClassName, styles[type], styles.text].join(' ');
   switch (type) {
     case 'h1':
