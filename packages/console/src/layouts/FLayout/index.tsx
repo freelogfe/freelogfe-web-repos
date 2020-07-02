@@ -44,6 +44,14 @@ interface FLayoutProps {
 }
 
 export default function ({children, sider, structure = 'center'}: FLayoutProps) {
+
+  const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
+
+  React.useEffect(() => {
+    window.onresize = () => {
+      setFooterOffsetTop(window.innerHeight - 68);
+    }
+  }, []);
   return (
     <Layout className={styles.Layout}>
       <Layout.Header className={styles.header}>
@@ -104,7 +112,7 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
       <div style={{height: 100}}/>
 
       {/* window.onresize */}
-      <Affix offsetTop={window.innerHeight - 68}>
+      <Affix offsetTop={footerOffsetTop}>
         <Layout.Footer className={styles.Footer}>
           <div>
             <div>关于freelog</div>
