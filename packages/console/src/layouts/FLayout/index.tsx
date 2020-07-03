@@ -112,21 +112,24 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
       <div style={{height: 100}}/>
 
       {/* window.onresize */}
-      <Affix offsetTop={footerOffsetTop}>
-        <Layout.Footer className={styles.Footer}>
-          <div>
-            <div>关于freelog</div>
-            <div style={{width: 30}}/>
-            <Dropdown overlay={<FMenu dataSource={types}/>}>
-              <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
-            </Dropdown>
-            <div style={{width: 120}}/>
-            <span>粤ICP备17085716号-1</span>
-            <div style={{width: 30}}/>
-            <span>Copyright© 2020 freelog freelog.com版权所有</span>
-          </div>
-        </Layout.Footer>
-      </Affix>
+      {
+        !sider && (<Affix offsetTop={footerOffsetTop}>
+          <Layout.Footer className={styles.Footer}>
+            <div>
+              <div>关于freelog</div>
+              <div style={{width: 30}}/>
+              <Dropdown overlay={<FMenu dataSource={types}/>}>
+                <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
+              </Dropdown>
+              <div style={{width: 120}}/>
+              <span>粤ICP备17085716号-1</span>
+              <div style={{width: 30}}/>
+              <span>Copyright© 2020 freelog freelog.com版权所有</span>
+            </div>
+          </Layout.Footer>
+        </Affix>)
+      }
+
     </Layout>
   );
 }

@@ -15,8 +15,15 @@ const config: IConfig = {
       // exact: true,
       routes: [
         {exact: true, path: '.', component: '../pages/resource'},
-        {exact: true, path: 'creator', component: '../pages/resource/creator'},
-        {exact: true, path: 'success', component: '../pages/resource/success'},
+        {
+          path: 'creator',
+          routes: [
+            {exact: true, path: '.', component: '../pages/resource/creator'},
+            {exact: true, path: 'success', component: '../pages/resource/creator/success'},
+          ]
+        },
+        {exact: true, path: 'info', component: '../pages/resource/info'},
+        {exact: true, path: 'auth', component: '../pages/resource/auth'},
         {exact: true, path: 'version', component: '../pages/resource/version'},
       ]
     },
