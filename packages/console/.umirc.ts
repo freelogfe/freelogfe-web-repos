@@ -24,7 +24,13 @@ const config: IConfig = {
         },
         {exact: true, path: 'info', component: '../pages/resource/info'},
         {exact: true, path: 'auth', component: '../pages/resource/auth'},
-        {exact: true, path: 'version', component: '../pages/resource/version'},
+        {
+          path: 'version',
+          routes: [
+            {exact: true, path: '.', component: '../pages/resource/version'},
+            {exact: true, path: 'success', component: '../pages/resource/version/success'},
+          ]
+        },
       ]
     },
     // ]
