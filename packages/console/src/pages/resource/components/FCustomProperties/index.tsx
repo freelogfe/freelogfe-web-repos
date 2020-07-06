@@ -18,9 +18,6 @@ interface FCustomPropertiesProps {
 export default function ({stubborn = false}: FCustomPropertiesProps) {
   return (<div>
     <Property data={{}}/>
-    <Property data={{}}/>
-    <Property data={{}}/>
-    <Property data={{}}/>
   </div>);
 }
 
