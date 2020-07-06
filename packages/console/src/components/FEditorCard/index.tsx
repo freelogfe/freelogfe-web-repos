@@ -3,7 +3,7 @@ import {FTitleText} from '@/components/FText';
 import styles from './index.less';
 
 interface FEditorCardProps {
-  children?: React.ReactNode;
+  children?: React.ReactNode | React.ReactNodeArray;
   title: string;
   dot?: boolean;
 }

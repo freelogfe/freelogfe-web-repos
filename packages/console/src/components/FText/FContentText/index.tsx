@@ -6,10 +6,12 @@ interface FContentProps {
   text: string;
   type?: 'normal' | 'highlight' | 'negative' | 'additional1' | 'additional2';
   singleRow?: boolean;
+  children?: React.ReactNode | React.ReactNodeArray;
+  className?: string;
 }
 
-export default function ({text, type = 'normal', singleRow = false}: FContentProps) {
+export default function ({className, children, text, type = 'normal', singleRow = false}: FContentProps) {
   return (
-    <div className={(singleRow && shared.singleRow) + ' ' + styles[type]}>{text}</div>
+    <div className={[(singleRow && shared.singleRow), styles[type], className].join(' ')}>{children || text}</div>
   );
 }
