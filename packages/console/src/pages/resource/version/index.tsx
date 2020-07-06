@@ -68,7 +68,7 @@ export default function () {
             <FContentText text={'从上一版本导入'}/>
           </Space>
         </Space>
-        <FCustomProperties/>
+        <FCustomProperties stubborn={true}/>
       </FEditorCard>
       <FEditorCard dot={false} title={'版本描述'}>
         <div className={styles.description}>
