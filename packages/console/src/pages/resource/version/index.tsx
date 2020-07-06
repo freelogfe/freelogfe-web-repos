@@ -30,7 +30,8 @@ export default function () {
           true && (<div className={styles.object}>
             {/*<div className={styles.objectErrorInfo}>所选文件格式和资源类型不匹配，请重新选择。</div>*/}
             {/*<div className={styles.objectErrorInfo}>文件大小不能超过50MB，请重新选择。</div>*/}
-            <div className={styles.objectErrorInfo}>该资源已存在，不能重复创建，请重新选择。&nbsp;&nbsp;<FTextButton theme="primary">查看</FTextButton></div>
+            <div className={styles.objectErrorInfo}>该资源已存在，不能重复创建，请重新选择。&nbsp;&nbsp;<FTextButton
+              theme="primary">查看</FTextButton></div>
 
             <Space size={30}>
               <FNormalButton theme={'weaken'}>从存储空间选择</FNormalButton>
@@ -73,7 +74,7 @@ export default function () {
       <FEditorCard dot={false} title={'版本描述'}>
         <div className={styles.description}>
           <BraftEditor
-            controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link']}
+            controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}
             // value={editorState}
             // onChange={this.handleEditorChange}
             // onSave={this.submitContent}
