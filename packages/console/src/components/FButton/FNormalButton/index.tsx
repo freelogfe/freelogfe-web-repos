@@ -17,7 +17,7 @@ export default function ({theme = 'normal', ...props}: FNormalButtonProps) {
   // }
 
   return (<Button
-    className={sharedStyles[theme]}
+    className={styles.Button + ' ' + styles[theme]}
     type="primary"
     {...props}
   />);

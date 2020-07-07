@@ -4,19 +4,20 @@ import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import {FContentText, FTitleText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
-import {FTextButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
-import {FNormalButton, FCircleButton} from '@/components/FButton';
+import {FNormalButton, FCircleButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
-import {CopyOutlined, LoadingOutlined} from '@ant-design/icons';
+import {CopyOutlined, LoadingOutlined, ExclamationCircleFilled} from '@ant-design/icons';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
 import FObjectCard from '@/pages/resource/components/FObjectCard';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
+import FDepPanel from '@/pages/resource/components/FDepPanel';
 
 
 export default function () {
+
   return (<FInfoLayout>
     <div style={{height: 36}}/>
     <FTitleText text={'创建版本'} type={'h2'}/>
@@ -51,12 +52,26 @@ export default function () {
             <FCircleButton theme="weaken"/>
             <FContentText text={'添加'}/>
           </Space>
-          {true && <Space size={10}>
+          <Space size={10}>
             <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
             <FContentText text={'从上一版本导入'}/>
-          </Space>}
-
+          </Space>
         </Space>
+
+        <div className={styles.depUpthrow}>
+          <FTitleText text={'基础上抛'} type="form"/>
+          <ExclamationCircleFilled style={{color: '#C7C7C7', marginLeft: 5}}/>
+          <div className={styles.depUpthrowLabel}>
+            <label>ww-zh/PB-markdown</label>
+            <label>ww-zh/PB-markdown</label>
+            <label>ww-zh/PB-markdown</label>
+          </div>
+        </div>
+
+        <>
+          <div style={{height: 20}}/>
+          <FDepPanel/>
+        </>
       </FEditorCard>
       <FEditorCard dot={false} title={'自定义属性'}>
         <Space size={80}>

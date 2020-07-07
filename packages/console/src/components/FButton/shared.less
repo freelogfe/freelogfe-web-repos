@@ -1,20 +1,9 @@
-.Button {
-  line-height: 26px;
-  width: 26px;
-  height: 26px;
-  min-width: 0;
-  padding: 0;
-  display: block;
-  flex-shrink: 0;
-}
-
 .weaken {
-  color: #2784FF;
-  background-color: #EEF6FF;
   border: none;
 
-  &:after {
-    display: none;
+  &, &:focus {
+    color: #2784FF;
+    background-color: #EEF6FF;
   }
 
   &:hover {
@@ -27,18 +16,12 @@
     background-color: #E4F0FF;
   }
 
-  &:focus {
-    color: #2784FF;
-    background-color: #EEF6FF;
-  }
 
   &[disabled] {
-    color: #A9CEFF;
-    background-color: #F1F8FF;
-
-    &:hover, &:active, &:focus {
+    &, &:hover, &:active, &:focus {
       color: #A9CEFF;
       background-color: #F1F8FF;
     }
   }
 }
+

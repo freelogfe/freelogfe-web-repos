@@ -3,7 +3,7 @@ import styles from './index.less';
 import shared from '../shared.less';
 
 interface FContentProps {
-  text: string;
+  text?: string;
   type?: 'normal' | 'highlight' | 'negative' | 'additional1' | 'additional2';
   singleRow?: boolean;
   children?: React.ReactNode | React.ReactNodeArray;
