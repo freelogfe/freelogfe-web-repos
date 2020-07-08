@@ -8,18 +8,21 @@ import FEditorCard from '@/components/FEditorCard';
 import {FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
+import FBraftEditor from '@/components/FBraftEditor';
+import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 
 export default function () {
   return (<FInfoLayout>
     <FContentLayout header={<Header/>}>
       <FEditorCard title={'版本描述'}>
-        版本描述
+        {false && <FBraftEditor/>}
+        {true && <div className={styles.description}></div>}
       </FEditorCard>
       <FEditorCard title={'相关视图'}>
-        相关视图
+        <div className={styles.diagram}/>
       </FEditorCard>
       <FEditorCard title={'自定义属性'}>
-        自定义属性
+        <FCustomProperties stubborn={true}/>
       </FEditorCard>
     </FContentLayout>
   </FInfoLayout>);

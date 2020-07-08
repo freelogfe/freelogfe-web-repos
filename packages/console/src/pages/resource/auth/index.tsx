@@ -5,12 +5,13 @@ import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {FTitleText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
+import FBraftEditor from '@/components/FBraftEditor';
 
 export default function () {
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={'授权信息'} type={'h2'}/>}>
       <FEditorCard title={'授权策略'}>
-        授权策略
+        <FBraftEditor/>
       </FEditorCard>
       <FEditorCard title={'被授权合约'}>
         被授权合约

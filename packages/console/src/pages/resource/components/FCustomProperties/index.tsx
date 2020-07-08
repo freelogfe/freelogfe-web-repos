@@ -17,8 +17,8 @@ interface FCustomPropertiesProps {
 }
 
 export default function ({stubborn = false}: FCustomPropertiesProps) {
-  return (<div>
-    <Property data={{}}/>
+  return (<div className={styles.styles}>
+    <Property stubborn={stubborn} data={{}}/>
   </div>);
 }
 
@@ -30,11 +30,11 @@ interface PropertyProps {
 
 function Property({stubborn = false, data}: PropertyProps) {
 
-  const [editing, setEditing] = React.useState<'' | 'value' | 'remark'>('');
+  const [editing, setEditing] = React.useState<'' | 'value' | 'remark'>('remark');
 
   return (<FHorn
     extra={stubborn || (<a className={styles.delete}>删除</a>)}
-    className={styles.styles}>
+    className={styles.FHorn}>
 
     <div className={styles.row}>
       <Field title={'key'} dot={true}>

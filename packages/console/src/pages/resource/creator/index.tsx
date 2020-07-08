@@ -5,10 +5,12 @@ import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
+import {FNormalButton, FTextButton} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
+import {Space} from 'antd';
 
 const resourceType = [
   {
@@ -23,10 +25,7 @@ const resourceType = [
 
 export default function () {
   return (<FLayout>
-    {/*<div style={{height: 36}}/>*/}
-    {/*<FTitleText text={'创建资源'} type={'h2'}/>*/}
-    {/*<div style={{height: 36}}/>*/}
-    <FContentLayout header={<FTitleText text={'创建资源'} type={'h2'}/>}>
+    <FContentLayout header={<Header/>}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>
@@ -58,4 +57,15 @@ export default function () {
       </div>
     </FContentLayout>
   </FLayout>);
+}
+
+function Header() {
+  return (<div className={styles.Header}>
+    <FTitleText text={'创建资源'} type={'h2'}/>
+
+    <Space size={30}>
+      <FTextButton>暂存草稿</FTextButton>
+      <FNormalButton style={{width: 108}}>创建</FNormalButton>
+    </Space>
+  </div>);
 }

@@ -6,13 +6,64 @@
 }
 
 .normal {
-  color: #666;
+  &, &:focus {
+    color: #666;
+  }
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #187AFC;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #CFCFCF;
+    }
+  }
 }
 
 .link {
-  color: #6555C0;
+  &, &:focus {
+    color: #6555C0;
+  }
+
+  &:hover {
+    color: #8172D8;
+  }
+
+  &:active {
+    color: #5644B7;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #C1BBE6;
+    }
+  }
 }
 
 .primary {
-  color: @f-primary-color;
+  &, &:focus {
+    color: @f-primary-color;
+  }
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #187AFC;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #A9CEFF;
+    }
+  }
 }

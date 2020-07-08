@@ -6,11 +6,11 @@ import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {FContentText, FTitleText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
+import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FCircleButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {CopyOutlined, LoadingOutlined, ExclamationCircleFilled} from '@ant-design/icons';
-import BraftEditor from 'braft-editor';
-import 'braft-editor/dist/index.css';
+
 import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
 import FObjectCard from '@/pages/resource/components/FObjectCard';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
@@ -82,17 +82,11 @@ export default function () {
             <FContentText text={'从上一版本导入'}/>
           </Space>
         </Space>
-        <FCustomProperties stubborn={true}/>
+        <div style={{height: 35}}/>
+        <FCustomProperties stubborn={false}/>
       </FEditorCard>
       <FEditorCard dot={false} title={'版本描述'}>
-        <div className={styles.description}>
-          <BraftEditor
-            controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}
-            // value={editorState}
-            // onChange={this.handleEditorChange}
-            // onSave={this.submitContent}
-          />
-        </div>
+        <FBraftEditor/>
       </FEditorCard>
 
       <FSelectObjectModal/>
