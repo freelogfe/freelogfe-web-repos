@@ -9,14 +9,12 @@ import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
+import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {FTextButton} from '@/components/FButton';
 
 export default function () {
   return (<FInfoLayout>
-    <div style={{height: 36}}/>
-    <FTitleText text={'资源信息'} type={'h2'}/>
-    <div style={{height: 36}}/>
-    <div className={styles.content}>
+    <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
       <FEditorCard title={'资源名称'}>
         <FContentText text={'ww-zh/freelog-waterfall-picture'}/>
       </FEditorCard>
@@ -47,6 +45,6 @@ export default function () {
       <FEditorCard title={'资源封面'}>
         <FLabelEditor/>
       </FEditorCard>
-    </div>
+    </FContentLayout>
   </FInfoLayout>)
 };
