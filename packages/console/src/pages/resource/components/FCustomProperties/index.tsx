@@ -5,6 +5,7 @@ import styles from './index.less';
 import {Space, Switch} from 'antd';
 import {EditOutlined} from '@ant-design/icons';
 import {FTextButton} from '@/components/FButton';
+import FHorn from '@/pages/resource/components/FHorn';
 
 interface data {
 
@@ -31,12 +32,9 @@ function Property({stubborn = false, data}: PropertyProps) {
 
   const [editing, setEditing] = React.useState<'' | 'value' | 'remark'>('');
 
-  return (<div className={styles.styles}>
-    {
-      stubborn || (<div className={styles.delete}>
-        <a>删除</a>
-      </div>)
-    }
+  return (<FHorn
+    extra={stubborn || (<a className={styles.delete}>删除</a>)}
+    className={styles.styles}>
 
     <div className={styles.row}>
       <Field title={'key'} dot={true}>
@@ -70,7 +68,7 @@ function Property({stubborn = false, data}: PropertyProps) {
         <FInput disabled={stubborn}/>
       </Field>
     </div>
-  </div>);
+  </FHorn>);
 }
 
 
@@ -84,13 +82,13 @@ interface FieldProps {
 
 function Field({status = 'normal', className, dot = false, title, children}: FieldProps) {
   return (<div className={styles.Field + ' ' + className}>
-    <div className={styles.FieldTitle}>
-      {dot && <i className={styles.dot}/>}
-      <span>{title}</span>
-    </div>
-    <div style={{height: 5}}/>
-    <div className={styles.FieldBody}>
-      <div className={styles.rightTop}>
+      <div className={styles.FieldTitle}>
+        {dot && <i className={styles.dot}/>}
+        <span>{title}</span>
+      </div>
+      <div style={{height: 5}}/>
+
+      <FHorn extra={<>
         {
           status === 'editable' && (
             <FTextButton className={styles.editable}>
@@ -102,9 +100,9 @@ function Field({status = 'normal', className, dot = false, title, children}: Fie
           status === 'editing' && (
             <Space size={10}><FTextButton>取消</FTextButton><FTextButton theme="primary">保存</FTextButton></Space>)
         }
-
-      </div>
-      {children}
+      </>}>
+        {children}
+      </FHorn>
     </div>
-  </div>);
+  );
 }

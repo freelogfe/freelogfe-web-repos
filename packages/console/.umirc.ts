@@ -29,6 +29,7 @@ const config: IConfig = {
           routes: [
             {exact: true, path: '.', component: '../pages/resource/version'},
             {exact: true, path: 'success', component: '../pages/resource/version/success'},
+            {exact: true, path: ':version', component: '../pages/resource/version/[version]'},
           ]
         },
       ]
