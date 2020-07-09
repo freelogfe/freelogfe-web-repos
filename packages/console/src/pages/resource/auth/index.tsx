@@ -6,7 +6,8 @@ import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FPolicies from '@/pages/resource/components/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
-import FDepPanel from "@/pages/resource/components/FDepPanel";
+import FDepPanel from '@/pages/resource/components/FDepPanel';
+import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
 
 const columns: any[] = [
@@ -79,26 +80,4 @@ export default function () {
       </FEditorCard>
     </FContentLayout>
   </FInfoLayout>);
-}
-
-interface StatusLabelProps {
-  status?: 'executing' | 'pending' | 'stopped';
-}
-
-function StatusLabel({status = 'executing'}: StatusLabelProps) {
-  let text = '';
-  switch (status) {
-    case "executing":
-      text = '执行中';
-      break;
-    case "pending":
-      text = '待执行';
-      break;
-    case "stopped":
-      text = '已终止';
-      break;
-    default:
-      text = '执行中';
-  }
-  return (<label className={styles[status]}>{text}</label>);
 }

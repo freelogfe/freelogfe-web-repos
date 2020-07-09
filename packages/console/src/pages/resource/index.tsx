@@ -45,7 +45,7 @@ export default function () {
           <div style={{marginLeft: 60}}>
             <span>类型：</span>
             <Dropdown overlay={<FMenu dataSource={types}/>}>
-              <span style={{cursor: 'pointer'}}>全部<DownOutlined style={{marginLeft: 8}}/></span>
+              <span style={{cursor: 'pointer'}}>全部<DownOutlined style={{marginLeft: 10}}/></span>
             </Dropdown>
           </div>
 
