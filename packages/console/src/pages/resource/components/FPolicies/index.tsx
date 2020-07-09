@@ -29,12 +29,12 @@ const code = 'for public:\n' +
 
 export default function () {
   return (<div className={styles.FPoliciesStyles}>
-    {false && <div className={styles.empty}>
+    {false && (<div className={styles.empty}>
       <FTipText type="secondary" text={'未添加策略的资源不会出现在资源市场中'}/>
       <div style={{height: 20}}/>
       <FNormalButton>立即添加策略</FNormalButton>
-    </div>}
-    <div className={styles.policies}>
+    </div>)}
+    {true && (<div className={styles.policies}>
       <PolicyCard/>
       <PolicyCard/>
       <PolicyCard/>
@@ -44,9 +44,10 @@ export default function () {
       <div>
         <FNormalButton theme="weaken" shape="circle" icon={<PlusOutlined/>}/>
       </div>
-    </div>
-    <FModal title="查看策略"
-            visible={false}
+    </div>)}
+    <FModal
+      title="查看策略"
+      visible={false}
       // onOk={this.handleOk}
       // onCancel={this.handleCancel}
     >
