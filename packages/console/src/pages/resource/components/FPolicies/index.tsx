@@ -17,7 +17,7 @@ const code = 'for public:\n' +
   '    active\n' +
   '    recontractable\n' +
   '    presentable\n' +
-  '    presentable\n' +
+  '    presentablepresentablepresentablepresentablepresentable\n' +
   '    presentable\n' +
   '    presentable\n' +
   '    presentable\n' +
