@@ -29,6 +29,14 @@ const navs = [
   },
 ];
 
+const resource = {
+  cover: '',
+  title: '这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这',
+  version: '1.0.10',
+  policy: ['免费1', '免费2', '免费3'],
+  type: 'image',
+};
+
 export default function () {
   return (
     <FLayout>
@@ -57,19 +65,8 @@ export default function () {
       </div>
 
       <div className={styles.Content}>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        <FResourceCard resource={resource} type="resource" className={styles.FResourceCard}/>
+        <FResourceCard resource={resource} type="resource" className={styles.FResourceCard}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>

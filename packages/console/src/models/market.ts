@@ -1,6 +1,6 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {Reducer} from './shared';
+import {DvaReducer} from './shared';
 
 export interface MarketModelState {
   dataSource: any[];
@@ -13,7 +13,7 @@ export interface MarketModelType {
     fetchDataSource: Effect;
   };
   reducers: {
-    changeDataSource: Reducer<MarketModelState, AnyAction>;
+    changeDataSource: DvaReducer<MarketModelState, AnyAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -23,7 +23,21 @@ const MarketModel: MarketModelType = {
   namespace: 'market',
 
   state: {
-    dataSource: [],
+    dataSource: [{
+      id: 1,
+      cover: '',
+      title: '这里是发行名称1',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
+    }, {
+      id: 2,
+      cover: '',
+      title: '这里是发行名称2',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
+    }],
   },
 
   effects: {

@@ -5,6 +5,8 @@ import {Button} from 'antd';
 import FAffixTabs from '@/components/FAffixTabs';
 import Finput from '@/components/Finput';
 import FResourceCard from "@/components/FResourceCard";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, MarketModelState} from "@/models/connect";
 
 const navs = [
   {
@@ -19,7 +21,12 @@ const navs = [
 
 const filters = ['全部类型', 'json', 'widget', 'image', 'audio', 'markdown', 'theme', 'reveal_slide', 'license', 'video', 'catalog'];
 
-export default function () {
+interface MarketProps {
+  dispatch: Dispatch;
+  market: MarketModelState,
+}
+
+function Market({dispatch, market}: MarketProps) {
   return (
     <FLayout>
       <FAffixTabs tabs={navs}/>
@@ -37,19 +44,10 @@ export default function () {
       <div style={{height: 30}}/>
 
       <div className={styles.Content}>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
-        <FResourceCard className={styles.FResourceCard}/>
+        {
+          market.dataSource.map((resource: any) => (<FResourceCard key={resource.id} resource={resource} className={styles.FResourceCard}/>))
+        }
+
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
@@ -66,3 +64,7 @@ export default function () {
     </FLayout>
   );
 }
+
+export default connect(({market}: ConnectState) => ({
+  market,
+}))(Market);
