@@ -48,7 +48,7 @@ export default function ({className = '', type = 'market'}: Interface) {
 
       <div className={styles.Meta}>
         <div style={{height: '12px'}}/>
-        <FContentText text={'这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这'}/>
+        <FContentText singleRow={true} text={'这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这'}/>
         <div style={{height: '6px'}}/>
         <div className={styles.MetaInfo}>
           <FContentText type="additional1" text={'image'}/>

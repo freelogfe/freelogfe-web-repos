@@ -1,6 +1,6 @@
-import {Subscription, Reducer, Effect} from 'umi';
 import {AnyAction} from 'redux';
-import {EffectsCommandMap, SubscriptionAPI} from 'dva';
+import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {Reducer} from './shared';
 
 export interface MarketModelState {
   dataSource: any[];
@@ -13,7 +13,7 @@ export interface MarketModelType {
     fetchDataSource: Effect;
   };
   reducers: {
-    changeDataSource: Reducer<MarketModelState>;
+    changeDataSource: Reducer<MarketModelState, AnyAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -33,7 +33,7 @@ const MarketModel: MarketModelType = {
   },
 
   reducers: {
-    changeDataSource(state: MarketModelState, action: AnyAction) {
+    changeDataSource(state: MarketModelState, action: AnyAction): MarketModelState {
       return {...state, ...action.payload};
     },
   },
