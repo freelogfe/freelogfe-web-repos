@@ -11,6 +11,9 @@ import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCov
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {Space} from 'antd';
+import {ResourceCreatorPageModelState} from "@/models/resourceCreatorPage";
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourcePageModelState} from "@/models/connect";
 
 const resourceType = [
   {
@@ -23,7 +26,12 @@ const resourceType = [
   },
 ];
 
-export default function () {
+interface ResourceCreatorProps {
+  dispatch: Dispatch;
+  resource: ResourceCreatorPageModelState;
+}
+
+function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
   return (<FLayout>
     <FContentLayout header={<Header/>}>
       <div className={styles.workspace}>
@@ -32,6 +40,7 @@ export default function () {
             <FContentText text={'yanghongtian /'}/>
             &nbsp;
             <FInput
+              value={resource.name}
               className={styles.FInput}
               placeholder={'输入资源名称'}
               suffix={<span className={styles.FInputWordCount}>40</span>}
@@ -69,3 +78,7 @@ function Header() {
     </Space>
   </div>);
 }
+
+export default connect(({resourceCreatorPage}: ConnectState) => ({
+  resource: resourceCreatorPage,
+}))(ResourceCreator);

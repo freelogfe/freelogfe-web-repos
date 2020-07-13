@@ -31,17 +31,9 @@ const navs = [
   },
 ];
 
-const resource = {
-  cover: '',
-  title: '这里是发行名称这里是发行名称这这里是发行名称这里是发行名称这',
-  version: '1.0.10',
-  policy: ['免费1', '免费2', '免费3'],
-  type: 'image',
-};
-
 interface ResourceProps {
   dispatch: Dispatch;
-  resource: ResourcePageModelState,
+  resource: ResourcePageModelState;
 }
 
 function Resource({dispatch, resource}: ResourceProps) {

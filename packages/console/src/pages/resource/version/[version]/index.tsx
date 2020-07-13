@@ -10,10 +10,22 @@ import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connect";
 
-export default function () {
+interface VersionEditorProps {
+  dispatch: Dispatch;
+  version: ResourceVersionEditorPageModelState,
+}
+
+function VersionEditor({dispatch, version}: VersionEditorProps) {
   return (<FInfoLayout>
-    <FContentLayout header={<Header/>}>
+    <FContentLayout
+      header={<Header
+        version={version.version}
+        signingDate={version.signingDate}
+        resourceID={version.resourceID}
+      />}>
       <FEditorCard title={'版本描述'}>
         {false && <FBraftEditor/>}
         {true && <div className={styles.description}></div>}
@@ -28,16 +40,30 @@ export default function () {
   </FInfoLayout>);
 }
 
-function Header() {
+interface HeaderProps {
+  version: string;
+  resourceID: string;
+  signingDate: string;
+}
+
+function Header({version, resourceID, signingDate}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={'10.15.4'} type="h2"/>
+    <FTitleText text={version} type="h2"/>
     <div style={{height: 10}}/>
-    <Space size={20}>
-      <Space size={40}>
-        <FContentText type="additional2" text={'合约ID：adhjtyrghgjhxdfthgasdhdflgkftr'}/>
-        <FContentText type="additional2" text={'签约时间：2019-10-10'}/>
-      </Space>
-      <FTextButton theme="primary"><DownloadOutlined style={{fontSize: 16, fontWeight: 600}}/></FTextButton>
+    <Space size={0}>
+      <FContentText type="additional2" text={'签约时间：' + signingDate}/>
+      <div style={{width: 40}}/>
+      <FContentText type="additional2" text={'资源ID：' + resourceID}/>
+      <div style={{width: 20}}/>
+      <FTextButton
+        theme="primary"
+      >
+        <DownloadOutlined style={{fontSize: 16, fontWeight: 600}}/>
+      </FTextButton>
     </Space>
   </div>);
 }
+
+export default connect(({resourceVersionEditorPage}: ConnectState) => ({
+  version: resourceVersionEditorPage,
+}))(VersionEditor);

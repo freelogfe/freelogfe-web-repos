@@ -15,14 +15,21 @@ import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
 import FObjectCard from '@/pages/resource/components/FObjectCard';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/components/FDepPanel';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourceVersionPageModelState} from "@/models/connect";
+
+interface VersionCreatorProps {
+  dispatch: Dispatch;
+  version: ResourceVersionPageModelState,
+}
 
 
-export default function () {
+function VersionCreator({dispatch, version}: VersionCreatorProps) {
 
   return (<FInfoLayout>
-    <FContentLayout header={<FTitleText text={'创建版本'} type={'h2'}/>}>
+    <FContentLayout header={<Header/>}>
       <FEditorCard dot={true} title={'版本号'}>
-        <FInput className={styles.versionInput}/>
+        <FInput value={version.version} className={styles.versionInput}/>
       </FEditorCard>
       <FEditorCard dot={true} title={'对象'}>
         {
@@ -93,3 +100,18 @@ export default function () {
     </FContentLayout>
   </FInfoLayout>);
 }
+
+function Header() {
+  return (<div className={styles.Header}>
+    <FTitleText text={'创建版本'} type={'h2'}/>
+
+    <Space size={30}>
+      <FTextButton>暂存草稿</FTextButton>
+      <FNormalButton style={{width: 108}}>创建</FNormalButton>
+    </Space>
+  </div>);
+}
+
+export default connect(({resourceVersionPage}: ConnectState) => ({
+  version: resourceVersionPage,
+}))(VersionCreator);

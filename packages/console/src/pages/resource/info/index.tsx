@@ -12,12 +12,19 @@ import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FTextButton} from '@/components/FButton';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceInfoPageModelState} from '@/models/connect';
 
-export default function () {
+interface InfoProps {
+  dispatch: Dispatch;
+  info: ResourceInfoPageModelState,
+}
+
+function Info({dispatch, info}: InfoProps) {
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
       <FEditorCard title={'资源名称'}>
-        <FContentText text={'ww-zh/freelog-waterfall-picture'}/>
+        <FContentText text={info.name}/>
       </FEditorCard>
       <FEditorCard title={'资源类型'}>
         <FContentText text={'image'}/>
@@ -49,3 +56,7 @@ export default function () {
     </FContentLayout>
   </FInfoLayout>)
 };
+
+export default connect(({resourceInfoPage}: ConnectState) => ({
+  info: resourceInfoPage,
+}))(Info);

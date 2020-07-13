@@ -6,7 +6,7 @@ export interface ResourcePageModelState {
   dataSource: any[];
 }
 
-export interface MarketModelType {
+export interface ResourcePageModelType {
   namespace: 'resourcePage';
   state: ResourcePageModelState;
   effects: {
@@ -18,7 +18,7 @@ export interface MarketModelType {
   subscriptions: { setup: Subscription };
 }
 
-const MarketModel: MarketModelType = {
+const Model: ResourcePageModelType = {
 
   namespace: 'resourcePage',
 
@@ -59,4 +59,4 @@ const MarketModel: MarketModelType = {
 
 };
 
-export default MarketModel;
+export default Model;

@@ -18,7 +18,7 @@ export interface MarketModelType {
   subscriptions: { setup: Subscription };
 }
 
-const MarketModel: MarketModelType = {
+const Model: MarketModelType = {
 
   namespace: 'marketPage',
 
@@ -59,4 +59,4 @@ const MarketModel: MarketModelType = {
 
 };
 
-export default MarketModel;
+export default Model;

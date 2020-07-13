@@ -9,15 +9,17 @@ import FEditorCard from '@/components/FEditorCard';
 import FDepPanel from '@/pages/resource/components/FDepPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourceAuthPageModelState, ResourcePageModelState} from "@/models/connect";
 
 const columns: any[] = [
   {
     title: '合约名称｜合约ID',
     dataIndex: 'name',
-    render: (text: any) => (<>
-      <FContentText text={'免费策略1'}/>
+    render: (_: any, record: any) => (<>
+      <FContentText text={record.contractName}/>
       <div style={{height: 2}}/>
-      <FContentText type="additional2" text={'asjfgjiergingnsdfshskh'}/>
+      <FContentText type="additional2" text={record.contractID}/>
     </>),
   },
   {
@@ -25,42 +27,26 @@ const columns: any[] = [
     // className: 'column-money',
     dataIndex: 'authorizedParties',
     // align: 'right',
-    render: () => (<FContentText text={'资源xxx'}/>)
+    render: (_: any, record: any) => (<FContentText text={record.authorizedParty}/>)
   },
   {
     title: '合约创建时间',
     dataIndex: 'createTime',
-    render: () => (<FContentText text={'2020-05-19'}/>)
+    render: (_: any, record: any) => (<FContentText text={record.createDate}/>)
   },
   {
     title: '合约状态',
     dataIndex: 'contractStatus',
-    render: () => (<StatusLabel status="executing"/>)
+    render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    money: '￥300,000.00',
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    money: '￥1,256,000.00',
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    money: '￥120,000.00',
-    address: 'Sidney No. 1 Lake Park',
-  },
-];
+interface AuthProps {
+  dispatch: Dispatch;
+  auth: ResourceAuthPageModelState,
+}
 
-export default function () {
+function Auth({dispatch, auth}: AuthProps) {
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={'授权信息'} type={'h2'}/>}>
       <FEditorCard title={'授权策略'}>
@@ -72,7 +58,7 @@ export default function () {
       <FEditorCard title={'授权合约'}>
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={auth.contractsAuthorize || []}
           bordered
           // title={() => 'Header'}
           // footer={() => 'Footer'}
@@ -81,3 +67,7 @@ export default function () {
     </FContentLayout>
   </FInfoLayout>);
 }
+
+export default connect(({resourceAuthPage}: ConnectState) => ({
+  auth: resourceAuthPage,
+}))(Auth);
