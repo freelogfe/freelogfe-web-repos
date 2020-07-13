@@ -7,6 +7,7 @@ import Finput from '@/components/Finput';
 import FResourceCard from "@/components/FResourceCard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from "@/models/connect";
+import {list} from "@/services/resource";
 
 const navs = [
   {
@@ -27,6 +28,11 @@ interface MarketProps {
 }
 
 function Market({dispatch, market}: MarketProps) {
+
+  React.useEffect(() => {
+    list({});
+  }, []);
+
   return (
     <FLayout>
       <FAffixTabs tabs={navs}/>

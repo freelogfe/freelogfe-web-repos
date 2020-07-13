@@ -1,6 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
+import {list} from "@/services/resource";
 
 export interface MarketPageModelState {
   dataSource: any[];
@@ -42,7 +43,9 @@ const Model: MarketModelType = {
 
   effects: {
     * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-      yield put({type: 'save'});
+      console.log('FFFFFFFFF');
+      yield call(list, {page: 1});
+      // yield put({type: 'save'});
     },
   },
 
@@ -54,6 +57,12 @@ const Model: MarketModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
+      history.listen((listener) => {
+        // console.log(listener, 'LLLLLLLLLLLL');
+        // if (listener.pathname === '/') {
+        //   dispatch({type: 'fetchDataSource'});
+        // }
+      });
     },
   },
 

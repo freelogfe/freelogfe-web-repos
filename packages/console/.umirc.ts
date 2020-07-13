@@ -127,6 +127,21 @@ const config: IConfig = {
     'alert-error-bg-color': '#FDEBEC',
 
   },
+  devServer: {
+    headers: {
+      // 'authorization': 'Bearer eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDI4LCJ1c2VybmFtZSI6IjEyMzQ1Njc2Nzg5IiwidXNlclR5cGUiOjEsIm1vYmlsZSI6IjE4NTY1Njg0MDkwIiwiZW1haWwiOiIiLCJpc3MiOiJodHRwczovL2lkZW50aXR5LmZyZWVsb2cuY29tIiwic3ViIjoiNTAwMjgiLCJhdWQiOiJmcmVlbG9nLXdlYnNpdGUiLCJleHAiOjE1OTU5MzEyOTksImlhdCI6MTU5NDYzNTI5OSwianRpIjoiNTdkODAxNGZiOGFhNGIwMWE4YjQ4NDVlZTFlOGNmMjMifQ==.0c0bd65d4a425826f2111f09fa3a6ccba3af2ffde8f7fc20fdca35f7054883804185147df0af69c3302e9365c61552b742a78be6adbcbe6d3a91af2b357f4a3815003ca147af2c406becb2deb7ffa79ce275e6598cff6f0bd2df897a9f439cce4f8da344e837c14b7503ee1085a69464e3ca824a972a14136de911119b461bec',
+      'Cookie': 'authInfo=eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDI4LCJ1c2VybmFtZSI6IjEyMzQ1Njc2Nzg5IiwidXNlclR5cGUiOjEsIm1vYmlsZSI6IjE4NTY1Njg0MDkwIiwiZW1haWwiOiIiLCJpc3MiOiJodHRwczovL2lkZW50aXR5LmZyZWVsb2cuY29tIiwic3ViIjoiNTAwMjgiLCJhdWQiOiJmcmVlbG9nLXdlYnNpdGUiLCJleHAiOjE1OTU5MzE0NzQsImlhdCI6MTU5NDYzNTQ3NCwianRpIjoiNTdkODAxNGZiOGFhNGIwMWE4YjQ4NDVlZTFlOGNmMjMifQ==.41815b1053e96eabaefced581209a55f891e62fb92975b9a14f49ebc830537fac8486a855affb2fbea9e282ffc4086b75d0ec61df9957df6f6b50d3b9f8d9d9b0fd5b1ba4c2f1fc470edfdee550fff035db7448afb22f94d829e22e895db58fd62346aefa0522c4eb054e209bf3b10a0fe61ed87814fa6dfe358c01749793e73; path=/; domain=testfreelog.com',
+    },
+    proxy: {
+      '/v2': {
+        target: 'http://qi.testfreelog.com',
+        // secure: false,
+        changeOrigin: true,
+      }
+    },
+  },
+
+
 };
 
 export default config;
