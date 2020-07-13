@@ -1,7 +1,12 @@
-import {MarketModelState} from './market';
+import {MarketPageModelState} from './marketPage';
+import {ResourcePageModelState} from './resourcePage';
 
-export {MarketModelState};
+export {
+  MarketPageModelState,
+  ResourcePageModelState,
+};
 
 export interface ConnectState {
-  market: MarketModelState;
+  marketPage: MarketPageModelState;
+  resourcePage: ResourcePageModelState;
 }

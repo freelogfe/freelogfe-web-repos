@@ -6,7 +6,7 @@ import FAffixTabs from '@/components/FAffixTabs';
 import Finput from '@/components/Finput';
 import FResourceCard from "@/components/FResourceCard";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketModelState} from "@/models/connect";
+import {ConnectState, MarketPageModelState} from "@/models/connect";
 
 const navs = [
   {
@@ -23,7 +23,7 @@ const filters = ['全部类型', 'json', 'widget', 'image', 'audio', 'markdown',
 
 interface MarketProps {
   dispatch: Dispatch;
-  market: MarketModelState,
+  market: MarketPageModelState,
 }
 
 function Market({dispatch, market}: MarketProps) {
@@ -45,7 +45,8 @@ function Market({dispatch, market}: MarketProps) {
 
       <div className={styles.Content}>
         {
-          market.dataSource.map((resource: any) => (<FResourceCard key={resource.id} resource={resource} className={styles.FResourceCard}/>))
+          market.dataSource.map((resource: any) => (
+            <FResourceCard key={resource.id} resource={resource} className={styles.FResourceCard}/>))
         }
 
         <div className={styles.bottomPadding}/>
@@ -65,6 +66,6 @@ function Market({dispatch, market}: MarketProps) {
   );
 }
 
-export default connect(({market}: ConnectState) => ({
-  market,
+export default connect(({marketPage}: ConnectState) => ({
+  market: marketPage,
 }))(Market);

@@ -9,6 +9,8 @@ import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import FAffixTabs from '@/components/FAffixTabs';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourcePageModelState} from "@/models/connect";
 
 const types = [{
   children: '全部',
@@ -37,7 +39,12 @@ const resource = {
   type: 'image',
 };
 
-export default function () {
+interface ResourceProps {
+  dispatch: Dispatch;
+  resource: ResourcePageModelState,
+}
+
+function Resource({dispatch, resource}: ResourceProps) {
   return (
     <FLayout>
       <FAffixTabs tabs={navs}/>
@@ -65,8 +72,12 @@ export default function () {
       </div>
 
       <div className={styles.Content}>
-        <FResourceCard resource={resource} type="resource" className={styles.FResourceCard}/>
-        <FResourceCard resource={resource} type="resource" className={styles.FResourceCard}/>
+        {
+          resource.dataSource.map((i: any) => (<FResourceCard
+            resource={i}
+            type="resource"
+            className={styles.FResourceCard}/>))
+        }
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
@@ -77,3 +88,7 @@ export default function () {
     </FLayout>
   );
 }
+
+export default connect(({resourcePage}: ConnectState) => ({
+  resource: resourcePage,
+}))(Resource);

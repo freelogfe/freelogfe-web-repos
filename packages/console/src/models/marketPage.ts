@@ -2,25 +2,25 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 
-export interface MarketModelState {
+export interface MarketPageModelState {
   dataSource: any[];
 }
 
 export interface MarketModelType {
-  namespace: 'market';
-  state: MarketModelState;
+  namespace: 'marketPage';
+  state: MarketPageModelState;
   effects: {
     fetchDataSource: Effect;
   };
   reducers: {
-    changeDataSource: DvaReducer<MarketModelState, AnyAction>;
+    changeDataSource: DvaReducer<MarketPageModelState, AnyAction>;
   };
   subscriptions: { setup: Subscription };
 }
 
 const MarketModel: MarketModelType = {
 
-  namespace: 'market',
+  namespace: 'marketPage',
 
   state: {
     dataSource: [{
@@ -47,7 +47,7 @@ const MarketModel: MarketModelType = {
   },
 
   reducers: {
-    changeDataSource(state: MarketModelState, action: AnyAction): MarketModelState {
+    changeDataSource(state: MarketPageModelState, action: AnyAction): MarketPageModelState {
       return {...state, ...action.payload};
     },
   },
