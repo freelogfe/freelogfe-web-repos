@@ -32,10 +32,10 @@ export default {
   },
   data() {
     return {
+      isLogin: false,
       isShowDialog: false,
       scAuthPresentableList: [],
       activePresentableIndex: 0,
-      isLogin: false,
       contracts: [],
       selectedPolicies: [],
     }
@@ -74,7 +74,9 @@ export default {
       const loginStatus = await checkLoginStatus()
       this.isLogin = loginStatus === 1
       if (loginStatus !== 1) {
-        window.FreelogApp.trigger(GO_TO_LOGIN)
+        window.FreelogApp.trigger(GO_TO_LOGIN, () => {
+          window.location.reload()
+        })
       }
       if (this.authDefaultContract != null) {
         this.fetchPBContracts()

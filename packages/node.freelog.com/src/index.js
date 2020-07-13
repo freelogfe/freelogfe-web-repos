@@ -4,10 +4,11 @@ import './app/styles/global.less'
 import './_core/index'
 import fReport from '@freelog/freelog-report'
 
+const { Env: { type: envType, mainDomain } } = window.FreelogApp
 const __PAGEBUILD_AUTH__ = 'pagebuild-auth'
-const { Env: { type: envType, mainDomain }, loadMicroApp } = window.FreelogApp
 const pbAuthContentHash = getPagebuildAuthContentHash(window.__appOutputFilenames__, __PAGEBUILD_AUTH__)
-loadMicroApp({
+
+window.FreelogApp.loadMicroApp({
   name: __PAGEBUILD_AUTH__,
   container: '#app-container',
   scripts: [ `//static.${mainDomain}/pagebuild/pagebuild-auth.${pbAuthContentHash}.js` ],

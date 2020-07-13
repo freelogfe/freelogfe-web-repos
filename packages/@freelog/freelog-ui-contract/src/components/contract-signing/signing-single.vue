@@ -9,9 +9,9 @@
     </template>
     <template>
       <resource-contract
-              v-if="isRenderResoureContract"
-              :defaultContract.sync="defaultContract"
-              :presentable="presentable">
+        v-if="isRenderResoureContract"
+        :defaultContract.sync="defaultContract"
+        :presentable="presentable">
       </resource-contract>
     </template>
   </div>

@@ -13,8 +13,8 @@ import {
   batchGetPresentables,
   getUserNodeData,
   setUserNodeData,
-  getPresnetableSubDependData,
-  getPresnetableSubDependInfo,
+  getPresentableSubDependData,
+  getPresentableSubDependInfo,
   requireResource,
   requireSubDepend,
 } from './api'
@@ -39,12 +39,12 @@ export interface IFreelogQuery {
   getPresentableAuth(presentableId: string): Promise <any>
   getPresentableData(presentableId: string): Promise <Response>
   batchGetPresentables(params: batchGetPresentablesParams): Promise <any>
-  getUserNodeData(params: {fields: string;}): Promise<object>
-  setUserNodeData(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>
   getPresentableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise <Response>
   getPresentableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise <any>
   requireResource(presentableId: string): Promise<any>
   requireSubDepend(presentableId: string, subDependId: string, entityNid: string): Promise <any>
+  getUserNodeData(params: {fields: string;}): Promise<object>
+  setUserNodeData(data: {removeFields: string[]; appendOrReplaceObject: object;}): Promise<void>
 }
 
 export default function initQI(): IFreelogQuery {
@@ -80,8 +80,8 @@ export default function initQI(): IFreelogQuery {
     getPresentableAuth,
     getPresentableData,
     batchGetPresentables,
-    getPresnetableSubDependData,
-    getPresnetableSubDependInfo,
+    getPresentableSubDependData,
+    getPresentableSubDependInfo,
     requireResource,
     requireSubDepend,
     getUserInfo,

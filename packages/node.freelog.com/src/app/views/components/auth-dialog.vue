@@ -1,10 +1,10 @@
 <template>
   <div>
     <contract-signing-dialog
-        :activeIndex="activePresentableIndex"
-        :visible.sync="isShowDialog"
-        @close-dialog="hideAuthDialog"
-        :presentableList="scAuthPresentableList"></contract-signing-dialog>
+      :activeIndex="activePresentableIndex"
+      :visible.sync="isShowDialog"
+      @close-dialog="hideAuthDialog"
+      :presentableList="scAuthPresentableList"></contract-signing-dialog>
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 function noop() {}
 let authCallback = noop
 import ContractSigningDialog from '@freelog/freelog-ui-contract/src/components/contract-signing/contract-signing-dialog.vue'
+import { checkLoginStatus } from '@freelog/freelog-ui-login/src/core'
 export default {
   name: 'freelog-auth-dialog',
   components: { ContractSigningDialog },
@@ -38,9 +39,21 @@ export default {
   },
   methods: {
     initEvent() {
-      window.FreelogApp.on('SHOW_AUTH_DIALOG', this.showAuthDialog)
+      window.FreelogApp.on('SHOW_AUTH_DIALOG', async (presentable, callback = noop) => {
+        const loginStatus = await checkLoginStatus()
+        if (loginStatus !== 1) {
+          this.$message.warning('您尚未登录，请先登录后再进行授权签约！')
+          window.FreelogApp.trigger('GO_TO_LOGIN', () => {})
+        } else {
+          this.showAuthDialog({
+            presentableList: [ presentable ],
+            activePresentableId: presentable.presentableId,
+            callback,
+          })
+        }
+      })
     },
-    showAuthDialog({presentableList, activePresentableId, callback = noop}) {
+    async showAuthDialog({ presentableList, activePresentableId, callback = noop }) {
       this.loadContractDialog = true
       if (typeof callback === 'function'){
         authCallback = callback

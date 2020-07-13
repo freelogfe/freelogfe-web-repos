@@ -154,7 +154,7 @@ export default {
             if (this.$route) {
               loginSuccessHandler(userInfo, this.$route.query.redirect)
             }
-            this.$emit("onLoginSuccess")
+            this.$emit("onLoginSuccess", userInfo)
           } else {
             return Promise.reject(res.data.msg)
           }

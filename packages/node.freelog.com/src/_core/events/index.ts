@@ -1,71 +1,69 @@
 import { toArray } from '../utils'
 
-export default class EventCenter {
-  _events: any;
-  constructor() {
-    this._events = Object.create(null)
+if ( typeof window.CustomEvent !== "function" ) {
+  class CustomEvent {
+    constructor(event: string, params: plainObject) {
+      params = params || { bubbles: false, cancelable: false, detail: null }
+      var evt = document.createEvent( 'CustomEvent' )
+      evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail )
+      return evt
+    }
+  }
+  // @ts-ignore
+  window.CustomEvent = CustomEvent
+}
+
+type Listener = (...args: Array<any>) => any
+export default class EventEmitter {
+  _elem: Element
+  private listenerMap: Map<any, any> = new Map()
+
+  constructor(elem: Element) {
+    this._elem = elem
   }
 
-  on(event: string | symbol, fn: () => any): this {
-    (this._events[event] || (this._events[event] = [])).push(fn)
+  on(type: string, listener: Listener): this {
+    const self = this
+    function _cb(event: CustomEvent): any {
+      listener.apply(self._elem, event.detail)
+    }
+    this._elem.addEventListener(type, _cb, false)
+    const listeners: Array<Listener> = this.listenerMap.get(type) || []
+    listeners.push(_cb)
+    this.listenerMap.set(type, listeners)
+    this.listenerMap.set(listener, _cb) 
     return this
   }
 
-  once(event: string | symbol, fn: () => any): this {
+  once(type: string, listener: Listener): this {
     const self = this
     function on() {
-      self.off(event, on)
-      on.fn.apply(self, arguments)
+      self.off(type, on)
+      on.listener.apply(self, arguments)
     }
-    on.fn = fn
-    self.on(event, on)
-    return self
+    on.listener = listener
+    self.on(type, on)
+    return this
   }
 
-  off(event: string | symbol, fn: () => any): this {
-    const self = this
-    // all
-    if (!arguments.length) {
-      self._events = Object.create(null)
-      return self
-    }
-
-    // specific event
-    const cbs = self._events[event]
-    if (!cbs) {
-      return self
-    }
-    if (!fn) {
-      self._events[event] = null
-      return self
-    }
-
-    // specific handler
-    let cb
-    let i = cbs.length
-    while (i--) {
-      cb = cbs[i]
-      if (cb === fn || cb.fn === fn) {
-        cbs.splice(i, 1)
-        break
+  off(type: string, listener?: Listener): this {
+    if (listener == null) {
+      const listeners: Array<Listener> = this.listenerMap.get(type)
+      for (const fn of listeners) {
+        this._elem.removeEventListener(type, fn)
       }
-    }
-    return self
+    } else if (typeof listener === 'function') {
+      const _cb = this.listenerMap.get(listener)
+      this._elem.removeEventListener(type, _cb)
+    } 
+    
+    return this
   }
 
-  emit(event: string | symbol, ...args: Array<any>): this {
-    let cbs = this._events[event]
-    if (cbs) {
-      cbs = cbs.length > 1 ? toArray(cbs) : cbs
-      const info = `event handler for "${event.toString()}"`
-      cbs.forEach((handler: (...rest: any []) => void) => {
-        try {
-          handler(...args)
-        } catch (e) {
-          console.error(info, e)
-        }
-      })
-    }
+  trigger(type: string, ...args: Array<any>): this {
+    const event = new CustomEvent(type, { detail: args })
+    this._elem.dispatchEvent(event)
     return this
   }
 }
+

@@ -34,7 +34,7 @@
     <h3>{{$t('node_data')}}</h3>
     <div class="my-profile-privacy">
       <div class="my-profile-row">
-        <label>{{$t('userdata_used_storage')}}</label>
+        <label>{{$t('userdata_used_storage', { NodeDataUsedStorage: `${nodeDataTotalFileSize}MB` })}}</label>
         <div class="my-profile-row__content">
           <el-button type="primary" @click="dialogVisible = true">{{$t('manage_data')}}</el-button>
         </div>
@@ -43,8 +43,10 @@
         <label>{{$t('display_userdata_in_storage')}}</label>
         <div class="my-profile-row__content">
           <div class="my-p-nodeData-switch-box">
-            <el-switch v-model="showNodeData"></el-switch>
-            <span>{{$t('enter_nodedata')}}</span>
+            <el-switch v-model="showNodeData" disabled></el-switch>
+            <a :href="nodedataUrl" target="_blank">
+              <span>{{$t('enter_nodedata')}}</span>
+            </a>
           </div>
         </div>
       </div>
@@ -55,7 +57,7 @@
       :title="$t('manage_data')"
       :visible.sync="dialogVisible"
       width="760px">
-      <el-table :data="nodeData" class="my-p-manage-data" @selection-change="handleSelectionChange">
+      <el-table :data="nodeDataList" class="my-p-manage-data" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column :label="$t('node')" >
           <template slot-scope="scope">
@@ -65,7 +67,7 @@
         </el-table-column>
         <el-table-column :label="$t('used_storage')" width="120">
           <template slot-scope="scope">
-            <div class="my-p-md-size">{{Math.floor(scope.row.totalFileSize / 1024)}}KB</div>
+            <div class="my-p-md-size">{{scope.row.totalFileSize}}</div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('last_used')" width="160">
@@ -76,7 +78,7 @@
       </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button type="text" @click="dialogVisible = false">{{$t('common.cancelBtnText')}}</el-button>
-        <el-button type="danger" :disabled="canRemove" @click="dialogVisible = false">{{$t('remove')}}</el-button>
+        <el-button type="danger" :disabled="canRemove" @click="clearNodeUserData">{{$t('remove')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -91,13 +93,15 @@ export default {
 
   data() {
     return {
-      showNodeData: false,
-      dialogVisible: true,
-      nodeData: [
+      showNodeData: true,
+      dialogVisible: false,
+      nodeDataList: [
         { nodeName: '节点111', nodeDomain: 'x123.freelog.com', totalFileSize: 0, updateDate: '2020-05-13T08:32:46.323Z' },
         { nodeName: '节点111', nodeDomain: 'x123.freelog.com', totalFileSize: 0, updateDate: '2020-05-13T08:32:46.323Z' },
       ],
-      mSelections: []
+      mSelections: [],
+      nodeDataTotalFileSize: 0,
+      subDomainMap: new Map()
     }
   },
 
@@ -110,9 +114,14 @@ export default {
     canRemove() {
       return !this.mSelections.length
     },
+    nodedataUrl() {
+      return `//console.${window.FreelogApp.Env.mainDomain}/storage/display?activatedBucketName=.UserNodeData`
+    },
   },
 
-  mounted() {
+  async mounted() {
+    this.gethNodeUserData()
+    this.pagingGetNodeUserData()
   },
 
   watch: {
@@ -120,9 +129,68 @@ export default {
   },
   methods: {
     handleSelectionChange(rows) {
-      console.log('rows -', rows)
       this.mSelections = rows
     },
+    async gethNodeUserData() {
+      const result = await this.$axios.get('/v1/storages/buckets/.UserNodeData').then(response => response.data)
+      if (result.errcode === 0) {
+        const data = result.data
+        this.nodeDataTotalFileSize = (data.totalFileSize / 1024 / 1024).toFixed(2)
+      } else {
+        this.$message.error(result.msg)
+        this.nodeDataTotalFileSize = 0
+      }
+    },
+    async pagingGetNodeUserData() {
+      const result = await this.$axios.get('/v1/storages/buckets/.UserNodeData/objects').then(response => response.data)
+      if (result.errcode === 0) {
+        const data = result.data
+        this.nodeDataList = data.dataList.map(item => {
+          const { objectName, systemMeta, systemProperty } = item
+          item.subDomain = objectName.replace(/\.ncfg$/, '')
+          item.nodeDomain = `${item.subDomain}.${window.FreelogApp.Env.mainDomain}`
+          const totalFileSize = systemProperty.fileSize || systemMeta.fileSize
+          console.log('totalFileSize --', totalFileSize, (totalFileSize / 1024).toFixed(2))
+          if (totalFileSize > 1024 * 1024) {
+            item.totalFileSize = (totalFileSize / 1024 / 1024).toFixed(2) + 'MB'
+          } else if (totalFileSize > 1024) {
+            item.totalFileSize = (totalFileSize / 1024).toFixed(2) + 'KB'
+          } else {
+            item.totalFileSize = totalFileSize + 'B'
+          }
+          
+          item.nodeName = this.subDomainMap.get(item.subDomain)
+          return item
+        })
+        await this.getNodeInfo()
+      }
+    },
+    async getNodeInfo() {
+      const nodeDomains = this.nodeDataList.map(item => item.subDomain).filter(item => this.subDomain.get(item.subDomain) == null)
+      if (nodeDomains.length === 0) return 
+      const result = await this.$axios.get(`/v1/nodes/list?nodeDomains=${nodeDomains.join(',')}&projection=nodeName,nodeId,nodeDomain`).then(response => response.data)
+      if (result.errcode === 0) {
+        for (const item of result.data) {
+          const { nodeDomain, nodeName } = item
+          this.subDomainMap.set(nodeDomain, nodeName)
+        }
+        this.nodeDataList = this.nodeDataList.map(item => {
+          item.nodeName = this.subDomainMap.get(item.subDomain)
+          return item
+        })
+      }
+    },
+    async clearNodeUserData() {
+      const bucketName = this.mSelections[0].bucketName
+      const objectIds = this.mSelections.map(item => item.objectId).join(',')
+      const result = await this.$axios.delete(`/v1/storages/buckets/${bucketName}/objects/${objectIds}`).then(response => response.data)
+      if (result.errcode === 0) {
+        this.$message.success('数据清理成功！') 
+        this.pagingGetNodeUserData()
+      } else {
+        this.$message.error('数据清理失败！') 
+      }
+    }
   }
 }
 </script>
@@ -227,7 +295,8 @@ export default {
   }
   .el-dialog .el-dialog__body {
     padding: 25px 40px 30px;
-}
+    max-height: 410px; overflow-y: auto;
+  }
   .el-table.my-p-manage-data {
     @colorVal: #222;
     thead {
@@ -235,4 +304,5 @@ export default {
     }
     color: @colorVal;
   }
+
 </style>

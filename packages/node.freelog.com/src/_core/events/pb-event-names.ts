@@ -23,4 +23,4 @@ export const NOTIFY_NODE: string = 'NOTIFY_NODE'
 export const SHOW_ERROR_MESSAGE: string = 'SHOW_ERROR_MESSAGE'
 
 // Freelog app mounted
-export const FREELOG_APP_MOUNTED: symbol = Symbol.for('FREELOG_APP_MOUNTED')
+export const FREELOG_APP_MOUNTED: string = 'FREELOG_APP_MOUNTED'

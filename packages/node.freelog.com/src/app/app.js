@@ -15,7 +15,6 @@ Vue.use(axiosPlugin, axios)
 
 initLogin({ Vue, i18n, isRegisterRouter: false })
 
-
 export async function bootstrap() {}
 export async function mount({ appRootElement }) {
   const selector = '#app-auth'

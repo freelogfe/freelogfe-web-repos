@@ -1,7 +1,9 @@
 <template>
   <div class="pb-app">
-    <div v-if="authHandlerBoxVisible">
-      <f-auth-handler-box :pbAuthErrorData="pbAuthErrorData"></f-auth-handler-box>
+    <div v-if="isLoadedAuthHandlerBox">
+      <f-auth-handler-box 
+        :pbAuthErrorData="pbAuthErrorData"
+        @auth-box-mounted="mountAuthHandlerBox"></f-auth-handler-box>
     </div>
    
     <transition name="fade">
@@ -9,7 +11,7 @@
         <f-login 
           class="pb-l-d-comp" 
           showClose 
-          @close-dialog="loginDialogVisible = false"
+          @close-dialog="closeDialogHandler"
           @onLoginSuccess="loginSuccessHandler"></f-login>
       </div>
     </transition>
@@ -18,21 +20,15 @@
 
 <script>
   import { TOGGLE_TOOL_BAR, GO_TO_LOGIN, HANDLE_INVALID_AUTH, SHOW_AUTH_DIALOG } from '../../_core/events/pb-event-names'
-
+  var cacheAuthEventOptions = []
+  var chcheLoginEventCBs = []
   export default {
     data() {
       return {
-        isShowToolBar: false,
-        isLogin: false,
-        isShowDialog: false,
-        authHandlerBoxVisible: false,
-        loadContractDialog: false,
-        pbExceptionMsg: '',
         pbAuthErrorData: null,
-        scAuthPresentableList: [],
-        activePresentableIndex: 0,
+        isShowToolBar: false,
+        isLoadedAuthHandlerBox: false,
         loginDialogVisible: false,
-        isLoadedPBAuthDialog: false
       }
     },
     components: {
@@ -46,13 +42,13 @@
       async init() {
         this.initEvents()
         /**
-         * 当pb存在授权问题
+         * 当pb存在授权问题：
          * 1. 显示"异常页面"
          * 2. 检查用户是否登录，否则提示用户完成"登录"
          */
         const authErrorData = window.__auth_info__ && window.__auth_info__.__auth_error_info__
         if(authErrorData) {
-          this.authHandlerBoxVisible = true
+          this.isLoadedAuthHandlerBox = true
           this.pbAuthErrorData = authErrorData
         }
       },
@@ -63,19 +59,36 @@
          */
         if(window.FreelogApp.on) {
           window.FreelogApp
-            .on(GO_TO_LOGIN, this.showLoginDialog)
-            .once(SHOW_AUTH_DIALOG, () => (this.authHandlerBoxVisible = true))
+            .on(GO_TO_LOGIN, (callback) => {
+              chcheLoginEventCBs.push(callback)
+              this.loginDialogVisible = true
+            })
+            .once(SHOW_AUTH_DIALOG, (options, callback) => {
+              // 缓存事件SHOW_AUTH_DIALOG的数据
+              cacheAuthEventOptions.push({ options, callback })
+              this.isLoadedAuthHandlerBox = true
+            })
         }
-      },
-      async showLoginDialog() {
-        this.loginDialogVisible = true
       },
       toggleToolBar() {
         this.isShowToolBar ? this.$refs.toolbar.hide() : this.$refs.toolbar.show()
         this.isShowToolBar = !this.isShowToolBar
       },
-      loginSuccessHandler() {
-        window.location.reload()
+      closeDialogHandler() {
+        this.loginDialogVisible = false
+        // chcheLoginEventCBs = []
+      },
+      loginSuccessHandler(data) {
+        chcheLoginEventCBs.forEach(cb => cb())
+        this.loginDialogVisible = false
+      },
+      mountAuthHandlerBox() {
+        // 再次触发已缓存的SHOW_AUTH_DIALOG
+        for (const eventOpt of cacheAuthEventOptions) {
+          const { options, callback } = eventOpt
+          window.FreelogApp.trigger(SHOW_AUTH_DIALOG, options, callback)
+        }
+        cacheAuthEventOptions = []
       },
     }
   }

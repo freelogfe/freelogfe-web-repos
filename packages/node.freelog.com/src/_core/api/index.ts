@@ -17,24 +17,19 @@ const _fetch: qiFetchFn = createQIFetch({
 
 export async function getUserNodeData({fields= ''}: {fields: string;} = {fields: ''}): Promise<object> {
   if (!fields) {
-    return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick`, {});
+    return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick`, {})
   }
-  return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick?fields=${fields}`, {});
+  return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}/customPick?fields=${fields}`, {})
 }
 
 export async function setUserNodeData({removeFields = [],appendOrReplaceObject= {}}: {removeFields?: string[]; appendOrReplaceObject?: object;}) {
-  // return {
-  //   backgroundColor: color,
-  // };
   return _fetch(`/v1/storages/buckets/.UserNodeData/objects/${nodeId}`, {
     method: 'put',
     data: {
       removeFields,
       appendOrReplaceObject
     },
-  });
-
-  // return res
+  })
 }
 
 /**
@@ -145,7 +140,7 @@ export async function batchGetPresentables(params?: batchGetPresentablesParams):
 /**
  * 获取presentable子依赖的数据内容
  */
-export async function getPresnetableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise<Response> {
+export async function getPresentableSubDependData(presentableId: string, subDependId: string, entityNid: string): Promise<Response> {
   const url: string = resolveSubDependDataUrl(presentableId, subDependId, entityNid)
   return _fetch(url)
 }
@@ -153,7 +148,7 @@ export async function getPresnetableSubDependData(presentableId: string, subDepe
 /**
  * 获取presentable子依赖的信息
  */
-export async function getPresnetableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise<any> {
+export async function getPresentableSubDependInfo(presentableId: string, subDependId: string, entityNid: string): Promise<any> {
   const url: string = resolveSubDependInfoUrl(presentableId, subDependId, entityNid)
   return _fetch(url).then(resp => resp.json())
 }
