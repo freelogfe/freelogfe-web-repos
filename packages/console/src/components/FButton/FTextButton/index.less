@@ -1,0 +1,69 @@
+@import '../../../config';
+
+.button {
+  height: 20px;
+  padding: 0;
+}
+
+.normal {
+  &, &:focus {
+    color: #666;
+  }
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #187AFC;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #CFCFCF;
+    }
+  }
+}
+
+.link {
+  &, &:focus {
+    color: #6555C0;
+  }
+
+  &:hover {
+    color: #8172D8;
+  }
+
+  &:active {
+    color: #5644B7;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #C1BBE6;
+    }
+  }
+}
+
+.primary {
+  &, &:focus {
+    color: @f-primary-color;
+  }
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #187AFC;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #A9CEFF;
+    }
+  }
+}

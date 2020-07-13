@@ -8,7 +8,7 @@ interface FMenuItem {
 }
 
 
-interface FMenuProps {
+export interface FMenuProps {
   dataSource: FMenuItem[];
 }
 

@@ -9,6 +9,8 @@ import FMenu from '@/components/FMenu';
 import FResourceCard from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import FAffixTabs from '@/components/FAffixTabs';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ResourcePageModelState} from "@/models/connect";
 
 const types = [{
   children: '全部',
@@ -29,7 +31,12 @@ const navs = [
   },
 ];
 
-export default function () {
+interface ResourceProps {
+  dispatch: Dispatch;
+  resource: ResourcePageModelState;
+}
+
+function Resource({dispatch, resource}: ResourceProps) {
   return (
     <FLayout>
       <FAffixTabs tabs={navs}/>
@@ -45,7 +52,7 @@ export default function () {
           <div style={{marginLeft: 60}}>
             <span>类型：</span>
             <Dropdown overlay={<FMenu dataSource={types}/>}>
-              <span style={{cursor: 'pointer'}}>全部<DownOutlined style={{marginLeft: 8}}/></span>
+              <span style={{cursor: 'pointer'}}>全部<DownOutlined style={{marginLeft: 10}}/></span>
             </Dropdown>
           </div>
 
@@ -57,19 +64,12 @@ export default function () {
       </div>
 
       <div className={styles.Content}>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="resource" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
-        <FResourceCard type="favorite" className={styles.FResourceCard}/>
+        {
+          resource.dataSource.map((i: any) => (<FResourceCard
+            resource={i}
+            type="resource"
+            className={styles.FResourceCard}/>))
+        }
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
@@ -77,7 +77,10 @@ export default function () {
       </div>
       <div style={{height: 10}}/>
       <FPagination className={styles.FPagination}/>
-      <div style={{height: 100}}/>
     </FLayout>
   );
 }
+
+export default connect(({resourcePage}: ConnectState) => ({
+  resource: resourcePage,
+}))(Resource);

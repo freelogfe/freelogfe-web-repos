@@ -15,8 +15,23 @@ const config: IConfig = {
       // exact: true,
       routes: [
         {exact: true, path: '.', component: '../pages/resource'},
-        {exact: true, path: 'creator', component: '../pages/resource/creator'},
-        {exact: true, path: 'success', component: '../pages/resource/success'},
+        {
+          path: 'creator',
+          routes: [
+            {exact: true, path: '.', component: '../pages/resource/creator'},
+            {exact: true, path: 'success', component: '../pages/resource/creator/success'},
+          ]
+        },
+        {exact: true, path: 'info', component: '../pages/resource/info'},
+        {exact: true, path: 'auth', component: '../pages/resource/auth'},
+        {
+          path: 'version',
+          routes: [
+            {exact: true, path: '.', component: '../pages/resource/version'},
+            {exact: true, path: 'success', component: '../pages/resource/version/success'},
+            {exact: true, path: ':version', component: '../pages/resource/version/[version]'},
+          ]
+        },
       ]
     },
     // ]
@@ -103,6 +118,14 @@ const config: IConfig = {
     'select-item-selected-font-weight': 400,
     'select-item-selected-bg': 'inherit',
     'select-item-active-bg': '#2784FF',
+
+    'alert-success-border-color': '#BDECD8',
+    'alert-success-bg-color': '#E5F6EF',
+    'alert-warning-border-color': '#F6DCA6',
+    'alert-warning-bg-color': '#FBF5EA',
+    'alert-error-border-color': '#FFD2D2',
+    'alert-error-bg-color': '#FDEBEC',
+
   },
 };
 

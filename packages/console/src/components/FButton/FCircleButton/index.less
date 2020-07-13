@@ -1,3 +1,5 @@
+@import '../shared';
+
 .Button {
   line-height: 26px;
   width: 26px;
@@ -6,4 +8,44 @@
   padding: 0;
   display: block;
   flex-shrink: 0;
+
+  &:after {
+    display: none;
+  }
+}
+
+.normal {
+
+}
+
+.text {
+
+}
+
+.delete {
+
+  border: none;
+  transform: scale(9 / 13);
+
+  &, &:focus {
+    color: #EE4040;
+    background-color: #FDEBEB;
+  }
+
+  &:hover {
+    color: white;
+    background-color: #F86363;
+  }
+
+  &:active {
+    color: white;
+    background-color: #EB3737;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #F8B3B3;
+      background-color: #FDEFEF;
+    }
+  }
 }

@@ -1,14 +1,11 @@
 import React from 'react';
 import styles from './index.less';
-import {Layout, Dropdown} from 'antd';
+import {Layout, Dropdown, Affix} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
-import {PlusOutlined} from '@ant-design/icons';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
-
-const {Header, Content, Footer} = Layout;
 
 const discover = [
   {
@@ -42,12 +39,22 @@ const types = [{
 
 interface FLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;
+  structure?: 'center' | 'left-right';
+  sider?: React.ReactNode | React.ReactNodeArray;
 }
 
-export default function ({children}: FLayoutProps) {
+export default function ({children, sider, structure = 'center'}: FLayoutProps) {
+
+  const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
+
+  React.useEffect(() => {
+    window.onresize = () => {
+      setFooterOffsetTop(window.innerHeight - 68);
+    }
+  }, []);
   return (
     <Layout className={styles.Layout}>
-      <Header className={styles.header}>
+      <Layout.Header className={styles.header}>
         <div className={styles.headerLeft}>
           <a className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
           <div className={styles.MenuBar}>
@@ -81,23 +88,48 @@ export default function ({children}: FLayoutProps) {
             <img src={avatarSrc} alt={'avatar'}/>
           </a>
         </div>
-      </Header>
-      <Content className={styles.Content}>
-        <div>{children}</div>
-      </Content>
-      <Footer className={styles.Footer}>
-        <div>
-          <div>关于freelog</div>
-          <div style={{width: 30}}/>
-          <Dropdown overlay={<FMenu dataSource={types}/>}>
-            <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
-          </Dropdown>
-          <div style={{width: 120}}/>
-          <span>粤ICP备17085716号-1</span>
-          <div style={{width: 30}}/>
-          <span>Copyright© 2020 freelog freelog.com版权所有</span>
-        </div>
-      </Footer>
+      </Layout.Header>
+      {
+        structure === 'center' &&
+        (<Layout.Content className={styles.Content}>
+          <div>{children}</div>
+        </Layout.Content>)
+      }
+
+      {
+        structure === 'left-right' &&
+        (<Layout.Content className={styles.leftRight}>
+          <div className={styles.Slider}>
+            <div style={{height: 40}}/>
+            <div>{sider}</div>
+          </div>
+          <div className={styles.rightContent}>
+            <div>{children}</div>
+          </div>
+        </Layout.Content>)
+      }
+
+      <div style={{height: 100}}/>
+
+      {/* window.onresize */}
+      {
+        !sider && (<Affix offsetTop={footerOffsetTop}>
+          <Layout.Footer className={styles.Footer}>
+            <div>
+              <div>关于freelog</div>
+              <div style={{width: 30}}/>
+              <Dropdown overlay={<FMenu dataSource={types}/>}>
+                <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
+              </Dropdown>
+              <div style={{width: 120}}/>
+              <span>粤ICP备17085716号-1</span>
+              <div style={{width: 30}}/>
+              <span>Copyright© 2020 freelog freelog.com版权所有</span>
+            </div>
+          </Layout.Footer>
+        </Affix>)
+      }
+
     </Layout>
   );
 }

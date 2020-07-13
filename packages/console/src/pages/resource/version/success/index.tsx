@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FLayout from '@/layouts/FLayout';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FTextButton} from '@/components/FButton';
 
 export default function () {
   return (<FLayout>
@@ -10,12 +10,13 @@ export default function () {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type={'secondary'} text={'资源创建成功'}/>
+      <FTipText type={'secondary'} text={'版本 10.5.2 创建成功'}/>
       <div style={{height: 40}}/>
-      <FTipText type={'modal'} text={'未发行版本的资源，不会出现在资源市场中'}/>
-      <div style={{height: 20}}/>
-      <FNormalButton>为资源创建第一个版本</FNormalButton>
+      <div className={styles.goto}>
+        <FTipText type={'modal'} text={'3秒 后跳转至资源信息-最新版本编辑页；'}/>
+        <div style={{width: 10}}/>
+        <FTextButton theme={'primary'}>立即跳转</FTextButton>
+      </div>
     </div>
-    <div style={{height: 100}}/>
   </FLayout>)
 }
