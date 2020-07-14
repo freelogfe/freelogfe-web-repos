@@ -6,34 +6,35 @@ import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
+// import { history } from 'umi';
 
 const discover = [
   {
     children: '发现市场',
-    id: 1
+    key: 1
   },
   {
     children: '发现节点',
-    id: 2
+    key: 2
   },
 ];
 
 const create = [
   {
     children: '创建资源',
-    id: 1
+    key: 1
   },
   {
     children: '创建节点',
-    id: 2
+    key: 2
   },
 ];
 
 const types = [{
-  id: 1,
+  key: 1,
   children: '中文'
 }, {
-  id: 2,
+  key: 2,
   children: 'English'
 }];
 
@@ -46,6 +47,11 @@ interface FLayoutProps {
 export default function ({children, sider, structure = 'center'}: FLayoutProps) {
 
   const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
+
+  function onClick(params: any) {
+    console.log(params, 'params');
+    // history.push('/resource/creator');
+  }
 
   React.useEffect(() => {
     window.onresize = () => {
@@ -76,11 +82,12 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
             // disabled={true}
           />
 
-          <Dropdown overlay={<FMenu dataSource={create}/>}>
+          <Dropdown overlay={<FMenu
+            onClick={onClick}
+            dataSource={create}/>}
+          >
             <a className={styles.create}>
-              <FCircleButton
-                // disabled={true}
-              />
+              <FCircleButton/>
             </a>
           </Dropdown>
 
