@@ -2,17 +2,41 @@ import * as React from 'react';
 import styles from './index.less';
 import FUploadImage from '@/components/FUploadImage';
 import {FContentText} from '@/components/FText';
+import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 
-export default function () {
+interface FUploadResourceCoverProps {
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+export default function ({value, onChange}: FUploadResourceCoverProps) {
+
+  const uploadConfig = {
+    accept: 'image/*',
+    beforeUpload: (file: RcFile, FileList: RcFile[]) => {
+      console.log(file, 'file');
+      onChange && onChange('https://cn.bing.com/th?id=OHR.PantheonParis_ZH-CN1546295756_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0');
+      return false;
+    },
+    onChange: (info: UploadChangeParam) => {
+      // console.log(info, '########');
+    },
+  };
+
   return (<div className={styles.cover}>
-    <FUploadImage>
-      <a className={styles.FUploadImageChildren}>
-        <i className={'freelog fl-icon-shangchuanfengmian'}/>
-        <span>上传封面</span>
-      </a>
-    </FUploadImage>
+    {!value
+      ? (<FUploadImage  {...uploadConfig}>
+        <a className={styles.FUploadImageChildren}>
+          <i className={'freelog fl-icon-shangchuanfengmian'}/>
+          <span>上传封面</span>
+        </a>
+      </FUploadImage>)
+      : (<div className={styles.FUploadImageChildren}>
+        <img src={value}/>
+      </div>)
+    }
     <div className={styles.coverTip}>
-      <FUploadImage>
+      <FUploadImage {...uploadConfig}>
         <a className={styles.ReUpload}>重新上传</a>
       </FUploadImage>
       <div style={{height: 15}}/>
@@ -22,3 +46,12 @@ export default function () {
     </div>
   </div>);
 }
+
+// interface UploadProps {
+//   children?: React.ReactNode;
+//   on
+// }
+//
+// function Upload() {
+//
+// }
