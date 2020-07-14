@@ -14,10 +14,10 @@ import {ConnectState, ResourcePageModelState} from "@/models/connect";
 
 const types = [{
   children: '全部',
-  id: 1,
+  key: 1,
 }, {
   children: '部分',
-  id: 2,
+  key: 2,
 }];
 
 const navs = [

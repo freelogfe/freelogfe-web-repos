@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent, ChangeEventHandler} from 'react';
 import styles from './index.less';
 import {Layout, Dropdown, Affix} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
@@ -6,7 +6,9 @@ import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
-// import { history } from 'umi';
+import router from 'umi/router';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, GlobalSearchingModelState} from '@/models/connect';
 
 const discover = [
   {
@@ -42,15 +44,32 @@ interface FLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;
   structure?: 'center' | 'left-right';
   sider?: React.ReactNode | React.ReactNodeArray;
+  dispatch: Dispatch;
+  global: GlobalSearchingModelState;
 }
 
-export default function ({children, sider, structure = 'center'}: FLayoutProps) {
+function FLayout({children, sider, structure = 'center', dispatch, global}: FLayoutProps) {
 
   const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
 
-  function onClick(params: any) {
+  function onDiscoverClick(params: any) {
+    // console.log(params, 'paramsparams');
+    if (params.key === '1') {
+      return router.push('/');
+    }
+    if (params.key === '2') {
+      return router.push('/example');
+    }
+  }
+
+  function onCreateClick(params: any) {
     console.log(params, 'params');
-    // history.push('/resource/creator');
+    if (params.key === '1') {
+      return router.push('/resource/creator');
+    }
+    if (params.key === '2') {
+
+    }
   }
 
   React.useEffect(() => {
@@ -58,13 +77,14 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
       setFooterOffsetTop(window.innerHeight - 68);
     }
   }, []);
+
   return (
     <Layout className={styles.Layout}>
       <Layout.Header className={styles.header}>
         <div className={styles.headerLeft}>
           <a className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
           <div className={styles.MenuBar}>
-            <Dropdown overlay={<FMenu dataSource={discover}/>}>
+            <Dropdown overlay={<FMenu onClick={onDiscoverClick} dataSource={discover}/>}>
               <a className={styles.Menu}>发现</a>
             </Dropdown>
             <a className={styles.Menu}>存储空间</a>
@@ -75,15 +95,20 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
         </div>
         <div className={styles.headerRight}>
           <FInput
+            value={global.input}
             className={styles.FInput}
             // placeholder="Search in Freelog"
             size="small"
             theme="dark"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => dispatch({
+              type: 'globalSearching/onInputChange',
+              payload: event.target.value,
+            })}
             // disabled={true}
           />
 
           <Dropdown overlay={<FMenu
-            onClick={onClick}
+            onClick={onCreateClick}
             dataSource={create}/>}
           >
             <a className={styles.create}>
@@ -140,3 +165,7 @@ export default function ({children, sider, structure = 'center'}: FLayoutProps) 
     </Layout>
   );
 }
+
+export default connect(({globalSearching}: ConnectState) => ({
+  global: globalSearching,
+}))(FLayout);

@@ -18,12 +18,14 @@ const config: IConfig = {
     // component: '../layouts/index',
     // routes: [
     {exact: true, path: '/', component: '../pages/index'},
-    {exact: true, path: '/ui-example', component: '../pages/ui-example'},
+    {exact: true, path: '/example', component: '../pages/index'},
+
     {
       path: '/resource',
       // exact: true,
       routes: [
         {exact: true, path: '.', component: '../pages/resource'},
+
         {
           path: 'creator',
           routes: [
@@ -38,13 +40,14 @@ const config: IConfig = {
           routes: [
             {exact: true, path: '.', component: '../pages/resource/version'},
             {exact: true, path: 'success', component: '../pages/resource/version/success'},
-            {exact: true, path: ':version', component: '../pages/resource/version/[version]'},
+            {exact: true, path: ':version', component: '../pages/resource/version/$version'},
           ]
         },
       ]
     },
     // ]
     // }
+    {exact: true, path: '/ui-example', component: '../pages/ui-example'},
   ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html

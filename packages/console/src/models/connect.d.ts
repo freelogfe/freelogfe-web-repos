@@ -1,3 +1,4 @@
+import {GlobalSearchingModelState} from './globalSearching';
 import {MarketPageModelState} from './marketPage';
 import {ResourcePageModelState} from './resourcePage';
 import {ResourceCreatorPageModelState} from './resourceCreatorPage';
@@ -7,6 +8,7 @@ import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 
 export {
+  GlobalSearchingModelState,
   MarketPageModelState,
   ResourcePageModelState,
   ResourceCreatorPageModelState,
@@ -17,6 +19,7 @@ export {
 };
 
 export interface ConnectState {
+  globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
   resourcePage: ResourcePageModelState;
   resourceCreatorPage: ResourceCreatorPageModelState;
