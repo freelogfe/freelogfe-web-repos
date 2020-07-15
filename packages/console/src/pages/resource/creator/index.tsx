@@ -19,16 +19,7 @@ import {
   OnChangeLabelsAction,
   OnChangeNameAction,
   OnChangeResourceTypeAction
-} from "@/models/resourceCreatorPage";
-
-// const resourceTypes = [
-//   {
-//     value: 'image',
-//   },
-//   {
-//     value: 'zip',
-//   },
-// ];
+} from '@/models/resourceCreatorPage';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
