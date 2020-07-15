@@ -18,7 +18,7 @@ const config: IConfig = {
     // component: '../layouts/index',
     // routes: [
     {exact: true, path: '/', component: '../pages/index'},
-    {exact: true, path: '/example', component: '../pages/index'},
+    {exact: true, path: '/example', component: '../pages/example'},
 
     {
       path: '/resource',

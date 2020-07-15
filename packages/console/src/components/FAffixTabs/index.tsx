@@ -3,24 +3,27 @@ import {Affix, Tabs} from 'antd';
 import styles from './index.less';
 
 interface Tab {
-  id: string | number;
-  text: string | number;
+  value: string;
+  text: string;
 }
 
 interface FAffixTabsProps {
-  tabs: Tab[];
+  options: Tab[];
+  value: string;
+  onChange?: (value: '1' | '2') => void;
 }
 
-export default function ({tabs}: FAffixTabsProps) {
+export default function ({options, value, onChange}: FAffixTabsProps) {
   return (<Affix offsetTop={0}>
     <Tabs
-      defaultActiveKey="1"
+      activeKey={value}
       size="large"
       className={styles.Tabs}
-      // onChange={callback}
+      onChange={(value: any) => onChange && onChange(value)}
+      animated={false}
     >
       {
-        tabs.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.id}/>))
+        options.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.value}/>))
       }
     </Tabs>
   </Affix>);

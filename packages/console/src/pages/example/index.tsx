@@ -34,8 +34,8 @@ interface MarketProps {
 function Market({dispatch, market}: MarketProps) {
 
   function onChangeTab(value: '1' | '2') {
-    if (value === '2') {
-      return router.push('/example');
+    if (value === '1') {
+      return router.push('/');
     }
   }
 
@@ -43,51 +43,12 @@ function Market({dispatch, market}: MarketProps) {
     <FLayout>
       <FAffixTabs
         options={navs}
-        value={'1'}
+        value={'2'}
         // onChange={(value) => dispatch<OnChangeTabValueAction>({type: 'marketPage/onChangeTabValue', payload: value})}
         onChange={onChangeTab}
       />
       <div style={{height: 30}}/>
-      <div className={styles.filter}>
-        <Labels
-          options={filters}
-          value={market.resourceType}
-          onChange={(value) => dispatch<OnChangeResourceTypeAction>({
-            type: 'marketPage/onChangeResourceType',
-            payload: value,
-          })}
-        />
-        <FInput
-          value={market.inputText}
-          onChange={(e) => dispatch<OnChangeInputTextAction>({
-            type: 'marketPage/onChangeInputText',
-            payload: e.target.value
-          })}
-          theme="dark"
-          size="small"
-          className={styles.filterInput}
-        />
-      </div>
-
-      <div style={{height: 30}}/>
-
-      <div className={styles.Content}>
-        {
-          market.dataSource.map((resource: any) => (
-            <FResourceCard key={resource.id} resource={resource} className={styles.FResourceCard}/>))
-        }
-
-        <div className={styles.bottomPadding}/>
-        <div className={styles.bottomPadding}/>
-        <div className={styles.bottomPadding}/>
-        <div className={styles.bottomPadding}/>
-      </div>
-
-      <div style={{height: 100}}/>
-
-      <div className={styles.bottom}>
-        <Button className={styles.loadMore}>加载更多</Button>
-      </div>
+      
 
       {/*<div style={{height: 100}}/>*/}
     </FLayout>
