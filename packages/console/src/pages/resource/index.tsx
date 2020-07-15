@@ -18,7 +18,7 @@ import {
   OnChangePageCurrentAction, OnChangePageSizeAction,
   OnChangeResourceStatusAction,
   OnChangeResourceTypeAction
-} from "@/models/resourcePage";
+} from '@/models/resourcePage';
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -136,21 +136,23 @@ function Resource({dispatch, resource}: ResourceProps) {
         <div className={styles.bottomPadding}/>
         <div className={styles.bottomPadding}/>
       </div>
-      <div style={{height: 10}}/>
-      <FPagination
-        current={resource.pageCurrent}
-        pageSize={resource.pageSize}
-        total={resource.totalNum}
-        onChangeCurrent={(value) => dispatch<OnChangePageCurrentAction>({
-          type: 'resourcePage/onChangePageCurrent',
-          payload: value
-        })}
-        onChangePageSize={(value) => dispatch<OnChangePageSizeAction>({
-          type: 'resourcePage/onChangePageSize',
-          payload: value
-        })}
-        className={styles.FPagination}
-      />
+      {resource.totalNum > 10 && <>
+        <div style={{height: 10}}/>
+        <FPagination
+          current={resource.pageCurrent}
+          pageSize={resource.pageSize}
+          total={resource.totalNum}
+          onChangeCurrent={(value) => dispatch<OnChangePageCurrentAction>({
+            type: 'resourcePage/onChangePageCurrent',
+            payload: value
+          })}
+          onChangePageSize={(value) => dispatch<OnChangePageSizeAction>({
+            type: 'resourcePage/onChangePageSize',
+            payload: value
+          })}
+          className={styles.FPagination}
+        />
+      </>}
     </FLayout>
   );
 }

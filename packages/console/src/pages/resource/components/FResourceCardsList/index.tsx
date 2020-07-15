@@ -1,0 +1,144 @@
+import * as React from 'react';
+import styles from "@/pages/resource/index.less";
+import {Dropdown} from "antd";
+import FMenu from "@/components/FMenu";
+import {
+  OnChangeInputTextAction,
+  OnChangePageCurrentAction, OnChangePageSizeAction,
+  OnChangeResourceStatusAction,
+  OnChangeResourceTypeAction
+} from "@/models/resourcePage";
+import FInput from "@/components/FInput";
+import {FNormalButton} from "@/components/FButton";
+import {router} from "umi";
+import FResourceCard from "@/components/FResourceCard";
+import FPagination from "@/components/FPagination";
+import FLayout from "@/layouts/FLayout";
+import {resourceTypes} from "@/utils/globals";
+import {DownOutlined} from '@ant-design/icons';
+
+const resourceTypeOptions = [
+  {text: '全部', value: '-1'},
+  ...resourceTypes.map((i) => ({value: i}))
+];
+
+const resourceStatusOptions = [
+  {text: '全部', value: '-1'},
+  {text: '已上线', value: '1'},
+];
+
+const navs = [
+  {
+    value: '1',
+    text: '我的资源',
+  },
+  {
+    value: '2',
+    text: '我的收藏',
+  },
+];
+
+interface FResourceCardsListProps {
+  resourceType: string;
+  resourceStatus: string;
+  inputText: string;
+  dataSource: any[];
+  pageCurrent: number;
+  pageSize: number;
+  totalNum: number;
+  onChangeResourceType?: (value: string) => void;
+  onChangeResourceStatus?: (value: string) => void;
+  onChangeInputText?: (value: string) => void;
+  onChangePageCurrent?: (value: number) => void;
+  onChangePageSize?: (value: number) => void;
+}
+
+export default function ({
+                           resourceType, resourceStatus, inputText, dataSource, pageCurrent, pageSize, totalNum,
+                           onChangeResourceType, onChangeResourceStatus, onChangeInputText, onChangePageCurrent, onChangePageSize
+                         }: FResourceCardsListProps) {
+
+  const [typeText, setTypeText] = React.useState('');
+  const [statusText, setStatusText] = React.useState('');
+
+
+  React.useEffect(() => {
+    const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
+    setTypeText(selectedType?.text || selectedType?.value);
+  }, [resourceType]);
+
+  React.useEffect(() => {
+    const selectedStatus: any = resourceStatusOptions.find((i) => i.value === resourceStatus);
+    console.log(selectedStatus, 'selectedStatusselectedStatus');
+    setStatusText(selectedStatus?.text || selectedStatus?.value);
+  }, [resourceStatus]);
+
+  function onChangeTab(value: '1' | '2') {
+    if (value === '2') {
+      return router.push('/resource/collect');
+    }
+  }
+
+  return (<>
+    <div className={styles.filter}>
+      <div className={styles.filterLeft}>
+        <div>
+          <span>类型：</span>
+          <Dropdown overlay={<FMenu
+            options={resourceTypeOptions}
+            onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
+          />}>
+              <span style={{cursor: 'pointer'}}>{typeText}<DownOutlined
+                style={{marginLeft: 8}}/></span>
+          </Dropdown>
+        </div>
+        <div style={{marginLeft: 60}}>
+          <span>类型：</span>
+          <Dropdown overlay={<FMenu
+            options={resourceStatusOptions}
+            onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value)}
+          />}>
+            <span style={{cursor: 'pointer'}}>{statusText}<DownOutlined style={{marginLeft: 10}}/></span>
+          </Dropdown>
+        </div>
+
+      </div>
+      <div className={styles.filterRight}>
+        <FInput
+          value={inputText}
+          onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
+          theme="dark"
+          className={styles.FInput}
+        />
+        <FNormalButton
+          onClick={() => router.push('/resource/creator')}
+          type="primary"
+        >创建资源</FNormalButton>
+      </div>
+    </div>
+
+    <div className={styles.Content}>
+      {
+        dataSource.map((i: any) => (<FResourceCard
+          key={i.id}
+          resource={i}
+          type="resource"
+          className={styles.FResourceCard}/>))
+      }
+      <div className={styles.bottomPadding}/>
+      <div className={styles.bottomPadding}/>
+      <div className={styles.bottomPadding}/>
+      <div className={styles.bottomPadding}/>
+    </div>
+    {totalNum > 10 && <>
+      <div style={{height: 10}}/>
+      <FPagination
+        current={pageCurrent}
+        pageSize={pageSize}
+        total={totalNum}
+        onChangeCurrent={(value) => onChangePageCurrent && onChangePageCurrent(value)}
+        onChangePageSize={(value) => onChangePageSize && onChangePageSize(value)}
+        className={styles.FPagination}
+      />
+    </>}</>)
+}

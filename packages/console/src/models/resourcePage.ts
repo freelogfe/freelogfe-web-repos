@@ -88,10 +88,38 @@ const Model: ResourcePageModelType = {
       version: '1.0.10',
       policy: ['免费1', '免费2', '免费3'],
       type: 'image',
+    }, {
+      id: 3,
+      cover: '',
+      title: '这里是发行名称2',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
+    }, {
+      id: 4,
+      cover: '',
+      title: '这里是发行名称2',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
+    }, {
+      id: 5,
+      cover: '',
+      title: '这里是发行名称2',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
+    }, {
+      id: 6,
+      cover: '',
+      title: '这里是发行名称2',
+      version: '1.0.10',
+      policy: ['免费1', '免费2', '免费3'],
+      type: 'image',
     }],
     pageCurrent: 1,
     pageSize: 20,
-    totalNum: 100,
+    totalNum: 6,
   },
 
   effects: {
@@ -102,11 +130,9 @@ const Model: ResourcePageModelType = {
 
   reducers: {
     onChangeResourceType(state: ResourcePageModelState, action: OnChangeResourceTypeAction): ResourcePageModelState {
-      // console.log(action, 'AAAAA');
       return {...state, resourceType: action.payload};
     },
     onChangeResourceStatus(state: ResourcePageModelState, action: OnChangeResourceStatusAction): ResourcePageModelState {
-      console.log(action, 'BBBBB');
       return {...state, resourceStatus: action.payload};
     },
     onChangeInputText(state: ResourcePageModelState, action: OnChangeInputTextAction): ResourcePageModelState {
