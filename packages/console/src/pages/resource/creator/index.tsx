@@ -21,23 +21,25 @@ import {
   OnChangeResourceTypeAction
 } from "@/models/resourceCreatorPage";
 
-const resourceTypes = [
-  {
-    value: 'image',
-  },
-  {
-    value: 'zip',
-  },
-];
+// const resourceTypes = [
+//   {
+//     value: 'image',
+//   },
+//   {
+//     value: 'zip',
+//   },
+// ];
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
   resource: ResourceCreatorPageModelState;
 }
 
+const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
+
 function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
   return (<FLayout>
-    <FContentLayout header={<Header/>}>
+    <FContentLayout header={<Header onClickCache={() => null} onClickCreate={() => null}/>}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>
@@ -51,7 +53,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
               })}
               className={styles.FInput}
               placeholder={'输入资源名称'}
-              suffix={<span className={styles.FInputWordCount}>40</span>}
+              suffix={<span className={styles.FInputWordCount}>{resource.name.length}</span>}
             />
           </div>
         </FEditorCard>
@@ -103,13 +105,18 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
   </FLayout>);
 }
 
-function Header() {
+interface HeaderProps {
+  onClickCache: () => void;
+  onClickCreate: () => void;
+}
+
+function Header({onClickCache, onClickCreate}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText text={'创建资源'} type={'h2'}/>
 
     <Space size={30}>
-      <FTextButton>暂存草稿</FTextButton>
-      <FNormalButton style={{width: 108}}>创建</FNormalButton>
+      <FTextButton onClick={onClickCache}>暂存草稿</FTextButton>
+      <FNormalButton onClick={onClickCreate} style={{width: 108}}>创建</FNormalButton>
     </Space>
   </div>);
 }

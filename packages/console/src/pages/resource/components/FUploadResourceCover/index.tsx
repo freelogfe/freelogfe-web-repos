@@ -36,18 +36,18 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
       </div>)
     }
     <div className={styles.coverTip}>
-      <FUploadImage {...uploadConfig}>
+      {value && <FUploadImage {...uploadConfig}>
         <a className={styles.ReUpload}>重新上传</a>
-      </FUploadImage>
-      <div style={{height: 15}}/>
-      <FContentText type="additional2" text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；'}/>
-      <div style={{height: 5}}/>
-      <FContentText type="additional2" text={'未上传封面时，默认使用系统封面。'}/>
-    </div>
-  </div>);
-}
+      </FUploadImage>}
+        <div style={{height: 15}}/>
+        <FContentText type="additional2" text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；'}/>
+        <div style={{height: 5}}/>
+        <FContentText type="additional2" text={'未上传封面时，默认使用系统封面。'}/>
+        </div>
+        </div>);
+      }
 
-// interface UploadProps {
+      // interface UploadProps {
 //   children?: React.ReactNode;
 //   on
 // }
