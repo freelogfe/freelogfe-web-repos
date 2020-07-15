@@ -48,7 +48,7 @@ function Market({dispatch, market}: MarketProps) {
         onChange={onChangeTab}
       />
       <div style={{height: 30}}/>
-      
+
 
       {/*<div style={{height: 100}}/>*/}
     </FLayout>

@@ -25,7 +25,7 @@ const config: IConfig = {
       // exact: true,
       routes: [
         {exact: true, path: '.', component: '../pages/resource'},
-
+        {exact: true, path: 'collect', component: '../pages/resource/collect'},
         {
           path: 'creator',
           routes: [

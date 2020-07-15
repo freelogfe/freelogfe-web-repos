@@ -2,28 +2,37 @@ import * as React from 'react';
 import {Pagination, Select} from 'antd';
 import styles from './index.less';
 
-const {Option} = Select;
-export default function ({className}: any) {
+interface FPaginationProps {
+  current?: number
+  pageSize?: number;
+  total?: number;
+  className?: string;
+  onChangeCurrent?: (value: number) => void;
+  onChangePageSize?: (value: number) => void;
+}
+
+export default function ({className, current = 1, pageSize = 20, total = -1, onChangeCurrent, onChangePageSize}: FPaginationProps) {
   return (
     <div className={className + ' ' + styles.FPagination}>
       <Select
         className={styles.Select}
-        defaultValue={20}
+        value={pageSize}
         style={{width: 90}}
         size="small"
-        // onChange={handleChange}
+        onChange={(value) => onChangePageSize && onChangePageSize(value)}
       >
-        <Option value={10}>10条/页</Option>
-        <Option value={20}>20条/页</Option>
-        <Option value={30}>30条/页</Option>
-        <Option value={40}>40条/页</Option>
-        <Option value={50}>50条/页</Option>
+        <Select.Option value={10}>10条/页</Select.Option>
+        <Select.Option value={20}>20条/页</Select.Option>
+        <Select.Option value={30}>30条/页</Select.Option>
+        <Select.Option value={40}>40条/页</Select.Option>
+        <Select.Option value={50}>50条/页</Select.Option>
       </Select>
       <Pagination
         // size="small"
-        defaultCurrent={6}
-        total={500}
+        current={current}
+        total={total}
         // showTotal={}
+        onChange={(page) => onChangeCurrent && onChangeCurrent(page)}
         showSizeChanger={false}
       />
     </div>);

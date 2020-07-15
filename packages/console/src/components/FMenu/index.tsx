@@ -4,30 +4,29 @@ import {Menu} from 'antd';
 import {ClickParam} from 'antd/lib/menu';
 
 interface FMenuItem {
-  children: React.ReactNode;
-  key: string | number;
+  text?: React.ReactNode;
+  value: string;
 }
-
 
 export interface FMenuProps {
-  dataSource: FMenuItem[];
-  onClick?: (param: ClickParam) => void;
+  options: FMenuItem[];
+  onClick?: (value: string) => void;
 }
 
-export default function FMenu({dataSource, onClick}: FMenuProps) {
+export default function FMenu({options, onClick}: FMenuProps) {
   return (
     <Menu
       selectable={false}
       className={styles.Menu}
       mode="vertical"
-      onClick={onClick}
+      onClick={(param) => onClick && onClick(param.key)}
     >
       {
-        dataSource
+        (options || [])
           .map((i: FMenuItem) => (<Menu.Item
-            key={i.key}
+            key={i.value}
             className={styles.MenuItem}
-          >{i.children}</Menu.Item>))
+          >{i.text || i.value}</Menu.Item>))
       }
     </Menu>
   );

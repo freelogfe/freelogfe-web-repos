@@ -9,6 +9,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 import {OnChangeInputTextAction, OnChangeResourceTypeAction, OnChangeTabValueAction} from "@/models/marketPage";
 import {router} from 'umi';
+import {resourceTypes} from "@/utils/globals";
 
 const navs = [
   {
@@ -24,7 +25,7 @@ const navs = [
 const filters = [{
   value: -1,
   text: '全部类型'
-}, ...['json', 'widget', 'image', 'audio', 'markdown', 'theme', 'reveal_slide', 'license', 'video', 'catalog'].map((i) => ({value: i}))];
+}, ...resourceTypes.map((i) => ({value: i}))];
 
 interface MarketProps {
   dispatch: Dispatch;

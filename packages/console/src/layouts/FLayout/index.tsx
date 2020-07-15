@@ -10,34 +10,45 @@ import router from 'umi/router';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalSearchingModelState} from '@/models/connect';
 
-const discover = [
+const discoverOptions = [
   {
-    children: '发现市场',
-    key: 1
+    text: '发现市场',
+    value: '1'
   },
   {
-    children: '发现节点',
-    key: 2
-  },
-];
-
-const create = [
-  {
-    children: '创建资源',
-    key: 1
-  },
-  {
-    children: '创建节点',
-    key: 2
+    text: '发现节点',
+    value: '2'
   },
 ];
 
-const types = [{
-  key: 1,
-  children: '中文'
+const resourcesOptions = [
+  {
+    text: '我的资源',
+    value: '1'
+  },
+  {
+    text: '我的收藏',
+    value: '2'
+  },
+];
+
+const creatorOptions = [
+  {
+    text: '创建资源',
+    value: '1'
+  },
+  {
+    text: '创建节点',
+    value: '2'
+  },
+];
+
+const languagesOptions = [{
+  value: '1',
+  text: '中文'
 }, {
-  key: 2,
-  children: 'English'
+  value: '2',
+  text: 'English'
 }];
 
 interface FLayoutProps {
@@ -52,22 +63,31 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
 
   const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
 
-  function onDiscoverClick(params: any) {
+  function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (params.key === '1') {
+    if (value === '1') {
       return router.push('/');
     }
-    if (params.key === '2') {
+    if (value === '2') {
       return router.push('/example');
     }
   }
 
-  function onCreateClick(params: any) {
-    console.log(params, 'params');
-    if (params.key === '1') {
+  function onClickResource(value: string) {
+    if (value === '1') {
+      return router.push('/resource');
+    }
+    if (value === '2') {
+      return router.push('/resource/collect');
+    }
+  }
+
+  function onCreateClick(value: string) {
+    // console.log(params, 'params');
+    if (value === '1') {
       return router.push('/resource/creator');
     }
-    if (params.key === '2') {
+    if (value === '2') {
 
     }
   }
@@ -84,11 +104,19 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
         <div className={styles.headerLeft}>
           <a className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
           <div className={styles.MenuBar}>
-            <Dropdown overlay={<FMenu onClick={onDiscoverClick} dataSource={discover}/>}>
-              <a className={styles.Menu}>发现</a>
+            <Dropdown overlay={<FMenu
+              onClick={onDiscoverClick}
+              options={discoverOptions}
+            />}>
+              <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>发现</a>
             </Dropdown>
             <a className={styles.Menu}>存储空间</a>
-            <a className={styles.Menu}>资源管理</a>
+            <Dropdown overlay={<FMenu
+              onClick={onClickResource}
+              options={resourcesOptions}
+            />}>
+              <a onClick={() => onClickResource('1')} className={styles.Menu}>资源管理</a>
+            </Dropdown>
             <a className={styles.Menu}>节点管理</a>
             <a className={styles.Menu}>合约管理</a>
           </div>
@@ -109,7 +137,8 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
 
           <Dropdown overlay={<FMenu
             onClick={onCreateClick}
-            dataSource={create}/>}
+            options={creatorOptions}
+          />}
           >
             <a className={styles.create}>
               <FCircleButton/>
@@ -150,7 +179,8 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
             <div>
               <div>关于freelog</div>
               <div style={{width: 30}}/>
-              <Dropdown overlay={<FMenu dataSource={types}/>}>
+              <Dropdown overlay={<FMenu
+                options={languagesOptions}/>}>
                 <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
               </Dropdown>
               <div style={{width: 120}}/>
