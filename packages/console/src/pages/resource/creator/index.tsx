@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
@@ -29,7 +29,7 @@ interface ResourceCreatorProps {
 const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
 function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
-  return (<FLayout>
+  return (<FCenterLayout>
     <FContentLayout header={<Header onClickCache={() => null} onClickCreate={() => null}/>}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
@@ -93,7 +93,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
         </FEditorCard>
       </div>
     </FContentLayout>
-  </FLayout>);
+  </FCenterLayout>);
 }
 
 interface HeaderProps {

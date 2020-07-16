@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import {FTipText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 
 export default function () {
-  return (<FLayout>
+  return (<FCenterLayout>
     <div style={{height: 100}}/>
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
@@ -16,5 +16,5 @@ export default function () {
       <div style={{height: 20}}/>
       <FNormalButton>为资源创建第一个版本</FNormalButton>
     </div>
-  </FLayout>)
+  </FCenterLayout>)
 }

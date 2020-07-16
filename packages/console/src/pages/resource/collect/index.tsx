@@ -1,5 +1,5 @@
 import * as React from 'react';
-import FLayout from '@/layouts/FLayout';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
@@ -32,12 +32,12 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
 
   function onChangeTab(value: '1' | '2') {
     if (value === '1') {
-      return router.push('/resource');
+      return router.push('/resource/list');
     }
   }
 
   return (
-    <FLayout>
+    <FCenterLayout>
       <FAffixTabs
         value={'2'}
         options={navs}
@@ -73,9 +73,11 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
           payload: value
         })}
         isCollect={true}
+        onBoomJuice={() => null}
+        onClickMore={() => null}
       />
 
-    </FLayout>
+    </FCenterLayout>
   );
 }
 

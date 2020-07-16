@@ -1,5 +1,5 @@
 import * as React from 'react';
-import FLayout from '@/layouts/FLayout';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourcePageModelState} from '@/models/connect';
@@ -37,7 +37,7 @@ function Resource({dispatch, resource}: ResourceProps) {
   }
 
   return (
-    <FLayout>
+    <FCenterLayout>
       <FAffixTabs
         value={'1'}
         options={navs}
@@ -73,9 +73,12 @@ function Resource({dispatch, resource}: ResourceProps) {
           payload: value
         })}
         showGotoCreateBtn={true}
+        onClickDetails={() => null}
+        onClickEditing={(id) => router.push(`/resource/${id}/info`)}
+        onClickRevision={(id,record) => router.push(`/resource/${id}/version/${record.version}`)}
       />
 
-    </FLayout>
+    </FCenterLayout>
   );
 }
 

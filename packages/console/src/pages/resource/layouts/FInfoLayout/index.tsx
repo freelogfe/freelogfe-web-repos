@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
+import FSiderLayout from '@/layouts/FSiderLayout';
 import Sider from './Sider';
 
 interface FInfoLayoutProps {
@@ -8,7 +8,7 @@ interface FInfoLayoutProps {
 }
 
 export default function ({children}: FInfoLayoutProps) {
-  return (<FLayout sider={<Sider/>} structure="left-right">{children}</FLayout>);
+  return (<FSiderLayout sider={<Sider/>}>{children}</FSiderLayout>);
 }
 
 

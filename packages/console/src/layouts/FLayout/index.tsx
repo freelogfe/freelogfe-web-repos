@@ -43,25 +43,14 @@ const creatorOptions = [
   },
 ];
 
-const languagesOptions = [{
-  value: '1',
-  text: '中文'
-}, {
-  value: '2',
-  text: 'English'
-}];
 
 interface FLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;
-  structure?: 'center' | 'left-right';
-  sider?: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   global: GlobalSearchingModelState;
 }
 
-function FLayout({children, sider, structure = 'center', dispatch, global}: FLayoutProps) {
-
-  const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
+function FLayout({children, dispatch, global}: FLayoutProps) {
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
@@ -75,7 +64,7 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
 
   function onClickResource(value: string) {
     if (value === '1') {
-      return router.push('/resource');
+      return router.push('/resource/list');
     }
     if (value === '2') {
       return router.push('/resource/collect');
@@ -91,12 +80,6 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
 
     }
   }
-
-  React.useEffect(() => {
-    window.onresize = () => {
-      setFooterOffsetTop(window.innerHeight - 68);
-    }
-  }, []);
 
   return (
     <Layout className={styles.Layout}>
@@ -153,47 +136,10 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
           </a>
         </div>
       </Layout.Header>
-      {
-        structure === 'center' &&
-        (<Layout.Content className={styles.Content}>
-          <div>{children}</div>
-        </Layout.Content>)
-      }
 
-      {
-        structure === 'left-right' &&
-        (<Layout.Content className={styles.leftRight}>
-          <div className={styles.Slider}>
-            <div style={{height: 40}}/>
-            <div>{sider}</div>
-          </div>
-          <div className={styles.rightContent}>
-            <div>{children}</div>
-          </div>
-        </Layout.Content>)
-      }
+      {children}
 
       <div style={{height: 100}}/>
-
-      {/* window.onresize */}
-      {
-        !sider && (<Affix offsetTop={footerOffsetTop}>
-          <Layout.Footer className={styles.Footer}>
-            <div>
-              <div>关于freelog</div>
-              <div style={{width: 30}}/>
-              <Dropdown overlay={<FMenu
-                options={languagesOptions}/>}>
-                <div style={{cursor: 'pointer'}}>中文<DownOutlined style={{marginLeft: 8}}/></div>
-              </Dropdown>
-              <div style={{width: 120}}/>
-              <span>粤ICP备17085716号-1</span>
-              <div style={{width: 30}}/>
-              <span>Copyright© 2020 freelog freelog.com版权所有</span>
-            </div>
-          </Layout.Footer>
-        </Affix>)
-      }
 
     </Layout>
   );

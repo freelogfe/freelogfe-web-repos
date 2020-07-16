@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.less';
 import FLayout from '@/layouts/FLayout';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import {Button} from 'antd';
 import FAffixTabs from '@/components/FAffixTabs';
 import FInput from '@/components/FInput';
@@ -41,7 +42,7 @@ function Market({dispatch, market}: MarketProps) {
   }
 
   return (
-    <FLayout>
+    <FCenterLayout>
       <FAffixTabs
         options={navs}
         value={'1'}
@@ -91,7 +92,7 @@ function Market({dispatch, market}: MarketProps) {
       </div>
 
       {/*<div style={{height: 100}}/>*/}
-    </FLayout>
+    </FCenterLayout>
   );
 }
 

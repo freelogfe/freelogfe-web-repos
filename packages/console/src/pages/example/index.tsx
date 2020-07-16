@@ -1,13 +1,9 @@
 import React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
-import {Button} from 'antd';
+import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
-import FInput from '@/components/FInput';
-import FResourceCard from "@/components/FResourceCard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from "@/models/connect";
-import {OnChangeInputTextAction, OnChangeResourceTypeAction, OnChangeTabValueAction} from "@/models/marketPage";
 import {router} from 'umi';
 
 const navs = [
@@ -35,12 +31,12 @@ function Market({dispatch, market}: MarketProps) {
 
   function onChangeTab(value: '1' | '2') {
     if (value === '1') {
-      return router.push('/');
+      return router.push('/market');
     }
   }
 
   return (
-    <FLayout>
+    <FCenterLayout>
       <FAffixTabs
         options={navs}
         value={'2'}
@@ -51,7 +47,7 @@ function Market({dispatch, market}: MarketProps) {
 
 
       {/*<div style={{height: 100}}/>*/}
-    </FLayout>
+    </FCenterLayout>
   );
 }
 

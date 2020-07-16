@@ -16,6 +16,8 @@ const config: IConfig = {
     {exact: true, path: '/ui-example', component: '../pages/ui-example'},
     {
       path: '/',
+      component: '../layouts/FLayout',
+      // meta: {structure: 'left-right'},
       routes: [
         {exact: true, path: '.', redirect: '/market'},
         {exact: true, path: 'market', component: '../pages/market'},
