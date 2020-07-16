@@ -1,16 +1,16 @@
 import * as React from 'react';
 import FLayout from '@/layouts/FLayout';
 import FAffixTabs from '@/components/FAffixTabs';
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourcePageModelState} from '@/models/connect';
 import {router} from 'umi';
 import {
   OnChangeInputTextAction,
   OnChangePageCurrentAction, OnChangePageSizeAction,
   OnChangeResourceStatusAction,
   OnChangeResourceTypeAction
-} from "@/models/resourceCollectPage";
-import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
+} from '@/models/resourcePage';
+import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 
 const navs = [
   {
@@ -23,23 +23,23 @@ const navs = [
   },
 ];
 
-interface ResourceCollectProps {
+interface ResourceProps {
   dispatch: Dispatch;
-  resource: ResourceCollectPageModelState;
+  resource: ResourcePageModelState;
 }
 
-function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
+function Resource({dispatch, resource}: ResourceProps) {
 
   function onChangeTab(value: '1' | '2') {
-    if (value === '1') {
-      return router.push('/resource');
+    if (value === '2') {
+      return router.push('/resource/collect');
     }
   }
 
   return (
     <FLayout>
       <FAffixTabs
-        value={'2'}
+        value={'1'}
         options={navs}
         onChange={onChangeTab}
       />
@@ -53,32 +53,32 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
         pageSize={resource.pageSize}
         totalNum={resource.totalNum}
         onChangeResourceType={(value) => dispatch<OnChangeResourceTypeAction>({
-          type: 'resourceCollectPage/onChangeResourceType',
+          type: 'resourcePage/onChangeResourceType',
           payload: value
         })}
         onChangeResourceStatus={(value) => dispatch<OnChangeResourceStatusAction>({
-          type: 'resourceCollectPage/onChangeResourceStatus',
+          type: 'resourcePage/onChangeResourceStatus',
           payload: value
         })}
         onChangeInputText={(value) => dispatch<OnChangeInputTextAction>({
-          type: 'resourceCollectPage/onChangeInputText',
+          type: 'resourcePage/onChangeInputText',
           payload: value
         })}
         onChangePageCurrent={(value) => dispatch<OnChangePageCurrentAction>({
-          type: 'resourceCollectPage/onChangePageCurrent',
+          type: 'resourcePage/onChangePageCurrent',
           payload: value
         })}
         onChangePageSize={(value) => dispatch<OnChangePageSizeAction>({
-          type: 'resourceCollectPage/onChangePageSize',
+          type: 'resourcePage/onChangePageSize',
           payload: value
         })}
-        isCollect={true}
+        showGotoCreateBtn={true}
       />
 
     </FLayout>
   );
 }
 
-export default connect(({resourceCollectPage}: ConnectState) => ({
-  resource: resourceCollectPage,
-}))(ResourceCollect);
+export default connect(({resourcePage}: ConnectState) => ({
+  resource: resourcePage,
+}))(Resource);

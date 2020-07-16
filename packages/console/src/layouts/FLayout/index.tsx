@@ -66,7 +66,7 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
     if (value === '1') {
-      return router.push('/');
+      return router.push('/market');
     }
     if (value === '2') {
       return router.push('/example');
@@ -102,7 +102,10 @@ function FLayout({children, sider, structure = 'center', dispatch, global}: FLay
     <Layout className={styles.Layout}>
       <Layout.Header className={styles.header}>
         <div className={styles.headerLeft}>
-          <a className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
+          <a
+            onClick={() => router.push('/market')}
+            className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
+          />
           <div className={styles.MenuBar}>
             <Dropdown overlay={<FMenu
               onClick={onDiscoverClick}

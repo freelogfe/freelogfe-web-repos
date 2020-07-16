@@ -13,41 +13,45 @@ if (!fs.existsSync(authInfoPath)) {
 const config: IConfig = {
   treeShaking: true,
   routes: [
-    // {
-    // path: '/',
-    // component: '../layouts/index',
-    // routes: [
-    {exact: true, path: '/', component: '../pages/index'},
-    {exact: true, path: '/example', component: '../pages/example'},
-
+    {exact: true, path: '/ui-example', component: '../pages/ui-example'},
     {
-      path: '/resource',
-      // exact: true,
+      path: '/',
       routes: [
-        {exact: true, path: '.', component: '../pages/resource'},
-        {exact: true, path: 'collect', component: '../pages/resource/collect'},
+        {exact: true, path: '.', redirect: '/market'},
+        {exact: true, path: 'market', component: '../pages/market'},
+        {exact: true, path: 'example', component: '../pages/example'},
         {
-          path: 'creator',
+          path: 'resource',
           routes: [
-            {exact: true, path: '.', component: '../pages/resource/creator'},
-            {exact: true, path: 'success', component: '../pages/resource/creator/success'},
-          ]
-        },
-        {exact: true, path: 'info', component: '../pages/resource/info'},
-        {exact: true, path: 'auth', component: '../pages/resource/auth'},
-        {
-          path: 'version',
-          routes: [
-            {exact: true, path: '.', component: '../pages/resource/version'},
-            {exact: true, path: 'success', component: '../pages/resource/version/success'},
-            {exact: true, path: ':version', component: '../pages/resource/version/$version'},
+            {exact: true, path: '.', redirect: '/resource/list'},
+            {exact: true, path: 'list', component: '../pages/resource/list'},
+            {exact: true, path: 'collect', component: '../pages/resource/collect'},
+            {
+              path: 'creator',
+              routes: [
+                {exact: true, path: '.', component: '../pages/resource/creator'},
+                {exact: true, path: 'success', component: '../pages/resource/creator/success'},
+              ]
+            },
+            {
+              path: ':id',
+              routes: [
+                {exact: true, path: 'info', component: '../pages/resource/$id/info'},
+                {exact: true, path: 'auth', component: '../pages/resource/$id/auth'},
+                {
+                  path: 'version',
+                  routes: [
+                    {exact: true, path: 'creator', component: '../pages/resource/$id/version/creator'},
+                    {exact: true, path: 'success', component: '../pages/resource/$id/version/success'},
+                    {exact: true, path: ':version', component: '../pages/resource/$id/version/$version'},
+                  ]
+                },
+              ]
+            }
           ]
         },
       ]
     },
-    // ]
-    // }
-    {exact: true, path: '/ui-example', component: '../pages/ui-example'},
   ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html

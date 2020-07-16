@@ -1,21 +1,15 @@
 import * as React from 'react';
-import styles from "@/pages/resource/index.less";
-import {Dropdown} from "antd";
-import FMenu from "@/components/FMenu";
-import {
-  OnChangeInputTextAction,
-  OnChangePageCurrentAction, OnChangePageSizeAction,
-  OnChangeResourceStatusAction,
-  OnChangeResourceTypeAction
-} from "@/models/resourcePage";
-import FInput from "@/components/FInput";
-import {FNormalButton} from "@/components/FButton";
-import {router} from "umi";
-import FResourceCard from "@/components/FResourceCard";
-import FPagination from "@/components/FPagination";
-import FLayout from "@/layouts/FLayout";
-import {resourceTypes} from "@/utils/globals";
+import styles from './index.less';
+import {Dropdown} from 'antd';
+import FMenu from '@/components/FMenu';
+import FInput from '@/components/FInput';
+import {FNormalButton} from '@/components/FButton';
+import {router} from 'umi';
+import FResourceCard from '@/components/FResourceCard';
+import FPagination from '@/components/FPagination';
+import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
+
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -51,11 +45,20 @@ interface FResourceCardsListProps {
   onChangeInputText?: (value: string) => void;
   onChangePageCurrent?: (value: number) => void;
   onChangePageSize?: (value: number) => void;
+  showGotoCreateBtn?: boolean;
+  isCollect?: boolean;
+  onBoomJuice?: (id: string | number, record: any, index: number) => void;
+  onClickDetails?: (id: string | number, record: any, index: number) => void;
+  onClickEditing?: (id: string | number, record: any, index: number) => void;
+  onClickRevision?: (id: string | number, record: any, index: number) => void;
+  onClickMore?: (id: string | number, record: any, index: number) => void;
 }
 
 export default function ({
                            resourceType, resourceStatus, inputText, dataSource, pageCurrent, pageSize, totalNum,
-                           onChangeResourceType, onChangeResourceStatus, onChangeInputText, onChangePageCurrent, onChangePageSize
+                           onChangeResourceType, onChangeResourceStatus, onChangeInputText, onChangePageCurrent, onChangePageSize,
+                           showGotoCreateBtn = false, isCollect = false,
+                           onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore
                          }: FResourceCardsListProps) {
 
   const [typeText, setTypeText] = React.useState('');
@@ -69,7 +72,6 @@ export default function ({
 
   React.useEffect(() => {
     const selectedStatus: any = resourceStatusOptions.find((i) => i.value === resourceStatus);
-    console.log(selectedStatus, 'selectedStatusselectedStatus');
     setStatusText(selectedStatus?.text || selectedStatus?.value);
   }, [resourceStatus]);
 
@@ -110,20 +112,26 @@ export default function ({
           theme="dark"
           className={styles.FInput}
         />
-        <FNormalButton
+        {showGotoCreateBtn && <FNormalButton
           onClick={() => router.push('/resource/creator')}
           type="primary"
-        >创建资源</FNormalButton>
+        >创建资源</FNormalButton>}
       </div>
     </div>
 
     <div className={styles.Content}>
       {
-        dataSource.map((i: any) => (<FResourceCard
+        dataSource.map((i: any, j: number) => (<FResourceCard
           key={i.id}
           resource={i}
-          type="resource"
-          className={styles.FResourceCard}/>))
+          type={isCollect ? 'favorite' : 'resource'}
+          className={styles.FResourceCard}
+          onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
+          onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
+          onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
+          onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
+          onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
+        />))
       }
       <div className={styles.bottomPadding}/>
       <div className={styles.bottomPadding}/>

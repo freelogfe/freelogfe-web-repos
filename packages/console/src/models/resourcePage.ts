@@ -119,7 +119,7 @@ const Model: ResourcePageModelType = {
     }],
     pageCurrent: 1,
     pageSize: 20,
-    totalNum: 6,
+    totalNum: 20,
   },
 
   effects: {

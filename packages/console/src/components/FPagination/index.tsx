@@ -30,6 +30,7 @@ export default function ({className, current = 1, pageSize = 20, total = -1, onC
       <Pagination
         // size="small"
         current={current}
+        pageSize={pageSize}
         total={total}
         // showTotal={}
         onChange={(page) => onChangeCurrent && onChangeCurrent(page)}

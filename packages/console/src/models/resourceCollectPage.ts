@@ -75,24 +75,17 @@ const Model: ResourceCollectModelType = {
     resourceType: '-1',
     resourceStatus: '-1',
     inputText: '',
-    dataSource: [{
-      id: 1,
+    dataSource: Array(11).fill(null).map((i, j) => ({
+      id: j,
       cover: '',
       title: '这里是发行名称1',
       version: '1.0.10',
       policy: ['免费1', '免费2', '免费3'],
       type: 'image',
-    }, {
-      id: 2,
-      cover: '',
-      title: '这里是发行名称2',
-      version: '1.0.10',
-      policy: ['免费1', '免费2', '免费3'],
-      type: 'image',
-    }],
+    })),
     pageCurrent: 1,
     pageSize: 20,
-    totalNum: 6,
+    totalNum: 11,
   },
 
   effects: {
