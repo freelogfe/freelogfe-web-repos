@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import {Button} from 'antd';
 import FAffixTabs from '@/components/FAffixTabs';

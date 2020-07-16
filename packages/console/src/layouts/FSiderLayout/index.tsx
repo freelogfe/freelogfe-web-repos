@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import {Layout} from "antd";
+import {Layout} from 'antd';
 
 interface FSiderLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;

@@ -2,47 +2,45 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 
-export interface ResourceInfoPageModelState {
+export interface ResourceSilderModelState {
   info: {
     name: string;
     resourceType: string;
     cover: string;
-    upthrows: string[];
-    introduction: string;
-    labels: string[];
+    versions: string[];
+    status: 'online',
   };
 }
 
 interface ChangeInfoAction extends AnyAction {
-  type: 'resourceInfoPage/changeInfoAction',
-  payload: ResourceInfoPageModelState['info'];
+  type: 'resourceSilder/changeInfoAction',
+  payload: ResourceSilderModelState['info'];
 }
 
 // export
 
 export interface ResourceInfoPageModelType {
-  namespace: 'resourceInfoPage';
-  state: ResourceInfoPageModelState;
+  namespace: 'resourceSilder';
+  state: ResourceSilderModelState;
   effects: {
     fetchDataSource: Effect;
   };
   reducers: {
-    changeInfo: DvaReducer<ResourceInfoPageModelState, ChangeInfoAction>;
+    changeInfo: DvaReducer<ResourceSilderModelState, ChangeInfoAction>;
   };
   subscriptions: { setup: Subscription };
 }
 
 const Model: ResourceInfoPageModelType = {
-  namespace: 'resourceInfoPage',
+  namespace: 'resourceSilder',
 
   state: {
     info: {
       name: 'ww-zh/freelog-waterfall-picture1',
       resourceType: 'image',
       cover: 'https://cn.bing.com/th?id=OHR.FrederickSound_ZH-CN1838908749_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0',
-      upthrows: ['stefan/image3', 'stefan/image4'],
-      introduction: '在经济学界中流传着一篇著名的文章，这篇文章用独特的视角把精彩纷呈的社会分工呈现给大众，这篇文章深刻的阐述了高度的专业化如何带来人类总体福祉的提升，这篇文章揭示了自由选择在人类生产创造过程中的重要意义',
-      labels: ['123', '456', '789'],
+      versions: ['1.1.2', '1.3.42', '52.342.12'],
+      status: 'online',
     },
   },
 
@@ -53,7 +51,7 @@ const Model: ResourceInfoPageModelType = {
   },
 
   reducers: {
-    changeInfo(state: ResourceInfoPageModelState, action: ChangeInfoAction): ResourceInfoPageModelState {
+    changeInfo(state: ResourceSilderModelState, action: ChangeInfoAction): ResourceSilderModelState {
       return {
         ...state,
         info: action.payload
@@ -63,6 +61,7 @@ const Model: ResourceInfoPageModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
+      // console.log(history, 'historyhistory');
     },
   },
 

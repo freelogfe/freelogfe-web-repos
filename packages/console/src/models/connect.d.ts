@@ -7,6 +7,7 @@ import {ResourceInfoPageModelState} from './resourceInfoPage';
 import {ResourceVersionPageModelState} from './ResourceVersionPage';
 import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
+import {ResourceSilderModelState} from './resourceSilder';
 
 export {
   GlobalSearchingModelState,
@@ -18,6 +19,7 @@ export {
   ResourceVersionPageModelState,
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
+  ResourceSilderModelState,
 };
 
 export interface ConnectState {
@@ -30,4 +32,5 @@ export interface ConnectState {
   resourceVersionPage: ResourceVersionPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
+  resourceSilder: ResourceSilderModelState;
 }
