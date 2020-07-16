@@ -7,15 +7,17 @@ import {TextAreaProps} from 'antd/lib/input';
 
 interface FIntroductionEditorProps extends TextAreaProps {
   // status?: '' | 'edit' | 'save';
+  // value: string;
+  // onChange?: (value: string) => void;
 }
 
-export default function ({className, value, onChange}: FIntroductionEditorProps) {
+export default function ({className, value = '', onChange}: FIntroductionEditorProps) {
   return (<div className={styles.introduction}>
     <Input.TextArea
       value={value}
       onChange={onChange}
       className={styles.TextArea}
     />
-    <span className={styles.FInputWordCount}>200</span>
+    <span className={styles.FInputWordCount}>{String(value).length}</span>
   </div>)
 }

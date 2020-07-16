@@ -41,11 +41,16 @@ export default function ({value = [], onChange}: FLabelEditor) {
     onChangeInput(e.target.value);
   }
 
+  function onRemove(index: number) {
+    onChangeErrorText('');
+    return onChange && onChange(value?.filter((i, j) => j !== index));
+  }
+
   return (<div className={styles.styles}>
     {
-      value.map((i: string) => (<label key={i} className={styles.label}>
+      value.map((i: string, j: number) => (<label key={i} className={styles.label}>
         <span>{i}</span>
-        <a><CloseOutlined/></a>
+        <a onClick={() => onRemove(j)}><CloseOutlined/></a>
       </label>))
     }
     <div className={styles.InputWrap}>
