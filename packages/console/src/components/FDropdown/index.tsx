@@ -8,10 +8,13 @@ import {DownOutlined} from '@ant-design/icons';
 interface FDropdownProps extends FMenuProps {
   children?: React.ReactNode;
   text?: React.ReactNode;
+  onChange?: (value: string) => void;
 }
 
-export default function ({dataSource, children, text}: FDropdownProps) {
-  return (<Dropdown overlay={<FMenu dataSource={dataSource}/>}>
+export default function ({options, children, text, onChange}: FDropdownProps) {
+  return (<Dropdown overlay={<FMenu
+    onClick={onChange}
+    options={options}/>}>
     {text ? (<div className={styles.text}>
       {text}
       <DownOutlined className={styles.DownOutlined}/>

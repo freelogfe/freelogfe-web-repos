@@ -3,7 +3,11 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 
 export interface ResourceAuthPageModelState {
-  policies: any[] | null;
+  policies: {
+    title: string;
+    status: 'executing' | 'stopped';
+    code: string;
+  }[] | null;
   contractsAuthorize: any[] | null;
   contractsAuthorized: any[] | null;
 }
@@ -25,7 +29,16 @@ const Model: ResourceAuthPageModelType = {
   namespace: 'resourceAuthPage',
 
   state: {
-    policies: null,
+    policies: [{
+      title: '免费策略1',
+      status: 'executing',
+      code: 'for public:\n' +
+        '  initial:\n' +
+        '    active\n' +
+        '    recontractable\n' +
+        '    presentable\n' +
+        '    terminate',
+    }],
     contractsAuthorized: [],
     contractsAuthorize: [
       {

@@ -50,7 +50,7 @@ function Auth({dispatch, auth}: AuthProps) {
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={'授权信息'} type={'h2'}/>}>
       <FEditorCard title={'授权策略'}>
-        <FPolicies/>
+        <FPolicies dataSource={auth.policies || []}/>
       </FEditorCard>
       <FEditorCard title={'被授权合约'}>
         <FDepPanel/>
