@@ -4,6 +4,7 @@ import {DvaReducer} from './shared';
 
 export interface ResourceAuthPageModelState {
   policies: {
+    id: string | number;
     title: string;
     status: 'executing' | 'stopped';
     code: string;
@@ -30,7 +31,18 @@ const Model: ResourceAuthPageModelType = {
 
   state: {
     policies: [{
+      id: '12',
       title: '免费策略1',
+      status: 'executing',
+      code: 'for public:\n' +
+        '  initial:\n' +
+        '    active\n' +
+        '    recontractable\n' +
+        '    presentable\n' +
+        '    terminate',
+    }, {
+      id: '13',
+      title: '免费策略2',
       status: 'executing',
       code: 'for public:\n' +
         '  initial:\n' +

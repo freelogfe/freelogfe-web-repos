@@ -13,6 +13,7 @@ interface FCodemirror {
 
 export default function ({value, onChange}: FCodemirror) {
   return (<CodeMirror
+    className={styles.CodeMirror}
     value={value}
     options={{
       lineNumbers: true,
