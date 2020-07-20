@@ -10,14 +10,32 @@ export interface ResourceAuthPageModelState {
     status: 'executing' | 'stopped';
     code: string;
   }[] | null;
-  contractsAuthorize: any[] | null;
   contractsAuthorized: FAuthPanelProps['dataSource'];
+  contractsAuthorize: {
+    key: string,
+    contractName: string,
+    contractID: string,
+    authorizedParty: string,
+    createDate: string,
+    status: 'executing' | 'stopped';
+  }[] | null;
+}
+
+export interface ChangePoliciesAction {
+  type: 'resourceAuthPage/changePolicies';
+  payload: ResourceAuthPageModelState['policies'];
 }
 
 export interface ChangeContractsAuthorizedAction {
   type: 'resourceAuthPage/changeContractsAuthorized';
   payload: ResourceAuthPageModelState['contractsAuthorized'];
 }
+
+export interface ChangeContractsAuthorizeAction {
+  type: 'resourceAuthPage/changeContractsAuthorize';
+  payload: ResourceAuthPageModelState['contractsAuthorize'];
+}
+
 
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
@@ -26,14 +44,16 @@ export interface ResourceAuthPageModelType {
     fetchDataSource: Effect;
   };
   reducers: {
+    changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
     changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
+    changeContractsAuthorize: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizeAction>;
   };
   subscriptions: { setup: Subscription };
 }
 
-const policies: ResourceAuthPageModelState['policies'] = [{
-  id: '12',
-  title: '免费策略1',
+const policies: ResourceAuthPageModelState['policies'] = [1, 2, 3, 4, 5, 6].map((i) => ({
+  id: i,
+  title: '免费策略' + i,
   status: 'executing',
   code: 'for public:\n' +
     '  initial:\n' +
@@ -41,22 +61,12 @@ const policies: ResourceAuthPageModelState['policies'] = [{
     '    recontractable\n' +
     '    presentable\n' +
     '    terminate',
-}, {
-  id: '13',
-  title: '免费策略2',
-  status: 'executing',
-  code: 'for public:\n' +
-    '  initial:\n' +
-    '    active\n' +
-    '    recontractable\n' +
-    '    presentable\n' +
-    '    terminate',
-}];
+}));
 
-const contractsAuthorized: FAuthPanelProps['dataSource'] = [{
-  id: 123,
-  activated: false,
-  title: 'ww-zh/PB-markdown',
+const contractsAuthorized: FAuthPanelProps['dataSource'] = [1, 2, 3, 4, 5, 6].map((i) => ({
+  id: i,
+  activated: i === 2,
+  title: 'ww-zh/PB-markdown' + i,
   resourceType: 'markdown',
   version: '1.2.3',
   contracts: [{
@@ -107,63 +117,9 @@ const contractsAuthorized: FAuthPanelProps['dataSource'] = [{
       '  active\n' +
       '  proceed to state_3 on action_3',
   }],
-}, {
-  id: 1234,
-  activated: true,
-  title: 'ww-zh/PB-markdown123423',
-  resourceType: 'markdown',
-  version: '1.2.3',
-  contracts: [{
-    checked: true,
-    title: '策略1111',
-    status: 'executing',
-    code: 'initial:\n' +
-      '  active\n' +
-      '  recontractable\n' +
-      '  presentable\n' +
-      '  terminate',
-    id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
-    date: '2019-10-10',
-    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
-  }, {
-    checked: true,
-    title: '策略2111',
-    status: 'executing',
-    code: 'initial:\n' +
-      '  active\n' +
-      '  recontractable\n' +
-      '  presentable\n' +
-      '  terminate',
-    id: 'adhjtyrghgjhxdfthgasdhdfl2324gkftr',
-    date: '2019-10-10',
-    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
-  }],
-  policies: [{
-    id: '123423',
-    title: '策略22323',
-    code: 'init:\n' +
-      '  proceed to state_1 on action_1\n' +
-      'state_1:\n' +
-      '  active\n' +
-      '  proceed to state_2 on action_2\n' +
-      'state_2:\n' +
-      '  active\n' +
-      '  proceed to state_3 on action_3',
-  }, {
-    id: '12342323',
-    title: '策asdf略2',
-    code: 'init:\n' +
-      '  proceed to state_1 on action_1\n' +
-      'state_1:\n' +
-      '  active\n' +
-      '  proceed to state_2 on action_2\n' +
-      'state_2:\n' +
-      '  active\n' +
-      '  proceed to state_3 on action_3',
-  }],
-}];
+}));
 
-const contractsAuthorize = [
+const contractsAuthorize: ResourceAuthPageModelState['contractsAuthorize'] = [
   {
     key: '1',
     contractName: '免费策略1',
@@ -197,8 +153,14 @@ const Model: ResourceAuthPageModelType = {
     }
   },
   reducers: {
+    changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {
+      return {...state, policies: action.payload};
+    },
     changeContractsAuthorized(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizedAction): ResourceAuthPageModelState {
       return {...state, contractsAuthorized: action.payload};
+    },
+    changeContractsAuthorize(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizeAction): ResourceAuthPageModelState {
+      return {...state, contractsAuthorize: action.payload};
     },
   },
   subscriptions: {

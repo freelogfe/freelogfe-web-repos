@@ -39,7 +39,7 @@ const Model: ResourceInfoPageModelType = {
       name: 'ww-zh/freelog-waterfall-picture1',
       resourceType: 'image',
       cover: 'https://cn.bing.com/th?id=OHR.FrederickSound_ZH-CN1838908749_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0',
-      versions: ['1.1.2', '1.3.42', '52.342.12'],
+      versions: ['3.2.1', '1.3.4', '1.2.1', '1.1.2'],
       status: 'online',
     },
   },
