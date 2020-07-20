@@ -288,6 +288,7 @@ export default {
 
 
 <style lang="less" type="text/less">
+
   .my-profile-view {
     .profile-info-item .el-form-item__label {
       width: 110px !important;

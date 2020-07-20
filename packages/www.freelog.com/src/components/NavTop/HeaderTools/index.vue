@@ -24,7 +24,7 @@
                         <div style="">{{userInfo && userInfo.mobile}}</div>
                     </div>
                     <!-- <a @click="gotoUserProfile">个人中心</a> -->
-                    <router-link to="/login" >{{$t('navTop.logout')}}</router-link>
+                    <a @click="logout">{{$t('navTop.logout')}}</a>
                 </div>
             </a>
         </div>

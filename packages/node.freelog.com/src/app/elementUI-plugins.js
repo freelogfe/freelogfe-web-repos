@@ -16,10 +16,10 @@ export default {
     Vue.component(Dialog.name, Dialog)
 
     Vue.prototype.$loading = Loading.service
+    Vue.prototype.$message = Message
     Vue.prototype.$msgbox = MessageBox
     Vue.prototype.$alert = MessageBox.alert
     Vue.prototype.$confirm = MessageBox.confirm
     Vue.prototype.$prompt = MessageBox.prompt
-    Vue.prototype.$message = Message
   }
 }
