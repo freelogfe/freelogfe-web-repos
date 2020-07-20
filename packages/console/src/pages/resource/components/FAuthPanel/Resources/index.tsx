@@ -11,13 +11,15 @@ interface ResourcesProps {
     version: string;
     labels: string[];
   }[];
+  onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
 }
 
-export default function Resources({dataSource}: ResourcesProps) {
+export default function Resources({dataSource, onClick}: ResourcesProps) {
   return <div className={styles.styles}>
     {dataSource.map((i) => (
       <div
         key={i.id}
+        onClick={() => onClick && onClick(i)}
         className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
         <div>
           <FContentText text={i.title}/>

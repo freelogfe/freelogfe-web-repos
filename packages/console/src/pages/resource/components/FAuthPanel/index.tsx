@@ -27,13 +27,30 @@ export interface FAuthPanelProps {
       code: string;
     }[];
   }[];
+  onChangeActivatedResource?: (dataSource: FAuthPanelProps['dataSource']) => void;
 }
 
-export default function ({dataSource}: FAuthPanelProps) {
+export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
+
+  const [activeResource, setActiveResource] = React.useState<FAuthPanelProps['dataSource'][0] | null>(null);
+
+  React.useEffect(() => {
+    const resource = dataSource.find((i) => i.activated);
+    setActiveResource(resource || null);
+  }, [dataSource]);
+
+  function onChangeActivated(id: number | string) {
+    onChangeActivatedResource && onChangeActivatedResource(dataSource.map((i) => ({
+      ...i,
+      activated: i.id === id,
+    })));
+  }
+
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>
       <div>
         <Resources
+          onClick={(resource) => onChangeActivated(resource.id)}
           dataSource={dataSource.map((i) => ({
             id: i.id,
             activated: i.activated,
@@ -49,12 +66,12 @@ export default function ({dataSource}: FAuthPanelProps) {
       <div>
         <FContentText type="additional2" text={'可复用的合约'}/>
         <div style={{height: 5}}/>
-        <Contracts dataSource={dataSource[0].contracts}/>
+        {activeResource && <Contracts dataSource={activeResource.contracts}/>}
 
         <div style={{height: 20}}/>
         <FContentText type="additional2" text={'可签约的合约'}/>
         <div style={{height: 5}}/>
-        <Policies dataSource={dataSource[0].policies}/>
+        {activeResource && <Policies dataSource={activeResource.policies}/>}
       </div>
     </div>
   </div>);

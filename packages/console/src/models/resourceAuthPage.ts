@@ -14,6 +14,11 @@ export interface ResourceAuthPageModelState {
   contractsAuthorized: FAuthPanelProps['dataSource'];
 }
 
+export interface ChangeContractsAuthorizedAction {
+  type: 'resourceAuthPage/changeContractsAuthorized';
+  payload: ResourceAuthPageModelState['contractsAuthorized'];
+}
+
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
@@ -21,7 +26,7 @@ export interface ResourceAuthPageModelType {
     fetchDataSource: Effect;
   };
   reducers: {
-    changeDataSource: DvaReducer<ResourceAuthPageModelState, AnyAction>;
+    changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -50,7 +55,7 @@ const policies: ResourceAuthPageModelState['policies'] = [{
 
 const contractsAuthorized: FAuthPanelProps['dataSource'] = [{
   id: 123,
-  activated: true,
+  activated: false,
   title: 'ww-zh/PB-markdown',
   resourceType: 'markdown',
   version: '1.2.3',
@@ -102,6 +107,60 @@ const contractsAuthorized: FAuthPanelProps['dataSource'] = [{
       '  active\n' +
       '  proceed to state_3 on action_3',
   }],
+}, {
+  id: 1234,
+  activated: true,
+  title: 'ww-zh/PB-markdown123423',
+  resourceType: 'markdown',
+  version: '1.2.3',
+  contracts: [{
+    checked: true,
+    title: '策略1111',
+    status: 'executing',
+    code: 'initial:\n' +
+      '  active\n' +
+      '  recontractable\n' +
+      '  presentable\n' +
+      '  terminate',
+    id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
+    date: '2019-10-10',
+    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
+  }, {
+    checked: true,
+    title: '策略2111',
+    status: 'executing',
+    code: 'initial:\n' +
+      '  active\n' +
+      '  recontractable\n' +
+      '  presentable\n' +
+      '  terminate',
+    id: 'adhjtyrghgjhxdfthgasdhdfl2324gkftr',
+    date: '2019-10-10',
+    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
+  }],
+  policies: [{
+    id: '123423',
+    title: '策略22323',
+    code: 'init:\n' +
+      '  proceed to state_1 on action_1\n' +
+      'state_1:\n' +
+      '  active\n' +
+      '  proceed to state_2 on action_2\n' +
+      'state_2:\n' +
+      '  active\n' +
+      '  proceed to state_3 on action_3',
+  }, {
+    id: '12342323',
+    title: '策asdf略2',
+    code: 'init:\n' +
+      '  proceed to state_1 on action_1\n' +
+      'state_1:\n' +
+      '  active\n' +
+      '  proceed to state_2 on action_2\n' +
+      'state_2:\n' +
+      '  active\n' +
+      '  proceed to state_3 on action_3',
+  }],
 }];
 
 const contractsAuthorize = [
@@ -138,9 +197,8 @@ const Model: ResourceAuthPageModelType = {
     }
   },
   reducers: {
-    changeDataSource(state: ResourceAuthPageModelState, action: AnyAction):
-      ResourceAuthPageModelState {
-      return {...state, ...action.payload};
+    changeContractsAuthorized(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizedAction): ResourceAuthPageModelState {
+      return {...state, contractsAuthorized: action.payload};
     },
   },
   subscriptions: {

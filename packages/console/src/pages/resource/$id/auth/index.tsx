@@ -11,6 +11,7 @@ import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceAuthPageModelState, ResourcePageModelState} from "@/models/connect";
+import {ChangeContractsAuthorizedAction} from "@/models/resourceAuthPage";
 
 const columns: any[] = [
   {
@@ -59,6 +60,10 @@ function Auth({dispatch, auth}: AuthProps) {
       <FEditorCard title={'被授权合约'}>
         <FAuthPanel
           dataSource={auth.contractsAuthorized}
+          onChangeActivatedResource={(value) => dispatch<ChangeContractsAuthorizedAction>({
+            type: 'resourceAuthPage/changeContractsAuthorized',
+            payload: value,
+          })}
         />
       </FEditorCard>
       <FEditorCard title={'授权合约'}>
