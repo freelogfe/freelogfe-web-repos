@@ -4,7 +4,7 @@ import {ResourcePageModelState} from './resourcePage';
 import {ResourceCollectPageModelState} from './resourceCollectPage';
 import {ResourceCreatorPageModelState} from './resourceCreatorPage';
 import {ResourceInfoPageModelState} from './resourceInfoPage';
-import {ResourceVersionPageModelState} from './ResourceVersionPage';
+import {ResourceVersionCreatorPageModelState} from './resourceVersionCreatorPage';
 import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 import {ResourceSilderModelState} from './resourceSilder';
@@ -16,7 +16,7 @@ export {
   ResourceCollectPageModelState,
   ResourceCreatorPageModelState,
   ResourceInfoPageModelState,
-  ResourceVersionPageModelState,
+  ResourceVersionCreatorPageModelState,
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
   ResourceSilderModelState,
@@ -29,7 +29,7 @@ export interface ConnectState {
   resourceCollectPage: ResourceCollectPageModelState;
   resourceCreatorPage: ResourceCreatorPageModelState;
   resourceInfoPage: ResourceInfoPageModelState;
-  resourceVersionPage: ResourceVersionPageModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
   resourceSilder: ResourceSilderModelState;

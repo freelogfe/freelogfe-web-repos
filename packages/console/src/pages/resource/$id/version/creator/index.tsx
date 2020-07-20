@@ -11,16 +11,16 @@ import {FNormalButton, FCircleButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {CopyOutlined, LoadingOutlined, ExclamationCircleFilled} from '@ant-design/icons';
 
-import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
-import FObjectCard from '@/pages/resource/components/FObjectCard';
+// import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
+import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/components/FDepPanel';
 import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionPageModelState} from "@/models/connect";
+import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
-  version: ResourceVersionPageModelState,
+  version: ResourceVersionCreatorPageModelState,
 }
 
 
@@ -29,26 +29,16 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
   return (<FInfoLayout>
     <FContentLayout header={<Header/>}>
       <FEditorCard dot={true} title={'版本号'}>
+        {/*{console.log(version.version, 'versionversionversionversion')}*/}
         <FInput value={version.version} className={styles.versionInput}/>
       </FEditorCard>
       <FEditorCard dot={true} title={'对象'}>
-        {
-          true && (<div className={styles.object}>
-            {/*<div className={styles.objectErrorInfo}>所选文件格式和资源类型不匹配，请重新选择。</div>*/}
-            {/*<div className={styles.objectErrorInfo}>文件大小不能超过50MB，请重新选择。</div>*/}
-            <div className={styles.objectErrorInfo}>该资源已存在，不能重复创建，请重新选择。&nbsp;&nbsp;<FTextButton
-              theme="primary">查看</FTextButton></div>
-
-            <Space size={30}>
-              <FNormalButton theme={'weaken'}>从存储空间选择</FNormalButton>
-              <FNormalButton theme={'weaken'}>本地上传</FNormalButton>
-            </Space>
-
-
-          </div>)
-        }
-        {false && (<div className={styles.checking}>校验中 <LoadingOutlined/></div>)}
-        {false && (<FObjectCard/>)}
+        <FSelectObject resourceObject={{
+          id: '12341234',
+          name: '资源1',
+          size: 101234123,
+          path: 'bucket21/1234.gif'
+        }}/>
       </FEditorCard>
 
       <FEditorCard dot={false} title={'依赖'}>
@@ -75,7 +65,8 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
 
         <>
           <div style={{height: 20}}/>
-          <FDepPanel/>
+          {/* TODO: */}
+          {/*<FDepPanel />*/}
         </>
       </FEditorCard>
       <FEditorCard dot={false} title={'自定义属性'}>
@@ -96,7 +87,7 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
         <FBraftEditor/>
       </FEditorCard>
 
-      <FSelectObjectModal/>
+      {/*<FSelectObjectModal/>*/}
     </FContentLayout>
   </FInfoLayout>);
 }
@@ -112,6 +103,6 @@ function Header() {
   </div>);
 }
 
-export default connect(({resourceVersionPage}: ConnectState) => ({
-  version: resourceVersionPage,
+export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+  version: resourceVersionCreatorPage,
 }))(VersionCreator);
