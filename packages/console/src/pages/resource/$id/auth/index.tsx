@@ -6,7 +6,7 @@ import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FPolicies from '@/pages/resource/components/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
-import FDepPanel from '@/pages/resource/components/FDepPanel';
+import FAuthPanel from '@/pages/resource/components/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
 import {connect, Dispatch} from "dva";
@@ -57,7 +57,9 @@ function Auth({dispatch, auth}: AuthProps) {
         />
       </FEditorCard>
       <FEditorCard title={'被授权合约'}>
-        <FDepPanel type="auth" dataSource={auth.contractsAuthorized}/>
+        <FAuthPanel
+          dataSource={auth.contractsAuthorized}
+        />
       </FEditorCard>
       <FEditorCard title={'授权合约'}>
         <Table

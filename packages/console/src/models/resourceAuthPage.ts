@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {AuthPanelProps} from "@/pages/resource/components/FDepPanel";
+import {FAuthPanelProps} from "@/pages/resource/components/FAuthPanel";
 
 export interface ResourceAuthPageModelState {
   policies: {
@@ -11,7 +11,7 @@ export interface ResourceAuthPageModelState {
     code: string;
   }[] | null;
   contractsAuthorize: any[] | null;
-  contractsAuthorized: AuthPanelProps['dataSource'];
+  contractsAuthorized: FAuthPanelProps['dataSource'];
 }
 
 export interface ResourceAuthPageModelType {
@@ -48,7 +48,7 @@ const policies: ResourceAuthPageModelState['policies'] = [{
     '    terminate',
 }];
 
-const contractsAuthorized: AuthPanelProps['dataSource'] = [{
+const contractsAuthorized: FAuthPanelProps['dataSource'] = [{
   id: 123,
   activated: true,
   title: 'ww-zh/PB-markdown',
@@ -59,17 +59,39 @@ const contractsAuthorized: AuthPanelProps['dataSource'] = [{
     title: '策略1',
     status: 'executing',
     code: 'initial:\n' +
-      '    active\n' +
-      '    recontractable\n' +
-      '    presentable\n' +
-      '    terminate',
+      '  active\n' +
+      '  recontractable\n' +
+      '  presentable\n' +
+      '  terminate',
     id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
     date: '2019-10-10',
-    versions: ['10.5.2', '10.5.3'],
-    checkedVersions: ['10.5.2', '10.5.3'],
+    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
+  }, {
+    checked: true,
+    title: '策略2',
+    status: 'executing',
+    code: 'initial:\n' +
+      '  active\n' +
+      '  recontractable\n' +
+      '  presentable\n' +
+      '  terminate',
+    id: 'adhjtyrghgjhxdfthgasdhdfl2324gkftr',
+    date: '2019-10-10',
+    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
   }],
   policies: [{
     id: '123423',
+    title: '策略2',
+    code: 'init:\n' +
+      '  proceed to state_1 on action_1\n' +
+      'state_1:\n' +
+      '  active\n' +
+      '  proceed to state_2 on action_2\n' +
+      'state_2:\n' +
+      '  active\n' +
+      '  proceed to state_3 on action_3',
+  }, {
+    id: '12342323',
     title: '策略2',
     code: 'init:\n' +
       '  proceed to state_1 on action_1\n' +
