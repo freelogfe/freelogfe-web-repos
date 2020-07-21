@@ -18,6 +18,7 @@ import FDepPanel from '@/pages/resource/components/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
+  OnChangeDependenciesAction,
   OnChangeDescriptionAction,
   OnChangeResourceObjectAction,
   OnChangeVersionAction
@@ -65,21 +66,13 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
           </Space>
         </Space>
 
-        <div className={styles.depUpthrow}>
-          <FTitleText text={'基础上抛'} type="form"/>
-          <ExclamationCircleFilled style={{color: '#C7C7C7', marginLeft: 5}}/>
-          <div className={styles.depUpthrowLabel}>
-            <label>ww-zh/PB-markdown</label>
-            <label>ww-zh/PB-markdown</label>
-            <label>ww-zh/PB-markdown</label>
-          </div>
-        </div>
-
-        <>
-          <div style={{height: 20}}/>
-          {/* TODO: */}
-          {/*<FDepPanel />*/}
-        </>
+        <FDepPanel
+          dataSource={version.dependencies}
+          onChange={(value) => dispatch<OnChangeDependenciesAction>({
+            type: 'resourceVersionCreatorPage/onChangeDependencies',
+            payload: value,
+          })}
+        />
       </FEditorCard>
       <FEditorCard dot={false} title={'自定义属性'}>
         <Space size={80}>

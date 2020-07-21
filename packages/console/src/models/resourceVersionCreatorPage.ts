@@ -2,12 +2,13 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FSelectObject} from "@/pages/resource/components/FSelectObject";
+import {FDepPanelProps} from "@/pages/resource/components/FDepPanel";
 
 export interface ResourceVersionCreatorPageModelState {
   version: string;
   resourceObject: FSelectObject['resourceObject'];
   upthrow: string[];
-  dependencies: any[];
+  dependencies: FDepPanelProps['dataSource'];
   properties: any[];
   description: string;
 }
@@ -59,6 +60,12 @@ export interface ResourceVersionCreatorModelType {
   subscriptions: { setup: Subscription };
 }
 
+const code = 'initial:\n' +
+  '    active\n' +
+  '    recontractable\n' +
+  '    presentable\n' +
+  '    terminate';
+
 const Model: ResourceVersionCreatorModelType = {
 
   namespace: 'resourceVersionCreatorPage',
@@ -73,7 +80,65 @@ const Model: ResourceVersionCreatorModelType = {
     //   path: 'bucket21/1234.gif'
     // },
     upthrow: ['1234', '34234'],
-    dependencies: [1243],
+    dependencies: [
+      {
+        id: 'string',
+        activated: true,
+        title: 'liukai/hahaha',
+        resourceType: 'image',
+        version: {
+          isCustom: false,
+          input: '',
+          allowUpdate: true,
+          select: '1.2.3',
+        },
+        versions: ['11.2.3', '1.2.3'],
+        upthrow: false,
+        enableReuseContracts: [{
+          checked: true,
+          title: '买奶粉',
+          status: 'stopping',
+          code: code,
+          id: '1234',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
+        }],
+        enabledPolicies: [{
+          checked: true,
+          id: 'string',
+          title: 'string',
+          code: code,
+        }]
+      }, {
+        id: 'string2',
+        activated: false,
+        title: 'liukai2/hahaha2',
+        resourceType: 'image',
+        version: {
+          isCustom: false,
+          input: '',
+          allowUpdate: true,
+          select: '1.2.3',
+        },
+        versions: ['11.2.3', '1.2.3'],
+        upthrow: false,
+        enableReuseContracts: [{
+          checked: true,
+          title: '买奶粉2',
+          status: 'stopping',
+          code: code,
+          id: '1234',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
+        }],
+        enabledPolicies: [{
+          checked: true,
+          id: 'string',
+          title: 'string',
+          code: code,
+        }]
+      }
+    ],
     properties: [234],
     description: '12423',
   },
