@@ -5,16 +5,16 @@ import {FTitleText, FContentText} from '@/components/FText';
 import {Progress} from 'antd';
 
 interface ObjectCardProps {
-  cancelBtnText?: '取消上传' | '删除';
   resourceObject: {
     name: string;
     size: number;
     path: string;
   };
   progress: number | null;
+  onClickDelete?: () => void;
 }
 
-export default function ({resourceObject, cancelBtnText = '删除', progress}: ObjectCardProps) {
+export default function ({resourceObject, progress = null, onClickDelete}: ObjectCardProps) {
   return (<div className={styles.styles}>
     <div className={styles.card}>
       <img src={img} className={styles.img} alt=""/>
@@ -27,7 +27,7 @@ export default function ({resourceObject, cancelBtnText = '删除', progress}: O
           <div style={{display: "flex", flexShrink: 0}}>{humanizeSize(resourceObject.size)}</div>
           <div style={{display: "flex", flexShrink: 0, width: 30}}/>
           {progress === null
-            ? <FContentText className={styles.infoSize} type="additional1" text={resourceObject.path}/>
+            ? <FContentText className={styles.infoSize} type="additional1" text={resourceObject.path || '本地上传'}/>
             : (<>
               <span style={{paddingRight: 10}}>{progress}%</span>
               <Progress
@@ -43,7 +43,8 @@ export default function ({resourceObject, cancelBtnText = '删除', progress}: O
       </div>
     </div>
     <div style={{width: 10}}/>
-    <a className={styles.delete}>{cancelBtnText}</a>
+    <a onClick={() => onClickDelete && onClickDelete()}
+       className={styles.delete}>{progress !== null ? '取消上传' : '删除'}</a>
   </div>)
 }
 

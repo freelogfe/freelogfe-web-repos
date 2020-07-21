@@ -4,12 +4,13 @@ import {FNormalButton, FTextButton} from "@/components/FButton";
 import {Space, Drawer, Modal} from "antd";
 import FObjectCard from "./ObjectCard";
 import {LoadingOutlined} from '@ant-design/icons';
-import FDropdown from "@/components/FDropdown";
+import FUpload from "@/components/FUpload";
 import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
-// import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 
-import Storage from './Storage';
+import Storage, {ResourceObject} from './Storage';
+import {RcFile} from "antd/lib/upload/interface";
 
 const errorText = {
   duplicated: '该资源已存在，不能重复创建，请重新选择。',
@@ -17,21 +18,48 @@ const errorText = {
   resourceType: '所选文件格式和资源类型不匹配，请重新选择。',
 };
 
-interface FSelectObject {
-  resourceObject?: {
-    id: string;
-    name: string;
-    size: number;
-    path: string;
-  } | null;
+export interface FSelectObject {
+  resourceObject?: ResourceObject | null;
+  onChange?: (file: FSelectObject['resourceObject']) => void;
 }
 
-export default function ({resourceObject}: FSelectObject) {
+export default function ({resourceObject, onChange}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
-
   const [errorT, setErrorT] = React.useState<string>('');
+
+  function onSelect(resource: ResourceObject) {
+    setModalVisible(false);
+    return onChange && onChange(resource);
+  }
+
+  async function beforeUpload(file: RcFile) {
+    setIsChecking(true);
+    console.log(file, 'filefile');
+    if (file.size > 50 * 1024 * 1024 * 1024) {
+      setIsChecking(false);
+      return setErrorT(errorText.size);
+    }
+
+    console.log(await getSHA1Hash(file), 'filefile');
+    setIsChecking(false);
+    // setErrorT(errorText.duplicated);
+    await upload();
+    onChange && onChange({
+      id: '12341234',
+      name: '资源1',
+      size: 101234123,
+      path: '',
+      type: '',
+      time: '',
+    })
+    ;
+  }
+
+  async function upload() {
+
+  }
 
   return (<div>
     {
@@ -41,17 +69,31 @@ export default function ({resourceObject}: FSelectObject) {
           {errorT &&
           <div className={styles.objectErrorInfo}>{errorT}&nbsp;&nbsp;<FTextButton theme="primary">查看</FTextButton></div>}
 
-          <Space size={30}>
-            <FNormalButton
-              theme={'weaken'}
-              onClick={() => setModalVisible(true)}
-            >从存储空间选择</FNormalButton>
-            <FNormalButton theme={'weaken'}>本地上传</FNormalButton>
-          </Space>
-
-          {isChecking && (<div className={styles.checking}>校验中 <LoadingOutlined/></div>)}
+          {isChecking
+            ? (<Space size={50} className={styles.checking}>
+              <span>校验中<LoadingOutlined style={{paddingLeft: 10}}/></span>
+              <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
+            </Space>)
+            : <Space size={30}>
+              <FNormalButton
+                theme={'weaken'}
+                onClick={() => setModalVisible(true)}
+              >从存储空间选择</FNormalButton>
+              <FUpload
+                beforeUpload={beforeUpload}
+                showUploadList={false}
+              >
+                <FNormalButton
+                  theme={'weaken'}
+                >本地上传</FNormalButton>
+              </FUpload>
+            </Space>}
         </div>)
-        : (<FObjectCard resourceObject={resourceObject} progress={75}/>)
+        : (<FObjectCard
+          resourceObject={resourceObject}
+          progress={null}
+          onClickDelete={() => onChange && onChange(null)}
+        />)
     }
 
     <Drawer
@@ -60,7 +102,11 @@ export default function ({resourceObject}: FSelectObject) {
       visible={modalVisible}
       width={820}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
-    ><Storage onSelect={() => setModalVisible(false)}/></Drawer>
+    >
+      <Storage
+        onSelect={onSelect}
+      />
+    </Drawer>
   </div>);
 }
 
@@ -69,21 +115,21 @@ export default function ({resourceObject}: FSelectObject) {
  * @param file
  * @return {Promise<string>}
  */
-// function getSHA1Hash(file) {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onload = function (evt) {
-//       var wordArray = CryptoJS.lib.WordArray.create(reader.result);
-//       var hash = CryptoJS.SHA1(wordArray).toString();
-//       resolve(hash);
-//
-//       // const sha1sum = crypto.createHash('sha1');
-//       // sha1sum.update(chunk)
-//       // console.log(sha1sum.digest('hex'), 'sha1sum.digest(\'hex\')');
-//       // resolve(sha1sum.digest('hex'));
-//
-//     };
-//     // reader.readAsBinaryString(file);
-//     reader.readAsArrayBuffer(file);
-//   });
-// }
+function getSHA1Hash(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      const wordArray = CryptoJS.lib.WordArray.create(reader.result);
+      const hash = CryptoJS.SHA1(wordArray).toString();
+      resolve(hash);
+
+      // const sha1sum = crypto.createHash('sha1');
+      // sha1sum.update(chunk)
+      // console.log(sha1sum.digest('hex'), 'sha1sum.digest(\'hex\')');
+      // resolve(sha1sum.digest('hex'));
+
+    };
+    // reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
+  });
+}

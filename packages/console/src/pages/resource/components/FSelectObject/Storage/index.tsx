@@ -5,8 +5,17 @@ import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
 
+export interface ResourceObject {
+  id: string;
+  name: string;
+  size: number;
+  path: string;
+  type: string;
+  time: string;
+}
+
 interface StorageProps {
-  onSelect?: (resource: any) => void;
+  onSelect?: (resource: ResourceObject) => void;
 }
 
 export default function ({onSelect}: StorageProps) {
@@ -20,6 +29,29 @@ export default function ({onSelect}: StorageProps) {
   const [selected, setSelected] = React.useState<any>('-1');
 
   const [input, setInput] = React.useState<string>('');
+
+  const [resourceObjects, setResourceObjects] = React.useState<ResourceObject[] | null>(null);
+
+  React.useEffect(() => {
+    setResourceObjects([
+      {
+        id: 'q12342',
+        name: 'picture.png',
+        size: 1234190,
+        path: 'buckt1/1234.png',
+        time: '2019-12-22 12:22',
+        type: 'image'
+      },
+      {
+        id: 'q12343',
+        name: 'picture2.png',
+        size: 634532,
+        path: 'buckt2/1234.png',
+        time: '2019-12-22 23:00',
+        type: 'image'
+      },
+    ])
+  }, []);
 
   return (
     <div className={styles.SelectBucket}>
@@ -44,12 +76,12 @@ export default function ({onSelect}: StorageProps) {
       <div style={{height: 17}}/>
 
       {
-        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i: number) => (
-          <div key={i} className={styles.bucket}>
+        (resourceObjects || []).map((i: ResourceObject) => (
+          <div key={i.id} className={styles.bucket}>
             <div>
-              <FContentText text={`bucket${i}/xxx.png`}/>
+              <FContentText text={i.path}/>
               <div style={{height: 2}}/>
-              <FContentText type={'additional2'} text={'资源类型 image | 更新时间 2019.02.10 12:12'}/>
+              <FContentText type={'additional2'} text={`资源类型 ${i.type} | 更新时间 ${i.time}`}/>
             </div>
             <FNormalButton
               theme="weaken"

@@ -17,6 +17,11 @@ import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/components/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
+import {
+  OnChangeDescriptionAction,
+  OnChangeResourceObjectAction,
+  OnChangeVersionAction
+} from "@/models/resourceVersionCreatorPage";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -29,16 +34,23 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
   return (<FInfoLayout>
     <FContentLayout header={<Header/>}>
       <FEditorCard dot={true} title={'版本号'}>
-        {/*{console.log(version.version, 'versionversionversionversion')}*/}
-        <FInput value={version.version} className={styles.versionInput}/>
+        <FInput
+          value={version.version}
+          onChange={(e) => dispatch<OnChangeVersionAction>({
+            type: 'resourceVersionCreatorPage/onChangeVersion',
+            payload: e.target.value,
+          })}
+          className={styles.versionInput}
+        />
       </FEditorCard>
       <FEditorCard dot={true} title={'对象'}>
-        <FSelectObject resourceObject={{
-          id: '12341234',
-          name: '资源1',
-          size: 101234123,
-          path: 'bucket21/1234.gif'
-        }}/>
+        <FSelectObject
+          resourceObject={version.resourceObject}
+          onChange={(value) => dispatch<OnChangeResourceObjectAction>({
+            type: 'resourceVersionCreatorPage/onChangeResourceObject',
+            payload: value,
+          })}
+        />
       </FEditorCard>
 
       <FEditorCard dot={false} title={'依赖'}>
@@ -84,7 +96,12 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
         <FCustomProperties stubborn={false}/>
       </FEditorCard>
       <FEditorCard dot={false} title={'版本描述'}>
-        <FBraftEditor/>
+        <FBraftEditor
+          onChange={(value) => dispatch<OnChangeDescriptionAction>({
+            type: 'resourceVersionCreatorPage/onChangeDescription',
+            payload: value,
+          })}
+        />
       </FEditorCard>
 
       {/*<FSelectObjectModal/>*/}

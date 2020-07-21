@@ -14,6 +14,7 @@
     "axios": "^0.19.2",
     "braft-editor": "^2.3.9",
     "codemirror": "^5.55.0",
+    "crypto-js": "^4.0.0",
     "dva": "^2.6.0-beta.6",
     "react": "^16.8.6",
     "react-codemirror2": "^7.2.1",
@@ -21,6 +22,7 @@
     "react-syntax-highlighter": "^12.2.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^3.1.47",
     "@types/jest": "^23.3.12",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
