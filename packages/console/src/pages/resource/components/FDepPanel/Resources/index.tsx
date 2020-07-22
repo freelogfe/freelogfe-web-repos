@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from "./index.less";
 import {FContentText} from "@/components/FText";
+import {FCircleButton} from "@/components/FButton";
 import {EditOutlined} from '@ant-design/icons';
 import VersionPopover from './VersionPopover';
 
@@ -22,12 +23,17 @@ export interface ResourcesProps {
   }[];
   onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
   onChange?: (resource: ResourcesProps['dataSource'][0]) => void;
+  onDelete?: (resource: ResourcesProps['dataSource'][0]) => void;
 }
 
-export default function Resources({dataSource, onClick, onChange}: ResourcesProps) {
+export default function Resources({dataSource, onClick, onChange, onDelete}: ResourcesProps) {
 
-  function onChangeVersion() {
-
+  function onChangeVersion(version: ResourcesProps['dataSource'][0]['version'], id: ResourcesProps['dataSource'][0]['id']) {
+    const resource: ResourcesProps['dataSource'][0] = dataSource.find((i) => i.id === id) as ResourcesProps['dataSource'][0];
+    return onChange && onChange({
+      ...resource,
+      version,
+    })
   }
 
   return <div className={styles.styles}>
@@ -45,6 +51,7 @@ export default function Resources({dataSource, onClick, onChange}: ResourcesProp
                 style={{paddingRight: 5}}>版本范围：{i.version.isCustom ? i.version.input : ((i.version.allowUpdate ? '^' : '') + i.version.select)}</span>
               <VersionPopover
                 versions={i.versions}
+                onChange={(version) => onChangeVersion(version, i.id)}
                 defaultVersion={i.version}><EditOutlined/></VersionPopover>
             </div>
           </FContentText>
@@ -60,6 +67,10 @@ export default function Resources({dataSource, onClick, onChange}: ResourcesProp
             </div>
           </>
         </div>
+        <FCircleButton onClick={(e) => {
+          e.stopPropagation();
+          return onDelete && onDelete(i)
+        }} theme='delete'/>
       </div>))}
   </div>
 }

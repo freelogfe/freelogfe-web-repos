@@ -1,3 +1,5 @@
+@import '../../../../../config';
+
 .styles {
   margin-bottom: -5px;
 }
@@ -20,23 +22,31 @@
   display: flex;
   align-items: center;
 
-  & > span {
-    padding-right: 10px;
-  }
+  //& > span {
+  //  padding-right: 10px;
+  //}
 
-  & > div:last-child {
-    padding: 0 10px;
-  }
+  //& > div:last-child {
+  //  padding: 0 10px;
+  //}
+}
+
+.executing, .stopped {
+  line-height: 20px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  display: inline-block;
 }
 
 .executing {
-  line-height: 20px;
-  padding: 0 10px;
-  border: 1px solid #42C28C;
-  border-radius: 10px;
-  color: #42C28C;
-  font-size: 12px;
-  display: inline-block;
+  border: 1px solid @f-success-color;
+  color: @f-success-color;
+}
+
+.stopped {
+  border: 1px solid @f-error-color;
+  color: @f-error-color;
 }
 
 .highlight {

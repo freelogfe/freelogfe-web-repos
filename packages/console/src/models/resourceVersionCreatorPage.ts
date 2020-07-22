@@ -97,7 +97,7 @@ const Model: ResourceVersionCreatorModelType = {
         enableReuseContracts: [{
           checked: true,
           title: '买奶粉',
-          status: 'stopping',
+          status: 'stopped',
           code: code,
           id: '1234',
           date: '2013-12-22',
@@ -125,7 +125,7 @@ const Model: ResourceVersionCreatorModelType = {
         enableReuseContracts: [{
           checked: true,
           title: '买奶粉2',
-          status: 'stopping',
+          status: 'executing',
           code: code,
           id: '1234',
           date: '2013-12-22',

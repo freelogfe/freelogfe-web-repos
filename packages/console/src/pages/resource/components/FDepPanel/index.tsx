@@ -8,6 +8,7 @@ import {Radio, Checkbox, Space} from 'antd';
 import Resources, {ResourcesProps} from './Resources';
 import Contracts from "./Contracts";
 import Policies from "./Policies";
+import {resourceTypes} from "@/utils/globals";
 
 export interface FDepPanelProps {
   dataSource: {
@@ -26,7 +27,7 @@ export interface FDepPanelProps {
     enableReuseContracts: {
       checked: boolean;
       title: string;
-      status: string;
+      status: 'executing' | 'stopped';
       code: string;
       id: string;
       date: string;
@@ -52,7 +53,16 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
   }, [dataSource]);
 
   function onChangeResources(value: ResourcesProps['dataSource'][0]) {
-    console.log(value, '######');
+    // console.log(value, '######');
+    return onChange && onChange(dataSource.map((i) => {
+      if (value.id !== i.id) {
+        return i;
+      }
+      return {
+        ...i,
+        version: value.version,
+      };
+    }));
   }
 
   function onChangeResourcesActivated(value: ResourcesProps['dataSource'][0]) {
@@ -60,6 +70,27 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
       ...i,
       activated: value.id === i.id,
     })));
+  }
+
+  function onDeleteResource(value: ResourcesProps['dataSource'][0]) {
+    const resources = dataSource.filter((i) => i.id !== value.id);
+
+    if (value.activated && resources.length > 0) {
+      resources[0].activated = true;
+    }
+    return onChange && onChange(resources);
+  }
+
+  function onChangeIsUpthrow(bool: boolean) {
+    return onChange && onChange(dataSource.map((i) => {
+      if (i.id !== activeResource?.id) {
+        return i;
+      }
+      return {
+        ...i,
+        upthrow: bool,
+      };
+    }))
   }
 
   return (<>
@@ -92,7 +123,9 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
                   labels: i.enableReuseContracts.map((j) => j.title),
                   upthrow: i.upthrow,
                 }))}
-                onClick={(resource) => onChangeResourcesActivated(resource)}
+                onClick={onChangeResourcesActivated}
+                onChange={onChangeResources}
+                onDelete={onDeleteResource}
               />
             </div>
           </div>
@@ -101,31 +134,43 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
           <div>
             <div className={styles.radios}>
               <div>
-                <Radio style={{lineHeight: '16px'}} checked={activeResource?.upthrow}/>
+                <Radio
+                  style={{lineHeight: '16px'}}
+                  checked={activeResource?.upthrow}
+                  onClick={() => onChangeIsUpthrow(true)}
+                />
                 <span style={{color: '#666'}}>上抛</span>
                 <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
               </div>
               <div style={{height: 18}}/>
               <div>
-                <Radio style={{lineHeight: '16px'}} checked={!activeResource?.upthrow}/>
+                <Radio
+                  style={{lineHeight: '16px'}}
+                  checked={!activeResource?.upthrow}
+                  onClick={() => onChangeIsUpthrow(false)}
+                />
                 <span style={{color: '#666'}}>签约</span>
                 <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
               </div>
             </div>
 
-            <div style={{height: 20}}/>
-            <FContentText type="additional2" text={'可复用的合约'}/>
-            <div style={{height: 5}}/>
-            {activeResource && <Contracts
-              dataSource={activeResource.enableReuseContracts}
-            />}
+            {!activeResource?.upthrow &&
+            <>
+              <div style={{height: 20}}/>
+              <FContentText type="additional2" text={'可复用的合约'}/>
+              <div style={{height: 5}}/>
+              {activeResource && <Contracts
+                dataSource={activeResource.enableReuseContracts}
+              />}
 
-            <div style={{height: 20}}/>
-            <FContentText type="additional2" text={'可签约的策略'}/>
-            <div style={{height: 5}}/>
-            {activeResource && <Policies
-              dataSource={activeResource.enabledPolicies}
-            />}
+              <div style={{height: 20}}/>
+              <FContentText type="additional2" text={'可签约的策略'}/>
+              <div style={{height: 5}}/>
+              {activeResource && <Policies
+                dataSource={activeResource.enabledPolicies}
+              />}
+            </>
+            }
           </div>
         </div>
       </div>

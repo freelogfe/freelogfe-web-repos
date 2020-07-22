@@ -12,7 +12,7 @@ interface VersionPopoverProps {
   children: any;
 }
 
-export default function ({defaultVersion, versions, children}: VersionPopoverProps) {
+export default function ({defaultVersion, versions, children, onChange}: VersionPopoverProps) {
 
   const [visible, setVisible] = React.useState<boolean>(false);
 
@@ -20,6 +20,7 @@ export default function ({defaultVersion, versions, children}: VersionPopoverPro
 
   function onConfirm() {
     setVisible(false);
+    return onChange && onChange(version);
   }
 
   function onChangeVersion(obj: any) {
@@ -28,6 +29,10 @@ export default function ({defaultVersion, versions, children}: VersionPopoverPro
       ...obj,
     })
   }
+
+  // function onSubmit() {
+  //
+  // }
 
   return (<Popover
     placement="bottomLeft"
@@ -47,15 +52,17 @@ export default function ({defaultVersion, versions, children}: VersionPopoverPro
           onChange={(value) => onChangeVersion({select: value})}
           size="small"
           className={styles.Select}
+          disabled={version.isCustom}
         >
           {
-            versions.map((i) => <Select.Option value={i}>{i}</Select.Option>)
+            versions.map((i) => <Select.Option key={i} value={i}>{i}</Select.Option>)
           }
         </Select>
         <div style={{width: 20}}/>
         <Checkbox
           checked={version.allowUpdate}
           onChange={(e) => onChangeVersion({allowUpdate: e.target.checked})}
+          disabled={version.isCustom}
         />
         <div style={{width: 10}}/>
         <div>允许使用当前版本的最新变动</div>
@@ -74,6 +81,7 @@ export default function ({defaultVersion, versions, children}: VersionPopoverPro
           className={styles.FInput}
           placeholder="输入semver版本范围"
           size="small"
+          disabled={!version.isCustom}
         />
       </div>
       <div style={{height: 10}}/>

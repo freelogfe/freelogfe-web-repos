@@ -14,8 +14,11 @@ export default function Contracts({dataSource}: ContractsProps) {
     {dataSource.map((k) => (<div key={k.id} className={styles.Policy}>
       <div className={styles.PolicyGrammar}>
         <div className={styles.PolicyGrammarName}>
+          <Checkbox checked={true}/>
+          <div style={{width: 5}}/>
           <span>{k.title}</span>
-          <label className={styles.executing}>执行中</label>
+          <div style={{width: 10}}/>
+          <label className={styles[k.status]}>{k.status === 'executing' ? '执行中' : '已终止'}</label>
         </div>
         <div style={{height: 15}}/>
         <pre className={styles.highlight}>{k.code}</pre>
