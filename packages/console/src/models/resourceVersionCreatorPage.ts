@@ -130,11 +130,24 @@ const Model: ResourceVersionCreatorModelType = {
           id: '1234',
           date: '2013-12-22',
           versions: ['12.23.3', '1.42.3'],
+        }, {
+          checked: false,
+          title: '买奶粉sd2',
+          status: 'executing',
+          code: code,
+          id: '12342345',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
         }],
         enabledPolicies: [{
           checked: true,
           id: 'string',
           title: 'string',
+          code: code,
+        }, {
+          checked: true,
+          id: 'stringzd',
+          title: 'hello',
           code: code,
         }]
       }

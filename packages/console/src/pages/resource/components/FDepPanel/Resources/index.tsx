@@ -59,10 +59,15 @@ export default function Resources({dataSource, onClick, onChange, onDelete}: Res
             <div style={{height: 9}}/>
             <div className={styles.DepPanelLabels}>
               {
-                i.labels.map((j: string) => (<label
+                !i.upthrow && i.labels.map((j: string) => (<label
                   key={j}
                   className={styles.labelInfo}
                 >{j}</label>))
+              }
+              {
+                i.upthrow && (<label
+                  className={styles.labelError}
+                >上抛</label>)
               }
             </div>
           </>

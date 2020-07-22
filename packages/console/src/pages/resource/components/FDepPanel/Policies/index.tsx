@@ -6,16 +6,31 @@ import {Checkbox} from "antd";
 
 interface PoliciesProps {
   dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];
-  onChange?: (dataRourece: PoliciesProps['dataSource']) => void;
+  onChange?: (dataSource: PoliciesProps['dataSource']) => void;
 }
 
 export default function Policies({dataSource, onChange}: PoliciesProps) {
+  function onChangeChecked(checked: boolean, contract: PoliciesProps['dataSource'][0]) {
+    return onChange && onChange(dataSource.map((i) => {
+      if (i.id !== contract.id) {
+        return i;
+      }
+      return {
+        ...i,
+        checked,
+      }
+    }))
+  }
+
   return (<div className={styles.styles}>
     {dataSource.map((i) => (
       <div key={i.id} className={styles.Policy}>
         <div className={styles.PolicyGrammar}>
           <div className={styles.PolicyName}>
-            <Checkbox checked={true}/>
+            <Checkbox
+              checked={i.checked}
+              onChange={(e) => onChangeChecked(e.target.checked, i)}
+            />
             <div style={{width: 5}}/>
             <span>{i.title}</span>
           </div>

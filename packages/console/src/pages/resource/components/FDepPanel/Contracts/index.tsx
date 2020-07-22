@@ -9,12 +9,28 @@ interface ContractsProps {
   onChange?: (dataRourece: ContractsProps['dataSource']) => void;
 }
 
-export default function Contracts({dataSource}: ContractsProps) {
+export default function Contracts({dataSource, onChange}: ContractsProps) {
+
+  function onChangeChecked(checked: boolean, contract: ContractsProps['dataSource'][0]) {
+    return onChange && onChange(dataSource.map((i) => {
+      if (i.id !== contract.id) {
+        return i;
+      }
+      return {
+        ...i,
+        checked,
+      }
+    }))
+  }
+
   return <div className={styles.styles}>
     {dataSource.map((k) => (<div key={k.id} className={styles.Policy}>
       <div className={styles.PolicyGrammar}>
         <div className={styles.PolicyGrammarName}>
-          <Checkbox checked={true}/>
+          <Checkbox
+            checked={k.checked}
+            onChange={(e) => onChangeChecked(e.target.checked, k)}
+          />
           <div style={{width: 5}}/>
           <span>{k.title}</span>
           <div style={{width: 10}}/>

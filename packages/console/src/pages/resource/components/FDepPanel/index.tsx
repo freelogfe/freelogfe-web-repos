@@ -8,6 +8,7 @@ import {Radio, Checkbox, Space} from 'antd';
 import Resources, {ResourcesProps} from './Resources';
 import Contracts from "./Contracts";
 import Policies from "./Policies";
+import UpthrowList from "./UpthrowList";
 import {resourceTypes} from "@/utils/globals";
 
 export interface FDepPanelProps {
@@ -90,22 +91,40 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
         ...i,
         upthrow: bool,
       };
-    }))
+    }));
+  }
+
+  function onChangeContracts(contracts: FDepPanelProps['dataSource'][0]['enableReuseContracts']) {
+    return onChange && onChange(dataSource.map((i) => {
+      if (i.id !== activeResource?.id) {
+        return i;
+      }
+      return {
+        ...i,
+        enableReuseContracts: contracts,
+      };
+    }));
+  }
+
+  function onChangePolicies(policies: FDepPanelProps['dataSource'][0]['enabledPolicies']) {
+    return onChange && onChange(dataSource.map((i) => {
+      if (i.id !== activeResource?.id) {
+        return i;
+      }
+      return {
+        ...i,
+        enabledPolicies: policies,
+      };
+    }));
+  }
+
+
+  if (!dataSource || dataSource.length === 0) {
+    return null;
   }
 
   return (<>
-    <>
-      <div style={{height: 30}}/>
-      <div className={styles.depUpthrow}>
-        <FTitleText text={'基础上抛'} type="form"/>
-        <ExclamationCircleFilled style={{color: '#C7C7C7', marginLeft: 5}}/>
-        <div className={styles.depUpthrowLabel}>
-          <label>ww-zh/PB-markdown</label>
-          <label>ww-zh/PB-markdown</label>
-          <label>ww-zh/PB-markdown</label>
-        </div>
-      </div>
-    </>
+    <UpthrowList labels={dataSource.filter((i) => i.upthrow).map((j) => j.title)}/>
     <>
       <div style={{height: 20}}/>
       <div className={styles.DepPanel}>
@@ -120,7 +139,10 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
                   resourceType: i.resourceType,
                   versions: i.versions,
                   version: i.version,
-                  labels: i.enableReuseContracts.map((j) => j.title),
+                  labels: [
+                    ...i.enableReuseContracts.filter((i) => i.checked).map((j) => j.title),
+                    ...i.enabledPolicies.filter((i) => i.checked).map((j) => j.title)
+                  ],
                   upthrow: i.upthrow,
                 }))}
                 onClick={onChangeResourcesActivated}
@@ -156,19 +178,30 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
 
             {!activeResource?.upthrow &&
             <>
-              <div style={{height: 20}}/>
-              <FContentText type="additional2" text={'可复用的合约'}/>
-              <div style={{height: 5}}/>
-              {activeResource && <Contracts
-                dataSource={activeResource.enableReuseContracts}
-              />}
+              {
+                activeResource && activeResource.enableReuseContracts.length > 0 && (<>
+                  <div style={{height: 20}}/>
+                  <FContentText type="additional2" text={'可复用的合约'}/>
+                  <div style={{height: 5}}/>
+                  <Contracts
+                    dataSource={activeResource.enableReuseContracts}
+                    onChange={onChangeContracts}
+                  />
+                </>)
+              }
 
-              <div style={{height: 20}}/>
-              <FContentText type="additional2" text={'可签约的策略'}/>
-              <div style={{height: 5}}/>
-              {activeResource && <Policies
-                dataSource={activeResource.enabledPolicies}
-              />}
+              {
+                activeResource && activeResource.enabledPolicies.length > 0 && (<>
+                  <div style={{height: 20}}/>
+                  <FContentText type="additional2" text={'可签约的策略'}/>
+                  <div style={{height: 5}}/>
+                  <Policies
+                    dataSource={activeResource.enabledPolicies}
+                    onChange={onChangePolicies}
+                  />
+                </>)
+              }
+
             </>
             }
           </div>
