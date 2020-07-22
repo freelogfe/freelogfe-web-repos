@@ -19,7 +19,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
   OnChangeDependenciesAction,
-  OnChangeDescriptionAction,
+  OnChangeDescriptionAction, OnChangePropertiesAction,
   OnChangeResourceObjectAction,
   OnChangeVersionAction
 } from "@/models/resourceVersionCreatorPage";
@@ -75,18 +75,14 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
         />
       </FEditorCard>
       <FEditorCard dot={false} title={'自定义属性'}>
-        <Space size={80}>
-          <Space size={10}>
-            <FCircleButton theme="weaken"/>
-            <FContentText text={'添加'}/>
-          </Space>
-          <Space size={10}>
-            <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
-            <FContentText text={'从上一版本导入'}/>
-          </Space>
-        </Space>
-        <div style={{height: 35}}/>
-        <FCustomProperties stubborn={false}/>
+        <FCustomProperties
+          stubborn={false}
+          dataSource={version.properties}
+          onChange={(value) => dispatch<OnChangePropertiesAction>({
+            type: 'resourceVersionCreatorPage/onChangeProperties',
+            payload: value,
+          })}
+        />
       </FEditorCard>
       <FEditorCard dot={false} title={'版本描述'}>
         <FBraftEditor

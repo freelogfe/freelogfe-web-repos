@@ -3,13 +3,14 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FSelectObject} from "@/pages/resource/components/FSelectObject";
 import {FDepPanelProps} from "@/pages/resource/components/FDepPanel";
+import {FCustomPropertiesProps} from "@/pages/resource/components/FCustomProperties";
 
 export interface ResourceVersionCreatorPageModelState {
   version: string;
   resourceObject: FSelectObject['resourceObject'];
   upthrow: string[];
   dependencies: FDepPanelProps['dataSource'];
-  properties: any[];
+  properties: FCustomPropertiesProps['dataSource'];
   description: string;
 }
 
@@ -152,7 +153,28 @@ const Model: ResourceVersionCreatorModelType = {
         }]
       }
     ],
-    properties: [234],
+    properties: [{
+      key: 'myKey',
+      value: 'myValue',
+      description: 'myDescription',
+      allowCustom: true,
+      custom: 'select',
+      customOption: 'abc,def,ghi',
+    }, {
+      key: 'myKey2',
+      value: 'myValue',
+      description: 'myDescription',
+      allowCustom: true,
+      custom: 'select',
+      customOption: 'abc,def,ghi',
+    }, {
+      key: 'myKey3',
+      value: 'myValue',
+      description: 'myDescription',
+      allowCustom: true,
+      custom: 'select',
+      customOption: 'abc,def,ghi',
+    }],
     description: '12423',
   },
 

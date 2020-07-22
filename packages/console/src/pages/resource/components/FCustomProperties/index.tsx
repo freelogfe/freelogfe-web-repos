@@ -3,51 +3,125 @@ import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import styles from './index.less';
 import {Space, Switch} from 'antd';
-import {EditOutlined} from '@ant-design/icons';
-import {FTextButton} from '@/components/FButton';
+import {EditOutlined, CopyOutlined} from '@ant-design/icons';
+import {FCircleButton, FTextButton} from '@/components/FButton';
 import FHorn from '@/pages/resource/components/FHorn';
+import {FContentText} from "@/components/FText";
 
-interface data {
-
+interface Data {
+  readonly key: string | number;
+  readonly value: string | number;
+  readonly description: string;
+  readonly allowCustom: boolean;
+  readonly custom: 'input' | 'select';
+  readonly customOption: string;
 }
 
-interface FCustomPropertiesProps {
-  stubborn?: boolean;
-  dataSource?: data[];
+export interface FCustomPropertiesProps {
+  readonly stubborn?: boolean;
+  readonly dataSource: Data[];
+  onChange?: (dataSource: FCustomPropertiesProps['dataSource']) => void;
 }
 
-export default function ({stubborn = false}: FCustomPropertiesProps) {
-  return (<div className={styles.styles}>
-    <Property stubborn={stubborn} data={{}}/>
-  </div>);
+export default function ({stubborn = false, dataSource, onChange}: FCustomPropertiesProps) {
+  function onChangeProperty(value: Data, index: number) {
+    return onChange && onChange(dataSource.map((i, j) => {
+      if (index !== j) {
+        return i;
+      }
+      return value;
+    }));
+  }
+
+  function onDelete(index: number) {
+    return onChange && onChange(dataSource.filter((i, j) => j !== index));
+  }
+
+  function onAdd() {
+    return onChange && onChange([
+      {key: '', value: '', description: '', allowCustom: false, custom: 'input', customOption: ''},
+      ...dataSource,
+    ]);
+  }
+
+  return (<>
+    <Space size={80}>
+      <Space size={10}>
+        <FCircleButton onClick={onAdd} theme="weaken"/>
+        <FContentText text={'添加'}/>
+      </Space>
+      <Space size={10}>
+        <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
+        <FContentText text={'从上一版本导入'}/>
+      </Space>
+    </Space>
+    {dataSource.length > 0 && <div className={styles.styles}>
+      <div style={{height: 35}}/>
+      {
+        dataSource.map((i, j) => (<Property
+          key={j}
+          stubborn={stubborn}
+          data={i}
+          onChange={(value) => onChangeProperty(value, j)}
+          onDelete={() => onDelete(j)}
+        />))
+      }
+    </div>}
+  </>);
 }
 
 interface PropertyProps {
-  data: data;
+  data: Data;
   stubborn?: boolean;
+  onChange?: (data: PropertyProps['data']) => void;
+  onDelete?: () => void;
 }
 
 
-function Property({stubborn = false, data}: PropertyProps) {
+function Property({stubborn = false, data, onChange, onDelete}: PropertyProps) {
 
   const [editing, setEditing] = React.useState<'' | 'value' | 'remark'>('remark');
 
+  function onChangeData(kv: any) {
+    return onChange && onChange({
+      ...data,
+      ...kv,
+    });
+  }
+
   return (<FHorn
-    extra={stubborn || (<a className={styles.delete}>删除</a>)}
+    extra={stubborn || (<a
+      onClick={() => onDelete && onDelete()}
+      className={styles.delete}
+    >删除</a>)}
     className={styles.FHorn}>
 
     <div className={styles.row}>
       <Field title={'key'} dot={true}>
-        <FInput disabled={stubborn}/>
+        <FInput
+          value={data.key}
+          onChange={(e) => onChangeData({key: e.target.value})}
+          disabled={stubborn}
+        />
       </Field>
       <Field status={stubborn ? (editing === 'value' ? 'editing' : 'editable') : 'normal'} title={'value'} dot={true}>
-        <FInput disabled={stubborn}/>
+        <FInput
+          value={data.value}
+          onChange={(e) => onChangeData({value: e.target.value})}
+          disabled={stubborn}
+        />
       </Field>
       <Field status={stubborn ? (editing === 'remark' ? 'editing' : 'editable') : 'normal'} title={'属性说明'}>
-        <FInput disabled={false}/>
+        <FInput
+          value={data.description}
+          onChange={(e) => onChangeData({description: e.target.value})}
+          disabled={false}
+        />
       </Field>
       <Field title={'允许展品自定义'}>
         <Switch
+          checked={data.allowCustom}
+          onChange={(value) => onChangeData({allowCustom: value})}
           disabled={stubborn}
           className={styles.Switch}
           size="default"
@@ -55,19 +129,32 @@ function Property({stubborn = false, data}: PropertyProps) {
         />
       </Field>
     </div>
-    <div className={styles.row}>
-      <Field className={styles.FSelect} title={'自定义方式'}>
-        <FSelect
-          disabled={stubborn}
-          className={styles.FSelect}
-          dataSource={[{value: 1, title: '输入框'}, {value: 2, title: '下拉框'}]}
-          placeholder={'请选择'}
-        />
-      </Field>
-      <Field title={'属性说明'} className={styles.customOptions}>
-        <FInput disabled={stubborn}/>
-      </Field>
-    </div>
+
+    {
+      data.allowCustom && (<div className={styles.row}>
+        <Field className={styles.FSelect} title={'自定义方式'}>
+          <FSelect
+            value={data.custom}
+            onChange={(value) => onChangeData({custom: value})}
+            disabled={stubborn}
+            className={styles.FSelect}
+            dataSource={[{value: 'input', title: '输入框'}, {value: 'select', title: '下拉框'}]}
+            placeholder={'请选择'}
+          />
+        </Field>
+        {
+          data.custom === 'select' && (<Field title={'自定义选项'} className={styles.customOptions}>
+            <FInput
+              value={data.customOption}
+              onChange={(e) => onChangeData({customOption: e.target.value})}
+              disabled={stubborn}
+            />
+          </Field>)
+        }
+
+      </div>)
+    }
+
   </FHorn>);
 }
 
