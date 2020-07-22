@@ -6,16 +6,16 @@ import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
 
 export interface ResourceObject {
-  id: string;
-  name: string;
-  size: number;
-  path: string;
-  type: string;
-  time: string;
+  readonly id: string;
+  readonly name: string;
+  readonly size: number;
+  readonly path: string;
+  readonly type: string;
+  readonly time: string;
 }
 
 interface StorageProps {
-  onSelect?: (resource: ResourceObject) => void;
+  readonly onSelect?: (resource: ResourceObject) => void;
 }
 
 export default function ({onSelect}: StorageProps) {

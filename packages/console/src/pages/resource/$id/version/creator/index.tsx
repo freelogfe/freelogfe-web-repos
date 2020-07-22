@@ -55,16 +55,6 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
       </FEditorCard>
 
       <FEditorCard dot={false} title={'依赖'}>
-        <Space size={80}>
-          <Space size={10}>
-            <FCircleButton theme="weaken"/>
-            <FContentText text={'添加'}/>
-          </Space>
-          <Space size={10}>
-            <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
-            <FContentText text={'从上一版本导入'}/>
-          </Space>
-        </Space>
 
         <FDepPanel
           dataSource={version.dependencies}

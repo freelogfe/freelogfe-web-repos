@@ -5,8 +5,6 @@ import {Space, Drawer, Modal} from "antd";
 import FObjectCard from "./ObjectCard";
 import {LoadingOutlined} from '@ant-design/icons';
 import FUpload from "@/components/FUpload";
-import FInput from "@/components/FInput";
-import {FContentText} from "@/components/FText";
 import * as CryptoJS from 'crypto-js';
 
 import Storage, {ResourceObject} from './Storage';
@@ -19,8 +17,8 @@ const errorText = {
 };
 
 export interface FSelectObject {
-  resourceObject?: ResourceObject | null;
-  onChange?: (file: FSelectObject['resourceObject']) => void;
+  readonly resourceObject?: ResourceObject | null;
+  readonly onChange?: (file: FSelectObject['resourceObject']) => void;
 }
 
 export default function ({resourceObject, onChange}: FSelectObject) {

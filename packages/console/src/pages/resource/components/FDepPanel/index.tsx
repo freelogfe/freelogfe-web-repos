@@ -3,50 +3,54 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import {FCircleButton} from '@/components/FButton';
-import {EditOutlined, InfoCircleFilled, ExclamationCircleFilled} from '@ant-design/icons';
-import {Radio, Checkbox, Space} from 'antd';
+import {EditOutlined, InfoCircleFilled, CopyOutlined} from '@ant-design/icons';
+import {Radio, Checkbox, Space, Drawer} from 'antd';
 import Resources, {ResourcesProps} from './Resources';
 import Contracts from "./Contracts";
 import Policies from "./Policies";
 import UpthrowList from "./UpthrowList";
-import {resourceTypes} from "@/utils/globals";
+import Market, {MarketResource} from "./Market";
+
+interface DepResources {
+  readonly id: string;
+  readonly activated: boolean;
+  readonly title: string;
+  readonly resourceType: string;
+  readonly version: {
+    readonly isCustom: boolean;
+    readonly select: string;
+    readonly allowUpdate: boolean;
+    readonly input: string;
+  };
+  readonly versions: string[];
+  readonly upthrow: boolean;
+  readonly enableReuseContracts: {
+    readonly checked: boolean;
+    readonly title: string;
+    readonly status: 'executing' | 'stopped';
+    readonly code: string;
+    readonly id: string;
+    readonly date: string;
+    readonly versions: string[];
+  }[];
+  readonly enabledPolicies: {
+    readonly checked: boolean;
+    readonly id: string;
+    readonly title: string;
+    readonly code: string;
+  }[];
+  readonly unresolved?: DepResources[];
+}
 
 export interface FDepPanelProps {
-  dataSource: {
-    id: string;
-    activated: boolean;
-    title: string;
-    resourceType: string;
-    version: {
-      isCustom: boolean;
-      select: string;
-      allowUpdate: boolean;
-      input: string;
-    };
-    versions: string[];
-    upthrow: boolean;
-    enableReuseContracts: {
-      checked: boolean;
-      title: string;
-      status: 'executing' | 'stopped';
-      code: string;
-      id: string;
-      date: string;
-      versions: string[];
-    }[];
-    enabledPolicies: {
-      checked: boolean;
-      id: string;
-      title: string;
-      code: string;
-    }[];
-  }[];
+  readonly dataSource: DepResources[];
   onChange?: (dataSource: FDepPanelProps['dataSource']) => void;
 }
 
 export default function ({dataSource, onChange}: FDepPanelProps) {
 
   const [activeResource, setActiveResource] = React.useState<FDepPanelProps['dataSource'][0] | null>(null);
+  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const resource = dataSource.find((i) => i.activated);
@@ -74,10 +78,18 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
   }
 
   function onDeleteResource(value: ResourcesProps['dataSource'][0]) {
-    const resources = dataSource.filter((i) => i.id !== value.id);
+    let resources = dataSource.filter((i) => i.id !== value.id);
 
     if (value.activated && resources.length > 0) {
-      resources[0].activated = true;
+      resources = resources.map((i, j) => {
+        if (j !== 0) {
+          return i;
+        }
+        return {
+          ...i,
+          activated: true,
+        };
+      })
     }
     return onChange && onChange(resources);
   }
@@ -118,14 +130,32 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
     }));
   }
 
-
-  if (!dataSource || dataSource.length === 0) {
-    return null;
+  function addDepResource(value: MarketResource) {
+    const dep: DepResources = {
+      ...marketToDep(value),
+      activated: dataSource.length === 0,
+    };
+    return onChange && onChange([
+      dep,
+      ...dataSource,
+    ]);
   }
 
   return (<>
-    <UpthrowList labels={dataSource.filter((i) => i.upthrow).map((j) => j.title)}/>
-    <>
+    <Space size={80}>
+      <Space size={10}>
+        <FCircleButton onClick={() => setModalVisible(true)} theme="weaken"/>
+        <FContentText text={'添加'}/>
+      </Space>
+      <Space size={10}>
+        <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
+        <FContentText text={'从上一版本导入'}/>
+      </Space>
+    </Space>
+
+    {dataSource.length > 0 && (<>
+      <UpthrowList labels={dataSource.filter((i) => i.upthrow).map((j) => j.title)}/>
+
       <div style={{height: 20}}/>
       <div className={styles.DepPanel}>
         <div className={styles.DepPanelNavs}>
@@ -207,6 +237,53 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
           </div>
         </div>
       </div>
-    </>
+    </>)}
+
+    <Drawer
+      title={'添加依赖'}
+      onClose={() => setModalVisible(false)}
+      visible={modalVisible}
+      width={820}
+      bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+    >
+      <Market
+        addedResourceID={dataSource.map((i) => i.id)}
+        onSelect={addDepResource}
+      />
+    </Drawer>
   </>);
+}
+
+
+function marketToDep(value: MarketResource) {
+  return {
+    id: value.id,
+    activated: false,
+    title: value.name,
+    resourceType: value.resourceType,
+    version: {
+      isCustom: false,
+      select: value.versions[0],
+      allowUpdate: true,
+      input: '',
+    },
+    versions: value.versions,
+    upthrow: false,
+    enableReuseContracts: value.enableReuseContracts.map((i) => ({
+      checked: true,
+      title: i.title,
+      status: i.status,
+      code: i.code,
+      id: i.id,
+      date: i.date,
+      versions: i.versions,
+    })),
+    enabledPolicies: value.enabledPolicies.map((i) => ({
+      checked: true,
+      id: i.id,
+      title: i.title,
+      code: i.title,
+    })),
+    unresolved: [],
+  };
 }

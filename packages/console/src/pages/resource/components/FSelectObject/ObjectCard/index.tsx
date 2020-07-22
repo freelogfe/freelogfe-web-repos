@@ -5,13 +5,13 @@ import {FTitleText, FContentText} from '@/components/FText';
 import {Progress} from 'antd';
 
 interface ObjectCardProps {
-  resourceObject: {
-    name: string;
-    size: number;
-    path: string;
+  readonly resourceObject: {
+    readonly name: string;
+    readonly size: number;
+    readonly path: string;
   };
-  progress: number | null;
-  onClickDelete?: () => void;
+  readonly progress: number | null;
+  readonly onClickDelete?: () => void;
 }
 
 export default function ({resourceObject, progress = null, onClickDelete}: ObjectCardProps) {
