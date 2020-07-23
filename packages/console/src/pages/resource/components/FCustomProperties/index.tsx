@@ -7,6 +7,7 @@ import {EditOutlined, CopyOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FContentText} from "@/components/FText";
+import {ResourcesProps} from "@/pages/resource/components/FDepPanel/Resources";
 
 interface Data {
   readonly key: string | number;
@@ -45,16 +46,19 @@ export default function ({stubborn = false, dataSource, onChange}: FCustomProper
   }
 
   return (<>
-    <Space size={80}>
-      <Space size={10}>
-        <FCircleButton onClick={onAdd} theme="weaken"/>
-        <FContentText text={'添加'}/>
-      </Space>
-      <Space size={10}>
-        <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
-        <FContentText text={'从上一版本导入'}/>
-      </Space>
-    </Space>
+    {
+      !stubborn && (<Space size={80}>
+        <Space size={10}>
+          <FCircleButton onClick={onAdd} theme="weaken"/>
+          <FContentText text={'添加'}/>
+        </Space>
+        <Space size={10}>
+          <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
+          <FContentText text={'从上一版本导入'}/>
+        </Space>
+      </Space>)
+    }
+
     {dataSource.length > 0 && <div className={styles.styles}>
       <div style={{height: 35}}/>
       {

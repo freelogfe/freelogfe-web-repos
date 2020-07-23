@@ -18,7 +18,7 @@ import FDepPanel from '@/pages/resource/components/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
-  OnChangeDependenciesAction,
+  OnChangeDependenciesAction, OnChangeDepRelationshipAction,
   OnChangeDescriptionAction, OnChangePropertiesAction,
   OnChangeResourceObjectAction,
   OnChangeVersionAction
@@ -57,9 +57,14 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
       <FEditorCard dot={false} title={'依赖'}>
 
         <FDepPanel
+          relationships={version.depRelationship}
           dataSource={version.dependencies}
           onChange={(value) => dispatch<OnChangeDependenciesAction>({
             type: 'resourceVersionCreatorPage/onChangeDependencies',
+            payload: value,
+          })}
+          onChangeRelationships={(value) => dispatch<OnChangeDepRelationshipAction>({
+            type: 'resourceVersionCreatorPage/changeDepRelationship',
             payload: value,
           })}
         />

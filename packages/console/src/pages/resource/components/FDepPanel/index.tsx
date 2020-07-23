@@ -9,13 +9,13 @@ import Resources, {ResourcesProps} from './Resources';
 import Contracts from "./Contracts";
 import Policies from "./Policies";
 import UpthrowList from "./UpthrowList";
-import Market, {MarketResource} from "./Market";
+import Market from "./Market";
 
-interface DepResources {
+export interface DepResources {
   readonly id: string;
-  readonly activated: boolean;
   readonly title: string;
   readonly resourceType: string;
+  readonly time?: string;
   readonly version: {
     readonly isCustom: boolean;
     readonly select: string;
@@ -42,20 +42,58 @@ interface DepResources {
   readonly unresolved?: DepResources[];
 }
 
-export interface FDepPanelProps {
-  readonly dataSource: DepResources[];
-  onChange?: (dataSource: FDepPanelProps['dataSource']) => void;
+interface Relationship {
+  readonly id: string;
+  readonly children: {
+    readonly id: string;
+  }[];
 }
 
-export default function ({dataSource, onChange}: FDepPanelProps) {
+export interface FDepPanelProps {
+  readonly dataSource: DepResources[];
+  readonly relationships: Relationship[];
+  readonly onChange?: (dataSource: FDepPanelProps['dataSource']) => void;
+  readonly onChangeRelationships?: (relationships: FDepPanelProps['relationships']) => void;
+}
+
+export default function ({dataSource, relationships, onChange, onChangeRelationships}: FDepPanelProps) {
 
   const [activeResource, setActiveResource] = React.useState<FDepPanelProps['dataSource'][0] | null>(null);
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  const [activatedID, setActivatedID] = React.useState<string | number>('');
 
+  // 删除无用的数据源
+  // React.useEffect(() => {
+  //   const set = new Set();
+  //   for (const i of relationships) {
+  //     set.add(i.id);
+  //     for (const j of i.children) {
+  //       set.add(j.id);
+  //     }
+  //   }
+  //   onChange && onChange(dataSource.filter((i) => !set.has(i.id)));
+  // }, [relationships]);
+
+  // 自动刷新当前激活的资源信息
   React.useEffect(() => {
-    const resource = dataSource.find((i) => i.activated);
+    const resource = dataSource.find((i) => i.id === activatedID);
     setActiveResource(resource || null);
-  }, [dataSource]);
+  }, [dataSource, activatedID]);
+
+  // 自动激活一个资源ID
+  React.useEffect(() => {
+    for (const i of relationships) {
+      if (i.id === activatedID) {
+        return;
+      }
+      for (const j of i.children) {
+        if (j.id === activatedID) {
+          return;
+        }
+      }
+    }
+    setActivatedID(relationships.length > 0 ? relationships[0].id : '');
+  }, [activatedID, relationships]);
 
   function onChangeResources(value: ResourcesProps['dataSource'][0]) {
     // console.log(value, '######');
@@ -70,28 +108,21 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
     }));
   }
 
-  function onChangeResourcesActivated(value: ResourcesProps['dataSource'][0]) {
-    return onChange && onChange(dataSource.map((i) => ({
-      ...i,
-      activated: value.id === i.id,
-    })));
+  function onChangeResourcesActivated(value: string | number) {
+    setActivatedID(value);
   }
 
-  function onDeleteResource(value: ResourcesProps['dataSource'][0]) {
-    let resources = dataSource.filter((i) => i.id !== value.id);
-
-    if (value.activated && resources.length > 0) {
-      resources = resources.map((i, j) => {
-        if (j !== 0) {
-          return i;
-        }
-        return {
-          ...i,
-          activated: true,
-        };
-      })
+  function onDeleteResource(value: string | number) {
+    let resources = relationships.filter((i) => i.id !== value);
+    onChangeRelationships && onChangeRelationships(resources);
+    const usedResourceID: string[] = [];
+    for (const i of resources) {
+      usedResourceID.push(i.id);
+      for (const j of i.children) {
+        usedResourceID.push(j.id);
+      }
     }
-    return onChange && onChange(resources);
+    return onChange && onChange(dataSource.filter((i) => usedResourceID.includes(i.id)));
   }
 
   function onChangeIsUpthrow(bool: boolean) {
@@ -130,16 +161,32 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
     }));
   }
 
-  function addDepResource(value: MarketResource) {
-    const dep: DepResources = {
-      ...marketToDep(value),
-      activated: dataSource.length === 0,
-    };
-    return onChange && onChange([
-      dep,
+  function addDepResource(resource: DepResources) {
+    // console.log(resource, 'valuevalue');
+    // const [data, rela] = marketToDep(value),
+
+    const addResource = [
+      resource,
+      ...(resource.unresolved || []),
+    ];
+    const allResourceID = dataSource.map((i) => i.id);
+
+    const enabledAddResource = addResource.filter((i) => !allResourceID.includes(i.id));
+
+    onChange && onChange([
+      ...enabledAddResource,
       ...dataSource,
     ]);
+
+    return onChangeRelationships && onChangeRelationships([
+      {
+        id: resource.id,
+        children: (resource.unresolved || []).map((i) => ({id: i.id})),
+      },
+      ...relationships,
+    ]);
   }
+
 
   return (<>
     <Space size={80}>
@@ -153,8 +200,10 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
       </Space>
     </Space>
 
-    {dataSource.length > 0 && (<>
-      <UpthrowList labels={dataSource.filter((i) => i.upthrow).map((j) => j.title)}/>
+    {relationships.length > 0 && (<>
+      <UpthrowList
+        labels={Array.from(new Set(dataSource.filter((i) => i.upthrow).map((j) => j.title)))}
+      />
 
       <div style={{height: 20}}/>
       <div className={styles.DepPanel}>
@@ -162,19 +211,16 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
           <div>
             <div>
               <Resources
-                dataSource={dataSource.map((i) => ({
-                  id: i.id,
-                  activated: i.activated,
-                  title: i.title,
-                  resourceType: i.resourceType,
-                  versions: i.versions,
-                  version: i.version,
-                  labels: [
-                    ...i.enableReuseContracts.filter((i) => i.checked).map((j) => j.title),
-                    ...i.enabledPolicies.filter((i) => i.checked).map((j) => j.title)
-                  ],
-                  upthrow: i.upthrow,
-                }))}
+                activatedID={activatedID}
+                // @ts-ignore
+                dataSource={relationships.map((i) => {
+                  return {
+                    ...dataSource.find((j) => j.id === i.id),
+                    unresolved: i.children.map((k) => {
+                      return dataSource.find((l) => k.id === l.id)
+                    })
+                  }
+                })}
                 onClick={onChangeResourcesActivated}
                 onChange={onChangeResources}
                 onDelete={onDeleteResource}
@@ -247,7 +293,7 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <Market
-        addedResourceID={dataSource.map((i) => i.id)}
+        addedResourceID={relationships.map((i) => i.id)}
         onSelect={addDepResource}
       />
     </Drawer>
@@ -255,35 +301,34 @@ export default function ({dataSource, onChange}: FDepPanelProps) {
 }
 
 
-function marketToDep(value: MarketResource) {
-  return {
-    id: value.id,
-    activated: false,
-    title: value.name,
-    resourceType: value.resourceType,
-    version: {
-      isCustom: false,
-      select: value.versions[0],
-      allowUpdate: true,
-      input: '',
-    },
-    versions: value.versions,
-    upthrow: false,
-    enableReuseContracts: value.enableReuseContracts.map((i) => ({
-      checked: true,
-      title: i.title,
-      status: i.status,
-      code: i.code,
-      id: i.id,
-      date: i.date,
-      versions: i.versions,
-    })),
-    enabledPolicies: value.enabledPolicies.map((i) => ({
-      checked: true,
-      id: i.id,
-      title: i.title,
-      code: i.title,
-    })),
-    unresolved: [],
-  };
-}
+// function marketToDep(value: MarketResource): DepResources[] {
+//   return {
+//     id: value.id,
+//     title: value.name,
+//     resourceType: value.resourceType,
+//     version: {
+//       isCustom: false,
+//       select: value.versions[0],
+//       allowUpdate: true,
+//       input: '',
+//     },
+//     versions: value.versions,
+//     upthrow: false,
+//     enableReuseContracts: value.enableReuseContracts.map((i) => ({
+//       checked: true,
+//       title: i.title,
+//       status: i.status,
+//       code: i.code,
+//       id: i.id,
+//       date: i.date,
+//       versions: i.versions,
+//     })),
+//     enabledPolicies: value.enabledPolicies.map((i) => ({
+//       checked: true,
+//       id: i.id,
+//       title: i.title,
+//       code: i.title,
+//     })),
+//     unresolved: [],
+//   };
+// }

@@ -34,7 +34,7 @@ function VersionEditor({dispatch, version}: VersionEditorProps) {
         <div className={styles.diagram}/>
       </FEditorCard>
       <FEditorCard title={'自定义属性'}>
-        <FCustomProperties stubborn={true}/>
+        <FCustomProperties dataSource={[]} stubborn={true}/>
       </FEditorCard>
     </FContentLayout>
   </FInfoLayout>);

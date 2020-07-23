@@ -5,32 +5,33 @@ import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
 import {resourceTypes} from "@/utils/globals";
+import {DepResources, FDepPanelProps} from "@/pages/resource/components/FDepPanel";
 
-export interface MarketResource {
-  readonly id: string;
-  readonly name: string;
-  readonly resourceType: string;
-  readonly time: string;
-  readonly versions: string[];
-  readonly enableReuseContracts: {
-    readonly id: string;
-    readonly title: string;
-    readonly status: 'executing' | 'stopped';
-    readonly code: string;
-    readonly date: string;
-    readonly versions: string[];
-  }[];
-  readonly enabledPolicies: {
-    readonly id: string;
-    readonly title: string;
-    readonly code: string;
-  }[];
-  readonly unresolved: MarketResource[];
-}
+// export interface MarketResource {
+//   readonly id: string;
+//   readonly name: string;
+//   readonly resourceType: string;
+//   readonly time: string;
+//   readonly versions: string[];
+//   readonly enableReuseContracts: {
+//     readonly id: string;
+//     readonly title: string;
+//     readonly status: 'executing' | 'stopped';
+//     readonly code: string;
+//     readonly date: string;
+//     readonly versions: string[];
+//   }[];
+//   readonly enabledPolicies: {
+//     readonly id: string;
+//     readonly title: string;
+//     readonly code: string;
+//   }[];
+//   readonly unresolved: MarketResource[];
+// }
 
 interface MarketProps {
   readonly addedResourceID?: string[];
-  readonly onSelect?: (resource: MarketResource) => void;
+  readonly onSelect?: (resource: DepResources) => void;
 }
 
 export default function ({onSelect, addedResourceID}: MarketProps) {
@@ -43,60 +44,178 @@ export default function ({onSelect, addedResourceID}: MarketProps) {
 
   const [input, setInput] = React.useState<string>('');
 
-  const [resourceObjects, setResourceObjects] = React.useState<MarketResource[] | null>(null);
+  const [resourceObjects, setResourceObjects] = React.useState<DepResources[] | null>(null);
 
   React.useEffect(() => {
     setResourceObjects([
       {
-        id: 'q12342',
-        name: 'liukai/picture.png',
-        time: '2019-12-22 12:22',
+        id: '100',
+        title: 'liukai/hahaha',
         resourceType: 'image',
-        versions: ['1.2.3', '4.5.6'],
-        enableReuseContracts: [
-          {
+        version: {
+          isCustom: false,
+          input: '',
+          allowUpdate: true,
+          select: '1.2.3',
+        },
+        versions: ['11.2.3', '1.2.3'],
+        upthrow: false,
+        enableReuseContracts: [{
+          checked: true,
+          title: '买奶粉',
+          status: 'stopped',
+          code: 'code',
+          id: '1234',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
+        }],
+        enabledPolicies: [{
+          checked: true,
+          id: 'string',
+          title: 'string',
+          code: 'code',
+        }],
+        unresolved: [{
+          id: '1234',
+          title: 'liukai/hahaha',
+          resourceType: 'image',
+          version: {
+            isCustom: false,
+            input: '',
+            allowUpdate: true,
+            select: '1.2.3',
+          },
+          versions: ['11.2.3', '1.2.3'],
+          upthrow: false,
+          enableReuseContracts: [{
+            checked: true,
             title: '买奶粉',
             status: 'stopped',
-            code: 'start',
+            code: 'code',
             id: '1234',
             date: '2013-12-22',
             versions: ['12.23.3', '1.42.3'],
-          }
-        ],
+          }],
+          enabledPolicies: [{
+            checked: true,
+            id: 'string',
+            title: 'string',
+            code: 'code',
+          }]
+        }]
+      }, {
+        id: '101',
+        title: 'liukai2/hahaha2',
+        resourceType: 'image',
+        version: {
+          isCustom: false,
+          input: '',
+          allowUpdate: true,
+          select: '1.2.3',
+        },
+        versions: ['11.2.3', '1.2.3'],
+        upthrow: false,
+        enableReuseContracts: [{
+          checked: true,
+          title: '买奶粉2',
+          status: 'executing',
+          code: 'code',
+          id: '1234',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
+        }, {
+          checked: false,
+          title: '买奶粉sd2',
+          status: 'executing',
+          code: 'code',
+          id: '12342345',
+          date: '2013-12-22',
+          versions: ['12.23.3', '1.42.3'],
+        }],
         enabledPolicies: [{
+          checked: true,
           id: 'string',
           title: 'string',
-          code: 'stop',
+          code: 'code',
+        }, {
+          checked: true,
+          id: 'stringzd',
+          title: 'hello',
+          code: 'code',
         }],
-        unresolved: [],
-      },
-      {
-        id: 'q1232342',
-        name: 'liukai2/picture.png',
-        time: '2019-12-22 12:22',
-        resourceType: 'image',
-        versions: ['1.2.3', '4.5.6'],
-        enableReuseContracts: [
-          {
-            title: '买奶粉',
-            status: 'stopped',
-            code: 'start',
+        unresolved: [{
+          id: '1234',
+          title: 'liukai2/hahaha2',
+          resourceType: 'image',
+          version: {
+            isCustom: false,
+            input: '',
+            allowUpdate: true,
+            select: '1.2.3',
+          },
+          versions: ['11.2.3', '1.2.3'],
+          upthrow: false,
+          enableReuseContracts: [{
+            checked: true,
+            title: '买奶粉2',
+            status: 'executing',
+            code: 'code',
             id: '1234',
             date: '2013-12-22',
             versions: ['12.23.3', '1.42.3'],
-          }
-        ],
-        enabledPolicies: [{
-          id: 'string',
-          title: 'string',
-          code: 'stop',
-        }],
-        unresolved: [],
-      },
+          }, {
+            checked: false,
+            title: '买奶粉sd2',
+            status: 'executing',
+            code: 'code',
+            id: '12342345',
+            date: '2013-12-22',
+            versions: ['12.23.3', '1.42.3'],
+          }],
+          enabledPolicies: [{
+            checked: true,
+            id: 'string',
+            title: 'string',
+            code: 'code',
+          }, {
+            checked: true,
+            id: 'stringzd',
+            title: 'hello',
+            code: 'code',
+          }]
+        }, {
+          id: '100',
+          title: 'liukai/hahaha',
+          resourceType: 'image',
+          version: {
+            isCustom: false,
+            input: '',
+            allowUpdate: true,
+            select: '1.2.3',
+          },
+          versions: ['11.2.3', '1.2.3'],
+          upthrow: false,
+          enableReuseContracts: [{
+            checked: true,
+            title: '买奶粉',
+            status: 'stopped',
+            code: 'code',
+            id: '1234',
+            date: '2013-12-22',
+            versions: ['12.23.3', '1.42.3'],
+          }],
+          enabledPolicies: [{
+            checked: true,
+            id: 'string',
+            title: 'string',
+            code: 'code',
+          }],
+        }]
+      }
     ])
   }, []);
 
-  // function onConfirm(i: MarketResource) {
+  // function onConfirm(i) {
   //
   // }
 
@@ -123,10 +242,10 @@ export default function ({onSelect, addedResourceID}: MarketProps) {
       <div style={{height: 17}}/>
 
       {
-        resourceObjects?.map((i: MarketResource) => (
+        resourceObjects?.map((i) => (
           <div key={i.id} className={styles.bucket}>
             <div>
-              <FContentText text={i.name}/>
+              <FContentText text={i.title}/>
               <div style={{height: 2}}/>
               <FContentText type={'additional2'} text={`资源类型 ${i.resourceType} | 更新时间 ${i.time}`}/>
             </div>

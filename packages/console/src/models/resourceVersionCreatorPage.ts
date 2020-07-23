@@ -4,11 +4,13 @@ import {DvaReducer} from './shared';
 import {FSelectObject} from "@/pages/resource/components/FSelectObject";
 import {FDepPanelProps} from "@/pages/resource/components/FDepPanel";
 import {FCustomPropertiesProps} from "@/pages/resource/components/FCustomProperties";
+import {ResourcesProps} from "@/pages/resource/components/FDepPanel/Resources";
 
 export interface ResourceVersionCreatorPageModelState {
   version: string;
   resourceObject: FSelectObject['resourceObject'];
-  upthrow: string[];
+  // upthrow: string[];
+  depRelationship: FDepPanelProps['relationships'];
   dependencies: FDepPanelProps['dataSource'];
   properties: FCustomPropertiesProps['dataSource'];
   description: string;
@@ -24,9 +26,14 @@ export interface OnChangeResourceObjectAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['resourceObject'];
 }
 
-export interface OnChangeUpthrowAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeUpthrow';
-  payload: ResourceVersionCreatorPageModelState['upthrow'];
+// export interface OnChangeUpthrowAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/onChangeUpthrow';
+//   payload: ResourceVersionCreatorPageModelState['upthrow'];
+// }
+
+export interface OnChangeDepRelationshipAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/changeDepRelationship';
+  payload: ResourceVersionCreatorPageModelState['depRelationship'];
 }
 
 export interface OnChangeDependenciesAction extends AnyAction {
@@ -53,7 +60,8 @@ export interface ResourceVersionCreatorModelType {
   reducers: {
     onChangeVersion: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeVersionAction>;
     onChangeResourceObject: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeResourceObjectAction>;
-    onChangeUpthrow: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeUpthrowAction>;
+    // onChangeUpthrow: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeUpthrowAction>;
+    changeDepRelationship: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepRelationshipAction>;
     onChangeDependencies: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesAction>;
     onChangeProperties: DvaReducer<ResourceVersionCreatorPageModelState, OnChangePropertiesAction>;
     onChangeDescription: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDescriptionAction>;
@@ -80,78 +88,78 @@ const Model: ResourceVersionCreatorModelType = {
     //   size: 101234123,
     //   path: 'bucket21/1234.gif'
     // },
-    upthrow: ['1234', '34234'],
+    // upthrow: ['1234', '34234'],
+    // depRelationship: [{id: '100', children: [{id: '101'}]}, {id: '101', children: [{id: '100'}]}],
+    depRelationship: [],
     dependencies: [
-      {
-        id: 'string',
-        activated: true,
-        title: 'liukai/hahaha',
-        resourceType: 'image',
-        version: {
-          isCustom: false,
-          input: '',
-          allowUpdate: true,
-          select: '1.2.3',
-        },
-        versions: ['11.2.3', '1.2.3'],
-        upthrow: false,
-        enableReuseContracts: [{
-          checked: true,
-          title: '买奶粉',
-          status: 'stopped',
-          code: code,
-          id: '1234',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }],
-        enabledPolicies: [{
-          checked: true,
-          id: 'string',
-          title: 'string',
-          code: code,
-        }]
-      }, {
-        id: 'string2',
-        activated: false,
-        title: 'liukai2/hahaha2',
-        resourceType: 'image',
-        version: {
-          isCustom: false,
-          input: '',
-          allowUpdate: true,
-          select: '1.2.3',
-        },
-        versions: ['11.2.3', '1.2.3'],
-        upthrow: false,
-        enableReuseContracts: [{
-          checked: true,
-          title: '买奶粉2',
-          status: 'executing',
-          code: code,
-          id: '1234',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }, {
-          checked: false,
-          title: '买奶粉sd2',
-          status: 'executing',
-          code: code,
-          id: '12342345',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }],
-        enabledPolicies: [{
-          checked: true,
-          id: 'string',
-          title: 'string',
-          code: code,
-        }, {
-          checked: true,
-          id: 'stringzd',
-          title: 'hello',
-          code: code,
-        }]
-      }
+      // {
+      //   id: '100',
+      //   title: 'liukai/hahaha',
+      //   resourceType: 'image',
+      //   version: {
+      //     isCustom: false,
+      //     input: '',
+      //     allowUpdate: true,
+      //     select: '1.2.3',
+      //   },
+      //   versions: ['11.2.3', '1.2.3'],
+      //   upthrow: false,
+      //   enableReuseContracts: [{
+      //     checked: true,
+      //     title: '买奶粉',
+      //     status: 'stopped',
+      //     code: code,
+      //     id: '1234',
+      //     date: '2013-12-22',
+      //     versions: ['12.23.3', '1.42.3'],
+      //   }],
+      //   enabledPolicies: [{
+      //     checked: true,
+      //     id: 'string',
+      //     title: 'string',
+      //     code: code,
+      //   }]
+      // }, {
+      //   id: '101',
+      //   title: 'liukai2/hahaha2',
+      //   resourceType: 'image',
+      //   version: {
+      //     isCustom: false,
+      //     input: '',
+      //     allowUpdate: true,
+      //     select: '1.2.3',
+      //   },
+      //   versions: ['11.2.3', '1.2.3'],
+      //   upthrow: false,
+      //   enableReuseContracts: [{
+      //     checked: true,
+      //     title: '买奶粉2',
+      //     status: 'executing',
+      //     code: code,
+      //     id: '1234',
+      //     date: '2013-12-22',
+      //     versions: ['12.23.3', '1.42.3'],
+      //   }, {
+      //     checked: false,
+      //     title: '买奶粉sd2',
+      //     status: 'executing',
+      //     code: code,
+      //     id: '12342345',
+      //     date: '2013-12-22',
+      //     versions: ['12.23.3', '1.42.3'],
+      //   }],
+      //   enabledPolicies: [{
+      //     checked: true,
+      //     id: 'string',
+      //     title: 'string',
+      //     code: code,
+      //   }, {
+      //     checked: true,
+      //     id: 'stringzd',
+      //     title: 'hello',
+      //     code: code,
+      //   }]
+      // }
     ],
     properties: [{
       key: 'myKey',
@@ -191,10 +199,15 @@ const Model: ResourceVersionCreatorModelType = {
     onChangeResourceObject(state: ResourceVersionCreatorPageModelState, action: OnChangeResourceObjectAction): ResourceVersionCreatorPageModelState {
       return {...state, resourceObject: action.payload};
     },
-    onChangeUpthrow(state: ResourceVersionCreatorPageModelState, action: OnChangeUpthrowAction): ResourceVersionCreatorPageModelState {
-      return {...state, upthrow: action.payload};
+    // onChangeUpthrow(state: ResourceVersionCreatorPageModelState, action: OnChangeUpthrowAction): ResourceVersionCreatorPageModelState {
+    //   return {...state, upthrow: action.payload};
+    // },
+
+    changeDepRelationship(state: ResourceVersionCreatorPageModelState, action: OnChangeDepRelationshipAction): ResourceVersionCreatorPageModelState {
+      return {...state, depRelationship: action.payload};
     },
     onChangeDependencies(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesAction): ResourceVersionCreatorPageModelState {
+      // console.log(action.payload, 'payload');
       return {...state, dependencies: action.payload};
     },
     onChangeProperties(state: ResourceVersionCreatorPageModelState, action: OnChangePropertiesAction): ResourceVersionCreatorPageModelState {
