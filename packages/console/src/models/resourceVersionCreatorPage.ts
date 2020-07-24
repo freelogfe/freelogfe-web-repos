@@ -1,17 +1,54 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {FSelectObject} from "@/pages/resource/components/FSelectObject";
-import {FDepPanelProps} from "@/pages/resource/components/FDepPanel";
-import {FCustomPropertiesProps} from "@/pages/resource/components/FCustomProperties";
-import {ResourcesProps} from "@/pages/resource/components/FDepPanel/Resources";
+import {FSelectObject} from '@/pages/resource/components/FSelectObject';
+import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
+
+export type DepResources = Readonly<{
+  id: string;
+  title: string;
+  resourceType: string;
+  time: string;
+  version: Readonly<{
+    isCustom: boolean;
+    select: string;
+    allowUpdate: boolean;
+    input: string;
+  }>;
+  versions: string[];
+  upthrow: boolean;
+  enableReuseContracts: Readonly<{
+    checked: boolean;
+    title: string;
+    status: 'executing' | 'stopped';
+    code: string;
+    id: string;
+    date: string;
+    versions: string[];
+  }>[];
+  enabledPolicies: Readonly<{
+    checked: boolean;
+    id: string;
+    title: string;
+    code: string;
+  }>[];
+}>[];
+
+export type Relationship = Readonly<{
+  id: string;
+  children: Readonly<{
+    id: string;
+  }>[];
+}>[];
 
 export interface ResourceVersionCreatorPageModelState {
   version: string;
   resourceObject: FSelectObject['resourceObject'];
-  // upthrow: string[];
-  depRelationship: FDepPanelProps['relationships'];
-  dependencies: FDepPanelProps['dataSource'];
+
+  depRelationship: Relationship;
+  dependencies: DepResources;
+  depActivatedID: string;
+
   properties: FCustomPropertiesProps['dataSource'];
   description: string;
 }
@@ -26,11 +63,6 @@ export interface OnChangeResourceObjectAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['resourceObject'];
 }
 
-// export interface OnChangeUpthrowAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onChangeUpthrow';
-//   payload: ResourceVersionCreatorPageModelState['upthrow'];
-// }
-
 export interface OnChangeDepRelationshipAction extends AnyAction {
   type: 'resourceVersionCreatorPage/changeDepRelationship';
   payload: ResourceVersionCreatorPageModelState['depRelationship'];
@@ -39,6 +71,22 @@ export interface OnChangeDepRelationshipAction extends AnyAction {
 export interface OnChangeDependenciesAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onChangeDependencies';
   payload: ResourceVersionCreatorPageModelState['dependencies'];
+}
+
+export interface OnChangeDependenciesByIDAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChangeDependenciesByID';
+  payload: Partial<ResourceVersionCreatorPageModelState['dependencies'][number]>;
+  id: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
+}
+
+export interface DeleteDependencyByIDAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/deleteDependencyByID';
+  payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
+}
+
+export interface OnChangeDepActivatedIDAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChangeDepActivatedID';
+  payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
 }
 
 export interface OnChangePropertiesAction extends AnyAction {
@@ -56,24 +104,21 @@ export interface ResourceVersionCreatorModelType {
   state: ResourceVersionCreatorPageModelState;
   effects: {
     fetchDataSource: Effect;
+    init: Effect;
   };
   reducers: {
     onChangeVersion: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeVersionAction>;
     onChangeResourceObject: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeResourceObjectAction>;
-    // onChangeUpthrow: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeUpthrowAction>;
     changeDepRelationship: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepRelationshipAction>;
     onChangeDependencies: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesAction>;
+    deleteDependencyByID: DvaReducer<ResourceVersionCreatorPageModelState, DeleteDependencyByIDAction>;
+    onChangeDependenciesByID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesByIDAction>;
+    onChangeDepActivatedID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepActivatedIDAction>;
     onChangeProperties: DvaReducer<ResourceVersionCreatorPageModelState, OnChangePropertiesAction>;
     onChangeDescription: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDescriptionAction>;
   };
   subscriptions: { setup: Subscription };
 }
-
-const code = 'initial:\n' +
-  '    active\n' +
-  '    recontractable\n' +
-  '    presentable\n' +
-  '    terminate';
 
 const Model: ResourceVersionCreatorModelType = {
 
@@ -82,85 +127,10 @@ const Model: ResourceVersionCreatorModelType = {
   state: {
     version: '1.2.3',
     resourceObject: null,
-    //   {
-    //   id: '12341234',
-    //   name: '资源1',
-    //   size: 101234123,
-    //   path: 'bucket21/1234.gif'
-    // },
-    // upthrow: ['1234', '34234'],
-    // depRelationship: [{id: '100', children: [{id: '101'}]}, {id: '101', children: [{id: '100'}]}],
     depRelationship: [],
-    dependencies: [
-      // {
-      //   id: '100',
-      //   title: 'liukai/hahaha',
-      //   resourceType: 'image',
-      //   version: {
-      //     isCustom: false,
-      //     input: '',
-      //     allowUpdate: true,
-      //     select: '1.2.3',
-      //   },
-      //   versions: ['11.2.3', '1.2.3'],
-      //   upthrow: false,
-      //   enableReuseContracts: [{
-      //     checked: true,
-      //     title: '买奶粉',
-      //     status: 'stopped',
-      //     code: code,
-      //     id: '1234',
-      //     date: '2013-12-22',
-      //     versions: ['12.23.3', '1.42.3'],
-      //   }],
-      //   enabledPolicies: [{
-      //     checked: true,
-      //     id: 'string',
-      //     title: 'string',
-      //     code: code,
-      //   }]
-      // }, {
-      //   id: '101',
-      //   title: 'liukai2/hahaha2',
-      //   resourceType: 'image',
-      //   version: {
-      //     isCustom: false,
-      //     input: '',
-      //     allowUpdate: true,
-      //     select: '1.2.3',
-      //   },
-      //   versions: ['11.2.3', '1.2.3'],
-      //   upthrow: false,
-      //   enableReuseContracts: [{
-      //     checked: true,
-      //     title: '买奶粉2',
-      //     status: 'executing',
-      //     code: code,
-      //     id: '1234',
-      //     date: '2013-12-22',
-      //     versions: ['12.23.3', '1.42.3'],
-      //   }, {
-      //     checked: false,
-      //     title: '买奶粉sd2',
-      //     status: 'executing',
-      //     code: code,
-      //     id: '12342345',
-      //     date: '2013-12-22',
-      //     versions: ['12.23.3', '1.42.3'],
-      //   }],
-      //   enabledPolicies: [{
-      //     checked: true,
-      //     id: 'string',
-      //     title: 'string',
-      //     code: code,
-      //   }, {
-      //     checked: true,
-      //     id: 'stringzd',
-      //     title: 'hello',
-      //     code: code,
-      //   }]
-      // }
-    ],
+    dependencies: [],
+    depActivatedID: '',
+
     properties: [{
       key: 'myKey',
       value: 'myValue',
@@ -187,6 +157,14 @@ const Model: ResourceVersionCreatorModelType = {
   },
 
   effects: {
+    * init(_: AnyAction, {call, put, take}: EffectsCommandMap) {
+      // yield put({type: 'save'});
+      // console.log('####*****');
+      // while (true) {
+      //   yield take('deleteDependencyByID');
+      //   console.log('deleteDependencyByID');
+      // }
+    },
     * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
       yield put({type: 'save'});
     },
@@ -199,17 +177,52 @@ const Model: ResourceVersionCreatorModelType = {
     onChangeResourceObject(state: ResourceVersionCreatorPageModelState, action: OnChangeResourceObjectAction): ResourceVersionCreatorPageModelState {
       return {...state, resourceObject: action.payload};
     },
-    // onChangeUpthrow(state: ResourceVersionCreatorPageModelState, action: OnChangeUpthrowAction): ResourceVersionCreatorPageModelState {
-    //   return {...state, upthrow: action.payload};
-    // },
-
     changeDepRelationship(state: ResourceVersionCreatorPageModelState, action: OnChangeDepRelationshipAction): ResourceVersionCreatorPageModelState {
       return {...state, depRelationship: action.payload};
     },
     onChangeDependencies(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesAction): ResourceVersionCreatorPageModelState {
-      // console.log(action.payload, 'payload');
       return {...state, dependencies: action.payload};
     },
+    onChangeDependenciesByID(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesByIDAction): ResourceVersionCreatorPageModelState {
+      const resources = state.dependencies;
+      const dependencies = resources.map((i) => {
+        if (i.id !== action.id) {
+          return i;
+        }
+        return {
+          ...i,
+          ...action.payload,
+        };
+      });
+
+      return {
+        ...state,
+        dependencies,
+      };
+    },
+    deleteDependencyByID(state: ResourceVersionCreatorPageModelState, action: DeleteDependencyByIDAction): ResourceVersionCreatorPageModelState {
+      const depRelationship = state.depRelationship.filter((i) => i.id !== action.payload);
+      const usedResourceID: string[] = [];
+      for (const i of depRelationship) {
+        usedResourceID.push(i.id);
+        for (const j of i.children) {
+          usedResourceID.push(j.id);
+        }
+      }
+      const dependencies = state.dependencies.filter((i) => usedResourceID.includes(i.id));
+      return {
+        ...state,
+        depRelationship,
+        dependencies,
+      };
+    },
+    onChangeDepActivatedID(state: ResourceVersionCreatorPageModelState, action: OnChangeDepActivatedIDAction): ResourceVersionCreatorPageModelState {
+      return {
+        ...state,
+        depActivatedID: action.payload
+      };
+    },
+
     onChangeProperties(state: ResourceVersionCreatorPageModelState, action: OnChangePropertiesAction): ResourceVersionCreatorPageModelState {
       return {...state, properties: action.payload};
     },
@@ -220,7 +233,14 @@ const Model: ResourceVersionCreatorModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
+      // console.log('#######');
+      dispatch({
+        type: 'init',
+      });
     },
+
+    // suba1234({dispatch}: SubscriptionAPI) {
+    // },
   },
 
 };

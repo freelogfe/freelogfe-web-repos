@@ -14,7 +14,7 @@ import {CopyOutlined, LoadingOutlined, ExclamationCircleFilled} from '@ant-desig
 // import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
-import FDepPanel from '@/pages/resource/components/FDepPanel';
+import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {

@@ -1,17 +1,24 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
+import {FTitleText} from '@/components/FText';
 import {ExclamationCircleFilled} from '@ant-design/icons';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 
 interface UpthrowListProps {
-  labels: string[];
+  // dispatch: Dispatch;
+  creator: ResourceVersionCreatorPageModelState;
 }
 
-export default function ({labels}: UpthrowListProps) {
+function UpthrowList({creator: {dependencies}}: UpthrowListProps) {
+
+  const labels = Array.from(new Set(dependencies.filter((i) => i.upthrow).map((j) => j.title)));
+
   if (!labels || labels.length === 0) {
     return null;
   }
+
   return (<>
     <div style={{height: 30}}/>
     <div className={styles.depUpthrow}>
@@ -25,3 +32,7 @@ export default function ({labels}: UpthrowListProps) {
     </div>
   </>)
 }
+
+export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+  creator: resourceVersionCreatorPage,
+}))(UpthrowList);

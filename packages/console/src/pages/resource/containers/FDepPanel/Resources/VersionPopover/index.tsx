@@ -3,7 +3,7 @@ import FInput from '@/components/FInput';
 import {FNormalButton} from '@/components/FButton';
 import * as React from "react";
 import styles from './index.less';
-import {ResourcesProps} from "@/pages/resource/components/FDepPanel/Resources";
+import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
 
 interface VersionPopoverProps {
   defaultVersion: ResourcesProps['dataSource'][0]['version']

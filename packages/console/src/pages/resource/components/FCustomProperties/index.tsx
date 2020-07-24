@@ -7,7 +7,7 @@ import {EditOutlined, CopyOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FContentText} from "@/components/FText";
-import {ResourcesProps} from "@/pages/resource/components/FDepPanel/Resources";
+import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
 
 interface Data {
   readonly key: string | number;
