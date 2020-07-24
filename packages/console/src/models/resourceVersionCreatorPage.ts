@@ -131,28 +131,7 @@ const Model: ResourceVersionCreatorModelType = {
     dependencies: [],
     depActivatedID: '',
 
-    properties: [{
-      key: 'myKey',
-      value: 'myValue',
-      description: 'myDescription',
-      allowCustom: true,
-      custom: 'select',
-      customOption: 'abc,def,ghi',
-    }, {
-      key: 'myKey2',
-      value: 'myValue',
-      description: 'myDescription',
-      allowCustom: true,
-      custom: 'select',
-      customOption: 'abc,def,ghi',
-    }, {
-      key: 'myKey3',
-      value: 'myValue',
-      description: 'myDescription',
-      allowCustom: true,
-      custom: 'select',
-      customOption: 'abc,def,ghi',
-    }],
+    properties: [],
     description: '12423',
   },
 

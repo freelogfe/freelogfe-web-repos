@@ -3,32 +3,28 @@ import * as React from 'react';
 import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
-import {FContentText, FTitleText} from '@/components/FText';
+import {FTitleText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FNormalButton, FCircleButton, FTextButton} from '@/components/FButton';
+import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
-import {CopyOutlined, LoadingOutlined, ExclamationCircleFilled} from '@ant-design/icons';
 
-// import FSelectObjectModal from '@/pages/resource/components/FSelectObjectModal';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
-  OnChangeDependenciesAction, OnChangeDepRelationshipAction,
   OnChangeDescriptionAction, OnChangePropertiesAction,
   OnChangeResourceObjectAction,
   OnChangeVersionAction
-} from "@/models/resourceVersionCreatorPage";
+} from '@/models/resourceVersionCreatorPage';
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
   version: ResourceVersionCreatorPageModelState,
 }
-
 
 function VersionCreator({dispatch, version}: VersionCreatorProps) {
 
@@ -44,6 +40,7 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
           className={styles.versionInput}
         />
       </FEditorCard>
+
       <FEditorCard dot={true} title={'对象'}>
         <FSelectObject
           resourceObject={version.resourceObject}
@@ -55,20 +52,9 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
       </FEditorCard>
 
       <FEditorCard dot={false} title={'依赖'}>
-
-        <FDepPanel
-          relationships={version.depRelationship}
-          dataSource={version.dependencies}
-          onChange={(value) => dispatch<OnChangeDependenciesAction>({
-            type: 'resourceVersionCreatorPage/onChangeDependencies',
-            payload: value,
-          })}
-          onChangeRelationships={(value) => dispatch<OnChangeDepRelationshipAction>({
-            type: 'resourceVersionCreatorPage/changeDepRelationship',
-            payload: value,
-          })}
-        />
+        <FDepPanel/>
       </FEditorCard>
+
       <FEditorCard dot={false} title={'自定义属性'}>
         <FCustomProperties
           stubborn={false}
@@ -79,6 +65,7 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
           })}
         />
       </FEditorCard>
+
       <FEditorCard dot={false} title={'版本描述'}>
         <FBraftEditor
           onChange={(value) => dispatch<OnChangeDescriptionAction>({
@@ -88,7 +75,6 @@ function VersionCreator({dispatch, version}: VersionCreatorProps) {
         />
       </FEditorCard>
 
-      {/*<FSelectObjectModal/>*/}
     </FContentLayout>
   </FInfoLayout>);
 }

@@ -12,6 +12,7 @@ import FBraftEditor from '@/components/FBraftEditor';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connect";
+import FHorn from "@/pages/resource/components/FHorn";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -19,6 +20,14 @@ interface VersionEditorProps {
 }
 
 function VersionEditor({dispatch, version}: VersionEditorProps) {
+
+  const [isEdit, setIsEdit] = React.useState<boolean>(false);
+  const [editorText, setEditorText] = React.useState<string>(version.description);
+
+  function onClickConfirm() {
+
+  }
+
   return (<FInfoLayout>
     <FContentLayout
       header={<Header
@@ -26,15 +35,39 @@ function VersionEditor({dispatch, version}: VersionEditorProps) {
         signingDate={version.signingDate}
         resourceID={version.resourceID}
       />}>
+
       <FEditorCard title={'版本描述'}>
-        {false && <FBraftEditor/>}
-        {true && <div className={styles.description}></div>}
+        {isEdit
+          ? (<FHorn extra={<Space size={10}>
+            <FTextButton onClick={() => setIsEdit(false)}>取消</FTextButton>
+            <FTextButton onClick={onClickConfirm} theme="primary">保存</FTextButton>
+          </Space>}>
+            <FBraftEditor
+              defaultValue={editorText}
+              onChange={(value) => setEditorText(value)}
+            />
+          </FHorn>)
+          : (<FHorn extra={<FTextButton
+            onClick={() => setIsEdit(true)}
+            theme="primary"
+          >编辑</FTextButton>}>
+            <div className={styles.description}>
+              <div
+                className={styles.container}
+                dangerouslySetInnerHTML={{__html: version.description}}
+              />
+            </div>
+          </FHorn>)
+        }
       </FEditorCard>
       <FEditorCard title={'相关视图'}>
         <div className={styles.diagram}/>
       </FEditorCard>
       <FEditorCard title={'自定义属性'}>
-        <FCustomProperties dataSource={[]} stubborn={true}/>
+        <FCustomProperties
+          dataSource={version.properties}
+          stubborn={true}
+        />
       </FEditorCard>
     </FContentLayout>
   </FInfoLayout>);
@@ -76,44 +109,44 @@ export default connect(({resourceVersionEditorPage}: ConnectState) => ({
  <title>Preview Content</title>
  <style>
  html,body{
-              height: 100%;
-              margin: 0;
-              padding: 0;
-              overflow: auto;
-              background-color: #f1f2f3;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            background-color: #f1f2f3;
             }
  .container{
-              box-sizing: border-box;
-              width: 1000px;
-              max-width: 100%;
-              min-height: 100%;
-              margin: 0 auto;
-              padding: 30px 20px;
-              overflow: hidden;
-              background-color: #fff;
-              border-right: solid 1px #eee;
-              border-left: solid 1px #eee;
+            box-sizing: border-box;
+            width: 1000px;
+            max-width: 100%;
+            min-height: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            overflow: hidden;
+            background-color: #fff;
+            border-right: solid 1px #eee;
+            border-left: solid 1px #eee;
             }
  .container img,
  .container audio,
  .container video{
-              max-width: 100%;
-              height: auto;
+            max-width: 100%;
+            height: auto;
             }
  .container p{
-              white-space: pre-wrap;
-              min-height: 1em;
+            white-space: pre-wrap;
+            min-height: 1em;
             }
  .container pre{
-              padding: 15px;
-              background-color: #f1f1f1;
-              border-radius: 5px;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
             }
  .container blockquote{
-              margin: 0;
-              padding: 15px;
-              background-color: #f1f1f1;
-              border-left: 3px solid #d1d1d1;
+            margin: 0;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-left: 3px solid #d1d1d1;
             }
  </style>
  </head>

@@ -10,13 +10,13 @@ interface FBraftEditorProps {
 
 export default function ({defaultValue, onChange}: FBraftEditorProps) {
 
-  const [editorState, setEditorState] = React.useState<null | EditorState>(null);
+  const [editorState, setEditorState] = React.useState<null | EditorState>(BraftEditor.createEditorState(defaultValue));
 
-  React.useEffect(() => {
-    if (defaultValue) {
-      setEditorState(BraftEditor.createEditorState(defaultValue));
-    }
-  }, [defaultValue]);
+  // React.useEffect(() => {
+  //   if (defaultValue) {
+  //     setEditorState(BraftEditor.createEditorState(defaultValue));
+  //   }
+  // }, [defaultValue]);
 
   function handleEditorChange(editorState: EditorState) {
     setEditorState(editorState);
@@ -30,7 +30,8 @@ export default function ({defaultValue, onChange}: FBraftEditorProps) {
     <BraftEditor
       className={styles.styles}
       controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}
-      value={editorState}
+      // value={editorState}
+      defaultValue={editorState}
       onChange={handleEditorChange}
       // onSave={this.submitContent}
     />
