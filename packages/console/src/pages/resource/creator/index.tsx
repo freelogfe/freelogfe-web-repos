@@ -18,7 +18,7 @@ import {
   OnChangeIntroductionAction,
   OnChangeLabelsAction,
   OnChangeNameAction,
-  OnChangeResourceTypeAction
+  OnChangeResourceTypeAction, OnCreateAction
 } from '@/models/resourceCreatorPage';
 
 interface ResourceCreatorProps {
@@ -28,9 +28,17 @@ interface ResourceCreatorProps {
 
 const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
+
 function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
+
+  function onClickCreate() {
+    dispatch<OnCreateAction>({
+      type: 'resourceCreatorPage/create',
+    });
+  }
+
   return (<FCenterLayout>
-    <FContentLayout header={<Header onClickCache={() => null} onClickCreate={() => null}/>}>
+    <FContentLayout header={<Header onClickCache={() => null} onClickCreate={onClickCreate}/>}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>

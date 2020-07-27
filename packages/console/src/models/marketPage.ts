@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {list} from '@/services/resource';
+import {list} from '@/services/resources';
 
 export interface MarketPageModelState {
   tabValue: '1' | '2';

@@ -1,6 +1,8 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
+import {create} from '@/services/resources';
+import {ConnectState} from "@/models/connect";
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -35,11 +37,16 @@ export interface OnChangeLabelsAction extends AnyAction {
   payload: string[];
 }
 
+export interface OnCreateAction extends AnyAction {
+  type: 'resourceCreatorPage/create';
+  // payload: string[];
+}
+
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
   effects: {
-    fetchDataSource: Effect;
+    create: Effect;
   };
   reducers: {
     onChangeName: DvaReducer<ResourceCreatorPageModelState, OnChangeNameAction>;
@@ -64,8 +71,18 @@ const Model: ResourceCreatorPageModelType = {
   },
 
   effects: {
-    * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-      yield put({type: 'save'});
+    * create(_: OnCreateAction, {call, put, select}: EffectsCommandMap) {
+      const params = yield select(({resourceCreatorPage}: ConnectState) => ({
+        name: resourceCreatorPage.name,
+        resourceType: resourceCreatorPage.resourceType,
+        // policies?: any[];
+        coverImages: [resourceCreatorPage.cover],
+        intro: resourceCreatorPage.introduction,
+        tags: resourceCreatorPage.labels,
+      }));
+      // create(params);
+      yield call(create, params);
+      // yield put({type: 'save'});
     },
   },
 

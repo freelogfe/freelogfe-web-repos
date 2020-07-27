@@ -161,6 +161,14 @@ const config: IConfig = {
         headers: {
           'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
         },
+      },
+      '/v1': {
+        target: 'http://qi.testfreelog.com',
+        secure: false,
+        changeOrigin: true,
+        headers: {
+          'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
+        },
       }
     },
   },

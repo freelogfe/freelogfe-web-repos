@@ -2,12 +2,11 @@ import request from '@/utils/request';
 
 interface CreateParamsType {
   name: string;
-  bucketName: string;
   resourceType: string;
-  policies: any[];
-  coverImages: string[];
-  intro: string;
-  tags: string[];
+  policies?: any[];
+  coverImages?: string[];
+  intro?: string;
+  tags?: string[];
 }
 
 export function create(params: CreateParamsType) {
