@@ -5,7 +5,7 @@ import warning from '../../../assets/warning.svg';
 export default function ({className, normal}: any) {
   return (
     <div className={[styles.div, className].join(' ')}>
-      <label className={normal ? styles.normal : styles.warning}>已上线</label>
+      <label className={normal ? styles.normal : styles.warning}>{normal ? '已上线' : '未上线'}</label>
       {normal || <img src={warning}/>}
     </div>
   );

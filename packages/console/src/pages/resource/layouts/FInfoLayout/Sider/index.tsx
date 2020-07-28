@@ -5,13 +5,14 @@ import {FContentText} from '@/components/FText';
 import {Space} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceSilderModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
+import {FetchDataSourceAction} from "@/models/resourceInfo";
 
 interface SilderProps {
   dispatch: Dispatch;
-  silder: ResourceSilderModelState;
+  resourceInfo: ResourceInfoModelState;
   match: {
     params: {
       id: string;
@@ -20,16 +21,28 @@ interface SilderProps {
   };
 }
 
-function Sider({silder: {info}, match}: RouterTypes & SilderProps) {
+function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProps) {
   // console.log(match, 'props');
+
+  React.useEffect(() => {
+    // console.log('##@@#@##@#@#');
+    dispatch<FetchDataSourceAction>({
+      type: 'resourceInfo/fetchDataSource',
+      payload: match.params.id,
+    });
+  }, [dispatch, match.params.id]);
+
+  if (!info) {
+    return null;
+  }
 
   return (<div className={styles.Sider}>
     <FResourceCover
-      src={info.cover}
-      status={info.status}
+      src={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
+      status={info?.status === 1 ? 'online' : 'stopped'}
     />
     <div style={{height: 15}}/>
-    <FContentText text={info.name}/>
+    <FContentText text={info?.resourceName}/>
     <div style={{height: 10}}/>
     <label className={styles.label}>{info.resourceType}</label>
     <div style={{height: 15}}/>
@@ -64,11 +77,11 @@ function Sider({silder: {info}, match}: RouterTypes & SilderProps) {
           }
 
           {
-            info.versions.map((i) => (<div key={i} className={styles.radio + ' ' + styles.smallVersion}>
+            info?.resourceVersions.map((i) => (<div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
               <a
                 onClick={() => router.push(`/resource/${match.params.id}/version/${i}`)}
-                className={(match.path === '/resource/:id/version/:version' && match.params.version === i) ? styles.activatedRadio : ''}
-              >{i}</a>
+                className={(match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedRadio : ''}
+              >{i.version}</a>
             </div>))
           }
         </Space>
@@ -77,6 +90,7 @@ function Sider({silder: {info}, match}: RouterTypes & SilderProps) {
   </div>)
 }
 
-export default withRouter(connect(({resourceSilder}: ConnectState) => ({
-  silder: resourceSilder,
+export default withRouter(connect(({resourceInfo}: ConnectState) => ({
+  resourceInfo: resourceInfo,
 }))(Sider))
+

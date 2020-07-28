@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {ResourcePageModelState} from "@/models/resourcePage";
+// import {ResourcePageModelState} from "@/models/resourceListPage";
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
@@ -56,13 +56,13 @@ export interface ResourceCollectModelType {
     fetchDataSource: Effect;
   };
   reducers: {
-    onChangeResourceType: DvaReducer<ResourcePageModelState, OnChangeResourceTypeAction>;
-    onChangeResourceStatus: DvaReducer<ResourcePageModelState, OnChangeResourceStatusAction>;
-    onChangeInputText: DvaReducer<ResourcePageModelState, OnChangeInputTextAction>;
-    changeDataSource: DvaReducer<ResourcePageModelState, ChangeDataSourceAction>;
-    onChangePageCurrent: DvaReducer<ResourcePageModelState, OnChangePageCurrentAction>;
-    onChangePageSize: DvaReducer<ResourcePageModelState, OnChangePageSizeAction>;
-    onChangeTotalNum: DvaReducer<ResourcePageModelState, OnChangeTotalNumAction>;
+    onChangeResourceType: DvaReducer<ResourceCollectPageModelState, OnChangeResourceTypeAction>;
+    onChangeResourceStatus: DvaReducer<ResourceCollectPageModelState, OnChangeResourceStatusAction>;
+    onChangeInputText: DvaReducer<ResourceCollectPageModelState, OnChangeInputTextAction>;
+    changeDataSource: DvaReducer<ResourceCollectPageModelState, ChangeDataSourceAction>;
+    onChangePageCurrent: DvaReducer<ResourceCollectPageModelState, OnChangePageCurrentAction>;
+    onChangePageSize: DvaReducer<ResourceCollectPageModelState, OnChangePageSizeAction>;
+    onChangeTotalNum: DvaReducer<ResourceCollectPageModelState, OnChangeTotalNumAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -95,16 +95,16 @@ const Model: ResourceCollectModelType = {
   },
 
   reducers: {
-    onChangeResourceType(state: ResourcePageModelState, action: OnChangeResourceTypeAction): ResourcePageModelState {
+    onChangeResourceType(state: ResourceCollectPageModelState, action: OnChangeResourceTypeAction): ResourceCollectPageModelState {
       return {...state, resourceType: action.payload};
     },
-    onChangeResourceStatus(state: ResourcePageModelState, action: OnChangeResourceStatusAction): ResourcePageModelState {
+    onChangeResourceStatus(state: ResourceCollectPageModelState, action: OnChangeResourceStatusAction): ResourceCollectPageModelState {
       return {...state, resourceStatus: action.payload};
     },
-    onChangeInputText(state: ResourcePageModelState, action: OnChangeInputTextAction): ResourcePageModelState {
+    onChangeInputText(state: ResourceCollectPageModelState, action: OnChangeInputTextAction): ResourceCollectPageModelState {
       return {...state, inputText: action.payload};
     },
-    changeDataSource(state: ResourcePageModelState, {payload, restart = false}: ChangeDataSourceAction): ResourcePageModelState {
+    changeDataSource(state: ResourceCollectPageModelState, {payload, restart = false}: ChangeDataSourceAction): ResourceCollectPageModelState {
       if (restart) {
         return {
           ...state,
@@ -119,13 +119,13 @@ const Model: ResourceCollectModelType = {
         ],
       };
     },
-    onChangePageCurrent(state: ResourcePageModelState, action: OnChangePageCurrentAction): ResourcePageModelState {
+    onChangePageCurrent(state: ResourceCollectPageModelState, action: OnChangePageCurrentAction): ResourceCollectPageModelState {
       return {...state, pageCurrent: action.payload};
     },
-    onChangePageSize(state: ResourcePageModelState, action: OnChangePageSizeAction): ResourcePageModelState {
+    onChangePageSize(state: ResourceCollectPageModelState, action: OnChangePageSizeAction): ResourceCollectPageModelState {
       return {...state, pageSize: action.payload};
     },
-    onChangeTotalNum(state: ResourcePageModelState, action: OnChangeTotalNumAction): ResourcePageModelState {
+    onChangeTotalNum(state: ResourceCollectPageModelState, action: OnChangeTotalNumAction): ResourceCollectPageModelState {
       return {...state, totalNum: action.payload};
     },
   },

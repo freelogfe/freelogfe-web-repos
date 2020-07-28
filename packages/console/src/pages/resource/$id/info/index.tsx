@@ -9,22 +9,23 @@ import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FHorn from '@/pages/resource/components/FHorn';
-import {FTextButton} from '@/components/FButton';
+import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoPageModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState} from '@/models/connect';
 import {
-  OnChangeCoverAction,
-  OnChangeEditorAction,
+  // OnChangeCoverAction,
+  OnChangeEditorAction, OnChangeInfoAction,
   OnChangeIsEditingAction,
-  OnChangeLabelsAction
+  // OnChangeLabelsAction
 } from "@/models/resourceInfoPage";
 
 interface InfoProps {
   dispatch: Dispatch;
-  resource: ResourceInfoPageModelState,
+  resourceInfo: ResourceInfoModelState,
+  resourceInfoPage: ResourceInfoPageModelState,
 }
 
-function Info({dispatch, resource: {info, isEditing, editor, cover, labels}}: InfoProps) {
+function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
   function onChangeIsEditing(bool: boolean) {
     dispatch<OnChangeIsEditingAction>({
       type: 'resourceInfoPage/onChangeIsEditing',
@@ -32,64 +33,105 @@ function Info({dispatch, resource: {info, isEditing, editor, cover, labels}}: In
     });
   }
 
+  // if (!info) {
+  //   return null;
+  // }
+
   return (<FInfoLayout>
-    <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
+    {info && <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
       <FEditorCard title={'资源名称'}>
-        <FContentText text={info.name}/>
+        <FContentText text={info?.resourceName}/>
       </FEditorCard>
       <FEditorCard title={'资源类型'}>
         <FContentText text={info.resourceType}/>
       </FEditorCard>
-      <FEditorCard title={'基础上抛'}>
+      {info?.baseUpcastResources.length > 0 && <FEditorCard title={'基础上抛'}>
         <div className={styles.upthrow}>
           {
-            info.upthrows.map((i) => <label key={i}>{i}</label>)
+            info?.baseUpcastResources.map((i) => <label key={i.resourceId}>{i.resourceName}</label>)
           }
         </div>
-      </FEditorCard>
+      </FEditorCard>}
       <FEditorCard title={'资源简介'}>
+
+        {!info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
+          <FCircleButton
+            onClick={() => onChangeIsEditing(true)}
+            theme="weaken"
+          />
+          <FContentText text={'添加'}/>
+        </Space>)}
+
         <FHorn className={styles.about} extra={<>
-          {isEditing
-            ? (<Space size={10}><FTextButton onClick={() => onChangeIsEditing(false)}>取消</FTextButton><FTextButton
-              theme="primary">保存</FTextButton></Space>)
-            : <FTextButton
+          {resourceInfoPage.isEditing
+            ? (<Space size={10}>
+              <FTextButton
+                onClick={() => onChangeIsEditing(false)}
+              >取消</FTextButton>
+              <FTextButton
+                theme="primary"
+                onClick={() => {
+                  onChangeIsEditing(false)
+                  dispatch<OnChangeInfoAction>({
+                    type: 'resourceInfoPage/onChangeInfo',
+                    payload: {intro: resourceInfoPage.editor},
+                    id: info?.resourceId,
+                  });
+                }}
+              >保存</FTextButton>
+            </Space>)
+            : info?.intro ? <FTextButton
               theme="primary"
               onClick={() => onChangeIsEditing(true)}
-            >编辑</FTextButton>}
+            >编辑</FTextButton> : null}
         </>}>
 
-          {isEditing
-            ? (<FIntroductionEditor value={editor} onChange={(e) => dispatch<OnChangeEditorAction>({
-              type: 'resourceInfoPage/onChangeEditor',
-              payload: e.target.value,
-            })}/>)
-            : (<div className={styles.aboutPanel}>
-              <FContentText text={info.introduction}/>
-            </div>)}
+          {resourceInfoPage.isEditing
+            ? (<FIntroductionEditor
+              value={resourceInfoPage.editor}
+              onChange={(e) => dispatch<OnChangeEditorAction>({
+                type: 'resourceInfoPage/onChangeEditor',
+                payload: e.target.value,
+              })}/>)
+            : info?.intro ? (<div className={styles.aboutPanel}>
+              <FContentText text={info?.intro}/>
+            </div>) : null}
         </FHorn>
+
       </FEditorCard>
       <FEditorCard title={'资源封面'}>
         <FUploadResourceCover
-          value={cover}
-          onChange={(value) => dispatch<OnChangeCoverAction>({
-            type: 'resourceInfoPage/onChangeCover',
-            payload: value,
+          value={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
+          // onChange={(value) => dispatch<OnChangeCoverAction>({
+          //   type: 'resourceInfoPage/onChangeCover',
+          //   payload: value,
+          // })}
+          onChange={(value) => dispatch<OnChangeInfoAction>({
+            type: 'resourceInfoPage/onChangeInfo',
+            payload: {coverImages: [value]},
+            id: info?.resourceId,
           })}
         />
       </FEditorCard>
       <FEditorCard title={'资源标签'}>
         <FLabelEditor
-          value={labels}
-          onChange={(value) => dispatch<OnChangeLabelsAction>({
-            type: 'resourceInfoPage/onChangeLabels',
-            payload: value,
+          values={info?.tags}
+          // onChange={(value) => dispatch<OnChangeLabelsAction>({
+          //   type: 'resourceInfoPage/onChangeLabels',
+          //   payload: value,
+          // })}
+          onChange={(value) => dispatch<OnChangeInfoAction>({
+            type: 'resourceInfoPage/onChangeInfo',
+            payload: {tags: value},
+            id: info?.resourceId,
           })}
         />
       </FEditorCard>
-    </FContentLayout>
+    </FContentLayout>}
   </FInfoLayout>)
 }
 
-export default connect(({resourceInfoPage}: ConnectState) => ({
-  resource: resourceInfoPage,
+export default connect(({resourceInfo, resourceInfoPage}: ConnectState) => ({
+  resourceInfo: resourceInfo,
+  resourceInfoPage: resourceInfoPage,
 }))(Info);

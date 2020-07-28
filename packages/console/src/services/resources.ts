@@ -32,7 +32,7 @@ interface UpdateParamsType {
 }
 
 export function update(params: UpdateParamsType) {
-  return request.put(`/v2/resources/{resourceId}`)
+  return request.put(`/v2/resources/${params.resourceId}`, params);
 }
 
 interface ListParamsType {
@@ -52,12 +52,16 @@ export function list(params: ListParamsType) {
   });
 }
 
-// interface Interface {
-//
-// }
-//
-// export function resourceDrafts(params: ListParamsType) {
-//   return request.get('/v2/resources', {
-//     params,
-//   });
-// }
+interface InfoParamsType {
+  resourceIdOrName: string;
+  isLoadLatestVersionInfo?: 0 | 1;
+  projection?: string;
+}
+
+export function info(params: InfoParamsType) {
+  return request.get(`/v2/resources/${params.resourceIdOrName}`, {
+    data: params,
+  });
+}
+
+

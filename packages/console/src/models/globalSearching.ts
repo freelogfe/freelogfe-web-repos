@@ -1,10 +1,12 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
+import {DvaReducer, WholeReadonly} from './shared';
 
-export interface GlobalSearchingModelState {
+export interface IGlobalSearchingModelState {
   input: string;
 }
+
+type GlobalSearchingModelState = WholeReadonly<IGlobalSearchingModelState>
 
 interface OnInputChangeAction extends AnyAction {
   payload: string

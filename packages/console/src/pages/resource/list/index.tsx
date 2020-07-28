@@ -2,14 +2,15 @@ import * as React from 'react';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourcePageModelState} from '@/models/connect';
+import {ConnectState, ResourceListPageModelState} from '@/models/connect';
 import {router} from 'umi';
 import {
+  FetchDataSourceAction,
   OnChangeInputTextAction,
   OnChangePageCurrentAction, OnChangePageSizeAction,
   OnChangeResourceStatusAction,
   OnChangeResourceTypeAction
-} from '@/models/resourcePage';
+} from '@/models/resourceListPage';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 
 const navs = [
@@ -25,10 +26,16 @@ const navs = [
 
 interface ResourceProps {
   dispatch: Dispatch;
-  resource: ResourcePageModelState;
+  resource: ResourceListPageModelState;
 }
 
 function Resource({dispatch, resource}: ResourceProps) {
+
+  React.useEffect(() => {
+    dispatch<FetchDataSourceAction>({
+      type: 'resourceListPage/fetchDataSource',
+    });
+  }, [dispatch]);
 
   function onChangeTab(value: '1' | '2') {
     if (value === '2') {
@@ -53,35 +60,35 @@ function Resource({dispatch, resource}: ResourceProps) {
         pageSize={resource.pageSize}
         totalNum={resource.totalNum}
         onChangeResourceType={(value) => dispatch<OnChangeResourceTypeAction>({
-          type: 'resourcePage/onChangeResourceType',
+          type: 'resourceListPage/onChangeResourceType',
           payload: value
         })}
         onChangeResourceStatus={(value) => dispatch<OnChangeResourceStatusAction>({
-          type: 'resourcePage/onChangeResourceStatus',
+          type: 'resourceListPage/onChangeResourceStatus',
           payload: value
         })}
         onChangeInputText={(value) => dispatch<OnChangeInputTextAction>({
-          type: 'resourcePage/onChangeInputText',
+          type: 'resourceListPage/onChangeInputText',
           payload: value
         })}
         onChangePageCurrent={(value) => dispatch<OnChangePageCurrentAction>({
-          type: 'resourcePage/onChangePageCurrent',
+          type: 'resourceListPage/onChangePageCurrent',
           payload: value
         })}
         onChangePageSize={(value) => dispatch<OnChangePageSizeAction>({
-          type: 'resourcePage/onChangePageSize',
+          type: 'resourceListPage/onChangePageSize',
           payload: value
         })}
         showGotoCreateBtn={true}
         onClickDetails={() => null}
         onClickEditing={(id) => router.push(`/resource/${id}/info`)}
-        onClickRevision={(id,record) => router.push(`/resource/${id}/version/${record.version}`)}
+        onClickRevision={(id, record) => router.push(`/resource/${id}/version/creator`)}
       />
 
     </FCenterLayout>
   );
 }
 
-export default connect(({resourcePage}: ConnectState) => ({
-  resource: resourcePage,
+export default connect(({resourceListPage}: ConnectState) => ({
+  resource: resourceListPage,
 }))(Resource);

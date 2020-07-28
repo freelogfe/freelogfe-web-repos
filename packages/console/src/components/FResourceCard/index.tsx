@@ -17,6 +17,7 @@ interface FResourceCardProps {
     version: string;
     policy: string[];
     type: string;
+    status: 0 | 1;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -62,7 +63,10 @@ export default function ({
                 }
               </div>
             </nav>
-            <Status normal={true} className={styles.Status}/>
+            <Status
+              normal={resource.status === 1}
+              className={styles.Status}
+            />
           </>)
         }
 
@@ -77,7 +81,7 @@ export default function ({
         <div style={{height: '6px'}}/>
         <div className={styles.MetaInfo}>
           <FContentText type="additional1" text={resource.type}/>
-          <FContentText type="additional1" text={'最新版本 ' + resource.version}/>
+          <FContentText type="additional1" text={resource.version ? ('最新版本 ' + resource.version) : '暂无版本'}/>
         </div>
         <div style={{height: '15px'}}/>
         <div className={styles.MetaFooter}>
