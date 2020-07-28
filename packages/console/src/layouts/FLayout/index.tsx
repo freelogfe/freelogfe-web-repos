@@ -6,7 +6,7 @@ import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
-import router from 'umi/router';
+import {router} from 'umi';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalSearchingModelState} from '@/models/connect';
 

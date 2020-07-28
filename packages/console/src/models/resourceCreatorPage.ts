@@ -3,6 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {create} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
+import {router} from "umi";
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -76,12 +77,19 @@ const Model: ResourceCreatorPageModelType = {
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
         // policies?: any[];
-        coverImages: [resourceCreatorPage.cover],
+        coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : undefined,
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       }));
       // create(params);
-      yield call(create, params);
+      try {
+        const {data} = yield call(create, params);
+        console.log(data, '$$$$R$$');
+        router.replace(`/resource/${data.resourceId}/success`)
+      } catch (e) {
+        console.error(e);
+      }
+
       // yield put({type: 'save'});
     },
   },

@@ -51,7 +51,23 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 axios.interceptors.response.use(function (response) {
   // Do something with response data
-  return response;
+  if (response.status !== 200) {
+    const error = {
+      description: codeMessage[response.status],
+      message: response.status,
+    };
+    notification.error(error);
+    throw new Error(JSON.stringify(error));
+  }
+  const {data} = response;
+  if (data.errcode !== 0 || data.ret !== 0) {
+
+    notification.error({
+      message: data.msg,
+    });
+    throw new Error(JSON.stringify(data));
+  }
+  return data;
 }, function (error) {
   // Do something with response error
   return Promise.reject(error);

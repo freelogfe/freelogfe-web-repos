@@ -38,12 +38,13 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
   }
 
   return (<FCenterLayout>
-    <FContentLayout header={<Header onClickCache={() => null} onClickCreate={onClickCreate}/>}>
+    <FContentLayout header={<Header onClickCreate={onClickCreate}/>}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>
             <FContentText text={'yanghongtian /'}/>
             &nbsp;
+            {/* /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/ */}
             <FInput
               value={resource.name}
               onChange={(e) => dispatch<OnChangeNameAction>({
@@ -105,16 +106,16 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
 }
 
 interface HeaderProps {
-  onClickCache: () => void;
+  // onClickCache: () => void;
   onClickCreate: () => void;
 }
 
-function Header({onClickCache, onClickCreate}: HeaderProps) {
+function Header({onClickCreate}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText text={'创建资源'} type={'h2'}/>
 
     <Space size={30}>
-      <FTextButton onClick={onClickCache}>暂存草稿</FTextButton>
+      {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}
       <FNormalButton onClick={onClickCreate} style={{width: 108}}>创建</FNormalButton>
     </Space>
   </div>);

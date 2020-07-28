@@ -7,18 +7,22 @@ import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceSilderModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
+import RouterTypes from "umi/routerTypes";
 
 interface SilderProps {
   dispatch: Dispatch;
   silder: ResourceSilderModelState;
   match: {
-    params: { [key: string]: string };
-    path: string;
+    params: {
+      id: string;
+      version: string;
+    };
   };
 }
 
-function Sider({silder: {info}, match}: SilderProps) {
+function Sider({silder: {info}, match}: RouterTypes & SilderProps) {
   // console.log(match, 'props');
+
   return (<div className={styles.Sider}>
     <FResourceCover
       src={info.cover}
@@ -47,7 +51,8 @@ function Sider({silder: {info}, match}: SilderProps) {
 
         <div className={styles.radio}>
           <a className={''}>版本列表</a>
-          <FTextButton onClick={() => router.push(`/resource/${match.params.id}/version/creator`)}><i className="freelog fl-icon-add"/></FTextButton>
+          <FTextButton onClick={() => router.push(`/resource/${match.params.id}/version/creator`)}><i
+            className="freelog fl-icon-add"/></FTextButton>
         </div>
 
         <Space size={16} direction="vertical" className={styles.versions + ' ' + styles.Space}>

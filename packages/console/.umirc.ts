@@ -28,16 +28,11 @@ const config: IConfig = {
             {exact: true, path: '.', redirect: '/resource/list'},
             {exact: true, path: 'list', component: '../pages/resource/list'},
             {exact: true, path: 'collect', component: '../pages/resource/collect'},
-            {
-              path: 'creator',
-              routes: [
-                {exact: true, path: '.', component: '../pages/resource/creator'},
-                {exact: true, path: 'success', component: '../pages/resource/creator/success'},
-              ]
-            },
+            {exact: true, path: 'creator', component: '../pages/resource/creator'},
             {
               path: ':id',
               routes: [
+                {exact: true, path: 'success', component: '../pages/resource/$id/success'},
                 {exact: true, path: 'info', component: '../pages/resource/$id/info'},
                 {exact: true, path: 'auth', component: '../pages/resource/$id/auth'},
                 {
@@ -95,12 +90,12 @@ const config: IConfig = {
     // 'box-shadow-base': '0 2px 5px 0 rgba(0,0,0,0.2)',
     'text-color': '#222',
     'body-background': '#FAFBFC',
-    'shadow-1-up': 'none',
-    'shadow-1-down': 'none',
-    'shadow-1-left': 'none',
-    'shadow-1-right': 'none',
-    'shadow-2': 'none',
-    'shadow-color': 'transparent',
+    // 'shadow-1-up': 'none',
+    // 'shadow-1-down': 'none',
+    // 'shadow-1-left': 'none',
+    // 'shadow-1-right': 'none',
+    // 'shadow-2': 'none',
+    // 'shadow-color': 'transparent',
     'line-height-base': 10 / 7,
 
     'layout-body-background': '#FAFBFC',

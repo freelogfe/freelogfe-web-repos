@@ -51,3 +51,13 @@ export function list(params: ListParamsType) {
     params,
   });
 }
+
+// interface Interface {
+//
+// }
+//
+// export function resourceDrafts(params: ListParamsType) {
+//   return request.get('/v2/resources', {
+//     params,
+//   });
+// }

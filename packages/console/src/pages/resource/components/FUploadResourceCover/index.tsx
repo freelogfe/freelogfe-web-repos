@@ -20,7 +20,7 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
       return false;
     },
     onChange: (info: UploadChangeParam) => {
-      console.log(info, '########');
+      // console.log(info, '########');
     },
     multiple: false,
   };
@@ -30,8 +30,8 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
     let param = new FormData();
     param.append('file', file);
     const res = await uploadImage(param);
-    console.log(res, 'RRRRRRRRR');
-    // onChange && onChange('https://cn.bing.com/th?id=OHR.PantheonParis_ZH-CN1546295756_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0');
+    // console.log(res, 'RRRRRRRRR');
+    onChange && onChange(res.data.url);
   }
 
   return (<div className={styles.cover}>
