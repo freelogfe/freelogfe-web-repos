@@ -160,11 +160,11 @@ const Model: ResourceListPageModelType = {
 
   subscriptions: {
     __init__({dispatch, history}: SubscriptionAPI) {
-      console.log(history, 'HHHHHHH');
-      history.listen((listener) => {
-        console.log(listener, 'LLLLLLL');
-        console.log(router, 'routerrouter');
-      });
+      // console.log(history, 'HHHHHHH');
+      // history.listen((listener) => {
+        // console.log(listener, 'LLLLLLL');
+        // console.log(router, 'routerrouter');
+      // });
 
       // if (history) {
       //

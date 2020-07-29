@@ -4,6 +4,9 @@ import FDropdown from "@/components/FDropdown";
 import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
+import {bucketList} from "@/services/storages";
+import {FMenuProps} from "@/components/FMenu";
+import moment from 'moment'
 
 export interface ResourceObject {
   readonly id: string;
@@ -18,14 +21,13 @@ interface StorageProps {
   readonly onSelect?: (resource: ResourceObject) => void;
 }
 
+interface StorageStates {
+  bucketOptions: {},
+}
+
 export default function ({onSelect}: StorageProps) {
 
-  const [select, setSelect] = React.useState([
-    {text: '全部Bucket', value: '-1'},
-    {value: 'bucket1'},
-    {value: 'bucket2'},
-    {value: 'bucket3'},
-  ]);
+  const [bucketOptions, setBucketOptions] = React.useState<FMenuProps['options']>([{text: '全部Bucket', value: '-1'},]);
   const [selected, setSelected] = React.useState<any>('-1');
 
   const [input, setInput] = React.useState<string>('');
@@ -33,13 +35,15 @@ export default function ({onSelect}: StorageProps) {
   const [resourceObjects, setResourceObjects] = React.useState<ResourceObject[] | null>(null);
 
   React.useEffect(() => {
+    handleBucketOptions();
     setResourceObjects([
       {
         id: 'q12342',
         name: 'picture.png',
         size: 1234190,
         path: 'buckt1/1234.png',
-        time: '2019-12-22 12:22',
+        // time: '2019-12-22 12:22',
+        time: moment().format('YYYY-MM-DD HH:mm'),
         type: 'image'
       },
       {
@@ -47,19 +51,31 @@ export default function ({onSelect}: StorageProps) {
         name: 'picture2.png',
         size: 634532,
         path: 'buckt2/1234.png',
-        time: '2019-12-22 23:00',
+        time: moment().format('YYYY-MM-DD HH:mm'),
         type: 'image'
       },
     ])
   }, []);
+
+  async function handleBucketOptions() {
+    const {data} = await bucketList({bucketType: 1});
+    setBucketOptions([
+      {text: '全部Bucket', value: '-1'},
+      ...data.map((i: any) => ({value: i.bucketName}))
+    ]);
+  }
+
+  async function handleDataSource() {
+
+  }
 
   return (
     <div className={styles.SelectBucket}>
       <div className={styles.filter}>
         <div className={styles.filterSelect}>
           <FDropdown
-            options={select}
-            text={selected === '-1' ? select[0].text : selected}
+            options={bucketOptions}
+            text={selected === '-1' ? bucketOptions[0].text : selected}
             onChange={(value) => setSelected(value)}
           />
         </div>

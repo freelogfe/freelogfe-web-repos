@@ -26,16 +26,28 @@ interface InfoProps {
 }
 
 function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
-  function onChangeIsEditing(bool: boolean) {
-    dispatch<OnChangeIsEditingAction>({
-      type: 'resourceInfoPage/onChangeIsEditing',
-      payload: bool
-    });
-  }
 
-  // if (!info) {
-  //   return null;
-  // }
+  // React.useEffect(() => {
+  //   dispatch<OnChangeEditorAction>({
+  //     type: 'resourceInfoPage/onChangeEditor',
+  //     payload: info?.intro,
+  //   })
+  // },[]);
+  const [editorText, setEditorText] = React.useState<string>('');
+  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    // console.log(info?.intro, 'info?.intro');
+    setEditorText(info?.intro || '');
+  }, [info]);
+
+  function onChangeIsEditing(bool: boolean) {
+    // dispatch<OnChangeIsEditingAction>({
+    //   type: 'resourceInfoPage/onChangeIsEditing',
+    //   payload: bool
+    // });
+    setIsEditing(bool)
+  }
 
   return (<FInfoLayout>
     {info && <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
@@ -63,7 +75,7 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
         </Space>)}
 
         <FHorn className={styles.about} extra={<>
-          {resourceInfoPage.isEditing
+          {isEditing
             ? (<Space size={10}>
               <FTextButton
                 onClick={() => onChangeIsEditing(false)}
@@ -71,10 +83,11 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
               <FTextButton
                 theme="primary"
                 onClick={() => {
-                  onChangeIsEditing(false)
+                  onChangeIsEditing(false);
                   dispatch<OnChangeInfoAction>({
                     type: 'resourceInfoPage/onChangeInfo',
-                    payload: {intro: resourceInfoPage.editor},
+                    // payload: {intro: resourceInfoPage.editor},
+                    payload: {intro: editorText},
                     id: info?.resourceId,
                   });
                 }}
@@ -86,13 +99,17 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
             >编辑</FTextButton> : null}
         </>}>
 
-          {resourceInfoPage.isEditing
+          {isEditing
             ? (<FIntroductionEditor
-              value={resourceInfoPage.editor}
-              onChange={(e) => dispatch<OnChangeEditorAction>({
-                type: 'resourceInfoPage/onChangeEditor',
-                payload: e.target.value,
-              })}/>)
+              // value={resourceInfoPage.editor}
+              value={editorText}
+              // onChange={(e) => dispatch<OnChangeEditorAction>({
+              //   type: 'resourceInfoPage/onChangeEditor',
+              //   payload: e.target.value,
+              // })}
+              onChange={(e) => setEditorText(e.target.value)}
+              // onBlur={() => onChangeIsEditing(false)}
+            />)
             : info?.intro ? (<div className={styles.aboutPanel}>
               <FContentText text={info?.intro}/>
             </div>) : null}

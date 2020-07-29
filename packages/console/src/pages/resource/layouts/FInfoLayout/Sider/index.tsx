@@ -77,9 +77,9 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
           }
 
           {
-            info?.resourceVersions.map((i) => (<div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
+            [...info?.resourceVersions].reverse().map((i) => (<div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
               <a
-                onClick={() => router.push(`/resource/${match.params.id}/version/${i}`)}
+                onClick={() => router.push(`/resource/${match.params.id}/version/${i.version}`)}
                 className={(match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedRadio : ''}
               >{i.version}</a>
             </div>))

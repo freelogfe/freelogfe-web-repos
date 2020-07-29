@@ -9,6 +9,7 @@ import * as CryptoJS from 'crypto-js';
 
 import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
+import {fileIsExist, uploadFile} from "@/services/storages";
 
 const errorText = {
   duplicated: '该资源已存在，不能重复创建，请重新选择。',
@@ -17,11 +18,12 @@ const errorText = {
 };
 
 export interface FSelectObject {
+  readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
   readonly onChange?: (file: FSelectObject['resourceObject']) => void;
 }
 
-export default function ({resourceObject, onChange}: FSelectObject) {
+export default function ({resourceObject, onChange, resourceType}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -40,24 +42,42 @@ export default function ({resourceObject, onChange}: FSelectObject) {
       return setErrorT(errorText.size);
     }
 
-    console.log(await getSHA1Hash(file), 'filefile');
+    // if (isEnabled) {
+    //return setErrorT(errorText.duplicated);
+    // }
+    const sha1 = await getSHA1Hash(file);
+    const {data: isExist} = await fileIsExist({sha1});
     setIsChecking(false);
-    // setErrorT(errorText.duplicated);
-    await upload();
+
+    if (isExist) {
+      return onChange && onChange({
+        id: sha1,
+        name: file.name,
+        size: file.size,
+        path: '',
+        type: resourceType,
+        time: '',
+      });
+    }
+    const {data} = await uploadFile({
+      file: file,
+      resourceType: resourceType,
+    });
+
     onChange && onChange({
-      id: '12341234',
-      name: '资源1',
-      size: 101234123,
+      id: data.sha1,
+      name: file.name,
+      size: data.fileSize,
       path: '',
-      type: '',
+      type: resourceType,
       time: '',
-    })
-    ;
+    });
   }
 
-  async function upload() {
-
-  }
+  //
+  // async function upload() {
+  //
+  // }
 
   return (<div>
     {
@@ -113,7 +133,7 @@ export default function ({resourceObject, onChange}: FSelectObject) {
  * @param file
  * @return {Promise<string>}
  */
-function getSHA1Hash(file: File) {
+function getSHA1Hash(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = function (evt) {

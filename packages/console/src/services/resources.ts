@@ -64,4 +64,33 @@ export function info(params: InfoParamsType) {
   });
 }
 
+export interface CreateVersionParamsType {
+  resourceId: string;
+  version: string;
+  fileSha1: string;
+  description?: string;
+  dependencies?: {
+    resourceId: string;
+    versionRange: string;
+  }[];
+  customPropertyDescriptors?: {
+    key: string;
+    defaultValue: string;
+    type: string;
+    candidateItems?: string[];
+    remark?: string;
+  }[];
+  baseUpcastResources?: {
+    resourceId: string;
+  }[];
+  resolveResources: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
+}
 
+export function createVersion(params: CreateVersionParamsType) {
+  return request.post(`/v2/resources/${params.resourceId}/versions`, params);
+}

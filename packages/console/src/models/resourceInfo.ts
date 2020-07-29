@@ -3,7 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info} from "@/services/resources";
 
-interface IResourceInfoModelState {
+export interface ResourceInfoModelState {
   info: null | {
     resourceId: string;
     resourceType: string;
@@ -29,7 +29,7 @@ interface IResourceInfoModelState {
 }
 
 // export type ResourceInfoModelState = WholeReadonly<IResourceInfoModelState>
-export type ResourceInfoModelState = IResourceInfoModelState;
+// export type ResourceInfoModelState = IResourceInfoModelState;
 
 export interface ChangeInfoAction extends AnyAction {
   type: 'resourceInfo/changeInfo' | 'changeInfo';

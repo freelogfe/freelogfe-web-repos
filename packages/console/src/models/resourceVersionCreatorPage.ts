@@ -3,12 +3,17 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
+import {FetchDataSourceAction} from "@/models/resourceInfo";
+import {createVersion, CreateVersionParamsType} from "@/services/resources";
+import {ConnectState} from "@/models/connect";
+import {router} from "umi";
 
 export type DepResources = Readonly<{
   id: string;
   title: string;
   resourceType: string;
   time: string;
+  status: 0 | 1;
   version: Readonly<{
     isCustom: boolean;
     select: string;
@@ -99,12 +104,18 @@ export interface OnChangeDescriptionAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['description'];
 }
 
+export interface CreateVersionAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/createVersion';
+  payload: string;
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
     fetchDataSource: Effect;
-    init: Effect;
+    // init: Effect;
+    createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     onChangeVersion: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeVersionAction>;
@@ -125,28 +136,40 @@ const Model: ResourceVersionCreatorModelType = {
   namespace: 'resourceVersionCreatorPage',
 
   state: {
-    version: '1.2.3',
+    version: '',
     resourceObject: null,
     depRelationship: [],
     dependencies: [],
     depActivatedID: '',
 
     properties: [],
-    description: '12423',
+    description: '',
   },
 
   effects: {
-    * init(_: AnyAction, {call, put, take}: EffectsCommandMap) {
-      // yield put({type: 'save'});
-      // console.log('####*****');
-      // while (true) {
-      //   yield take('deleteDependencyByID');
-      //   console.log('deleteDependencyByID');
-      // }
-    },
+    // * init(_: AnyAction, {call, put, take}: EffectsCommandMap) {
+    //   // yield put({type: 'save'});
+    //   // console.log('####*****');
+    //   // while (true) {
+    //   //   yield take('deleteDependencyByID');
+    //   //   console.log('deleteDependencyByID');
+    //   // }
+    // },
     * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
       yield put({type: 'save'});
     },
+
+    * createVersion(action: CreateVersionAction, {call, select}: EffectsCommandMap) {
+      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceId: action.payload,
+        version: resourceVersionCreatorPage.version,
+        fileSha1: resourceVersionCreatorPage.resourceObject?.id,
+        resolveResources: [],
+      }));
+      const {data} = yield call(createVersion, params);
+      // console.log(data, 'datadatadata');
+      router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
+    }
   },
 
   reducers: {

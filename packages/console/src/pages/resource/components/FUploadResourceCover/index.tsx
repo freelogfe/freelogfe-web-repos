@@ -27,9 +27,11 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
 
   async function upload(file: File) {
     // await uploadImage({file});
-    let param = new FormData();
-    param.append('file', file);
-    const res = await uploadImage(param);
+    // let param = new FormData();
+    // param.append('file', file);
+    const res = await uploadImage({
+      file: file,
+    });
     // console.log(res, 'RRRRRRRRR');
     onChange && onChange(res.data.url);
   }

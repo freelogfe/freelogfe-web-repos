@@ -93,7 +93,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
 
         <FEditorCard title={'资源标签'}>
           <FLabelEditor
-            value={resource.labels}
+            values={resource.labels}
             onChange={(value) => dispatch<OnChangeLabelsAction>({
               type: 'resourceCreatorPage/onChangeLabels',
               payload: value

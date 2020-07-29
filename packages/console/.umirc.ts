@@ -39,8 +39,13 @@ const config: IConfig = {
                   path: 'version',
                   routes: [
                     {exact: true, path: 'creator', component: '../pages/resource/$id/version/creator'},
-                    {exact: true, path: 'success', component: '../pages/resource/$id/version/success'},
-                    {exact: true, path: ':version', component: '../pages/resource/$id/version/$version'},
+                    {
+                      path: ':version',
+                      routes: [
+                        {exact: true, path: '.', component: '../pages/resource/$id/version/$version'},
+                        {exact: true, path: 'success', component: '../pages/resource/$id/version/$version/success'},
+                      ]
+                    },
                   ]
                 },
               ]

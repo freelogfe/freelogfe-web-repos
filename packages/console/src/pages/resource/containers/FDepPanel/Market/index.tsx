@@ -1,109 +1,113 @@
 import * as React from 'react';
-import styles from "./index.less";
-import FDropdown from "@/components/FDropdown";
-import FInput from "@/components/FInput";
-import {FContentText} from "@/components/FText";
-import {FNormalButton} from "@/components/FButton";
-import {resourceTypes} from "@/utils/globals";
+import styles from './index.less';
+import FDropdown from '@/components/FDropdown';
+import FInput from '@/components/FInput';
+import {FContentText} from '@/components/FText';
+import {FNormalButton} from '@/components/FButton';
+import {resourceTypes} from '@/utils/globals';
 import {
   DepResources,
   OnChangeDependenciesAction,
   OnChangeDepRelationshipAction
-} from "@/models/resourceVersionCreatorPage";
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
+} from '@/models/resourceVersionCreatorPage';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import {list} from '@/services/resources';
+import moment from 'moment';
 
 interface MarketProps {
   dispatch: Dispatch;
   creator: ResourceVersionCreatorPageModelState;
 }
 
+const selectOptions: { text?: string, value: string }[] = [
+  {text: '资源市场', value: '1'},
+  {text: '我的资源', value: '2'},
+  {text: '我的收藏', value: '3'},
+]
+
 function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProps) {
 
-  const [select, setSelect] = React.useState<{ text?: string, value: string }[]>([
-    {text: '全部类型', value: '-1'},
-    ...resourceTypes.map((i) => ({value: i})),
-  ]);
-  const [selected, setSelected] = React.useState<any>('-1');
+  const [selected, setSelected] = React.useState<any>('1');
 
   const [input, setInput] = React.useState<string>('');
 
   const [resourceObjects, setResourceObjects] = React.useState<DepResources>([]);
 
   React.useEffect(() => {
-    setResourceObjects([
-      {
-        id: '100',
-        title: 'liukai/hahaha',
-        resourceType: 'image',
-        time: '2000',
-        version: {
-          isCustom: false,
-          input: '',
-          allowUpdate: true,
-          select: '1.2.3',
-        },
-        versions: ['11.2.3', '1.2.3'],
-        upthrow: false,
-        enableReuseContracts: [{
-          checked: true,
-          title: '买奶粉',
-          status: 'stopped',
-          code: 'code',
-          id: '1234',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }],
-        enabledPolicies: [{
-          checked: true,
-          id: 'string',
-          title: 'string',
-          code: 'code',
-        }],
-      }, {
-        id: '101',
-        title: 'liukai2/hahaha2',
-        resourceType: 'image',
-        time: '',
-        version: {
-          isCustom: false,
-          input: '',
-          allowUpdate: true,
-          select: '1.2.3',
-        },
-        versions: ['11.2.3', '1.2.3'],
-        upthrow: false,
-        enableReuseContracts: [{
-          checked: true,
-          title: '买奶粉2',
-          status: 'executing',
-          code: 'code',
-          id: '1234',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }, {
-          checked: false,
-          title: '买奶粉sd2',
-          status: 'executing',
-          code: 'code',
-          id: '12342345',
-          date: '2013-12-22',
-          versions: ['12.23.3', '1.42.3'],
-        }],
-        enabledPolicies: [{
-          checked: true,
-          id: 'string',
-          title: 'string',
-          code: 'code',
-        }, {
-          checked: true,
-          id: 'stringzd',
-          title: 'hello',
-          code: 'code',
-        }],
-      }
-    ])
+    handleDataSource();
+    // setResourceObjects([
+    //   {
+    //     id: '100',
+    //     title: 'liukai/hahaha',
+    //     resourceType: 'image',
+    //     time: '2000',
+    //     version: {
+    //       isCustom: false,
+    //       input: '',
+    //       allowUpdate: true,
+    //       select: '1.2.3',
+    //     },
+    //     versions: ['11.2.3', '1.2.3'],
+    //     upthrow: false,
+    //     enableReuseContracts: [{
+    //       checked: true,
+    //       title: '买奶粉',
+    //       status: 'stopped',
+    //       code: 'code',
+    //       id: '1234',
+    //       date: '2013-12-22',
+    //       versions: ['12.23.3', '1.42.3'],
+    //     }],
+    //     enabledPolicies: [{
+    //       checked: true,
+    //       id: 'string',
+    //       title: 'string',
+    //       code: 'code',
+    //     }],
+    //   }
+    // ])
   }, []);
+
+  async function handleDataSource() {
+    const params = {};
+    const {data} = await list(params);
+    const resources = data.dataList.map((i: any) => ({
+      id: i.resourceId,
+      title: i.resourceName,
+      resourceType: i.resourceType,
+      time: moment(i.updateDate).format('YYYY-MM-DD HH:mm'),
+      status: i.status,
+      version: {
+        isCustom: false,
+        input: '',
+        allowUpdate: true,
+        select: '',
+      },
+      versions: i.resourceVersions.map((j: any) => j.version),
+      upthrow: false,
+      enableReuseContracts: [
+        // {
+        //   checked: true,
+        //   title: '买奶粉2',
+        //   status: 'executing',
+        //   code: 'code',
+        //   id: '1234',
+        //   date: '2013-12-22',
+        //   versions: ['12.23.3', '1.42.3'],
+        // }
+      ],
+      enabledPolicies: [
+        // {
+        //   checked: true,
+        //   id: 'string',
+        //   title: 'string',
+        //   code: 'code',
+        // }
+      ],
+    }));
+    setResourceObjects(resources);
+  }
 
   function onSelect(i: DepResources[number]) {
     dispatch<OnChangeDependenciesAction>({
@@ -127,8 +131,8 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       <div className={styles.filter}>
         <div className={styles.filterSelect}>
           <FDropdown
-            options={select}
-            text={selected === '-1' ? select[0].text : selected}
+            options={selectOptions}
+            text={selectOptions.find((i) => i.value === selected)?.text}
             onChange={(value) => setSelected(value)}
           />
         </div>
@@ -155,7 +159,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
             <FNormalButton
               theme="weaken"
               onClick={() => onSelect(i)}
-              disabled={depRelationship.map((j) => j.id).includes(i.id)}
+              disabled={depRelationship.map((j) => j.id).includes(i.id) || i.status === 0}
             >选择</FNormalButton>
           </div>
         ))
