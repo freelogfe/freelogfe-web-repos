@@ -23,7 +23,7 @@ interface FPoliciesProps {
   dataSource?: Policy[];
   // onChange?: (value: Policy[]) => void;
   onAddPolicy?: ({title, code}: { title: string; code: string; }) => void;
-  onChangeStatus?: (id: string | number, status: Policy['status']) => void;
+  onChangeStatus?: ({id, status, title}: { id: string | number; status: Policy['status']; title: string; }) => void;
 }
 
 export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPoliciesProps) {
@@ -42,8 +42,8 @@ export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPolici
     });
   }
 
-  function onPolicyStatusChange(id: string | number, status: Policy['status']) {
-    return onChangeStatus && onChangeStatus(id, status);
+  function onPolicyStatusChange(id: string | number, status: Policy['status'], title: string) {
+    return onChangeStatus && onChangeStatus({id, status, title});
   }
 
   function openNewVisible() {
@@ -82,7 +82,7 @@ export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPolici
             status={i.status}
             code={i.code}
             onPreview={() => openPreviewCode(i.code)}
-            onChangeStatus={(value) => onPolicyStatusChange(i.id, value)}
+            onChangeStatus={(value) => onPolicyStatusChange(i.id, value, i.title)}
           />))
         }
         <div>

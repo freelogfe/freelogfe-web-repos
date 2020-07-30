@@ -10,8 +10,13 @@ import FAuthPanel from '@/pages/resource/components/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
 import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceAuthPageModelState, ResourcePageModelState} from "@/models/connect";
-import {ChangeContractsAuthorizedAction} from "@/models/resourceAuthPage";
+import {
+  ConnectState,
+  ResourceAuthPageModelState,
+  ResourceInfoModelState,
+} from "@/models/connect";
+import {ChangeContractsAuthorizedAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
+import {withRouter} from "umi";
 
 const columns: any[] = [
   {
@@ -45,16 +50,48 @@ const columns: any[] = [
 interface AuthProps {
   dispatch: Dispatch;
   auth: ResourceAuthPageModelState,
+  // resourceInfo: ResourceInfoModelState,
+  match: {
+    params: {
+      id: string,
+    }
+  }
 }
 
-function Auth({dispatch, auth}: AuthProps) {
+function Auth({dispatch, auth, match}: AuthProps) {
+
+  function onAddPolicy(value: { title: string; code: string; }) {
+    // console.log(value, 'valuevalue');
+    dispatch<UpdatePoliciesAction>({
+      type: 'resourceAuthPage/updatePolicies',
+      id: match.params.id,
+      payload: value,
+    });
+  }
+
+  function onChangeStatus(value: {}) {
+    dispatch<UpdatePoliciesAction>({
+      type: 'resourceAuthPage/updatePolicies',
+      id: match.params.id,
+      payload: value,
+    });
+  }
+
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={'授权信息'} type={'h2'}/>}>
       <FEditorCard title={'授权策略'}>
         <FPolicies
           dataSource={auth.policies || []}
-          onChangeStatus={() => null}
-          onAddPolicy={() => null}
+          onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
+            type: 'resourceAuthPage/updatePolicies',
+            id: match.params.id,
+            payload: value,
+          })}
+          onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
+            type: 'resourceAuthPage/updatePolicies',
+            id: match.params.id,
+            payload: value,
+          })}
         />
       </FEditorCard>
       <FEditorCard title={'被授权合约'}>
@@ -79,6 +116,7 @@ function Auth({dispatch, auth}: AuthProps) {
   </FInfoLayout>);
 }
 
-export default connect(({resourceAuthPage}: ConnectState) => ({
+export default withRouter(connect(({resourceAuthPage}: ConnectState) => ({
   auth: resourceAuthPage,
-}))(Auth);
+  // resourceInfo: resourceInfo,
+}))(Auth));

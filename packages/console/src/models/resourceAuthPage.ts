@@ -2,6 +2,8 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FAuthPanelProps} from "@/pages/resource/components/FAuthPanel";
+import {update, UpdateParamsType} from "@/services/resources";
+import {FetchDataSourceAction} from "@/models/resourceInfo";
 
 export interface ResourceAuthPageModelState {
   policies: {
@@ -24,6 +26,7 @@ export interface ResourceAuthPageModelState {
 export interface ChangePoliciesAction {
   type: 'resourceAuthPage/changePolicies';
   payload: ResourceAuthPageModelState['policies'];
+
 }
 
 export interface ChangeContractsAuthorizedAction {
@@ -36,12 +39,18 @@ export interface ChangeContractsAuthorizeAction {
   payload: ResourceAuthPageModelState['contractsAuthorize'];
 }
 
+export interface UpdatePoliciesAction {
+  type: 'resourceAuthPage/updatePolicies';
+  payload: Partial<Exclude<ResourceAuthPageModelState['policies'], null>[number]>;
+  id: string;
+}
 
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
     fetchDataSource: Effect;
+    updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
@@ -143,14 +152,34 @@ const Model: ResourceAuthPageModelType = {
   namespace: 'resourceAuthPage',
 
   state: {
-    policies: policies,
+    policies: [],
     contractsAuthorized: contractsAuthorized,
     contractsAuthorize: contractsAuthorize,
   },
   effects: {
     * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
       yield put({type: 'save'});
-    }
+    },
+    * updatePolicies(action: UpdatePoliciesAction, {call, put}: EffectsCommandMap) {
+      const params = {
+        resourceId: action.id,
+        policyChangeInfo: {
+          [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
+            {
+              policyId: action.payload.id,
+              policyName: action.payload.title,
+              status: action.payload.status === 'stopped' ? 0 : 1,
+              policyText: action.payload.code,
+            }
+          ],
+        },
+      };
+      yield call(update, params);
+      yield put<FetchDataSourceAction>({
+        type: 'resourceInfo/fetchDataSource',
+        payload: action.id,
+      });
+    },
   },
   reducers: {
     changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {

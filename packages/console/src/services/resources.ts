@@ -15,7 +15,7 @@ export function create(params: CreateParamsType) {
 }
 
 // 更新资源信息
-interface UpdateParamsType {
+export interface UpdateParamsType {
   resourceId: string;
   intro?: string;
   tags?: string[];
@@ -136,4 +136,33 @@ export interface UpdateResourceVersionInfoParamsType {
 
 export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParamsType) {
   return request.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
+}
+
+// 保存或者更新资源版本草稿
+export interface SaveVersionsDraft {
+  resourceId: string;
+  version: string;
+  fileSha1: string;
+  description: string;
+  dependencies: {
+    resourceId: string;
+    versionRange: string;
+    versionRangeType: 1 | 2;
+  }[];
+  customPropertyDescriptors: {
+    key: string;
+    defaultValue: string;
+    type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+    candidateItems?: string[];
+    remark?: string;
+  }[];
+  baseUpcastResources: {
+    resourceId: string;
+  }[];
+  resolveResources: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }
 }

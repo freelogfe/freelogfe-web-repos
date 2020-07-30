@@ -110,6 +110,11 @@ export interface CreateVersionAction extends AnyAction {
   payload: string;
 }
 
+export interface SaveDraftAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/saveDraft';
+  payload: string;
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -117,6 +122,7 @@ export interface ResourceVersionCreatorModelType {
     fetchDataSource: Effect;
     // init: Effect;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
+    saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     onChangeVersion: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeVersionAction>;
@@ -177,7 +183,10 @@ const Model: ResourceVersionCreatorModelType = {
       const {data} = yield call(createVersion, params);
       // console.log(data, 'datadatadata');
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
-    }
+    },
+    * saveDraft(action: SaveDraftAction, {call, select}: EffectsCommandMap) {
+      yield
+    },
   },
 
   reducers: {
