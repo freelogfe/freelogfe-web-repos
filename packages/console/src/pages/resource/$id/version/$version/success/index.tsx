@@ -17,7 +17,7 @@ interface SuccessProps {
   }
 }
 
-let clear: any;
+let clear: any = null;
 let timeV: number = 3;
 
 function Success({match}: SuccessProps) {
@@ -32,11 +32,17 @@ function Success({match}: SuccessProps) {
       if (timeV === 0) {
         goto();
       }
+
     }, 1000);
+    return function () {
+      clearInterval(clear);
+      clear = null;
+      timeV = 3;
+    }
   }, [goto, time]);
 
   function goto() {
-    clearInterval(clear);
+
     return router.replace(match.url.replace('/success', ''));
   }
 

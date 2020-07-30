@@ -24,7 +24,7 @@ const selectOptions: { text?: string, value: string }[] = [
   {text: '资源市场', value: '1'},
   {text: '我的资源', value: '2'},
   {text: '我的收藏', value: '3'},
-]
+];
 
 function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProps) {
 

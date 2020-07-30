@@ -46,10 +46,20 @@ const errorHandler = (error: { response: Response }): Response => {
   return response;
 };
 
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+  // Do something before request is sent
+  return config;
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error);
+});
+
 /**
  * 配置request请求时的默认参数
  */
 axios.interceptors.response.use(function (response) {
+  // console.log(response, 'response');
   // Do something with response data
   if (response.status !== 200) {
     const error = {
@@ -69,6 +79,7 @@ axios.interceptors.response.use(function (response) {
   }
   return data;
 }, function (error) {
+  // console.log(error, 'errorerror');
   // Do something with response error
   return Promise.reject(error);
 });

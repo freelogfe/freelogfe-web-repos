@@ -47,7 +47,12 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
   }
 
   function onConfirm(value: Data, index: number) {
-    // onSave && onSave ()
+    onSave && onSave(dataSource.map((i,j) => {
+      if (j !==index) {
+        return i;
+      }
+      return value;
+    }));
   }
 
   return (<>
@@ -108,6 +113,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       ...data,
       ...kv,
     });
+    setEditing('');
   }
 
   return (<FHorn

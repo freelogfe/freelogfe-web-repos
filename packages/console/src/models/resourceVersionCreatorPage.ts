@@ -7,6 +7,7 @@ import {FetchDataSourceAction} from "@/models/resourceInfo";
 import {createVersion, CreateVersionParamsType} from "@/services/resources";
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
+import BraftEditor, {EditorState} from "braft-editor";
 
 export type DepResources = Readonly<{
   id: string;
@@ -55,7 +56,7 @@ export interface ResourceVersionCreatorPageModelState {
   depActivatedID: string;
 
   properties: FCustomPropertiesProps['dataSource'];
-  description: string;
+  description: EditorState;
 }
 
 export interface OnChangeVersionAction extends AnyAction {
@@ -141,9 +142,8 @@ const Model: ResourceVersionCreatorModelType = {
     depRelationship: [],
     dependencies: [],
     depActivatedID: '',
-
     properties: [],
-    description: '',
+    description: BraftEditor.createEditorState(''),
   },
 
   effects: {
@@ -165,6 +165,14 @@ const Model: ResourceVersionCreatorModelType = {
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id,
         resolveResources: [],
+        customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
+          key: i.key,
+          defaultValue: i.value,
+          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
+          candidateItems: i.customOption ? i.customOption.split(',') : [],
+          remark: i.description,
+        })),
+        description: resourceVersionCreatorPage.description.toHTML(),
       }));
       const {data} = yield call(createVersion, params);
       // console.log(data, 'datadatadata');

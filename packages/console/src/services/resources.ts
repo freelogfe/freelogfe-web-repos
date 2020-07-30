@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 
+// 创建资源
 interface CreateParamsType {
   name: string;
   resourceType: string;
@@ -13,6 +14,7 @@ export function create(params: CreateParamsType) {
   return request.post('/v2/resources', params)
 }
 
+// 更新资源信息
 interface UpdateParamsType {
   resourceId: string;
   intro?: string;
@@ -35,6 +37,7 @@ export function update(params: UpdateParamsType) {
   return request.put(`/v2/resources/${params.resourceId}`, params);
 }
 
+// 查看资源分页列表
 interface ListParamsType {
   page?: number;
   pageSize?: number;
@@ -52,6 +55,7 @@ export function list(params: ListParamsType) {
   });
 }
 
+// 查看单个资源详情
 interface InfoParamsType {
   resourceIdOrName: string;
   isLoadLatestVersionInfo?: 0 | 1;
@@ -64,6 +68,7 @@ export function info(params: InfoParamsType) {
   });
 }
 
+// 创建资源版本
 export interface CreateVersionParamsType {
   resourceId: string;
   version: string;
@@ -76,7 +81,7 @@ export interface CreateVersionParamsType {
   customPropertyDescriptors?: {
     key: string;
     defaultValue: string;
-    type: string;
+    type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
     candidateItems?: string[];
     remark?: string;
   }[];
@@ -93,4 +98,42 @@ export interface CreateVersionParamsType {
 
 export function createVersion(params: CreateVersionParamsType) {
   return request.post(`/v2/resources/${params.resourceId}/versions`, params);
+}
+
+// 查看资源版本信息
+export interface ResourceVersionInfoParamsType1 {
+  version: string;
+  resourceId: string;
+  projection?: string;
+}
+
+export interface ResourceVersionInfoParamsType2 {
+  versionId: string;
+  projection?: string;
+}
+
+export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
+  if ((params as ResourceVersionInfoParamsType1).version) {
+    return request.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
+      params: {
+        projection: params.projection,
+      }
+    });
+  }
+  return request.get(`/v2/resources/versionss/detail`, {
+    params,
+  })
+}
+
+// 更新资源版本信息
+export interface UpdateResourceVersionInfoParamsType {
+  version: string;
+  resourceId: string;
+  description?: string;
+  customPropertyDescriptors?: CreateVersionParamsType['customPropertyDescriptors'];
+  resolveResources?: CreateVersionParamsType['resolveResources'];
+}
+
+export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParamsType) {
+  return request.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
 }

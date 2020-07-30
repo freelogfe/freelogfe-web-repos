@@ -13,10 +13,7 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState} from '@/models/connect';
 import {
-  // OnChangeCoverAction,
-  OnChangeEditorAction, OnChangeInfoAction,
-  OnChangeIsEditingAction,
-  // OnChangeLabelsAction
+  OnChangeInfoAction,
 } from "@/models/resourceInfoPage";
 
 interface InfoProps {
@@ -27,25 +24,14 @@ interface InfoProps {
 
 function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
 
-  // React.useEffect(() => {
-  //   dispatch<OnChangeEditorAction>({
-  //     type: 'resourceInfoPage/onChangeEditor',
-  //     payload: info?.intro,
-  //   })
-  // },[]);
   const [editorText, setEditorText] = React.useState<string>('');
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    // console.log(info?.intro, 'info?.intro');
     setEditorText(info?.intro || '');
   }, [info]);
 
   function onChangeIsEditing(bool: boolean) {
-    // dispatch<OnChangeIsEditingAction>({
-    //   type: 'resourceInfoPage/onChangeIsEditing',
-    //   payload: bool
-    // });
     setIsEditing(bool)
   }
 

@@ -1,11 +1,10 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {FContentText, FTitleText} from '@/components/FText';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FEditorCard from '@/components/FEditorCard';
-import {FTextButton} from '@/components/FButton';
+import {FCircleButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
@@ -13,19 +12,71 @@ import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connect";
 import FHorn from "@/pages/resource/components/FHorn";
+import {FetchDataSourceAction, UpdateDataSourceAction} from "@/models/resourceVersionEditorPage";
+import BraftEditor, {EditorState} from "braft-editor";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
-  version: ResourceVersionEditorPageModelState,
+  version: ResourceVersionEditorPageModelState;
+  match: {
+    params: {
+      id: string;
+      version: string;
+    }
+  }
 }
 
-function VersionEditor({dispatch, version}: VersionEditorProps) {
+function VersionEditor({dispatch, version, match}: VersionEditorProps) {
 
-  const [isEdit, setIsEdit] = React.useState<boolean>(false);
-  const [editorText, setEditorText] = React.useState<string>(version.description);
+  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
+  const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
 
-  function onClickConfirm() {
+  React.useEffect(() => {
+    handleData();
+  }, [handleData, match.params.version]);
 
+  React.useEffect(() => {
+    setEditor(BraftEditor.createEditorState(version.description));
+  }, [version.description]);
+
+  React.useEffect(() => {
+    setProperties(version.properties);
+  }, [version.properties]);
+
+  function handleData() {
+    dispatch<FetchDataSourceAction>({
+      type: 'resourceVersionEditorPage/fetchDataSource',
+      payload: {
+        resourceId: match.params.id,
+        version: match.params.version,
+      }
+    });
+  }
+
+  function onUpdateEditorText() {
+    dispatch<UpdateDataSourceAction>({
+      type: 'resourceVersionEditorPage/updateDataSource',
+      payload: {
+        description: editor.toHTML(),
+      }
+    });
+    setIsEditing(false);
+  }
+
+  function onUpdateProperties(data: any[]) {
+    dispatch<UpdateDataSourceAction>({
+      type: 'resourceVersionEditorPage/updateDataSource',
+      payload: {
+        customPropertyDescriptors: data.map((i) => ({
+          key: i.key as string,
+          defaultValue: i.value as string,
+          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
+          candidateItems: i.customOption ? i.customOption.split(',') : [],
+          remark: i.description,
+        })),
+      }
+    });
   }
 
   return (<FInfoLayout>
@@ -37,18 +88,28 @@ function VersionEditor({dispatch, version}: VersionEditorProps) {
       />}>
 
       <FEditorCard title={'版本描述'}>
-        {isEdit
+
+        {!version.description && !isEditing && (<Space size={10}>
+          <FCircleButton
+            onClick={() => setIsEditing(true)}
+            theme="weaken"
+          />
+          <FContentText text={'添加'}/>
+        </Space>)}
+
+        {isEditing
           ? (<FHorn extra={<Space size={10}>
-            <FTextButton onClick={() => setIsEdit(false)}>取消</FTextButton>
-            <FTextButton onClick={onClickConfirm} theme="primary">保存</FTextButton>
+            <FTextButton onClick={() => setIsEditing(false)}>取消</FTextButton>
+            <FTextButton onClick={onUpdateEditorText} theme="primary">保存</FTextButton>
           </Space>}>
             <FBraftEditor
-              defaultValue={editorText}
-              onChange={(value) => setEditorText(value)}
+              value={editor}
+              // defaultValue={editorText}
+              onChange={(value) => setEditor(value)}
             />
           </FHorn>)
-          : (<FHorn extra={<FTextButton
-            onClick={() => setIsEdit(true)}
+          : (version.description && (<FHorn extra={<FTextButton
+            onClick={() => setIsEditing(true)}
             theme="primary"
           >编辑</FTextButton>}>
             <div className={styles.description}>
@@ -57,18 +118,20 @@ function VersionEditor({dispatch, version}: VersionEditorProps) {
                 dangerouslySetInnerHTML={{__html: version.description}}
               />
             </div>
-          </FHorn>)
+          </FHorn>))
         }
       </FEditorCard>
       <FEditorCard title={'相关视图'}>
         <div className={styles.diagram}/>
       </FEditorCard>
-      <FEditorCard title={'自定义属性'}>
+      {properties?.length > 0 && <FEditorCard title={'自定义属性'}>
         <FCustomProperties
           dataSource={version.properties}
           stubborn={true}
+          onChange={(value) => setProperties(value)}
+          onSave={onUpdateProperties}
         />
-      </FEditorCard>
+      </FEditorCard>}
     </FContentLayout>
   </FInfoLayout>);
 }
@@ -84,7 +147,7 @@ function Header({version, resourceID, signingDate}: HeaderProps) {
     <FTitleText text={version} type="h2"/>
     <div style={{height: 10}}/>
     <Space size={0}>
-      <FContentText type="additional2" text={'签约时间：' + signingDate}/>
+      <FContentText type="additional2" text={'发行时间：' + signingDate}/>
       <div style={{width: 40}}/>
       <FContentText type="additional2" text={'资源ID：' + resourceID}/>
       <div style={{width: 20}}/>
