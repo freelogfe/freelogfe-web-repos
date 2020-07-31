@@ -109,7 +109,7 @@ const Model: ResourceListPageModelType = {
         id: i.resourceId,
         cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
         title: i.resourceName,
-        version: i.resourceVersions.length > 0 ? i.resourceVersions[0] : '',
+        version: i.latestVersion,
         // policy: i.policies,
         policy: [],
         type: i.resourceType,

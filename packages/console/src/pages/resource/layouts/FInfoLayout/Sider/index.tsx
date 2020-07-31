@@ -32,6 +32,10 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
     });
   }, [dispatch, match.params.id]);
 
+  function gotoCreator() {
+    router.push(`/resource/${match.params.id}/version/creator`);
+  }
+
   if (!info) {
     return null;
   }
@@ -63,26 +67,31 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
         </div>
 
         <div className={styles.radio}>
-          <a className={''}>版本列表</a>
-          <FTextButton onClick={() => router.push(`/resource/${match.params.id}/version/creator`)}><i
+          <a>版本列表</a>
+          <FTextButton onClick={gotoCreator}><i
             className="freelog fl-icon-add"/></FTextButton>
         </div>
 
         <Space size={16} direction="vertical" className={styles.versions + ' ' + styles.Space}>
           {
-            match.path === '/resource/:id/version/creator' && (
-              <div className={styles.radio + ' ' + styles.smallVersion}>
-                <a className={styles.activatedRadio}>正在创建版本</a>
+            match.path === '/resource/:id/version/creator'
+              ? (
+                <div className={styles.radio + ' ' + styles.smallVersion}>
+                  <a className={styles.activatedRadio}>正在创建版本</a>
+                </div>)
+              : (<div className={styles.radio + ' ' + styles.smallVersion}>
+                <a onClick={gotoCreator}>{true ? '10.15.4' : '未输入版本号'}（草稿）</a>
               </div>)
           }
 
           {
-            [...info?.resourceVersions].reverse().map((i) => (<div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
-              <a
-                onClick={() => router.push(`/resource/${match.params.id}/version/${i.version}`)}
-                className={(match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedRadio : ''}
-              >{i.version}</a>
-            </div>))
+            [...info?.resourceVersions].reverse().map((i) => (
+              <div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
+                <a
+                  onClick={() => router.push(`/resource/${match.params.id}/version/${i.version}`)}
+                  className={(match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedRadio : ''}
+                >{i.version}</a>
+              </div>))
           }
         </Space>
       </Space>

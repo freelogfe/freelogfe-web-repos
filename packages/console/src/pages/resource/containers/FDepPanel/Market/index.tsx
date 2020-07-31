@@ -82,7 +82,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
         isCustom: false,
         input: '',
         allowUpdate: true,
-        select: '',
+        select: i.latestVersion,
       },
       versions: i.resourceVersions.map((j: any) => j.version),
       upthrow: false,
