@@ -32,9 +32,9 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
   const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
 
-  React.useEffect(() => {
-    handleData();
-  }, [handleData, match.params.version]);
+  // React.useEffect(() => {
+  //   handleData();
+  // }, [handleData, match.params.version]);
 
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(version.description));
@@ -44,15 +44,15 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
     setProperties(version.properties);
   }, [version.properties]);
 
-  function handleData() {
-    dispatch<FetchDataSourceAction>({
-      type: 'resourceVersionEditorPage/fetchDataSource',
-      payload: {
-        resourceId: match.params.id,
-        version: match.params.version,
-      }
-    });
-  }
+  // function handleData() {
+  //   dispatch<FetchDataSourceAction>({
+  //     type: 'resourceVersionEditorPage/fetchDataSource',
+  //     payload: {
+  //       resourceId: match.params.id,
+  //       version: match.params.version,
+  //     }
+  //   });
+  // }
 
   function onUpdateEditorText() {
     dispatch<UpdateDataSourceAction>({

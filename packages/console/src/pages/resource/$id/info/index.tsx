@@ -52,7 +52,7 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
       </FEditorCard>}
       <FEditorCard title={'资源简介'}>
 
-        {!info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
+        {!info?.intro && !isEditing && (<Space size={10}>
           <FCircleButton
             onClick={() => onChangeIsEditing(true)}
             theme="weaken"

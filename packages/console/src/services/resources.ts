@@ -63,6 +63,7 @@ interface InfoParamsType {
 }
 
 export function info(params: InfoParamsType) {
+  // console.log('!@!!!!!!!!!!!');
   return request.get(`/v2/resources/${params.resourceIdOrName}`, {
     data: params,
   });
@@ -97,6 +98,7 @@ export interface CreateVersionParamsType {
 }
 
 export function createVersion(params: CreateVersionParamsType) {
+  console.log('#@$@#$@#$@#$');
   return request.post(`/v2/resources/${params.resourceId}/versions`, params);
 }
 
@@ -113,6 +115,7 @@ export interface ResourceVersionInfoParamsType2 {
 }
 
 export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
+  console.log('####!AAA');
   if ((params as ResourceVersionInfoParamsType1).version) {
     return request.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
       params: {

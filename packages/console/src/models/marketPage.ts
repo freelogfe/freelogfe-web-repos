@@ -2,12 +2,20 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {list} from '@/services/resources';
+import {ConnectState} from "@/models/connect";
 
 export interface MarketPageModelState {
   tabValue: '1' | '2';
   resourceType: number | string;
   inputText: string;
-  dataSource: any[];
+  dataSource: {
+    id: string;
+    cover: string,
+    title: string,
+    version: string,
+    policy: string[],
+    type: string,
+  }[];
 }
 
 export interface OnChangeTabValueAction extends AnyAction {
@@ -26,16 +34,20 @@ export interface OnChangeInputTextAction extends AnyAction {
 }
 
 export interface ChangeDataSourceAction extends AnyAction {
-  type: 'marketPage/changeDataSource';
-  payload: any[];
+  type: 'marketPage/changeDataSource' | 'changeDataSource';
+  payload: MarketPageModelState['dataSource'];
   restart?: boolean;
+}
+
+export interface FetchDataSourceAction extends AnyAction {
+  type: 'fetchDataSource',
 }
 
 export interface MarketModelType {
   namespace: 'marketPage';
   state: MarketPageModelState;
   effects: {
-    fetchDataSource: Effect;
+    fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     onChangeTabValue: DvaReducer<MarketPageModelState, OnChangeTabValueAction>;
@@ -43,7 +55,10 @@ export interface MarketModelType {
     onChangeInputText: DvaReducer<MarketPageModelState, OnChangeInputTextAction>;
     changeDataSource: DvaReducer<MarketPageModelState, ChangeDataSourceAction>;
   };
-  subscriptions: { setup: Subscription };
+  subscriptions: {
+    setup: Subscription;
+    fetchData: Subscription;
+  };
 }
 
 const Model: MarketModelType = {
@@ -54,28 +69,33 @@ const Model: MarketModelType = {
     tabValue: '1',
     resourceType: -1,
     inputText: '',
-    dataSource: [{
-      id: 1,
-      cover: '',
-      title: '这里是发行名称1',
-      version: '1.0.10',
-      policy: ['免费1', '免费2', '免费3'],
-      type: 'image',
-    }, {
-      id: 2,
-      cover: '',
-      title: '这里是发行名称2',
-      version: '1.0.10',
-      policy: ['免费1', '免费2', '免费3'],
-      type: 'image',
-    }],
+    dataSource: [],
   },
 
   effects: {
-    * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-      console.log('FFFFFFFFF');
-      yield call(list, {page: 1});
-      // yield put({type: 'save'});
+    * fetchDataSource(_: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+      const routerHistory = yield select(({routerHistories}: ConnectState) => {
+        // console.log(routerHistory, 'routerHistory');
+        return routerHistories[routerHistories.length - 1];
+      });
+      if (routerHistory?.pathname === '/example') {
+        return;
+      }
+      const {data} = yield call(list, {page: 1});
+      const dataSource = data.dataList.map((i: any) => ({
+        id: i.resourceId,
+        cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+        title: i.resourceName,
+        version: i.latestVersion,
+        // TODO: 这里应该是策略
+        policy: i.tags,
+        type: i.resourceType,
+      }));
+      yield put<ChangeDataSourceAction>({
+        type: 'changeDataSource',
+        payload: dataSource,
+        restart: true,
+      });
     },
   },
 
@@ -109,7 +129,7 @@ const Model: MarketModelType = {
         ...state,
         dataSource: [
           ...state.dataSource,
-          payload,
+          ...payload,
         ],
       };
     },
@@ -119,10 +139,20 @@ const Model: MarketModelType = {
     setup({dispatch, history}: SubscriptionAPI) {
       history.listen((listener) => {
         // console.log(listener, 'LLLLLLLLLLLL');
-        if (listener.pathname === '/') {
+        if (listener.pathname === '/market') {
           dispatch({type: 'onChangeTabValue', payload: '1'});
-        } else {
+        }
+        if (listener.pathname === '/example') {
           dispatch({type: 'onChangeTabValue', payload: '2'});
+        }
+      });
+    },
+    fetchData({dispatch, history}: SubscriptionAPI) {
+      history.listen((listener) => {
+        if (listener.pathname === '/market') {
+          dispatch<FetchDataSourceAction>({
+            type: 'fetchDataSource',
+          });
         }
       });
     },

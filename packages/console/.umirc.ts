@@ -21,7 +21,7 @@ const config: IConfig = {
       routes: [
         {exact: true, path: '.', redirect: '/market'},
         {exact: true, path: 'market', component: '../pages/market'},
-        {exact: true, path: 'example', component: '../pages/example'},
+        {exact: true, path: 'example', component: '../pages/market'},
         {
           path: 'resource',
           routes: [

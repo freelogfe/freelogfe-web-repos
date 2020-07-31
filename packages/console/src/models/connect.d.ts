@@ -9,10 +9,11 @@ import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 // import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
+import {RouterHistoriesModelState} from './routerHistory';
 import {WholeReadonly} from "@/models/shared";
 
-
 export {
+  RouterHistoriesModelState,
   GlobalSearchingModelState,
   MarketPageModelState,
   ResourceListPageModelState,
@@ -26,6 +27,7 @@ export {
 };
 
 export interface ConnectState {
+  routerHistories: RouterHistoriesModelState,
   globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
   resourceListPage: ResourceListPageModelState;

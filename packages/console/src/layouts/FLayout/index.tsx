@@ -8,7 +8,7 @@ import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {router} from 'umi';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, GlobalSearchingModelState} from '@/models/connect';
+import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState} from '@/models/connect';
 
 const discoverOptions = [
   {
@@ -48,16 +48,17 @@ interface FLayoutProps {
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   global: GlobalSearchingModelState;
+  routerHistories: RouterHistoriesModelState;
 }
 
-function FLayout({children, dispatch, global}: FLayoutProps) {
+function FLayout({children, dispatch, global, routerHistories}: FLayoutProps) {
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1') {
+    if (value === '1' && routerHistories[routerHistories.length - 1].pathname !== '/market') {
       return router.push('/market');
     }
-    if (value === '2') {
+    if (value === '2' && routerHistories[routerHistories.length - 1].pathname !== '/example') {
       return router.push('/example');
     }
   }
@@ -86,7 +87,7 @@ function FLayout({children, dispatch, global}: FLayoutProps) {
       <Layout.Header className={styles.header}>
         <div className={styles.headerLeft}>
           <a
-            onClick={() => router.push('/market')}
+            onClick={() => onDiscoverClick('1')}
             className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
           />
           <div className={styles.MenuBar}>
@@ -145,6 +146,7 @@ function FLayout({children, dispatch, global}: FLayoutProps) {
   );
 }
 
-export default connect(({globalSearching}: ConnectState) => ({
+export default connect(({globalSearching, routerHistories}: ConnectState) => ({
   global: globalSearching,
+  routerHistories: routerHistories,
 }))(FLayout);

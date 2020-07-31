@@ -46,5 +46,5 @@ export function uploadImage(params: UploadImageParamsType) {
       formData.append(key, value);
     }
   }
-  return request.post('/v1/storages/files/uploadImage', params);
+  return request.post('/v1/storages/files/uploadImage', formData);
 }

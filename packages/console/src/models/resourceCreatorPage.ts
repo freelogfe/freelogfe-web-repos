@@ -65,6 +65,7 @@ const Model: ResourceCreatorPageModelType = {
 
   state: {
     name: '',
+    // /^(?!_)[a-z0-9_]{3,20}(?<!_)$/
     resourceType: '',
     introduction: '',
     cover: '',
@@ -73,18 +74,19 @@ const Model: ResourceCreatorPageModelType = {
 
   effects: {
     * create(_: OnCreateAction, {call, put, select}: EffectsCommandMap) {
+      console.log('createcreatecreate');
       const params = yield select(({resourceCreatorPage}: ConnectState) => ({
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
-        // policies?: any[];
-        coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : undefined,
+        policies: [],
+        coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       }));
       // create(params);
       try {
         const {data} = yield call(create, params);
-        console.log(data, '$$$$R$$');
+        // console.log(data, '$$$$R$$');
         router.replace(`/resource/${data.resourceId}/success`)
       } catch (e) {
         console.error(e);

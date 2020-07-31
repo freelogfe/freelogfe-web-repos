@@ -10,6 +10,9 @@ import {
 } from "@/services/resources";
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
+// const {pathToRegexp} = require('path-to-regexp');
+import {pathToRegexp} from '@/utils/pathToRegexp';
+import * as redux from 'react-redux';
 
 export interface ResourceVersionEditorPageModelState {
   version: string;
@@ -110,6 +113,24 @@ const Model: ResourceVersionEditorModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
+
+      history.listen((listener) => {
+        const regexp = pathToRegexp('/resource/:id/version/:version');
+        const result = regexp.exec(listener.pathname);
+        if (result) {
+          if (result[2] === 'creator') {
+            return;
+          }
+          dispatch<FetchDataSourceAction>({
+            type: 'fetchDataSource',
+            payload: {
+              resourceId: result[1],
+              version: result[2],
+            }
+          });
+        }
+      });
+
     },
   },
 

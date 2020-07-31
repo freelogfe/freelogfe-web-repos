@@ -17,7 +17,7 @@ export default function ({className, value, ...props}: FIntroductionEditorProps)
 
   React.useEffect(() => {
     textInput.focus();
-  });
+  }, []);
 
   return (<div className={styles.introduction}>
     <Input.TextArea
