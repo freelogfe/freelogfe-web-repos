@@ -20,14 +20,14 @@ const config: IConfig = {
       // meta: {structure: 'left-right'},
       routes: [
         {exact: true, path: '.', redirect: '/market'},
-        {exact: true, path: 'market', component: '../pages/market'},
+        {exact: true, path: 'market', component: '../pages/market', meta: {a: 1}},
         {exact: true, path: 'example', component: '../pages/market'},
         {
           path: 'resource',
           routes: [
             {exact: true, path: '.', redirect: '/resource/list'},
             {exact: true, path: 'list', component: '../pages/resource/list'},
-            {exact: true, path: 'collect', component: '../pages/resource/collect'},
+            {exact: true, path: 'collect', component: '../pages/resource/list'},
             {exact: true, path: 'creator', component: '../pages/resource/creator'},
             {
               path: ':id',

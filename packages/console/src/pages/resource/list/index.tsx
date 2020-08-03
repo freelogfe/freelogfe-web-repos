@@ -1,17 +1,10 @@
 import * as React from 'react';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceListPageModelState} from '@/models/connect';
-import {router} from 'umi';
-import {
-  FetchDataSourceAction,
-  OnChangeInputTextAction,
-  OnChangePageCurrentAction, OnChangePageSizeAction,
-  OnChangeResourceStatusAction,
-  OnChangeResourceTypeAction
-} from '@/models/resourceListPage';
-import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
+import {router, withRouter} from 'umi';
+import Resources from "./Resources";
+import Collects from "./Collects";
+import {RouteComponentProps} from "react-router";
 
 const navs = [
   {
@@ -24,20 +17,21 @@ const navs = [
   },
 ];
 
-interface ResourceProps {
-  dispatch: Dispatch;
-  resource: ResourceListPageModelState;
+interface ListProps extends RouteComponentProps {
+
 }
 
-function Resource({dispatch, resource}: ResourceProps) {
+function List({match}: ListProps) {
+  const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
 
   React.useEffect(() => {
-    dispatch<FetchDataSourceAction>({
-      type: 'resourceListPage/fetchDataSource',
-    });
-  }, [dispatch]);
+    setTabValue(match.path === '/resource/list' ? '1' : '2')
+  }, [match.path]);
 
   function onChangeTab(value: '1' | '2') {
+    if (value === '1') {
+      return router.push('/resource/list');
+    }
     if (value === '2') {
       return router.push('/resource/collect');
     }
@@ -46,49 +40,16 @@ function Resource({dispatch, resource}: ResourceProps) {
   return (
     <FCenterLayout>
       <FAffixTabs
-        value={'1'}
+        value={tabValue}
         options={navs}
         onChange={onChangeTab}
       />
 
-      <FResourceCardsList
-        resourceType={resource.resourceType}
-        resourceStatus={resource.resourceStatus}
-        inputText={resource.inputText}
-        dataSource={resource.dataSource}
-        pageCurrent={resource.pageCurrent}
-        pageSize={resource.pageSize}
-        totalNum={resource.totalNum}
-        onChangeResourceType={(value) => dispatch<OnChangeResourceTypeAction>({
-          type: 'resourceListPage/onChangeResourceType',
-          payload: value
-        })}
-        onChangeResourceStatus={(value) => dispatch<OnChangeResourceStatusAction>({
-          type: 'resourceListPage/onChangeResourceStatus',
-          payload: value
-        })}
-        onChangeInputText={(value) => dispatch<OnChangeInputTextAction>({
-          type: 'resourceListPage/onChangeInputText',
-          payload: value
-        })}
-        onChangePageCurrent={(value) => dispatch<OnChangePageCurrentAction>({
-          type: 'resourceListPage/onChangePageCurrent',
-          payload: value
-        })}
-        onChangePageSize={(value) => dispatch<OnChangePageSizeAction>({
-          type: 'resourceListPage/onChangePageSize',
-          payload: value
-        })}
-        showGotoCreateBtn={true}
-        onClickDetails={() => null}
-        onClickEditing={(id) => router.push(`/resource/${id}/info`)}
-        onClickRevision={(id, record) => router.push(`/resource/${id}/version/creator`)}
-      />
+      {tabValue === '1' ? <Resources/> : null}
+      {tabValue === '2' ? <Collects/> : null}
 
     </FCenterLayout>
   );
 }
 
-export default connect(({resourceListPage}: ConnectState) => ({
-  resource: resourceListPage,
-}))(Resource);
+export default withRouter(List);

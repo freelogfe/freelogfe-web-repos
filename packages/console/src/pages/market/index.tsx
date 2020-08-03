@@ -1,17 +1,11 @@
 import React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
-import {Button} from 'antd';
 import FAffixTabs from '@/components/FAffixTabs';
-import FInput from '@/components/FInput';
-import FResourceCard from "@/components/FResourceCard";
-import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketPageModelState} from "@/models/connect";
-import {OnChangeInputTextAction, OnChangeResourceTypeAction, OnChangeTabValueAction} from "@/models/marketPage";
-import {router} from 'umi';
-import {resourceTypes} from "@/utils/globals";
+import {router, withRouter} from 'umi';
 import Resources from "./Resources";
 import Examples from "@/pages/market/Examples";
+import {RouteComponentProps} from "react-router";
 
 const navs = [
   {
@@ -25,18 +19,22 @@ const navs = [
 ];
 
 
-interface MarketProps {
-  dispatch: Dispatch;
-  market: MarketPageModelState,
+interface MarketProps extends RouteComponentProps {
+
 }
 
-function Market({dispatch, market}: MarketProps) {
+function Market({match, history, location, ...props}: MarketProps) {
+  const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
+
+  React.useEffect(() => {
+    setTabValue(match.path === '/market' ? '1' : '2')
+  }, [match.path]);
 
   function onChangeTab(value: '1' | '2') {
-    if (value === '1' && market.tabValue !== '1') {
+    if (value === '1' && tabValue !== '1') {
       return router.push('/market');
     }
-    if (value === '2' && market.tabValue !== '2') {
+    if (value === '2' && tabValue !== '2') {
       return router.push('/example');
     }
   }
@@ -45,18 +43,17 @@ function Market({dispatch, market}: MarketProps) {
     <FCenterLayout>
       <FAffixTabs
         options={navs}
-        value={market.tabValue}
+        value={tabValue}
         // onChange={(value) => dispatch<OnChangeTabValueAction>({type: 'marketPage/onChangeTabValue', payload: value})}
         onChange={onChangeTab}
       />
-      {market.tabValue === '1' && <Resources/>}
-      {market.tabValue === '2' && <Examples/>}
+      {tabValue === '1' && <Resources/>}
+      {tabValue === '2' && <Examples/>}
 
     </FCenterLayout>
   );
 }
 
-export default connect(({marketPage}: ConnectState) => ({
-  market: marketPage,
-}))(Market);
+
+export default withRouter(Market);
 

@@ -17,8 +17,9 @@ const resourceTypeOptions = [
 ];
 
 const resourceStatusOptions = [
-  {text: '全部', value: '-1'},
+  {text: '全部', value: '2'},
   {text: '已上线', value: '1'},
+  {text: '已下线', value: '0'},
 ];
 
 const navs = [

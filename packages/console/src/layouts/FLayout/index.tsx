@@ -6,9 +6,10 @@ import FMenu from '@/components/FMenu';
 import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
-import {router} from 'umi';
+import {router, withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState} from '@/models/connect';
+import {RouteComponentProps} from "react-router";
 
 const discoverOptions = [
   {
@@ -44,14 +45,15 @@ const creatorOptions = [
 ];
 
 
-interface FLayoutProps {
+interface FLayoutProps extends RouteComponentProps{
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   global: GlobalSearchingModelState;
   routerHistories: RouterHistoriesModelState;
 }
 
-function FLayout({children, dispatch, global, routerHistories}: FLayoutProps) {
+function FLayout({children, dispatch, global, routerHistories, ...props}: FLayoutProps) {
+  // console.log(props, 'propspropspropsLayout');
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
@@ -146,7 +148,8 @@ function FLayout({children, dispatch, global, routerHistories}: FLayoutProps) {
   );
 }
 
-export default connect(({globalSearching, routerHistories}: ConnectState) => ({
+
+export default withRouter(connect(({globalSearching, routerHistories}: ConnectState) => ({
   global: globalSearching,
   routerHistories: routerHistories,
-}))(FLayout);
+}))(FLayout));
