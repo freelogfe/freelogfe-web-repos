@@ -163,5 +163,7 @@
 	"licensee": "乙方",
 	"licencee_contract": "被授权合约",
 	"info_basic_upcast": "基础上抛是在资源的第一个版本中被上抛的依赖。基础上抛贯穿资源的所有版本，资源中新版本上抛的依赖都不能超过基础上抛的范围。",
-	"relationship_status_abnormal": "链路异常"
+	"relationship_status_abnormal": "异常",
+	"no_short_description": "暂无简介",
+	"import_object_fail": ""
 }

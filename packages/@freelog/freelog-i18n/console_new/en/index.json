@@ -163,5 +163,7 @@
 	"licensee": "Licensee",
 	"licencee_contract": "Licencee Contract",
 	"info_basic_upcast": "Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list.",
-	"relationship_status_abnormal": "Alarm"
+	"relationship_status_abnormal": "Abnormal",
+	"no_short_description": "No description",
+	"import_object_fail": ""
 }
