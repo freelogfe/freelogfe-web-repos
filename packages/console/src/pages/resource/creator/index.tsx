@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
-import {FTitleText, FContentText} from '@/components/FText';
+import {FTitleText, FContentText, FTipText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
-import FSelect from '@/components/FSelect';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
@@ -14,11 +13,6 @@ import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState} from '@/models/connect';
 import {
-  // OnChangeCoverAction,
-  // OnChangeIntroductionAction,
-  // OnChangeLabelsAction,
-  // OnChangeNameAction,
-  // OnChangeResourceTypeAction,
   OnCreateAction,
   ChangeAction,
 } from '@/models/resourceCreatorPage';
@@ -63,6 +57,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
               placeholder={'输入资源名称'}
               suffix={<span className={styles.FInputWordCount}>{resource.name.length}</span>}
             />
+
           </div>
         </FEditorCard>
 
