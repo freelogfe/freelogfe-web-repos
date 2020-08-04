@@ -63,7 +63,6 @@ interface InfoParamsType {
 }
 
 export function info(params: InfoParamsType) {
-  // console.log('!@!!!!!!!!!!!');
   return request.get(`/v2/resources/${params.resourceIdOrName}`, {
     data: params,
   });
@@ -98,7 +97,6 @@ export interface CreateVersionParamsType {
 }
 
 export function createVersion(params: CreateVersionParamsType) {
-  console.log('#@$@#$@#$@#$');
   return request.post(`/v2/resources/${params.resourceId}/versions`, params);
 }
 
@@ -142,30 +140,20 @@ export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParam
 }
 
 // 保存或者更新资源版本草稿
-export interface SaveVersionsDraft {
+export interface SaveVersionsDraftParamsType {
   resourceId: string;
-  version: string;
-  fileSha1: string;
-  description: string;
-  dependencies: {
-    resourceId: string;
-    versionRange: string;
-    versionRangeType: 1 | 2;
-  }[];
-  customPropertyDescriptors: {
-    key: string;
-    defaultValue: string;
-    type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
-    candidateItems?: string[];
-    remark?: string;
-  }[];
-  baseUpcastResources: {
-    resourceId: string;
-  }[];
-  resolveResources: {
-    resourceId: string;
-    contracts: {
-      policyId: string;
-    }[];
-  }
+  draftData: any;
+}
+
+export function saveVersionsDraft(params: SaveVersionsDraftParamsType) {
+  return request.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
+}
+
+// 查看资源版本草稿
+export interface LookDraftParamsType {
+  resourceId: string;
+}
+
+export function lookDraft(params: LookDraftParamsType) {
+  return request.get(`/v2/resources/${params.resourceId}/versions/drafts`);
 }

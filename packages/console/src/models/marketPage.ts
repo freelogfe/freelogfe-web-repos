@@ -42,11 +42,7 @@ export interface ChangeStatesAction extends AnyAction {
 
 export interface ChangeAction extends AnyAction {
   type: 'change',
-  payload: {
-    resourceType?: string;
-    inputText?: string;
-    pageCurrent?: number;
-  };
+  payload: Partial<MarketPageModelState>;
 }
 
 export interface MarketModelType {
@@ -66,16 +62,6 @@ export interface MarketModelType {
     // takeEvery: Subscription;
   };
 }
-
-// function debounce(fn: Function, wait: number) {
-//   let timeout: any = null;
-//   return function () {
-//     if (timeout !== null) {
-//       clearTimeout(timeout);
-//     }
-//     timeout = setTimeout(fn, wait);
-//   }
-// }
 
 const Model: MarketModelType = {
 

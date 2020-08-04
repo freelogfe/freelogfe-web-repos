@@ -6,9 +6,10 @@ import {FContentText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {resourceTypes} from '@/utils/globals';
 import {
+  ChangeAction,
   DepResources,
-  OnChangeDependenciesAction,
-  OnChangeDepRelationshipAction
+  // OnChangeDependenciesAction,
+  // OnChangeDepRelationshipAction
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -36,37 +37,6 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
 
   React.useEffect(() => {
     handleDataSource();
-    // setResourceObjects([
-    //   {
-    //     id: '100',
-    //     title: 'liukai/hahaha',
-    //     resourceType: 'image',
-    //     time: '2000',
-    //     version: {
-    //       isCustom: false,
-    //       input: '',
-    //       allowUpdate: true,
-    //       select: '1.2.3',
-    //     },
-    //     versions: ['11.2.3', '1.2.3'],
-    //     upthrow: false,
-    //     enableReuseContracts: [{
-    //       checked: true,
-    //       title: '买奶粉',
-    //       status: 'stopped',
-    //       code: 'code',
-    //       id: '1234',
-    //       date: '2013-12-22',
-    //       versions: ['12.23.3', '1.42.3'],
-    //     }],
-    //     enabledPolicies: [{
-    //       checked: true,
-    //       id: 'string',
-    //       title: 'string',
-    //       code: 'code',
-    //     }],
-    //   }
-    // ])
   }, []);
 
   async function handleDataSource() {
@@ -110,19 +80,18 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
   }
 
   function onSelect(i: DepResources[number]) {
-    dispatch<OnChangeDependenciesAction>({
-      type: 'resourceVersionCreatorPage/onChangeDependencies',
-      payload: [
-        i,
-        ...dependencies,
-      ],
-    });
-    dispatch<OnChangeDepRelationshipAction>({
-      type: 'resourceVersionCreatorPage/changeDepRelationship',
-      payload: [
-        {id: i.id, children: []},
-        ...depRelationship,
-      ],
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        dependencies: [
+          i,
+          ...dependencies,
+        ],
+        depRelationship: [
+          {id: i.id, children: []},
+          ...depRelationship,
+        ]
+      },
     });
   }
 

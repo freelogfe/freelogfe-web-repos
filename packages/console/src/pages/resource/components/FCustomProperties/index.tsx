@@ -10,8 +10,8 @@ import {FContentText} from "@/components/FText";
 import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
 
 type Data = Readonly<{
-  key: string | number;
-  value: string | number;
+  key: string;
+  value: string;
   description: string;
   allowCustom: boolean;
   custom: 'input' | 'select';
@@ -47,8 +47,8 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
   }
 
   function onConfirm(value: Data, index: number) {
-    onSave && onSave(dataSource.map((i,j) => {
-      if (j !==index) {
+    onSave && onSave(dataSource.map((i, j) => {
+      if (j !== index) {
         return i;
       }
       return value;
@@ -68,11 +68,12 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
             <FContentText text={'从上一版本导入'}/>
           </Space>
         </Space>
-        <div style={{height: 35}}/>
+
       </>)
     }
 
     {dataSource.length > 0 && <div className={styles.styles}>
+      <div style={{height: 35}}/>
       {
         dataSource.map((i, j) => (<Property
           key={j}

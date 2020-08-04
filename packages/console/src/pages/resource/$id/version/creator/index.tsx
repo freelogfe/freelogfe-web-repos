@@ -16,10 +16,12 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
+  ChangeAction,
   CreateVersionAction,
-  OnChangeDescriptionAction, OnChangePropertiesAction,
-  OnChangeResourceObjectAction,
-  OnChangeVersionAction
+  // OnChangeDescriptionAction, OnChangePropertiesAction,
+  // OnChangeResourceObjectAction,
+  // OnChangeVersionAction,
+  SaveDraftAction
 } from '@/models/resourceVersionCreatorPage';
 import {withRouter} from "umi";
 
@@ -37,7 +39,9 @@ interface VersionCreatorProps {
 function VersionCreator({dispatch, version, match, resource}: VersionCreatorProps) {
 
   function onClickCache() {
-
+    dispatch<SaveDraftAction>({
+      type: 'resourceVersionCreatorPage/saveDraft',
+    });
   }
 
   function onClickCreate() {
@@ -47,15 +51,19 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
     });
   }
 
+  function onChange(payload: ChangeAction['payload']) {
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload,
+    })
+  }
+
   return (<FInfoLayout>
     <FContentLayout header={<Header onClickCreate={onClickCreate} onClickCache={onClickCache}/>}>
       <FEditorCard dot={true} title={'版本号'}>
         <FInput
           value={version.version}
-          onChange={(e) => dispatch<OnChangeVersionAction>({
-            type: 'resourceVersionCreatorPage/onChangeVersion',
-            payload: e.target.value,
-          })}
+          onChange={(e) => onChange({version: e.target.value})}
           className={styles.versionInput}
         />
       </FEditorCard>
@@ -64,10 +72,7 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         <FSelectObject
           resourceType={resource.info?.resourceType || ''}
           resourceObject={version.resourceObject}
-          onChange={(value) => dispatch<OnChangeResourceObjectAction>({
-            type: 'resourceVersionCreatorPage/onChangeResourceObject',
-            payload: value,
-          })}
+          onChange={(value) => onChange({resourceObject: value})}
         />
       </FEditorCard>
 
@@ -79,19 +84,14 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         <FCustomProperties
           stubborn={false}
           dataSource={version.properties}
-          onChange={(value) => dispatch<OnChangePropertiesAction>({
-            type: 'resourceVersionCreatorPage/onChangeProperties',
-            payload: value,
-          })}
+          onChange={(value) => onChange({properties: value})}
         />
       </FEditorCard>
 
       <FEditorCard dot={false} title={'版本描述'}>
         <FBraftEditor
-          onChange={(value) => dispatch<OnChangeDescriptionAction>({
-            type: 'resourceVersionCreatorPage/onChangeDescription',
-            payload: value,
-          })}
+          value={version.description}
+          onChange={(value) => onChange({description: value})}
         />
       </FEditorCard>
 

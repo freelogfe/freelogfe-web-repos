@@ -3,6 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info} from "@/services/resources";
 import {ChangePoliciesAction, ResourceAuthPageModelState} from "@/models/resourceAuthPage";
+import {FetchDraftAction} from "@/models/resourceVersionCreatorPage";
 
 export interface ResourceInfoModelState {
   info: null | {

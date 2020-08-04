@@ -109,7 +109,10 @@ export default function ({
       <div className={styles.filterRight}>
         <FInput
           value={inputText}
-          onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
+          debounce={300}
+          allowClear={true}
+          // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
+          onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
           theme="dark"
           className={styles.FInput}
         />

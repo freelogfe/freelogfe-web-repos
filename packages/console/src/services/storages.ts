@@ -35,7 +35,7 @@ export function uploadFile(params: UploadFileParamsType) {
   return request.post('/v1/storages/files/upload', formData);
 }
 
-interface UploadImageParamsType {
+export interface UploadImageParamsType {
   file: File;
 }
 

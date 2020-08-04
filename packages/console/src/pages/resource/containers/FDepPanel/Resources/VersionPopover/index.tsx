@@ -3,11 +3,14 @@ import FInput from '@/components/FInput';
 import {FNormalButton} from '@/components/FButton';
 import * as React from "react";
 import styles from './index.less';
-import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
+import {DepResources} from "@/models/resourceVersionCreatorPage";
+// import {ResourcesProps} from "..";
 
 interface VersionPopoverProps {
-  defaultVersion: ResourcesProps['dataSource'][0]['version']
-  versions: ResourcesProps['dataSource'][0]['versions'];
+  // defaultVersion: ResourcesProps['dataSource'][0]['version']
+  // versions: ResourcesProps['dataSource'][0]['versions'];
+  defaultVersion: DepResources[0]['version']
+  versions: DepResources[0]['versions'];
   onChange?: (version: VersionPopoverProps['defaultVersion']) => void;
   children: any;
 }

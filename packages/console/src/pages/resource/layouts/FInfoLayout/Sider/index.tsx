@@ -5,14 +5,16 @@ import {FContentText} from '@/components/FText';
 import {Space} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
+import {FetchDraftAction} from "@/models/resourceVersionCreatorPage";
 
 interface SilderProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   match: {
     params: {
       id: string;
@@ -21,16 +23,20 @@ interface SilderProps {
   };
 }
 
-function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProps) {
+function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, match, dispatch}: RouterTypes & SilderProps) {
   // console.log(match, 'props');
 
   React.useEffect(() => {
-    // console.log('##@@#@##@#@#');
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
     });
+    dispatch<FetchDraftAction>({
+      type: 'resourceVersionCreatorPage/fetchDraft',
+      payload: match.params.id,
+    });
   }, [dispatch, match.params.id]);
+
 
   function gotoCreator() {
     router.push(`/resource/${match.params.id}/version/creator`);
@@ -79,9 +85,9 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
                 <div className={styles.radio + ' ' + styles.smallVersion}>
                   <a className={styles.activatedRadio}>正在创建版本</a>
                 </div>)
-              : (<div className={styles.radio + ' ' + styles.smallVersion}>
-                <a onClick={gotoCreator}>{true ? '10.15.4' : '未输入版本号'}（草稿）</a>
-              </div>)
+              : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
+                <a onClick={gotoCreator}>{draftData.version || '未输入版本号'}（草稿）</a>
+              </div>))
           }
 
           {
@@ -99,7 +105,8 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
   </div>)
 }
 
-export default withRouter(connect(({resourceInfo}: ConnectState) => ({
+export default withRouter(connect(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
   resourceInfo: resourceInfo,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Sider))
 

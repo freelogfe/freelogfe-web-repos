@@ -3,11 +3,17 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
-import {FetchDataSourceAction} from "@/models/resourceInfo";
-import {createVersion, CreateVersionParamsType} from "@/services/resources";
-import {ConnectState} from "@/models/connect";
+import {
+  createVersion,
+  CreateVersionParamsType, lookDraft, LookDraftParamsType,
+  saveVersionsDraft,
+  SaveVersionsDraftParamsType
+} from "@/services/resources";
+import {ConnectState, MarketPageModelState} from "@/models/connect";
 import {router} from "umi";
 import BraftEditor, {EditorState} from "braft-editor";
+import fMessage from '@/components/fMessage';
+import any = jasmine.any;
 
 export type DepResources = Readonly<{
   id: string;
@@ -57,26 +63,8 @@ export interface ResourceVersionCreatorPageModelState {
 
   properties: FCustomPropertiesProps['dataSource'];
   description: EditorState;
-}
 
-export interface OnChangeVersionAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeVersion';
-  payload: ResourceVersionCreatorPageModelState['version'];
-}
-
-export interface OnChangeResourceObjectAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeResourceObject';
-  payload: ResourceVersionCreatorPageModelState['resourceObject'];
-}
-
-export interface OnChangeDepRelationshipAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/changeDepRelationship';
-  payload: ResourceVersionCreatorPageModelState['depRelationship'];
-}
-
-export interface OnChangeDependenciesAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeDependencies';
-  payload: ResourceVersionCreatorPageModelState['dependencies'];
+  draftData: any;
 }
 
 export interface OnChangeDependenciesByIDAction extends AnyAction {
@@ -95,45 +83,38 @@ export interface OnChangeDepActivatedIDAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
 }
 
-export interface OnChangePropertiesAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeProperties';
-  payload: ResourceVersionCreatorPageModelState['properties'];
-}
-
-export interface OnChangeDescriptionAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChangeDescription';
-  payload: ResourceVersionCreatorPageModelState['description'];
-}
-
 export interface CreateVersionAction extends AnyAction {
   type: 'resourceVersionCreatorPage/createVersion';
+}
+
+export interface FetchDraftAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/fetchDraft';
   payload: string;
 }
 
 export interface SaveDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/saveDraft';
-  payload: string;
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceVersionCreatorPage/change',
+  payload: Partial<ResourceVersionCreatorPageModelState>;
 }
 
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
-    fetchDataSource: Effect;
-    // init: Effect;
+    // fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void; ;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
+    fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    onChangeVersion: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeVersionAction>;
-    onChangeResourceObject: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeResourceObjectAction>;
-    changeDepRelationship: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepRelationshipAction>;
-    onChangeDependencies: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesAction>;
+    change: DvaReducer<MarketPageModelState, ChangeAction>;
     deleteDependencyByID: DvaReducer<ResourceVersionCreatorPageModelState, DeleteDependencyByIDAction>;
     onChangeDependenciesByID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesByIDAction>;
     onChangeDepActivatedID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepActivatedIDAction>;
-    onChangeProperties: DvaReducer<ResourceVersionCreatorPageModelState, OnChangePropertiesAction>;
-    onChangeDescription: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDescriptionAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -150,24 +131,17 @@ const Model: ResourceVersionCreatorModelType = {
     depActivatedID: '',
     properties: [],
     description: BraftEditor.createEditorState(''),
+    draftData: null,
   },
 
   effects: {
-    // * init(_: AnyAction, {call, put, take}: EffectsCommandMap) {
-    //   // yield put({type: 'save'});
-    //   // console.log('####*****');
-    //   // while (true) {
-    //   //   yield take('deleteDependencyByID');
-    //   //   console.log('deleteDependencyByID');
-    //   // }
+    // * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
+    //   yield put({type: 'save'});
     // },
-    * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-      yield put({type: 'save'});
-    },
 
     * createVersion(action: CreateVersionAction, {call, select}: EffectsCommandMap) {
-      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
-        resourceId: action.payload,
+      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceId: resourceInfo.info?.resourceId,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id,
         resolveResources: [],
@@ -181,26 +155,54 @@ const Model: ResourceVersionCreatorModelType = {
         description: resourceVersionCreatorPage.description.toHTML(),
       }));
       const {data} = yield call(createVersion, params);
-      // console.log(data, 'datadatadata');
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
     },
+    * fetchDraft(action: FetchDraftAction, {call, put}: EffectsCommandMap) {
+      const params: LookDraftParamsType = {
+        resourceId: action.payload,
+      };
+      const {data} = yield call(lookDraft, params);
+      if (!data) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            draftData: null,
+          }
+        });
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...data.draftData,
+          description: BraftEditor.createEditorState(data.draftData.description),
+          draftData: data.draftData,
+        }
+      });
+
+      // console.log(data.draftData.description, 'data.draftData.description');
+    },
     * saveDraft(action: SaveDraftAction, {call, select}: EffectsCommandMap) {
-      yield
+      const params: SaveVersionsDraftParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceId: resourceInfo.info?.resourceId,
+        draftData: {
+          ...resourceVersionCreatorPage,
+          description: resourceVersionCreatorPage.description.toHTML(),
+        },
+      }));
+      yield call(saveVersionsDraft, params);
+      fMessage('暂存草稿成功');
+      // yield put<ChangeAction>({
+      //
+      // });
     },
   },
 
   reducers: {
-    onChangeVersion(state: ResourceVersionCreatorPageModelState, action: OnChangeVersionAction): ResourceVersionCreatorPageModelState {
-      return {...state, version: action.payload};
-    },
-    onChangeResourceObject(state: ResourceVersionCreatorPageModelState, action: OnChangeResourceObjectAction): ResourceVersionCreatorPageModelState {
-      return {...state, resourceObject: action.payload};
-    },
-    changeDepRelationship(state: ResourceVersionCreatorPageModelState, action: OnChangeDepRelationshipAction): ResourceVersionCreatorPageModelState {
-      return {...state, depRelationship: action.payload};
-    },
-    onChangeDependencies(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesAction): ResourceVersionCreatorPageModelState {
-      return {...state, dependencies: action.payload};
+    change(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
+      };
     },
     onChangeDependenciesByID(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesByIDAction): ResourceVersionCreatorPageModelState {
       const resources = state.dependencies;
@@ -241,25 +243,14 @@ const Model: ResourceVersionCreatorModelType = {
         depActivatedID: action.payload
       };
     },
-
-    onChangeProperties(state: ResourceVersionCreatorPageModelState, action: OnChangePropertiesAction): ResourceVersionCreatorPageModelState {
-      return {...state, properties: action.payload};
-    },
-    onChangeDescription(state: ResourceVersionCreatorPageModelState, action: OnChangeDescriptionAction): ResourceVersionCreatorPageModelState {
-      return {...state, description: action.payload};
-    },
   },
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      // console.log('#######');
       dispatch({
         type: 'init',
       });
     },
-
-    // suba1234({dispatch}: SubscriptionAPI) {
-    // },
   },
 
 };
