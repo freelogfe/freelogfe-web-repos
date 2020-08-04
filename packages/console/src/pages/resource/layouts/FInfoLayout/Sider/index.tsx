@@ -27,6 +27,9 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
   // console.log(match, 'props');
 
   React.useEffect(() => {
+    if (match.params.id === info?.resourceId) {
+      return;
+    }
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
@@ -35,7 +38,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
       type: 'resourceVersionCreatorPage/fetchDraft',
       payload: match.params.id,
     });
-  }, [dispatch, match.params.id]);
+  }, [dispatch, info, match.params.id]);
 
 
   function gotoCreator() {

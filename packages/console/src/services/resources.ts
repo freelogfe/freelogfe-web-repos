@@ -113,7 +113,7 @@ export interface ResourceVersionInfoParamsType2 {
 }
 
 export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
-  console.log('####!AAA');
+  // console.log('####!AAA');
   if ((params as ResourceVersionInfoParamsType1).version) {
     return request.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
       params: {

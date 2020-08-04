@@ -13,48 +13,24 @@ export interface ResourceCreatorPageModelState {
   labels: string[];
 }
 
-export interface OnChangeNameAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeName';
-  payload: string;
-}
-
-export interface OnChangeResourceTypeAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeResourceType';
-  payload: string;
-}
-
-export interface OnChangeIntroductionAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeIntroduction';
-  payload: string;
-}
-
-export interface OnChangeCoverAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeCover';
-  payload: string;
-}
-
-export interface OnChangeLabelsAction extends AnyAction {
-  type: 'resourceCreatorPage/onChangeLabels';
-  payload: string[];
-}
-
 export interface OnCreateAction extends AnyAction {
   type: 'resourceCreatorPage/create';
   // payload: string[];
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceCreatorPage/change',
+  payload: Partial<ResourceCreatorPageModelState>;
 }
 
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
   effects: {
-    create: Effect;
+    create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    onChangeName: DvaReducer<ResourceCreatorPageModelState, OnChangeNameAction>;
-    onChangeResourceType: DvaReducer<ResourceCreatorPageModelState, OnChangeResourceTypeAction>;
-    onChangeIntroduction: DvaReducer<ResourceCreatorPageModelState, OnChangeIntroductionAction>;
-    onChangeCover: DvaReducer<ResourceCreatorPageModelState, OnChangeCoverAction>;
-    onChangeLabels: DvaReducer<ResourceCreatorPageModelState, OnChangeLabelsAction>;
+    change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -74,7 +50,6 @@ const Model: ResourceCreatorPageModelType = {
 
   effects: {
     * create(_: OnCreateAction, {call, put, select}: EffectsCommandMap) {
-      console.log('createcreatecreate');
       const params = yield select(({resourceCreatorPage}: ConnectState) => ({
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
@@ -83,34 +58,27 @@ const Model: ResourceCreatorPageModelType = {
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       }));
-      // create(params);
-      try {
-        const {data} = yield call(create, params);
-        // console.log(data, '$$$$R$$');
-        router.replace(`/resource/${data.resourceId}/success`)
-      } catch (e) {
-        console.error(e);
-      }
-
-      // yield put({type: 'save'});
+      const {data} = yield call(create, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          name: '',
+          resourceType: '',
+          introduction: '',
+          cover: '',
+          labels: [],
+        },
+      });
+      router.replace(`/resource/${data.resourceId}/success`);
     },
   },
 
   reducers: {
-    onChangeName(state: ResourceCreatorPageModelState, action): ResourceCreatorPageModelState {
-      return {...state, name: action.payload};
-    },
-    onChangeResourceType(state: ResourceCreatorPageModelState, action): ResourceCreatorPageModelState {
-      return {...state, resourceType: action.payload};
-    },
-    onChangeIntroduction(state: ResourceCreatorPageModelState, action): ResourceCreatorPageModelState {
-      return {...state, introduction: action.payload};
-    },
-    onChangeCover(state: ResourceCreatorPageModelState, action): ResourceCreatorPageModelState {
-      return {...state, cover: action.payload};
-    },
-    onChangeLabels(state: ResourceCreatorPageModelState, action): ResourceCreatorPageModelState {
-      return {...state, labels: action.payload};
+    change(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
+      };
     },
   },
 

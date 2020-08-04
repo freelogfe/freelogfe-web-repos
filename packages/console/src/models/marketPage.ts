@@ -54,7 +54,7 @@ export interface MarketModelType {
   };
   reducers: {
     changeDataSource: DvaReducer<MarketPageModelState, ChangeDataSourceAction>;
-    change: DvaReducer<MarketPageModelState, ChangeAction>
+    change: DvaReducer<MarketPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;

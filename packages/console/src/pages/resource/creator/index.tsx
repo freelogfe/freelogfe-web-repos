@@ -14,11 +14,13 @@ import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState} from '@/models/connect';
 import {
-  OnChangeCoverAction,
-  OnChangeIntroductionAction,
-  OnChangeLabelsAction,
-  OnChangeNameAction,
-  OnChangeResourceTypeAction, OnCreateAction
+  // OnChangeCoverAction,
+  // OnChangeIntroductionAction,
+  // OnChangeLabelsAction,
+  // OnChangeNameAction,
+  // OnChangeResourceTypeAction,
+  OnCreateAction,
+  ChangeAction,
 } from '@/models/resourceCreatorPage';
 
 interface ResourceCreatorProps {
@@ -37,6 +39,13 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
     });
   }
 
+  function onChange(payload: ChangeAction['payload']) {
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorPage/change',
+      payload,
+    })
+  }
+
   return (<FCenterLayout>
     <FContentLayout header={<Header onClickCreate={onClickCreate}/>}>
       <div className={styles.workspace}>
@@ -47,9 +56,8 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
             {/* /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/ */}
             <FInput
               value={resource.name}
-              onChange={(e) => dispatch<OnChangeNameAction>({
-                type: 'resourceCreatorPage/onChangeName',
-                payload: e.target.value
+              onChange={(e) => onChange({
+                name: e.target.value
               })}
               className={styles.FInput}
               placeholder={'输入资源名称'}
@@ -61,9 +69,8 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
         <FEditorCard title={'资源类型'} dot={true}>
           <AutoComplete
             value={resource.resourceType}
-            onChange={(value) => dispatch<OnChangeResourceTypeAction>({
-              type: 'resourceCreatorPage/onChangeResourceType',
-              payload: value,
+            onChange={(value) => onChange({
+              resourceType: value,
             })}
             className={styles.FSelect}
             placeholder={'资源类型'}
@@ -74,9 +81,8 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
         <FEditorCard title={'资源简介'}>
           <FIntroductionEditor
             value={resource.introduction}
-            onChange={(e) => dispatch<OnChangeIntroductionAction>({
-              type: 'resourceCreatorPage/onChangeIntroduction',
-              payload: e.target.value
+            onChange={(e) => onChange({
+              introduction: e.target.value
             })}
           />
         </FEditorCard>
@@ -84,9 +90,8 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
         <FEditorCard title={'资源封面'}>
           <FUploadResourceCover
             value={resource.cover}
-            onChange={(value) => dispatch<OnChangeCoverAction>({
-              type: 'resourceCreatorPage/onChangeCover',
-              payload: value,
+            onChange={(value) => onChange({
+              cover: value
             })}
           />
         </FEditorCard>
@@ -94,9 +99,8 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
         <FEditorCard title={'资源标签'}>
           <FLabelEditor
             values={resource.labels}
-            onChange={(value) => dispatch<OnChangeLabelsAction>({
-              type: 'resourceCreatorPage/onChangeLabels',
-              payload: value
+            onChange={(value) => onChange({
+              labels: value,
             })}
           />
         </FEditorCard>

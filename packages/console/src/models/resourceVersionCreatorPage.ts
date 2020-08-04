@@ -13,6 +13,7 @@ import {ConnectState, MarketPageModelState} from "@/models/connect";
 import {router} from "umi";
 import BraftEditor, {EditorState} from "braft-editor";
 import fMessage from '@/components/fMessage';
+import {FetchDataSourceAction} from "@/models/resourceInfo";
 import any = jasmine.any;
 
 export type DepResources = Readonly<{
@@ -139,7 +140,7 @@ const Model: ResourceVersionCreatorModelType = {
     //   yield put({type: 'save'});
     // },
 
-    * createVersion(action: CreateVersionAction, {call, select}: EffectsCommandMap) {
+    * createVersion(action: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceId: resourceInfo.info?.resourceId,
         version: resourceVersionCreatorPage.version,
@@ -155,6 +156,16 @@ const Model: ResourceVersionCreatorModelType = {
         description: resourceVersionCreatorPage.description.toHTML(),
       }));
       const {data} = yield call(createVersion, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draftData: null,
+        },
+      });
+      yield put<FetchDataSourceAction>({
+        type: 'resourceInfo/fetchDataSource',
+        payload: params.resourceId,
+      });
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
     },
     * fetchDraft(action: FetchDraftAction, {call, put}: EffectsCommandMap) {
@@ -167,6 +178,13 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             draftData: null,
+            version: '',
+            resourceObject: null,
+            depRelationship: [],
+            dependencies: [],
+            depActivatedID: '',
+            properties: [],
+            description: BraftEditor.createEditorState(''),
           }
         });
       }
@@ -181,7 +199,7 @@ const Model: ResourceVersionCreatorModelType = {
 
       // console.log(data.draftData.description, 'data.draftData.description');
     },
-    * saveDraft(action: SaveDraftAction, {call, select}: EffectsCommandMap) {
+    * saveDraft(action: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
       const params: SaveVersionsDraftParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceId: resourceInfo.info?.resourceId,
         draftData: {
@@ -191,9 +209,12 @@ const Model: ResourceVersionCreatorModelType = {
       }));
       yield call(saveVersionsDraft, params);
       fMessage('暂存草稿成功');
-      // yield put<ChangeAction>({
-      //
-      // });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draftData: params.draftData,
+        },
+      });
     },
   },
 
