@@ -49,6 +49,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
             &nbsp;
             {/* /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/ */}
             <FInput
+              // errorText={'输入资源名称'}
               value={resource.name}
               onChange={(e) => onChange({
                 name: e.target.value
