@@ -55,7 +55,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
       status={info?.status === 1 ? 'online' : 'stopped'}
     />
     <div style={{height: 15}}/>
-    <FContentText text={info?.resourceName}/>
+    <FContentText className={styles.breakWord} text={info?.resourceName}/>
     <div style={{height: 10}}/>
     <label className={styles.label}>{info.resourceType}</label>
     <div style={{height: 15}}/>
