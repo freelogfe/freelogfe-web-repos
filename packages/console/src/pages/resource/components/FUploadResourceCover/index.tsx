@@ -15,7 +15,7 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
   const uploadConfig = {
     accept: 'image/*',
     beforeUpload: (file: RcFile, FileList: RcFile[]) => {
-      console.log(file, 'file1');
+      // console.log(file, 'file1');
       upload(file);
       return false;
     },
@@ -26,10 +26,6 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
   };
 
   async function upload(file: File) {
-    console.log(file, 'file2');
-    // await uploadImage({file});
-    // let param = new FormData();
-    // param.append('file', file);
     const res = await uploadImage({
       file: file,
     });

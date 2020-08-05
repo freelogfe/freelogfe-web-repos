@@ -18,10 +18,7 @@ import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelSta
 import {
   ChangeAction,
   CreateVersionAction,
-  // OnChangeDescriptionAction, OnChangePropertiesAction,
-  // OnChangeResourceObjectAction,
-  // OnChangeVersionAction,
-  SaveDraftAction
+  SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {withRouter} from "umi";
 

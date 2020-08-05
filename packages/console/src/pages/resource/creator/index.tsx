@@ -11,7 +11,7 @@ import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceCreatorPageModelState} from '@/models/connect';
+import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
 import {
   OnCreateAction,
   ChangeAction,
@@ -20,12 +20,13 @@ import {
 interface ResourceCreatorProps {
   dispatch: Dispatch;
   resource: ResourceCreatorPageModelState;
+  user: UserModelState;
 }
 
 const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
 
-function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
+function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
 
   function onClickCreate() {
     dispatch<OnCreateAction>({
@@ -45,7 +46,7 @@ function ResourceCreator({dispatch, resource}: ResourceCreatorProps) {
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>
-            <FContentText text={'yanghongtian /'}/>
+            <FContentText text={`${user.info?.username} /`}/>
             &nbsp;
             {/* /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/ */}
             <FInput
@@ -121,6 +122,7 @@ function Header({onClickCreate}: HeaderProps) {
   </div>);
 }
 
-export default connect(({resourceCreatorPage}: ConnectState) => ({
+export default connect(({resourceCreatorPage, user}: ConnectState) => ({
   resource: resourceCreatorPage,
+  user: user,
 }))(ResourceCreator);

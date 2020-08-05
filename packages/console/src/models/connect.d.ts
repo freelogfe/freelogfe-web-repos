@@ -10,7 +10,7 @@ import {ResourceAuthPageModelState} from './resourceAuthPage';
 // import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
 import {RouterHistoriesModelState} from './routerHistory';
-import {WholeReadonly} from "@/models/shared";
+import {UserModelState} from './user';
 
 export {
   RouterHistoriesModelState,
@@ -24,6 +24,7 @@ export {
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
   ResourceInfoModelState,
+  UserModelState,
 };
 
 export interface ConnectState {
@@ -38,4 +39,5 @@ export interface ConnectState {
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState;
+  user: UserModelState,
 }

@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import {AxiosRequestConfig} from 'axios';
 
 export interface bucketListParamsType {
   bucketType: 0 | 1 | 2;
@@ -25,26 +26,26 @@ interface UploadFileParamsType {
   resourceType?: string;
 }
 
-export function uploadFile(params: UploadFileParamsType) {
+export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestConfig) {
   const formData = new FormData();
   for (const [key, value] of Object.entries(params)) {
     if (value) {
       formData.append(key, value);
     }
   }
-  return request.post('/v1/storages/files/upload', formData);
+  return request.post('/v1/storages/files/upload', formData, config);
 }
 
 export interface UploadImageParamsType {
   file: File;
 }
 
-export function uploadImage(params: UploadImageParamsType) {
+export function uploadImage(params: UploadImageParamsType, config?: AxiosRequestConfig) {
   const formData = new FormData();
   for (const [key, value] of Object.entries(params)) {
     if (value) {
       formData.append(key, value);
     }
   }
-  return request.post('/v1/storages/files/uploadImage', formData);
+  return request.post('/v1/storages/files/uploadImage', formData, config);
 }

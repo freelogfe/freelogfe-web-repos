@@ -28,6 +28,7 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
   const [errorT, setErrorT] = React.useState<string>('');
+  const [progress, setProgress] = React.useState<number | null>(null);
 
   function onSelect(resource: ResourceObject) {
     setModalVisible(false);
@@ -59,25 +60,35 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
         time: '',
       });
     }
+
+    onChange && onChange({
+      id: '',
+      name: file.name,
+      size: file.size,
+      path: '',
+      type: resourceType,
+      time: '',
+    });
+
     const {data} = await uploadFile({
       file: file,
       resourceType: resourceType,
+    }, {
+      onUploadProgress(progressEvent: any) {
+        setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+      }
     });
 
     onChange && onChange({
       id: data.sha1,
       name: file.name,
-      size: data.fileSize,
+      size: file.size,
       path: '',
       type: resourceType,
       time: '',
     });
+    setProgress(null);
   }
-
-  //
-  // async function upload() {
-  //
-  // }
 
   return (<div>
     {
@@ -109,7 +120,7 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
         </div>)
         : (<FObjectCard
           resourceObject={resourceObject}
-          progress={null}
+          progress={progress}
           onClickDelete={() => onChange && onChange(null)}
         />)
     }
