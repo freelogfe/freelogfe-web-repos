@@ -56,12 +56,17 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
   }
 
   return (<FInfoLayout>
-    <FContentLayout header={<Header onClickCreate={onClickCreate} onClickCache={onClickCache}/>}>
+    <FContentLayout header={<Header
+      onClickCreate={onClickCreate}
+      onClickCache={onClickCache}
+      disabledCreate={!!version.versionErrorText || !!version.resourceObjectErrorText}
+    />}>
       <FEditorCard dot={true} title={'版本号'}>
         <FInput
           value={version.version}
-          onChange={(e) => onChange({version: e.target.value})}
+          onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
           className={styles.versionInput}
+          errorText={version.versionErrorText}
         />
       </FEditorCard>
 
@@ -69,7 +74,9 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         <FSelectObject
           resourceType={resource.info?.resourceType || ''}
           resourceObject={version.resourceObject}
-          onChange={(value) => onChange({resourceObject: value})}
+          onChange={(value) => onChange({resourceObject: value, resourceObjectErrorText: ''})}
+          errorText={version.resourceObjectErrorText}
+          onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
         />
       </FEditorCard>
 
@@ -102,9 +109,10 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
 interface HeaderProps {
   onClickCache: () => void;
   onClickCreate: () => void;
+  disabledCreate?: boolean;
 }
 
-function Header({onClickCache, onClickCreate}: HeaderProps) {
+function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText text={'创建版本'} type={'h2'}/>
 
@@ -113,6 +121,7 @@ function Header({onClickCache, onClickCreate}: HeaderProps) {
       <FNormalButton
         style={{width: 108}}
         onClick={onClickCreate}
+        disabled={disabledCreate}
       >创建</FNormalButton>
     </Space>
   </div>);

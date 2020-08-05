@@ -11,7 +11,7 @@ import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, uploadFile} from "@/services/storages";
 
-const errorText = {
+const errorTexts = {
   duplicated: '该资源已存在，不能重复创建，请重新选择。',
   size: '文件大小不能超过50MB，请重新选择。',
   resourceType: '所选文件格式和资源类型不匹配，请重新选择。',
@@ -21,9 +21,12 @@ export interface FSelectObject {
   readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
   readonly onChange?: (file: FSelectObject['resourceObject']) => void;
+  errorText?: string;
+
+  onChangeErrorText?(text: string): void;
 }
 
-export default function ({resourceObject, onChange, resourceType}: FSelectObject) {
+export default function ({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -37,15 +40,12 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
 
   async function beforeUpload(file: RcFile) {
     setIsChecking(true);
-    console.log(file, 'filefile');
     if (file.size > 50 * 1024 * 1024 * 1024) {
       setIsChecking(false);
-      return setErrorT(errorText.size);
+      // return setErrorT(errorTexts.size);
+      return onChangeErrorText && onChangeErrorText(errorTexts.size);
     }
 
-    // if (isEnabled) {
-    //return setErrorT(errorText.duplicated);
-    // }
     const sha1 = await getSHA1Hash(file);
     const {data: isExist} = await fileIsExist({sha1});
     setIsChecking(false);
@@ -95,8 +95,12 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
       !resourceObject
         ? (<div className={styles.object}>
 
-          {errorT &&
-          <div className={styles.objectErrorInfo}>{errorT}&nbsp;&nbsp;<FTextButton theme="primary">查看</FTextButton></div>}
+          {errorText &&
+          <div className={styles.objectErrorInfo}>
+            <span>{errorText}</span>
+            <span>&nbsp;&nbsp;</span>
+            {errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}
+          </div>}
 
           {isChecking
             ? (<Space size={50} className={styles.checking}>

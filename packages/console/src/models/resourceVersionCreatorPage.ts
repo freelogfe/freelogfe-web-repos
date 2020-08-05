@@ -14,7 +14,7 @@ import {router} from "umi";
 import BraftEditor, {EditorState} from "braft-editor";
 import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from "@/models/resourceInfo";
-import any = jasmine.any;
+import * as semver from 'semver';
 
 export type DepResources = Readonly<{
   id: string;
@@ -56,7 +56,9 @@ export type Relationship = Readonly<{
 
 export interface ResourceVersionCreatorPageModelState {
   version: string;
+  versionErrorText: string;
   resourceObject: FSelectObject['resourceObject'];
+  resourceObjectErrorText: string;
 
   depRelationship: Relationship;
   dependencies: DepResources;
@@ -120,29 +122,31 @@ export interface ResourceVersionCreatorModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceVersionCreatorPageModelState = {
+  version: '',
+  versionErrorText: '',
+  resourceObject: null,
+  resourceObjectErrorText: '',
+
+  depRelationship: [],
+  dependencies: [],
+  depActivatedID: '',
+  properties: [],
+  description: BraftEditor.createEditorState(''),
+  draftData: null,
+};
+
 const Model: ResourceVersionCreatorModelType = {
 
   namespace: 'resourceVersionCreatorPage',
 
-  state: {
-    version: '',
-    resourceObject: null,
-    depRelationship: [],
-    dependencies: [],
-    depActivatedID: '',
-    properties: [],
-    description: BraftEditor.createEditorState(''),
-    draftData: null,
-  },
+  state: initStates,
 
   effects: {
-    // * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-    //   yield put({type: 'save'});
-    // },
-
     * createVersion(action: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceId: resourceInfo.info?.resourceId,
+        latestVersion: resourceInfo.info?.latestVersion,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id,
         resolveResources: [],
@@ -155,6 +159,19 @@ const Model: ResourceVersionCreatorModelType = {
         })),
         description: resourceVersionCreatorPage.description.toHTML(),
       }));
+
+      const {versionErrorText, resourceObjectErrorText} = verify(params);
+
+      if (versionErrorText || resourceObjectErrorText) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionErrorText,
+            resourceObjectErrorText,
+          },
+        });
+      }
+
       const {data} = yield call(createVersion, params);
       yield put<ChangeAction>({
         type: 'change',
@@ -165,6 +182,10 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
       });
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
     },
@@ -196,8 +217,6 @@ const Model: ResourceVersionCreatorModelType = {
           draftData: data.draftData,
         }
       });
-
-      // console.log(data.draftData.description, 'data.draftData.description');
     },
     * saveDraft(action: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
       const params: SaveVersionsDraftParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
@@ -268,12 +287,32 @@ const Model: ResourceVersionCreatorModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      dispatch({
-        type: 'init',
-      });
+      // dispatch({
+      //   type: 'init',
+      // });
     },
   },
 
 };
 
 export default Model;
+
+function verify(data: any) {
+  const {version, latestVersion, fileSha1} = data;
+  let versionErrorText = '';
+  let resourceObjectErrorText = '';
+
+  if (!version) {
+    versionErrorText = '请输入版本号';
+  } else if (!semver.valid(version)) {
+    versionErrorText = '版本号不合法';
+  } else if (!semver.gt(version, latestVersion || '0.0.0')) {
+    versionErrorText = latestVersion ? `必须大于最新版本 ${latestVersion}` : '必须大于 0.0.0';
+  }
+
+  if (!fileSha1) {
+    resourceObjectErrorText = '请选择对象或上传文件';
+  }
+
+  return {versionErrorText, resourceObjectErrorText};
+}
