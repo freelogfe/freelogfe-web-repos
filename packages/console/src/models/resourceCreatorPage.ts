@@ -117,7 +117,7 @@ function verifyDate({name, resourceType}: any) {
   if (!name) {
     nameErrorText = '请输入资源名称';
   } else if (name.length > 60) {
-    nameErrorText = '不错过60个字符';
+    nameErrorText = '不多于60个字符';
   } else if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/.test(name)) {
     nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
   }
@@ -125,8 +125,8 @@ function verifyDate({name, resourceType}: any) {
   let resourceTypeErrorText = '';
   if (!resourceType) {
     resourceTypeErrorText = '请输入资源类型';
-  } else if (resourceType.length > 60) {
-    resourceTypeErrorText = '不错过60个字符';
+  } else if (resourceType.length < 3) {
+    resourceTypeErrorText = '不少于3个字符';
   } else if (!/^(?!_)[a-z0-9_]{3,20}(?<!_)$/.test(resourceType)) {
     resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
   }
