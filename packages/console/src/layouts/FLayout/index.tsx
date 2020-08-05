@@ -10,10 +10,22 @@ import {router, withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
+import FLayoutFooter from "@/layouts/FLayoutFooter";
+import {parse} from "path-to-regexp";
+import {setLocale} from 'umi-plugin-react/locale';
+import {
+  formatDate,
+  formatTime,
+  formatRelative,
+  formatNumber,
+  formatPlural,
+  formatMessage,
+  formatHTMLMessage
+} from 'umi-plugin-react/locale';
 
 const discoverOptions = [
   {
-    text: '发现市场',
+    text: '发现资源',
     value: '1'
   },
   {
@@ -45,7 +57,7 @@ const creatorOptions = [
 ];
 
 
-interface FLayoutProps extends RouteComponentProps{
+interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   global: GlobalSearchingModelState;
@@ -97,7 +109,9 @@ function FLayout({children, dispatch, global, routerHistories, ...props}: FLayou
               onClick={onDiscoverClick}
               options={discoverOptions}
             />}>
-              <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>发现</a>
+              <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>
+                {formatMessage({id: 'faxian'})}
+              </a>
             </Dropdown>
             <a className={styles.Menu}>存储空间</a>
             <Dropdown overlay={<FMenu
@@ -129,27 +143,31 @@ function FLayout({children, dispatch, global, routerHistories, ...props}: FLayou
             options={creatorOptions}
           />}
           >
-            <a className={styles.create}>
+            <a className={styles.create} onClick={() => onCreateClick('1')}>
               <FCircleButton/>
             </a>
           </Dropdown>
 
-          <a className={styles.avatar}>
-            <img src={avatarSrc} alt={'avatar'}/>
-          </a>
+          <Dropdown overlay={<div></div>}>
+            <a className={styles.avatar}>
+              <img src={avatarSrc} alt={'avatar'}/>
+            </a>
+          </Dropdown>
         </div>
       </Layout.Header>
 
       {children}
 
       <div style={{height: 100}}/>
-
+      <FLayoutFooter/>
     </Layout>
   );
 }
-
 
 export default withRouter(connect(({globalSearching, routerHistories}: ConnectState) => ({
   global: globalSearching,
   routerHistories: routerHistories,
 }))(FLayout));
+
+// parse()
+// router.
