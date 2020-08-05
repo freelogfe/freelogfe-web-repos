@@ -9,7 +9,7 @@ import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 // import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
-import {RouterHistoriesModelState} from './routerHistory';
+import {RouterHistoriesModelState} from './routerHistories';
 import {UserModelState} from './user';
 
 export {

@@ -15,7 +15,7 @@ interface OnChangeAction extends AnyAction {
   type: 'onChange'
 }
 
-interface RouterHistoryModelType {
+interface RouterHistoriesModelType {
   namespace: 'routerHistories';
   state: RouterHistoriesModelState;
   // effects: {
@@ -27,7 +27,7 @@ interface RouterHistoryModelType {
   subscriptions: { setup: Subscription };
 }
 
-const Model: RouterHistoryModelType = {
+const Model: RouterHistoriesModelType = {
 
   namespace: 'routerHistories',
 

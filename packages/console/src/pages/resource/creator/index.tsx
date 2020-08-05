@@ -16,6 +16,7 @@ import {
   OnCreateAction,
   ChangeAction,
 } from '@/models/resourceCreatorPage';
+import FAutoComplete from "@/components/FAutoComplete";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -42,32 +43,36 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
   }
 
   return (<FCenterLayout>
-    <FContentLayout header={<Header onClickCreate={onClickCreate}/>}>
+    <FContentLayout header={<Header
+      disabled={!!resource.nameErrorText || !!resource.resourceTypeErrorText}
+      onClickCreate={onClickCreate}
+    />}>
       <div className={styles.workspace}>
         <FEditorCard title={'资源名称'} dot={true}>
           <div className={styles.resourceName}>
             <FContentText text={`${user.info?.username} /`}/>
             &nbsp;
-            {/* /^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/ */}
             <FInput
-              // errorText={'输入资源名称'}
+              errorText={resource.nameErrorText}
               value={resource.name}
               onChange={(e) => onChange({
-                name: e.target.value
+                name: e.target.value,
+                nameErrorText: '',
               })}
               className={styles.FInput}
               placeholder={'输入资源名称'}
               suffix={<span className={styles.FInputWordCount}>{resource.name.length}</span>}
             />
-
           </div>
         </FEditorCard>
 
         <FEditorCard title={'资源类型'} dot={true}>
-          <AutoComplete
+          <FAutoComplete
+            errorText={resource.resourceTypeErrorText}
             value={resource.resourceType}
             onChange={(value) => onChange({
               resourceType: value,
+              resourceTypeErrorText: '',
             })}
             className={styles.FSelect}
             placeholder={'资源类型'}
@@ -107,17 +112,21 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
 }
 
 interface HeaderProps {
-  // onClickCache: () => void;
   onClickCreate: () => void;
+  disabled?: boolean;
 }
 
-function Header({onClickCreate}: HeaderProps) {
+function Header({onClickCreate, disabled = false}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText text={'创建资源'} type={'h2'}/>
 
     <Space size={30}>
       {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}
-      <FNormalButton onClick={onClickCreate} style={{width: 108}}>创建</FNormalButton>
+      <FNormalButton
+        onClick={onClickCreate}
+        style={{width: 108}}
+        disabled={disabled}
+      >创建</FNormalButton>
     </Space>
   </div>);
 }
