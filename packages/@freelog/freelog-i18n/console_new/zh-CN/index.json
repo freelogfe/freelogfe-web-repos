@@ -151,7 +151,7 @@
 	"contract_name": "合约名称",
 	"used_contract": "有效合约",
 	"sign_contract_confirm": "合约将应用于以下版本",
-	"shelve_contract_confirm": "确认该合约不在应用于版本 {version number}吗？",
+	"shelve_contract_confirm": "确认该合约不在应用于版本 {VersionNumber}吗？",
 	"shelve_contract": "搁置",
 	"release_date": "发行时间",
 	"object_id": "对象ID",

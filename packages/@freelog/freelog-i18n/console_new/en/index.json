@@ -151,7 +151,7 @@
 	"contract_name": "Contract name",
 	"used_contract": "Valid contract",
 	"sign_contract_confirm": "The contract will be used for ",
-	"shelve_contract_confirm": "Are you sure to shelve the contract for version {version number}?",
+	"shelve_contract_confirm": "Are you sure to shelve the contract for version {VersionNumber}?",
 	"shelve_contract": "Shelve",
 	"release_date": "Released on",
 	"object_id": "Object ID",
