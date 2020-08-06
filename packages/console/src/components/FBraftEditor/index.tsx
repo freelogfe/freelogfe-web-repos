@@ -3,16 +3,19 @@ import styles from './index.less';
 import BraftEditor, {BraftEditorProps, EditorState} from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import {uploadImage, UploadImageParamsType} from "@/services/storages";
+import {connect} from "dva";
+import {ConnectState, GlobalModelState} from "@/models/connect";
 
 interface FBraftEditorProps extends BraftEditorProps {
-
+  global: GlobalModelState;
 }
 
-export default function (props: FBraftEditorProps) {
+function FBraftEditor({global, ...props}: FBraftEditorProps) {
 
   return (
     <BraftEditor
       {...props}
+      language={global.locale === 'en-US' ? 'en' : 'zh'}
       className={styles.styles}
       controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}
       media={{
@@ -54,3 +57,8 @@ export default function (props: FBraftEditorProps) {
     />
   );
 }
+
+
+export default connect(({global}: ConnectState) => ({
+  global: global,
+}))(FBraftEditor);

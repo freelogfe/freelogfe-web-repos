@@ -10,11 +10,12 @@ import * as CryptoJS from 'crypto-js';
 import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, uploadFile} from "@/services/storages";
+import {i18nMessage} from "@/utils/i18n";
 
 const errorTexts = {
-  duplicated: '该资源已存在，不能重复创建，请重新选择。',
-  size: '文件大小不能超过50MB，请重新选择。',
-  resourceType: '所选文件格式和资源类型不匹配，请重新选择。',
+  duplicated: i18nMessage('resource_exist'),
+  size: i18nMessage('limit_on_file_size'),
+  resourceType: i18nMessage('file_format_incorrect'),
 };
 
 export interface FSelectObject {
@@ -104,21 +105,21 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
 
           {isChecking
             ? (<Space size={50} className={styles.checking}>
-              <span>校验中<LoadingOutlined style={{paddingLeft: 10}}/></span>
+              <span>{i18nMessage('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
               <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
             </Space>)
             : <Space size={30}>
               <FNormalButton
                 theme={'weaken'}
                 onClick={() => setModalVisible(true)}
-              >从存储空间选择</FNormalButton>
+              >{i18nMessage('choose_from_storage')}</FNormalButton>
               <FUpload
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
                 <FNormalButton
                   theme={'weaken'}
-                >本地上传</FNormalButton>
+                >{i18nMessage('upload_from_local')}</FNormalButton>
               </FUpload>
             </Space>}
         </div>)

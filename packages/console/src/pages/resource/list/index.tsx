@@ -5,15 +5,16 @@ import {router, withRouter} from 'umi';
 import Resources from "./Resources";
 import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
+import {i18nMessage} from "@/utils/i18n";
 
 const navs = [
   {
     value: '1',
-    text: '我的资源',
+    text: i18nMessage('my_resources'),
   },
   {
     value: '2',
-    text: '我的收藏',
+    text: i18nMessage('my_collections'),
   },
 ];
 

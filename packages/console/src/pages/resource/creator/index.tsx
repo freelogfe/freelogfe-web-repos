@@ -17,6 +17,7 @@ import {
   ChangeAction,
 } from '@/models/resourceCreatorPage';
 import FAutoComplete from "@/components/FAutoComplete";
+import {i18nMessage} from "@/utils/i18n";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -48,7 +49,7 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
       onClickCreate={onClickCreate}
     />}>
       <div className={styles.workspace}>
-        <FEditorCard title={'资源名称'} dot={true}>
+        <FEditorCard title={i18nMessage('resource_name')} dot={true}>
           <div className={styles.resourceName}>
             <FContentText text={`${user.info?.username} /`}/>
             &nbsp;
@@ -60,13 +61,13 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
                 nameErrorText: '',
               })}
               className={styles.FInput}
-              placeholder={'输入资源名称'}
+              placeholder={i18nMessage('hint_enter_resource_name')}
               suffix={<span className={styles.FInputWordCount}>{resource.name.length}</span>}
             />
           </div>
         </FEditorCard>
 
-        <FEditorCard title={'资源类型'} dot={true}>
+        <FEditorCard title={i18nMessage('resource_type')} dot={true}>
           <FAutoComplete
             errorText={resource.resourceTypeErrorText}
             value={resource.resourceType}
@@ -75,21 +76,22 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
               resourceTypeErrorText: '',
             })}
             className={styles.FSelect}
-            placeholder={'资源类型'}
+            placeholder={i18nMessage('hint_choose_resource_type')}
             options={resourceTypes}
           />
         </FEditorCard>
 
-        <FEditorCard title={'资源简介'}>
+        <FEditorCard title={i18nMessage('resource_short_description')}>
           <FIntroductionEditor
             value={resource.introduction}
             onChange={(e) => onChange({
               introduction: e.target.value
             })}
+            placeholder={i18nMessage('hint_enter_resource_short_description')}
           />
         </FEditorCard>
 
-        <FEditorCard title={'资源封面'}>
+        <FEditorCard title={i18nMessage('resource_image')}>
           <FUploadResourceCover
             value={resource.cover}
             onChange={(value) => onChange({
@@ -98,7 +100,7 @@ function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
           />
         </FEditorCard>
 
-        <FEditorCard title={'资源标签'}>
+        <FEditorCard title={i18nMessage('resource_tag')}>
           <FLabelEditor
             values={resource.labels}
             onChange={(value) => onChange({
@@ -118,7 +120,7 @@ interface HeaderProps {
 
 function Header({onClickCreate, disabled = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={'创建资源'} type={'h2'}/>
+    <FTitleText text={i18nMessage('create_resource')} type={'h2'}/>
 
     <Space size={30}>
       {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}
@@ -126,7 +128,7 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
         onClick={onClickCreate}
         style={{width: 108}}
         disabled={disabled}
-      >创建</FNormalButton>
+      >{i18nMessage('create')}</FNormalButton>
     </Space>
   </div>);
 }

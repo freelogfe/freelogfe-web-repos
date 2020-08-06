@@ -8,6 +8,7 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FContentText} from "@/components/FText";
 import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
+import {i18nMessage} from "@/utils/i18n";
 
 type Data = Readonly<{
   key: string;
@@ -61,11 +62,11 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
         <Space size={80}>
           <Space size={10}>
             <FCircleButton onClick={onAdd} theme="weaken"/>
-            <FContentText text={'添加'}/>
+            <FContentText text={i18nMessage('create_property')}/>
           </Space>
           <Space size={10}>
             <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
-            <FContentText text={'从上一版本导入'}/>
+            <FContentText text={i18nMessage('import_from_previous_version')}/>
           </Space>
         </Space>
 
@@ -121,11 +122,11 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
     extra={stubborn || (<a
       onClick={() => onDelete && onDelete()}
       className={styles.delete}
-    >删除</a>)}
+    >{i18nMessage('remove')}</a>)}
     className={styles.FHorn}>
 
     <div className={styles.row}>
-      <Field title={'key'} dot={true}>
+      <Field title={i18nMessage('key')} dot={true}>
         <FInput
           value={data.key}
           onChange={(e) => onChangeData({key: e.target.value})}
@@ -134,7 +135,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       </Field>
       <Field
         status={stubborn ? (editing === 'value' ? 'editing' : 'editable') : 'normal'}
-        title={'value'}
+        title={i18nMessage('value')}
         dot={true}
         onClickEdit={() => setEditing('value')}
         onClickCancel={() => setEditing('')}
@@ -153,7 +154,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       </Field>
       <Field
         status={stubborn ? (editing === 'remark' ? 'editing' : 'editable') : 'normal'}
-        title={'属性说明'}
+        title={i18nMessage('property_remark')}
         onClickEdit={() => setEditing('remark')}
         onClickCancel={() => setEditing('')}
         onClickConfirm={() => onSave({description: descriptionText})}
@@ -169,7 +170,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
             disabled={stubborn}
           />)}
       </Field>
-      <Field title={'允许展品自定义'}>
+      <Field title={i18nMessage('support_customization')}>
         <Switch
           checked={data.allowCustom}
           onChange={(value) => onChangeData({allowCustom: value})}
@@ -183,18 +184,21 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
 
     {
       data.allowCustom && (<div className={styles.row}>
-        <Field className={styles.FSelect} title={'自定义方式'}>
+        <Field className={styles.FSelect} title={i18nMessage('value_input_mode')}>
           <FSelect
             value={data.custom}
             onChange={(value) => onChangeData({custom: value})}
             disabled={stubborn}
             className={styles.FSelect}
-            dataSource={[{value: 'input', title: '输入框'}, {value: 'select', title: '下拉框'}]}
+            dataSource={[
+              {value: 'input', title: i18nMessage('textfield')},
+              {value: 'select', title: i18nMessage('dropdownlist')},
+            ]}
             placeholder={'请选择'}
           />
         </Field>
         {
-          data.custom === 'select' && (<Field title={'自定义选项'} className={styles.customOptions}>
+          data.custom === 'select' && (<Field title={i18nMessage('value_options')} className={styles.customOptions}>
             <FInput
               value={data.customOption}
               onChange={(e) => onChangeData({customOption: e.target.value})}
@@ -243,8 +247,8 @@ function Field({status = 'normal', className, dot = false, title, children, onCl
         {
           status === 'editing' && (
             <Space size={10}>
-              <FTextButton onClick={onClickCancel}>取消</FTextButton>
-              <FTextButton onClick={onClickConfirm} theme="primary">保存</FTextButton>
+              <FTextButton onClick={onClickCancel}>{i18nMessage('cancel')}</FTextButton>
+              <FTextButton onClick={onClickConfirm} theme="primary">{i18nMessage('save')}</FTextButton>
             </Space>)
         }
       </>}>

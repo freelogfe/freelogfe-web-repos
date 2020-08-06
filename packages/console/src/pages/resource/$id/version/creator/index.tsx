@@ -21,6 +21,7 @@ import {
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {withRouter} from "umi";
+import {i18nMessage} from "@/utils/i18n";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -61,7 +62,7 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
       onClickCache={onClickCache}
       disabledCreate={!!version.versionErrorText || !!version.resourceObjectErrorText}
     />}>
-      <FEditorCard dot={true} title={'版本号'}>
+      <FEditorCard dot={true} title={i18nMessage('version_number')}>
         <FInput
           value={version.version}
           onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
@@ -70,7 +71,7 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         />
       </FEditorCard>
 
-      <FEditorCard dot={true} title={'对象'}>
+      <FEditorCard dot={true} title={i18nMessage('release_object')}>
         <FSelectObject
           resourceType={resource.info?.resourceType || ''}
           resourceObject={version.resourceObject}
@@ -80,11 +81,11 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         />
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'依赖'}>
+      <FEditorCard dot={false} title={i18nMessage('rely')}>
         <FDepPanel/>
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'自定义属性'}>
+      <FEditorCard dot={false} title={i18nMessage('object_property')}>
         <FCustomProperties
           stubborn={false}
           dataSource={version.properties}
@@ -92,7 +93,7 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
         />
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'版本描述'}>
+      <FEditorCard dot={false} title={i18nMessage('version_description')}>
         <FBraftEditor
           value={version.description}
           onChange={(value) => onChange({description: value})}
@@ -114,15 +115,15 @@ interface HeaderProps {
 
 function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={'创建版本'} type={'h2'}/>
+    <FTitleText text={i18nMessage('create_new_version')} type={'h2'}/>
 
     <Space size={30}>
-      <FTextButton onClick={onClickCache}>暂存草稿</FTextButton>
+      <FTextButton onClick={onClickCache}>{i18nMessage('save_as_draft')}</FTextButton>
       <FNormalButton
         style={{width: 108}}
         onClick={onClickCreate}
         disabled={disabledCreate}
-      >创建</FNormalButton>
+      >{i18nMessage('release_to_market')}</FNormalButton>
     </Space>
   </div>);
 }

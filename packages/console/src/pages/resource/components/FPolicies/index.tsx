@@ -11,6 +11,7 @@ import {PlusOutlined} from '@ant-design/icons';
 
 
 import styles from './index.less';
+import {i18nMessage} from "@/utils/i18n";
 
 interface Policy {
   id: string | number;
@@ -70,9 +71,9 @@ export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPolici
   return (<div className={styles.FPoliciesStyles}>
     {dataSource?.length === 0
       ? (<div className={styles.empty}>
-        <FTipText type="secondary" text={'未添加策略的资源不会出现在资源市场中'}/>
+        <FTipText type="secondary" text={i18nMessage('hint_add_authorization_plan')}/>
         <div style={{height: 20}}/>
-        <FNormalButton onClick={openNewVisible}>立即添加策略</FNormalButton>
+        <FNormalButton onClick={openNewVisible}>{i18nMessage('add_authorization_plan')}</FNormalButton>
       </div>)
       : (<div className={styles.policies}>
         {
@@ -147,7 +148,7 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
           }
         }}
         text={<StatusLabel status={'executing'}/>}
-        options={[{value: 'executing', text: '启用'}, {value: 'stopped', text: '停用'}]}
+        options={[{value: 'executing', text: i18nMessage('enabled')}, {value: 'stopped', text: i18nMessage('disabled')}]}
       />
     </div>
     <div style={{height: 5}}/>

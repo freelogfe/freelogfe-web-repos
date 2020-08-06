@@ -1,27 +1,27 @@
 import React, {ChangeEvent, ChangeEventHandler} from 'react';
 import styles from './index.less';
 import {Layout, Dropdown, Affix} from 'antd';
-import {DownOutlined} from '@ant-design/icons';
 import FMenu from '@/components/FMenu';
-import avatarSrc from '../../assets/avatar.png';
+// import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {router, withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState} from '@/models/connect';
+import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState, UserModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
 import FLayoutFooter from "@/layouts/FLayoutFooter";
-import {parse} from "path-to-regexp";
 import {setLocale} from 'umi-plugin-react/locale';
-import {
-  formatDate,
-  formatTime,
-  formatRelative,
-  formatNumber,
-  formatPlural,
-  formatMessage,
-  formatHTMLMessage
-} from 'umi-plugin-react/locale';
+import {FTitleText, FContentText} from '@/components/FText';
+import {i18nMessage} from "@/utils/i18n";
+// import {
+//   formatDate,
+//   formatTime,
+//   formatRelative,
+//   formatNumber,
+//   formatPlural,
+//   formatMessage,
+//   formatHTMLMessage
+// } from 'umi-plugin-react/locale';
 
 const discoverOptions = [
   {
@@ -62,9 +62,10 @@ interface FLayoutProps extends RouteComponentProps {
   dispatch: Dispatch;
   global: GlobalSearchingModelState;
   routerHistories: RouterHistoriesModelState;
+  user: UserModelState,
 }
 
-function FLayout({children, dispatch, global, routerHistories, ...props}: FLayoutProps) {
+function FLayout({children, dispatch, global, routerHistories, user, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
   function onDiscoverClick(value: string) {
@@ -110,18 +111,19 @@ function FLayout({children, dispatch, global, routerHistories, ...props}: FLayou
               options={discoverOptions}
             />}>
               <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>
-                {formatMessage({id: 'faxian'})}
+                {i18nMessage('explorer')}
               </a>
             </Dropdown>
-            <a className={styles.Menu}>存储空间</a>
+            <a className={styles.Menu}>{i18nMessage('storage')}</a>
             <Dropdown overlay={<FMenu
               onClick={onClickResource}
               options={resourcesOptions}
             />}>
-              <a onClick={() => onClickResource('1')} className={styles.Menu}>资源管理</a>
+              <a onClick={() => onClickResource('1')}
+                 className={styles.Menu}>{i18nMessage('resource_manage')}</a>
             </Dropdown>
-            <a className={styles.Menu}>节点管理</a>
-            <a className={styles.Menu}>合约管理</a>
+            <a className={styles.Menu}>{i18nMessage('node_manage')}</a>
+            <a className={styles.Menu}>{i18nMessage('contract_manage')}</a>
           </div>
         </div>
         <div className={styles.headerRight}>
@@ -148,9 +150,21 @@ function FLayout({children, dispatch, global, routerHistories, ...props}: FLayou
             </a>
           </Dropdown>
 
-          <Dropdown overlay={<div></div>}>
+          <Dropdown overlay={<div className={styles.userPanel}>
+            <div className={styles.userPanelHeader}>
+              <img src={user.info?.headImage} alt="headImage"/>
+              <div style={{height: 10}}/>
+              <FTitleText type="h4" text={user.info?.username}/>
+              <div style={{height: 8}}/>
+              <FContentText text={user.info?.mobile || user.info?.email}/>
+            </div>
+            <div className={styles.userPanelMenu}>
+              <a>个人中心</a>
+              <a>登出</a>
+            </div>
+          </div>}>
             <a className={styles.avatar}>
-              <img src={avatarSrc} alt={'avatar'}/>
+              <img src={user.info?.headImage} alt={'avatar'}/>
             </a>
           </Dropdown>
         </div>
@@ -159,14 +173,17 @@ function FLayout({children, dispatch, global, routerHistories, ...props}: FLayou
       {children}
 
       <div style={{height: 100}}/>
+
       <FLayoutFooter/>
+
     </Layout>
   );
 }
 
-export default withRouter(connect(({globalSearching, routerHistories}: ConnectState) => ({
+export default withRouter(connect(({globalSearching, routerHistories, user}: ConnectState) => ({
   global: globalSearching,
   routerHistories: routerHistories,
+  user: user,
 }))(FLayout));
 
 // parse()

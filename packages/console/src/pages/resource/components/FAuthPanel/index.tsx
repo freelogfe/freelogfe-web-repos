@@ -4,6 +4,7 @@ import {FContentText} from '@/components/FText';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
+import {i18nMessage} from "@/utils/i18n";
 
 export interface FAuthPanelProps {
   dataSource: {
@@ -64,12 +65,12 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
     </div>
     <div className={styles.DepPanelContent}>
       <div>
-        <FContentText type="additional2" text={'可复用的合约'}/>
+        <FContentText type="additional2" text={i18nMessage('used_contract')}/>
         <div style={{height: 5}}/>
         {activeResource && <Contracts dataSource={activeResource.contracts}/>}
 
         <div style={{height: 20}}/>
-        <FContentText type="additional2" text={'可签约的合约'}/>
+        <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
         <div style={{height: 5}}/>
         {activeResource && <Policies dataSource={activeResource.policies}/>}
       </div>

@@ -5,6 +5,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {DepResources, OnChangeDependenciesByIDAction} from "@/models/resourceVersionCreatorPage";
 import {InfoCircleFilled} from '@ant-design/icons';
+import {i18nMessage} from "@/utils/i18n";
 
 interface IsUpthrowProps {
   dispatch: Dispatch;
@@ -33,7 +34,7 @@ function IsUpthrow({creator, dispatch}: IsUpthrowProps) {
         checked={resource.upthrow}
         onClick={() => onChangeIsUpthrow(true)}
       />
-      <span style={{color: '#666'}}>上抛</span>
+      <span style={{color: '#666'}}>{i18nMessage('info_upcast')}</span>
       <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
     </div>
     <div style={{height: 18}}/>
@@ -43,7 +44,7 @@ function IsUpthrow({creator, dispatch}: IsUpthrowProps) {
         checked={!resource.upthrow}
         onClick={() => onChangeIsUpthrow(false)}
       />
-      <span style={{color: '#666'}}>签约</span>
+      <span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>
       <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
     </div>
   </div>);

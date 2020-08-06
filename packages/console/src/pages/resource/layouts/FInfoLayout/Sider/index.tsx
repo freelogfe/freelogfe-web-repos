@@ -10,6 +10,7 @@ import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
 import {FetchDraftAction} from "@/models/resourceVersionCreatorPage";
+import {i18nMessage} from "@/utils/i18n";
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -66,17 +67,17 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
           <a
             className={match.path === '/resource/:id/info' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/info`)}
-          >资源信息</a>
+          >{i18nMessage('resource_information')}</a>
         </div>
         <div className={styles.radio}>
           <a
             className={match.path === '/resource/:id/auth' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/auth`)}
-          >授权信息</a>
+          >{i18nMessage('authorization_infomation')}</a>
         </div>
 
         <div className={styles.radio}>
-          <a>版本列表</a>
+          <a>{i18nMessage('verions')}</a>
           <FTextButton onClick={gotoCreator}><i
             className="freelog fl-icon-add"/></FTextButton>
         </div>
@@ -86,7 +87,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
             match.path === '/resource/:id/version/creator'
               ? (
                 <div className={styles.radio + ' ' + styles.smallVersion}>
-                  <a className={styles.activatedRadio}>正在创建版本</a>
+                  <a className={styles.activatedRadio}>{i18nMessage('unamed_version')}</a>
                 </div>)
               : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
                 <a onClick={gotoCreator}>{draftData.version || '未输入版本号'}（草稿）</a>

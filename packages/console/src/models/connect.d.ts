@@ -11,6 +11,7 @@ import {ResourceAuthPageModelState} from './resourceAuthPage';
 import {ResourceInfoModelState} from './resourceInfo';
 import {RouterHistoriesModelState} from './routerHistories';
 import {UserModelState} from './user';
+import {GlobalModelState} from './global';
 
 export {
   RouterHistoriesModelState,
@@ -25,6 +26,7 @@ export {
   ResourceAuthPageModelState,
   ResourceInfoModelState,
   UserModelState,
+  GlobalModelState,
 };
 
 export interface ConnectState {
@@ -40,4 +42,5 @@ export interface ConnectState {
   resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState;
   user: UserModelState,
+  global: GlobalModelState,
 }

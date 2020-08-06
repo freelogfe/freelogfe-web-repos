@@ -17,10 +17,11 @@ import {
 } from "@/models/connect";
 import {ChangeContractsAuthorizedAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
 import {withRouter} from "umi";
+import {i18nMessage} from "@/utils/i18n";
 
 const columns: any[] = [
   {
-    title: '合约名称｜合约ID',
+    title: i18nMessage('contract_name') + '｜' + i18nMessage('contract_id'),
     dataIndex: 'name',
     render: (_: any, record: any) => (<>
       <FContentText text={record.contractName}/>
@@ -29,19 +30,19 @@ const columns: any[] = [
     </>),
   },
   {
-    title: '被授权方',
+    title: i18nMessage('licensee'),
     // className: 'column-money',
     dataIndex: 'authorizedParties',
     // align: 'right',
     render: (_: any, record: any) => (<FContentText text={record.authorizedParty}/>)
   },
   {
-    title: '合约创建时间',
+    title: i18nMessage('contract_signed_time'),
     dataIndex: 'createTime',
     render: (_: any, record: any) => (<FContentText text={record.createDate}/>)
   },
   {
-    title: '合约状态',
+    title: i18nMessage('contract_state'),
     dataIndex: 'contractStatus',
     render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
   },
@@ -78,8 +79,8 @@ function Auth({dispatch, auth, match}: AuthProps) {
   }
 
   return (<FInfoLayout>
-    <FContentLayout header={<FTitleText text={'授权信息'} type={'h2'}/>}>
-      <FEditorCard title={'授权策略'}>
+    <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
+      <FEditorCard title={i18nMessage('authorization_plan')}>
         <FPolicies
           dataSource={auth.policies || []}
           onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
@@ -94,7 +95,7 @@ function Auth({dispatch, auth, match}: AuthProps) {
           })}
         />
       </FEditorCard>
-      <FEditorCard title={'被授权合约'}>
+      <FEditorCard title={i18nMessage('licencee_contract')}>
         <FAuthPanel
           dataSource={auth.contractsAuthorized}
           onChangeActivatedResource={(value) => dispatch<ChangeContractsAuthorizedAction>({
@@ -103,7 +104,7 @@ function Auth({dispatch, auth, match}: AuthProps) {
           })}
         />
       </FEditorCard>
-      <FEditorCard title={'授权合约'}>
+      <FEditorCard title={i18nMessage('authorizing_contracts')}>
         <Table
           columns={columns}
           dataSource={auth.contractsAuthorize || []}

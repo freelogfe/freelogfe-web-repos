@@ -11,6 +11,7 @@ import {
 import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import {FContentText} from "@/components/FText";
+import {i18nMessage} from "@/utils/i18n";
 
 interface PoliciesProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];
@@ -47,7 +48,7 @@ function Policies({creator, dispatch}: PoliciesProps) {
 
   return (<>
     <div style={{height: 20}}/>
-    <FContentText type="additional2" text={'可签约的策略'}/>
+    <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
     <div style={{height: 5}}/>
     <div className={styles.styles}>
       {resource.enabledPolicies.map((i) => (

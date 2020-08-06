@@ -13,6 +13,7 @@ import UpthrowList from './UpthrowList';
 import Market from './Market';
 import {connect} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import {i18nMessage} from "@/utils/i18n";
 
 export interface FDepPanelProps {
   // dispatch: Dispatch;
@@ -30,14 +31,14 @@ function FDepPanel({creator}: FDepPanelProps) {
           onClick={() => setModalVisible(true)}
           theme="weaken"
         />
-        <FContentText text={'添加'}/>
+        <FContentText text={i18nMessage('add_rely_resource')}/>
       </Space>
       <Space size={10}>
         <FCircleButton
           theme="weaken"
           icon={<CopyOutlined/>}
         />
-        <FContentText text={'从上一版本导入'}/>
+        <FContentText text={i18nMessage('import_from_previous_version')}/>
       </Space>
     </Space>
 

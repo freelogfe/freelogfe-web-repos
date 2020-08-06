@@ -14,6 +14,7 @@ import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connec
 import FHorn from "@/pages/resource/components/FHorn";
 import {FetchDataSourceAction, UpdateDataSourceAction} from "@/models/resourceVersionEditorPage";
 import BraftEditor, {EditorState} from "braft-editor";
+import {i18nMessage} from "@/utils/i18n";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -87,7 +88,7 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
         resourceID={version.resourceID}
       />}>
 
-      <FEditorCard title={'版本描述'}>
+      <FEditorCard title={i18nMessage('version_description')}>
 
         {!version.description && !isEditing && (<Space size={10}>
           <FCircleButton
@@ -99,8 +100,8 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
 
         {isEditing
           ? (<FHorn extra={<Space size={10}>
-            <FTextButton onClick={() => setIsEditing(false)}>取消</FTextButton>
-            <FTextButton onClick={onUpdateEditorText} theme="primary">保存</FTextButton>
+            <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
+            <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
           </Space>}>
             <FBraftEditor
               value={editor}
@@ -121,10 +122,10 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
           </FHorn>))
         }
       </FEditorCard>
-      <FEditorCard title={'相关视图'}>
+      <FEditorCard title={i18nMessage('version_maps')}>
         <div className={styles.diagram}/>
       </FEditorCard>
-      {properties?.length > 0 && <FEditorCard title={'自定义属性'}>
+      {properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>
         <FCustomProperties
           dataSource={version.properties}
           stubborn={true}
@@ -147,9 +148,9 @@ function Header({version, resourceID, signingDate}: HeaderProps) {
     <FTitleText text={version} type="h2"/>
     <div style={{height: 10}}/>
     <Space size={0}>
-      <FContentText type="additional2" text={'发行时间：' + signingDate}/>
+      <FContentText type="additional2" text={i18nMessage('release_date') + '：' + signingDate}/>
       <div style={{width: 40}}/>
-      <FContentText type="additional2" text={'资源ID：' + resourceID}/>
+      <FContentText type="additional2" text={i18nMessage('object_id') + '：' + resourceID}/>
       <div style={{width: 20}}/>
       <FTextButton
         theme="primary"

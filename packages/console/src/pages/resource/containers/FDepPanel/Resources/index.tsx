@@ -12,6 +12,7 @@ import {
   OnChangeDepActivatedIDAction,
   OnChangeDependenciesByIDAction
 } from '@/models/resourceVersionCreatorPage';
+import {i18nMessage} from "@/utils/i18n";
 
 export interface ResourcesProps {
   // readonly dataSource: FDepPanelProps['dataSource'];
@@ -91,7 +92,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
               <FContentText type="additional2">
                 <div>{i.resourceType} |
                   <span
-                    style={{paddingRight: 5}}>版本范围：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version.select)}</span>
+                    style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version.select)}</span>
                   <VersionPopover
                     versions={i.versions}
                     onChange={(version) => onChangeVersion(version, i.id)}
@@ -151,7 +152,11 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
 
   return (<div className={styles.children}>
     <div style={{padding: '5px 0 5px 20px'}}>
-      <FContentText type="additional2" text={'此资源存在以下基础上抛'}/>
+      <FContentText
+        type="additional2"
+        // text={'此资源存在以下基础上抛'}
+        text={i18nMessage('upcast')}
+      />
     </div>
     {
       dataSource.map((i) => (
@@ -176,7 +181,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
               {
                 i.upthrow && (<label
                   className={styles.labelError}
-                >上抛</label>)
+                >{i18nMessage('info_upcast')}</label>)
               }
             </div>
           </>

@@ -9,6 +9,7 @@ import FResourceCard from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
+import {i18nMessage} from "@/utils/i18n";
 
 
 const resourceTypeOptions = [
@@ -86,7 +87,7 @@ export default function ({
     <div className={styles.filter}>
       <div className={styles.filterLeft}>
         <div>
-          <span>类型：</span>
+          <span>{i18nMessage('resource_type')}：</span>
           <Dropdown overlay={<FMenu
             options={resourceTypeOptions}
             onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
@@ -96,7 +97,7 @@ export default function ({
           </Dropdown>
         </div>
         <div style={{marginLeft: 60}}>
-          <span>类型：</span>
+          <span>{i18nMessage('resource_state')}：</span>
           <Dropdown overlay={<FMenu
             options={resourceStatusOptions}
             onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value)}
@@ -115,11 +116,12 @@ export default function ({
           onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
           theme="dark"
           className={styles.FInput}
+          placeholder={i18nMessage('search_resource')}
         />
         {showGotoCreateBtn && <FNormalButton
           onClick={() => router.push('/resource/creator')}
           type="primary"
-        >创建资源</FNormalButton>}
+        >{i18nMessage('create_resource')}</FNormalButton>}
       </div>
     </div>
 
