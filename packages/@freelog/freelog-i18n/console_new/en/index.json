@@ -116,7 +116,7 @@
 	"property_remark": "属性说明",
 	"value": "Value",
 	"key": "Key",
-	"version_created_successfully": "Version {version number} released  ",
+	"version_created_successfully": "Version {VersionNumber} released  ",
 	"jump_to_version_edit": "After {timer} seconds, jump to check the new version detail",
 	"jump_now": "Jump now",
 	"verifying": "Verifying……",

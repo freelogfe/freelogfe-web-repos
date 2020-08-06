@@ -116,7 +116,7 @@
 	"property_remark": "属性说明",
 	"value": "属性值",
 	"key": "属性键",
-	"version_created_successfully": "版本{version number}发行成功",
+	"version_created_successfully": "版本{VersionNumber}发行成功",
 	"jump_to_version_edit": "{timer} 秒 后跳转到新版本信息页",
 	"jump_now": "立即跳转",
 	"verifying": "校验中……",
