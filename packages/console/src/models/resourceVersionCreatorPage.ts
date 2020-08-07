@@ -5,15 +5,15 @@ import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
 import {
   createVersion,
-  CreateVersionParamsType, lookDraft, LookDraftParamsType,
+  CreateVersionParamsType, lookDraft, LookDraftParamsType, resourceVersionInfo,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
-} from "@/services/resources";
-import {ConnectState, MarketPageModelState} from "@/models/connect";
-import {router} from "umi";
-import BraftEditor, {EditorState} from "braft-editor";
+} from '@/services/resources';
+import {ConnectState, MarketPageModelState} from '@/models/connect';
+import {router} from 'umi';
+import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import {FetchDataSourceAction} from "@/models/resourceInfo";
+import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 
 export type DepResources = Readonly<{
@@ -99,6 +99,10 @@ export interface SaveDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/saveDraft';
 }
 
+export interface ImportPreVersionAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/importPreVersion';
+}
+
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
   payload: Partial<ResourceVersionCreatorPageModelState>;
@@ -108,7 +112,7 @@ export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
-    // fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void; ;
+    importPreVersion: (action: ImportPreVersionAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
@@ -235,6 +239,32 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
+    * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
+      const {resourceId, latestVersion} = yield select(({resourceInfo}: ConnectState) => ({
+        resourceId: resourceInfo.info?.resourceId,
+        latestVersion: resourceInfo.info?.latestVersion,
+      }));
+      const {data} = yield call(resourceVersionInfo, {
+        version: latestVersion,
+        resourceId: resourceId,
+      });
+      // console.log(data.customPropertyDescriptors, 'datadatadata1423234');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          properties: data.customPropertyDescriptors.map((i: any) => ({
+            key: i.key,
+            value: i.defaultValue,
+            description: i.remark,
+            allowCustom: i.type !== 'readonlyText',
+            // custom: 'input' | 'select';
+            // i.custom === 'input' ? 'editableText' : 'select'
+            custom: i.type === 'editableText' ? 'input' : 'select',
+            customOption: i.candidateItems.join(','),
+          })),
+        },
+      })
+    }
   },
 
   reducers: {

@@ -22,11 +22,12 @@ type Data = Readonly<{
 export type FCustomPropertiesProps = Readonly<{
   stubborn?: boolean;
   dataSource: Data[];
-  onChange?: (dataSource: FCustomPropertiesProps['dataSource']) => void;
-  onSave?: (dataSource: FCustomPropertiesProps['dataSource']) => void;
+  onChange?(dataSource: FCustomPropertiesProps['dataSource']): void;
+  onSave?(dataSource: FCustomPropertiesProps['dataSource']): void;
+  onImport?(): void;
 }>;
 
-export default function ({stubborn = false, dataSource, onChange, onSave}: FCustomPropertiesProps) {
+export default function ({stubborn = false, dataSource, onChange, onImport, onSave}: FCustomPropertiesProps) {
   function onChangeProperty(value: Data, index: number) {
     return onChange && onChange(dataSource.map((i, j) => {
       if (index !== j) {
@@ -65,7 +66,11 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
             <FContentText text={i18nMessage('create_property')}/>
           </Space>
           <Space size={10}>
-            <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
+            <FCircleButton
+              theme="weaken"
+              icon={<CopyOutlined/>}
+              onClick={() => onImport && onImport()}
+            />
             <FContentText text={i18nMessage('import_from_previous_version')}/>
           </Space>
         </Space>

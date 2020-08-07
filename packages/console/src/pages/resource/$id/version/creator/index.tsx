@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
@@ -9,7 +8,6 @@ import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
-
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -17,7 +15,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
   ChangeAction,
-  CreateVersionAction,
+  CreateVersionAction, ImportPreVersionAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {withRouter} from "umi";
@@ -90,6 +88,9 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
           stubborn={false}
           dataSource={version.properties}
           onChange={(value) => onChange({properties: value})}
+          onImport={() => dispatch<ImportPreVersionAction>({
+            type: 'resourceVersionCreatorPage/importPreVersion',
+          })}
         />
       </FEditorCard>
 
