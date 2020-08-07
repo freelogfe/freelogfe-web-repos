@@ -2,6 +2,7 @@ import {IConfig} from 'umi-types';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+// import {i18nMessage} from "@/utils/i18n";
 // import { defineConfig } from 'umi';
 // import {i18nMessage} from "@/utils/i18n";
 
@@ -174,13 +175,13 @@ const config: IConfig | any = {
     },
   },
 
-  locale: {
-    default: 'zh-CN',
-    antd: false,
-    title: true,
-    baseNavigator: true,
-    baseSeparator: '-',
-  }
+  // locale: {
+  //   default: 'zh-CN',
+  //   antd: false,
+  //   title: true,
+  //   baseNavigator: true,
+  //   baseSeparator: '-',
+  // }
 };
 
 export default config;
