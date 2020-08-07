@@ -26,7 +26,6 @@ export interface ResourceAuthPageModelState {
 export interface ChangePoliciesAction {
   type: 'resourceAuthPage/changePolicies';
   payload: ResourceAuthPageModelState['policies'];
-
 }
 
 export interface ChangeContractsAuthorizedAction {
@@ -45,6 +44,11 @@ export interface UpdatePoliciesAction {
   id: string;
 }
 
+export interface ChangeAction extends AnyAction {
+  type: 'change',
+  payload: Partial<ResourceAuthPageModelState>;
+}
+
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
@@ -53,6 +57,7 @@ export interface ResourceAuthPageModelType {
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
+    change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
     changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
     changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
     changeContractsAuthorize: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizeAction>;
@@ -158,21 +163,18 @@ const Model: ResourceAuthPageModelType = {
   },
   effects: {
     * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
-      yield put({type: 'save'});
+      // yield put({type: 'save'});
     },
     * updatePolicies(action: UpdatePoliciesAction, {call, put}: EffectsCommandMap) {
       const params = {
         resourceId: action.id,
-        policyChangeInfo: {
-          [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
-            {
-              policyId: action.payload.id,
-              policyName: action.payload.title,
-              status: action.payload.status === 'stopped' ? 0 : 1,
-              policyText: action.payload.code,
-            }
-          ],
-        },
+        // [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
+        [action.payload.status ? 'updatePolicies' : 'addPolicies']: [
+          {
+            policyId: action.payload.id,
+            status: action.payload.status === 'stopped' ? 0 : 1,
+          }
+        ],
       };
       yield call(update, params);
       yield put<FetchDataSourceAction>({
@@ -182,6 +184,12 @@ const Model: ResourceAuthPageModelType = {
     },
   },
   reducers: {
+    change(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
+      };
+    },
     changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {
       return {...state, policies: action.payload};
     },

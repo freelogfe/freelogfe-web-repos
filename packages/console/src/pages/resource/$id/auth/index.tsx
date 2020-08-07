@@ -86,12 +86,17 @@ function Auth({dispatch, auth, match}: AuthProps) {
           onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
             type: 'resourceAuthPage/updatePolicies',
             id: match.params.id,
-            payload: value,
+            payload: {
+              id: value.id,
+              status: value.status,
+            },
           })}
           onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
             type: 'resourceAuthPage/updatePolicies',
             id: match.params.id,
-            payload: value,
+            payload: {
+              id: value.id,
+            },
           })}
         />
       </FEditorCard>

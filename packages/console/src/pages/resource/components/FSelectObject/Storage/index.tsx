@@ -37,23 +37,23 @@ export default function ({onSelect}: StorageProps) {
   React.useEffect(() => {
     handleBucketOptions();
     setResourceObjects([
-      {
-        id: 'q12342',
-        name: 'picture.png',
-        size: 1234190,
-        path: 'buckt1/1234.png',
-        // time: '2019-12-22 12:22',
-        time: moment().format('YYYY-MM-DD HH:mm'),
-        type: 'image'
-      },
-      {
-        id: 'q12343',
-        name: 'picture2.png',
-        size: 634532,
-        path: 'buckt2/1234.png',
-        time: moment().format('YYYY-MM-DD HH:mm'),
-        type: 'image'
-      },
+      // {
+      //   id: 'q12342',
+      //   name: 'picture.png',
+      //   size: 1234190,
+      //   path: 'buckt1/1234.png',
+      //   // time: '2019-12-22 12:22',
+      //   time: moment().format('YYYY-MM-DD HH:mm'),
+      //   type: 'image'
+      // },
+      // {
+      //   id: 'q12343',
+      //   name: 'picture2.png',
+      //   size: 634532,
+      //   path: 'buckt2/1234.png',
+      //   time: moment().format('YYYY-MM-DD HH:mm'),
+      //   type: 'image'
+      // },
     ])
   }, []);
 
