@@ -133,6 +133,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
     <div className={styles.row}>
       <Field title={i18nMessage('key')} dot={true}>
         <FInput
+          wrapClassName={styles.FInputWrap}
           value={data.key}
           onChange={(e) => onChangeData({key: e.target.value})}
           disabled={stubborn}
@@ -148,10 +149,12 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       >
         {stubborn && editing === 'value'
           ? <FInput
+            wrapClassName={styles.FInputWrap}
             value={valueText}
             onChange={(e) => setValueText(e.target.value)}
           />
           : <FInput
+            wrapClassName={styles.FInputWrap}
             value={data.value}
             onChange={(e) => onChangeData({value: e.target.value})}
             disabled={stubborn}
@@ -166,10 +169,12 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       >
         {stubborn && editing === 'remark'
           ? <FInput
+            wrapClassName={styles.FInputWrap}
             value={descriptionText}
             onChange={(e) => setDescriptionText(e.target.value)}
           />
           : (<FInput
+            wrapClassName={styles.FInputWrap}
             value={data.description}
             onChange={(e) => onChangeData({description: e.target.value})}
             disabled={stubborn}
@@ -205,6 +210,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
         {
           data.custom === 'select' && (<Field title={i18nMessage('value_options')} className={styles.customOptions}>
             <FInput
+              // wrapClassName={}
               value={data.customOption}
               onChange={(e) => onChangeData({customOption: e.target.value})}
               disabled={stubborn}
@@ -234,7 +240,7 @@ interface FieldProps {
 }
 
 function Field({status = 'normal', className, dot = false, title, children, onClickEdit, onClickCancel, onClickConfirm}: FieldProps) {
-  return (<div className={styles.Field + ' ' + className}>
+  return (<div className={styles.Field + ' ' + (className || '')}>
       <div className={styles.FieldTitle}>
         {dot && <i className={styles.dot}/>}
         <span>{title}</span>

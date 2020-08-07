@@ -33,10 +33,6 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
   const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
 
-  // React.useEffect(() => {
-  //   handleData();
-  // }, [handleData, match.params.version]);
-
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(version.description));
   }, [version.description]);
@@ -44,16 +40,6 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
   React.useEffect(() => {
     setProperties(version.properties);
   }, [version.properties]);
-
-  // function handleData() {
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceVersionEditorPage/fetchDataSource',
-  //     payload: {
-  //       resourceId: match.params.id,
-  //       version: match.params.version,
-  //     }
-  //   });
-  // }
 
   function onUpdateEditorText() {
     dispatch<UpdateDataSourceAction>({
@@ -152,9 +138,7 @@ function Header({version, resourceID, signingDate}: HeaderProps) {
       <div style={{width: 40}}/>
       <FContentText type="additional2" text={i18nMessage('object_id') + '：' + resourceID}/>
       <div style={{width: 20}}/>
-      <FTextButton
-        theme="primary"
-      >
+      <FTextButton theme="primary">
         <DownloadOutlined style={{fontSize: 16, fontWeight: 600}}/>
       </FTextButton>
     </Space>

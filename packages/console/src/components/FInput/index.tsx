@@ -10,6 +10,7 @@ interface FInputProps extends InputProps {
   value?: string;
   debounce?: number;
   errorText?: string;
+  wrapClassName?: string;
 
   onDebounceChange?(value: string): void;
 }
@@ -22,6 +23,7 @@ export default function ({
                            onChange,
                            onDebounceChange,
                            errorText,
+                           wrapClassName,
                            ...props
                          }: FInputProps) {
 
@@ -49,7 +51,7 @@ export default function ({
   }
 
   if (theme === 'dark') {
-    return (<div className={styles.wrap}>
+    return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
       <Input
         value={debounce ? inputText : value}
         onChange={onInputChange}
@@ -63,7 +65,7 @@ export default function ({
       }
     </div>);
   }
-  return (<div className={styles.wrap}>
+  return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
     <Input
       value={debounce ? inputText : value}
       onChange={onInputChange}
