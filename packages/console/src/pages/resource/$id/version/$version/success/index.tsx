@@ -6,6 +6,7 @@ import {FTextButton} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import {i18nMessage} from "@/utils/i18n";
+import {useInterval} from 'ahooks';
 
 interface SuccessProps {
   match: {
@@ -18,29 +19,39 @@ interface SuccessProps {
   }
 }
 
-let clear: any = null;
-let timeV: number = 3;
+// let clear: any = null;
+// let timeV: number = 3;
 
 function Success({match}: SuccessProps) {
-  // console.log(match, 'SSSSSSAAAAA');
-  const [time, setTime] = React.useState<number>(timeV);
 
-  React.useEffect(() => {
-    clear = setInterval(() => {
-      console.log(time, 'EEEEE');
-      timeV--;
-      setTime(timeV);
-      if (timeV === 0) {
-        goto();
-      }
-
-    }, 1000);
-    return function () {
-      clearInterval(clear);
-      clear = null;
-      timeV = 3;
+  const [count, setCount] = React.useState<number>(3);
+  useInterval(() => {
+    const c = count - 1;
+    setCount(c);
+    if (c === 0) {
+      goto();
     }
-  }, [goto, time]);
+  }, 1000);
+
+  // console.log(match, 'SSSSSSAAAAA');
+  // const [time, setTime] = React.useState<number>(timeV);
+
+  // React.useEffect(() => {
+  //   clear = setInterval(() => {
+  //     console.log(time, 'EEEEE');
+  //     timeV--;
+  //     setTime(timeV);
+  //     if (timeV === 0) {
+  //       goto();
+  //     }
+  //
+  //   }, 1000);
+  //   return function () {
+  //     clearInterval(clear);
+  //     clear = null;
+  //     timeV = 3;
+  //   }
+  // }, [goto, time]);
 
   function goto() {
 
@@ -57,7 +68,7 @@ function Success({match}: SuccessProps) {
                 text={i18nMessage('version_created_successfully', {VersionNumber: match.params.version})}/>
       <div style={{height: 40}}/>
       <div className={styles.goto}>
-        <FTipText type={'modal'} text={i18nMessage('jump_to_version_edit', {timer: time})}/>
+        <FTipText type={'modal'} text={i18nMessage('jump_to_version_edit', {timer: count})}/>
         <div style={{width: 10}}/>
         <FTextButton
           theme={'primary'}
