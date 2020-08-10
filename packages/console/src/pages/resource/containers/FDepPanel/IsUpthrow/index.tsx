@@ -34,7 +34,8 @@ function IsUpthrow({creator, dispatch}: IsUpthrowProps) {
         checked={resource.upthrow}
         onClick={() => onChangeIsUpthrow(true)}
       />
-      <span style={{color: '#666'}}>{i18nMessage('info_upcast')}</span>
+      {/*<span style={{color: '#666'}}>{i18nMessage('info_upcast')}</span>*/}
+      <span style={{color: '#666'}}>上抛</span>
       <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
     </div>
     <div style={{height: 18}}/>
@@ -44,7 +45,8 @@ function IsUpthrow({creator, dispatch}: IsUpthrowProps) {
         checked={!resource.upthrow}
         onClick={() => onChangeIsUpthrow(false)}
       />
-      <span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>
+      {/*<span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>*/}
+      <span style={{color: '#666'}}>签约</span>
       <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
     </div>
   </div>);

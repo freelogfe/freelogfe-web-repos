@@ -153,6 +153,7 @@ const Model: ResourceVersionCreatorModelType = {
         latestVersion: resourceInfo.info?.latestVersion,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id,
+        filename: resourceVersionCreatorPage.resourceObject?.name,
         resolveResources: [],
         customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
           key: i.key,

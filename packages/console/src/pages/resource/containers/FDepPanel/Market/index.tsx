@@ -15,6 +15,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {list} from '@/services/resources';
 import moment from 'moment';
+import {resourceList} from "@/services/collections";
 
 interface MarketProps {
   dispatch: Dispatch;
@@ -41,7 +42,12 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
 
   async function handleDataSource() {
     const params = {};
-    const {data} = await list(params);
+    // const {data} = await list(params);
+    const {data} = await list({isSelf: 1});
+    // const {data: data2} = await resourceList({});
+    console.log(data, 'data');
+    // console.log(data1, 'data1');
+    // console.log(data2, 'data2');
     const resources = data.dataList.map((i: any) => ({
       id: i.resourceId,
       title: i.resourceName,
@@ -78,6 +84,10 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
     }));
     setResourceObjects(resources);
   }
+
+  // async function f() {
+  //
+  // }
 
   function onSelect(i: DepResources[number]) {
     dispatch<ChangeAction>({
@@ -128,7 +138,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
             <FNormalButton
               theme="weaken"
               onClick={() => onSelect(i)}
-              disabled={depRelationship.map((j) => j.id).includes(i.id) || i.status === 0}
+              disabled={depRelationship.map((j) => j.id).includes(i.id)}
             >选择</FNormalButton>
           </div>
         ))
