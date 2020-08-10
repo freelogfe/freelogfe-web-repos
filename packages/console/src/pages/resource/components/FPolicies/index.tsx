@@ -4,8 +4,6 @@ import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {FNormalButton, FTextButton, FCircleButton} from '@/components/FButton';
 import FDropdown from '@/components/FDropdown';
 import FModal from '@/components/FModal';
-import FInput from '@/components/FInput';
-import FCodemirror from '@/components/FCodemirror';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {PlusOutlined} from '@ant-design/icons';
 import styles from './index.less';
@@ -14,7 +12,7 @@ import {Drawer} from "antd";
 import Pool from './Pool';
 
 interface Policy {
-  id: string | number;
+  id: string;
   title: string;
   status: 'executing' | 'stopped';
   code: string;
@@ -24,40 +22,40 @@ interface FPoliciesProps {
   dataSource?: Policy[];
   // onChange?: (value: Policy[]) => void;
   onAddPolicy?: ({id, title, code}: Policy) => void;
-  onChangeStatus?: ({id, status, title}: Policy) => void;
+  onChangeStatus?: ({id, status, title}: Partial<Policy>) => void;
 }
 
 export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPoliciesProps) {
 
-  const [newVisible, setNewVisible] = React.useState<boolean>(false);
-  const [newTitle, setNewTitle] = React.useState<string>('');
-  const [newCode, setNewCode] = React.useState<string>('');
+  const [drawerVisible, setDrawerVisible] = React.useState<boolean>(false);
+  // const [newTitle, setNewTitle] = React.useState<string>('');
+  // const [newCode, setNewCode] = React.useState<string>('');
   const [previewCode, setPreviewCode] = React.useState<string>('');
   const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
 
-  function onOkNewPolicy() {
-    setNewVisible(false);
-    // return onAddPolicy && onAddPolicy({
-    //   title: newTitle,
-    //   code: newCode,
-    // });
-  }
+  // function onOkNewPolicy() {
+  //   setNewVisible(false);
+  //   // return onAddPolicy && onAddPolicy({
+  //   //   title: newTitle,
+  //   //   code: newCode,
+  //   // });
+  // }
 
-  function onPolicyStatusChange(id: string | number, status: Policy['status'], title: string) {
-    // return onChangeStatus && onChangeStatus({id, status, title});
+  function onPolicyStatusChange(id: string, status: Policy['status'], title: string) {
+    return onChangeStatus && onChangeStatus({id, status, title});
   }
 
   function openNewVisible() {
-    setNewVisible(true);
+    setDrawerVisible(true);
   }
 
   function closeNewVisible() {
-    setNewVisible(false);
+    setDrawerVisible(false);
   }
 
-  function onChangeCode(value: string) {
-    setNewCode(value);
-  }
+  // function onChangeCode(value: string) {
+  //   setNewCode(value);
+  // }
 
   function openPreviewCode(code: string) {
     setPreviewCode(code);
@@ -107,38 +105,41 @@ export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPolici
         showLineNumbers={true}
       >{previewCode}</SyntaxHighlighter>
     </FModal>
-    <FModal
-      title="新建策略"
-      visible={false}
-      onCancel={closeNewVisible}
-      onOk={onOkNewPolicy}
-      width={768}
-    >
-      <FInput
-        className={styles.newTitle}
-        value={newTitle}
-        onChange={(e) => setNewTitle(e.target.value)}
-        placeholder={'请输入授权策略名称'}
-      />
-      <div style={{height: 10}}/>
-      <FCodemirror
-        value={newCode}
-        onChange={onChangeCode}
-      />
-    </FModal>
+    {/*<FModal*/}
+    {/*  title="新建策略"*/}
+    {/*  visible={false}*/}
+    {/*  onCancel={closeNewVisible}*/}
+    {/*  onOk={onOkNewPolicy}*/}
+    {/*  width={768}*/}
+    {/*>*/}
+    {/*  <FInput*/}
+    {/*    className={styles.newTitle}*/}
+    {/*    value={newTitle}*/}
+    {/*    onChange={(e) => setNewTitle(e.target.value)}*/}
+    {/*    placeholder={'请输入授权策略名称'}*/}
+    {/*  />*/}
+    {/*  <div style={{height: 10}}/>*/}
+    {/*  <FCodemirror*/}
+    {/*    value={newCode}*/}
+    {/*    onChange={onChangeCode}*/}
+    {/*  />*/}
+    {/*</FModal>*/}
     <Drawer
       title={'选择策略'}
       onClose={closeNewVisible}
-      visible={newVisible}
+      visible={drawerVisible}
       width={820}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
-      <Pool onSelect={(value) => onAddPolicy && onAddPolicy({
-        id: value.policyId,
-        title: value.policyName,
-        status: 'executing',
-        code: value.policyText,
-      })}/>
+      <Pool onSelect={(value) => {
+        onAddPolicy && onAddPolicy({
+          id: value.policyId,
+          title: value.policyName,
+          status: 'executing',
+          code: value.policyText,
+        });
+        return closeNewVisible();
+      }}/>
     </Drawer>
   </div>);
 }
@@ -161,11 +162,12 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
             return onChangeStatus && onChangeStatus(value);
           }
         }}
-        text={<StatusLabel status={'executing'}/>}
-        options={[{value: 'executing', text: i18nMessage('enabled')}, {
-          value: 'stopped',
-          text: i18nMessage('disabled')
-        }]}
+        text={<StatusLabel status={status}/>}
+        options={[
+          // {value: 'executing', text: i18nMessage('enabled')},
+          {value: 'executing', text: i18nMessage('enabled')},
+          {value: 'stopped', text: i18nMessage('disabled')},
+        ]}
       />
     </div>
     <div style={{height: 5}}/>

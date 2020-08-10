@@ -15,7 +15,7 @@ import {
   ResourceAuthPageModelState,
   ResourceInfoModelState,
 } from "@/models/connect";
-import {ChangeContractsAuthorizedAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
+import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
 import {withRouter} from "umi";
 import {i18nMessage} from "@/utils/i18n";
 
@@ -103,9 +103,9 @@ function Auth({dispatch, auth, match}: AuthProps) {
       <FEditorCard title={i18nMessage('licencee_contract')}>
         <FAuthPanel
           dataSource={auth.contractsAuthorized}
-          onChangeActivatedResource={(value) => dispatch<ChangeContractsAuthorizedAction>({
-            type: 'resourceAuthPage/changeContractsAuthorized',
-            payload: value,
+          onChangeActivatedResource={(value) => dispatch<ChangeAction>({
+            type: 'resourceAuthPage/change',
+            payload: {},
           })}
         />
       </FEditorCard>

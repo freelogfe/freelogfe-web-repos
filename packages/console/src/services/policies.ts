@@ -15,7 +15,7 @@ export function policies(params: PoliciesParamsType) {
 }
 
 // 批量获取授权策略列表
-interface PoliciesListParamsType {
+export interface PoliciesListParamsType {
   policyIds: string;
   subjectType?: number;
   userId?: number;

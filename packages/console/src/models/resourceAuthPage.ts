@@ -4,10 +4,11 @@ import {DvaReducer} from './shared';
 import {FAuthPanelProps} from "@/pages/resource/components/FAuthPanel";
 import {update, UpdateParamsType} from "@/services/resources";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
+import {policiesList, PoliciesListParamsType} from "@/services/policies";
 
 export interface ResourceAuthPageModelState {
   policies: {
-    id: string | number;
+    id: string;
     title: string;
     status: 'executing' | 'stopped';
     code: string;
@@ -23,20 +24,20 @@ export interface ResourceAuthPageModelState {
   }[] | null;
 }
 
-export interface ChangePoliciesAction {
-  type: 'resourceAuthPage/changePolicies';
-  payload: ResourceAuthPageModelState['policies'];
-}
-
-export interface ChangeContractsAuthorizedAction {
-  type: 'resourceAuthPage/changeContractsAuthorized';
-  payload: ResourceAuthPageModelState['contractsAuthorized'];
-}
-
-export interface ChangeContractsAuthorizeAction {
-  type: 'resourceAuthPage/changeContractsAuthorize';
-  payload: ResourceAuthPageModelState['contractsAuthorize'];
-}
+// export interface ChangePoliciesAction {
+//   type: 'resourceAuthPage/changePolicies';
+//   payload: ResourceAuthPageModelState['policies'];
+// }
+//
+// export interface ChangeContractsAuthorizedAction {
+//   type: 'resourceAuthPage/changeContractsAuthorized';
+//   payload: ResourceAuthPageModelState['contractsAuthorized'];
+// }
+//
+// export interface ChangeContractsAuthorizeAction {
+//   type: 'resourceAuthPage/changeContractsAuthorize';
+//   payload: ResourceAuthPageModelState['contractsAuthorize'];
+// }
 
 export interface UpdatePoliciesAction {
   type: 'resourceAuthPage/updatePolicies';
@@ -45,37 +46,30 @@ export interface UpdatePoliciesAction {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change',
+  type: 'change' | 'resourceAuthPage/change',
   payload: Partial<ResourceAuthPageModelState>;
+}
+
+export interface FetchPoliciesAction extends AnyAction {
+  type: 'resourceAuthPage/fetchPolicies',
+  payload: { policyId: string, policyName: string, status: 0 | 1 }[];
 }
 
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
-    fetchDataSource: Effect;
+    fetchPolicies: (action: FetchPoliciesAction, effects: EffectsCommandMap) => void;
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
-    changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
-    changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
-    changeContractsAuthorize: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizeAction>;
+    // changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
+    // changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
+    // changeContractsAuthorize: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizeAction>;
   };
   subscriptions: { setup: Subscription };
 }
-
-const policies: ResourceAuthPageModelState['policies'] = [1, 2, 3, 4, 5, 6].map((i) => ({
-  id: i,
-  title: '免费策略' + i,
-  status: 'executing',
-  code: 'for public:\n' +
-    '  initial:\n' +
-    '    active\n' +
-    '    recontractable\n' +
-    '    presentable\n' +
-    '    terminate',
-}));
 
 const contractsAuthorized: FAuthPanelProps['dataSource'] = [1, 2, 3, 4, 5, 6].map((i) => ({
   id: i,
@@ -162,10 +156,32 @@ const Model: ResourceAuthPageModelType = {
     contractsAuthorize: contractsAuthorize,
   },
   effects: {
-    * fetchDataSource(_: AnyAction, {call, put}: EffectsCommandMap) {
+    * fetchPolicies({payload}: FetchPoliciesAction, {call, put}: EffectsCommandMap) {
       // yield put({type: 'save'});
+      // console.log(payload, 'payload');
+      if (payload.length === 0) {
+        return;
+      }
+      const params: PoliciesListParamsType = {
+        policyIds: payload.map((i) => i.policyId).join(','),
+      };
+      const {data} = yield call(policiesList, params);
+      // console.log(data, '#EDDDDDSDF');
+      const policies: ResourceAuthPageModelState['policies'] = payload.map((i) => ({
+        id: i.policyId,
+        title: i.policyName,
+        status: i.status === 1 ? 'executing' : 'stopped',
+        code: (data.find((j: any) => j.policyId === i.policyId) || {policyText: ''}).policyText,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policies: policies,
+        }
+      });
     },
     * updatePolicies(action: UpdatePoliciesAction, {call, put}: EffectsCommandMap) {
+      console.log(action.payload, 'action.payloadaction.payload');
       const params = {
         resourceId: action.id,
         // [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
@@ -190,15 +206,15 @@ const Model: ResourceAuthPageModelType = {
         ...payload,
       };
     },
-    changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {
-      return {...state, policies: action.payload};
-    },
-    changeContractsAuthorized(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizedAction): ResourceAuthPageModelState {
-      return {...state, contractsAuthorized: action.payload};
-    },
-    changeContractsAuthorize(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizeAction): ResourceAuthPageModelState {
-      return {...state, contractsAuthorize: action.payload};
-    },
+    // changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {
+    //   return {...state, policies: action.payload};
+    // },
+    // changeContractsAuthorized(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizedAction): ResourceAuthPageModelState {
+    //   return {...state, contractsAuthorized: action.payload};
+    // },
+    // changeContractsAuthorize(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizeAction): ResourceAuthPageModelState {
+    //   return {...state, contractsAuthorize: action.payload};
+    // },
   },
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
