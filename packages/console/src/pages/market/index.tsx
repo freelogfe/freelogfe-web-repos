@@ -6,6 +6,8 @@ import {router, withRouter} from 'umi';
 import Resources from "./Resources";
 import Examples from "@/pages/market/Examples";
 import {RouteComponentProps} from "react-router";
+import {connect, Dispatch} from "dva";
+import {ChangeAction} from "@/models/global";
 
 const navs = [
   {
@@ -20,11 +22,22 @@ const navs = [
 
 
 interface MarketProps extends RouteComponentProps {
-
+  dispatch: Dispatch;
+  route: any;
 }
 
-function Market({match, history, location, ...props}: MarketProps) {
+function Market({dispatch, match, history, location, route, ...props}: MarketProps) {
+
   const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setTabValue(match.path === '/market' ? '1' : '2')
@@ -55,5 +68,5 @@ function Market({match, history, location, ...props}: MarketProps) {
 }
 
 
-export default withRouter(Market);
+export default withRouter(connect()(Market));
 

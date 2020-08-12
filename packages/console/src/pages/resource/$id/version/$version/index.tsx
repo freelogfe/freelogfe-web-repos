@@ -15,6 +15,8 @@ import FHorn from "@/pages/resource/components/FHorn";
 import {FetchDataSourceAction, UpdateDataSourceAction} from "@/models/resourceVersionEditorPage";
 import BraftEditor, {EditorState} from "braft-editor";
 import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import RouterTypes from "umi/routerTypes";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -27,11 +29,20 @@ interface VersionEditorProps {
   }
 }
 
-function VersionEditor({dispatch, version, match}: VersionEditorProps) {
+function VersionEditor({dispatch, route, version, match}: VersionEditorProps & RouterTypes) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
   const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(version.description));
@@ -130,6 +141,7 @@ interface HeaderProps {
 }
 
 function Header({version, resourceID, signingDate}: HeaderProps) {
+
   return (<div className={styles.Header}>
     <FTitleText text={version} type="h2"/>
     <div style={{height: 10}}/>

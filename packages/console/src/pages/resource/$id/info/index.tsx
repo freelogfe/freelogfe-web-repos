@@ -16,6 +16,8 @@ import {
   OnChangeInfoAction,
 } from "@/models/resourceInfoPage";
 import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import {RouterTypes} from "umi";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -23,10 +25,19 @@ interface InfoProps {
   resourceInfoPage: ResourceInfoPageModelState,
 }
 
-function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
+function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoProps & RouterTypes) {
 
   const [editorText, setEditorText] = React.useState<string>('');
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setEditorText(info?.intro || '');

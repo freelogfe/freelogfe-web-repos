@@ -13,11 +13,12 @@ import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
 import {
-  OnCreateAction,
-  ChangeAction,
+  OnCreateAction,ChangeAction,
 } from '@/models/resourceCreatorPage';
+import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from "@/components/FAutoComplete";
 import {i18nMessage} from "@/utils/i18n";
+import {RouterTypes} from "umi";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -28,7 +29,16 @@ interface ResourceCreatorProps {
 const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
 
-function ResourceCreator({dispatch, resource, user}: ResourceCreatorProps) {
+function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps & RouterTypes) {
+
+  React.useEffect(() => {
+    dispatch<GlobalChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function onClickCreate() {
     dispatch<OnCreateAction>({

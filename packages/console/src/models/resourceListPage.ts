@@ -116,7 +116,7 @@ const Model: ResourceListPageModelType = {
         title: i.resourceName,
         version: i.latestVersion,
         // policy: i.policies,
-        policy: [],
+        policy: i.policies.map((l:any) => l.policyName),
         type: i.resourceType,
         status: i.status,
       }));

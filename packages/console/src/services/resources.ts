@@ -45,6 +45,8 @@ export interface ListParamsType {
   resourceType?: string;
   isSelf?: 0 | 1;
   status?: 0 | 1 | 2;
+  startResourceId?: string;
+  isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
 }

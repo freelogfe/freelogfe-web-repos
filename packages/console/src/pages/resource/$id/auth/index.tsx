@@ -16,7 +16,8 @@ import {
   ResourceInfoModelState,
 } from "@/models/connect";
 import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
-import {withRouter} from "umi";
+import {ChangeAction as GlobalChangeAction} from '@/models/global';
+import {RouterTypes, withRouter} from "umi";
 import {i18nMessage} from "@/utils/i18n";
 
 const columns: any[] = [
@@ -59,7 +60,16 @@ interface AuthProps {
   }
 }
 
-function Auth({dispatch, auth, match}: AuthProps) {
+function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
+
+  React.useEffect(() => {
+    dispatch<GlobalChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function onAddPolicy(value: { title: string; code: string; }) {
     // console.log(value, 'valuevalue');

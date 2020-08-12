@@ -93,6 +93,7 @@ export default function ({
             {
               resource.policy.map((i: string) => <Policy key={i} text={i}/>)
             }
+            {/*<Policy text={resource.policy[0]}/>*/}
           </div>
           <a onClick={() => onClickMore && onClickMore(resource)}>{i18nMessage('more_details')}>></a>
         </div>

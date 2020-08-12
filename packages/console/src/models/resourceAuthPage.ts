@@ -5,6 +5,7 @@ import {FAuthPanelProps} from "@/pages/resource/components/FAuthPanel";
 import {update, UpdateParamsType} from "@/services/resources";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
 import {policiesList, PoliciesListParamsType} from "@/services/policies";
+import {contracts, ContractsParamsType} from "@/services/contracts";
 
 export interface ResourceAuthPageModelState {
   policies: {
@@ -24,21 +25,6 @@ export interface ResourceAuthPageModelState {
   }[] | null;
 }
 
-// export interface ChangePoliciesAction {
-//   type: 'resourceAuthPage/changePolicies';
-//   payload: ResourceAuthPageModelState['policies'];
-// }
-//
-// export interface ChangeContractsAuthorizedAction {
-//   type: 'resourceAuthPage/changeContractsAuthorized';
-//   payload: ResourceAuthPageModelState['contractsAuthorized'];
-// }
-//
-// export interface ChangeContractsAuthorizeAction {
-//   type: 'resourceAuthPage/changeContractsAuthorize';
-//   payload: ResourceAuthPageModelState['contractsAuthorize'];
-// }
-
 export interface UpdatePoliciesAction {
   type: 'resourceAuthPage/updatePolicies';
   payload: Partial<Exclude<ResourceAuthPageModelState['policies'], null>[number]>;
@@ -55,18 +41,27 @@ export interface FetchPoliciesAction extends AnyAction {
   payload: { policyId: string, policyName: string, status: 0 | 1 }[];
 }
 
+export interface FetchAuthorizedAction extends AnyAction {
+  type: 'resourceAuthPage/fetchAuthorized',
+  payload: string;
+}
+
+export interface FetchAuthorizeAction extends AnyAction {
+  type: 'resourceAuthPage/fetchAuthorize',
+  payload: string;
+}
+
 export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
     fetchPolicies: (action: FetchPoliciesAction, effects: EffectsCommandMap) => void;
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
+    fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;
+    fetchAuthorize: (action: FetchAuthorizeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
-    // changePolicies: DvaReducer<ResourceAuthPageModelState, ChangePoliciesAction>;
-    // changeContractsAuthorized: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizedAction>;
-    // changeContractsAuthorize: DvaReducer<ResourceAuthPageModelState, ChangeContractsAuthorizeAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -157,8 +152,6 @@ const Model: ResourceAuthPageModelType = {
   },
   effects: {
     * fetchPolicies({payload}: FetchPoliciesAction, {call, put}: EffectsCommandMap) {
-      // yield put({type: 'save'});
-      // console.log(payload, 'payload');
       if (payload.length === 0) {
         return;
       }
@@ -181,7 +174,6 @@ const Model: ResourceAuthPageModelType = {
       });
     },
     * updatePolicies(action: UpdatePoliciesAction, {call, put}: EffectsCommandMap) {
-      console.log(action.payload, 'action.payloadaction.payload');
       const params = {
         resourceId: action.id,
         // [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
@@ -197,6 +189,20 @@ const Model: ResourceAuthPageModelType = {
         type: 'resourceInfo/fetchDataSource',
         payload: action.id,
       });
+    },
+    * fetchAuthorized({payload}: FetchAuthorizedAction, {call}: EffectsCommandMap) {
+      const params: ContractsParamsType = {
+        identityType: 2,
+        licenseeId: payload,
+      };
+      yield call(contracts, params);
+    },
+    * fetchAuthorize({payload}: FetchAuthorizeAction, {call}: EffectsCommandMap) {
+      const params: ContractsParamsType = {
+        identityType: 1,
+        licensorId: payload,
+      };
+      yield call(contracts, params);
     },
   },
   reducers: {

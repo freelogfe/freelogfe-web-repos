@@ -15,10 +15,11 @@ import {
 
 export interface GlobalModelState {
   locale: 'zh-CN' | 'en-US' | 'pt-BR';
+  route: any;
 }
 
-interface ChangeAction extends AnyAction {
-  type: 'change';
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'global/change';
   payload: Partial<GlobalModelState>;
 }
 
@@ -45,6 +46,7 @@ const Model: GlobalModelType = {
   namespace: 'global',
   state: {
     locale: getLocale() as GlobalModelState['locale'],
+    route: null,
   },
   effects: {
     * setLocale({payload}: SetLocaleAction, {call, put}: EffectsCommandMap) {

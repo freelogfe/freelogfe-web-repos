@@ -1,11 +1,13 @@
 import * as React from 'react';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
-import {router, withRouter} from 'umi';
+import {router, RouterTypes, withRouter} from 'umi';
 import Resources from "./Resources";
 import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
 import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import {Dispatch, connect} from "dva";
 
 const navs = [
   {
@@ -19,11 +21,20 @@ const navs = [
 ];
 
 interface ListProps extends RouteComponentProps {
-
+  dispatch: Dispatch;
 }
 
-function List({match}: ListProps) {
+function List({match, dispatch, route}: ListProps & RouterTypes) {
   const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setTabValue(match.path === '/resource/list' ? '1' : '2')
@@ -53,4 +64,4 @@ function List({match}: ListProps) {
   );
 }
 
-export default withRouter(List);
+export default withRouter(connect()(List));

@@ -2,7 +2,7 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info} from "@/services/resources";
-import {FetchPoliciesAction} from "@/models/resourceAuthPage";
+import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "@/models/resourceAuthPage";
 import {FetchDraftAction} from '@/models/resourceVersionCreatorPage';
 
 export interface ResourceInfoModelState {
@@ -79,6 +79,16 @@ const Model: ResourceInfoModelType = {
       yield put<FetchPoliciesAction>({
         type: 'resourceAuthPage/fetchPolicies',
         payload: data.policies,
+      });
+
+      yield put<FetchAuthorizeAction>({
+        type: 'resourceAuthPage/fetchAuthorize',
+        payload: data.resourceId,
+      });
+
+      yield put<FetchAuthorizedAction>({
+        type: 'resourceAuthPage/fetchAuthorized',
+        payload: data.resourceId,
       });
     },
   },

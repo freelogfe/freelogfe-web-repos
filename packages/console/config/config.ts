@@ -23,19 +23,25 @@ const config: IConfig | any = {
       // meta: {structure: 'left-right'},
       routes: [
         {exact: true, path: '.', redirect: '/market'},
-        {exact: true, path: 'market', component: '../pages/market', title: '市场资源'},
-        {exact: true, path: 'example', component: '../pages/market', title: '示例节点'},
+        {exact: true, path: 'market', component: '../pages/market', title: '市场资源', meta: {footer: true}},
+        {exact: true, path: 'example', component: '../pages/market', title: '示例节点', meta: {footer: true}},
         {
           path: 'resource',
           routes: [
             {exact: true, path: '.', redirect: '/resource/list'},
-            {exact: true, path: 'list', component: '../pages/resource/list', title: '我的资源'},
-            {exact: true, path: 'collect', component: '../pages/resource/list', title: '我的收藏'},
-            {exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源'},
+            {exact: true, path: 'list', component: '../pages/resource/list', title: '我的资源', meta: {footer: true}},
+            {exact: true, path: 'collect', component: '../pages/resource/list', title: '我的收藏', meta: {footer: true}},
+            {exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源', meta: {footer: true}},
             {
               path: ':id',
               routes: [
-                {exact: true, path: 'success', component: '../pages/resource/$id/success', title: '资源创建成功'},
+                {
+                  exact: true,
+                  path: 'success',
+                  component: '../pages/resource/$id/success',
+                  title: '资源创建成功',
+                  meta: {footer: true}
+                },
                 {exact: true, path: 'info', component: '../pages/resource/$id/info', title: '资源信息'},
                 {exact: true, path: 'auth', component: '../pages/resource/$id/auth', title: '授权信息'},
                 {
@@ -51,6 +57,7 @@ const config: IConfig | any = {
                           path: 'success',
                           component: '../pages/resource/$id/version/$version/success',
                           title: '版本创建成功',
+                          meta: {footer: true}
                         },
                       ]
                     },

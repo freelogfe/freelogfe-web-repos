@@ -7,6 +7,9 @@ import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import {i18nMessage} from "@/utils/i18n";
 import {useInterval} from 'ahooks';
+import {ChangeAction} from "@/models/global";
+import {connect, Dispatch} from 'dva';
+import RouterTypes from "umi/routerTypes";
 
 interface SuccessProps {
   match: {
@@ -16,13 +19,14 @@ interface SuccessProps {
 
     };
     url: string;
-  }
+  };
+  dispatch: Dispatch;
 }
 
 // let clear: any = null;
 // let timeV: number = 3;
 
-function Success({match}: SuccessProps) {
+function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
 
   const [count, setCount] = React.useState<number>(3);
   useInterval(() => {
@@ -32,6 +36,15 @@ function Success({match}: SuccessProps) {
       goto();
     }
   }, 1000);
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   // console.log(match, 'SSSSSSAAAAA');
   // const [time, setTime] = React.useState<number>(timeV);
@@ -80,4 +93,4 @@ function Success({match}: SuccessProps) {
 }
 
 
-export default withRouter(Success);
+export default withRouter(connect()(Success));

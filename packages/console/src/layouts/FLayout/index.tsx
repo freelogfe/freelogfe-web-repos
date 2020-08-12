@@ -7,7 +7,13 @@ import {FCircleButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {router, withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, GlobalSearchingModelState, RouterHistoriesModelState, UserModelState} from '@/models/connect';
+import {
+  ConnectState,
+  GlobalModelState,
+  GlobalSearchingModelState,
+  RouterHistoriesModelState,
+  UserModelState
+} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
 import FLayoutFooter from "@/layouts/FLayoutFooter";
 import {setLocale} from 'umi-plugin-react/locale';
@@ -60,12 +66,13 @@ const creatorOptions = [
 interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
-  global: GlobalSearchingModelState;
+  globalSearching: GlobalSearchingModelState;
   routerHistories: RouterHistoriesModelState;
   user: UserModelState,
+  global: GlobalModelState;
 }
 
-function FLayout({children, dispatch, global, routerHistories, user, ...props}: FLayoutProps) {
+function FLayout({children, global, dispatch, globalSearching, routerHistories, user, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
   function onDiscoverClick(value: string) {
@@ -128,7 +135,7 @@ function FLayout({children, dispatch, global, routerHistories, user, ...props}: 
         </div>
         <div className={styles.headerRight}>
           <FInput
-            value={global.input}
+            value={globalSearching.input}
             className={styles.FInput}
             // placeholder="Search in Freelog"
             size="small"
@@ -174,16 +181,19 @@ function FLayout({children, dispatch, global, routerHistories, user, ...props}: 
 
       <div style={{height: 100}}/>
 
-      <FLayoutFooter/>
+      {
+        global.route?.meta?.footer && (<FLayoutFooter/>)
+      }
 
     </Layout>
   );
 }
 
-export default withRouter(connect(({globalSearching, routerHistories, user}: ConnectState) => ({
-  global: globalSearching,
+export default withRouter(connect(({globalSearching, routerHistories, user, global}: ConnectState) => ({
+  globalSearching: globalSearching,
   routerHistories: routerHistories,
   user: user,
+  global: global,
 }))(FLayout));
 
 // parse()

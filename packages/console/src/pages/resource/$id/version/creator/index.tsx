@@ -18,8 +18,10 @@ import {
   CreateVersionAction, ImportPreVersionAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
+import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {withRouter} from "umi";
 import {i18nMessage} from "@/utils/i18n";
+import RouterTypes from "umi/routerTypes";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -32,7 +34,16 @@ interface VersionCreatorProps {
   };
 }
 
-function VersionCreator({dispatch, version, match, resource}: VersionCreatorProps) {
+function VersionCreator({dispatch, route, version, match, resource}: VersionCreatorProps & RouterTypes) {
+
+  React.useEffect(() => {
+    dispatch<GlobalChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function onClickCache() {
     dispatch<SaveDraftAction>({

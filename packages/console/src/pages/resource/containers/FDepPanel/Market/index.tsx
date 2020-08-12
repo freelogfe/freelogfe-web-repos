@@ -13,7 +13,7 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-import {list} from '@/services/resources';
+import {list, ListParamsType} from '@/services/resources';
 import moment from 'moment';
 import {resourceList} from "@/services/collections";
 
@@ -41,9 +41,12 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
   }, []);
 
   async function handleDataSource() {
-    const params = {};
+    const params: ListParamsType = {
+      isLoadPolicyInfo: 1,
+      isSelf: 1,
+    };
     // const {data} = await list(params);
-    const {data} = await list({isSelf: 1});
+    const {data} = await list(params);
     // const {data: data2} = await resourceList({});
     console.log(data, 'data');
     // console.log(data1, 'data1');
@@ -73,14 +76,12 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
         //   versions: ['12.23.3', '1.42.3'],
         // }
       ],
-      enabledPolicies: [
-        // {
-        //   checked: true,
-        //   id: 'string',
-        //   title: 'string',
-        //   code: 'code',
-        // }
-      ],
+      enabledPolicies: i.policies.map((policy: any) => ({
+          checked: true,
+          id: policy.policyId,
+          title: policy.policyName,
+          code: policy.policyText,
+      })),
     }));
     setResourceObjects(resources);
   }

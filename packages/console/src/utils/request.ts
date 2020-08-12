@@ -26,6 +26,13 @@ const codeMessage: any = {
   504: '网关超时。',
 };
 
+if (window.location.hostname.includes('.com')) {
+  const arr = window.location.hostname.split('.');
+  arr[0] = 'qi';
+  axios.defaults.baseURL = `${window.location.protocol}//${arr.join('.')}`;
+  axios.defaults.withCredentials = true;
+}
+
 /**
  * 异常处理程序
  */

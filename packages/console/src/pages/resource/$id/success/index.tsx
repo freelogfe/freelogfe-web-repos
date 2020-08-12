@@ -6,8 +6,11 @@ import {FNormalButton} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import {Dispatch,connect} from "dva";
 
 interface SuccessProps {
+  dispatch: Dispatch;
   match: {
     params: {
       id: string;
@@ -15,7 +18,16 @@ interface SuccessProps {
   };
 }
 
-function Success({match}: RouterTypes & SuccessProps) {
+function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function goto() {
     // /resource/:id/version/creator
@@ -36,4 +48,4 @@ function Success({match}: RouterTypes & SuccessProps) {
   </FCenterLayout>)
 }
 
-export default withRouter(Success);
+export default withRouter(connect()(Success));

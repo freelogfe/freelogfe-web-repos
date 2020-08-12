@@ -154,7 +154,22 @@ const Model: ResourceVersionCreatorModelType = {
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id,
         filename: resourceVersionCreatorPage.resourceObject?.name,
-        resolveResources: [],
+        // resolveResources: resourceVersionCreatorPage.dependencies.map((dep) => ({
+        //
+        // })),
+        dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
+          const version = dep.version;
+          return {
+            resourceId: dep.id,
+            versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
+          }
+        }),
+        resolveResources: resourceVersionCreatorPage.dependencies.map((dep) => ({
+          resourceId: dep.id,
+          contracts: dep.enabledPolicies
+            .filter((p) => (p.checked))
+            .map((p) => ({policyId: p.id})),
+        })),
         customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
           key: i.key,
           defaultValue: i.value,

@@ -123,8 +123,7 @@ const Model: MarketModelType = {
         cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
         title: i.resourceName,
         version: i.latestVersion,
-        // TODO: 这里应该是策略
-        policy: i.tags,
+        policy: i.policies.map((l:any) => l.policyName),
         type: i.resourceType,
       }));
       yield put<ChangeDataSourceAction>({

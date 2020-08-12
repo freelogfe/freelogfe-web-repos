@@ -87,7 +87,8 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
             match.path === '/resource/:id/version/creator'
               ? (
                 <div className={styles.radio + ' ' + styles.smallVersion}>
-                  <a className={styles.activatedRadio}>{i18nMessage('unamed_version')}</a>
+                  {/*<a className={styles.activatedRadio}>{i18nMessage('unamed_version')}</a>*/}
+                  <a className={styles.activatedRadio}>正在创建版本</a>
                 </div>)
               : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
                 <a onClick={gotoCreator}>{draftData.version || '未输入版本号'}（草稿）</a>
