@@ -16,6 +16,7 @@ import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
+import {contracts, ContractsParamsType} from "@/services/contracts";
 
 export type DepResources = Readonly<{
   id: string;
@@ -110,6 +111,11 @@ export interface AddADepByIDAction extends AnyAction {
   payload: string;
 }
 
+export interface AddDependenciesForDepRelationAction {
+  type: 'resourceVersionCreatorPage/dddDependenciesForDepRelation';
+  payload: string;
+}
+
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
   payload: Partial<ResourceVersionCreatorPageModelState>;
@@ -124,6 +130,7 @@ export interface ResourceVersionCreatorModelType {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     addADepByIDAction: (action: AddADepByIDAction, effects: EffectsCommandMap) => void;
+    dddDependenciesForDepRelation: (action: AddDependenciesForDepRelationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -306,11 +313,37 @@ const Model: ResourceVersionCreatorModelType = {
       };
       console.log(relationship, 'relationship');
       const {allBaseUpthrowIds, resourceDepRelationship, resourceDependencies}: { allBaseUpthrowIds: string[], resourceDepRelationship: any, resourceDependencies: any } = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
-        allBaseUpthrowIds: resourceInfo.info?.baseUpcastResources?.map((up: any) => up.resourceId),
+
         resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-        resourceDependencies: resourceVersionCreatorPage.dependencies,
+
       }));
       console.log(allBaseUpthrowIds, 'allBaseUpthrowIds23redssZX');
+
+      // for (const re of ){
+      //  yield put<AddDependenciesForDepRelationAction>()
+      // }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depRelationship: [
+            relationship,
+            ...resourceDepRelationship,
+          ],
+          // dependencies: [
+          //   ...dependencies,
+          //   ...resourceDependencies,
+          // ],
+        }
+      });
+    },
+    // TODO:
+    * dddDependenciesForDepRelation({payload}: AddDependenciesForDepRelationAction, {call, select, put}: EffectsCommandMap) {
+      const {resourceInfo, allBaseUpthrowIds, resourceDependencies} = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
+        resourceInfo: resourceInfo.info,
+        allBaseUpthrowIds: resourceInfo.info?.baseUpcastResources?.map((up: any) => up.resourceId),
+        resourceDependencies: resourceVersionCreatorPage.dependencies,
+      }));
 
       const resourcesParams: BatchInfoParamsType = {
         resourceIds: payload,
@@ -358,21 +391,25 @@ const Model: ResourceVersionCreatorModelType = {
           // }>[];
         };
       });
+
+      const params: ContractsParamsType = {
+        identityType: 2,
+        licensorId: payload,
+        licenseeId: resourceInfo.resourceId,
+      };
+      yield call(contracts, params);
+
       console.log(dependencies, 'dependency1r4dasf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          depRelationship: [
-            relationship,
-            ...resourceDepRelationship,
-          ],
           dependencies: [
             ...dependencies,
             ...resourceDependencies,
           ],
         }
-      })
-    },
+      });
+    }
   },
 
   reducers: {
@@ -453,4 +490,9 @@ function verify(data: any) {
   }
 
   return {versionErrorText, resourceObjectErrorText};
+}
+
+// TODO:
+async function f() {
+
 }
