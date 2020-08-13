@@ -4,6 +4,7 @@ import {DvaReducer} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
 import {
+  batchInfo, BatchInfoParamsType,
   createVersion,
   CreateVersionParamsType, lookDraft, LookDraftParamsType, resourceVersionInfo,
   saveVersionsDraft,
@@ -20,7 +21,7 @@ export type DepResources = Readonly<{
   id: string;
   title: string;
   resourceType: string;
-  time: string;
+  // time: string;
   status: 0 | 1;
   version: Readonly<{
     isCustom: boolean;
@@ -30,6 +31,7 @@ export type DepResources = Readonly<{
   }>;
   versions: string[];
   upthrow: boolean;
+  upthrowDisabled: boolean;
   enableReuseContracts: Readonly<{
     checked: boolean;
     title: string;
@@ -103,6 +105,11 @@ export interface ImportPreVersionAction extends AnyAction {
   type: 'resourceVersionCreatorPage/importPreVersion';
 }
 
+export interface AddADepByIDAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/addADepByIDAction';
+  payload: string;
+}
+
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
   payload: Partial<ResourceVersionCreatorPageModelState>;
@@ -116,6 +123,7 @@ export interface ResourceVersionCreatorModelType {
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
+    addADepByIDAction: (action: AddADepByIDAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -148,40 +156,44 @@ const Model: ResourceVersionCreatorModelType = {
 
   effects: {
     * createVersion(action: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
-      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceId: resourceInfo.info?.resourceId,
-        latestVersion: resourceInfo.info?.latestVersion,
-        version: resourceVersionCreatorPage.version,
-        fileSha1: resourceVersionCreatorPage.resourceObject?.id,
-        filename: resourceVersionCreatorPage.resourceObject?.name,
-        // resolveResources: resourceVersionCreatorPage.dependencies.map((dep) => ({
-        //
-        // })),
-        baseUpcastResources: resourceVersionCreatorPage.dependencies
+
+      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
+        const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
           .filter((dep) => dep.upthrow)
-          .map((dep) => dep.id),
-        dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
-          const version = dep.version;
-          return {
+          .map((dep) => dep.id);
+        const resolveResources = resourceVersionCreatorPage.dependencies
+          .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
+          .map((dep) => ({
             resourceId: dep.id,
-            versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
-          }
-        }),
-        resolveResources: resourceVersionCreatorPage.dependencies.map((dep) => ({
-          resourceId: dep.id,
-          contracts: dep.enabledPolicies
-            .filter((p) => (p.checked))
-            .map((p) => ({policyId: p.id})),
-        })),
-        customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
-          key: i.key,
-          defaultValue: i.value,
-          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
-          candidateItems: i.customOption ? i.customOption.split(',') : [],
-          remark: i.description,
-        })),
-        description: resourceVersionCreatorPage.description.toHTML(),
-      }));
+            contracts: dep.enabledPolicies
+              .filter((p) => (p.checked))
+              .map((p) => ({policyId: p.id})),
+          }));
+        return {
+          resourceId: resourceInfo.info?.resourceId,
+          latestVersion: resourceInfo.info?.latestVersion,
+          version: resourceVersionCreatorPage.version,
+          fileSha1: resourceVersionCreatorPage.resourceObject?.id,
+          filename: resourceVersionCreatorPage.resourceObject?.name,
+          baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
+          dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
+            const version = dep.version;
+            return {
+              resourceId: dep.id,
+              versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
+            }
+          }),
+          resolveResources: resolveResources,
+          customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
+            key: i.key,
+            defaultValue: i.value,
+            type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
+            candidateItems: i.customOption ? i.customOption.split(',') : [],
+            remark: i.description,
+          })),
+          description: resourceVersionCreatorPage.description.toHTML(),
+        };
+      });
 
       const {versionErrorText, resourceObjectErrorText} = verify(params);
 
@@ -283,7 +295,84 @@ const Model: ResourceVersionCreatorModelType = {
           })),
         },
       })
-    }
+    },
+    * addADepByIDAction({payload}: AddADepByIDAction, {put, call, select}: EffectsCommandMap) {
+      console.log(payload, 'PPPPLLLLLL');
+      const relationship = {
+        id: payload,
+        children: [
+          // {id: payload},
+        ],
+      };
+      console.log(relationship, 'relationship');
+      const {allBaseUpthrowIds, resourceDepRelationship, resourceDependencies}: { allBaseUpthrowIds: string[], resourceDepRelationship: any, resourceDependencies: any } = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
+        allBaseUpthrowIds: resourceInfo.info?.baseUpcastResources?.map((up: any) => up.resourceId),
+        resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
+        resourceDependencies: resourceVersionCreatorPage.dependencies,
+      }));
+      console.log(allBaseUpthrowIds, 'allBaseUpthrowIds23redssZX');
+
+      const resourcesParams: BatchInfoParamsType = {
+        resourceIds: payload,
+        isLoadPolicyInfo: 1,
+      };
+      const {data: resourcesData} = yield call(batchInfo, resourcesParams);
+      console.info(resourcesData, 'resourcesData123rfd23');
+
+      const dependencies: DepResources = resourcesData.map((r: any) => {
+        return {
+          id: r.resourceId,
+          title: r.resourceName,
+          resourceType: r.resourceType,
+          status: r.status,
+          version: {
+            isCustom: false,
+            select: r.latestVersion,
+            allowUpdate: true,
+            input: '',
+          },
+          versions: r.resourceVersions.map((version: any) => version.version),
+          upthrow: allBaseUpthrowIds.includes(r.resourceId),
+          upthrowDisabled: !!r.latestVersion,
+          enableReuseContracts: [],
+          enabledPolicies: r.policies.map((policy: any) => ({
+            checked: false,
+            id: policy.policyId,
+            title: policy.policyName,
+            code: policy.policyText,
+          })),
+          //   enableReuseContracts: Readonly<{
+          //     checked: boolean;
+          //   title: string;
+          //   status: 'executing' | 'stopped';
+          //   code: string;
+          //   id: string;
+          //   date: string;
+          //   versions: string[];
+          // }>[];
+          //   enabledPolicies: Readonly<{
+          //     checked: boolean;
+          //   id: string;
+          //   title: string;
+          //   code: string;
+          // }>[];
+        };
+      });
+      console.log(dependencies, 'dependency1r4dasf');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depRelationship: [
+            relationship,
+            ...resourceDepRelationship,
+          ],
+          dependencies: [
+            ...dependencies,
+            ...resourceDependencies,
+          ],
+        }
+      })
+    },
   },
 
   reducers: {

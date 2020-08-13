@@ -64,8 +64,8 @@ interface InfoParamsType {
   projection?: string;
 }
 
-export function info(params: InfoParamsType) {
-  return request.get(`/v2/resources/${params.resourceIdOrName}`, {
+export function info({resourceIdOrName, ...params}: InfoParamsType) {
+  return request.get(`/v2/resources/${resourceIdOrName}`, {
     params: params,
   });
 }

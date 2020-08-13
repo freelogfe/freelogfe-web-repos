@@ -28,27 +28,34 @@ function IsUpthrow({creator, dispatch}: IsUpthrowProps) {
   }
 
   return (<div className={styles.radios}>
+    {/*{(!resource.upthrowDisabled || resource.upthrow) && (*/}
     <div>
       <Radio
-        style={{lineHeight: '16px'}}
+        style={{lineHeight: '16px', color: 'red'}}
         checked={resource.upthrow}
+        disabled={resource.upthrowDisabled && !resource.upthrow}
         onClick={() => onChangeIsUpthrow(true)}
       />
       {/*<span style={{color: '#666'}}>{i18nMessage('info_upcast')}</span>*/}
       <span style={{color: '#666'}}>上抛</span>
       <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
     </div>
+
     <div style={{height: 18}}/>
-    <div>
-      <Radio
-        style={{lineHeight: '16px'}}
-        checked={!resource.upthrow}
-        onClick={() => onChangeIsUpthrow(false)}
-      />
-      {/*<span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>*/}
-      <span style={{color: '#666'}}>签约</span>
-      <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
-    </div>
+    {/*{(!resource.upthrowDisabled || !resource.upthrow) && (*/}
+      <div>
+        <Radio
+          style={{lineHeight: '16px'}}
+          checked={!resource.upthrow}
+          disabled={resource.upthrowDisabled && resource.upthrow}
+          onClick={() => onChangeIsUpthrow(false)}
+        />
+        {/*<span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>*/}
+        <span style={{color: '#666'}}>签约</span>
+        <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
+      </div>
+    {/*)}*/}
+
   </div>);
 }
 

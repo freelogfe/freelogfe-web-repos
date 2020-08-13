@@ -108,7 +108,7 @@ const Model: ResourceListPageModelType = {
         ...params,
         isSelf: 1,
       });
-      // console.log(data, 'data');
+      // console.log(data, 'dataasdfw');
 
       const resource: ResourceListPageModelState['dataSource'] = data.dataList.map((i: any) => ({
         id: i.resourceId,

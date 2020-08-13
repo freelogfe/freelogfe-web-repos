@@ -6,6 +6,7 @@ import {FContentText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {resourceTypes} from '@/utils/globals';
 import {
+  AddADepByIDAction,
   ChangeAction,
   DepResources,
   // OnChangeDependenciesAction,
@@ -48,7 +49,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
     // const {data} = await list(params);
     const {data} = await list(params);
     // const {data: data2} = await resourceList({});
-    console.log(data, 'data');
+    // console.log(data, 'data3fasd');
     // console.log(data1, 'data1');
     // console.log(data2, 'data2');
     const resources = data.dataList.map((i: any) => ({
@@ -77,10 +78,10 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
         // }
       ],
       enabledPolicies: i.policies.map((policy: any) => ({
-          checked: true,
-          id: policy.policyId,
-          title: policy.policyName,
-          code: policy.policyText,
+        checked: true,
+        id: policy.policyId,
+        title: policy.policyName,
+        code: policy.policyText,
       })),
     }));
     setResourceObjects(resources);
@@ -91,19 +92,23 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
   // }
 
   function onSelect(i: DepResources[number]) {
-    dispatch<ChangeAction>({
-      type: 'resourceVersionCreatorPage/change',
-      payload: {
-        dependencies: [
-          i,
-          ...dependencies,
-        ],
-        depRelationship: [
-          {id: i.id, children: []},
-          ...depRelationship,
-        ]
-      },
-    });
+    // dispatch<ChangeAction>({
+    //   type: 'resourceVersionCreatorPage/change',
+    //   payload: {
+    //     dependencies: [
+    //       i,
+    //       ...dependencies,
+    //     ],
+    //     depRelationship: [
+    //       {id: i.id, children: []},
+    //       ...depRelationship,
+    //     ]
+    //   },
+    // });
+    dispatch<AddADepByIDAction>({
+      type: 'resourceVersionCreatorPage/addADepByIDAction',
+      payload: i.id,
+    })
   }
 
   return (

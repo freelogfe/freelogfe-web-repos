@@ -161,7 +161,7 @@ const Model: ResourceAuthPageModelType = {
         resourceId: baseResourceId,
       };
       const {data} = yield call(resolveResources, params);
-      console.log(data, 'datadata');
+      // console.log(data, 'datadata');
       if (data.length === 0) {
         return yield put<ChangeAction>({
           type: 'change',
@@ -177,7 +177,7 @@ const Model: ResourceAuthPageModelType = {
       };
 
       const {data: resourcesInfoData} = yield call(batchInfo, resourceParams);
-      console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
+      // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
       const contractsParams: ContractsParamsType = {
         identityType: 2,
@@ -186,21 +186,21 @@ const Model: ResourceAuthPageModelType = {
       };
 
       const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
-      console.log(contractsData, 'contractsDatacontractsData');
+      // console.log(contractsData, 'contractsDatacontractsData');
       // const {data: resourceData} = yield call()
 
       const contractsAuthorized = data.map((i: any, j: number) => {
         const currentResource = resourcesInfoData.find((resource: any) => resource.resourceId === i.resourceId);
-        console.log(currentResource, 'currentResource');
+        // console.log(currentResource, 'currentResource');
         const allEnabledVersions: string[] = i.versions.map((version: any) => version.version);
         const allContracts = contractsData
           .filter((c: any) => c.licensorId === i.resourceId);
-        console.info(allContracts, 'allContracts');
+        // console.info(allContracts, 'allContracts');
 
         const allUsedPoliciesId = allContracts.map((c: any) => c.policyId);
-        console.info(allUsedPoliciesId, 'allUsedPoliciesId');
+        // console.info(allUsedPoliciesId, 'allUsedPoliciesId');
         const allEnabledPolicies = resourcesInfoData.find((resource: any) => resource.resourceId === i.resourceId)?.policies?.filter((resource: any) => !allUsedPoliciesId.includes(resource.policyId));
-        console.log(allEnabledPolicies, 'allEnabledPolicies');
+        // console.log(allEnabledPolicies, 'allEnabledPolicies');
         return {
           id: currentResource.resourceId,
           activated: j === 0,

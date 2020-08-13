@@ -8,6 +8,10 @@ import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
 // import '~'
 
+// notification.config({
+//   duration: 1000000
+// });
+
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
