@@ -14,6 +14,7 @@ export interface ContractsParamsType {
   status?: 2 | 4 | 6;
   order?: string;
   licenseeIdentityType?: number;
+  isLoadPolicyInfo?: 0 | 1;
   projection?: string;
 }
 

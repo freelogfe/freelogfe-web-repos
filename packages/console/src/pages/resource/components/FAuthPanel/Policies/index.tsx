@@ -15,9 +15,9 @@ export default function Policies({dataSource, onLicense}: PoliciesProps) {
   return (<div className={styles.styles}>
     {dataSource.map((i) => (
       <div key={i.id} className={styles.Policy}>
-        <div key={i.id} className={styles.PolicyGrammar}>
+        <div className={styles.PolicyGrammar}>
           <div className={styles.PolicyName}>
-            <span>{i.title}</span>
+            <span>{i.title} {i.id}</span>
             <FNormalButton
               size="small"
               onClick={() => onLicense && onLicense(i.id, i)}

@@ -110,24 +110,30 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
           })}
         />
       </FEditorCard>
-      <FEditorCard title={i18nMessage('licencee_contract')}>
-        <FAuthPanel
-          dataSource={auth.contractsAuthorized}
-          onChangeActivatedResource={(value) => dispatch<ChangeAction>({
-            type: 'resourceAuthPage/change',
-            payload: {},
-          })}
-        />
-      </FEditorCard>
-      <FEditorCard title={i18nMessage('authorizing_contracts')}>
-        <Table
-          columns={columns}
-          dataSource={auth.contractsAuthorize || []}
-          bordered
-          // title={() => 'Header'}
-          // footer={() => 'Footer'}
-        />
-      </FEditorCard>
+      {
+        auth.contractsAuthorized?.length > 0 && (<FEditorCard title={i18nMessage('licencee_contract')}>
+          <FAuthPanel
+            dataSource={auth.contractsAuthorized}
+            onChangeActivatedResource={(value) => dispatch<ChangeAction>({
+              type: 'resourceAuthPage/change',
+              payload: {},
+            })}
+          />
+        </FEditorCard>)
+      }
+
+      {
+        auth.contractsAuthorize?.length > 0 && (<FEditorCard title={i18nMessage('authorizing_contracts')}>
+          <Table
+            columns={columns}
+            dataSource={auth.contractsAuthorize}
+            bordered
+            // title={() => 'Header'}
+            // footer={() => 'Footer'}
+          />
+        </FEditorCard>)
+      }
+
     </FContentLayout>
   </FInfoLayout>);
 }

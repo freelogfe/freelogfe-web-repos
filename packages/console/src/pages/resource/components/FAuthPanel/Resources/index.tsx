@@ -8,7 +8,7 @@ interface ResourcesProps {
     activated: boolean;
     title: string;
     resourceType: string;
-    version: string;
+    // version: string;
     labels: string[];
   }[];
   onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
@@ -25,7 +25,7 @@ export default function Resources({dataSource, onClick}: ResourcesProps) {
           <FContentText text={i.title}/>
           <div style={{height: 9}}/>
           <FContentText type="additional2">
-            <span>{i.resourceType} | 版本范围：{i.version}</span>
+            <span>{i.resourceType}</span>
           </FContentText>
           <>
             <div style={{height: 9}}/>

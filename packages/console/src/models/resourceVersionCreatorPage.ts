@@ -157,6 +157,9 @@ const Model: ResourceVersionCreatorModelType = {
         // resolveResources: resourceVersionCreatorPage.dependencies.map((dep) => ({
         //
         // })),
+        baseUpcastResources: resourceVersionCreatorPage.dependencies
+          .filter((dep) => dep.upthrow)
+          .map((dep) => dep.id),
         dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
           const version = dep.version;
           return {

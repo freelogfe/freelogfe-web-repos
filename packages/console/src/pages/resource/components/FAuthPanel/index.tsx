@@ -65,14 +65,23 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
     </div>
     <div className={styles.DepPanelContent}>
       <div>
-        <FContentText type="additional2" text={i18nMessage('used_contract')}/>
-        <div style={{height: 5}}/>
-        {activeResource && <Contracts dataSource={activeResource.contracts}/>}
+        {
+          activeResource && activeResource?.contracts.length > 0 && (<>
+            <FContentText type="additional2" text={i18nMessage('used_contract')}/>
+            <div style={{height: 5}}/>
+            <Contracts dataSource={activeResource.contracts}/>
+          </>)
+        }
 
-        <div style={{height: 20}}/>
-        <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
-        <div style={{height: 5}}/>
-        {activeResource && <Policies dataSource={activeResource.policies}/>}
+        {
+          activeResource && activeResource?.policies?.length > 0 && (<>
+            <div style={{height: 20}}/>
+            <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
+            <div style={{height: 5}}/>
+            <Policies dataSource={activeResource.policies}/>
+          </>)
+        }
+
       </div>
     </div>
   </div>);

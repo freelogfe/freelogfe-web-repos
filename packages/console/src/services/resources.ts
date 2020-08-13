@@ -66,7 +66,22 @@ interface InfoParamsType {
 
 export function info(params: InfoParamsType) {
   return request.get(`/v2/resources/${params.resourceIdOrName}`, {
-    data: params,
+    params: params,
+  });
+}
+
+// 批量查询资源列表
+export interface BatchInfoParamsType {
+  resourceIds?: string;
+  resourceNames?: string;
+  isLoadPolicyInfo?: 0 | 1;
+  isLoadLatestVersionInfo?: 0 | 1;
+  projection?: string;
+}
+
+export function batchInfo(params: BatchInfoParamsType) {
+  return request.get(`/v2/resources/list`, {
+    params: params,
   });
 }
 
@@ -158,4 +173,13 @@ export interface LookDraftParamsType {
 
 export function lookDraft(params: LookDraftParamsType) {
   return request.get(`/v2/resources/${params.resourceId}/versions/drafts`);
+}
+
+// 查询资源所解决的依赖集
+export interface ResolveResourcesParamsType {
+  resourceId: string;
+}
+
+export function resolveResources(params: LookDraftParamsType) {
+  return request.get(`/v2/resources/${params.resourceId}/resolveResources`);
 }
