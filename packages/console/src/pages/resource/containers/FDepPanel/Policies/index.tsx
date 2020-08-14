@@ -1,17 +1,17 @@
 import * as React from 'react';
-import styles from "./index.less";
-import {FNormalButton} from "@/components/FButton";
-import {FDepPanelProps} from "@/pages/resource/containers/FDepPanel";
-import {Checkbox} from "antd";
+import styles from './index.less';
+import {FNormalButton} from '@/components/FButton';
+import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
+import {Checkbox} from 'antd';
 import {
   DepResources,
   OnChangeDependenciesByIDAction,
   ResourceVersionCreatorPageModelState
-} from "@/models/resourceVersionCreatorPage";
-import {connect, Dispatch} from "dva";
-import {ConnectState} from "@/models/connect";
-import {FContentText} from "@/components/FText";
-import {i18nMessage} from "@/utils/i18n";
+} from '@/models/resourceVersionCreatorPage';
+import {connect, Dispatch} from 'dva';
+import {ConnectState} from '@/models/connect';
+import {FContentText} from '@/components/FText';
+import {i18nMessage} from '@/utils/i18n';
 
 interface PoliciesProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];

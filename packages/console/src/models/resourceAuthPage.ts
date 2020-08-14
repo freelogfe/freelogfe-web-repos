@@ -161,7 +161,7 @@ const Model: ResourceAuthPageModelType = {
         resourceId: baseResourceId,
       };
       const {data} = yield call(resolveResources, params);
-      // console.log(data, 'datadata');
+      // console.log(data, 'datadata232323');
       if (data.length === 0) {
         return yield put<ChangeAction>({
           type: 'change',
@@ -172,10 +172,10 @@ const Model: ResourceAuthPageModelType = {
       }
 
       const resourceParams: BatchInfoParamsType = {
-        resourceIds: data.map((i: any) => i.resourceId).join(''),
+        resourceIds: data.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
       };
-
+      // console.log(resourceParams, 'resourceParams908hik');
       const {data: resourcesInfoData} = yield call(batchInfo, resourceParams);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 

@@ -50,6 +50,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
       })
     }
   });
+  console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
   function onChangeVersion(version: DepResources[number]['version'], id: DepResources[number]['id']) {
     dispatch<OnChangeDependenciesByIDAction>({
@@ -173,7 +174,9 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
             <div style={{height: 5}}/>
             <div className={styles.DepPanelLabels}>
               {
-                !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies].map((j) => (<label
+                !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                  .filter((k) => k.checked)
+                  .map((j) => (<label
                   key={j.id}
                   className={styles.labelInfo}
                 >{j.title}</label>))

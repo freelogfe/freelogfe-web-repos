@@ -9,17 +9,17 @@ import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connect";
-import FHorn from "@/pages/resource/components/FHorn";
-import {FetchDataSourceAction, UpdateDataSourceAction} from "@/models/resourceVersionEditorPage";
-import BraftEditor, {EditorState} from "braft-editor";
-import {i18nMessage} from "@/utils/i18n";
-import {ChangeAction} from "@/models/global";
-import RouterTypes from "umi/routerTypes";
-import {withRouter} from "umi";
-import {RouteComponentProps} from "react-router";
-import {apiHost} from "@/utils/request";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
+import FHorn from '@/pages/resource/components/FHorn';
+import {FetchDataSourceAction, UpdateDataSourceAction} from '@/models/resourceVersionEditorPage';
+import BraftEditor, {EditorState} from 'braft-editor';
+import {i18nMessage} from '@/utils/i18n';
+import {ChangeAction} from '@/models/global';
+import RouterTypes from 'umi/routerTypes';
+import {withRouter} from 'umi';
+import {RouteComponentProps} from 'react-router';
+import {apiHost} from '@/utils/request';
 
 interface VersionEditorProps extends RouteComponentProps<{ id: string; version: string; }> {
   dispatch: Dispatch;

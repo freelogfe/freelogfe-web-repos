@@ -117,7 +117,7 @@ export interface ImportPreVersionAction extends AnyAction {
 
 export interface AddADepByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/addADepByIDAction';
-  payload: string;
+  payload: string[];
 }
 
 export interface AddDependenciesForDepRelationAction {
@@ -319,25 +319,27 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * addADepByIDAction({payload}: AddADepByIDAction, {put, call, select}: EffectsCommandMap) {
       console.log(payload, 'PPPPLLLLLL');
+      const [id, ...ids] = payload;
       const relationship = {
-        id: payload,
-        children: [
-          // {id: payload},
-        ],
+        id: id,
+        children: ids.map((i: string) => ({id: i})),
       };
       console.log(relationship, 'relationship');
-      const {resourceDepRelationship}: { allBaseUpthrowIds: string[], resourceDepRelationship: any, resourceDependencies: any } = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
+      const {resourceDepRelationship} = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
       }));
+      console.log(resourceDepRelationship, 'resourceDepRelationshipfwa3278iuwe');
+      for (const i of payload) {
+        console.log(i, 'AddDependenciesForDepRelationAction');
+        yield call(sleep, 1000);
+        yield put<AddDependenciesForDepRelationAction>({
+          type: 'dddDependenciesForDepRelation',
+          payload: i,
+        });
+      }
 
-      // for (const re of ){
-      //  yield put<AddDependenciesForDepRelationAction>()
-      // }
-      yield put<AddDependenciesForDepRelationAction>({
-        type: 'dddDependenciesForDepRelation',
-        payload: relationship.id,
-      });
-
+      yield call(sleep, 1000);
+      console.log('开始change');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -354,11 +356,19 @@ const Model: ResourceVersionCreatorModelType = {
     },
     // TODO:
     * dddDependenciesForDepRelation({payload}: AddDependenciesForDepRelationAction, {call, select, put}: EffectsCommandMap) {
+
       const {resourceInfo, allBaseUpthrowIds, resourceDependencies} = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
         resourceInfo: resourceInfo.info,
         allBaseUpthrowIds: resourceInfo.info?.baseUpcastResources?.map((up: any) => up.resourceId),
         resourceDependencies: resourceVersionCreatorPage.dependencies,
       }));
+
+      // console.log(resourceDependencies, 'resourceDependenciesresourceDependencies23rfwds');
+      const allExistsResourceDependenciesIds: string[] = resourceDependencies.map((rr: any) => rr.id);
+      // console.log(allExistsResourceDependenciesIds, 'allExistsResourceDependenciesId23weds');
+      if (allExistsResourceDependenciesIds.includes(payload)) {
+        return;
+      }
 
       const resourcesParams: InfoParamsType = {
         resourceIdOrName: payload,
@@ -374,16 +384,16 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
-      console.log(contractsData, 'contractsData24fsdzvrg');
+      // console.log(contractsData, 'contractsData24fsdzvrg');
       const allContractPolicyIds = contractsData.map((constract: any) => constract.policyId);
-      console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
+      // console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
 
 
       const resolveResourcesParams: ResolveResourcesParamsType = {
         resourceId: resourceInfo.resourceId,
       };
       const {data: resolveResourcesData} = yield call(resolveResources, resolveResourcesParams);
-      console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
+      // console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
 
       const dependency: DepResources[number] = {
         id: resourceData.resourceId,
@@ -398,7 +408,7 @@ const Model: ResourceVersionCreatorModelType = {
         },
         versions: resourceData.resourceVersions.map((version: any) => version.version),
         upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
-        upthrowDisabled: !!resourceData.latestVersion,
+        upthrowDisabled: !!resourceInfo.latestVersion,
         enableReuseContracts: contractsData.map((c: any) => ({
           checked: true,
           id: c.contractId,
@@ -426,8 +436,8 @@ const Model: ResourceVersionCreatorModelType = {
           })),
       };
 
-      console.log(dependency, 'dependency1r4dasf');
-      yield put<ChangeAction>({
+      // console.log(dependency, 'dependency1r4dasf');
+      return yield put<ChangeAction>({
         type: 'change',
         payload: {
           dependencies: [
@@ -520,6 +530,10 @@ function verify(data: any) {
 }
 
 // TODO:
-async function f() {
+async function handleDepResource(resourceId: string) {
 
+}
+
+function sleep(t: number) {
+  return new Promise((resolve) => setTimeout(resolve, t));
 }

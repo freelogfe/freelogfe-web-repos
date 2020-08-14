@@ -59,31 +59,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       resourceType: i.resourceType,
       time: moment(i.updateDate).format('YYYY-MM-DD HH:mm'),
       status: i.status,
-      version: {
-        isCustom: false,
-        input: '',
-        allowUpdate: true,
-        select: i.latestVersion,
-      },
-      versions: i.resourceVersions.map((j: any) => j.version),
-      upthrow: false,
-      enableReuseContracts: [
-        // {
-        //   checked: true,
-        //   title: '买奶粉2',
-        //   status: 'executing',
-        //   code: 'code',
-        //   id: '1234',
-        //   date: '2013-12-22',
-        //   versions: ['12.23.3', '1.42.3'],
-        // }
-      ],
-      enabledPolicies: i.policies.map((policy: any) => ({
-        checked: true,
-        id: policy.policyId,
-        title: policy.policyName,
-        code: policy.policyText,
-      })),
+      baseUpcastResources: i.baseUpcastResources,
     }));
     setResourceObjects(resources);
   }
@@ -92,7 +68,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
   //
   // }
 
-  function onSelect(i: DepResources[number]) {
+  function onSelect(i: any) {
     // dispatch<ChangeAction>({
     //   type: 'resourceVersionCreatorPage/change',
     //   payload: {
@@ -106,10 +82,11 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
     //     ]
     //   },
     // });
+    console.log(i, 'ii23dscvs');
     dispatch<AddADepByIDAction>({
       type: 'resourceVersionCreatorPage/addADepByIDAction',
-      payload: i.id,
-    })
+      payload: [i.id, ...i.baseUpcastResources.map((up: any) => up.resourceId)],
+    });
   }
 
   return (

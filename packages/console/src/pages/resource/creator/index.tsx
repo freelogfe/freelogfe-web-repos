@@ -16,9 +16,9 @@ import {
   OnCreateAction,ChangeAction,
 } from '@/models/resourceCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
-import FAutoComplete from "@/components/FAutoComplete";
-import {i18nMessage} from "@/utils/i18n";
-import {RouterTypes} from "umi";
+import FAutoComplete from '@/components/FAutoComplete';
+import {i18nMessage} from '@/utils/i18n';
+import {RouterTypes} from 'umi';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
