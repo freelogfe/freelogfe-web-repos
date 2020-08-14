@@ -179,8 +179,8 @@
 	"total_number": "共{TotalNumber}个",
 	"objects_list_empty": "您还没有上传过对象",
 	"upload_object": "上传对象",
-	"object_name": "",
-	"size": "",
-	"last_updated_time": "",
+	"object_name": "名称",
+	"size": "对象大小",
+	"last_updated_time": "最近更新",
 	"copy_object_name": "复制对象名"
 }

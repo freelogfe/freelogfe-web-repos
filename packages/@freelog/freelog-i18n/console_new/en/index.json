@@ -179,8 +179,8 @@
 	"total_number": "",
 	"objects_list_empty": "",
 	"upload_object": "Upload objects",
-	"object_name": "",
-	"size": "",
-	"last_updated_time": "",
+	"object_name": "Name",
+	"size": "Object size",
+	"last_updated_time": "Last updated",
 	"copy_object_name": ""
 }
