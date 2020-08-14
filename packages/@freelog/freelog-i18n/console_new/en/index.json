@@ -178,5 +178,9 @@
 	"created_time": "",
 	"total_number": "",
 	"objects_list_empty": "",
-	"upload_object": "Upload objects"
+	"upload_object": "Upload objects",
+	"object_name": "",
+	"size": "",
+	"last_updated_time": "",
+	"copy_object_name": ""
 }

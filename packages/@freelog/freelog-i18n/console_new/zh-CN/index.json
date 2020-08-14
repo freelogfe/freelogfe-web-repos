@@ -178,5 +178,9 @@
 	"created_time": "创建时间",
 	"total_number": "共{TotalNumber}个",
 	"objects_list_empty": "您还没有上传过对象",
-	"upload_object": "上传对象"
+	"upload_object": "上传对象",
+	"object_name": "",
+	"size": "",
+	"last_updated_time": "",
+	"copy_object_name": ""
 }
