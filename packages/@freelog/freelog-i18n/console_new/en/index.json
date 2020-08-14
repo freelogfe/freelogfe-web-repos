@@ -183,11 +183,11 @@
 	"size": "Object size",
 	"last_updated_time": "Last updated",
 	"copy_object_name": "",
-	"edit_object_information": "",
-	"object_file": "",
-	"system_buckets": "",
+	"edit_object_information": "Object information",
+	"object_file": "Object name",
+	"system_buckets": "System Buckets",
 	"nodedata_buckets_empty": "",
-	"uploaded_successfully": "",
-	"resume_uploading": "",
+	"uploaded_successfully": "Uploaded successfully",
+	"resume_uploading": "Resume uploading",
 	"cover_object_with_same_name": ""
 }

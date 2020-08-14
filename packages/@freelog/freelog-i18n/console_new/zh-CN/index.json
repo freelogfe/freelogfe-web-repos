@@ -183,11 +183,11 @@
 	"size": "对象大小",
 	"last_updated_time": "最近更新",
 	"copy_object_name": "复制对象名",
-	"edit_object_information": "",
-	"object_file": "",
-	"system_buckets": "",
-	"nodedata_buckets_empty": "",
-	"uploaded_successfully": "",
-	"resume_uploading": "",
-	"cover_object_with_same_name": ""
+	"edit_object_information": "对象信息",
+	"object_file": "对象名称",
+	"system_buckets": "系统存储空间",
+	"nodedata_buckets_empty": "您在浏览节点时产生的数据文件将会保存在这里。",
+	"uploaded_successfully": "上传成功",
+	"resume_uploading": "重新上传",
+	"cover_object_with_same_name": "更新将会覆盖原有的对象文件，但是保留依赖、自定义属性等设置。"
 }
