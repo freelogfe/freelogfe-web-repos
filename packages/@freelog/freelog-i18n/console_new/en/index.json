@@ -170,5 +170,9 @@
 	"my_buckets_list_empty": "",
 	"manage_buckets_empty_title": "Free creativity starting from Freelog",
 	"manage_buckets_empty_msg": "In Freelog , you can create buckets, upload and test your resources.",
-	"create_bucket": "Create a bucket"
+	"create_bucket": "Create a bucket",
+	"create_bucket_popup_title": "",
+	"create_bucket_popup_msg": "",
+	"enter_bucket_name": "",
+	"naming_convention_bucket_name": ""
 }
