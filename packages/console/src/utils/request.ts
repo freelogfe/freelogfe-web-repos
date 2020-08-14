@@ -12,6 +12,7 @@ import NProgress from '@/components/fNprogress';
 //   duration: 1000000
 // });
 
+
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -30,10 +31,12 @@ const codeMessage: any = {
   504: '网关超时。',
 };
 
+export const apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+
 if (window.location.hostname.includes('.com')) {
-  const arr = window.location.hostname.split('.');
-  arr[0] = 'qi';
-  axios.defaults.baseURL = `${window.location.protocol}//${arr.join('.')}`;
+  // const arr = window.location.hostname.split('.');
+  // arr[0] = 'qi';
+  axios.defaults.baseURL = apiHost;
   axios.defaults.withCredentials = true;
 }
 

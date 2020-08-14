@@ -58,8 +58,9 @@ export function list(params: ListParamsType) {
 }
 
 // 查看单个资源详情
-interface InfoParamsType {
+export interface InfoParamsType {
   resourceIdOrName: string;
+  isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   projection?: string;
 }

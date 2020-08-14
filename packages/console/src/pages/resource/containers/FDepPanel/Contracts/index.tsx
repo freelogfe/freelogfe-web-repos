@@ -42,6 +42,10 @@ function Contracts({creator, dispatch}: ContractsProps) {
     });
   }
 
+  if (resource.enableReuseContracts.length === 0) {
+    return null;
+  }
+
   return <>
     <div style={{height: 20}}/>
     <FContentText type="additional2" text={i18nMessage('reusable_contract')}/>

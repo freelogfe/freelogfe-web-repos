@@ -181,7 +181,7 @@ const config: IConfig | any = {
       }
     },
   },
-
+  hash: true,
   // locale: {
   //   default: 'zh-CN',
   //   antd: false,

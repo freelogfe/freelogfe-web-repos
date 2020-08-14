@@ -46,6 +46,10 @@ function Policies({creator, dispatch}: PoliciesProps) {
     });
   }
 
+  if (resource.enabledPolicies.length === 0) {
+    return null;
+  }
+
   return (<>
     <div style={{height: 20}}/>
     <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>

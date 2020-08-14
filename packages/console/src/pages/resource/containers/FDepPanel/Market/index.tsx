@@ -17,6 +17,7 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {list, ListParamsType} from '@/services/resources';
 import moment from 'moment';
 import {resourceList} from "@/services/collections";
+import any = jasmine.any;
 
 interface MarketProps {
   dispatch: Dispatch;
@@ -35,7 +36,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
 
   const [input, setInput] = React.useState<string>('');
 
-  const [resourceObjects, setResourceObjects] = React.useState<DepResources>([]);
+  const [resourceObjects, setResourceObjects] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     handleDataSource();

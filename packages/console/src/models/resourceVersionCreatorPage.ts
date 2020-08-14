@@ -4,9 +4,16 @@ import {DvaReducer} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
 import {
-  batchInfo, BatchInfoParamsType,
+  batchInfo,
+  BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType, lookDraft, LookDraftParamsType, resourceVersionInfo,
+  CreateVersionParamsType,
+  info,
+  InfoParamsType,
+  lookDraft,
+  LookDraftParamsType, resolveResources,
+  ResolveResourcesParamsType,
+  resourceVersionInfo,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
@@ -17,6 +24,7 @@ import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import {contracts, ContractsParamsType} from "@/services/contracts";
+import moment from "moment";
 
 export type DepResources = Readonly<{
   id: string;
@@ -35,10 +43,11 @@ export type DepResources = Readonly<{
   upthrowDisabled: boolean;
   enableReuseContracts: Readonly<{
     checked: boolean;
+    id: string;
+    policyId: string;
     title: string;
     status: 'executing' | 'stopped';
     code: string;
-    id: string;
     date: string;
     versions: string[];
   }>[];
@@ -112,7 +121,7 @@ export interface AddADepByIDAction extends AnyAction {
 }
 
 export interface AddDependenciesForDepRelationAction {
-  type: 'resourceVersionCreatorPage/dddDependenciesForDepRelation';
+  type: 'resourceVersionCreatorPage/dddDependenciesForDepRelation' | 'dddDependenciesForDepRelation';
   payload: string;
 }
 
@@ -172,9 +181,14 @@ const Model: ResourceVersionCreatorModelType = {
           .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
           .map((dep) => ({
             resourceId: dep.id,
-            contracts: dep.enabledPolicies
-              .filter((p) => (p.checked))
-              .map((p) => ({policyId: p.id})),
+            contracts: [
+              ...dep.enabledPolicies
+                .filter((p) => (p.checked))
+                .map((p) => ({policyId: p.id})),
+              ...dep.enableReuseContracts
+                .filter((c) => (c.checked))
+                .map((c) => ({policyId: c.policyId})),
+            ],
           }));
         return {
           resourceId: resourceInfo.info?.resourceId,
@@ -312,16 +326,17 @@ const Model: ResourceVersionCreatorModelType = {
         ],
       };
       console.log(relationship, 'relationship');
-      const {allBaseUpthrowIds, resourceDepRelationship, resourceDependencies}: { allBaseUpthrowIds: string[], resourceDepRelationship: any, resourceDependencies: any } = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
-
+      const {resourceDepRelationship}: { allBaseUpthrowIds: string[], resourceDepRelationship: any, resourceDependencies: any } = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
         resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-
       }));
-      console.log(allBaseUpthrowIds, 'allBaseUpthrowIds23redssZX');
 
       // for (const re of ){
       //  yield put<AddDependenciesForDepRelationAction>()
       // }
+      yield put<AddDependenciesForDepRelationAction>({
+        type: 'dddDependenciesForDepRelation',
+        payload: relationship.id,
+      });
 
       yield put<ChangeAction>({
         type: 'change',
@@ -345,66 +360,78 @@ const Model: ResourceVersionCreatorModelType = {
         resourceDependencies: resourceVersionCreatorPage.dependencies,
       }));
 
-      const resourcesParams: BatchInfoParamsType = {
-        resourceIds: payload,
+      const resourcesParams: InfoParamsType = {
+        resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
-      const {data: resourcesData} = yield call(batchInfo, resourcesParams);
-      console.info(resourcesData, 'resourcesData123rfd23');
+      const {data: resourceData} = yield call(info, resourcesParams);
+      console.info(resourceData, 'resourcesData123rfd23');
 
-      const dependencies: DepResources = resourcesData.map((r: any) => {
-        return {
-          id: r.resourceId,
-          title: r.resourceName,
-          resourceType: r.resourceType,
-          status: r.status,
-          version: {
-            isCustom: false,
-            select: r.latestVersion,
-            allowUpdate: true,
-            input: '',
-          },
-          versions: r.resourceVersions.map((version: any) => version.version),
-          upthrow: allBaseUpthrowIds.includes(r.resourceId),
-          upthrowDisabled: !!r.latestVersion,
-          enableReuseContracts: [],
-          enabledPolicies: r.policies.map((policy: any) => ({
+      const contractsParams: ContractsParamsType = {
+        identityType: 2,
+        licensorId: payload,
+        licenseeId: resourceInfo.resourceId,
+        isLoadPolicyInfo: 1,
+      };
+      const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
+      console.log(contractsData, 'contractsData24fsdzvrg');
+      const allContractPolicyIds = contractsData.map((constract: any) => constract.policyId);
+      console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
+
+
+      const resolveResourcesParams: ResolveResourcesParamsType = {
+        resourceId: resourceInfo.resourceId,
+      };
+      const {data: resolveResourcesData} = yield call(resolveResources, resolveResourcesParams);
+      console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
+
+      const dependency: DepResources[number] = {
+        id: resourceData.resourceId,
+        title: resourceData.resourceName,
+        resourceType: resourceData.resourceType,
+        status: resourceData.status,
+        version: {
+          isCustom: false,
+          select: resourceData.latestVersion,
+          allowUpdate: true,
+          input: '',
+        },
+        versions: resourceData.resourceVersions.map((version: any) => version.version),
+        upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
+        upthrowDisabled: !!resourceData.latestVersion,
+        enableReuseContracts: contractsData.map((c: any) => ({
+          checked: true,
+          id: c.contractId,
+          policyId: c.policyId,
+          title: c.contractName,
+          status: c.isAuth ? 'executing' : 'stopped',
+          code: c.policyInfo.policyText,
+          date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+          versions: resolveResourcesData
+            .find((rr: any) => rr.resourceId === resourceData.resourceId)
+            .versions
+            .filter((rr: any) => {
+              const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
+              return allContractIds.includes(c.contractId);
+            })
+            .map((rr: any) => rr.version),
+        })),
+        enabledPolicies: resourceData.policies
+          .filter((policy: any) => !allContractPolicyIds.includes(policy.policyId))
+          .map((policy: any) => ({
             checked: false,
             id: policy.policyId,
             title: policy.policyName,
             code: policy.policyText,
           })),
-          //   enableReuseContracts: Readonly<{
-          //     checked: boolean;
-          //   title: string;
-          //   status: 'executing' | 'stopped';
-          //   code: string;
-          //   id: string;
-          //   date: string;
-          //   versions: string[];
-          // }>[];
-          //   enabledPolicies: Readonly<{
-          //     checked: boolean;
-          //   id: string;
-          //   title: string;
-          //   code: string;
-          // }>[];
-        };
-      });
-
-      const params: ContractsParamsType = {
-        identityType: 2,
-        licensorId: payload,
-        licenseeId: resourceInfo.resourceId,
       };
-      yield call(contracts, params);
 
-      console.log(dependencies, 'dependency1r4dasf');
+      console.log(dependency, 'dependency1r4dasf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           dependencies: [
-            ...dependencies,
+            dependency,
             ...resourceDependencies,
           ],
         }
