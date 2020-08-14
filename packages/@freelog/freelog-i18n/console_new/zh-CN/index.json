@@ -165,14 +165,18 @@
 	"info_basic_upcast": "基础上抛是在资源的第一个版本中被上抛的依赖。基础上抛贯穿资源的所有版本，资源中新版本上抛的依赖都不能超过基础上抛的范围。",
 	"relationship_status_abnormal": "异常",
 	"no_short_description": "暂无简介",
-	"import_object_fail": "对象没有设置资源类型，导入失败",
+	"import_object_fail": "对象导入失败，请先设置资源类型",
 	"my_buckets": "我的存储空间",
-	"my_buckets_list_empty": "",
+	"my_buckets_list_empty": "点击“+”创建您的存储空间",
 	"manage_buckets_empty_title": "自由创作从Freelog开始\n",
 	"manage_buckets_empty_msg": "在Freelog，您可以创建存储空间，上传资源对象进行测试。\n",
 	"create_bucket": "创建存储空间",
 	"create_bucket_popup_title": "创建存储空间",
 	"create_bucket_popup_msg": "* 请注意存储空间的名称一但创建则不可修改。\n* Freelog为每个用户提供2GB的免费存储容量",
 	"enter_bucket_name": "输入存储空间名称",
-	"naming_convention_bucket_name": "只能包括小写字母、数字和短横线（-）。\n必须以小写字母或者数字开头和结尾。\n长度必须在 1–63 字符之间。"
+	"naming_convention_bucket_name": "只能包括小写字母、数字和短横线（-）。\n必须以小写字母或者数字开头和结尾。\n长度必须在 1–63 字符之间。",
+	"created_time": "",
+	"total_number": "",
+	"objects_list_empty": "",
+	"upload_object": "上传对象"
 }
