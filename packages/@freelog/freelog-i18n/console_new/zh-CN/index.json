@@ -3,7 +3,7 @@
 	"create_release_popup_empty": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
 	"file_exist": "存在同名文件",
 	"replace_file": "替换",
-	"file_size_exceed": "数据文件不能超过5MB",
+	"file_size_exceed": "数据文件不能超过512KB",
 	"check_release_details": "查看发行详情",
 	"create_release": "创建发行",
 	"create_new_release": "创建新发行",
@@ -165,5 +165,10 @@
 	"info_basic_upcast": "基础上抛是在资源的第一个版本中被上抛的依赖。基础上抛贯穿资源的所有版本，资源中新版本上抛的依赖都不能超过基础上抛的范围。",
 	"relationship_status_abnormal": "异常",
 	"no_short_description": "暂无简介",
-	"import_object_fail": "对象没有设置资源类型，导入失败"
+	"import_object_fail": "对象没有设置资源类型，导入失败",
+	"my_buckets": "我的存储空间",
+	"my_buckets_list_empty": "",
+	"manage_buckets_empty_title": "自由创作从Freelog开始\n",
+	"manage_buckets_empty_msg": "在Freelog，您可以创建存储空间，上传资源对象进行测试。\n",
+	"create_bucket": "创建存储空间"
 }

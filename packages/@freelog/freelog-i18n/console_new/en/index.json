@@ -3,7 +3,7 @@
 	"create_release_popup_empty": "Release a resource as the first version of a complete new release, or a new version of a exist release.",
 	"file_exist": "The file of same name already exists.",
 	"replace_file": "Replace",
-	"file_size_exceed": "Data file can not exceed 5MB",
+	"file_size_exceed": "Data file can not exceed 512KB",
 	"check_release_details": "More details",
 	"create_release": "Create release",
 	"create_new_release": "Create new release",
@@ -165,5 +165,10 @@
 	"info_basic_upcast": "Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list.",
 	"relationship_status_abnormal": "Abnormal",
 	"no_short_description": "No description",
-	"import_object_fail": ""
+	"import_object_fail": "",
+	"my_buckets": "My Buckets",
+	"my_buckets_list_empty": "",
+	"manage_buckets_empty_title": "Free creativity starting from Freelog",
+	"manage_buckets_empty_msg": "In Freelog , you can create buckets, upload and test your resources.",
+	"create_bucket": "Create a bucket"
 }
