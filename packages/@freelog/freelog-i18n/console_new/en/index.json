@@ -189,5 +189,6 @@
 	"nodedata_buckets_empty": "Your setting while you visit a node will be stored here.",
 	"uploaded_successfully": "Uploaded successfully",
 	"resume_uploading": "Resume uploading",
-	"cover_object_with_same_name": "Updating will replace the old file with the new one, but the settings of rely and property will be remained."
+	"cover_object_with_same_name": "Updating will replace the old file with the new one, but the settings of rely and property will be remained.",
+	"test_item_exist": ""
 }
