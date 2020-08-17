@@ -82,7 +82,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
     //     ]
     //   },
     // });
-    console.log(i, 'ii23dscvs');
+    // console.log(i, 'ii23dscvs');
     dispatch<AddADepByIDAction>({
       type: 'resourceVersionCreatorPage/addADepByIDAction',
       payload: [i.id, ...i.baseUpcastResources.map((up: any) => up.resourceId)],

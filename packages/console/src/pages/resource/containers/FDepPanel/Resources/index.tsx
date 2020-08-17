@@ -50,7 +50,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
       })
     }
   });
-  console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
+  // console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
   function onChangeVersion(version: DepResources[number]['version'], id: DepResources[number]['id']) {
     dispatch<OnChangeDependenciesByIDAction>({
@@ -181,10 +181,11 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                   className={styles.labelInfo}
                 >{j.title}</label>))
               }
+              {/*{i18nMessage('info_upcast')}*/}
               {
                 i.upthrow && (<label
                   className={styles.labelError}
-                >{i18nMessage('info_upcast')}</label>)
+                >上抛</label>)
               }
             </div>
           </>
