@@ -331,17 +331,6 @@ const Model: ResourceVersionCreatorModelType = {
         dependencies: resourceVersionCreatorPage.dependencies,
         allExistsIds: resourceVersionCreatorPage.dependencies.map((r: any) => r.resourceId),
       }));
-      // console.log(resourceDepRelationship, 'resourceDepRelationshipfwa3278iuwe');
-      // for (const i of payload) {
-      //   console.log(i, 'AddDependenciesForDepRelationAction');
-      //   yield call(sleep, 1000);
-      //   yield put<AddDependenciesForDepRelationAction>({
-      //     type: 'dddDependenciesForDepRelation',
-      //     payload: i,
-      //   });
-      // }
-      //
-      // yield call(sleep, 1000);
       const handleDepResourcePrams: HandleDepResourceParams = {
         resourceInfo: resourceInfo,
         allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
@@ -365,99 +354,6 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
     },
-    // TODO:
-    // * dddDependenciesForDepRelation({payload}: AddDependenciesForDepRelationAction, {call, select, put}: EffectsCommandMap) {
-    //
-    //   const {resourceInfo, allBaseUpthrowIds, resourceDependencies} = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
-    //     resourceInfo: resourceInfo.info,
-    //     allBaseUpthrowIds: resourceInfo.info?.baseUpcastResources?.map((up: any) => up.resourceId),
-    //     resourceDependencies: resourceVersionCreatorPage.dependencies,
-    //   }));
-    //
-    //   // console.log(resourceDependencies, 'resourceDependenciesresourceDependencies23rfwds');
-    //   const allExistsResourceDependenciesIds: string[] = resourceDependencies.map((rr: any) => rr.id);
-    //   // console.log(allExistsResourceDependenciesIds, 'allExistsResourceDependenciesId23weds');
-    //   if (allExistsResourceDependenciesIds.includes(payload)) {
-    //     return;
-    //   }
-    //
-    //   const resourcesParams: InfoParamsType = {
-    //     resourceIdOrName: payload,
-    //     isLoadPolicyInfo: 1,
-    //   };
-    //   const {data: resourceData} = yield call(info, resourcesParams);
-    //   console.info(resourceData, 'resourcesData123rfd23');
-    //
-    //   const contractsParams: ContractsParamsType = {
-    //     identityType: 2,
-    //     licensorId: payload,
-    //     licenseeId: resourceInfo.resourceId,
-    //     isLoadPolicyInfo: 1,
-    //   };
-    //   const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
-    //   // console.log(contractsData, 'contractsData24fsdzvrg');
-    //   const allContractPolicyIds = contractsData.map((constract: any) => constract.policyId);
-    //   // console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
-    //
-    //
-    //   const resolveResourcesParams: ResolveResourcesParamsType = {
-    //     resourceId: resourceInfo.resourceId,
-    //   };
-    //   const {data: resolveResourcesData} = yield call(resolveResources, resolveResourcesParams);
-    //   // console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
-    //
-    //   const dependency: DepResources[number] = {
-    //     id: resourceData.resourceId,
-    //     title: resourceData.resourceName,
-    //     resourceType: resourceData.resourceType,
-    //     status: resourceData.status,
-    //     version: {
-    //       isCustom: false,
-    //       select: resourceData.latestVersion,
-    //       allowUpdate: true,
-    //       input: '',
-    //     },
-    //     versions: resourceData.resourceVersions.map((version: any) => version.version),
-    //     upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
-    //     upthrowDisabled: !!resourceInfo.latestVersion,
-    //     enableReuseContracts: contractsData.map((c: any) => ({
-    //       checked: true,
-    //       id: c.contractId,
-    //       policyId: c.policyId,
-    //       title: c.contractName,
-    //       status: c.isAuth ? 'executing' : 'stopped',
-    //       code: c.policyInfo.policyText,
-    //       date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-    //       versions: resolveResourcesData
-    //         .find((rr: any) => rr.resourceId === resourceData.resourceId)
-    //         .versions
-    //         .filter((rr: any) => {
-    //           const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
-    //           return allContractIds.includes(c.contractId);
-    //         })
-    //         .map((rr: any) => rr.version),
-    //     })),
-    //     enabledPolicies: resourceData.policies
-    //       .filter((policy: any) => !allContractPolicyIds.includes(policy.policyId))
-    //       .map((policy: any) => ({
-    //         checked: false,
-    //         id: policy.policyId,
-    //         title: policy.policyName,
-    //         code: policy.policyText,
-    //       })),
-    //   };
-    //
-    //   // console.log(dependency, 'dependency1r4dasf');
-    //   return yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       dependencies: [
-    //         dependency,
-    //         ...resourceDependencies,
-    //       ],
-    //     }
-    //   });
-    // }
   },
 
   reducers: {

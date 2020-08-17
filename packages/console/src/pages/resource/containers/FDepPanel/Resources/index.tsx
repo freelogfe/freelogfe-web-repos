@@ -33,7 +33,7 @@ interface DataS extends T {
 function Resources({creator: {depRelationship, dependencies, depActivatedID}, dispatch}: ResourcesProps) {
 
   React.useEffect(() => {
-    if (!depRelationship.map((i) => i.id).includes(depActivatedID)) {
+    if (!dependencies.map((i) => i.id).includes(depActivatedID)) {
       if (depRelationship.length > 0) {
         onChangeResourcesActivated(depRelationship[0].id);
       } else {
@@ -50,6 +50,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
       })
     }
   });
+
   // console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
   function onChangeVersion(version: DepResources[number]['version'], id: DepResources[number]['id']) {
@@ -163,7 +164,10 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
       dataSource.map((i) => (
         <div
           key={i.id}
-          onClick={() => onClick && onClick(i.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick && onClick(i.id);
+          }}
           className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}>
           <FContentText text={i.title}/>
           <div style={{height: 5}}/>
@@ -177,9 +181,9 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                 !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
                   .filter((k) => k.checked)
                   .map((j) => (<label
-                  key={j.id}
-                  className={styles.labelInfo}
-                >{j.title}</label>))
+                    key={j.id}
+                    className={styles.labelInfo}
+                  >{j.title}</label>))
               }
               {/*{i18nMessage('info_upcast')}*/}
               {
