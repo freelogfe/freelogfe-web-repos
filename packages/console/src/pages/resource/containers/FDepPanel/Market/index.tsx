@@ -17,11 +17,25 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {list, ListParamsType} from '@/services/resources';
 import moment from 'moment';
 import {resourceList} from "@/services/collections";
-import any = jasmine.any;
+import {List, Skeleton} from 'antd';
 
 interface MarketProps {
   dispatch: Dispatch;
   creator: ResourceVersionCreatorPageModelState;
+}
+
+interface MarketStatus {
+  selected: '1' | '2' | '3';
+  page: number;
+  totalItem: number;
+  input: string;
+  resourceObjects: {
+    id: string;
+    title: string;
+    resourceType: string;
+    time: string;
+    status: 0 | 1;
+  }[];
 }
 
 const selectOptions: { text?: string, value: string }[] = [
@@ -30,29 +44,32 @@ const selectOptions: { text?: string, value: string }[] = [
   {text: '我的收藏', value: '3'},
 ];
 
+let page: MarketStatus['page'] = 1;
+let input: MarketStatus['input'] = '';
+
 function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProps) {
 
-  const [selected, setSelected] = React.useState<any>('1');
+  const [selected, setSelected] = React.useState<MarketStatus['selected']>('1');
+  // const [page, setPage] = React.useState<MarketStatus['page']>(1);
+  // const [input, setInput] = React.useState<MarketStatus['input']>('');
+  const [totalItem, setTotalItem] = React.useState<MarketStatus['totalItem']>(-1);
 
-  const [input, setInput] = React.useState<string>('');
-
-  const [resourceObjects, setResourceObjects] = React.useState<any[]>([]);
+  const [resourceObjects, setResourceObjects] = React.useState<MarketStatus['resourceObjects']>([]);
 
   React.useEffect(() => {
-    handleDataSource();
+    handleDataSource(0);
   }, []);
 
-  async function handleDataSource() {
+  async function handleDataSource(isSelf: 0 | 1 = 0) {
     const params: ListParamsType = {
-      isLoadPolicyInfo: 1,
-      isSelf: 1,
+      isSelf: isSelf,
+      pageSize: 20,
+      page: page,
+      status: isSelf === 1 ? 2 : 1,
+      keywords: window.encodeURIComponent(input),
     };
-    // const {data} = await list(params);
+    // console.log(params, '324wdsparams');
     const {data} = await list(params);
-    // const {data: data2} = await resourceList({});
-    // console.log(data, 'data3fasd');
-    // console.log(data1, 'data1');
-    // console.log(data2, 'data2');
     const resources = data.dataList.map((i: any) => ({
       id: i.resourceId,
       title: i.resourceName,
@@ -61,32 +78,42 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       status: i.status,
       baseUpcastResources: i.baseUpcastResources,
     }));
-    setResourceObjects(resources);
+    setTotalItem(data.totalItem);
+    if (page === 1) {
+      setResourceObjects(resources);
+    } else {
+      setResourceObjects([
+        ...resourceObjects,
+        ...resources,
+      ]);
+    }
+
   }
 
-  // async function f() {
-  //
-  // }
-
   function onSelect(i: any) {
-    // dispatch<ChangeAction>({
-    //   type: 'resourceVersionCreatorPage/change',
-    //   payload: {
-    //     dependencies: [
-    //       i,
-    //       ...dependencies,
-    //     ],
-    //     depRelationship: [
-    //       {id: i.id, children: []},
-    //       ...depRelationship,
-    //     ]
-    //   },
-    // });
-    // console.log(i, 'ii23dscvs');
+    // console.log(i, 'IIIIIIsAAAA');
     dispatch<AddADepByIDAction>({
       type: 'resourceVersionCreatorPage/addADepByIDAction',
       payload: [i.id, ...i.baseUpcastResources.map((up: any) => up.resourceId)],
     });
+  }
+
+  function onChangeSelected(selected: MarketStatus['selected']) {
+    setSelected(selected as MarketStatus['selected']);
+    page = 1;
+    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
+  }
+
+  function onChangePage() {
+    // console.log(page, 'page35erdf');
+    page += 1;
+    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
+  }
+
+  function onChangeInput(value: string) {
+    input = value;
+    page = 1;
+    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
   }
 
   return (
@@ -96,13 +123,15 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
           <FDropdown
             options={selectOptions}
             text={selectOptions.find((i) => i.value === selected)?.text}
-            onChange={(value) => setSelected(value)}
+            onChange={onChangeSelected as any}
           />
         </div>
 
         <FInput
+          debounce={300}
+          onDebounceChange={onChangeInput}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          // onChange={(e) => setInput(e.target.value)}
           className={styles.filterInput}
           theme="dark"
           size="small"
@@ -111,9 +140,24 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
 
       <div style={{height: 17}}/>
 
-      {
-        resourceObjects?.map((i) => (
-          <div key={i.id} className={styles.bucket}>
+      <List
+        // className="demo-loadmore-list"
+        loading={totalItem === -1}
+        itemLayout="horizontal"
+        loadMore={(totalItem > page * 20)
+          ? (<div
+            style={{
+              textAlign: 'center',
+              marginTop: 12,
+              height: 32,
+              lineHeight: '32px',
+            }}
+          ><FNormalButton onClick={onChangePage}>加载更多</FNormalButton></div>)
+          : (resourceObjects.length > 0 && (
+            <div style={{textAlign: 'center', padding: '10px 0'}}><FContentText type="additional1" text={'没有更多了~'}/></div>))}
+        dataSource={resourceObjects}
+        renderItem={(i: MarketStatus['resourceObjects'][number]) => (
+          <div className={styles.bucket}>
             <div>
               <FContentText text={i.title}/>
               <div style={{height: 2}}/>
@@ -125,8 +169,8 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
               disabled={depRelationship.map((j) => j.id).includes(i.id)}
             >选择</FNormalButton>
           </div>
-        ))
-      }
+        )}
+      />
     </div>
   );
 }
