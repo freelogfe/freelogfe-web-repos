@@ -190,5 +190,6 @@
 	"uploaded_successfully": "上传成功",
 	"resume_uploading": "重新上传",
 	"cover_object_with_same_name": "更新将会覆盖原有的对象文件，但是保留依赖、自定义属性等设置。",
-	"test_item_exist": "导入失败，该测试目标已存在。"
+	"test_item_exist": "导入失败，该测试目标已存在。",
+	"version_range_incorrect": "格式有误。版本范围输入应符合SemVer规范。"
 }

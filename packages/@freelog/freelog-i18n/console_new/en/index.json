@@ -190,5 +190,6 @@
 	"uploaded_successfully": "Uploaded successfully",
 	"resume_uploading": "Resume uploading",
 	"cover_object_with_same_name": "Updating will replace the old file with the new one, but the settings of rely and property will be remained.",
-	"test_item_exist": ""
+	"test_item_exist": "",
+	"version_range_incorrect": ""
 }
