@@ -1,25 +1,51 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
+import {ChangeAction} from "@/models/resourceAuthPage";
 
 interface ResourcesProps {
-  dataSource: {
-    id: string | number;
-    activated: boolean;
-    title: string;
-    resourceType: string;
-    // version: string;
-    labels: string[];
-  }[];
-  onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
+  dispatch: Dispatch;
+  // dataSource: {
+  //   id: string | number;
+  //   activated: boolean;
+  //   title: string;
+  //   resourceType: string;
+  //   // version: string;
+  //   labels: string[];
+  // }[];
+  resourceAuthPage: ResourceAuthPageModelState;
+  // onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
 }
 
-function Resources({dataSource, onClick}: ResourcesProps) {
+function Resources({resourceAuthPage, dispatch, onClick}: ResourcesProps) {
+  function onChangeActivated(id: number | string) {
+    dispatch<ChangeAction>({
+      type: 'resourceAuthPage/change',
+      payload: {
+        contractsAuthorized: resourceAuthPage.contractsAuthorized.map((i) => ({
+          ...i,
+          activated: i.id === id,
+        })),
+      },
+    });
+  }
+
+  const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
+    id: i.id,
+    activated: i.activated,
+    title: i.title,
+    resourceType: i.resourceType,
+    version: i.version,
+    labels: i.contracts.map((j) => j.title)
+  }));
+
   return <div className={styles.styles}>
     {dataSource.map((i) => (
       <div
         key={i.id}
-        onClick={() => onClick && onClick(i)}
+        onClick={() => onChangeActivated(i.id)}
         className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
         <div>
           <FContentText text={i.title}/>
@@ -43,4 +69,9 @@ function Resources({dataSource, onClick}: ResourcesProps) {
   </div>
 }
 
-export default Resources;
+
+export default connect(({resourceAuthPage}: ConnectState) => {
+  return ({
+    resourceAuthPage: resourceAuthPage
+  });
+})(Resources);

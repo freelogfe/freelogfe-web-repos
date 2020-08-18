@@ -51,17 +51,7 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>
       <div>
-        <Resources
-          onClick={(resource) => onChangeActivated(resource.id)}
-          dataSource={dataSource.map((i) => ({
-            id: i.id,
-            activated: i.activated,
-            title: i.title,
-            resourceType: i.resourceType,
-            version: i.version,
-            labels: i.contracts.map((j) => j.title)
-          }))}
-        />
+        <Resources/>
       </div>
     </div>
     <div className={styles.DepPanelContent}>
