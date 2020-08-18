@@ -1,5 +1,5 @@
 {
-	"create_my_first_release ": "该展品名称在当前节点已使用。",
+	"create_my_first_release ": "",
 	"create_release_popup_empty": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
 	"file_exist": "存在同名文件",
 	"replace_file": "替换",
@@ -191,5 +191,7 @@
 	"resume_uploading": "重新上传",
 	"cover_object_with_same_name": "更新将会覆盖原有的对象文件，但是保留依赖、自定义属性等设置。",
 	"test_item_exist": "导入失败，该测试目标已存在。",
-	"version_range_incorrect": "格式有误。版本范围输入应符合SemVer规范。"
+	"version_range_incorrect": "格式有误。版本范围输入应符合SemVer规范。",
+	"alarm_exhibits_show_plan": "",
+	"alarm_exhibits_show_authorization": ""
 }

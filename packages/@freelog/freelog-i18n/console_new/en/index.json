@@ -1,5 +1,5 @@
 {
-	"create_my_first_release ": "The exhibits name already exists on this node.",
+	"create_my_first_release ": "",
 	"create_release_popup_empty": "Release a resource as the first version of a complete new release, or a new version of a exist release.",
 	"file_exist": "The file of same name already exists.",
 	"replace_file": "Replace",
@@ -191,5 +191,7 @@
 	"resume_uploading": "Resume uploading",
 	"cover_object_with_same_name": "Updating will replace the old file with the new one, but the settings of rely and property will be remained.",
 	"test_item_exist": "",
-	"version_range_incorrect": ""
+	"version_range_incorrect": "",
+	"alarm_exhibits_show_plan": "",
+	"alarm_exhibits_show_authorization": ""
 }
