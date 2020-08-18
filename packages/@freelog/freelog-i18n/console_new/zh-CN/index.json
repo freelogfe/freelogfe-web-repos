@@ -192,6 +192,6 @@
 	"cover_object_with_same_name": "更新将会覆盖原有的对象文件，但是保留依赖、自定义属性等设置。",
 	"test_item_exist": "导入失败，该测试目标已存在。",
 	"version_range_incorrect": "格式有误。版本范围输入应符合SemVer规范。",
-	"alarm_exhibits_show_plan": "",
-	"alarm_exhibits_show_authorization": ""
+	"alarm_exhibits_show_plan": "请先添加并启用授权策略，再上线展品。",
+	"alarm_exhibits_show_authorization": "授权链异常，无法上线展品。"
 }
