@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {FAuthPanelProps} from "@/pages/resource/components/FAuthPanel";
+import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
 import {
   batchInfo,
   BatchInfoParamsType,

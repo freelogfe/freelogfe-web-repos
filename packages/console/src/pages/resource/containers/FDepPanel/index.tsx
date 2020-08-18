@@ -70,7 +70,6 @@ function FDepPanel({creator}: FDepPanelProps) {
       </>)
     }
 
-
     <Drawer
       title={'添加依赖'}
       onClose={() => setModalVisible(false)}

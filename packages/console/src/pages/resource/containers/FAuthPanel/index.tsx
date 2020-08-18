@@ -28,7 +28,8 @@ export interface FAuthPanelProps {
       code: string;
     }[];
   }[];
-  onChangeActivatedResource?: (dataSource: FAuthPanelProps['dataSource']) => void;
+
+  onChangeActivatedResource?(dataSource: FAuthPanelProps['dataSource']): void;
 }
 
 export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
@@ -64,7 +65,7 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
       </div>
     </div>
     <div className={styles.DepPanelContent}>
-      <div>
+      <div className={styles.contentBox} id={'DepPanelContent'}>
         {
           activeResource && activeResource?.contracts.length > 0 && (<>
             <FContentText type="additional2" text={i18nMessage('used_contract')}/>

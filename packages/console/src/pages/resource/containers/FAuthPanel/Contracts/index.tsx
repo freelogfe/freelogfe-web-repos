@@ -32,16 +32,22 @@ export default function Contracts({dataSource}: ContractsProps) {
           <FContentText type="additional2" text={'签约时间：' + k.date}/>
         </Space>
         <div style={{height: 9}}/>
-        <div>
-          <FContentText type="additional2">
-            应用版本：
-            <Space size={15}>
-              {k.versions.map((i) => <Space size={2} key={i.version}>
-                <Checkbox checked={i.checked}/>
-                <span>{i.version}</span>
-              </Space>)}
+        <div className={styles.versionControl}>
+          <FContentText type="additional2">应用版本：</FContentText>
+          <div className={styles.allVersions}>
+            {k.versions.map((i) => <Space size={8} key={i.version}>
+              <Checkbox checked={i.checked}/>
+              <span>{i.version}</span>
+            </Space>)}
+            <Space size={8}>
+              <Checkbox checked={true}/>
+              <span>{'0.0.1'}</span>
             </Space>
-          </FContentText>
+            <Space size={8}>
+              <Checkbox checked={true}/>
+              <span>{'0.0.1'}</span>
+            </Space>
+          </div>
         </div>
       </div>
     </div>))}

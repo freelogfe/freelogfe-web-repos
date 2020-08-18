@@ -6,7 +6,7 @@ import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FPolicies from '@/pages/resource/components/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
-import FAuthPanel from '@/pages/resource/components/FAuthPanel';
+import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
 import {connect, Dispatch} from "dva";
@@ -116,7 +116,9 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
             dataSource={auth.contractsAuthorized}
             onChangeActivatedResource={(value) => dispatch<ChangeAction>({
               type: 'resourceAuthPage/change',
-              payload: {},
+              payload: {
+                contractsAuthorized: value,
+              },
             })}
           />
         </FEditorCard>)
