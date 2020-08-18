@@ -7,19 +7,10 @@ import {ChangeAction} from "@/models/resourceAuthPage";
 
 interface ResourcesProps {
   dispatch: Dispatch;
-  // dataSource: {
-  //   id: string | number;
-  //   activated: boolean;
-  //   title: string;
-  //   resourceType: string;
-  //   // version: string;
-  //   labels: string[];
-  // }[];
   resourceAuthPage: ResourceAuthPageModelState;
-  // onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
 }
 
-function Resources({resourceAuthPage, dispatch, onClick}: ResourcesProps) {
+function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
   function onChangeActivated(id: number | string) {
     dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
