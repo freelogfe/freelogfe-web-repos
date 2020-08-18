@@ -3,16 +3,19 @@ import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {Checkbox, Dropdown, Space} from 'antd';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceInfoModelState} from "@/models/connect";
 
 interface PolicyCardProps {
+  dispatch: Dispatch;
+  resourceInfo: ResourceInfoModelState['info'];
   title: string;
   code: string;
 
   onClickLicense?(): void;
 }
 
-function PolicyCard({title, code, onClickLicense}: PolicyCardProps) {
+function PolicyCard({title, code, onClickLicense, resourceInfo}: PolicyCardProps) {
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
 
   return (<div className={styles.Policy}>
@@ -20,7 +23,9 @@ function PolicyCard({title, code, onClickLicense}: PolicyCardProps) {
       <div className={styles.PolicyName}>
         <span>{title}</span>
         <Dropdown
-          overlay={<MenuPanel versions={[]} onClickCancel={() => setDropdownVisible(false)}/>}
+          overlay={<MenuPanel
+            versions={resourceInfo?.resourceVersions.map((v) => v.version) as string[]}
+            onClickCancel={() => setDropdownVisible(false)}/>}
           trigger={['click']}
           placement="bottomRight"
           visible={dropdownVisible}
@@ -40,13 +45,13 @@ function PolicyCard({title, code, onClickLicense}: PolicyCardProps) {
   </div>);
 }
 
-export default PolicyCard;
+
+export default connect(({resourceInfo}: ConnectState) => ({
+  resourceInfo: resourceInfo.info,
+}))(PolicyCard);
 
 interface MenuPanelProps {
-  versions: {
-    text: string;
-    checked: boolean;
-  }[];
+  versions: string[];
 
   onClickConfirm?(versions: string[]): void;
 
@@ -54,31 +59,40 @@ interface MenuPanelProps {
 }
 
 function MenuPanel({versions, onClickConfirm, onClickCancel}: MenuPanelProps) {
+  const [selectedVersions, setSelectedVersions] = React.useState<string[]>([]);
+
+  function onChangeSelected(version: string, checked: boolean) {
+    if (checked) {
+      setSelectedVersions([
+        ...selectedVersions,
+        version,
+      ]);
+    } else {
+      setSelectedVersions(selectedVersions.filter((v: string) => v !== version));
+    }
+  }
+
   return (<div className={styles.MenuPanel}>
     <FContentText text={'选择签约的版本'}/>
     <div style={{height: 30}}/>
     <div className={styles.allVersions}>
-      <Space size={8}>
-        <Checkbox checked={true}/>
-        <span>0.0.1</span>
-      </Space>
-      <Space size={8}>
-        <Checkbox checked={true}/>
-        <span>0.0.2</span>
-      </Space>
-      <Space size={8}>
-        <Checkbox checked={true}/>
-        <span>0.0.2</span>
-      </Space>
-      <Space size={8}>
-        <Checkbox checked={true}/>
-        <span>0.0.2</span>
-      </Space>
+      {
+        versions.map((v) => (<Space size={8} key={v}>
+          <Checkbox
+            checked={selectedVersions.includes(v)}
+            onChange={(e) => onChangeSelected(v, e.target.checked)}
+          />
+          <span>{v}</span>
+        </Space>))
+      }
     </div>
     <div style={{height: 40}}/>
     <Space size={25}>
-      <FTextButton onClick={() => onClickCancel && onClickCancel()}>取消</FTextButton>
-      <FNormalButton>签约</FNormalButton>
+      <FTextButton
+        onClick={() => onClickCancel && onClickCancel()}>取消</FTextButton>
+      <FNormalButton
+        onClick={() => onClickConfirm && onClickConfirm(selectedVersions)}
+      >签约</FNormalButton>
     </Space>
   </div>);
 }

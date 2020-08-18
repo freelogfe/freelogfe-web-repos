@@ -11,7 +11,7 @@ interface ContractsProps {
     code: string;
     id: string;
     date: string;
-    versions: { version: string; checked: boolean; }[];
+    versions: { version: string; checked: boolean; disabled: boolean; }[];
   }[];
 }
 
@@ -36,17 +36,9 @@ export default function Contracts({dataSource}: ContractsProps) {
           <FContentText type="additional2">应用版本：</FContentText>
           <div className={styles.allVersions}>
             {k.versions.map((i) => <Space size={8} key={i.version}>
-              <Checkbox checked={i.checked}/>
+              <Checkbox checked={i.checked} disabled={i.disabled}/>
               <span>{i.version}</span>
             </Space>)}
-            <Space size={8}>
-              <Checkbox checked={true}/>
-              <span>{'0.0.1'}</span>
-            </Space>
-            <Space size={8}>
-              <Checkbox checked={true}/>
-              <span>{'0.0.1'}</span>
-            </Space>
           </div>
         </div>
       </div>

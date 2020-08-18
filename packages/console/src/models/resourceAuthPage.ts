@@ -74,38 +74,38 @@ export interface ResourceAuthPageModelType {
   subscriptions: { setup: Subscription };
 }
 
-const contractsAuthorized: FAuthPanelProps['dataSource'] = [1, 2, 3, 4, 5, 6].map((i) => ({
-  id: i,
-  activated: i === 2,
-  title: 'ww-zh/PB-markdown' + i,
-  resourceType: 'markdown',
-  version: '1.2.3',
-  contracts: [{
-    checked: true,
-    title: '策略1',
-    status: 'executing',
-    code: 'initial:\n' +
-      '  active\n' +
-      '  recontractable\n' +
-      '  presentable\n' +
-      '  terminate',
-    id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
-    date: '2019-10-10',
-    versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
-  }],
-  policies: [{
-    id: '123423',
-    title: '策略2',
-    code: 'init:\n' +
-      '  proceed to state_1 on action_1\n' +
-      'state_1:\n' +
-      '  active\n' +
-      '  proceed to state_2 on action_2\n' +
-      'state_2:\n' +
-      '  active\n' +
-      '  proceed to state_3 on action_3',
-  }],
-}));
+// const contractsAuthorized: FAuthPanelProps['dataSource'] = [1, 2, 3, 4, 5, 6].map((i) => ({
+//   id: i,
+//   activated: i === 2,
+//   title: 'ww-zh/PB-markdown' + i,
+//   resourceType: 'markdown',
+//   version: '1.2.3',
+//   contracts: [{
+//     checked: true,
+//     title: '策略1',
+//     status: 'executing',
+//     code: 'initial:\n' +
+//       '  active\n' +
+//       '  recontractable\n' +
+//       '  presentable\n' +
+//       '  terminate',
+//     id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
+//     date: '2019-10-10',
+//     versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
+//   }],
+//   policies: [{
+//     id: '123423',
+//     title: '策略2',
+//     code: 'init:\n' +
+//       '  proceed to state_1 on action_1\n' +
+//       'state_1:\n' +
+//       '  active\n' +
+//       '  proceed to state_2 on action_2\n' +
+//       'state_2:\n' +
+//       '  active\n' +
+//       '  proceed to state_3 on action_3',
+//   }],
+// }));
 
 const Model: ResourceAuthPageModelType = {
 
@@ -222,6 +222,7 @@ const Model: ResourceAuthPageModelType = {
                   return {
                     version: v,
                     checked: !!i.versions?.find((version: any) => version.version === v)?.contracts?.find((contract: any) => contract.contractId === c.contractId),
+                    disabled: i.versions?.length === 1,
                   };
                 }),
               };

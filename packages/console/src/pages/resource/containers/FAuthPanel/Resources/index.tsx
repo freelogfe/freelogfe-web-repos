@@ -14,7 +14,7 @@ interface ResourcesProps {
   onClick?: (resource: ResourcesProps['dataSource'][0]) => void;
 }
 
-export default function Resources({dataSource, onClick}: ResourcesProps) {
+function Resources({dataSource, onClick}: ResourcesProps) {
   return <div className={styles.styles}>
     {dataSource.map((i) => (
       <div
@@ -42,3 +42,5 @@ export default function Resources({dataSource, onClick}: ResourcesProps) {
       </div>))}
   </div>
 }
+
+export default Resources;

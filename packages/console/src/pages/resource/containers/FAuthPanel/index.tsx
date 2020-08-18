@@ -20,7 +20,7 @@ export interface FAuthPanelProps {
       code: string;
       id: string;
       date: string;
-      versions: { version: string; checked: boolean; }[];
+      versions: { version: string; checked: boolean; disabled: boolean }[];
     }[];
     policies: {
       id: string;
