@@ -88,7 +88,9 @@ const Model: ResourceInfoModelType = {
 
       yield put<FetchAuthorizedAction>({
         type: 'resourceAuthPage/fetchAuthorized',
-        payload: data.resourceId,
+        payload: {
+          baseResourceId: data.resourceId
+        },
       });
     },
   },

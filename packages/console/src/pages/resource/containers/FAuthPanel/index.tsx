@@ -26,6 +26,7 @@ export interface FAuthPanelProps {
       id: string;
       title: string;
       code: string;
+      allEnabledVersions: string[];
     }[];
   }[];
 

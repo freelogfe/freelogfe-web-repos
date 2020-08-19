@@ -184,3 +184,20 @@ export interface ResolveResourcesParamsType {
 export function resolveResources(params: LookDraftParamsType) {
   return request.get(`/v2/resources/${params.resourceId}/resolveResources`);
 }
+
+// 查询资源所解决的依赖集
+export interface BatchSetContractsParamsType {
+  resourceId: string;
+  subjects: {
+    subjectId: string;
+    versions: {
+      version: string;
+      policyId: string;
+      operation: 0 | 1;
+    }[];
+  }[];
+}
+
+export function batchSetContracts({resourceId, subjects}: BatchSetContractsParamsType) {
+  return request.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, {subjects});
+}

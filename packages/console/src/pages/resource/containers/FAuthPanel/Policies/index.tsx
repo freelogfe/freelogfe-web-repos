@@ -1,27 +1,39 @@
 import * as React from 'react';
 import styles from './index.less';
 import PolicyCard from './PolicyCard';
+import {Dispatch, connect} from "dva";
+import {UpdateAuthorizedAction} from "@/models/resourceAuthPage";
+import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
 
 interface PoliciesProps {
-  dataSource: {
-    id: string;
-    title: string;
-    code: string;
-  }[];
-  onLicense?: (id: string, record: PoliciesProps['dataSource'][0]) => void;
+  dispatch: Dispatch;
+  dataSource: FAuthPanelProps['dataSource'][number]['policies'];
+  // onLicense?: (id: string, record: PoliciesProps['dataSource'][0]) => void;
 }
 
-export default function Policies({dataSource, onLicense}: PoliciesProps) {
+function Policies({dataSource, dispatch}: PoliciesProps) {
+  function onLicense(versions: string[], policyId: string) {
+    dispatch<UpdateAuthorizedAction>({
+      type: 'resourceAuthPage/updateAuthorized',
+      payload: versions.map((v: string) => ({
+        version: v,
+        policyId: policyId,
+        operation: 1,
+      })),
+    });
+  }
+
   return (<div className={styles.styles}>
     {dataSource.map((i) => (
       <PolicyCard
         key={i.id}
         title={i.title}
         code={i.code}
-        onClickLicense={() => onLicense && onLicense(i.id, i)}
+        allVersions={i.allEnabledVersions}
+        onClickLicense={(versions: string[]) => onLicense(versions, i.id)}
       />
     ))}
   </div>)
 }
 
-
+export default connect()(Policies);

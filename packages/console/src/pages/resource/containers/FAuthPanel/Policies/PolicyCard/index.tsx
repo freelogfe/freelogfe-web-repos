@@ -6,17 +6,31 @@ import {FNormalButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState} from "@/models/connect";
 
+// import {UpdateAuthorizedAction} from "@/models/resourceAuthPage";
+
 interface PolicyCardProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState['info'];
   title: string;
   code: string;
+  allVersions: string[];
 
-  onClickLicense?(): void;
+  onClickLicense?(versions: string[]): void;
 }
 
-function PolicyCard({title, code, onClickLicense, resourceInfo}: PolicyCardProps) {
+function PolicyCard({title, code, allVersions, onClickLicense, resourceInfo, dispatch}: PolicyCardProps) {
   const [dropdownVisible, setDropdownVisible] = React.useState<boolean>(false);
+
+  // function onLicense() {
+  //   dispatch<UpdateAuthorizedAction>({
+  //     type: 'resourceAuthPage/updateAuthorized',
+  //     payload: [{
+  //       version: '0',
+  //       policyId: 'sdf',
+  //       operation: 1,
+  //     }]
+  //   });
+  // }
 
   return (<div className={styles.Policy}>
     <div className={styles.PolicyGrammar}>
@@ -24,8 +38,10 @@ function PolicyCard({title, code, onClickLicense, resourceInfo}: PolicyCardProps
         <span>{title}</span>
         <Dropdown
           overlay={<MenuPanel
-            versions={resourceInfo?.resourceVersions.map((v) => v.version) as string[]}
-            onClickCancel={() => setDropdownVisible(false)}/>}
+            versions={allVersions}
+            onClickCancel={() => setDropdownVisible(false)}
+            onClickConfirm={(versions) => onClickLicense && onClickLicense(versions)}
+          />}
           trigger={['click']}
           placement="bottomRight"
           visible={dropdownVisible}
@@ -35,7 +51,7 @@ function PolicyCard({title, code, onClickLicense, resourceInfo}: PolicyCardProps
         >
           <FNormalButton
             size="small"
-            onClick={() => onClickLicense && onClickLicense()}
+            // onClick={() => onClickLicense && onClickLicense()}
           >获取授权</FNormalButton>
         </Dropdown>
       </div>

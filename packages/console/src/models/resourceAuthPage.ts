@@ -4,7 +4,7 @@ import {DvaReducer} from './shared';
 import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
 import {
   batchInfo,
-  BatchInfoParamsType,
+  BatchInfoParamsType, batchSetContracts, BatchSetContractsParamsType,
   resolveResources,
   ResolveResourcesParamsType,
   update,
@@ -14,6 +14,7 @@ import {FetchDataSourceAction} from "@/models/resourceInfo";
 import {policiesList, PoliciesListParamsType} from "@/services/policies";
 import {contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
+import {ConnectState} from "@/models/connect";
 
 export interface ResourceAuthPageModelState {
   policies: {
@@ -50,13 +51,25 @@ export interface FetchPoliciesAction extends AnyAction {
 }
 
 export interface FetchAuthorizedAction extends AnyAction {
-  type: 'resourceAuthPage/fetchAuthorized',
-  payload: string;
+  type: 'resourceAuthPage/fetchAuthorized' | 'fetchAuthorized',
+  payload: {
+    baseResourceId: string;
+    activatedResourceId?: string;
+  };
 }
 
 export interface FetchAuthorizeAction extends AnyAction {
   type: 'resourceAuthPage/fetchAuthorize',
   payload: string;
+}
+
+export interface UpdateAuthorizedAction extends AnyAction {
+  type: 'resourceAuthPage/updateAuthorized',
+  payload: {
+    version: string;
+    policyId: string;
+    operation: 0 | 1;
+  }[];
 }
 
 export interface ResourceAuthPageModelType {
@@ -67,45 +80,13 @@ export interface ResourceAuthPageModelType {
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
     fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;
     fetchAuthorize: (action: FetchAuthorizeAction, effects: EffectsCommandMap) => void;
+    updateAuthorized: (action: UpdateAuthorizedAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceAuthPageModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
 }
-
-// const contractsAuthorized: FAuthPanelProps['dataSource'] = [1, 2, 3, 4, 5, 6].map((i) => ({
-//   id: i,
-//   activated: i === 2,
-//   title: 'ww-zh/PB-markdown' + i,
-//   resourceType: 'markdown',
-//   version: '1.2.3',
-//   contracts: [{
-//     checked: true,
-//     title: '策略1',
-//     status: 'executing',
-//     code: 'initial:\n' +
-//       '  active\n' +
-//       '  recontractable\n' +
-//       '  presentable\n' +
-//       '  terminate',
-//     id: 'adhjtyrghgjhxdfthgasdhdflgkftr',
-//     date: '2019-10-10',
-//     versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}],
-//   }],
-//   policies: [{
-//     id: '123423',
-//     title: '策略2',
-//     code: 'init:\n' +
-//       '  proceed to state_1 on action_1\n' +
-//       'state_1:\n' +
-//       '  active\n' +
-//       '  proceed to state_2 on action_2\n' +
-//       'state_2:\n' +
-//       '  active\n' +
-//       '  proceed to state_3 on action_3',
-//   }],
-// }));
 
 const Model: ResourceAuthPageModelType = {
 
@@ -156,7 +137,7 @@ const Model: ResourceAuthPageModelType = {
         payload: action.id,
       });
     },
-    * fetchAuthorized({payload: baseResourceId}: FetchAuthorizedAction, {call, put}: EffectsCommandMap) {
+    * fetchAuthorized({payload: {baseResourceId, activatedResourceId}}: FetchAuthorizedAction, {call, put}: EffectsCommandMap) {
       const params: ResolveResourcesParamsType = {
         resourceId: baseResourceId,
       };
@@ -203,7 +184,7 @@ const Model: ResourceAuthPageModelType = {
         // console.log(allEnabledPolicies, 'allEnabledPolicies');
         return {
           id: currentResource.resourceId,
-          activated: j === 0,
+          activated: activatedResourceId ? activatedResourceId === currentResource.resourceId : (j === 0),
           title: currentResource.resourceName,
           resourceType: currentResource.resourceType,
           version: '',
@@ -216,13 +197,13 @@ const Model: ResourceAuthPageModelType = {
                 status: c.status === 0 ? 'stopping' : 'executing',
                 code: c.policyInfo.policyText,
                 id: c.contractId,
-                date: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
+                date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
                 // versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}]
                 versions: allEnabledVersions.map((v: string) => {
                   return {
                     version: v,
                     checked: !!i.versions?.find((version: any) => version.version === v)?.contracts?.find((contract: any) => contract.contractId === c.contractId),
-                    disabled: i.versions?.length === 1,
+                    disabled: currentResource.versions?.contracts?.length === 1,
                   };
                 }),
               };
@@ -231,6 +212,7 @@ const Model: ResourceAuthPageModelType = {
             id: policy.policyId,
             title: policy.policyName,
             code: policy.policyText,
+            allEnabledVersions: allEnabledVersions,
           })),
         }
       });
@@ -262,6 +244,27 @@ const Model: ResourceAuthPageModelType = {
         }
       });
     },
+    * updateAuthorized({payload}: UpdateAuthorizedAction, {select, call, put}: EffectsCommandMap) {
+      const {resourceId, activatedResourceId} = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
+        resourceId: resourceInfo.info?.resourceId,
+        activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
+      }));
+      const params: BatchSetContractsParamsType = {
+        resourceId,
+        subjects: [{
+          subjectId: activatedResourceId,
+          versions: payload,
+        }],
+      };
+      const {data} = yield call(batchSetContracts, params);
+      yield put<FetchAuthorizedAction>({
+        type: 'fetchAuthorized',
+        payload: {
+          baseResourceId: resourceId,
+          activatedResourceId: activatedResourceId,
+        },
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {
@@ -270,15 +273,6 @@ const Model: ResourceAuthPageModelType = {
         ...payload,
       };
     },
-    // changePolicies(state: ResourceAuthPageModelState, action: ChangePoliciesAction): ResourceAuthPageModelState {
-    //   return {...state, policies: action.payload};
-    // },
-    // changeContractsAuthorized(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizedAction): ResourceAuthPageModelState {
-    //   return {...state, contractsAuthorized: action.payload};
-    // },
-    // changeContractsAuthorize(state: ResourceAuthPageModelState, action: ChangeContractsAuthorizeAction): ResourceAuthPageModelState {
-    //   return {...state, contractsAuthorize: action.payload};
-    // },
   },
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
