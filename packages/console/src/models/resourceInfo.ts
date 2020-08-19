@@ -1,9 +1,8 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info} from "@/services/resources";
 import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "@/models/resourceAuthPage";
-import {FetchDraftAction} from '@/models/resourceVersionCreatorPage';
 
 export interface ResourceInfoModelState {
   info: null | {
@@ -30,9 +29,6 @@ export interface ResourceInfoModelState {
   };
 }
 
-// export type ResourceInfoModelState = WholeReadonly<IResourceInfoModelState>
-// export type ResourceInfoModelState = IResourceInfoModelState;
-
 export interface ChangeInfoAction extends AnyAction {
   type: 'resourceInfo/changeInfo' | 'changeInfo';
   payload: ResourceInfoModelState['info'];
@@ -47,7 +43,6 @@ export interface ResourceInfoModelType {
   namespace: 'resourceInfo';
   state: WholeReadonly<ResourceInfoModelState>;
   effects: {
-    // fetchDataSource: Effect;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
