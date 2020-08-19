@@ -170,7 +170,8 @@ const Model: ResourceAuthPageModelType = {
       // console.log(contractsData, 'contractsDatacontractsData');
       // const {data: resourceData} = yield call()
 
-      const contractsAuthorized = data.map((i: any, j: number) => {
+      const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
+        // 当前资源信息
         const currentResource = resourcesInfoData.find((resource: any) => resource.resourceId === i.resourceId);
         // console.log(currentResource, 'currentResource');
         const allEnabledVersions: string[] = i.versions.map((version: any) => version.version);
@@ -189,21 +190,26 @@ const Model: ResourceAuthPageModelType = {
           resourceType: currentResource.resourceType,
           version: '',
           contracts: allContracts
-            .map((c: any) => {
-              // console.log()
+            .map((c: any /* 当前合约 */) => {
+              // console.log(c, '当前合约');
+              // console.log(i, '关系');
               return {
                 checked: true,
+                id: c.contractId,
+                policyId: c.policyId,
                 title: c.contractName,
                 status: c.status === 0 ? 'stopping' : 'executing',
                 code: c.policyInfo.policyText,
-                id: c.contractId,
                 date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
                 // versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}]
                 versions: allEnabledVersions.map((v: string) => {
+                  // console.log(i, currentResource, c, v, 'aw39osidc');
+                  const versionContracts = i.versions?.find((version: any) => version.version === v)?.contracts;
+                  const versionChecked: boolean = !!versionContracts?.find((contract: any) => contract.contractId === c.contractId);
                   return {
                     version: v,
-                    checked: !!i.versions?.find((version: any) => version.version === v)?.contracts?.find((contract: any) => contract.contractId === c.contractId),
-                    disabled: currentResource.versions?.contracts?.length === 1,
+                    checked: versionChecked,
+                    disabled: (versionContracts.length === 1) && versionChecked,
                   };
                 }),
               };

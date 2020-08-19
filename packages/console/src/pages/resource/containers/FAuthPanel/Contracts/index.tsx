@@ -1,21 +1,38 @@
 import * as React from 'react';
-import styles from "./index.less";
-import {Checkbox, Space} from "antd";
-import {FContentText} from "@/components/FText";
+import styles from './index.less';
+import {Checkbox, Space} from 'antd';
+import {FContentText} from '@/components/FText';
+import {UpdateAuthorizedAction} from '@/models/resourceAuthPage';
+import {connect, DispatchProp} from 'dva';
 
-interface ContractsProps {
+
+interface ContractsProps extends DispatchProp {
   dataSource: {
     checked: boolean;
     title: string;
     status: string;
     code: string;
     id: string;
+    policyId: string;
     date: string;
     versions: { version: string; checked: boolean; disabled: boolean; }[];
   }[];
 }
 
-export default function Contracts({dataSource}: ContractsProps) {
+function Contracts({dataSource, dispatch}: ContractsProps) {
+
+  function onLicenseChange(version: string, policyId: string, checked: boolean) {
+    // console.log(version, policyId, checked, '#@WDSfaDSAFD0[IJOA');
+    dispatch<UpdateAuthorizedAction>({
+      type: 'resourceAuthPage/updateAuthorized',
+      payload: [{
+        version: version,
+        policyId: policyId,
+        operation: checked ? 1 : 0,
+      }],
+    });
+  }
+
   return <div className={styles.styles}>
     {dataSource.map((k) => (<div key={k.id} className={styles.Policy}>
       <div className={styles.PolicyGrammar}>
@@ -36,7 +53,11 @@ export default function Contracts({dataSource}: ContractsProps) {
           <FContentText type="additional2">应用版本：</FContentText>
           <div className={styles.allVersions}>
             {k.versions.map((i) => <Space size={8} key={i.version}>
-              <Checkbox checked={i.checked} disabled={i.disabled}/>
+              <Checkbox
+                checked={i.checked}
+                disabled={i.disabled}
+                onChange={(e) => onLicenseChange(i.version, k.policyId, e.target.checked)}
+              />
               <span>{i.version}</span>
             </Space>)}
           </div>
@@ -45,3 +66,5 @@ export default function Contracts({dataSource}: ContractsProps) {
     </div>))}
   </div>
 }
+
+export default connect()(Contracts);
