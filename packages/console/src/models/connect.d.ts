@@ -9,12 +9,12 @@ import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 // import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
-import {RouterHistoriesModelState} from './routerHistories';
+// import {RouterHistoriesModelState} from './routerHistories';
 import {UserModelState} from './user';
 import {GlobalModelState} from './global';
 
 export {
-  RouterHistoriesModelState,
+  // RouterHistoriesModelState,
   GlobalSearchingModelState,
   MarketPageModelState,
   ResourceListPageModelState,
@@ -30,7 +30,7 @@ export {
 };
 
 export interface ConnectState {
-  routerHistories: RouterHistoriesModelState,
+  // routerHistories: RouterHistoriesModelState,
   globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
   resourceListPage: ResourceListPageModelState;

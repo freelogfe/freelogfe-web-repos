@@ -11,7 +11,7 @@ import {
   ConnectState,
   GlobalModelState,
   GlobalSearchingModelState,
-  RouterHistoriesModelState,
+  // RouterHistoriesModelState,
   UserModelState
 } from '@/models/connect';
 import {RouteComponentProps} from "react-router";
@@ -67,20 +67,20 @@ interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
   dispatch: Dispatch;
   globalSearching: GlobalSearchingModelState;
-  routerHistories: RouterHistoriesModelState;
+  // routerHistories: GlobalModelState['routerHistories'];
   user: UserModelState,
   global: GlobalModelState;
 }
 
-function FLayout({children, global, dispatch, globalSearching, routerHistories, user, ...props}: FLayoutProps) {
+function FLayout({children, global, dispatch, globalSearching, user, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1' && routerHistories[routerHistories.length - 1].pathname !== '/market') {
+    if (value === '1' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/market') {
       return router.push('/market');
     }
-    if (value === '2' && routerHistories[routerHistories.length - 1].pathname !== '/example') {
+    if (value === '2' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/example') {
       return router.push('/example');
     }
   }
@@ -189,9 +189,9 @@ function FLayout({children, global, dispatch, globalSearching, routerHistories, 
   );
 }
 
-export default withRouter(connect(({globalSearching, routerHistories, user, global}: ConnectState) => ({
+export default withRouter(connect(({globalSearching, user, global}: ConnectState) => ({
   globalSearching: globalSearching,
-  routerHistories: routerHistories,
+  routerHistories: global.routerHistories,
   user: user,
   global: global,
 }))(FLayout));

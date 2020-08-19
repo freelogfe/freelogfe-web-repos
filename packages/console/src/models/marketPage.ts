@@ -96,7 +96,7 @@ const Model: MarketModelType = {
     },
     * fetchDataSource(action: FetchDataSourceAction, {call, put, select, take}: EffectsCommandMap) {
 
-      const routerHistory = yield select(({routerHistories}: ConnectState) => {
+      const routerHistory = yield select(({global:{routerHistories}}: ConnectState) => {
         // console.log(routerHistory, 'routerHistory');
         return routerHistories[routerHistories.length - 1];
       });
