@@ -5,6 +5,7 @@ import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import {i18nMessage} from "@/utils/i18n";
+import {CloseCircleFilled} from '@ant-design/icons';
 
 export interface FAuthPanelProps {
   dataSource: {
@@ -34,7 +35,7 @@ export interface FAuthPanelProps {
   onChangeActivatedResource?(dataSource: FAuthPanelProps['dataSource']): void;
 }
 
-export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
+function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
 
   const [activeResource, setActiveResource] = React.useState<FAuthPanelProps['dataSource'][0] | null>(null);
 
@@ -58,6 +59,8 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
     </div>
     <div className={styles.DepPanelContent}>
       <div className={styles.contentBox} id={'DepPanelContent'}>
+
+        {/*<>*/}
         {
           activeResource && activeResource?.contracts.length > 0 && (<>
             <FContentText type="additional2" text={i18nMessage('used_contract')}/>
@@ -74,8 +77,10 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
             <Policies dataSource={activeResource.policies}/>
           </>)
         }
-
+        {/*</>*/}
       </div>
     </div>
   </div>);
 }
+
+export default FAuthPanel;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FCircleButton} from '@/components/FButton';
-import {EditOutlined} from '@ant-design/icons';
+import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
 import VersionPopover from './VersionPopover';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -12,7 +12,7 @@ import {
   OnChangeDepActivatedIDAction,
   OnChangeDependenciesByIDAction
 } from '@/models/resourceVersionCreatorPage';
-import {i18nMessage} from "@/utils/i18n";
+import {i18nMessage} from '@/utils/i18n';
 
 export interface ResourcesProps {
   // readonly dataSource: FDepPanelProps['dataSource'];
@@ -89,16 +89,23 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
             onClick={() => onChangeResourcesActivated(i.id)}
             className={styles.DepPanelNav + ' ' + (i.id === depActivatedID ? styles.DepPanelNavActive : '')}>
             <div>
-              <FContentText text={i.title}/>
+              <div className={styles.title}>
+                <FContentText text={i.title}/>
+                {i.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
+              </div>
               <div style={{height: 9}}/>
               <FContentText type="additional2">
-                <div>{i.resourceType} |
-                  <span
-                    style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version.select)}</span>
-                  <VersionPopover
-                    versions={i.versions}
-                    onChange={(version) => onChangeVersion(version, i.id)}
-                    defaultVersion={i.version}><EditOutlined/></VersionPopover>
+                <div>{i.resourceType} | {i.versions.length === 0 ? <span
+                    style={{paddingRight: 5}}>暂无版本</span>
+                  : <>
+                    <span
+                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version.select)}</span>
+                    <VersionPopover
+                      versions={i.versions}
+                      onChange={(version) => onChangeVersion(version, i.id)}
+                      defaultVersion={i.version}><EditOutlined/></VersionPopover>
+                  </>
+                }
                 </div>
               </FContentText>
               <>

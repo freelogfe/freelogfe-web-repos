@@ -30,8 +30,7 @@ export type DepResources = Readonly<{
   id: string;
   title: string;
   resourceType: string;
-  // time: string;
-  status: 0 | 1;
+  status: 0 | 1 | 2;
   version: Readonly<{
     isCustom: boolean;
     select: string;
@@ -56,6 +55,7 @@ export type DepResources = Readonly<{
     id: string;
     title: string;
     code: string;
+    status: 0 | 1;
   }>[];
 }>[];
 
@@ -119,11 +119,6 @@ export interface AddADepByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/addADepByIDAction';
   payload: string[];
 }
-
-// export interface AddDependenciesForDepRelationAction {
-//   type: 'resourceVersionCreatorPage/dddDependenciesForDepRelation' | 'dddDependenciesForDepRelation';
-//   payload: string;
-// }
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
@@ -516,12 +511,16 @@ async function dddDependency(resourceId: string, resourceInfo: any, allBaseUpthr
     })),
     enabledPolicies: resourceData.policies
       .filter((policy: any) => !allContractPolicyIds.includes(policy.policyId))
-      .map((policy: any) => ({
-        checked: false,
-        id: policy.policyId,
-        title: policy.policyName,
-        code: policy.policyText,
-      })),
+      .map((policy: any) => {
+        // console.log(policy, 'PPPPafwe98iokl');
+        return {
+          checked: false,
+          id: policy.policyId,
+          title: policy.policyName,
+          code: policy.policyText,
+          status: policy.status,
+        };
+      }),
   };
 
   return dependency;
