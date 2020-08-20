@@ -168,48 +168,62 @@ const Model: ResourceVersionCreatorModelType = {
   effects: {
     * createVersion(action: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
 
-      const params: CreateVersionParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
-        const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
-          .filter((dep) => dep.upthrow)
-          .map((dep) => dep.id);
-        const resolveResources = resourceVersionCreatorPage.dependencies
-          .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
-          .map((dep) => ({
-            resourceId: dep.id,
-            contracts: [
-              ...dep.enabledPolicies
-                .filter((p) => (p.checked))
-                .map((p) => ({policyId: p.id})),
-              ...dep.enableReuseContracts
-                .filter((c) => (c.checked))
-                .map((c) => ({policyId: c.policyId})),
-            ],
-          }));
+      const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
-          resourceId: resourceInfo.info?.resourceId,
-          latestVersion: resourceInfo.info?.latestVersion,
-          version: resourceVersionCreatorPage.version,
-          fileSha1: resourceVersionCreatorPage.resourceObject?.id,
-          filename: resourceVersionCreatorPage.resourceObject?.name,
-          baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
-          dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
-            const version = dep.version;
-            return {
-              resourceId: dep.id,
-              versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
-            }
-          }),
-          resolveResources: resolveResources,
-          customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
-            key: i.key,
-            defaultValue: i.value,
-            type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
-            candidateItems: i.customOption ? i.customOption.split(',') : [],
-            remark: i.description,
-          })),
-          description: resourceVersionCreatorPage.description.toHTML(),
+          resourceVersionCreatorPage,
+          resourceInfo,
         };
       });
+      const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
+        .filter((dep) => dep.upthrow)
+        .map((dep) => dep.id);
+      const resolveResources = resourceVersionCreatorPage.dependencies
+        .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
+        .map((dep) => ({
+          resourceId: dep.id,
+          contracts: [
+            ...dep.enabledPolicies
+              .filter((p) => (p.checked))
+              .map((p) => ({policyId: p.id})),
+            ...dep.enableReuseContracts
+              .filter((c) => (c.checked))
+              .map((c) => ({policyId: c.policyId})),
+          ],
+        }));
+      const params: CreateVersionParamsType = {
+        resourceId: resourceInfo.info?.resourceId || '',
+        // latestVersion: resourceInfo.info?.latestVersion || '',
+        version: resourceVersionCreatorPage.version,
+        fileSha1: resourceVersionCreatorPage.resourceObject?.id || '',
+        filename: resourceVersionCreatorPage.resourceObject?.name || '',
+        baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
+        dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
+          const version = dep.version;
+          return {
+            resourceId: dep.id,
+            versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
+          }
+        }),
+        resolveResources: resolveResources,
+        customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
+          key: i.key,
+          defaultValue: i.value,
+          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
+          candidateItems: i.customOption ? i.customOption.split(',') : [],
+          remark: i.description,
+        })),
+        description: resourceVersionCreatorPage.description.toHTML(),
+      };
+
+      // for (const resolve of params.resolveResources) {
+      //
+      // }
+
+      for (const custom of (params.customPropertyDescriptors || [])) {
+        if (!custom.key || !custom.defaultValue) {
+          return fMessage('请检查自定义属性');
+        }
+      }
 
       const {versionErrorText, resourceObjectErrorText} = verify(params);
 
@@ -488,14 +502,11 @@ async function dddDependency(resourceId: string, resourceInfo: any, allBaseUpthr
   // console.log(contractsData, 'contractsData24fsdzvrg');
   const allContractPolicyIds = contractsData.map((constract: any) => constract.policyId);
   // console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
-
-
   const resolveResourcesParams: ResolveResourcesParamsType = {
     resourceId: resourceInfo.resourceId,
   };
   const {data: resolveResourcesData} = await resolveResources(resolveResourcesParams);
   // console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
-
   const dependency: DepResources[number] = {
     id: resourceData.resourceId,
     title: resourceData.resourceName,

@@ -99,15 +99,6 @@ const Model: ResourceAuthPageModelType = {
   },
   effects: {
     * fetchPolicies({payload}: FetchPoliciesAction, {call, put}: EffectsCommandMap) {
-      // console.log(payload, 'ppplllllaaaadiiiii');
-      // if (payload.length === 0) {
-      //   return;
-      // }
-      // const params: PoliciesListParamsType = {
-      //   policyIds: payload.map((i) => i.policyId).join(','),
-      // };
-      // const {data} = yield call(policiesList, params);
-      // console.log(data, '#EDDDDDSDF');
       const policies: ResourceAuthPageModelState['policies'] = payload.map((i) => ({
         id: i.policyId,
         title: i.policyName,

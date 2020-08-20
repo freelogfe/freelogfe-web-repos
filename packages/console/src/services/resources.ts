@@ -91,6 +91,7 @@ export interface CreateVersionParamsType {
   resourceId: string;
   version: string;
   fileSha1: string;
+  filename: string;
   description?: string;
   dependencies?: {
     resourceId: string;
