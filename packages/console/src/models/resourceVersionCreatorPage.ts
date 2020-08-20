@@ -455,7 +455,7 @@ async function handleDepResource({allNeedHandledIds, resourceInfo, allBaseUpthro
           versionRange: '',
         }],
       });
-      console.log(data, 'data');
+      // console.log(data, 'data');
       if (!data) {
         dep = {
           ...dep,

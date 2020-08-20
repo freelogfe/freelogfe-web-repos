@@ -47,7 +47,7 @@ export interface ChangeAction extends AnyAction {
 
 export interface FetchPoliciesAction extends AnyAction {
   type: 'resourceAuthPage/fetchPolicies',
-  payload: { policyId: string, policyName: string, status: 0 | 1 }[];
+  payload: { policyId: string, policyName: string, status: 0 | 1, policyText: string; }[];
 }
 
 export interface FetchAuthorizedAction extends AnyAction {
@@ -99,19 +99,20 @@ const Model: ResourceAuthPageModelType = {
   },
   effects: {
     * fetchPolicies({payload}: FetchPoliciesAction, {call, put}: EffectsCommandMap) {
-      if (payload.length === 0) {
-        return;
-      }
-      const params: PoliciesListParamsType = {
-        policyIds: payload.map((i) => i.policyId).join(','),
-      };
-      const {data} = yield call(policiesList, params);
+      // console.log(payload, 'ppplllllaaaadiiiii');
+      // if (payload.length === 0) {
+      //   return;
+      // }
+      // const params: PoliciesListParamsType = {
+      //   policyIds: payload.map((i) => i.policyId).join(','),
+      // };
+      // const {data} = yield call(policiesList, params);
       // console.log(data, '#EDDDDDSDF');
       const policies: ResourceAuthPageModelState['policies'] = payload.map((i) => ({
         id: i.policyId,
         title: i.policyName,
         status: i.status === 1 ? 'executing' : 'stopped',
-        code: (data.find((j: any) => j.policyId === i.policyId) || {policyText: ''}).policyText,
+        code: i.policyText,
       }));
       yield put<ChangeAction>({
         type: 'change',

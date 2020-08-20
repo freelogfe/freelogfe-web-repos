@@ -62,7 +62,7 @@ const Model: ResourceInfoModelType = {
     * fetchDataSource(action: FetchDataSourceAction, {call, put}: EffectsCommandMap): Generator<any, void, any> {
       const params = {
         resourceIdOrName: action.payload,
-        // isLoadLatestVersionInfo: 1,
+        isLoadPolicyInfo: 1,
       };
       const {data} = yield call(info, params);
       // console.log(data, 'DDDDDDDD');
