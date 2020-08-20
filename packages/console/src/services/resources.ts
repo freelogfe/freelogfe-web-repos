@@ -201,3 +201,16 @@ export interface BatchSetContractsParamsType {
 export function batchSetContracts({resourceId, subjects}: BatchSetContractsParamsType) {
   return request.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, {subjects});
 }
+
+// 资源依赖循环性检查
+export interface CycleDependencyCheckParamsType {
+  resourceId: string;
+  dependencies: {
+    resourceId: string;
+    versionRange: string;
+  }[];
+}
+
+export function cycleDependencyCheck({resourceId, ...pramas}: CycleDependencyCheckParamsType) {
+  return request.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, pramas);
+}

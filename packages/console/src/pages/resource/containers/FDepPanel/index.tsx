@@ -26,7 +26,7 @@ function FDepPanel({creator}: FDepPanelProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
-  console.log(resource, 'resource23qeasdj98io');
+  // console.log(resource, 'resource23qeasdj98io');
   return (<>
     <Space size={80}>
       <Space size={10}>

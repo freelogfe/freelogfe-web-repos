@@ -7,7 +7,7 @@ import {
   batchInfo,
   BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType,
+  CreateVersionParamsType, cycleDependencyCheck,
   info,
   InfoParamsType,
   lookDraft,
@@ -441,11 +441,29 @@ interface HandleDepResourceParams {
 async function handleDepResource({allNeedHandledIds, resourceInfo, allBaseUpthrowIds, allExistsIds}: HandleDepResourceParams) {
   const arr: any[] = [];
 
-  for (const id of allNeedHandledIds) {
+  for (const [i, id] of Object.entries(allNeedHandledIds)) {
     if (allExistsIds.includes(id)) {
       continue;
     }
-    const dep = await dddDependency(id, resourceInfo, allBaseUpthrowIds);
+    let dep = await dddDependency(id, resourceInfo, allBaseUpthrowIds);
+
+    if (dep.status === 1) {
+      const {data} = await cycleDependencyCheck({
+        resourceId: resourceInfo.resourceId,
+        dependencies: [{
+          resourceId: id,
+          versionRange: '',
+        }],
+      });
+      console.log(data, 'data');
+      if (!data) {
+        dep = {
+          ...dep,
+          status: 2,
+        };
+      }
+    }
+
     arr.push(dep);
   }
 

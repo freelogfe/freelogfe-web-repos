@@ -95,7 +95,7 @@ const Model: GlobalModelType = {
   subscriptions: {
     setup({dispatch, history}) {
       history.listen((listener) => {
-        console.log(listener, 'listener');
+        // console.log(listener, 'listener098phijnoweklf');
         dispatch<PushRouterAction>({
           type: 'pushRouter',
           payload: listener,
