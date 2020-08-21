@@ -19,6 +19,7 @@ export interface MarketPageModelState {
     policy: string[],
     type: string,
   }[];
+  totalItem: number;
 }
 
 export interface ChangeDataSourceAction extends AnyAction {
@@ -72,6 +73,7 @@ const Model: MarketModelType = {
     resourceType: '-1',
     inputText: '',
     dataSource: [],
+    totalItem: -1,
   },
 
   effects: {
@@ -96,7 +98,7 @@ const Model: MarketModelType = {
     },
     * fetchDataSource(action: FetchDataSourceAction, {call, put, select, take}: EffectsCommandMap) {
 
-      const routerHistory = yield select(({global:{routerHistories}}: ConnectState) => {
+      const routerHistory = yield select(({global: {routerHistories}}: ConnectState) => {
         // console.log(routerHistory, 'routerHistory');
         return routerHistories[routerHistories.length - 1];
       });
@@ -118,12 +120,18 @@ const Model: MarketModelType = {
         status: 1,
         pageSize: 20,
       });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          totalItem: data.totalItem,
+        },
+      });
       const dataSource = data.dataList.map((i: any) => ({
         id: i.resourceId,
         cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
         title: i.resourceName,
         version: i.latestVersion,
-        policy: i.policies.map((l:any) => l.policyName),
+        policy: i.policies.map((l: any) => l.policyName),
         type: i.resourceType,
       }));
       yield put<ChangeDataSourceAction>({

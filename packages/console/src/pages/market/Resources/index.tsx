@@ -60,19 +60,24 @@ function Resources({dispatch, market}: ResourcesProps) {
       <div className={styles.bottomPadding}/>
     </div>
 
-    <div style={{height: 100}}/>
 
-    <div className={styles.bottom}>
-      <Button
-        className={styles.loadMore}
-        onClick={() => dispatch<ChangeStatesAction>({
-          type: 'marketPage/changeStates',
-          payload: {
-            pageCurrent: market.pageCurrent + 1,
-          },
-        })}
-      >加载更多</Button>
-    </div>
+    {
+      market.totalItem > (20 * market.pageCurrent) && (<>
+        <div style={{height: 100}}/>
+        <div className={styles.bottom}>
+          <Button
+            className={styles.loadMore}
+            onClick={() => dispatch<ChangeStatesAction>({
+              type: 'marketPage/changeStates',
+              payload: {
+                pageCurrent: market.pageCurrent + 1,
+              },
+            })}
+          >加载更多</Button>
+        </div>
+      </>)
+    }
+
   </>)
 }
 
