@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {connect, Dispatch} from "dva";
-import {ConnectState, MarketPageModelState} from "@/models/connect";
-import styles from "@/pages/market/index.less";
-import {ChangeStatesAction} from "@/models/marketPage";
-import FInput from "@/components/FInput";
-import FResourceCard from "@/components/FResourceCard";
-import {Button} from "antd";
-import {resourceTypes} from "@/utils/globals";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, MarketPageModelState} from '@/models/connect';
+import styles from '@/pages/market/index.less';
+import {ChangeStatesAction} from '@/models/marketPage';
+import FInput from '@/components/FInput';
+import FResourceCard from '@/components/FResourceCard';
+import {Button} from 'antd';
+import {resourceTypes} from '@/utils/globals';
 
 const filters = [{
   value: '-1',
