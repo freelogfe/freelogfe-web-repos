@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
@@ -9,19 +8,20 @@ import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
-
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {
-  CreateVersionAction,
-  OnChangeDescriptionAction, OnChangePropertiesAction,
-  OnChangeResourceObjectAction,
-  OnChangeVersionAction
+  ChangeAction,
+  CreateVersionAction, ImportPreVersionAction,
+  SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
+import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {withRouter} from "umi";
+import {i18nMessage} from "@/utils/i18n";
+import RouterTypes from "umi/routerTypes";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -34,10 +34,21 @@ interface VersionCreatorProps {
   };
 }
 
-function VersionCreator({dispatch, version, match, resource}: VersionCreatorProps) {
+function VersionCreator({dispatch, route, version, match, resource}: VersionCreatorProps & RouterTypes) {
+
+  React.useEffect(() => {
+    dispatch<GlobalChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function onClickCache() {
-
+    dispatch<SaveDraftAction>({
+      type: 'resourceVersionCreatorPage/saveDraft',
+    });
   }
 
   function onClickCreate() {
@@ -47,51 +58,57 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
     });
   }
 
+  function onChange(payload: ChangeAction['payload']) {
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload,
+    })
+  }
+
   return (<FInfoLayout>
-    <FContentLayout header={<Header onClickCreate={onClickCreate} onClickCache={onClickCache}/>}>
-      <FEditorCard dot={true} title={'版本号'}>
+    <FContentLayout header={<Header
+      onClickCreate={onClickCreate}
+      onClickCache={onClickCache}
+      disabledCreate={!!version.versionErrorText || !!version.resourceObjectErrorText}
+    />}>
+      <FEditorCard dot={true} title={i18nMessage('version_number')}>
         <FInput
           value={version.version}
-          onChange={(e) => dispatch<OnChangeVersionAction>({
-            type: 'resourceVersionCreatorPage/onChangeVersion',
-            payload: e.target.value,
-          })}
+          onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
           className={styles.versionInput}
+          errorText={version.versionErrorText}
         />
       </FEditorCard>
 
-      <FEditorCard dot={true} title={'对象'}>
+      <FEditorCard dot={true} title={i18nMessage('release_object')}>
         <FSelectObject
           resourceType={resource.info?.resourceType || ''}
           resourceObject={version.resourceObject}
-          onChange={(value) => dispatch<OnChangeResourceObjectAction>({
-            type: 'resourceVersionCreatorPage/onChangeResourceObject',
-            payload: value,
-          })}
+          onChange={(value) => onChange({resourceObject: value, resourceObjectErrorText: ''})}
+          errorText={version.resourceObjectErrorText}
+          onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
         />
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'依赖'}>
+      <FEditorCard dot={false} title={i18nMessage('rely')}>
         <FDepPanel/>
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'自定义属性'}>
+      <FEditorCard dot={false} title={i18nMessage('object_property')}>
         <FCustomProperties
           stubborn={false}
           dataSource={version.properties}
-          onChange={(value) => dispatch<OnChangePropertiesAction>({
-            type: 'resourceVersionCreatorPage/onChangeProperties',
-            payload: value,
+          onChange={(value) => onChange({properties: value})}
+          onImport={() => dispatch<ImportPreVersionAction>({
+            type: 'resourceVersionCreatorPage/importPreVersion',
           })}
         />
       </FEditorCard>
 
-      <FEditorCard dot={false} title={'版本描述'}>
+      <FEditorCard dot={false} title={i18nMessage('version_description')}>
         <FBraftEditor
-          onChange={(value) => dispatch<OnChangeDescriptionAction>({
-            type: 'resourceVersionCreatorPage/onChangeDescription',
-            payload: value,
-          })}
+          value={version.description}
+          onChange={(value) => onChange({description: value})}
         />
       </FEditorCard>
 
@@ -105,18 +122,20 @@ function VersionCreator({dispatch, version, match, resource}: VersionCreatorProp
 interface HeaderProps {
   onClickCache: () => void;
   onClickCreate: () => void;
+  disabledCreate?: boolean;
 }
 
-function Header({onClickCache, onClickCreate}: HeaderProps) {
+function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={'创建版本'} type={'h2'}/>
+    <FTitleText text={i18nMessage('create_new_version')} type={'h2'}/>
 
     <Space size={30}>
-      <FTextButton onClick={onClickCache}>暂存草稿</FTextButton>
+      <FTextButton onClick={onClickCache}>{i18nMessage('save_as_draft')}</FTextButton>
       <FNormalButton
         style={{width: 108}}
         onClick={onClickCreate}
-      >创建</FNormalButton>
+        disabled={disabledCreate}
+      >{i18nMessage('release_to_market')}</FNormalButton>
     </Space>
   </div>);
 }

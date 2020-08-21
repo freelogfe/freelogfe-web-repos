@@ -4,6 +4,8 @@ import {FContentText} from '@/components/FText';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
+import {i18nMessage} from "@/utils/i18n";
+import {CloseCircleFilled} from '@ant-design/icons';
 
 export interface FAuthPanelProps {
   dataSource: {
@@ -19,18 +21,21 @@ export interface FAuthPanelProps {
       code: string;
       id: string;
       date: string;
-      versions: { version: string; checked: boolean; }[];
+      policyId: string;
+      versions: { version: string; checked: boolean; disabled: boolean }[];
     }[];
     policies: {
       id: string;
       title: string;
       code: string;
+      allEnabledVersions: string[];
     }[];
   }[];
-  onChangeActivatedResource?: (dataSource: FAuthPanelProps['dataSource']) => void;
+
+  onChangeActivatedResource?(dataSource: FAuthPanelProps['dataSource']): void;
 }
 
-export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
+function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
 
   const [activeResource, setActiveResource] = React.useState<FAuthPanelProps['dataSource'][0] | null>(null);
 
@@ -49,30 +54,33 @@ export default function ({dataSource, onChangeActivatedResource}: FAuthPanelProp
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>
       <div>
-        <Resources
-          onClick={(resource) => onChangeActivated(resource.id)}
-          dataSource={dataSource.map((i) => ({
-            id: i.id,
-            activated: i.activated,
-            title: i.title,
-            resourceType: i.resourceType,
-            version: i.version,
-            labels: i.contracts.map((j) => j.title)
-          }))}
-        />
+        <Resources/>
       </div>
     </div>
     <div className={styles.DepPanelContent}>
-      <div>
-        <FContentText type="additional2" text={'可复用的合约'}/>
-        <div style={{height: 5}}/>
-        {activeResource && <Contracts dataSource={activeResource.contracts}/>}
+      <div className={styles.contentBox} id={'DepPanelContent'}>
 
-        <div style={{height: 20}}/>
-        <FContentText type="additional2" text={'可签约的合约'}/>
-        <div style={{height: 5}}/>
-        {activeResource && <Policies dataSource={activeResource.policies}/>}
+        {/*<>*/}
+        {
+          activeResource && activeResource?.contracts.length > 0 && (<>
+            <FContentText type="additional2" text={i18nMessage('used_contract')}/>
+            <div style={{height: 5}}/>
+            <Contracts dataSource={activeResource.contracts}/>
+          </>)
+        }
+
+        {
+          activeResource && activeResource?.policies?.length > 0 && (<>
+            <div style={{height: 20}}/>
+            <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
+            <div style={{height: 5}}/>
+            <Policies dataSource={activeResource.policies}/>
+          </>)
+        }
+        {/*</>*/}
       </div>
     </div>
   </div>);
 }
+
+export default FAuthPanel;

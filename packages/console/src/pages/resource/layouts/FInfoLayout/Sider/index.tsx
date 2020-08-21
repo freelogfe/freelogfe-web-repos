@@ -5,14 +5,17 @@ import {FContentText} from '@/components/FText';
 import {Space} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
+import {FetchDraftAction} from "@/models/resourceVersionCreatorPage";
+import {i18nMessage} from "@/utils/i18n";
 
 interface SilderProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   match: {
     params: {
       id: string;
@@ -21,16 +24,23 @@ interface SilderProps {
   };
 }
 
-function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProps) {
+function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, match, dispatch}: RouterTypes & SilderProps) {
   // console.log(match, 'props');
 
   React.useEffect(() => {
-    // console.log('##@@#@##@#@#');
+    if (match.params.id === info?.resourceId) {
+      return;
+    }
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
     });
-  }, [dispatch, match.params.id]);
+    dispatch<FetchDraftAction>({
+      type: 'resourceVersionCreatorPage/fetchDraft',
+      payload: match.params.id,
+    });
+  }, [dispatch, info, match.params.id]);
+
 
   function gotoCreator() {
     router.push(`/resource/${match.params.id}/version/creator`);
@@ -46,7 +56,7 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
       status={info?.status === 1 ? 'online' : 'stopped'}
     />
     <div style={{height: 15}}/>
-    <FContentText text={info?.resourceName}/>
+    <FContentText className={styles.breakWord} text={info?.resourceName}/>
     <div style={{height: 10}}/>
     <label className={styles.label}>{info.resourceType}</label>
     <div style={{height: 15}}/>
@@ -57,17 +67,17 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
           <a
             className={match.path === '/resource/:id/info' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/info`)}
-          >资源信息</a>
+          >{i18nMessage('resource_information')}</a>
         </div>
         <div className={styles.radio}>
           <a
             className={match.path === '/resource/:id/auth' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/auth`)}
-          >授权信息</a>
+          >{i18nMessage('authorization_infomation')}</a>
         </div>
 
         <div className={styles.radio}>
-          <a>版本列表</a>
+          <a>{i18nMessage('verions')}</a>
           <FTextButton onClick={gotoCreator}><i
             className="freelog fl-icon-add"/></FTextButton>
         </div>
@@ -77,11 +87,12 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
             match.path === '/resource/:id/version/creator'
               ? (
                 <div className={styles.radio + ' ' + styles.smallVersion}>
+                  {/*<a className={styles.activatedRadio}>{i18nMessage('unamed_version')}</a>*/}
                   <a className={styles.activatedRadio}>正在创建版本</a>
                 </div>)
-              : (<div className={styles.radio + ' ' + styles.smallVersion}>
-                <a onClick={gotoCreator}>{true ? '10.15.4' : '未输入版本号'}（草稿）</a>
-              </div>)
+              : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
+                <a onClick={gotoCreator}>{draftData.version || '未输入版本号'}（草稿）</a>
+              </div>))
           }
 
           {
@@ -99,7 +110,8 @@ function Sider({resourceInfo: {info}, match, dispatch}: RouterTypes & SilderProp
   </div>)
 }
 
-export default withRouter(connect(({resourceInfo}: ConnectState) => ({
+export default withRouter(connect(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
   resourceInfo: resourceInfo,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Sider))
 

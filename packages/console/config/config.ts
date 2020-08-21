@@ -2,6 +2,9 @@ import {IConfig} from 'umi-types';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+// import {i18nMessage} from "@/utils/i18n";
+// import { defineConfig } from 'umi';
+// import {i18nMessage} from "@/utils/i18n";
 
 const freelogDir = path.resolve(os.homedir(), '.freelog/');
 const authInfoPath = path.resolve(freelogDir, 'authInfo.json');
@@ -10,7 +13,7 @@ if (!fs.existsSync(authInfoPath)) {
 }
 
 // ref: https://umijs.org/config/
-const config: IConfig = {
+const config: IConfig | any = {
   treeShaking: true,
   routes: [
     {exact: true, path: '/ui-example', component: '../pages/ui-example'},
@@ -20,30 +23,42 @@ const config: IConfig = {
       // meta: {structure: 'left-right'},
       routes: [
         {exact: true, path: '.', redirect: '/market'},
-        {exact: true, path: 'market', component: '../pages/market'},
-        {exact: true, path: 'example', component: '../pages/market'},
+        {exact: true, path: 'market', component: '../pages/market', title: '市场资源', meta: {footer: true}},
+        {exact: true, path: 'example', component: '../pages/market', title: '示例节点', meta: {footer: true}},
         {
           path: 'resource',
           routes: [
             {exact: true, path: '.', redirect: '/resource/list'},
-            {exact: true, path: 'list', component: '../pages/resource/list'},
-            {exact: true, path: 'collect', component: '../pages/resource/collect'},
-            {exact: true, path: 'creator', component: '../pages/resource/creator'},
+            {exact: true, path: 'list', component: '../pages/resource/list', title: '我的资源', meta: {footer: true}},
+            {exact: true, path: 'collect', component: '../pages/resource/list', title: '我的收藏', meta: {footer: true}},
+            {exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源', meta: {footer: true}},
             {
               path: ':id',
               routes: [
-                {exact: true, path: 'success', component: '../pages/resource/$id/success'},
-                {exact: true, path: 'info', component: '../pages/resource/$id/info'},
-                {exact: true, path: 'auth', component: '../pages/resource/$id/auth'},
+                {
+                  exact: true,
+                  path: 'success',
+                  component: '../pages/resource/$id/success',
+                  title: '资源创建成功',
+                  meta: {footer: true}
+                },
+                {exact: true, path: 'info', component: '../pages/resource/$id/info', title: '资源信息'},
+                {exact: true, path: 'auth', component: '../pages/resource/$id/auth', title: '授权信息'},
                 {
                   path: 'version',
                   routes: [
-                    {exact: true, path: 'creator', component: '../pages/resource/$id/version/creator'},
+                    {exact: true, path: 'creator', component: '../pages/resource/$id/version/creator', title: '版本创建'},
                     {
                       path: ':version',
                       routes: [
-                        {exact: true, path: '.', component: '../pages/resource/$id/version/$version'},
-                        {exact: true, path: 'success', component: '../pages/resource/$id/version/$version/success'},
+                        {exact: true, path: '.', component: '../pages/resource/$id/version/$version', title: '版本信息'},
+                        {
+                          exact: true,
+                          path: 'success',
+                          component: '../pages/resource/$id/version/$version/success',
+                          title: '版本创建成功',
+                          meta: {footer: true}
+                        },
                       ]
                     },
                   ]
@@ -146,13 +161,7 @@ const config: IConfig = {
 
   },
   devServer: {
-    headers: {
-      // 'authorization': 'Bearer eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDI4LCJ1c2VybmFtZSI6IjEyMzQ1Njc2Nzg5IiwidXNlclR5cGUiOjEsIm1vYmlsZSI6IjE4NTY1Njg0MDkwIiwiZW1haWwiOiIiLCJpc3MiOiJodHRwczovL2lkZW50aXR5LmZyZWVsb2cuY29tIiwic3ViIjoiNTAwMjgiLCJhdWQiOiJmcmVlbG9nLXdlYnNpdGUiLCJleHAiOjE1OTU5MzEyOTksImlhdCI6MTU5NDYzNTI5OSwianRpIjoiNTdkODAxNGZiOGFhNGIwMWE4YjQ4NDVlZTFlOGNmMjMifQ==.0c0bd65d4a425826f2111f09fa3a6ccba3af2ffde8f7fc20fdca35f7054883804185147df0af69c3302e9365c61552b742a78be6adbcbe6d3a91af2b357f4a3815003ca147af2c406becb2deb7ffa79ce275e6598cff6f0bd2df897a9f439cce4f8da344e837c14b7503ee1085a69464e3ca824a972a14136de911119b461bec',
-      // 'authorization': `Bearer ${JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies.replace('authInfo=', '').split(';')[0]}`,
-      // 'authorization': `Bearer ${JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies.replace('authInfo=', '').split(';')[0]}`,
-      // 'Cookie': 'locale=zh-cn; authInfo=eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDI4LCJ1c2VybmFtZSI6IjEyMzQ1Njc2Nzg5IiwidXNlclR5cGUiOjEsIm1vYmlsZSI6IjE4NTY1Njg0MDkwIiwiZW1haWwiOiIiLCJpc3MiOiJodHRwczovL2lkZW50aXR5LmZyZWVsb2cuY29tIiwic3ViIjoiNTAwMjgiLCJhdWQiOiJmcmVlbG9nLXdlYnNpdGUiLCJleHAiOjE1OTU5ODk1ODksImlhdCI6MTU5NDY5MzU4OSwianRpIjoiNTdkODAxNGZiOGFhNGIwMWE4YjQ4NDVlZTFlOGNmMjMifQ==.11e0c2bd2578636e2b2c3f93adcf28de98f2bce73096198e1fd7ca7459c00dde1a987176f6e93e41cef691d2462e39fd9ecca922da9723a2c14e2db232af5c7c4a436f65615f039ef437010dd69676930c47bace721773bd68dc645383cbdb18970de3fe38162156b77db4caf11c320d7b466ab28ff4d425387229a2db455431; uid=50028',
-      // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies,
-    },
+    headers: {},
     proxy: {
       '/v2': {
         target: 'http://qi.testfreelog.com',
@@ -172,8 +181,14 @@ const config: IConfig = {
       }
     },
   },
-
-
+  hash: true,
+  // locale: {
+  //   default: 'zh-CN',
+  //   antd: false,
+  //   title: true,
+  //   baseNavigator: true,
+  //   baseSeparator: '-',
+  // }
 };
 
 export default config;

@@ -9,11 +9,12 @@ import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
 // import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
-import {RouterHistoriesModelState} from './routerHistory';
-import {WholeReadonly} from "@/models/shared";
+// import {RouterHistoriesModelState} from './routerHistories';
+import {UserModelState} from './user';
+import {GlobalModelState} from './global';
 
 export {
-  RouterHistoriesModelState,
+  // RouterHistoriesModelState,
   GlobalSearchingModelState,
   MarketPageModelState,
   ResourceListPageModelState,
@@ -24,10 +25,12 @@ export {
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
   ResourceInfoModelState,
+  UserModelState,
+  GlobalModelState,
 };
 
 export interface ConnectState {
-  routerHistories: RouterHistoriesModelState,
+  // routerHistories: RouterHistoriesModelState,
   globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
   resourceListPage: ResourceListPageModelState;
@@ -38,4 +41,6 @@ export interface ConnectState {
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState;
+  user: UserModelState,
+  global: GlobalModelState,
 }

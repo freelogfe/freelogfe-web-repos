@@ -1,15 +1,15 @@
 import * as React from 'react';
-import {connect, Dispatch} from "dva";
-import {ConnectState, MarketPageModelState} from "@/models/connect";
-import styles from "@/pages/market/index.less";
-import {OnChangeInputTextAction, OnChangeResourceTypeAction} from "@/models/marketPage";
-import FInput from "@/components/FInput";
-import FResourceCard from "@/components/FResourceCard";
-import {Button} from "antd";
-import {resourceTypes} from "@/utils/globals";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, MarketPageModelState} from '@/models/connect';
+import styles from '@/pages/market/index.less';
+import {ChangeStatesAction} from '@/models/marketPage';
+import FInput from '@/components/FInput';
+import FResourceCard from '@/components/FResourceCard';
+import {Button} from 'antd';
+import {resourceTypes} from '@/utils/globals';
 
 const filters = [{
-  value: -1,
+  value: '-1',
   text: '全部类型'
 }, ...resourceTypes.map((i) => ({value: i}))];
 
@@ -25,16 +25,16 @@ function Resources({dispatch, market}: ResourcesProps) {
       <Labels
         options={filters}
         value={market.resourceType}
-        onChange={(value) => dispatch<OnChangeResourceTypeAction>({
-          type: 'marketPage/onChangeResourceType',
-          payload: value,
+        onChange={(value) => dispatch<ChangeStatesAction>({
+          type: 'marketPage/changeStates',
+          payload: {resourceType: value as string},
         })}
       />
       <FInput
         value={market.inputText}
-        onChange={(e) => dispatch<OnChangeInputTextAction>({
-          type: 'marketPage/onChangeInputText',
-          payload: e.target.value
+        onChange={(e) => dispatch<ChangeStatesAction>({
+          type: 'marketPage/changeStates',
+          payload: {inputText: e.target.value},
         })}
         theme="dark"
         size="small"
@@ -47,7 +47,11 @@ function Resources({dispatch, market}: ResourcesProps) {
     <div className={styles.Content}>
       {
         market.dataSource.map((resource: any) => (
-          <FResourceCard key={resource.id} resource={resource} className={styles.FResourceCard}/>))
+          <FResourceCard
+            key={resource.id}
+            resource={resource}
+            className={styles.FResourceCard}
+          />))
       }
 
       <div className={styles.bottomPadding}/>
@@ -56,11 +60,24 @@ function Resources({dispatch, market}: ResourcesProps) {
       <div className={styles.bottomPadding}/>
     </div>
 
-    <div style={{height: 100}}/>
 
-    <div className={styles.bottom}>
-      <Button className={styles.loadMore}>加载更多</Button>
-    </div>
+    {
+      market.totalItem > (20 * market.pageCurrent) && (<>
+        <div style={{height: 100}}/>
+        <div className={styles.bottom}>
+          <Button
+            className={styles.loadMore}
+            onClick={() => dispatch<ChangeStatesAction>({
+              type: 'marketPage/changeStates',
+              payload: {
+                pageCurrent: market.pageCurrent + 1,
+              },
+            })}
+          >加载更多</Button>
+        </div>
+      </>)
+    }
+
   </>)
 }
 

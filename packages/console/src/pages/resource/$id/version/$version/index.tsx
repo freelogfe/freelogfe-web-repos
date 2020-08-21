@@ -9,32 +9,43 @@ import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import FCustomProperties from '@/pages/resource/components/FCustomProperties';
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionEditorPageModelState} from "@/models/connect";
-import FHorn from "@/pages/resource/components/FHorn";
-import {FetchDataSourceAction, UpdateDataSourceAction} from "@/models/resourceVersionEditorPage";
-import BraftEditor, {EditorState} from "braft-editor";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
+import FHorn from '@/pages/resource/components/FHorn';
+import {FetchDataSourceAction, UpdateDataSourceAction} from '@/models/resourceVersionEditorPage';
+import BraftEditor, {EditorState} from 'braft-editor';
+import {i18nMessage} from '@/utils/i18n';
+import {ChangeAction} from '@/models/global';
+import RouterTypes from 'umi/routerTypes';
+import {withRouter} from 'umi';
+import {RouteComponentProps} from 'react-router';
+import {apiHost} from '@/utils/request';
 
-interface VersionEditorProps {
+interface VersionEditorProps extends RouteComponentProps<{ id: string; version: string; }> {
   dispatch: Dispatch;
   version: ResourceVersionEditorPageModelState;
-  match: {
-    params: {
-      id: string;
-      version: string;
-    }
-  }
+  // match: {
+  //   params: {
+  //     id: string;
+  //     version: string;
+  //   }
+  // }
 }
 
-function VersionEditor({dispatch, version, match}: VersionEditorProps) {
+function VersionEditor({dispatch, route, version, match}: VersionEditorProps & RouterTypes) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
   const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
 
-  // React.useEffect(() => {
-  //   handleData();
-  // }, [handleData, match.params.version]);
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(version.description));
@@ -43,16 +54,6 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
   React.useEffect(() => {
     setProperties(version.properties);
   }, [version.properties]);
-
-  // function handleData() {
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceVersionEditorPage/fetchDataSource',
-  //     payload: {
-  //       resourceId: match.params.id,
-  //       version: match.params.version,
-  //     }
-  //   });
-  // }
 
   function onUpdateEditorText() {
     dispatch<UpdateDataSourceAction>({
@@ -85,9 +86,10 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
         version={version.version}
         signingDate={version.signingDate}
         resourceID={version.resourceID}
+        onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
       />}>
 
-      <FEditorCard title={'版本描述'}>
+      <FEditorCard title={i18nMessage('version_description')}>
 
         {!version.description && !isEditing && (<Space size={10}>
           <FCircleButton
@@ -99,8 +101,8 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
 
         {isEditing
           ? (<FHorn extra={<Space size={10}>
-            <FTextButton onClick={() => setIsEditing(false)}>取消</FTextButton>
-            <FTextButton onClick={onUpdateEditorText} theme="primary">保存</FTextButton>
+            <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
+            <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
           </Space>}>
             <FBraftEditor
               value={editor}
@@ -121,10 +123,10 @@ function VersionEditor({dispatch, version, match}: VersionEditorProps) {
           </FHorn>))
         }
       </FEditorCard>
-      <FEditorCard title={'相关视图'}>
+      <FEditorCard title={i18nMessage('version_maps')}>
         <div className={styles.diagram}/>
       </FEditorCard>
-      {properties?.length > 0 && <FEditorCard title={'自定义属性'}>
+      {properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>
         <FCustomProperties
           dataSource={version.properties}
           stubborn={true}
@@ -140,29 +142,34 @@ interface HeaderProps {
   version: string;
   resourceID: string;
   signingDate: string;
+
+  onClickDownload?(): void;
 }
 
-function Header({version, resourceID, signingDate}: HeaderProps) {
+function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps) {
+
   return (<div className={styles.Header}>
     <FTitleText text={version} type="h2"/>
     <div style={{height: 10}}/>
     <Space size={0}>
-      <FContentText type="additional2" text={'发行时间：' + signingDate}/>
+      <FContentText type="additional2" text={i18nMessage('release_date') + '：' + signingDate}/>
       <div style={{width: 40}}/>
-      <FContentText type="additional2" text={'资源ID：' + resourceID}/>
+      <FContentText type="additional2" text={i18nMessage('object_id') + '：' + resourceID}/>
       <div style={{width: 20}}/>
-      <FTextButton
-        theme="primary"
-      >
-        <DownloadOutlined style={{fontSize: 16, fontWeight: 600}}/>
+      <FTextButton theme="primary">
+        <DownloadOutlined
+          onClick={() => onClickDownload && onClickDownload()}
+          style={{fontSize: 16, fontWeight: 600}}
+        />
       </FTextButton>
     </Space>
   </div>);
 }
 
-export default connect(({resourceVersionEditorPage}: ConnectState) => ({
+
+export default withRouter(connect(({resourceVersionEditorPage}: ConnectState) => ({
   version: resourceVersionEditorPage,
-}))(VersionEditor);
+}))(VersionEditor));
 
 // 富文本内容预览
 /**

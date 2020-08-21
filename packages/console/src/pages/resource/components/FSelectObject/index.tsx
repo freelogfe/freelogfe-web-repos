@@ -10,24 +10,29 @@ import * as CryptoJS from 'crypto-js';
 import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, uploadFile} from "@/services/storages";
+import {i18nMessage} from "@/utils/i18n";
 
-const errorText = {
-  duplicated: '该资源已存在，不能重复创建，请重新选择。',
-  size: '文件大小不能超过50MB，请重新选择。',
-  resourceType: '所选文件格式和资源类型不匹配，请重新选择。',
+const errorTexts = {
+  duplicated: i18nMessage('resource_exist'),
+  size: i18nMessage('limit_on_file_size'),
+  resourceType: i18nMessage('file_format_incorrect'),
 };
 
 export interface FSelectObject {
   readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
   readonly onChange?: (file: FSelectObject['resourceObject']) => void;
+  errorText?: string;
+
+  onChangeErrorText?(text: string): void;
 }
 
-export default function ({resourceObject, onChange, resourceType}: FSelectObject) {
+export default function ({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
   const [errorT, setErrorT] = React.useState<string>('');
+  const [progress, setProgress] = React.useState<number | null>(null);
 
   function onSelect(resource: ResourceObject) {
     setModalVisible(false);
@@ -36,15 +41,12 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
 
   async function beforeUpload(file: RcFile) {
     setIsChecking(true);
-    console.log(file, 'filefile');
     if (file.size > 50 * 1024 * 1024 * 1024) {
       setIsChecking(false);
-      return setErrorT(errorText.size);
+      // return setErrorT(errorTexts.size);
+      return onChangeErrorText && onChangeErrorText(errorTexts.size);
     }
 
-    // if (isEnabled) {
-    //return setErrorT(errorText.duplicated);
-    // }
     const sha1 = await getSHA1Hash(file);
     const {data: isExist} = await fileIsExist({sha1});
     setIsChecking(false);
@@ -59,57 +61,71 @@ export default function ({resourceObject, onChange, resourceType}: FSelectObject
         time: '',
       });
     }
+
+    onChange && onChange({
+      id: '',
+      name: file.name,
+      size: file.size,
+      path: '',
+      type: resourceType,
+      time: '',
+    });
+
     const {data} = await uploadFile({
       file: file,
       resourceType: resourceType,
+    }, {
+      onUploadProgress(progressEvent: any) {
+        setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+      }
     });
 
     onChange && onChange({
       id: data.sha1,
       name: file.name,
-      size: data.fileSize,
+      size: file.size,
       path: '',
       type: resourceType,
       time: '',
     });
+    setProgress(null);
   }
-
-  //
-  // async function upload() {
-  //
-  // }
 
   return (<div>
     {
       !resourceObject
         ? (<div className={styles.object}>
 
-          {errorT &&
-          <div className={styles.objectErrorInfo}>{errorT}&nbsp;&nbsp;<FTextButton theme="primary">查看</FTextButton></div>}
+          {errorText &&
+          <div className={styles.objectErrorInfo}>
+            <span>{errorText}</span>
+            <span>&nbsp;&nbsp;</span>
+            {errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}
+          </div>}
 
           {isChecking
             ? (<Space size={50} className={styles.checking}>
-              <span>校验中<LoadingOutlined style={{paddingLeft: 10}}/></span>
+              <span>{i18nMessage('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
               <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
             </Space>)
             : <Space size={30}>
               <FNormalButton
                 theme={'weaken'}
                 onClick={() => setModalVisible(true)}
-              >从存储空间选择</FNormalButton>
+              >{i18nMessage('choose_from_storage')}</FNormalButton>
               <FUpload
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
                 <FNormalButton
                   theme={'weaken'}
-                >本地上传</FNormalButton>
+                >{i18nMessage('upload_from_local')}</FNormalButton>
               </FUpload>
             </Space>}
         </div>)
         : (<FObjectCard
           resourceObject={resourceObject}
-          progress={null}
+          progress={progress}
           onClickDelete={() => onChange && onChange(null)}
         />)
     }

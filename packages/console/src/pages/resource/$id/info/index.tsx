@@ -15,6 +15,9 @@ import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState} from '
 import {
   OnChangeInfoAction,
 } from "@/models/resourceInfoPage";
+import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import {RouterTypes} from "umi";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -22,10 +25,19 @@ interface InfoProps {
   resourceInfoPage: ResourceInfoPageModelState,
 }
 
-function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
+function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoProps & RouterTypes) {
 
   const [editorText, setEditorText] = React.useState<string>('');
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   React.useEffect(() => {
     setEditorText(info?.intro || '');
@@ -36,28 +48,28 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
   }
 
   return (<FInfoLayout>
-    {info && <FContentLayout header={<FTitleText text={'资源信息'} type={'h2'}/>}>
-      <FEditorCard title={'资源名称'}>
+    {info && <FContentLayout header={<FTitleText text={i18nMessage('resource_information')} type={'h2'}/>}>
+      <FEditorCard title={i18nMessage('resource_name')}>
         <FContentText text={info?.resourceName}/>
       </FEditorCard>
-      <FEditorCard title={'资源类型'}>
+      <FEditorCard title={i18nMessage('resource_type')}>
         <FContentText text={info.resourceType}/>
       </FEditorCard>
-      {info?.baseUpcastResources.length > 0 && <FEditorCard title={'基础上抛'}>
-        <div className={styles.upthrow}>
-          {
-            info?.baseUpcastResources.map((i) => <label key={i.resourceId}>{i.resourceName}</label>)
-          }
-        </div>
-      </FEditorCard>}
-      <FEditorCard title={'资源简介'}>
+      {/*{info?.baseUpcastResources.length > 0 && <FEditorCard title={'基础上抛'}>*/}
+      {/*  <div className={styles.upthrow}>*/}
+      {/*    {*/}
+      {/*      info?.baseUpcastResources.map((i) => <label key={i.resourceId}>{i.resourceName}</label>)*/}
+      {/*    }*/}
+      {/*  </div>*/}
+      {/*</FEditorCard>}*/}
+      <FEditorCard title={i18nMessage('resource_short_description')}>
 
         {!info?.intro && !isEditing && (<Space size={10}>
           <FCircleButton
             onClick={() => onChangeIsEditing(true)}
             theme="weaken"
           />
-          <FContentText text={'添加'}/>
+          <FContentText text={i18nMessage('resource_short_description')}/>
         </Space>)}
 
         <FHorn className={styles.about} extra={<>
@@ -65,7 +77,7 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
             ? (<Space size={10}>
               <FTextButton
                 onClick={() => onChangeIsEditing(false)}
-              >取消</FTextButton>
+              >{i18nMessage('cancel')}</FTextButton>
               <FTextButton
                 theme="primary"
                 onClick={() => {
@@ -77,12 +89,12 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
                     id: info?.resourceId,
                   });
                 }}
-              >保存</FTextButton>
+              >{i18nMessage('save')}</FTextButton>
             </Space>)
             : info?.intro ? <FTextButton
               theme="primary"
               onClick={() => onChangeIsEditing(true)}
-            >编辑</FTextButton> : null}
+            >{i18nMessage('edit')}</FTextButton> : null}
         </>}>
 
           {isEditing
@@ -102,7 +114,7 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
         </FHorn>
 
       </FEditorCard>
-      <FEditorCard title={'资源封面'}>
+      <FEditorCard title={i18nMessage('resource_image')}>
         <FUploadResourceCover
           value={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
           // onChange={(value) => dispatch<OnChangeCoverAction>({
@@ -116,7 +128,7 @@ function Info({dispatch, resourceInfoPage, resourceInfo: {info}}: InfoProps) {
           })}
         />
       </FEditorCard>
-      <FEditorCard title={'资源标签'}>
+      <FEditorCard title={i18nMessage('resource_tag')}>
         <FLabelEditor
           values={info?.tags}
           // onChange={(value) => dispatch<OnChangeLabelsAction>({

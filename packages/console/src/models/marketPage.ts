@@ -1,12 +1,15 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {list} from '@/services/resources';
+import {list, ListParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
+import {useDebounce} from "ahooks";
+
+// import {useDebounceFn} from 'ahooks';
 
 export interface MarketPageModelState {
-  tabValue: '1' | '2';
-  resourceType: number | string;
+  pageCurrent: number;
+  resourceType: string;
   inputText: string;
   dataSource: {
     id: string;
@@ -16,21 +19,7 @@ export interface MarketPageModelState {
     policy: string[],
     type: string,
   }[];
-}
-
-export interface OnChangeTabValueAction extends AnyAction {
-  type: 'marketPage/onChangeTabValue';
-  payload: '1' | '2';
-}
-
-export interface OnChangeResourceTypeAction extends AnyAction {
-  type: 'marketPage/onChangeResourceType';
-  payload: string | number;
-}
-
-export interface OnChangeInputTextAction extends AnyAction {
-  type: 'marketPage/onChangeInputText';
-  payload: string;
+  totalItem: number;
 }
 
 export interface ChangeDataSourceAction extends AnyAction {
@@ -43,21 +32,35 @@ export interface FetchDataSourceAction extends AnyAction {
   type: 'fetchDataSource',
 }
 
+export interface ChangeStatesAction extends AnyAction {
+  type: 'marketPage/changeStates',
+  payload: {
+    resourceType?: string;
+    inputText?: string;
+    pageCurrent?: number;
+  };
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change',
+  payload: Partial<MarketPageModelState>;
+}
+
 export interface MarketModelType {
   namespace: 'marketPage';
   state: MarketPageModelState;
   effects: {
+    changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    onChangeTabValue: DvaReducer<MarketPageModelState, OnChangeTabValueAction>;
-    onChangeResourceType: DvaReducer<MarketPageModelState, OnChangeResourceTypeAction>;
-    onChangeInputText: DvaReducer<MarketPageModelState, OnChangeInputTextAction>;
     changeDataSource: DvaReducer<MarketPageModelState, ChangeDataSourceAction>;
+    change: DvaReducer<MarketPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
     fetchData: Subscription;
+    // takeEvery: Subscription;
   };
 }
 
@@ -66,57 +69,85 @@ const Model: MarketModelType = {
   namespace: 'marketPage',
 
   state: {
-    tabValue: '1',
-    resourceType: -1,
+    pageCurrent: 1,
+    resourceType: '-1',
     inputText: '',
     dataSource: [],
+    totalItem: -1,
   },
 
   effects: {
-    * fetchDataSource(_: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
-      const routerHistory = yield select(({routerHistories}: ConnectState) => {
+    * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
+      if (payload.resourceType || payload.inputText) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            ...payload,
+            pageCurrent: 1,
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload,
+        });
+      }
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+      });
+    },
+    * fetchDataSource(action: FetchDataSourceAction, {call, put, select, take}: EffectsCommandMap) {
+
+      const routerHistory = yield select(({global: {routerHistories}}: ConnectState) => {
         // console.log(routerHistory, 'routerHistory');
         return routerHistories[routerHistories.length - 1];
       });
-      if (routerHistory?.pathname === '/example') {
+      const oldDataSource = yield select(({marketPage}: ConnectState) => ({
+        dataSource: marketPage.dataSource,
+      }));
+      if (routerHistory?.pathname === '/example' && oldDataSource.dataSource.length > 0) {
         return;
       }
-      const {data} = yield call(list, {page: 1});
+
+      const params: ListParamsType = yield select(({marketPage}: ConnectState) => ({
+        page: marketPage.pageCurrent,
+        keywords: marketPage.inputText,
+        resourceType: marketPage.resourceType === '-1' ? undefined : marketPage.resourceType,
+      }));
+
+      const {data} = yield call(list, {
+        ...params,
+        status: 1,
+        pageSize: 20,
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          totalItem: data.totalItem,
+        },
+      });
       const dataSource = data.dataList.map((i: any) => ({
         id: i.resourceId,
         cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
         title: i.resourceName,
         version: i.latestVersion,
-        // TODO: 这里应该是策略
-        policy: i.tags,
+        policy: i.policies.map((l: any) => l.policyName),
         type: i.resourceType,
       }));
       yield put<ChangeDataSourceAction>({
         type: 'changeDataSource',
         payload: dataSource,
-        restart: true,
+        restart: params.page === 1,
       });
     },
   },
 
   reducers: {
-    onChangeTabValue(state, {payload}): MarketPageModelState {
+    change(state, {payload}) {
       return {
         ...state,
-        tabValue: payload,
+        ...payload,
       }
-    },
-    onChangeResourceType(state, {payload}): MarketPageModelState {
-      return {
-        ...state,
-        resourceType: payload,
-      };
-    },
-    onChangeInputText(state, {payload}): MarketPageModelState {
-      return {
-        ...state,
-        inputText: payload,
-      };
     },
     changeDataSource(state, {payload, restart = false}): MarketPageModelState {
       if (restart) {
@@ -137,18 +168,25 @@ const Model: MarketModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      history.listen((listener) => {
-        // console.log(listener, 'LLLLLLLLLLLL');
-        if (listener.pathname === '/market') {
-          dispatch({type: 'onChangeTabValue', payload: '1'});
-        }
-        if (listener.pathname === '/example') {
-          dispatch({type: 'onChangeTabValue', payload: '2'});
-        }
-      });
+      // history.listen((listener) => {
+      //   // console.log(listener, 'LLLLLLLLLLLL');
+      //   if (listener.pathname === '/market') {
+      //     dispatch({type: 'onChangeTabValue', payload: '1'});
+      //   }
+      //   if (listener.pathname === '/example') {
+      //     dispatch({type: 'onChangeTabValue', payload: '2'});
+      //   }
+      // });
     },
+    // takeEvery({dispatch, history}: SubscriptionAPI) {
+    //   dispatch<TakeEveryAction>({
+    //     type: 'takeEvery',
+    //   });
+    // },
     fetchData({dispatch, history}: SubscriptionAPI) {
+
       history.listen((listener) => {
+        // console.log(listener, 'listener');
         if (listener.pathname === '/market') {
           dispatch<FetchDataSourceAction>({
             type: 'fetchDataSource',

@@ -1,13 +1,17 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {list} from "@/services/resources";
-import {router} from 'dva';
+import {list, ListParamsType} from "@/services/resources";
+import {debounce } from 'redux-saga/effects'
+import {ConnectState} from "@/models/connect";
 
 export interface ResourceListPageModelState {
   resourceType: string;
   resourceStatus: string;
   inputText: string;
+  pageCurrent: number;
+  pageSize: number;
+  totalNum: number;
   dataSource: {
     id: string;
     cover: string;
@@ -18,68 +22,39 @@ export interface ResourceListPageModelState {
     type: string;
     status: 0 | 1;
   }[];
-  pageCurrent: number;
-  pageSize: number;
-  totalNum: number;
-}
-
-export interface OnChangeResourceTypeAction extends AnyAction {
-  type: 'resourceListPage/onChangeResourceType',
-  payload: string;
-}
-
-export interface OnChangeResourceStatusAction extends AnyAction {
-  type: 'resourceListPage/onChangeResourceStatus',
-  payload: string;
-}
-
-export interface OnChangeInputTextAction extends AnyAction {
-  type: 'resourceListPage/onChangeInputText',
-  payload: string;
-}
-
-export interface ChangeDataSourceAction extends AnyAction {
-  type: 'resourceListPage/changeDataSource' | 'changeDataSource',
-  payload: ResourceListPageModelState['dataSource'];
-  // restart?: boolean;
-}
-
-export interface OnChangePageCurrentAction extends AnyAction {
-  type: 'resourceListPage/onChangePageCurrent',
-  payload: number;
-}
-
-export interface OnChangePageSizeAction extends AnyAction {
-  type: 'resourceListPage/onChangePageSize',
-  payload: number;
-}
-
-export interface OnChangeTotalNumAction extends AnyAction {
-  type: 'resourceListPage/onChangeTotalNum',
-  payload: number;
 }
 
 export interface FetchDataSourceAction extends AnyAction {
-  type: 'resourceListPage/fetchDataSource',
+  type: 'fetchDataSource',
+}
+
+export interface ChangeStatesAction extends AnyAction {
+  type: 'resourceListPage/changeStates',
+  payload: {
+    resourceType?: string;
+    resourceStatus?: string;
+    inputText?: string;
+    pageCurrent?: number;
+    pageSize?: number;
+  };
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change',
+  payload: Partial<ResourceListPageModelState>;
 }
 
 export interface ResourceListPageModelType {
   namespace: 'resourceListPage';
   state: ResourceListPageModelState;
   effects: {
-    fetchDataSource: Effect;
+    changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
+    fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    onChangeResourceType: DvaReducer<ResourceListPageModelState, OnChangeResourceTypeAction>;
-    onChangeResourceStatus: DvaReducer<ResourceListPageModelState, OnChangeResourceStatusAction>;
-    onChangeInputText: DvaReducer<ResourceListPageModelState, OnChangeInputTextAction>;
-    changeDataSource: DvaReducer<ResourceListPageModelState, ChangeDataSourceAction>;
-    onChangePageCurrent: DvaReducer<ResourceListPageModelState, OnChangePageCurrentAction>;
-    onChangePageSize: DvaReducer<ResourceListPageModelState, OnChangePageSizeAction>;
-    onChangeTotalNum: DvaReducer<ResourceListPageModelState, OnChangeTotalNumAction>;
+    change: DvaReducer<ResourceListPageModelState, ChangeAction>;
   };
   subscriptions: {
-    __init__: Subscription;
     setup: Subscription;
   };
 }
@@ -90,20 +65,50 @@ const Model: ResourceListPageModelType = {
 
   state: {
     resourceType: '-1',
-    resourceStatus: '-1',
+    resourceStatus: '2',
     inputText: '',
     dataSource: [],
     pageCurrent: 1,
     pageSize: 20,
-    totalNum: 20,
+    totalNum: -1,
   },
 
   effects: {
-    * fetchDataSource(_: FetchDataSourceAction, {call, put}: EffectsCommandMap) {
+    * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
+      if (payload.resourceType || payload.inputText || payload.pageSize || payload.resourceStatus) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            ...payload,
+            pageCurrent: 1,
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload,
+        });
+      }
+      // yield debounce(1000, 'change', () => console.log('####'))
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+      });
+    },
+    * fetchDataSource(_: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
-      const params = {};
-      const {data} = yield call(list, params);
-      // console.log(data, 'data');
+      const params: ListParamsType = yield select(({resourceListPage}: ConnectState) => ({
+        page: resourceListPage.pageCurrent,
+        pageSize: resourceListPage.pageSize,
+        keywords: resourceListPage.inputText,
+        resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
+        status: resourceListPage.resourceStatus,
+      }));
+      const {data} = yield call(list, {
+        ...params,
+        isSelf: 1,
+      });
+      // console.log(data, 'dataasdfw');
 
       const resource: ResourceListPageModelState['dataSource'] = data.dataList.map((i: any) => ({
         id: i.resourceId,
@@ -111,67 +116,40 @@ const Model: ResourceListPageModelType = {
         title: i.resourceName,
         version: i.latestVersion,
         // policy: i.policies,
-        policy: [],
+        policy: i.policies.map((l:any) => l.policyName),
         type: i.resourceType,
         status: i.status,
       }));
-      yield put<ChangeDataSourceAction>({
-        type: 'changeDataSource',
-        payload: resource
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataSource: resource,
+          totalNum: data.totalItem,
+        },
       });
     },
   },
 
   reducers: {
-    onChangeResourceType(state: ResourceListPageModelState, action: OnChangeResourceTypeAction): ResourceListPageModelState {
-      return {...state, resourceType: action.payload};
-    },
-    onChangeResourceStatus(state: ResourceListPageModelState, action: OnChangeResourceStatusAction): ResourceListPageModelState {
-      return {...state, resourceStatus: action.payload};
-    },
-    onChangeInputText(state: ResourceListPageModelState, action: OnChangeInputTextAction): ResourceListPageModelState {
-      return {...state, inputText: action.payload};
-    },
-    changeDataSource(state: ResourceListPageModelState, {payload}: ChangeDataSourceAction): ResourceListPageModelState {
-      // if (restart) {
+    change(state: ResourceListPageModelState, action: ChangeAction): ResourceListPageModelState {
       return {
         ...state,
-        dataSource: payload
+        ...action.payload
       };
-      // }
-      // return {
-      //   ...state,
-      //   dataSource: [
-      //     ...state.dataSource,
-      //     ...payload,
-      //   ],
-      // };
-    },
-    onChangePageCurrent(state: ResourceListPageModelState, action: OnChangePageCurrentAction): ResourceListPageModelState {
-      return {...state, pageCurrent: action.payload};
-    },
-    onChangePageSize(state: ResourceListPageModelState, action: OnChangePageSizeAction): ResourceListPageModelState {
-      return {...state, pageSize: action.payload};
-    },
-    onChangeTotalNum(state: ResourceListPageModelState, action: OnChangeTotalNumAction): ResourceListPageModelState {
-      return {...state, totalNum: action.payload};
     },
   },
 
   subscriptions: {
-    __init__({dispatch, history}: SubscriptionAPI) {
-      // console.log(history, 'HHHHHHH');
-      // history.listen((listener) => {
-        // console.log(listener, 'LLLLLLL');
-        // console.log(router, 'routerrouter');
-      // });
-
-      // if (history) {
-      //
-      // }
-    },
     setup({dispatch, history}: SubscriptionAPI) {
+      history.listen((listener) => {
+        if (listener.pathname === '/resource/list') {
+          dispatch<FetchDataSourceAction>({
+            type: 'fetchDataSource',
+          });
+        }
+      });
     },
+
   },
 
 };

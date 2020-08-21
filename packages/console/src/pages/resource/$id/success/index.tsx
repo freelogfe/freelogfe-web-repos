@@ -5,9 +5,12 @@ import {FTipText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
-
+import {i18nMessage} from "@/utils/i18n";
+import {ChangeAction} from "@/models/global";
+import {Dispatch,connect} from "dva";
 
 interface SuccessProps {
+  dispatch: Dispatch;
   match: {
     params: {
       id: string;
@@ -15,7 +18,16 @@ interface SuccessProps {
   };
 }
 
-function Success({match}: RouterTypes & SuccessProps) {
+function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'global/change',
+      payload: {
+        route: route,
+      },
+    });
+  }, [route]);
 
   function goto() {
     // /resource/:id/version/creator
@@ -27,13 +39,13 @@ function Success({match}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type={'secondary'} text={'资源创建成功'}/>
+      <FTipText type={'secondary'} text={i18nMessage('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type={'modal'} text={'未发行版本的资源，不会出现在资源市场中'}/>
+      <FTipText type={'modal'} text={i18nMessage('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
-      <FNormalButton onClick={goto}>为资源创建第一个版本</FNormalButton>
+      <FNormalButton onClick={goto}>{i18nMessage('create_first_version')}</FNormalButton>
     </div>
   </FCenterLayout>)
 }
 
-export default withRouter(Success);
+export default withRouter(connect()(Success));

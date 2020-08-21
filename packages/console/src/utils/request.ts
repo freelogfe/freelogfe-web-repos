@@ -8,6 +8,11 @@ import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
 // import '~'
 
+// notification.config({
+//   duration: 1000000
+// });
+
+
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -25,6 +30,15 @@ const codeMessage: any = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
+export const apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+
+if (window.location.hostname.includes('.com')) {
+  // const arr = window.location.hostname.split('.');
+  // arr[0] = 'qi';
+  axios.defaults.baseURL = apiHost;
+  axios.defaults.withCredentials = true;
+}
 
 /**
  * 异常处理程序

@@ -8,10 +8,11 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FContentText} from "@/components/FText";
 import {ResourcesProps} from "@/pages/resource/containers/FDepPanel/Resources";
+import {i18nMessage} from "@/utils/i18n";
 
 type Data = Readonly<{
-  key: string | number;
-  value: string | number;
+  key: string;
+  value: string;
   description: string;
   allowCustom: boolean;
   custom: 'input' | 'select';
@@ -21,11 +22,12 @@ type Data = Readonly<{
 export type FCustomPropertiesProps = Readonly<{
   stubborn?: boolean;
   dataSource: Data[];
-  onChange?: (dataSource: FCustomPropertiesProps['dataSource']) => void;
-  onSave?: (dataSource: FCustomPropertiesProps['dataSource']) => void;
+  onChange?(dataSource: FCustomPropertiesProps['dataSource']): void;
+  onSave?(dataSource: FCustomPropertiesProps['dataSource']): void;
+  onImport?(): void;
 }>;
 
-export default function ({stubborn = false, dataSource, onChange, onSave}: FCustomPropertiesProps) {
+export default function ({stubborn = false, dataSource, onChange, onImport, onSave}: FCustomPropertiesProps) {
   function onChangeProperty(value: Data, index: number) {
     return onChange && onChange(dataSource.map((i, j) => {
       if (index !== j) {
@@ -47,8 +49,8 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
   }
 
   function onConfirm(value: Data, index: number) {
-    onSave && onSave(dataSource.map((i,j) => {
-      if (j !==index) {
+    onSave && onSave(dataSource.map((i, j) => {
+      if (j !== index) {
         return i;
       }
       return value;
@@ -61,18 +63,23 @@ export default function ({stubborn = false, dataSource, onChange, onSave}: FCust
         <Space size={80}>
           <Space size={10}>
             <FCircleButton onClick={onAdd} theme="weaken"/>
-            <FContentText text={'添加'}/>
+            <FContentText text={i18nMessage('create_property')}/>
           </Space>
           <Space size={10}>
-            <FCircleButton theme="weaken" icon={<CopyOutlined/>}/>
-            <FContentText text={'从上一版本导入'}/>
+            <FCircleButton
+              theme="weaken"
+              icon={<CopyOutlined/>}
+              onClick={() => onImport && onImport()}
+            />
+            <FContentText text={i18nMessage('import_from_previous_version')}/>
           </Space>
         </Space>
-        <div style={{height: 35}}/>
+
       </>)
     }
 
     {dataSource.length > 0 && <div className={styles.styles}>
+      <div style={{height: 35}}/>
       {
         dataSource.map((i, j) => (<Property
           key={j}
@@ -120,12 +127,13 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
     extra={stubborn || (<a
       onClick={() => onDelete && onDelete()}
       className={styles.delete}
-    >删除</a>)}
+    >{i18nMessage('remove')}</a>)}
     className={styles.FHorn}>
 
     <div className={styles.row}>
-      <Field title={'key'} dot={true}>
+      <Field title={i18nMessage('key')} dot={true}>
         <FInput
+          wrapClassName={styles.FInputWrap}
           value={data.key}
           onChange={(e) => onChangeData({key: e.target.value})}
           disabled={stubborn}
@@ -133,7 +141,7 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       </Field>
       <Field
         status={stubborn ? (editing === 'value' ? 'editing' : 'editable') : 'normal'}
-        title={'value'}
+        title={i18nMessage('value')}
         dot={true}
         onClickEdit={() => setEditing('value')}
         onClickCancel={() => setEditing('')}
@@ -141,10 +149,12 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       >
         {stubborn && editing === 'value'
           ? <FInput
+            wrapClassName={styles.FInputWrap}
             value={valueText}
             onChange={(e) => setValueText(e.target.value)}
           />
           : <FInput
+            wrapClassName={styles.FInputWrap}
             value={data.value}
             onChange={(e) => onChangeData({value: e.target.value})}
             disabled={stubborn}
@@ -152,23 +162,25 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
       </Field>
       <Field
         status={stubborn ? (editing === 'remark' ? 'editing' : 'editable') : 'normal'}
-        title={'属性说明'}
+        title={i18nMessage('property_remark')}
         onClickEdit={() => setEditing('remark')}
         onClickCancel={() => setEditing('')}
         onClickConfirm={() => onSave({description: descriptionText})}
       >
         {stubborn && editing === 'remark'
           ? <FInput
+            wrapClassName={styles.FInputWrap}
             value={descriptionText}
             onChange={(e) => setDescriptionText(e.target.value)}
           />
           : (<FInput
+            wrapClassName={styles.FInputWrap}
             value={data.description}
             onChange={(e) => onChangeData({description: e.target.value})}
             disabled={stubborn}
           />)}
       </Field>
-      <Field title={'允许展品自定义'}>
+      <Field title={i18nMessage('support_customization')}>
         <Switch
           checked={data.allowCustom}
           onChange={(value) => onChangeData({allowCustom: value})}
@@ -182,19 +194,23 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
 
     {
       data.allowCustom && (<div className={styles.row}>
-        <Field className={styles.FSelect} title={'自定义方式'}>
+        <Field className={styles.FSelect} title={i18nMessage('value_input_mode')}>
           <FSelect
             value={data.custom}
             onChange={(value) => onChangeData({custom: value})}
             disabled={stubborn}
             className={styles.FSelect}
-            dataSource={[{value: 'input', title: '输入框'}, {value: 'select', title: '下拉框'}]}
+            dataSource={[
+              {value: 'input', title: i18nMessage('textfield')},
+              {value: 'select', title: i18nMessage('dropdownlist')},
+            ]}
             placeholder={'请选择'}
           />
         </Field>
         {
-          data.custom === 'select' && (<Field title={'自定义选项'} className={styles.customOptions}>
+          data.custom === 'select' && (<Field title={i18nMessage('value_options')} className={styles.customOptions}>
             <FInput
+              // wrapClassName={}
               value={data.customOption}
               onChange={(e) => onChangeData({customOption: e.target.value})}
               disabled={stubborn}
@@ -224,7 +240,7 @@ interface FieldProps {
 }
 
 function Field({status = 'normal', className, dot = false, title, children, onClickEdit, onClickCancel, onClickConfirm}: FieldProps) {
-  return (<div className={styles.Field + ' ' + className}>
+  return (<div className={styles.Field + ' ' + (className || '')}>
       <div className={styles.FieldTitle}>
         {dot && <i className={styles.dot}/>}
         <span>{title}</span>
@@ -242,8 +258,8 @@ function Field({status = 'normal', className, dot = false, title, children, onCl
         {
           status === 'editing' && (
             <Space size={10}>
-              <FTextButton onClick={onClickCancel}>取消</FTextButton>
-              <FTextButton onClick={onClickConfirm} theme="primary">保存</FTextButton>
+              <FTextButton onClick={onClickCancel}>{i18nMessage('cancel')}</FTextButton>
+              <FTextButton onClick={onClickConfirm} theme="primary">{i18nMessage('save')}</FTextButton>
             </Space>)
         }
       </>}>

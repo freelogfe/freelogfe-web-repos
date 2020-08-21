@@ -3,6 +3,7 @@ import styles from './index.less';
 import img from '@/assets/file-object.svg';
 import {FTitleText, FContentText} from '@/components/FText';
 import {Progress} from 'antd';
+import {i18nMessage} from "@/utils/i18n";
 
 interface ObjectCardProps {
   readonly resourceObject: {
@@ -44,7 +45,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
     </div>
     <div style={{width: 10}}/>
     <a onClick={() => onClickDelete && onClickDelete()}
-       className={styles.delete}>{progress !== null ? '取消上传' : '删除'}</a>
+       className={styles.delete}>{progress !== null ? i18nMessage('cancel_uploading') : i18nMessage('remove')}</a>
   </div>)
 }
 

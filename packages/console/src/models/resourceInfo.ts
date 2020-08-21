@@ -1,8 +1,8 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info} from "@/services/resources";
-import {ChangePoliciesAction, ResourceAuthPageModelState} from "@/models/resourceAuthPage";
+import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "@/models/resourceAuthPage";
 
 export interface ResourceInfoModelState {
   info: null | {
@@ -29,9 +29,6 @@ export interface ResourceInfoModelState {
   };
 }
 
-// export type ResourceInfoModelState = WholeReadonly<IResourceInfoModelState>
-// export type ResourceInfoModelState = IResourceInfoModelState;
-
 export interface ChangeInfoAction extends AnyAction {
   type: 'resourceInfo/changeInfo' | 'changeInfo';
   payload: ResourceInfoModelState['info'];
@@ -46,7 +43,6 @@ export interface ResourceInfoModelType {
   namespace: 'resourceInfo';
   state: WholeReadonly<ResourceInfoModelState>;
   effects: {
-    // fetchDataSource: Effect;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -66,7 +62,7 @@ const Model: ResourceInfoModelType = {
     * fetchDataSource(action: FetchDataSourceAction, {call, put}: EffectsCommandMap): Generator<any, void, any> {
       const params = {
         resourceIdOrName: action.payload,
-        // isLoadLatestVersionInfo: 1,
+        isLoadPolicyInfo: 1,
       };
       const {data} = yield call(info, params);
       // console.log(data, 'DDDDDDDD');
@@ -75,9 +71,21 @@ const Model: ResourceInfoModelType = {
         payload: data,
       });
 
-      yield put<ChangePoliciesAction>({
-        type: 'resourceAuthPage/changePolicies',
-        payload: [],
+      yield put<FetchPoliciesAction>({
+        type: 'resourceAuthPage/fetchPolicies',
+        payload: data.policies,
+      });
+
+      yield put<FetchAuthorizeAction>({
+        type: 'resourceAuthPage/fetchAuthorize',
+        payload: data.resourceId,
+      });
+
+      yield put<FetchAuthorizedAction>({
+        type: 'resourceAuthPage/fetchAuthorized',
+        payload: {
+          baseResourceId: data.resourceId
+        },
       });
     },
   },
