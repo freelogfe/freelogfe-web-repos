@@ -25,6 +25,7 @@ const config: IConfig | any = {
         {exact: true, path: '.', redirect: '/market'},
         {exact: true, path: 'market', component: '../pages/market', title: '市场资源', meta: {footer: true}},
         {exact: true, path: 'example', component: '../pages/market', title: '示例节点', meta: {footer: true}},
+        {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间', meta: {footer: true}},
         {
           path: 'resource',
           routes: [
