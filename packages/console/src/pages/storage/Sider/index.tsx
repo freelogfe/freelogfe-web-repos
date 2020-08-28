@@ -27,6 +27,7 @@ function Sider({}: SiderProps) {
       showInfo={false}
       className={styles.progressBack}
     />
+    <div className={styles.ratio}>23.5 MB / 2 GB</div>
   </div>);
 }
 
