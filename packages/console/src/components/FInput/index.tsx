@@ -9,7 +9,7 @@ interface FInputProps extends InputProps {
   theme?: 'dark' | 'light';
   value?: string;
   debounce?: number;
-  errorText?: string;
+  errorText?: React.ReactNode;
   wrapClassName?: string;
 
   onDebounceChange?(value: string): void;

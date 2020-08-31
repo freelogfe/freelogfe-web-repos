@@ -6,6 +6,9 @@ import {Drawer, Space} from 'antd';
 import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
 import Market from "@/pages/resource/containers/FDepPanel/Market";
+import Header from '../Header';
+import Details from "@/pages/storage/Content/Details";
+import SelectDeps from "@/pages/storage/Content/SelectDeps";
 
 // import {} from '@/components/FT'
 
@@ -83,18 +86,14 @@ const data = [
 ];
 
 function Content({}: ContentProps) {
+
+  const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(true);
+  const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
+
   return (<div>
-    <div className={styles.header}>
-      <div className={styles.headerLeft}>
-        <FTitleText type="h1" text={'bucket-001'}/>
-        <div style={{height: 5}}/>
-        <Space size={40}>
-          <div>创建时间 2020.05.30</div>
-          <div>存储对象 4</div>
-        </Space>
-      </div>
-      <FNormalButton>上传对象</FNormalButton>
-    </div>
+
+    <Header/>
+
     <div className={styles.body}>
       <FTable columns={columns} dataSource={data}/>
     </div>
@@ -102,20 +101,20 @@ function Content({}: ContentProps) {
     <Drawer
       title={'编辑对象信息'}
       // onClose={() => setModalVisible(false)}
-      // visible={modalVisible}
-      visible={true}
+      visible={objectInfoVisible}
       width={720}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
+      <Details/>
       <Drawer
         title="添加依赖"
         width={640}
-        visible={true}
+        visible={depInfoVisible}
         // closable={}
         // onClose={this.onChildrenDrawerClose}
         // visible={this.state.childrenDrawer}
       >
-        This is two-level drawer
+        <SelectDeps/>
       </Drawer>
       {/*<Market/>*/}
     </Drawer>

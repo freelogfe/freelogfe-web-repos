@@ -1,21 +1,25 @@
 .styles {
-  padding: 40px 0;
-
+  padding: 25px 0;
 }
 
 .title {
   display: flex;
   align-items: center;
-
+  position: relative;
 }
 
 .dot {
   width: 4px;
   height: 4px;
-  margin-right: 10px;
-  margin-left: 36px;
+  //margin-right: 10px;
+  //margin-left: 36px;
   border-radius: 50%;
   background-color: #EE4040;
+  left: -14px;
+  top: 50%;
+  //transition: 0 -50%;
+  transform: translateY(-50%);
+  position: absolute;
 }
 
 .dotHidden {
@@ -23,5 +27,5 @@
 }
 
 .content {
-  padding: 0 70px;
+  padding: 0;
 }
