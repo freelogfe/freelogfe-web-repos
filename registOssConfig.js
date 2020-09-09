@@ -9,6 +9,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
+// 两个key，由 aliyun OSS 生成
 const data = {
     accessKeyId: "LTAIWcbdWQYqXLPQ",
     accessKeySecret: "14adw1CXwaWxavnGgj5dvgnk1fiVU2"
