@@ -15,17 +15,17 @@ interface FInputProps extends InputProps {
   onDebounceChange?(value: string): void;
 }
 
-export default function ({
-                           theme = 'light',
-                           className = '',
-                           debounce = 0,
-                           value,
-                           onChange,
-                           onDebounceChange,
-                           errorText,
-                           wrapClassName,
-                           ...props
-                         }: FInputProps) {
+function FInput({
+                  theme = 'light',
+                  className = '',
+                  debounce = 0,
+                  value,
+                  onChange,
+                  onDebounceChange,
+                  errorText,
+                  wrapClassName,
+                  ...props
+                }: FInputProps) {
 
   const [inputText, setInputText] = React.useState<string>(value || '');
   const {run} = useDebounceFn(
@@ -78,3 +78,5 @@ export default function ({
 
   </div>);
 }
+
+export default FInput;

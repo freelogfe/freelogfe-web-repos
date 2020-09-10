@@ -10,7 +10,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
     "ahooks": "^2.4.0",
-    "antd": "^4.3.5",
+    "antd": "^4.6.3",
     "antd-img-crop": "^3.9.0",
     "axios": "^0.19.2",
     "braft-editor": "^2.3.9",

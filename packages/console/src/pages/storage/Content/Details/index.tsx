@@ -3,11 +3,12 @@ import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {CopyOutlined, DownloadOutlined, ArrowUpOutlined} from '@ant-design/icons';
 import {FTextButton, FCircleButton} from '@/components/FButton';
-import {Space, Divider, Popover} from 'antd';
+import {Space, Divider, Popover, Drawer} from 'antd';
 import FEditorCard from '@/components/FEditorCard';
 import FSelect from '@/components/FSelect';
 import {ImportPreVersionAction} from "@/models/resourceVersionCreatorPage";
 import FCustomProperties from "@/components/FCustomProperties";
+import SelectDeps from "@/pages/storage/Content/SelectDeps";
 
 
 interface DetailsProps {
@@ -16,6 +17,7 @@ interface DetailsProps {
 
 function Details({}: DetailsProps) {
   // const divContainer = React.useRef<HTMLDivElement>(null);
+  const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(true);
 
   return (<div className={styles.divContainer}>
     <div style={{height: 10}}/>
@@ -36,7 +38,7 @@ function Details({}: DetailsProps) {
     </FEditorCard>
     <FEditorCard title={'依赖'}>
       <Space size={10}>
-        <FCircleButton theme="weaken"/>
+        <FCircleButton onClick={() => setDepInfoVisible(true)} theme="weaken"/>
         <FContentText text={'添加'}/>
       </Space>
       <DepsCards/>
@@ -52,20 +54,33 @@ function Details({}: DetailsProps) {
         colNum={2}
         stubborn={false}
         // dataSource={version.properties}
-        dataSource={[{
-          key: '',
-          value: '',
-          description: '',
-          allowCustom: true,
-          custom: 'select',
-          customOption: ''
-        }]}
+        dataSource={[
+          //   {
+          //   key: '',
+          //   value: '',
+          //   description: '',
+          //   allowCustom: true,
+          //   custom: 'select',
+          //   customOption: ''
+          // }
+        ]}
         // onChange={(value) => onChange({properties: value})}
         // onImport={() => dispatch<ImportPreVersionAction>({
         //   type: 'resourceVersionCreatorPage/importPreVersion',
         // })}
       />
     </FEditorCard>
+
+    <Drawer
+      title="添加依赖"
+      width={640}
+      visible={depInfoVisible}
+      // closable={}
+      // onClose={this.onChildrenDrawerClose}
+      // visible={this.state.childrenDrawer}
+    >
+      <SelectDeps/>
+    </Drawer>
   </div>);
 }
 

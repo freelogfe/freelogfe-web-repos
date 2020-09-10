@@ -18,7 +18,7 @@ export default function FMenu({options, onClick}: FMenuProps) {
       selectable={false}
       className={styles.Menu}
       mode="vertical"
-      onClick={(param) => onClick && onClick(param.key)}
+      onClick={(param: any) => onClick && onClick(param.key)}
     >
       {
         (options || [])

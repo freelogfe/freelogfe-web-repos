@@ -136,10 +136,10 @@ const config: IConfig | any = {
     'menu-item-active-bg': '#2784FF',
     'menu-highlight-color': '#fff',
 
-    'tabs-horizontal-margin': '0 100px 0 0',
-    'tabs-horizontal-margin-rtl': '0 0 0 100px',
-    'tabs-horizontal-padding-lg': '18px 0',
-    'tabs-bar-margin': 0,
+    // 'tabs-horizontal-margin': '0 100px 0 0',
+    // 'tabs-horizontal-margin-rtl': '0 0 0 100px',
+    // 'tabs-horizontal-padding-lg': '18px 0',
+    // 'tabs-bar-margin': 0,
 
     'btn-shadow': 'none',
     'btn-primary-shadow': 'none',

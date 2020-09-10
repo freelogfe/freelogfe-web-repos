@@ -1,16 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FContentText} from '@/components/FText';
+import {FTextButton} from '@/components/FButton';
 import {Drawer, Space} from 'antd';
 import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
-import Market from "@/pages/resource/containers/FDepPanel/Market";
 import Header from '../Header';
 import Details from "@/pages/storage/Content/Details";
-import SelectDeps from "@/pages/storage/Content/SelectDeps";
-
-// import {} from '@/components/FT'
 
 interface ContentProps {
 
@@ -88,7 +84,7 @@ const data = [
 function Content({}: ContentProps) {
 
   const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(true);
-  const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
+
 
   return (<div>
 
@@ -106,16 +102,6 @@ function Content({}: ContentProps) {
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <Details/>
-      <Drawer
-        title="添加依赖"
-        width={640}
-        visible={depInfoVisible}
-        // closable={}
-        // onClose={this.onChildrenDrawerClose}
-        // visible={this.state.childrenDrawer}
-      >
-        <SelectDeps/>
-      </Drawer>
       {/*<Market/>*/}
     </Drawer>
   </div>);
