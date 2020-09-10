@@ -83,7 +83,7 @@ const data = [
 
 function Content({}: ContentProps) {
 
-  const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(true);
+  const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
 
 
   return (<div>

@@ -17,7 +17,7 @@ interface DetailsProps {
 
 function Details({}: DetailsProps) {
   // const divContainer = React.useRef<HTMLDivElement>(null);
-  const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(true);
+  const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
   return (<div className={styles.divContainer}>
     <div style={{height: 10}}/>
