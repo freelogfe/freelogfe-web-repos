@@ -2,11 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
-import {Drawer, Space} from 'antd';
+import {Drawer, Row, Space, Col} from 'antd';
 import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
 import Header from '../Header';
-import Details from "@/pages/storage/Content/Details";
+import Details from '@/pages/storage/Content/Details';
+import FUploadTasksPanel from "@/pages/storage/components/FUploadTasksPanel";
 
 interface ContentProps {
 
@@ -93,6 +94,8 @@ function Content({}: ContentProps) {
     <div className={styles.body}>
       <FTable columns={columns} dataSource={data}/>
     </div>
+
+    <FUploadTasksPanel/>
 
     <Drawer
       title={'编辑对象信息'}
