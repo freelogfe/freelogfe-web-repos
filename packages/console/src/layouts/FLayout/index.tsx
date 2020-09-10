@@ -77,20 +77,27 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/market') {
+    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/market')) {
       return router.push('/market');
     }
-    if (value === '2' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/example') {
+    if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/example')) {
       return router.push('/example');
     }
+
   }
 
   function onClickResource(value: string) {
-    if (value === '1') {
+    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/list')) {
       return router.push('/resource/list');
     }
-    if (value === '2') {
+    if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/collect')) {
       return router.push('/resource/collect');
+    }
+  }
+
+  function onClickStorage() {
+    if (!global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/storage')) {
+      return router.push('/storage');
     }
   }
 
@@ -121,7 +128,10 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
                 {i18nMessage('explorer')}
               </a>
             </Dropdown>
-            <a className={styles.Menu}>{i18nMessage('storage')}</a>
+            <a
+              onClick={() => onClickStorage()}
+              className={styles.Menu}>{i18nMessage('storage')}
+            </a>
             <Dropdown overlay={<FMenu
               onClick={onClickResource}
               options={resourcesOptions}

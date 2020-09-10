@@ -6,6 +6,8 @@ import {FTextButton, FCircleButton} from '@/components/FButton';
 import {Space, Divider, Popover} from 'antd';
 import FEditorCard from '@/components/FEditorCard';
 import FSelect from '@/components/FSelect';
+import {ImportPreVersionAction} from "@/models/resourceVersionCreatorPage";
+import FCustomProperties from "@/components/FCustomProperties";
 
 
 interface DetailsProps {
@@ -45,6 +47,24 @@ function Details({}: DetailsProps) {
         <FCircleButton theme="weaken"/>
         <FContentText text={'添加'}/>
       </Space>
+      <FCustomProperties
+        noHeaderButton={true}
+        colNum={2}
+        stubborn={false}
+        // dataSource={version.properties}
+        dataSource={[{
+          key: '',
+          value: '',
+          description: '',
+          allowCustom: true,
+          custom: 'select',
+          customOption: ''
+        }]}
+        // onChange={(value) => onChange({properties: value})}
+        // onImport={() => dispatch<ImportPreVersionAction>({
+        //   type: 'resourceVersionCreatorPage/importPreVersion',
+        // })}
+      />
     </FEditorCard>
   </div>);
 }

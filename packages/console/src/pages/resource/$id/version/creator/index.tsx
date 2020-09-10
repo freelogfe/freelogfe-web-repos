@@ -9,7 +9,7 @@ import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
-import FCustomProperties from '@/pages/resource/components/FCustomProperties';
+import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from "@/models/connect";
@@ -71,47 +71,48 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
       onClickCache={onClickCache}
       disabledCreate={!!version.versionErrorText || !!version.resourceObjectErrorText}
     />}>
-      <FEditorCard dot={true} title={i18nMessage('version_number')}>
-        <FInput
-          value={version.version}
-          onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
-          className={styles.versionInput}
-          errorText={version.versionErrorText}
-        />
-      </FEditorCard>
+      <div className={styles.wrap}>
+        <FEditorCard dot={true} title={i18nMessage('version_number')}>
+          <FInput
+            value={version.version}
+            onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
+            className={styles.versionInput}
+            errorText={version.versionErrorText}
+          />
+        </FEditorCard>
 
-      <FEditorCard dot={true} title={i18nMessage('release_object')}>
-        <FSelectObject
-          resourceType={resource.info?.resourceType || ''}
-          resourceObject={version.resourceObject}
-          onChange={(value) => onChange({resourceObject: value, resourceObjectErrorText: ''})}
-          errorText={version.resourceObjectErrorText}
-          onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
-        />
-      </FEditorCard>
+        <FEditorCard dot={true} title={i18nMessage('release_object')}>
+          <FSelectObject
+            resourceType={resource.info?.resourceType || ''}
+            resourceObject={version.resourceObject}
+            onChange={(value) => onChange({resourceObject: value, resourceObjectErrorText: ''})}
+            errorText={version.resourceObjectErrorText}
+            onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
+          />
+        </FEditorCard>
 
-      <FEditorCard dot={false} title={i18nMessage('rely')}>
-        <FDepPanel/>
-      </FEditorCard>
+        <FEditorCard dot={false} title={i18nMessage('rely')}>
+          <FDepPanel/>
+        </FEditorCard>
 
-      <FEditorCard dot={false} title={i18nMessage('object_property')}>
-        <FCustomProperties
-          stubborn={false}
-          dataSource={version.properties}
-          onChange={(value) => onChange({properties: value})}
-          onImport={() => dispatch<ImportPreVersionAction>({
-            type: 'resourceVersionCreatorPage/importPreVersion',
-          })}
-        />
-      </FEditorCard>
+        <FEditorCard dot={false} title={i18nMessage('object_property')}>
+          <FCustomProperties
+            stubborn={false}
+            dataSource={version.properties}
+            onChange={(value) => onChange({properties: value})}
+            onImport={() => dispatch<ImportPreVersionAction>({
+              type: 'resourceVersionCreatorPage/importPreVersion',
+            })}
+          />
+        </FEditorCard>
 
-      <FEditorCard dot={false} title={i18nMessage('version_description')}>
-        <FBraftEditor
-          value={version.description}
-          onChange={(value) => onChange({description: value})}
-        />
-      </FEditorCard>
-
+        <FEditorCard dot={false} title={i18nMessage('version_description')}>
+          <FBraftEditor
+            value={version.description}
+            onChange={(value) => onChange({description: value})}
+          />
+        </FEditorCard>
+      </div>
     </FContentLayout>
   </FInfoLayout>);
 }
