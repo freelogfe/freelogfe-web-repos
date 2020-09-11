@@ -7,11 +7,10 @@ import {ResourceInfoPageModelState} from './resourceInfoPage';
 import {ResourceVersionCreatorPageModelState} from './resourceVersionCreatorPage';
 import {ResourceVersionEditorPageModelState} from './ResourceVersionEditorPage';
 import {ResourceAuthPageModelState} from './resourceAuthPage';
-// import {ResourceSilderModelState} from './resourceSilder';
 import {ResourceInfoModelState} from './resourceInfo';
-// import {RouterHistoriesModelState} from './routerHistories';
 import {UserModelState} from './user';
 import {GlobalModelState} from './global';
+import {StorageHomePageModelState} from './storageHomePage';
 
 export {
   // RouterHistoriesModelState,
@@ -27,6 +26,7 @@ export {
   ResourceInfoModelState,
   UserModelState,
   GlobalModelState,
+  StorageHomePageModelState,
 };
 
 export interface ConnectState {
@@ -43,4 +43,5 @@ export interface ConnectState {
   resourceInfo: ResourceInfoModelState;
   user: UserModelState,
   global: GlobalModelState,
+  storageHomePage: StorageHomePageModelState
 }

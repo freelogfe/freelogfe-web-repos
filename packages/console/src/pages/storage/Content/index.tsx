@@ -8,6 +8,8 @@ import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOu
 import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
 import FUploadTasksPanel from "@/pages/storage/components/FUploadTasksPanel";
+// @ts-ignore
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 interface ContentProps {
 
@@ -21,9 +23,11 @@ const columns = [
     render(text: any, record: any) {
       return <Space size={10}>
         <FContentText text={text}/>
-        <FTextButton theme={'primary'}>
-          <SnippetsOutlined/>
-        </FTextButton>
+        <CopyToClipboard text={text}>
+          <FTextButton theme={'primary'}>
+            <SnippetsOutlined/>
+          </FTextButton>
+        </CopyToClipboard>
       </Space>;
     }
   },

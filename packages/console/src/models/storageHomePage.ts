@@ -3,11 +3,25 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 
 export interface StorageHomePageModelState {
-  info: null | {};
+  newBucketName: string;
+  bucketList: string[];
+  activatedBucket: string;
+  totalStorage: number;
+  usedStorage: number;
+
+  currentBucketInfo: {
+    name: string;
+    createTime: string;
+    objectQuantity: number;
+  } | null;
+  objectList: {
+    name: string;
+
+  }[];
 }
 
-interface ChangeAction extends AnyAction {
-  type: 'change';
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'storageHomePage/change';
   payload: Partial<StorageHomePageModelState>;
 }
 
@@ -32,7 +46,13 @@ export interface StorageHomePageModelType {
 const Model: StorageHomePageModelType = {
   namespace: 'storageHomePage',
   state: {
-    info: null,
+    newBucketName: '',
+    bucketList: [],
+    activatedBucket: '',
+    totalStorage: -1,
+    usedStorage: -1,
+
+    currentBucketInfo: null,
   },
   effects: {
     * fetchInfo({}, {}) {

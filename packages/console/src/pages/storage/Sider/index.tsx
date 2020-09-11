@@ -5,18 +5,28 @@ import {FCircleButton} from '@/components/FButton';
 import {Progress} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
+import {connect, Dispatch} from "dva";
+import {ConnectState, StorageHomePageModelState} from "@/models/connect";
+import {ChangeAction} from "@/models/storageHomePage";
 
 interface SiderProps {
-
+  dispatch: Dispatch;
+  storage: StorageHomePageModelState,
 }
 
 const navs = [];
 
-function Sider({}: SiderProps) {
+function Sider({storage, dispatch}: SiderProps) {
+
+  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+
   return (<div className={styles.sider}>
     <div className={styles.title}>
       <FTitleText text={'我的存储空间'} type="form"/>
-      <FCircleButton theme="text"/>
+      <FCircleButton
+        theme="text"
+        onClick={() => setModalVisible(true)}
+      />
     </div>
     <div style={{height: 18}}/>
     {
@@ -54,10 +64,10 @@ function Sider({}: SiderProps) {
 
     <FModal
       title="创建Bucket"
-      visible={false}
+      visible={modalVisible}
       width={640}
       // onOk={this.handleOk}
-      // onCancel={this.handleCancel}
+      onCancel={() => setModalVisible(false)}
     >
       <div className={styles.FModalBody}>
         <div style={{height: 50}}/>
@@ -67,6 +77,15 @@ function Sider({}: SiderProps) {
         </ul>
         <div style={{height: 10}}/>
         <FInput
+          value={storage.newBucketName}
+          onChange={(e) => {
+            dispatch<ChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                newBucketName: e.target.value,
+              },
+            });
+          }}
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
           errorText={<div>
@@ -81,4 +100,6 @@ function Sider({}: SiderProps) {
   </div>);
 }
 
-export default Sider;
+export default connect(({storageHomePage}: ConnectState) => ({
+  storage: storageHomePage,
+}))(Sider);
