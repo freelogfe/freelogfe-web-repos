@@ -38,6 +38,54 @@ export function deleteBuckets(params: DeleteBucketsParamsType) {
   return request.delete(`/v1/storages/buckets/${params.bucketName}`);
 }
 
+// 分页查看存储对象列表
+export interface DeleteBucketsParamsType {
+  bucketName: string;
+  resourceType?: string;
+  isLoadingTypeless?: boolean;
+  keywords?: string;
+  projection?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export function objectList({bucketName, ...params}: DeleteBucketsParamsType) {
+  return request.get(`/v1/storages/buckets/${bucketName}/objects`, {
+    params,
+  });
+}
+
+// 创建存储对象
+export interface CreateObjectParamsType {
+  bucketName: string;
+  objectName: string;
+  sha1: string;
+  resourceType?: string;
+}
+
+export function createObject({bucketName, ...params}: CreateObjectParamsType) {
+  return request.post(`/v1/storages/buckets/${bucketName}/objects`, {
+    params,
+  });
+}
+
+// 查看存储对象详情
+export interface ObjectDetailsParamsType1 {
+  bucketName: string;
+  objectId: string;
+}
+
+export interface ObjectDetailsParamsType2 {
+  objectIdOrName: string;
+}
+
+export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsParamsType2) {
+  if ((params as ObjectDetailsParamsType2).objectIdOrName) {
+    return request.get(`/v1/storages/objects/{objectIdOrName}`);
+  }
+  return request.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
+}
+
 // 根据sha1查询文件是否存在
 export interface FileIsExistParamsType {
   sha1: string;
@@ -78,4 +126,14 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
     }
   }
   return request.post('/v1/storages/files/uploadImage', formData, config);
+}
+
+// 更新存储对象属性
+export interface UpdateObjectParamsType {
+  objectIdOrName: string;
+  // customProperty?: [];
+}
+
+export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
+  return request.put(`/v1/storages/objects/${objectIdOrName}`)
 }
