@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FCircleButton, FNormalButton} from '@/components/FButton';
-import {Progress} from 'antd';
+import {Progress, Space} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import {connect, Dispatch} from 'dva';
@@ -24,18 +24,29 @@ interface SiderProps {
 
 function Sider({storage, dispatch}: SiderProps) {
 
-  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  // const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
   const customBuckets = storage.bucketList.filter((b) => b.bucketType === 1);
   const systemBuckets = storage.bucketList.filter((b) => b.bucketType === 2);
 
   return (<div className={styles.sider}>
     <div className={styles.title}>
-      <FTitleText text={'我的存储空间'} type="form"/>
-      <FCircleButton
-        theme="text"
-        onClick={() => setModalVisible(true)}
-      />
+      <Space size={10}>
+        <FTitleText text={`我的存储空间`} type="form"/>
+        <FTitleText text={`${storage.bucketList.length}/5`} type="form"/>
+      </Space>
+      {
+        storage.bucketList.length < 5 && (<FCircleButton
+          theme="text"
+          onClick={() => dispatch<ChangeAction>({
+            type: 'storageHomePage/change',
+            payload: {
+              newBucketModalVisible: true,
+            },
+          })}
+        />)
+      }
+
     </div>
     <div style={{height: 18}}/>
     {
@@ -102,12 +113,20 @@ function Sider({storage, dispatch}: SiderProps) {
 
     <FModal
       title="创建Bucket"
-      visible={modalVisible}
+      visible={storage.newBucketModalVisible}
       width={640}
-      onOk={() => dispatch<CreateBucketAction>({
-        type: 'storageHomePage/createBucket',
+      onOk={() => {
+        dispatch<CreateBucketAction>({
+          type: 'storageHomePage/createBucket',
+        });
+        // setModalVisible(false);
+      }}
+      onCancel={() => dispatch<ChangeAction>({
+        type: 'storageHomePage/change',
+        payload: {
+          newBucketModalVisible: false,
+        },
       })}
-      onCancel={() => setModalVisible(false)}
     >
       <div className={styles.FModalBody}>
         <div style={{height: 50}}/>
@@ -123,16 +142,17 @@ function Sider({storage, dispatch}: SiderProps) {
               type: 'storageHomePage/change',
               payload: {
                 newBucketName: e.target.value,
+                newBucketNameError: false,
               },
             });
           }}
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
-          errorText={<div>
+          errorText={storage.newBucketNameError ? (<div>
             <div>只能包括小写字母、数字和短横线（-）；</div>
             <div>必须以小写字母或者数字开头和结尾 ；</div>
             <div>长度必须在 1–63 字符之间。</div>
-          </div>}
+          </div>) : ''}
         />
         <div style={{height: 100}}/>
       </div>

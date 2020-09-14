@@ -13,6 +13,9 @@ import moment from "moment";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
+  newBucketNameError: boolean;
+  newBucketModalVisible: boolean;
+
   bucketList: {
     bucketName: string;
     bucketType: 0 | 1 | 2;
@@ -23,11 +26,6 @@ export interface StorageHomePageModelState {
   totalStorage: number;
   usedStorage: number;
 
-  // currentBucketInfo: {
-  //   name: string;
-  //   createTime: string;
-  //   objectQuantity: number;
-  // } | null;
   objectList: {
     name: string;
   }[];
@@ -82,6 +80,9 @@ const Model: StorageHomePageModelType = {
   namespace: 'storageHomePage',
   state: {
     newBucketName: '',
+    newBucketNameError: false,
+    newBucketModalVisible: false,
+
     bucketList: [],
     activatedBucket: '',
     totalStorage: -1,
@@ -122,13 +123,34 @@ const Model: StorageHomePageModelType = {
         type: 'fetchSpaceStatistic',
       });
     },
-    * createBucket({}: CreateBucketAction, {call, select}: EffectsCommandMap) {
+    * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
       // console.log(storageHomePage, 'storageHomePage');
+
+      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(storageHomePage.newBucketName)) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            newBucketNameError: true,
+          },
+        });
+        return;
+      }
       const params: CreateBucketParamsType = {
         bucketName: storageHomePage.newBucketName,
       };
-      yield call(createBucket, params);
+      const {data} = yield call(createBucket, params);
+      // console.log(data, 'datadata2p98;ho');
+      yield put<FetchBucketsAction>({
+        type: 'fetchBuckets',
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          newBucketModalVisible: false,
+          // activatedBucket: data.bucketName,
+        },
+      });
     },
     * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
