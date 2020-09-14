@@ -19,6 +19,7 @@ import FLayoutFooter from "@/layouts/FLayoutFooter";
 import {setLocale} from 'umi-plugin-react/locale';
 import {FTitleText, FContentText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
+import {FetchBucketsAction} from "@/models/storageHomePage";
 // import {
 //   formatDate,
 //   formatTime,
@@ -74,6 +75,12 @@ interface FLayoutProps extends RouteComponentProps {
 
 function FLayout({children, global, dispatch, globalSearching, user, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
+
+  React.useEffect(() => {
+    dispatch<FetchBucketsAction>({
+      type: 'storageHomePage/fetchBuckets',
+    });
+  });
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');

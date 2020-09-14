@@ -1,14 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
-import {Space} from "antd";
-import {FNormalButton} from "@/components/FButton";
+import {FTitleText} from '@/components/FText';
+import {Space} from 'antd';
+import {FNormalButton} from '@/components/FButton';
+import {connect, Dispatch} from 'dva';
+import {CreateBucketAction} from '@/models/storageHomePage';
 
 interface HeaderProps {
-
+  dispatch: Dispatch;
 }
 
-function Header({}: HeaderProps) {
+function Header({dispatch}: HeaderProps) {
   return (<div className={styles.header}>
     <div className={styles.headerLeft}>
       <FTitleText type="h1" text={'bucket-001'}/>
@@ -18,8 +20,13 @@ function Header({}: HeaderProps) {
         <div>存储对象 4</div>
       </Space>
     </div>
-    <FNormalButton>上传对象</FNormalButton>
+    <FNormalButton
+      // onClick={() => dispatch<CreateBucketAction>({
+      //   type: 'storageHomePage/createBucket',
+      // })}
+    >上传对象</FNormalButton>
   </div>);
 }
 
-export default Header;
+
+export default connect()(Header);

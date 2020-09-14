@@ -1,20 +1,19 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleButton} from '@/components/FButton';
+import {FCircleButton, FNormalButton} from '@/components/FButton';
 import {Progress} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import {connect, Dispatch} from "dva";
 import {ConnectState, StorageHomePageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/storageHomePage";
+import {ChangeAction, CreateBucketAction} from "@/models/storageHomePage";
 
 interface SiderProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState,
 }
 
-const navs = [];
 
 function Sider({storage, dispatch}: SiderProps) {
 
@@ -30,10 +29,23 @@ function Sider({storage, dispatch}: SiderProps) {
     </div>
     <div style={{height: 18}}/>
     {
-      navs.length > 0 ? (<div className={styles.buckets}>
-        <a className={styles.bucketActive}>bucket-001</a>
-        <a>bucket-002</a>
-        <a>bucket-003</a>
+      storage.bucketList.length > 0 ? (<div className={styles.buckets}>
+        {
+          storage.bucketList
+            .filter((b) => b.bucketType === 1)
+            .map((b) => (<a
+              className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
+              onClick={() => dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  activatedBucket: b.bucketName,
+                },
+              })}
+            >{b.bucketName}</a>))
+        }
+
+        {/*<a>bucket-002</a>*/}
+        {/*<a>bucket-003</a>*/}
       </div>) : (<FContentText
         type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
     }
@@ -66,7 +78,9 @@ function Sider({storage, dispatch}: SiderProps) {
       title="创建Bucket"
       visible={modalVisible}
       width={640}
-      // onOk={this.handleOk}
+      onOk={() => dispatch<CreateBucketAction>({
+        type: 'storageHomePage/createBucket',
+      })}
       onCancel={() => setModalVisible(false)}
     >
       <div className={styles.FModalBody}>
