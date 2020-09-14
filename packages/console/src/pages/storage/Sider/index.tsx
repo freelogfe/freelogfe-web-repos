@@ -26,6 +26,9 @@ function Sider({storage, dispatch}: SiderProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
+  const customBuckets = storage.bucketList.filter((b) => b.bucketType === 1);
+  const systemBuckets = storage.bucketList.filter((b) => b.bucketType === 2);
+
   return (<div className={styles.sider}>
     <div className={styles.title}>
       <FTitleText text={'我的存储空间'} type="form"/>
@@ -36,10 +39,9 @@ function Sider({storage, dispatch}: SiderProps) {
     </div>
     <div style={{height: 18}}/>
     {
-      storage.bucketList.length > 0 ? (<div className={styles.buckets}>
+      customBuckets.length > 0 ? (<div className={styles.buckets}>
         {
-          storage.bucketList
-            .filter((b) => b.bucketType === 1)
+          customBuckets
             .map((b) => (<a
               key={b.bucketName}
               className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
@@ -76,22 +78,27 @@ function Sider({storage, dispatch}: SiderProps) {
     />
     <div className={styles.ratio}>{humanizeSize(storage.usedStorage)} / {humanizeSize(storage.totalStorage)}</div>
 
-    <div style={{height: 60}}/>
+    {systemBuckets.length > 0 && (<>
+      <div style={{height: 60}}/>
 
-    <div className={styles.title}>
-      <FTitleText text={'系统存储空间'} type="form"/>
-      {/*<FCircleButton theme="text"/>*/}
-    </div>
+      <div className={styles.title}>
+        <FTitleText text={'系统存储空间'} type="form"/>
+      </div>
 
-    <div style={{height: 18}}/>
-    <div className={styles.buckets}>
-      <a
-        className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
-        onClick={() => dispatch<OnChangeActivatedBucketAction>({
-          type: 'storageHomePage/onChangeActivatedBucket',
-          payload: '.UserNodeData',
-        })}>.Nodedata</a>
-    </div>
+      <div style={{height: 18}}/>
+      <div className={styles.buckets}>
+        {/*{*/}
+        {/*  systemBuckets.map((b) => (*/}
+        <a
+          className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
+          onClick={() => dispatch<OnChangeActivatedBucketAction>({
+            type: 'storageHomePage/onChangeActivatedBucket',
+            payload: '.UserNodeData',
+          })}>.Nodedata</a>
+        {/*))*/}
+        {/*}*/}
+      </div>
+    </>)}
 
     <FModal
       title="创建Bucket"
