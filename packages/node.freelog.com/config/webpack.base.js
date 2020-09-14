@@ -1,4 +1,5 @@
 
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -84,6 +85,9 @@ const webpackConfig = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
     new HtmlWebpackPlugin({
       inject: 'body',
       filename: 'index.html',

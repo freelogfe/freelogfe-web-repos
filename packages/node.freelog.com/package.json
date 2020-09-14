@@ -6,12 +6,12 @@
   "private": true,
   "scripts": {
     "deploy": "freelog-ci deploy",
-    "dev": "lerna link && webpack-dev-server --config ./config/webpack.dev.js",
+    "dev": "lerna link && NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
     "build": "rm -rf ./dist/** && webpack --config ./config/webpack.prod.js",
     "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
-    "build:prod": "npm run build -- --env=prod",
-    "build:beta": "npm run build -- --env=beta",
-    "build:test": "npm run build -- --env=test"
+    "build:prod": "NODE_ENV=production npm run build",
+    "build:beta": "NODE_ENV=beta npm run build",
+    "build:test": "NODE_ENV=test npm run build"
   },
   "keywords": [],
   "author": "wwzh",

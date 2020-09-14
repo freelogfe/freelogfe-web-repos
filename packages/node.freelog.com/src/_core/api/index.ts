@@ -105,12 +105,14 @@ function resolveSubDependencies(fSubDependencies: string): Array<ISubDependency>
 }
 
 /**
- * 获取单个presentable资源数据
+ * 根据presentableID获取单个presentable资源数据
  * @param {string} presentableId
  */
 export async function getPresentableData(presentableId: string): Promise<Response> {
   return _fetch(`/v1/presentable/${presentableId}/data`)
 }
+
+
 
 /**
  * 通过releaseNames或relealseIds批量获取节点Presentable
