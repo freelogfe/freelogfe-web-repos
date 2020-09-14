@@ -6,7 +6,7 @@ export interface TempModelState {
   info: null | {};
 }
 
-interface ChangeAction extends AnyAction {
+export interface ChangeAction extends AnyAction {
   type: 'change';
   payload: Partial<TempModelState>;
 }

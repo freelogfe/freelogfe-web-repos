@@ -11,7 +11,7 @@ interface FDropdownProps extends FMenuProps {
   onChange?: (value: string) => void;
 }
 
-export default function ({options, children, text, onChange}: FDropdownProps) {
+function FDropdown({options, children, text, onChange}: FDropdownProps) {
   return (<Dropdown overlay={<FMenu
     onClick={onChange}
     options={options}/>}>
@@ -21,3 +21,5 @@ export default function ({options, children, text, onChange}: FDropdownProps) {
     </div>) : children}
   </Dropdown>)
 }
+
+export default FDropdown;

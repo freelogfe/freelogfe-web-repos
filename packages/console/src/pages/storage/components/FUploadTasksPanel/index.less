@@ -1,0 +1,53 @@
+.UploadingTasks {
+  position: fixed;
+  width: 600px;
+  bottom: 0;
+  right: 70px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px 4px 0 0;
+}
+
+.title {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.body {
+  border-top: 1px solid #E5E5E5;
+  padding: 0 30px;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 65px;
+  border-bottom: 1px solid #E5E5E5;
+
+  & > div:first-child {
+    width: 60%;
+  }
+
+  & > div:last-child {
+    width: 40%;
+  }
+}
+
+.taskInfo {
+  width: 50%;
+  //display: flex;
+  //align-items: center;
+}
+
+.footer {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+  padding: 0 30px;
+}

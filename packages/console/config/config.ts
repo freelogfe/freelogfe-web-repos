@@ -25,6 +25,7 @@ const config: IConfig | any = {
         {exact: true, path: '.', redirect: '/market'},
         {exact: true, path: 'market', component: '../pages/market', title: '市场资源', meta: {footer: true}},
         {exact: true, path: 'example', component: '../pages/market', title: '示例节点', meta: {footer: true}},
+        {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间', meta: {footer: true}},
         {
           path: 'resource',
           routes: [
@@ -135,10 +136,10 @@ const config: IConfig | any = {
     'menu-item-active-bg': '#2784FF',
     'menu-highlight-color': '#fff',
 
-    'tabs-horizontal-margin': '0 100px 0 0',
-    'tabs-horizontal-margin-rtl': '0 0 0 100px',
-    'tabs-horizontal-padding-lg': '18px 0',
-    'tabs-bar-margin': 0,
+    // 'tabs-horizontal-margin': '0 100px 0 0',
+    // 'tabs-horizontal-margin-rtl': '0 0 0 100px',
+    // 'tabs-horizontal-padding-lg': '18px 0',
+    // 'tabs-bar-margin': 0,
 
     'btn-shadow': 'none',
     'btn-primary-shadow': 'none',

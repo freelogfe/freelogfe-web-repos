@@ -19,7 +19,29 @@
 }
 
 .text {
+  border: none;
 
+  &, &:focus {
+    background-color: transparent;
+    color: #666;
+  }
+
+  &:hover {
+    color: white;
+    background-color: #529DFF;
+  }
+
+  &:active {
+    color: white;
+    background-color: #187AFC;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #CFCFCF;
+      background-color: transparent;
+    }
+  }
 }
 
 .delete {

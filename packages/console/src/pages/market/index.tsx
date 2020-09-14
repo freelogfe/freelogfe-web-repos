@@ -62,7 +62,6 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
       />
       {tabValue === '1' && <Resources/>}
       {tabValue === '2' && <Examples/>}
-
     </FCenterLayout>
   );
 }

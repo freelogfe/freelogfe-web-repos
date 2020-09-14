@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {FCustomPropertiesProps} from "@/pages/resource/components/FCustomProperties";
+import {FCustomPropertiesProps} from "@/components/FCustomProperties";
 import {
   resourceVersionInfo,
   ResourceVersionInfoParamsType1,

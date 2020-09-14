@@ -8,7 +8,7 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
-import FCustomProperties from '@/pages/resource/components/FCustomProperties';
+import FCustomProperties from '@/components/FCustomProperties';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
 import FHorn from '@/pages/resource/components/FHorn';

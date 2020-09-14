@@ -18,6 +18,7 @@ import {list, ListParamsType} from '@/services/resources';
 import moment from 'moment';
 import {resourceList} from "@/services/collections";
 import {List, Skeleton} from 'antd';
+import FResourceList from "@/components/FResourceList";
 
 interface MarketProps {
   dispatch: Dispatch;
@@ -99,6 +100,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
   }
 
   function onChangeSelected(selected: MarketStatus['selected']) {
+    // console.log(selected, 'selectedp988nklwe4fds');
     setSelected(selected as MarketStatus['selected']);
     page = 1;
     setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
@@ -122,7 +124,7 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
         <div className={styles.filterSelect}>
           <FDropdown
             options={selectOptions}
-            text={selectOptions.find((i) => i.value === selected)?.text}
+            text={<>{selectOptions.find((i) => i.value === selected)?.text}</>}
             onChange={onChangeSelected as any}
           />
         </div>
@@ -139,38 +141,46 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       </div>
 
       <div style={{height: 17}}/>
-
-      <List
-        // className="demo-loadmore-list"
+      {/*{console.log(resourceObjects, 'resourceObjects23ioj;')}*/}
+      <FResourceList
+        resourceObjects={resourceObjects}
         loading={totalItem === -1}
-        itemLayout="horizontal"
-        loadMore={(totalItem > page * 20)
-          ? (<div
-            style={{
-              textAlign: 'center',
-              marginTop: 12,
-              height: 32,
-              lineHeight: '32px',
-            }}
-          ><FNormalButton onClick={onChangePage}>加载更多</FNormalButton></div>)
-          : (resourceObjects.length > 0 && (
-            <div style={{textAlign: 'center', padding: '10px 0'}}><FContentText type="additional1" text={'没有更多了~'}/></div>))}
-        dataSource={resourceObjects}
-        renderItem={(i: MarketStatus['resourceObjects'][number]) => (
-          <div className={styles.bucket}>
-            <div>
-              <FContentText text={i.title}/>
-              <div style={{height: 2}}/>
-              <FContentText type={'additional2'} text={`资源类型 ${i.resourceType} | 更新时间 ${i.time}`}/>
-            </div>
-            <FNormalButton
-              theme="weaken"
-              onClick={() => onSelect(i)}
-              disabled={depRelationship.map((j) => j.id).includes(i.id)}
-            >选择</FNormalButton>
-          </div>
-        )}
+        stillMore={totalItem > page * 20}
+        onSelect={onSelect}
+        onLoadMord={onChangePage}
       />
+      {/*<List*/}
+      {/*  // className="demo-loadmore-list"*/}
+      {/*  loading={totalItem === -1}*/}
+      {/*  itemLayout="horizontal"*/}
+      {/*  loadMore={(totalItem > page * 20)*/}
+      {/*    ? (<div*/}
+      {/*      style={{*/}
+      {/*        textAlign: 'center',*/}
+      {/*        marginTop: 12,*/}
+      {/*        height: 32,*/}
+      {/*        lineHeight: '32px',*/}
+      {/*      }}*/}
+      {/*    ><FNormalButton onClick={onChangePage}>加载更多</FNormalButton></div>)*/}
+      {/*    : (resourceObjects.length > 0 && (*/}
+      {/*      <div style={{textAlign: 'center', padding: '10px 0'}}><FContentText type="additional1" text={'没有更多了~'}/>*/}
+      {/*      </div>))}*/}
+      {/*  dataSource={resourceObjects}*/}
+      {/*  renderItem={(i: MarketStatus['resourceObjects'][number]) => (*/}
+      {/*    <div className={styles.bucket}>*/}
+      {/*      <div>*/}
+      {/*        <FContentText text={i.title}/>*/}
+      {/*        <div style={{height: 2}}/>*/}
+      {/*        <FContentText type={'additional2'} text={`资源类型 ${i.resourceType} | 更新时间 ${i.time}`}/>*/}
+      {/*      </div>*/}
+      {/*      <FNormalButton*/}
+      {/*        theme="weaken"*/}
+      {/*        onClick={() => onSelect(i)}*/}
+      {/*        disabled={depRelationship.map((j) => j.id).includes(i.id)}*/}
+      {/*      >选择</FNormalButton>*/}
+      {/*    </div>*/}
+      {/*  )}*/}
+      {/*/>*/}
     </div>
   );
 }

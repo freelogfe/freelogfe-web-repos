@@ -19,6 +19,7 @@ import FLayoutFooter from "@/layouts/FLayoutFooter";
 import {setLocale} from 'umi-plugin-react/locale';
 import {FTitleText, FContentText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
+import {FetchBucketsAction} from "@/models/storageHomePage";
 // import {
 //   formatDate,
 //   formatTime,
@@ -75,22 +76,35 @@ interface FLayoutProps extends RouteComponentProps {
 function FLayout({children, global, dispatch, globalSearching, user, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
+  React.useEffect(() => {
+    dispatch<FetchBucketsAction>({
+      type: 'storageHomePage/fetchBuckets',
+    });
+  }, []);
+
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/market') {
+    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/market')) {
       return router.push('/market');
     }
-    if (value === '2' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/example') {
+    if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/example')) {
       return router.push('/example');
     }
+
   }
 
   function onClickResource(value: string) {
-    if (value === '1') {
+    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/list')) {
       return router.push('/resource/list');
     }
-    if (value === '2') {
+    if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/collect')) {
       return router.push('/resource/collect');
+    }
+  }
+
+  function onClickStorage() {
+    if (!global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/storage')) {
+      return router.push('/storage');
     }
   }
 
@@ -121,7 +135,10 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
                 {i18nMessage('explorer')}
               </a>
             </Dropdown>
-            <a className={styles.Menu}>{i18nMessage('storage')}</a>
+            <a
+              onClick={() => onClickStorage()}
+              className={styles.Menu}>{i18nMessage('storage')}
+            </a>
             <Dropdown overlay={<FMenu
               onClick={onClickResource}
               options={resourcesOptions}

@@ -2,7 +2,7 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
-import {FCustomPropertiesProps} from '@/pages/resource/components/FCustomProperties';
+import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
   batchInfo,
   BatchInfoParamsType,
