@@ -34,6 +34,7 @@ function Sider({storage, dispatch}: SiderProps) {
           storage.bucketList
             .filter((b) => b.bucketType === 1)
             .map((b) => (<a
+              key={b.bucketName}
               className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
               onClick={() => dispatch<ChangeAction>({
                 type: 'storageHomePage/change',

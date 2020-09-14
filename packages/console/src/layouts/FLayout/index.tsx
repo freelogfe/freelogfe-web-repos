@@ -80,7 +80,7 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
     dispatch<FetchBucketsAction>({
       type: 'storageHomePage/fetchBuckets',
     });
-  });
+  }, []);
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
