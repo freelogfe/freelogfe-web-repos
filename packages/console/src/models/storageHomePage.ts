@@ -1,8 +1,14 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
-import {bucketList, BucketListParamsType, createBucket, CreateBucketParamsType} from "@/services/storages";
+import {ConnectState} from '@/models/connect';
+import {
+  bucketList,
+  BucketListParamsType,
+  createBucket,
+  CreateBucketParamsType, deleteBuckets, DeleteBucketsParamsType,
+  spaceStatistics
+} from '@/services/storages';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -32,11 +38,25 @@ export interface ChangeAction extends AnyAction {
 }
 
 export interface FetchBucketsAction extends AnyAction {
-  type: 'storageHomePage/fetchBuckets';
+  type: 'storageHomePage/fetchBuckets' | 'fetchBuckets';
 }
 
 export interface CreateBucketAction extends AnyAction {
   type: 'storageHomePage/createBucket';
+}
+
+export interface OnChangeActivatedBucketAction extends AnyAction {
+  type: 'storageHomePage/onChangeActivatedBucket' | 'onChangeActivatedBucket';
+  payload: string;
+}
+
+export interface FetchSpaceStatisticAction extends AnyAction {
+  type: 'fetchSpaceStatistic';
+}
+
+export interface DeleteBucketByNameAction extends AnyAction {
+  type: 'storageHomePage/deleteBucketByName';
+  payload: string;
 }
 
 export interface StorageHomePageModelType {
@@ -45,6 +65,9 @@ export interface StorageHomePageModelType {
   effects: {
     fetchBuckets: (action: FetchBucketsAction, effects: EffectsCommandMap) => void;
     createBucket: (action: CreateBucketAction, effects: EffectsCommandMap) => void;
+    onChangeActivatedBucket: (action: OnChangeActivatedBucketAction, effects: EffectsCommandMap) => void;
+    fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
+    deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -83,8 +106,19 @@ const Model: StorageHomePageModelType = {
             createDate: i.createDate,
             totalFileQuantity: i.totalFileQuantity,
           })),
-          activatedBucket: (storageHomePage.activatedBucket === '' && data?.length > 0) ? data[0].bucketName : '',
+          // activatedBucket: (storageHomePage.activatedBucket === '' && data?.length > 0) ? data[0].bucketName : '',
         },
+      });
+      yield put<OnChangeActivatedBucketAction>({
+        type: 'onChangeActivatedBucket',
+        payload: data?.length > 0
+          ? (data.map((b: any) => b.bucketName).includes(storageHomePage.activatedBucket)
+            ? storageHomePage.activatedBucket
+            : data[0].bucketName)
+          : '',
+      });
+      yield put<FetchSpaceStatisticAction>({
+        type: 'fetchSpaceStatistic',
       });
     },
     * createBucket({}: CreateBucketAction, {call, select}: EffectsCommandMap) {
@@ -94,6 +128,34 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.newBucketName,
       };
       yield call(createBucket, params);
+    },
+    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activatedBucket: payload,
+        },
+      });
+    },
+    * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
+      const {data} = yield call(spaceStatistics);
+      // console.log(data, 'aw89ihnwesdlk');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          totalStorage: data.storageLimit,
+          usedStorage: data.totalFileSize,
+        },
+      });
+    },
+    * deleteBucketByName({payload}: DeleteBucketByNameAction, {call, put}: EffectsCommandMap) {
+      const params: DeleteBucketsParamsType = {
+        bucketName: payload,
+      };
+      yield call(deleteBuckets, params);
+      yield put<FetchBucketsAction>({
+        type: 'fetchBuckets',
+      });
     },
   },
   reducers: {

@@ -5,9 +5,16 @@ import {FCircleButton, FNormalButton} from '@/components/FButton';
 import {Progress} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
-import {connect, Dispatch} from "dva";
-import {ConnectState, StorageHomePageModelState} from "@/models/connect";
-import {ChangeAction, CreateBucketAction} from "@/models/storageHomePage";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {
+  ChangeAction,
+  CreateBucketAction,
+  DeleteBucketByNameAction,
+  OnChangeActivatedBucketAction
+} from '@/models/storageHomePage';
+import {humanizeSize} from '@/utils/format';
+import {Delete} from "@/components/FIcons";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -36,17 +43,25 @@ function Sider({storage, dispatch}: SiderProps) {
             .map((b) => (<a
               key={b.bucketName}
               className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
-              onClick={() => dispatch<ChangeAction>({
-                type: 'storageHomePage/change',
-                payload: {
-                  activatedBucket: b.bucketName,
-                },
-              })}
-            >{b.bucketName}</a>))
+              onClick={() => {
+                if (storage.activatedBucket === b.bucketName) {
+                  return;
+                }
+                dispatch<OnChangeActivatedBucketAction>({
+                  type: 'storageHomePage/onChangeActivatedBucket',
+                  payload: b.bucketName,
+                });
+              }}
+            >
+              <span>{b.bucketName}</span>
+              {storage.activatedBucket === b.bucketName && <Delete onClick={() => {
+                dispatch<DeleteBucketByNameAction>({
+                  type: 'storageHomePage/deleteBucketByName',
+                  payload: b.bucketName,
+                });
+              }} style={{color: '#EE4040'}}/>}
+            </a>))
         }
-
-        {/*<a>bucket-002</a>*/}
-        {/*<a>bucket-003</a>*/}
       </div>) : (<FContentText
         type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
     }
@@ -59,7 +74,7 @@ function Sider({storage, dispatch}: SiderProps) {
       showInfo={false}
       className={styles.progressBack}
     />
-    <div className={styles.ratio}>23.5 MB / 2 GB</div>
+    <div className={styles.ratio}>{humanizeSize(storage.usedStorage)} / {humanizeSize(storage.totalStorage)}</div>
 
     <div style={{height: 60}}/>
 
@@ -70,9 +85,12 @@ function Sider({storage, dispatch}: SiderProps) {
 
     <div style={{height: 18}}/>
     <div className={styles.buckets}>
-      {/*<a className={styles.bucketActive}>bucket-001</a>*/}
-      <a>.Nodedata</a>
-      {/*<a>bucket-003</a>*/}
+      <a
+        className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
+        onClick={() => dispatch<OnChangeActivatedBucketAction>({
+          type: 'storageHomePage/onChangeActivatedBucket',
+          payload: '.UserNodeData',
+        })}>.Nodedata</a>
     </div>
 
     <FModal

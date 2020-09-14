@@ -29,6 +29,15 @@ export function spaceStatistics(params?: SpaceStatisticsParamsType) {
   return request.get(`/v1/storages/buckets/spaceStatistics`);
 }
 
+// 删除bucket
+export interface DeleteBucketsParamsType {
+  bucketName: string;
+}
+
+export function deleteBuckets(params: DeleteBucketsParamsType) {
+  return request.delete(`/v1/storages/buckets/${params.bucketName}`);
+}
+
 // 根据sha1查询文件是否存在
 export interface FileIsExistParamsType {
   sha1: string;
