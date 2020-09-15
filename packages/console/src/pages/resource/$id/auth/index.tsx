@@ -90,52 +90,54 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
 
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
-      <FEditorCard title={i18nMessage('authorization_plan')}>
-        <FPolicies
-          dataSource={auth.policies || []}
-          onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
-            type: 'resourceAuthPage/updatePolicies',
-            id: match.params.id,
-            payload: {
-              id: value.id,
-              status: value.status,
-            },
-          })}
-          onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
-            type: 'resourceAuthPage/updatePolicies',
-            id: match.params.id,
-            payload: {
-              id: value.id,
-            },
-          })}
-        />
-      </FEditorCard>
-      {
-        auth.contractsAuthorized?.length > 0 && (<FEditorCard title={i18nMessage('licencee_contract')}>
-          <FAuthPanel
-            dataSource={auth.contractsAuthorized}
-            onChangeActivatedResource={(value) => dispatch<ChangeAction>({
-              type: 'resourceAuthPage/change',
+      <div className={styles.styles}>
+        <FEditorCard title={i18nMessage('authorization_plan')}>
+
+          <FPolicies
+            dataSource={auth.policies || []}
+            onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
+              type: 'resourceAuthPage/updatePolicies',
+              id: match.params.id,
               payload: {
-                contractsAuthorized: value,
+                id: value.id,
+                status: value.status,
+              },
+            })}
+            onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
+              type: 'resourceAuthPage/updatePolicies',
+              id: match.params.id,
+              payload: {
+                id: value.id,
               },
             })}
           />
-        </FEditorCard>)
-      }
+        </FEditorCard>
+        {
+          auth.contractsAuthorized?.length > 0 && (<FEditorCard title={i18nMessage('licencee_contract')}>
+            <FAuthPanel
+              dataSource={auth.contractsAuthorized}
+              onChangeActivatedResource={(value) => dispatch<ChangeAction>({
+                type: 'resourceAuthPage/change',
+                payload: {
+                  contractsAuthorized: value,
+                },
+              })}
+            />
+          </FEditorCard>)
+        }
 
-      {
-        auth.contractsAuthorize?.length > 0 && (<FEditorCard title={i18nMessage('authorizing_contracts')}>
-          <Table
-            columns={columns}
-            dataSource={auth.contractsAuthorize}
-            bordered
-            // title={() => 'Header'}
-            // footer={() => 'Footer'}
-          />
-        </FEditorCard>)
-      }
-
+        {
+          auth.contractsAuthorize?.length > 0 && (<FEditorCard title={i18nMessage('authorizing_contracts')}>
+            <Table
+              columns={columns}
+              dataSource={auth.contractsAuthorize}
+              bordered
+              // title={() => 'Header'}
+              // footer={() => 'Footer'}
+            />
+          </FEditorCard>)
+        }
+      </div>
     </FContentLayout>
   </FInfoLayout>);
 }

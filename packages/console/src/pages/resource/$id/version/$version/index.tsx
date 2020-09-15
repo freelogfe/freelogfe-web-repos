@@ -88,52 +88,53 @@ function VersionEditor({dispatch, route, version, match}: VersionEditorProps & R
         resourceID={version.resourceID}
         onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
       />}>
+      <div className={styles.styles}>
+        <FEditorCard title={i18nMessage('version_description')}>
 
-      <FEditorCard title={i18nMessage('version_description')}>
-
-        {!version.description && !isEditing && (<Space size={10}>
-          <FCircleButton
-            onClick={() => setIsEditing(true)}
-            theme="weaken"
-          />
-          <FContentText text={'添加'}/>
-        </Space>)}
-
-        {isEditing
-          ? (<FHorn extra={<Space size={10}>
-            <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
-            <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
-          </Space>}>
-            <FBraftEditor
-              value={editor}
-              // defaultValue={editorText}
-              onChange={(value) => setEditor(value)}
+          {!version.description && !isEditing && (<Space size={10}>
+            <FCircleButton
+              onClick={() => setIsEditing(true)}
+              theme="weaken"
             />
-          </FHorn>)
-          : (version.description && (<FHorn extra={<FTextButton
-            onClick={() => setIsEditing(true)}
-            theme="primary"
-          >编辑</FTextButton>}>
-            <div className={styles.description}>
-              <div
-                className={styles.container}
-                dangerouslySetInnerHTML={{__html: version.description}}
+            <FContentText text={'添加'}/>
+          </Space>)}
+
+          {isEditing
+            ? (<FHorn extra={<Space size={10}>
+              <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
+              <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
+            </Space>}>
+              <FBraftEditor
+                value={editor}
+                // defaultValue={editorText}
+                onChange={(value) => setEditor(value)}
               />
-            </div>
-          </FHorn>))
-        }
-      </FEditorCard>
-      <FEditorCard title={i18nMessage('version_maps')}>
-        <div className={styles.diagram}/>
-      </FEditorCard>
-      {properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>
-        <FCustomProperties
-          dataSource={version.properties}
-          stubborn={true}
-          onChange={(value) => setProperties(value)}
-          onSave={onUpdateProperties}
-        />
-      </FEditorCard>}
+            </FHorn>)
+            : (version.description && (<FHorn extra={<FTextButton
+              onClick={() => setIsEditing(true)}
+              theme="primary"
+            >编辑</FTextButton>}>
+              <div className={styles.description}>
+                <div
+                  className={styles.container}
+                  dangerouslySetInnerHTML={{__html: version.description}}
+                />
+              </div>
+            </FHorn>))
+          }
+        </FEditorCard>
+        <FEditorCard title={i18nMessage('version_maps')}>
+          <div className={styles.diagram}/>
+        </FEditorCard>
+        {properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>
+          <FCustomProperties
+            dataSource={version.properties}
+            stubborn={true}
+            onChange={(value) => setProperties(value)}
+            onSave={onUpdateProperties}
+          />
+        </FEditorCard>}
+      </div>
     </FContentLayout>
   </FInfoLayout>);
 }

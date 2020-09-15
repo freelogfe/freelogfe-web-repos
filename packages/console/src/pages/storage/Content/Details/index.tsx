@@ -75,9 +75,6 @@ function Details({}: DetailsProps) {
       title="添加依赖"
       width={640}
       visible={depInfoVisible}
-      // closable={}
-      // onClose={this.onChildrenDrawerClose}
-      // visible={this.state.childrenDrawer}
     >
       <SelectDeps/>
     </Drawer>
@@ -112,11 +109,6 @@ interface Interface {
 function DepsCards() {
   const [ref, setRef] = React.useState<HTMLDivElement | null>(null);
 
-  const [visibleIndex, setVisibleIndex] = React.useState<number>(-1);
-  // React.useEffect(() => {
-  //   console.log(ref, 'RRRRRR');
-  // }, [ref]);
-
   return (<div
     className={styles.DepsCards}
     ref={(div) => setRef(div)}
@@ -141,11 +133,7 @@ function DepsCards() {
             <Divider type="vertical"/>
             <FContentText type="additional2">版本范围：xxx</FContentText>
             <Divider type="vertical"/>
-            {/*{console.log(divContainer, 'divContainer')}*/}
             {ref && <Popover
-              // trigger={'hover'}
-              // onVisibleChange={(visible: boolean) => console.log(visible, 'VVVVV')}
-              // visible={visibleIndex === 0}
               getPopupContainer={(triggerNode) => {
                 return ref || document.body;
               }}

@@ -11,6 +11,7 @@ import {ResourceInfoModelState} from './resourceInfo';
 import {UserModelState} from './user';
 import {GlobalModelState} from './global';
 import {StorageHomePageModelState} from './storageHomePage';
+import {StorageObjectEditorModelState} from './storageObjectEditor';
 
 export {
   // RouterHistoriesModelState,
@@ -27,6 +28,7 @@ export {
   UserModelState,
   GlobalModelState,
   StorageHomePageModelState,
+  StorageObjectEditorModelState,
 };
 
 export interface ConnectState {
@@ -41,7 +43,8 @@ export interface ConnectState {
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState;
-  user: UserModelState,
-  global: GlobalModelState,
-  storageHomePage: StorageHomePageModelState
+  user: UserModelState;
+  global: GlobalModelState;
+  storageHomePage: StorageHomePageModelState;
+  storageObjectEditor: StorageObjectEditorModelState;
 }

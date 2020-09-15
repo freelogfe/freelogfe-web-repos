@@ -9,7 +9,7 @@ import {
   CreateBucketParamsType, deleteBuckets, DeleteBucketsParamsType,
   spaceStatistics
 } from '@/services/storages';
-import moment from "moment";
+import moment from 'moment';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -27,7 +27,11 @@ export interface StorageHomePageModelState {
   usedStorage: number;
 
   objectList: {
+    key: string;
     name: string;
+    type: string;
+    size: number;
+    updateTime: string;
   }[];
 }
 
@@ -89,7 +93,22 @@ const Model: StorageHomePageModelType = {
     usedStorage: -1,
 
     // currentBucketInfo: null,
-    objectList: [],
+    objectList: [
+      {
+        key: '1',
+        name: 'John Brown',
+        type: 'image',
+        size: 2378,
+        updateTime: '2019.04.14 12:00',
+      },
+      {
+        key: '2',
+        name: 'John Brown2',
+        type: 'image',
+        size: 2378,
+        updateTime: '2019.04.14 12:00',
+      },
+    ],
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
@@ -105,7 +124,7 @@ const Model: StorageHomePageModelType = {
           bucketList: data.map((i: any) => ({
             bucketName: i.bucketName,
             bucketType: i.bucketType,
-            createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
+            createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
             totalFileQuantity: i.totalFileQuantity,
           })),
           // activatedBucket: (storageHomePage.activatedBucket === '' && data?.length > 0) ? data[0].bucketName : '',
