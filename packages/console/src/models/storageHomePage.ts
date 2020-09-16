@@ -10,8 +10,6 @@ import {
   spaceStatistics, uploadFile
 } from '@/services/storages';
 import moment from 'moment';
-import {RcFile} from 'antd/lib/upload/interface';
-import fMessage from '@/components/fMessage';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -35,14 +33,6 @@ export interface StorageHomePageModelState {
     size: number;
     updateTime: string;
   }[];
-
-  // uploadTaskList: {
-  //   uid: string;
-  //   sha1?: string;
-  //   file: RcFile;
-  //   status: 'uploading' | 'success' | 'canceled' | 'failed' | 'sameName';
-  //   progress?: number;
-  // }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -72,10 +62,10 @@ export interface DeleteBucketByNameAction extends AnyAction {
   payload: string;
 }
 
-// export interface UploadFilesAction extends AnyAction {
-//   type: 'storageHomePage/uploadFiles';
-//   payload: RcFile[];
-// }
+export interface CreateObjectAction extends AnyAction {
+  type: 'storageHomePage/createObject';
+  payload: { sha1: string; objectName: string };
+}
 
 export interface StorageHomePageModelType {
   namespace: 'storageHomePage';
@@ -86,7 +76,7 @@ export interface StorageHomePageModelType {
     onChangeActivatedBucket: (action: OnChangeActivatedBucketAction, effects: EffectsCommandMap) => void;
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
-    // uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
+    createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -125,8 +115,6 @@ const Model: StorageHomePageModelType = {
         updateTime: '2019.04.14 12:00',
       },
     ],
-
-    // uploadTaskList: [],
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
@@ -217,61 +205,8 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    // * uploadFiles({payload}: UploadFilesAction, {select, put}: EffectsCommandMap) {
-    //   console.log(payload, 'payload230-');
-    //   const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
-    //   console.log(totalSize, 'totalSize2afds');
-    //   const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}))
-    //   if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
-    //     return fMessage('超出储存', 'warning');
-    //   }
-    //   const tasks: StorageHomePageModelState['uploadTaskList'] = [];
-    //   for (const file of payload) {
-    //     tasks.push({
-    //       uid: file.uid,
-    //       file: file,
-    //       status: 'uploading',
-    //       progress: 0,
-    //     });
-    //   }
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       uploadTaskList: [
-    //         ...tasks,
-    //         ...storageHomePage.uploadTaskList,
-    //       ],
-    //     }
-    //   });
-    //   for (const file of payload) {
-    //     upload(file, function* (task) {
-    //       console.log(task, '22234vcwe');
-    //       let ct = task;
-    //       while (true) {
-    //         console.log(ct, 'ctct');
-    //         ct = yield put<ChangeAction>({
-    //           type: 'change',
-    //           payload: {
-    //             uploadTaskList: storageHomePage.uploadTaskList.map((t) => {
-    //               console.log(t.uid !== ct.uid, 't.uid !== ct.uid');
-    //               if (t.uid !== ct.uid) {
-    //                 return t;
-    //               }
-    //               return {
-    //                 ...ct
-    //               };
-    //             }),
-    //           }
-    //         });
-    //
-    //         if (!ct) {
-    //           break;
-    //         }
-    //       }
-    //
-    //     });
-    //   }
-    // },
+    * createObject({payload}: CreateObjectAction, {}: EffectsCommandMap) {
+    },
   },
   reducers: {
     change(state, {payload}) {
@@ -289,35 +224,3 @@ const Model: StorageHomePageModelType = {
 };
 
 export default Model;
-
-// async function upload(file: RcFile, cd: (task: StorageHomePageModelState['uploadTaskList'][number]) => void) {
-//
-//   const gen: any = cd({
-//     uid: file.uid,
-//     file: file,
-//     status: 'uploading',
-//     progress: 0,
-//   });
-//   gen.next();
-//   const {data} = await uploadFile({file}, {
-//     onUploadProgress(progressEvent) {
-//       console.log(progressEvent, 'progressEvent23ds');
-//       gen.next({
-//         uid: file.uid,
-//         file: file,
-//         status: 'uploading',
-//         progress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
-//       });
-//       // console.log('PPPPPPPP');
-//     },
-//   });
-//   console.log('FFFFFFFFF');
-//   gen.next({
-//     uid: file.uid,
-//     sha1: data.sha1,
-//     file: file,
-//     status: 'success',
-//   });
-//   // gen.next(null);
-//   // console.log(data, 'datadata');
-// }

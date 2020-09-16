@@ -9,6 +9,7 @@ import {StorageHomePageModelState} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
 import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
+import fMessage from "@/components/fMessage";
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -33,7 +34,6 @@ function Header({dispatch, storage}: HeaderProps) {
       <FTitleText type="h1" text={bucket.bucketName}/>
       <div style={{height: 5}}/>
       <Space size={40}>
-        {/*<div>创建时间 2020.05.30</div>*/}
         <div>创建时间 {bucket.createDate}</div>
         <div>存储对象 {bucket.totalFileQuantity}</div>
       </Space>
@@ -44,15 +44,18 @@ function Header({dispatch, storage}: HeaderProps) {
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(file, FileList, 'beforeUpload 24ew890sio;');
         if (file === fileList[fileList.length - 1]) {
-          // console.log(fileList, 'FFFFFFF');
-          // dispatch<UploadFilesAction>({
-          //   type: 'storageHomePage/uploadFiles',
-          //   payload: fileList,
-          // });
-          setFiles([
-            ...fileList,
-            ...files,
-          ]);
+          const totalSize: number = fileList.map((f) => f.size).reduce((p, c) => p + c, 0);
+          if (storage.totalStorage - storage.usedStorage < totalSize) {
+            fMessage('超出储存', 'warning');
+          } else {
+            // for (const f of fileList) {
+            //   f.objectName = 'f.name'
+            // }
+            setFiles([
+              ...fileList,
+              ...files,
+            ]);
+          }
         }
         return false;
       }}
