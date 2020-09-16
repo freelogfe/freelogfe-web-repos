@@ -8,11 +8,15 @@ import {connect, Dispatch} from 'dva';
 import {StorageHomePageModelState} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
-import FUploadTasksPanel from "@/pages/storage/components/FUploadTasksPanel";
+import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 
 interface HeaderProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState;
+}
+
+interface HeaderStates {
+  files: RcFile[];
 }
 
 function Header({dispatch, storage}: HeaderProps) {
@@ -21,6 +25,8 @@ function Header({dispatch, storage}: HeaderProps) {
   if (!bucket) {
     return null;
   }
+
+  const [files, setFiles] = React.useState<HeaderStates['files']>([]);
 
   return (<div className={styles.header}>
     <div className={styles.headerLeft}>
@@ -38,7 +44,15 @@ function Header({dispatch, storage}: HeaderProps) {
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(file, FileList, 'beforeUpload 24ew890sio;');
         if (file === fileList[fileList.length - 1]) {
-          console.log(fileList, 'FFFFFFF');
+          // console.log(fileList, 'FFFFFFF');
+          // dispatch<UploadFilesAction>({
+          //   type: 'storageHomePage/uploadFiles',
+          //   payload: fileList,
+          // });
+          setFiles([
+            ...fileList,
+            ...files,
+          ]);
         }
         return false;
       }}
@@ -50,7 +64,9 @@ function Header({dispatch, storage}: HeaderProps) {
       >上传对象</FNormalButton>
     </FUpload>
 
-    <FUploadTasksPanel/>
+    <FUploadTasksPanel
+      files={files}
+    />
   </div>);
 }
 

@@ -6,18 +6,18 @@ import {FTextButton} from '@/components/FButton';
 import {CloseOutlined} from '@ant-design/icons';
 
 interface UploadingProps {
-
+  progress: number;
 }
 
-function Uploading({}: UploadingProps) {
+function Uploading({progress}: UploadingProps) {
   return (<div className={styles.Uploading}>
     <Space
       className={styles.status}
       size={10}
     >
-      <FContentText text={'45%'}/>
+      <FContentText text={progress + '%'}/>
       <div style={{width: 100}}>
-        <Progress type={'line'} percent={30} showInfo={false}/>
+        <Progress type={'line'} percent={progress} showInfo={false}/>
       </div>
     </Space>
     <div className={styles.action}>

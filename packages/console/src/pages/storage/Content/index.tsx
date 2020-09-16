@@ -7,7 +7,7 @@ import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
 import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
-import FUploadTasksPanel from "@/pages/storage/components/FUploadTasksPanel";
+import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
