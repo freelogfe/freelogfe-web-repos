@@ -6,11 +6,12 @@ import {
   bucketList,
   BucketListParamsType,
   createBucket,
-  CreateBucketParamsType, createObject, CreateObjectParamsType, deleteBuckets, DeleteBucketsParamsType,
+  CreateBucketParamsType, createObject, CreateObjectParamsType, deleteBuckets, DeleteBucketsParamsType, objectList,
   spaceStatistics, uploadFile
 } from '@/services/storages';
 import moment from 'moment';
 import {RcFile} from "antd/lib/upload/interface";
+import {formatDateTime, humanizeSize} from "@/utils/format";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -29,6 +30,7 @@ export interface StorageHomePageModelState {
 
   objectList: {
     key: string;
+    id: string;
     name: string;
     type: string;
     size: number;
@@ -74,7 +76,7 @@ export interface CreateObjectAction extends AnyAction {
 }
 
 export interface FetchObjectsAction extends AnyAction {
-  type: 'storageHomePage/fetchObjects';
+  type: 'storageHomePage/fetchObjects' | 'fetchObjects';
   // payload: { sha1: string; objectName: string };
 }
 
@@ -183,6 +185,9 @@ const Model: StorageHomePageModelType = {
           activatedBucket: payload,
         },
       });
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
+      });
     },
     * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
       const {data} = yield call(spaceStatistics);
@@ -204,7 +209,7 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * createObject({payload}: CreateObjectAction, {call, select}: EffectsCommandMap) {
+    * createObject({payload}: CreateObjectAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
@@ -214,9 +219,33 @@ const Model: StorageHomePageModelType = {
         sha1: payload.sha1,
       };
       yield call(createObject, params);
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
+      });
+      yield put<FetchSpaceStatisticAction>({
+        type: 'fetchSpaceStatistic',
+      });
     },
-    * fetchObjects({}: FetchObjectsAction, {}: EffectsCommandMap) {
-
+    * fetchObjects({}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+      const params: DeleteBucketsParamsType = {
+        bucketName: storageHomePage.activatedBucket,
+      };
+      const {data} = yield call(objectList, params);
+      console.log(data, 'datadata23w908io');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          objectList: data.dataList.map((i: any) => ({
+            key: i.objectId,
+            id: i.objectId,
+            name: i.objectName,
+            type: i.resourceType,
+            size: humanizeSize(i.systemProperty.fileSize),
+            updateTime: formatDateTime(i.updateDate),
+          })),
+        },
+      });
     }
   },
   reducers: {

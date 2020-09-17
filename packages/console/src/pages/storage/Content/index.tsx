@@ -12,6 +12,7 @@ import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from "@/models/connect";
+import {downloadObjectToFile} from "@/utils/downloadFile";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -56,7 +57,7 @@ function Content({storage}: ContentProps) {
           <FTextButton theme={'primary'}>
             <SendOutlined/>
           </FTextButton>
-          <FTextButton theme={'primary'}>
+          <FTextButton onClick={() => downloadObjectToFile(record.id, record.name)} theme={'primary'}>
             <DownloadOutlined/>
           </FTextButton>
           <FTextButton className={styles.Delete}>

@@ -80,6 +80,7 @@ axios.interceptors.response.use(function (response) {
   // console.log(response, 'response');
   // Do something with response data
   NProgress.done();
+  console.log(response, 'responseresponse');
   if (response.status !== 200) {
     const error = {
       description: codeMessage[response.status],
@@ -89,7 +90,7 @@ axios.interceptors.response.use(function (response) {
     throw new Error(JSON.stringify(error));
   }
   const {data} = response;
-  if (data.errcode !== 0 || data.ret !== 0) {
+  if ((data.errcode !== 0 || data.ret !== 0) && response.headers['content-type'] !== "application/octet-stream") {
 
     notification.error({
       message: data.msg,

@@ -19,7 +19,7 @@ export interface FUploadTasksPanelProps {
 
 function FUploadTasksPanel({dispatch, storage, hidden = false}: FUploadTasksPanelProps) {
 
-  const [open, setOpen] = React.useState<boolean>(true);
+  const [open, setOpen] = React.useState<boolean>(false);
 
   return (<div className={styles.UploadingTasks} style={{display: hidden ? 'none' : 'block'}}>
     <div className={styles.title}>

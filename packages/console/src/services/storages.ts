@@ -30,6 +30,15 @@ export function spaceStatistics(params?: SpaceStatisticsParamsType) {
 }
 
 // 删除bucket
+export interface DeleteBucketParamsType {
+  bucketName: string;
+}
+
+export function deleteBucket(params: DeleteBucketParamsType) {
+  return request.get(`/v1/storages/buckets/${params.bucketName}`);
+}
+
+// 删除bucket
 export interface DeleteBucketsParamsType {
   bucketName: string;
 }
@@ -82,6 +91,27 @@ export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsPa
     return request.get(`/v1/storages/objects/{objectIdOrName}`);
   }
   return request.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
+}
+
+// 删除存储对象
+export interface DeleteObjectsParamsType {
+  bucketName: string;
+  objectIds: string;
+}
+
+export function deleteObjects(params: DeleteObjectsParamsType) {
+  return request.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
+}
+
+// 下载存储对象文件
+export interface DownloadObjectParamsType {
+  objectIdOrName: string;
+}
+
+export function downloadObject(params: DownloadObjectParamsType) {
+  return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
+    params: params,
+  });
 }
 
 // 根据sha1查询文件是否存在

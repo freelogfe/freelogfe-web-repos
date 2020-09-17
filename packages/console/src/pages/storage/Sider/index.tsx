@@ -83,7 +83,7 @@ function Sider({storage, dispatch}: SiderProps) {
 
     <Progress
       strokeWidth={6}
-      percent={30}
+      percent={storage.usedStorage / storage.totalStorage}
       showInfo={false}
       className={styles.progressBack}
     />
