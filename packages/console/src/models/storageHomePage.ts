@@ -6,10 +6,11 @@ import {
   bucketList,
   BucketListParamsType,
   createBucket,
-  CreateBucketParamsType, deleteBuckets, DeleteBucketsParamsType,
+  CreateBucketParamsType, createObject, CreateObjectParamsType, deleteBuckets, DeleteBucketsParamsType,
   spaceStatistics, uploadFile
 } from '@/services/storages';
 import moment from 'moment';
+import {RcFile} from "antd/lib/upload/interface";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -32,6 +33,11 @@ export interface StorageHomePageModelState {
     type: string;
     size: number;
     updateTime: string;
+  }[];
+
+  uploadTaskQueue: {
+    file: RcFile
+    name: string;
   }[];
 }
 
@@ -67,6 +73,11 @@ export interface CreateObjectAction extends AnyAction {
   payload: { sha1: string; objectName: string };
 }
 
+export interface FetchObjectsAction extends AnyAction {
+  type: 'storageHomePage/fetchObjects';
+  // payload: { sha1: string; objectName: string };
+}
+
 export interface StorageHomePageModelType {
   namespace: 'storageHomePage';
   state: StorageHomePageModelState;
@@ -77,6 +88,7 @@ export interface StorageHomePageModelType {
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
+    fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -99,22 +111,9 @@ const Model: StorageHomePageModelType = {
     usedStorage: -1,
 
     // currentBucketInfo: null,
-    objectList: [
-      {
-        key: '1',
-        name: 'John Brown',
-        type: 'image',
-        size: 2378,
-        updateTime: '2019.04.14 12:00',
-      },
-      {
-        key: '2',
-        name: 'John Brown2',
-        type: 'image',
-        size: 2378,
-        updateTime: '2019.04.14 12:00',
-      },
-    ],
+    objectList: [],
+
+    uploadTaskQueue: [],
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
@@ -205,8 +204,20 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * createObject({payload}: CreateObjectAction, {}: EffectsCommandMap) {
+    * createObject({payload}: CreateObjectAction, {call, select}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
+      const params: CreateObjectParamsType = {
+        bucketName: storageHomePage.activatedBucket,
+        objectName: payload.objectName,
+        sha1: payload.sha1,
+      };
+      yield call(createObject, params);
     },
+    * fetchObjects({}: FetchObjectsAction, {}: EffectsCommandMap) {
+
+    }
   },
   reducers: {
     change(state, {payload}) {

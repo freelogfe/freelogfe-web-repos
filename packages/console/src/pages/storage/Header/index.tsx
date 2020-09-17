@@ -5,10 +5,10 @@ import {Space} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
-import {StorageHomePageModelState} from '@/models/storageHomePage';
+import {ChangeAction, StorageHomePageModelState} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
-import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
+import FUploadTasksPanel, {FUploadTasksPanelProps} from "@/pages/storage/containers/FUploadTasksPanel";
 import fMessage from "@/components/fMessage";
 
 interface HeaderProps {
@@ -17,7 +17,7 @@ interface HeaderProps {
 }
 
 interface HeaderStates {
-  files: RcFile[];
+  // fileObjects: FUploadTasksPanelProps['fileObjects'];
 }
 
 function Header({dispatch, storage}: HeaderProps) {
@@ -27,7 +27,7 @@ function Header({dispatch, storage}: HeaderProps) {
     return null;
   }
 
-  const [files, setFiles] = React.useState<HeaderStates['files']>([]);
+  // const [fileObjects, setFileObjects] = React.useState<HeaderStates['fileObjects']>([]);
 
   return (<div className={styles.header}>
     <div className={styles.headerLeft}>
@@ -48,28 +48,27 @@ function Header({dispatch, storage}: HeaderProps) {
           if (storage.totalStorage - storage.usedStorage < totalSize) {
             fMessage('超出储存', 'warning');
           } else {
-            // for (const f of fileList) {
-            //   f.objectName = 'f.name'
-            // }
-            setFiles([
-              ...fileList,
-              ...files,
-            ]);
+            dispatch<ChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                uploadTaskQueue: [
+                  ...fileList.map((fo) => ({
+                    name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
+                    file: fo,
+                  })),
+                  ...storage.uploadTaskQueue,
+                ]
+              }
+            });
           }
         }
         return false;
       }}
     >
-      <FNormalButton
-        // onClick={() => dispatch<CreateBucketAction>({
-        //   type: 'storageHomePage/createBucket',
-        // })}
-      >上传对象</FNormalButton>
+      <FNormalButton>上传对象</FNormalButton>
     </FUpload>
 
-    <FUploadTasksPanel
-      files={files}
-    />
+    <FUploadTasksPanel/>
   </div>);
 }
 

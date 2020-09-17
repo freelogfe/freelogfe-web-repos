@@ -64,9 +64,7 @@ export interface CreateObjectParamsType {
 }
 
 export function createObject({bucketName, ...params}: CreateObjectParamsType) {
-  return request.post(`/v1/storages/buckets/${bucketName}/objects`, {
-    params,
-  });
+  return request.post(`/v1/storages/buckets/${bucketName}/objects`, params);
 }
 
 // 查看存储对象详情

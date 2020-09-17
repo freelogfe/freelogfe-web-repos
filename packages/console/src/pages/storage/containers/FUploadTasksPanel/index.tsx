@@ -8,15 +8,16 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
 import Task from "@/pages/storage/containers/FUploadTasksPanel/Task";
+import {CreateObjectAction} from "@/models/storageHomePage";
 
-interface FUploadTasksPanelProps {
+export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState;
-  files: RcFile[];
+  // fileObjects: StorageHomePageModelState[''];
   hidden?: boolean;
 }
 
-function FUploadTasksPanel({dispatch, storage, files, hidden = false}: FUploadTasksPanelProps) {
+function FUploadTasksPanel({dispatch, storage, hidden = false}: FUploadTasksPanelProps) {
 
   const [open, setOpen] = React.useState<boolean>(true);
 
@@ -32,11 +33,18 @@ function FUploadTasksPanel({dispatch, storage, files, hidden = false}: FUploadTa
     </div>
     <div className={styles.body} style={{display: open ? 'block' : 'none'}}>
       {
-        files.map((f) => (<Task
-          key={f.uid}
-          file={f}
-          onSuccess={({fileName, sha1}) => {
-
+        storage.uploadTaskQueue.map((f) => (<Task
+          key={f.file.uid}
+          file={f.file}
+          name={f.name}
+          onSuccess={({objectName, sha1}) => {
+            dispatch<CreateObjectAction>({
+              type: 'storageHomePage/createObject',
+              payload: {
+                objectName,
+                sha1,
+              }
+            })
           }}
         />))
       }

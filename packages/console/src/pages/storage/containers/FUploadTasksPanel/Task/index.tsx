@@ -12,9 +12,10 @@ import {uploadFile} from '@/services/storages';
 
 interface TaskProps {
   file: RcFile;
+  name: string;
   sameName?: boolean;
 
-  onSuccess?({fileName, sha1}: { fileName: string; sha1: string; }): void;
+  onSuccess?({objectName, sha1}: { objectName: string; sha1: string; }): void;
 }
 
 interface TaskStates {
@@ -22,7 +23,7 @@ interface TaskStates {
   progress: number;
 }
 
-function Task({file, sameName, onSuccess}: TaskProps) {
+function Task({name, file, sameName, onSuccess}: TaskProps) {
 
   const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
   const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
@@ -39,12 +40,12 @@ function Task({file, sameName, onSuccess}: TaskProps) {
     });
     // console.log(data);
     setStatus('success');
-    onSuccess && onSuccess({fileName: file.name, sha1: data.sha1});
+    onSuccess && onSuccess({objectName: name, sha1: data.sha1});
   }
 
   return (<div className={styles.taskItem}>
     <div className={styles.taskInfo}>
-      <FContentText text={file.name} singleRow={true}/>
+      <FContentText text={name} singleRow={true}/>
       <div style={{height: 2}}/>
       <FContentText text={humanizeSize(file.size)}/>
     </div>
