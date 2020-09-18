@@ -177,6 +177,18 @@ export function lookDraft(params: LookDraftParamsType) {
   return request.get(`/v2/resources/${params.resourceId}/versions/drafts`);
 }
 
+// 下载资源文件
+export interface ResourcesDownloadParamsType {
+  resourceId: string;
+  version: string;
+}
+
+export function resourcesDownload(params: ResourcesDownloadParamsType) {
+  return request.get(`/v2/resources/${params.resourceId}/versions/${params.version}/download`, {
+    responseType: 'arraybuffer',
+  });
+}
+
 // 查询资源所解决的依赖集
 export interface ResolveResourcesParamsType {
   resourceId: string;

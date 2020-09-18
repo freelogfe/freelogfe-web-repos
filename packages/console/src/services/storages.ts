@@ -1,4 +1,4 @@
-import request, {downloadObjectToFile} from '@/utils/request';
+import request from '@/utils/request';
 import {AxiosRequestConfig} from 'axios';
 
 // 创建bucket(系统级的bucket不允许创建)
@@ -110,7 +110,6 @@ export interface DownloadObjectParamsType {
 
 export function downloadObject(params: DownloadObjectParamsType) {
   return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
-    params: params,
     responseType: 'arraybuffer',
     // onDownloadProgress: (progressEvent: any) => {
     //   console.log(progressEvent, 'progressEvent230');

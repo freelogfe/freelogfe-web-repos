@@ -20,6 +20,7 @@ import RouterTypes from 'umi/routerTypes';
 import {withRouter} from 'umi';
 import {RouteComponentProps} from 'react-router';
 import {apiHost} from '@/utils/request';
+import {resourcesDownload} from "@/services/resources";
 
 interface VersionEditorProps extends RouteComponentProps<{ id: string; version: string; }> {
   dispatch: Dispatch;
@@ -86,7 +87,8 @@ function VersionEditor({dispatch, route, version, match}: VersionEditorProps & R
         version={version.version}
         signingDate={version.signingDate}
         resourceID={version.resourceID}
-        onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
+        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
+        onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
       <div className={styles.styles}>
         <FEditorCard title={i18nMessage('version_description')}>

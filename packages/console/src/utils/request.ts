@@ -77,7 +77,7 @@ axios.interceptors.response.use(function (response) {
     throw new Error(JSON.stringify(error));
   }
   const {data, headers} = response;
-  if (headers['content-type'] === 'application/octet-stream') {
+  if (headers['content-disposition']?.includes('attachment;')) {
     return downloadFile(response);
   }
 
@@ -99,6 +99,7 @@ export default axios;
 
 export function downloadFile(res: AxiosResponse) {
   const {data, headers} = res;
+  // const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
   const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
   const blob = new Blob([data], {});
   FileSaver.saveAs(blob, fileName);
