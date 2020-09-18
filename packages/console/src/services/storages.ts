@@ -112,6 +112,9 @@ export function downloadObject(params: DownloadObjectParamsType) {
   return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
     params: params,
     responseType: 'arraybuffer',
+    // onDownloadProgress: (progressEvent: any) => {
+    //   console.log(progressEvent, 'progressEvent230');
+    // }
   });
 }
 
