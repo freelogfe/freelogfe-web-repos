@@ -232,7 +232,7 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.activatedBucket,
       };
       const {data} = yield call(objectList, params);
-      console.log(data, 'datadata23w908io');
+      // console.log(data, 'datadata23w908io');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

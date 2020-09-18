@@ -32,7 +32,7 @@ function Content({storage}: ContentProps) {
       render(text: any, record: any) {
         return <Space size={10}>
           <FContentText text={text}/>
-          <CopyToClipboard text={text}>
+          <CopyToClipboard text={`${storage.activatedBucket}/${text}`}>
             <FTextButton theme={'primary'}>
               <SnippetsOutlined/>
             </FTextButton>
