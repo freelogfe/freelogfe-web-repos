@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request, {apiHost} from '@/utils/request';
 import {AxiosRequestConfig} from 'axios';
 
 // 创建bucket(系统级的bucket不允许创建)
@@ -109,12 +109,13 @@ export interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
-    responseType: 'arraybuffer',
-    // onDownloadProgress: (progressEvent: any) => {
-    //   console.log(progressEvent, 'progressEvent230');
-    // }
-  });
+  return window.location.href = apiHost + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  // return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
+  //   responseType: 'arraybuffer',
+  //   // onDownloadProgress: (progressEvent: any) => {
+  //   //   console.log(progressEvent, 'progressEvent230');
+  //   // }
+  // });
 }
 
 // 根据sha1查询文件是否存在

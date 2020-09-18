@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request, {apiHost} from '@/utils/request';
 
 // 创建资源
 interface CreateParamsType {
@@ -184,9 +184,10 @@ export interface ResourcesDownloadParamsType {
 }
 
 export function resourcesDownload(params: ResourcesDownloadParamsType) {
-  return request.get(`/v2/resources/${params.resourceId}/versions/${params.version}/download`, {
-    responseType: 'arraybuffer',
-  });
+  return window.location.href = apiHost + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
+  // return request.get(`/v2/resources/${params.resourceId}/versions/${params.version}/download`, {
+  //   responseType: 'arraybuffer',
+  // });
 }
 
 // 查询资源所解决的依赖集
