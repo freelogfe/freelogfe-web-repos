@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
+import FileSaver from 'file-saver';
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -20,14 +21,14 @@ const codeMessage: any = {
   504: '网关超时。',
 };
 
-export const apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
-
+export let apiHost: string = '';
 if (window.location.hostname.includes('.com')) {
-  // const arr = window.location.hostname.split('.');
-  // arr[0] = 'qi';
-  axios.defaults.baseURL = apiHost;
+  apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+  // apiHost = window.location.origin.replace('console', 'qi');
   axios.defaults.withCredentials = true;
+  axios.defaults.baseURL = apiHost;
 }
+
 
 /**
  * 异常处理程序
@@ -97,17 +98,39 @@ axios.interceptors.response.use(function (response) {
 
 export default axios;
 
-async function downloadObjectToFile(res: AxiosResponse) {
+export function downloadObjectToFile(res: AxiosResponse) {
   const {data, headers} = res;
   const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
-  const blob = new Blob([data], {type: headers['content-type']});
-  const dom: HTMLAnchorElement = document.createElement('a');
-  const url: string = window.URL.createObjectURL(blob);
-  dom.href = url;
-  dom.download = decodeURIComponent(fileName);
-  dom.style.display = 'none';
-  document.body.appendChild(dom);
-  dom.click();
-  document.body.removeChild(dom);
-  window.URL.revokeObjectURL(url);
+  const blob = new Blob([data], {});
+  FileSaver.saveAs(blob, fileName);
+
+  // console.log(res, 'resresresres23');
+  // const {data, headers} = res;
+  // console.log(data, 'datadatadata23');
+  // const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
+  // const blob = new Blob([data], {type: headers['content-type']});
+  // const dom: HTMLAnchorElement = document.createElement('a');
+  // const url: string = window.URL.createObjectURL(blob);
+  // dom.href = url;
+  // dom.download = decodeURIComponent(fileName);
+  // dom.style.display = 'none';
+  // document.body.appendChild(dom);
+  // dom.click();
+  // document.body.removeChild(dom);
+  // window.URL.revokeObjectURL(url);
+
+  // config['responseType'] = 'arraybuffer';//关键点1
+
+  // config['blobType'] = 'application/vnd.ms-excel';
+  // const {data, headers} = res;
+  // const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
+  // const blobType = 'application/force-download';//关键点2
+  // const blobo = new Blob([res.data], {type: blobType})
+  // const archor = document.createElement('a');
+  // const href = window.URL.createObjectURL(blobo)//关键点3
+  // archor.setAttribute('href', href)
+  // // /* 关键之处：使用download属性必须要html5的页面才行 ，而且它不会刷新，文件名及扩展名均由这里控制*/
+  // archor.setAttribute('download', fileName)//关键点4
+  // archor.click();
+  // return true;
 }
