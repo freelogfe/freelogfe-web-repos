@@ -87,8 +87,8 @@ function VersionEditor({dispatch, route, version, match}: VersionEditorProps & R
         version={version.version}
         signingDate={version.signingDate}
         resourceID={version.resourceID}
-        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
-        onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
+        onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
+        // onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
       <div className={styles.styles}>
         <FEditorCard title={i18nMessage('version_description')}>

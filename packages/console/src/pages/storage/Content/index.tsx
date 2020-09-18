@@ -13,6 +13,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from "@/models/connect";
 import {downloadObject} from "@/services/storages";
+import {apiHost} from "@/utils/request";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -57,7 +58,11 @@ function Content({storage}: ContentProps) {
           <FTextButton theme={'primary'}>
             <SendOutlined/>
           </FTextButton>
-          <FTextButton onClick={() => downloadObject({objectIdOrName: record.id})} theme={'primary'}>
+          <FTextButton
+            // onClick={() => downloadObject({objectIdOrName: record.id})}
+            onClick={() => window.location.href = apiHost + `/v1/storages/objects/${record.id}/file`}
+            theme={'primary'}
+          >
             <DownloadOutlined/>
           </FTextButton>
           <FTextButton className={styles.Delete}>
