@@ -1,17 +1,6 @@
-/**
- * request 网络请求工具
- * 更详细的 api 文档: https://github.com/umijs/umi-request
- */
-// import {extend} from 'dva/fetch';
 import axios, {AxiosResponse} from 'axios';
 import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
-// import '~'
-
-// notification.config({
-//   duration: 1000000
-// });
-
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -77,10 +66,8 @@ axios.interceptors.request.use(function (config) {
  * 配置request请求时的默认参数
  */
 axios.interceptors.response.use(function (response) {
-  // console.log(response, 'response');
   // Do something with response data
   NProgress.done();
-  // console.log(response, 'responseresponse23r3wasd');
   if (response.status !== 200) {
     const error = {
       description: codeMessage[response.status],
@@ -103,7 +90,6 @@ axios.interceptors.response.use(function (response) {
   }
   return data;
 }, function (error) {
-  // console.log(error, 'errorerror');
   // Do something with response error
   NProgress.done();
   return Promise.reject(error);
@@ -111,25 +97,17 @@ axios.interceptors.response.use(function (response) {
 
 export default axios;
 
-export async function downloadObjectToFile(res: AxiosResponse) {
-  // const res = await axios.get(`/v1/storages/objects/${objectIdOrName}/file`, {responseType: 'blob'});
+async function downloadObjectToFile(res: AxiosResponse) {
   const {data, headers} = res;
-  // console.log(headers, 'headersheaders23efwsd');
-  // const fileName = headers['content-disposition'].replace(/\w+; filename=(.*)/, '$1');
   const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
-  // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
-  //const blob = new Blob([JSON.stringify(data)], ...)
   const blob = new Blob([data], {type: headers['content-type']});
-  let dom: HTMLAnchorElement = document.createElement('a');
-  let url: string = window.URL.createObjectURL(blob);
+  const dom: HTMLAnchorElement = document.createElement('a');
+  const url: string = window.URL.createObjectURL(blob);
   dom.href = url;
-  dom.download = decodeURI(fileName);
+  dom.download = decodeURIComponent(fileName);
   dom.style.display = 'none';
   document.body.appendChild(dom);
   dom.click();
   document.body.removeChild(dom);
-  window.URL.revokeObjectURL(url)
-  // })
-  // .catch((err) => {
-  // })
+  window.URL.revokeObjectURL(url);
 }
