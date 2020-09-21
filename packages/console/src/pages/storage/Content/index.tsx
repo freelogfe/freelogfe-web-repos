@@ -7,15 +7,13 @@ import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
 import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
-import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
-import {apiHost} from '@/utils/request';
 import FPagination from '@/components/FPagination';
-import {OnChangePaginationAction} from '@/models/storageHomePage';
+import {DeleteObjectAction, OnChangePaginationAction} from '@/models/storageHomePage';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -67,7 +65,13 @@ function Content({storage, dispatch}: ContentProps) {
           >
             <DownloadOutlined/>
           </FTextButton>
-          <FTextButton className={styles.Delete}>
+          <FTextButton
+            onClick={() => dispatch<DeleteObjectAction>({
+              type: 'storageHomePage/deleteObject',
+              payload: record.id
+            })}
+            className={styles.Delete}
+          >
             <DeleteOutlined/>
           </FTextButton>
         </Space>);
@@ -81,9 +85,9 @@ function Content({storage, dispatch}: ContentProps) {
       width: 150,
       render(text: any, record: any) {
         if (!text) {
-          return <FContentText type="negative" text={'未设置类型'}/>
+          return (<FContentText type="negative" text={'未设置类型'}/>);
         }
-        return <FContentText text={text}/>;
+        return (<FContentText text={text}/>);
       },
       className: styles.columns,
     },

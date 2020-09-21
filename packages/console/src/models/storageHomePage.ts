@@ -10,11 +10,10 @@ import {
   createObject,
   CreateObjectParamsType,
   deleteBuckets,
-  DeleteBucketsParamsType,
+  DeleteBucketsParamsType, deleteObjects, DeleteObjectsParamsType,
   objectList,
   ObjectListParamsType,
   spaceStatistics,
-  uploadFile
 } from '@/services/storages';
 import moment from 'moment';
 import {RcFile} from "antd/lib/upload/interface";
@@ -97,6 +96,11 @@ export interface OnChangePaginationAction extends AnyAction {
   }
 }
 
+export interface DeleteObjectAction extends AnyAction {
+  type: 'storageHomePage/deleteObject';
+  payload: string;
+}
+
 export interface StorageHomePageModelType {
   namespace: 'storageHomePage';
   state: StorageHomePageModelState;
@@ -109,6 +113,7 @@ export interface StorageHomePageModelType {
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
     onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
+    deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -293,6 +298,28 @@ const Model: StorageHomePageModelType = {
         type: 'fetchObjects',
       });
     },
+    * deleteObject({payload}: DeleteObjectAction, {call, select, put}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
+      const params: DeleteObjectsParamsType = {
+        bucketName: storageHomePage.activatedBucket,
+        objectIds: payload,
+      };
+      yield call(deleteObjects, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageCurrent: 1,
+        },
+      });
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
+      });
+      yield put<FetchSpaceStatisticAction>({
+        type: 'fetchSpaceStatistic',
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {
