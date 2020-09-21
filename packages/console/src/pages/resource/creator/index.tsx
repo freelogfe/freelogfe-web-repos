@@ -19,6 +19,7 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {i18nMessage} from '@/utils/i18n';
 import {RouterTypes} from 'umi';
+import {resourceTypes} from "@/utils/globals";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -26,8 +27,7 @@ interface ResourceCreatorProps {
   user: UserModelState;
 }
 
-const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
-
+// const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
 function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps & RouterTypes) {
 
@@ -87,7 +87,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             })}
             className={styles.FSelect}
             placeholder={i18nMessage('hint_choose_resource_type')}
-            options={resourceTypes}
+            options={resourceTypes.map((i: string) => ({value: i}))}
           />
         </FEditorCard>
 

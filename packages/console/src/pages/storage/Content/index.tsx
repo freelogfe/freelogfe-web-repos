@@ -7,14 +7,13 @@ import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
 import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
-// @ts-ignore
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import FPagination from '@/components/FPagination';
 import {DeleteObjectAction, OnChangePaginationAction} from '@/models/storageHomePage';
-import FCopyToClipboard from "@/components/FCopyToClipboard";
+import FCopyToClipboard from '@/components/FCopyToClipboard';
+import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -32,13 +31,13 @@ function Content({storage, dispatch}: ContentProps) {
       dataIndex: 'name',
       key: 'name',
       render(text: any, record: any) {
-        return <Space size={10}>
+        return (<Space size={10}>
           <FContentText text={text}/>
           <FCopyToClipboard
             text={`${storage.activatedBucket}/${text}`}
             title={'复制对象名称'}
           />
-        </Space>;
+        </Space>);
       }
     },
     {
@@ -52,7 +51,22 @@ function Content({storage, dispatch}: ContentProps) {
           return null;
         }
         return (<Space size={25}>
-          <FTextButton theme={'primary'}>
+          <FTextButton
+            onClick={() => {
+              // console.log(record, 'RREAcf90s8o');
+              dispatch<FetchInfoAction>({
+                type: 'storageObjectEditor/fetchInfo',
+                payload: record.id,
+              });
+              dispatch<ChangeAction>({
+                type: 'storageObjectEditor/change',
+                payload: {
+                  visible: true,
+                },
+              });
+            }}
+            theme={'primary'}
+          >
             <EditOutlined/>
           </FTextButton>
           <FTextButton theme={'primary'}>
@@ -157,17 +171,17 @@ function Content({storage, dispatch}: ContentProps) {
       }
 
     </div>
+    <Details/>
+    {/*<Drawer*/}
+    {/*  title={'编辑对象信息'}*/}
+    {/*  // onClose={() => setModalVisible(false)}*/}
+    {/*  visible={objectInfoVisible}*/}
+    {/*  width={720}*/}
+    {/*  bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}*/}
+    {/*>*/}
 
-    <Drawer
-      title={'编辑对象信息'}
-      // onClose={() => setModalVisible(false)}
-      visible={objectInfoVisible}
-      width={720}
-      bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
-    >
-      <Details/>
-      {/*<Market/>*/}
-    </Drawer>
+    {/*  /!*<Market/>*!/*/}
+    {/*</Drawer>*/}
   </div>);
 }
 
