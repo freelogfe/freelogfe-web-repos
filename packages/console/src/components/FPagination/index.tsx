@@ -11,7 +11,7 @@ interface FPaginationProps {
   onChangePageSize?: (value: number) => void;
 }
 
-export default function ({className, current = 1, pageSize = 20, total = -1, onChangeCurrent, onChangePageSize}: FPaginationProps) {
+function FPagination({className, current = 1, pageSize = 20, total = -1, onChangeCurrent, onChangePageSize}: FPaginationProps) {
   return (
     <div className={className + ' ' + styles.FPagination}>
       <Select
@@ -38,3 +38,5 @@ export default function ({className, current = 1, pageSize = 20, total = -1, onC
       />
     </div>);
 }
+
+export default FPagination;

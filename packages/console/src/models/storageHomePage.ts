@@ -6,8 +6,15 @@ import {
   bucketList,
   BucketListParamsType,
   createBucket,
-  CreateBucketParamsType, createObject, CreateObjectParamsType, deleteBuckets, DeleteBucketsParamsType, objectList,
-  spaceStatistics, uploadFile
+  CreateBucketParamsType,
+  createObject,
+  CreateObjectParamsType,
+  deleteBuckets,
+  DeleteBucketsParamsType,
+  objectList,
+  ObjectListParamsType,
+  spaceStatistics,
+  uploadFile
 } from '@/services/storages';
 import moment from 'moment';
 import {RcFile} from "antd/lib/upload/interface";
@@ -36,6 +43,9 @@ export interface StorageHomePageModelState {
     size: number;
     updateTime: string;
   }[];
+  pageCurrent: number;
+  pageSize: number;
+  total: number;
 
   uploadTaskQueue: {
     file: RcFile
@@ -77,7 +87,14 @@ export interface CreateObjectAction extends AnyAction {
 
 export interface FetchObjectsAction extends AnyAction {
   type: 'storageHomePage/fetchObjects' | 'fetchObjects';
-  // payload: { sha1: string; objectName: string };
+}
+
+export interface OnChangePaginationAction extends AnyAction {
+  type: 'storageHomePage/onChangePaginationAction';
+  payload: {
+    pageCurrent?: number;
+    pageSize?: number;
+  }
 }
 
 export interface StorageHomePageModelType {
@@ -91,6 +108,7 @@ export interface StorageHomePageModelType {
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
+    onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -114,6 +132,9 @@ const Model: StorageHomePageModelType = {
 
     // currentBucketInfo: null,
     objectList: [],
+    pageCurrent: 1,
+    pageSize: 10,
+    total: -1,
 
     uploadTaskQueue: [],
   },
@@ -228,8 +249,10 @@ const Model: StorageHomePageModelType = {
     },
     * fetchObjects({}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
-      const params: DeleteBucketsParamsType = {
+      const params: ObjectListParamsType = {
         bucketName: storageHomePage.activatedBucket,
+        page: storageHomePage.pageCurrent,
+        pageSize: storageHomePage.pageSize,
       };
       const {data} = yield call(objectList, params);
       // console.log(data, 'datadata23w908io');
@@ -242,11 +265,34 @@ const Model: StorageHomePageModelType = {
             name: i.objectName,
             type: i.resourceType,
             size: humanizeSize(i.systemProperty.fileSize),
-            updateTime: formatDateTime(i.updateDate),
+            updateTime: formatDateTime(i.updateDate, true),
           })),
+          total: data.totalItem,
         },
       });
-    }
+    },
+    * onChangePaginationAction({payload}: OnChangePaginationAction, {put}: EffectsCommandMap) {
+      if (payload.pageSize) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pageSize: payload.pageSize,
+            pageCurrent: 1,
+          },
+        });
+      }
+      if (payload.pageCurrent) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pageCurrent: payload.pageCurrent,
+          },
+        });
+      }
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {

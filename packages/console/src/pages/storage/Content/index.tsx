@@ -11,16 +11,18 @@ import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState} from "@/models/connect";
-import {downloadObject} from "@/services/storages";
-import {apiHost} from "@/utils/request";
+import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {downloadObject} from '@/services/storages';
+import {apiHost} from '@/utils/request';
+import FPagination from '@/components/FPagination';
+import {OnChangePaginationAction} from '@/models/storageHomePage';
 
 interface ContentProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState;
 }
 
-function Content({storage}: ContentProps) {
+function Content({storage, dispatch}: ContentProps) {
 
   const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
   const [hoverRecord, setHoverRecord] = React.useState<any>(null);
@@ -45,7 +47,7 @@ function Content({storage}: ContentProps) {
       title: '',
       dataIndex: 'tool',
       key: 'tool',
-      width: 170,
+      width: 180,
       render(text: any, record: any) {
         // console.log(hoverRecord, record);
         if (hoverRecord?.key !== record?.key) {
@@ -69,28 +71,35 @@ function Content({storage}: ContentProps) {
             <DeleteOutlined/>
           </FTextButton>
         </Space>);
-      }
+      },
+      className: styles.columns,
     },
     {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
-      width: 140,
+      width: 150,
       render(text: any, record: any) {
-        return text;
-      }
+        if (!text) {
+          return <FContentText type="negative" text={'未设置类型'}/>
+        }
+        return <FContentText text={text}/>;
+      },
+      className: styles.columns,
     },
     {
       title: '大小',
       dataIndex: 'size',
       key: 'size',
-      width: 90,
+      width: 100,
+      className: styles.columns,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
       key: 'updateTime',
-      width: 125,
+      width: 135,
+      className: styles.columns,
     },
   ];
 
@@ -102,6 +111,7 @@ function Content({storage}: ContentProps) {
       <FTable
         columns={columns}
         dataSource={storage.objectList}
+        pagination={false}
         onRow={(record) => {
           return {
             // onClick: event => {
@@ -120,6 +130,28 @@ function Content({storage}: ContentProps) {
           };
         }}
       />
+      {
+        storage.total !== -1 && (<div className={styles.pagination}>
+          <FPagination
+            pageSize={storage.pageSize}
+            current={storage.pageCurrent}
+            total={storage.total}
+            onChangeCurrent={(value) => dispatch<OnChangePaginationAction>({
+              type: 'storageHomePage/onChangePaginationAction',
+              payload: {
+                pageCurrent: value,
+              },
+            })}
+            onChangePageSize={(value) => dispatch<OnChangePaginationAction>({
+              type: 'storageHomePage/onChangePaginationAction',
+              payload: {
+                pageSize: value,
+              },
+            })}
+          />
+        </div>)
+      }
+
     </div>
 
     <Drawer

@@ -48,7 +48,7 @@ export function deleteBuckets(params: DeleteBucketsParamsType) {
 }
 
 // 分页查看存储对象列表
-export interface DeleteBucketsParamsType {
+export interface ObjectListParamsType {
   bucketName: string;
   resourceType?: string;
   isLoadingTypeless?: boolean;

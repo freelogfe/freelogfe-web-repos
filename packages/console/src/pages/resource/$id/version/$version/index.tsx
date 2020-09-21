@@ -169,7 +169,6 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
   </div>);
 }
 
-
 export default withRouter(connect(({resourceVersionEditorPage}: ConnectState) => ({
   version: resourceVersionEditorPage,
 }))(VersionEditor));
