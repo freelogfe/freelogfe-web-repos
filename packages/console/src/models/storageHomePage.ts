@@ -251,6 +251,9 @@ const Model: StorageHomePageModelType = {
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
+      yield put<FetchBucketsAction>({
+        type: 'fetchBuckets',
+      });
     },
     * fetchObjects({}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
@@ -318,6 +321,9 @@ const Model: StorageHomePageModelType = {
       });
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
+      });
+      yield put<FetchBucketsAction>({
+        type: 'fetchBuckets',
       });
     }
   },
