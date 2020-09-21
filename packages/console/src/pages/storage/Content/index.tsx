@@ -14,6 +14,7 @@ import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import FPagination from '@/components/FPagination';
 import {DeleteObjectAction, OnChangePaginationAction} from '@/models/storageHomePage';
+import FCopyToClipboard from "@/components/FCopyToClipboard";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -33,11 +34,10 @@ function Content({storage, dispatch}: ContentProps) {
       render(text: any, record: any) {
         return <Space size={10}>
           <FContentText text={text}/>
-          <CopyToClipboard text={`${storage.activatedBucket}/${text}`}>
-            <FTextButton theme={'primary'}>
-              <SnippetsOutlined/>
-            </FTextButton>
-          </CopyToClipboard>
+          <FCopyToClipboard
+            text={`${storage.activatedBucket}/${text}`}
+            title={'复制对象名称'}
+          />
         </Space>;
       }
     },
@@ -68,7 +68,7 @@ function Content({storage, dispatch}: ContentProps) {
           <FTextButton
             onClick={() => dispatch<DeleteObjectAction>({
               type: 'storageHomePage/deleteObject',
-              payload: record.id
+              payload: record.id,
             })}
             className={styles.Delete}
           >
@@ -102,7 +102,7 @@ function Content({storage, dispatch}: ContentProps) {
       title: '更新时间',
       dataIndex: 'updateTime',
       key: 'updateTime',
-      width: 135,
+      width: 140,
       className: styles.columns,
     },
   ];
