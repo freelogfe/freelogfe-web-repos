@@ -16,16 +16,21 @@ import {i18nMessage} from "@/utils/i18n";
 import FAutoComplete from "@/components/FAutoComplete";
 import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {downloadObject} from "@/services/storages";
-import {ChangeAction} from "@/models/storageObjectEditor";
+import {ChangeAction, UpdateObjectInfoAction} from "@/models/storageObjectEditor";
+import {FetchObjectsAction} from "@/models/storageHomePage";
 
 interface DetailsProps {
   dispatch: Dispatch;
   editor: StorageObjectEditorModelState;
 }
 
+let autoComplete: any = null;
+
 function Details({editor, dispatch}: DetailsProps) {
   // const divContainer = React.useRef<HTMLDivElement>(null);
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
+
+  // const textInput = React.useRef<any>(null);
 
   return (<Drawer
     title={'编辑对象信息'}
@@ -34,6 +39,9 @@ function Details({editor, dispatch}: DetailsProps) {
     width={720}
     bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     onClose={() => {
+      dispatch<FetchObjectsAction>({
+        type: 'storageHomePage/fetchObjects',
+      });
       dispatch<ChangeAction>({
         type: 'storageObjectEditor/change',
         payload: {
@@ -76,14 +84,41 @@ function Details({editor, dispatch}: DetailsProps) {
         {/*/>*/}
         <FAutoComplete
           // errorText={resource.resourceTypeErrorText}
+          autoRef={(r: any) => {
+            console.log(r, 'rRRRRR');
+            autoComplete = r;
+          }}
           value={editor.type}
           onChange={(value) => {
             dispatch<ChangeAction>({
-              type: 'change',
+              type: 'storageObjectEditor/change',
               payload: {
-
-              }
-            })
+                type: value,
+              },
+            });
+          }}
+          onBlur={() => {
+            dispatch<UpdateObjectInfoAction>({
+              type: 'storageObjectEditor/updateObjectInfo',
+              // payload: {
+              //   type: value,
+              // },
+            });
+          }}
+          onSelect={(value) => {
+            dispatch<ChangeAction>({
+              type: 'storageObjectEditor/change',
+              payload: {
+                type: value,
+              },
+            });
+            autoComplete.blur();
+            // dispatch<UpdateObjectInfoAction>({
+            //   type: 'storageObjectEditor/updateObjectInfo',
+            //   // payload: {
+            //   //   type: value,
+            //   // },
+            // });
           }}
           className={styles.FAutoComplete}
           placeholder={i18nMessage('hint_choose_resource_type')}

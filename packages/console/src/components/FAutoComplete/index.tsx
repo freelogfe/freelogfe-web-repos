@@ -5,11 +5,13 @@ import {AutoCompleteProps} from "antd/lib/auto-complete";
 
 interface FAutoCompleteProps extends AutoCompleteProps {
   errorText?: string;
+  autoRef?: any;
 }
 
-function FAutoComplete({errorText, ...props}: FAutoCompleteProps) {
+function FAutoComplete({autoRef, errorText, ...props}: FAutoCompleteProps) {
   return (<div className={styles.wrap}>
     <AutoComplete
+      ref={(ee: any) => autoRef && autoRef(ee)}
       {...props}
       // className={!!errorText ? styles.AutoCompleteError : ''}
     />

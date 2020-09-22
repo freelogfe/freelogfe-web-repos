@@ -164,8 +164,14 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
 export interface UpdateObjectParamsType {
   objectIdOrName: string;
   // customProperty?: [];
+  dependencies?: {
+    name: string;
+    type: string;
+    versionRange?: string;
+  }[];
+  resourceType?: string;
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
-  return request.put(`/v1/storages/objects/${objectIdOrName}`)
+  return request.put(`/v1/storages/objects/${objectIdOrName}`, params);
 }
