@@ -85,7 +85,7 @@ function Details({editor, dispatch}: DetailsProps) {
         <FAutoComplete
           // errorText={resource.resourceTypeErrorText}
           autoRef={(r: any) => {
-            console.log(r, 'rRRRRR');
+            // console.log(r, 'rRRRRR');
             autoComplete = r;
           }}
           value={editor.type}

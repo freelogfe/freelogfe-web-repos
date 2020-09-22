@@ -101,7 +101,7 @@ export interface DeleteObjectAction extends AnyAction {
   payload: string;
 }
 
-export interface StorageHomePageModelType {
+interface StorageHomePageModelType {
   namespace: 'storageHomePage';
   state: StorageHomePageModelState;
   effects: {

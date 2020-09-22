@@ -12,6 +12,7 @@ import {UserModelState} from './user';
 import {GlobalModelState} from './global';
 import {StorageHomePageModelState} from './storageHomePage';
 import {StorageObjectEditorModelState} from './storageObjectEditor';
+import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
 
 export {
   // RouterHistoriesModelState,
@@ -29,6 +30,7 @@ export {
   GlobalModelState,
   StorageHomePageModelState,
   StorageObjectEditorModelState,
+  StorageObjectDepSelectorModelState,
 };
 
 export interface ConnectState {
@@ -47,4 +49,5 @@ export interface ConnectState {
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
+  storageObjectDepSelector: StorageObjectDepSelectorModelState;
 }

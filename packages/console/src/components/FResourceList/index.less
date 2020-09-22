@@ -4,4 +4,40 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  & > div:first-child {
+    width: 500px;
+  }
+}
+
+.title {
+  width: 500px;
+  display: flex;
+  align-items: center;
+
+  & > div {
+    max-width: 450px;
+    flex-shrink: 1;
+  }
+
+  & > label {
+    //color: #E9A923;
+    //background-color: #FBF5EA;
+    //font-size: 12px;
+    //line-height: 18px;
+    //border-radius: 4px;;
+    background-color: #FBF5EA;
+    color: #E9A923;
+    padding: 2px 5px;
+    font-size: 12px;
+    margin-left: 5px;
+    flex-shrink: 0;
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: 12px;
+  //height: 32px;
+  line-height: 32px;
 }
