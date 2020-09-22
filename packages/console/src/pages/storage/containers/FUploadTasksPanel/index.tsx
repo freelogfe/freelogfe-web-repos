@@ -6,27 +6,32 @@ import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
-import {RcFile} from "antd/lib/upload/interface";
-import Task from "@/pages/storage/containers/FUploadTasksPanel/Task";
-import {CreateObjectAction} from "@/models/storageHomePage";
+import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
+import {ChangeAction, CreateObjectAction} from '@/models/storageHomePage';
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState;
-  // fileObjects: StorageHomePageModelState[''];
-  hidden?: boolean;
 }
 
-function FUploadTasksPanel({dispatch, storage, hidden = false}: FUploadTasksPanelProps) {
+function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
 
-  const [open, setOpen] = React.useState<boolean>(false);
-
-  return (<div className={styles.UploadingTasks} style={{display: hidden ? 'none' : 'block'}}>
+  return (<div
+    className={styles.UploadingTasks}
+    style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
+  >
     <div className={styles.title}>
       <FContentText text={'任务列表'}/>
       <Space size={20}>
-        <FTextButton onClick={() => setOpen(!open)}>
-          {open ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
+        <FTextButton onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'storageHomePage/change',
+            payload: {
+              uploadPanelOpen: !storage.uploadPanelOpen,
+            }
+          });
+        }}>
+          {storage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
         </FTextButton>
         <FTextButton><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
@@ -43,16 +48,14 @@ function FUploadTasksPanel({dispatch, storage, hidden = false}: FUploadTasksPane
               payload: {
                 objectName,
                 sha1,
-              }
+              },
             })
           }}
         />))
       }
     </div>
-
   </div>);
 }
-
 
 export default connect(({storageHomePage}: ConnectState) => ({
   storage: storageHomePage,

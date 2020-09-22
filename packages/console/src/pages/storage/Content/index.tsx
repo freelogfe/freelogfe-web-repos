@@ -69,9 +69,9 @@ function Content({storage, dispatch}: ContentProps) {
           >
             <EditOutlined/>
           </FTextButton>
-          <FTextButton theme={'primary'}>
-            <SendOutlined/>
-          </FTextButton>
+          {/*<FTextButton theme={'primary'}>*/}
+          {/*  <SendOutlined/>*/}
+          {/*</FTextButton>*/}
           <FTextButton
             onClick={() => downloadObject({objectIdOrName: record.id})}
             // onClick={() => window.location.href = apiHost + `/v1/storages/objects/${record.id}/file`}

@@ -50,6 +50,8 @@ export interface StorageHomePageModelState {
     file: RcFile
     name: string;
   }[];
+  uploadPanelVisible: boolean;
+  uploadPanelOpen: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -142,6 +144,8 @@ const Model: StorageHomePageModelType = {
     total: -1,
 
     uploadTaskQueue: [],
+    uploadPanelVisible: false,
+    uploadPanelOpen: false,
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
