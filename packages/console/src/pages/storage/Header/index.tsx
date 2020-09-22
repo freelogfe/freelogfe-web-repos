@@ -57,7 +57,9 @@ function Header({dispatch, storage}: HeaderProps) {
                     file: fo,
                   })),
                   ...storage.uploadTaskQueue,
-                ]
+                ],
+                uploadPanelOpen: true,
+                uploadPanelVisible: true,
               }
             });
           }

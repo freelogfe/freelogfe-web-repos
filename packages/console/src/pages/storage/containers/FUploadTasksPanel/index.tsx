@@ -33,10 +33,17 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         }}>
           {storage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
         </FTextButton>
-        <FTextButton><CloseOutlined style={{fontSize: 12}}/></FTextButton>
+        <FTextButton onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'storageHomePage/change',
+            payload: {
+              uploadPanelVisible: false,
+            }
+          });
+        }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
     </div>
-    <div className={styles.body} style={{display: open ? 'block' : 'none'}}>
+    <div className={styles.body} style={{display: storage.uploadPanelOpen ? 'block' : 'none'}}>
       {
         storage.uploadTaskQueue.map((f) => (<Task
           key={f.file.uid}

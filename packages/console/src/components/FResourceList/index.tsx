@@ -57,7 +57,7 @@ function FResourceList({
           <div style={{height: 2}}/>
           <FContentText
             type={'additional2'}
-            text={`资源类型 ${i.resourceType} | 更新时间 ${i.time}`}
+            text={(i.resourceType ? `资源类型 ${i.resourceType}` : '未设置类型') + ` | 更新时间 ${i.time}`}
           />
         </div>
         {

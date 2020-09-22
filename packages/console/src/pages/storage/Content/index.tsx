@@ -149,7 +149,7 @@ function Content({storage, dispatch}: ContentProps) {
         }}
       />
       {
-        storage.total !== -1 && (<div className={styles.pagination}>
+        storage.total > 0 && (<div className={styles.pagination}>
           <FPagination
             pageSize={storage.pageSize}
             current={storage.pageCurrent}
