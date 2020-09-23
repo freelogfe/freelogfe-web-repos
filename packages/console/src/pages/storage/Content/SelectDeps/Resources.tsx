@@ -14,6 +14,7 @@ import {
   OnChangeOConditionsAction,
   OnChangeRConditionsAction
 } from "@/models/storageObjectDepSelector";
+import {UpdateObjectDepRAction} from "@/models/storageObjectEditor";
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -75,7 +76,12 @@ function Resources({dispatch, selector}: ResourcesProps) {
       }))}
       loading={selector.rTotal === -1}
       stillMore={selector.rTotal > selector.rPageCurrent * selector.rPageSize}
-      // onSelect={onSelect}
+      onSelect={(value) => {
+        dispatch<UpdateObjectDepRAction>({
+          type: 'storageObjectEditor/updateObjectDepR',
+          payload: value.id,
+        });
+      }}
       onLoadMord={() => {
         dispatch<OnChangeRConditionsAction>({
           type: 'storageObjectDepSelector/onChangeRConditions',
