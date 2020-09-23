@@ -5,7 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import FInput from "@/components/FInput";
 import FResourceList from "@/components/FResourceList";
 import {connect, Dispatch} from "dva";
-import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from "@/models/connect";
+import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from '@/models/connect';
 import {DownOutlined} from '@ant-design/icons';
 import {
   FetchObjectsAction,
@@ -13,7 +13,7 @@ import {
   OnChangeOConditionsAction,
   OnChangeRConditionsAction
 } from "@/models/storageObjectDepSelector";
-import {UpdateObjectDepOAction} from "@/models/storageObjectEditor";
+import {AddObjectDepOAction} from "@/models/storageObjectEditor";
 
 interface ObjectsProps {
   dispatch: Dispatch;
@@ -81,8 +81,8 @@ function Objects({dispatch, selector, storageHomePage}: ObjectsProps) {
       loading={selector.oTotal === -1}
       stillMore={selector.oTotal > selector.oPageCurrent * selector.oPageSize}
       onSelect={(value) => {
-        dispatch<UpdateObjectDepOAction>({
-          type: 'storageObjectEditor/updateObjectDepO',
+        dispatch<AddObjectDepOAction>({
+          type: 'storageObjectEditor/addObjectDepO',
           payload: value.id,
         });
       }}

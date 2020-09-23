@@ -175,3 +175,16 @@ export interface UpdateObjectParamsType {
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
   return request.put(`/v1/storages/objects/${objectIdOrName}`, params);
 }
+
+// 批量查询存储对象列表
+export interface BatchObjectListParamsType {
+  fullObjectNames?: string;
+  objectIds?: string;
+  projection?: string;
+}
+
+export function batchObjectList(params: BatchObjectListParamsType) {
+  return request.get(`/v1/storages/objects/list`, {
+    params,
+  });
+}

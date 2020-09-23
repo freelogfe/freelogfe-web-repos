@@ -16,8 +16,9 @@ import {i18nMessage} from "@/utils/i18n";
 import FAutoComplete from "@/components/FAutoComplete";
 import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {downloadObject} from "@/services/storages";
-import {ChangeAction, UpdateObjectInfoAction} from "@/models/storageObjectEditor";
+import {ChangeAction, DeleteObjectDepAction, UpdateObjectInfoAction} from "@/models/storageObjectEditor";
 import {FetchObjectsAction} from "@/models/storageHomePage";
+import DepsCards from './DepsCards';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -133,8 +134,39 @@ function Details({editor, dispatch}: DetailsProps) {
           />
           <FContentText text={'添加'}/>
         </Space>
-        <DepsCards/>
-        <DepsCards/>
+        {/*{*/}
+        {/*  editor.*/}
+        {/*}*/}
+        {
+          editor.depRs.length > 0 && (<DepsCards
+            title={'资源'}
+            dataSource={editor.depRs}
+            onDelete={(name) => {
+              dispatch<DeleteObjectDepAction>({
+                type: 'storageObjectEditor/deleteObjectDep',
+                payload: {
+                  resourceName: name,
+                }
+              });
+            }}
+          />)
+        }
+
+        {
+          editor.depOs.length > 0 && (<DepsCards
+            title={'对象'}
+            dataSource={editor.depOs}
+            onDelete={(name) => {
+              dispatch<DeleteObjectDepAction>({
+                type: 'storageObjectEditor/deleteObjectDep',
+                payload: {
+                  objectName: name,
+                }
+              });
+            }}
+          />)
+        }
+
       </FEditorCard>
       {/*<FEditorCard title={'自定义属性'}>*/}
       {/*  <Space size={10}>*/}
@@ -179,68 +211,4 @@ export default connect(({storageObjectEditor}: ConnectState) => ({
   editor: storageObjectEditor,
 }))(Details);
 
-function BasisUpthrows() {
-  return (
-    <Space direction="vertical" size={10}>
-      <div>
-        <Space size={10}>
-          <ArrowUpOutlined style={{color: '#EA7171'}}/>
-          <span>stefan/image9</span>
-        </Space>
-      </div>
-      <div>
-        <Space size={10}>
-          <ArrowUpOutlined style={{color: '#EA7171'}}/>
-          <span>stefan/image9</span>
-        </Space>
-      </div>
-    </Space>
-  );
-}
 
-interface Interface {
-
-}
-
-function DepsCards() {
-  const [ref, setRef] = React.useState<HTMLDivElement | null>(null);
-
-  return (<div
-    className={styles.DepsCards}
-    ref={(div) => setRef(div)}
-  >
-    <div style={{height: 30}}/>
-    <FContentText text={'添加'}/>
-    <div style={{height: 15}}/>
-    <div className={styles.resources}>
-      <div className={styles.resource}>
-        <div className={styles.resourceLeft}>
-          <div className={styles.resourceTitle}>
-            <FContentText
-              singleRow={true}
-              text={'stefan/image2image2image2image2image2'}
-              className={styles.resourceName}
-            />
-            <span className={styles.notOnline}>未上线</span>
-          </div>
-          <div style={{height: 9}}/>
-          <div className={styles.resourceInfo}>
-            <FContentText type="additional2">image</FContentText>
-            <Divider type="vertical"/>
-            <FContentText type="additional2">版本范围：xxx</FContentText>
-            <Divider type="vertical"/>
-            {ref && <Popover
-              getPopupContainer={(triggerNode) => {
-                return ref || document.body;
-              }}
-              content={<BasisUpthrows/>}
-            >
-              <div><FContentText type="additional2">3个基础上抛</FContentText></div>
-            </Popover>
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>);
-}
