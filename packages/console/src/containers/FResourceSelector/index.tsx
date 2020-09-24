@@ -15,8 +15,8 @@ import {
 import {AddObjectDepRAction} from '@/models/storageObjectEditor';
 
 interface FResourceSelectorProps {
-  disabledNames?: string[];
-  showRemoveNames?: string[];
+  disabledIDsOrNames?: string[];
+  showRemoveIDsOrNames?: string[];
 
   onSelect?({id, name}: { id: string; name: string; }): void;
 
@@ -33,7 +33,7 @@ const selectOptions: { text?: string, value: string }[] = [
 ];
 
 function FResourceSelector({
-                             disabledNames, showRemoveNames, onSelect, onDelete,
+                             disabledIDsOrNames, showRemoveIDsOrNames, onSelect, onDelete,
                              dispatch, selector
                            }: FResourceSelectorProps) {
   React.useEffect(() => {
@@ -75,6 +75,8 @@ function FResourceSelector({
       />
     </div>
     <FResourceList
+      showRemoveIDsOrNames={showRemoveIDsOrNames}
+      disabledIDsOrNames={disabledIDsOrNames}
       resourceObjects={selector.resourceList.map((r) => ({
         id: r.resourceId,
         title: r.resourceName,

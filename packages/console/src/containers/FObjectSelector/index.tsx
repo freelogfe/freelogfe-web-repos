@@ -14,8 +14,8 @@ import {
 import {AddObjectDepOAction} from "@/models/storageObjectEditor";
 
 interface FObjectSelectorProps {
-  disabledNames?: string[];
-  showRemoveNames?: string[];
+  disabledIDsOrNames?: string[];
+  showRemoveIDsOrNames?: string[];
 
   onSelect?({id, name}: { id: string; name: string; }): void;
 
@@ -31,7 +31,7 @@ const selectOptions: { text?: string, value: string }[] = [
 ];
 
 function FObjectSelector({
-                           disabledNames, showRemoveNames, onSelect, onDelete,
+                           disabledIDsOrNames, showRemoveIDsOrNames, onSelect, onDelete,
                            dispatch, selector, storageHomePage
                          }: FObjectSelectorProps) {
 
@@ -80,6 +80,8 @@ function FObjectSelector({
       />
     </div>
     <FResourceList
+      disabledIDsOrNames={disabledIDsOrNames}
+      showRemoveIDsOrNames={showRemoveIDsOrNames}
       resourceObjects={selector.objectList.map((o) => ({
         id: o.objectId,
         resourceType: o.resourceType,

@@ -116,13 +116,11 @@ const Model: StorageObjectDepSelectorModelType = {
         isSelf: selector.rSelect === '2' ? 1 : 0,
       };
 
-
       if (selector.rSelect === '3') {
         const {data} = yield call(resourceList, params);
         console.log(data, 'data3209dj');
         return;
       }
-
 
       const {data} = yield call(list, params);
       // console.log(data, '#EWDS90');
