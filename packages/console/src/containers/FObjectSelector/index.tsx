@@ -1,17 +1,17 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FDropdown from "@/components/FDropdown";
-import FInput from "@/components/FInput";
-import FResourceList from "@/components/FResourceList";
-import {connect, Dispatch} from "dva";
+import FDropdown from '@/components/FDropdown';
+import FInput from '@/components/FInput';
+import FResourceList from '@/components/FResourceList';
+import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from '@/models/connect';
 import {DownOutlined} from '@ant-design/icons';
 import {
   FetchObjectsAction,
   OnChangeOConditionsAction,
-} from "@/models/storageObjectDepSelector";
-import {AddObjectDepOAction} from "@/models/storageObjectEditor";
+} from '@/models/storageObjectDepSelector';
+import {AddObjectDepOAction} from '@/models/storageObjectEditor';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -26,7 +26,7 @@ interface FObjectSelectorProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-const selectOptions: { text?: string, value: string }[] = [
+const defaultSelectOptions: { text?: string, value: string }[] = [
   {text: '全部Bucket', value: '_all'},
 ];
 
@@ -43,17 +43,20 @@ function FObjectSelector({
     }
   }, []);
 
+  const selectOptions = [
+    ...defaultSelectOptions,
+    ...storageHomePage.bucketList.map((b) => ({
+      value: b.bucketName,
+      text: b.bucketName,
+    })),
+  ];
+
   return (<>
     <div className={styles.filter}>
       <FDropdown
-        options={[
-          ...selectOptions,
-          ...storageHomePage.bucketList.map((b) => ({
-            value: b.bucketName,
-            text: b.bucketName,
-          })),
-        ]}
+        options={selectOptions}
         onChange={(value) => {
+          console.log(value, 'valuevalue23rfsd');
           dispatch<OnChangeOConditionsAction>({
             type: 'storageObjectDepSelector/onChangeOConditions',
             payload: {

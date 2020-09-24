@@ -47,7 +47,7 @@ export interface FetchResourcesAction extends AnyAction {
 }
 
 export interface FetchObjectsAction extends AnyAction {
-  type: 'storageObjectDepSelector/fetchObjects';
+  type: 'storageObjectDepSelector/fetchObjects' | 'fetchObjects';
 }
 
 export interface OnChangeRConditionsAction extends AnyAction {
@@ -146,7 +146,10 @@ const Model: StorageObjectDepSelectorModelType = {
         storageObjectDepSelector,
       }));
       const params: ObjectListParamsType = {
-        bucketName: '_all',
+        bucketName: selector.oSelect,
+        keywords: selector.oInput,
+        page: selector.oPageCurrent,
+        pageSize: selector.oPageSize,
       };
       const {data} = yield call(objectList, params);
       // console.log(data, 'datadata322');
@@ -209,8 +212,8 @@ const Model: StorageObjectDepSelectorModelType = {
         });
       }
 
-      yield put<FetchResourcesAction>({
-        type: 'fetchResources',
+      yield put<FetchObjectsAction>({
+        type: 'fetchObjects',
       });
     },
   },

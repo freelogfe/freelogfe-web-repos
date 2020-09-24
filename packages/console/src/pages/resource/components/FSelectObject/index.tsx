@@ -11,6 +11,7 @@ import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, uploadFile} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
+import FObjectSelector from "@/containers/FObjectSelector";
 
 const errorTexts = {
   duplicated: i18nMessage('resource_exist'),
@@ -137,8 +138,10 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
       width={820}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
-      <Storage
-        onSelect={onSelect}
+      {/*<Storage*/}
+      {/*  onSelect={onSelect}*/}
+      {/*/>*/}
+      <FObjectSelector
       />
     </Drawer>
   </div>);
