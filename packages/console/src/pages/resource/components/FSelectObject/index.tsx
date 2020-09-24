@@ -142,6 +142,8 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
       {/*  onSelect={onSelect}*/}
       {/*/>*/}
       <FObjectSelector
+        onSelect={(value) => console.log(value, '32dsf8ioj')}
+        onDelete={(value) => console.log(value, '32dsfewc8ioj')}
       />
     </Drawer>
   </div>);
@@ -159,14 +161,7 @@ function getSHA1Hash(file: File): Promise<string> {
       const wordArray = CryptoJS.lib.WordArray.create(reader.result);
       const hash = CryptoJS.SHA1(wordArray).toString();
       resolve(hash);
-
-      // const sha1sum = crypto.createHash('sha1');
-      // sha1sum.update(chunk)
-      // console.log(sha1sum.digest('hex'), 'sha1sum.digest(\'hex\')');
-      // resolve(sha1sum.digest('hex'));
-
     };
-    // reader.readAsBinaryString(file);
     reader.readAsArrayBuffer(file);
   });
 }

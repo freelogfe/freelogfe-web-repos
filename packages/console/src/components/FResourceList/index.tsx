@@ -64,18 +64,16 @@ function FResourceList({
           />
         </div>
         {
-          // i.buttonStatus !== 'remove' ?
           (!showRemoveIDsOrNames?.includes(i.title) && !showRemoveIDsOrNames?.includes(i.id))
             ? (<FNormalButton
               theme="weaken"
               onClick={() => onSelect && onSelect(i)}
-              // disabled={i.buttonStatus === 'disabled'}
               disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
             >选择</FNormalButton>)
             : (<FNormalButton
               theme="delete2"
               onClick={() => onDelete && onDelete(i)}
-              // disabled={i.buttonStatus === 'disabled'}
+              disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
             >移除</FNormalButton>)
         }
       </div>

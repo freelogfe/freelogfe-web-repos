@@ -4,7 +4,6 @@ import styles from './index.less';
 import FDropdown from '@/components/FDropdown';
 import FInput from '@/components/FInput';
 import FResourceList from '@/components/FResourceList';
-import {Tabs} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState} from '@/models/connect';
 import {DownOutlined} from '@ant-design/icons';
@@ -12,7 +11,6 @@ import {
   FetchResourcesAction,
   OnChangeRConditionsAction
 } from '@/models/storageObjectDepSelector';
-import {AddObjectDepRAction} from '@/models/storageObjectEditor';
 
 interface FResourceSelectorProps {
   disabledIDsOrNames?: string[];
