@@ -14,8 +14,10 @@ export interface FResourceListProps {
     resourceType: string;
     time: string;
     status: 0 | 1;
-    buttonStatus?: 'select' | 'disabled' | 'remove';
+    // buttonStatus?: 'select' | 'disabled' | 'remove';
   }[];
+  disabledNames?: string[];
+  showRemoveNames?: string[];
 
   onLoadMord?(): void;
 
@@ -26,6 +28,7 @@ export interface FResourceListProps {
 
 function FResourceList({
                          resourceObjects, loading, stillMore,
+                         disabledNames = [], showRemoveNames = [],
                          onLoadMord, onSelect, onDelete,
                        }: FResourceListProps) {
   return (<List
@@ -61,10 +64,12 @@ function FResourceList({
           />
         </div>
         {
-          i.buttonStatus !== 'remove' ? (<FNormalButton
+          // i.buttonStatus !== 'remove' ?
+          !showRemoveNames?.includes(i.title) ? (<FNormalButton
               theme="weaken"
               onClick={() => onSelect && onSelect(i)}
-              disabled={i.buttonStatus === 'disabled'}
+              // disabled={i.buttonStatus === 'disabled'}
+              disabled={disabledNames?.includes(i.title)}
             >选择</FNormalButton>)
             : (<FNormalButton
               theme="delete2"

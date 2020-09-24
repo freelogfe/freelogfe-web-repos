@@ -210,6 +210,7 @@ const Model: StorageObjectEditorModelType = {
       yield call(updateObject, params);
     },
     * addObjectDepR({payload}: AddObjectDepRAction, {call, put, select}: EffectsCommandMap) {
+
       const params: InfoParamsType = {
         resourceIdOrName: payload,
       };

@@ -66,7 +66,7 @@ export interface InfoParamsType {
 }
 
 export function info({resourceIdOrName, ...params}: InfoParamsType) {
-  return request.get(`/v2/resources/${resourceIdOrName}`, {
+  return request.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
     params: params,
   });
 }
