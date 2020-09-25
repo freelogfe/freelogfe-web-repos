@@ -23,6 +23,8 @@ export interface StorageObjectDepSelectorModelState {
   rSelect: '1' | '2' | '3';
   rInput: string;
 
+  visibleOResourceType: string;
+  isLoadingTypelessO: 0 | 1;
   objectList: {
     objectId: string;
     bucketName: string;
@@ -38,7 +40,7 @@ export interface StorageObjectDepSelectorModelState {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'storageObjectDepSelector/change';
   payload: Partial<StorageObjectDepSelectorModelState>;
 }
 
@@ -97,6 +99,8 @@ const Model: StorageObjectDepSelectorModelType = {
     rSelect: '1',
     rInput: '',
 
+    visibleOResourceType: '',
+    isLoadingTypelessO: 1,
     objectList: [],
     oTotal: -1,
     oPageSize: 20,
@@ -147,6 +151,8 @@ const Model: StorageObjectDepSelectorModelType = {
       }));
       const params: ObjectListParamsType = {
         bucketName: selector.oSelect,
+        resourceType: selector.visibleOResourceType || undefined,
+        isLoadingTypeless: selector.isLoadingTypelessO,
         keywords: selector.oInput,
         page: selector.oPageCurrent,
         pageSize: selector.oPageSize,

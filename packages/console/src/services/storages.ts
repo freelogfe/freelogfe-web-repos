@@ -51,7 +51,7 @@ export function deleteBuckets(params: DeleteBucketsParamsType) {
 export interface ObjectListParamsType {
   bucketName: string;
   resourceType?: string;
-  isLoadingTypeless?: boolean;
+  isLoadingTypeless?: 0 | 1;
   keywords?: string;
   projection?: string;
   page?: number;

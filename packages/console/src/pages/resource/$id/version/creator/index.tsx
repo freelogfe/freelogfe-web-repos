@@ -12,16 +12,16 @@ import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from "@/models/connect";
+import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction,
   CreateVersionAction, ImportPreVersionAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
-import {withRouter} from "umi";
-import {i18nMessage} from "@/utils/i18n";
-import RouterTypes from "umi/routerTypes";
+import {withRouter} from 'umi';
+import {i18nMessage} from '@/utils/i18n';
+import RouterTypes from 'umi/routerTypes';
 
 interface VersionCreatorProps {
   dispatch: Dispatch;

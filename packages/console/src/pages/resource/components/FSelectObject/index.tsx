@@ -7,7 +7,7 @@ import {LoadingOutlined} from '@ant-design/icons';
 import FUpload from "@/components/FUpload";
 import * as CryptoJS from 'crypto-js';
 
-import Storage, {ResourceObject} from './Storage';
+// import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, uploadFile} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
@@ -18,6 +18,15 @@ const errorTexts = {
   size: i18nMessage('limit_on_file_size'),
   resourceType: i18nMessage('file_format_incorrect'),
 };
+
+export interface ResourceObject {
+  readonly id: string;
+  readonly name: string;
+  readonly size: number;
+  readonly path: string;
+  readonly type: string;
+  readonly time: string;
+}
 
 export interface FSelectObject {
   readonly resourceType: string;
@@ -142,6 +151,8 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
       {/*  onSelect={onSelect}*/}
       {/*/>*/}
       <FObjectSelector
+        visibleResourceType={resourceType}
+        // isLoadingTypeless={1}
         onSelect={(value) => console.log(value, '32dsf8ioj')}
         onDelete={(value) => console.log(value, '32dsfewc8ioj')}
       />

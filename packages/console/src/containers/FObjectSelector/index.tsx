@@ -8,6 +8,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from '@/models/connect';
 import {DownOutlined} from '@ant-design/icons';
 import {
+  ChangeAction,
   FetchObjectsAction,
   OnChangeOConditionsAction,
 } from '@/models/storageObjectDepSelector';
@@ -16,6 +17,8 @@ import {AddObjectDepOAction} from '@/models/storageObjectEditor';
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
   showRemoveIDsOrNames?: string[];
+  visibleResourceType?: string;
+  isLoadingTypeless?: 0 | 1;
 
   onSelect?({id, name}: { id: string; name: string; }): void;
 
@@ -31,17 +34,42 @@ const defaultSelectOptions: { text?: string, value: string }[] = [
 ];
 
 function FObjectSelector({
-                           disabledIDsOrNames, showRemoveIDsOrNames, onSelect, onDelete,
+                           disabledIDsOrNames, showRemoveIDsOrNames, visibleResourceType = '', isLoadingTypeless = 1, onSelect, onDelete,
                            dispatch, selector, storageHomePage
                          }: FObjectSelectorProps) {
 
   React.useEffect(() => {
+    // console.log(visibleResourceType, 'visibleResourceTypevisibleResourceType');
+    // console.log('asfdsf9898798uoiu');
     if (selector.oTotal === -1) {
+      dispatch<ChangeAction>({
+        type: 'storageObjectDepSelector/change',
+        payload: {
+          visibleOResourceType: visibleResourceType,
+          isLoadingTypelessO: isLoadingTypeless,
+        },
+      });
       dispatch<FetchObjectsAction>({
         type: 'storageObjectDepSelector/fetchObjects',
       });
     }
   }, []);
+
+  React.useEffect(() => {
+    if (selector.oTotal === -1) {
+      return;
+    }
+    dispatch<ChangeAction>({
+      type: 'storageObjectDepSelector/change',
+      payload: {
+        visibleOResourceType: visibleResourceType,
+        isLoadingTypelessO: isLoadingTypeless,
+      },
+    });
+    dispatch<FetchObjectsAction>({
+      type: 'storageObjectDepSelector/fetchObjects',
+    });
+  }, [isLoadingTypeless, visibleResourceType]);
 
   const selectOptions = [
     ...defaultSelectOptions,
