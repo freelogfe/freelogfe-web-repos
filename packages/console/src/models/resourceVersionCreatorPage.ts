@@ -25,13 +25,14 @@ import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import {contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
+import {batchObjectList, BatchObjectListParamsType} from "@/services/storages";
 
 export type DepResources = Readonly<{
   id: string;
   title: string;
   resourceType: string;
-  status: 0 | 1 | 2;
-  version: Readonly<{
+  status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/;
+  version?: Readonly<{
     isCustom: boolean;
     select: string;
     allowUpdate: boolean;
@@ -379,44 +380,77 @@ const Model: ResourceVersionCreatorModelType = {
     * objectAddDeps({payload}: ObjectAddDepsAction, {call, put, select}: EffectsCommandMap) {
       // console.log(payload, 'payloadw3890jsdlk');
       const rNames: string[] = payload.filter((r) => r.type === 'resource').map((r) => r.name);
-      // const oNames: string[] = payload.filter((o) => o.type === 'object').map((o) => o.name);
       // console.log(rNames, oNames, '29308jdslkfj');
 
-      const params: BatchInfoParamsType = {
-        resourceNames: rNames.join(','),
-      };
+      if (rNames.length > 0) {
+        const params: BatchInfoParamsType = {
+          resourceNames: rNames.join(','),
+        };
 
-      const {data} = yield call(batchInfo, params);
-      console.log(data, '093jkldsajflksd');
-      for (const r of data) {
-        const payload = [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)];
+        const {data} = yield call(batchInfo, params);
+        // console.log(data, '093jkldsajflksd');
+        for (const r of data) {
+          const payload = [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)];
 
-        const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-          resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-          resourceInfo: resourceInfo.info,
-          dependencies: resourceVersionCreatorPage.dependencies,
+          const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+            resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
+            resourceInfo: resourceInfo.info,
+            dependencies: resourceVersionCreatorPage.dependencies,
+          }));
+
+          const params: handleAddADepByIDDateParamsType = {
+            payload: payload,
+            resourceInfo: resourceInfo,
+            dependencies: dependencies,
+          };
+          const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              depRelationship: [
+                relationship,
+                ...resourceDepRelationship,
+              ],
+              dependencies: [
+                ...dependencies,
+                ...allDeps,
+              ],
+            }
+          });
+        }
+      }
+
+      const oNames: string[] = payload.filter((o) => o.type === 'object').map((o) => o.name);
+
+      if (oNames.length > 0) {
+        const params: BatchObjectListParamsType = {
+          fullObjectNames: oNames.join(',')
+        };
+
+        const {data: data} = yield call(batchObjectList, params);
+        console.log(data, 'data123rw90dsjo');
+        const objs = data.map((o: any) => ({
+          id: o.objectId,
+          title: o.bucketName + '/' + o.objectName,
+          resourceType: o.resourceType,
+          status: 3,
         }));
 
-        const params: handleAddADepByIDDateParamsType = {
-          payload: payload,
-          resourceInfo: resourceInfo,
-          dependencies: dependencies,
-        };
-        const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            depRelationship: [
-              relationship,
-              ...resourceDepRelationship,
-            ],
-            dependencies: [
-              ...dependencies,
-              ...allDeps,
-            ],
-          }
-        });
+        // yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {
+        //     depRelationship: [
+        //       relationship,
+        //       ...resourceDepRelationship,
+        //     ],
+        //     dependencies: [
+        //       ...dependencies,
+        //       ...allDeps,
+        //     ],
+        //   }
+        // });
       }
+
     },
   },
 
