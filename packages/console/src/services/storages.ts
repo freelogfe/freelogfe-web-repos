@@ -88,7 +88,7 @@ export interface ObjectDetailsParamsType2 {
 
 export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsParamsType2) {
   if ((params as ObjectDetailsParamsType2).objectIdOrName) {
-    return request.get(`/v1/storages/objects/${(params as ObjectDetailsParamsType2).objectIdOrName}`);
+    return request.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
   }
   return request.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
 }

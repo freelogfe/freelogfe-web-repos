@@ -28,19 +28,25 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
           {/*<FContentText type="additional1" text={'10 M'}/>*/}
           <div style={{display: "flex", flexShrink: 0}}>{humanizeSize(resourceObject.size)}</div>
           <div style={{display: "flex", flexShrink: 0, width: 30}}/>
-          {progress === null
-            ? <FContentText className={styles.infoSize} type="additional1" text={resourceObject.path || '本地上传'}/>
-            : (<>
-              <span style={{paddingRight: 10}}>{progress}%</span>
-              <Progress
-                className={styles.Progress}
-                width={100}
-                showInfo={false}
-                percent={progress}
-                size="small"
-                trailColor="#EBEBEB"
+          {
+            progress === null
+              ? <FContentText
+                className={styles.infoSize}
+                type="additional1"
+                text={resourceObject.path ? `存储空间/${resourceObject.path}` : '本地上传'}
               />
-            </>)}
+              : (<>
+                <span style={{paddingRight: 10}}>{progress}%</span>
+                <Progress
+                  className={styles.Progress}
+                  width={100}
+                  showInfo={false}
+                  percent={progress}
+                  size="small"
+                  trailColor="#EBEBEB"
+                />
+              </>)
+          }
         </div>
       </div>
     </div>

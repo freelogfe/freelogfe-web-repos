@@ -9,7 +9,7 @@ import * as CryptoJS from 'crypto-js';
 
 // import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
-import {fileIsExist, uploadFile} from "@/services/storages";
+import {fileIsExist, objectDetails, ObjectDetailsParamsType2, uploadFile} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
 import FObjectSelector from "@/containers/FObjectSelector";
 
@@ -44,9 +44,23 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
   const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
-  function onSelect(resource: ResourceObject) {
-    setModalVisible(false);
-    return onChange && onChange(resource);
+  async function onSelect(obj: { id: string; name: string; }) {
+    // setModalVisible(false);
+    // return onChange && onChange(resource);
+    console.log(obj, 'obj903iodslk');
+    const params: ObjectDetailsParamsType2 = {
+      objectIdOrName: obj.id,
+    };
+    const {data} = await objectDetails(params);
+    console.log(data, '@#RCXFW');
+    onChange && onChange({
+      id: data.sha1,
+      name: data.objectName,
+      size: data.systemProperty.fileSize,
+      path: data.bucketName,
+      type: resourceType,
+      time: '',
+    });
   }
 
   async function beforeUpload(file: RcFile) {
@@ -153,7 +167,8 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
       <FObjectSelector
         visibleResourceType={resourceType}
         // isLoadingTypeless={1}
-        onSelect={(value) => console.log(value, '32dsf8ioj')}
+        // onSelect={(value) => console.log(value, '32dsf8ioj')}
+        onSelect={onSelect}
         onDelete={(value) => console.log(value, '32dsfewc8ioj')}
       />
     </Drawer>
