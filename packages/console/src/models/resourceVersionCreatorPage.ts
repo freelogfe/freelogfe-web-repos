@@ -32,12 +32,12 @@ export type DepResources = Readonly<{
   title: string;
   resourceType: string;
   status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/;
-  version?: Readonly<{
+  version: Readonly<{
     isCustom: boolean;
     select: string;
     allowUpdate: boolean;
     input: string;
-  }>;
+  }> | null;
   versions: string[];
   upthrow: boolean;
   upthrowDisabled: boolean;
@@ -208,7 +208,7 @@ const Model: ResourceVersionCreatorModelType = {
           const version = dep.version;
           return {
             resourceId: dep.id,
-            versionRange: version.isCustom ? version.input : (version.allowUpdate ? '^' : '') + version.select,
+            versionRange: version?.isCustom ? version?.input : (version?.allowUpdate ? '^' : '') + version?.select,
           }
         }),
         resolveResources: resolveResources,
@@ -382,6 +382,12 @@ const Model: ResourceVersionCreatorModelType = {
       const rNames: string[] = payload.filter((r) => r.type === 'resource').map((r) => r.name);
       // console.log(rNames, oNames, '29308jdslkfj');
 
+      const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
+        resourceInfo: resourceInfo.info,
+        dependencies: resourceVersionCreatorPage.dependencies,
+      }));
+
       if (rNames.length > 0) {
         const params: BatchInfoParamsType = {
           resourceNames: rNames.join(','),
@@ -391,12 +397,6 @@ const Model: ResourceVersionCreatorModelType = {
         // console.log(data, '093jkldsajflksd');
         for (const r of data) {
           const payload = [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)];
-
-          const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-            resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-            resourceInfo: resourceInfo.info,
-            dependencies: resourceVersionCreatorPage.dependencies,
-          }));
 
           const params: handleAddADepByIDDateParamsType = {
             payload: payload,
@@ -428,27 +428,36 @@ const Model: ResourceVersionCreatorModelType = {
         };
 
         const {data: data} = yield call(batchObjectList, params);
-        console.log(data, 'data123rw90dsjo');
-        const objs = data.map((o: any) => ({
+        // console.log(data, 'data123rw90dsjo');
+        const allDeps = data.map((o: any) => ({
           id: o.objectId,
           title: o.bucketName + '/' + o.objectName,
           resourceType: o.resourceType,
           status: 3,
+          version: null,
+          versions: [],
+          upthrow: false,
+          upthrowDisabled: false,
+          enableReuseContracts: [],
+          enabledPolicies: [],
         }));
 
-        // yield put<ChangeAction>({
-        //   type: 'change',
-        //   payload: {
-        //     depRelationship: [
-        //       relationship,
-        //       ...resourceDepRelationship,
-        //     ],
-        //     dependencies: [
-        //       ...dependencies,
-        //       ...allDeps,
-        //     ],
-        //   }
-        // });
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            depRelationship: [
+              ...data.map((o: any) => ({
+                id: o.objectId,
+                children: [],
+              })),
+              ...resourceDepRelationship,
+            ],
+            dependencies: [
+              ...dependencies,
+              ...allDeps,
+            ],
+          }
+        });
       }
 
     },

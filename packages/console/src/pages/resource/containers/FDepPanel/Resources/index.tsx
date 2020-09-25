@@ -81,9 +81,9 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
 
   return <div className={styles.styles}>
     {dataSource?.map((i) => {
-        if (!i?.version) {
-          return null;
-        }
+        // if (!i?.version) {
+        //   return null;
+        // }
         return (<div key={i.id}>
           <div
             onClick={() => onChangeResourcesActivated(i.id)}
@@ -95,11 +95,11 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
               </div>
               <div style={{height: 9}}/>
               <FContentText type="additional2">
-                <div>{i.resourceType} | {i.versions.length === 0 ? <span
+                <div>{i.resourceType} | {i.versions?.length === 0 ? <span
                     style={{paddingRight: 5}}>暂无版本</span>
                   : <>
                     <span
-                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version.select)}</span>
+                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version?.select)}</span>
                     <VersionPopover
                       versions={i.versions}
                       onChange={(version) => onChangeVersion(version, i.id)}
@@ -179,7 +179,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
           <FContentText text={i.title}/>
           <div style={{height: 5}}/>
           <FContentText type="additional2">
-            <div>{i.resourceType}</div>
+            <div>{i.resourceType || ''}</div>
           </FContentText>
           <>
             <div style={{height: 5}}/>
