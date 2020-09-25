@@ -116,13 +116,18 @@ export interface ImportPreVersionAction extends AnyAction {
 }
 
 export interface AddADepByIDAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/addADepByIDAction';
+  type: 'resourceVersionCreatorPage/addADepByIDAction' | 'addADepByIDAction';
   payload: string[];
 }
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
   payload: Partial<ResourceVersionCreatorPageModelState>;
+}
+
+export interface ObjectAddDepsAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/objectAddDeps'
+  payload: { name: string; type: 'resource' | 'object'; versionRange: string; }[];
 }
 
 export interface ResourceVersionCreatorModelType {
@@ -134,6 +139,7 @@ export interface ResourceVersionCreatorModelType {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     addADepByIDAction: (action: AddADepByIDAction, effects: EffectsCommandMap) => void;
+    objectAddDeps: (action: ObjectAddDepsAction, effects: EffectsCommandMap) => void;
     // dddDependenciesForDepRelation: (action: AddDependenciesForDepRelationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -363,6 +369,26 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
     },
+    * objectAddDeps({payload}: ObjectAddDepsAction, {call, put}: EffectsCommandMap) {
+      // console.log(payload, 'payloadw3890jsdlk');
+      const rNames: string[] = payload.filter((r) => r.type === 'resource').map((r) => r.name);
+      // const oNames: string[] = payload.filter((o) => o.type === 'object').map((o) => o.name);
+      // console.log(rNames, oNames, '29308jdslkfj');
+
+      const params: BatchInfoParamsType = {
+        resourceNames: rNames.join(','),
+      };
+
+      const {data} = yield call(batchInfo, params);
+      console.log(data, '093jkldsajflksd');
+      // for (const r of data) {
+      //   yield put<AddADepByIDAction>({
+      //     type: 'addADepByIDAction',
+      //     payload: [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)]
+      //   });
+      //   yield call(sleep, 300);
+      // }
+    },
   },
 
   reducers: {
@@ -553,4 +579,10 @@ async function dddDependency(resourceId: string, resourceInfo: any, allBaseUpthr
   };
 
   return dependency;
+}
+
+function sleep(time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  });
 }

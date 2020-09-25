@@ -15,7 +15,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction,
-  CreateVersionAction, ImportPreVersionAction,
+  CreateVersionAction, ImportPreVersionAction, ObjectAddDepsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -62,7 +62,7 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
     dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
-    })
+    });
   }
 
   return (<FInfoLayout>
@@ -85,7 +85,16 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
           <FSelectObject
             resourceType={resource.info?.resourceType || ''}
             resourceObject={version.resourceObject}
-            onChange={(value) => onChange({resourceObject: value, resourceObjectErrorText: ''})}
+            onChange={(value, deps) => {
+              onChange({resourceObject: value, resourceObjectErrorText: ''});
+              if (!deps || deps.length === 0) {
+                return;
+              }
+              dispatch<ObjectAddDepsAction>({
+                type: 'resourceVersionCreatorPage/objectAddDeps',
+                payload: deps,
+              })
+            }}
             errorText={version.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
           />

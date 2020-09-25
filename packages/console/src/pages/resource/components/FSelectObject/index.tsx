@@ -31,7 +31,7 @@ export interface ResourceObject {
 export interface FSelectObject {
   readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
-  readonly onChange?: (file: FSelectObject['resourceObject']) => void;
+  readonly onChange?: (file: FSelectObject['resourceObject'], deps?: { name: string; type: 'resource' | 'object'; versionRange: string; }[]) => void;
   errorText?: string;
 
   onChangeErrorText?(text: string): void;
@@ -44,15 +44,15 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
   const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
-  async function onSelect(obj: { id: string; name: string; }) {
-    // setModalVisible(false);
+  async function onSelectObject(obj: { id: string; name: string; }) {
+    setModalVisible(false);
     // return onChange && onChange(resource);
-    console.log(obj, 'obj903iodslk');
+    // console.log(obj, 'obj903iodslk');
     const params: ObjectDetailsParamsType2 = {
       objectIdOrName: obj.id,
     };
     const {data} = await objectDetails(params);
-    console.log(data, '@#RCXFW');
+    // console.log(data, '@#RCXFW');
     onChange && onChange({
       id: data.sha1,
       name: data.objectName,
@@ -60,7 +60,7 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
       path: data.bucketName,
       type: resourceType,
       time: '',
-    });
+    }, data.dependencies);
   }
 
   async function beforeUpload(file: RcFile) {
@@ -168,8 +168,10 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
         visibleResourceType={resourceType}
         // isLoadingTypeless={1}
         // onSelect={(value) => console.log(value, '32dsf8ioj')}
-        onSelect={onSelect}
-        onDelete={(value) => console.log(value, '32dsfewc8ioj')}
+        showRemoveIDsOrNames={[`${resourceObject?.path}/${resourceObject?.name}`]}
+        onSelect={onSelectObject}
+        // onDelete={(value) => console.log(value, '32dsfewc8ioj')}
+        onDelete={() => onChange && onChange(null)}
       />
     </Drawer>
   </div>);
