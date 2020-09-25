@@ -334,11 +334,11 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * addADepByIDAction({payload}: AddADepByIDAction, {put, call, select}: EffectsCommandMap) {
       // console.log(payload, 'PPPPLLLLLL');
-      const [id, ...ids] = payload;
-      const relationship = {
-        id: id,
-        children: ids.map((i: string) => ({id: i})),
-      };
+      // const [id, ...ids] = payload;
+      // const relationship = {
+      //   id: id,
+      //   children: ids.map((i: string) => ({id: i})),
+      // };
       // console.log(relationship, 'relationship');
       const {resourceDepRelationship, resourceInfo, dependencies, allExistsIds} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
@@ -346,14 +346,21 @@ const Model: ResourceVersionCreatorModelType = {
         dependencies: resourceVersionCreatorPage.dependencies,
         allExistsIds: resourceVersionCreatorPage.dependencies.map((r: any) => r.resourceId),
       }));
-      const handleDepResourcePrams: HandleDepResourceParams = {
+
+      const params: handleAddADepByIDDateParamsType = {
+        payload: payload,
         resourceInfo: resourceInfo,
-        allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
-        allNeedHandledIds: payload,
-        allExistsIds: allExistsIds,
+        dependencies: dependencies,
       };
-      // console.log(handleDepResourcePrams, 'handleDepResourcePrams34dspoi;j');
-      const allDeps = yield call(handleDepResource, handleDepResourcePrams);
+      const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
+      // const handleDepResourcePrams: HandleDepResourceParams = {
+      //   resourceInfo: resourceInfo,
+      //   allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
+      //   allNeedHandledIds: payload,
+      //   allExistsIds: allExistsIds,
+      // };
+      // // console.log(handleDepResourcePrams, 'handleDepResourcePrams34dspoi;j');
+      // const allDeps = yield call(handleDepResource, handleDepResourcePrams);
       // console.log(allDeps, '开始change');
       yield put<ChangeAction>({
         type: 'change',
@@ -369,7 +376,7 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
     },
-    * objectAddDeps({payload}: ObjectAddDepsAction, {call, put}: EffectsCommandMap) {
+    * objectAddDeps({payload}: ObjectAddDepsAction, {call, put, select}: EffectsCommandMap) {
       // console.log(payload, 'payloadw3890jsdlk');
       const rNames: string[] = payload.filter((r) => r.type === 'resource').map((r) => r.name);
       // const oNames: string[] = payload.filter((o) => o.type === 'object').map((o) => o.name);
@@ -381,13 +388,35 @@ const Model: ResourceVersionCreatorModelType = {
 
       const {data} = yield call(batchInfo, params);
       console.log(data, '093jkldsajflksd');
-      // for (const r of data) {
-      //   yield put<AddADepByIDAction>({
-      //     type: 'addADepByIDAction',
-      //     payload: [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)]
-      //   });
-      //   yield call(sleep, 300);
-      // }
+      for (const r of data) {
+        const payload = [r.resourceId, ...r.baseUpcastResources.map((rs: any) => rs.resourceId)];
+
+        const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+          resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
+          resourceInfo: resourceInfo.info,
+          dependencies: resourceVersionCreatorPage.dependencies,
+        }));
+
+        const params: handleAddADepByIDDateParamsType = {
+          payload: payload,
+          resourceInfo: resourceInfo,
+          dependencies: dependencies,
+        };
+        const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            depRelationship: [
+              relationship,
+              ...resourceDepRelationship,
+            ],
+            dependencies: [
+              ...dependencies,
+              ...allDeps,
+            ],
+          }
+        });
+      }
     },
   },
 
@@ -581,8 +610,50 @@ async function dddDependency(resourceId: string, resourceInfo: any, allBaseUpthr
   return dependency;
 }
 
-function sleep(time: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
+interface handleAddADepByIDDateParamsType {
+  payload: string[];
+  resourceInfo: any;
+  dependencies: any;
+}
+
+async function handleAddADepByIDDate({payload, resourceInfo, dependencies}: handleAddADepByIDDateParamsType) {
+// console.log(payload, 'PPPPLLLLLL');
+  const [id, ...ids] = payload;
+  const relationship = {
+    id: id,
+    children: ids.map((i: string) => ({id: i})),
+  };
+  // console.log(relationship, 'relationship');
+  // const {resourceDepRelationship, resourceInfo, dependencies, allExistsIds} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+  //   resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
+  //   resourceInfo: resourceInfo.info,
+  //   dependencies: dependencies,
+  //   allExistsIds: dependencies.map((r: any) => r.resourceId),
+  // }));
+  const handleDepResourcePrams: HandleDepResourceParams = {
+    resourceInfo: resourceInfo,
+    allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
+    allNeedHandledIds: payload,
+    allExistsIds: dependencies.map((r: any) => r.resourceId),
+  };
+  // console.log(handleDepResourcePrams, 'handleDepResourcePrams34dspoi;j');
+  const allDeps = await handleDepResource(handleDepResourcePrams);
+  // console.log(allDeps, '开始change');
+  return {
+    relationship,
+    allDeps,
+  };
+  // yield put<ChangeAction>({
+  //   type: 'change',
+  //   payload: {
+  //     depRelationship: [
+  //       relationship,
+  //       ...resourceDepRelationship,
+  //     ],
+  //     dependencies: [
+  //       ...dependencies,
+  //       ...allDeps,
+  //     ],
+  //   }
+  // });
 }
