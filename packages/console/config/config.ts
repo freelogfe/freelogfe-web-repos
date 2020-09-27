@@ -23,7 +23,16 @@ const config: IConfig | any = {
       // meta: {structure: 'left-right'},
       routes: [
         {exact: true, path: '.', redirect: '/market'},
-        {exact: true, path: 'market', component: '../pages/market', title: '市场资源'},
+        {
+          exact: false,
+          path: 'market',
+          // component: '../pages/market',
+          // title: '市场资源',
+          routes: [
+            {exact: true, path: ':id', component: '../pages/market/$id', title: '资源详情'},
+            {exact: true, path: '.', component: '../pages/market', title: '市场资源'},
+          ],
+        },
         {exact: true, path: 'example', component: '../pages/market', title: '示例节点'},
         {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
         {
