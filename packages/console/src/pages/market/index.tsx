@@ -8,6 +8,7 @@ import Examples from "@/pages/market/Examples";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from "dva";
 import {ChangeAction} from "@/models/global";
+import FLayoutFooter from "@/layouts/FLayoutFooter";
 
 const navs = [
   {
@@ -52,7 +53,7 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
     }
   }
 
-  return (
+  return (<>
     <FCenterLayout>
       <FAffixTabs
         options={navs}
@@ -63,7 +64,8 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
       {tabValue === '1' && <Resources/>}
       {tabValue === '2' && <Examples/>}
     </FCenterLayout>
-  );
+    <FLayoutFooter/>
+  </>);
 }
 
 

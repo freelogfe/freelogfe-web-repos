@@ -10,5 +10,6 @@ interface FCenterLayoutProps {
 export default function ({children}: FCenterLayoutProps) {
   return (<Layout.Content className={styles.Content}>
     <div>{children}</div>
+    <div style={{height: 100}}/>
   </Layout.Content>)
 }

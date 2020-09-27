@@ -196,11 +196,9 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
 
       {children}
 
-      <div style={{height: 100}}/>
-
-      {
-        global.route?.meta?.footer && (<FLayoutFooter/>)
-      }
+      {/*{*/}
+      {/*  global.route?.meta?.footer && (<FLayoutFooter/>)*/}
+      {/*}*/}
 
     </Layout>
   );
