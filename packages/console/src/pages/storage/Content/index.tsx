@@ -14,6 +14,7 @@ import FPagination from '@/components/FPagination';
 import {DeleteObjectAction, OnChangePaginationAction} from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
+import {FDelete} from "@/components/FIcons";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -86,7 +87,7 @@ function Content({storage, dispatch}: ContentProps) {
             })}
             className={styles.Delete}
           >
-            <DeleteOutlined/>
+            <FDelete/>
           </FTextButton>
         </Space>);
       },

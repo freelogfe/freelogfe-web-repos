@@ -14,7 +14,7 @@ import {
   OnChangeActivatedBucketAction
 } from '@/models/storageHomePage';
 import {humanizeSize} from '@/utils/format';
-import {Delete} from "@/components/FIcons";
+import {FDelete} from "@/components/FIcons";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -67,7 +67,7 @@ function Sider({storage, dispatch}: SiderProps) {
               }}
             >
               <span>{b.bucketName}</span>
-              {storage.activatedBucket === b.bucketName && <Delete onClick={() => {
+              {storage.activatedBucket === b.bucketName && <FDelete onClick={() => {
                 dispatch<DeleteBucketByNameAction>({
                   type: 'storageHomePage/deleteBucketByName',
                   payload: b.bucketName,

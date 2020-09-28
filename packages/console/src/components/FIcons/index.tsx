@@ -1,6 +1,10 @@
 import * as React from 'react';
-import Delete from './Delete';
+import FDelete from './FDelete';
+import FFavorite from './FFavorite';
+import FDown from './FDown';
 
 export {
-  Delete,
+  FDelete,
+  FFavorite,
+  FDown,
 }

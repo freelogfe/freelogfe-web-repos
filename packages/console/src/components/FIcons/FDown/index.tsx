@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import {DeleteOutlined} from '@ant-design/icons';
+import {DownOutlined} from '@ant-design/icons';
 import {CSSProperties, ReactElement, ReactEventHandler, ReactPropTypes} from "react";
 
-interface DeleteProps {
+interface FDownProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function Delete({...props}: DeleteProps) {
-  return (<DeleteOutlined {...props} />);
+function FDown({...props}: FDownProps) {
+  return (<DownOutlined {...props} />);
 }
 
-export default Delete;
+export default FDown;

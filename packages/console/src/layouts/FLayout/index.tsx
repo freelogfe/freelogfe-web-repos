@@ -84,7 +84,7 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/market')) {
+    if (value === '1' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/market') {
       return router.push('/market');
     }
     if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/example')) {
