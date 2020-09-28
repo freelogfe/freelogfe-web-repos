@@ -13,6 +13,7 @@ interface FResourceCardProps {
   className?: string;
   type?: 'resource' | 'favorite' | 'market';
   resource: {
+    id: string;
     cover: string;
     title: string;
     version: string;

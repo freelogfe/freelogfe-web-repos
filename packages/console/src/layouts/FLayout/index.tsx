@@ -119,7 +119,10 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
   }
 
   return (
-    <Layout className={styles.Layout}>
+    <Layout
+      className={styles.Layout}
+      style={{backgroundColor: global.backgroundColor || 'transparent'}}
+    >
       <Layout.Header className={styles.header}>
         <div className={styles.headerLeft}>
           <a

@@ -7,6 +7,7 @@ import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
 import {resourceTypes} from '@/utils/globals';
+import {router} from "umi";
 
 const filters = [{
   value: '-1',
@@ -51,6 +52,10 @@ function Resources({dispatch, market}: ResourcesProps) {
             key={resource.id}
             resource={resource}
             className={styles.FResourceCard}
+            onClick={(resource) => {
+              // console.log(resource, 'resourceq098upioq');
+              return router.push(`/market/${resource.id}`);
+            }}
           />))
       }
 
