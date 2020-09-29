@@ -6,6 +6,10 @@ import {ChangeAction} from '@/models/global';
 import Sign from './Sign';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FSwap} from "@/components/FIcons";
+import Description from "./Description";
+import Property from "./Property";
+import Option from "./Option";
+import Viewport from "@/pages/market/$id/Viewport";
 
 interface ResourceDetailsProps {
   dispatch: Dispatch;
@@ -45,6 +49,14 @@ function ResourceDetails({dispatch}: ResourceDetailsProps) {
           <FSwap/>
         </div>
 
+        <div style={{height: 30}}/>
+        <Description/>
+        <div style={{height: 50}}/>
+        <Property/>
+        <div style={{height: 50}}/>
+        <Option/>
+        <div style={{height: 50}}/>
+        <Viewport/>
       </div>
     </div>
   </FCenterLayout>);
