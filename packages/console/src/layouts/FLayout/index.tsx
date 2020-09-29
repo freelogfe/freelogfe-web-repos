@@ -90,7 +90,6 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
     if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/example')) {
       return router.push('/example');
     }
-
   }
 
   function onClickResource(value: string) {
