@@ -9,7 +9,7 @@ import {FSwap} from "@/components/FIcons";
 import Description from "./Description";
 import Property from "./Property";
 import Option from "./Option";
-import Viewport from "@/pages/market/$id/Viewport";
+import Viewport from "@/pages/market/$id/index/Viewport";
 
 interface ResourceDetailsProps {
   dispatch: Dispatch;

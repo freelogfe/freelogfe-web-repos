@@ -18,7 +18,9 @@ function FCenterLayout({children, global}: FCenterLayoutProps) {
       // backgroundColor: 'white'
     }}
   >
+    {/*<div className={}>*/}
     <div>{children}</div>
+    {/*</div>*/}
     <div style={{height: 100}}/>
   </Layout.Content>)
 }

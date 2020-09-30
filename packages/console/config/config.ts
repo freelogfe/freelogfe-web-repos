@@ -30,10 +30,14 @@ const config: IConfig | any = {
           // title: '市场资源',
           routes: [
             {
-              exact: true,
+              // exact: true,
               path: ':id',
-              component: '../pages/market/$id',
-              title: '资源详情',
+              // component: '../pages/market/$id',
+              // title: '资源详情',
+              routes: [
+                {exact: true, path: 'sign', component: '../pages/market/$id/sign', title: '市场资源'},
+                {exact: true, path: '.', component: '../pages/market/$id/index', title: '市场资源'},
+              ]
             },
             {exact: true, path: '.', component: '../pages/market', title: '市场资源'},
           ],

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import styles from "./index.less";
-import FCopyToClipboard from "@/components/FCopyToClipboard";
-import {FContentText, FTitleText} from "@/components/FText";
-import {FDown, FFavorite} from "@/components/FIcons";
-import {Checkbox, Space} from "antd";
-import {FNormalButton} from "@/components/FButton";
+import styles from './index.less';
+import FCopyToClipboard from '@/components/FCopyToClipboard';
+import {FContentText, FTitleText} from '@/components/FText';
+import {FDown, FFavorite} from '@/components/FIcons';
+import {Checkbox, Space} from 'antd';
+import {FNormalButton} from '@/components/FButton';
 
 function Sign() {
   return (<div className={styles.info}>
