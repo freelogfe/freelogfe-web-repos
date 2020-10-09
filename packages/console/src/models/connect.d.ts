@@ -13,6 +13,7 @@ import {GlobalModelState} from './global';
 import {StorageHomePageModelState} from './storageHomePage';
 import {StorageObjectEditorModelState} from './storageObjectEditor';
 import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
+import {MarketResourcePageState} from './marketResourcePage';
 
 export {
   // RouterHistoriesModelState,
@@ -31,6 +32,7 @@ export {
   StorageHomePageModelState,
   StorageObjectEditorModelState,
   StorageObjectDepSelectorModelState,
+  MarketResourcePageState,
 };
 
 export interface ConnectState {
@@ -50,4 +52,5 @@ export interface ConnectState {
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
   storageObjectDepSelector: StorageObjectDepSelectorModelState;
+  marketResourcePage: MarketResourcePageState;
 }

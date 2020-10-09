@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import FCenterLayout from "@/layouts/FCenterLayout";
-import {FInfo, FSwap} from "@/components/FIcons";
-import FInput from "@/components/FInput";
+import FCenterLayout from '@/layouts/FCenterLayout';
+import {FInfo, FSwap} from '@/components/FIcons';
+import FInput from '@/components/FInput';
 import {Space, Tooltip, Drawer} from 'antd';
 
 function Sign() {
@@ -12,7 +12,7 @@ function Sign() {
       <FTitleText text={'确认签约'}/>
       <div style={{width: 50}}/>
       <div className={styles.headerResource}>
-        <img src={undefined}/>
+        <img alt={''} src={undefined}/>
         <div style={{width: 8}}/>
         <FContentText text={'stefan/Smells like teen spirit'}/>
       </div>
@@ -90,7 +90,7 @@ function Sign() {
     </div>
 
     <Drawer
-      visible={true}
+      visible={false}
       // title={<span style={{fontWeight: 400}}>stefan/Smell like teen spirit</span>}
       title={null}
       width={720}
