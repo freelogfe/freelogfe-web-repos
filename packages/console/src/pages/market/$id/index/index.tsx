@@ -10,12 +10,14 @@ import Description from './Description';
 import Property from './Property';
 import Option from './Option';
 import Viewport from '@/pages/market/$id/index/Viewport';
+import {ConnectState, MarketResourcePageState} from '@/models/connect';
 
 interface ResourceDetailsProps {
   dispatch: Dispatch;
+  marketResourcePage: MarketResourcePageState,
 }
 
-function ResourceDetails({dispatch}: ResourceDetailsProps) {
+function ResourceDetails({dispatch, marketResourcePage}: ResourceDetailsProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -42,9 +44,9 @@ function ResourceDetails({dispatch}: ResourceDetailsProps) {
       <div style={{height: 50}}/>
       <div>
         <div className={styles.versionTitle}>
-          <FTitleText text={'当前版本 10.15.4'}/>
+          <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
           <div style={{width: 15}}/>
-          <FContentText text={'发布时间 2020/05/19'} type="additional1"/>
+          <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
           <div style={{width: 20}}/>
           <FSwap/>
         </div>
@@ -63,4 +65,4 @@ function ResourceDetails({dispatch}: ResourceDetailsProps) {
 }
 
 
-export default connect()(ResourceDetails);
+export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(ResourceDetails);
