@@ -60,7 +60,7 @@ export interface MarketResourcePageState {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'marketResourcePage/change';
   payload: Partial<MarketResourcePageState>;
 }
 
@@ -161,8 +161,8 @@ const Model: MarketResourcePageModelType = {
       version: '1.1.0',
       releaseTime: '2020/05/19',
 
-      description: '<p>123423</p>',
-      showAllDescription: false,
+      description: '<p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p>',
+      showAllDescription: true,
 
       properties: [
         {key: '类型', value: 'audio'},
