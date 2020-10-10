@@ -24,13 +24,22 @@ const menu = (
     mode="vertical"
   >
     <Menu.Item className={styles.MenuItem}>
-      1st menu item
+      <Space size={10}>
+        <span>节点1</span>
+        <span className={styles.contracted}>(已签约)</span>
+      </Space>
     </Menu.Item>
     <Menu.Item className={styles.MenuItem}>
-      2nd menu item
+      <Space size={10}>
+        <span>节点2</span>
+        <span className={styles.contracted}>(已签约)</span>
+      </Space>
     </Menu.Item>
     <Menu.Item className={styles.MenuItem}>
-      3rd menu item
+      <Space size={10}>
+        <span>节点3</span>
+        <span className={styles.contracted}>(已签约)</span>
+      </Space>
     </Menu.Item>
   </Menu>
 );
@@ -96,9 +105,10 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
       </div>
       <div style={{height: 15}}/>
       <div className={styles.signBottom}>
-        <FNormalButton
-          className={styles.signButton}
-        >签约</FNormalButton>
+        {/*<FNormalButton*/}
+        {/*  className={styles.signButton}*/}
+        {/*>签约</FNormalButton>*/}
+        <span>该资源已签约，可进入<a>展品管理</a>进行授权管理</span>
       </div>
     </div>
   </div>);

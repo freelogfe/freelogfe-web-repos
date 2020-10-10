@@ -11,6 +11,7 @@ import Property from './Property';
 import Option from './Option';
 import Viewport from '@/pages/market/$id/index/Viewport';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import FDropdown from "@/components/FDropdown";
 
 interface ResourceDetailsProps {
   dispatch: Dispatch;
@@ -48,7 +49,7 @@ function ResourceDetails({dispatch, marketResourcePage}: ResourceDetailsProps) {
           <div style={{width: 15}}/>
           <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
           <div style={{width: 20}}/>
-          <FSwap/>
+          <FDropdown options={[{value: '0.0.1'}, {value: '0.0.2'}]}><FSwap/></FDropdown>
         </div>
 
         <div style={{height: 30}}/>
