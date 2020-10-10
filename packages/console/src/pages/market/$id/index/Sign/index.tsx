@@ -7,11 +7,33 @@ import {Checkbox, Space} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {Dropdown, Menu} from 'antd';
+import Contracts from './Contracts';
+import Policies from './Policies';
+import Resources from './Resources';
 
 interface SignProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
 }
+
+const menu = (
+  <Menu
+    selectable={false}
+    className={styles.Menu}
+    mode="vertical"
+  >
+    <Menu.Item className={styles.MenuItem}>
+      1st menu item
+    </Menu.Item>
+    <Menu.Item className={styles.MenuItem}>
+      2nd menu item
+    </Menu.Item>
+    <Menu.Item className={styles.MenuItem}>
+      3rd menu item
+    </Menu.Item>
+  </Menu>
+);
 
 function Sign({dispatch, marketResourcePage}: SignProps) {
   return (<div className={styles.info}>
@@ -23,8 +45,10 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
       />
       <div style={{height: 10}}/>
       <div className={styles.title}>
-            <span
-              className={styles.titleText}>12345467890/123454678901234546789012345467890123454678901234546789012345467890 </span>
+        <span
+          className={styles.titleText}>{marketResourcePage.resourceInfo?.name || ''}
+        </span>
+        &nbsp;
         <FCopyToClipboard
           text={marketResourcePage.resourceInfo?.name || ''}
           title={'复制资源名称'}
@@ -36,9 +60,6 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
         {
           (marketResourcePage.resourceInfo?.tags || []).map((t) => (<label key={t}>{t}</label>))
         }
-        {/*<label>audio</label>*/}
-        {/*<label>音乐</label>*/}
-        {/*<label>摇滚</label>*/}
       </div>
       <div style={{height: 10}}/>
       <FContentText
@@ -50,113 +71,26 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
     </div>
     <div className={styles.cell}/>
     <div className={styles.infoRight}>
-      <div className={styles.nodeSelector}>
-        <Space size={20}>
-          <span className={styles.nodeSelectorLabel}>签约节点</span>
-          <FContentText
-            text={marketResourcePage.allNodes.find((n) => n.id === marketResourcePage.selectedNode)?.name || ''}/>
-        </Space>
-        <FDown/>
-      </div>
+      {/* <FMenu options={[{value: '1', text: '节点1'}, {value: '2', text: '节点2'}]}/> */}
+      <Dropdown overlay={menu}>
+        <div className={styles.nodeSelector}>
+          <Space size={10}>
+            <span className={styles.nodeSelectorLabel}>签约节点</span>
+            <FContentText
+              text={marketResourcePage.allNodes.find((n) => n.id === marketResourcePage.selectedNode)?.name || ''}/>
+            <span className={styles.contracted}>(已签约)</span>
+          </Space>
+          <FDown/>
+        </div>
+      </Dropdown>
       <div style={{height: 15}}/>
       <div className={styles.sign}>
         <div className={styles.signLeft}>
-          <div className={styles.signLeftNav}>选择主资源授权策略</div>
-          {
-            marketResourcePage.signResources.filter((r, i) => i === 0)
-              .map((r) => (<a
-                key={r.id}
-                className={styles.signResource + ' ' + styles.activatedSignResource}
-              >
-                <FTitleText
-                  type="h5"
-                  text={r.name}
-                  singleRow
-                />
-                <div style={{height: 5}}/>
-                <FContentText
-                  type="additional2"
-                  text={r.type}
-                />
-                <div style={{height: 5}}/>
-                <div className={styles.policeTags}>
-                  {
-                    r.policies.filter((p) => p.checked)
-                      .map((p) => (<label key={p.id}>{p.name}</label>))
-                  }
-                </div>
-              </a>))
-          }
-
-          <div className={styles.signLeftNav}>选择基础上抛授权策略</div>
-          {
-            marketResourcePage.signResources.filter((r, i) => i !== 0)
-              .map((r) => (<a className={styles.signResource} key={r.id}>
-                <FTitleText
-                  type="h5"
-                  text={r.name}
-                  singleRow
-                />
-                <div style={{height: 5}}/>
-                <FContentText
-                  type="additional2"
-                  text={r.type}
-                />
-                <div style={{height: 5}}/>
-                <div className={styles.policeTags}>
-                  {
-                    r.policies.filter((p) => p.checked)
-                      .map((p) => (<label key={p.id}>{p.name}</label>))
-                  }
-                </div>
-              </a>))
-          }
+          <Resources/>
         </div>
         <div className={styles.signRight}>
-
-          {
-            marketResourcePage.signResources
-              .filter((r) => r.checked)
-              // .map((r) => r.policies)
-              .map(({policies}, i) => (<div key={i}>
-                {
-                  policies.map((p) => (<div className={styles.singPolicy} key={p.id}>
-                    <div className={styles.PolicyName}>
-                      <Checkbox
-                        // disabled={i.status === 0}
-                        checked={p.checked}
-                        // onChange={(e) => onChangeChecked(e.target.checked, i)}
-                      />
-                      <div style={{width: 5}}/>
-                      <span>{p.name}</span>
-                    </div>
-                    <div style={{height: 15}}/>
-                    <pre>{p.text}</pre>
-                  </div>))
-                }
-
-              </div>))
-          }
-
-
-          {/*<div className={styles.singPolicy}>*/}
-          {/*  <div className={styles.PolicyName}>*/}
-          {/*    <Checkbox*/}
-          {/*      // disabled={i.status === 0}*/}
-          {/*      checked={true}*/}
-          {/*      // onChange={(e) => onChangeChecked(e.target.checked, i)}*/}
-          {/*    />*/}
-          {/*    <div style={{width: 5}}/>*/}
-          {/*    <span>策略1</span>*/}
-          {/*  </div>*/}
-          {/*  <div style={{height: 15}}/>*/}
-          {/*  <pre>{'initial:\n' +*/}
-          {/*  '    active\n' +*/}
-          {/*  '    recontractable\n' +*/}
-          {/*  '    presentable\n' +*/}
-          {/*  '    terminate'}</pre>*/}
-          {/*</div>*/}
-
+          <Contracts/>
+          <Policies/>
         </div>
 
       </div>

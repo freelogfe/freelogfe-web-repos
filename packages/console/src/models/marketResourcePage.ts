@@ -26,12 +26,18 @@ export interface MarketResourcePageState {
     id: string;
     name: string;
     type: string;
-    policies: {
+    policies?: {
       checked: boolean;
       id: string;
       name: string;
       text: string;
     }[];
+    contracts?: {
+      id: string;
+      name: string;
+      text: string;
+      createTime: string;
+    }[],
   }[];
 
   allVersions: string[];
@@ -94,37 +100,57 @@ const Model: MarketResourcePageModelType = {
       selectedNode: '1234',
 
       signResources: [
+        // {
+        //   checked: true,
+        //   id: '234dsfds',
+        //   name: 'stefan/Smells like teen spirit',
+        //   type: 'audio',
+        //   policies: [
+        //     {
+        //       checked: true,
+        //       id: '23sdfasd',
+        //       name: '策略1',
+        //       text: 'initial:\n' +
+        //         '    active\n' +
+        //         '    recontractable\n' +
+        //         '    presentable\n' +
+        //         '    terminate',
+        //     }, {
+        //       checked: true,
+        //       id: '23sdfasd',
+        //       name: '策略1',
+        //       text: 'initial:\n' +
+        //         '    active\n' +
+        //         '    recontractable\n' +
+        //         '    presentable\n' +
+        //         '    terminate',
+        //     }
+        //   ],
+        // },
         {
           checked: true,
-          id: '234dsfds',
-          name: 'stefan/Smells like teen spirit',
-          type: 'audio',
-          policies: [{
-            checked: true,
-            id: '23sdfasd',
-            name: '策略1',
-            text: 'initial:\n' +
-              '    active\n' +
-              '    recontractable\n' +
-              '    presentable\n' +
-              '    terminate',
-          }],
-        },
-        {
-          checked: false,
           id: '234dsfds2',
           name: 'stefan/Smells like teen spirit',
           type: 'audio',
-          policies: [{
-            checked: true,
+          contracts: [{
             id: '23sdfasd',
             name: '策略1',
+            createTime: '2020/05/19',
             text: 'initial:\n' +
               '    active\n' +
               '    recontractable\n' +
               '    presentable\n' +
               '    terminate',
-          }],
+          },{
+            id: '23sdfasd2',
+            name: '策略1',
+            createTime: '2020/05/19',
+            text: 'initial:\n' +
+              '    active\n' +
+              '    recontractable\n' +
+              '    presentable\n' +
+              '    terminate',
+          }]
         }
       ],
 
