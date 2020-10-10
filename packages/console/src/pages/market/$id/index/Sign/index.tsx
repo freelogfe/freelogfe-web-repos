@@ -11,38 +11,12 @@ import {Dropdown, Menu} from 'antd';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
+import NodeSelector from './NodeSelector';
 
 interface SignProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
 }
-
-const menu = (
-  <Menu
-    selectable={false}
-    className={styles.Menu}
-    mode="vertical"
-  >
-    <Menu.Item className={styles.MenuItem}>
-      <Space size={10}>
-        <span>节点1</span>
-        <span className={styles.contracted}>(已签约)</span>
-      </Space>
-    </Menu.Item>
-    <Menu.Item className={styles.MenuItem}>
-      <Space size={10}>
-        <span>节点2</span>
-        <span className={styles.contracted}>(已签约)</span>
-      </Space>
-    </Menu.Item>
-    <Menu.Item className={styles.MenuItem}>
-      <Space size={10}>
-        <span>节点3</span>
-        <span className={styles.contracted}>(已签约)</span>
-      </Space>
-    </Menu.Item>
-  </Menu>
-);
 
 function Sign({dispatch, marketResourcePage}: SignProps) {
   return (<div className={styles.info}>
@@ -80,18 +54,7 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
     </div>
     <div className={styles.cell}/>
     <div className={styles.infoRight}>
-      {/* <FMenu options={[{value: '1', text: '节点1'}, {value: '2', text: '节点2'}]}/> */}
-      <Dropdown overlay={menu}>
-        <div className={styles.nodeSelector}>
-          <Space size={10}>
-            <span className={styles.nodeSelectorLabel}>签约节点</span>
-            <FContentText
-              text={marketResourcePage.allNodes.find((n) => n.id === marketResourcePage.selectedNode)?.name || ''}/>
-            <span className={styles.contracted}>(已签约)</span>
-          </Space>
-          <FDown/>
-        </div>
-      </Dropdown>
+      <NodeSelector/>
       <div style={{height: 15}}/>
       <div className={styles.sign}>
         <div className={styles.signLeft}>
