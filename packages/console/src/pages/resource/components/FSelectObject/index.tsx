@@ -72,10 +72,11 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
     }
 
     const sha1 = await getSHA1Hash(file);
-    const {data: isExist} = await fileIsExist({sha1});
+    const {data: isExists} = await fileIsExist({sha1});
+    // console.log(isExist[0], 'datadata23089ujsd');
     setIsChecking(false);
 
-    if (isExist) {
+    if (isExists[0].isExisting) {
       return onChange && onChange({
         id: sha1,
         name: file.name,
