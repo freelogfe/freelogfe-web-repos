@@ -41,7 +41,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
   }, []);
 
   React.useEffect(() => {
-    console.log((match.params as any).id, 'match98320j');
+    // console.log((match.params as any).id, 'match98320j');
     dispatch<InitDataAction>({
       type: 'marketResourcePage/initData',
       payload: (match.params as any).id,
@@ -59,7 +59,11 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
           <div style={{width: 15}}/>
           <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
           <div style={{width: 20}}/>
-          <FDropdown options={marketResourcePage.allVersions.map((v) => ({value: v}))}><FSwap/></FDropdown>
+          <FDropdown
+            options={marketResourcePage.allVersions.reverse().map((v) => ({value: v}))}
+          >
+            <FSwap/>
+          </FDropdown>
         </div>
 
         <div style={{height: 30}}/>

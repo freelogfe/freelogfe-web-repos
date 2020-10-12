@@ -4,7 +4,11 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {nodes, NodesParamsType} from "@/services/nodes";
 
 export interface NodesModelState {
-  nodeList: {}[];
+  nodeList: {
+    nodeDomain: string;
+    nodeId: number;
+    nodeName: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -36,10 +40,20 @@ const Model: NodesModelType = {
     nodeList: [],
   },
   effects: {
-    * fetchNodes({}: FetchNodesAction, {call}: EffectsCommandMap) {
+    * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
       const params: NodesParamsType = {};
       const {data} = yield call(nodes, params);
-      console.log(data, '#SDFASDC');
+      // console.log(data, '#SDFASDC');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeList: data.dataList.map((n: any) => ({
+            nodeDomain: n.nodeDomain,
+            nodeId: n.nodeId,
+            nodeName: n.nodeName,
+          })),
+        }
+      })
     },
   },
   reducers: {
