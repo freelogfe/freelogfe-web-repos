@@ -40,15 +40,17 @@ function Description({dispatch, marketResourcePage}: DescriptionProps) {
   return (<div className={styles.styles}>
     <FTitleText text={'版本描述'} type={'h3'}/>
     <div style={{height: 20}}/>
-    <div
-      ref={refContainer}
-      style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
-      dangerouslySetInnerHTML={{__html: marketResourcePage.description}}
-      className={styles.content + ' ' + styles.container}
-    />
+    <div className={styles.contentWrap}>
+      <div
+        ref={refContainer}
+        style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
+        dangerouslySetInnerHTML={{__html: marketResourcePage.description}}
+        className={styles.content + ' ' + styles.container}
+      />
+      {!marketResourcePage.showAllDescription && (<div className={styles.mask}/>)}
+    </div>
     {
       !marketResourcePage.showAllDescription && (<>
-        <div className={styles.mask}/>
         <div className={styles.footer}>
           <FTextButton theme="primary">展开查看全部 <FDown/></FTextButton>
         </div>

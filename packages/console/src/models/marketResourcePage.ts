@@ -1,8 +1,14 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
+import {info, InfoParamsType, resourceVersionInfo, ResourceVersionInfoParamsType1} from "@/services/resources";
+import {ConnectState} from "@/models/connect";
+import {isCollected} from "@/services/collections";
+import {formatDateTime} from "@/utils/format";
 
 export interface MarketResourcePageState {
+  resourceId: string;
+
   resourceInfo: null | {
     cover: string;
     name: string;
@@ -56,7 +62,6 @@ export interface MarketResourcePageState {
     key: string;
     value: string;
   }[];
-
 }
 
 export interface ChangeAction extends AnyAction {
@@ -64,15 +69,26 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<MarketResourcePageState>;
 }
 
-interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo';
+export interface InitDataAction extends AnyAction {
+  type: 'marketResourcePage/initData';
+  payload: string;
+}
+
+export interface FetchInfoAction extends AnyAction {
+  type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
+}
+
+export interface FetchVersionInfoAction extends AnyAction {
+  type: 'fetchVersionInfo';
 }
 
 export interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageState;
   effects: {
+    initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageState, ChangeAction>;
@@ -85,12 +101,14 @@ export interface MarketResourcePageModelType {
 const Model: MarketResourcePageModelType = {
     namespace: 'marketResourcePage',
     state: {
+      resourceId: '',
+
       resourceInfo: {
-        cover: 'https://image.freelog.com/preview-image/f3b712c4a7a052d71226e1d5b1c0c3342ae8d725',
-        name: 'stefan/Smells like teen spirit',
-        type: 'audio',
-        tags: ['音乐', '摇滚'],
-        about: '《Smells Like Teen Spirit》是涅槃乐队演唱的一首垃圾摇滚风格单曲，由科特·柯本、大卫·格鲁、克里斯特·诺沃塞克共同作词作曲，布奇·维格制作，发行于1991年9月10日，被收录在涅槃乐队第二张录',
+        cover: '',
+        name: '',
+        type: '',
+        tags: [],
+        about: '',
       },
 
       popularity: 219,
@@ -157,20 +175,19 @@ const Model: MarketResourcePageModelType = {
         }
       ],
 
-      allVersions: ['1.1.0'],
-      version: '1.1.0',
+      allVersions: [],
+      version: '',
       releaseTime: '2020/05/19',
-
       description: '<p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p>',
       showAllDescription: true,
 
       properties: [
-        {key: '类型', value: 'audio'},
-        {key: '语言', value: '英语'},
-        {key: '最新版本', value: '1.1.3'},
-        {key: '唱片公司', value: 'Geffen'},
-        {key: '专辑', value: 'Nevermind'},
-        {key: '唱片类型', value: '录音室专辑'},
+        // {key: '类型', value: 'audio'},
+        // {key: '语言', value: '英语'},
+        // {key: '最新版本', value: '1.1.3'},
+        // {key: '唱片公司', value: 'Geffen'},
+        // {key: '专辑', value: 'Nevermind'},
+        // {key: '唱片类型', value: '录音室专辑'},
       ],
 
       options: [
@@ -179,19 +196,83 @@ const Model: MarketResourcePageModelType = {
       ],
     },
     effects: {
-      * fetchInfo({}, {}) {
+      * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            resourceId: payload,
+          }
+        });
 
+        yield put<FetchInfoAction>({
+          type: 'fetchInfo',
+        });
       },
-    }
-    ,
+      * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
+        const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({marketResourcePage}));
+        const params: InfoParamsType = {
+          resourceIdOrName: marketResourcePage.resourceId,
+        };
+        const {data} = yield call(info, params);
+        console.log(data, 'datadata32');
+
+        const params1 = {
+          resourceIds: marketResourcePage.resourceId,
+        };
+
+        const {data: data1} = yield call(isCollected, params1);
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            resourceInfo: {
+              cover: data.coverImages.length > 0 ? data.coverImages[0] : '',
+              name: data.resourceName,
+              type: data.resourceType,
+              tags: data.tags,
+              about: data.intro,
+            },
+            hasCollect: data1[0].isCollected,
+            allVersions: data.resourceVersions.map((v: any) => v.version),
+            version: data.latestVersion,
+          },
+        });
+
+        yield put<FetchVersionInfoAction>({
+          type: 'fetchVersionInfo',
+        });
+      },
+      * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
+        const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+          marketResourcePage
+        }));
+        const params: ResourceVersionInfoParamsType1 = {
+          version: marketResourcePage.version,
+          resourceId: marketResourcePage.resourceId,
+        };
+        const {data} = yield call(resourceVersionInfo, params);
+        console.log(data, '98sdalkf');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            releaseTime: formatDateTime(data.createDate),
+            description: data.description,
+            properties: Object.entries(data.systemProperty as object)
+              .map((s) => ({
+                key: s[0],
+                value: s[1],
+              })),
+          },
+        });
+      },
+    },
     reducers: {
       change(state, {payload}) {
         return {
           ...state,
           ...payload,
         }
-      }
-      ,
+      },
     }
     ,
     subscriptions: {

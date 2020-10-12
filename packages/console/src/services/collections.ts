@@ -14,3 +14,14 @@ export function resourceList(params: ResourceListParamsType) {
     params
   });
 }
+
+// 批量查询资源是否收藏
+export interface IsCollectedParamsType {
+  resourceIds: string;
+}
+
+export function isCollected(params: IsCollectedParamsType) {
+  return request.get('/v2/collections/resources/isCollected', {
+    params
+  });
+}

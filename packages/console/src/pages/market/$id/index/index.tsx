@@ -12,13 +12,15 @@ import Option from './Option';
 import Viewport from '@/pages/market/$id/index/Viewport';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import FDropdown from "@/components/FDropdown";
+import {FetchInfoAction, InitDataAction} from "@/models/marketResourcePage";
+import RouterTypes from "umi/routerTypes";
 
-interface ResourceDetailsProps {
+interface ResourceDetailsProps extends RouterTypes {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState,
 }
 
-function ResourceDetails({dispatch, marketResourcePage}: ResourceDetailsProps) {
+function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -38,6 +40,14 @@ function ResourceDetails({dispatch, marketResourcePage}: ResourceDetailsProps) {
     }
   }, []);
 
+  React.useEffect(() => {
+    console.log((match.params as any).id, 'match98320j');
+    dispatch<InitDataAction>({
+      type: 'marketResourcePage/initData',
+      payload: (match.params as any).id,
+    });
+  }, []);
+
   return (<FCenterLayout>
     <div className={styles.wrap}>
       <div style={{height: 40}}/>
@@ -49,7 +59,7 @@ function ResourceDetails({dispatch, marketResourcePage}: ResourceDetailsProps) {
           <div style={{width: 15}}/>
           <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
           <div style={{width: 20}}/>
-          <FDropdown options={[{value: '0.0.1'}, {value: '0.0.2'}]}><FSwap/></FDropdown>
+          <FDropdown options={marketResourcePage.allVersions.map((v) => ({value: v}))}><FSwap/></FDropdown>
         </div>
 
         <div style={{height: 30}}/>
