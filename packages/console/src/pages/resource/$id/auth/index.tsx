@@ -9,16 +9,16 @@ import FEditorCard from '@/components/FEditorCard';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
-import {connect, Dispatch} from "dva";
+import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
   ResourceAuthPageModelState,
   ResourceInfoModelState,
-} from "@/models/connect";
-import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
+} from '@/models/connect';
+import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
-import {RouterTypes, withRouter} from "umi";
-import {i18nMessage} from "@/utils/i18n";
+import {RouterTypes, withRouter} from 'umi';
+import {i18nMessage} from '@/utils/i18n';
 
 const columns: any[] = [
   {

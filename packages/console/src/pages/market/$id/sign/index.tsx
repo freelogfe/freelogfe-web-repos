@@ -5,8 +5,15 @@ import FCenterLayout from '@/layouts/FCenterLayout';
 import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import {Space, Tooltip, Drawer} from 'antd';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, MarketResourcePageState} from '@/models/connect';
 
-function Sign() {
+interface SignProps {
+  dispatch: Dispatch;
+  marketResourcePage: MarketResourcePageState;
+}
+
+function Sign({dispatch, marketResourcePage}: SignProps) {
   return (<FCenterLayout>
     <div className={styles.header}>
       <FTitleText text={'确认签约'}/>
@@ -28,7 +35,7 @@ function Sign() {
           <FSwap/>
         </div>
         <div style={{height: 50}}/>
-        <FTitleText text={'输入展品名称'} type={'h3'}/>
+        <FTitleText text={'输入展品名称'} type="h3"/>
         <div style={{height: 20}}/>
         <div className={styles.exhibitName}>
           <FInput className={styles.exhibitNameInput}/>
@@ -138,4 +145,6 @@ function Sign() {
   </FCenterLayout>);
 }
 
-export default Sign;
+export default connect(({marketResourcePage}: ConnectState) => ({
+  marketResourcePage,
+}))(Sign);

@@ -1,12 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
+import {FInfo} from "@/components/FIcons";
+import {Tooltip} from 'antd';
+import {TooltipProps, TooltipPropsWithOverlay, TooltipPropsWithTitle} from 'antd/lib/tooltip';
 
-interface FTooltipProps {
-
+interface FTooltipProps extends TooltipPropsWithTitle {
+  children: React.ReactNode;
 }
 
-function __Template({}: FTooltipProps) {
-  return (<div>__Template</div>);
+function FTooltip({children, title}: FTooltipProps) {
+  return (<Tooltip
+    title={<span className={styles.title}>{title}</span>}
+    color={'#fff'}>{children}</Tooltip>);
 }
 
-export default __Template;
+export default FTooltip;

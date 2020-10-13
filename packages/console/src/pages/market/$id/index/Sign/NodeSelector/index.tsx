@@ -4,14 +4,15 @@ import {Dropdown, Menu, Space} from "antd";
 import {FContentText} from "@/components/FText";
 import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageState} from "@/models/connect";
+import {ConnectState, MarketResourcePageState, NodesModelState} from "@/models/connect";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
+  nodes: NodesModelState;
 }
 
-function NodeSelector({dispatch, marketResourcePage}: NodeSelectorProps) {
+function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) {
   const selectedNode = marketResourcePage.allNodes.find((n) => n.id === marketResourcePage.selectedNode);
 
   return (<Dropdown overlay={(
@@ -21,10 +22,13 @@ function NodeSelector({dispatch, marketResourcePage}: NodeSelectorProps) {
       mode="vertical"
     >
       {
-        marketResourcePage.allNodes.map((n) => (<Menu.Item key={n.id} className={styles.MenuItem}>
+        nodes.nodeList.map((n) => (<Menu.Item
+          key={n.nodeId}
+          className={styles.MenuItem}
+        >
           <Space size={10}>
-            <span>{n.name}</span>
-            {n.signed && (<span className={styles.contracted}>(已签约)</span>)}
+            <span>{n.nodeName}</span>
+            {/*{n.signed && (<span className={styles.contracted}>(已签约)</span>)}*/}
           </Space>
         </Menu.Item>))
       }
@@ -42,4 +46,4 @@ function NodeSelector({dispatch, marketResourcePage}: NodeSelectorProps) {
   </Dropdown>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(NodeSelector);
+export default connect(({marketResourcePage, nodes}: ConnectState) => ({marketResourcePage, nodes}))(NodeSelector);

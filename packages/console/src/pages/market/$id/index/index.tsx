@@ -11,9 +11,9 @@ import Property from './Property';
 import Option from './Option';
 import Viewport from '@/pages/market/$id/index/Viewport';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
-import FDropdown from "@/components/FDropdown";
-import {FetchInfoAction, InitDataAction} from "@/models/marketResourcePage";
-import RouterTypes from "umi/routerTypes";
+import FDropdown from '@/components/FDropdown';
+import {FetchInfoAction, InitDataAction} from '@/models/marketResourcePage';
+import RouterTypes from 'umi/routerTypes';
 
 interface ResourceDetailsProps extends RouterTypes {
   dispatch: Dispatch;
@@ -53,26 +53,22 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       <div style={{height: 40}}/>
       <Sign/>
       <div style={{height: 50}}/>
-      <div>
+      <div className={styles.versionWrap}>
         <div className={styles.versionTitle}>
           <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
           <div style={{width: 15}}/>
           <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
           <div style={{width: 20}}/>
           <FDropdown
-            options={marketResourcePage.allVersions.reverse().map((v) => ({value: v}))}
+            options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
           >
             <FSwap/>
           </FDropdown>
         </div>
 
-        <div style={{height: 30}}/>
         <Description/>
-        <div style={{height: 50}}/>
         <Property/>
-        <div style={{height: 50}}/>
         <Option/>
-        <div style={{height: 50}}/>
         <Viewport/>
       </div>
     </div>

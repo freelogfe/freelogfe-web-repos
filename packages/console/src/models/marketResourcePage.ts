@@ -46,7 +46,7 @@ export interface MarketResourcePageState {
     }[],
   }[];
 
-  allVersions: string[];
+  readonly allVersions: string[];
   version: string;
   releaseTime: string;
 
@@ -177,23 +177,13 @@ const Model: MarketResourcePageModelType = {
 
       allVersions: [],
       version: '',
-      releaseTime: '2020/05/19',
-      description: '<p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p><p>123423</p>',
+      releaseTime: '',
+      description: '',
       showAllDescription: true,
 
-      properties: [
-        // {key: '类型', value: 'audio'},
-        // {key: '语言', value: '英语'},
-        // {key: '最新版本', value: '1.1.3'},
-        // {key: '唱片公司', value: 'Geffen'},
-        // {key: '专辑', value: 'Nevermind'},
-        // {key: '唱片类型', value: '录音室专辑'},
-      ],
+      properties: [],
 
-      options: [
-        {key: '推荐语1', value: '录音室专辑'},
-        {key: '推荐语2', value: '录音室专辑'},
-      ],
+      options: [],
     },
     effects: {
       * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
@@ -214,7 +204,7 @@ const Model: MarketResourcePageModelType = {
           resourceIdOrName: marketResourcePage.resourceId,
         };
         const {data} = yield call(info, params);
-        console.log(data, 'datadata32');
+        // console.log(data, 'datadata32');
 
         const params1 = {
           resourceIds: marketResourcePage.resourceId,
@@ -251,16 +241,28 @@ const Model: MarketResourcePageModelType = {
           resourceId: marketResourcePage.resourceId,
         };
         const {data} = yield call(resourceVersionInfo, params);
-        console.log(data, '98sdalkf');
+        // console.log(data, '98sdalkf');
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             releaseTime: formatDateTime(data.createDate),
             description: data.description,
-            properties: Object.entries(data.systemProperty as object)
-              .map((s) => ({
-                key: s[0],
-                value: s[1],
+            properties: [
+              ...Object.entries(data.systemProperty as object)
+                .map((s) => ({
+                  key: s[0],
+                  value: s[1],
+                })),
+              ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+                .map((p: any) => ({
+                  key: p.key,
+                  value: p.defaultValue,
+                })),
+            ],
+            options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
+              .map((p: any) => ({
+                key: p.key,
+                value: p.defaultValue,
               })),
           },
         });

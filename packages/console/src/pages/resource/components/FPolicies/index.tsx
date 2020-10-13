@@ -9,7 +9,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import styles from './index.less';
 import {i18nMessage} from "@/utils/i18n";
 import {Drawer} from "antd";
-import Pool from './Pool';
+// import Pool from './Pool';
 
 interface Policy {
   id: string;
@@ -131,15 +131,15 @@ export default function ({dataSource = [], onAddPolicy, onChangeStatus}: FPolici
       width={820}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
-      <Pool onSelect={(value) => {
-        onAddPolicy && onAddPolicy({
-          id: value.policyId,
-          title: value.policyName,
-          status: 'executing',
-          code: value.policyText,
-        });
-        return closeNewVisible();
-      }}/>
+      {/*<Pool onSelect={(value) => {*/}
+      {/*  onAddPolicy && onAddPolicy({*/}
+      {/*    id: value.policyId,*/}
+      {/*    title: value.policyName,*/}
+      {/*    status: 'executing',*/}
+      {/*    code: value.policyText,*/}
+      {/*  });*/}
+      {/*  return closeNewVisible();*/}
+      {/*}}/>*/}
     </Drawer>
   </div>);
 }

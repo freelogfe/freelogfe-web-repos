@@ -6,24 +6,26 @@ import {FDown, FFavorite} from '@/components/FIcons';
 import {Checkbox, Space} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageState, NodesModelState} from '@/models/connect';
 import {Dropdown, Menu} from 'antd';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
+import * as cover from '@/assets/default-resource-cover.jpg';
 
 interface SignProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
+  nodes: NodesModelState;
 }
 
-function Sign({dispatch, marketResourcePage}: SignProps) {
+function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <img
         className={styles.cover}
-        src={marketResourcePage.resourceInfo?.cover || undefined}
+        src={marketResourcePage.resourceInfo?.cover || cover}
         alt={''}
       />
       <div style={{height: 10}}/>
@@ -77,4 +79,7 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
   </div>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Sign);
+export default connect(({marketResourcePage, nodes}: ConnectState) => ({
+  marketResourcePage,
+  nodes,
+}))(Sign);
