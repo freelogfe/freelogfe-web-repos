@@ -82,6 +82,11 @@ export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo';
 }
 
+export interface OnChangeVersionAction extends AnyAction {
+  type: 'marketResourcePage/onChangeVersion';
+  payload: string;
+}
+
 export interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageState;
@@ -89,6 +94,7 @@ export interface MarketResourcePageModelType {
     initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
+    onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageState, ChangeAction>;
@@ -265,6 +271,19 @@ const Model: MarketResourcePageModelType = {
                 value: p.defaultValue,
               })),
           },
+        });
+      },
+      * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
+        console.log(payload, 'payload234sd09');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            version: payload,
+          },
+        });
+
+        yield  put<FetchVersionInfoAction>({
+          type: 'fetchVersionInfo',
         });
       },
     },

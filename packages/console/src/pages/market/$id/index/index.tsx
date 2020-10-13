@@ -12,7 +12,7 @@ import Option from './Option';
 import Viewport from '@/pages/market/$id/index/Viewport';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
-import {FetchInfoAction, InitDataAction} from '@/models/marketResourcePage';
+import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
 
 interface ResourceDetailsProps extends RouterTypes {
@@ -61,6 +61,13 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
           <div style={{width: 20}}/>
           <FDropdown
             options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
+            onChange={(value) => {
+              console.log(value, '3209jsd');
+              dispatch<OnChangeVersionAction>({
+                type: 'marketResourcePage/onChangeVersion',
+                payload: value,
+              });
+            }}
           >
             <FSwap/>
           </FDropdown>
