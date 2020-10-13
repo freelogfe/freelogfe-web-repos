@@ -38,8 +38,8 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
       <Space size={10}>
         <span className={styles.nodeSelectorLabel}>签约节点</span>
         <FContentText
-          text={selectedNode?.name || ''}/>
-        {selectedNode?.signed && (<span className={styles.contracted}>(已签约)</span>)}
+          text={selectedNode?.nodeName || ''}/>
+        {/*{selectedNode?.signed && (<span className={styles.contracted}>(已签约)</span>)}*/}
       </Space>
       <FDown/>
     </div>
