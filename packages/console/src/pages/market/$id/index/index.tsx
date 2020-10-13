@@ -62,14 +62,14 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
           <FDropdown
             options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
             onChange={(value) => {
-              console.log(value, '3209jsd');
+              // console.log(value, '3209jsd');
               dispatch<OnChangeVersionAction>({
                 type: 'marketResourcePage/onChangeVersion',
                 payload: value,
               });
             }}
           >
-            <FSwap/>
+            <a><FSwap/></a>
           </FDropdown>
         </div>
 

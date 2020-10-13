@@ -13,7 +13,7 @@ interface NodeSelectorProps {
 }
 
 function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) {
-  const selectedNode = marketResourcePage.allNodes.find((n) => n.id === marketResourcePage.selectedNode);
+  const selectedNode = nodes.nodeList.find((n) => n.nodeDomain === marketResourcePage.selectedNodeDomain);
 
   return (<Dropdown overlay={(
     <Menu

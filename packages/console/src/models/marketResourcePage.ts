@@ -20,12 +20,8 @@ export interface MarketResourcePageState {
   popularity: number;
   hasCollect: boolean;
 
-  allNodes: {
-    id: string;
-    name: string;
-    signed: boolean;
-  }[];
-  selectedNode: string;
+  signedNodeIDs: string[];
+  selectedNodeDomain: string;
 
   signResources: {
     checked: boolean;
@@ -120,11 +116,8 @@ const Model: MarketResourcePageModelType = {
       popularity: 219,
       hasCollect: false,
 
-      allNodes: [
-        {id: '1234', name: '我的音乐节点1', signed: false},
-        {id: '123456', name: '我的音乐节点2', signed: true},
-      ],
-      selectedNode: '123456',
+      signedNodeIDs: [],
+      selectedNodeDomain: '',
 
       signResources: [
         // {
