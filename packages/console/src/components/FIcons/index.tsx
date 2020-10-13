@@ -4,6 +4,7 @@ import FFavorite from './FFavorite';
 import FDown from './FDown';
 import FSwap from './FSwap';
 import FInfo from './FInfo';
+import FFileText from './FFileText';
 
 export {
   FDelete,
@@ -11,4 +12,5 @@ export {
   FDown,
   FSwap,
   FInfo,
+  FFileText,
 }

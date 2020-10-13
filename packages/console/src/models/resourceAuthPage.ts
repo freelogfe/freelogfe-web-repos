@@ -23,6 +23,13 @@ export interface ResourceAuthPageModelState {
     status: 'executing' | 'stopped';
     code: string;
   }[] | null;
+  policyPreviewVisible: boolean;
+  policyPreviewText: string;
+  newPolicyTitle: string;
+  newPolicyText: string;
+  policyEditorVisible: boolean;
+  policyTemplateVisible: boolean;
+
   contractsAuthorized: FAuthPanelProps['dataSource'];
   contractsAuthorize: {
     key: string,
@@ -37,7 +44,7 @@ export interface ResourceAuthPageModelState {
 export interface UpdatePoliciesAction {
   type: 'resourceAuthPage/updatePolicies';
   payload: Partial<Exclude<ResourceAuthPageModelState['policies'], null>[number]>;
-  id: string;
+  // id: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -94,6 +101,13 @@ const Model: ResourceAuthPageModelType = {
 
   state: {
     policies: [],
+    policyPreviewVisible: false,
+    policyPreviewText: '',
+    newPolicyTitle: '',
+    newPolicyText: '',
+    policyEditorVisible: false,
+    policyTemplateVisible: false,
+
     contractsAuthorized: [],
     contractsAuthorize: [],
   },
@@ -112,9 +126,12 @@ const Model: ResourceAuthPageModelType = {
         }
       });
     },
-    * updatePolicies(action: UpdatePoliciesAction, {call, put}: EffectsCommandMap) {
+    * updatePolicies(action: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}:ConnectState) => ({
+        resourceInfo,
+      }));
       const params = {
-        resourceId: action.id,
+        resourceId: resourceInfo.info?.resourceId,
         // [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
         [action.payload.status ? 'updatePolicies' : 'addPolicies']: [
           {
@@ -126,7 +143,7 @@ const Model: ResourceAuthPageModelType = {
       yield call(update, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
-        payload: action.id,
+        payload: resourceInfo.info?.resourceId || '',
       });
     },
     * fetchAuthorized({payload: {baseResourceId, activatedResourceId}}: FetchAuthorizedAction, {call, put}: EffectsCommandMap) {

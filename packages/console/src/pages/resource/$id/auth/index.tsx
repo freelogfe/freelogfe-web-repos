@@ -3,7 +3,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
-import FPolicies from '@/pages/resource/components/FPolicies';
+import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
@@ -51,7 +51,7 @@ const columns: any[] = [
 
 interface AuthProps {
   dispatch: Dispatch;
-  auth: ResourceAuthPageModelState,
+  auth: ResourceAuthPageModelState;
   // resourceInfo: ResourceInfoModelState,
   match: {
     params: {
@@ -71,45 +71,44 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
     });
   }, [route]);
 
-  function onAddPolicy(value: { title: string; code: string; }) {
-    // console.log(value, 'valuevalue');
-    dispatch<UpdatePoliciesAction>({
-      type: 'resourceAuthPage/updatePolicies',
-      id: match.params.id,
-      payload: value,
-    });
-  }
+  // function onAddPolicy(value: { title: string; code: string; }) {
+  //   // console.log(value, 'valuevalue');
+  //   dispatch<UpdatePoliciesAction>({
+  //     type: 'resourceAuthPage/updatePolicies',
+  //     id: match.params.id,
+  //     payload: value,
+  //   });
+  // }
 
-  function onChangeStatus(value: {}) {
-    dispatch<UpdatePoliciesAction>({
-      type: 'resourceAuthPage/updatePolicies',
-      id: match.params.id,
-      payload: value,
-    });
-  }
+  // function onChangeStatus(value: {}) {
+  //   dispatch<UpdatePoliciesAction>({
+  //     type: 'resourceAuthPage/updatePolicies',
+  //     id: match.params.id,
+  //     payload: value,
+  //   });
+  // }
 
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
       <div className={styles.styles}>
         <FEditorCard title={i18nMessage('authorization_plan')}>
-
           <FPolicies
-            dataSource={auth.policies || []}
-            onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
-              type: 'resourceAuthPage/updatePolicies',
-              id: match.params.id,
-              payload: {
-                id: value.id,
-                status: value.status,
-              },
-            })}
-            onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
-              type: 'resourceAuthPage/updatePolicies',
-              id: match.params.id,
-              payload: {
-                id: value.id,
-              },
-            })}
+            // dataSource={auth.policies || []}
+            // onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
+            //   type: 'resourceAuthPage/updatePolicies',
+            //   id: match.params.id,
+            //   payload: {
+            //     id: value.id,
+            //     status: value.status,
+            //   },
+            // })}
+            // onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
+            //   type: 'resourceAuthPage/updatePolicies',
+            //   id: match.params.id,
+            //   payload: {
+            //     id: value.id,
+            //   },
+            // })}
           />
         </FEditorCard>
         {
