@@ -21,7 +21,12 @@ export interface ResourceInfoModelState {
       versionId: string;
       createDate: string;
     }[];
-    policies: any[];
+    policies: {
+      policyId: string;
+      status: 0 | 1;
+      policyName: string;
+      policyText: string;
+    }[];
     baseUpcastResources: {
       resourceId: string;
       resourceName: string;
@@ -59,9 +64,9 @@ const Model: ResourceInfoModelType = {
   },
 
   effects: {
-    * fetchDataSource(action: FetchDataSourceAction, {call, put}: EffectsCommandMap): Generator<any, void, any> {
+    * fetchDataSource({payload}: FetchDataSourceAction, {call, put}: EffectsCommandMap): Generator<any, void, any> {
       const params = {
-        resourceIdOrName: action.payload,
+        resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(info, params);
@@ -71,22 +76,22 @@ const Model: ResourceInfoModelType = {
         payload: data,
       });
 
-      yield put<FetchPoliciesAction>({
-        type: 'resourceAuthPage/fetchPolicies',
-        payload: data.policies,
-      });
+      // yield put<FetchPoliciesAction>({
+      //   type: 'resourceAuthPage/fetchPolicies',
+      //   payload: data.policies,
+      // });
 
-      yield put<FetchAuthorizeAction>({
-        type: 'resourceAuthPage/fetchAuthorize',
-        payload: data.resourceId,
-      });
-
-      yield put<FetchAuthorizedAction>({
-        type: 'resourceAuthPage/fetchAuthorized',
-        payload: {
-          baseResourceId: data.resourceId
-        },
-      });
+      // yield put<FetchAuthorizeAction>({
+      //   type: 'resourceAuthPage/fetchAuthorize',
+      //   payload: data.resourceId,
+      // });
+      //
+      // yield put<FetchAuthorizedAction>({
+      //   type: 'resourceAuthPage/fetchAuthorized',
+      //   payload: {
+      //     baseResourceId: data.resourceId
+      //   },
+      // });
     },
   },
 

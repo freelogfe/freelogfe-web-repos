@@ -15,7 +15,12 @@ import {
   ResourceAuthPageModelState,
   ResourceInfoModelState,
 } from '@/models/connect';
-import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
+import {
+  ChangeAction,
+  FetchAuthorizeAction,
+  FetchAuthorizedAction,
+  UpdatePoliciesAction
+} from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {RouterTypes, withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
@@ -71,22 +76,24 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
     });
   }, [route]);
 
-  // function onAddPolicy(value: { title: string; code: string; }) {
-  //   // console.log(value, 'valuevalue');
-  //   dispatch<UpdatePoliciesAction>({
-  //     type: 'resourceAuthPage/updatePolicies',
-  //     id: match.params.id,
-  //     payload: value,
-  //   });
-  // }
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'resourceAuthPage/change',
+      payload: {
+        resourceID: match.params.id,
+      }
+    });
 
-  // function onChangeStatus(value: {}) {
-  //   dispatch<UpdatePoliciesAction>({
-  //     type: 'resourceAuthPage/updatePolicies',
-  //     id: match.params.id,
-  //     payload: value,
-  //   });
-  // }
+    dispatch<FetchAuthorizeAction>({
+      type: 'resourceAuthPage/fetchAuthorize',
+      // payload: data.resourceId,
+    });
+
+    dispatch<FetchAuthorizedAction>({
+      type: 'resourceAuthPage/fetchAuthorized',
+      payload: {},
+    });
+  }, []);
 
   return (<FInfoLayout>
     <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>

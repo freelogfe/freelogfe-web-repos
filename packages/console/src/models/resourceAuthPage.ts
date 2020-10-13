@@ -17,6 +17,8 @@ import moment from "moment";
 import {ConnectState} from "@/models/connect";
 
 export interface ResourceAuthPageModelState {
+  resourceID: string;
+
   policies: {
     id: string;
     title: string;
@@ -60,14 +62,13 @@ export interface FetchPoliciesAction extends AnyAction {
 export interface FetchAuthorizedAction extends AnyAction {
   type: 'resourceAuthPage/fetchAuthorized' | 'fetchAuthorized',
   payload: {
-    baseResourceId: string;
     activatedResourceId?: string;
   };
 }
 
 export interface FetchAuthorizeAction extends AnyAction {
   type: 'resourceAuthPage/fetchAuthorize',
-  payload: string;
+  // payload: string;
 }
 
 export interface UpdateAuthorizedAction extends AnyAction {
@@ -100,6 +101,8 @@ const Model: ResourceAuthPageModelType = {
   namespace: 'resourceAuthPage',
 
   state: {
+    resourceID: '',
+
     policies: [],
     policyPreviewVisible: false,
     policyPreviewText: '',
@@ -127,7 +130,7 @@ const Model: ResourceAuthPageModelType = {
       });
     },
     * updatePolicies(action: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceInfo}: ConnectState = yield select(({resourceInfo}:ConnectState) => ({
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
         resourceInfo,
       }));
       const params = {
@@ -146,9 +149,17 @@ const Model: ResourceAuthPageModelType = {
         payload: resourceInfo.info?.resourceId || '',
       });
     },
-    * fetchAuthorized({payload: {baseResourceId, activatedResourceId}}: FetchAuthorizedAction, {call, put}: EffectsCommandMap) {
+    * fetchAuthorized({payload: {activatedResourceId}}: FetchAuthorizedAction, {call, put, select}: EffectsCommandMap) {
+      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+        resourceAuthPage,
+      }));
+
+      // console.log(resourceInfo, 'resourceInfo0932qojf');
+      // if (!resourceInfo.info?.resourceId) {
+      //   return;
+      // }
       const params: ResolveResourcesParamsType = {
-        resourceId: baseResourceId,
+        resourceId: resourceAuthPage.resourceID,
       };
       const {data} = yield call(resolveResources, params);
       // console.log(data, 'datadata232323');
@@ -171,13 +182,11 @@ const Model: ResourceAuthPageModelType = {
 
       const contractsParams: ContractsParamsType = {
         identityType: 2,
-        licenseeId: baseResourceId,
+        licenseeId: resourceAuthPage.resourceID,
         isLoadPolicyInfo: 1,
       };
 
       const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
-      // console.log(contractsData, 'contractsDatacontractsData');
-      // const {data: resourceData} = yield call()
 
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
@@ -239,12 +248,18 @@ const Model: ResourceAuthPageModelType = {
         },
       });
     },
-    * fetchAuthorize({payload}: FetchAuthorizeAction, {call, put}: EffectsCommandMap) {
+    * fetchAuthorize({payload}: FetchAuthorizeAction, {call, put, select}: EffectsCommandMap) {
+      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+        resourceAuthPage,
+      }));
+
       const params: ContractsParamsType = {
         identityType: 1,
-        licensorId: payload,
+        licensorId: resourceAuthPage.resourceID,
       };
+      // console.log('@#RWEQFRSDF');
       const {data} = yield call(contracts, params);
+      // console.log(data, '1234213134');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -260,14 +275,17 @@ const Model: ResourceAuthPageModelType = {
       });
     },
     * updateAuthorized({payload}: UpdateAuthorizedAction, {select, call, put}: EffectsCommandMap) {
-      const {resourceId, activatedResourceId} = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
-        resourceId: resourceInfo.info?.resourceId,
-        activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
+      // const {resourceId, activatedResourceId} = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
+      //   resourceId: resourceInfo.info?.resourceId,
+      //   activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
+      // }));
+      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+        resourceAuthPage,
       }));
       const params: BatchSetContractsParamsType = {
-        resourceId,
+        resourceId: resourceAuthPage.resourceID,
         subjects: [{
-          subjectId: activatedResourceId,
+          subjectId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
           versions: payload,
         }],
       };
@@ -275,8 +293,8 @@ const Model: ResourceAuthPageModelType = {
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
-          baseResourceId: resourceId,
-          activatedResourceId: activatedResourceId,
+          // baseResourceId: resourceInfo.info?.resourceId || '',
+          activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
         },
       });
     }

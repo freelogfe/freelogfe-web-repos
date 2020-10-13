@@ -10,7 +10,7 @@ import styles from './index.less';
 import {i18nMessage} from '@/utils/i18n';
 import {Drawer, Space, Collapse} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceAuthPageModelState} from '@/models/connect';
+import {ConnectState, ResourceAuthPageModelState, ResourceInfoModelState} from '@/models/connect';
 import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
@@ -28,9 +28,10 @@ interface Policy {
 interface FPoliciesProps {
   dispatch: Dispatch;
   auth: ResourceAuthPageModelState;
+  resourceInfo: ResourceInfoModelState;
 }
 
-function FPolicies({dispatch, auth}: FPoliciesProps) {
+function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
 
   function onPolicyStatusChange(id: string, status: Policy['status'], title: string) {
     dispatch<UpdatePoliciesAction>({
@@ -48,7 +49,7 @@ function FPolicies({dispatch, auth}: FPoliciesProps) {
       payload: {
         policyEditorVisible: true,
       }
-    })
+    });
   }
 
   function closeNewVisible() {
@@ -61,27 +62,30 @@ function FPolicies({dispatch, auth}: FPoliciesProps) {
   }
 
   return (<div className={styles.FPoliciesStyles}>
-    {auth.policies?.length === 0
+    {info?.policies?.length === 0
       ? (<div className={styles.empty}>
-        <FTipText type="secondary" text={i18nMessage('hint_add_authorization_plan')}/>
+        <FTipText
+          type="secondary"
+          text={i18nMessage('hint_add_authorization_plan')}
+        />
         <div style={{height: 20}}/>
         <FNormalButton onClick={openNewVisible}>{i18nMessage('add_authorization_plan')}</FNormalButton>
       </div>)
       : (<div className={styles.policies}>
         {
-          auth.policies?.map((i) => (<PolicyCard
-            key={i.id}
-            title={i.title}
-            status={i.status}
-            code={i.code}
+          info?.policies?.map((i) => (<PolicyCard
+            key={i.policyId}
+            title={i.policyName}
+            status={i.status ? 'executing' : 'stopped'}
+            code={i.policyText}
             onPreview={() => dispatch<ChangeAction>({
               type: 'resourceAuthPage/change',
               payload: {
                 policyPreviewVisible: true,
-                policyPreviewText: i.code,
+                policyPreviewText: i.policyText,
               }
             })}
-            onChangeStatus={(value) => onPolicyStatusChange(i.id, value, i.title)}
+            onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
           />))
         }
         <div>
@@ -186,7 +190,7 @@ function FPolicies({dispatch, auth}: FPoliciesProps) {
   </div>);
 }
 
-export default connect(({resourceAuthPage}: ConnectState) => ({
+export default connect(({resourceAuthPage, resourceInfo}: ConnectState) => ({
   auth: resourceAuthPage,
-  // resourceInfo: resourceInfo,
+  resourceInfo: resourceInfo,
 }))(FPolicies);
