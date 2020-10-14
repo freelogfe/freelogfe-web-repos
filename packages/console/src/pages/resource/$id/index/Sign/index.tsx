@@ -13,6 +13,7 @@ import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import * as cover from '@/assets/default-resource-cover.jpg';
+import {OnClickCollectionAction} from "@/models/marketResourcePage";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -50,7 +51,9 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       <FContentText
         text={marketResourcePage.resourceInfo?.about || ''}/>
       <div style={{height: 20}}/>
-      <a className={styles.favoriteBtn}>
+      <a className={styles.favoriteBtn} onClick={() => dispatch<OnClickCollectionAction>({
+        type: 'marketResourcePage/onClickCollection',
+      })}>
         <FFavorite/> 收藏 ({marketResourcePage.popularity}人气)
       </a>
     </div>

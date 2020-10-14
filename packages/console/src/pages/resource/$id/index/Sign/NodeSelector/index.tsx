@@ -5,6 +5,7 @@ import {FContentText} from "@/components/FText";
 import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageState, NodesModelState} from "@/models/connect";
+import {ChangeAction} from "@/models/marketResourcePage";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
@@ -20,10 +21,16 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
       selectable={false}
       className={styles.Menu}
       mode="vertical"
+      onClick={(param: any) => dispatch<ChangeAction>({
+        type: 'marketResourcePage/change',
+        payload: {
+          selectedNodeDomain: param.key,
+        },
+      })}
     >
       {
         nodes.nodeList.map((n) => (<Menu.Item
-          key={n.nodeId}
+          key={n.nodeDomain}
           className={styles.MenuItem}
         >
           <Space size={10}>
@@ -37,8 +44,14 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
     <div className={styles.nodeSelector}>
       <Space size={10}>
         <span className={styles.nodeSelectorLabel}>签约节点</span>
-        <FContentText
-          text={selectedNode?.nodeName || ''}/>
+        {
+          selectedNode
+            ? (<FContentText
+              text={selectedNode.nodeName}/>)
+            : (<FContentText
+              type="negative"
+              text={'选择签约的节点…'}/>)
+        }
         {/*{selectedNode?.signed && (<span className={styles.contracted}>(已签约)</span>)}*/}
       </Space>
       <FDown/>

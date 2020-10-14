@@ -3,8 +3,15 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {info, InfoParamsType, resourceVersionInfo, ResourceVersionInfoParamsType1} from "@/services/resources";
 import {ConnectState} from "@/models/connect";
-import {isCollected} from "@/services/collections";
+import {
+  collectedCount,
+  CollectedCountParamsType,
+  collectResource,
+  CollectResourceParamsType, deleteCollectResource, DeleteCollectResourceParamsType,
+  isCollected
+} from "@/services/collections";
 import {formatDateTime} from "@/utils/format";
+import {presentableList, PresentableListParamsType} from "@/services/presentables";
 
 export interface MarketResourcePageState {
   resourceId: string;
@@ -74,6 +81,14 @@ export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
 }
 
+export interface FetchCollectionInfoAction extends AnyAction {
+  type: 'fetchCollectionInfo';
+}
+
+export interface OnClickCollectionAction extends AnyAction {
+  type: 'marketResourcePage/onClickCollection';
+}
+
 export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo';
 }
@@ -89,6 +104,8 @@ export interface MarketResourcePageModelType {
   effects: {
     initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
+    onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
   };
@@ -113,7 +130,7 @@ const Model: MarketResourcePageModelType = {
         about: '',
       },
 
-      popularity: 219,
+      popularity: 0,
       hasCollect: false,
 
       signedNodeIDs: [],
@@ -196,20 +213,28 @@ const Model: MarketResourcePageModelType = {
         yield put<FetchInfoAction>({
           type: 'fetchInfo',
         });
+
+        yield put<FetchCollectionInfoAction>({
+          type: 'fetchCollectionInfo',
+        });
       },
       * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
-        const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({marketResourcePage}));
+        const {marketResourcePage, user}: ConnectState = yield select(({marketResourcePage, user}: ConnectState) => ({
+          marketResourcePage,
+          user,
+        }));
         const params: InfoParamsType = {
           resourceIdOrName: marketResourcePage.resourceId,
         };
         const {data} = yield call(info, params);
-        // console.log(data, 'datadata32');
 
-        const params1 = {
+        const param3: PresentableListParamsType = {
+          userId: user.info?.userId,
           resourceIds: marketResourcePage.resourceId,
+          // projection: 'nodeId',
         };
 
-        const {data: data1} = yield call(isCollected, params1);
+        const {data: data3} = yield call(presentableList, param3);
 
         yield put<ChangeAction>({
           type: 'change',
@@ -221,14 +246,61 @@ const Model: MarketResourcePageModelType = {
               tags: data.tags,
               about: data.intro,
             },
-            hasCollect: data1[0].isCollected,
             allVersions: data.resourceVersions.map((v: any) => v.version),
             version: data.latestVersion,
+            //
+            signedNodeIDs: data3.map((p: any) => p.nodeId),
           },
         });
 
         yield put<FetchVersionInfoAction>({
           type: 'fetchVersionInfo',
+        });
+      },
+      * fetchCollectionInfo({}: FetchCollectionInfoAction, {call, select, put}: EffectsCommandMap) {
+        const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+          marketResourcePage,
+        }));
+
+        const params1 = {
+          resourceIds: marketResourcePage.resourceId,
+        };
+
+        const {data: data1} = yield call(isCollected, params1);
+
+        const params2: CollectedCountParamsType = {
+          resourceId: marketResourcePage.resourceId,
+        };
+
+        const {data: data2} = yield call(collectedCount, params2);
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            hasCollect: data1[0].isCollected,
+            popularity: data2,
+          },
+        });
+      },
+      * onClickCollection({}: OnClickCollectionAction, {select, call, put}: EffectsCommandMap) {
+        const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+          marketResourcePage,
+        }));
+
+        if (!marketResourcePage.hasCollect) {
+          const params: CollectResourceParamsType = {
+            resourceId: marketResourcePage.resourceId,
+          };
+          yield call(collectResource, params)
+        } else {
+          const params: DeleteCollectResourceParamsType = {
+            resourceId: marketResourcePage.resourceId,
+          };
+          yield call(deleteCollectResource, params);
+        }
+
+        yield put<FetchCollectionInfoAction>({
+          type: 'fetchCollectionInfo',
         });
       },
       * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
@@ -267,7 +339,7 @@ const Model: MarketResourcePageModelType = {
         });
       },
       * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
-        console.log(payload, 'payload234sd09');
+        // console.log(payload, 'payload234sd09');
         yield put<ChangeAction>({
           type: 'change',
           payload: {
