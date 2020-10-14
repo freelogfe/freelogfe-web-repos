@@ -1,5 +1,5 @@
 import 'jest';
-import Index from '../market';
+import Index from '../market/index';
 import React from 'react';
 import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from '@/models/connect';
-import styles from '@/pages/market/index.less';
+import styles from '@/pages/market/index/index.less';
 import {ChangeStatesAction} from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';

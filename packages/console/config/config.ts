@@ -26,8 +26,6 @@ const config: IConfig | any = {
         {
           exact: false,
           path: 'market',
-          // component: '../pages/market',
-          // title: '市场资源',
           routes: [
             {
               // exact: true,
@@ -39,10 +37,11 @@ const config: IConfig | any = {
                 {exact: true, path: '.', component: '../pages/market/$id/index', title: '市场资源'},
               ]
             },
-            {exact: true, path: '.', component: '../pages/market', title: '市场资源'},
+            {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
           ],
         },
-        {exact: true, path: 'example', component: '../pages/market', title: '示例节点'},
+        // TODO: 需要迁移到市场下面
+        // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
         {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
         {
           path: 'node',
