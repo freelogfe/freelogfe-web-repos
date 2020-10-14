@@ -42,7 +42,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
 
   function onClickCreate() {
     dispatch<OnCreateAction>({
-      type: 'resourceCreatorPage/create',
+      type: 'resourceCreatorPage/creator',
     });
   }
 

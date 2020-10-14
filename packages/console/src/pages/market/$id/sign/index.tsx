@@ -119,7 +119,7 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
           <pre>{'initial:\n' +
           '    active\n' +
           '    recontractable\n' +
-          '    presentable\n' +
+          '    exhibit\n' +
           '    terminate'}</pre>
         </div>
         <div className={styles.policy}>
@@ -128,7 +128,7 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
           <pre>{'initial:\n' +
           '    active\n' +
           '    recontractable\n' +
-          '    presentable\n' +
+          '    exhibit\n' +
           '    terminate'}</pre>
         </div>
         <div className={styles.policy}>
@@ -137,7 +137,7 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
           <pre>{'initial:\n' +
           '    active\n' +
           '    recontractable\n' +
-          '    presentable\n' +
+          '    exhibit\n' +
           '    terminate'}</pre>
         </div>
       </Space>

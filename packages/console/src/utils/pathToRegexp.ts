@@ -410,7 +410,7 @@ function tokensToRegexp(tokens: any, keys: any, options: any) {
   var endsWith = "[" + escapeString(options.endsWith || "") + "]|$";
   var delimiter = "[" + escapeString(options.delimiter || "/#?") + "]";
   var route = start ? "^" : "";
-  // Iterate over the tokens and create our regexp string.
+  // Iterate over the tokens and creator our regexp string.
   for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
     var token = tokens_1[_i];
     if (typeof token === "string") {

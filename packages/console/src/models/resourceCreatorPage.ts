@@ -16,7 +16,7 @@ export interface ResourceCreatorPageModelState {
 }
 
 export interface OnCreateAction extends AnyAction {
-  type: 'resourceCreatorPage/create';
+  type: 'resourceCreatorPage/creator';
 }
 
 // export interface OnVerifyAction extends AnyAction {

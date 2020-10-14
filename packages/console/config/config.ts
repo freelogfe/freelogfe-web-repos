@@ -45,6 +45,14 @@ const config: IConfig | any = {
         {exact: true, path: 'example', component: '../pages/market', title: '示例节点'},
         {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
         {
+          path: 'node',
+          routes: [
+            {exact: true, path: 'creator', component: '../pages/node/creator', title: '节点创建'},
+            {exact: true, path: 'exhibit/:id', component: '../pages/node/exhibit/$id', title: '展品管理'},
+            {exact: true, path: ':id', component: '../pages/node/$id', title: '节点管理'},
+          ]
+        },
+        {
           path: 'resource',
           routes: [
             {exact: true, path: '.', redirect: '/resource/list'},

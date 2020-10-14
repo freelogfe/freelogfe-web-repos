@@ -133,7 +133,7 @@ const Model: MarketResourcePageModelType = {
         //       text: 'initial:\n' +
         //         '    active\n' +
         //         '    recontractable\n' +
-        //         '    presentable\n' +
+        //         '    exhibit\n' +
         //         '    terminate',
         //     }, {
         //       checked: true,
@@ -142,7 +142,7 @@ const Model: MarketResourcePageModelType = {
         //       text: 'initial:\n' +
         //         '    active\n' +
         //         '    recontractable\n' +
-        //         '    presentable\n' +
+        //         '    exhibit\n' +
         //         '    terminate',
         //     }
         //   ],
@@ -159,7 +159,7 @@ const Model: MarketResourcePageModelType = {
             text: 'initial:\n' +
               '    active\n' +
               '    recontractable\n' +
-              '    presentable\n' +
+              '    exhibit\n' +
               '    terminate',
           }, {
             id: '23sdfasd2',
@@ -168,7 +168,7 @@ const Model: MarketResourcePageModelType = {
             text: 'initial:\n' +
               '    active\n' +
               '    recontractable\n' +
-              '    presentable\n' +
+              '    exhibit\n' +
               '    terminate',
           }]
         }
