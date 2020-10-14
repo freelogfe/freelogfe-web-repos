@@ -54,7 +54,7 @@ function Resources({dispatch, market}: ResourcesProps) {
             className={styles.FResourceCard}
             onClick={(resource) => {
               // console.log(resource, 'resourceq098upioq');
-              return router.push(`/market/${resource.id}`);
+              return router.push(`/resource/${resource.id}`);
             }}
           />))
       }

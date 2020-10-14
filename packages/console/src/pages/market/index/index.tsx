@@ -49,7 +49,7 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
       return router.push('/market');
     }
     if (value === '2' && tabValue !== '2') {
-      return router.push('/example');
+      return router.push('/market/example');
     }
   }
 

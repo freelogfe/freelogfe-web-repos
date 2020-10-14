@@ -2,9 +2,6 @@ import {IConfig} from 'umi-types';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-// import {i18nMessage} from "@/utils/i18n";
-// import { defineConfig } from 'umi';
-// import {i18nMessage} from "@/utils/i18n";
 
 const freelogDir = path.resolve(os.homedir(), '.freelog/');
 const authInfoPath = path.resolve(freelogDir, 'authInfo.json');
@@ -27,21 +24,11 @@ const config: IConfig | any = {
           exact: false,
           path: 'market',
           routes: [
-            {
-              // exact: true,
-              path: ':id',
-              // component: '../pages/market/$id',
-              // title: '资源详情',
-              routes: [
-                {exact: true, path: 'sign', component: '../pages/market/$id/sign', title: '市场资源'},
-                {exact: true, path: '.', component: '../pages/market/$id/index', title: '市场资源'},
-              ]
-            },
             {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
+            // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
+            {exact: true, path: 'example', component: '../pages/market/index', title: '示例节点'},
           ],
         },
-        // TODO: 需要迁移到市场下面
-        // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
         {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
         {
           path: 'node',
@@ -61,12 +48,9 @@ const config: IConfig | any = {
             {
               path: ':id',
               routes: [
-                {
-                  exact: true,
-                  path: 'success',
-                  component: '../pages/resource/$id/success',
-                  title: '资源创建成功',
-                },
+                {exact: true, path: '.', component: '../pages/resource/$id/index', title: '市场资源'},
+                {exact: true, path: 'sign', component: '../pages/resource/$id/sign', title: '市场资源'},
+                {exact: true, path: 'success', component: '../pages/resource/$id/success', title: '资源创建成功',},
                 {exact: true, path: 'info', component: '../pages/resource/$id/info', title: '资源信息'},
                 {exact: true, path: 'auth', component: '../pages/resource/$id/auth', title: '授权信息'},
                 {

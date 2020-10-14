@@ -9,7 +9,7 @@ import {FSwap} from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
-import Viewport from '@/pages/market/$id/index/Viewport';
+import Viewport from '@/pages/resource/$id/index/Viewport';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
 import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
