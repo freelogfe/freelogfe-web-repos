@@ -20,17 +20,15 @@ export interface UpdateParamsType {
   intro?: string;
   tags?: string[];
   coverImages?: string[];
-  policyChangeInfo?: {
-    addPolicies?: {
-      policyName: string;
-      policyText: string;
-    }[];
-    updatePolicies?: {
-      policyId: string;
-      policyName: string;
-      status: 0 | 1;
-    }[];
-  };
+  addPolicies?: {
+    policyName: string;
+    policyText: string;
+    status?: 0 | 1; // 1:上线 0:下线
+  }[];
+  updatePolicies?: {
+    policyId: string;
+    status: 0 | 1; // 0:下线策略 1:上线策略
+  }[];
 }
 
 export function update(params: UpdateParamsType) {

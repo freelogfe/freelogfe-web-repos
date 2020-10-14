@@ -37,8 +37,10 @@ function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
     dispatch<UpdatePoliciesAction>({
       type: 'resourceAuthPage/updatePolicies',
       payload: {
-        id: id,
-        status: status,
+        updatePolicies: [{
+          policyId: id,
+          status: status === 'executing' ? 1 : 0,
+        }],
       },
     });
   }
@@ -160,7 +162,23 @@ function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
         </a>
         <Space size={30}>
           <FTextButton onClick={closeNewVisible}>取消</FTextButton>
-          <FNormalButton>确定</FNormalButton>
+          <FNormalButton onClick={() => {
+            dispatch<UpdatePoliciesAction>({
+              type: 'resourceAuthPage/updatePolicies',
+              payload: {
+                addPolicies: [{
+                  policyName: auth.newPolicyTitle,
+                  policyText: auth.newPolicyText,
+                }],
+              },
+            });
+            dispatch<ChangeAction>({
+              type: 'resourceAuthPage/change',
+              payload: {
+                policyEditorVisible: false,
+              },
+            });
+          }}>确定</FNormalButton>
         </Space>
       </div>
 

@@ -99,24 +99,7 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
     <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
       <div className={styles.styles}>
         <FEditorCard title={i18nMessage('authorization_plan')}>
-          <FPolicies
-            // dataSource={auth.policies || []}
-            // onChangeStatus={(value) => dispatch<UpdatePoliciesAction>({
-            //   type: 'resourceAuthPage/updatePolicies',
-            //   id: match.params.id,
-            //   payload: {
-            //     id: value.id,
-            //     status: value.status,
-            //   },
-            // })}
-            // onAddPolicy={(value) => dispatch<UpdatePoliciesAction>({
-            //   type: 'resourceAuthPage/updatePolicies',
-            //   id: match.params.id,
-            //   payload: {
-            //     id: value.id,
-            //   },
-            // })}
-          />
+          <FPolicies/>
         </FEditorCard>
         {
           auth.contractsAuthorized?.length > 0 && (<FEditorCard title={i18nMessage('licencee_contract')}>

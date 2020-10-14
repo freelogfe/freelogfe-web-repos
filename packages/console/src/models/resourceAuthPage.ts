@@ -45,8 +45,16 @@ export interface ResourceAuthPageModelState {
 
 export interface UpdatePoliciesAction {
   type: 'resourceAuthPage/updatePolicies';
-  payload: Partial<Exclude<ResourceAuthPageModelState['policies'], null>[number]>;
-  // id: string;
+  payload: {
+    updatePolicies?: {
+      policyId: string;
+      status: 0 | 1; // 0:下线策略 1:上线策略
+    }[];
+    addPolicies?: {
+      policyName: string;
+      policyText: string;
+    }[];
+  };
 }
 
 export interface ChangeAction extends AnyAction {
@@ -129,19 +137,13 @@ const Model: ResourceAuthPageModelType = {
         }
       });
     },
-    * updatePolicies(action: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
+    * updatePolicies({payload}: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
       const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
         resourceInfo,
       }));
-      const params = {
-        resourceId: resourceInfo.info?.resourceId,
-        // [action.payload.id ? 'updatePolicies' : 'addPolicies']: [
-        [action.payload.status ? 'updatePolicies' : 'addPolicies']: [
-          {
-            policyId: action.payload.id,
-            status: action.payload.status === 'stopped' ? 0 : 1,
-          }
-        ],
+      const params: UpdateParamsType = {
+        resourceId: resourceInfo.info?.resourceId || '',
+        ...payload,
       };
       yield call(update, params);
       yield put<FetchDataSourceAction>({
