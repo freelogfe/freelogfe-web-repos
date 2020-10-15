@@ -35,7 +35,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
         >
           <Space size={10}>
             <span>{n.nodeName}</span>
-            {/*{n.signed && (<span className={styles.contracted}>(已签约)</span>)}*/}
+            {marketResourcePage.signedNodeIDs.includes(n.nodeId) && (<span className={styles.contracted}>(已签约)</span>)}
           </Space>
         </Menu.Item>))
       }
@@ -52,11 +52,14 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
               type="negative"
               text={'选择签约的节点…'}/>)
         }
-        {/*{selectedNode?.signed && (<span className={styles.contracted}>(已签约)</span>)}*/}
+        {marketResourcePage.signedNodeIDs.includes(selectedNode?.nodeId || -1) && (<span className={styles.contracted}>(已签约)</span>)}
       </Space>
       <FDown/>
     </div>
   </Dropdown>);
 }
 
-export default connect(({marketResourcePage, nodes}: ConnectState) => ({marketResourcePage, nodes}))(NodeSelector);
+export default connect(({marketResourcePage, nodes}: ConnectState) => ({
+  marketResourcePage,
+  nodes
+}))(NodeSelector);
