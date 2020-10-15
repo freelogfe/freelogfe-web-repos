@@ -18,7 +18,12 @@ import {
   isCollected
 } from "@/services/collections";
 import {formatDateTime} from "@/utils/format";
-import {presentableList, PresentableListParamsType} from "@/services/presentables";
+import {
+  createPresentable,
+  CreatePresentableParamsType,
+  presentableList,
+  PresentableListParamsType
+} from "@/services/presentables";
 
 export interface MarketResourcePageState {
   resourceId: string;
@@ -78,6 +83,8 @@ export interface MarketResourcePageState {
     key: string;
     value: string;
   }[];
+
+  signExhibitName: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -115,6 +122,11 @@ export interface OnChangeVersionAction extends AnyAction {
   payload: string;
 }
 
+export interface SignContractAction extends AnyAction {
+  type: 'marketResourcePage/signContract';
+  // payload: string;
+}
+
 export interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageState;
@@ -126,6 +138,7 @@ export interface MarketResourcePageModelType {
     fetchSignedResources: (action: FetchSignedResourcesAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
+    signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageState, ChangeAction>;
@@ -192,6 +205,8 @@ const Model: MarketResourcePageModelType = {
     properties: [],
 
     options: [],
+
+    signExhibitName: '',
   },
   effects: {
     * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
@@ -380,6 +395,27 @@ const Model: MarketResourcePageModelType = {
       yield  put<FetchVersionInfoAction>({
         type: 'fetchVersionInfo',
       });
+    },
+    * signContract({}: SignContractAction, {call, select}: EffectsCommandMap) {
+      const {marketResourcePage, nodes}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
+        marketResourcePage,
+        nodes,
+      }));
+      const params: CreatePresentableParamsType = {
+        nodeId: nodes.nodeList.find((n) => n.nodeDomain === marketResourcePage.selectedNodeDomain)?.nodeId as number,
+        resourceId: marketResourcePage.resourceId,
+        version: marketResourcePage.version,
+        presentableName: marketResourcePage.signExhibitName,
+        resolveResources: marketResourcePage.signResources.map((sr) => ({
+          resourceId: sr.id,
+          contracts: sr.policies.filter((srp) => srp.checked)
+            .map((srp) => ({
+              policyId: srp.id,
+            }))
+        })),
+      };
+      const {data} = yield call(createPresentable, params);
+      console.log(data, 'data0923ure2p3oi');
     },
   },
   reducers: {

@@ -7,160 +7,94 @@ import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import {Space, Tooltip, Drawer} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
-import FLeft from "@/components/FIcons/FLeft";
+import {ConnectState, MarketResourcePageState, NodesModelState} from '@/models/connect';
+import FLeft from '@/components/FIcons/FLeft';
+import ResourcesAndPolicies from './ResourcesAndPolicies';
+import FixedFooter from './FixedFooter';
+import {router} from 'umi';
+import FTooltip from '@/components/FTooltip';
+import {ChangeAction} from "@/models/marketResourcePage";
 
 interface SignProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
+  nodes: NodesModelState;
 }
 
-function Sign({dispatch, marketResourcePage}: SignProps) {
+function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
+  const selectedNode = nodes.nodeList.find((n) => n.nodeDomain === marketResourcePage.selectedNodeDomain);
+
+  if (!selectedNode) {
+    router.goBack();
+    return null;
+  }
+
   return (<FCenterLayout>
     <div className={styles.header}>
       <FTitleText text={'确认签约'}/>
       <div style={{width: 50}}/>
       <div className={styles.headerResource}>
-        <img alt={''} src={undefined}/>
+        <img
+          alt={''}
+          src={marketResourcePage.resourceInfo?.cover || undefined}
+        />
         <div style={{width: 8}}/>
-        <FContentText text={'stefan/Smells like teen spirit'}/>
+        <FContentText text={marketResourcePage.resourceInfo?.name}/>
       </div>
     </div>
 
     <div className={styles.content}>
       <div>
-        <FTitleText type={'h3'} text={'确认签约节点'}/>
+        <FTitleText
+          type="h3"
+          text={'确认签约节点'}
+        />
         <div style={{height: 20}}/>
         <div className={styles.nodeName}>
-          <FTitleText type={'h5'} text={'我的音乐节点'}/>
-          <div style={{width: 20}}/>
-          <FSwap/>
+          <FTitleText
+            type="h5"
+            text={selectedNode?.nodeName}
+          />
+          {/*<div style={{width: 20}}/>*/}
+          {/*<FSwap/>*/}
         </div>
         <div style={{height: 50}}/>
-        <FTitleText text={'输入展品名称'} type="h3"/>
+        <FTitleText
+          text={'输入展品名称'}
+          type="h3"
+        />
         <div style={{height: 20}}/>
         <div className={styles.exhibitName}>
-          <FInput className={styles.exhibitNameInput}/>
+          <FInput
+            value={marketResourcePage.signExhibitName}
+            className={styles.exhibitNameInput}
+            onChange={(e) => dispatch<ChangeAction>({
+              type: 'marketResourcePage/change',
+              payload: {signExhibitName: e.target.value,}
+            })}
+          />
           <div style={{width: 10}}/>
-          <Tooltip
-            placement="leftBottom"
+          <FTooltip
+            placement="bottomLeft"
             title={'展品名称在当前节点内部唯一，后期不可修改，仅供编码用'}
           >
             <FInfo/>
-          </Tooltip>
+          </FTooltip>
         </div>
         <div style={{height: 50}}/>
-        <FTitleText text={'确认签约策略'} type={'h3'}/>
-        <div style={{height: 20}}/>
-        <div className={styles.smallTitle}>当前资源</div>
-        <div style={{height: 10}}/>
-        <a className={styles.resource}>
-          <div>
-            <FTitleText type={'h4'} text={'stefan/Smells like teen spirit'}/>
-            <div style={{height: 5}}/>
-            <FContentText type="additional2" text={'audio'}/>
-          </div>
-          <div className={styles.resourcePolicies}>
-            <label>策略1</label>
-          </div>
-        </a>
-        <div style={{height: 20}}/>
-        <div className={styles.smallTitle}>基础上抛</div>
-        <div style={{height: 10}}/>
-        <Space
-          direction="vertical"
-          size={10}
-          style={{width: '100%'}}
-        >
-          <a className={styles.resource}>
-            <div>
-              <FTitleText type={'h4'} text={'stefan/Smells like teen spirit'}/>
-              <div style={{height: 5}}/>
-              <FContentText type="additional2" text={'audio'}/>
-            </div>
-            <div className={styles.resourcePolicies}>
-              <label>策略1</label>
-              <label>策略1</label>
-              <label>策略1</label>
-            </div>
-          </a>
-          <a className={styles.resource}>
-            <div>
-              <FTitleText type={'h4'} text={'stefan/Smells like teen spirit'}/>
-              <div style={{height: 5}}/>
-              <FContentText type="additional2" text={'audio'}/>
-            </div>
-            <div className={styles.resourcePolicies}>
-              <label>策略1</label>
-            </div>
-          </a>
-        </Space>
+
+        <ResourcesAndPolicies/>
       </div>
     </div>
-
 
     <div style={{height: 50}}/>
 
-    <div className={styles.footer}>
-      <div>
-        <FTextButton>
-          <FLeft/>
-          <>返回上一步</>
-        </FTextButton>
-        <div style={{width: 30}}/>
-        <FNormalButton>确认签约</FNormalButton>
-      </div>
-    </div>
+    <FixedFooter/>
 
-    <Drawer
-      visible={false}
-      // title={<span style={{fontWeight: 400}}>stefan/Smell like teen spirit</span>}
-      title={null}
-      width={720}
-      bodyStyle={{padding: 40}}
-    >
-      <FTitleText text={'stefan/Smell like teen spirit'} type={'h3'}/>
-      <div style={{height: 10}}/>
-      <FContentText type="additional1" text={'audio'}/>
-      <div style={{height: 50}}/>
-      <FTitleText type={'h3'} text={'已选策略'}/>
-      <div style={{height: 30}}/>
-      <Space
-        direction="vertical"
-        size={20}
-        style={{width: '100%'}}>
-        <div className={styles.policy}>
-          <FTitleText text={'策略1'} type={'h4'}/>
-          <div style={{height: 15}}/>
-          <pre>{'initial:\n' +
-          '    active\n' +
-          '    recontractable\n' +
-          '    exhibit\n' +
-          '    terminate'}</pre>
-        </div>
-        <div className={styles.policy}>
-          <FTitleText text={'策略1'} type={'h4'}/>
-          <div style={{height: 15}}/>
-          <pre>{'initial:\n' +
-          '    active\n' +
-          '    recontractable\n' +
-          '    exhibit\n' +
-          '    terminate'}</pre>
-        </div>
-        <div className={styles.policy}>
-          <FTitleText text={'策略1'} type={'h4'}/>
-          <div style={{height: 15}}/>
-          <pre>{'initial:\n' +
-          '    active\n' +
-          '    recontractable\n' +
-          '    exhibit\n' +
-          '    terminate'}</pre>
-        </div>
-      </Space>
-    </Drawer>
   </FCenterLayout>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({
+export default connect(({marketResourcePage, nodes}: ConnectState) => ({
   marketResourcePage,
+  nodes,
 }))(Sign);

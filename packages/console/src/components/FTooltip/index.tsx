@@ -8,10 +8,12 @@ interface FTooltipProps extends TooltipPropsWithTitle {
   children: React.ReactNode;
 }
 
-function FTooltip({children, title}: FTooltipProps) {
+function FTooltip({children, title, ...props}: FTooltipProps) {
   return (<Tooltip
     title={<span className={styles.title}>{title}</span>}
-    color={'#fff'}>{children}</Tooltip>);
+    color={'#fff'}
+    {...props}
+  >{children}</Tooltip>);
 }
 
 export default FTooltip;

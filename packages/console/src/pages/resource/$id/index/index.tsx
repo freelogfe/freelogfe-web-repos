@@ -42,6 +42,9 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
 
   React.useEffect(() => {
     // console.log((match.params as any).id, 'match98320j');
+    if ((match.params as any).id === marketResourcePage.resourceId) {
+      return;
+    }
     dispatch<InitDataAction>({
       type: 'marketResourcePage/initData',
       payload: (match.params as any).id,
