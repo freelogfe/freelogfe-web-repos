@@ -12,6 +12,7 @@ import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
 import NodeSelector from './NodeSelector';
+import Bottom from './Bottom';
 import * as cover from '@/assets/default-resource-cover.jpg';
 import {OnClickCollectionAction} from "@/models/marketResourcePage";
 
@@ -54,7 +55,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       <a className={styles.favoriteBtn} onClick={() => dispatch<OnClickCollectionAction>({
         type: 'marketResourcePage/onClickCollection',
       })}>
-        <FFavorite/> 收藏 ({marketResourcePage.popularity}人气)
+        <FFavorite filled={marketResourcePage.hasCollect}/> 收藏 ({marketResourcePage.popularity}人气)
       </a>
     </div>
     <div className={styles.cell}/>
@@ -72,12 +73,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
 
       </div>
       <div style={{height: 15}}/>
-      <div className={styles.signBottom}>
-        {/*<FNormalButton*/}
-        {/*  className={styles.signButton}*/}
-        {/*>签约</FNormalButton>*/}
-        <span>该资源已签约，可进入<a>展品管理</a>进行授权管理</span>
-      </div>
+      <Bottom/>
     </div>
   </div>);
 }

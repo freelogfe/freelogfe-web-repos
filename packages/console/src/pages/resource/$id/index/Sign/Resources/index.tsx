@@ -3,6 +3,7 @@ import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageState} from "@/models/connect";
+import {ChangeAction} from "@/models/marketResourcePage";
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -10,13 +11,33 @@ interface ResourcesProps {
 }
 
 function Resources({dispatch, marketResourcePage}: ResourcesProps) {
+
+  const showResource: any = marketResourcePage.signedResources || marketResourcePage.signResources;
+
+  // console.log(showResource, 'showResource3209');
+
+  function onChangeSelected(id: string) {
+    console.log(id, 'id3209udsf');
+    dispatch<ChangeAction>({
+      type: 'marketResourcePage/change',
+      payload: {
+        signResources: marketResourcePage.signResources.map((sr) => ({
+          ...sr,
+          selected: id === sr.id,
+        }))
+      }
+    })
+  }
+
   return (<>
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
-      marketResourcePage.signResources.filter((r, i) => i === 0)
-        .map((r) => (<a
+      showResource
+        .filter((r: any, i: number) => i === 0)
+        .map((r: any) => (<a
           key={r.id}
-          className={styles.signResource + ' ' + styles.activatedSignResource}
+          className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
+          onClick={() => onChangeSelected(r.id)}
         >
           <FTitleText
             type="h5"
@@ -31,38 +52,50 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
           <div style={{height: 5}}/>
           <div className={styles.policeTags}>
             {
-              r.policies?.filter((p) => p.checked)
-                .map((p) => (<label key={p.id}>{p.name}</label>))
+              r.policies?.filter((p: any) => p.checked)
+                .map((p: any) => (<label key={p.id}>{p.name}</label>))
             }
-          </div>
-        </a>))
-    }
-
-    {
-      marketResourcePage.signResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
-    }
-
-    {
-      marketResourcePage.signResources.filter((r, i) => i !== 0)
-        .map((r) => (<a className={styles.signResource} key={r.id}>
-          <FTitleText
-            type="h5"
-            text={r.name}
-            singleRow
-          />
-          <div style={{height: 5}}/>
-          <FContentText
-            type="additional2"
-            text={r.type}
-          />
-          <div style={{height: 5}}/>
-          <div className={styles.policeTags}>
             {
-              r.policies?.filter((p) => p.checked)
-                .map((p) => (<label key={p.id}>{p.name}</label>))
+              r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
             }
           </div>
         </a>))
+    }
+
+    {
+      showResource.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
+    }
+
+    {
+      showResource
+        .filter((r: any, i: number) => i !== 0)
+        .map((r: any) => (
+          <a
+            className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
+            key={r.id}
+            onClick={() => onChangeSelected(r.id)}
+          >
+            <FTitleText
+              type="h5"
+              text={r.name}
+              singleRow
+            />
+            <div style={{height: 5}}/>
+            <FContentText
+              type="additional2"
+              text={r.type}
+            />
+            <div style={{height: 5}}/>
+            <div className={styles.policeTags}>
+              {
+                r.policies?.filter((p: any) => p.checked)
+                  .map((p: any) => (<label key={p.id}>{p.name}</label>))
+              }
+              {
+                r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
+              }
+            </div>
+          </a>))
     }
   </>);
 }

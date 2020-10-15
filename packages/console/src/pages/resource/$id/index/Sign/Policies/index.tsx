@@ -3,18 +3,21 @@ import styles from './index.less';
 import {Checkbox, Space} from "antd";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageState} from "@/models/connect";
+import {ChangeAction} from "@/models/marketResourcePage";
 
 interface PoliciesProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageState;
 }
 
-function Policies({marketResourcePage}: PoliciesProps) {
+function Policies({dispatch, marketResourcePage}: PoliciesProps) {
 
-  const policies = marketResourcePage.signResources.find((r) => r.checked)?.policies;
+  const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
+
   if (!policies) {
     return null;
   }
+
   return (<div>
     {
       policies.map((p) => (<div
@@ -24,6 +27,28 @@ function Policies({marketResourcePage}: PoliciesProps) {
         <Space size={5}>
           <Checkbox
             checked={p.checked}
+            onChange={(e) => dispatch<ChangeAction>({
+              type: 'marketResourcePage/change',
+              payload: {
+                signResources: marketResourcePage.signResources.map((sr) => {
+                  if (!sr.selected) {
+                    return sr;
+                  }
+                  return {
+                    ...sr,
+                    policies: sr.policies.map((srp) => {
+                      if (srp.id !== p.id) {
+                        return srp;
+                      }
+                      return {
+                        ...srp,
+                        checked: e.target.checked,
+                      }
+                    })
+                  }
+                })
+              }
+            })}
           />
           <span>{p.name}</span>
         </Space>
