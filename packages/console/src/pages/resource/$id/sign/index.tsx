@@ -1,12 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
+import {FNormalButton, FTextButton} from '@/components/FButton';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import {Space, Tooltip, Drawer} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import FLeft from "@/components/FIcons/FLeft";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -93,6 +95,20 @@ function Sign({dispatch, marketResourcePage}: SignProps) {
             </div>
           </a>
         </Space>
+      </div>
+    </div>
+
+
+    <div style={{height: 50}}/>
+
+    <div className={styles.footer}>
+      <div>
+        <FTextButton>
+          <FLeft/>
+          <>返回上一步</>
+        </FTextButton>
+        <div style={{width: 30}}/>
+        <FNormalButton>确认签约</FNormalButton>
       </div>
     </div>
 
