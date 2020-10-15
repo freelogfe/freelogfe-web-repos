@@ -14,7 +14,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
   return (<div className={styles.signBottom}>
     <FNormalButton
       className={styles.signButton}
-      disabled={!marketResourcePage.selectedNodeDomain}
+      disabled={marketResourcePage.selectedNodeID === -1}
       onClick={() => router.push(`/resource/${marketResourcePage.resourceId}/sign`)}
     >签约</FNormalButton>
     {/*<span>该资源已签约，可进入<a>展品管理</a>进行授权管理</span>*/}

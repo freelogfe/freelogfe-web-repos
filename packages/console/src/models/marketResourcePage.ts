@@ -39,8 +39,9 @@ export interface MarketResourcePageState {
   popularity: number;
   hasCollect: boolean;
 
-  signedNodeIDs: string[];
-  selectedNodeDomain: string;
+  signedNodeIDs: number[];
+  // selectedNodeDomain
+  selectedNodeID: number;
 
   signResources: {
     selected: boolean;
@@ -165,7 +166,7 @@ const Model: MarketResourcePageModelType = {
     hasCollect: false,
 
     signedNodeIDs: [],
-    selectedNodeDomain: '',
+    selectedNodeID: -1,
 
     signResources: [],
     signedResources: null && [
@@ -402,7 +403,7 @@ const Model: MarketResourcePageModelType = {
         nodes,
       }));
       const params: CreatePresentableParamsType = {
-        nodeId: nodes.nodeList.find((n) => n.nodeDomain === marketResourcePage.selectedNodeDomain)?.nodeId as number,
+        nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
         presentableName: marketResourcePage.signExhibitName,
