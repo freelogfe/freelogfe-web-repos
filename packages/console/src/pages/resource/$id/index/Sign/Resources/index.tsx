@@ -17,7 +17,20 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
   // console.log(showResource, 'showResource3209');
 
   function onChangeSelected(id: string) {
-    console.log(id, 'id3209udsf');
+    // console.log(id, 'id3209udsf');
+    // console.log(marketResourcePage.signedResources, 'id3209udsf');
+    if (marketResourcePage.signedResources) {
+      dispatch<ChangeAction>({
+        type: 'marketResourcePage/change',
+        payload: {
+          signedResources: marketResourcePage.signedResources.map((sr) => ({
+            ...sr,
+            selected: id === sr.id,
+          })),
+        },
+      });
+      return;
+    }
     dispatch<ChangeAction>({
       type: 'marketResourcePage/change',
       payload: {
@@ -26,7 +39,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
           selected: id === sr.id,
         }))
       }
-    })
+    });
   }
 
   return (<>

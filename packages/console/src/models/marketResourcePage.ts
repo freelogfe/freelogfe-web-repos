@@ -20,10 +20,27 @@ import {
 import {formatDateTime} from "@/utils/format";
 import {
   createPresentable,
-  CreatePresentableParamsType,
+  CreatePresentableParamsType, presentableDetails, PresentableDetailsParamsType2,
   presentableList,
   PresentableListParamsType
 } from "@/services/presentables";
+import {Simulate} from "react-dom/test-utils";
+import select = Simulate.select;
+import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
+
+
+interface Contract {
+  id: string;
+  name: string;
+  text: string;
+  createTime: string;
+}
+
+interface Policy {
+  id: string;
+  name: string;
+  text: string;
+}
 
 export interface MarketResourcePageState {
   resourceId: string;
@@ -60,12 +77,8 @@ export interface MarketResourcePageState {
     id: string;
     name: string;
     type: string;
-    contracts: {
-      id: string;
-      name: string;
-      text: string;
-      createTime: string;
-    }[],
+    contracts: Contract[];
+    policies: Policy[];
   }[];
 
   readonly allVersions: string[];
@@ -110,9 +123,14 @@ export interface OnClickCollectionAction extends AnyAction {
   type: 'marketResourcePage/onClickCollection';
 }
 
-export interface FetchSignedResourcesAction extends AnyAction {
-  type: 'fetchSignResources';
+export interface OnChangeNodeSelectorAction extends AnyAction {
+  type: 'marketResourcePage/onChangeNodeSelector';
+  payload: number;
 }
+
+// export interface FetchSignedResourcesAction extends AnyAction {
+//   type: 'fetchSignResources';
+// }
 
 export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo';
@@ -136,7 +154,8 @@ export interface MarketResourcePageModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
-    fetchSignedResources: (action: FetchSignedResourcesAction, effects: EffectsCommandMap) => void;
+    onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
+    // fetchSignedResources: (action: FetchSignedResourcesAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
@@ -169,33 +188,7 @@ const Model: MarketResourcePageModelType = {
     selectedNodeID: -1,
 
     signResources: [],
-    signedResources: null && [
-      {
-        selected: true,
-        id: '234dsfds2',
-        name: 'stefan/Smells like teen spirit',
-        type: 'audio',
-        contracts: [{
-          id: '23sdfasd',
-          name: '合约1',
-          createTime: '2020/05/19',
-          text: 'initial:\n' +
-            '    active\n' +
-            '    recontractable\n' +
-            '    exhibit\n' +
-            '    terminate',
-        }, {
-          id: '23sdfasd21',
-          name: '合约2',
-          createTime: '2020/05/19',
-          text: 'initial:\n' +
-            '    active\n' +
-            '    recontractable\n' +
-            '    exhibit\n' +
-            '    terminate',
-        }]
-      }
-    ],
+    signedResources: null,
 
     allVersions: [],
     version: '',
@@ -346,8 +339,90 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchCollectionInfo',
       });
     },
-    * fetchSignedResources({}: FetchSignedResourcesAction, {}: EffectsCommandMap) {
+    // * fetchSignedResources({}: FetchSignedResourcesAction, {}: EffectsCommandMap) {
+    //
+    // },
+    * onChangeNodeSelector({payload}: OnChangeNodeSelectorAction, {put, select, call}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          selectedNodeID: payload,
+        },
+      });
 
+      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
+        marketResourcePage
+      }));
+
+      const signed: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+
+      if (!signed) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            signedResources: null,
+          },
+        });
+      }
+
+      const params: PresentableDetailsParamsType2 = {
+        nodeId: marketResourcePage.selectedNodeID,
+        resourceId: marketResourcePage.resourceId,
+      };
+      const {data} = yield call(presentableDetails, params);
+      // console.log(data, 'datadata0923jsdfsd');
+      const allContracts = data.resolveResources;
+      console.log(allContracts, 'datadata0923jsdfsd');
+
+      const allContractIds: string[] = allContracts?.map((c: any) => c.contracts.map((cs: any) => cs.contractId)).flat();
+      // console.log(allContractIds, 'allContractIds3290dsj');
+      const params1: BatchContractsParamsType = {
+        contractIds: allContractIds.join(','),
+        isLoadPolicyInfo: 1,
+      };
+      const {data: data1} = yield call(batchContracts, params1);
+      console.log(data1, 'data19023jr');
+
+      const signedResources = marketResourcePage.signResources
+        .map((sr, i: number) => {
+          const contracts: Contract[] = [];
+          const policies: Policy[] = [];
+
+          for (const p of sr.policies) {
+            const contract = data1.find((c: any) => c.policyId === p.id && sr.id === c.subjectId);
+            if (contract) {
+              contracts.push(({
+                id: contract.contractId,
+                name: contract.contractName,
+                text: contract.policyInfo.policyText,
+                createTime: formatDateTime(contract.createDate),
+              }));
+            } else {
+              policies.push({
+                id: p.id,
+                name: p.name,
+                text: p.text,
+              });
+            }
+          }
+
+          return {
+            selected: i === 0,
+            id: sr.id,
+            name: sr.name,
+            type: sr.type,
+            contracts: contracts,
+            policies: policies,
+          };
+        });
+      // console.log(signedResources, 'signedResources0239jsd');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          signedResources: signedResources,
+        }
+      })
     },
     * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({

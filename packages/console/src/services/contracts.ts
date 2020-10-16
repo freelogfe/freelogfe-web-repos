@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-// 批量查询合同列表
+// 查询合同分页列表
 export interface ContractsParamsType {
   page?: number;
   pageSize?: number;
@@ -20,6 +20,24 @@ export interface ContractsParamsType {
 
 export function contracts(params: ContractsParamsType) {
   return request.get('/v2/contracts', {
+    params,
+  });
+}
+
+// 批量查询合同列表
+export interface BatchContractsParamsType {
+  contractIds?: string;
+  subjectIds?: string;
+  identityType?: 1 | 2;
+  licenseeIdentityType?: number;
+  licensorId?: string;
+  licenseeId?: string;
+  isLoadPolicyInfo?: 0 | 1;
+  projection?: string;
+}
+
+export function batchContracts(params: BatchContractsParamsType) {
+  return request.get('/v2/contracts/list', {
     params,
   });
 }

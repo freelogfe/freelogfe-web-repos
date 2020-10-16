@@ -5,7 +5,7 @@ import {FContentText} from "@/components/FText";
 import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageState, NodesModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/marketResourcePage";
+import {ChangeAction, OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
@@ -21,11 +21,9 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
       selectable={false}
       className={styles.Menu}
       mode="vertical"
-      onClick={(param: any) => dispatch<ChangeAction>({
-        type: 'marketResourcePage/change',
-        payload: {
-          selectedNodeID: Number(param.key),
-        },
+      onClick={(param: any) => dispatch<OnChangeNodeSelectorAction>({
+          type: 'marketResourcePage/onChangeNodeSelector',
+          payload: Number(param.key),
       })}
     >
       {
@@ -52,7 +50,8 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
               type="negative"
               text={'选择签约的节点…'}/>)
         }
-        {marketResourcePage.signedNodeIDs.includes(selectedNode?.nodeId || -1) && (<span className={styles.contracted}>(已签约)</span>)}
+        {marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID || -1) && (
+          <span className={styles.contracted}>(已签约)</span>)}
       </Space>
       <FDown/>
     </div>

@@ -23,5 +23,5 @@ export function humanizeSize(bytes: number): string {
  *
  */
 export function formatDateTime(date: string, showTime: boolean = false) {
-  return moment(date).format('YYYY.MM.DD' + (showTime ? ' HH:mm' : ''));
+  return moment(date).format('YYYY/MM/DD' + (showTime ? ' HH:mm' : ''));
 }
