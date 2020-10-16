@@ -5,12 +5,12 @@ export interface CollectResourceParamsType {
   resourceId: string;
 }
 
-export function collectResource(params: ResourceListParamsType) {
+export function collectResource(params: CollectResourceParamsType) {
   return request.post('/v2/collections/resources', params);
 }
 
 // 查看收藏的资源列表
-export interface ResourceListParamsType {
+export interface CollectionResourcesParamsType {
   page?: number;
   pageSize?: number;
   keywords?: number;
@@ -18,7 +18,7 @@ export interface ResourceListParamsType {
   resourceStatus?: number;
 }
 
-export function resourceList(params: ResourceListParamsType) {
+export function collectionResources(params: CollectionResourcesParamsType) {
   return request.get('/v2/collections/resources', {
     params
   });

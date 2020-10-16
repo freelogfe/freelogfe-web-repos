@@ -381,7 +381,7 @@ const Model: MarketResourcePageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data: data1} = yield call(batchContracts, params1);
-      console.log(data1, 'data19023jr');
+      // console.log(data1, 'data19023jr');
 
       const signedResources = marketResourcePage.signResources
         .map((sr, i: number) => {
