@@ -5,7 +5,7 @@ import {list, ListParamsType} from "@/services/resources";
 import {objectList, ObjectListParamsType} from "@/services/storages";
 import {formatDateTime} from "@/utils/format";
 import {ConnectState} from "@/models/connect";
-import {resourceList, ResourceListParamsType} from "@/services/collections";
+import {collectionResources, CollectionResourcesParamsType} from "@/services/collections";
 
 export interface StorageObjectDepSelectorModelState {
   // tabKey: '1' | '2';
@@ -113,7 +113,7 @@ const Model: StorageObjectDepSelectorModelType = {
       const {storageObjectDepSelector: selector}: ConnectState = yield select(({storageObjectDepSelector}: ConnectState) => ({
         storageObjectDepSelector,
       }));
-      const params: ListParamsType | ResourceListParamsType = {
+      const params: ListParamsType | CollectionResourcesParamsType = {
         page: selector.rPageCurrent,
         pageSize: selector.rPageSize,
         keywords: selector.rInput,
@@ -121,8 +121,8 @@ const Model: StorageObjectDepSelectorModelType = {
       };
 
       if (selector.rSelect === '3') {
-        const {data} = yield call(resourceList, params);
-        console.log(data, 'data3209dj');
+        const {data} = yield call(collectionResources, params);
+        // console.log(data, 'data3209dj');
         return;
       }
 
