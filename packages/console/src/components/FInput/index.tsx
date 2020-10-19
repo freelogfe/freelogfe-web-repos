@@ -57,7 +57,12 @@ function FInput({
         onChange={onInputChange}
         // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
         prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
-        className={[styles.Input, theme === 'dark' ? styles.dark : '', className, errorText ? styles.InputError : ''].join(' ')}
+        className={[
+          styles.Input,
+          theme === 'dark' ? styles.dark : '',
+          className,
+          errorText ? styles.InputError : '']
+          .join(' ')}
         {...props}
       />
       {
