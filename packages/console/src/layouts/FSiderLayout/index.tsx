@@ -22,8 +22,9 @@ export default function ({sider, children}: FSiderLayoutProps) {
     style={{minHeight: minHeight}}
   >
     <div className={styles.Slider}>
-      <div style={{height: 40}}/>
-      <div>{sider}</div>
+      {/*<div style={{height: 40}}/>*/}
+      {/*<div></div>*/}
+      {sider}
     </div>
     <div className={styles.rightContent}>
       <div>{children}</div>

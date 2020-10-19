@@ -51,6 +51,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
   }
 
   return (<div className={styles.Sider}>
+    <div style={{height: 40}}/>
     <FResourceCover
       src={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
       status={info?.status === 1 ? 'online' : 'stopped'}
