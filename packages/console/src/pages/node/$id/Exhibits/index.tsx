@@ -5,9 +5,10 @@ import Header from '../Header';
 import FTable from "@/components/FTable";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {FContentText} from '@/components/FText';
-import {Space, Switch} from "antd";
+import {Space} from "antd";
 import {FTextButton} from '@/components/FButton';
 import FPagination from "@/components/FPagination";
+import FSwitch from "@/components/FSwitch";
 
 const columns = [
   {
@@ -77,10 +78,7 @@ const columns = [
     width: 65,
     render(): any {
       return (<Space size={15}>
-        <Switch
-          size="small"
-          // style={{backgroundColor: '#42C28C'}}
-        />
+        <FSwitch/>
         <FExclamation/>
       </Space>)
     }

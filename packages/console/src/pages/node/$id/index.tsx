@@ -13,8 +13,8 @@ interface NodeManagerProps {
 function NodeManager({}: NodeManagerProps) {
   return (<FSiderLayout sider={<Sider/>}>
     {/*<NoContent/>*/}
-    {/*<Exhibits/>*/}
-    <Themes/>
+    <Exhibits/>
+    {/*<Themes/>*/}
   </FSiderLayout>);
 }
 
