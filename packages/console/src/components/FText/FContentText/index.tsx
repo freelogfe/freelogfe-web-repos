@@ -12,6 +12,7 @@ interface FContentProps {
 
 export default function ({className, children, text, type = 'normal', singleRow = false}: FContentProps) {
   return (
-    <div className={[(singleRow && shared.singleRow), styles[type], className].join(' ')}>{children || text}</div>
+    <div
+      className={[(singleRow && shared.singleRow), styles.styles, styles[type], className].join(' ')}>{children || text}</div>
   );
 }

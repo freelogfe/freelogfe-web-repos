@@ -5,6 +5,9 @@ import FDown from './FDown';
 import FSwap from './FSwap';
 import FInfo from './FInfo';
 import FFileText from './FFileText';
+import FFileSearch from './FFileSearch';
+import FEdit from './FEdit';
+import FExclamation from './FExclamation';
 
 export {
   FDelete,
@@ -13,4 +16,7 @@ export {
   FSwap,
   FInfo,
   FFileText,
+  FFileSearch,
+  FEdit,
+  FExclamation,
 }
