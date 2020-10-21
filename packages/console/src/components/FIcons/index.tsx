@@ -8,6 +8,8 @@ import FFileText from './FFileText';
 import FFileSearch from './FFileSearch';
 import FEdit from './FEdit';
 import FExclamation from './FExclamation';
+import FClose from './FClose';
+import FDoubleUp from './FDoubleUp';
 
 export {
   FDelete,
@@ -19,4 +21,6 @@ export {
   FFileSearch,
   FEdit,
   FExclamation,
+  FClose,
+  FDoubleUp,
 }

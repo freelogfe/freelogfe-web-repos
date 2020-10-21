@@ -6,6 +6,7 @@ import {Space} from "antd";
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
+import Side from './Side';
 
 interface PresentableProps {
 
@@ -38,11 +39,7 @@ function Presentable({}: PresentableProps) {
           </div>
         </div>
         <div style={{width: 10}}/>
-        <div className={styles.side}>
-          <div>
-
-          </div>
-        </div>
+        <Side/>
       </div>
     </div>
     <div style={{height: 100}}/>
