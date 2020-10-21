@@ -67,7 +67,6 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           <Contracts/>
           <Policies/>
         </div>
-
       </div>
       <div style={{height: 15}}/>
       <Bottom/>

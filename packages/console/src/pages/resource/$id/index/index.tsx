@@ -60,7 +60,10 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
         <div className={styles.versionTitle}>
           <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
           <div style={{width: 15}}/>
-          <FContentText text={'发布时间 ' + marketResourcePage.releaseTime} type="additional1"/>
+          <FContentText
+            text={'发布时间 ' + marketResourcePage.releaseTime}
+            type="additional1"
+          />
           <div style={{width: 20}}/>
           <FDropdown
             options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}

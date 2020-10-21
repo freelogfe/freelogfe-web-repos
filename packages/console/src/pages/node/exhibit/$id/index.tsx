@@ -3,6 +3,9 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import FSwitch from "@/components/FSwitch";
 import {Space} from "antd";
+import Policies from './Policies';
+import Contracts from './Contracts';
+import Viewports from './Viewports';
 
 interface PresentableProps {
 
@@ -27,12 +30,18 @@ function Presentable({}: PresentableProps) {
       <div className={styles.body}>
         <div className={styles.content}>
           <div>
-
+            <Policies/>
+            <div style={{height: 50}}/>
+            <Contracts/>
+            <div style={{height: 50}}/>
+            <Viewports/>
           </div>
         </div>
         <div style={{width: 10}}/>
         <div className={styles.side}>
-          <div></div>
+          <div>
+
+          </div>
         </div>
       </div>
     </div>
