@@ -1,5 +1,34 @@
 import request from '@/utils/request';
 
+// 创建节点
+export interface CreateParamsType {
+  nodeName: string;
+  nodeDomain: string;
+}
+
+export function create(params: CreateParamsType) {
+  return request.post('/v2/nodes', params);
+}
+
+// 查看节点详情
+export interface NodeDetailParamsType1 {
+  nodeId: number;
+}
+
+export interface NodeDetailParamsType2 {
+  nodeName?: string;
+  nodeDomain?: string;
+}
+
+export function nodeDetail(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
+  if ((params as NodeDetailParamsType1).nodeId) {
+    return request.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
+  }
+  return request.get(`/v2/nodes/detail`, {
+    params,
+  });
+}
+
 // 查看收藏的资源列表
 export interface NodesParamsType {
   page?: number;

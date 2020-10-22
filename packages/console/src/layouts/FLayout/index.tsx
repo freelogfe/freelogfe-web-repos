@@ -10,7 +10,7 @@ import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
   GlobalModelState,
-  GlobalSearchingModelState,
+  GlobalSearchingModelState, NodesModelState,
   // RouterHistoriesModelState,
   UserModelState
 } from '@/models/connect';
@@ -71,9 +71,10 @@ interface FLayoutProps extends RouteComponentProps {
   // routerHistories: GlobalModelState['routerHistories'];
   user: UserModelState,
   global: GlobalModelState;
+  nodes: NodesModelState;
 }
 
-function FLayout({children, global, dispatch, globalSearching, user, ...props}: FLayoutProps) {
+function FLayout({children, global, dispatch, globalSearching, user, nodes, ...props}: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
   React.useEffect(() => {
@@ -101,6 +102,10 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
     }
   }
 
+  function onClickNodes(value: string) {
+    return router.push('/node/' + value);
+  }
+
   function onClickStorage() {
     if (!global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/storage')) {
       return router.push('/storage');
@@ -113,7 +118,7 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
       return router.push('/resource/creator');
     }
     if (value === '2') {
-
+      return router.push('/node/creator');
     }
   }
 
@@ -148,7 +153,15 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
               <a onClick={() => onClickResource('1')}
                  className={styles.Menu}>{i18nMessage('resource_manage')}</a>
             </Dropdown>
-            <a className={styles.Menu}>{i18nMessage('node_manage')}</a>
+            <Dropdown overlay={<FMenu
+              onClick={onClickNodes}
+              options={nodes.nodeList.map((n) => ({
+                text: n.nodeName,
+                value: n.nodeDomain,
+              }))}
+            />}>
+              <a className={styles.Menu}>{i18nMessage('node_manage')}</a>
+            </Dropdown>
             <a className={styles.Menu}>{i18nMessage('contract_manage')}</a>
           </div>
         </div>
@@ -169,9 +182,11 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
           <Dropdown overlay={<FMenu
             onClick={onCreateClick}
             options={creatorOptions}
-          />}
-          >
-            <a className={styles.create} onClick={() => onCreateClick('1')}>
+          />}>
+            <a
+              className={styles.create}
+              // onClick={() => onCreateClick('1')}
+            >
               <FCircleButton/>
             </a>
           </Dropdown>
@@ -206,11 +221,12 @@ function FLayout({children, global, dispatch, globalSearching, user, ...props}: 
   );
 }
 
-export default withRouter(connect(({globalSearching, user, global}: ConnectState) => ({
+export default withRouter(connect(({globalSearching, user, global, nodes}: ConnectState) => ({
   globalSearching: globalSearching,
   routerHistories: global.routerHistories,
   user: user,
   global: global,
+  nodes: nodes,
 }))(FLayout));
 
 // parse()

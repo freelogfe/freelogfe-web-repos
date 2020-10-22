@@ -13,10 +13,13 @@ interface FSelectProps extends SelectProps<any> {
   dataSource: Option[];
 }
 
-export default function ({dataSource, className, ...props}: FSelectProps) {
+function FSelect({dataSource, className, ...props}: FSelectProps) {
   return (<Select className={className + ' ' + styles.Select} {...props}>
     {
-      dataSource.map((i: Option) => (<Select.Option key={i.value} value={i.value} disabled={i.disabled}>{i.title}</Select.Option>))
+      dataSource.map((i: Option) => (
+        <Select.Option key={i.value} value={i.value} disabled={i.disabled}>{i.title}</Select.Option>))
     }
   </Select>);
 }
+
+export default FSelect;

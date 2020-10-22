@@ -5,8 +5,9 @@ import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {FClose, FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FNormalButton, FTextButton, FCircleButton} from "@/components/FButton";
 import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
+import FSelect from "@/components/FSelect";
 
 interface SideProps {
 
@@ -86,10 +87,29 @@ function Side({}: SideProps) {
 
       <FTitleText text={'自定义选项'} type="form"/>
       <div style={{height: 15}}/>
+      <div className={styles.options}>
+        <div>
+          <FContentText text={'流派'}/>
+          <FSelect
+            className={styles.FSelect}
+            value={'123'}
+            dataSource={[{value: '123', title: 'ROCK摇滚'}]}
+          />
+        </div>
+        <div>
+          <FContentText text={'流派'}/>
+          <FInput className={styles.FInput}/>
+        </div>
+      </div>
+      <div style={{height: 20}}/>
+      <Space className={styles.addCustomTitle}>
+        <FCircleButton theme="text"/>
+        <span>添加自定义选项</span>
+      </Space>
     </div>
     <div style={{height: 10}}/>
     <div className={styles.info}>
-      <div className={styles.cover}>
+      <div className={styles.cover} style={{cursor: 'default'}}>
         <img
           alt=""
           src={imgSrc}
@@ -102,7 +122,6 @@ function Side({}: SideProps) {
       <div style={{fontSize: 12, color: '#666'}}>audio</div>
     </div>
 
-    <div className={styles.footer}>收起</div>
   </div>);
 }
 
