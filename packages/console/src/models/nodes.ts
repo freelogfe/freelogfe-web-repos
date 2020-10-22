@@ -62,7 +62,7 @@ const Model: NodesModelType = {
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
       const params: NodesParamsType = {};
       const {data} = yield call(nodes, params);
-      // console.log(data, '#SDFASDC');
+      console.log(data, '#SDFASDC');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -72,7 +72,7 @@ const Model: NodesModelType = {
             nodeName: n.nodeName,
           })),
         }
-      })
+      });
     },
     * createNode({}: CreateNodeAction, {call, select, put}: EffectsCommandMap) {
       const {nodes}: ConnectState = yield select(({nodes}: ConnectState) => ({

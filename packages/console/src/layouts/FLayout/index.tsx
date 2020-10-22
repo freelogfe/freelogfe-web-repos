@@ -157,7 +157,8 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
               onClick={onClickNodes}
               options={nodes.nodeList.map((n) => ({
                 text: n.nodeName,
-                value: n.nodeDomain,
+                // value: n.nodeDomain,
+                value: String(n.nodeId),
               }))}
             />}>
               <a className={styles.Menu}>{i18nMessage('node_manage')}</a>

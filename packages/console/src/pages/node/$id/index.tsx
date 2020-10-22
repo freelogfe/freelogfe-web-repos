@@ -5,12 +5,30 @@ import Sider from './Sider';
 import NoContent from './NoContent';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
+import {withRouter} from "umi";
+import RouterTypes from "umi/routerTypes";
+import {Dispatch, connect} from "dva";
+import {ChangeAction, FetchInfoAction} from "@/models/nodeManagerPage";
 
-interface NodeManagerProps {
-
+interface NodeManagerProps extends RouterTypes {
+  dispatch: Dispatch;
 }
 
-function NodeManager({}: NodeManagerProps) {
+function NodeManager({dispatch, match}: NodeManagerProps) {
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'nodeManagerPage/change',
+      payload: {
+        nodeId: Number((match.params as any).id),
+      },
+    });
+
+    dispatch<FetchInfoAction>({
+      type: 'nodeManagerPage/fetchInfo',
+    });
+  }, [(match.params as any).id]);
+
   return (<FSiderLayout sider={<Sider/>}>
     {/*<NoContent/>*/}
     <Exhibits/>
@@ -18,4 +36,5 @@ function NodeManager({}: NodeManagerProps) {
   </FSiderLayout>);
 }
 
-export default NodeManager;
+
+export default connect()(withRouter(NodeManager));
