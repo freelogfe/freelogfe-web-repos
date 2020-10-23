@@ -1,14 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FEdit, FExclamation, FFileSearch} from "@/components/FIcons";
+import {FDown, FEdit, FExclamation, FFileSearch} from "@/components/FIcons";
 import Header from '../Header';
 import FTable from "@/components/FTable";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {FContentText} from '@/components/FText';
+import {FContentText, FTitleText} from '@/components/FText';
 import {Space} from "antd";
 import {FTextButton} from '@/components/FButton';
 import FPagination from "@/components/FPagination";
 import FSwitch from "@/components/FSwitch";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, NodeManagerModelState} from "@/models/connect";
+import FInput from "@/components/FInput";
 
 const columns = [
   {
@@ -101,12 +104,31 @@ const dataSource = [
 ];
 
 interface ExhibitsProps {
-
+  dispatch: Dispatch;
+  nodeManagerPage: NodeManagerModelState;
 }
 
-function Exhibits({}: ExhibitsProps) {
+function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   return (<div>
-    <Header/>
+    <div className={styles.header}>
+      <FTitleText type="h1" text={'展品管理'}/>
+      <Space size={80}>
+        <div>
+          <span>类型：</span>
+          <span>全部 <FDown/></span>
+        </div>
+        <div>
+          <span>状态：</span>
+          <span>全部 <FDown/></span>
+        </div>
+        <div>
+          <FInput
+            className={styles.input}
+            theme="dark"
+          />
+        </div>
+      </Space>
+    </div>
     <div className={styles.body}>
       <FTable
         columns={columns}
@@ -121,4 +143,6 @@ function Exhibits({}: ExhibitsProps) {
   </div>);
 }
 
-export default Exhibits;
+export default connect(({nodeManagerPage}: ConnectState) => ({
+  nodeManagerPage,
+}))(Exhibits);

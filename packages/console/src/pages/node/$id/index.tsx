@@ -8,13 +8,15 @@ import Themes from './Themes';
 import {withRouter} from "umi";
 import RouterTypes from "umi/routerTypes";
 import {Dispatch, connect} from "dva";
-import {ChangeAction, FetchInfoAction} from "@/models/nodeManagerPage";
+import {ChangeAction, FetchInfoAction, NodeManagerModelState} from "@/models/nodeManagerPage";
+import {ConnectState} from "@/models/connect";
 
 interface NodeManagerProps extends RouterTypes {
   dispatch: Dispatch;
+  nodeManagerPage: NodeManagerModelState;
 }
 
-function NodeManager({dispatch, match}: NodeManagerProps) {
+function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -31,10 +33,14 @@ function NodeManager({dispatch, match}: NodeManagerProps) {
 
   return (<FSiderLayout sider={<Sider/>}>
     {/*<NoContent/>*/}
-    <Exhibits/>
-    {/*<Themes/>*/}
+    {
+      nodeManagerPage.showTheme ?<Themes/>: <Exhibits/>
+    }
+
   </FSiderLayout>);
 }
 
 
-export default connect()(withRouter(NodeManager));
+export default connect(({nodeManagerPage}: ConnectState) => ({
+  nodeManagerPage,
+}))(withRouter(NodeManager));
