@@ -16,6 +16,7 @@ import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
 import {MarketResourcePageState} from './marketResourcePage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
+import {WholeReadonly} from "@/models/shared";
 
 export {
   // RouterHistoriesModelState,

@@ -20,8 +20,18 @@ export function humanizeSize(bytes: number): string {
 }
 
 /**
- *
+ * 格式化日期时间
  */
 export function formatDateTime(date: string, showTime: boolean = false) {
   return moment(date).format('YYYY/MM/DD' + (showTime ? ' HH:mm' : ''));
+}
+
+/**
+ *
+ */
+export function completeUrlByDomain(domain: string) {
+  if (!window.location.origin.includes('.com')) {
+    return `http://${domain}.testfreelog.com`;
+  }
+  return `${window.location.protocol}//${domain}.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
 }

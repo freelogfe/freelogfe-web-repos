@@ -1,12 +1,12 @@
-import {DvaReducer} from '@/models/shared';
+import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {create, CreateParamsType, nodeDetail, NodeDetailParamsType2, nodes, NodesParamsType} from "@/services/nodes";
-import {ConnectState} from "@/models/connect";
-import {router} from "umi";
+import {ConnectState} from '@/models/connect';
+import {router} from 'umi';
 
-export interface NodesModelState {
-  nodeList: {
+export type NodesModelState = WholeReadonly<{
+  list: {
     nodeDomain: string;
     nodeId: number;
     nodeName: string;
@@ -17,7 +17,7 @@ export interface NodesModelState {
 
   nodeDomain: string;
   domainError: string;
-}
+}>;
 
 export interface ChangeAction extends AnyAction {
   type: 'nodes/change' | 'change';
@@ -34,7 +34,7 @@ export interface CreateNodeAction extends AnyAction {
 
 export interface NodesModelType {
   namespace: 'nodes';
-  state: NodesModelState;
+  state: WholeReadonly<NodesModelState>;
   effects: {
     fetchNodes: (action: FetchNodesAction, effects: EffectsCommandMap) => void;
     createNode: (action: CreateNodeAction, effects: EffectsCommandMap) => void;
@@ -50,7 +50,7 @@ export interface NodesModelType {
 const Model: NodesModelType = {
   namespace: 'nodes',
   state: {
-    nodeList: [],
+    list: [],
 
     nodeName: '',
     nameError: '',
@@ -60,18 +60,25 @@ const Model: NodesModelType = {
   },
   effects: {
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
+      // console.log('FetchNodesAction******');
       const params: NodesParamsType = {};
       const {data} = yield call(nodes, params);
-      console.log(data, '#SDFASDC');
+      // console.log(data.dataList, '#SDFASDC');
+      const nodeList = data.dataList.map((node: any, i: number) => {
+        // console.log(node, i, '#@#$FAEWASD');
+        return Object.freeze({
+          nodeDomain: node.nodeDomain,
+          nodeId: node.nodeId,
+          // nodeId: i,
+          nodeName: node.nodeName,
+        });
+      });
+      // console.log(nodeList, 'nodeList3209jdlsif');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeList: data.dataList.map((n: any) => ({
-            nodeDomain: n.nodeDomain,
-            nodeId: n.nodeId,
-            nodeName: n.nodeName,
-          })),
-        }
+          list: Object.freeze(nodeList),
+        },
       });
     },
     * createNode({}: CreateNodeAction, {call, select, put}: EffectsCommandMap) {
@@ -150,6 +157,7 @@ const Model: NodesModelType = {
   },
   reducers: {
     change(state, {payload}) {
+      // console.log(payload, '98023j');
       return {
         ...state,
         ...payload,

@@ -155,10 +155,10 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
             </Dropdown>
             <Dropdown overlay={<FMenu
               onClick={onClickNodes}
-              options={nodes.nodeList.map((n) => ({
+              options={nodes.list.map((n) => ({
                 text: n.nodeName,
                 // value: n.nodeDomain,
-                value: String(n.nodeId),
+                value: n.nodeId.toString(),
               }))}
             />}>
               <a className={styles.Menu}>{i18nMessage('node_manage')}</a>

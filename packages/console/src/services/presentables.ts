@@ -48,6 +48,27 @@ export function presentableDetails(params: PresentableDetailsParamsType1 | Prese
   });
 }
 
+// 查询展品分页列表
+export interface PresentablesParamsType {
+  nodeId: number;
+  page?: number;
+  pageSize?: number;
+  resourceType?: string;
+  omitResourceType?: string;
+  onlineStatus?: number;
+  tags?: string;
+  projection?: string;
+  keywords?: string;
+  isLoadVersionProperty?: 0 | 1;
+  isLoadPolicyInfo?: 0 | 1;
+}
+
+export function presentables(params: PresentablesParamsType) {
+  return request.get(`/v2/presentables`, {
+    params,
+  });
+}
+
 // 批量查询展品列表
 export interface PresentableListParamsType {
   nodeId?: number;
