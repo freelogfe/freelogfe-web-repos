@@ -125,6 +125,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
           <FInput
             className={styles.input}
             theme="dark"
+            // value={nodeManagerPage}
           />
         </div>
       </Space>
