@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from "@/components/FText";
-import FInput from "@/components/FInput";
+import {FTitleText, FContentText} from '@/components/FText';
+import FInput from '@/components/FInput';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {Space} from "antd";
-import {FExclamation} from "@/components/FIcons";
+import {Space} from 'antd';
+import {FExclamation} from '@/components/FIcons';
 
 interface ThemesProps {
 

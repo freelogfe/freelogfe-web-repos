@@ -14,7 +14,7 @@ interface NodeSelectorProps {
 }
 
 function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) {
-  const selectedNode = nodes.nodeList.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
+  const selectedNode = nodes.list.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
 
   return (<Dropdown overlay={(
     <Menu
@@ -27,7 +27,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
       })}
     >
       {
-        nodes.nodeList.map((n) => (<Menu.Item
+        nodes.list.map((n) => (<Menu.Item
           key={n.nodeId}
           className={styles.MenuItem}
         >

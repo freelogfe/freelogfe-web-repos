@@ -81,7 +81,7 @@ export interface MarketResourcePageState {
     policies: Policy[];
   }[];
 
-  readonly allVersions: string[];
+  allVersions: string[];
   version: string;
   releaseTime: string;
 

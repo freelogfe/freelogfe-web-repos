@@ -5,11 +5,11 @@ import Sider from './Sider';
 import NoContent from './NoContent';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
-import {withRouter} from "umi";
-import RouterTypes from "umi/routerTypes";
-import {Dispatch, connect} from "dva";
-import {ChangeAction, FetchInfoAction, NodeManagerModelState} from "@/models/nodeManagerPage";
-import {ConnectState} from "@/models/connect";
+import {withRouter} from 'umi';
+import RouterTypes from 'umi/routerTypes';
+import {Dispatch, connect} from 'dva';
+import {ChangeAction, FetchInfoAction, NodeManagerModelState} from '@/models/nodeManagerPage';
+import {ConnectState} from '@/models/connect';
 
 interface NodeManagerProps extends RouterTypes {
   dispatch: Dispatch;

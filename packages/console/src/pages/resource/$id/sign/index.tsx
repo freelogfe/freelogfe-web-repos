@@ -22,7 +22,7 @@ interface SignProps {
 }
 
 function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
-  const selectedNode = nodes.nodeList.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
+  const selectedNode = nodes.list.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
 
   if (!selectedNode) {
     router.goBack();
