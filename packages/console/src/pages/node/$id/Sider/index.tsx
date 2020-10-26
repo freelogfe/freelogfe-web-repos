@@ -14,6 +14,11 @@ interface SiderProps {
 }
 
 function Sider({dispatch, nodeManagerPage}: SiderProps) {
+
+  // React.useEffect(() => {
+  //   console.log('Sider useEffect');
+  // }, []);
+
   return (<div className={styles.styles}>
     <div>
       <FTitleText type="h3" text={nodeManagerPage.nodeName}/>

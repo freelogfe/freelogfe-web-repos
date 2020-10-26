@@ -119,6 +119,10 @@ const resourceStatusOptions = [
 
 function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
 
+  // React.useEffect(() => {
+  //   console.log('Exhibits useEffect');
+  // }, []);
+
   const dataSource: NodeManagerModelState['exhibitList'] = nodeManagerPage.exhibitList.map((i) => ({
     key: i.id,
     ...i,

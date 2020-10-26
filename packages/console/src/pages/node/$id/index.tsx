@@ -8,7 +8,7 @@ import Themes from './Themes';
 import {withRouter} from 'umi';
 import RouterTypes from 'umi/routerTypes';
 import {Dispatch, connect} from 'dva';
-import {ChangeAction, FetchInfoAction, NodeManagerModelState} from '@/models/nodeManagerPage';
+import {ChangeAction, FetchInfoAction, FetchNodeInfoAction, NodeManagerModelState} from '@/models/nodeManagerPage';
 import {ConnectState} from '@/models/connect';
 
 interface NodeManagerProps extends RouterTypes {
@@ -18,6 +18,11 @@ interface NodeManagerProps extends RouterTypes {
 
 function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
 
+
+  // React.useEffect(() => {
+  //   console.log('NodeManager useEffect');
+  // }, []);
+
   React.useEffect(() => {
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
@@ -26,9 +31,19 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
       },
     });
 
+    dispatch<FetchNodeInfoAction>({
+      type: 'nodeManagerPage/fetchNodeInfo',
+    });
+
     dispatch<FetchInfoAction>({
       type: 'nodeManagerPage/fetchInfo',
     });
+
+    dispatch<FetchInfoAction>({
+      type: 'nodeManagerPage/fetchInfo',
+    });
+
+
   }, [(match.params as any).id]);
 
   return (<FSiderLayout sider={<Sider/>}>

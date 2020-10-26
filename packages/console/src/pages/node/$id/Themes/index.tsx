@@ -11,6 +11,11 @@ interface ThemesProps {
 }
 
 function Themes({}: ThemesProps) {
+
+  // React.useEffect(() => {
+  //   console.log('Themes useEffect');
+  // }, []);
+
   return (<div>
     <div className={styles.header}>
       <FTitleText type="h1" text={'主题管理'}/>

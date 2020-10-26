@@ -47,6 +47,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<NodeManagerModelState>;
 }
 
+export interface FetchNodeInfoAction {
+  type: 'nodeManagerPage/fetchNodeInfo';
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'nodeManagerPage/fetchInfo' | 'fetchInfo';
 }
@@ -62,12 +66,19 @@ export interface OnChangeExhibitAction extends AnyAction {
   }>;
 }
 
+export interface FetchThemesAction extends AnyAction {
+  type: 'FetchThemesAction';
+  payload: 'fetchThemes';
+}
+
 export interface NodeManagerModelType {
   namespace: 'nodeManagerPage';
   state: WholeReadonly<NodeManagerModelState>;
   effects: {
+    fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     onChangeExhibit: (action: OnChangeExhibitAction, effects: EffectsCommandMap) => void;
+    fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<NodeManagerModelState, ChangeAction>;
@@ -85,7 +96,7 @@ const Model: NodeManagerModelType = {
     nodeName: '',
     nodeUrl: '',
     testNodeUrl: '',
-    showTheme: false,
+    showTheme: true,
 
     selectedType: '-1',
     selectedStatus: '2',
@@ -99,13 +110,14 @@ const Model: NodeManagerModelType = {
     themeList: [],
   },
   effects: {
-    * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
+    * fetchNodeInfo({}: FetchNodeInfoAction, {put, select}: EffectsCommandMap) {
       const {nodes, nodeManagerPage}: ConnectState = yield select(({nodes, nodeManagerPage}: ConnectState) => ({
         nodes,
         nodeManagerPage,
       }));
 
       const currentNode = nodes.list.find((n) => n.nodeId === nodeManagerPage.nodeId);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -114,6 +126,11 @@ const Model: NodeManagerModelType = {
           testNodeUrl: completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
         },
       });
+    },
+    * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
+      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+        nodeManagerPage,
+      }));
 
       const params: PresentablesParamsType = {
         nodeId: nodeManagerPage.nodeId,
@@ -124,8 +141,8 @@ const Model: NodeManagerModelType = {
         resourceType: nodeManagerPage.selectedType === '-1' ? undefined : nodeManagerPage.selectedType,
         // isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(presentables, params);
 
+      const {data} = yield call(presentables, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -163,6 +180,39 @@ const Model: NodeManagerModelType = {
       }
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
+      });
+    },
+    * fetchThemes({}: FetchThemesAction, {call, put, select}: EffectsCommandMap) {
+      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+        nodeManagerPage,
+      }));
+
+      const params: PresentablesParamsType = {
+        nodeId: nodeManagerPage.nodeId,
+        // page: nodeManagerPage.pageCurrent,
+        // pageSize: nodeManagerPage.pageSize,
+        keywords: nodeManagerPage.themeInputFilter || undefined,
+        onlineStatus: 2,
+        resourceType: 'theme',
+      };
+
+      const {data} = yield call(presentables, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          themeList: data.dataList.map((i: any) => ({
+            id: i.presentableId,
+            cover: i.coverImages[0],
+            title: i.presentableTitle,
+            // resourceName: i.presentableName,
+            version: i.version,
+            isOnline: i.status,
+            // type: i.resourceInfo.resourceType,
+            policies: [],
+            // resourceId: i.resourceInfo.resourceId,
+          })),
+          totalNum: data.totalItem,
+        },
       });
     }
   },
