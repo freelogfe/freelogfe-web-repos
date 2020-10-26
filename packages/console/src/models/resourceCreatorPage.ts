@@ -16,7 +16,7 @@ export interface ResourceCreatorPageModelState {
 }
 
 export interface OnCreateAction extends AnyAction {
-  type: 'resourceCreatorPage/creator';
+  type: 'resourceCreatorPage/create';
 }
 
 // export interface OnVerifyAction extends AnyAction {
@@ -58,6 +58,7 @@ const Model: ResourceCreatorPageModelType = {
 
   effects: {
     * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
+      // console.log('OnCreateAction2839u42o3');
       const params = yield select(({resourceCreatorPage}: ConnectState) => ({
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,

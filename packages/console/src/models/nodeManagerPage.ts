@@ -67,8 +67,8 @@ export interface OnChangeExhibitAction extends AnyAction {
 }
 
 export interface FetchThemesAction extends AnyAction {
-  type: 'FetchThemesAction';
-  payload: 'fetchThemes';
+  type: 'nodeManagerPage/fetchThemes';
+  // payload: 'nodeManagerPage/fetchThemes';
 }
 
 export interface NodeManagerModelType {
@@ -197,6 +197,9 @@ const Model: NodeManagerModelType = {
       };
 
       const {data} = yield call(presentables, params);
+
+      console.log(data, 'data2390urijofdsf');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
