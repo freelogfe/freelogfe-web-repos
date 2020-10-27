@@ -6,14 +6,18 @@ import {FClose, FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
 import {FNormalButton, FTextButton, FCircleButton} from "@/components/FButton";
-import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
 import FSelect from "@/components/FSelect";
+import FModal from "@/components/FModal";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
+import {ChangeAction} from "@/models/exhibitInfoPage";
 
 interface SideProps {
-
+  dispatch: Dispatch;
+  exhibitInfoPage: ExhibitInfoPageModelState,
 }
 
-function Side({}: SideProps) {
+function Side({dispatch, exhibitInfoPage}: SideProps) {
   return (<div className={styles.side}>
     <div className={styles.base}>
       <FTitleText text={'基础信息'} type="h4"/>
@@ -22,7 +26,7 @@ function Side({}: SideProps) {
       <div className={styles.cover}>
         <img
           alt=""
-          src={imgSrc}
+          src={exhibitInfoPage.pCover || imgSrc}
         />
         <div>
           <FEdit style={{fontSize: 32}}/>
@@ -35,32 +39,52 @@ function Side({}: SideProps) {
 
       <FTitleText text={'展品标题'} type="form"/>
       <div style={{height: 15}}/>
-      <Space size={10}>
-        <FContentText text={'Smells like teen spirit'}/>
-        <a><FEdit/></a>
-      </Space>
-      <FInput
-        className={styles.Input}
-      />
-      <div style={{height: 10}}/>
-      <div className={styles.btn}>
-        <FTextButton size="small">取消</FTextButton>
-        <div style={{width: 15}}/>
-        <FNormalButton size="small">确定</FNormalButton>
-      </div>
+      {
+        exhibitInfoPage.pInputTitle !== null
+          ? (<Space size={10}>
+            <FContentText text={exhibitInfoPage.pTitle}/>
+            <a><FEdit/></a>
+          </Space>)
+          : (<>
+            <FInput
+              className={styles.Input}
+              value={exhibitInfoPage.pInputTitle || ''}
+              onChange={(e) => dispatch<ChangeAction>({
+                type: 'exhibitInfoPage/change',
+                payload: {
+                  pInputTitle: e.target.value,
+                },
+              })}
+            />
+            <div style={{height: 10}}/>
+            <div className={styles.btn}>
+              <FTextButton size="small">取消</FTextButton>
+              <div style={{width: 15}}/>
+              <FNormalButton size="small">确定</FNormalButton>
+            </div>
+          </>)
+      }
+
       <div style={{height: 30}}/>
 
       <FTitleText text={'展品标签'} type="form"/>
       <div style={{height: 15}}/>
       <div className={styles.tags}>
-        <label>标签1<FClose/></label>
-        <label>标签1<FClose/></label>
-        <label>标签2<FClose/></label>
+        {
+          exhibitInfoPage.pTags.map((t) => (<label key={t}>{t}<FClose/></label>))
+        }
       </div>
       <div style={{height: 15}}/>
       <FInput
         placeholder={'回车添加标签，esc取消'}
         className={styles.Input}
+        value={exhibitInfoPage.pTagInput}
+        onChange={(e) => dispatch<ChangeAction>({
+          type: 'exhibitInfoPage/change',
+          payload: {
+            pTagInput: e.target.value,
+          },
+        })}
       />
       <div style={{height: 30}}/>
 
@@ -103,12 +127,22 @@ function Side({}: SideProps) {
       </div>
       <div style={{height: 20}}/>
       <Space className={styles.addCustomTitle}>
-        <FCircleButton theme="text"/>
+        <FCircleButton
+          theme="text"
+          onClick={() => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pAddCustomModalVisible: true,
+            },
+          })}
+        />
         <span>添加自定义选项</span>
       </Space>
     </div>
     <div style={{height: 10}}/>
     <div className={styles.info}>
+      <FTitleText text={'关联资源'} type="h4"/>
+      <div style={{height: 20}}/>
       <div className={styles.cover} style={{cursor: 'default'}}>
         <img
           alt=""
@@ -117,12 +151,79 @@ function Side({}: SideProps) {
       </div>
 
       <div style={{height: 12}}/>
-      <FContentText singleRow text={'这里是展品名称这里是展品名这里是展品名称这里是展品名称'}/>
+      <FContentText singleRow text={exhibitInfoPage.resourceName}/>
       <div style={{height: 10}}/>
-      <div style={{fontSize: 12, color: '#666'}}>audio</div>
+      <div style={{fontSize: 12, color: '#666'}}>{exhibitInfoPage.resourceType}</div>
     </div>
 
+    <FModal
+      title={'添加自定义选项'}
+      width={560}
+      visible={exhibitInfoPage.pAddCustomModalVisible}
+      okText={'添加'}
+      onCancel={() => dispatch<ChangeAction>({
+        type: 'exhibitInfoPage/change',
+        payload: {
+          pAddCustomModalVisible: false,
+        },
+      })}
+    >
+      <div className={styles.modalBody}>
+        <div className={styles.modalBodyTitle}>
+          <i/>
+          <div style={{width: 5}}/>
+          <FTitleText type="form">key</FTitleText>
+        </div>
+        <div style={{height: 5}}/>
+        <FInput
+          className={styles.modalBodyInput}
+          value={exhibitInfoPage.pAddCustomKey}
+          onChange={(e) => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pAddCustomKey: e.target.value,
+            },
+          })}
+        />
+        <div style={{height: 20}}/>
+        <div className={styles.modalBodyTitle}>
+          <i/>
+          <div style={{width: 5}}/>
+          <FTitleText type="form">value</FTitleText>
+        </div>
+        <div style={{height: 5}}/>
+        <FInput
+          className={styles.modalBodyInput}
+          value={exhibitInfoPage.pAddCustomValue}
+          onChange={(e) => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pAddCustomValue: e.target.value,
+            },
+          })}
+        />
+        <div style={{height: 20}}/>
+        <div>
+          <FTitleText type="form">属性说明</FTitleText>
+        </div>
+        <div style={{height: 5}}/>
+        <FInput
+          className={styles.modalBodyInput}
+          value={exhibitInfoPage.pAddCustomDescription}
+          onChange={(e) => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pAddCustomDescription: e.target.value,
+            },
+          })}
+        />
+      </div>
+
+
+    </FModal>
   </div>);
 }
 
-export default Side;
+export default connect(({exhibitInfoPage}: ConnectState) => ({
+  exhibitInfoPage,
+}))(Side);

@@ -43,8 +43,9 @@ export function presentableDetails(params: PresentableDetailsParamsType1 | Prese
       params,
     });
   }
-  return request.get(`/v2/presentables/${(params as PresentableDetailsParamsType1).presentableId}`, {
-    params,
+  const {presentableId, ...p} = params as PresentableDetailsParamsType1;
+  return request.get(`/v2/presentables/${presentableId}`, {
+    params: p,
   });
 }
 

@@ -20,7 +20,7 @@ import {ChangeAction, OnChangeExhibitAction} from "@/models/nodeManagerPage";
 
 const columns: ColumnsType<NodeManagerModelState['exhibitList'][number]> = [
   {
-    title: <FContentText text={'展品标题｜类型｜展品名称｜策略'}/>,
+    title: <FContentText text={'展品名称｜类型｜展品标题｜策略'}/>,
 
     dataIndex: 'name',
     key: 'name',
@@ -33,14 +33,14 @@ const columns: ColumnsType<NodeManagerModelState['exhibitList'][number]> = [
         <div className={styles.infos}>
           <FContentText
             singleRow
-            text={record.title}
+            text={record.resourceName}
           />
           <div className={styles.sub}>
             <label>{record.type}</label>
             <div style={{width: 5}}/>
             <FContentText
               type="additional2"
-              text={record.resourceName}
+              text={record.title}
               singleRow
             />
           </div>

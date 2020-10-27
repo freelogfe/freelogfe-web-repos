@@ -16,7 +16,7 @@ import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
 import {MarketResourcePageState} from './marketResourcePage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
-import {WholeReadonly} from "@/models/shared";
+import {ExhibitInfoPageModelState} from './exhibitInfoPage';
 
 export {
   // RouterHistoriesModelState,
@@ -38,6 +38,7 @@ export {
   MarketResourcePageState,
   NodesModelState,
   NodeManagerModelState,
+  ExhibitInfoPageModelState,
 };
 
 export interface ConnectState {
@@ -60,4 +61,5 @@ export interface ConnectState {
   marketResourcePage: MarketResourcePageState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
+  exhibitInfoPage: ExhibitInfoPageModelState;
 }

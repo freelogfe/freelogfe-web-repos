@@ -1,17 +1,17 @@
-import {DvaReducer} from '@/models/shared';
+import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 
-export interface TempModelState {
+export type TempModelState = WholeReadonly<{
   info: null | {};
-}
+}>;
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
   payload: Partial<TempModelState>;
 }
 
-interface FetchInfoAction extends AnyAction {
+export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
 
@@ -35,7 +35,7 @@ const Model: TempModelType = {
     info: null,
   },
   effects: {
-    * fetchInfo({}, {}) {
+    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
 
     },
   },

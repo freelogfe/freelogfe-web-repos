@@ -8,6 +8,8 @@ interface FModal extends ModalProps {
   children?: React.ReactNode | React.ReactNodeArray;
 }
 
-export default function ({children, ...props}: FModal) {
+function FModal({children, ...props}: FModal) {
   return (<Modal {...props}>{children}</Modal>)
 }
+
+export default FModal;
