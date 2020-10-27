@@ -5,12 +5,17 @@ import FInput from '@/components/FInput';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {Space} from 'antd';
 import {FExclamation} from '@/components/FIcons';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, NodeManagerModelState} from "@/models/connect";
+import {OnChangeThemeAction} from "@/models/nodeManagerPage";
+import {router} from "umi";
 
 interface ThemesProps {
-
+  dispatch: Dispatch;
+  nodeManagerPage: NodeManagerModelState;
 }
 
-function Themes({}: ThemesProps) {
+function Themes({dispatch, nodeManagerPage}: ThemesProps) {
 
   // React.useEffect(() => {
   //   console.log('Themes useEffect');
@@ -22,33 +27,49 @@ function Themes({}: ThemesProps) {
       <FInput
         className={styles.input}
         theme="dark"
+        debounce={300}
+        onDebounceChange={(value) => dispatch<OnChangeThemeAction>({
+          type: 'nodeManagerPage/onChangeTheme',
+          payload: {
+            themeInputFilter: value,
+          },
+        })}
       />
     </div>
     <div className={styles.body}>
       {
-        [1, 2, 3, 4, 5, 6, 7].map((i) => (<div className={styles.theme} key={i}>
+        nodeManagerPage.themeList.map((i) => (<div
+          className={styles.theme}
+          key={i.id}
+        >
           <div className={styles.cover}>
             <Space size={10}>
-              <Label active={false}/>
-              <FExclamation/>
+              <Label active={i.isOnline}/>
+              {!i.isOnline && <FExclamation/>}
             </Space>
 
-            <img alt="" src={imgSrc}/>
-            <div className={styles.action} style={{justifyContent: 'space-between'}}>
-                <span>编辑</span>
-                <span>|</span>
-                <span>激活</span>
+            <img alt="" src={i.cover || imgSrc}/>
+            <div
+              className={styles.action}
+              style={{justifyContent: 'space-between'}}
+            >
+              <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
+              <span>|</span>
+              <span>激活</span>
             </div>
           </div>
           <div style={{height: 12}}/>
-          <FContentText text={'这里是展品名称这里是展品名称这这里是展品名称这里是展品名称这'} singleRow/>
+          <FContentText
+            text={i.title}
+            singleRow
+          />
           <div style={{height: 6}}/>
           <FContentText type="additional1" text={'展示版本 1.0.10'}/>
           <div style={{height: 15}}/>
           <div className={styles.polices}>
-            <label>免费</label>
-            <label>免费2</label>
-            <label>收费策略1</label>
+            {
+              i.policies.map((p) => (<label>{p}</label>))
+            }
           </div>
         </div>))
       }
@@ -58,7 +79,9 @@ function Themes({}: ThemesProps) {
   </div>);
 }
 
-export default Themes;
+export default connect(({nodeManagerPage}: ConnectState) => ({
+  nodeManagerPage,
+}))(Themes);
 
 interface LabelProps {
   active?: boolean

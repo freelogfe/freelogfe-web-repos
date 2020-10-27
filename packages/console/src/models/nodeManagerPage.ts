@@ -67,8 +67,15 @@ export interface OnChangeExhibitAction extends AnyAction {
 }
 
 export interface FetchThemesAction extends AnyAction {
-  type: 'nodeManagerPage/fetchThemes';
+  type: 'nodeManagerPage/fetchThemes' | 'fetchThemes';
   // payload: 'nodeManagerPage/fetchThemes';
+}
+
+export interface OnChangeThemeAction extends AnyAction {
+  type: 'nodeManagerPage/onChangeTheme';
+  payload: {
+    themeInputFilter?: string;
+  };
 }
 
 export interface NodeManagerModelType {
@@ -79,6 +86,7 @@ export interface NodeManagerModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     onChangeExhibit: (action: OnChangeExhibitAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
+    onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<NodeManagerModelState, ChangeAction>;
@@ -198,7 +206,7 @@ const Model: NodeManagerModelType = {
 
       const {data} = yield call(presentables, params);
 
-      console.log(data, 'data2390urijofdsf');
+      // console.log(data, 'data2390urijofdsf');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -214,10 +222,21 @@ const Model: NodeManagerModelType = {
             policies: [],
             // resourceId: i.resourceInfo.resourceId,
           })),
-          totalNum: data.totalItem,
+          // totalNum: data.totalItem,
         },
       });
-    }
+    },
+    * onChangeTheme({payload}: OnChangeThemeAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          themeInputFilter: payload.themeInputFilter,
+        },
+      });
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {
