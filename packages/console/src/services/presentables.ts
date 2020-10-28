@@ -19,6 +19,33 @@ export function createPresentable(params: CreatePresentableParamsType) {
   return request.post(`/v2/presentables`, params);
 }
 
+// 更新展品
+export interface UpdatePresentableParamsType {
+  presentableId: string;
+  presentableTitle?: string;
+  tags?: string[];
+  coverImages?: string[];
+  addPolicies?: {
+    policyName: string;
+    policyText: string;
+    status?: 0 | 1;
+  }[];
+  updatePolicies?: {
+    policyId: string;
+    status: 0 | 1;
+  }[];
+  resolveResources?: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
+}
+
+export function updatePresentable({presentableId, ...params}: UpdatePresentableParamsType) {
+  return request.put(`/v2/presentables/${presentableId}`, params);
+}
+
 // 查看展品详情
 export interface PresentableDetailsParamsType1 {
   presentableId: string;

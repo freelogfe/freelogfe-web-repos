@@ -22,7 +22,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
 
   const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
 
-  console.log(mainResource, 'mainResource9032jhf');
+  // console.log(mainResource, 'mainResource9032jhf');
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({

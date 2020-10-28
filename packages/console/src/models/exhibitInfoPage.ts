@@ -1,7 +1,12 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {presentableDetails, PresentableDetailsParamsType1} from "@/services/presentables";
+import {
+  presentableDetails,
+  PresentableDetailsParamsType1,
+  updatePresentable,
+  UpdatePresentableParamsType
+} from "@/services/presentables";
 import {ConnectState} from "@/models/connect";
 import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
 import {batchInfo, BatchInfoParamsType} from "@/services/resources";
@@ -21,6 +26,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     text: string;
     status: 0 | 1;
   }[];
+  addPolicyDrawerVisible: boolean;
 
   associated: {
     selected: boolean;
@@ -74,11 +80,29 @@ export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo' | 'exhibitInfoPage/fetchInfo';
 }
 
+export interface AddAPolicyAction extends AnyAction {
+  type: 'exhibitInfoPage/addAPolicy';
+  payload: {
+    title: string;
+    text: string;
+  };
+}
+
+export interface UpdateAPolicyAction extends AnyAction {
+  type: 'exhibitInfoPage/updateAPolicy';
+  payload: {
+    id: string;
+    status: 0 | 1
+  };
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
+    updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -99,6 +123,8 @@ const Model: ExhibitInfoPageModelType = {
     isOnline: false,
 
     policies: [],
+    addPolicyDrawerVisible: false,
+
     associated: [],
 
     pCover: '',
@@ -125,6 +151,7 @@ const Model: ExhibitInfoPageModelType = {
       const params: PresentableDetailsParamsType1 = {
         presentableId: exhibitInfoPage.presentableId,
         isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
       // console.log(data, 'data2309jdsfa');
@@ -139,7 +166,12 @@ const Model: ExhibitInfoPageModelType = {
           resourceName: data.presentableName,
           resourceType: data.resourceInfo.resourceType,
           isOnline: data.onlineStatus === 1,
-          policies: [],
+          policies: data.policies.map((p: any) => ({
+            id: p.policyId,
+            name: p.policyName,
+            text: p.policyText,
+            status: p.status,
+          })),
           associated: result.map((r, index) => ({
             selected: index === 0,
             id: r.resourceId,
@@ -163,6 +195,39 @@ const Model: ExhibitInfoPageModelType = {
           pTags: data.tags,
         },
       })
+    },
+    * addAPolicy({payload}: AddAPolicyAction, {call, select, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const params: UpdatePresentableParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        addPolicies: [{
+          policyName: payload.title,
+          policyText: payload.text,
+          status: 1,
+        }],
+      };
+      yield call(updatePresentable, params);
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+    },
+    * updateAPolicy({payload}: UpdateAPolicyAction, {call, select, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const params: UpdatePresentableParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        updatePolicies: [{
+          policyId: payload.id,
+          status: payload.status,
+        }],
+      };
+      yield call(updatePresentable, params);
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
     },
   },
   reducers: {
