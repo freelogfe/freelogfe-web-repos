@@ -27,10 +27,10 @@ export interface ResourceAuthPageModelState {
   }[] | null;
   policyPreviewVisible: boolean;
   policyPreviewText: string;
-  newPolicyTitle: string;
-  newPolicyText: string;
+  // newPolicyTitle: string;
+  // newPolicyText: string;
   policyEditorVisible: boolean;
-  policyTemplateVisible: boolean;
+  // policyTemplateVisible: boolean;
 
   contractsAuthorized: FAuthPanelProps['dataSource'];
   contractsAuthorize: {
@@ -114,10 +114,10 @@ const Model: ResourceAuthPageModelType = {
     policies: [],
     policyPreviewVisible: false,
     policyPreviewText: '',
-    newPolicyTitle: '',
-    newPolicyText: '',
+    // newPolicyTitle: '',
+    // newPolicyText: '',
     policyEditorVisible: false,
-    policyTemplateVisible: false,
+    // policyTemplateVisible: false,
 
     contractsAuthorized: [],
     contractsAuthorize: [],
