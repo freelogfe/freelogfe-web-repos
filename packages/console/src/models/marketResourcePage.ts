@@ -372,7 +372,7 @@ const Model: MarketResourcePageModelType = {
       const {data} = yield call(presentableDetails, params);
       // console.log(data, 'datadata0923jsdfsd');
       const allContracts = data.resolveResources;
-      console.log(allContracts, 'datadata0923jsdfsd');
+      // console.log(allContracts, 'datadata0923jsdfsd');
 
       const allContractIds: string[] = allContracts?.map((c: any) => c.contracts.map((cs: any) => cs.contractId)).flat();
       // console.log(allContractIds, 'allContractIds3290dsj');

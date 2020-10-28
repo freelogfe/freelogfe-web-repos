@@ -25,6 +25,7 @@ export interface PresentableDetailsParamsType1 {
   projection?: string;
   isLoadVersionProperty?: 0 | 1;
   isLoadPolicyInfo?: 0 | 1;
+  isLoadCustomPropertyDescriptors?: 0 | 1;
 }
 
 export interface PresentableDetailsParamsType2 {
@@ -35,6 +36,7 @@ export interface PresentableDetailsParamsType2 {
   projection?: string;
   isLoadVersionProperty?: 0 | 1;
   isLoadPolicyInfo?: 0 | 1;
+  isLoadCustomPropertyDescriptors?: 0 | 1;
 }
 
 export function presentableDetails(params: PresentableDetailsParamsType1 | PresentableDetailsParamsType2) {
