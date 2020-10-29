@@ -46,6 +46,15 @@ export function updatePresentable({presentableId, ...params}: UpdatePresentableP
   return request.put(`/v2/presentables/${presentableId}`, params);
 }
 
+export interface PresentablesOnlineParamsType {
+  presentableId: string;
+  onlineStatus: 0 | 1;
+}
+
+export function presentablesOnlineStatus({presentableId, ...params}: PresentablesOnlineParamsType) {
+  return request.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
+}
+
 // 查看展品详情
 export interface PresentableDetailsParamsType1 {
   presentableId: string;

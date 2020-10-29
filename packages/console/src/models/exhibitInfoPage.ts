@@ -3,7 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {
   presentableDetails,
-  PresentableDetailsParamsType1,
+  PresentableDetailsParamsType1, PresentablesOnlineParamsType, presentablesOnlineStatus,
   updatePresentable,
   UpdatePresentableParamsType
 } from "@/services/presentables";
@@ -105,6 +105,12 @@ export interface UpdateBaseInfoAction extends AnyAction {
   };
 }
 
+export interface UpdateStatusAction extends AnyAction {
+  type: 'exhibitInfoPage/updateStatus';
+  payload: 0 | 1;
+}
+
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
@@ -113,6 +119,7 @@ export interface ExhibitInfoPageModelType {
     addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
     updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
     updateBaseInfo: (action: UpdateBaseInfoAction, effects: EffectsCommandMap) => void;
+    updateStatus: (action: UpdateStatusAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -254,6 +261,22 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload,
       });
+    },
+    * updateStatus({payload}: UpdateStatusAction, {call, select, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const params: PresentablesOnlineParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        onlineStatus: payload,
+      };
+      yield call(presentablesOnlineStatus, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          isOnline: payload === 1,
+        },
+      })
     },
   },
   reducers: {

@@ -9,7 +9,7 @@ import Viewports from './Viewports';
 import Side from './Side';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
-import {ChangeAction, FetchInfoAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, FetchInfoAction, UpdateStatusAction} from "@/models/exhibitInfoPage";
 import RouterTypes from "umi/routerTypes";
 import {nodeDetail} from "@/services/nodes";
 
@@ -45,7 +45,13 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
         </div>
         <Space size={20}>
           <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
-          <FSwitch checked={exhibitInfoPage.isOnline}/>
+          <FSwitch
+            checked={exhibitInfoPage.isOnline}
+            onChange={(value) => dispatch<UpdateStatusAction>({
+              type: 'exhibitInfoPage/updateStatus',
+              payload: value ? 1 : 0,
+            })}
+          />
         </Space>
       </div>
       <div className={styles.body}>
