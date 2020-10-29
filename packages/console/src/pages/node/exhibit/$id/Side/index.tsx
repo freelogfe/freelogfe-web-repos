@@ -27,7 +27,7 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
       payload: {
         pInputTitle: value,
       },
-    })
+    });
   }
 
   return (<div className={styles.side}>
@@ -100,7 +100,17 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
       <div style={{height: 15}}/>
       <div className={styles.tags}>
         {
-          exhibitInfoPage.pTags.map((t) => (<label key={t}>{t}<FClose/></label>))
+          exhibitInfoPage.pTags.map((t) => (<label key={t}>
+            <span>{t}</span>
+            <FTextButton onClick={() => {
+              dispatch<UpdateBaseInfoAction>({
+                type: 'exhibitInfoPage/updateBaseInfo',
+                payload: {
+                  pTags: exhibitInfoPage.pTags.filter((tag) => tag !== t),
+                },
+              });
+            }}><FClose/></FTextButton>
+          </label>))
         }
       </div>
       <div style={{height: 15}}/>
@@ -114,6 +124,23 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
             pTagInput: e.target.value,
           },
         })}
+        onPressEnter={() => {
+          dispatch<UpdateBaseInfoAction>({
+            type: 'exhibitInfoPage/updateBaseInfo',
+            payload: {
+              pTags: [
+                ...exhibitInfoPage.pTags,
+                exhibitInfoPage.pTagInput,
+              ],
+            },
+          });
+          dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pTagInput: '',
+            },
+          })
+        }}
       />
       <div style={{height: 30}}/>
 
