@@ -13,30 +13,30 @@ interface FUploadResourceCoverProps {
 
 export default function ({value, onChange}: FUploadResourceCoverProps) {
 
-  const uploadConfig = {
-    accept: 'image/*',
-    beforeUpload: (file: RcFile, FileList: RcFile[]) => {
-      // console.log(file, 'file1');
-      upload(file);
-      return false;
-    },
-    onChange: (info: UploadChangeParam) => {
-      // console.log(info, '########');
-    },
-    multiple: false,
-  };
+  // const uploadConfig = {
+  //   accept: 'image/*',
+  //   beforeUpload: (file: RcFile, FileList: RcFile[]) => {
+  //     // console.log(file, 'file1');
+  //     upload(file);
+  //     return false;
+  //   },
+  //   onChange: (info: UploadChangeParam) => {
+  //     // console.log(info, '########');
+  //   },
+  //   multiple: false,
+  // };
 
-  async function upload(file: File) {
-    const res = await uploadImage({
-      file: file,
-    });
-    // console.log(res, 'RRRRRRRRR');
-    onChange && onChange(res.data.url);
-  }
+  // async function upload(file: File) {
+  //   const res = await uploadImage({
+  //     file: file,
+  //   });
+  //   // console.log(res, 'RRRRRRRRR');
+  //   onChange && onChange(res.data.url);
+  // }
 
   return (<div className={styles.cover}>
     {!value
-      ? (<FUploadImage  {...uploadConfig}>
+      ? (<FUploadImage onUploadSuccess={(url) => onChange && onChange(url)}>
         <a className={styles.FUploadImageChildren}>
           <i className={'freelog fl-icon-shangchuanfengmian'}/>
           <span>{i18nMessage('upload_image')}</span>
@@ -47,7 +47,7 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
       </div>)
     }
     <div className={styles.coverTip}>
-      {value && <FUploadImage {...uploadConfig}>
+      {value && <FUploadImage onUploadSuccess={(url) => onChange && onChange(url)}>
         <a className={styles.ReUpload}>{i18nMessage('replace_resource_image')}</a>
       </FUploadImage>}
       <div style={{height: 15}}/>

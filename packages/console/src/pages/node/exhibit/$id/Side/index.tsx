@@ -11,6 +11,8 @@ import FModal from "@/components/FModal";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/exhibitInfoPage";
+import FUploadImage from "@/components/FUploadImage";
+import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 
 interface SideProps {
   dispatch: Dispatch;
@@ -18,49 +20,74 @@ interface SideProps {
 }
 
 function Side({dispatch, exhibitInfoPage}: SideProps) {
+
+  function onChangePInputTitle(value: string | null) {
+    dispatch<ChangeAction>({
+      type: 'exhibitInfoPage/change',
+      payload: {
+        pInputTitle: value,
+      },
+    })
+  }
+
+  const uploadConfig = {
+    accept: 'image/*',
+    beforeUpload: (file: RcFile, FileList: RcFile[]) => {
+      // console.log(file, 'file1');
+      console.log(file);
+      return false;
+    },
+    onChange: (info: UploadChangeParam) => {
+      // console.log(info, '########');
+    },
+    multiple: false,
+  };
+
   return (<div className={styles.side}>
     <div className={styles.base}>
       <FTitleText text={'基础信息'} type="h4"/>
       <div style={{height: 20}}/>
 
-      <div className={styles.cover}>
-        <img
-          alt=""
-          src={exhibitInfoPage.pCover || imgSrc}
-        />
-        <div>
-          <FEdit style={{fontSize: 32}}/>
-          <div style={{height: 10}}/>
-          <div>修改封面</div>
+      <FUploadImage onUploadSuccess={(url: string) => console.log(url, 'UUUUUU')}>
+        <div className={styles.cover}>
+          <img
+            alt=""
+            src={exhibitInfoPage.pCover || imgSrc}
+          />
+          <div>
+            <FEdit style={{fontSize: 32}}/>
+            <div style={{height: 10}}/>
+            <div>修改封面</div>
+          </div>
         </div>
-      </div>
+      </FUploadImage>
 
       <div style={{height: 20}}/>
 
       <FTitleText text={'展品标题'} type="form"/>
       <div style={{height: 15}}/>
       {
-        exhibitInfoPage.pInputTitle !== null
+        exhibitInfoPage.pInputTitle === null
           ? (<Space size={10}>
             <FContentText text={exhibitInfoPage.pTitle}/>
-            <a><FEdit/></a>
+            <a onClick={() => onChangePInputTitle(exhibitInfoPage.pTitle)}><FEdit/></a>
           </Space>)
           : (<>
             <FInput
               className={styles.Input}
               value={exhibitInfoPage.pInputTitle || ''}
-              onChange={(e) => dispatch<ChangeAction>({
-                type: 'exhibitInfoPage/change',
-                payload: {
-                  pInputTitle: e.target.value,
-                },
-              })}
+              onChange={(e) => onChangePInputTitle(e.target.value)}
             />
             <div style={{height: 10}}/>
             <div className={styles.btn}>
-              <FTextButton size="small">取消</FTextButton>
+              <FTextButton
+                size="small"
+                onClick={() => onChangePInputTitle(null)}
+              >取消</FTextButton>
               <div style={{width: 15}}/>
-              <FNormalButton size="small">确定</FNormalButton>
+              <FNormalButton
+                size="small"
+              >确定</FNormalButton>
             </div>
           </>)
       }
