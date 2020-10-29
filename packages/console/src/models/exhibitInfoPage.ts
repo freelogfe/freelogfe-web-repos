@@ -96,6 +96,15 @@ export interface UpdateAPolicyAction extends AnyAction {
   };
 }
 
+export interface UpdateBaseInfoAction extends AnyAction {
+  type: 'exhibitInfoPage/updateBaseInfo';
+  payload: {
+    pCover?: string;
+    pTitle?: string;
+    pTags?: string[];
+  };
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
@@ -103,6 +112,7 @@ export interface ExhibitInfoPageModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
     updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
+    updateBaseInfo: (action: UpdateBaseInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -227,6 +237,22 @@ const Model: ExhibitInfoPageModelType = {
       yield call(updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
+      });
+    },
+    * updateBaseInfo({payload}: UpdateBaseInfoAction, {select, call, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const params: UpdatePresentableParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        presentableTitle: payload.pTitle,
+        tags: payload.pTags,
+        coverImages: payload.pCover ? [payload.pCover] : undefined,
+      };
+      yield call(updatePresentable, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload,
       });
     },
   },

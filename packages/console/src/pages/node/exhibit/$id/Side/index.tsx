@@ -10,7 +10,7 @@ import FSelect from "@/components/FSelect";
 import FModal from "@/components/FModal";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, UpdateBaseInfoAction} from "@/models/exhibitInfoPage";
 import FUploadImage from "@/components/FUploadImage";
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 
@@ -30,25 +30,18 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
     })
   }
 
-  const uploadConfig = {
-    accept: 'image/*',
-    beforeUpload: (file: RcFile, FileList: RcFile[]) => {
-      // console.log(file, 'file1');
-      console.log(file);
-      return false;
-    },
-    onChange: (info: UploadChangeParam) => {
-      // console.log(info, '########');
-    },
-    multiple: false,
-  };
-
   return (<div className={styles.side}>
     <div className={styles.base}>
       <FTitleText text={'基础信息'} type="h4"/>
       <div style={{height: 20}}/>
 
-      <FUploadImage onUploadSuccess={(url: string) => console.log(url, 'UUUUUU')}>
+      <FUploadImage
+        onUploadSuccess={(url: string) => dispatch<UpdateBaseInfoAction>({
+          type: 'exhibitInfoPage/updateBaseInfo',
+          payload: {
+            pCover: url,
+          },
+        })}>
         <div className={styles.cover}>
           <img
             alt=""
@@ -87,6 +80,15 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
               <div style={{width: 15}}/>
               <FNormalButton
                 size="small"
+                onClick={() => {
+                  dispatch<UpdateBaseInfoAction>({
+                    type: 'exhibitInfoPage/updateBaseInfo',
+                    payload: {
+                      pTitle: exhibitInfoPage.pInputTitle || '',
+                    },
+                  });
+                  onChangePInputTitle(null);
+                }}
               >确定</FNormalButton>
             </div>
           </>)
@@ -245,8 +247,6 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
           })}
         />
       </div>
-
-
     </FModal>
   </div>);
 }
