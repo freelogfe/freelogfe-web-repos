@@ -219,12 +219,8 @@ const Model: ResourceVersionCreatorModelType = {
           candidateItems: i.customOption ? i.customOption.split(',') : [],
           remark: i.description,
         })),
-        description: resourceVersionCreatorPage.description.toHTML(),
+        description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
-
-      // for (const resolve of params.resolveResources) {
-      //
-      // }
 
       for (const custom of (params.customPropertyDescriptors || [])) {
         if (!custom.key || !custom.defaultValue) {

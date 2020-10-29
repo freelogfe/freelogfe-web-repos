@@ -171,7 +171,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
-      // console.log(data, 'data2309jdsfa');
+      console.log(data, 'data2309jdsfa');
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
@@ -210,6 +210,24 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.coverImages[0] || '',
           pTitle: data.presentableTitle,
           pTags: data.tags,
+
+          pBaseAttrs: [
+            ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
+              key: s[0],
+              value: s[1],
+            })),
+            ...data.resourceCustomPropertyDescriptors.filter((rd: any) => rd.type === 'readonlyText')
+              .map((rd: any) => ({
+                key: rd.key,
+                value: rd.defaultValue,
+              })),
+          ],
+          pCustomAttrs: data.resourceCustomPropertyDescriptors.filter((rd: any) => rd.type !== 'readonlyText')
+            .map((rd: any) => ({
+              key: rd.key,
+              value: rd.defaultValue,
+              option: rd.type === 'select' ? rd.candidateItems : [],
+            })),
         },
       })
     },

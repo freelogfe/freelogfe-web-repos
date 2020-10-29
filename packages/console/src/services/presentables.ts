@@ -46,6 +46,7 @@ export function updatePresentable({presentableId, ...params}: UpdatePresentableP
   return request.put(`/v2/presentables/${presentableId}`, params);
 }
 
+// 上下线presentable
 export interface PresentablesOnlineParamsType {
   presentableId: string;
   onlineStatus: 0 | 1;
@@ -125,3 +126,19 @@ export function presentableList(params: PresentableListParamsType) {
     params,
   });
 }
+
+// 批量查询展品列表
+export interface UpdateRewritePropertyParamsType {
+  presentableId: string;
+  rewriteProperty: {
+    key: string;
+    value: string;
+    remark: string;
+  }[];
+}
+
+export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
+  return request.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
+}
+
+

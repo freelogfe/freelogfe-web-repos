@@ -113,8 +113,8 @@ export interface CreateVersionParamsType {
   }[];
 }
 
-export function createVersion(params: CreateVersionParamsType) {
-  return request.post(`/v2/resources/${params.resourceId}/versions`, params);
+export function createVersion({resourceId, ...params}: CreateVersionParamsType) {
+  return request.post(`/v2/resources/${resourceId}/versions`, params);
 }
 
 // 查看资源版本信息

@@ -152,14 +152,12 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
       <div className={styles.attr}>
         <table>
           <tbody>
-          <tr>
-            <td><FContentText text={'类型'}/></td>
-            <td><FContentText text={'audio'}/></td>
-          </tr>
-          <tr>
-            <td><FContentText text={'最新版本'}/></td>
-            <td><FContentText text={'1.1.3'}/></td>
-          </tr>
+          {
+            exhibitInfoPage.pBaseAttrs.map((pb) => (<tr key={pb.key}>
+              <td><FContentText text={pb.key}/></td>
+              <td><FContentText text={pb.value}/></td>
+            </tr>))
+          }
           </tbody>
         </table>
       </div>
@@ -168,18 +166,25 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
       <FTitleText text={'自定义选项'} type="form"/>
       <div style={{height: 15}}/>
       <div className={styles.options}>
-        <div>
-          <FContentText text={'流派'}/>
-          <FSelect
-            className={styles.FSelect}
-            value={'123'}
-            dataSource={[{value: '123', title: 'ROCK摇滚'}]}
-          />
-        </div>
-        <div>
-          <FContentText text={'流派'}/>
-          <FInput className={styles.FInput}/>
-        </div>
+        {
+          exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
+            <div className={styles.optionTitle}>
+              <FContentText text={'流派'}/>
+            </div>
+            <div style={{height: 5}}/>
+            {
+              pc.option.length > 0
+                ? (<FSelect
+                  className={styles.FSelect}
+                  value={pc.value}
+                  dataSource={pc.option.map((d) => ({value: d, title: d}))}
+                />)
+                : (<FInput className={styles.FInput}/>)
+            }
+
+          </div>))
+        }
+
       </div>
       <div style={{height: 20}}/>
       <Space className={styles.addCustomTitle}>
