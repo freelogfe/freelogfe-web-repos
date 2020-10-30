@@ -181,7 +181,6 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
                 />)
                 : (<FInput className={styles.FInput}/>)
             }
-
           </div>))
         }
 

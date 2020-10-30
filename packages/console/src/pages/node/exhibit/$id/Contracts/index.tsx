@@ -5,7 +5,7 @@ import {FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -67,7 +67,10 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
           </div>
         </a>
 
-        <div className={styles.signLeftNav}>基础上抛</div>
+        {
+          otherResource.length > 0 && (<div className={styles.signLeftNav}>基础上抛</div>)
+        }
+
         {
           otherResource.map((r) => (<a
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
@@ -135,7 +138,16 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                 >
                   <div className={styles.singPolicyHeader}>
                     <span>{p.name}</span>
-                    <a className={styles.singPolicyHeaderBtn}>签约</a>
+                    <a
+                      className={styles.singPolicyHeaderBtn}
+                      onClick={() => dispatch<UpdateRelationAction>({
+                        type: 'exhibitInfoPage/updateRelation',
+                        payload: {
+                          resourceId: selectedResource.id,
+                          policyId: p.id,
+                        }
+                      })}
+                    >签约</a>
                   </div>
                   <div style={{height: 15}}/>
                   <pre>{p.text}</pre>
@@ -143,8 +155,6 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               }
             </>)
           }
-
-
         </div>
       </div>
     </div>

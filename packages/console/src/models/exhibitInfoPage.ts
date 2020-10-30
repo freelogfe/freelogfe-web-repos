@@ -6,10 +6,10 @@ import {
   PresentableDetailsParamsType1, PresentablesOnlineParamsType, presentablesOnlineStatus,
   updatePresentable,
   UpdatePresentableParamsType
-} from "@/services/presentables";
-import {ConnectState} from "@/models/connect";
-import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
-import {batchInfo, BatchInfoParamsType} from "@/services/resources";
+} from '@/services/presentables';
+import {ConnectState} from '@/models/connect';
+import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
+import {batchInfo, BatchInfoParamsType} from '@/services/resources';
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -39,6 +39,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
       id: string;
       text: string;
       createTime: string;
+      policyId: string;
     }[];
     policies: {
       id: string;
@@ -110,6 +111,14 @@ export interface UpdateStatusAction extends AnyAction {
   payload: 0 | 1;
 }
 
+export interface UpdateRelationAction extends AnyAction {
+  type: 'exhibitInfoPage/updateRelation';
+  payload: {
+    resourceId: string;
+    policyId: string;
+  };
+}
+
 
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
@@ -120,6 +129,7 @@ export interface ExhibitInfoPageModelType {
     updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
     updateBaseInfo: (action: UpdateBaseInfoAction, effects: EffectsCommandMap) => void;
     updateStatus: (action: UpdateStatusAction, effects: EffectsCommandMap) => void;
+    updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -171,7 +181,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
-      console.log(data, 'data2309jdsfa');
+      // console.log(data, 'data2309jdsfa');
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
@@ -200,6 +210,7 @@ const Model: ExhibitInfoPageModelType = {
               id: c.contractId,
               text: c.policyText,
               createTime: c.createDate,
+              policyId: c.policyId,
             })),
             policies: r.policies.map((p) => ({
               id: p.policyId,
@@ -296,6 +307,29 @@ const Model: ExhibitInfoPageModelType = {
         },
       })
     },
+    * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
+      console.log(resource, '$#@$#$@#');
+      const params: UpdatePresentableParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        resolveResources: [
+          {
+            resourceId: resource?.id || '',
+            contracts: [
+              ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
+              {policyId: payload.policyId},
+            ]
+          }
+        ]
+      };
+      yield call(updatePresentable, params);
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {
@@ -334,6 +368,7 @@ type HandleRelationResult = {
     createDate: string
     policyText: string
     status: 0 | 1;
+    policyId: string;
   }[];
   policies: {
     policyId: string;
@@ -371,12 +406,14 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
       status: resource.status,
       contracts: r.contracts.map((c) => {
         const contract = data1.find((dc: any) => dc.contractId === c.contractId);
+        // console.log(contract, 'contract0923');
         return {
           contractId: contract.contractId,
           contractName: contract.contractName,
           createDate: contract.createDate,
           policyText: contract.policyInfo.policyText,
           status: contract.status,
+          policyId: contract.policyId,
         };
       }),
       policies: resource.policies
