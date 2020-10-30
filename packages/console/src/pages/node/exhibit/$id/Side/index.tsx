@@ -31,7 +31,7 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
     });
   }
 
-  function onChangeCustomAttrs({key, value}: { key: string; value: string }, update?: boolean = false) {
+  function onChangeCustomAttrs({key, value}: { key: string; value: string }, update: boolean = false) {
     dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
       payload: {
