@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {FClose, FEdit} from "@/components/FIcons";
+import {FClose, FDelete, FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
 import {FNormalButton, FTextButton, FCircleButton} from "@/components/FButton";
@@ -10,9 +10,10 @@ import FSelect from "@/components/FSelect";
 import FModal from "@/components/FModal";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction, UpdateBaseInfoAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, UpdateBaseInfoAction, UpdateRewriteAction} from "@/models/exhibitInfoPage";
 import FUploadImage from "@/components/FUploadImage";
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
+import FRedo from "@/components/FIcons/FRedo";
 
 interface SideProps {
   dispatch: Dispatch;
@@ -28,6 +29,28 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
         pInputTitle: value,
       },
     });
+  }
+
+  function onChangeCustomAttrs({key, value}: { key: string; value: string }, update?: boolean = false) {
+    dispatch<ChangeAction>({
+      type: 'exhibitInfoPage/change',
+      payload: {
+        pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
+          if (pCustomAttr.key !== key) {
+            return pCustomAttr;
+          }
+          return {
+            ...pCustomAttr,
+            value: value,
+          };
+        })
+      }
+    });
+    if (update) {
+      dispatch<UpdateRewriteAction>({
+        type: 'exhibitInfoPage/updateRewrite',
+      });
+    }
   }
 
   return (<div className={styles.side}>
@@ -169,17 +192,63 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
         {
           exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
             <div className={styles.optionTitle}>
-              <FContentText text={'流派'}/>
+              <FContentText text={pc.key}/>
+
+              {
+                pc.defaultValue
+                  ? (<FTextButton
+                    theme="primary"
+                    onClick={() => {
+                      onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                    }}
+                  ><FRedo/></FTextButton>)
+                  : (<Space size={10}>
+                    <FTextButton
+                      theme="primary"
+                      onClick={() => {
+                        // onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                      }}
+                    ><FEdit/></FTextButton>
+                    <FDelete
+                      style={{color: '#EE4040', cursor: 'pointer'}}
+                      onClick={() => {
+                        dispatch<ChangeAction>({
+                          type: 'exhibitInfoPage/change',
+                          payload: {
+                            pCustomAttrs:exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                              return pc.key !== pCustomAttr.key;
+                            }),
+                          },
+                        });
+                        dispatch<UpdateRewriteAction>({
+                          type: 'exhibitInfoPage/updateRewrite',
+                        });
+                      }}
+                    />
+                  </Space>)
+              }
             </div>
             <div style={{height: 5}}/>
             {
-              pc.option.length > 0
+              (pc.option && pc.option.length > 0)
                 ? (<FSelect
                   className={styles.FSelect}
                   value={pc.value}
                   dataSource={pc.option.map((d) => ({value: d, title: d}))}
+                  onChange={(value) => {
+                    onChangeCustomAttrs({key: pc.key, value: value}, true);
+                  }}
                 />)
-                : (<FInput className={styles.FInput}/>)
+                : (<FInput
+                  className={styles.FInput}
+                  value={pc.value}
+                  onChange={(e) => {
+                    onChangeCustomAttrs({key: pc.key, value: e.target.value});
+                  }}
+                  onBlur={() => dispatch<UpdateRewriteAction>({
+                    type: 'exhibitInfoPage/updateRewrite',
+                  })}
+                />)
             }
           </div>))
         }
@@ -227,6 +296,28 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
           pAddCustomModalVisible: false,
         },
       })}
+      onOk={() => {
+
+        dispatch<ChangeAction>({
+          type: 'exhibitInfoPage/change',
+          payload: {
+            pCustomAttrs: [
+              ...exhibitInfoPage.pCustomAttrs
+                .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey),
+              {
+                key: exhibitInfoPage.pAddCustomKey,
+                value: exhibitInfoPage.pAddCustomValue,
+                // defaultValue?: string;
+                // option?: string[];
+                remark: exhibitInfoPage.pAddCustomDescription,
+              }
+            ]
+          }
+        });
+        dispatch<UpdateRewriteAction>({
+          type: 'exhibitInfoPage/updateRewrite',
+        });
+      }}
     >
       <div className={styles.modalBody}>
         <div className={styles.modalBodyTitle}>

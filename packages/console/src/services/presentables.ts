@@ -127,7 +127,7 @@ export function presentableList(params: PresentableListParamsType) {
   });
 }
 
-// 批量查询展品列表
+// 设置展品自定义属性
 export interface UpdateRewritePropertyParamsType {
   presentableId: string;
   rewriteProperty: {
@@ -140,5 +140,3 @@ export interface UpdateRewritePropertyParamsType {
 export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
   return request.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
 }
-
-

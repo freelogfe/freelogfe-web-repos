@@ -5,7 +5,7 @@ import {
   presentableDetails,
   PresentableDetailsParamsType1, PresentablesOnlineParamsType, presentablesOnlineStatus,
   updatePresentable,
-  UpdatePresentableParamsType
+  UpdatePresentableParamsType, updateRewriteProperty, UpdateRewritePropertyParamsType
 } from '@/services/presentables';
 import {ConnectState} from '@/models/connect';
 import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
@@ -62,7 +62,9 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   pCustomAttrs: {
     key: string;
     value: string;
-    option: string[];
+    defaultValue?: string;
+    option?: string[];
+    remark: string;
   }[];
 
   pAddCustomModalVisible: boolean;
@@ -119,6 +121,10 @@ export interface UpdateRelationAction extends AnyAction {
   };
 }
 
+export interface UpdateRewriteAction extends AnyAction {
+  type: 'exhibitInfoPage/updateRewrite';
+  // payload:
+}
 
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
@@ -130,6 +136,7 @@ export interface ExhibitInfoPageModelType {
     updateBaseInfo: (action: UpdateBaseInfoAction, effects: EffectsCommandMap) => void;
     updateStatus: (action: UpdateStatusAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
+    updateRewrite: (action: UpdateRewriteAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -181,11 +188,17 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
-      // console.log(data, 'data2309jdsfa');
+      console.log(data, 'data2309jdsfa');
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
 
+      const disabledRewriteKeys = [
+        // ...Object.keys(data.resourceSystemProperty),
+        ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
+        // ...data.presentableRewriteProperty.map((i: any) => i.key),
+      ];
+      // console.log(disabledRewriteKeys, 'disabledRewriteKeys3092hj2');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -233,12 +246,27 @@ const Model: ExhibitInfoPageModelType = {
                 value: rd.defaultValue,
               })),
           ],
-          pCustomAttrs: data.resourceCustomPropertyDescriptors.filter((rd: any) => rd.type !== 'readonlyText')
-            .map((rd: any) => ({
-              key: rd.key,
-              value: rd.defaultValue,
-              option: rd.type === 'select' ? rd.candidateItems : [],
-            })),
+          pCustomAttrs: [
+            ...data.resourceCustomPropertyDescriptors
+              .filter((rd: any) => rd.type !== 'readonlyText')
+              .map((rd: any) => {
+                const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+                return {
+                  key: rd.key,
+                  value: prp ? prp.value : rd.defaultValue,
+                  defaultValue: rd.defaultValue,
+                  option: rd.type === 'select' ? rd.candidateItems : [],
+                  remark: rd.remark,
+                };
+              }),
+            ...data.presentableRewriteProperty
+              .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
+              .map((pr: any) => ({
+                key: pr.key,
+                value: pr.value,
+                remark: pr.remark,
+              })),
+          ],
         },
       })
     },
@@ -329,7 +357,24 @@ const Model: ExhibitInfoPageModelType = {
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
-    }
+    },
+    * updateRewrite({}: UpdateRewriteAction, {select, call}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      console.log(exhibitInfoPage, 'exhibitInfoPage90jdf');
+      const params: UpdateRewritePropertyParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        rewriteProperty: exhibitInfoPage.pCustomAttrs
+          .filter((pc) => pc.value !== pc.defaultValue)
+          .map((pc) => ({
+            key: pc.key,
+            value: pc.value,
+            remark: pc.remark,
+          })),
+      };
+      yield call(updateRewriteProperty, params);
+    },
   },
   reducers: {
     change(state, {payload}) {
