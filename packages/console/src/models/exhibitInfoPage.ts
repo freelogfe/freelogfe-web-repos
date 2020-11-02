@@ -65,6 +65,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     defaultValue?: string;
     option?: string[];
     remark: string;
+    isEditing?: boolean;
   }[];
 
   pAddCustomModalVisible: boolean;
@@ -188,7 +189,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
-      console.log(data, 'data2309jdsfa');
+      // console.log(data, 'data2309jdsfa');
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
@@ -257,6 +258,7 @@ const Model: ExhibitInfoPageModelType = {
                   defaultValue: rd.defaultValue,
                   option: rd.type === 'select' ? rd.candidateItems : [],
                   remark: rd.remark,
+                  isEditing: false,
                 };
               }),
             ...data.presentableRewriteProperty
@@ -362,7 +364,7 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      console.log(exhibitInfoPage, 'exhibitInfoPage90jdf');
+      // console.log(exhibitInfoPage, 'exhibitInfoPage90jdf');
       const params: UpdateRewritePropertyParamsType = {
         presentableId: exhibitInfoPage.presentableId,
         rewriteProperty: exhibitInfoPage.pCustomAttrs

@@ -97,7 +97,7 @@ const Model: ResourceCollectModelType = {
         resourceStatus: resourceCollectPage.resourceStatus === '-1' ? 2 : resourceCollectPage.resourceStatus,
       }));
       const {data} = yield call(collectionResources, params);
-      console.log(data, 'data3290joisdf');
+      // console.log(data, 'data3290joisdf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

@@ -12,7 +12,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateBaseInfoAction, UpdateRewriteAction} from "@/models/exhibitInfoPage";
 import FUploadImage from "@/components/FUploadImage";
-import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
+// import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import FRedo from "@/components/FIcons/FRedo";
 
 interface SideProps {
@@ -206,7 +206,22 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
                     <FTextButton
                       theme="primary"
                       onClick={() => {
-                        // onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                        const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                        if (!editing) {
+                          return;
+                        }
+                        dispatch<ChangeAction>({
+                          type: 'exhibitInfoPage/change',
+                          payload: {
+                            pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                              ...pCustomAttr,
+                              isEditing: pCustomAttr.key === pc.key,
+                            })),
+                            pAddCustomKey: editing.key,
+                            pAddCustomValue: editing.value,
+                            pAddCustomDescription: editing.remark,
+                          },
+                        });
                       }}
                     ><FEdit/></FTextButton>
                     <FDelete
@@ -215,7 +230,7 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
                         dispatch<ChangeAction>({
                           type: 'exhibitInfoPage/change',
                           payload: {
-                            pCustomAttrs:exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                            pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
                               return pc.key !== pCustomAttr.key;
                             }),
                           },
@@ -288,32 +303,59 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
     <FModal
       title={'添加自定义选项'}
       width={560}
-      visible={exhibitInfoPage.pAddCustomModalVisible}
+      visible={exhibitInfoPage.pAddCustomModalVisible || !!exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
       okText={'添加'}
       onCancel={() => dispatch<ChangeAction>({
         type: 'exhibitInfoPage/change',
         payload: {
           pAddCustomModalVisible: false,
+          pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+            ...pCustomAttr,
+            isEditing: false,
+          })),
         },
       })}
       onOk={() => {
+        const editing = exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
+        if (editing) {
+          dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pCustomAttrs: exhibitInfoPage.pCustomAttrs
+                .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
+                .map((pCustomAtt) => {
+                  if (!pCustomAtt.isEditing) {
+                    return pCustomAtt;
+                  }
+                  return {
+                    ...pCustomAtt,
+                    key: exhibitInfoPage.pAddCustomKey,
+                    value: exhibitInfoPage.pAddCustomValue,
+                    remark: exhibitInfoPage.pAddCustomDescription,
+                    isEditing: false,
+                  };
+                }),
+            }
+          });
+        } else {
+          dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              pCustomAttrs: [
+                ...exhibitInfoPage.pCustomAttrs
+                  .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey),
+                {
+                  key: exhibitInfoPage.pAddCustomKey,
+                  value: exhibitInfoPage.pAddCustomValue,
+                  // defaultValue?: string;
+                  // option?: string[];
+                  remark: exhibitInfoPage.pAddCustomDescription,
+                }
+              ]
+            }
+          });
+        }
 
-        dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            pCustomAttrs: [
-              ...exhibitInfoPage.pCustomAttrs
-                .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey),
-              {
-                key: exhibitInfoPage.pAddCustomKey,
-                value: exhibitInfoPage.pAddCustomValue,
-                // defaultValue?: string;
-                // option?: string[];
-                remark: exhibitInfoPage.pAddCustomDescription,
-              }
-            ]
-          }
-        });
         dispatch<UpdateRewriteAction>({
           type: 'exhibitInfoPage/updateRewrite',
         });
