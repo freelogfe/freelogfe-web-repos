@@ -149,10 +149,8 @@ export default function ({
         </div>)
         : (<div className={styles.noData}>
           <FContentText type="negative" text={'暂无数据~'}/>
-
         </div>)
     }
-
 
     {totalNum > 10 && <>
       <div style={{height: 10}}/>
