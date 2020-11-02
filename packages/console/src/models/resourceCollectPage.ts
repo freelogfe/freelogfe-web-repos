@@ -2,7 +2,12 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState, ResourceListPageModelState} from '@/models/connect';
-import {collectionResources, CollectionResourcesParamsType} from '@/services/collections';
+import {
+  collectionResources,
+  CollectionResourcesParamsType,
+  deleteCollectResource,
+  DeleteCollectResourceParamsType
+} from '@/services/collections';
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
@@ -21,6 +26,11 @@ export interface ResourceCollectPageModelState {
   }[];
 }
 
+export interface ChangeAction extends AnyAction {
+  type: 'change',
+  payload: Partial<ResourceListPageModelState>;
+}
+
 export interface FetchDataSourceAction extends AnyAction {
   type: 'resourceCollectPage/fetchDataSource' | 'fetchDataSource',
 }
@@ -36,9 +46,9 @@ export interface ChangeStatesAction extends AnyAction {
   };
 }
 
-export interface ChangeAction extends AnyAction {
-  type: 'change',
-  payload: Partial<ResourceListPageModelState>;
+export interface BoomJuiceAction {
+  type: 'resourceCollectPage/boomJuice';
+  payload: string;
 }
 
 export interface ResourceCollectModelType {
@@ -47,6 +57,7 @@ export interface ResourceCollectModelType {
   effects: {
     changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+    boomJuice: (action: BoomJuiceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCollectPageModelState, ChangeAction>;
@@ -114,6 +125,15 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
+    * boomJuice({payload}: BoomJuiceAction, {call, put}: EffectsCommandMap) {
+      const params: DeleteCollectResourceParamsType = {
+        resourceId: payload,
+      };
+      yield call(deleteCollectResource, params);
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+      });
+    }
   },
 
   reducers: {

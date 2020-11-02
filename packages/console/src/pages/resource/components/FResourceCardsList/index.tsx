@@ -10,6 +10,7 @@ import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
 import {i18nMessage} from "@/utils/i18n";
+import {FContentText} from '@/components/FText';
 
 
 const resourceTypeOptions = [
@@ -125,25 +126,34 @@ export default function ({
       </div>
     </div>
 
-    <div className={styles.Content}>
-      {
-        dataSource.map((i: any, j: number) => (<FResourceCard
-          key={i.id}
-          resource={i}
-          type={isCollect ? 'favorite' : 'resource'}
-          className={styles.FResourceCard}
-          onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
-          onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
-          onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
-          onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
-          onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
-        />))
-      }
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-    </div>
+    {
+      dataSource.length > 0
+        ? (<div className={styles.Content}>
+          {
+            dataSource.map((i: any, j: number) => (<FResourceCard
+              key={i.id}
+              resource={i}
+              type={isCollect ? 'favorite' : 'resource'}
+              className={styles.FResourceCard}
+              onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
+              onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
+              onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
+              onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
+              onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
+            />))
+          }
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+        </div>)
+        : (<div className={styles.noData}>
+          <FContentText type="negative" text={'暂无数据~'}/>
+
+        </div>)
+    }
+
+
     {totalNum > 10 && <>
       <div style={{height: 10}}/>
       <FPagination

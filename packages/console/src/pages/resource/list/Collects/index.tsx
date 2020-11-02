@@ -7,6 +7,7 @@ import {router} from 'umi';
 import {} from "@/models/resourceCollectPage";
 import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
 import {ChangeStatesAction} from "@/models/resourceCollectPage";
+import {BoomJuiceAction} from "@/models/resourceCollectPage";
 
 const navs = [
   {
@@ -46,7 +47,13 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     onChangePageCurrent={(value) => changeStatus({pageCurrent: value})}
     onChangePageSize={(value) => changeStatus({pageSize: value})}
     isCollect={true}
-    onBoomJuice={() => null}
+    onBoomJuice={(id) => {
+      // console.log(id, '3029jdaslkfasdf');
+      dispatch<BoomJuiceAction>({
+        type: 'resourceCollectPage/boomJuice',
+        payload: id.toString(),
+      })
+    }}
     onClickMore={() => null}
   />);
 }
