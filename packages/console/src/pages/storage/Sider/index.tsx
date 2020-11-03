@@ -30,6 +30,7 @@ function Sider({storage, dispatch}: SiderProps) {
   const systemBuckets = storage.bucketList.filter((b) => b.bucketType === 2);
 
   return (<div className={styles.sider}>
+    <div style={{height: 45}}/>
     <div className={styles.title}>
       <Space size={10}>
         <FTitleText text={`我的存储空间`} type="form"/>

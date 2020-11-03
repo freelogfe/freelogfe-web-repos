@@ -7,10 +7,10 @@ import moment from 'moment';
  */
 export function humanizeSize(bytes: number): string {
   // console.log('dddhumanizeSizesdfsd');
-  if (bytes < 0) {
-    return "0 B";
+  if (bytes <= 0) {
+    return '0 B';
   }
-  let unitArr = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  let unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   let index = 0;
   // var srcsize = parseFloat(value);
   index = Math.floor(Math.log(bytes) / Math.log(1024));
