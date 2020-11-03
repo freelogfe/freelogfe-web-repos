@@ -33,17 +33,7 @@
   padding: 0 25px;
 }
 
-.Menu {
-  display: inline-block;
-  padding: 0 15px;
-  line-height: 70px;
-  color: #222;
-  //height: 68px;
 
-  &:hover {
-    color: #2784FF;
-  }
-}
 
 .headerRight {
   display: flex;
@@ -123,20 +113,19 @@
   }
 }
 
-.emptyDropdown {
-  height: 180px;
-  padding: 0 50px;
-  //background-color: #AED0FF;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  //box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-  background-color: white;
-}
-
 .newButton {
   display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+  transition: none;
+  border-top: 1px solid #E4E7EB;
+
+  &:hover {
+    color: white;
+    background-color: @primary-color;
+  }
 }
 
 .dropdown {

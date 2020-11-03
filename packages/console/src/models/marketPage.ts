@@ -8,6 +8,9 @@ import {useDebounce} from "ahooks";
 // import {useDebounceFn} from 'ahooks';
 
 export interface MarketPageModelState {
+
+  tabValue: '1' | '2',
+
   pageCurrent: number;
   resourceType: string;
   inputText: string;
@@ -42,7 +45,7 @@ export interface ChangeStatesAction extends AnyAction {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change',
+  type: 'change' | 'marketPage/change';
   payload: Partial<MarketPageModelState>;
 }
 
@@ -69,6 +72,9 @@ const Model: MarketModelType = {
   namespace: 'marketPage',
 
   state: {
+
+    tabValue: '1',
+
     pageCurrent: 1,
     resourceType: '-1',
     inputText: '',

@@ -17,6 +17,8 @@ import {MarketResourcePageState} from './marketResourcePage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
+import RouterTypes from "umi/routerTypes";
+import {Router} from "dva";
 
 export {
   // RouterHistoriesModelState,

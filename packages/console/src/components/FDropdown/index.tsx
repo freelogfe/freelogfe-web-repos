@@ -4,7 +4,7 @@ import {Dropdown} from 'antd';
 import {DropDownProps} from "antd/lib/dropdown";
 
 interface FDropdownProps extends DropDownProps {
-  children: React.ReactElement;
+  children: React.ReactNode;
   // overlay:
 }
 
@@ -13,7 +13,7 @@ function FDropdown({children, overlay, overlayClassName, ...props}: FDropdownPro
     {...props}
     overlay={overlay}
     overlayClassName={styles.dropdown + ' ' + overlayClassName}
-  >{children}</Dropdown>);
+  ><div className={styles.children}>{children}</div></Dropdown>);
 }
 
 export default FDropdown;

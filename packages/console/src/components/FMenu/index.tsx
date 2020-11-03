@@ -8,11 +8,12 @@ interface FMenuItem {
 }
 
 export interface FMenuProps {
+  value?: string;
   options: FMenuItem[];
   onClick?: (value: string) => void;
 }
 
-export default function FMenu({options, onClick}: FMenuProps) {
+export default function FMenu({options, value, onClick}: FMenuProps) {
   return (
     <Menu
       selectable={false}
@@ -24,7 +25,7 @@ export default function FMenu({options, onClick}: FMenuProps) {
         (options || [])
           .map((i: FMenuItem) => (<Menu.Item
             key={i.value}
-            className={styles.MenuItem}
+            className={styles.MenuItem + ' ' + (value === i.value ? styles.active : '')}
           >{i.text || i.value}</Menu.Item>))
       }
     </Menu>

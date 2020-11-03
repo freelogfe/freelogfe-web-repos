@@ -7,8 +7,10 @@ import Resources from "./Resources";
 import Examples from "@/pages/market/Examples";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from "dva";
-import {ChangeAction} from "@/models/global";
+import {ChangeAction as GlobalChangeAction} from "@/models/global";
+import {ChangeAction} from "@/models/marketPage";
 import FLayoutFooter from "@/layouts/FLayoutFooter";
+import {ConnectState, MarketPageModelState} from "@/models/connect";
 
 const navs = [
   {
@@ -25,14 +27,15 @@ const navs = [
 interface MarketProps extends RouteComponentProps {
   dispatch: Dispatch;
   route: any;
+
+  marketPage: MarketPageModelState;
 }
 
-function Market({dispatch, match, history, location, route, ...props}: MarketProps) {
+function Market({dispatch, match, history, location, route, marketPage, ...props}: MarketProps) {
 
-  const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
-
+  // 路由更新路由匹配信息
   React.useEffect(() => {
-    dispatch<ChangeAction>({
+    dispatch<GlobalChangeAction>({
       type: 'global/change',
       payload: {
         route: route,
@@ -41,14 +44,19 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
   }, [route]);
 
   React.useEffect(() => {
-    setTabValue(match.path === '/market' ? '1' : '2')
+    dispatch<ChangeAction>({
+      type: 'marketPage/change',
+      payload: {
+        tabValue: match.path === '/market' ? '1' : '2',
+      },
+    })
   }, [match.path]);
 
   function onChangeTab(value: '1' | '2') {
-    if (value === '1' && tabValue !== '1') {
+    if (value === '1' && marketPage.tabValue !== '1') {
       return router.push('/market');
     }
-    if (value === '2' && tabValue !== '2') {
+    if (value === '2' && marketPage.tabValue !== '2') {
       return router.push('/market/example');
     }
   }
@@ -57,17 +65,19 @@ function Market({dispatch, match, history, location, route, ...props}: MarketPro
     <FCenterLayout>
       <FAffixTabs
         options={navs}
-        value={tabValue}
+        value={marketPage.tabValue}
         // onChange={(value) => dispatch<OnChangeTabValueAction>({type: 'marketPage/onChangeTabValue', payload: value})}
         onChange={onChangeTab}
       />
-      {tabValue === '1' && <Resources/>}
-      {tabValue === '2' && <Examples/>}
+      {marketPage.tabValue === '1' && <Resources/>}
+      {marketPage.tabValue === '2' && <Examples/>}
     </FCenterLayout>
     <FLayoutFooter/>
   </>);
 }
 
 
-export default withRouter(connect()(Market));
+export default withRouter(connect(({marketPage}: ConnectState) => ({
+  marketPage,
+}))(Market));
 

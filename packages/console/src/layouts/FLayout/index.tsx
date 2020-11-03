@@ -2,7 +2,6 @@ import React, {ChangeEvent, ChangeEventHandler} from 'react';
 import styles from './index.less';
 import {Layout, Dropdown, Affix} from 'antd';
 import FMenu from '@/components/FMenu';
-// import avatarSrc from '../../assets/avatar.png';
 import {FCircleButton, FNormalButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {router, withRouter} from 'umi';
@@ -19,7 +18,7 @@ import FLayoutFooter from "@/layouts/FLayoutFooter";
 import {setLocale} from 'umi-plugin-react/locale';
 import {FTitleText, FContentText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
-import {FetchBucketsAction} from "@/models/storageHomePage";
+import {ChangeAction, FetchBucketsAction, OnChangeActivatedBucketAction} from "@/models/storageHomePage";
 // import {
 //   formatDate,
 //   formatTime,
@@ -31,28 +30,11 @@ import {FetchBucketsAction} from "@/models/storageHomePage";
 // } from 'umi-plugin-react/locale';
 import {FPlus} from '@/components/FIcons';
 import FDropdown from "@/components/FDropdown";
-
-const discoverOptions = [
-  {
-    text: '发现资源',
-    value: '1'
-  },
-  {
-    text: '发现节点',
-    value: '2'
-  },
-];
-
-const resourcesOptions = [
-  {
-    text: '我的资源',
-    value: '1'
-  },
-  {
-    text: '我的收藏',
-    value: '2'
-  },
-];
+import Discover from "./Discover";
+import Storage from "./Storage";
+import Resource from "./Resource";
+import Node from "./Node";
+import Contract from "./Contract";
 
 const creatorOptions = [
   {
@@ -64,7 +46,6 @@ const creatorOptions = [
     value: '2'
   },
 ];
-
 
 interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -105,24 +86,6 @@ function FLayout({
     }
   }
 
-  function onClickResource(value: string) {
-    if (value === '1' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/list')) {
-      return router.push('/resource/list');
-    }
-    if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/resource/collect')) {
-      return router.push('/resource/collect');
-    }
-  }
-
-  function onClickNodes(value: string) {
-    return router.push('/node/' + value);
-  }
-
-  function onClickStorage() {
-    if (!global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/storage')) {
-      return router.push('/storage');
-    }
-  }
 
   function onCreateClick(value: string) {
     // console.log(params, 'params');
@@ -146,55 +109,17 @@ function FLayout({
             className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
           />
           <div className={styles.MenuBar}>
-            <FDropdown overlay={<FMenu
-              onClick={onDiscoverClick}
-              options={discoverOptions}
-            />}>
-              <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>
-                {i18nMessage('explorer')}
-              </a>
-            </FDropdown>
 
-            <FDropdown overlay={<div className={styles.emptyDropdown}>
-              <FContentText text={'自由创作从Freelog开始'}/>
-              <div style={{height: 30}}/>
-              <FNormalButton size="small">创建Bucket</FNormalButton>
-            </div>}>
-              <a
-                onClick={() => onClickStorage()}
-                className={styles.Menu}>{i18nMessage('storage')}
-              </a>
-            </FDropdown>
+            <Discover/>
 
-            <FDropdown overlay={<FMenu
-              onClick={onClickResource}
-              options={resourcesOptions}
-            />}>
-              <a onClick={() => onClickResource('1')}
-                 className={styles.Menu}>{i18nMessage('resource_manage')}</a>
-            </FDropdown>
+            <Storage/>
 
-            <FDropdown
-              visible={true}
-              overlay={nodes.list.length > 0 ? (<div>
-                <FMenu
-                  onClick={onClickNodes}
-                  options={nodes.list.map((n) => ({
-                    text: n.nodeName,
-                    // value: n.nodeDomain,
-                    value: n.nodeId.toString(),
-                  }))}
-                />
-                <a className={styles.newButton}>1234<FPlus/></a>
-              </div>) : (<div className={styles.emptyDropdown}>
-                <FContentText text={'自由创作从Freelog开始'}/>
-                <div style={{height: 30}}/>
-                <FNormalButton size="small">创建节点</FNormalButton>
-              </div>)}>
-              <a className={styles.Menu}>{i18nMessage('node_manage')}</a>
-            </FDropdown>
+            <Resource/>
 
-            <a className={styles.Menu}>{i18nMessage('contract_manage')}</a>
+            <Node/>
+
+            <Contract/>
+
           </div>
         </div>
 
