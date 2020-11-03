@@ -3,14 +3,14 @@ import styles from './index.less';
 import {Layout, Dropdown, Affix} from 'antd';
 import FMenu from '@/components/FMenu';
 // import avatarSrc from '../../assets/avatar.png';
-import {FCircleButton} from '@/components/FButton';
+import {FCircleButton, FNormalButton} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {router, withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
   GlobalModelState,
-  GlobalSearchingModelState, NodesModelState,
+  GlobalSearchingModelState, NodesModelState, StorageHomePageModelState,
   // RouterHistoriesModelState,
   UserModelState
 } from '@/models/connect';
@@ -29,6 +29,8 @@ import {FetchBucketsAction} from "@/models/storageHomePage";
 //   formatMessage,
 //   formatHTMLMessage
 // } from 'umi-plugin-react/locale';
+import {FPlus} from '@/components/FIcons';
+import FDropdown from "@/components/FDropdown";
 
 const discoverOptions = [
   {
@@ -72,9 +74,19 @@ interface FLayoutProps extends RouteComponentProps {
   user: UserModelState,
   global: GlobalModelState;
   nodes: NodesModelState;
+  storage: StorageHomePageModelState,
 }
 
-function FLayout({children, global, dispatch, globalSearching, user, nodes, ...props}: FLayoutProps) {
+function FLayout({
+                   children,
+                   global,
+                   dispatch,
+                   globalSearching,
+                   user,
+                   nodes,
+                   storage,
+                   // ...props
+                 }: FLayoutProps) {
   // console.log(props, 'propspropspropsLayout');
 
   React.useEffect(() => {
@@ -134,38 +146,58 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
             className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
           />
           <div className={styles.MenuBar}>
-            <Dropdown overlay={<FMenu
+            <FDropdown overlay={<FMenu
               onClick={onDiscoverClick}
               options={discoverOptions}
             />}>
               <a onClick={() => onDiscoverClick('1')} className={styles.Menu}>
                 {i18nMessage('explorer')}
               </a>
-            </Dropdown>
-            <a
-              onClick={() => onClickStorage()}
-              className={styles.Menu}>{i18nMessage('storage')}
-            </a>
-            <Dropdown overlay={<FMenu
+            </FDropdown>
+
+            <FDropdown overlay={<div className={styles.emptyDropdown}>
+              <FContentText text={'自由创作从Freelog开始'}/>
+              <div style={{height: 30}}/>
+              <FNormalButton size="small">创建Bucket</FNormalButton>
+            </div>}>
+              <a
+                onClick={() => onClickStorage()}
+                className={styles.Menu}>{i18nMessage('storage')}
+              </a>
+            </FDropdown>
+
+            <FDropdown overlay={<FMenu
               onClick={onClickResource}
               options={resourcesOptions}
             />}>
               <a onClick={() => onClickResource('1')}
                  className={styles.Menu}>{i18nMessage('resource_manage')}</a>
-            </Dropdown>
-            <Dropdown overlay={<FMenu
-              onClick={onClickNodes}
-              options={nodes.list.map((n) => ({
-                text: n.nodeName,
-                // value: n.nodeDomain,
-                value: n.nodeId.toString(),
-              }))}
-            />}>
+            </FDropdown>
+
+            <FDropdown
+              visible={true}
+              overlay={nodes.list.length > 0 ? (<div>
+                <FMenu
+                  onClick={onClickNodes}
+                  options={nodes.list.map((n) => ({
+                    text: n.nodeName,
+                    // value: n.nodeDomain,
+                    value: n.nodeId.toString(),
+                  }))}
+                />
+                <a className={styles.newButton}>1234<FPlus/></a>
+              </div>) : (<div className={styles.emptyDropdown}>
+                <FContentText text={'自由创作从Freelog开始'}/>
+                <div style={{height: 30}}/>
+                <FNormalButton size="small">创建节点</FNormalButton>
+              </div>)}>
               <a className={styles.Menu}>{i18nMessage('node_manage')}</a>
-            </Dropdown>
+            </FDropdown>
+
             <a className={styles.Menu}>{i18nMessage('contract_manage')}</a>
           </div>
         </div>
+
         <div className={styles.headerRight}>
           <FInput
             value={globalSearching.input}
@@ -180,7 +212,7 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
             // disabled={true}
           />
 
-          <Dropdown overlay={<FMenu
+          <FDropdown overlay={<FMenu
             onClick={onCreateClick}
             options={creatorOptions}
           />}>
@@ -190,9 +222,9 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
             >
               <FCircleButton/>
             </a>
-          </Dropdown>
+          </FDropdown>
 
-          <Dropdown overlay={<div className={styles.userPanel}>
+          <FDropdown overlay={<div className={styles.userPanel}>
             <div className={styles.userPanelHeader}>
               <img src={user.info?.headImage} alt="headImage"/>
               <div style={{height: 10}}/>
@@ -208,7 +240,7 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
             <a className={styles.avatar}>
               <img src={user.info?.headImage} alt={'avatar'}/>
             </a>
-          </Dropdown>
+          </FDropdown>
         </div>
       </Layout.Header>
 
@@ -222,12 +254,19 @@ function FLayout({children, global, dispatch, globalSearching, user, nodes, ...p
   );
 }
 
-export default withRouter(connect(({globalSearching, user, global, nodes}: ConnectState) => ({
+export default withRouter(connect(({
+                                     globalSearching,
+                                     user,
+                                     global,
+                                     nodes,
+                                     storageHomePage
+                                   }: ConnectState) => ({
   globalSearching: globalSearching,
   routerHistories: global.routerHistories,
   user: user,
   global: global,
   nodes: nodes,
+  storage: storageHomePage,
 }))(FLayout));
 
 // parse()

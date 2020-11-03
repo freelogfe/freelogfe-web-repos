@@ -2,7 +2,7 @@ import * as React from 'react';
 import {FTipText, FContentText} from '@/components/FText';
 // import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {FNormalButton, FTextButton, FCircleButton} from '@/components/FButton';
-// import FDropdown from '@/components/FDropdown';
+// import FDropdownMenu from '@/components/FDropdownMenu';
 import FModal from '@/components/FModal';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {PlusOutlined} from '@ant-design/icons';

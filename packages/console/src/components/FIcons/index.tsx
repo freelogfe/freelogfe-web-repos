@@ -10,6 +10,7 @@ import FEdit from './FEdit';
 import FExclamation from './FExclamation';
 import FClose from './FClose';
 import FDoubleUp from './FDoubleUp';
+import FPlus from './FPlus';
 
 export {
   FDelete,
@@ -23,4 +24,5 @@ export {
   FExclamation,
   FClose,
   FDoubleUp,
+  FPlus,
 }

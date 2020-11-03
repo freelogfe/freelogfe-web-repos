@@ -1,25 +1,19 @@
 import * as React from 'react';
-
 import styles from './index.less';
-import FMenu, {FMenuProps} from '@/components/FMenu';
 import {Dropdown} from 'antd';
-import {DownOutlined} from '@ant-design/icons';
+import {DropDownProps} from "antd/lib/dropdown";
 
-interface FDropdownProps extends FMenuProps {
-  children?: React.ReactNode;
-  text?: React.ReactNode;
-  onChange?: (value: string) => void;
+interface FDropdownProps extends DropDownProps {
+  children: React.ReactElement;
+  // overlay:
 }
 
-function FDropdown({options, children, text, onChange}: FDropdownProps) {
-  return (<Dropdown overlay={<FMenu
-    onClick={onChange}
-    options={options}/>}>
-    {text ? (<div className={styles.text}>
-      {text}
-      <DownOutlined className={styles.DownOutlined}/>
-    </div>) : children}
-  </Dropdown>)
+function FDropdown({children, overlay, overlayClassName, ...props}: FDropdownProps) {
+  return (<Dropdown
+    {...props}
+    overlay={overlay}
+    overlayClassName={styles.dropdown + ' ' + overlayClassName}
+  >{children}</Dropdown>);
 }
 
 export default FDropdown;
