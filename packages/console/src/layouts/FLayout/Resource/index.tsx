@@ -40,6 +40,7 @@ function Resource({global}: ResourceProps) {
 
   return (<FDropdown
     overlay={<FMenu
+      value={cRoute.pathname.startsWith('/resource/list') ? '1' : cRoute.pathname.startsWith('/resource/collect') ? '2' : ''}
       onClick={onClickResource}
       options={resourcesOptions}
     />}>
