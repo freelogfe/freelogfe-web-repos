@@ -487,7 +487,7 @@ const Model: MarketResourcePageModelType = {
           type: 'change',
           payload: {
             signExhibitNameErrorTip: `展品名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? " < > |`,
-          }
+          },
         });
         return;
       }
@@ -496,9 +496,17 @@ const Model: MarketResourcePageModelType = {
         presentableName: marketResourcePage.signExhibitName,
       };
       const {data: data1} = yield call(presentableDetails, params1);
-      console.log(data1, '2093uoi23r');
+      // console.log(data1, '2093uoi23r');
+      if (data1) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            signExhibitNameErrorTip: `该展品名称在当前节点已使用，请重新输入。`,
+          },
+        });
+        return;
+      }
 
-      return;
       const params: CreatePresentableParamsType = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,
