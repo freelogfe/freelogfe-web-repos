@@ -4,6 +4,7 @@ import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import {router} from 'umi';
+import {ChangeAction} from "@/models/marketResourcePage";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -21,7 +22,15 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             marketResourcePage.selectedNodeID === -1
             || marketResourcePage.signResources.map((sr) => sr.policies.filter((srp) => srp.checked).length).includes(0)
           }
-          onClick={() => router.push(`/resource/${marketResourcePage.resourceId}/sign`)}
+          onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'marketResourcePage/change',
+              payload: {
+                signExhibitName: marketResourcePage.resourceInfo?.name?.split('/')[1] || '',
+              }
+            });
+            router.push(`/resource/${marketResourcePage.resourceId}/sign`);
+          }}
         >签约</FNormalButton>)
         : (<span>该资源已签约，可进入<a>展品管理</a>进行授权管理</span>)
     }

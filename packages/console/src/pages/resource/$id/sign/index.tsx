@@ -13,7 +13,7 @@ import ResourcesAndPolicies from './ResourcesAndPolicies';
 import FixedFooter from './FixedFooter';
 import {router} from 'umi';
 import FTooltip from '@/components/FTooltip';
-import {ChangeAction} from "@/models/marketResourcePage";
+import {ChangeAction} from '@/models/marketResourcePage';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -77,9 +77,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           <FTooltip
             placement="bottomLeft"
             title={'展品名称在当前节点内部唯一，后期不可修改，仅供编码用'}
-          >
-            <FInfo/>
-          </FTooltip>
+          ><FInfo/></FTooltip>
         </div>
         <div style={{height: 50}}/>
 

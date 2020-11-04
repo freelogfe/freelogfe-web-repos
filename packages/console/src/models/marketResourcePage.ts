@@ -147,7 +147,7 @@ export interface SignContractAction extends AnyAction {
   // payload: string;
 }
 
-export interface MarketResourcePageModelType {
+interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageState;
   effects: {

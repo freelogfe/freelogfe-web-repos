@@ -14,6 +14,7 @@ import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
 import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 interface ResourceDetailsProps extends RouterTypes {
   dispatch: Dispatch;
@@ -65,7 +66,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
             type="additional1"
           />
           <div style={{width: 20}}/>
-          <FDropdown
+          <FDropdownMenu
             options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
             onChange={(value) => {
               // console.log(value, '3209jsd');
@@ -76,7 +77,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
             }}
           >
             <a><FSwap/></a>
-          </FDropdown>
+          </FDropdownMenu>
         </div>
 
         <Description/>

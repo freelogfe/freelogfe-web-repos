@@ -4,13 +4,19 @@ import {FNormalButton, FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FLeft from '@/components/FIcons/FLeft';
 import {connect, Dispatch} from 'dva';
-import {SignContractAction} from "@/models/marketResourcePage";
+import {MarketResourcePageState, SignContractAction} from "@/models/marketResourcePage";
+import {EXHIBIT_NAME} from "@/utils/regexp";
+import {ConnectState} from "@/models/connect";
 
 interface FixedFooterProps {
   dispatch: Dispatch;
+
+  marketResourcePage: MarketResourcePageState;
 }
 
-function FixedFooter({dispatch}: FixedFooterProps) {
+function FixedFooter({dispatch, marketResourcePage}: FixedFooterProps) {
+
+
   return (<div className={styles.footer}>
     <div>
       <FTextButton onClick={() => router.goBack()}>
@@ -18,11 +24,16 @@ function FixedFooter({dispatch}: FixedFooterProps) {
         <>返回上一步</>
       </FTextButton>
       <div style={{width: 30}}/>
-      <FNormalButton onClick={() => dispatch<SignContractAction>({
-        type: 'marketResourcePage/signContract',
-      })}>确认签约</FNormalButton>
+      <FNormalButton
+        onClick={() => dispatch<SignContractAction>({
+          type: 'marketResourcePage/signContract',
+        })}
+        disabled={!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)}
+      >确认签约</FNormalButton>
     </div>
   </div>);
 }
 
-export default connect()(FixedFooter);
+export default connect(({marketResourcePage}: ConnectState) => ({
+  marketResourcePage,
+}))(FixedFooter);
