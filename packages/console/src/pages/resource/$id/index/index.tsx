@@ -14,7 +14,7 @@ import {ConnectState, MarketResourcePageState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
 import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
-import FDropdownMenu from "@/components/FDropdownMenu";
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface ResourceDetailsProps extends RouterTypes {
   dispatch: Dispatch;
@@ -81,8 +81,11 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
         </div>
 
         <Description/>
+
         <Property/>
+
         <Option/>
+
         <Viewport/>
       </div>
     </div>
