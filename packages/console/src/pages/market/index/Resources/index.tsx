@@ -33,10 +33,12 @@ function Resources({dispatch, market}: ResourcesProps) {
       />
       <FInput
         value={market.inputText}
-        onChange={(e) => dispatch<ChangeStatesAction>({
+        debounce={300}
+        onDebounceChange={(value) => dispatch<ChangeStatesAction>({
           type: 'marketPage/changeStates',
-          payload: {inputText: e.target.value},
+          payload: {inputText: value},
         })}
+        // onChange={(e) => }
         theme="dark"
         size="small"
         className={styles.filterInput}
