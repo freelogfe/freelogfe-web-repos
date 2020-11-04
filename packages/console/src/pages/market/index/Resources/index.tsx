@@ -46,27 +46,30 @@ function Resources({dispatch, market}: ResourcesProps) {
     </div>
 
     <div style={{height: 30}}/>
-
-    <div className={styles.Content}>
-      {
-        market.dataSource.map((resource: any) => (
-          <FResourceCard
-            key={resource.id}
-            resource={resource}
-            className={styles.FResourceCard}
-            onClick={(resource) => {
-              // console.log(resource, 'resourceq098upioq');
-              return router.push(`/resource/${resource.id}`);
-            }}
-          />))
-      }
-
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-      <div className={styles.bottomPadding}/>
-    </div>
-
+    {
+      market.dataSource.length > 0
+        ? (<div className={styles.Content}>
+          {
+            market.dataSource.map((resource: any) => (
+              <FResourceCard
+                key={resource.id}
+                resource={resource}
+                className={styles.FResourceCard}
+                onClick={(resource) => {
+                  // console.log(resource, 'resourceq098upioq');
+                  return router.push(`/resource/${resource.id}`);
+                }}
+              />))
+          }
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+          <div className={styles.bottomPadding}/>
+        </div>)
+        : (<div className={styles.noData}>
+          暂无数据
+        </div>)
+    }
 
     {
       market.totalItem > (20 * market.pageCurrent) && (<>
@@ -84,7 +87,7 @@ function Resources({dispatch, market}: ResourcesProps) {
         </div>
       </>)
     }
-
+    <div style={{height: 100}}/>
   </>)
 }
 
