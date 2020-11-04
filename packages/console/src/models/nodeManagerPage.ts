@@ -104,7 +104,7 @@ const Model: NodeManagerModelType = {
     nodeName: '',
     nodeUrl: '',
     testNodeUrl: '',
-    showTheme: true,
+    showTheme: false,
 
     selectedType: '-1',
     selectedStatus: '2',

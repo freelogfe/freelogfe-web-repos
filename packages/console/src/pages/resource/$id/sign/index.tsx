@@ -59,10 +59,17 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           {/*<FSwap/>*/}
         </div>
         <div style={{height: 50}}/>
-        <FTitleText
-          text={'输入展品名称'}
-          type="h3"
-        />
+        <div className={styles.nameTitle}>
+          <FTitleText
+            text={'输入展品名称'}
+            type="h3"
+          />
+          <div style={{width: 10}}/>
+          <FContentText
+            type="additional2"
+            text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
+          />
+        </div>
         <div style={{height: 20}}/>
         <div className={styles.exhibitName}>
           <FInput
@@ -70,14 +77,18 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
             className={styles.exhibitNameInput}
             onChange={(e) => dispatch<ChangeAction>({
               type: 'marketResourcePage/change',
-              payload: {signExhibitName: e.target.value,}
+              payload: {
+                signExhibitName: e.target.value,
+                signExhibitNameErrorTip: '',
+              },
             })}
           />
-          <div style={{width: 10}}/>
-          <FTooltip
-            placement="bottomLeft"
-            title={'展品名称在当前节点内部唯一，后期不可修改，仅供编码用'}
-          ><FInfo/></FTooltip>
+          <div style={{height: 5}}/>
+          <div className={styles.signExhibitNameErrorTip}>{marketResourcePage.signExhibitNameErrorTip}</div>
+          {/*<FTooltip*/}
+          {/*  placement="bottomLeft"*/}
+          {/*  title={'展品名称在当前节点内部唯一，后期不可修改，仅供编码用'}*/}
+          {/*><FInfo/></FTooltip>*/}
         </div>
         <div style={{height: 50}}/>
 

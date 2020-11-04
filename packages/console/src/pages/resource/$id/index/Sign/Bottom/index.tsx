@@ -27,6 +27,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
               type: 'marketResourcePage/change',
               payload: {
                 signExhibitName: marketResourcePage.resourceInfo?.name?.split('/')[1] || '',
+                signExhibitNameErrorTip: '',
               }
             });
             router.push(`/resource/${marketResourcePage.resourceId}/sign`);

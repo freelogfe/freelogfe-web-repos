@@ -28,7 +28,7 @@ function FixedFooter({dispatch, marketResourcePage}: FixedFooterProps) {
         onClick={() => dispatch<SignContractAction>({
           type: 'marketResourcePage/signContract',
         })}
-        disabled={!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)}
+        // disabled={!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)}
       >确认签约</FNormalButton>
     </div>
   </div>);

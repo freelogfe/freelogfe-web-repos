@@ -1,3 +1,5 @@
+@import '../../../../config';
+
 .header {
   height: 100px;
   display: flex;
@@ -36,11 +38,20 @@
 }
 
 .exhibitName {
-  display: flex;
-  align-items: center;
+  //display: flex;
+  //align-items: center;
 }
 
 .exhibitNameInput {
   width: 400px;
 }
 
+.signExhibitNameErrorTip {
+  font-size: 12px;
+  color: @f-error-color;
+}
+
+.nameTitle {
+  display: flex;
+  align-items: baseline;
+}

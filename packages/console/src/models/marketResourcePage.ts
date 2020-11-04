@@ -28,6 +28,7 @@ import {Simulate} from "react-dom/test-utils";
 import select = Simulate.select;
 import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
 import {router} from "umi";
+import {EXHIBIT_NAME} from "@/utils/regexp";
 
 
 interface Contract {
@@ -100,6 +101,7 @@ export interface MarketResourcePageState {
   }[];
 
   signExhibitName: string;
+  signExhibitNameErrorTip: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -202,6 +204,7 @@ const Model: MarketResourcePageModelType = {
     options: [],
 
     signExhibitName: '',
+    signExhibitNameErrorTip: '',
   },
   effects: {
     * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
@@ -473,11 +476,29 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchVersionInfo',
       });
     },
-    * signContract({}: SignContractAction, {call, select}: EffectsCommandMap) {
+    * signContract({}: SignContractAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage, nodes}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
         marketResourcePage,
         nodes,
       }));
+
+      if (!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            signExhibitNameErrorTip: `展品名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? " < > |`,
+          }
+        });
+        return;
+      }
+      const params1: PresentableDetailsParamsType2 = {
+        nodeId: marketResourcePage.selectedNodeID,
+        presentableName: marketResourcePage.signExhibitName,
+      };
+      const {data: data1} = yield call(presentableDetails, params1);
+      console.log(data1, '2093uoi23r');
+
+      return;
       const params: CreatePresentableParamsType = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,

@@ -9,6 +9,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {OnChangeThemeAction} from "@/models/nodeManagerPage";
 import {router} from "umi";
+import {i18nMessage} from "@/utils/i18n";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -66,10 +67,13 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           <div style={{height: 6}}/>
           <FContentText type="additional1" text={'展示版本 1.0.10'}/>
           <div style={{height: 15}}/>
-          <div className={styles.polices}>
-            {
-              i.policies.map((p) => (<label>{p}</label>))
-            }
+          <div className={styles.bottom}>
+            <div className={styles.polices}>
+              {
+                i.policies.map((p) => (<label>{p}</label>))
+              }
+            </div>
+            <a onClick={() => null}>{i18nMessage('more_details')}>></a>
           </div>
         </div>))
       }

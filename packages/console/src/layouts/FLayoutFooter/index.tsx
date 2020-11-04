@@ -10,8 +10,12 @@ import {SetLocaleAction} from "@/models/global";
 const languagesOptions = [
   {value: 'zh-CN', text: '中文'},
   {value: 'en-US', text: 'English'},
-  {value: 'pt-BR', text: 'Key'},
 ];
+// console.log(process.env, 'process.env');
+
+if (process.env.NODE_ENV !== 'production') {
+  languagesOptions.push({value: 'pt-BR', text: 'Key'});
+}
 
 interface FLayoutFooter {
   dispatch: Dispatch;
