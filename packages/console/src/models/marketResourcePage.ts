@@ -82,6 +82,7 @@ export interface MarketResourcePageState {
     contracts: Contract[];
     policies: Policy[];
   }[];
+  signedResourceExhibitId: string;
 
   allVersions: string[];
   version: string;
@@ -192,6 +193,7 @@ const Model: MarketResourcePageModelType = {
 
     signResources: [],
     signedResources: null,
+    signedResourceExhibitId: '',
 
     allVersions: [],
     version: '',
@@ -250,7 +252,7 @@ const Model: MarketResourcePageModelType = {
         rawSignResources = [
           ...rawSignResources,
           ...data1,
-        ]
+        ];
       }
 
       // console.log(rawSignResources, 'rawSignResources2309ef');
@@ -374,7 +376,7 @@ const Model: MarketResourcePageModelType = {
         resourceId: marketResourcePage.resourceId,
       };
       const {data} = yield call(presentableDetails, params);
-      // console.log(data, 'datadata0923jsdfsd');
+      console.log(data, 'datadata0923jsdfsd');
       const allContracts = data.resolveResources;
       // console.log(allContracts, 'datadata0923jsdfsd');
 
@@ -425,8 +427,9 @@ const Model: MarketResourcePageModelType = {
         type: 'change',
         payload: {
           signedResources: signedResources,
-        }
-      })
+          signedResourceExhibitId: data.presentableId,
+        },
+      });
     },
     * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({

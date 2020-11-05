@@ -33,7 +33,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             router.push(`/resource/${marketResourcePage.resourceId}/sign`);
           }}
         >签约</FNormalButton>)
-        : (<span>该资源已签约，可进入<a>展品管理</a>进行授权管理</span>)
+        : (<span>该资源已签约，可进入<a onClick={() => router.push(`/node/exhibit/${marketResourcePage.signedResourceExhibitId}`)}>展品管理</a>进行授权管理</span>)
     }
 
   </div>);
