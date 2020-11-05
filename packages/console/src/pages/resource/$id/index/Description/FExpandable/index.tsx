@@ -27,15 +27,7 @@ function FExpandable({children}: FExpandableProps) {
     {
       expandable !== null && (<div className={styles.button}>
         {
-          !expandable && (<FTextButton
-            theme="primary"
-            onClick={() => {
-              setExpandable(true);
-            }}
-          ><span>展开查看全部 <FDown/></span></FTextButton>)
-        }
-        {
-          expandable && (<FTextButton
+          expandable === true && (<FTextButton
             theme="primary"
             onClick={() => {
               setExpandable(false);
@@ -59,7 +51,19 @@ function FExpandable({children}: FExpandableProps) {
     }
 
 
-    {expandable !== null && (<div style={{height: 30}}/>)}
+    {expandable !== null && (<div
+      className={styles.closeButton}
+      // style={{}}
+    >
+      {
+        expandable === false && (<FTextButton
+          theme="primary"
+          onClick={() => {
+            setExpandable(true);
+          }}
+        ><span>展开查看全部 <FDown/></span></FTextButton>)
+      }
+    </div>)}
   </div>);
 }
 
