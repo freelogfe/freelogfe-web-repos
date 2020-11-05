@@ -89,7 +89,7 @@ export interface MarketResourcePageState {
   releaseTime: string;
 
   description: string;
-  showAllDescription: boolean;
+  // showAllDescription: boolean;
 
   properties: {
     key: string;
@@ -199,7 +199,7 @@ const Model: MarketResourcePageModelType = {
     version: '',
     releaseTime: '',
     description: '',
-    showAllDescription: true,
+    // showAllDescription: true,
 
     properties: [],
 

@@ -14,7 +14,7 @@ interface DescriptionProps {
   marketResourcePage: MarketResourcePageState;
 }
 
-let devE: HTMLDivElement | null = null;
+// let devE: HTMLDivElement | null = null;
 
 function Description({dispatch, marketResourcePage}: DescriptionProps) {
 
@@ -22,44 +22,45 @@ function Description({dispatch, marketResourcePage}: DescriptionProps) {
     return null;
   }
 
-  const refContainer = React.useRef<any>();
+  // const refContainer = React.useRef<any>();
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      dispatch<ChangeAction>({
-        type: 'marketResourcePage/change',
-        payload: {
-          showAllDescription: true,
-        },
-      });
-      setTimeout(() => {
-        if (refContainer.current.clientHeight > 300) {
-          dispatch<ChangeAction>({
-            type: 'marketResourcePage/change',
-            payload: {
-              showAllDescription: false,
-            },
-          });
-        }
-      });
-    });
-  }, [marketResourcePage.description]);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     dispatch<ChangeAction>({
+  //       type: 'marketResourcePage/change',
+  //       payload: {
+  //         showAllDescription: true,
+  //       },
+  //     });
+  //     setTimeout(() => {
+  //       if (refContainer.current.clientHeight > 300) {
+  //         dispatch<ChangeAction>({
+  //           type: 'marketResourcePage/change',
+  //           payload: {
+  //             showAllDescription: false,
+  //           },
+  //         });
+  //       }
+  //     });
+  //   });
+  // }, [marketResourcePage.description]);
 
   return (<>
     <div
-      ref={(el) => devE = el}
-      onClick={() => dispatch<ChangeAction>({
-        type: 'marketResourcePage/change',
-        payload: {
-          showAllDescription: true
-        }
-      })} style={{height: 30}}/>
+      // ref={(el) => devE = el}
+      // onClick={() => dispatch<ChangeAction>({
+      //   type: 'marketResourcePage/change',
+      //   payload: {
+      //     showAllDescription: true
+      //   }
+      // })}
+      style={{height: 30}}/>
     <div className={styles.styles}>
       <FTitleText text={'版本描述'} type={'h3'}/>
       <div style={{height: 20}}/>
       <FExpandable>
         {marketResourcePage.description && (<div
-          ref={refContainer}
+          // ref={refContainer}
           // style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
           dangerouslySetInnerHTML={{__html: marketResourcePage.description}}
           className={styles.container}
