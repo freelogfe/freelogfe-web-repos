@@ -9,7 +9,6 @@ import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from "dva";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {ChangeAction} from "@/models/marketPage";
-import FLayoutFooter from "@/layouts/FLayoutFooter";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 
 const navs = [

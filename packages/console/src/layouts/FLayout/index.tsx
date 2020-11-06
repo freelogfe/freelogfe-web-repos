@@ -15,12 +15,21 @@ interface FLayoutProps extends RouteComponentProps {
 }
 
 function FLayout({children, global}: FLayoutProps) {
+
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', () => {
+      setMinHeight(window.innerHeight);
+    });
+  }, []);
+
   return (
     <Layout
       className={styles.Layout}
       style={{
-        backgroundColor: global.backgroundColor || 'transparent',
-        minHeight: window.innerHeight,
+        // backgroundColor: global.backgroundColor || 'transparent',
+        minHeight: minHeight,
       }}
     >
       <Layout.Header className={styles.header}>
@@ -29,9 +38,9 @@ function FLayout({children, global}: FLayoutProps) {
 
       <Layout.Content className={styles.Content}>{children}</Layout.Content>
 
-      {/*<Layout.Footer className={styles.Footer}>*/}
-      {/*  <FFooter/>*/}
-      {/*</Layout.Footer>*/}
+      <Layout.Footer className={styles.Footer}>
+        <FFooter/>
+      </Layout.Footer>
 
     </Layout>
   );
