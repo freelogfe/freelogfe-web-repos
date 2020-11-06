@@ -38,9 +38,9 @@ function FLayout({children, global}: FLayoutProps) {
 
       <Layout.Content className={styles.Content}>{children}</Layout.Content>
 
-      <Layout.Footer className={styles.Footer}>
-        <FFooter/>
-      </Layout.Footer>
+      {/*<Layout.Footer className={styles.Footer}>*/}
+      {/*  <FFooter/>*/}
+      {/*</Layout.Footer>*/}
 
     </Layout>
   );
