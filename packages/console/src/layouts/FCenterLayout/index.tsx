@@ -3,6 +3,7 @@ import styles from './index.less';
 import {Layout} from 'antd';
 import {connect} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
+import FFooter from "@/layouts/FFooter";
 
 interface FCenterLayoutProps {
   global: GlobalModelState;
@@ -12,18 +13,27 @@ interface FCenterLayoutProps {
 
 function FCenterLayout({children, global}: FCenterLayoutProps) {
 
-  React.useEffect(() => () => {
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 140);
+
+  React.useEffect(() => {
     window.addEventListener('resize', () => {
-      // console.log('0293josdf');
+      setMinHeight(window.innerHeight - 140);
     });
   }, []);
 
-  return (<div className={styles.content}>
-    {/*<div className={}>*/}
-    <div>{children}</div>
-    {/*</div>*/}
-    <div style={{height: 100}}/>
-  </div>)
+
+  return (<>
+    <div style={{minHeight: minHeight}} className={styles.content}>
+      {/*<div className={}>*/}
+      <div>{children}</div>
+      {/*</div>*/}
+      <div style={{height: 100}}/>
+
+
+      {/*<F*/}
+    </div>
+    <FFooter/>
+  </>);
 }
 
 export default connect(({global}: ConnectState) => ({

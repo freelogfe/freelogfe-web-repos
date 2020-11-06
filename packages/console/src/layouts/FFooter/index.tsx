@@ -30,7 +30,7 @@ interface FLayoutFooter {
   global: GlobalModelState;
 }
 
-function FLayoutFooter({dispatch, global}: FLayoutFooter) {
+function FFooter({dispatch, global}: FLayoutFooter) {
 
   function changeLocale(value: 'zh-CN' | 'en-US' | 'pt-BR') {
     // setLocale(value === '1' ? 'zh-CN' : 'en-US');
@@ -66,4 +66,4 @@ function FLayoutFooter({dispatch, global}: FLayoutFooter) {
 
 export default connect(({global}: ConnectState) => ({
   global: global,
-}))(FLayoutFooter);
+}))(FFooter);

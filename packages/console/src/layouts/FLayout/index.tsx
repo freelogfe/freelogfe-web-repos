@@ -5,7 +5,7 @@ import {withRouter} from 'umi';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
-import FFooter from "@/layouts/FLayout/FFooter";
+import FFooter from "@/layouts/FFooter";
 import FHeader from "@/layouts/FLayout/FHeader";
 
 interface FLayoutProps extends RouteComponentProps {
