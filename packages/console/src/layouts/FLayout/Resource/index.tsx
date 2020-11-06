@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import sharedStyles from '../index.less';
+// import sharedStyles from '../index.less';
 import FMenu from "@/components/FMenu";
 import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";

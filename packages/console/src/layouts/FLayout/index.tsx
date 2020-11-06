@@ -35,17 +35,9 @@ import Storage from "./Storage";
 import Resource from "./Resource";
 import Node from "./Node";
 import Contract from "./Contract";
-
-const creatorOptions = [
-  {
-    text: '创建资源',
-    value: '1'
-  },
-  {
-    text: '创建节点',
-    value: '2'
-  },
-];
+import Search from "./Search";
+import Create from "./Create";
+import User from "./User";
 
 interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -86,17 +78,6 @@ function FLayout({
     }
   }
 
-
-  function onCreateClick(value: string) {
-    // console.log(params, 'params');
-    if (value === '1') {
-      return router.push('/resource/creator');
-    }
-    if (value === '2') {
-      return router.push('/node/creator');
-    }
-  }
-
   return (
     <Layout
       className={styles.Layout}
@@ -124,49 +105,14 @@ function FLayout({
         </div>
 
         <div className={styles.headerRight}>
-          <FInput
-            value={globalSearching.input}
-            className={styles.FInput}
-            // placeholder="Search in Freelog"
-            size="small"
-            theme="dark"
-            onChange={(event: ChangeEvent<HTMLInputElement>) => dispatch({
-              type: 'globalSearching/onInputChange',
-              payload: event.target.value,
-            })}
-            // disabled={true}
-          />
 
-          <FDropdown overlay={<FMenu
-            onClick={onCreateClick}
-            options={creatorOptions}
-          />}>
-            <a
-              className={styles.create}
-              // onClick={() => onCreateClick('1')}
-            >
-              <FCircleButton/>
-            </a>
-          </FDropdown>
+          <Search/>
 
-          <FDropdown overlay={<div className={styles.userPanel}>
-            <div className={styles.userPanelHeader}>
-              <img src={user.info?.headImage} alt="headImage"/>
-              <div style={{height: 10}}/>
-              <FTitleText type="h4" text={user.info?.username}/>
-              <div style={{height: 8}}/>
-              <FContentText text={user.info?.mobile || user.info?.email}/>
-            </div>
-            <div className={styles.userPanelMenu}>
-              <a>个人中心</a>
-              <a>登出</a>
-            </div>
-          </div>}>
-            <a className={styles.avatar}>
-              <img src={user.info?.headImage} alt={'avatar'}/>
-            </a>
-          </FDropdown>
+          <Create/>
+
+          <User/>
         </div>
+
       </Layout.Header>
 
       {children}
