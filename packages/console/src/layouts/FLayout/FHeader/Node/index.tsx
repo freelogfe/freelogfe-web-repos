@@ -9,7 +9,7 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 interface NodeProps {
   dispatch: Dispatch;

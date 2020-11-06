@@ -1,17 +1,22 @@
 import * as React from 'react';
 import styles from './index.less';
-import sharedStyles from '../index.less';
+import sharedStyles from '../../index.less';
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
 import FMenu from "@/components/FMenu";
-import {ChangeAction, OnChangeActivatedBucketAction, StorageHomePageModelState} from "@/models/storageHomePage";
+import {
+  ChangeAction,
+  FetchBucketsAction,
+  OnChangeActivatedBucketAction,
+  StorageHomePageModelState
+} from "@/models/storageHomePage";
 import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
 import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 interface StorageProps {
   dispatch: Dispatch;
@@ -24,6 +29,12 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
 
   const cRoute = global.routerHistories[global.routerHistories.length - 1];
   const isCurrent: boolean = cRoute.pathname.startsWith('/storage');
+
+  React.useEffect(() => {
+    dispatch<FetchBucketsAction>({
+      type: 'storageHomePage/fetchBuckets',
+    });
+  }, []);
 
   function onClickStorage() {
     if (!isCurrent) {

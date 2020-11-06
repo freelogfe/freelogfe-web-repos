@@ -72,7 +72,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
       {marketPage.tabValue === '1' && <Resources/>}
       {marketPage.tabValue === '2' && <Examples/>}
     </FCenterLayout>
-    <FLayoutFooter/>
+    {/*<FLayoutFooter/>*/}
   </>);
 }
 

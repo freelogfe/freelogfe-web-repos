@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {i18nMessage} from "@/utils/i18n";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 interface ContractProps {
 

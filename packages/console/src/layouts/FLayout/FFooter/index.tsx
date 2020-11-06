@@ -6,7 +6,15 @@ import {DownOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from "dva";
 import {ConnectState, GlobalModelState, GlobalSearchingModelState} from "@/models/connect";
 import {SetLocaleAction} from "@/models/global";
-
+// import {
+//   formatDate,
+//   formatTime,
+//   formatRelative,
+//   formatNumber,
+//   formatPlural,
+//   formatMessage,
+//   formatHTMLMessage
+// } from 'umi-plugin-react/locale';
 const languagesOptions = [
   {value: 'zh-CN', text: '中文'},
   {value: 'en-US', text: 'English'},
@@ -24,6 +32,7 @@ interface FLayoutFooter {
 
 function FLayoutFooter({dispatch, global}: FLayoutFooter) {
 
+  const refFooter = React.useRef<any>();
   const [footerOffsetTop, setFooterOffsetTop] = React.useState<number>(window.innerHeight - 68);
 
   React.useEffect(() => {
@@ -31,6 +40,11 @@ function FLayoutFooter({dispatch, global}: FLayoutFooter) {
       setFooterOffsetTop(window.innerHeight - 68);
     }
   }, []);
+
+  React.useEffect(() => {
+    // console.log('02934urweopidfs1234');
+    setFooterOffsetTop(window.innerHeight - 68);
+  }, [refFooter?.current?.offsetTop]);
 
   function changeLocale(value: 'zh-CN' | 'en-US' | 'pt-BR') {
     // setLocale(value === '1' ? 'zh-CN' : 'en-US');
@@ -41,9 +55,9 @@ function FLayoutFooter({dispatch, global}: FLayoutFooter) {
     });
   }
 
-  return (<Affix offsetTop={footerOffsetTop}>
-    <Layout.Footer className={styles.Footer}>
-      <div>
+  return (
+
+      <div ref={refFooter}>
         <div>关于freelog</div>
         <div style={{width: 30}}/>
         <Dropdown overlay={<FMenu
@@ -62,8 +76,7 @@ function FLayoutFooter({dispatch, global}: FLayoutFooter) {
         <div style={{width: 30}}/>
         <span>Copyright© 2020 freelog freelog.com版权所有</span>
       </div>
-    </Layout.Footer>
-  </Affix>);
+    );
 }
 
 export default connect(({global}: ConnectState) => ({

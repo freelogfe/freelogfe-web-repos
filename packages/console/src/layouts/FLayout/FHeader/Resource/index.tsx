@@ -7,7 +7,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {router} from "umi";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 const resourcesOptions = [
   {

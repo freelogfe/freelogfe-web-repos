@@ -11,18 +11,19 @@ interface FCenterLayoutProps {
 }
 
 function FCenterLayout({children, global}: FCenterLayoutProps) {
-  // console
-  return (<Layout.Content
-    className={styles.Content}
-    style={{
-      // backgroundColor: 'white'
-    }}
-  >
+
+  React.useEffect(() => () => {
+    window.addEventListener('resize', () => {
+      // console.log('0293josdf');
+    });
+  }, []);
+
+  return (<div className={styles.content}>
     {/*<div className={}>*/}
     <div>{children}</div>
     {/*</div>*/}
     <div style={{height: 100}}/>
-  </Layout.Content>)
+  </div>)
 }
 
 export default connect(({global}: ConnectState) => ({

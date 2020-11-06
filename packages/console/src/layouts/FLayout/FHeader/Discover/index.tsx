@@ -7,7 +7,7 @@ import FDropdown from "@/components/FDropdown";
 import {router} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageState} from "@/models/connect";
-import Nav from "../components/Nav";
+import Nav from "../../components/Nav";
 
 const discoverOptions = [
   {

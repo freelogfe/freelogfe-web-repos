@@ -17,7 +17,7 @@ export default function ({sider, children}: FSiderLayoutProps) {
     }
   },[]);
 
-  return (<Layout.Content
+  return (<div
     className={styles.leftRight}
     style={{minHeight: minHeight}}
   >
@@ -30,5 +30,5 @@ export default function ({sider, children}: FSiderLayoutProps) {
       <div>{children}</div>
       <div style={{height: 100}}/>
     </div>
-  </Layout.Content>)
+  </div>)
 }
