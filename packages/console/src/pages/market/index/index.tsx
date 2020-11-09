@@ -10,6 +10,7 @@ import {connect, Dispatch} from "dva";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {ChangeAction} from "@/models/marketPage";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
+import FFooter from '@/layouts/FFooter';
 
 const navs = [
   {
@@ -72,6 +73,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
       {marketPage.tabValue === '2' && <Examples/>}
     </FCenterLayout>
     {/*<FLayoutFooter/>*/}
+    <FFooter/>
   </>);
 }
 

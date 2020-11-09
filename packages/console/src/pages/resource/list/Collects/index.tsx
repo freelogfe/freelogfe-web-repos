@@ -33,6 +33,10 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     })
   }
 
+  // return (<div>
+  //
+  // </div>);
+
   return (<FResourceCardsList
     resourceType={resource.resourceType}
     resourceStatus={resource.resourceStatus}

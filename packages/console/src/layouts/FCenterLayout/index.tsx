@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import {Layout} from 'antd';
 import {connect} from 'dva';
-import {ConnectState, GlobalModelState} from "@/models/connect";
-import FFooter from "@/layouts/FFooter";
+import {ConnectState, GlobalModelState} from '@/models/connect';
+import FFooter from '@/layouts/FFooter';
 
 interface FCenterLayoutProps {
   global: GlobalModelState;
@@ -21,18 +21,15 @@ function FCenterLayout({children, global}: FCenterLayoutProps) {
     });
   }, []);
 
-
   return (<>
-    <div style={{minHeight: minHeight}} className={styles.content}>
-      {/*<div className={}>*/}
+    <div
+      style={{minHeight: minHeight}}
+      className={styles.content}
+    >
       <div>{children}</div>
-      {/*</div>*/}
-      <div style={{height: 100}}/>
-
-
-      {/*<F*/}
+      {/*<div style={{height: 100}}/>*/}
     </div>
-    <FFooter/>
+    {/*<FFooter/>*/}
   </>);
 }
 

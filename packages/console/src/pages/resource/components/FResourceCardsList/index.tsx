@@ -10,8 +10,8 @@ import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
 import {i18nMessage} from "@/utils/i18n";
-import {FContentText} from '@/components/FText';
-
+import {FContentText, FTipText} from '@/components/FText';
+import FNoDataTip from '@/components/FNoDataTip';
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -67,6 +67,13 @@ export default function ({
   const [typeText, setTypeText] = React.useState('');
   const [statusText, setStatusText] = React.useState('');
 
+  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 220);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', () => {
+      setContentMinHeight(window.innerHeight - 220);
+    });
+  }, []);
 
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
@@ -85,6 +92,7 @@ export default function ({
   }
 
   return (<>
+    <div style={{height: 40}}/>
     <div className={styles.filter}>
       <div className={styles.filterLeft}>
         <div>
@@ -128,28 +136,34 @@ export default function ({
 
     {
       dataSource.length > 0
-        ? (<div className={styles.Content}>
-          {
-            dataSource.map((i: any, j: number) => (<FResourceCard
-              key={i.id}
-              resource={i}
-              type={isCollect ? 'favorite' : 'resource'}
-              className={styles.FResourceCard}
-              onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
-              onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
-              onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
-              onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
-              onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
-            />))
-          }
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-        </div>)
-        : (<div className={styles.noData}>
-          <FContentText type="negative" text={'暂无数据~'}/>
-        </div>)
+        ? (<>
+          <div style={{height: 40}}/>
+          <div className={styles.Content}>
+            {
+              dataSource.map((i: any, j: number) => (<FResourceCard
+                key={i.id}
+                resource={i}
+                type={isCollect ? 'favorite' : 'resource'}
+                className={styles.FResourceCard}
+                onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
+                onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
+                onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
+                onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
+                onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
+              />))
+            }
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+          </div>
+        </>)
+        : (<FNoDataTip
+          height={contentMinHeight}
+          tipText={'未收藏任何资源'}
+          btnText={'前往资源市场'}
+          onClick={() => router.push('/market')}
+        />)
     }
 
     {totalNum > 10 && <>

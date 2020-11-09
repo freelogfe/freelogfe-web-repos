@@ -27,7 +27,7 @@ interface ResourceProps {
 function Resource({global}: ResourceProps) {
 
   const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = cRoute.pathname.startsWith('/resource');
+  const isCurrent: boolean = cRoute.pathname === '/resource/list' || cRoute.pathname === '/resource/collect';
 
   function onClickResource(value: string) {
     if (value === '1' && !cRoute.pathname.startsWith('/resource/list')) {
