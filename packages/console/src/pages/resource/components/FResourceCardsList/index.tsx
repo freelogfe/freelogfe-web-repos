@@ -158,12 +158,17 @@ export default function ({
             <div className={styles.bottomPadding}/>
           </div>
         </>)
-        : (<FNoDataTip
+        : (isCollect ? (<FNoDataTip
           height={contentMinHeight}
           tipText={'未收藏任何资源'}
           btnText={'前往资源市场'}
           onClick={() => router.push('/market')}
-        />)
+        />) : (<FNoDataTip
+          height={contentMinHeight}
+          tipText={'未创建任何资源'}
+          btnText={'创建资源'}
+          onClick={() => router.push('/resource/creator')}
+        />))
     }
 
     {totalNum > 10 && <>
