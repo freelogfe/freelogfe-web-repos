@@ -1,7 +1,7 @@
 import request, {apiHost} from '@/utils/request';
 
 // 创建资源
-interface CreateParamsType {
+export interface CreateParamsType {
   name: string;
   resourceType: string;
   policies?: any[];

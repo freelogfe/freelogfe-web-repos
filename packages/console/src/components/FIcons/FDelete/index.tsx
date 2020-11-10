@@ -10,8 +10,10 @@ interface FDeleteProps {
   onClick?(): void;
 }
 
-function FDelete({...props}: FDeleteProps) {
-  return (<DeleteOutlined {...props} />);
+function FDelete({className, ...props}: FDeleteProps) {
+  return (<i className={['freelog', 'fl-icon-shanchu', className].join(' ')} {...props} />);
 }
+
+//
 
 export default FDelete;

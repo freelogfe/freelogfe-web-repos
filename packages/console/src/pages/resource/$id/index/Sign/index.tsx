@@ -55,7 +55,8 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
         <a className={styles.favoriteBtn} onClick={() => dispatch<OnClickCollectionAction>({
           type: 'marketResourcePage/onClickCollection',
         })}>
-          <FFavorite filled={marketResourcePage.hasCollect}/> 收藏 ({marketResourcePage.popularity}人气)
+          <FFavorite
+            filled={marketResourcePage.hasCollect}/> {marketResourcePage.hasCollect ? '已收藏' : '收藏'} ({marketResourcePage.popularity}人气)
         </a>
       </div>
     </div>

@@ -4,7 +4,7 @@ import {FTitleText, FContentText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {Space} from 'antd';
-import {FExclamation} from '@/components/FIcons';
+import {FWarning} from '@/components/FIcons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {OnChangeThemeAction} from "@/models/nodeManagerPage";
@@ -46,7 +46,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           <div className={styles.cover}>
             <Space size={10}>
               <Label active={i.isOnline}/>
-              {!i.isOnline && <FExclamation/>}
+              {!i.isOnline && <FWarning/>}
             </Space>
 
             <img alt="" src={i.cover || imgSrc}/>

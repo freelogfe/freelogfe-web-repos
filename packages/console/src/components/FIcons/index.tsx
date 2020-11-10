@@ -11,6 +11,7 @@ import FExclamation from './FExclamation';
 import FClose from './FClose';
 import FDoubleUp from './FDoubleUp';
 import FPlus from './FPlus';
+import FWarning from './FWarning';
 
 export {
   FDelete,
@@ -25,4 +26,5 @@ export {
   FClose,
   FDoubleUp,
   FPlus,
+  FWarning,
 }

@@ -10,9 +10,9 @@ interface FFileTextProps {
   onClick?(): void;
 }
 
-function FEdit({className, ...props}: FFileTextProps) {
+function FEdit({...props}: FFileTextProps) {
   // return (<EditOutlined {...props}/>);
-  return (<i className={['freelog', 'fl-icon-bianji', className].join(' ')} {...props} />);
+  return (<i className="freelog fl-icon-xiazai1" {...props} />);
 }
 
 export default FEdit;

@@ -10,8 +10,9 @@ interface FFileTextProps {
   onClick?(): void;
 }
 
-function FFileSearch({...props}: FFileTextProps) {
-  return (<FileSearchOutlined {...props}/>);
+function FFileSearch({className, ...props}: FFileTextProps) {
+  // return (<FileSearchOutlined {...props}/>);
+  return (<i className={['freelog', 'fl-icon-chakanziyuan', className].join(' ')} {...props}/>);
 }
 
 export default FFileSearch;

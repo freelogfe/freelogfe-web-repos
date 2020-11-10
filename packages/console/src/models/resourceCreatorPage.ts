@@ -1,9 +1,10 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {create} from '@/services/resources';
+import {create, CreateParamsType, info, InfoParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
+import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -59,15 +60,23 @@ const Model: ResourceCreatorPageModelType = {
   effects: {
     * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
       // console.log('OnCreateAction2839u42o3');
-      const params = yield select(({resourceCreatorPage}: ConnectState) => ({
+      const {resourceCreatorPage, user} = yield select(({resourceCreatorPage, user}: ConnectState) => ({
+        resourceCreatorPage,
+        user,
+      }));
+      let {nameErrorText, resourceTypeErrorText} = verifyDate({
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
-        policies: [],
-        coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
-        intro: resourceCreatorPage.introduction,
-        tags: resourceCreatorPage.labels,
-      }));
-      const {nameErrorText, resourceTypeErrorText} = verifyDate(params);
+      });
+      if (!nameErrorText) {
+        const params1: InfoParamsType = {
+          resourceIdOrName: encodeURIComponent(`${user.info.username}/${resourceCreatorPage.name}`),
+        };
+        const {data: data1} = yield call(info, params1);
+        if (data1) {
+          nameErrorText = '资源名已存在';
+        }
+      }
       if (nameErrorText || resourceTypeErrorText) {
         return yield put<ChangeAction>({
           type: 'change',
@@ -77,7 +86,14 @@ const Model: ResourceCreatorPageModelType = {
           },
         });
       }
-
+      const params: CreateParamsType = {
+        name: resourceCreatorPage.name,
+        resourceType: resourceCreatorPage.resourceType,
+        policies: [],
+        coverImages: resourceCreatorPage.cover ? [resourceCreatorPage.cover] : [],
+        intro: resourceCreatorPage.introduction,
+        tags: resourceCreatorPage.labels,
+      };
       const {data} = yield call(create, params);
       yield put<ChangeAction>({
         type: 'change',
@@ -119,7 +135,7 @@ function verifyDate({name, resourceType}: any) {
     nameErrorText = '请输入资源名称';
   } else if (name.length > 60) {
     nameErrorText = '不多于60个字符';
-  } else if (!/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/.test(name)) {
+  } else if (!RESOURCE_NAME.test(name)) {
     nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
   }
 
@@ -128,7 +144,7 @@ function verifyDate({name, resourceType}: any) {
     resourceTypeErrorText = '请输入资源类型';
   } else if (resourceType.length < 3) {
     resourceTypeErrorText = '不少于3个字符';
-  } else if (!/^(?!_)[a-z0-9_]{3,20}(?<!_)$/.test(resourceType)) {
+  } else if (!RESOURCE_TYPE.test(resourceType)) {
     resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
   }
   return {nameErrorText, resourceTypeErrorText};
