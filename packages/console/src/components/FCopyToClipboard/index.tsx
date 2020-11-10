@@ -5,6 +5,7 @@ import {FTextButton} from '@/components/FButton';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {SnippetsOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
+import {FCopy} from "@/components/FIcons";
 
 interface FCopyToClipboardProps {
   text: string;
@@ -44,7 +45,7 @@ function FCopyToClipboard({text, title, success}: FCopyToClipboardProps) {
         }}
         theme={'primary'}
       >
-        <SnippetsOutlined/>
+        <FCopy/>
       </FTextButton>
     </CopyToClipboard>
   </Tooltip>);

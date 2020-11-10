@@ -12,6 +12,7 @@ import FClose from './FClose';
 import FDoubleUp from './FDoubleUp';
 import FPlus from './FPlus';
 import FWarning from './FWarning';
+import FCopy from './FCopy';
 
 export {
   FDelete,
@@ -27,4 +28,5 @@ export {
   FDoubleUp,
   FPlus,
   FWarning,
+  FCopy,
 }
