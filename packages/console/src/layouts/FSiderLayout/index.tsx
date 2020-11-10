@@ -12,10 +12,15 @@ export default function ({sider, children}: FSiderLayoutProps) {
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 60);
 
   React.useEffect(() => {
-    window.onresize = () => {
-      setMinHeight(window.innerHeight - 60);
-    }
-  },[]);
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 60);
+  }
 
   return (<div
     className={styles.leftRight}

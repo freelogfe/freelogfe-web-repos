@@ -19,10 +19,15 @@ function FLayout({children, global}: FLayoutProps) {
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight);
 
   React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setMinHeight(window.innerHeight);
-    });
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
   }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight);
+  }
 
   return (
     <Layout

@@ -25,10 +25,16 @@ function Resources({dispatch, market}: ResourcesProps) {
   const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 275);
 
   React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setContentMinHeight(window.innerHeight - 275);
-    });
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    }
   }, []);
+
+  function setHeight() {
+    setContentMinHeight(window.innerHeight - 275);
+  }
+
   // <FNoDataTip height={} tipText={}
   return (<>
     <div style={{height: 30}}/>

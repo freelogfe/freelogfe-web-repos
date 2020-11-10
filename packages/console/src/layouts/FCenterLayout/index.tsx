@@ -16,10 +16,16 @@ function FCenterLayout({children, global}: FCenterLayoutProps) {
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 140);
 
   React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setMinHeight(window.innerHeight - 140);
-    });
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
   }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 140);
+  }
 
   return (<>
     <div
