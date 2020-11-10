@@ -102,7 +102,6 @@ function Resources({dispatch, market}: ResourcesProps) {
         />)
     }
 
-
   </>)
 }
 

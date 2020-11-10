@@ -70,10 +70,15 @@ export default function ({
   const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 220);
 
   React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setContentMinHeight(window.innerHeight - 220);
-    });
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    }
   }, []);
+
+  function setHeight() {
+    setContentMinHeight(window.innerHeight - 220);
+  }
 
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
@@ -158,23 +163,10 @@ export default function ({
             <div className={styles.bottomPadding}/>
           </div>
         </>)
-        : (inputText || resourceType !== '-1' || resourceStatus !== '-2')
-        ? (<FNoDataTip
+        : (<FNoDataTip
           height={contentMinHeight}
           tipText={'没有符合条件的资源'}
         />)
-        : (isCollect ? (<FNoDataTip
-            height={contentMinHeight}
-            tipText={'未收藏任何资源'}
-            btnText={'前往资源市场'}
-            onClick={() => router.push('/market')}
-          />)
-          : (<FNoDataTip
-            height={contentMinHeight}
-            tipText={'未创建任何资源'}
-            btnText={'创建资源'}
-            onClick={() => router.push('/resource/creator')}
-          />))
     }
 
     {totalNum > 10 && <>
@@ -187,5 +179,6 @@ export default function ({
         onChangePageSize={(value) => onChangePageSize && onChangePageSize(value)}
         className={styles.FPagination}
       />
-    </>}</>)
+    </>}
+  </>)
 }

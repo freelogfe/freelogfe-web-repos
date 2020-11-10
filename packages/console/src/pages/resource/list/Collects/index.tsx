@@ -8,17 +8,7 @@ import {} from "@/models/resourceCollectPage";
 import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
 import {ChangeStatesAction} from "@/models/resourceCollectPage";
 import {BoomJuiceAction} from "@/models/resourceCollectPage";
-
-const navs = [
-  {
-    value: '1',
-    text: '我的资源',
-  },
-  {
-    value: '2',
-    text: '我的收藏',
-  },
-];
+import FNoDataTip from "@/components/FNoDataTip";
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -26,16 +16,37 @@ interface ResourceCollectProps {
 }
 
 function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
+
+  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 220);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight)
+    }
+  }, []);
+
+  function setHeight() {
+    setContentMinHeight(window.innerHeight - 140);
+  }
+
+  console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
+  if (resource.dataSource.length === 0 && !resource.inputText && resource.resourceType === '-1' && resource.resourceStatus === '2') {
+    return (<FNoDataTip
+      height={contentMinHeight}
+      tipText={'未收藏任何资源'}
+      btnText={'前往资源市场'}
+      onClick={() => router.push('/market')}
+    />);
+  }
+
   function changeStatus(payload: ChangeStatesAction['payload']) {
     dispatch<ChangeStatesAction>({
       type: 'resourceCollectPage/changeStates',
       payload,
     })
   }
-
-  // return (<div>
-  //
-  // </div>);
 
   return (<FResourceCardsList
     resourceType={resource.resourceType}
