@@ -8,6 +8,7 @@ import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
 import {resourceTypes} from '@/utils/globals';
 import {router} from "umi";
+import FNoDataTip from "@/components/FNoDataTip";
 
 const filters = [{
   value: '-1',
@@ -20,6 +21,15 @@ interface ResourcesProps {
 }
 
 function Resources({dispatch, market}: ResourcesProps) {
+
+  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 275);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', () => {
+      setContentMinHeight(window.innerHeight - 275);
+    });
+  }, []);
+  // <FNoDataTip height={} tipText={}
   return (<>
     <div style={{height: 30}}/>
     <div className={styles.filter}>
@@ -45,49 +55,54 @@ function Resources({dispatch, market}: ResourcesProps) {
       />
     </div>
 
-    <div style={{height: 30}}/>
     {
       market.dataSource.length > 0
-        ? (<div className={styles.Content}>
+        ? (<>
+          <div style={{height: 30}}/>
+          <div className={styles.Content}>
+            {
+              market.dataSource.map((resource: any) => (
+                <FResourceCard
+                  key={resource.id}
+                  resource={resource}
+                  className={styles.FResourceCard}
+                  onClick={(resource) => {
+                    // console.log(resource, 'resourceq098upioq');
+                    return router.push(`/resource/${resource.id}`);
+                  }}
+                />))
+            }
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+            <div className={styles.bottomPadding}/>
+          </div>
+
           {
-            market.dataSource.map((resource: any) => (
-              <FResourceCard
-                key={resource.id}
-                resource={resource}
-                className={styles.FResourceCard}
-                onClick={(resource) => {
-                  // console.log(resource, 'resourceq098upioq');
-                  return router.push(`/resource/${resource.id}`);
-                }}
-              />))
+            market.totalItem > (20 * market.pageCurrent) && (<>
+              <div style={{height: 100}}/>
+              <div className={styles.bottom}>
+                <Button
+                  className={styles.loadMore}
+                  onClick={() => dispatch<ChangeStatesAction>({
+                    type: 'marketPage/changeStates',
+                    payload: {
+                      pageCurrent: market.pageCurrent + 1,
+                    },
+                  })}
+                >加载更多</Button>
+              </div>
+            </>)
           }
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-          <div className={styles.bottomPadding}/>
-        </div>)
-        : (<div className={styles.noData}>
-          暂无数据
-        </div>)
+          <div style={{height: 200}}/>
+        </>)
+        : (<FNoDataTip
+          height={contentMinHeight}
+          tipText={'没有符合条件的资源'}
+        />)
     }
 
-    {
-      market.totalItem > (20 * market.pageCurrent) && (<>
-        <div style={{height: 100}}/>
-        <div className={styles.bottom}>
-          <Button
-            className={styles.loadMore}
-            onClick={() => dispatch<ChangeStatesAction>({
-              type: 'marketPage/changeStates',
-              payload: {
-                pageCurrent: market.pageCurrent + 1,
-              },
-            })}
-          >加载更多</Button>
-        </div>
-      </>)
-    }
-    <div style={{height: 100}}/>
+
   </>)
 }
 

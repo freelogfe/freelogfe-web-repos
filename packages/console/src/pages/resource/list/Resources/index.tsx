@@ -34,9 +34,10 @@ function Resources({dispatch, resource}: ResourceProps) {
     onChangePageCurrent={(value) => changeStatus({pageCurrent: value})}
     onChangePageSize={(value) => changeStatus({pageSize: value})}
     showGotoCreateBtn={true}
-    onClickDetails={() => null}
+    onClickDetails={(id) => router.push(`/resource/${id}`)}
     onClickEditing={(id) => router.push(`/resource/${id}/info`)}
     onClickRevision={(id, record) => router.push(`/resource/${id}/version/creator`)}
+    onClickMore={(id) => router.push(`/resource/${id}`)}
   />)
 }
 
