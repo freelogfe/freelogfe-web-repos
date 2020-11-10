@@ -12,7 +12,7 @@ interface FSwapProps {
 
 function FSwap({className, ...props}: FSwapProps) {
   // return (<SwapOutlined {...props}/>);
-  return (<i className={['freelog', 'fl-icon-warning', className].join(' ')} {...props}/>);
+  return (<i className={['freelog', 'fl-icon-warning1', className].join(' ')} {...props}/>);
 }
 
 export default FSwap;

@@ -13,6 +13,7 @@ import FDoubleUp from './FDoubleUp';
 import FPlus from './FPlus';
 import FWarning from './FWarning';
 import FCopy from './FCopy';
+import FCloudUpload from './FCloudUpload';
 
 export {
   FDelete,
@@ -29,4 +30,5 @@ export {
   FPlus,
   FWarning,
   FCopy,
+  FCloudUpload,
 }

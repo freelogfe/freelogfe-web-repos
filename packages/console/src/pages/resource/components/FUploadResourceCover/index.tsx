@@ -5,6 +5,7 @@ import {FContentText} from '@/components/FText';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {uploadImage} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
+import {FCloudUpload} from "@/components/FIcons";
 
 interface FUploadResourceCoverProps {
   value?: string;
@@ -13,32 +14,12 @@ interface FUploadResourceCoverProps {
 
 export default function ({value, onChange}: FUploadResourceCoverProps) {
 
-  // const uploadConfig = {
-  //   accept: 'image/*',
-  //   beforeUpload: (file: RcFile, FileList: RcFile[]) => {
-  //     // console.log(file, 'file1');
-  //     upload(file);
-  //     return false;
-  //   },
-  //   onChange: (info: UploadChangeParam) => {
-  //     // console.log(info, '########');
-  //   },
-  //   multiple: false,
-  // };
-
-  // async function upload(file: File) {
-  //   const res = await uploadImage({
-  //     file: file,
-  //   });
-  //   // console.log(res, 'RRRRRRRRR');
-  //   onChange && onChange(res.data.url);
-  // }
-
   return (<div className={styles.cover}>
     {!value
       ? (<FUploadImage onUploadSuccess={(url) => onChange && onChange(url)}>
         <a className={styles.FUploadImageChildren}>
-          <i className={'freelog fl-icon-shangchuanfengmian'}/>
+          {/*<i className={'freelog fl-icon-shangchuanfengmian'}/>*/}
+          <FCloudUpload/>
           <span>{i18nMessage('upload_image')}</span>
         </a>
       </FUploadImage>)
