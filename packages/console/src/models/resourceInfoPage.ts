@@ -3,10 +3,17 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceInfo";
 import {update} from "@/services/resources";
+import {MarketPageModelState} from "@/models/marketPage";
 
 export interface ResourceInfoPageModelState {
   isEditing: boolean;
-  editor: string;
+  editorText: string;
+  introductionErrorText: string;
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceInfoPage/change';
+  payload: Partial<ResourceInfoPageModelState>;
 }
 
 export interface OnChangeIsEditingAction extends AnyAction {
@@ -32,6 +39,7 @@ export interface ResourceInfoPageModelType {
     onChangeInfo: (action: OnChangeInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
+    change: DvaReducer<MarketPageModelState, ChangeAction>;
     onChangeIsEditing: DvaReducer<ResourceInfoPageModelState, OnChangeIsEditingAction>;
     onChangeEditor: DvaReducer<ResourceInfoPageModelState, OnChangeEditorAction>;
   };
@@ -43,12 +51,14 @@ const Model: ResourceInfoPageModelType = {
 
   state: {
     isEditing: false,
-    editor: '',
+    editorText: '',
+    introductionErrorText: '',
   },
 
   effects: {
-    * onChangeInfo(action: OnChangeInfoAction, {call, put}: EffectsCommandMap) {
+    * onChangeInfo(action: OnChangeInfoAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
+
       const params = {
         ...action.payload,
         resourceId: action.id,
@@ -62,6 +72,12 @@ const Model: ResourceInfoPageModelType = {
   },
 
   reducers: {
+    change(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
+      }
+    },
     onChangeIsEditing(state: ResourceInfoPageModelState, action: OnChangeIsEditingAction): ResourceInfoPageModelState {
       return {
         ...state,
@@ -71,7 +87,7 @@ const Model: ResourceInfoPageModelType = {
     onChangeEditor(state: ResourceInfoPageModelState, action: OnChangeEditorAction): ResourceInfoPageModelState {
       return {
         ...state,
-        editor: action.payload
+        editorText: action.payload
       };
     },
   },

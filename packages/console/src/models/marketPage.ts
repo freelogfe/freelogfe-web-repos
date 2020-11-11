@@ -25,6 +25,11 @@ export interface MarketPageModelState {
   totalItem: number;
 }
 
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'marketPage/change';
+  payload: Partial<MarketPageModelState>;
+}
+
 export interface ChangeDataSourceAction extends AnyAction {
   type: 'marketPage/changeDataSource' | 'changeDataSource';
   payload: MarketPageModelState['dataSource'];
@@ -42,11 +47,6 @@ export interface ChangeStatesAction extends AnyAction {
     inputText?: string;
     pageCurrent?: number;
   };
-}
-
-export interface ChangeAction extends AnyAction {
-  type: 'change' | 'marketPage/change';
-  payload: Partial<MarketPageModelState>;
 }
 
 export interface MarketModelType {

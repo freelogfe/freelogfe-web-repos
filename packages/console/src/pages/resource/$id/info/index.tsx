@@ -12,11 +12,9 @@ import FHorn from '@/pages/resource/components/FHorn';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState} from '@/models/connect';
-import {
-  OnChangeInfoAction,
-} from "@/models/resourceInfoPage";
+import {OnChangeInfoAction, ChangeAction} from "@/models/resourceInfoPage";
 import {i18nMessage} from "@/utils/i18n";
-import {ChangeAction} from "@/models/global";
+import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {RouterTypes} from "umi";
 
 interface InfoProps {
@@ -27,11 +25,8 @@ interface InfoProps {
 
 function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoProps & RouterTypes) {
 
-  const [editorText, setEditorText] = React.useState<string>('');
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
-
   React.useEffect(() => {
-    dispatch<ChangeAction>({
+    dispatch<GlobalChangeAction>({
       type: 'global/change',
       payload: {
         route: route,
@@ -39,12 +34,26 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
     });
   }, [route]);
 
-  React.useEffect(() => {
-    setEditorText(info?.intro || '');
-  }, [info]);
+  // React.useEffect(() => {
+  //   // setEditorText(info?.intro || '');
+  //   dispatch<ChangeAction>({
+  //     type: 'resourceInfoPage/change',
+  //     payload: {
+  //       editorText: info?.intro || '',
+  //     },
+  //   })
+  // }, [info]);
 
   function onChangeIsEditing(bool: boolean) {
-    setIsEditing(bool)
+    // console.log(bool, '0293jdsfl;kjf;lasd');
+    console.log(info?.intro, 'info?.intro');
+    dispatch<ChangeAction>({
+      type: 'resourceInfoPage/change',
+      payload: {
+        editorText: bool ? info?.intro : '',
+        isEditing: bool,
+      },
+    });
   }
 
   return (<FInfoLayout>
@@ -65,53 +74,58 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
         {/*</FEditorCard>}*/}
         <FEditorCard title={i18nMessage('resource_short_description')}>
 
-          {!info?.intro && !isEditing && (<Space size={10}>
-            <FCircleButton
-              onClick={() => onChangeIsEditing(true)}
-              theme="weaken"
-            />
-            <FContentText text={i18nMessage('resource_short_description')}/>
-          </Space>)}
+          {
+            !info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
+              <FCircleButton
+                onClick={() => onChangeIsEditing(true)}
+                theme="weaken"
+              />
+              <FContentText text={i18nMessage('resource_short_description')}/>
+            </Space>)}
 
           <FHorn className={styles.about} extra={<>
-            {isEditing
-              ? (<Space size={10}>
-                <FTextButton
-                  onClick={() => onChangeIsEditing(false)}
-                >{i18nMessage('cancel')}</FTextButton>
-                <FTextButton
+            {
+              resourceInfoPage.isEditing
+                ? (<Space size={10}>
+                  <FTextButton
+                    onClick={() => onChangeIsEditing(false)}
+                  >{i18nMessage('cancel')}</FTextButton>
+                  <FTextButton
+                    theme="primary"
+                    onClick={() => {
+                      onChangeIsEditing(false);
+
+                      dispatch<OnChangeInfoAction>({
+                        type: 'resourceInfoPage/onChangeInfo',
+                        // payload: {intro: resourceInfoPage.editor},
+                        payload: {intro: resourceInfoPage.editorText},
+                        id: info?.resourceId,
+                      });
+                    }}
+                  >{i18nMessage('save')}</FTextButton>
+                </Space>)
+                : info?.intro
+                ? <FTextButton
                   theme="primary"
-                  onClick={() => {
-                    onChangeIsEditing(false);
-                    dispatch<OnChangeInfoAction>({
-                      type: 'resourceInfoPage/onChangeInfo',
-                      // payload: {intro: resourceInfoPage.editor},
-                      payload: {intro: editorText},
-                      id: info?.resourceId,
-                    });
-                  }}
-                >{i18nMessage('save')}</FTextButton>
-              </Space>)
-              : info?.intro ? <FTextButton
-                theme="primary"
-                onClick={() => onChangeIsEditing(true)}
-              >{i18nMessage('edit')}</FTextButton> : null}
+                  onClick={() => onChangeIsEditing(true)}
+                >{i18nMessage('edit')}</FTextButton>
+                : null}
           </>}>
 
-            {isEditing
-              ? (<FIntroductionEditor
-                // value={resourceInfoPage.editor}
-                value={editorText}
-                // onChange={(e) => dispatch<OnChangeEditorAction>({
-                //   type: 'resourceInfoPage/onChangeEditor',
-                //   payload: e.target.value,
-                // })}
-                onChange={(e) => setEditorText(e.target.value)}
-                // onBlur={() => onChangeIsEditing(false)}
-              />)
-              : info?.intro ? (<div className={styles.aboutPanel}>
-                <FContentText text={info?.intro}/>
-              </div>) : null}
+            {
+              resourceInfoPage.isEditing
+                ? (<FIntroductionEditor
+                  value={resourceInfoPage.editorText}
+                  onChange={(e) => dispatch<ChangeAction>({
+                    type: 'resourceInfoPage/change',
+                    payload: {
+                      editorText: e.target.value,
+                    },
+                  })}
+                />)
+                : info?.intro ? (<div className={styles.aboutPanel}>
+                  <FContentText text={info?.intro}/>
+                </div>) : null}
           </FHorn>
 
         </FEditorCard>
