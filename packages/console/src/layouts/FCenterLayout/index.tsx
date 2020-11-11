@@ -33,9 +33,7 @@ function FCenterLayout({children, global}: FCenterLayoutProps) {
       className={styles.content}
     >
       <div>{children}</div>
-      {/*<div style={{height: 100}}/>*/}
     </div>
-    {/*<FFooter/>*/}
   </>);
 }
 

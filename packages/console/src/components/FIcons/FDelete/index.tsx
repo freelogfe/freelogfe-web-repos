@@ -14,6 +14,4 @@ function FDelete({className, ...props}: FDeleteProps) {
   return (<i className={['freelog', 'fl-icon-shanchu', className].join(' ')} {...props} />);
 }
 
-//
-
 export default FDelete;

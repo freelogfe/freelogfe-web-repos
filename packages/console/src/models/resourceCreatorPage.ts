@@ -1,5 +1,5 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {create, CreateParamsType, info, InfoParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
@@ -8,25 +8,41 @@ import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
 
 export interface ResourceCreatorPageModelState {
   name: string;
+  nameVerify: 0 | 1 | 2;
   nameErrorText: string;
+
   resourceType: string;
+  resourceTypeVerify: 0 | 2;
   resourceTypeErrorText: string;
+
   introduction: string;
+  introductionErrorText: string;
+
   cover: string;
   labels: string[];
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceCreatorPage/change',
+  payload: Partial<ResourceCreatorPageModelState>;
 }
 
 export interface OnCreateAction extends AnyAction {
   type: 'resourceCreatorPage/create';
 }
 
-// export interface OnVerifyAction extends AnyAction {
-//   type: 'verify';
-// }
+export interface OnChangeNameAction extends AnyAction {
+  type: 'resourceCreatorPage/onChangeName';
+  payload: string;
+}
 
-export interface ChangeAction extends AnyAction {
-  type: 'change' | 'resourceCreatorPage/change',
-  payload: Partial<ResourceCreatorPageModelState>;
+export interface OnChangeResourceTypeAction extends AnyAction {
+  type: 'resourceCreatorPage/onChangeResourceType';
+  payload: string;
+}
+
+export interface OnChange {
+
 }
 
 export interface ResourceCreatorPageModelType {
@@ -34,7 +50,8 @@ export interface ResourceCreatorPageModelType {
   state: ResourceCreatorPageModelState;
   effects: {
     create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
-    // verify: (action: OnVerifyAction, effects: EffectsCommandMap) => void;
+    onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
+    onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
@@ -48,43 +65,28 @@ const Model: ResourceCreatorPageModelType = {
 
   state: {
     name: '',
-    // /^(?!_)[a-z0-9_]{3,20}(?<!_)$/
+    nameVerify: 0,
     nameErrorText: '',
+
     resourceType: '',
+    resourceTypeVerify: 0,
     resourceTypeErrorText: '',
+
     introduction: '',
+    introductionErrorText: '',
+
     cover: '',
+
     labels: [],
   },
-
   effects: {
     * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
-      // console.log('OnCreateAction2839u42o3');
       const {resourceCreatorPage, user} = yield select(({resourceCreatorPage, user}: ConnectState) => ({
         resourceCreatorPage,
         user,
       }));
-      let {nameErrorText, resourceTypeErrorText} = verifyDate({
-        name: resourceCreatorPage.name,
-        resourceType: resourceCreatorPage.resourceType,
-      });
-      if (!nameErrorText) {
-        const params1: InfoParamsType = {
-          resourceIdOrName: encodeURIComponent(`${user.info.username}/${resourceCreatorPage.name}`),
-        };
-        const {data: data1} = yield call(info, params1);
-        if (data1) {
-          nameErrorText = '资源名已存在';
-        }
-      }
-      if (nameErrorText || resourceTypeErrorText) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            nameErrorText,
-            resourceTypeErrorText,
-          },
-        });
+      if (resourceCreatorPage.nameErrorText || resourceCreatorPage.resourceTypeErrorText) {
+        return;
       }
       const params: CreateParamsType = {
         name: resourceCreatorPage.name,
@@ -109,6 +111,65 @@ const Model: ResourceCreatorPageModelType = {
       });
       router.replace(`/resource/${data.resourceId}/success`);
     },
+    * onChangeName({payload}: OnChangeNameAction, {put, call, select}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nameVerify: 1,
+        },
+      });
+
+      let nameErrorText: string = '';
+
+      if (!payload) {
+        nameErrorText = '请输入资源名称';
+      } else if (payload.length > 60) {
+        nameErrorText = '不多于60个字符';
+      } else if (!RESOURCE_NAME.test(payload)) {
+        nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
+      } else {
+        const {user} = yield select(({user}: ConnectState) => ({
+          user,
+        }));
+        const params1: InfoParamsType = {
+          resourceIdOrName: encodeURIComponent(`${user.info.username}/${payload}`),
+        };
+        const {data: data1} = yield call(info, params1);
+        if (data1) {
+          nameErrorText = '资源名已存在';
+        }
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          name: payload,
+          nameErrorText,
+          nameVerify: 2,
+        },
+      });
+    },
+    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+      let resourceTypeErrorText = '';
+      if (!payload) {
+        resourceTypeErrorText = '请输入资源类型';
+      } else if (payload.length < 3) {
+        resourceTypeErrorText = '不少于3个字符';
+      } else if (payload.length > 20) {
+        resourceTypeErrorText = '不多于20个字符';
+      } else if (!RESOURCE_TYPE.test(payload)) {
+        resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceType: payload,
+          resourceTypeVerify: 2,
+          resourceTypeErrorText,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -129,23 +190,23 @@ const Model: ResourceCreatorPageModelType = {
 
 export default Model;
 
-function verifyDate({name, resourceType}: any) {
-  let nameErrorText = '';
-  if (!name) {
-    nameErrorText = '请输入资源名称';
-  } else if (name.length > 60) {
-    nameErrorText = '不多于60个字符';
-  } else if (!RESOURCE_NAME.test(name)) {
-    nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
-  }
-
-  let resourceTypeErrorText = '';
-  if (!resourceType) {
-    resourceTypeErrorText = '请输入资源类型';
-  } else if (resourceType.length < 3) {
-    resourceTypeErrorText = '不少于3个字符';
-  } else if (!RESOURCE_TYPE.test(resourceType)) {
-    resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
-  }
-  return {nameErrorText, resourceTypeErrorText};
-}
+// function verifyDate({name, resourceType}: any) {
+//   let nameErrorText = '';
+//   if (!name) {
+//     nameErrorText = '请输入资源名称';
+//   } else if (name.length > 60) {
+//     nameErrorText = '不多于60个字符';
+//   } else if (!RESOURCE_NAME.test(name)) {
+//     nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
+//   }
+//
+//   let resourceTypeErrorText = '';
+//   if (!resourceType) {
+//     resourceTypeErrorText = '请输入资源类型';
+//   } else if (resourceType.length < 3) {
+//     resourceTypeErrorText = '不少于3个字符';
+//   } else if (!RESOURCE_TYPE.test(resourceType)) {
+//     resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+//   }
+//   return {nameErrorText, resourceTypeErrorText};
+// }

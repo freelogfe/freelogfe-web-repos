@@ -13,13 +13,17 @@ import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
 import {
-  OnCreateAction,ChangeAction,
+  OnCreateAction,
+  ChangeAction,
+  OnChangeNameAction,
+  OnChangeResourceTypeAction
 } from '@/models/resourceCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {i18nMessage} from '@/utils/i18n';
 import {RouterTypes} from 'umi';
-import {resourceTypes} from "@/utils/globals";
+import {resourceTypes} from '@/utils/globals';
+import {FCheck, FLoading} from '@/components/FIcons';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -56,7 +60,8 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
 
   return (<FCenterLayout>
     <FContentLayout header={<Header
-      disabled={!!resource.nameErrorText || !!resource.resourceTypeErrorText}
+      disabled={resource.nameVerify !== 2 || resource.resourceTypeVerify !== 2
+      || !!resource.nameErrorText || !!resource.resourceTypeErrorText || !!resource.introductionErrorText}
       onClickCreate={onClickCreate}
     />}>
       <div className={styles.workspace}>
@@ -67,14 +72,24 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             <FInput
               errorText={resource.nameErrorText}
               value={resource.name}
-              onChange={(e) => onChange({
-                name: e.target.value,
-                nameErrorText: '',
-              })}
+              debounce={300}
+              onDebounceChange={(value) => {
+                dispatch<OnChangeNameAction>({
+                  type: 'resourceCreatorPage/onChangeName',
+                  payload: value,
+                });
+              }}
+              // onChange={(e) => onChange({
+              //   name: e.target.value,
+              //   nameErrorText: '',
+              // })}
               className={styles.FInput}
               placeholder={i18nMessage('hint_enter_resource_name')}
-              suffix={<span className={styles.FInputWordCount}>{resource.name.length}</span>}
+              lengthLimit={60}
             />
+            <div style={{width: 10}}/>
+            {resource.nameVerify === 1 && <FLoading/>}
+            {resource.nameVerify === 2 && !resource.nameErrorText && <FCheck/>}
           </div>
         </FEditorCard>
 
@@ -82,9 +97,9 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
           <FAutoComplete
             errorText={resource.resourceTypeErrorText}
             value={resource.resourceType}
-            onChange={(value) => onChange({
-              resourceType: value,
-              resourceTypeErrorText: '',
+            onChange={(value) => dispatch<OnChangeResourceTypeAction>({
+              type: 'resourceCreatorPage/onChangeResourceType',
+              payload: value,
             })}
             className={styles.FSelect}
             placeholder={i18nMessage('hint_choose_resource_type')}
@@ -96,6 +111,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
           <FIntroductionEditor
             value={resource.introduction}
             onChange={(e) => onChange({
+              introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
               introduction: e.target.value
             })}
             placeholder={i18nMessage('hint_enter_resource_short_description')}
@@ -121,6 +137,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
         </FEditorCard>
       </div>
     </FContentLayout>
+    <div style={{height: 100}}/>
   </FCenterLayout>);
 }
 

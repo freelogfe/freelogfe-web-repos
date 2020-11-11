@@ -44,7 +44,7 @@ interface Policy {
   text: string;
 }
 
-export interface MarketResourcePageState {
+export interface MarketResourcePageModelState {
   resourceId: string;
 
   resourceInfo: null | {
@@ -107,7 +107,7 @@ export interface MarketResourcePageState {
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'marketResourcePage/change';
-  payload: Partial<MarketResourcePageState>;
+  payload: Partial<MarketResourcePageModelState>;
 }
 
 export interface InitDataAction extends AnyAction {
@@ -152,7 +152,7 @@ export interface SignContractAction extends AnyAction {
 
 interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
-  state: MarketResourcePageState;
+  state: MarketResourcePageModelState;
   effects: {
     initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
@@ -165,7 +165,7 @@ interface MarketResourcePageModelType {
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<MarketResourcePageState, ChangeAction>;
+    change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;

@@ -6,14 +6,12 @@ import {TextAreaProps} from 'antd/lib/input';
 // import {FTextButton} from '@/components/FButton';
 
 interface FIntroductionEditorProps extends TextAreaProps {
-  // status?: '' | 'edit' | 'save';
-  // value: string;
-  // onChange?: (value: string) => void;
+  errorText?: string;
 }
 
 let textInput: any;
 
-export default function ({className, value, ...props}: FIntroductionEditorProps) {
+export default function ({className, value, errorText, ...props}: FIntroductionEditorProps) {
 
   React.useEffect(() => {
     textInput.focus();
@@ -27,6 +25,8 @@ export default function ({className, value, ...props}: FIntroductionEditorProps)
       // onChange={(e) => onChange && onChange(e)}
       className={styles.TextArea}
     />
-    <span className={styles.FInputWordCount}>{String(value).length}</span>
+    <span
+      className={[styles.FInputWordCount, 1000 - String(value).length < 0 ? styles.beyond : ''].join(' ')}>{1000 - String(value).length}</span>
+    <div className={styles.error}>{errorText}</div>
   </div>)
 }

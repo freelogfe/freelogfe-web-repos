@@ -10,7 +10,7 @@ import Description from './Description';
 import Property from './Property';
 import Option from './Option';
 import Viewport from '@/pages/resource/$id/index/Viewport';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
 import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
@@ -18,7 +18,7 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface ResourceDetailsProps extends RouterTypes {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState,
+  marketResourcePage: MarketResourcePageModelState,
 }
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {

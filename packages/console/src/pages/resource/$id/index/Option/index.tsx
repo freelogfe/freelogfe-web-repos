@@ -4,12 +4,12 @@ import styles from './index.less';
 import {Space, Tooltip} from 'antd';
 import {FInfo} from '@/components/FIcons';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import FTooltip from "@/components/FTooltip";
 
 interface OptionProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function Option({dispatch, marketResourcePage}: OptionProps) {

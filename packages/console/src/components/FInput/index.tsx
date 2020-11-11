@@ -11,6 +11,7 @@ interface FInputProps extends InputProps {
   debounce?: number;
   errorText?: React.ReactNode;
   wrapClassName?: string;
+  lengthLimit?: number;
 
   onDebounceChange?(value: string): void;
 }
@@ -24,6 +25,7 @@ function FInput({
                   onDebounceChange,
                   errorText,
                   wrapClassName,
+                  lengthLimit = 0,
                   ...props
                 }: FInputProps) {
 
@@ -46,10 +48,6 @@ function FInput({
     debounce ? setInputText(e.target.value) : (onChange && onChange(e));
   }
 
-  function debounceChange(e: ChangeEvent<HTMLInputElement>) {
-
-  }
-
   if (theme === 'dark') {
     return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
       <Input
@@ -60,8 +58,7 @@ function FInput({
         className={[
           styles.Input,
           theme === 'dark' ? styles.dark : '',
-          className,
-          errorText ? styles.InputError : '']
+          className]
           .join(' ')}
         {...props}
       />
@@ -75,6 +72,9 @@ function FInput({
       value={debounce ? inputText : value}
       onChange={onInputChange}
       className={[styles.Input, className, errorText ? styles.InputError : ''].join(' ')}
+      suffix={lengthLimit > 0 ?
+        <span
+          className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}>{lengthLimit - inputText.length}</span> : undefined}
       {...props}
     />
     {

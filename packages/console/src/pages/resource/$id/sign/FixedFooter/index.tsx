@@ -4,14 +4,14 @@ import {FNormalButton, FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FLeft from '@/components/FIcons/FLeft';
 import {connect, Dispatch} from 'dva';
-import {MarketResourcePageState, SignContractAction} from "@/models/marketResourcePage";
+import {MarketResourcePageModelState, SignContractAction} from "@/models/marketResourcePage";
 import {EXHIBIT_NAME} from "@/utils/regexp";
 import {ConnectState} from "@/models/connect";
 
 interface FixedFooterProps {
   dispatch: Dispatch;
 
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function FixedFooter({dispatch, marketResourcePage}: FixedFooterProps) {

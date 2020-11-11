@@ -2,12 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageState} from "@/models/connect";
+import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 
 interface ResourcesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function Resources({dispatch, marketResourcePage}: ResourcesProps) {

@@ -4,12 +4,12 @@ import {Dropdown, Menu, Space} from "antd";
 import {FContentText} from "@/components/FText";
 import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageState, NodesModelState} from "@/models/connect";
+import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/models/connect";
 import {ChangeAction, OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
   nodes: NodesModelState;
 }
 

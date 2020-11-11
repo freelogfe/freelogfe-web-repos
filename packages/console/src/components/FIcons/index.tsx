@@ -14,6 +14,8 @@ import FPlus from './FPlus';
 import FWarning from './FWarning';
 import FCopy from './FCopy';
 import FCloudUpload from './FCloudUpload';
+import FCheck from './FCheck';
+import FLoading from './FLoading';
 
 export {
   FDelete,
@@ -31,4 +33,6 @@ export {
   FWarning,
   FCopy,
   FCloudUpload,
+  FCheck,
+  FLoading,
 }

@@ -2,13 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {router} from 'umi';
 import {ChangeAction} from "@/models/marketResourcePage";
 
 interface BottomProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function Bottom({dispatch, marketResourcePage}: BottomProps) {

@@ -2,12 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {Checkbox, Space} from "antd";
 import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageState} from "@/models/connect";
+import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 
 interface PoliciesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function Policies({dispatch, marketResourcePage}: PoliciesProps) {

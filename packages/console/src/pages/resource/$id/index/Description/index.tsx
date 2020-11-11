@@ -4,14 +4,14 @@ import styles from './index.less';
 import {FTextButton} from '@/components/FButton';
 import {FDown} from '@/components/FIcons';
 import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
 import FUp from "@/components/FIcons/FUp";
 import FExpandable from "@/pages/resource/$id/index/Description/FExpandable";
 
 interface DescriptionProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 // let devE: HTMLDivElement | null = null;

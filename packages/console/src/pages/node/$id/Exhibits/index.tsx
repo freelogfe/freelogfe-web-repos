@@ -10,7 +10,7 @@ import {FTextButton} from '@/components/FButton';
 import FPagination from '@/components/FPagination';
 import FSwitch from '@/components/FSwitch';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState, NodeManagerModelState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState, NodeManagerModelState} from '@/models/connect';
 import FInput from '@/components/FInput';
 import {router} from "umi";
 import {ColumnsType} from "antd/lib/table/interface";

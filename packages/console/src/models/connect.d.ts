@@ -13,7 +13,7 @@ import {GlobalModelState} from './global';
 import {StorageHomePageModelState} from './storageHomePage';
 import {StorageObjectEditorModelState} from './storageObjectEditor';
 import {StorageObjectDepSelectorModelState} from './storageObjectDepSelector';
-import {MarketResourcePageState} from './marketResourcePage';
+import {MarketResourcePageModelState} from './marketResourcePage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
@@ -37,7 +37,7 @@ export {
   StorageHomePageModelState,
   StorageObjectEditorModelState,
   StorageObjectDepSelectorModelState,
-  MarketResourcePageState,
+  MarketResourcePageModelState,
   NodesModelState,
   NodeManagerModelState,
   ExhibitInfoPageModelState,
@@ -60,7 +60,7 @@ export interface ConnectState {
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
   storageObjectDepSelector: StorageObjectDepSelectorModelState;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;

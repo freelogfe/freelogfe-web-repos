@@ -7,7 +7,7 @@ import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
 import {Space, Tooltip, Drawer} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState, NodesModelState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import FLeft from '@/components/FIcons/FLeft';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import FixedFooter from './FixedFooter';
@@ -17,7 +17,7 @@ import {ChangeAction} from '@/models/marketResourcePage';
 
 interface SignProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
   nodes: NodesModelState;
 }
 

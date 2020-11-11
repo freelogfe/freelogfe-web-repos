@@ -2,11 +2,11 @@ import * as React from 'react';
 import {FTitleText, FContentText} from '@/components/FText';
 import styles from './index.less';
 import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 
 interface PropertyProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState,
+  marketResourcePage: MarketResourcePageModelState,
 }
 
 function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {

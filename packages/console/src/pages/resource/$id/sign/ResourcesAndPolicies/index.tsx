@@ -3,11 +3,11 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import {Drawer, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, MarketResourcePageState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 
 interface ResourcesAndPoliciesProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
 }
 
 function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPoliciesProps) {

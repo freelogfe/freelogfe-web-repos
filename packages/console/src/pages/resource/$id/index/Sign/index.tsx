@@ -4,7 +4,7 @@ import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {FContentText, FTitleText} from '@/components/FText';
 import {FFavorite} from '@/components/FIcons';
 import {Dispatch, connect} from 'dva';
-import {ConnectState, MarketResourcePageState, NodesModelState} from '@/models/connect';
+import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import Resources from './Resources';
@@ -15,7 +15,7 @@ import {OnClickCollectionAction} from '@/models/marketResourcePage';
 
 interface SignProps {
   dispatch: Dispatch;
-  marketResourcePage: MarketResourcePageState;
+  marketResourcePage: MarketResourcePageModelState;
   nodes: NodesModelState;
 }
 

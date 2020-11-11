@@ -6,7 +6,7 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {router} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
-import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageState} from "@/models/connect";
+import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
 
 const discoverOptions = [
