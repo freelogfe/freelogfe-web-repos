@@ -46,12 +46,13 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
 
   function onChangeIsEditing(bool: boolean) {
     // console.log(bool, '0293jdsfl;kjf;lasd');
-    console.log(info?.intro, 'info?.intro');
+    // console.log(info?.intro, 'info?.intro');
     dispatch<ChangeAction>({
       type: 'resourceInfoPage/change',
       payload: {
         editorText: bool ? info?.intro : '',
         isEditing: bool,
+        introductionErrorText: '',
       },
     });
   }
@@ -92,9 +93,9 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
                   >{i18nMessage('cancel')}</FTextButton>
                   <FTextButton
                     theme="primary"
+                    disabled={!!resourceInfoPage.introductionErrorText}
                     onClick={() => {
                       onChangeIsEditing(false);
-
                       dispatch<OnChangeInfoAction>({
                         type: 'resourceInfoPage/onChangeInfo',
                         // payload: {intro: resourceInfoPage.editor},
@@ -116,10 +117,12 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
               resourceInfoPage.isEditing
                 ? (<FIntroductionEditor
                   value={resourceInfoPage.editorText}
+                  errorText={resourceInfoPage.introductionErrorText}
                   onChange={(e) => dispatch<ChangeAction>({
                     type: 'resourceInfoPage/change',
                     payload: {
                       editorText: e.target.value,
+                      introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
                     },
                   })}
                 />)
