@@ -23,23 +23,23 @@ interface ResourceDetailsProps extends RouterTypes {
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'global/change',
-      payload: {
-        backgroundColor: 'white',
-      },
-    });
-    return () => {
-      // console.log('#E#####EEEEE');
-      dispatch<ChangeAction>({
-        type: 'global/change',
-        payload: {
-          backgroundColor: '',
-        },
-      });
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       // backgroundColor: 'white',
+  //     },
+  //   });
+  //   return () => {
+  //     // console.log('#E#####EEEEE');
+  //     dispatch<ChangeAction>({
+  //       type: 'global/change',
+  //       payload: {
+  //         // backgroundColor: '',
+  //       },
+  //     });
+  //   }
+  // }, []);
 
   React.useEffect(() => {
     // console.log((match.params as any).id, 'match98320j');

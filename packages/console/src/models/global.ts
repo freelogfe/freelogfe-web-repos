@@ -19,7 +19,7 @@ export interface GlobalModelState {
   locale: 'zh-CN' | 'en-US' | 'pt-BR';
   route: any;
   routerHistories: History['location'][];
-  backgroundColor: string;
+  // backgroundColor: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -58,7 +58,7 @@ const Model: GlobalModelType = {
     locale: getLocale() as GlobalModelState['locale'],
     route: null,
     routerHistories: [],
-    backgroundColor: '',
+    // backgroundColor: '',
   },
   effects: {
     * setLocale({payload}: SetLocaleAction, {call, put}: EffectsCommandMap) {

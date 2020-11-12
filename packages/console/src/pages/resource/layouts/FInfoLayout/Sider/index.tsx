@@ -24,8 +24,7 @@ interface SilderProps {
   };
 }
 
-function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, match, dispatch}: RouterTypes & SilderProps) {
-  // console.log(match, 'props');
+function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, match, dispatch, route}: RouterTypes & SilderProps) {
 
   React.useEffect(() => {
     if (match.params.id === info?.resourceId) {
@@ -75,6 +74,8 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
             className={match.path === '/resource/:id/auth' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/auth`)}
           >{i18nMessage('authorization_infomation')}</a>
+          {info?.policies.length === 0 && (<div style={{backgroundColor: 'red', borderRadius: '50%', width: 4, height: 4}}/>)}
+          <div style={{width: 75}}/>
         </div>
 
         <div className={styles.radio}>
