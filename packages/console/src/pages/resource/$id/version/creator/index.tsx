@@ -22,6 +22,7 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
+import * as semver from 'semver';
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -75,7 +76,9 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
         <FEditorCard dot={true} title={i18nMessage('version_number')}>
           <FInput
             value={version.version}
-            onChange={(e) => onChange({version: e.target.value, versionErrorText: ''})}
+            onChange={(e) => {
+              onChange({version: e.target.value, versionErrorText: ''});
+            }}
             className={styles.versionInput}
             errorText={version.versionErrorText}
           />
@@ -93,7 +96,7 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
               dispatch<ObjectAddDepsAction>({
                 type: 'resourceVersionCreatorPage/objectAddDeps',
                 payload: deps,
-              })
+              });
             }}
             errorText={version.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}

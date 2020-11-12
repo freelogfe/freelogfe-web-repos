@@ -79,7 +79,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
         </div>
 
         <div className={styles.radio}>
-          <a>{i18nMessage('verions')}</a>
+          <a style={{cursor: 'default'}}>{i18nMessage('verions')}</a>
           <FTextButton onClick={gotoCreator}><i
             className="freelog fl-icon-add"/></FTextButton>
         </div>

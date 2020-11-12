@@ -68,7 +68,7 @@ interface AuthProps {
 function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
 
   React.useEffect(() => {
-    console.log(route, match, 'RM');
+    // console.log(route, match, 'RM');
     dispatch<GlobalChangeAction>({
       type: 'global/change',
       payload: {
