@@ -78,17 +78,27 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   depRelationship: Relationship;
   dependencies: DepResources;
   depActivatedID: string;
-
-  properties: FCustomPropertiesProps['dataSource'];
 }> & {
+  properties: FCustomPropertiesProps['dataSource'];
+
   description: EditorState;
   draftData: any;
 };
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceVersionCreatorPage/change',
+  payload: Partial<ResourceVersionCreatorPageModelState>;
+}
 
 export interface OnChangeDependenciesByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onChangeDependenciesByID';
   payload: Partial<ResourceVersionCreatorPageModelState['dependencies'][number]>;
   id: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
+}
+
+export interface ChangeVersionInputAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
+  payload: string;
 }
 
 export interface DeleteDependencyByIDAction extends AnyAction {
@@ -123,11 +133,6 @@ export interface AddADepByIDAction extends AnyAction {
   payload: string[];
 }
 
-export interface ChangeAction extends AnyAction {
-  type: 'change' | 'resourceVersionCreatorPage/change',
-  payload: Partial<ResourceVersionCreatorPageModelState>;
-}
-
 export interface ObjectAddDepsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/objectAddDeps'
   payload: { name: string; type: 'resource' | 'object'; versionRange: string; }[];
@@ -137,9 +142,10 @@ export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
+    fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
+    changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
     importPreVersion: (action: ImportPreVersionAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
-    fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     addADepByIDAction: (action: AddADepByIDAction, effects: EffectsCommandMap) => void;
     objectAddDeps: (action: ObjectAddDepsAction, effects: EffectsCommandMap) => void;
@@ -177,8 +183,28 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
-    * createVersion(action: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
-
+    * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+        resourceInfo,
+      }));
+      let versionErrorText: string = '';
+      if (!payload) {
+        versionErrorText = '请输入版本号';
+      } else if (!semver.valid(payload)) {
+        versionErrorText = '版本号不合法';
+      } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
+        versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          version: payload,
+          versionVerify: 2,
+          versionErrorText: versionErrorText,
+        }
+      });
+    },
+    * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
           resourceVersionCreatorPage,
@@ -261,9 +287,9 @@ const Model: ResourceVersionCreatorModelType = {
       });
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
     },
-    * fetchDraft(action: FetchDraftAction, {call, put}: EffectsCommandMap) {
+    * fetchDraft({payload}: FetchDraftAction, {call, put}: EffectsCommandMap) {
       const params: LookDraftParamsType = {
-        resourceId: action.payload,
+        resourceId: payload,
       };
       const {data} = yield call(lookDraft, params);
       if (!data) {
@@ -290,7 +316,7 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
     },
-    * saveDraft(action: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
+    * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
       const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceInfo, resourceVersionCreatorPage
       }));

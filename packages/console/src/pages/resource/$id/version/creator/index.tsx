@@ -14,7 +14,7 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
-  ChangeAction,
+  ChangeAction, ChangeVersionInputAction,
   CreateVersionAction, ImportPreVersionAction, ObjectAddDepsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -77,7 +77,10 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
           <FInput
             value={version.version}
             onChange={(e) => {
-              onChange({version: e.target.value, versionErrorText: ''});
+              dispatch<ChangeVersionInputAction>({
+                type: 'resourceVersionCreatorPage/changeVersionInputAction',
+                payload: e.target.value,
+              });
             }}
             className={styles.versionInput}
             errorText={version.versionErrorText}

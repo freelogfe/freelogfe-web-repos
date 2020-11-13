@@ -7,24 +7,27 @@ import {FContentText} from "@/components/FText";
 import {i18nMessage} from "@/utils/i18n";
 import Property from './Property';
 
-export type Data = Readonly<{
+interface Data {
   key: string;
   value: string;
   description: string;
   allowCustom: boolean;
   custom: 'input' | 'select';
   customOption: string;
-}>;
+}
 
-export type FCustomPropertiesProps = Readonly<{
+export interface FCustomPropertiesProps {
   stubborn?: boolean;
   colNum?: number;
   noHeaderButton?: boolean;
   dataSource: Data[];
+
   onChange?(dataSource: FCustomPropertiesProps['dataSource']): void;
+
   onSave?(dataSource: FCustomPropertiesProps['dataSource']): void;
+
   onImport?(): void;
-}>;
+}
 
 export default function ({noHeaderButton = false, stubborn = false, dataSource, onChange, onImport, onSave, colNum}: FCustomPropertiesProps) {
   function onChangeProperty(value: Data, index: number) {

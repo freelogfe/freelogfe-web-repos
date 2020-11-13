@@ -41,10 +41,15 @@ export interface OnChangeResourceTypeAction extends AnyAction {
   payload: string;
 }
 
+export interface ClearDataAction extends AnyAction {
+  type: 'resourceCreatorPage/clearData';
+}
+
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
   effects: {
+    clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
     create: (action: OnCreateAction, effects: EffectsCommandMap) => void;
     onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
@@ -76,6 +81,12 @@ const Model: ResourceCreatorPageModelType = {
   namespace: 'resourceCreatorPage',
   state: initStates,
   effects: {
+    * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
     * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
       const {resourceCreatorPage, user} = yield select(({resourceCreatorPage, user}: ConnectState) => ({
         resourceCreatorPage,
@@ -105,10 +116,7 @@ const Model: ResourceCreatorPageModelType = {
           labels: [],
         },
       });
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-      });
+
       router.replace(`/resource/${data.resourceId}/success`);
     },
     * onChangeName({payload}: OnChangeNameAction, {put, call, select}: EffectsCommandMap) {

@@ -16,7 +16,7 @@ import {
   OnCreateAction,
   ChangeAction,
   OnChangeNameAction,
-  OnChangeResourceTypeAction
+  OnChangeResourceTypeAction, ClearDataAction
 } from '@/models/resourceCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
@@ -43,6 +43,14 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
       },
     });
   }, [route]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch<ClearDataAction>({
+        type: 'resourceCreatorPage/clearData',
+      });
+    };
+  }, []);
 
   function onClickCreate() {
     // console.log('onClickCreate', '0932jdlfsf');
