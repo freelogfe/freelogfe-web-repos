@@ -132,9 +132,6 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
   </FInfoLayout>);
 }
 
-
-//CreateVersionAction
-
 interface HeaderProps {
   onClickCache: () => void;
   onClickCreate: () => void;

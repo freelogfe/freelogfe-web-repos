@@ -13,6 +13,7 @@ import {
   OnChangeOConditionsAction,
 } from '@/models/storageObjectDepSelector';
 import {AddObjectDepOAction} from '@/models/storageObjectEditor';
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -81,7 +82,7 @@ function FObjectSelector({
 
   return (<>
     <div className={styles.filter}>
-      <FDropdown
+      <FDropdownMenu
         options={selectOptions}
         onChange={(value) => {
           console.log(value, 'valuevalue23rfsd');
@@ -95,7 +96,7 @@ function FObjectSelector({
       >
         <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text} <DownOutlined
           style={{marginLeft: 8}}/></a>
-      </FDropdown>
+      </FDropdownMenu>
       <FInput
         theme="dark"
         debounce={300}

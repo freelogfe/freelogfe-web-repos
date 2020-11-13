@@ -37,7 +37,7 @@ export interface FSelectObject {
   onChangeErrorText?(text: string): void;
 }
 
-export default function ({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
+function FSelectObject ({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -177,6 +177,8 @@ export default function ({resourceObject, onChange, resourceType, errorText, onC
     </Drawer>
   </div>);
 }
+
+export default FSelectObject;
 
 /**
  * 根据 File 获取 SHA1 Hash 字符串
