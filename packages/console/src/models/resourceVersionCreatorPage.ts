@@ -1,6 +1,6 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
+import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
@@ -13,7 +13,7 @@ import {
   lookDraft,
   LookDraftParamsType, resolveResources,
   ResolveResourcesParamsType,
-  resourceVersionInfo,
+  resourceVersionInfo, ResourceVersionInfoParamsType1, ResourceVersionInfoParamsType2,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
@@ -27,7 +27,7 @@ import {contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
 import {batchObjectList, BatchObjectListParamsType} from "@/services/storages";
 
-export type DepResources = Readonly<{
+export type DepResources = {
   id: string;
   title: string;
   resourceType: string;
@@ -58,18 +58,20 @@ export type DepResources = Readonly<{
     code: string;
     status: 0 | 1;
   }>[];
-}>[];
+}[];
 
-export type Relationship = Readonly<{
+export type Relationship = {
   id: string;
   children: Readonly<{
     id: string;
   }>[];
-}>[];
+}[];
 
-export interface ResourceVersionCreatorPageModelState {
+export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   version: string;
+  versionVerify: 0 | 2;
   versionErrorText: string;
+
   resourceObject: FSelectObject['resourceObject'];
   resourceObjectErrorText: string;
 
@@ -78,10 +80,10 @@ export interface ResourceVersionCreatorPageModelState {
   depActivatedID: string;
 
   properties: FCustomPropertiesProps['dataSource'];
+}> & {
   description: EditorState;
-
   draftData: any;
-}
+};
 
 export interface OnChangeDependenciesByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onChangeDependenciesByID';
@@ -154,7 +156,9 @@ export interface ResourceVersionCreatorModelType {
 
 const initStates: ResourceVersionCreatorPageModelState = {
   version: '',
+  versionVerify: 0,
   versionErrorText: '',
+
   resourceObject: null,
   resourceObjectErrorText: '',
 
@@ -287,13 +291,16 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * saveDraft(action: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
-      const params: SaveVersionsDraftParamsType = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceId: resourceInfo.info?.resourceId,
+      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceInfo, resourceVersionCreatorPage
+      }));
+      const params: SaveVersionsDraftParamsType = {
+        resourceId: resourceInfo.info?.resourceId || '',
         draftData: {
           ...resourceVersionCreatorPage,
           description: resourceVersionCreatorPage.description.toHTML(),
         },
-      }));
+      };
       yield call(saveVersionsDraft, params);
       fMessage('暂存草稿成功');
       yield put<ChangeAction>({
@@ -304,14 +311,14 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
-      const {resourceId, latestVersion} = yield select(({resourceInfo}: ConnectState) => ({
-        resourceId: resourceInfo.info?.resourceId,
-        latestVersion: resourceInfo.info?.latestVersion,
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+        resourceInfo
       }));
-      const {data} = yield call(resourceVersionInfo, {
-        version: latestVersion,
-        resourceId: resourceId,
-      });
+      const params: ResourceVersionInfoParamsType1 = {
+        resourceId: resourceInfo.info?.latestVersion || '',
+        version: resourceInfo.info?.latestVersion || '',
+      };
+      const {data} = yield call(resourceVersionInfo, params);
       // console.log(data.customPropertyDescriptors, 'datadatadata1423234');
       yield put<ChangeAction>({
         type: 'change',
@@ -330,58 +337,34 @@ const Model: ResourceVersionCreatorModelType = {
       })
     },
     * addADepByIDAction({payload}: AddADepByIDAction, {put, call, select}: EffectsCommandMap) {
-      // console.log(payload, 'PPPPLLLLLL');
-      // const [id, ...ids] = payload;
-      // const relationship = {
-      //   id: id,
-      //   children: ids.map((i: string) => ({id: i})),
-      // };
-      // console.log(relationship, 'relationship');
-      const {resourceDepRelationship, resourceInfo, dependencies, allExistsIds} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-        resourceInfo: resourceInfo.info,
-        dependencies: resourceVersionCreatorPage.dependencies,
-        allExistsIds: resourceVersionCreatorPage.dependencies.map((r: any) => r.resourceId),
+      const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceVersionCreatorPage, resourceInfo,
       }));
 
       const params: handleAddADepByIDDateParamsType = {
         payload: payload,
-        resourceInfo: resourceInfo,
-        dependencies: dependencies,
+        resourceInfo: resourceInfo.info,
+        dependencies: resourceVersionCreatorPage.dependencies,
       };
       const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
-      // const handleDepResourcePrams: HandleDepResourceParams = {
-      //   resourceInfo: resourceInfo,
-      //   allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
-      //   allNeedHandledIds: payload,
-      //   allExistsIds: allExistsIds,
-      // };
-      // // console.log(handleDepResourcePrams, 'handleDepResourcePrams34dspoi;j');
-      // const allDeps = yield call(handleDepResource, handleDepResourcePrams);
-      // console.log(allDeps, '开始change');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           depRelationship: [
             relationship,
-            ...resourceDepRelationship,
+            ...resourceVersionCreatorPage.depRelationship,
           ],
           dependencies: [
-            ...dependencies,
+            ...resourceVersionCreatorPage.dependencies,
             ...allDeps,
           ],
         }
       });
     },
     * objectAddDeps({payload}: ObjectAddDepsAction, {call, put, select}: EffectsCommandMap) {
-      // console.log(payload, 'payloadw3890jsdlk');
       const rNames: string[] = payload.filter((r) => r.type === 'resource').map((r) => r.name);
-      // console.log(rNames, oNames, '29308jdslkfj');
-
-      const {resourceDepRelationship, resourceInfo, dependencies} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-        resourceInfo: resourceInfo.info,
-        dependencies: resourceVersionCreatorPage.dependencies,
+      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceInfo, resourceVersionCreatorPage,
       }));
 
       if (rNames.length > 0) {
@@ -397,7 +380,7 @@ const Model: ResourceVersionCreatorModelType = {
           const params: handleAddADepByIDDateParamsType = {
             payload: payload,
             resourceInfo: resourceInfo,
-            dependencies: dependencies,
+            dependencies: resourceVersionCreatorPage.dependencies,
           };
           const {relationship, allDeps} = yield call(handleAddADepByIDDate, params);
           yield put<ChangeAction>({
@@ -405,10 +388,10 @@ const Model: ResourceVersionCreatorModelType = {
             payload: {
               depRelationship: [
                 relationship,
-                ...resourceDepRelationship,
+                ...resourceVersionCreatorPage.depRelationship,
               ],
               dependencies: [
-                ...dependencies,
+                ...resourceVersionCreatorPage.dependencies,
                 ...allDeps,
               ],
             }
@@ -446,10 +429,10 @@ const Model: ResourceVersionCreatorModelType = {
                 id: o.objectId,
                 children: [],
               })),
-              ...resourceDepRelationship,
+              ...resourceVersionCreatorPage.depRelationship,
             ],
             dependencies: [
-              ...dependencies,
+              ...resourceVersionCreatorPage.dependencies,
               ...allDeps,
             ],
           }

@@ -41,10 +41,6 @@ export interface OnChangeResourceTypeAction extends AnyAction {
   payload: string;
 }
 
-export interface OnChange {
-
-}
-
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
@@ -59,26 +55,26 @@ export interface ResourceCreatorPageModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceCreatorPageModelState = {
+  name: '',
+  nameVerify: 0,
+  nameErrorText: '',
+
+  resourceType: '',
+  resourceTypeVerify: 0,
+  resourceTypeErrorText: '',
+
+  introduction: '',
+  introductionErrorText: '',
+
+  cover: '',
+
+  labels: [],
+};
+
 const Model: ResourceCreatorPageModelType = {
-
   namespace: 'resourceCreatorPage',
-
-  state: {
-    name: '',
-    nameVerify: 0,
-    nameErrorText: '',
-
-    resourceType: '',
-    resourceTypeVerify: 0,
-    resourceTypeErrorText: '',
-
-    introduction: '',
-    introductionErrorText: '',
-
-    cover: '',
-
-    labels: [],
-  },
+  state: initStates,
   effects: {
     * create({}: OnCreateAction, {call, put, select}: EffectsCommandMap) {
       const {resourceCreatorPage, user} = yield select(({resourceCreatorPage, user}: ConnectState) => ({
@@ -108,6 +104,10 @@ const Model: ResourceCreatorPageModelType = {
           cover: '',
           labels: [],
         },
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
       });
       router.replace(`/resource/${data.resourceId}/success`);
     },

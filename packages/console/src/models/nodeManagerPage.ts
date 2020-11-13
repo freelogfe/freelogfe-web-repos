@@ -80,7 +80,7 @@ export interface OnChangeThemeAction extends AnyAction {
 
 export interface NodeManagerModelType {
   namespace: 'nodeManagerPage';
-  state: WholeReadonly<NodeManagerModelState>;
+  state: NodeManagerModelState;
   effects: {
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
