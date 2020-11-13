@@ -1,5 +1,5 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/components/FCustomProperties';
@@ -41,7 +41,7 @@ export type DepResources = {
   versions: string[];
   upthrow: boolean;
   upthrowDisabled: boolean;
-  enableReuseContracts: Readonly<{
+  enableReuseContracts: {
     checked: boolean;
     id: string;
     policyId: string;
@@ -50,14 +50,14 @@ export type DepResources = {
     code: string;
     date: string;
     versions: string[];
-  }>[];
-  enabledPolicies: Readonly<{
+  }[];
+  enabledPolicies: {
     checked: boolean;
     id: string;
     title: string;
     code: string;
     status: 0 | 1;
-  }>[];
+  }[];
 }[];
 
 export type Relationship = {
