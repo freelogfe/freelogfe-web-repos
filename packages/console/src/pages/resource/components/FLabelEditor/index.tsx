@@ -5,7 +5,7 @@ import {Input, Form} from 'antd';
 import {i18nMessage} from "@/utils/i18n";
 
 interface FLabelEditor {
-  values?: string[];
+  values?: readonly string[];
   onChange?: (values: string[]) => void;
 }
 
