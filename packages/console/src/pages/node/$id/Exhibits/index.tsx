@@ -17,8 +17,12 @@ import {ColumnsType} from "antd/lib/table/interface";
 import FMenu from "@/components/FMenu";
 import {resourceTypes} from "@/utils/globals";
 import {ChangeAction, OnChangeExhibitAction} from "@/models/nodeManagerPage";
+import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
+import FNoDataTip from "@/components/FNoDataTip";
+import FDropdownMenu from "@/components/FDropdownMenu";
+import FLoadingTip from "@/components/FLoadingTip";
 
-const columns: ColumnsType<NodeManagerModelState['exhibitList'][number]> = [
+const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
   {
     title: <FContentText text={'展品名称｜类型｜展品标题｜策略'}/>,
 
@@ -108,7 +112,7 @@ interface ExhibitsProps {
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
-  ...resourceTypes.map((i) => ({value: i}))
+  ...resourceTypes.map((i) => ({value: i, text: i}))
 ];
 
 const resourceStatusOptions = [
@@ -119,47 +123,92 @@ const resourceStatusOptions = [
 
 function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
 
-  // React.useEffect(() => {
-  //   console.log('Exhibits useEffect');
-  // }, []);
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
+  const [minHeight2, setMinHeight2] = React.useState<number>(window.innerHeight - 70);
+
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 170);
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight2);
+    return () => {
+      window.removeEventListener('resize', setHeight2);
+    };
+  }, []);
+
+  function setHeight2() {
+    setMinHeight2(window.innerHeight - 70);
+  }
 
   const dataSource: NodeManagerModelState['exhibitList'] = nodeManagerPage.exhibitList.map((i) => ({
     key: i.id,
     ...i,
   }));
 
-  return (<div>
+  if (nodeManagerPage.exhibitDataState === 'loading') {
+    return (<FLoadingTip height={minHeight2}/>);
+  }
+
+  if (nodeManagerPage.exhibitDataState === 'noData') {
+    return (<FNoDataTip
+      height={minHeight2}
+      tipText={'当前节点没有添加展品'}
+      btnText={'进入资源市场'}
+      onClick={() => {
+        dispatch<MarketChangeAction>({
+          type: 'marketPage/change',
+          payload: {
+            resourceType: '-1',
+          }
+        });
+        router.push('/market');
+      }}
+    />);
+  }
+
+  return (<>
+
     <div className={styles.header}>
       <FTitleText type="h1" text={'展品管理'}/>
       <Space size={80}>
         <div>
           <span>类型：</span>
-          <Dropdown overlay={<FMenu
+          <FDropdownMenu
             options={resourceTypeOptions}
-            onClick={(value) => dispatch<OnChangeExhibitAction>({
+            onChange={(value) => dispatch<OnChangeExhibitAction>({
               type: 'nodeManagerPage/onChangeExhibit',
               payload: {
                 selectedType: value,
               },
             })}
-          />}>
-            <span style={{cursor: 'pointer'}}>全部<FDown style={{marginLeft: 8}}/></span>
-          </Dropdown>
-          {/*<span>全部 <FDown/></span>*/}
+          >
+            <span
+              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.selectedType)?.text || ''}<FDown
+              style={{marginLeft: 8}}/></span>
+          </FDropdownMenu>
         </div>
         <div>
           <span>状态：</span>
-          <Dropdown overlay={<FMenu
+          <FDropdownMenu
             options={resourceStatusOptions}
-            onClick={(value) => dispatch<OnChangeExhibitAction>({
+            onChange={(value) => dispatch<OnChangeExhibitAction>({
               type: 'nodeManagerPage/onChangeExhibit',
               payload: {
                 selectedStatus: value,
               },
             })}
-          />}>
+          >
             <span style={{cursor: 'pointer'}}>全部<FDown style={{marginLeft: 10}}/></span>
-          </Dropdown>
+          </FDropdownMenu>
         </div>
         <div>
           <FInput
@@ -177,34 +226,38 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
         </div>
       </Space>
     </div>
-    <div className={styles.body}>
-      <FTable
-        columns={columns}
-        dataSource={dataSource as any}
-        pagination={false}
-      />
-      <div style={{height: 20}}/>
-      <div className={styles.pagination}>
-        <FPagination
-          current={nodeManagerPage.pageCurrent}
-          onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({
-            type: 'nodeManagerPage/onChangeExhibit',
-            payload: {
-              pageCurrent: value,
-            },
-          })}
-          pageSize={nodeManagerPage.pageSize}
-          onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({
-            type: 'nodeManagerPage/onChangeExhibit',
-            payload: {
-              pageSize: value,
-            },
-          })}
-          total={nodeManagerPage.totalNum}
-        />
-      </div>
-    </div>
-  </div>);
+    {
+      nodeManagerPage.exhibitDataState === 'noSearchData'
+        ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
+        : (<div className={styles.body}>
+          <FTable
+            columns={columns}
+            dataSource={dataSource as any}
+            pagination={false}
+          />
+          <div style={{height: 20}}/>
+          <div className={styles.pagination}>
+            <FPagination
+              current={nodeManagerPage.pageCurrent}
+              onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({
+                type: 'nodeManagerPage/onChangeExhibit',
+                payload: {
+                  pageCurrent: value,
+                },
+              })}
+              pageSize={nodeManagerPage.pageSize}
+              onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({
+                type: 'nodeManagerPage/onChangeExhibit',
+                payload: {
+                  pageSize: value,
+                },
+              })}
+              total={nodeManagerPage.totalNum}
+            />
+          </div>
+        </div>)
+    }
+  </>);
 }
 
 export default connect(({nodeManagerPage}: ConnectState) => ({

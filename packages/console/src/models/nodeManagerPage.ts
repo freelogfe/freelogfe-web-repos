@@ -30,6 +30,7 @@ export type NodeManagerModelState = WholeReadonly<{
     version: string;
   }[];
   totalNum: number;
+  exhibitDataState: '' | 'noData' | 'noSearchData' | 'loading';
 
   themeInputFilter: string;
   themeList: {
@@ -40,6 +41,7 @@ export type NodeManagerModelState = WholeReadonly<{
     version: string;
     isOnline: boolean;
   }[];
+  themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -113,9 +115,11 @@ const Model: NodeManagerModelType = {
     pageSize: 10,
     exhibitList: [],
     totalNum: -1,
+    exhibitDataState: 'loading',
 
     themeInputFilter: '',
     themeList: [],
+    themeDataState: 'loading',
   },
   effects: {
     * fetchNodeInfo({}: FetchNodeInfoAction, {put, select}: EffectsCommandMap) {
@@ -147,6 +151,7 @@ const Model: NodeManagerModelType = {
         keywords: nodeManagerPage.exhibitInputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.selectedStatus),
         resourceType: nodeManagerPage.selectedType === '-1' ? undefined : nodeManagerPage.selectedType,
+        omitResourceType: 'theme',
         // isLoadPolicyInfo: 1,
       };
 
@@ -166,6 +171,9 @@ const Model: NodeManagerModelType = {
             resourceId: i.resourceInfo.resourceId,
           })),
           totalNum: data.totalItem,
+          exhibitDataState: data.totalItem !== 0 ? ''
+            : (nodeManagerPage.selectedType === '-1' && nodeManagerPage.selectedStatus === '2' && nodeManagerPage.exhibitInputFilter === '')
+              ? 'noData' : 'noSearchData',
         },
       });
     },
@@ -191,6 +199,7 @@ const Model: NodeManagerModelType = {
       });
     },
     * fetchThemes({}: FetchThemesAction, {call, put, select}: EffectsCommandMap) {
+      console.log(23423423, '0923jfdslk');
       const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
         nodeManagerPage,
       }));
@@ -222,7 +231,8 @@ const Model: NodeManagerModelType = {
             policies: [],
             // resourceId: i.resourceInfo.resourceId,
           })),
-          // totalNum: data.totalItem,
+          themeDataState: data.totalItem !== 0 ? ''
+            : nodeManagerPage.themeInputFilter === '' ? 'noData' : 'noSearchData',
         },
       });
     },

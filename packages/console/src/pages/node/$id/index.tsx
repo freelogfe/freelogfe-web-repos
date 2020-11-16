@@ -49,13 +49,11 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
       type: 'nodeManagerPage/fetchThemes',
     });
 
-
   }, [(match.params as any).id]);
 
   return (<FSiderLayout sider={<Sider/>}>
-    {/*<NoContent/>*/}
     {
-      nodeManagerPage.showTheme ?<Themes/>: <Exhibits/>
+      nodeManagerPage.showTheme ? <Themes/> : <Exhibits/>
     }
 
   </FSiderLayout>);
