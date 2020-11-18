@@ -60,12 +60,16 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   }[];
 
   pCustomAttrs: {
+    defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
+    option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
+
+    value: string; // 最终向服务端提交的value数据
+
     key: string;
-    value: string;
-    defaultValue?: string;
-    option?: string[];
+    newValue: string;  // 输入框显示的值
+    newValueError: string; // 输入框校验的实时提醒错误信息
     remark: string;
-    isEditing?: boolean;
+    isEditing: boolean; // 是否弹窗来编辑此属性
   }[];
 
   pAddCustomModalVisible: boolean;
@@ -201,9 +205,7 @@ const Model: ExhibitInfoPageModelType = {
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
 
       const disabledRewriteKeys = [
-        // ...Object.keys(data.resourceSystemProperty),
         ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
-        // ...data.presentableRewriteProperty.map((i: any) => i.key),
       ];
       // console.log(disabledRewriteKeys, 'disabledRewriteKeys3092hj2');
       yield put<ChangeAction>({
@@ -247,32 +249,39 @@ const Model: ExhibitInfoPageModelType = {
               key: s[0],
               value: s[1],
             })),
-            ...data.resourceCustomPropertyDescriptors.filter((rd: any) => rd.type === 'readonlyText')
+            ...data.resourceCustomPropertyDescriptors
+              .filter((rd: any) => rd.type === 'readonlyText')
               .map((rd: any) => ({
                 key: rd.key,
                 value: rd.defaultValue,
               })),
           ],
           pCustomAttrs: [
-            ...data.resourceCustomPropertyDescriptors
+            ...(data.resourceCustomPropertyDescriptors as any[])
               .filter((rd: any) => rd.type !== 'readonlyText')
-              .map((rd: any) => {
+              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
                 const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+                const value = prp ? prp.value : rd.defaultValue;
                 return {
-                  key: rd.key,
-                  value: prp ? prp.value : rd.defaultValue,
-                  defaultValue: rd.defaultValue,
+                  key: rd?.key,
                   option: rd.type === 'select' ? rd.candidateItems : [],
+                  defaultValue: rd.defaultValue,
+                  value: value,
                   remark: rd.remark,
+                  newValue: value,
+                  newValueError: '',
                   isEditing: false,
                 };
               }),
-            ...data.presentableRewriteProperty
+            ...(data.presentableRewriteProperty as any[])
               .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-              .map((pr: any) => ({
+              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
                 key: pr.key,
                 value: pr.value,
+                newValue: pr.value,
+                newValueError: '',
                 remark: pr.remark,
+                isEditing: false,
               })),
           ],
         },
@@ -348,7 +357,7 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
       const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
-      console.log(resource, '$#@$#$@#');
+      // console.log(resource, '$#@$#$@#');
       const params: UpdatePresentableParamsType = {
         presentableId: exhibitInfoPage.presentableId,
         resolveResources: [
@@ -366,14 +375,22 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateRewrite({}: UpdateRewriteAction, {select, call}: EffectsCommandMap) {
+    * updateRewrite({}: UpdateRewriteAction, {select, call, put}: EffectsCommandMap) {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      // console.log(exhibitInfoPage, 'exhibitInfoPage90jdf');
+
+      const pCustomAttrs: ExhibitInfoPageModelState['pCustomAttrs'] = exhibitInfoPage.pCustomAttrs
+        .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pc) => {
+          return {
+            ...pc,
+            value: pc.newValueError ? pc.value : pc.newValue,
+          };
+        });
+
       const params: UpdateRewritePropertyParamsType = {
         presentableId: exhibitInfoPage.presentableId,
-        rewriteProperty: exhibitInfoPage.pCustomAttrs
+        rewriteProperty: pCustomAttrs
           .filter((pc) => pc.value !== pc.defaultValue)
           .map((pc) => ({
             key: pc.key,
@@ -382,6 +399,14 @@ const Model: ExhibitInfoPageModelType = {
           })),
       };
       yield call(updateRewriteProperty, params);
+
+      // 同步数据
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pCustomAttrs,
+        }
+      })
     },
   },
   reducers: {

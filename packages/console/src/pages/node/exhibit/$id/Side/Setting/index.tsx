@@ -30,9 +30,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           }
           return {
             ...pCustomAttr,
-            value: value,
+            newValue: value,
+            newValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
           };
-        })
+        }),
       }
     });
     if (update) {
@@ -140,7 +141,8 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
               />)
               : (<FInput
                 className={styles.FInput}
-                value={pc.value}
+                value={pc.newValue}
+                errorText={pc.newValueError}
                 onChange={(e) => {
                   onChangeCustomAttrs({key: pc.key, value: e.target.value});
                 }}
@@ -161,6 +163,12 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           type: 'exhibitInfoPage/change',
           payload: {
             pAddCustomModalVisible: true,
+            pAddCustomKey: '',
+            pAddCustomKeyError: '',
+            pAddCustomValue: '',
+            pAddCustomValueError: '',
+            pAddCustomDescription: '',
+            pAddCustomDescriptionError: '',
           },
         })}
       />
@@ -172,6 +180,12 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
       width={560}
       visible={exhibitInfoPage.pAddCustomModalVisible || !!exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
       okText={'添加'}
+      okButtonProps={{
+        disabled:
+          !!exhibitInfoPage.pAddCustomKeyError || exhibitInfoPage.pAddCustomKey === ''
+          || !!exhibitInfoPage.pAddCustomValueError || exhibitInfoPage.pAddCustomValue === ''
+          || !!exhibitInfoPage.pAddCustomDescriptionError
+      }}
       onCancel={() => dispatch<ChangeAction>({
         type: 'exhibitInfoPage/change',
         payload: {
@@ -189,8 +203,8 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
             type: 'exhibitInfoPage/change',
             payload: {
               pCustomAttrs: exhibitInfoPage.pCustomAttrs
-                .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
-                .map((pCustomAtt) => {
+                // .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
+                .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
                   if (!pCustomAtt.isEditing) {
                     return pCustomAtt;
                   }
@@ -198,6 +212,8 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                     ...pCustomAtt,
                     key: exhibitInfoPage.pAddCustomKey,
                     value: exhibitInfoPage.pAddCustomValue,
+                    newValue: exhibitInfoPage.pAddCustomValue,
+                    newValueError: '',
                     remark: exhibitInfoPage.pAddCustomDescription,
                     isEditing: false,
                   };
@@ -214,9 +230,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                 {
                   key: exhibitInfoPage.pAddCustomKey,
                   value: exhibitInfoPage.pAddCustomValue,
-                  // defaultValue?: string;
-                  // option?: string[];
+                  newValue: exhibitInfoPage.pAddCustomValue,
+                  newValueError: '',
                   remark: exhibitInfoPage.pAddCustomDescription,
+                  isEditing: false,
                 }
               ],
               pAddCustomModalVisible: false,
@@ -238,12 +255,27 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <FInput
           className={styles.modalBodyInput}
           value={exhibitInfoPage.pAddCustomKey}
-          onChange={(e) => dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              pAddCustomKey: e.target.value,
-            },
-          })}
+          errorText={exhibitInfoPage.pAddCustomKeyError}
+          onChange={(e) => {
+            const baseKeys: string[] = exhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
+            const customKeys: string[] = exhibitInfoPage.pCustomAttrs
+              .filter((pc) => !pc.isEditing)
+              .map<string>((pc) => pc.key);
+            const value: string = e.target.value;
+            let pAddCustomKeyError: string = '';
+            if (!/^[a-zA-Z0-9_]{1,20}$/.test(value)) {
+              pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
+            } else if ([...baseKeys, ...customKeys].includes(value)) {
+              pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
+            }
+            dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                pAddCustomKey: value,
+                pAddCustomKeyError: pAddCustomKeyError,
+              },
+            });
+          }}
         />
         <div style={{height: 20}}/>
         <div className={styles.modalBodyTitle}>
@@ -255,12 +287,17 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <FInput
           className={styles.modalBodyInput}
           value={exhibitInfoPage.pAddCustomValue}
-          onChange={(e) => dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              pAddCustomValue: e.target.value,
-            },
-          })}
+          errorText={exhibitInfoPage.pAddCustomValueError}
+          onChange={(e) => {
+            const value: string = e.target.value;
+            dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                pAddCustomValue: value,
+                pAddCustomValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
+              },
+            });
+          }}
         />
         <div style={{height: 20}}/>
         <div>
@@ -270,12 +307,17 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <FInput
           className={styles.modalBodyInput}
           value={exhibitInfoPage.pAddCustomDescription}
-          onChange={(e) => dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              pAddCustomDescription: e.target.value,
-            },
-          })}
+          errorText={exhibitInfoPage.pAddCustomDescriptionError}
+          onChange={(e) => {
+            const value: string = e.target.value;
+            dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                pAddCustomDescription: value,
+                pAddCustomDescriptionError: (value.length > 50) ? '0~50个字符' : '',
+              },
+            });
+          }}
         />
       </div>
     </FModal>
