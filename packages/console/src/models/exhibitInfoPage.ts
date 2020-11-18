@@ -230,7 +230,7 @@ const Model: ExhibitInfoPageModelType = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
       const {data: data2} = yield call(info, parmas);
-      console.log(data2, 'data2309jdsfa');
+      // console.log(data2, 'data2309jdsfa');
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
