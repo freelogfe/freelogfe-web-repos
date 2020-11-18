@@ -70,8 +70,11 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
 
   pAddCustomModalVisible: boolean;
   pAddCustomKey: string;
+  pAddCustomKeyError: string;
   pAddCustomValue: string;
+  pAddCustomValueError: string;
   pAddCustomDescription: string;
+  pAddCustomDescriptionError: string;
 
 }>;
 
@@ -173,8 +176,11 @@ const Model: ExhibitInfoPageModelType = {
 
     pAddCustomModalVisible: false,
     pAddCustomKey: '',
+    pAddCustomKeyError: '',
     pAddCustomValue: '',
+    pAddCustomValueError: '',
     pAddCustomDescription: '',
+    pAddCustomDescriptionError: '',
   },
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {

@@ -78,7 +78,6 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
           <div className={styles.optionTitle}>
             <FContentText text={pc.key}/>
-
             {
               pc.defaultValue
                 ? (<FTextButton
@@ -219,8 +218,9 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                   // option?: string[];
                   remark: exhibitInfoPage.pAddCustomDescription,
                 }
-              ]
-            }
+              ],
+              pAddCustomModalVisible: false,
+            },
           });
         }
         dispatch<UpdateRewriteAction>({

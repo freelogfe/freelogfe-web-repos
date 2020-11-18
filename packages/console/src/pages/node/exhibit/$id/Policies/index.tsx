@@ -1,13 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleButton} from '@/components/FButton';
+import {FTitleText, FContentText, FTipText} from '@/components/FText';
+import {FCircleButton, FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import FSwitch from '@/components/FSwitch';
 import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhibitInfoPage";
 import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
+import {i18nMessage} from "@/utils/i18n";
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -33,36 +34,48 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
       })}/>
     </Space>
     <div style={{height: 20}}/>
-    <div className={styles.policies}>
+    {
+      exhibitInfoPage.policies.length === 0
+        ? (<div className={styles.empty}>
+          <FTipText
+            type="secondary"
+            text={i18nMessage('hint_add_authorization_plan')}
+          />
+          <div style={{height: 20}}/>
+          <FNormalButton>{i18nMessage('add_authorization_plan')}</FNormalButton>
+        </div>)
+        : (<div className={styles.policies}>
+          {
+            exhibitInfoPage.policies.map((p) => (<div
+              className={styles.policy}
+              key={p.id}
+            >
+              <div className={styles.title}>
+                <FContentText text={p.name}/>
+                <Space size={8}>
+                  {
+                    p.status === 1
+                      ? (<label style={{color: '#42C28C'}}>已启用</label>)
+                      : (<label style={{color: '#B4B6BA'}}>已搁置</label>)
+                  }
+                  <FSwitch
+                    checked={p.status === 1}
+                    onChange={(value) => dispatch<UpdateAPolicyAction>({
+                      type: 'exhibitInfoPage/updateAPolicy',
+                      payload: {id: p.id, status: value ? 1 : 0}
+                    })}
+                  />
+                </Space>
+              </div>
+              <div style={{height: 15}}/>
+              <pre>{p.text}</pre>
+            </div>))
+          }
 
-      {
-        exhibitInfoPage.policies.map((p) => (<div
-          className={styles.policy}
-          key={p.id}
-        >
-          <div className={styles.title}>
-            <FContentText text={p.name}/>
-            <Space size={8}>
-              {
-                p.status === 1
-                  ? (<label style={{color: '#42C28C'}}>已启用</label>)
-                  : (<label style={{color: '#B4B6BA'}}>已搁置</label>)
-              }
-              <FSwitch
-                checked={p.status === 1}
-                onChange={(value) => dispatch<UpdateAPolicyAction>({
-                  type: 'exhibitInfoPage/updateAPolicy',
-                  payload: {id: p.id, status: value ? 1 : 0}
-                })}
-              />
-            </Space>
-          </div>
-          <div style={{height: 15}}/>
-          <pre>{p.text}</pre>
-        </div>))
-      }
+        </div>)
+    }
 
-    </div>
+
     <FPolicyBuilder
       visible={exhibitInfoPage.addPolicyDrawerVisible}
       onCancel={() => dispatch<ChangeAction>({
