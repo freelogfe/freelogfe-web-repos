@@ -52,7 +52,9 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   pTitle: string;
   pInputTitle: string | null;
   pTags: string[];
-  pTagInput: string;
+  // pTagInput: string;
+
+  settingUnfold: boolean;
 
   pBaseAttrs: {
     key: string;
@@ -173,7 +175,9 @@ const Model: ExhibitInfoPageModelType = {
     pTitle: '',
     pInputTitle: null,
     pTags: [],
-    pTagInput: '',
+    // pTagInput: '',
+
+    settingUnfold: false,
 
     pBaseAttrs: [],
     pCustomAttrs: [],

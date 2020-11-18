@@ -12,6 +12,7 @@ import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FModal from "@/components/FModal";
+import {FDoubleDown, FDoubleUp} from "@/components/FIcons";
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -52,128 +53,145 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
     <FDropdownMenu options={[{value: '0.0.1', text: '0.0.1'}]}>
       <Space style={{cursor: 'pointer'}} size={15}><FContentText text={'1.1.1'}/><FSwap/></Space>
     </FDropdownMenu>
-    <div style={{height: 30}}/>
 
-    <FTitleText text={'基础属性'} type="form"/>
-    <div style={{height: 15}}/>
-    <div className={styles.attr}>
-      <table>
-        <tbody>
-        {
-          exhibitInfoPage.pBaseAttrs.map((pb) => (<tr key={pb.key}>
-            <td><FContentText text={pb.key}/></td>
-            <td><FContentText text={pb.value}/></td>
-          </tr>))
-        }
-        </tbody>
-      </table>
-    </div>
-    <div style={{height: 30}}/>
+    {
+      exhibitInfoPage.settingUnfold && (<>
+        <div style={{height: 30}}/>
 
-    <FTitleText text={'自定义选项'} type="form"/>
-
-    <div style={{height: 15}}/>
-
-    <div className={styles.options}>
-      {
-        exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
-          <div className={styles.optionTitle}>
-            <FContentText text={pc.key}/>
+        <FTitleText text={'基础属性'} type="form"/>
+        <div style={{height: 15}}/>
+        <div className={styles.attr}>
+          <table>
+            <tbody>
             {
-              pc.defaultValue
-                ? (<FTextButton
-                  theme="primary"
-                  onClick={() => {
-                    onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
-                  }}
-                ><FRedo/></FTextButton>)
-                : (<Space size={10}>
-                  <FTextButton
-                    theme="primary"
-                    onClick={() => {
-                      const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                      if (!editing) {
-                        return;
-                      }
-                      dispatch<ChangeAction>({
-                        type: 'exhibitInfoPage/change',
-                        payload: {
-                          pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                            ...pCustomAttr,
-                            isEditing: pCustomAttr.key === pc.key,
-                          })),
-                          pAddCustomKey: editing.key,
-                          pAddCustomValue: editing.value,
-                          pAddCustomDescription: editing.remark,
-                        },
-                      });
-                    }}
-                  ><FEdit/></FTextButton>
-                  <FDelete
-                    style={{color: '#EE4040', cursor: 'pointer'}}
-                    onClick={() => {
-                      dispatch<ChangeAction>({
-                        type: 'exhibitInfoPage/change',
-                        payload: {
-                          pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
-                            return pc.key !== pCustomAttr.key;
-                          }),
-                        },
-                      });
-                      dispatch<UpdateRewriteAction>({
-                        type: 'exhibitInfoPage/updateRewrite',
-                      });
-                    }}
-                  />
-                </Space>)
+              exhibitInfoPage.pBaseAttrs.map((pb) => (<tr key={pb.key}>
+                <td><FContentText text={pb.key}/></td>
+                <td><FContentText text={pb.value}/></td>
+              </tr>))
             }
-          </div>
-          <div style={{height: 5}}/>
-          {
-            (pc.option && pc.option.length > 0)
-              ? (<FSelect
-                className={styles.FSelect}
-                value={pc.value}
-                dataSource={pc.option.map((d) => ({value: d, title: d}))}
-                onChange={(value) => {
-                  onChangeCustomAttrs({key: pc.key, value: value}, true);
-                }}
-              />)
-              : (<FInput
-                className={styles.FInput}
-                value={pc.newValue}
-                errorText={pc.newValueError}
-                onChange={(e) => {
-                  onChangeCustomAttrs({key: pc.key, value: e.target.value});
-                }}
-                onBlur={() => dispatch<UpdateRewriteAction>({
-                  type: 'exhibitInfoPage/updateRewrite',
-                })}
-              />)
-          }
-        </div>))
-      }
+            </tbody>
+          </table>
+        </div>
+        <div style={{height: 30}}/>
 
-    </div>
-    <div style={{height: 20}}/>
-    <Space className={styles.addCustomTitle}>
-      <FCircleButton
-        theme="text"
-        onClick={() => dispatch<ChangeAction>({
+        <FTitleText text={'自定义选项'} type="form"/>
+
+        <div style={{height: 15}}/>
+
+        <div className={styles.options}>
+          {
+            exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
+              <div className={styles.optionTitle}>
+                <FContentText text={pc.key}/>
+                {
+                  pc.defaultValue
+                    ? (<FTextButton
+                      theme="primary"
+                      onClick={() => {
+                        onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                      }}
+                    ><FRedo/></FTextButton>)
+                    : (<Space size={10}>
+                      <FTextButton
+                        theme="primary"
+                        onClick={() => {
+                          const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                          if (!editing) {
+                            return;
+                          }
+                          dispatch<ChangeAction>({
+                            type: 'exhibitInfoPage/change',
+                            payload: {
+                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                                ...pCustomAttr,
+                                isEditing: pCustomAttr.key === pc.key,
+                              })),
+                              pAddCustomKey: editing.key,
+                              pAddCustomValue: editing.value,
+                              pAddCustomDescription: editing.remark,
+                            },
+                          });
+                        }}
+                      ><FEdit/></FTextButton>
+                      <FDelete
+                        style={{color: '#EE4040', cursor: 'pointer'}}
+                        onClick={() => {
+                          dispatch<ChangeAction>({
+                            type: 'exhibitInfoPage/change',
+                            payload: {
+                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                                return pc.key !== pCustomAttr.key;
+                              }),
+                            },
+                          });
+                          dispatch<UpdateRewriteAction>({
+                            type: 'exhibitInfoPage/updateRewrite',
+                          });
+                        }}
+                      />
+                    </Space>)
+                }
+              </div>
+              <div style={{height: 5}}/>
+              {
+                (pc.option && pc.option.length > 0)
+                  ? (<FSelect
+                    className={styles.FSelect}
+                    value={pc.value}
+                    dataSource={pc.option.map((d) => ({value: d, title: d}))}
+                    onChange={(value) => {
+                      onChangeCustomAttrs({key: pc.key, value: value}, true);
+                    }}
+                  />)
+                  : (<FInput
+                    className={styles.FInput}
+                    value={pc.newValue}
+                    errorText={pc.newValueError}
+                    onChange={(e) => {
+                      onChangeCustomAttrs({key: pc.key, value: e.target.value});
+                    }}
+                    onBlur={() => dispatch<UpdateRewriteAction>({
+                      type: 'exhibitInfoPage/updateRewrite',
+                    })}
+                  />)
+              }
+            </div>))
+          }
+
+        </div>
+        <div style={{height: 20}}/>
+        <Space className={styles.addCustomTitle}>
+          <FCircleButton
+            theme="text"
+            onClick={() => dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                pAddCustomModalVisible: true,
+                pAddCustomKey: '',
+                pAddCustomKeyError: '',
+                pAddCustomValue: '',
+                pAddCustomValueError: '',
+                pAddCustomDescription: '',
+                pAddCustomDescriptionError: '',
+              },
+            })}
+          />
+          <span>添加自定义选项</span>
+        </Space>
+      </>)
+    }
+
+    <div style={{height: 30}}/>
+    <div style={{display: 'flex', justifyContent: 'center'}}>
+      <FTextButton onClick={() => {
+        dispatch<ChangeAction>({
           type: 'exhibitInfoPage/change',
           payload: {
-            pAddCustomModalVisible: true,
-            pAddCustomKey: '',
-            pAddCustomKeyError: '',
-            pAddCustomValue: '',
-            pAddCustomValueError: '',
-            pAddCustomDescription: '',
-            pAddCustomDescriptionError: '',
+            settingUnfold: !exhibitInfoPage.settingUnfold,
           },
-        })}
-      />
-      <span>添加自定义选项</span>
-    </Space>
+        });
+      }}>{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextButton>
+    </div>
 
     <FModal
       title={'添加自定义选项'}

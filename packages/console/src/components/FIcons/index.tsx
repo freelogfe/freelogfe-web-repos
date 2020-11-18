@@ -16,6 +16,8 @@ import FCopy from './FCopy';
 import FCloudUpload from './FCloudUpload';
 import FCheck from './FCheck';
 import FLoading from './FLoading';
+import FDoubleDown from './FDoubleDown';
+// import FLoading from './FLoading';
 
 export {
   FDelete,
@@ -29,6 +31,7 @@ export {
   FExclamation,
   FClose,
   FDoubleUp,
+  FDoubleDown,
   FPlus,
   FWarning,
   FCopy,
