@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FTextButton} from '@/components/FButton';
+import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Drawer, Row, Space, Col} from 'antd';
 import FTable from '@/components/FTable';
 import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
@@ -11,10 +11,14 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import FPagination from '@/components/FPagination';
-import {DeleteObjectAction, OnChangePaginationAction} from '@/models/storageHomePage';
+import {DeleteObjectAction, OnChangePaginationAction, UploadFilesAction} from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
 import {FDelete} from "@/components/FIcons";
+import FNoDataTip from "@/components/FNoDataTip";
+import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
+import FUpload from "@/components/FUpload";
+import {RcFile} from "antd/lib/upload/interface";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -25,6 +29,18 @@ function Content({storage, dispatch}: ContentProps) {
 
   const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
   const [hoverRecord, setHoverRecord] = React.useState<any>(null);
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 170);
+  }
 
   const columns = [
     {
@@ -126,63 +142,71 @@ function Content({storage, dispatch}: ContentProps) {
 
     <Header/>
 
-    <div className={styles.body}>
-      <FTable
-        columns={columns}
-        dataSource={storage.objectList}
-        pagination={false}
-        onRow={(record) => {
-          return {
-            // onClick: event => {
-            // }, // 点击行
-            // onDoubleClick: event => {
-            // },
-            // onContextMenu: event => {
-            // },
-            onMouseEnter: (event: any) => {
-              // console.log(event, record);
-              setHoverRecord(record);
-            }, // 鼠标移入行
-            onMouseLeave: event => {
-              setHoverRecord(null);
-            },
-          };
-        }}
-      />
-      {
-        storage.total > 0 && (<div className={styles.pagination}>
-          <FPagination
-            pageSize={storage.pageSize}
-            current={storage.pageCurrent}
-            total={storage.total}
-            onChangeCurrent={(value) => dispatch<OnChangePaginationAction>({
-              type: 'storageHomePage/onChangePaginationAction',
-              payload: {
-                pageCurrent: value,
-              },
-            })}
-            onChangePageSize={(value) => dispatch<OnChangePaginationAction>({
-              type: 'storageHomePage/onChangePaginationAction',
-              payload: {
-                pageSize: value,
-              },
-            })}
+    {
+      storage.objectList.length === 0
+        ? (<FNoDataTip
+          height={minHeight}
+          tipText={'当前Bucket还没有上传任何对象'}
+          btn={<FUpload
+            showUploadList={false}
+            multiple={true}
+            beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+              // console.log(file, FileList, 'beforeUpload 24ew890sio;');
+              if (file === fileList[fileList.length - 1]) {
+                // console.log('0923uiojfdaslk');
+                dispatch<UploadFilesAction>({
+                  type: 'storageHomePage/uploadFiles',
+                  payload: fileList,
+                });
+              }
+              return false;
+            }}><FNormalButton>上传对象</FNormalButton></FUpload>}
+        />)
+        : (<div className={styles.body}>
+          <FTable
+            columns={columns}
+            dataSource={storage.objectList}
+            pagination={false}
+            onRow={(record) => {
+              return {
+                onMouseEnter: (event: any) => {
+                  setHoverRecord(record);
+                }, // 鼠标移入行
+                onMouseLeave: event => {
+                  setHoverRecord(null);
+                },
+              };
+            }}
           />
+          {
+            storage.total > 0 && (<div className={styles.pagination}>
+              <FPagination
+                pageSize={storage.pageSize}
+                current={storage.pageCurrent}
+                total={storage.total}
+                onChangeCurrent={(value) => dispatch<OnChangePaginationAction>({
+                  type: 'storageHomePage/onChangePaginationAction',
+                  payload: {
+                    pageCurrent: value,
+                  },
+                })}
+                onChangePageSize={(value) => dispatch<OnChangePaginationAction>({
+                  type: 'storageHomePage/onChangePaginationAction',
+                  payload: {
+                    pageSize: value,
+                  },
+                })}
+              />
+            </div>)
+          }
+
         </div>)
-      }
+    }
 
-    </div>
+
     <Details/>
-    {/*<Drawer*/}
-    {/*  title={'编辑对象信息'}*/}
-    {/*  // onClose={() => setModalVisible(false)}*/}
-    {/*  visible={objectInfoVisible}*/}
-    {/*  width={720}*/}
-    {/*  bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}*/}
-    {/*>*/}
 
-    {/*  /!*<Market/>*!/*/}
-    {/*</Drawer>*/}
+    <FUploadTasksPanel/>
   </div>);
 }
 

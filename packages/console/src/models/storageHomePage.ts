@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import {RcFile} from "antd/lib/upload/interface";
 import {formatDateTime, humanizeSize} from "@/utils/format";
+import fMessage from "@/components/fMessage";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -103,6 +104,11 @@ export interface DeleteObjectAction extends AnyAction {
   payload: string;
 }
 
+export interface UploadFilesAction extends AnyAction {
+  type: 'storageHomePage/uploadFiles';
+  payload: RcFile[];
+}
+
 interface StorageHomePageModelType {
   namespace: 'storageHomePage';
   state: StorageHomePageModelState;
@@ -116,6 +122,7 @@ interface StorageHomePageModelType {
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
     onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
+    uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -329,7 +336,32 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
-    }
+    },
+    * uploadFiles({payload}: UploadFilesAction, {select, put}: EffectsCommandMap) {
+      console.log('!!!!!!!!!');
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
+      const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
+      if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
+        fMessage('超出储存', 'warning');
+        return;
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          uploadTaskQueue: [
+            ...payload.map((fo) => ({
+              name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
+              file: fo,
+            })),
+            ...storageHomePage.uploadTaskQueue,
+          ],
+          uploadPanelOpen: true,
+          uploadPanelVisible: true,
+        }
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {

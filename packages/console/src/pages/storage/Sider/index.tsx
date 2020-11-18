@@ -68,7 +68,7 @@ function Sider({storage, dispatch}: SiderProps) {
               }}
             >
               <span>{b.bucketName}</span>
-              {storage.activatedBucket === b.bucketName && <FDelete onClick={() => {
+              {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <FDelete onClick={() => {
                 dispatch<DeleteBucketByNameAction>({
                   type: 'storageHomePage/deleteBucketByName',
                   payload: b.bucketName,

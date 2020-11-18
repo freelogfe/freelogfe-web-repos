@@ -5,7 +5,7 @@ import {Space} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, StorageHomePageModelState} from '@/models/storageHomePage';
+import {ChangeAction, StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
 import FUploadTasksPanel, {FUploadTasksPanelProps} from "@/pages/storage/containers/FUploadTasksPanel";
@@ -44,25 +44,11 @@ function Header({dispatch, storage}: HeaderProps) {
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(file, FileList, 'beforeUpload 24ew890sio;');
         if (file === fileList[fileList.length - 1]) {
-          const totalSize: number = fileList.map((f) => f.size).reduce((p, c) => p + c, 0);
-          if (storage.totalStorage - storage.usedStorage < totalSize) {
-            fMessage('超出储存', 'warning');
-          } else {
-            dispatch<ChangeAction>({
-              type: 'storageHomePage/change',
-              payload: {
-                uploadTaskQueue: [
-                  ...fileList.map((fo) => ({
-                    name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
-                    file: fo,
-                  })),
-                  ...storage.uploadTaskQueue,
-                ],
-                uploadPanelOpen: true,
-                uploadPanelVisible: true,
-              }
-            });
-          }
+          // console.log('0923uiojfdaslk');
+          dispatch<UploadFilesAction>({
+            type: 'storageHomePage/uploadFiles',
+            payload: fileList,
+          });
         }
         return false;
       }}
@@ -70,7 +56,6 @@ function Header({dispatch, storage}: HeaderProps) {
       <FNormalButton>上传对象</FNormalButton>
     </FUpload>
 
-    <FUploadTasksPanel/>
   </div>);
 }
 

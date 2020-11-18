@@ -7,11 +7,12 @@ interface FNoDataTipProps {
   height: number;
   tipText: string;
   btnText?: string;
+  btn?: React.ReactNode;
 
   onClick?(): void;
 }
 
-function FNoDataTip({height, tipText, btnText, onClick}: FNoDataTipProps) {
+function FNoDataTip({height, tipText, btnText, btn, onClick}: FNoDataTipProps) {
   return (<div
     className={styles.noData}
     style={{height}}
@@ -22,6 +23,7 @@ function FNoDataTip({height, tipText, btnText, onClick}: FNoDataTipProps) {
         type="primary"
         text={tipText}
       />
+      
       {
         btnText && (<>
           <div style={{height: 30}}/>
@@ -29,6 +31,13 @@ function FNoDataTip({height, tipText, btnText, onClick}: FNoDataTipProps) {
             className={styles.btn}
             onClick={() => onClick && onClick()}
           >{btnText}</FNormalButton>
+        </>)
+      }
+
+      {
+        btn && (<>
+          <div style={{height: 30}}/>
+          {btn}
         </>)
       }
     </div>
