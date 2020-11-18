@@ -17,7 +17,7 @@ function Relation({exhibitInfoPage}: RelationProps) {
     <div className={styles.cover} style={{cursor: 'default'}}>
       <img
         alt=""
-        src={imgSrc}
+        src={exhibitInfoPage.resourceCover || imgSrc}
       />
     </div>
 

@@ -22,8 +22,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   // info: null | {};
 
   nodeName: string;
-  resourceName: string;
-  resourceType: string;
+  pName: string;
   isOnline: boolean;
 
   policies: {
@@ -90,6 +89,10 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   pAddCustomDescription: string;
   pAddCustomDescriptionError: string;
 
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  resourceCover: string;
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -176,13 +179,11 @@ const Model: ExhibitInfoPageModelType = {
     presentableId: '',
 
     nodeName: '',
-    resourceName: '',
-    resourceType: '',
-    isOnline: false,
+    pName: '',
 
+    isOnline: false,
     policies: [],
     addPolicyDrawerVisible: false,
-
     associated: [],
 
     pCover: '',
@@ -205,6 +206,11 @@ const Model: ExhibitInfoPageModelType = {
     pAddCustomValueError: '',
     pAddCustomDescription: '',
     pAddCustomDescriptionError: '',
+
+    resourceId: '',
+    resourceName: '',
+    resourceType: '',
+    resourceCover: '',
   },
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
@@ -224,7 +230,7 @@ const Model: ExhibitInfoPageModelType = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
       const {data: data2} = yield call(info, parmas);
-      // console.log(data2, 'data2309jdsfa');
+      console.log(data2, 'data2309jdsfa');
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
@@ -238,8 +244,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           nodeName: nodeName,
-          resourceName: data.presentableName,
-          resourceType: data.resourceInfo.resourceType,
+          pName: data.presentableName,
           isOnline: data.onlineStatus === 1,
           policies: data.policies.map((p: any) => ({
             id: p.policyId,
@@ -313,6 +318,11 @@ const Model: ExhibitInfoPageModelType = {
                 isEditing: false,
               })),
           ],
+
+          resourceId: data2.resourceId,
+          resourceName: data2.resourceName,
+          resourceType: data2.resourceType,
+          resourceCover: data2.coverImages[0] || '',
         },
       })
     },

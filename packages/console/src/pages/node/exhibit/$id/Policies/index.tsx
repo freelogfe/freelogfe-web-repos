@@ -39,7 +39,8 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
         ? (<div className={styles.empty}>
           <FTipText
             type="secondary"
-            text={i18nMessage('hint_add_authorization_plan')}
+            // text={i18nMessage('hint_add_authorization_plan')}
+            text={'无策略'}
           />
           <div style={{height: 20}}/>
           <FNormalButton>{i18nMessage('add_authorization_plan')}</FNormalButton>

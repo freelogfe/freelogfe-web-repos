@@ -41,7 +41,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
-          <FTitleText text={exhibitInfoPage.resourceName}/>
+          <FTitleText text={exhibitInfoPage.pName}/>
         </div>
         <Space size={20}>
           <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
