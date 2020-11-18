@@ -16,6 +16,7 @@ import {
 import {ConnectState} from '@/models/connect';
 import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
+import {formatDateTime} from "@/utils/format";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -262,7 +263,7 @@ const Model: ExhibitInfoPageModelType = {
               status: c.status,
               id: c.contractId,
               text: c.policyText,
-              createTime: c.createDate,
+              createTime: formatDateTime(c.createDate),
               policyId: c.policyId,
             })),
             policies: r.policies.map((p) => ({
