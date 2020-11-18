@@ -6,7 +6,12 @@ import {Space} from "antd";
 import {FDelete, FEdit, FSwap} from "@/components/FIcons";
 import {FCircleButton, FTextButton} from "@/components/FButton";
 import FRedo from "@/components/FIcons/FRedo";
-import {ChangeAction, ExhibitInfoPageModelState, UpdateRewriteAction} from "@/models/exhibitInfoPage";
+import {
+  ChangeAction,
+  ChangeVersionAction,
+  ExhibitInfoPageModelState,
+  UpdateRewriteAction
+} from "@/models/exhibitInfoPage";
 import FSelect from "@/components/FSelect";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
@@ -50,8 +55,16 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
 
     <FTitleText text={'展示版本'} type="form"/>
     <div style={{height: 15}}/>
-    <FDropdownMenu options={[{value: '0.0.1', text: '0.0.1'}]}>
-      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={'1.1.1'}/><FSwap/></Space>
+    <FDropdownMenu
+      options={[...exhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}
+      onChange={(value) => {
+        dispatch<ChangeVersionAction>({
+          type: 'exhibitInfoPage/changeVersion',
+          payload: value,
+        });
+      }}
+    >
+      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={exhibitInfoPage.version}/><FSwap/></Space>
     </FDropdownMenu>
 
     {

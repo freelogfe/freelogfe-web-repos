@@ -127,6 +127,17 @@ export function presentableList(params: PresentableListParamsType) {
   });
 }
 
+// 切换展品版本
+export interface PresentablesVersionParamsType {
+  presentableId: string;
+  version: string;
+}
+
+export function presentablesVersion({presentableId, ...params}: PresentablesVersionParamsType) {
+  return request.put(`/v2/presentables/${presentableId}/version`, params);
+}
+
+
 // 设置展品自定义属性
 export interface UpdateRewritePropertyParamsType {
   presentableId: string;

@@ -3,13 +3,19 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {
   presentableDetails,
-  PresentableDetailsParamsType1, PresentablesOnlineParamsType, presentablesOnlineStatus,
+  PresentableDetailsParamsType1,
+  PresentablesOnlineParamsType,
+  presentablesOnlineStatus,
+  presentablesVersion,
+  PresentablesVersionParamsType,
   updatePresentable,
-  UpdatePresentableParamsType, updateRewriteProperty, UpdateRewritePropertyParamsType
+  UpdatePresentableParamsType,
+  updateRewriteProperty,
+  UpdateRewritePropertyParamsType
 } from '@/services/presentables';
 import {ConnectState} from '@/models/connect';
 import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
-import {batchInfo, BatchInfoParamsType} from '@/services/resources';
+import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -52,7 +58,9 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   pTitle: string;
   pInputTitle: string | null;
   pTags: string[];
-  // pTagInput: string;
+
+  allVersions: string[];
+  version: string;
 
   settingUnfold: boolean;
 
@@ -136,6 +144,11 @@ export interface UpdateRewriteAction extends AnyAction {
   // payload:
 }
 
+export interface ChangeVersionAction extends AnyAction {
+  type: 'exhibitInfoPage/changeVersion';
+  payload: string;
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
@@ -147,6 +160,7 @@ export interface ExhibitInfoPageModelType {
     updateStatus: (action: UpdateStatusAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
     updateRewrite: (action: UpdateRewriteAction, effects: EffectsCommandMap) => void;
+    changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -175,7 +189,9 @@ const Model: ExhibitInfoPageModelType = {
     pTitle: '',
     pInputTitle: null,
     pTags: [],
-    // pTagInput: '',
+
+    allVersions: [],
+    version: '',
 
     settingUnfold: false,
 
@@ -203,7 +219,13 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(presentableDetails, params);
-      // console.log(data, 'data2309jdsfa');
+
+      const parmas: InfoParamsType = {
+        resourceIdOrName: data.resourceInfo.resourceId,
+      };
+      const {data: data2} = yield call(info, parmas);
+      // console.log(data2, 'data2309jdsfa');
+
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
       const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
@@ -247,6 +269,9 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.coverImages[0] || '',
           pTitle: data.presentableTitle,
           pTags: data.tags,
+
+          allVersions: data2.resourceVersions.map((d2: any) => d2.version),
+          version: data.version,
 
           pBaseAttrs: [
             ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
@@ -412,6 +437,19 @@ const Model: ExhibitInfoPageModelType = {
         }
       })
     },
+    * changeVersion({payload}: ChangeVersionAction, {call, put, select}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
+      const params: PresentablesVersionParamsType = {
+        presentableId: exhibitInfoPage.presentableId,
+        version: payload,
+      };
+      yield call(presentablesVersion, params);
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {
