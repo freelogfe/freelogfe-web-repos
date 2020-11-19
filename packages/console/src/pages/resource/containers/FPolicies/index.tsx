@@ -113,6 +113,10 @@ function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
 
     <FPolicyBuilderDrawer
       visible={auth.policyEditorVisible}
+      alreadyHas={info?.policies?.map((ip) => ({
+        title: ip.policyName,
+        text: ip.policyText,
+      }))}
       onCancel={closeNewVisible}
       onConfirm={({title, text}) => {
         dispatch<UpdatePoliciesAction>({
