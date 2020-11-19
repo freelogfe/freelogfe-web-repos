@@ -15,23 +15,18 @@ interface PoliciesProps {
   exhibitInfoPage: ExhibitInfoPageModelState;
 }
 
-const text = 'for public:\n' +
-  '  initial:\n' +
-  '    active\n' +
-  '    recontractable\n' +
-  '    presentable\n' +
-  '    terminate';
-
 function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
   return (<div>
     <Space size={15}>
       <FTitleText text={'授权策略'} type="h3"/>
-      <FCircleButton onClick={() => dispatch<ChangeAction>({
-        type: 'exhibitInfoPage/change',
-        payload: {
-          addPolicyDrawerVisible: true,
-        }
-      })}/>
+      {
+        exhibitInfoPage.policies.length !== 0 && (<FCircleButton onClick={() => dispatch<ChangeAction>({
+          type: 'exhibitInfoPage/change',
+          payload: {
+            addPolicyDrawerVisible: true,
+          }
+        })}/>)
+      }
     </Space>
     <div style={{height: 20}}/>
     {
@@ -43,7 +38,12 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
             text={'无策略'}
           />
           <div style={{height: 20}}/>
-          <FNormalButton>{i18nMessage('add_authorization_plan')}</FNormalButton>
+          <FNormalButton onClick={() => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              addPolicyDrawerVisible: true,
+            }
+          })}>{i18nMessage('add_authorization_plan')}</FNormalButton>
         </div>)
         : (<div className={styles.policies}>
           {
@@ -72,13 +72,15 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
               <pre>{p.text}</pre>
             </div>))
           }
-
         </div>)
     }
 
-
     <FPolicyBuilder
       visible={exhibitInfoPage.addPolicyDrawerVisible}
+      alreadyHas={exhibitInfoPage.policies.map((p) => ({
+        title: p.name,
+        text: p.text,
+      }))}
       onCancel={() => dispatch<ChangeAction>({
         type: 'exhibitInfoPage/change',
         payload: {
@@ -86,7 +88,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
         }
       })}
       onConfirm={({title, text}) => {
-        console.log(text, title, '90ijdsflfdslkk');
+        // console.log(text, title, '90ijdsflfdslkk');
         dispatch<AddAPolicyAction>({
           type: 'exhibitInfoPage/addAPolicy',
           payload: {text, title},

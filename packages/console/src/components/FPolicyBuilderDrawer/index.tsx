@@ -10,18 +10,42 @@ import PolicyTemplates from "./PolicyTemplates";
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
+  alreadyHas?: {
+    title: string;
+    text: string;
+  }[];
 
   onConfirm?({title, text}: { title: string, text: string }): void;
 
   onCancel?(): void;
 }
 
-function FPolicyBuilder({visible = false, onCancel, onConfirm}: FPolicyBuilderDrawerProps) {
+function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPolicyBuilderDrawerProps) {
 
   const [title, setTitle] = React.useState<string>('');
+  const [titleError, setTitleError] = React.useState<string>('');
   const [text, setText] = React.useState<string>('');
+  const [textError, setTextError] = React.useState<string>('');
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
+  const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
+  const [usedTexts, setUsedTexts] = React.useState<string[]>([]);
 
+  React.useEffect(() => {
+    setUsedTitles(alreadyHas?.map<string>((ah) => ah.title) || []);
+    setUsedTexts(alreadyHas?.map<string>((ah) => ah.text) || []);
+  }, [alreadyHas]);
+
+  function onChangeTitleInput(value: string) {
+    // const value: string = e.target.value;
+    setTitle(value);
+    setTitleError(verifyTitle(value, usedTitles));
+  }
+
+  function onChangeTextInput(value: string) {
+    // const value: string = e.target.value;
+    setText(value);
+    setTextError(verifyText(value, usedTexts));
+  }
 
   return (<Drawer
     title={'添加授权策略'}
@@ -33,14 +57,27 @@ function FPolicyBuilder({visible = false, onCancel, onConfirm}: FPolicyBuilderDr
     <FInput
       className={styles.newTitle}
       value={title}
-      onChange={(e) => setTitle(e.target.value)}
+      // errorText={titleError}
+      onChange={(e) => {
+        onChangeTitleInput(e.target.value);
+      }}
       placeholder={'请输入授权策略名称'}
     />
+    {titleError && <>
+      <div style={{height: 5}}/>
+      <div className={styles.textError}>{titleError}</div>
+    </>}
     <div style={{height: 20}}/>
     <FCodemirror
       value={text}
-      onChange={(value) => setText(value)}
+      onChange={(value) => {
+        onChangeTextInput(value);
+      }}
     />
+    {textError && <>
+      <div style={{height: 5}}/>
+      <div className={styles.textError}>{textError}</div>
+    </>}
     <div style={{height: 10}}/>
     <div className={styles.footer}>
       <a
@@ -53,12 +90,15 @@ function FPolicyBuilder({visible = false, onCancel, onConfirm}: FPolicyBuilderDr
       </a>
       <Space size={30}>
         <FTextButton onClick={() => onCancel && onCancel()}>取消</FTextButton>
-        <FNormalButton onClick={() => {
-          onConfirm && onConfirm({
-            title,
-            text,
-          });
-        }}>确定</FNormalButton>
+        <FNormalButton
+          onClick={() => {
+            onConfirm && onConfirm({
+              title,
+              text,
+            });
+          }}
+          disabled={title === '' || text === '' || !!titleError || !!textError}
+        >确定</FNormalButton>
       </Space>
     </div>
 
@@ -70,8 +110,9 @@ function FPolicyBuilder({visible = false, onCancel, onConfirm}: FPolicyBuilderDr
     >
       <PolicyTemplates
         onSelect={(p) => {
-          setTitle(p.title);
-          setText(p.text);
+          // setTitle(p.title);
+          onChangeTitleInput(p.title);
+          onChangeTextInput(p.text);
           setTemplateVisible(false);
         }}/>
     </Drawer>
@@ -79,3 +120,25 @@ function FPolicyBuilder({visible = false, onCancel, onConfirm}: FPolicyBuilderDr
 }
 
 export default FPolicyBuilder;
+
+function verifyTitle(title: string, allTitles: string[]): string {
+  let error: string = '';
+  if (title === '') {
+    error = '请输入标题';
+  } else if (title.length > 20) {
+    error = '不错过20个字符';
+  } else if (allTitles.includes(title)) {
+    error = '标题已存在';
+  }
+  return error;
+}
+
+function verifyText(text: string, allTexts: string[]): string {
+  let error: string = '';
+  if (text === '') {
+    error = '请输入内容';
+  } else if (allTexts.includes(text)) {
+    error = '内容已存在';
+  }
+  return error;
+}
