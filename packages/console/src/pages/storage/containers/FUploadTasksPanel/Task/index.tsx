@@ -24,9 +24,7 @@ interface TaskStates {
   progress: number;
 }
 
-let cancels: {
-  [key: string]: Canceler;
-} = {};
+let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
 function Task({name, file, sameName, onSuccess}: TaskProps) {
 
@@ -44,16 +42,13 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
       },
     }, true);
-    // setCancel(c);
-    cancels[file.uid] = cancel;
 
-    // setTimeout(() => {
-    //   c()
-    // }, 2000);
+    cancels.set(file.uid, cancel);
 
     const {data} = await promise;
 
     setStatus('success');
+
     onSuccess && onSuccess({objectName: name, sha1: data.sha1});
   }
 
@@ -67,8 +62,9 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
       status === 'uploading' && (<Uploading
         progress={progress}
         cancel={() => {
-          console.log(name, file, cancels, '#########');
-          cancels[file.uid] && cancels[file.uid](file.uid)
+          // console.log(name, file, cancels, '#########');
+          const c = cancels.get(file.uid);
+          c && c();
         }}
       />)
     }
@@ -89,10 +85,10 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
 
 export default Task;
 
-interface TaskInfo {
-  uid: string;
-  file: RcFile;
-  state: 'uploading' | 'success' | 'canceled' | 'failure' | ' duplication';
-  canceler: Canceler;
-  progress: number;
-}
+// interface TaskInfo {
+//   uid: string;
+//   file: RcFile;
+//   state: 'uploading' | 'success' | 'canceled' | 'failure' | ' duplication';
+//   canceler: Canceler;
+//   progress: number;
+// }
