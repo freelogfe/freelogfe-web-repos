@@ -19,6 +19,7 @@ import FNoDataTip from "@/components/FNoDataTip";
 import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
+import FLoadingTip from "@/components/FLoadingTip";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -27,7 +28,7 @@ interface ContentProps {
 
 function Content({storage, dispatch}: ContentProps) {
 
-  const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
+  // const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
   const [hoverRecord, setHoverRecord] = React.useState<any>(null);
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
 
@@ -143,7 +144,11 @@ function Content({storage, dispatch}: ContentProps) {
     <Header/>
 
     {
-      storage.objectList.length === 0
+      storage.total === -1 && (<FLoadingTip height={minHeight}/>)
+    }
+
+    {
+      storage.total === 0
         ? (<FNoDataTip
           height={minHeight}
           tipText={'当前Bucket还没有上传任何对象'}
@@ -202,7 +207,6 @@ function Content({storage, dispatch}: ContentProps) {
 
         </div>)
     }
-
 
     <Details/>
 
