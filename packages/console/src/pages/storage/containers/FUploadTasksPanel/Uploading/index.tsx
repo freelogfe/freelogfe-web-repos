@@ -4,12 +4,15 @@ import {Progress, Space} from "antd";
 import {FContentText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
 import {CloseOutlined} from '@ant-design/icons';
+import {Canceler} from "axios";
 
 interface UploadingProps {
   progress: number;
+
+  cancel?(): void
 }
 
-function Uploading({progress}: UploadingProps) {
+function Uploading({progress, cancel}: UploadingProps) {
   return (<div className={styles.Uploading}>
     <Space
       className={styles.status}
@@ -21,7 +24,7 @@ function Uploading({progress}: UploadingProps) {
       </div>
     </Space>
     <div className={styles.action}>
-      <FTextButton>
+      <FTextButton onClick={() => cancel && cancel()}>
         <CloseOutlined/>
       </FTextButton>
     </div>

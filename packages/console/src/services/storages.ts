@@ -1,5 +1,5 @@
 import request, {apiHost} from '@/utils/request';
-import {AxiosRequestConfig} from 'axios';
+import {AxiosRequestConfig, Canceler} from 'axios';
 
 // 创建bucket(系统级的bucket不允许创建)
 export interface CreateBucketParamsType {
@@ -135,14 +135,30 @@ interface UploadFileParamsType {
   resourceType?: string;
 }
 
-export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestConfig) {
+export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestConfig, returnCancel: boolean = false): Promise<any> | [Promise<any>, Canceler] {
   const formData = new FormData();
   for (const [key, value] of Object.entries(params)) {
     if (value) {
       formData.append(key, value);
     }
   }
-  return request.post('/v1/storages/files/upload', formData, config);
+
+  if (!returnCancel) {
+    return request.post('/v1/storages/files/upload', formData, config);
+  }
+
+  let cancel: any = null;
+  const promise = request.post('/v1/storages/files/upload', formData, {
+    ...config,
+    cancelToken: new request.CancelToken((c) => {
+      cancel = c;
+    }),
+  });
+  return [
+    promise,
+    cancel,
+  ];
+
 }
 
 // 上传图片文件
