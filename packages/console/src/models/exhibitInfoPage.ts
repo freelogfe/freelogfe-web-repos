@@ -22,6 +22,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
   // info: null | {};
 
+  nodeId: number;
   nodeName: string;
   pName: string;
   isOnline: boolean;
@@ -179,6 +180,7 @@ const Model: ExhibitInfoPageModelType = {
   state: {
     presentableId: '',
 
+    nodeId: -1,
     nodeName: '',
     pName: '',
 
@@ -244,6 +246,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          nodeId: data.nodeId,
           nodeName: nodeName,
           pName: data.presentableName,
           isOnline: data.onlineStatus === 1,

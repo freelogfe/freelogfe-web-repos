@@ -12,6 +12,8 @@ import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
 import {ChangeAction, FetchInfoAction, UpdateStatusAction} from "@/models/exhibitInfoPage";
 import RouterTypes from "umi/routerTypes";
 import {nodeDetail} from "@/services/nodes";
+import {FTextButton} from '@/components/FButton';
+import {router} from "umi";
 
 interface PresentableProps extends RouterTypes {
   dispatch: Dispatch;
@@ -37,7 +39,9 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
-          <FContentText type="negative" text={exhibitInfoPage.nodeName}/>
+          <FTextButton onClick={() => {
+            router.push(`/node/${exhibitInfoPage.nodeId}`)
+          }}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
