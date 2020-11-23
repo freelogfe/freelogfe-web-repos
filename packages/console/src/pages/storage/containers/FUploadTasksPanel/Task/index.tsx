@@ -10,11 +10,14 @@ import {RcFile} from 'antd/lib/upload/interface';
 import {humanizeSize} from '@/utils/format';
 import {uploadFile} from '@/services/storages';
 import {Canceler} from "axios";
+import {StorageHomePageModelState} from "@/models/storageHomePage";
 
 interface TaskProps {
-  file: RcFile;
-  name: string;
-  sameName?: boolean;
+  // file: RcFile;
+  // name: string;
+  // sameName?: boolean;
+  info: StorageHomePageModelState['uploadTaskQueue'][number];
+  allObjectNames: string[];
 
   onSuccess?({objectName, sha1}: { objectName: string; sha1: string; }): void;
 }
@@ -26,17 +29,38 @@ interface TaskStates {
 
 let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
-function Task({name, file, sameName, onSuccess}: TaskProps) {
+function Task({info: {name, file, sha1, exist}, allObjectNames, onSuccess}: TaskProps) {
 
   const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
   const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
-  // const [cancel, setCancel] = React.useState<Canceler | null>(null);
 
   React.useEffect(() => {
-    startUploadFile();
+    // if (sameName) {
+    //   return setStatus('sameName');
+    // }
+
+    verifySameName();
+    return () => {
+      const c = cancels.get(file.uid);
+      c && c();
+      cancels.delete(file.uid);
+    };
   }, []);
 
+  function verifySameName() {
+    if (allObjectNames.includes(name)) {
+      setStatus('sameName');
+      return;
+    }
+    startUploadFile();
+  }
+
   async function startUploadFile() {
+    if (exist) {
+      setStatus('success');
+      onSuccess && onSuccess({objectName: name, sha1: sha1});
+      return;
+    }
     const [promise, cancel]: any = uploadFile({file}, {
       onUploadProgress(progressEvent) {
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
@@ -44,19 +68,26 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
     }, true);
 
     cancels.set(file.uid, cancel);
-
-    const {data} = await promise;
-
-    setStatus('success');
-
-    onSuccess && onSuccess({objectName: name, sha1: data.sha1});
+    setStatus('uploading');
+    setProgress(0);
+    try {
+      const {data} = await promise;
+      setStatus('success');
+      onSuccess && onSuccess({objectName: name, sha1: data.sha1});
+    } catch (e) {
+      if (status !== 'uploading') {
+        setStatus('failed');
+      }
+    }
   }
 
   return (<div className={styles.taskItem}>
     <div className={styles.taskInfo}>
       <FContentText text={name} singleRow={true}/>
       <div style={{height: 2}}/>
-      <FContentText text={humanizeSize(file.size)}/>
+      <FContentText
+        text={humanizeSize(file.size)}
+      />
     </div>
     {
       status === 'uploading' && (<Uploading
@@ -65,6 +96,7 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
           // console.log(name, file, cancels, '#########');
           const c = cancels.get(file.uid);
           c && c();
+          setStatus('canceled');
         }}
       />)
     }
@@ -72,13 +104,19 @@ function Task({name, file, sameName, onSuccess}: TaskProps) {
       status === 'success' && (<UploadSuccess/>)
     }
     {
-      status === 'canceled' && (<UploadCancel/>)
+      status === 'canceled' && (<UploadCancel onClick={() => {
+        verifySameName();
+      }}/>)
     }
     {
-      status === 'sameName' && (<UploadSameName/>)
+      status === 'sameName' && (<UploadSameName onClick={() => {
+        startUploadFile();
+      }}/>)
     }
     {
-      status === 'failed' && (<UploadFailed/>)
+      status === 'failed' && (<UploadFailed onClick={() => {
+        verifySameName();
+      }}/>)
     }
   </div>);
 }

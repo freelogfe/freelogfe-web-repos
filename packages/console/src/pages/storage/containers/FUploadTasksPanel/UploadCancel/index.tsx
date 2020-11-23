@@ -5,13 +5,13 @@ import {RedoOutlined} from '@ant-design/icons';
 import {FTextButton} from "@/components/FButton";
 
 interface UploadCancelProps {
-
+  onClick?(): void;
 }
 
-function UploadCancel({}: UploadCancelProps) {
+function UploadCancel({onClick}: UploadCancelProps) {
   return (<div className={styles.UploadCancel}>
     <FContentText text={'已取消'}/>
-    <FTextButton>
+    <FTextButton onClick={() => onClick && onClick()}>
       <RedoOutlined/>
     </FTextButton>
   </div>);

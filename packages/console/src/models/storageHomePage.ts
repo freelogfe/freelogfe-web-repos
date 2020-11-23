@@ -10,7 +10,7 @@ import {
   createObject,
   CreateObjectParamsType,
   deleteBuckets,
-  DeleteBucketsParamsType, deleteObjects, DeleteObjectsParamsType,
+  DeleteBucketsParamsType, deleteObjects, DeleteObjectsParamsType, fileIsExist, FileIsExistParamsType,
   objectList,
   ObjectListParamsType,
   spaceStatistics,
@@ -19,6 +19,7 @@ import moment from 'moment';
 import {RcFile} from "antd/lib/upload/interface";
 import {formatDateTime, humanizeSize} from "@/utils/format";
 import fMessage from "@/components/fMessage";
+import {getSHA1Hash} from "@/utils/tools";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -48,8 +49,12 @@ export interface StorageHomePageModelState {
   total: number;
 
   uploadTaskQueue: {
+    uid: string;
+    sha1: string;
     file: RcFile
     name: string;
+    state: 0 | 1; // 0:未上传；1:上传成功
+    exist: boolean;
   }[];
   uploadPanelVisible: boolean;
   uploadPanelOpen: boolean;
@@ -337,8 +342,8 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * uploadFiles({payload}: UploadFilesAction, {select, put}: EffectsCommandMap) {
-      console.log('!!!!!!!!!');
+    * uploadFiles({payload}: UploadFilesAction, {select, put, call}: EffectsCommandMap) {
+      // console.log('!!!!!!!!!');
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
@@ -347,13 +352,24 @@ const Model: StorageHomePageModelType = {
         fMessage('超出储存', 'warning');
         return;
       }
+      const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
+
+      const params: FileIsExistParamsType = {
+        sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
+      };
+      // console.log(params, 'params2309jsadlfk');
+      const {data} = yield call(fileIsExist, params);
+      // console.log(data, '2390jasdf');
+      const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
+      // console.log(allExistSha1, 'allExistSha10932jfsd');
+      // return;
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           uploadTaskQueue: [
-            ...payload.map((fo) => ({
-              name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
-              file: fo,
+            ...uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => ({
+              ...utq,
+              exist: allExistSha1.includes(utq.sha1),
             })),
             ...storageHomePage.uploadTaskQueue,
           ],
@@ -379,3 +395,14 @@ const Model: StorageHomePageModelType = {
 };
 
 export default Model;
+
+async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
+  return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
+    uid: fo.uid,
+    sha1: await getSHA1Hash(fo),
+    name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
+    file: fo,
+    state: 0,
+    exist: false,
+  })));
+}

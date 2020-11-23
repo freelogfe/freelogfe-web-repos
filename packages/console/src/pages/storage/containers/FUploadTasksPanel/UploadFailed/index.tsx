@@ -5,13 +5,13 @@ import {RedoOutlined} from '@ant-design/icons';
 import {FTextButton} from "@/components/FButton";
 
 interface UploadFailedProps {
-
+  onClick?(): void;
 }
 
-function UploadFailed({}: UploadFailedProps) {
+function UploadFailed({onClick}: UploadFailedProps) {
   return (<div className={styles.UploadFailed}>
     <span>上传失败</span>
-    <FTextButton>
+    <FTextButton onClick={() => onClick && onClick()}>
       <RedoOutlined/>
     </FTextButton>
   </div>);

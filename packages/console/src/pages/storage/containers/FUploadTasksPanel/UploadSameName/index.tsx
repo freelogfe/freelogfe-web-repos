@@ -5,13 +5,16 @@ import {RedoOutlined} from '@ant-design/icons';
 import {FTextButton} from "@/components/FButton";
 
 interface UploadSameNameProps {
-
+  onClick?(): void;
 }
 
-function UploadSameName({}: UploadSameNameProps) {
+function UploadSameName({onClick}: UploadSameNameProps) {
   return (<div className={styles.UploadSameName}>
     <span>存在同名对象</span>
-    <FTextButton theme="primary">更新</FTextButton>
+    <FTextButton
+      theme="primary"
+      onClick={() => onClick && onClick()}
+    >更新</FTextButton>
   </div>);
 }
 

@@ -16,9 +16,31 @@ export interface FUploadTasksPanelProps {
 
 function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
 
+  function closeAll() {
+    dispatch<ChangeAction>({
+      type: 'storageHomePage/change',
+      payload: {
+        uploadPanelVisible: false,
+      },
+    });
+
+    setTimeout(() => {
+      dispatch<ChangeAction>({
+        type: 'storageHomePage/change',
+        payload: {
+          uploadTaskQueue: [],
+        },
+      });
+    });
+  }
+
+  if (!storage.uploadPanelVisible) {
+    return null;
+  }
+
   return (<div
     className={styles.UploadingTasks}
-    style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
+    // style={{display: !storage.uploadPanelVisible ? 'none' : 'block'}}
   >
     <div className={styles.title}>
       <FContentText text={'任务列表'}/>
@@ -34,21 +56,18 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
           {storage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
         </FTextButton>
         <FTextButton onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'storageHomePage/change',
-            payload: {
-              uploadPanelVisible: false,
-            }
-          });
+          closeAll();
         }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
     </div>
     <div className={styles.body} style={{display: storage.uploadPanelOpen ? 'block' : 'none'}}>
       {
         storage.uploadTaskQueue.map((f) => (<Task
-          key={f.file.uid}
-          file={f.file}
-          name={f.name}
+          key={f.uid}
+          info={f}
+          allObjectNames={storage.objectList.map<string>((ol) => ol.name)}
+          // file={f.file}
+          // name={f.name}
           onSuccess={({objectName, sha1}) => {
             dispatch<CreateObjectAction>({
               type: 'storageHomePage/createObject',
@@ -56,7 +75,15 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
                 objectName,
                 sha1,
               },
-            })
+            });
+            dispatch<ChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                // uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                // if (f.file.uid)
+                // })
+              }
+            });
           }}
         />))
       }
