@@ -54,8 +54,10 @@ export interface ObjectListParamsType {
   isLoadingTypeless?: 0 | 1;
   keywords?: string;
   projection?: string;
-  page?: number;
-  pageSize?: number;
+  // page?: number;
+  // pageSize?: number;
+  limit?: number;
+  skip?: number;
 }
 
 export function objectList({bucketName, ...params}: DeleteBucketsParamsType) {

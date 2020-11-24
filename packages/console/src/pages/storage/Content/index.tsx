@@ -11,7 +11,12 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import FPagination from '@/components/FPagination';
-import {DeleteObjectAction, OnChangePaginationAction, UploadFilesAction} from '@/models/storageHomePage';
+import {
+  DeleteObjectAction,
+  // OnChangePaginationAction,
+  UploadFilesAction,
+  ChangeAction as HomePageChangeAction, FetchObjectsAction
+} from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
 import {FDelete} from "@/components/FIcons";
@@ -20,6 +25,7 @@ import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -148,26 +154,51 @@ function Content({storage, dispatch}: ContentProps) {
     }
 
     {
-      storage.total === 0
-        ? (<FNoDataTip
-          height={minHeight}
-          tipText={'当前Bucket还没有上传任何对象'}
-          btn={<FUpload
-            showUploadList={false}
-            multiple={true}
-            beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-              // console.log(file, FileList, 'beforeUpload 24ew890sio;');
-              if (file === fileList[fileList.length - 1]) {
-                // console.log('0923uiojfdaslk');
-                dispatch<UploadFilesAction>({
-                  type: 'storageHomePage/uploadFiles',
-                  payload: fileList,
-                });
-              }
-              return false;
-            }}><FNormalButton>上传对象</FNormalButton></FUpload>}
-        />)
-        : (<div className={styles.body}>
+      storage.total === 0 && (<FNoDataTip
+        height={minHeight}
+        tipText={'当前Bucket还没有上传任何对象'}
+        btn={<FUpload
+          showUploadList={false}
+          multiple={true}
+          beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+            // console.log(file, FileList, 'beforeUpload 24ew890sio;');
+            if (file === fileList[fileList.length - 1]) {
+              // console.log('0923uiojfdaslk');
+              dispatch<UploadFilesAction>({
+                type: 'storageHomePage/uploadFiles',
+                payload: fileList,
+              });
+            }
+            return false;
+          }}><FNormalButton>上传对象</FNormalButton></FUpload>}
+      />)
+    }
+
+    {
+      storage.total > 0 && (<InfiniteScroll
+        pageStart={0}
+        initialLoad={false}
+        loadMore={(page: number) => {
+          // console.log(page, 'page23904');
+          console.log(storage, '9023jstoragestorage');
+          if (storage.isLoading || storage.total === -1) {
+            return;
+          }
+          dispatch<FetchObjectsAction>({
+            type: 'storageHomePage/fetchObjects',
+            payload: 'append',
+          });
+          // dispatch<OnChangePaginationAction>({
+          //   type: 'storageHomePage/onChangePaginationAction',
+          //   // payload: {
+          //   //   pageCurrent: page,
+          //   // },
+          // });
+        }}
+        hasMore={!storage.isLoading && storage.total !== -1 && storage.objectList.length < storage.total}
+        // loader={}
+      >
+        <div className={styles.body}>
           <FTable
             columns={columns}
             dataSource={storage.objectList}
@@ -183,31 +214,12 @@ function Content({storage, dispatch}: ContentProps) {
               };
             }}
           />
-          {
-            storage.total > 0 && (<div className={styles.pagination}>
-              <FPagination
-                pageSize={storage.pageSize}
-                current={storage.pageCurrent}
-                total={storage.total}
-                onChangeCurrent={(value) => dispatch<OnChangePaginationAction>({
-                  type: 'storageHomePage/onChangePaginationAction',
-                  payload: {
-                    pageCurrent: value,
-                  },
-                })}
-                onChangePageSize={(value) => dispatch<OnChangePaginationAction>({
-                  type: 'storageHomePage/onChangePaginationAction',
-                  payload: {
-                    pageSize: value,
-                  },
-                })}
-              />
-            </div>)
-          }
-
-        </div>)
+        </div>
+        {storage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>}
+      </InfiniteScroll>)
     }
 
+    {!storage.isLoading && <div style={{height: 100}}/>}
     <Details/>
 
     <FUploadTasksPanel/>

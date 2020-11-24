@@ -66,8 +66,6 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
           key={f.uid}
           info={f}
           allObjectNames={storage.objectList.map<string>((ol) => ol.name)}
-          // file={f.file}
-          // name={f.name}
           onSuccess={({objectName, sha1}) => {
             dispatch<CreateObjectAction>({
               type: 'storageHomePage/createObject',

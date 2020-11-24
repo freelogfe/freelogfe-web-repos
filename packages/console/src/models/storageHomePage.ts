@@ -44,8 +44,9 @@ export interface StorageHomePageModelState {
     size: number;
     updateTime: string;
   }[];
-  pageCurrent: number;
-  pageSize: number;
+  isLoading: boolean;
+  // pageCurrent: number;
+  // pageSize: number;
   total: number;
 
   uploadTaskQueue: {
@@ -94,15 +95,16 @@ export interface CreateObjectAction extends AnyAction {
 
 export interface FetchObjectsAction extends AnyAction {
   type: 'storageHomePage/fetchObjects' | 'fetchObjects';
+  payload?: 'restart' | 'insert' | 'append';
 }
 
-export interface OnChangePaginationAction extends AnyAction {
-  type: 'storageHomePage/onChangePaginationAction';
-  payload: {
-    pageCurrent?: number;
-    pageSize?: number;
-  }
-}
+// export interface OnChangePaginationAction extends AnyAction {
+//   type: 'storageHomePage/onChangePaginationAction';
+//   // payload: {
+//   // pageCurrent?: number;
+//   // pageSize?: number;
+//   // }
+// }
 
 export interface DeleteObjectAction extends AnyAction {
   type: 'storageHomePage/deleteObject';
@@ -125,7 +127,7 @@ interface StorageHomePageModelType {
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
-    onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
+    // onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
     uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
   };
@@ -151,8 +153,9 @@ const Model: StorageHomePageModelType = {
 
     // currentBucketInfo: null,
     objectList: [],
-    pageCurrent: 1,
-    pageSize: 10,
+    isLoading: true,
+    // pageCurrent: 1,
+    // pageSize: 100,
     total: -1,
 
     uploadTaskQueue: [],
@@ -263,6 +266,7 @@ const Model: StorageHomePageModelType = {
       yield call(createObject, params);
       yield put<FetchObjectsAction>({
         type: 'fetchObjects',
+        payload: 'insert',
       });
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
@@ -271,52 +275,69 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * fetchObjects({}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
+    * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
+      console.log(payload, 'payloadpayload234234');
+
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+      let skip: number = 0;
+      let limit: number = 10;
+
+      if (payload === 'append') {
+        skip = storageHomePage.objectList.length;
+      } else if (payload === 'insert') {
+        limit = 1;
+      }
+
       const params: ObjectListParamsType = {
         bucketName: storageHomePage.activatedBucket,
-        page: storageHomePage.pageCurrent,
-        pageSize: storageHomePage.pageSize,
+        limit,
+        skip,
       };
-      const {data} = yield call(objectList, params);
-      // console.log(data, 'datadata23w908io');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          objectList: data.dataList.map((i: any) => ({
-            key: i.objectId,
-            id: i.objectId,
-            name: i.objectName,
-            type: i.resourceType,
-            size: humanizeSize(i.systemProperty.fileSize),
-            updateTime: formatDateTime(i.updateDate, true),
-          })),
+          isLoading: true,
+        },
+      });
+      const {data} = yield call(objectList, params);
+      // console.log(data, 'datadata23w908io');
+      let objectListData: StorageHomePageModelState['objectList'] = storageHomePage.objectList;
+
+      if (payload === 'restart') {
+        objectListData = data.dataList.map(transformTableData);
+      } else if (payload === 'append') {
+        objectListData = [
+          ...objectListData,
+          ...data.dataList.map(transformTableData),
+        ];
+      } else if (payload === 'insert') {
+        objectListData = [
+          ...data.dataList.map(transformTableData),
+          ...objectListData,
+        ];
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          objectList: objectListData,
           total: data.totalItem,
+          isLoading: false,
         },
       });
     },
-    * onChangePaginationAction({payload}: OnChangePaginationAction, {put}: EffectsCommandMap) {
-      if (payload.pageSize) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pageSize: payload.pageSize,
-            pageCurrent: 1,
-          },
-        });
-      }
-      if (payload.pageCurrent) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            pageCurrent: payload.pageCurrent,
-          },
-        });
-      }
-      yield put<FetchObjectsAction>({
-        type: 'fetchObjects',
-      });
-    },
+    // * onChangePaginationAction({payload}: OnChangePaginationAction, {put}: EffectsCommandMap) {
+    //   // yield put<ChangeAction>({
+    //   //   type: 'change',
+    //   //   payload: {
+    //   //     pageCurrent: payload.pageCurrent,
+    //   //   },
+    //   // });
+    //   yield put<FetchObjectsAction>({
+    //     type: 'fetchObjects',
+    //     payload: 'append',
+    //   });
+    // },
     * deleteObject({payload}: DeleteObjectAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
@@ -329,12 +350,13 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pageCurrent: 1,
+          // pageCurrent: 1,
+          objectList: storageHomePage.objectList.filter((ol) => ol.id === payload),
         },
       });
-      yield put<FetchObjectsAction>({
-        type: 'fetchObjects',
-      });
+      // yield put<FetchObjectsAction>({
+      //   type: 'fetchObjects',
+      // });
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
@@ -405,4 +427,16 @@ async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['up
     state: 0,
     exist: false,
   })));
+}
+
+function transformTableData(i: any) {
+  return {
+    key: i.objectId,
+    dataIndex: i.objectId,
+    id: i.objectId,
+    name: i.objectName,
+    type: i.resourceType,
+    size: humanizeSize(i.systemProperty.fileSize),
+    updateTime: formatDateTime(i.updateDate, true),
+  };
 }
