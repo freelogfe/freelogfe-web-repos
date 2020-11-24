@@ -280,7 +280,7 @@ const Model: StorageHomePageModelType = {
 
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
       let skip: number = 0;
-      let limit: number = 10;
+      let limit: number = 20;
 
       if (payload === 'append') {
         skip = storageHomePage.objectList.length;
@@ -301,19 +301,19 @@ const Model: StorageHomePageModelType = {
       });
       const {data} = yield call(objectList, params);
       // console.log(data, 'datadata23w908io');
-      let objectListData: StorageHomePageModelState['objectList'] = storageHomePage.objectList;
+      let objectListData: StorageHomePageModelState['objectList'] = [];
 
       if (payload === 'restart') {
         objectListData = data.dataList.map(transformTableData);
       } else if (payload === 'append') {
         objectListData = [
-          ...objectListData,
+          ...storageHomePage.objectList,
           ...data.dataList.map(transformTableData),
         ];
       } else if (payload === 'insert') {
         objectListData = [
           ...data.dataList.map(transformTableData),
-          ...objectListData,
+          ...storageHomePage.objectList,
         ];
       }
 

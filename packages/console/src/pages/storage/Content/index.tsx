@@ -184,16 +184,16 @@ function Content({storage, dispatch}: ContentProps) {
           if (storage.isLoading || storage.total === -1) {
             return;
           }
+          dispatch<HomePageChangeAction>({
+            type: 'storageHomePage/change',
+            payload: {
+              isLoading: true,
+            },
+          });
           dispatch<FetchObjectsAction>({
             type: 'storageHomePage/fetchObjects',
             payload: 'append',
           });
-          // dispatch<OnChangePaginationAction>({
-          //   type: 'storageHomePage/onChangePaginationAction',
-          //   // payload: {
-          //   //   pageCurrent: page,
-          //   // },
-          // });
         }}
         hasMore={!storage.isLoading && storage.total !== -1 && storage.objectList.length < storage.total}
         // loader={}
