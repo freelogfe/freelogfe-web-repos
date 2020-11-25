@@ -13,9 +13,6 @@ import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
 
 interface TaskProps {
-  // file: RcFile;
-  // name: string;
-  // sameName?: boolean;
   file: StorageHomePageModelState['uploadTaskQueue'][number];
   allObjectNames: string[];
 

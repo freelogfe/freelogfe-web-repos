@@ -346,7 +346,6 @@ const Model: StorageHomePageModelType = {
       });
     },
     * uploadFiles({payload}: UploadFilesAction, {select, put, call}: EffectsCommandMap) {
-      // console.log('!!!!!!!!!');
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
@@ -360,12 +359,8 @@ const Model: StorageHomePageModelType = {
       const params: FileIsExistParamsType = {
         sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
       };
-      // console.log(params, 'params2309jsadlfk');
       const {data} = yield call(fileIsExist, params);
-      // console.log(data, '2390jasdf');
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
-      // console.log(allExistSha1, 'allExistSha10932jfsd');
-      // return;
       yield put<ChangeAction>({
         type: 'change',
         payload: {
