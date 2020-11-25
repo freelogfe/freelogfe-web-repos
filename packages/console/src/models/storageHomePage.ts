@@ -223,7 +223,15 @@ const Model: StorageHomePageModelType = {
         },
       });
     },
-    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put}: EffectsCommandMap) {
+    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select}: EffectsCommandMap) {
+
+      console.log(payload, 'pppppPPPPP23rfsdasd');
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
+      if (payload === storageHomePage.activatedBucket) {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -283,6 +291,10 @@ const Model: StorageHomePageModelType = {
       let limit: number = 20;
 
       if (payload === 'append') {
+        console.log(storageHomePage.objectList.length, storageHomePage.total, '20398');
+        if (storageHomePage.objectList.length === storageHomePage.total) {
+          return;
+        }
         skip = storageHomePage.objectList.length;
       } else if (payload === 'insert') {
         limit = 1;
@@ -326,18 +338,6 @@ const Model: StorageHomePageModelType = {
         },
       });
     },
-    // * onChangePaginationAction({payload}: OnChangePaginationAction, {put}: EffectsCommandMap) {
-    //   // yield put<ChangeAction>({
-    //   //   type: 'change',
-    //   //   payload: {
-    //   //     pageCurrent: payload.pageCurrent,
-    //   //   },
-    //   // });
-    //   yield put<FetchObjectsAction>({
-    //     type: 'fetchObjects',
-    //     payload: 'append',
-    //   });
-    // },
     * deleteObject({payload}: DeleteObjectAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
@@ -350,13 +350,10 @@ const Model: StorageHomePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // pageCurrent: 1,
-          objectList: storageHomePage.objectList.filter((ol) => ol.id === payload),
+          objectList: storageHomePage.objectList.filter((ol) => ol.id !== payload),
+          total: storageHomePage.total - 1,
         },
       });
-      // yield put<FetchObjectsAction>({
-      //   type: 'fetchObjects',
-      // });
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
