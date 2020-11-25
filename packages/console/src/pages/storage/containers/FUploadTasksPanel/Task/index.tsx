@@ -16,10 +16,12 @@ interface TaskProps {
   // file: RcFile;
   // name: string;
   // sameName?: boolean;
-  info: StorageHomePageModelState['uploadTaskQueue'][number];
+  file: StorageHomePageModelState['uploadTaskQueue'][number];
   allObjectNames: string[];
 
-  onSuccess?({objectName, sha1}: { objectName: string; sha1: string; }): void;
+  onSucceed?({uid, objectName, sha1}: { uid: string; objectName: string; sha1: string; }): void;
+
+  onFail?({uid, objectName}: { uid: string; objectName: string; }): void;
 }
 
 interface TaskStates {
@@ -29,7 +31,10 @@ interface TaskStates {
 
 let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
-function Task({info: {name, file, sha1, exist}, allObjectNames, onSuccess}: TaskProps) {
+function Task({
+                file, allObjectNames,
+                onSucceed, onFail
+              }: TaskProps) {
 
   const [status, setStatus] = React.useState<TaskStates['status']>('uploading');
   const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
@@ -56,12 +61,12 @@ function Task({info: {name, file, sha1, exist}, allObjectNames, onSuccess}: Task
   }
 
   async function startUploadFile() {
-    if (exist) {
+    if (file.exist) {
       setStatus('success');
-      onSuccess && onSuccess({objectName: name, sha1: sha1});
+      onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
       return;
     }
-    const [promise, cancel]: any = uploadFile({file}, {
+    const [promise, cancel]: any = uploadFile({file: file.file}, {
       onUploadProgress(progressEvent) {
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
       },
@@ -73,20 +78,24 @@ function Task({info: {name, file, sha1, exist}, allObjectNames, onSuccess}: Task
     try {
       const {data} = await promise;
       setStatus('success');
-      onSuccess && onSuccess({objectName: name, sha1: data.sha1});
+      onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: data.sha1});
     } catch (e) {
       if (status !== 'uploading') {
         setStatus('failed');
+        onFail && onFail({uid: file.uid, objectName: file.name});
       }
     }
   }
 
   return (<div className={styles.taskItem}>
     <div className={styles.taskInfo}>
-      <FContentText text={name} singleRow={true}/>
+      <FContentText
+        text={file.name}
+        singleRow={true}
+      />
       <div style={{height: 2}}/>
       <FContentText
-        text={humanizeSize(file.size)}
+        text={humanizeSize(file.file.size)}
       />
     </div>
     {
@@ -97,6 +106,7 @@ function Task({info: {name, file, sha1, exist}, allObjectNames, onSuccess}: Task
           const c = cancels.get(file.uid);
           c && c();
           setStatus('canceled');
+          onFail && onFail({uid: file.uid, objectName: file.name});
         }}
       />)
     }

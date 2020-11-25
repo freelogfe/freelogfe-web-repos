@@ -7,7 +7,13 @@ import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
-import {ChangeAction, CreateObjectAction} from '@/models/storageHomePage';
+import {
+  ChangeAction,
+  CreateObjectAction, FetchBucketsAction,
+  FetchObjectsAction,
+  FetchSpaceStatisticAction
+} from '@/models/storageHomePage';
+import * as ahooks from "ahooks";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -15,6 +21,24 @@ export interface FUploadTasksPanelProps {
 }
 
 function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
+
+  const {run} = ahooks.useDebounceFn(
+    () => {
+      dispatch<FetchObjectsAction>({
+        type: 'storageHomePage/fetchObjects',
+        payload: 'insert',
+      });
+      dispatch<FetchSpaceStatisticAction>({
+        type: 'storageHomePage/fetchSpaceStatistic',
+      });
+      dispatch<FetchBucketsAction>({
+        type: 'storageHomePage/fetchBuckets',
+      });
+    },
+    {
+      wait: 300,
+    },
+  );
 
   function closeAll() {
     dispatch<ChangeAction>({
@@ -64,22 +88,47 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
       {
         storage.uploadTaskQueue.map((f) => (<Task
           key={f.uid}
-          info={f}
+          file={f}
           allObjectNames={storage.objectList.map<string>((ol) => ol.name)}
-          onSuccess={({objectName, sha1}) => {
-            dispatch<CreateObjectAction>({
+          onSucceed={async ({objectName, sha1, uid}) => {
+            // console.log('!!!!!!######09jop23efwl;k');
+            dispatch<ChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                  if (f.file.uid !== uid) {
+                    return utq;
+                  }
+                  return {
+                    ...utq,
+                    state: 1,
+                  };
+                }),
+              }
+            });
+            await dispatch<CreateObjectAction>({
               type: 'storageHomePage/createObject',
               payload: {
                 objectName,
                 sha1,
               },
             });
+            // console.log('######!!!!!!asdfdsafasdf');
+            run();
+          }}
+          onFail={({objectName, uid}) => {
             dispatch<ChangeAction>({
               type: 'storageHomePage/change',
               payload: {
-                // uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
-                // if (f.file.uid)
-                // })
+                uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                  if (f.file.uid !== uid) {
+                    return utq;
+                  }
+                  return {
+                    ...utq,
+                    state: -1,
+                  };
+                }),
               }
             });
           }}
