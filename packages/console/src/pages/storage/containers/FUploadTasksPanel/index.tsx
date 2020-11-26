@@ -89,7 +89,7 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         storage.uploadTaskQueue.map((f) => (<Task
           key={f.uid}
           file={f}
-          allObjectNames={storage.objectList.map<string>((ol) => ol.name)}
+          bucketName={storage.activatedBucket}
           onSucceed={async ({objectName, sha1, uid}) => {
             // console.log('!!!!!!######09jop23efwl;k');
             dispatch<ChangeAction>({

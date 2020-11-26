@@ -34,9 +34,9 @@ interface ContentProps {
 
 function Content({storage, dispatch}: ContentProps) {
 
-  // const [objectInfoVisible, setObjectInfoVisible] = React.useState<boolean>(false);
   const [hoverRecord, setHoverRecord] = React.useState<any>(null);
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
+  const [isSame, setIsSame] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     window.addEventListener('resize', setHeight);

@@ -3,6 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {
+  batchObjectList, BatchObjectListParamsType,
   bucketList,
   BucketListParamsType,
   createBucket,
@@ -54,8 +55,9 @@ export interface StorageHomePageModelState {
     sha1: string;
     file: RcFile
     name: string;
-    state: -1 | 0 | 1; // -1:上传失败；0:上传中；1:上传成功
+    state: -1 | 0 | 1; // -1:未成功；0:进行中；1:已成功
     exist: boolean;
+    sameName: boolean;
   }[];
   uploadPanelVisible: boolean;
   uploadPanelOpen: boolean;
@@ -361,6 +363,15 @@ const Model: StorageHomePageModelType = {
       };
       const {data} = yield call(fileIsExist, params);
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
+
+      const params1: BatchObjectListParamsType = {
+        fullObjectNames: payload.map((p) => storageHomePage.activatedBucket + '/' + p.name).join(','),
+        projection: 'objectId,objectName',
+      };
+
+      const {data: data1} = yield call(batchObjectList, params1);
+      const allExistObjectNames: string[] = data1.map((d: any) => d.objectName);
+      // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -368,6 +379,7 @@ const Model: StorageHomePageModelType = {
             ...uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => ({
               ...utq,
               exist: allExistSha1.includes(utq.sha1),
+              sameName: allExistObjectNames.includes(utq.name),
             })),
             ...storageHomePage.uploadTaskQueue,
           ],
@@ -402,6 +414,7 @@ async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['up
     file: fo,
     state: 0,
     exist: false,
+    sameName: false,
   })));
 }
 

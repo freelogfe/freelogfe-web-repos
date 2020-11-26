@@ -8,13 +8,13 @@ import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
 import {RcFile} from 'antd/lib/upload/interface';
 import {humanizeSize} from '@/utils/format';
-import {uploadFile} from '@/services/storages';
+import {batchObjectList, BatchObjectListParamsType, uploadFile} from '@/services/storages';
 import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
-  allObjectNames: string[];
+  bucketName: string;
 
   onSucceed?({uid, objectName, sha1}: { uid: string; objectName: string; sha1: string; }): void;
 
@@ -29,7 +29,7 @@ interface TaskStates {
 let cancels: Map<string, Canceler> = new Map<string, Canceler>();
 
 function Task({
-                file, allObjectNames,
+                file, bucketName,
                 onSucceed, onFail
               }: TaskProps) {
 
@@ -37,11 +37,14 @@ function Task({
   const [progress, setProgress] = React.useState<TaskStates['progress']>(0);
 
   React.useEffect(() => {
-    // if (sameName) {
-    //   return setStatus('sameName');
-    // }
 
-    verifySameName();
+    if (file.sameName) {
+      setStatus('sameName');
+      onFail && onFail({uid: file.uid, objectName: file.name});
+      return;
+    }
+    startUploadFile();
+
     return () => {
       const c = cancels.get(file.uid);
       c && c();
@@ -49,12 +52,18 @@ function Task({
     };
   }, []);
 
-  function verifySameName() {
-    if (allObjectNames.includes(name)) {
+  async function verifySameName() {
+    const params1: BatchObjectListParamsType = {
+      fullObjectNames: bucketName + '/' + file.name,
+      projection: 'objectId,objectName',
+    };
+    const {data: data1} = await batchObjectList(params1);
+    // console.log(data1, 'dddd09283jadfslk');
+    if (data1.length === 0) {
+      startUploadFile();
+    } else {
       setStatus('sameName');
-      return;
     }
-    startUploadFile();
   }
 
   async function startUploadFile() {
@@ -103,6 +112,7 @@ function Task({
           const c = cancels.get(file.uid);
           c && c();
           setStatus('canceled');
+          setProgress(0);
           onFail && onFail({uid: file.uid, objectName: file.name});
         }}
       />)
@@ -118,6 +128,7 @@ function Task({
     {
       status === 'sameName' && (<UploadSameName onClick={() => {
         startUploadFile();
+        // verifySameName();
       }}/>)
     }
     {
