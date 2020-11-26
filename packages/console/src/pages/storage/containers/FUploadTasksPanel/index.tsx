@@ -14,6 +14,8 @@ import {
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
 import * as ahooks from "ahooks";
+import FModal from "@/components/FModal";
+import {FTipText} from "@/components/FText";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -21,6 +23,8 @@ export interface FUploadTasksPanelProps {
 }
 
 function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
+
+  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
   const {run} = ahooks.useDebounceFn(
     () => {
@@ -80,6 +84,11 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
           {storage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
         </FTextButton>
         <FTextButton onClick={() => {
+          const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storage.uploadTaskQueue.find((i) => i.state !== 1);
+          if (exits) {
+            setModalVisible(true);
+            return;
+          }
           closeAll();
         }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
@@ -135,6 +144,21 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         />))
       }
     </div>
+
+    <FModal
+      visible={modalVisible}
+      title={'提示'}
+      onOk={() => {
+        closeAll();
+        setModalVisible(false);
+      }}
+      onCancel={() => {
+        setModalVisible(false);
+      }}>
+      <div className={styles.modalContent}>
+        <FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>
+      </div>
+    </FModal>
   </div>);
 }
 
