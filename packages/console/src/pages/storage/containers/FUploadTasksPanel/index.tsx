@@ -13,9 +13,9 @@ import {
   FetchObjectsAction,
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
-import * as ahooks from "ahooks";
-import FModal from "@/components/FModal";
-import {FTipText} from "@/components/FText";
+import * as ahooks from 'ahooks';
+import FModal from '@/components/FModal';
+import {FTipText} from '@/components/FText';
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
