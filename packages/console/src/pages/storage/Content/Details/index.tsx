@@ -107,6 +107,10 @@ function Details({editor, dispatch}: DetailsProps) {
             });
           }}
           onSelect={(value) => {
+            if (value === editor.type) {
+              return;
+            }
+
             dispatch<ChangeAction>({
               type: 'storageObjectEditor/change',
               payload: {
@@ -134,9 +138,6 @@ function Details({editor, dispatch}: DetailsProps) {
           />
           <FContentText text={'添加'}/>
         </Space>
-        {/*{*/}
-        {/*  editor.*/}
-        {/*}*/}
         {
           editor.depRs.length > 0 && (<DepsCards
             title={'资源'}

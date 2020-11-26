@@ -26,6 +26,7 @@ import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
+import {CSSProperties} from "react";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -71,48 +72,20 @@ function Content({storage, dispatch}: ContentProps) {
       width: 180,
       render(text: any, record: any) {
         // console.log(hoverRecord, record);
-        if (hoverRecord?.key !== record?.key) {
-          return null;
+        if (hoverRecord?.key === record?.key) {
+          return (<ToolsBar
+            onClickEdit={() => onClickEdit(record)}
+            onClickDownload={() => downloadObject({objectIdOrName: record.id})}
+            onClickDelete={() => onClickDelete(record)}
+          />);
         }
-        return (<Space size={25}>
-          <FTextButton
-            onClick={() => {
-              // console.log(record, 'RREAcf90s8o');
-              dispatch<FetchInfoAction>({
-                type: 'storageObjectEditor/fetchInfo',
-                payload: record.id,
-              });
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  visible: true,
-                },
-              });
-            }}
-            theme={'primary'}
-          >
-            <EditOutlined/>
-          </FTextButton>
-          {/*<FTextButton theme={'primary'}>*/}
-          {/*  <SendOutlined/>*/}
-          {/*</FTextButton>*/}
-          <FTextButton
-            onClick={() => downloadObject({objectIdOrName: record.id})}
-            // onClick={() => window.location.href = apiHost + `/v1/storages/objects/${record.id}/file`}
-            theme={'primary'}
-          >
-            <DownloadOutlined/>
-          </FTextButton>
-          <FTextButton
-            onClick={() => dispatch<DeleteObjectAction>({
-              type: 'storageHomePage/deleteObject',
-              payload: record.id,
-            })}
-            className={styles.Delete}
-          >
-            <FDelete/>
-          </FTextButton>
-        </Space>);
+        return (<div className={styles.tools}>
+          <ToolsBar
+            onClickEdit={() => onClickEdit(record)}
+            onClickDownload={() => downloadObject({objectIdOrName: record.id})}
+            onClickDelete={() => onClickDelete(record)}
+          />
+        </div>);
       },
       className: styles.columns,
     },
@@ -144,6 +117,26 @@ function Content({storage, dispatch}: ContentProps) {
       className: styles.columns,
     },
   ];
+
+  function onClickEdit(record: any) {
+    dispatch<FetchInfoAction>({
+      type: 'storageObjectEditor/fetchInfo',
+      payload: record.id,
+    });
+    dispatch<ChangeAction>({
+      type: 'storageObjectEditor/change',
+      payload: {
+        visible: true,
+      },
+    });
+  }
+
+  function onClickDelete(record: any) {
+    dispatch<DeleteObjectAction>({
+      type: 'storageHomePage/deleteObject',
+      payload: record.id,
+    })
+  }
 
   return (<div>
 
@@ -178,9 +171,7 @@ function Content({storage, dispatch}: ContentProps) {
       storage.total > 0 && (<InfiniteScroll
         pageStart={0}
         initialLoad={false}
-        loadMore={(page: number) => {
-          // console.log(page, 'page23904');
-          console.log(storage, '9023jstoragestorage');
+        loadMore={() => {
           if (storage.isLoading || storage.total === -1) {
             return;
           }
@@ -196,7 +187,6 @@ function Content({storage, dispatch}: ContentProps) {
           });
         }}
         hasMore={!storage.isLoading && storage.total !== -1 && storage.objectList.length < storage.total}
-        // loader={}
       >
         <div className={styles.body}>
           <FTable
@@ -221,7 +211,6 @@ function Content({storage, dispatch}: ContentProps) {
 
     {!storage.isLoading && <div style={{height: 100}}/>}
     <Details/>
-
     <FUploadTasksPanel/>
   </div>);
 }
@@ -230,3 +219,32 @@ function Content({storage, dispatch}: ContentProps) {
 export default connect(({storageHomePage}: ConnectState) => ({
   storage: storageHomePage,
 }))(Content);
+
+interface ToolsBarProps {
+  onClickEdit?(): void;
+
+  onClickDownload?(): void;
+
+  onClickDelete?(): void;
+}
+
+function ToolsBar({onClickEdit, onClickDownload, onClickDelete}: ToolsBarProps) {
+  return (<Space
+    // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
+    size={25}>
+    <FTextButton
+      onClick={() => onClickEdit && onClickEdit()} theme={'primary'}
+    ><EditOutlined/></FTextButton>
+    {/*<FTextButton theme={'primary'}>*/}
+    {/*  <SendOutlined/>*/}
+    {/*</FTextButton>*/}
+    <FTextButton
+      onClick={() => onClickDownload && onClickDownload()}
+      theme={'primary'}
+    ><DownloadOutlined/></FTextButton>
+    <FTextButton
+      onClick={() => onClickDelete && onClickDelete()}
+      className={styles.Delete}
+    ><FDelete/></FTextButton>
+  </Space>)
+}

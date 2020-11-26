@@ -10,6 +10,8 @@ import {
 } from "@/services/storages";
 import {ConnectState} from "@/models/connect";
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from "@/services/resources";
+import {RESOURCE_TYPE} from "@/utils/regexp";
+import {OnChangeResourceTypeAction} from "@/models/resourceCreatorPage";
 
 interface DepR {
   name: string;
@@ -30,6 +32,7 @@ export interface StorageObjectEditorModelState {
   objectName: string;
   size: number;
   type: string;
+  typeError: string;
   depRs: DepR[];
   depOs: DepO[];
 }
@@ -89,18 +92,24 @@ export interface DeleteObjectDepAction extends AnyAction {
   };
 }
 
+export interface OnChangeTypeAction extends AnyAction {
+  type: 'storageObjectEditor/onChangeType';
+  payload: string;
+}
+
 export interface StorageObjectEditorModelType {
   namespace: 'storageObjectEditor';
   state: StorageObjectEditorModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    fetchRDepAction: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
-    fetchODepAction: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
+    fetchRDep: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
+    fetchODep: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
     updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
     deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
     syncObjectDep: (action: SyncObjectDepAction, effects: EffectsCommandMap) => void;
+    onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageObjectEditorModelState, ChangeAction>;
@@ -117,6 +126,7 @@ const Model: StorageObjectEditorModelType = {
     bucketName: '',
     objectName: '',
     type: '',
+    typeError: '',
     size: 0,
     depRs: [],
     depOs: [],
@@ -164,7 +174,7 @@ const Model: StorageObjectEditorModelType = {
         });
       }
     },
-    * fetchRDepAction({payload}: FetchRDepsAction, {call, put}: EffectsCommandMap) {
+    * fetchRDep({payload}: FetchRDepsAction, {call, put}: EffectsCommandMap) {
       const params: BatchInfoParamsType = {
         resourceNames: payload.map((r) => r.name).join(','),
       };
@@ -183,7 +193,7 @@ const Model: StorageObjectEditorModelType = {
         }
       });
     },
-    * fetchODepAction({payload}: FetchODepsAction, {call, put}: EffectsCommandMap) {
+    * fetchODep({payload}: FetchODepsAction, {call, put}: EffectsCommandMap) {
       const params: BatchObjectListParamsType = {
         fullObjectNames: payload,
       };
@@ -311,7 +321,24 @@ const Model: StorageObjectEditorModelType = {
       };
       yield call(updateObject, params);
     },
+    * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
+      let resourceTypeErrorText = '';
+      if (payload.length < 3 && payload.length > 0) {
+        resourceTypeErrorText = '不少于3个字符';
+      } else if (payload.length > 20) {
+        resourceTypeErrorText = '不多于20个字符';
+      } else if (!RESOURCE_TYPE.test(payload)) {
+        resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      }
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          type: payload,
+          typeError: resourceTypeErrorText,
+        },
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {
