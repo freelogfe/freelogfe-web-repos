@@ -35,9 +35,7 @@ interface ContentProps {
 
 function Content({storage, dispatch}: ContentProps) {
 
-  // const [hoverRecord, setHoverRecord] = React.useState<any>(null);
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
-  // const [isSame, setIsSame] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     window.addEventListener('resize', setHeight);
@@ -71,8 +69,6 @@ function Content({storage, dispatch}: ContentProps) {
       key: 'tool',
       width: 180,
       render(text: any, record: any) {
-        // console.log(hoverRecord, record);
-        // if (hoverRecord?.key === record?.key) {
         return (<div className={styles.hoverVisible}>
           <ToolsBar
             onClickEdit={() => onClickEdit(record)}
@@ -80,14 +76,6 @@ function Content({storage, dispatch}: ContentProps) {
             onClickDelete={() => onClickDelete(record)}
           />
         </div>);
-        // }
-        // return (<div className={styles.tools}>
-        //   <ToolsBar
-        //     onClickEdit={() => onClickEdit(record)}
-        //     onClickDownload={() => downloadObject({objectIdOrName: record.id})}
-        //     onClickDelete={() => onClickDelete(record)}
-        //   />
-        // </div>);
       },
       className: styles.columns,
     },
@@ -196,16 +184,6 @@ function Content({storage, dispatch}: ContentProps) {
             columns={columns}
             dataSource={storage.objectList}
             pagination={false}
-            // onRow={(record) => {
-            //   return {
-            //     onMouseEnter: (event: any) => {
-            //       setHoverRecord(record);
-            //     }, // 鼠标移入行
-            //     onMouseLeave: event => {
-            //       setHoverRecord(null);
-            //     },
-            //   };
-            // }}
           />
         </div>
         {storage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>}

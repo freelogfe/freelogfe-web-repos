@@ -79,10 +79,10 @@ export interface AddObjectDepOAction extends AnyAction {
   payload: string;
 }
 
-export interface SyncObjectDepAction extends AnyAction {
-  type: 'syncObjectDep';
-  // payload: string;
-}
+// export interface SyncObjectDepAction extends AnyAction {
+//   type: 'syncObjectDep';
+//   // payload: string;
+// }
 
 export interface DeleteObjectDepAction extends AnyAction {
   type: 'storageObjectEditor/deleteObjectDep';
@@ -108,7 +108,7 @@ export interface StorageObjectEditorModelType {
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
     deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
-    syncObjectDep: (action: SyncObjectDepAction, effects: EffectsCommandMap) => void;
+    // syncObjectDep: (action: SyncObjectDepAction, effects: EffectsCommandMap) => void;
     onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -246,9 +246,9 @@ const Model: StorageObjectEditorModelType = {
         },
       });
 
-      yield put<SyncObjectDepAction>({
-        type: 'syncObjectDep',
-      });
+      // yield put<SyncObjectDepAction>({
+      //   type: 'syncObjectDep',
+      // });
     },
     * addObjectDepO({payload}: AddObjectDepOAction, {call, put, select}: EffectsCommandMap) {
       const params: ObjectDetailsParamsType2 = {
@@ -272,9 +272,9 @@ const Model: StorageObjectEditorModelType = {
         }
       });
 
-      yield put<SyncObjectDepAction>({
-        type: 'syncObjectDep',
-      });
+      // yield put<SyncObjectDepAction>({
+      //   type: 'syncObjectDep',
+      // });
     },
     * deleteObjectDep({payload}: DeleteObjectDepAction, {put, select}: EffectsCommandMap) {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
@@ -298,36 +298,36 @@ const Model: StorageObjectEditorModelType = {
         });
       }
 
-      yield put<SyncObjectDepAction>({
-        type: 'syncObjectDep',
-      });
+      // yield put<SyncObjectDepAction>({
+      //   type: 'syncObjectDep',
+      // });
     },
-    * syncObjectDep({}: SyncObjectDepAction, {select, call}: EffectsCommandMap) {
-      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({storageObjectEditor}));
-      const params: UpdateObjectParamsType = {
-        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        dependencies: [
-          ...storageObjectEditor.depRs.map((r) => ({
-            name: r.name,
-            type: 'resource',
-            versionRange: r.version,
-          })),
-          ...storageObjectEditor.depOs.map((o) => ({
-            name: o.name,
-            type: 'object',
-            // versionRange: r.version,
-          })),
-        ],
-      };
-      yield call(updateObject, params);
-    },
+    // * syncObjectDep({}: SyncObjectDepAction, {select, call}: EffectsCommandMap) {
+    //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({storageObjectEditor}));
+    //   const params: UpdateObjectParamsType = {
+    //     objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
+    //     dependencies: [
+    //       ...storageObjectEditor.depRs.map((r) => ({
+    //         name: r.name,
+    //         type: 'resource',
+    //         versionRange: r.version,
+    //       })),
+    //       ...storageObjectEditor.depOs.map((o) => ({
+    //         name: o.name,
+    //         type: 'object',
+    //         // versionRange: r.version,
+    //       })),
+    //     ],
+    //   };
+    //   yield call(updateObject, params);
+    // },
     * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
       let resourceTypeErrorText = '';
       if (payload.length < 3 && payload.length > 0) {
         resourceTypeErrorText = '不少于3个字符';
       } else if (payload.length > 20) {
         resourceTypeErrorText = '不多于20个字符';
-      } else if (!RESOURCE_TYPE.test(payload)) {
+      } else if (payload !== '' && !RESOURCE_TYPE.test(payload)) {
         resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
       }
 

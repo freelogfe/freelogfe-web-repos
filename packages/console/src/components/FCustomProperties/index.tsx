@@ -7,10 +7,13 @@ import {FContentText} from "@/components/FText";
 import {i18nMessage} from "@/utils/i18n";
 import Property from './Property';
 
-interface Data {
+export interface Data {
   key: string;
+  keyError?: string;
   value: string;
+  valueError?: string;
   description: string;
+  descriptionError?: string;
   allowCustom: boolean;
   custom: 'input' | 'select';
   customOption: string;
@@ -76,7 +79,6 @@ export default function ({noHeaderButton = false, stubborn = false, dataSource, 
             <FContentText text={i18nMessage('import_from_previous_version')}/>
           </Space>
         </Space>
-
       </>)
     }
 
@@ -84,7 +86,7 @@ export default function ({noHeaderButton = false, stubborn = false, dataSource, 
       <div style={{height: 35}}/>
       {
         dataSource.map((i, j) => (<Property
-          colNum={colNum}
+          // colNum={colNum}
           key={j}
           stubborn={stubborn}
           data={i}
