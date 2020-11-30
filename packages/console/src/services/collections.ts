@@ -11,8 +11,8 @@ export function collectResource(params: CollectResourceParamsType) {
 
 // 查看收藏的资源列表
 export interface CollectionResourcesParamsType {
-  page?: number;
-  pageSize?: number;
+  // page?: number;
+  // pageSize?: number;
   keywords?: number;
   resourceType?: number;
   resourceStatus?: number;

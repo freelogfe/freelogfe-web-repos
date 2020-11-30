@@ -37,8 +37,8 @@ export function update(params: UpdateParamsType) {
 
 // 查看资源分页列表
 export interface ListParamsType {
-  page?: number;
-  pageSize?: number;
+  skip?: number;
+  limit?: number;
   keywords?: string;
   resourceType?: string;
   isSelf?: 0 | 1;

@@ -74,11 +74,6 @@ export interface FetchODepsAction extends AnyAction {
 
 export interface UpdateObjectInfoAction extends AnyAction {
   type: 'storageObjectEditor/updateObjectInfo';
-  // payload: {
-  //   type?: string;
-  //   depR?: StorageObjectEditorModelState['depR'];
-  //   depO?: StorageObjectEditorModelState['depO'];
-  // };
 }
 
 export interface AddObjectDepRAction extends AnyAction {
@@ -241,6 +236,7 @@ const Model: StorageObjectEditorModelType = {
     * addObjectDepR({payload}: AddObjectDepRAction, {call, put, select}: EffectsCommandMap) {
       const params: InfoParamsType = {
         resourceIdOrName: payload,
+        isLoadLatestVersionInfo: 1,
       };
       const {data} = yield call(info, params);
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
@@ -333,6 +329,18 @@ const Model: StorageObjectEditorModelType = {
       const params: UpdateObjectParamsType = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
         resourceType: storageObjectEditor.type,
+        dependencies: [
+          ...storageObjectEditor.depRs.map((r) => ({
+            name: r.name,
+            type: 'resource',
+            versionRange: r.version,
+          })),
+          ...storageObjectEditor.depOs.map((o) => ({
+            name: o.name,
+            type: 'object',
+            // versionRange: r.version,
+          })),
+        ],
       };
       yield call(updateObject, params);
     },

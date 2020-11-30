@@ -11,6 +11,7 @@ import {
   FetchResourcesAction,
   OnChangeRConditionsAction
 } from '@/models/storageObjectDepSelector';
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 interface FResourceSelectorProps {
   disabledIDsOrNames?: string[];
@@ -44,7 +45,7 @@ function FResourceSelector({
 
   return (<>
     <div className={styles.filter}>
-      <FDropdown
+      <FDropdownMenu
         options={selectOptions}
         onChange={(value) => {
           dispatch<OnChangeRConditionsAction>({
@@ -57,7 +58,7 @@ function FResourceSelector({
       >
         <a>{(selectOptions.find((op) => op.value === selector.rSelect) as any).text} <DownOutlined
           style={{marginLeft: 8}}/></a>
-      </FDropdown>
+      </FDropdownMenu>
       <FInput
         theme="dark"
         debounce={300}
@@ -83,7 +84,7 @@ function FResourceSelector({
         time: r.updateDate,
       }))}
       loading={selector.rTotal === -1}
-      stillMore={selector.rTotal > selector.rPageCurrent * selector.rPageSize}
+      stillMore={true}
       onSelect={(value) => {
         onSelect && onSelect({id: value.id, name: value.title});
       }}
@@ -94,7 +95,7 @@ function FResourceSelector({
         dispatch<OnChangeRConditionsAction>({
           type: 'storageObjectDepSelector/onChangeRConditions',
           payload: {
-            rPageCurrent: selector.rPageCurrent + 1,
+            // rPageCurrent: selector.rPageCurrent + 1,
           },
         });
       }}

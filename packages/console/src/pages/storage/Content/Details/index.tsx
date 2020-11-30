@@ -30,22 +30,22 @@ interface DetailsProps {
   editor: StorageObjectEditorModelState;
 }
 
-// let autoComplete: any = null;
-
 function Details({editor, dispatch}: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
+  const hasError: boolean = !!editor.typeError || !!editor.properties.find((ep) => {
+    return ep.key === '' || !!ep.keyError
+      || ep.value === '' || !!ep.valueError
+      || !!ep.descriptionError
+      || (ep.allowCustom && ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
+  });
+
   return (<Drawer
     title={'编辑对象信息'}
-    // onClose={() => setModalVisible(false)}
     visible={editor.visible}
-    // visible={true}
     width={720}
     bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     onClose={() => {
-      // dispatch<FetchObjectsAction>({
-      //   type: 'storageHomePage/fetchObjects',
-      // });
       dispatch<ChangeAction>({
         type: 'storageObjectEditor/change',
         payload: {
@@ -81,9 +81,6 @@ function Details({editor, dispatch}: DetailsProps) {
       <FEditorCard title={'资源类型'}>
         <FAutoComplete
           errorText={editor.typeError}
-          // autoRef={(r: any) => {
-          //   autoComplete = r;
-          // }}
           value={editor.type}
           onChange={(value) => {
             dispatch<OnChangeTypeAction>({
@@ -99,7 +96,6 @@ function Details({editor, dispatch}: DetailsProps) {
               type: 'storageObjectEditor/onChangeType',
               payload: value,
             });
-            // autoComplete.blur();
           }}
           className={styles.FAutoComplete}
           placeholder={i18nMessage('hint_choose_resource_type')}
@@ -176,14 +172,8 @@ function Details({editor, dispatch}: DetailsProps) {
         </Space>
         <div style={{height: 20}}/>
         <FCustomProperties
-          // noHeaderButton={true}
-          // colNum={2}
-          // stubborn={false}
-          // dataSource={version.properties}
           dataSource={editor.properties}
           onChange={(value) => {
-            // console.log(value, 'value2309uwfd');
-            // onChange({properties: value});
             dispatch<ChangeAction>({
               type: 'storageObjectEditor/change',
               payload: {
@@ -192,9 +182,6 @@ function Details({editor, dispatch}: DetailsProps) {
             });
 
           }}
-          // onImport={() => dispatch<ImportPreVersionAction>({
-          //   type: 'resourceVersionCreatorPage/importPreVersion',
-          // })}
         />
       </FEditorCard>
 
@@ -203,10 +190,11 @@ function Details({editor, dispatch}: DetailsProps) {
         <Space size={30}>
           <FTextButton>取消</FTextButton>
           <FNormalButton
+            disabled={hasError}
             onClick={() => {
-             dispatch<UpdateObjectInfoAction>({
-               type: 'storageObjectEditor/updateObjectInfo',
-             });
+              dispatch<UpdateObjectInfoAction>({
+                type: 'storageObjectEditor/updateObjectInfo',
+              });
             }}
           >保存</FNormalButton>
         </Space>
