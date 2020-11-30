@@ -1,9 +1,16 @@
+@import '../../config';
+
 .styles {
-  margin-bottom: -45px;
+  width: 100%;
 }
 
+.delete {
+  display: flex;
+  justify-content: flex-end;
 
+  & > span {
+    color: @f-error-color;
+    cursor: pointer;
+  }
 
-
-
-
+}

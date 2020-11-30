@@ -35,6 +35,18 @@ export interface StorageObjectEditorModelState {
   typeError: string;
   depRs: DepR[];
   depOs: DepO[];
+  properties: {
+    key: string;
+    keyError?: string;
+    value: string;
+    valueError?: string;
+    description: string;
+    descriptionError?: string;
+    allowCustom: boolean;
+    custom: 'input' | 'select';
+    customOption: string;
+    customOptionError: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -104,12 +116,11 @@ export interface StorageObjectEditorModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchRDep: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
     fetchODep: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
-    updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
+    onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
     deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
-    // syncObjectDep: (action: SyncObjectDepAction, effects: EffectsCommandMap) => void;
-    onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
+    updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageObjectEditorModelState, ChangeAction>;
@@ -130,6 +141,7 @@ const Model: StorageObjectEditorModelType = {
     size: 0,
     depRs: [],
     depOs: [],
+    properties: [],
   },
   effects: {
     * fetchInfo({payload}: FetchInfoAction, {call, put}: EffectsCommandMap) {
@@ -179,7 +191,6 @@ const Model: StorageObjectEditorModelType = {
         resourceNames: payload.map((r) => r.name).join(','),
       };
       const {data} = yield call(batchInfo, params);
-      console.log(data, 'resourceNames[9adsjflk');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -209,23 +220,29 @@ const Model: StorageObjectEditorModelType = {
         }
       });
     },
-    * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
-        storageObjectEditor,
-      }));
-      const params: UpdateObjectParamsType = {
-        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-        resourceType: storageObjectEditor.type,
-      };
-      yield call(updateObject, params);
+    * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
+      let resourceTypeErrorText = '';
+      if (payload.length < 3 && payload.length > 0) {
+        resourceTypeErrorText = '不少于3个字符';
+      } else if (payload.length > 20) {
+        resourceTypeErrorText = '不多于20个字符';
+      } else if (payload !== '' && !RESOURCE_TYPE.test(payload)) {
+        resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          type: payload,
+          typeError: resourceTypeErrorText,
+        },
+      });
     },
     * addObjectDepR({payload}: AddObjectDepRAction, {call, put, select}: EffectsCommandMap) {
-
       const params: InfoParamsType = {
         resourceIdOrName: payload,
       };
       const {data} = yield call(info, params);
-      // console.log(data, 'datadata213esdf');
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
       }));
@@ -245,10 +262,6 @@ const Model: StorageObjectEditorModelType = {
           ],
         },
       });
-
-      // yield put<SyncObjectDepAction>({
-      //   type: 'syncObjectDep',
-      // });
     },
     * addObjectDepO({payload}: AddObjectDepOAction, {call, put, select}: EffectsCommandMap) {
       const params: ObjectDetailsParamsType2 = {
@@ -258,7 +271,6 @@ const Model: StorageObjectEditorModelType = {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
       }));
-      // console.log(data, 'adsf#@DS');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -271,10 +283,6 @@ const Model: StorageObjectEditorModelType = {
           ],
         }
       });
-
-      // yield put<SyncObjectDepAction>({
-      //   type: 'syncObjectDep',
-      // });
     },
     * deleteObjectDep({payload}: DeleteObjectDepAction, {put, select}: EffectsCommandMap) {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
@@ -297,10 +305,6 @@ const Model: StorageObjectEditorModelType = {
           },
         });
       }
-
-      // yield put<SyncObjectDepAction>({
-      //   type: 'syncObjectDep',
-      // });
     },
     // * syncObjectDep({}: SyncObjectDepAction, {select, call}: EffectsCommandMap) {
     //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({storageObjectEditor}));
@@ -321,23 +325,16 @@ const Model: StorageObjectEditorModelType = {
     //   };
     //   yield call(updateObject, params);
     // },
-    * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
-      let resourceTypeErrorText = '';
-      if (payload.length < 3 && payload.length > 0) {
-        resourceTypeErrorText = '不少于3个字符';
-      } else if (payload.length > 20) {
-        resourceTypeErrorText = '不多于20个字符';
-      } else if (payload !== '' && !RESOURCE_TYPE.test(payload)) {
-        resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
-      }
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          type: payload,
-          typeError: resourceTypeErrorText,
-        },
-      });
+    * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {
+      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+        storageObjectEditor,
+      }));
+      const params: UpdateObjectParamsType = {
+        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
+        resourceType: storageObjectEditor.type,
+      };
+      yield call(updateObject, params);
     },
   },
   reducers: {

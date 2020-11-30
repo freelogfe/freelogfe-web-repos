@@ -11,16 +11,16 @@ interface FieldProps {
   title: string;
   children?: React.ReactNode;
   className?: string;
-  status?: 'normal' | 'editable' | 'editing';
+  // status?: 'normal' | 'editable' | 'editing';
 
-  onClickEdit?(): void;
+  // onClickEdit?(): void;
 
-  onClickCancel?(): void;
+  // onClickCancel?(): void;
 
-  onClickConfirm?(): void;
+  // onClickConfirm?(): void;
 }
 
-function Field({status = 'normal', className, dot = false, title, children, onClickEdit, onClickCancel, onClickConfirm}: FieldProps) {
+function Field({className, dot = false, title, children}: FieldProps) {
   return (<div className={styles.Field + ' ' + (className || '')}>
       <div className={styles.FieldTitle}>
         {dot && <i className={styles.dot}/>}
@@ -28,24 +28,24 @@ function Field({status = 'normal', className, dot = false, title, children, onCl
       </div>
       <div style={{height: 5}}/>
 
-      <FHorn extra={<>
-        {
-          status === 'editable' && (
-            <FTextButton className={styles.editable} onClick={onClickEdit}>
-              <EditOutlined/>
-            </FTextButton>
-          )
-        }
-        {
-          status === 'editing' && (
-            <Space size={10}>
-              <FTextButton onClick={onClickCancel}>{i18nMessage('cancel')}</FTextButton>
-              <FTextButton onClick={onClickConfirm} theme="primary">{i18nMessage('save')}</FTextButton>
-            </Space>)
-        }
-      </>}>
-        {children}
-      </FHorn>
+      {/*<FHorn extra={<>*/}
+      {/*  {*/}
+      {/*    status === 'editable' && (*/}
+      {/*      <FTextButton className={styles.editable} onClick={onClickEdit}>*/}
+      {/*        <EditOutlined/>*/}
+      {/*      </FTextButton>*/}
+      {/*    )*/}
+      {/*  }*/}
+      {/*  {*/}
+      {/*    status === 'editing' && (*/}
+      {/*      <Space size={10}>*/}
+      {/*        <FTextButton onClick={onClickCancel}>{i18nMessage('cancel')}</FTextButton>*/}
+      {/*        <FTextButton onClick={onClickConfirm} theme="primary">{i18nMessage('save')}</FTextButton>*/}
+      {/*      </Space>)*/}
+      {/*  }*/}
+      {/*</>}>*/}
+      {children}
+      {/*</FHorn>*/}
     </div>
   );
 }

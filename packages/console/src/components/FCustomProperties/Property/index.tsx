@@ -7,35 +7,24 @@ import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import {Data} from '../index';
 import Field from '../Field';
+import {CUSTOM_KEY} from "@/utils/regexp";
 
 interface PropertyProps {
   data: Data;
   // colNum?: number;
-  stubborn?: boolean;
+  // stubborn?: boolean;
   onChange?: (data: PropertyProps['data']) => void;
-  onConfirm?: (data: PropertyProps['data']) => void;
-  onDelete?: () => void;
+  // onConfirm?: (data: PropertyProps['data']) => void;
+  // onDelete?: () => void;
 }
 
-function Property({stubborn = false, data, onChange, onDelete, onConfirm}: PropertyProps) {
-  const [editing, setEditing] = React.useState<'' | 'value' | 'remark'>('');
-  const [valueText, setValueText] = React.useState<string>(data.value as string);
-  const [descriptionText, setDescriptionText] = React.useState<string>(data.description as string);
-  const colSpan = 12;
+function Property({data, onChange}: PropertyProps) {
 
-  function onChangeData(kv: any) {
+  function onChangeData(kv: Partial<PropertyProps['data']>) {
     return onChange && onChange({
       ...data,
       ...kv,
     });
-  }
-
-  function onSave(kv: Partial<Data>) {
-    onConfirm && onConfirm({
-      ...data,
-      ...kv,
-    });
-    setEditing('');
   }
 
   return (
@@ -46,62 +35,77 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
           <FInput
             wrapClassName={styles.FInputWrap}
             value={data.key}
-            onChange={(e) => onChangeData({key: e.target.value})}
-            disabled={stubborn}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let keyError: string = '';
+              if (value === '') {
+                keyError = '请输入';
+              } else if (value.length > 15) {
+                keyError = '不超过15个字符';
+              } else if (!CUSTOM_KEY.test(value)) {
+                keyError = `不符合${CUSTOM_KEY}`;
+              }
+              // console.log(value, 'value0932ur32');
+              onChangeData({
+                key: value,
+                keyError: keyError,
+              });
+            }}
           />
-          <div className={styles.error}>1234</div>
+          {data.keyError && <div className={styles.error}>{data.keyError}</div>}
         </Field>
         <Field
-          status={stubborn ? (editing === 'value' ? 'editing' : 'editable') : 'normal'}
           title={i18nMessage('value')}
           dot={true}
-          onClickEdit={() => setEditing('value')}
-          onClickCancel={() => setEditing('')}
-          onClickConfirm={() => onSave({value: valueText})}
         >
-          {stubborn && editing === 'value'
-            ? <FInput
-              wrapClassName={styles.FInputWrap}
-              value={valueText}
-              onChange={(e) => setValueText(e.target.value)}
-            />
-            : <FInput
-              wrapClassName={styles.FInputWrap}
-              value={data.value}
-              onChange={(e) => onChangeData({value: e.target.value})}
-              disabled={stubborn}
-            />}
-          <div className={styles.error}>1234</div>
+          <FInput
+            wrapClassName={styles.FInputWrap}
+            value={data.value}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let valueError: string = '';
+              if (value === '') {
+                valueError = '请输入';
+              } else if (value.length > 30) {
+                valueError = '不超过30个字符';
+              }
+              onChangeData({
+                value: value,
+                valueError: valueError,
+              });
+            }}
+          />
+          {data.valueError && <div className={styles.error}>{data.valueError}</div>}
         </Field>
       </Space>
       <div style={{height: 15}}/>
       <Space className={styles.row} size={20}>
-        <Field
-          status={stubborn ? (editing === 'remark' ? 'editing' : 'editable') : 'normal'}
-          title={i18nMessage('property_remark')}
-          onClickEdit={() => setEditing('remark')}
-          onClickCancel={() => setEditing('')}
-          onClickConfirm={() => onSave({description: descriptionText})}>
-          {stubborn && editing === 'remark'
-            ? <FInput
-              wrapClassName={styles.FInputWrap}
-              value={descriptionText}
-              onChange={(e) => setDescriptionText(e.target.value)}
-            />
-            : (<FInput
-              wrapClassName={styles.FInputWrap}
-              value={data.description}
-              onChange={(e) => onChangeData({description: e.target.value})}
-              disabled={stubborn}
-            />)}
-          <div className={styles.error}>1234</div>
+        <Field title={i18nMessage('property_remark')}>
+          <FInput
+            wrapClassName={styles.FInputWrap}
+            value={data.description}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let descriptionError: string = '';
+              // if (value === '') {
+              //   descriptionError = '请输入';
+              // } else
+              if (value.length > 50) {
+                descriptionError = '不超过50个字符';
+              }
+              onChangeData({
+                description: value,
+                descriptionError: descriptionError,
+              });
+            }}
+          />
+          {data.descriptionError && <div className={styles.error}>{data.descriptionError}</div>}
         </Field>
         <Field title={i18nMessage('support_customization')}>
           <div style={{height: 38, alignItems: 'center', display: 'flex'}}>
             <Switch
               checked={data.allowCustom}
               onChange={(value) => onChangeData({allowCustom: value})}
-              disabled={stubborn}
               className={styles.Switch}
               size="default"
               defaultChecked
@@ -116,7 +120,6 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
             <FSelect
               value={data.custom}
               onChange={(value) => onChangeData({custom: value})}
-              disabled={stubborn}
               className={styles.FSelect}
               dataSource={[
                 {value: 'input', title: i18nMessage('textfield')},
@@ -132,11 +135,24 @@ function Property({stubborn = false, data, onChange, onDelete, onConfirm}: Prope
                 <FInput
                   wrapClassName={styles.FInputWrap}
                   value={data.customOption}
-                  onChange={(e) => onChangeData({customOption: e.target.value})}
-                  disabled={stubborn}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let customOptionError: string = '';
+
+                    if (value === '') {
+                      customOptionError = '请输入';
+                    } else if (value.length > 500) {
+                      customOptionError = '不超过500个字符';
+                    }
+
+                    onChangeData({
+                      customOption: e.target.value,
+                      customOptionError: customOptionError,
+                    });
+                  }}
                 />
               </Field>
-              <div className={styles.error}>1234</div>
+              {data.customOptionError && <div className={styles.error}>{data.customOptionError}</div>}
             </div>)
           }
         </Space>)

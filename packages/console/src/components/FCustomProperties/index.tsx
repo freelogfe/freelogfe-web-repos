@@ -1,10 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Space, Switch, Row, Col} from 'antd';
-import {CopyOutlined} from '@ant-design/icons';
-import {FCircleButton, FTextButton} from '@/components/FButton';
-import {FContentText} from "@/components/FText";
-import {i18nMessage} from "@/utils/i18n";
+import {Space} from 'antd';
 import Property from './Property';
 
 export interface Data {
@@ -17,88 +13,80 @@ export interface Data {
   allowCustom: boolean;
   custom: 'input' | 'select';
   customOption: string;
+  customOptionError: string;
 }
 
 export interface FCustomPropertiesProps {
-  stubborn?: boolean;
-  colNum?: number;
-  noHeaderButton?: boolean;
   dataSource: Data[];
 
   onChange?(dataSource: FCustomPropertiesProps['dataSource']): void;
-
-  onSave?(dataSource: FCustomPropertiesProps['dataSource']): void;
-
-  onImport?(): void;
 }
 
-export default function ({noHeaderButton = false, stubborn = false, dataSource, onChange, onImport, onSave, colNum}: FCustomPropertiesProps) {
+function FCustomProperties({dataSource, onChange}: FCustomPropertiesProps) {
+
   function onChangeProperty(value: Data, index: number) {
-    return onChange && onChange(dataSource.map((i, j) => {
+    // console.log(value, 'value38920jdskfj');
+    const data: Data[] = dataSource.map((i, j) => {
       if (index !== j) {
         return i;
       }
       return value;
-    }));
+    });
+
+    return onChange && onChange(verifyDuplication(data));
   }
 
-  function onDelete(index: number) {
-    return onChange && onChange(dataSource.filter((i, j) => j !== index));
-  }
-
-  function onAdd() {
-    return onChange && onChange([
-      {key: '', value: '', description: '', allowCustom: false, custom: 'input', customOption: ''},
-      ...dataSource,
-    ]);
-  }
-
-  function onConfirm(value: Data, index: number) {
-    onSave && onSave(dataSource.map((i, j) => {
-      if (j !== index) {
-        return i;
+  function verifyDuplication(data: Data[]) {
+    const map: Map<string, number> = new Map<string, number>();
+    for (const item of data) {
+      if (item.key === '') {
+        continue;
       }
-      return value;
-    }));
+      if (map.has(item.key)) {
+        map.set(item.key, map.get(item.key) as number + 1)
+      } else {
+        map.set(item.key, 1);
+      }
+    }
+    const errorText: string = '键不能重复';
+
+    return data.map<Data>((d) => {
+      if (d.keyError && d.keyError !== errorText) {
+        return d;
+      }
+      // console.log(d.key, map.get(d.key), '9812347928137');
+      return {
+        ...d,
+        keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
+      };
+    });
   }
 
   return (<>
     {
-      !stubborn && !noHeaderButton && (<>
-        <Space size={80}>
-          <Space size={10}>
-            <FCircleButton onClick={onAdd} theme="weaken"/>
-            <FContentText text={i18nMessage('create_property')}/>
-          </Space>
-          <Space size={10}>
-            <FCircleButton
-              theme="weaken"
-              icon={<CopyOutlined/>}
-              onClick={() => onImport && onImport()}
-            />
-            <FContentText text={i18nMessage('import_from_previous_version')}/>
-          </Space>
-        </Space>
-      </>)
-    }
-
-    {dataSource.length > 0 && <div className={styles.styles}>
-      <div style={{height: 35}}/>
-      {
-        dataSource.map((i, j) => (<Property
-          // colNum={colNum}
-          key={j}
-          stubborn={stubborn}
-          data={i}
-          onChange={(value) => onChangeProperty(value, j)}
-          onConfirm={(value) => onConfirm(value, j)}
-          onDelete={() => onDelete(j)}
-        />))
-      }
-    </div>}
+      dataSource.length > 0 && <Space
+        className={styles.styles}
+        size={15}
+        direction="vertical"
+      >
+        {
+          [
+            ...dataSource.map((i, j) => (<div key={j}>
+              <Property
+                data={i}
+                onChange={(value) => onChangeProperty(value, j)}
+              />
+              <div className={styles.delete}>
+                <span onClick={() => {
+                  const data: Data[] = dataSource.filter((ds, index) => index !== j);
+                  onChange && onChange(verifyDuplication(data));
+                }}>删除</span>
+              </div>
+            </div>))
+          ].reverse()
+        }
+      </Space>}
   </>);
 }
 
-
-
-
+export default FCustomProperties;
