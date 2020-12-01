@@ -59,18 +59,18 @@ export interface FetchInfoAction extends AnyAction {
   payload: string;
 }
 
-export interface FetchRDepsAction extends AnyAction {
-  type: 'fetchRDepAction';
-  payload: {
-    name: string;
-    version: string;
-  }[];
-}
-
-export interface FetchODepsAction extends AnyAction {
-  type: 'fetchODepAction';
-  payload: string;
-}
+// export interface FetchRDepsAction extends AnyAction {
+//   type: 'fetchRDepAction';
+//   payload: {
+//     name: string;
+//     version: string;
+//   }[];
+// }
+//
+// export interface FetchODepsAction extends AnyAction {
+//   type: 'fetchODepAction';
+//   payload: string;
+// }
 
 export interface UpdateObjectInfoAction extends AnyAction {
   type: 'storageObjectEditor/updateObjectInfo';
@@ -109,8 +109,8 @@ export interface StorageObjectEditorModelType {
   state: StorageObjectEditorModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    fetchRDep: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
-    fetchODep: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
+    // fetchRDep: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
+    // fetchODep: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
     onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
@@ -144,7 +144,44 @@ const Model: StorageObjectEditorModelType = {
         objectIdOrName: payload,
       };
       const {data} = yield call(objectDetails, params);
-      console.log(data, '@#DCCADSFC');
+      // console.log(data, '@#DCCADSFC');
+      const resources: any[] = data.dependencies
+        .filter((ro: any) => ro.type === 'resource');
+      const objects: any[] = data.dependencies
+        .filter((ro: any) => ro.type === 'object');
+
+      let depRs: StorageObjectEditorModelState['depRs'] = [];
+      let depOs: StorageObjectEditorModelState['depOs'] = [];
+
+      if (resources.length > 0) {
+        console.log(resources, 'resources1234234');
+        const params: BatchInfoParamsType = {
+          resourceNames: resources.map((r: any) => r.name).join(','),
+        };
+        const {data} = yield call(batchInfo, params);
+        depRs = (data as any[]).map<StorageObjectEditorModelState['depRs'][number]>((r: any) => {
+          return {
+            name: r.resourceName,
+            type: r.resourceType,
+            version: resources.find((sr) => sr.name === r.resourceName)?.versionRange,
+            status: r.status,
+            baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
+          };
+        });
+      }
+
+      if (objects.length > 0) {
+        const params: BatchObjectListParamsType = {
+          fullObjectNames: objects.map((r: any) => r.name).join(','),
+        };
+        const {data} = yield call(batchObjectList, params);
+
+        depOs = (data as any[]).map<StorageObjectEditorModelState['depOs'][number]>((o: any) => ({
+          name: o.bucketName + '/' + o.objectName,
+          type: o.resourceType,
+        }));
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -152,8 +189,8 @@ const Model: StorageObjectEditorModelType = {
           objectName: data.objectName,
           type: data.resourceType,
           size: data.systemProperty.fileSize,
-          depRs: [],
-          depOs: [],
+          depRs: depRs,
+          depOs: depOs,
           properties: (data.customPropertyDescriptors as any[])
             .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
               return {
@@ -171,65 +208,41 @@ const Model: StorageObjectEditorModelType = {
             }),
         },
       });
-
-      const resourceNames = data.dependencies
-        .filter((ro: any) => ro.type === 'resource');
-      // .map((r: any) => r.name);
-      const objectNames: string[] = data.dependencies
-        .filter((ro: any) => ro.type === 'object')
-        .map((r: any) => r.name);
-
-      if (resourceNames.length > 0) {
-        yield put<FetchRDepsAction>({
-          type: 'fetchRDepAction',
-          payload: resourceNames.map((r: any) => ({
-            name: r.name,
-            version: r.versionRange,
-          })),
-        });
-      }
-
-      if (objectNames.length > 0) {
-        yield put<FetchODepsAction>({
-          type: 'fetchODepAction',
-          payload: objectNames.join(','),
-        });
-      }
     },
-    * fetchRDep({payload}: FetchRDepsAction, {call, put}: EffectsCommandMap) {
-      const params: BatchInfoParamsType = {
-        resourceNames: payload.map((r) => r.name).join(','),
-      };
-      const {data} = yield call(batchInfo, params);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          depRs: data.map((r: any) => ({
-            name: r.resourceName,
-            type: r.resourceType,
-            version: payload.find((sr) => sr.name === r.resourceName)?.version,
-            status: r.status,
-            baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
-          })),
-        }
-      });
-    },
-    * fetchODep({payload}: FetchODepsAction, {call, put}: EffectsCommandMap) {
-      const params: BatchObjectListParamsType = {
-        fullObjectNames: payload,
-      };
-      const {data} = yield call(batchObjectList, params);
-      // console.log(data, 'fullObjectNames2309opsdmadfs');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          depOs: data.map((o: any) => ({
-            name: o.bucketName + '/' + o.objectName,
-            type: o.resourceType,
-          })),
-        }
-      });
-    },
+    // * fetchRDep({payload}: FetchRDepsAction, {call, put}: EffectsCommandMap) {
+    //   const params: BatchInfoParamsType = {
+    //     resourceNames: payload.map((r) => r.name).join(','),
+    //   };
+    //   const {data} = yield call(batchInfo, params);
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       depRs: data.map((r: any) => ({
+    //         name: r.resourceName,
+    //         type: r.resourceType,
+    //         version: payload.find((sr) => sr.name === r.resourceName)?.version,
+    //         status: r.status,
+    //         baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
+    //       })),
+    //     }
+    //   });
+    // },
+    // * fetchODep({payload}: FetchODepsAction, {call, put}: EffectsCommandMap) {
+    //   const params: BatchObjectListParamsType = {
+    //     fullObjectNames: payload,
+    //   };
+    //   const {data} = yield call(batchObjectList, params);
+    //   // console.log(data, 'fullObjectNames2309opsdmadfs');
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       depOs: data.map((o: any) => ({
+    //         name: o.bucketName + '/' + o.objectName,
+    //         type: o.resourceType,
+    //       })),
+    //     }
+    //   });
+    // },
     * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
       let resourceTypeErrorText = '';
       if (payload.length < 3 && payload.length > 0) {
