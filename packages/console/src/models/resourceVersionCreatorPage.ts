@@ -242,7 +242,7 @@ const Model: ResourceVersionCreatorModelType = {
           }
         }),
         resolveResources: resolveResources,
-        customPropertyDescriptors: resourceVersionCreatorPage.properties.map((i) => ({
+        customPropertyDescriptors: resourceVersionCreatorPage.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => ({
           key: i.key,
           defaultValue: i.value,
           type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',

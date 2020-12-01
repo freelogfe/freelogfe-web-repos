@@ -181,7 +181,13 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
 // 更新存储对象属性
 export interface UpdateObjectParamsType {
   objectIdOrName: string;
-  // customProperty?: [];
+  customPropertyDescriptors?: {
+    key: string;
+    defaultValue: string;
+    type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+    candidateItems?: string[];
+    remark?: string;
+  }[];
   dependencies?: {
     name: string;
     type: string;

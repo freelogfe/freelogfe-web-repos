@@ -144,7 +144,7 @@ const Model: StorageObjectEditorModelType = {
         objectIdOrName: payload,
       };
       const {data} = yield call(objectDetails, params);
-      // console.log(data, '@#DCCADSFC');
+      console.log(data, '@#DCCADSFC');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -154,6 +154,21 @@ const Model: StorageObjectEditorModelType = {
           size: data.systemProperty.fileSize,
           depRs: [],
           depOs: [],
+          properties: (data.customPropertyDescriptors as any[])
+            .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                keyError: '',
+                value: cpd.defaultValue,
+                valueError: '',
+                description: cpd.remark,
+                descriptionError: '',
+                allowCustom: cpd.type !== 'readonlyText',
+                custom: cpd.type === 'editableText' ? 'input' : 'select',
+                customOption: cpd.candidateItems.join(','),
+                customOptionError: '',
+              }
+            }),
         },
       });
 
@@ -302,26 +317,6 @@ const Model: StorageObjectEditorModelType = {
         });
       }
     },
-    // * syncObjectDep({}: SyncObjectDepAction, {select, call}: EffectsCommandMap) {
-    //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({storageObjectEditor}));
-    //   const params: UpdateObjectParamsType = {
-    //     objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-    //     dependencies: [
-    //       ...storageObjectEditor.depRs.map((r) => ({
-    //         name: r.name,
-    //         type: 'resource',
-    //         versionRange: r.version,
-    //       })),
-    //       ...storageObjectEditor.depOs.map((o) => ({
-    //         name: o.name,
-    //         type: 'object',
-    //         // versionRange: r.version,
-    //       })),
-    //     ],
-    //   };
-    //   yield call(updateObject, params);
-    // },
-
     * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
@@ -341,6 +336,16 @@ const Model: StorageObjectEditorModelType = {
             // versionRange: r.version,
           })),
         ],
+        customPropertyDescriptors: storageObjectEditor.properties
+          .map<NonNullable<UpdateObjectParamsType['customPropertyDescriptors']>[number]>((p) => {
+            return {
+              key: p.key,
+              defaultValue: p.value,
+              type: !p.allowCustom ? 'readonlyText' : p.custom === 'input' ? 'editableText' : 'select',
+              candidateItems: p.customOption ? p.customOption.split(',') : [],
+              remark: p.description,
+            };
+          }),
       };
       yield call(updateObject, params);
     },
