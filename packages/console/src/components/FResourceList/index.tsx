@@ -14,6 +14,7 @@ export interface FResourceListProps {
     resourceType: string;
     time: string;
     status: 0 | 1;
+    latestVersion: string
     // buttonStatus?: 'select' | 'disabled' | 'remove';
   }[];
   disabledIDsOrNames?: string[];
@@ -55,7 +56,8 @@ function FResourceList({
                 text={i.title}
               />
             </div>
-            {i.status === 0 && <label>未上线</label>}
+            {i.status === 0 && <label
+              className={i.latestVersion ? styles.offline : styles.noVersion}>{i.latestVersion ? '未上线' : '未发行'}</label>}
           </div>
           <div style={{height: 2}}/>
           <FContentText
@@ -68,7 +70,7 @@ function FResourceList({
             ? (<FNormalButton
               theme="weaken"
               onClick={() => onSelect && onSelect(i)}
-              disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
+              disabled={!i.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
             >选择</FNormalButton>)
             : (<FNormalButton
               theme="delete2"

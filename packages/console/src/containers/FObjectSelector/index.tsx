@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FDropdown from '@/components/FDropdown';
 import FInput from '@/components/FInput';
-import FResourceList from '@/components/FResourceList';
+import FResourceList, {FResourceListProps} from '@/components/FResourceList';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState} from '@/models/connect';
 import {DownOutlined} from '@ant-design/icons';
@@ -12,7 +11,6 @@ import {
   FetchObjectsAction,
   OnChangeOConditionsAction,
 } from '@/models/storageObjectDepSelector';
-import {AddObjectDepOAction} from '@/models/storageObjectEditor';
 import FDropdownMenu from "@/components/FDropdownMenu";
 
 interface FObjectSelectorProps {
@@ -40,37 +38,28 @@ function FObjectSelector({
                          }: FObjectSelectorProps) {
 
   React.useEffect(() => {
-    // console.log(visibleResourceType, 'visibleResourceTypevisibleResourceType');
-    // console.log('asfdsf9898798uoiu');
     if (selector.oTotal === -1) {
-      dispatch<ChangeAction>({
-        type: 'storageObjectDepSelector/change',
-        payload: {
-          visibleOResourceType: visibleResourceType,
-          isLoadingTypelessO: isLoadingTypeless,
-        },
-      });
       dispatch<FetchObjectsAction>({
         type: 'storageObjectDepSelector/fetchObjects',
       });
     }
   }, []);
 
-  React.useEffect(() => {
-    if (selector.oTotal === -1) {
-      return;
-    }
-    dispatch<ChangeAction>({
-      type: 'storageObjectDepSelector/change',
-      payload: {
-        visibleOResourceType: visibleResourceType,
-        isLoadingTypelessO: isLoadingTypeless,
-      },
-    });
-    dispatch<FetchObjectsAction>({
-      type: 'storageObjectDepSelector/fetchObjects',
-    });
-  }, [isLoadingTypeless, visibleResourceType]);
+  // React.useEffect(() => {
+  //   if (selector.oTotal === -1) {
+  //     return;
+  //   }
+  //   dispatch<ChangeAction>({
+  //     type: 'storageObjectDepSelector/change',
+  //     payload: {
+  //       // visibleOResourceType: visibleResourceType,
+  //       // isLoadingTypelessO: isLoadingTypeless,
+  //     },
+  //   });
+  //   dispatch<FetchObjectsAction>({
+  //     type: 'storageObjectDepSelector/fetchObjects',
+  //   });
+  // }, [isLoadingTypeless, visibleResourceType]);
 
   const selectOptions = [
     ...defaultSelectOptions,
@@ -85,7 +74,7 @@ function FObjectSelector({
       <FDropdownMenu
         options={selectOptions}
         onChange={(value) => {
-          console.log(value, 'valuevalue23rfsd');
+          // console.log(value, 'valuevalue23rfsd');
           dispatch<OnChangeOConditionsAction>({
             type: 'storageObjectDepSelector/onChangeOConditions',
             payload: {
@@ -114,15 +103,16 @@ function FObjectSelector({
     <FResourceList
       disabledIDsOrNames={disabledIDsOrNames}
       showRemoveIDsOrNames={showRemoveIDsOrNames}
-      resourceObjects={selector.objectList.map((o) => ({
+      resourceObjects={selector.objectList.map<FResourceListProps['resourceObjects'][number]>((o) => ({
         id: o.objectId,
         resourceType: o.resourceType,
         status: 1,
         time: o.updateDate,
         title: `${o.bucketName}/${o.objectName}`,
+        latestVersion: '0.0.0',
       }))}
       loading={selector.oTotal === -1}
-      stillMore={selector.oTotal > selector.oPageCurrent * selector.oPageSize}
+      stillMore={selector.oTotal > selector.objectList.length}
       onSelect={(value) => {
         onSelect && onSelect({id: value.id, name: value.title});
       }}
@@ -130,11 +120,9 @@ function FObjectSelector({
         onDelete && onDelete({id: value.id, name: value.title});
       }}
       onLoadMord={() => {
-        dispatch<OnChangeOConditionsAction>({
-          type: 'storageObjectDepSelector/onChangeOConditions',
-          payload: {
-            oPageCurrent: selector.oPageCurrent + 1,
-          },
+        dispatch<FetchObjectsAction>({
+          type: 'storageObjectDepSelector/fetchObjects',
+          payload: false,
         });
       }}
     />

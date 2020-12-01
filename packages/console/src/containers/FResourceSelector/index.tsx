@@ -82,9 +82,10 @@ function FResourceSelector({
         resourceType: r.resourceType,
         status: r.status,
         time: r.updateDate,
+        latestVersion: r.latestVersion,
       }))}
       loading={selector.rTotal === -1}
-      stillMore={true}
+      stillMore={selector.resourceList.length < selector.rTotal}
       onSelect={(value) => {
         onSelect && onSelect({id: value.id, name: value.title});
       }}
@@ -92,11 +93,9 @@ function FResourceSelector({
         onDelete && onDelete({id: value.id, name: value.title});
       }}
       onLoadMord={() => {
-        dispatch<OnChangeRConditionsAction>({
-          type: 'storageObjectDepSelector/onChangeRConditions',
-          payload: {
-            // rPageCurrent: selector.rPageCurrent + 1,
-          },
+        dispatch<FetchResourcesAction>({
+          type: 'storageObjectDepSelector/fetchResources',
+          payload: false,
         });
       }}
     />
