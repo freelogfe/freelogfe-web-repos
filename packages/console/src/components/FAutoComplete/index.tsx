@@ -3,7 +3,6 @@ import styles from './index.less';
 import {AutoComplete} from 'antd';
 import {AutoCompleteProps} from 'antd/lib/auto-complete';
 import {useDebounceFn} from 'ahooks';
-import {ChangeEvent} from "react";
 
 interface FAutoCompleteProps extends AutoCompleteProps {
   errorText?: string;
