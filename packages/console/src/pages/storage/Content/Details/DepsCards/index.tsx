@@ -4,9 +4,9 @@ import {StorageObjectEditorModelState} from '@/models/storageObjectEditor';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
-import {FCircleButton} from '@/components/FButton';
-import {RangePickerDateProps} from "antd/lib/date-picker/generatePicker";
-import {Data} from "@/components/FCustomProperties";
+import {FCircleButton, FTextButton} from '@/components/FButton';
+import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
+import {FEdit} from "@/components/FIcons";
 
 interface DepsCardsProps {
   title: string;
@@ -43,7 +43,13 @@ function DepsCards({dataSource, title, onDelete}: DepsCardsProps) {
               {
                 d.version && (<>
                   <Divider type="vertical"/>
-                  <FContentText type="additional2">版本范围：{d.version}</FContentText>
+                  <Space size={5}>
+                    <FContentText type="additional2">版本范围：{d.version}</FContentText>
+                    <FVersionHandlerPopover
+                      value={'^12.2.3'}
+                      versionOptions={['1.2.1']}
+                    ><FTextButton><FEdit style={{fontSize: 12}}/></FTextButton></FVersionHandlerPopover>
+                  </Space>
                 </>)
               }
 
