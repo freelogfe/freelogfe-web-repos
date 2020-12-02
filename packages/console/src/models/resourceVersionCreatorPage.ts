@@ -27,17 +27,17 @@ import {contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
 import {batchObjectList, BatchObjectListParamsType} from "@/services/storages";
 
-export type DepResources = {
+export type DepResources = WholeReadonly<{
   id: string;
   title: string;
   resourceType: string;
   status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/;
-  version: Readonly<{
+  version: {
     isCustom: boolean;
     select: string;
     allowUpdate: boolean;
     input: string;
-  }> | null;
+  } | null;
   versions: string[];
   upthrow: boolean;
   upthrowDisabled: boolean;
@@ -58,7 +58,7 @@ export type DepResources = {
     code: string;
     status: 0 | 1;
   }[];
-}[];
+}[]>;
 
 export type Relationship = {
   id: string;
