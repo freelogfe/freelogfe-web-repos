@@ -22,7 +22,7 @@ import {
   OnChangeTypeAction,
   UpdateObjectInfoAction
 } from "@/models/storageObjectEditor";
-import {FetchObjectsAction} from "@/models/storageHomePage";
+import {FetchObjectsAction, UpdateAObjectAction} from "@/models/storageHomePage";
 import DepsCards from './DepsCards';
 
 interface DetailsProps {
@@ -191,9 +191,22 @@ function Details({editor, dispatch}: DetailsProps) {
           <FTextButton>取消</FTextButton>
           <FNormalButton
             disabled={hasError}
-            onClick={() => {
-              dispatch<UpdateObjectInfoAction>({
+            onClick={async () => {
+              await dispatch<UpdateObjectInfoAction>({
                 type: 'storageObjectEditor/updateObjectInfo',
+              });
+              dispatch<UpdateAObjectAction>({
+                type: 'storageHomePage/updateAObject',
+                payload: {
+                  id: editor.objectId,
+                  type: editor.type,
+                },
+              });
+              dispatch<ChangeAction>({
+                type: 'storageObjectEditor/change',
+                payload: {
+                  visible: false,
+                }
               });
             }}
           >保存</FNormalButton>

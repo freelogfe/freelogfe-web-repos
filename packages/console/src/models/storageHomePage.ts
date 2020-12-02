@@ -17,10 +17,10 @@ import {
   spaceStatistics,
 } from '@/services/storages';
 import moment from 'moment';
-import {RcFile} from "antd/lib/upload/interface";
-import {formatDateTime, humanizeSize} from "@/utils/format";
-import fMessage from "@/components/fMessage";
-import {getSHA1Hash} from "@/utils/tools";
+import {RcFile} from 'antd/lib/upload/interface';
+import {formatDateTime, humanizeSize} from '@/utils/format';
+import fMessage from '@/components/fMessage';
+import {getSHA1Hash} from '@/utils/tools';
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -46,8 +46,7 @@ export interface StorageHomePageModelState {
     updateTime: string;
   }[];
   isLoading: boolean;
-  // pageCurrent: number;
-  // pageSize: number;
+  pageSize: number;
   total: number;
 
   uploadTaskQueue: {
@@ -110,6 +109,11 @@ export interface UploadFilesAction extends AnyAction {
   payload: RcFile[];
 }
 
+export interface UpdateAObjectAction extends AnyAction {
+  type: 'storageHomePage/updateAObject';
+  payload: Pick<StorageHomePageModelState['objectList'][number], 'id'> & Partial<Omit<StorageHomePageModelState['objectList'][number], 'id'>>;
+}
+
 interface StorageHomePageModelType {
   namespace: 'storageHomePage';
   state: StorageHomePageModelState;
@@ -121,9 +125,9 @@ interface StorageHomePageModelType {
     deleteBucketByName: (action: DeleteBucketByNameAction, effects: EffectsCommandMap) => void;
     createObject: (action: CreateObjectAction, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
-    // onChangePaginationAction: (action: OnChangePaginationAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
     uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
+    updateAObject: (action: UpdateAObjectAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -145,11 +149,9 @@ const Model: StorageHomePageModelType = {
     totalStorage: -1,
     usedStorage: -1,
 
-    // currentBucketInfo: null,
     objectList: [],
     isLoading: true,
-    // pageCurrent: 1,
-    // pageSize: 100,
+    pageSize: 100,
     total: -1,
 
     uploadTaskQueue: [],
@@ -163,7 +165,6 @@ const Model: StorageHomePageModelType = {
       };
       const {data} = yield call(bucketList, params);
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
-      // console.log(data, 'datadata092834oi');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -173,7 +174,6 @@ const Model: StorageHomePageModelType = {
             createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
             totalFileQuantity: i.totalFileQuantity,
           })),
-          // activatedBucket: (storageHomePage.activatedBucket === '' && data?.length > 0) ? data[0].bucketName : '',
         },
       });
       yield put<OnChangeActivatedBucketAction>({
@@ -190,7 +190,6 @@ const Model: StorageHomePageModelType = {
     },
     * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
-      // console.log(storageHomePage, 'storageHomePage');
 
       if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(storageHomePage.newBucketName)) {
         yield put<ChangeAction>({
@@ -205,7 +204,6 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.newBucketName,
       };
       yield call(createBucket, params);
-      // console.log(data, 'datadata2p98;ho');
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -213,13 +211,10 @@ const Model: StorageHomePageModelType = {
         type: 'change',
         payload: {
           newBucketModalVisible: false,
-          // activatedBucket: data.bucketName,
         },
       });
     },
     * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select}: EffectsCommandMap) {
-
-      // console.log(payload, 'pppppPPPPP23rfsdasd');
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
@@ -238,7 +233,6 @@ const Model: StorageHomePageModelType = {
     },
     * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
       const {data} = yield call(spaceStatistics);
-      // console.log(data, 'aw89ihnwesdlk');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -268,27 +262,22 @@ const Model: StorageHomePageModelType = {
       yield call(createObject, params);
     },
     * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
-      // console.log(payload, 'payloadpayload234234');
-
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
       let skip: number = 0;
-      let limit: number = 20;
+      let limit: number = storageHomePage.pageSize;
 
       if (payload === 'append') {
-        // console.log(storageHomePage.objectList.length, storageHomePage.total, '20398');
         if (storageHomePage.objectList.length === storageHomePage.total) {
           return;
         }
         skip = storageHomePage.objectList.length;
       } else if (payload === 'insert') {
-        // console.log('insert9023jdsaklfasdf');
         const allNames: string[] = [
           ...storageHomePage.uploadTaskQueue.map<string>((utq) => utq.name),
           ...storageHomePage.objectList.map<string>((ol) => ol.name),
         ];
         limit = new Set(allNames).size;
       }
-      // console.log(limit, skip, '198234oi123h4');
       const params: ObjectListParamsType = {
         bucketName: storageHomePage.activatedBucket,
         limit,
@@ -301,7 +290,6 @@ const Model: StorageHomePageModelType = {
         },
       });
       const {data} = yield call(objectList, params);
-      // console.log(data, 'datadata23w908io');
       let objectListData: StorageHomePageModelState['objectList'] = [];
 
       if (payload === 'restart') {
@@ -387,6 +375,26 @@ const Model: StorageHomePageModelType = {
           uploadPanelVisible: true,
         }
       });
+    },
+    * updateAObject({payload}: UpdateAObjectAction, {select, put}: EffectsCommandMap) {
+      const {id, ...data} = payload;
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          objectList: storageHomePage.objectList.map<StorageHomePageModelState['objectList'][number]>((ol) => {
+            if (ol.id !== id) {
+              return ol;
+            }
+            return {
+              ...ol,
+              ...data,
+            };
+          }),
+        }
+      })
     },
   },
   reducers: {

@@ -11,7 +11,6 @@ import {
 import {ConnectState} from "@/models/connect";
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from "@/services/resources";
 import {RESOURCE_TYPE} from "@/utils/regexp";
-import {OnChangeResourceTypeAction} from "@/models/resourceCreatorPage";
 
 interface DepR {
   name: string;
@@ -28,6 +27,7 @@ interface DepO {
 
 export interface StorageObjectEditorModelState {
   visible: boolean;
+  objectId: string;
   bucketName: string;
   objectName: string;
   size: number;
@@ -59,19 +59,6 @@ export interface FetchInfoAction extends AnyAction {
   payload: string;
 }
 
-// export interface FetchRDepsAction extends AnyAction {
-//   type: 'fetchRDepAction';
-//   payload: {
-//     name: string;
-//     version: string;
-//   }[];
-// }
-//
-// export interface FetchODepsAction extends AnyAction {
-//   type: 'fetchODepAction';
-//   payload: string;
-// }
-
 export interface UpdateObjectInfoAction extends AnyAction {
   type: 'storageObjectEditor/updateObjectInfo';
 }
@@ -85,11 +72,6 @@ export interface AddObjectDepOAction extends AnyAction {
   type: 'storageObjectEditor/addObjectDepO';
   payload: string;
 }
-
-// export interface SyncObjectDepAction extends AnyAction {
-//   type: 'syncObjectDep';
-//   // payload: string;
-// }
 
 export interface DeleteObjectDepAction extends AnyAction {
   type: 'storageObjectEditor/deleteObjectDep';
@@ -129,6 +111,7 @@ const Model: StorageObjectEditorModelType = {
   namespace: 'storageObjectEditor',
   state: {
     visible: false,
+    objectId: '',
     bucketName: '',
     objectName: '',
     type: '',
@@ -144,7 +127,6 @@ const Model: StorageObjectEditorModelType = {
         objectIdOrName: payload,
       };
       const {data} = yield call(objectDetails, params);
-      // console.log(data, '@#DCCADSFC');
       const resources: any[] = data.dependencies
         .filter((ro: any) => ro.type === 'resource');
       const objects: any[] = data.dependencies
@@ -185,6 +167,7 @@ const Model: StorageObjectEditorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          objectId: data.objectId,
           bucketName: data.bucketName,
           objectName: data.objectName,
           type: data.resourceType,
@@ -209,40 +192,6 @@ const Model: StorageObjectEditorModelType = {
         },
       });
     },
-    // * fetchRDep({payload}: FetchRDepsAction, {call, put}: EffectsCommandMap) {
-    //   const params: BatchInfoParamsType = {
-    //     resourceNames: payload.map((r) => r.name).join(','),
-    //   };
-    //   const {data} = yield call(batchInfo, params);
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       depRs: data.map((r: any) => ({
-    //         name: r.resourceName,
-    //         type: r.resourceType,
-    //         version: payload.find((sr) => sr.name === r.resourceName)?.version,
-    //         status: r.status,
-    //         baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
-    //       })),
-    //     }
-    //   });
-    // },
-    // * fetchODep({payload}: FetchODepsAction, {call, put}: EffectsCommandMap) {
-    //   const params: BatchObjectListParamsType = {
-    //     fullObjectNames: payload,
-    //   };
-    //   const {data} = yield call(batchObjectList, params);
-    //   // console.log(data, 'fullObjectNames2309opsdmadfs');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       depOs: data.map((o: any) => ({
-    //         name: o.bucketName + '/' + o.objectName,
-    //         type: o.resourceType,
-    //       })),
-    //     }
-    //   });
-    // },
     * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
       let resourceTypeErrorText = '';
       if (payload.length < 3 && payload.length > 0) {
@@ -346,7 +295,6 @@ const Model: StorageObjectEditorModelType = {
           ...storageObjectEditor.depOs.map((o) => ({
             name: o.name,
             type: 'object',
-            // versionRange: r.version,
           })),
         ],
         customPropertyDescriptors: storageObjectEditor.properties
