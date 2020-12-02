@@ -15,7 +15,6 @@ export interface FResourceListProps {
     time: string;
     status: 0 | 1;
     latestVersion: string
-    // buttonStatus?: 'select' | 'disabled' | 'remove';
   }[];
   disabledIDsOrNames?: string[];
   showRemoveIDsOrNames?: string[];

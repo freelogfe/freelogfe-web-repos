@@ -12,7 +12,6 @@ interface StorageProps {
 function Storage({}: StorageProps) {
   return (<FSiderLayout sider={<Sider/>}>
     <Content/>
-    {/*<NoContent/>*/}
   </FSiderLayout>);
 }
 

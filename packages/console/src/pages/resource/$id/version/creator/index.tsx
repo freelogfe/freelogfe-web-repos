@@ -112,12 +112,12 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
 
         <FEditorCard dot={false} title={i18nMessage('object_property')}>
           <FCustomProperties
-            stubborn={false}
+            // stubborn={false}
             dataSource={version.properties}
             onChange={(value) => onChange({properties: value})}
-            onImport={() => dispatch<ImportPreVersionAction>({
-              type: 'resourceVersionCreatorPage/importPreVersion',
-            })}
+            // onImport={() => dispatch<ImportPreVersionAction>({
+            //   type: 'resourceVersionCreatorPage/importPreVersion',
+            // })}
           />
         </FEditorCard>
 
