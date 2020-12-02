@@ -2,7 +2,7 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {
-  batchObjectList, BatchObjectListParamsType,
+  batchObjectList, BatchObjectListParamsType, fileProperty, FilePropertyParamsType,
   objectDetails,
   ObjectDetailsParamsType2,
   updateObject,
@@ -30,8 +30,10 @@ export interface StorageObjectEditorModelState {
   objectId: string;
   bucketName: string;
   objectName: string;
+  sha1: string;
   size: number;
   type: string;
+  typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
   typeError: string;
   depRs: DepR[];
   depOs: DepO[];
@@ -91,8 +93,6 @@ export interface StorageObjectEditorModelType {
   state: StorageObjectEditorModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    // fetchRDep: (action: FetchRDepsAction, effects: EffectsCommandMap) => void;
-    // fetchODep: (action: FetchODepsAction, effects: EffectsCommandMap) => void;
     onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
@@ -114,7 +114,9 @@ const Model: StorageObjectEditorModelType = {
     objectId: '',
     bucketName: '',
     objectName: '',
+    sha1: '',
     type: '',
+    typeVerify: 2,
     typeError: '',
     size: 0,
     depRs: [],
@@ -136,7 +138,6 @@ const Model: StorageObjectEditorModelType = {
       let depOs: StorageObjectEditorModelState['depOs'] = [];
 
       if (resources.length > 0) {
-        console.log(resources, 'resources1234234');
         const params: BatchInfoParamsType = {
           resourceNames: resources.map((r: any) => r.name).join(','),
         };
@@ -170,6 +171,7 @@ const Model: StorageObjectEditorModelType = {
           objectId: data.objectId,
           bucketName: data.bucketName,
           objectName: data.objectName,
+          sha1: data.sha1,
           type: data.resourceType,
           size: data.systemProperty.fileSize,
           depRs: depRs,
@@ -192,7 +194,7 @@ const Model: StorageObjectEditorModelType = {
         },
       });
     },
-    * onChangeType({payload}: OnChangeTypeAction, {put}: EffectsCommandMap) {
+    * onChangeType({payload}: OnChangeTypeAction, {put, select, call}: EffectsCommandMap) {
       let resourceTypeErrorText = '';
       if (payload.length < 3 && payload.length > 0) {
         resourceTypeErrorText = '不少于3个字符';
@@ -202,11 +204,33 @@ const Model: StorageObjectEditorModelType = {
         resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
       }
 
+      if (!resourceTypeErrorText && payload) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            typeVerify: 1,
+          },
+        });
+        const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+          storageObjectEditor,
+        }));
+        const params: FilePropertyParamsType = {
+          sha1: storageObjectEditor.sha1,
+          resourceType: payload,
+        };
+
+        const {data} = yield call(fileProperty, params);
+        if (!data) {
+          resourceTypeErrorText = '不能设置为' + payload + '类型';
+        }
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           type: payload,
           typeError: resourceTypeErrorText,
+          typeVerify: 2,
         },
       });
     },

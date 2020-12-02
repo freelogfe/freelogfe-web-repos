@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {CopyOutlined, DownloadOutlined, ArrowUpOutlined} from '@ant-design/icons';
+import {DownloadOutlined} from '@ant-design/icons';
 import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
 import {Space, Divider, Popover, Drawer, Row, Col} from 'antd';
 import FEditorCard from '@/components/FEditorCard';
@@ -9,20 +9,20 @@ import FSelect from '@/components/FSelect';
 import FCustomProperties from '@/components/FCustomProperties';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageObjectEditorModelState} from "@/models/connect";
-import {resourceTypes} from "@/utils/globals";
-import {humanizeSize} from "@/utils/format";
-import {i18nMessage} from "@/utils/i18n";
-import FAutoComplete from "@/components/FAutoComplete";
-import FCopyToClipboard from "@/components/FCopyToClipboard";
-import {downloadObject} from "@/services/storages";
+import {ConnectState, StorageObjectEditorModelState} from '@/models/connect';
+import {resourceTypes} from '@/utils/globals';
+import {humanizeSize} from '@/utils/format';
+import {i18nMessage} from '@/utils/i18n';
+import FAutoComplete from '@/components/FAutoComplete';
+import FCopyToClipboard from '@/components/FCopyToClipboard';
+import {downloadObject} from '@/services/storages';
 import {
   ChangeAction,
   DeleteObjectDepAction,
   OnChangeTypeAction,
   UpdateObjectInfoAction
-} from "@/models/storageObjectEditor";
-import {FetchObjectsAction, UpdateAObjectAction} from "@/models/storageHomePage";
+} from '@/models/storageObjectEditor';
+import {FetchObjectsAction, UpdateAObjectAction} from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
 
 interface DetailsProps {
@@ -40,6 +40,16 @@ function Details({editor, dispatch}: DetailsProps) {
       || (ep.allowCustom && ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
   });
 
+  function onChangeType(value: string) {
+    if (value === editor.type) {
+      return;
+    }
+    dispatch<OnChangeTypeAction>({
+      type: 'storageObjectEditor/onChangeType',
+      payload: value,
+    });
+  }
+
   return (<Drawer
     title={'编辑对象信息'}
     visible={editor.visible}
@@ -52,8 +62,7 @@ function Details({editor, dispatch}: DetailsProps) {
           visible: false,
         },
       });
-    }}
-  >
+    }}>
     <div className={styles.divContainer}>
       <div style={{height: 10}}/>
       <Space size={15}>
@@ -65,7 +74,6 @@ function Details({editor, dispatch}: DetailsProps) {
           text={`${editor.bucketName}/${editor.objectName}`}
           title={'复制对象名称'}
         />
-        {/*<FTextButton theme="primary"><CopyOutlined/></FTextButton>*/}
         <FTextButton
           theme="primary"
           onClick={() => {
@@ -82,20 +90,9 @@ function Details({editor, dispatch}: DetailsProps) {
         <FAutoComplete
           errorText={editor.typeError}
           value={editor.type}
-          onChange={(value) => {
-            dispatch<OnChangeTypeAction>({
-              type: 'storageObjectEditor/onChangeType',
-              payload: value,
-            });
-          }}
-          onSelect={(value) => {
-            if (value === editor.type) {
-              return;
-            }
-            dispatch<OnChangeTypeAction>({
-              type: 'storageObjectEditor/onChangeType',
-              payload: value,
-            });
+          debounce={300}
+          onDebounceChange={(value) => {
+            onChangeType(value);
           }}
           className={styles.FAutoComplete}
           placeholder={i18nMessage('hint_choose_resource_type')}
@@ -180,7 +177,6 @@ function Details({editor, dispatch}: DetailsProps) {
                 properties: value,
               },
             });
-
           }}
         />
       </FEditorCard>
@@ -190,7 +186,7 @@ function Details({editor, dispatch}: DetailsProps) {
         <Space size={30}>
           <FTextButton>取消</FTextButton>
           <FNormalButton
-            disabled={hasError}
+            disabled={editor.typeVerify === 1 || hasError}
             onClick={async () => {
               await dispatch<UpdateObjectInfoAction>({
                 type: 'storageObjectEditor/updateObjectInfo',

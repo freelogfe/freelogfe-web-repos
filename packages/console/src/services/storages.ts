@@ -212,3 +212,15 @@ export function batchObjectList(params: BatchObjectListParamsType) {
     params,
   });
 }
+
+// 根据sha1和类型获取文件属性
+export interface FilePropertyParamsType {
+  sha1: string;
+  resourceType: string;
+}
+
+export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
+  return request.get(`/v1/storages/files/${sha1}/property`, {
+    params,
+  });
+}

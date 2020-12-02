@@ -81,7 +81,10 @@ axios.interceptors.response.use(function (response) {
     return downloadFile(response);
   }
 
-  if ((data.errcode === undefined ? data.errCode !== 0 : data.errcode !== 0) || data.ret !== 0) {
+  if ((data.errcode === undefined
+    ? (data.errCode !== 0 && data.errCode !== 2)
+    : (data.errcode !== 0 && data.errcode !== 2))
+    || data.ret !== 0) {
 
     notification.error({
       message: data.msg,
