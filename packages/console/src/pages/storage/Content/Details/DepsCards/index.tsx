@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {Divider, Popover, Space} from "antd";
-import {StorageObjectEditorModelState} from "@/models/storageObjectEditor";
-import styles from "./index.less";
-import {FContentText} from "@/components/FText";
+import {Divider, Popover, Space} from 'antd';
+import {StorageObjectEditorModelState} from '@/models/storageObjectEditor';
+import styles from './index.less';
+import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleButton} from '@/components/FButton';
+import {RangePickerDateProps} from "antd/lib/date-picker/generatePicker";
+import {Data} from "@/components/FCustomProperties";
 
 interface DepsCardsProps {
   title: string;
