@@ -1,10 +1,10 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
+import {DvaReducer, WholeReadonly} from './shared';
 import {list, ListParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
 
-export interface MarketPageModelState {
+export type  MarketPageModelState = WholeReadonly<{
   tabValue: '1' | '2',
   resourceType: string;
   inputText: string;
@@ -17,7 +17,7 @@ export interface MarketPageModelState {
     type: string,
   }[];
   totalItem: number;
-}
+}>;
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'marketPage/change';

@@ -91,24 +91,20 @@ const Model: NodesModelType = {
       });
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
-      // console.log('FetchNodesAction******');
-      const params: NodesParamsType = {};
+      const params: NodesParamsType = {
+        limit: 10000,
+      };
       const {data} = yield call(nodes, params);
-      // console.log(data.dataList, '#SDFASDC');
-      const nodeList = data.dataList.map((node: any, i: number) => {
-        // console.log(node, i, '#@#$FAEWASD');
-        return Object.freeze({
-          nodeDomain: node.nodeDomain,
-          nodeId: node.nodeId,
-          // nodeId: i,
-          nodeName: node.nodeName,
-        });
-      });
-      // console.log(nodeList, 'nodeList3209jdlsif');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          list: Object.freeze(nodeList),
+          list: (data.dataList as any[]).map<NodesModelState['list'][number]>((dl: any, i: number) => {
+            return {
+              nodeDomain: dl.nodeDomain,
+              nodeId: dl.nodeId,
+              nodeName: dl.nodeName,
+            };
+          }),
         },
       });
     },
