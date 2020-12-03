@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from '@/models/connect';
 import styles from '@/pages/market/index/index.less';
-import {ChangeStatesAction} from '@/models/marketPage';
+import {ChangeStatesAction, FetchDataSourceAction} from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
@@ -85,16 +85,14 @@ function Resources({dispatch, market}: ResourcesProps) {
           </div>
 
           {
-            market.totalItem > (20 * market.pageCurrent) && (<>
+            market.totalItem > market.dataSource.length && (<>
               <div style={{height: 100}}/>
               <div className={styles.bottom}>
                 <Button
                   className={styles.loadMore}
-                  onClick={() => dispatch<ChangeStatesAction>({
-                    type: 'marketPage/changeStates',
-                    payload: {
-                      pageCurrent: market.pageCurrent + 1,
-                    },
+                  onClick={() => dispatch<FetchDataSourceAction>({
+                    type: 'marketPage/fetchDataSource',
+                    payload: false,
                   })}
                 >加载更多</Button>
               </div>
