@@ -143,7 +143,7 @@ const Model: StorageObjectEditorModelType = {
           resourceNames: resources.map((r: any) => r.name).join(','),
         };
         const {data} = yield call(batchInfo, params);
-        console.log(data, 'data1234234');
+        // console.log(data, 'data1234234');
         depRs = (data as any[]).map<StorageObjectEditorModelState['depRs'][number]>((r: any) => {
           return {
             name: r.resourceName,
