@@ -255,9 +255,10 @@ const Model: StorageObjectEditorModelType = {
             {
               name: data.resourceName,
               type: data.resourceType,
-              version: data.latestVersion,
+              version: '^' + data.latestVersion,
               status: data.status,
               baseUpthrows: data.baseUpcastResources?.map((b: any) => b.resourceName),
+              versions: data.resourceVersions.map((rv: any) => rv.version)
             },
           ],
         },

@@ -45,11 +45,14 @@ function FVersionHandlerPopover({value, versionOptions, onChange, children}: FVe
 
   function onChangeInput(value: string) {
     // console.log(semver.validRange(value), 'VVVVVVV######');
+    // console.log(semver.maxSatisfying(['0.2.2', '0.2.3', '1.1.1', '1.2.2', '1.3.2', '2.2.2'], '^2.2.2'), '0923u4io');
     let inputError: string = '';
     if (!value) {
       inputError = '请输入版本号';
     } else if (!semver.validRange(value)) {
       inputError = '请输入合法semver版本';
+    } else if (!semver.maxSatisfying(versionOptions, value)) {
+      inputError = '最少要匹配一个版本';
     }
     setInput(value);
     setInputEror(inputError);
