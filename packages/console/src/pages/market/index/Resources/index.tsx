@@ -106,7 +106,7 @@ function Resources({dispatch, market}: ResourcesProps) {
         />)
     }
 
-  </>)
+  </>);
 }
 
 export default connect(({marketPage}: ConnectState) => ({
@@ -131,5 +131,5 @@ function Labels({options, value, onChange}: Labels) {
            onClick={() => onChange && onChange(i.value)}
         >{i.text || i.value}</a>))
     }
-  </div>)
+  </div>);
 }

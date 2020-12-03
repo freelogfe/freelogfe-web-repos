@@ -92,7 +92,7 @@ const Model: NodesModelType = {
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
       const params: NodesParamsType = {
-        limit: 10000,
+        limit: 100,
       };
       const {data} = yield call(nodes, params);
       yield put<ChangeAction>({
