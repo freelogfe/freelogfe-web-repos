@@ -10,14 +10,29 @@ import {FEdit} from "@/components/FIcons";
 
 interface DepsCardsProps {
   title: string;
-  dataSource: StorageObjectEditorModelState['depRs'] | StorageObjectEditorModelState['depOs'];
+  // dataSource: StorageObjectEditorModelState['depRs'] | StorageObjectEditorModelState['depOs'];
+  dataSource: {
+    name: string;
+    type: string;
+    version?: string;
+    versions?: string[];
+    status?: 0 | 1;
+    baseUpthrows?: string[];
+  }[];
 
-  onDelete?(name: string): void;
+  // onDelete?(name: string): void;
+  onChange?(value: DepsCardsProps['dataSource']): void;
 }
 
-function DepsCards({dataSource, title, onDelete}: DepsCardsProps) {
+function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
   const [ref, setRef] = React.useState<HTMLDivElement | null>(null);
+
   // console.log(JSON.stringify(dataSource), 'fdsdataSource3wq980');
+
+  function changeData(value: DepsCardsProps['dataSource']) {
+    return onChange && onChange(value);
+  }
+
   return (<div
     className={styles.DepsCards}
     ref={(div) => setRef(div)}
@@ -27,7 +42,7 @@ function DepsCards({dataSource, title, onDelete}: DepsCardsProps) {
     <div style={{height: 15}}/>
     <div className={styles.resources}>
       {
-        (dataSource as any).map((d: any) => (<div key={d.name} className={styles.resource}>
+        dataSource.map((d, i: number) => (<div key={d.name} className={styles.resource}>
           <div className={styles.resourceLeft}>
             <div className={styles.resourceTitle}>
               <FContentText
@@ -46,23 +61,34 @@ function DepsCards({dataSource, title, onDelete}: DepsCardsProps) {
                   <Space size={5}>
                     <FContentText type="additional2">版本范围：{d.version}</FContentText>
                     <FVersionHandlerPopover
-                      value={'^12.2.3'}
-                      versionOptions={['1.2.1']}
+                      value={d.version}
+                      versionOptions={d.versions || []}
+                      onChange={(value: string) => {
+                        changeData(dataSource.map((ds, index) => {
+                          if (index !== i) {
+                            return ds;
+                          }
+                          return {
+                            ...ds,
+                            version: value,
+                          }
+                        }));
+                      }}
                     ><FTextButton><FEdit style={{fontSize: 12}}/></FTextButton></FVersionHandlerPopover>
                   </Space>
                 </>)
               }
 
               {
-                d.baseUpthrows?.length > 0 && (<>
+                (d.baseUpthrows?.length || 0) > 0 && (<>
                   <Divider type="vertical"/>
                   {ref && <Popover
                     getPopupContainer={(triggerNode) => {
                       return ref || document.body;
                     }}
-                    content={<BasisUpthrows dataSource={d.baseUpthrows}/>}
+                    content={<BasisUpthrows dataSource={d.baseUpthrows || []}/>}
                   >
-                    <div><FContentText type="additional2">{d.baseUpthrows.length}个基础上抛</FContentText></div>
+                    <div><FContentText type="additional2">{d.baseUpthrows?.length || 0}个基础上抛</FContentText></div>
                   </Popover>
                   }
                 </>)
@@ -73,7 +99,9 @@ function DepsCards({dataSource, title, onDelete}: DepsCardsProps) {
           <div className={styles.resourceRight}>
             <FCircleButton
               theme="delete"
-              onClick={() => onDelete && onDelete(d.name)}
+              onClick={() => {
+                changeData(dataSource.filter((ds, index) => index !== i))
+              }}
             />
           </div>
         </div>))

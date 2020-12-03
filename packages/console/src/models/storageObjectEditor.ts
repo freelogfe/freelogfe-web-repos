@@ -16,6 +16,7 @@ interface DepR {
   name: string;
   type: string;
   version: string;
+  versions: string[];
   status: 0 | 1;
   baseUpthrows: string[];
 }
@@ -75,13 +76,13 @@ export interface AddObjectDepOAction extends AnyAction {
   payload: string;
 }
 
-export interface DeleteObjectDepAction extends AnyAction {
-  type: 'storageObjectEditor/deleteObjectDep';
-  payload: {
-    resourceName?: string;
-    objectName?: string;
-  };
-}
+// export interface DeleteObjectDepAction extends AnyAction {
+//   type: 'storageObjectEditor/deleteObjectDep';
+//   payload: {
+//     resourceName?: string;
+//     objectName?: string;
+//   };
+// }
 
 export interface OnChangeTypeAction extends AnyAction {
   type: 'storageObjectEditor/onChangeType';
@@ -96,7 +97,7 @@ export interface StorageObjectEditorModelType {
     onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
-    deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
+    // deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
     updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -142,6 +143,7 @@ const Model: StorageObjectEditorModelType = {
           resourceNames: resources.map((r: any) => r.name).join(','),
         };
         const {data} = yield call(batchInfo, params);
+        console.log(data, 'data1234234');
         depRs = (data as any[]).map<StorageObjectEditorModelState['depRs'][number]>((r: any) => {
           return {
             name: r.resourceName,
@@ -149,6 +151,7 @@ const Model: StorageObjectEditorModelType = {
             version: resources.find((sr) => sr.name === r.resourceName)?.versionRange,
             status: r.status,
             baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
+            versions: r.resourceVersions.map((rv: any) => rv.version)
           };
         });
       }
@@ -281,28 +284,28 @@ const Model: StorageObjectEditorModelType = {
         }
       });
     },
-    * deleteObjectDep({payload}: DeleteObjectDepAction, {put, select}: EffectsCommandMap) {
-      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
-        storageObjectEditor,
-      }));
-
-      if (payload.resourceName) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            depRs: storageObjectEditor.depRs.filter((r) => r.name !== payload.resourceName),
-          },
-        });
-      }
-      if (payload.objectName) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            depOs: storageObjectEditor.depOs.filter((r) => r.name !== payload.objectName),
-          },
-        });
-      }
-    },
+    // * deleteObjectDep({payload}: DeleteObjectDepAction, {put, select}: EffectsCommandMap) {
+    //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+    //     storageObjectEditor,
+    //   }));
+    //
+    //   if (payload.resourceName) {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         depRs: storageObjectEditor.depRs.filter((r) => r.name !== payload.resourceName),
+    //       },
+    //     });
+    //   }
+    //   if (payload.objectName) {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         depOs: storageObjectEditor.depOs.filter((r) => r.name !== payload.objectName),
+    //       },
+    //     });
+    //   }
+    // },
     * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,

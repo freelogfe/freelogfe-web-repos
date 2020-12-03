@@ -17,7 +17,7 @@ import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {downloadObject} from '@/services/storages';
 import {
   ChangeAction,
-  DeleteObjectDepAction,
+  // DeleteObjectDepAction,
   OnChangeTypeAction,
   UpdateObjectInfoAction
 } from '@/models/storageObjectEditor';
@@ -110,12 +110,13 @@ function Details({editor, dispatch}: DetailsProps) {
           editor.depRs.length > 0 && (<DepsCards
             title={'资源'}
             dataSource={editor.depRs}
-            onDelete={(name) => {
-              dispatch<DeleteObjectDepAction>({
-                type: 'storageObjectEditor/deleteObjectDep',
+            onChange={(value) => {
+              console.log(value, 'value2903jafdslkfa');
+              dispatch<ChangeAction>({
+                type: 'storageObjectEditor/change',
                 payload: {
-                  resourceName: name,
-                }
+                  depRs: value as StorageObjectEditorModelState['depRs'],
+                },
               });
             }}
           />)
@@ -125,12 +126,12 @@ function Details({editor, dispatch}: DetailsProps) {
           editor.depOs.length > 0 && (<DepsCards
             title={'对象'}
             dataSource={editor.depOs}
-            onDelete={(name) => {
-              dispatch<DeleteObjectDepAction>({
-                type: 'storageObjectEditor/deleteObjectDep',
+            onChange={(value) => {
+              dispatch<ChangeAction>({
+                type: 'storageObjectEditor/change',
                 payload: {
-                  objectName: name,
-                }
+                  depOs: value as StorageObjectEditorModelState['depOs'],
+                },
               });
             }}
           />)
