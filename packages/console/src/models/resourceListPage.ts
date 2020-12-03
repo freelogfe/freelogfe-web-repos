@@ -2,14 +2,13 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {list, ListParamsType} from "@/services/resources";
-import {debounce } from 'redux-saga/effects'
+import {debounce} from 'redux-saga/effects'
 import {ConnectState} from "@/models/connect";
 
 export interface ResourceListPageModelState {
   resourceType: string;
   resourceStatus: string;
   inputText: string;
-  pageCurrent: number;
   pageSize: number;
   totalNum: number;
   dataSource: {
@@ -17,7 +16,6 @@ export interface ResourceListPageModelState {
     cover: string;
     title: string;
     version: string;
-    // policy: i.policies,
     policy: string[],
     type: string;
     status: 0 | 1;
@@ -25,18 +23,13 @@ export interface ResourceListPageModelState {
 }
 
 export interface FetchDataSourceAction extends AnyAction {
-  type: 'fetchDataSource',
+  type: 'fetchDataSource' | 'resourceListPage/fetchDataSource';
+  payload?: boolean; // 是否 restart
 }
 
 export interface ChangeStatesAction extends AnyAction {
   type: 'resourceListPage/changeStates',
-  payload: {
-    resourceType?: string;
-    resourceStatus?: string;
-    inputText?: string;
-    pageCurrent?: number;
-    pageSize?: number;
-  };
+  payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -68,62 +61,58 @@ const Model: ResourceListPageModelType = {
     resourceStatus: '2',
     inputText: '',
     dataSource: [],
-    pageCurrent: 1,
     pageSize: 20,
     totalNum: -1,
   },
 
   effects: {
     * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-      if (payload.resourceType || payload.inputText || payload.pageSize || payload.resourceStatus) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            ...payload,
-            pageCurrent: 1,
-          },
-        });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload,
-        });
-      }
-      // yield debounce(1000, 'change', () => console.log('####'))
+      yield put<ChangeAction>({
+        type: 'change',
+        payload,
+      });
 
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
+        payload: true,
       });
     },
-    * fetchDataSource(_: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
-      const params: ListParamsType = yield select(({resourceListPage}: ConnectState) => ({
-        page: resourceListPage.pageCurrent,
-        pageSize: resourceListPage.pageSize,
+      const {resourceListPage}: ConnectState = yield select(({resourceListPage}: ConnectState) => ({
+        resourceListPage,
+      }));
+
+      let dataSource: ResourceListPageModelState['dataSource'] = [];
+      if (!payload) {
+        dataSource = resourceListPage.dataSource;
+      }
+
+      const params: ListParamsType = {
+        skip: dataSource.length,
+        limit: resourceListPage.pageSize,
         keywords: resourceListPage.inputText,
         resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
-        status: resourceListPage.resourceStatus,
-      }));
-      const {data} = yield call(list, {
-        ...params,
+        status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         isSelf: 1,
-      });
-      // console.log(data, 'dataasdfw');
+      };
+      const {data} = yield call(list, params);
 
-      const resource: ResourceListPageModelState['dataSource'] = data.dataList.map((i: any) => ({
-        id: i.resourceId,
-        cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-        title: i.resourceName,
-        version: i.latestVersion,
-        // policy: i.policies,
-        policy: i.policies.map((l:any) => l.policyName),
-        type: i.resourceType,
-        status: i.status,
-      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          dataSource: resource,
+          dataSource: [
+            ...dataSource,
+            ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => ({
+              id: i.resourceId,
+              cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+              title: i.resourceName,
+              version: i.latestVersion,
+              policy: i.policies.map((l: any) => l.policyName),
+              type: i.resourceType,
+              status: i.status,
+            })),
+          ],
           totalNum: data.totalItem,
         },
       });

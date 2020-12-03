@@ -11,9 +11,9 @@ import {
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
-  resourceStatus: string;
+  resourceStatus: '0' | '1' | '2';
   inputText: string;
-  pageCurrent: number;
+  // pageCurrent: number;
   pageSize: number;
   totalNum: number;
   dataSource: {
@@ -23,27 +23,23 @@ export interface ResourceCollectPageModelState {
     version: string;
     policy: string[];
     type: string;
+    status: 0 | 1;
   }[];
 }
 
 export interface ChangeAction extends AnyAction {
   type: 'change',
-  payload: Partial<ResourceListPageModelState>;
+  payload: Partial<ResourceCollectPageModelState>;
 }
 
 export interface FetchDataSourceAction extends AnyAction {
-  type: 'resourceCollectPage/fetchDataSource' | 'fetchDataSource',
+  type: 'resourceCollectPage/fetchDataSource' | 'fetchDataSource';
+  payload?: boolean; // 是否 restart
 }
 
 export interface ChangeStatesAction extends AnyAction {
   type: 'resourceCollectPage/changeStates',
-  payload: {
-    resourceType?: string;
-    resourceStatus?: string;
-    inputText?: string;
-    pageCurrent?: number;
-    pageSize?: number;
-  };
+  payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
 }
 
 export interface BoomJuiceAction {
@@ -74,73 +70,82 @@ const Model: ResourceCollectModelType = {
     resourceStatus: '2',
     inputText: '',
     dataSource: [],
-    pageCurrent: 1,
     pageSize: 20,
     totalNum: -1,
   },
 
   effects: {
     * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-      if (payload.resourceType || payload.inputText || payload.pageSize || payload.resourceStatus) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            ...payload,
-            pageCurrent: 1,
-          },
-        });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload,
-        });
-      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload,
+      });
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
       });
     },
-    * fetchDataSource({}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
-      const params: CollectionResourcesParamsType = yield select(({resourceCollectPage}: ConnectState) => ({
-        page: resourceCollectPage.pageCurrent,
-        pageSize: resourceCollectPage.pageSize,
+    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+      const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
+        resourceCollectPage,
+      }));
+
+      let dataSource: ResourceListPageModelState['dataSource'] = [];
+      if (!payload) {
+        dataSource = resourceCollectPage.dataSource;
+      }
+
+      const params: CollectionResourcesParamsType = {
+        skip: dataSource.length,
+        limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
         resourceType: resourceCollectPage.resourceType === '-1' ? undefined : resourceCollectPage.resourceType,
-        resourceStatus: resourceCollectPage.resourceStatus === '-1' ? 2 : resourceCollectPage.resourceStatus,
-      }));
+        resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
+      };
+
       const {data} = yield call(collectionResources, params);
       // console.log(data, 'data3290joisdf');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          dataSource: data.dataList.map((d: any) => ({
-            id: d.resourceId,
-            cover: d.coverImages[0],
-            title: d.resourceName,
-            version: d.latestVersion,
-            status: d.resourceStatus,
-            policy: ['TODO策略无法展示'],
-            type: d.resourceType,
-          })),
+          dataSource: [
+            ...dataSource,
+            ...(data.dataList as any[]).map<ResourceCollectPageModelState['dataSource'][number]>((d: any) => ({
+              id: d.resourceId,
+              cover: d.coverImages[0],
+              title: d.resourceName,
+              version: d.latestVersion,
+              status: d.resourceStatus,
+              policy: ['TODO策略无法展示'],
+              type: d.resourceType,
+            })),
+          ],
           totalNum: data.totalItem,
         },
       });
     },
-    * boomJuice({payload}: BoomJuiceAction, {call, put}: EffectsCommandMap) {
+    * boomJuice({payload}: BoomJuiceAction, {call, put, select}: EffectsCommandMap) {
       const params: DeleteCollectResourceParamsType = {
         resourceId: payload,
       };
       yield call(deleteCollectResource, params);
-      yield put<FetchDataSourceAction>({
-        type: 'fetchDataSource',
+      const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
+        resourceCollectPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataSource: resourceCollectPage.dataSource.filter((ds) => ds.id !== payload),
+          totalNum: resourceCollectPage.totalNum - 1,
+        },
       });
     }
   },
 
   reducers: {
-    change(state: ResourceCollectPageModelState, action: ChangeAction): ResourceCollectPageModelState {
+    change(state: ResourceCollectPageModelState, {payload}: ChangeAction): ResourceCollectPageModelState {
       return {
         ...state,
-        ...action.payload
+        ...payload
       };
     },
   },

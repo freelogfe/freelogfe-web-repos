@@ -7,9 +7,9 @@ import {FContentText} from '@/components/FText';
 import styles from './index.less';
 import {i18nMessage} from "@/utils/i18n";
 
-type EventFunc = (resource: FResourceCardProps['resource']) => void
+type EventFunc = () => void
 
-interface FResourceCardProps {
+export interface FResourceCardProps {
   className?: string;
   type?: 'resource' | 'favorite' | 'market';
   resource: {
@@ -35,7 +35,7 @@ export default function ({
                            onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick
                          }: FResourceCardProps) {
   return (
-    <div onClick={() => onClick && onClick(resource)}
+    <div onClick={() => onClick && onClick()}
          className={[styles.FResourceCard, className, type === 'market' ? styles.gesture : ''].join(' ')}>
       <div className={styles.Cover}>
         {
@@ -51,17 +51,17 @@ export default function ({
                 {
                   type === 'favorite'
                     ? (
-                      <a onClick={() => onBoomJuice && onBoomJuice(resource)}>{i18nMessage('remove_from_collection')}</a>
+                      <a onClick={() => onBoomJuice && onBoomJuice()}>{i18nMessage('remove_from_collection')}</a>
                     )
                     : (
                       <>
                         <a
-                          onClick={() => onClickDetails && onClickDetails(resource)}>{i18nMessage('resource_details')}</a>
+                          onClick={() => onClickDetails && onClickDetails()}>{i18nMessage('resource_details')}</a>
                         <Divider className={styles.Divider} type="vertical"/>
-                        <a onClick={() => onClickEditing && onClickEditing(resource)}>{i18nMessage('edit_resource')}</a>
+                        <a onClick={() => onClickEditing && onClickEditing()}>{i18nMessage('edit_resource')}</a>
                         <Divider className={styles.Divider} type="vertical"/>
                         <a
-                          onClick={() => onClickRevision && onClickRevision(resource)}>{i18nMessage('update_resource')}</a>
+                          onClick={() => onClickRevision && onClickRevision()}>{i18nMessage('update_resource')}</a>
                       </>
                     )
                 }
@@ -95,7 +95,7 @@ export default function ({
               resource.policy.map((i: string) => <Policy key={i} text={i}/>)
             }
           </div>
-          <a onClick={() => onClickMore && onClickMore(resource)}>{i18nMessage('more_details')}>></a>
+          <a onClick={() => onClickMore && onClickMore()}>{i18nMessage('more_details')}>></a>
         </div>
       </div>
     </div>

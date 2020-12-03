@@ -1,14 +1,11 @@
 import * as React from 'react';
-import FCenterLayout from '@/layouts/FCenterLayout';
-import FAffixTabs from '@/components/FAffixTabs';
-import {connect, Dispatch} from "dva";
+import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
 import {router} from 'umi';
-import {} from "@/models/resourceCollectPage";
-import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
-import {ChangeStatesAction} from "@/models/resourceCollectPage";
-import {BoomJuiceAction} from "@/models/resourceCollectPage";
-import FNoDataTip from "@/components/FNoDataTip";
+import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
+import {ChangeStatesAction} from '@/models/resourceCollectPage';
+import {BoomJuiceAction} from '@/models/resourceCollectPage';
+import FNoDataTip from '@/components/FNoDataTip';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -53,17 +50,27 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     resourceStatus={resource.resourceStatus}
     inputText={resource.inputText}
     dataSource={resource.dataSource}
-    pageCurrent={resource.pageCurrent}
-    pageSize={resource.pageSize}
     totalNum={resource.totalNum}
-    onChangeResourceType={(value) => changeStatus({resourceType: value})}
-    onChangeResourceStatus={(value) => changeStatus({resourceStatus: value})}
-    onChangeInputText={(value) => changeStatus({inputText: value})}
-    onChangePageCurrent={(value) => changeStatus({pageCurrent: value})}
-    onChangePageSize={(value) => changeStatus({pageSize: value})}
+    onChangeResourceType={(value) => {
+      if (value === resource.resourceType) {
+        return;
+      }
+      changeStatus({resourceType: value});
+    }}
+    onChangeResourceStatus={(value: string) => {
+      if (value === resource.resourceStatus) {
+        return;
+      }
+      changeStatus({resourceStatus: value as '0' | '1' | '2'});
+    }}
+    onChangeInputText={(value) => {
+      if (value === resource.inputText) {
+        return;
+      }
+      changeStatus({inputText: value});
+    }}
     isCollect={true}
     onBoomJuice={(id) => {
-      // console.log(id, '3029jdaslkfasdf');
       dispatch<BoomJuiceAction>({
         type: 'resourceCollectPage/boomJuice',
         payload: id.toString(),

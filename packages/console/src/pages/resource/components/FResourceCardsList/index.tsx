@@ -1,16 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Dropdown} from 'antd';
+import {Button, Dropdown} from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
 import {FNormalButton} from '@/components/FButton';
 import {router} from 'umi';
-import FResourceCard from '@/components/FResourceCard';
+import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
 import {i18nMessage} from "@/utils/i18n";
-import {FContentText, FTipText} from '@/components/FText';
 import FNoDataTip from '@/components/FNoDataTip';
 
 const resourceTypeOptions = [
@@ -35,34 +34,38 @@ const navs = [
   },
 ];
 
+type EventFunc = (id: string | number, record: any, index: number) => void;
+
 interface FResourceCardsListProps {
   resourceType: string;
   resourceStatus: string;
   inputText: string;
-  dataSource: any[];
-  pageCurrent: number;
-  pageSize: number;
+
+  dataSource: FResourceCardProps['resource'][];
   totalNum: number;
+
   onChangeResourceType?: (value: string) => void;
-  onChangeResourceStatus?: (value: string) => void;
+  onChangeResourceStatus?: (value: '0' | '1' | '2') => void;
   onChangeInputText?: (value: string) => void;
-  onChangePageCurrent?: (value: number) => void;
-  onChangePageSize?: (value: number) => void;
+
+  onloadMore?(): void;
+
   showGotoCreateBtn?: boolean;
   isCollect?: boolean;
-  onBoomJuice?: (id: string | number, record: any, index: number) => void;
-  onClickDetails?: (id: string | number, record: any, index: number) => void;
-  onClickEditing?: (id: string | number, record: any, index: number) => void;
-  onClickRevision?: (id: string | number, record: any, index: number) => void;
-  onClickMore?: (id: string | number, record: any, index: number) => void;
+
+  onBoomJuice?: EventFunc;
+  onClickDetails?: EventFunc;
+  onClickEditing?: EventFunc;
+  onClickRevision?: EventFunc;
+  onClickMore?: EventFunc;
 }
 
-export default function ({
-                           resourceType, resourceStatus, inputText, dataSource, pageCurrent, pageSize, totalNum,
-                           onChangeResourceType, onChangeResourceStatus, onChangeInputText, onChangePageCurrent, onChangePageSize,
-                           showGotoCreateBtn = false, isCollect = false,
-                           onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore
-                         }: FResourceCardsListProps) {
+function FResourceCardsList({
+                              resourceType, resourceStatus, inputText, dataSource, totalNum,
+                              onChangeResourceType, onChangeResourceStatus, onChangeInputText, onloadMore,
+                              showGotoCreateBtn = false, isCollect = false,
+                              onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore
+                            }: FResourceCardsListProps) {
 
   const [typeText, setTypeText] = React.useState('');
   const [statusText, setStatusText] = React.useState('');
@@ -114,7 +117,7 @@ export default function ({
           <span>{i18nMessage('resource_state')}：</span>
           <Dropdown overlay={<FMenu
             options={resourceStatusOptions}
-            onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value)}
+            onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')}
           />}>
             <span style={{cursor: 'pointer'}}>{statusText}<DownOutlined style={{marginLeft: 10}}/></span>
           </Dropdown>
@@ -169,16 +172,31 @@ export default function ({
         />)
     }
 
-    {totalNum > 10 && <>
-      <div style={{height: 10}}/>
-      <FPagination
-        current={pageCurrent}
-        pageSize={pageSize}
-        total={totalNum}
-        onChangeCurrent={(value) => onChangePageCurrent && onChangePageCurrent(value)}
-        onChangePageSize={(value) => onChangePageSize && onChangePageSize(value)}
-        className={styles.FPagination}
-      />
-    </>}
-  </>)
+    {
+      totalNum > dataSource.length && (<>
+        <div style={{height: 100}}/>
+        <div className={styles.bottom}>
+          <Button
+            className={styles.loadMore}
+            onClick={() => onloadMore && onloadMore()}
+          >加载更多</Button>
+        </div>
+      </>)
+    }
+    <div style={{height: 200}}/>
+
+    {/*{totalNum > 10 && <>*/}
+    {/*  <div style={{height: 10}}/>*/}
+    {/*  <FPagination*/}
+    {/*    current={pageCurrent}*/}
+    {/*    pageSize={pageSize}*/}
+    {/*    total={totalNum}*/}
+    {/*    onChangeCurrent={(value) => onChangePageCurrent && onChangePageCurrent(value)}*/}
+    {/*    onChangePageSize={(value) => onChangePageSize && onChangePageSize(value)}*/}
+    {/*    className={styles.FPagination}*/}
+    {/*  />*/}
+    {/*</>}*/}
+  </>);
 }
+
+export default FResourceCardsList;
