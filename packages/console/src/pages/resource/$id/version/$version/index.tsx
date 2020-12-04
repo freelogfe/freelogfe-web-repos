@@ -131,15 +131,19 @@ function VersionEditor({dispatch, route, version, match}: VersionEditorProps & R
         {properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>
           <FCustomProperties
             dataSource={version.properties}
-            stubborn={true}
+            // stubborn={true}
             onChange={(value) => setProperties(value)}
-            onSave={onUpdateProperties}
+            // onSave={onUpdateProperties}
           />
         </FEditorCard>}
       </div>
     </FContentLayout>
   </FInfoLayout>);
 }
+
+export default withRouter(connect(({resourceVersionEditorPage}: ConnectState) => ({
+  version: resourceVersionEditorPage,
+}))(VersionEditor));
 
 interface HeaderProps {
   version: string;
@@ -168,10 +172,6 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
     </Space>
   </div>);
 }
-
-export default withRouter(connect(({resourceVersionEditorPage}: ConnectState) => ({
-  version: resourceVersionEditorPage,
-}))(VersionEditor));
 
 // 富文本内容预览
 /**

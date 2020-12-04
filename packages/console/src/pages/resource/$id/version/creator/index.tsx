@@ -2,11 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
 import FContentLayout from '@/pages/resource/layouts/FContentLayout';
-import {FTitleText} from '@/components/FText';
+import {FContentText, FTitleText} from '@/components/FText';
 import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FCircleButton, FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
@@ -22,7 +22,8 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
-import * as semver from 'semver';
+import {CopyOutlined} from '@ant-design/icons';
+import {FCopy} from "@/components/FIcons";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -66,11 +67,20 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
     });
   }
 
+  const hasError: boolean = !version.version || !!version.versionErrorText
+    || !version.resourceObject || !!version.resourceObjectErrorText
+    || !!version.properties.find((ep) => {
+      return ep.key === '' || !!ep.keyError
+        || ep.value === '' || !!ep.valueError
+        || !!ep.descriptionError
+        || (ep.allowCustom && ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
+    });
+
   return (<FInfoLayout>
     <FContentLayout header={<Header
       onClickCreate={onClickCreate}
       onClickCache={onClickCache}
-      disabledCreate={!!version.versionErrorText || !!version.resourceObjectErrorText}
+      disabledCreate={hasError}
     />}>
       <div className={styles.wrap}>
         <FEditorCard dot={true} title={i18nMessage('version_number')}>
@@ -111,13 +121,50 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
         </FEditorCard>
 
         <FEditorCard dot={false} title={i18nMessage('object_property')}>
+          <Space size={80}>
+            <Space size={10}>
+              <FCircleButton
+                // onClick={() => setModalVisible(true)}
+                theme="weaken"
+                onClick={() => {
+                  dispatch<ChangeAction>({
+                    type: 'resourceVersionCreatorPage/change',
+                    payload: {
+                      properties: [
+                        ...version.properties,
+                        {
+                          key: '',
+                          keyError: '',
+                          value: '',
+                          valueError: '',
+                          description: '',
+                          descriptionError: '',
+                          allowCustom: false,
+                          custom: 'input',
+                          customOption: '',
+                          customOptionError: '',
+                        },
+                      ],
+                    },
+                  });
+                }}
+              />
+              <FContentText text={i18nMessage('create_property')}/>
+            </Space>
+            <Space size={10}>
+              <FCircleButton
+                theme="weaken"
+                icon={<FCopy/>}
+              />
+              <FContentText text={i18nMessage('import_from_previous_version')}/>
+            </Space>
+          </Space>
+
+          <div style={{height: 30}}/>
+
           <FCustomProperties
-            // stubborn={false}
             dataSource={version.properties}
             onChange={(value) => onChange({properties: value})}
-            // onImport={() => dispatch<ImportPreVersionAction>({
-            //   type: 'resourceVersionCreatorPage/importPreVersion',
-            // })}
           />
         </FEditorCard>
 

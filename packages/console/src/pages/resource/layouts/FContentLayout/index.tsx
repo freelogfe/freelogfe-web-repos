@@ -9,9 +9,11 @@ interface FContentLayoutProps {
   header: React.ReactNode | React.ReactNodeArray;
 }
 
-export default function ({header, children}: FContentLayoutProps) {
+function FContentLayout({header, children}: FContentLayoutProps) {
   return (<>
     <div className={styles.header}>{header}</div>
     <div className={styles.content}>{children}</div>
   </>)
 }
+
+export default FContentLayout;

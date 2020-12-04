@@ -1,5 +1,5 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FCustomPropertiesProps} from "@/components/FCustomProperties";
 import {
@@ -10,9 +10,7 @@ import {
 } from "@/services/resources";
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
-// const {pathToRegexp} = require('path-to-regexp');
 import {pathToRegexp} from '@/utils/pathToRegexp';
-import * as redux from 'react-redux';
 
 export interface ResourceVersionEditorPageModelState {
   version: string;
