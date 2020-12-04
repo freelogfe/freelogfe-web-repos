@@ -60,7 +60,6 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
     <div className={styles.DepPanelContent}>
       <div className={styles.contentBox} id={'DepPanelContent'}>
 
-        {/*<>*/}
         {
           activeResource && activeResource?.contracts.length > 0 && (<>
             <FContentText type="additional2" text={i18nMessage('used_contract')}/>
@@ -77,7 +76,6 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
             <Policies dataSource={activeResource.policies}/>
           </>)
         }
-        {/*</>*/}
       </div>
     </div>
   </div>);

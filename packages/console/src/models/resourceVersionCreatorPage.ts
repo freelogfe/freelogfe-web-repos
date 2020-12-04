@@ -32,12 +32,7 @@ export type DepResources = WholeReadonly<{
   title: string;
   resourceType: string;
   status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/;
-  version: {
-    isCustom: boolean;
-    select: string;
-    allowUpdate: boolean;
-    input: string;
-  } | null;
+  version: string;
   versions: string[];
   upthrow: boolean;
   upthrowDisabled: boolean;

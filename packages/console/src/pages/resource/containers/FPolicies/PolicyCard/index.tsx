@@ -5,6 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
 import {i18nMessage} from "@/utils/i18n";
 import {FTextButton} from "@/components/FButton";
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 interface PolicyCardProps {
   title: string;
@@ -18,7 +19,7 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
   return (<div className={styles.policy}>
     <div className={styles.policyHeader}>
       <FContentText text={title} singleRow={true}/>
-      <FDropdown
+      <FDropdownMenu
         onChange={(value: any) => {
           if (value !== status) {
             return onChangeStatus && onChangeStatus(value);
