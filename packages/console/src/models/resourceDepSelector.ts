@@ -16,7 +16,7 @@ export interface FetchInfoAction extends AnyAction {
 }
 
 export interface ResourceDepSelectorModelType {
-  namespace: 'temp';
+  namespace: 'resourceDepSelector';
   state: ResourceDepSelectorModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
@@ -30,7 +30,7 @@ export interface ResourceDepSelectorModelType {
 }
 
 const Model: ResourceDepSelectorModelType = {
-  namespace: 'temp',
+  namespace: 'resourceDepSelector',
   state: {
     info: null,
   },
