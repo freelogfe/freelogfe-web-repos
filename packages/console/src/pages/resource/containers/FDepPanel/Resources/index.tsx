@@ -3,23 +3,20 @@ import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FCircleButton} from '@/components/FButton';
 import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
-import VersionPopover from './VersionPopover';
+// import VersionPopover from './VersionPopover';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
+  ChangeAction,
   DeleteDependencyByIDAction,
   DepResources,
-  OnChangeDepActivatedIDAction,
-  OnChangeDependenciesByIDAction
+  // OnChangeDepActivatedIDAction,
+  // OnChangeDependenciesByIDAction
 } from '@/models/resourceVersionCreatorPage';
 import {i18nMessage} from '@/utils/i18n';
+import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 
 export interface ResourcesProps {
-  // readonly dataSource: FDepPanelProps['dataSource'];
-  // readonly activatedID: string | number;
-  // readonly onClick?: (resourceID: string | number) => void;
-  // readonly onChange?: (resource: ResourcesProps['dataSource'][0]) => void;
-  // readonly onDelete?: (resourceID: string | number) => void;
   dispatch: Dispatch;
   creator: ResourceVersionCreatorPageModelState;
 }
@@ -32,15 +29,15 @@ interface DataS extends T {
 
 function Resources({creator: {depRelationship, dependencies, depActivatedID}, dispatch}: ResourcesProps) {
 
-  React.useEffect(() => {
-    if (!dependencies.map((i) => i.id).includes(depActivatedID)) {
-      if (depRelationship.length > 0) {
-        onChangeResourcesActivated(depRelationship[0].id);
-      } else {
-        onChangeResourcesActivated('');
-      }
-    }
-  }, [depActivatedID, depRelationship, onChangeResourcesActivated]);
+  // React.useEffect(() => {
+  //   if (!dependencies.map((i) => i.id).includes(depActivatedID)) {
+  //     if (depRelationship.length > 0) {
+  //       onChangeResourcesActivated(depRelationship[0].id);
+  //     } else {
+  //       onChangeResourcesActivated('');
+  //     }
+  //   }
+  // }, [depActivatedID, depRelationship, onChangeResourcesActivated]);
 
   const dataSource: DataS[] = depRelationship.map((i) => {
     return {
@@ -53,22 +50,22 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
 
   // console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
-  function onChangeVersion(version: DepResources[number]['version'], id: DepResources[number]['id']) {
-    dispatch<OnChangeDependenciesByIDAction>({
-      type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
-      id,
-      payload: {
-        version,
-      }
-    });
-  }
+  // function onChangeVersion(version: DepResources[number]['versionRange'], id: DepResources[number]['id']) {
+  //   dispatch<OnChangeDependenciesByIDAction>({
+  //     type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
+  //     id,
+  //     payload: {
+  //       versionRange: version,
+  //     }
+  //   });
+  // }
 
-  function onChangeResourcesActivated(id: DepResources[number]['id']) {
-    dispatch<OnChangeDepActivatedIDAction>({
-      type: 'resourceVersionCreatorPage/onChangeDepActivatedID',
-      payload: id,
-    });
-  }
+  // function onChangeResourcesActivated(id: DepResources[number]['id']) {
+  //   dispatch<OnChangeDepActivatedIDAction>({
+  //     type: 'resourceVersionCreatorPage/onChangeDepActivatedID',
+  //     payload: id,
+  //   });
+  // }
 
   function onDeleteResource(id: DepResources[number]['id']) {
 
@@ -80,71 +77,79 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
   }
 
   return <div className={styles.styles}>
-    {dataSource?.map((i) => {
-        // if (!i?.version) {
-        //   return null;
-        // }
-        return (<div key={i.id}>
-          <div
-            onClick={() => onChangeResourcesActivated(i.id)}
-            className={styles.DepPanelNav + ' ' + (i.id === depActivatedID ? styles.DepPanelNavActive : '')}>
-            <div>
-              <div className={styles.title}>
-                <FContentText text={i.title}/>
-                {i.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
-              </div>
-              <div style={{height: 9}}/>
-              <FContentText type="additional2">
-                <div>{i.resourceType} | {i.versions?.length === 0 ? <span
-                    style={{paddingRight: 5}}>暂无版本</span>
-                  : <>
-                    <span
-                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i?.version?.isCustom ? i.version.input : ((i.version?.allowUpdate ? '^' : '') + i.version?.select)}</span>
-                    <VersionPopover
-                      versions={i.versions}
-                      onChange={(version) => onChangeVersion(version, i.id)}
-                      defaultVersion={i.version}><EditOutlined/></VersionPopover>
-                  </>
-                }
-                </div>
-              </FContentText>
-              <>
-                <div style={{height: 5}}/>
-                <div className={styles.DepPanelLabels}>
-                  {
-                    !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
-                      .filter((k) => k.checked)
-                      .map((j) => (<label
-                        key={j.id}
-                        className={styles.labelInfo}
-                      >{j.title}</label>))
-                  }
-                  {
-                    i.upthrow && (<label
-                      className={styles.labelError}
-                    >上抛</label>)
-                  }
-                </div>
-              </>
-            </div>
-            <FCircleButton
-              onClick={(e) => {
-                e.stopPropagation();
-                return onDeleteResource(i.id)
+    {
+      dataSource?.map((i) => {
+          return (<div key={i.id}>
+            <div
+              onClick={() => {
+                dispatch<ChangeAction>({
+                  type: 'resourceVersionCreatorPage/change',
+                  payload: {
+                    depActivatedID: i.id,
+                  },
+                });
               }}
-              theme='delete'
+              className={styles.DepPanelNav + ' ' + (i.id === depActivatedID ? styles.DepPanelNavActive : '')}>
+              <div>
+                <div className={styles.title}>
+                  <FContentText text={i.title}/>
+                  {i.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
+                </div>
+                <div style={{height: 9}}/>
+                <FContentText type="additional2">
+                  <div>{i.resourceType} | {
+                    i.versions?.length === 0
+                      ? <span style={{paddingRight: 5}}>暂无版本</span>
+                      : <>
+                    <span
+                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i.versionRange}</span>
+                        <FVersionHandlerPopover
+                          value={i.versionRange}
+                          versionOptions={i.versions}
+                          // versionOptions={['11.1.1']}
+                          // onChange={(version) => onChangeVersion(version, i.id)}
+                        ><EditOutlined/></FVersionHandlerPopover>
+                      </>
+                  }
+                  </div>
+                </FContentText>
+                <>
+                  <div style={{height: 5}}/>
+                  <div className={styles.DepPanelLabels}>
+                    {
+                      !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                        .filter((k) => k.checked)
+                        .map((j) => (<label
+                          key={j.id}
+                          className={styles.labelInfo}
+                        >{j.title}</label>))
+                    }
+                    {
+                      i.upthrow && (<label
+                        className={styles.labelError}
+                      >上抛</label>)
+                    }
+                  </div>
+                </>
+              </div>
+              <FCircleButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  return onDeleteResource(i.id)
+                }}
+                theme='delete'
+              />
+            </div>
+
+            <SmallNav
+              dataSource={i.unresolved || []}
+              activatedID={depActivatedID}
+              // onClick={onChangeResourcesActivated}
             />
-          </div>
 
-          <SmallNav
-            dataSource={i.unresolved || []}
-            activatedID={depActivatedID}
-            onClick={onChangeResourcesActivated}
-          />
-
-        </div>);
-      }
-    )}
+          </div>);
+        }
+      )}
   </div>
 }
 
@@ -183,22 +188,24 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
           </FContentText>
           <>
             <div style={{height: 5}}/>
-            <div className={styles.DepPanelLabels}>
-              {
-                !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
-                  .filter((k) => k.checked)
-                  .map((j) => (<label
-                    key={j.id}
-                    className={styles.labelInfo}
-                  >{j.title}</label>))
-              }
-              {/*{i18nMessage('info_upcast')}*/}
-              {
-                i.upthrow && (<label
-                  className={styles.labelError}
-                >上抛</label>)
-              }
-            </div>
+            {/*<div className={styles.DepPanelLabels}>*/}
+            {/*  {*/}
+            {/*    !i.upthrow && [*/}
+            {/*      // ...i.enableReuseContracts,*/}
+            {/*      ...i.enabledPolicies]*/}
+            {/*      .filter((k) => k.checked)*/}
+            {/*      .map((j) => (<label*/}
+            {/*        key={j.id}*/}
+            {/*        className={styles.labelInfo}*/}
+            {/*      >{j.title}</label>))*/}
+            {/*  }*/}
+            {/*  /!*{i18nMessage('info_upcast')}*!/*/}
+            {/*  {*/}
+            {/*    i.upthrow && (<label*/}
+            {/*      className={styles.labelError}*/}
+            {/*    >上抛</label>)*/}
+            {/*  }*/}
+            {/*</div>*/}
           </>
         </div>))
     }

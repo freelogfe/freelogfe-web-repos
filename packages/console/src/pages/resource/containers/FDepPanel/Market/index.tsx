@@ -3,14 +3,15 @@ import styles from './index.less';
 import FDropdown from '@/components/FDropdown';
 import FInput from '@/components/FInput';
 import {
-  AddADepByIDAction,
+  // AddADepByIDAction,
+  AddDepsAction
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {list, ListParamsType} from '@/services/resources';
 import moment from 'moment';
-import FResourceList from "@/components/FResourceList";
-import FDropdownMenu from "@/components/FDropdownMenu";
+import FResourceList from '@/components/FResourceList';
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface MarketProps {
   dispatch: Dispatch;
@@ -19,7 +20,7 @@ interface MarketProps {
 
 interface MarketStatus {
   selected: '1' | '2' | '3';
-  page: number;
+  // page: number;
   totalItem: number;
   input: string;
   resourceObjects: {
@@ -38,7 +39,7 @@ const selectOptions: { text?: string, value: string }[] = [
   {text: '我的收藏', value: '3'},
 ];
 
-let page: MarketStatus['page'] = 1;
+// let page: MarketStatus['page'] = 1;
 let input: MarketStatus['input'] = '';
 
 function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProps) {
@@ -71,42 +72,49 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       latestVersion: i.latestVersion,
     }));
     setTotalItem(data.totalItem);
-    if (page === 1) {
-      setResourceObjects(resources);
-    } else {
-      setResourceObjects([
-        ...resourceObjects,
-        ...resources,
-      ]);
-    }
+    // if (page === 1) {
+    //   setResourceObjects(resources);
+    // } else {
+    //   setResourceObjects([
+    //     ...resourceObjects,
+    //     ...resources,
+    //   ]);
+    // }
   }
 
   function onSelect(i: any) {
     // console.log(i, 'IIIIIIsAAAA');
-    dispatch<AddADepByIDAction>({
-      type: 'resourceVersionCreatorPage/addADepByIDAction',
-      payload: [i.id, ...i.baseUpcastResources.map((up: any) => up.resourceId)],
+    dispatch<AddDepsAction>({
+      type: 'resourceVersionCreatorPage/addDeps',
+      payload: {
+        relationships: [{
+          id: i.id,
+          children: (i.baseUpcastResources as any[]).map<{ id: string }>((up: any) => ({
+            id: up.resourceId,
+          }))
+        }],
+      },
     });
   }
 
-  function onChangeSelected(selected: MarketStatus['selected']) {
-    // console.log(selected, 'selectedp988nklwe4fds');
-    setSelected(selected as MarketStatus['selected']);
-    page = 1;
-    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
-  }
+  // function onChangeSelected(selected: MarketStatus['selected']) {
+  //   // console.log(selected, 'selectedp988nklwe4fds');
+  //   setSelected(selected as MarketStatus['selected']);
+  //   page = 1;
+  //   setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
+  // }
 
-  function onChangePage() {
-    // console.log(page, 'page35erdf');
-    page += 1;
-    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
-  }
+  // function onChangePage() {
+  //   // console.log(page, 'page35erdf');
+  //   page += 1;
+  //   setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
+  // }
 
-  function onChangeInput(value: string) {
-    input = value;
-    page = 1;
-    setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
-  }
+  // function onChangeInput(value: string) {
+  //   input = value;
+  //   page = 1;
+  //   setTimeout(() => handleDataSource(selected === '1' ? 0 : 1));
+  // }
 
   return (
     <div className={styles.SelectBucket}>
@@ -115,13 +123,13 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
           <FDropdownMenu
             options={selectOptions}
             text={<>{selectOptions.find((i) => i.value === selected)?.text}</>}
-            onChange={onChangeSelected as any}
+            // onChange={onChangeSelected as any}
           />
         </div>
 
         <FInput
           debounce={300}
-          onDebounceChange={onChangeInput}
+          // onDebounceChange={onChangeInput}
           value={input}
           className={styles.filterInput}
           theme="dark"
@@ -133,9 +141,10 @@ function Market({creator: {depRelationship, dependencies}, dispatch}: MarketProp
       <FResourceList
         resourceObjects={resourceObjects}
         loading={totalItem === -1}
-        stillMore={totalItem > page * 20}
+        // stillMore={totalItem > page * 20}
+        stillMore={true}
         onSelect={onSelect}
-        onLoadMord={onChangePage}
+        // onLoadMord={onChangePage}
       />
     </div>
   );

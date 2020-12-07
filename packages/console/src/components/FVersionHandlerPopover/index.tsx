@@ -5,13 +5,15 @@ import {FNormalButton} from '@/components/FButton';
 import FAutoComplete from "@/components/FAutoComplete";
 import {useDebounceFn} from 'ahooks';
 import * as semver from 'semver';
+import {WholeReadonly} from "@/models/shared";
 
-interface FVersionHandlerPopoverProps {
+type FVersionHandlerPopoverProps = WholeReadonly<{
   value: string;
   versionOptions: string[];
-  onChange?: (version: FVersionHandlerPopoverProps['value']) => void;
   children?: React.ReactNode;
-}
+}> & {
+  onChange?(version: FVersionHandlerPopoverProps['value']): void;
+};
 
 let isSelect: boolean = false;
 

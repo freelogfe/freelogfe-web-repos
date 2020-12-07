@@ -14,7 +14,7 @@ export interface FResourceListProps {
     resourceType: string;
     time: string;
     status: 0 | 1;
-    latestVersion: string
+    latestVersion: string;
   }[];
   disabledIDsOrNames?: string[];
   showRemoveIDsOrNames?: string[];

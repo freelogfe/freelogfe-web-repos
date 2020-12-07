@@ -14,8 +14,10 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
-  ChangeAction, ChangeVersionInputAction,
-  CreateVersionAction, ImportPreVersionAction, ObjectAddDepsAction,
+  ChangeAction,
+  // ChangeVersionInputAction,
+  CreateVersionAction,
+  // ImportPreVersionAction, ObjectAddDepsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -87,10 +89,10 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
           <FInput
             value={version.version}
             onChange={(e) => {
-              dispatch<ChangeVersionInputAction>({
-                type: 'resourceVersionCreatorPage/changeVersionInputAction',
-                payload: e.target.value,
-              });
+              // dispatch<ChangeVersionInputAction>({
+              //   type: 'resourceVersionCreatorPage/changeVersionInputAction',
+              //   payload: e.target.value,
+              // });
             }}
             className={styles.versionInput}
             errorText={version.versionErrorText}
@@ -106,10 +108,10 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
               if (!deps || deps.length === 0) {
                 return;
               }
-              dispatch<ObjectAddDepsAction>({
-                type: 'resourceVersionCreatorPage/objectAddDeps',
-                payload: deps,
-              });
+              // dispatch<ObjectAddDepsAction>({
+              //   type: 'resourceVersionCreatorPage/objectAddDeps',
+              //   payload: deps,
+              // });
             }}
             errorText={version.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}

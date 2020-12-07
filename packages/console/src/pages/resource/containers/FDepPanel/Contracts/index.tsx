@@ -1,12 +1,15 @@
 import * as React from 'react';
-import styles from "./index.less";
-import {Checkbox, Space} from "antd";
-import {FContentText} from "@/components/FText";
-import {FDepPanelProps} from "@/pages/resource/containers/FDepPanel";
-import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
-import {DepResources, OnChangeDependenciesByIDAction} from "@/models/resourceVersionCreatorPage";
-import {i18nMessage} from "@/utils/i18n";
+import styles from './index.less';
+import {Checkbox, Space} from 'antd';
+import {FContentText} from '@/components/FText';
+// import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import {
+  DepResources,
+  // OnChangeDependenciesByIDAction
+} from '@/models/resourceVersionCreatorPage';
+import {i18nMessage} from '@/utils/i18n';
 
 interface ContractsProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enableReuseContracts'];
@@ -33,13 +36,13 @@ function Contracts({creator, dispatch}: ContractsProps) {
         checked,
       }
     });
-    dispatch<OnChangeDependenciesByIDAction>({
-      type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
-      payload: {
-        enableReuseContracts,
-      },
-      id: creator.depActivatedID,
-    });
+    // dispatch<OnChangeDependenciesByIDAction>({
+    //   type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
+    //   payload: {
+    //     enableReuseContracts,
+    //   },
+    //   id: creator.depActivatedID,
+    // });
   }
 
   if (resource.enableReuseContracts.length === 0) {
