@@ -19,9 +19,10 @@ const selectOptions: { text?: string, value: string }[] = [
 interface MarketProps {
   dispatch: Dispatch;
   resourceDepSelector: ResourceDepSelectorModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Market({dispatch, resourceDepSelector}: MarketProps) {
+function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: MarketProps) {
 
   React.useEffect(() => {
     // handleDataSource(0);
@@ -30,22 +31,6 @@ function Market({dispatch, resourceDepSelector}: MarketProps) {
       payload: true,
     });
   }, []);
-
-  function onSelect(value: any) {
-    // console.log(value, 'value902jfasdlkf');
-    // console.log(i, 'IIIIIIsAAAA');
-    dispatch<AddDepsAction>({
-      type: 'resourceVersionCreatorPage/addDeps',
-      payload: {
-        relationships: [{
-          id: value.id,
-          children: (value.baseUpcastResources as any[]).map<{ id: string }>((up: any) => ({
-            id: up.resourceId,
-          }))
-        }],
-      },
-    });
-  }
 
   async function onFilterChange(payload: Partial<Pick<ResourceDepSelectorModelState, 'selected' | 'input'>>) {
     await dispatch<ChangeAction>({
@@ -96,19 +81,36 @@ function Market({dispatch, resourceDepSelector}: MarketProps) {
         }))}
         loading={resourceDepSelector.totalItem === -1}
         stillMore={resourceDepSelector.resourceList.length < resourceDepSelector.totalItem}
-        onSelect={onSelect}
+        onSelect={(value) => {
+          dispatch<AddDepsAction>({
+            type: 'resourceVersionCreatorPage/addDeps',
+            payload: {
+              relationships: [{
+                id: value.id,
+                children: (value.baseUpcastResources as any[]).map<{ id: string }>((up: any) => ({
+                  id: up.resourceId,
+                })),
+              }],
+            },
+          });
+        }}
         onLoadMord={() => {
           dispatch<FetchResourcesAction>({
             type: 'resourceDepSelector/fetchResources',
             payload: false,
           });
         }}
+        disabledIDsOrNames={[resourceVersionCreatorPage.resourceId]}
+        showRemoveIDsOrNames={resourceVersionCreatorPage.depRelationship.map<string>(((drs) => drs.id))}
+        onDelete={(value) => {
+
+        }}
       />
     </div>
   );
 }
 
-export default connect(({resourceDepSelector}: ConnectState) => ({
-  // resourceVersionCreatorPage,
+export default connect(({resourceDepSelector, resourceVersionCreatorPage}: ConnectState) => ({
+  resourceVersionCreatorPage,
   resourceDepSelector,
 }))(Market);
