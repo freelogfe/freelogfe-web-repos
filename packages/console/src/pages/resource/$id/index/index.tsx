@@ -24,6 +24,10 @@ interface ResourceDetailsProps extends RouterTypes {
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
   // React.useEffect(() => {
+  //   console.log('index092jadfslkasdf');
+  // }, []);
+
+  // React.useEffect(() => {
   //   dispatch<ChangeAction>({
   //     type: 'global/change',
   //     payload: {

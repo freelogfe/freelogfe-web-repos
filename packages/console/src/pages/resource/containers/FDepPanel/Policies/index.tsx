@@ -4,12 +4,10 @@ import {FNormalButton} from '@/components/FButton';
 import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
 import {Checkbox} from 'antd';
 import {
-  DepResources,
-  OnChangeDependenciesByIDAction,
-  ResourceVersionCreatorPageModelState
+  ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
-import {ConnectState} from '@/models/connect';
+import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {FContentText, FTipText} from '@/components/FText';
 import {CloseCircleFilled} from '@ant-design/icons';
 import {i18nMessage} from '@/utils/i18n';
@@ -18,17 +16,17 @@ interface PoliciesProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];
   // onChange?: (dataSource: PoliciesProps['dataSource']) => void;
   dispatch: Dispatch;
-  creator: ResourceVersionCreatorPageModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Policies({creator, dispatch}: PoliciesProps) {
-  const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
+function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
+  const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
   if (!resource || resource.upthrow) {
     return null;
   }
 
-  function onChangeChecked(checked: boolean, contractID: DepResources[number]['enabledPolicies'][number]) {
+  function onChangeChecked(checked: boolean, contractID: ResourceVersionCreatorPageModelState['dependencies'][number]['enabledPolicies'][number]) {
     const enabledPolicies = resource.enabledPolicies.map((i) => {
       if (i.id !== contractID.id) {
         return i;
@@ -38,12 +36,20 @@ function Policies({creator, dispatch}: PoliciesProps) {
         checked,
       };
     });
-    dispatch<OnChangeDependenciesByIDAction>({
-      type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
-      payload: {
+    const dependencies: ResourceVersionCreatorPageModelState['dependencies'] = resourceVersionCreatorPage.dependencies.map((dd) => {
+      if (dd.id !== resource.id) {
+        return dd;
+      }
+      return {
+        ...dd,
         enabledPolicies,
+      };
+    });
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        dependencies,
       },
-      id: creator.depActivatedID,
     });
   }
 
@@ -85,5 +91,5 @@ function Policies({creator, dispatch}: PoliciesProps) {
 }
 
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
-  creator: resourceVersionCreatorPage,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Policies);

@@ -6,8 +6,7 @@ import {FContentText} from '@/components/FText';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
-  DepResources,
-  // OnChangeDependenciesByIDAction
+  ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
 import {i18nMessage} from '@/utils/i18n';
 
@@ -15,34 +14,45 @@ interface ContractsProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enableReuseContracts'];
   // onChange?: (dataRourece: ContractsProps['dataSource']) => void;
   dispatch: Dispatch;
-  creator: ResourceVersionCreatorPageModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function Contracts({creator, dispatch}: ContractsProps) {
+function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
 
-  const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
+  const resource: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as ResourceVersionCreatorPageModelState['dependencies'][number];
 
   if (!resource || resource.upthrow) {
     return null;
   }
 
-  function onChangeChecked(checked: boolean, contractID: DepResources[number]['enableReuseContracts'][number]) {
-    const enableReuseContracts = resource.enableReuseContracts.map((i) => {
-      if (i.id !== contractID.id) {
-        return i;
+  function onChangeChecked(checked: boolean, contract: ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]) {
+    console.log(contract, 'erc2093jsdflk');
+    const enableReuseContracts: ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'] = resource.enableReuseContracts.map((erc) => {
+      if (erc.id !== contract.id) {
+        return erc;
       }
       return {
-        ...i,
+        ...erc,
         checked,
       }
     });
-    // dispatch<OnChangeDependenciesByIDAction>({
-    //   type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
-    //   payload: {
-    //     enableReuseContracts,
-    //   },
-    //   id: creator.depActivatedID,
-    // });
+
+    const dependencies = resourceVersionCreatorPage.dependencies.map<ResourceVersionCreatorPageModelState['dependencies'][number]>((dd) => {
+      if (dd.id !== resource.id) {
+        return dd;
+      }
+      return {
+        ...dd,
+        enableReuseContracts,
+      }
+    });
+
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        dependencies: dependencies,
+      },
+    });
   }
 
   if (resource.enableReuseContracts.length === 0) {
@@ -90,6 +100,6 @@ function Contracts({creator, dispatch}: ContractsProps) {
 }
 
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
-  creator: resourceVersionCreatorPage,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Contracts);
 

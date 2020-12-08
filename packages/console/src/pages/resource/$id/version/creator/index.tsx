@@ -14,7 +14,7 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
-  ChangeAction,
+  ChangeAction, ChangeVersionInputAction,
   // ChangeVersionInputAction,
   CreateVersionAction,
   // ImportPreVersionAction, ObjectAddDepsAction,
@@ -48,6 +48,16 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
       },
     });
   }, [route]);
+
+  React.useEffect(() => {
+    // console.log(match, 'creator902jfsadlk');
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        resourceId: match.params.id,
+      }
+    });
+  }, [match.params.id]);
 
   function onClickCache() {
     dispatch<SaveDraftAction>({
@@ -89,10 +99,10 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
           <FInput
             value={version.version}
             onChange={(e) => {
-              // dispatch<ChangeVersionInputAction>({
-              //   type: 'resourceVersionCreatorPage/changeVersionInputAction',
-              //   payload: e.target.value,
-              // });
+              dispatch<ChangeVersionInputAction>({
+                type: 'resourceVersionCreatorPage/changeVersionInputAction',
+                payload: e.target.value,
+              });
             }}
             className={styles.versionInput}
             errorText={version.versionErrorText}

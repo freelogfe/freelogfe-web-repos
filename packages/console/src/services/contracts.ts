@@ -29,7 +29,8 @@ export interface BatchContractsParamsType {
   contractIds?: string;
   subjectIds?: string;
   identityType?: 1 | 2;
-  licenseeIdentityType?: number;
+  subjectType?: 1 | 2 | 3;
+  licenseeIdentityType?: 1 | 2 | 3;
   licensorId?: string;
   licenseeId?: string;
   isLoadPolicyInfo?: 0 | 1;

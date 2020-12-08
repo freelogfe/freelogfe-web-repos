@@ -23,7 +23,7 @@ import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
-import {contracts, ContractsParamsType} from "@/services/contracts";
+import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
 import {batchObjectList, BatchObjectListParamsType} from "@/services/storages";
 
@@ -93,10 +93,10 @@ export interface ChangeAction extends AnyAction {
 //   id: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
 // }
 
-// export interface ChangeVersionInputAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
-//   payload: string;
-// }
+export interface ChangeVersionInputAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
+  payload: string;
+}
 
 
 // export interface OnChangeDepActivatedIDAction extends AnyAction {
@@ -144,7 +144,7 @@ export interface ResourceVersionCreatorModelType {
   state: ResourceVersionCreatorPageModelState;
   effects: {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
-    // changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
+    changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
     // importPreVersion: (action: ImportPreVersionAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
@@ -191,27 +191,27 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
-    // * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
-    //   const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
-    //     resourceInfo,
-    //   }));
-    //   let versionErrorText: string = '';
-    //   if (!payload) {
-    //     versionErrorText = '请输入版本号';
-    //   } else if (!semver.valid(payload)) {
-    //     versionErrorText = '版本号不合法';
-    //   } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
-    //     versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
-    //   }
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       version: payload,
-    //       versionVerify: 2,
-    //       versionErrorText: versionErrorText,
-    //     }
-    //   });
-    // },
+    * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+        resourceInfo,
+      }));
+      let versionErrorText: string = '';
+      if (!payload) {
+        versionErrorText = '请输入版本号';
+      } else if (!semver.valid(payload)) {
+        versionErrorText = '版本号不合法';
+      } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
+        versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          version: payload,
+          versionVerify: 2,
+          versionErrorText: versionErrorText,
+        }
+      });
+    },
     * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
@@ -349,12 +349,12 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      // console.log(relationships, 'relationships12342343');
+      const existIDs: string[] = resourceVersionCreatorPage.dependencies.map<string>((dd) => dd.id);
 
       const allIDs: string[] = [
         ...relationships.map((r) => r.id),
         ...relationships.map((r) => r.children).flat().map((c) => c.id),
-      ];
+      ].filter((id) => !existIDs.includes(id));
 
       const params: BatchInfoParamsType = {
         resourceIds: allIDs.join(','),
@@ -363,9 +363,23 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const {data} = yield call(batchInfo, params);
-      console.log(data, 'DDD!@#$@!#$@');
+      // console.log(data, 'DDD!@#$@!#$@');
+
+      const params1: BatchContractsParamsType = {
+        subjectIds: allIDs.join(','),
+        licenseeId: resourceVersionCreatorPage.resourceId,
+        subjectType: 1,
+        licenseeIdentityType: 1,
+        isLoadPolicyInfo: 1,
+      };
+      const {data: data1} = yield call(batchContracts, params1);
+      console.log(data1, 'data1 109234ui2o34');
 
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
+        const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
+        console.log(depC, 'dc2903jdsaflkj');
+
+        const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         return {
           id: dr.resourceId,
           title: dr.resourceName,
@@ -376,26 +390,28 @@ const Model: ResourceVersionCreatorModelType = {
           // upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
           upthrow: false,
           upthrowDisabled: !!dr.latestVersion,
-          // enableReuseContracts: contractsData.map((c: any) => ({
-          //   checked: true,
-          //   id: c.contractId,
-          //   policyId: c.policyId,
-          //   title: c.contractName,
-          //   status: c.isAuth ? 'executing' : 'stopped',
-          //   code: c.policyInfo.policyText,
-          //   date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-          //   versions: resolveResourcesData
-          //     .find((rr: any) => rr.resourceId === resourceData.resourceId)
-          //     .versions
-          //     .filter((rr: any) => {
-          //       const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
-          //       return allContractIds.includes(c.contractId);
-          //     })
-          //     .map((rr: any) => rr.version),
-          // })),
-          enableReuseContracts: [],
+          // enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts']>((c: any) => ({
+          enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => ({
+            checked: true,
+            id: c.contractId,
+            policyId: c.policyId,
+            title: c.contractName,
+            status: c.isAuth ? 'executing' : 'stopped',
+            code: c.policyInfo.policyText,
+            date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+            versions: ['1.2.2'],
+            // resolveResourcesData
+            // .find((rr: any) => rr.resourceId === resourceData.resourceId)
+            // .versions
+            // .filter((rr: any) => {
+            //   const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
+            //   return allContractIds.includes(c.contractId);
+            // })
+            // .map((rr: any) => rr.version),
+          })),
+          // enableReuseContracts: [],
           enabledPolicies: dr.policies
-            // .filter((policy: any) => !allContractPolicyIds.includes(policy.policyId))
+            .filter((policy: any) => !allDepCIDs.includes(policy.policyId))
             .map((policy: any) => {
               // console.log(policy, 'PPPPafwe98iokl');
               return {
@@ -424,8 +440,29 @@ const Model: ResourceVersionCreatorModelType = {
         },
       })
     },
-    * deleteDependencyByID({}: DeleteDependencyByIDAction, {}: EffectsCommandMap) {
+    * deleteDependencyByID({payload}: DeleteDependencyByIDAction, {select, put}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+      const depRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = resourceVersionCreatorPage.depRelationship.filter((drs) => drs.id !== payload);
+      const allUsedIDs: string[] = [
+        ...depRelationship.map<string>((drs) => drs.id),
+        ...depRelationship.map((drs) => drs.children).flat().map<string>((drs) => drs.id),
+      ];
+      const dependencies: ResourceVersionCreatorPageModelState['dependencies'] = resourceVersionCreatorPage.dependencies.filter((dp) => allUsedIDs.includes(dp.id));
 
+      let depActivatedID: string = resourceVersionCreatorPage.depActivatedID;
+      if (!allUsedIDs.includes(depActivatedID)) {
+        depActivatedID = allUsedIDs[0] || '';
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depRelationship,
+          dependencies,
+          depActivatedID,
+        },
+      });
     },
     // * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
     //   const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({

@@ -34,11 +34,11 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
     });
-    dispatch<FetchDraftAction>({
-      type: 'resourceVersionCreatorPage/fetchDraft',
-      payload: match.params.id,
-    });
-  }, [dispatch, info, match.params.id]);
+    // dispatch<FetchDraftAction>({
+    //   type: 'resourceVersionCreatorPage/fetchDraft',
+    //   payload: match.params.id,
+    // });
+  }, [info, match.params.id]);
 
 
   function gotoCreator() {

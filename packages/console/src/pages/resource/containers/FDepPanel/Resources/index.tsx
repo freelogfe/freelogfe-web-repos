@@ -18,7 +18,7 @@ import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 
 export interface ResourcesProps {
   dispatch: Dispatch;
-  creator: ResourceVersionCreatorPageModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
 type T = DepResources[0];
@@ -27,7 +27,7 @@ interface DataS extends T {
   unresolved: DepResources;
 }
 
-function Resources({creator: {depRelationship, dependencies, depActivatedID}, dispatch}: ResourcesProps) {
+function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
 
   // React.useEffect(() => {
   //   if (!dependencies.map((i) => i.id).includes(depActivatedID)) {
@@ -39,26 +39,35 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
   //   }
   // }, [depActivatedID, depRelationship, onChangeResourcesActivated]);
 
-  const dataSource: DataS[] = depRelationship.map((i) => {
-    return {
-      ...(dependencies.find((j) => j.id === i.id) as DepResources[number]),
-      unresolved: i.children.map((k) => {
-        return dependencies.find((l) => k.id === l.id) as DepResources[number];
-      })
-    }
-  });
+  // const dataSource: DataS[] = depRelationship.map((i) => {
+  //   return {
+  //     ...(dependencies.find((j) => j.id === i.id) as DepResources[number]),
+  //     unresolved: i.children.map((k) => {
+  //       return dependencies.find((l) => k.id === l.id) as DepResources[number];
+  //     })
+  //   }
+  // });
 
   // console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
-  // function onChangeVersion(version: DepResources[number]['versionRange'], id: DepResources[number]['id']) {
-  //   dispatch<OnChangeDependenciesByIDAction>({
-  //     type: 'resourceVersionCreatorPage/onChangeDependenciesByID',
-  //     id,
-  //     payload: {
-  //       versionRange: version,
-  //     }
-  //   });
-  // }
+  function onChangeVersion(version: DepResources[number]['versionRange'], id: DepResources[number]['id']) {
+    const dependencies: ResourceVersionCreatorPageModelState['dependencies'] = resourceVersionCreatorPage.dependencies.map((dd) => {
+      if (dd.id !== id) {
+        return dd;
+      }
+      return {
+        ...dd,
+        versionRange: version,
+      };
+    });
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      id,
+      payload: {
+        dependencies,
+      }
+    });
+  }
 
   // function onChangeResourcesActivated(id: DepResources[number]['id']) {
   //   dispatch<OnChangeDepActivatedIDAction>({
@@ -76,38 +85,46 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
     // return onChange && onChange();
   }
 
+  function onChangeActiveID(id: string) {
+    if (id === resourceVersionCreatorPage.depActivatedID) {
+      return;
+    }
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        depActivatedID: id,
+      },
+    });
+  }
+
   return <div className={styles.styles}>
     {
-      dataSource?.map((i) => {
-          return (<div key={i.id}>
+      resourceVersionCreatorPage.depRelationship.map((i) => {
+          const rrr: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies
+            .find((dds) => dds.id === i.id) as ResourceVersionCreatorPageModelState['dependencies'][number];
+          return (<div key={rrr.id}>
             <div
               onClick={() => {
-                dispatch<ChangeAction>({
-                  type: 'resourceVersionCreatorPage/change',
-                  payload: {
-                    depActivatedID: i.id,
-                  },
-                });
+                onChangeActiveID(rrr.id);
               }}
-              className={styles.DepPanelNav + ' ' + (i.id === depActivatedID ? styles.DepPanelNavActive : '')}>
+              className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}>
               <div>
                 <div className={styles.title}>
-                  <FContentText text={i.title}/>
-                  {i.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
+                  <FContentText text={rrr.title}/>
+                  {rrr.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
                 </div>
                 <div style={{height: 9}}/>
                 <FContentText type="additional2">
-                  <div>{i.resourceType} | {
-                    i.versions?.length === 0
+                  <div>{rrr.resourceType} | {
+                    rrr.versions?.length === 0
                       ? <span style={{paddingRight: 5}}>暂无版本</span>
                       : <>
                     <span
-                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{i.versionRange}</span>
+                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{rrr.versionRange}</span>
                         <FVersionHandlerPopover
-                          value={i.versionRange}
-                          versionOptions={i.versions}
-                          // versionOptions={['11.1.1']}
-                          // onChange={(version) => onChangeVersion(version, i.id)}
+                          value={rrr.versionRange}
+                          versionOptions={rrr.versions}
+                          onChange={(version) => onChangeVersion(version, i.id)}
                         ><EditOutlined/></FVersionHandlerPopover>
                       </>
                   }
@@ -117,7 +134,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
                   <div style={{height: 5}}/>
                   <div className={styles.DepPanelLabels}>
                     {
-                      !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                      !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
                         .filter((k) => k.checked)
                         .map((j) => (<label
                           key={j.id}
@@ -125,7 +142,7 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
                         >{j.title}</label>))
                     }
                     {
-                      i.upthrow && (<label
+                      rrr.upthrow && (<label
                         className={styles.labelError}
                       >上抛</label>)
                     }
@@ -142,9 +159,14 @@ function Resources({creator: {depRelationship, dependencies, depActivatedID}, di
             </div>
 
             <SmallNav
-              dataSource={i.unresolved || []}
-              activatedID={depActivatedID}
-              // onClick={onChangeResourcesActivated}
+              // dataSource={i.unresolved || []}
+              dataSource={i.children.map((k) => {
+                return resourceVersionCreatorPage.dependencies.find((l) => k.id === l.id) as DepResources[number];
+              })}
+              activatedID={resourceVersionCreatorPage.depActivatedID}
+              onClick={(resourceID) => {
+                onChangeActiveID(resourceID);
+              }}
             />
 
           </div>);
@@ -188,24 +210,22 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
           </FContentText>
           <>
             <div style={{height: 5}}/>
-            {/*<div className={styles.DepPanelLabels}>*/}
-            {/*  {*/}
-            {/*    !i.upthrow && [*/}
-            {/*      // ...i.enableReuseContracts,*/}
-            {/*      ...i.enabledPolicies]*/}
-            {/*      .filter((k) => k.checked)*/}
-            {/*      .map((j) => (<label*/}
-            {/*        key={j.id}*/}
-            {/*        className={styles.labelInfo}*/}
-            {/*      >{j.title}</label>))*/}
-            {/*  }*/}
-            {/*  /!*{i18nMessage('info_upcast')}*!/*/}
-            {/*  {*/}
-            {/*    i.upthrow && (<label*/}
-            {/*      className={styles.labelError}*/}
-            {/*    >上抛</label>)*/}
-            {/*  }*/}
-            {/*</div>*/}
+            <div className={styles.DepPanelLabels}>
+              {
+                !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                  .filter((k) => k.checked)
+                  .map((j) => (<label
+                    key={j.id}
+                    className={styles.labelInfo}
+                  >{j.title}</label>))
+              }
+              {/*{i18nMessage('info_upcast')}*/}
+              {
+                i.upthrow && (<label
+                  className={styles.labelError}
+                >上抛</label>)
+              }
+            </div>
           </>
         </div>))
     }
@@ -214,5 +234,5 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
 }
 
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
-  creator: resourceVersionCreatorPage,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Resources);
