@@ -349,7 +349,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      console.log(relationships, 'relationships12342343');
+      // console.log(relationships, 'relationships12342343');
 
       const allIDs: string[] = [
         ...relationships.map((r) => r.id),

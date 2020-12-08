@@ -17,8 +17,7 @@ import {MarketResourcePageModelState} from './marketResourcePage';
 import {NodesModelState} from './nodes';
 import {NodeManagerModelState} from './nodeManagerPage';
 import {ExhibitInfoPageModelState} from './exhibitInfoPage';
-import RouterTypes from "umi/routerTypes";
-import {Router} from "dva";
+import {ResourceDepSelectorModelState} from './resourceDepSelector';
 
 export {
   // RouterHistoriesModelState,
@@ -41,6 +40,7 @@ export {
   NodesModelState,
   NodeManagerModelState,
   ExhibitInfoPageModelState,
+  ResourceDepSelectorModelState,
 };
 
 export interface ConnectState {
@@ -64,4 +64,5 @@ export interface ConnectState {
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;
+  resourceDepSelector: ResourceDepSelectorModelState;
 }
