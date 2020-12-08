@@ -5,7 +5,7 @@ import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
   batchInfo,
-  BatchInfoParamsType,
+  BatchInfoParamsType, batchSetContracts, BatchSetContractsParamsType,
   createVersion,
   CreateVersionParamsType, cycleDependencyCheck,
   info,
@@ -373,7 +373,12 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data: data1} = yield call(batchContracts, params1);
-      console.log(data1, 'data1 109234ui2o34');
+      // console.log(data1, 'data1 109234ui2o34');
+
+      const params2: BatchSetContractsParamsType = {
+        resourceId: resourceVersionCreatorPage.resourceId,
+      };
+      const {data: data2} = yield call(batchSetContracts, params2);
 
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
         const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
