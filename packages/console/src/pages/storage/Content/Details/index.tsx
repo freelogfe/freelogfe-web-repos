@@ -168,17 +168,17 @@ function Details({editor, dispatch}: DetailsProps) {
           <FContentText text={'添加'}/>
         </Space>
         <div style={{height: 20}}/>
-        <FCustomProperties
-          dataSource={editor.properties}
-          onChange={(value) => {
-            dispatch<ChangeAction>({
-              type: 'storageObjectEditor/change',
-              payload: {
-                properties: value,
-              },
-            });
-          }}
-        />
+        {/*<FCustomProperties*/}
+        {/*  dataSource={editor.properties}*/}
+        {/*  onChange={(value) => {*/}
+        {/*    dispatch<ChangeAction>({*/}
+        {/*      type: 'storageObjectEditor/change',*/}
+        {/*      payload: {*/}
+        {/*        properties: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*/>*/}
       </FEditorCard>
 
       <div style={{height: 120}}/>
