@@ -5,12 +5,12 @@ import Property from './Property';
 
 export interface Data {
   key: string;
-  keyError?: string;
-  value: string;
-  valueError?: string;
+  keyError: string;
+  // value: string;
+  // valueError?: string;
   description: string;
-  descriptionError?: string;
-  allowCustom: boolean;
+  descriptionError: string;
+  // allowCustom: boolean;
   custom: 'input' | 'select';
   customOption: string;
   customOptionError: string;

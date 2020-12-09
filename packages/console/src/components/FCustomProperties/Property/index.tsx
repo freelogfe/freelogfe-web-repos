@@ -54,32 +54,6 @@ function Property({data, onChange}: PropertyProps) {
           />
           {data.keyError && <div className={styles.error}>{data.keyError}</div>}
         </Field>
-        <Field
-          title={i18nMessage('value')}
-          dot={true}
-        >
-          <FInput
-            wrapClassName={styles.FInputWrap}
-            value={data.value}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let valueError: string = '';
-              if (value === '') {
-                valueError = '请输入';
-              } else if (value.length > 30) {
-                valueError = '不超过30个字符';
-              }
-              onChangeData({
-                value: value,
-                valueError: valueError,
-              });
-            }}
-          />
-          {data.valueError && <div className={styles.error}>{data.valueError}</div>}
-        </Field>
-      </Space>
-      <div style={{height: 15}}/>
-      <Space className={styles.row} size={20}>
         <Field title={i18nMessage('property_remark')}>
           <FInput
             wrapClassName={styles.FInputWrap}
@@ -101,22 +75,30 @@ function Property({data, onChange}: PropertyProps) {
           />
           {data.descriptionError && <div className={styles.error}>{data.descriptionError}</div>}
         </Field>
-        <Field title={i18nMessage('support_customization')}>
-          <div style={{height: 38, alignItems: 'center', display: 'flex'}}>
-            <Switch
-              checked={data.allowCustom}
-              onChange={(value) => onChangeData({allowCustom: value})}
-              className={styles.Switch}
-              size="default"
-              defaultChecked
-            />
-          </div>
-        </Field>
       </Space>
+      {/*<div style={{height: 15}}/>*/}
+      {/*<Space className={styles.row} size={20}>*/}
+
+      {/*  /!*<Field title={i18nMessage('support_customization')}>*!/*/}
+      {/*  /!*  <div style={{height: 38, alignItems: 'center', display: 'flex'}}>*!/*/}
+      {/*  /!*    <Switch*!/*/}
+      {/*  /!*      checked={data.allowCustom}*!/*/}
+      {/*  /!*      onChange={(value) => onChangeData({allowCustom: value})}*!/*/}
+      {/*  /!*      className={styles.Switch}*!/*/}
+      {/*  /!*      size="default"*!/*/}
+      {/*  /!*      defaultChecked*!/*/}
+      {/*  /!*    />*!/*/}
+      {/*  /!*  </div>*!/*/}
+      {/*  /!*</Field>*!/*/}
+
+      {/*</Space>*/}
       <div style={{height: 15}}/>
       {
-        data.allowCustom && (<Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
-          <Field className={styles.FSelect} title={i18nMessage('value_input_mode')}>
+        <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
+          <Field
+            className={styles.FSelect}
+            title={i18nMessage('value_input_mode')}
+          >
             <FSelect
               value={data.custom}
               onChange={(value) => onChangeData({custom: value})}
@@ -131,7 +113,12 @@ function Property({data, onChange}: PropertyProps) {
 
           {
             data.custom === 'select' && (<div>
-              <Field title={i18nMessage('value_options')} className={styles.customOptions}>
+              <Field
+                dot={true}
+                // title={i18nMessage('value_options')}
+                title={'自定义选项(首个选项为默认值)'}
+                className={styles.customOptions}
+              >
                 <FInput
                   wrapClassName={styles.FInputWrap}
                   value={data.customOption}
@@ -155,7 +142,35 @@ function Property({data, onChange}: PropertyProps) {
               {data.customOptionError && <div className={styles.error}>{data.customOptionError}</div>}
             </div>)
           }
-        </Space>)
+
+          {
+            data.custom === 'input' && (<Field
+              // title={i18nMessage('value')}
+              title={'自定义选项(填写一个默认值)'}
+              dot={true}
+            >
+              <FInput
+                wrapClassName={styles.FInputWrap}
+                value={data.value}
+                onChange={(e) => {
+                  const value: string = e.target.value;
+                  let valueError: string = '';
+                  if (value === '') {
+                    valueError = '请输入';
+                  } else if (value.length > 30) {
+                    valueError = '不超过30个字符';
+                  }
+                  onChangeData({
+                    value: value,
+                    valueError: valueError,
+                  });
+                }}
+              />
+              {data.valueError && <div className={styles.error}>{data.valueError}</div>}
+            </Field>)
+          }
+
+        </Space>
       }
       <div style={{height: 15}}/>
     </div>
