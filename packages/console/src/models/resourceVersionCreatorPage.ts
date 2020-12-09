@@ -189,14 +189,12 @@ const Model: ResourceVersionCreatorModelType = {
           ],
         }));
       const params: CreateVersionParamsType = {
-        resourceId: resourceInfo.info?.resourceId || '',
-        // latestVersion: resourceInfo.info?.latestVersion || '',
+        resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id || '',
         filename: resourceVersionCreatorPage.resourceObject?.name || '',
         baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
         dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
-          // const version = dep.versionRange;
           return {
             resourceId: dep.id,
             versionRange: dep.versionRange,
@@ -212,24 +210,6 @@ const Model: ResourceVersionCreatorModelType = {
         })),
         description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
-
-      for (const custom of (params.customPropertyDescriptors || [])) {
-        if (!custom.key || !custom.defaultValue) {
-          return fMessage('请检查自定义属性');
-        }
-      }
-
-      const {versionErrorText, resourceObjectErrorText} = verify(params);
-
-      if (versionErrorText || resourceObjectErrorText) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            versionErrorText,
-            resourceObjectErrorText,
-          },
-        });
-      }
 
       const {data} = yield call(createVersion, params);
       yield put<FetchDataSourceAction>({

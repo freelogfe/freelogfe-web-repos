@@ -26,7 +26,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
   }
 
   function onChangeChecked(checked: boolean, contract: ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]) {
-    console.log(contract, 'erc2093jsdflk');
+    // console.log(contract, 'erc2093jsdflk');
     const enableReuseContracts: ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'] = resource.enableReuseContracts.map((erc) => {
       if (erc.id !== contract.id) {
         return erc;
