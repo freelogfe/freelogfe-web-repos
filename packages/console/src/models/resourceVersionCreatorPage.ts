@@ -4,16 +4,13 @@ import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
+  batchGetCoverageVersions, BatchGetCoverageVersionsParamsType,
   batchInfo,
-  BatchInfoParamsType, batchSetContracts, BatchSetContractsParamsType,
+  BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType, cycleDependencyCheck,
-  info,
-  InfoParamsType,
+  CreateVersionParamsType,
   lookDraft,
   LookDraftParamsType, resolveResources,
-  ResolveResourcesParamsType,
-  resourceVersionInfo, ResourceVersionInfoParamsType1, ResourceVersionInfoParamsType2,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
@@ -25,7 +22,6 @@ import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
-import {batchObjectList, BatchObjectListParamsType} from "@/services/storages";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -79,7 +75,6 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   properties: FCustomPropertiesProps['dataSource'];
 
   description: EditorState;
-  draftData: any;
 };
 
 export interface ChangeAction extends AnyAction {
@@ -87,39 +82,23 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceVersionCreatorPageModelState>;
 }
 
-// export interface OnChangeDependenciesByIDAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onChangeDependenciesByID';
-//   payload: Partial<ResourceVersionCreatorPageModelState['dependencies'][number]>;
-//   id: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
-// }
-
-export interface ChangeVersionInputAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
-  payload: string;
+export interface FetchDraftAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/fetchDraft';
+  // payload: string;
 }
-
-
-// export interface OnChangeDepActivatedIDAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onChangeDepActivatedID';
-//   payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
-// }
 
 export interface CreateVersionAction extends AnyAction {
   type: 'resourceVersionCreatorPage/createVersion';
-}
-
-export interface FetchDraftAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/fetchDraft';
-  payload: string;
 }
 
 export interface SaveDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/saveDraft';
 }
 
-// export interface ImportPreVersionAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/importPreVersion';
-// }
+export interface ChangeVersionInputAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
+  payload: string;
+}
 
 export interface AddDepsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/addDeps' | 'addDeps';
@@ -134,20 +113,14 @@ export interface DeleteDependencyByIDAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
 }
 
-// export interface ObjectAddDepsAction extends AnyAction {
-//   type: 'resourceVersionCreatorPage/objectAddDeps'
-//   payload: { name: string; type: 'resource' | 'object'; versionRange: string; }[];
-// }
-
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
-    changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
-    // importPreVersion: (action: ImportPreVersionAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
+    changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     // addADepByIDsAction: (action: AddADepByIDsAction, effects: EffectsCommandMap) => void;
@@ -181,7 +154,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   description: BraftEditor.createEditorState(''),
 
-  draftData: null,
+  // draftData: null,
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -191,27 +164,6 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
-    * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
-      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
-        resourceInfo,
-      }));
-      let versionErrorText: string = '';
-      if (!payload) {
-        versionErrorText = '请输入版本号';
-      } else if (!semver.valid(payload)) {
-        versionErrorText = '版本号不合法';
-      } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
-        versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
-      }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          version: payload,
-          versionVerify: 2,
-          versionErrorText: versionErrorText,
-        }
-      });
-    },
     * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
@@ -279,12 +231,6 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       const {data} = yield call(createVersion, params);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          draftData: null,
-        },
-      });
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
@@ -295,32 +241,24 @@ const Model: ResourceVersionCreatorModelType = {
       });
       router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
     },
-    * fetchDraft({payload}: FetchDraftAction, {call, put}: EffectsCommandMap) {
+    * fetchDraft({}: FetchDraftAction, {call, put, select}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
+        return {
+          resourceVersionCreatorPage,
+        };
+      });
       const params: LookDraftParamsType = {
-        resourceId: payload,
+        resourceId: resourceVersionCreatorPage.resourceId,
       };
       const {data} = yield call(lookDraft, params);
       if (!data) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            draftData: null,
-            version: '',
-            resourceObject: null,
-            depRelationship: [],
-            dependencies: [],
-            depActivatedID: '',
-            properties: [],
-            description: BraftEditor.createEditorState(''),
-          }
-        });
+        return;
       }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ...data.draftData,
           description: BraftEditor.createEditorState(data.draftData.description),
-          draftData: data.draftData,
         }
       });
     },
@@ -337,11 +275,26 @@ const Model: ResourceVersionCreatorModelType = {
       };
       yield call(saveVersionsDraft, params);
       fMessage('暂存草稿成功');
+    },
+    * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+        resourceInfo,
+      }));
+      let versionErrorText: string = '';
+      if (!payload) {
+        versionErrorText = '请输入版本号';
+      } else if (!semver.valid(payload)) {
+        versionErrorText = '版本号不合法';
+      } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
+        versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          draftData: params.draftData,
-        },
+          version: payload,
+          versionVerify: 2,
+          versionErrorText: versionErrorText,
+        }
       });
     },
     * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {
@@ -375,14 +328,18 @@ const Model: ResourceVersionCreatorModelType = {
       const {data: data1} = yield call(batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
-      const params2: BatchSetContractsParamsType = {
-        resourceId: resourceVersionCreatorPage.resourceId,
-      };
-      const {data: data2} = yield call(batchSetContracts, params2);
+      let coverageVersions: any[] = [];
+      if (data1.length > 0) {
+        const params2: BatchGetCoverageVersionsParamsType = {
+          resourceId: resourceVersionCreatorPage.resourceId,
+          contractIds: data1.map((ci: any) => ci.contractId).join(','),
+        };
+        const {data: data2} = yield call(batchGetCoverageVersions, params2);
+        coverageVersions = data2;
+      }
 
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
         const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
-        console.log(depC, 'dc2903jdsaflkj');
 
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         return {
@@ -392,35 +349,27 @@ const Model: ResourceVersionCreatorModelType = {
           status: dr.status,
           versionRange: '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
-          // upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
           upthrow: false,
           upthrowDisabled: !!dr.latestVersion,
-          // enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts']>((c: any) => ({
-          enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => ({
-            checked: true,
-            id: c.contractId,
-            policyId: c.policyId,
-            title: c.contractName,
-            status: c.isAuth ? 'executing' : 'stopped',
-            code: c.policyInfo.policyText,
-            date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-            versions: ['1.2.2'],
-            // resolveResourcesData
-            // .find((rr: any) => rr.resourceId === resourceData.resourceId)
-            // .versions
-            // .filter((rr: any) => {
-            //   const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
-            //   return allContractIds.includes(c.contractId);
-            // })
-            // .map((rr: any) => rr.version),
-          })),
-          // enableReuseContracts: [],
+          enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+            return {
+              checked: true,
+              id: c.contractId,
+              policyId: c.policyId,
+              title: c.contractName,
+              status: c.isAuth ? 'executing' : 'stopped',
+              code: c.policyInfo.policyText,
+              date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+              versions: coverageVersions.find((cv) => c.contractId === cv.contractId)
+                .versions.map((ccc: any) => ccc.version),
+            };
+          }),
           enabledPolicies: dr.policies
             .filter((policy: any) => !allDepCIDs.includes(policy.policyId))
             .map((policy: any) => {
               // console.log(policy, 'PPPPafwe98iokl');
               return {
-                checked: true,
+                checked: false,
                 id: policy.policyId,
                 title: policy.policyName,
                 code: policy.policyText,

@@ -188,6 +188,18 @@ export function resourcesDownload(params: ResourcesDownloadParamsType) {
   // });
 }
 
+// 批量查看合同覆盖的版本集
+export interface BatchGetCoverageVersionsParamsType {
+  resourceId: string;
+  contractIds: string;
+}
+
+export function batchGetCoverageVersions({resourceId, ...params}: BatchGetCoverageVersionsParamsType) {
+  return request.get(`/v2/resources/${resourceId}/contracts/coverageVersions`, {
+    params,
+  });
+}
+
 // 查询资源所解决的依赖集
 export interface ResolveResourcesParamsType {
   resourceId: string;
@@ -197,7 +209,7 @@ export function resolveResources(params: LookDraftParamsType) {
   return request.get(`/v2/resources/${params.resourceId}/resolveResources`);
 }
 
-// 查询资源所解决的依赖集
+// 批量设置策略应用的版本
 export interface BatchSetContractsParamsType {
   resourceId: string;
   subjects: {

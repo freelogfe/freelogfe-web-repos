@@ -16,7 +16,7 @@ import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelSta
 import {
   ChangeAction, ChangeVersionInputAction,
   // ChangeVersionInputAction,
-  CreateVersionAction,
+  CreateVersionAction, FetchDraftAction,
   // ImportPreVersionAction, ObjectAddDepsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -51,13 +51,20 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
 
   React.useEffect(() => {
     // console.log(match, 'creator902jfsadlk');
-    dispatch<ChangeAction>({
+    init();
+  }, [match.params.id]);
+
+  async function init() {
+    await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload: {
         resourceId: match.params.id,
       }
     });
-  }, [match.params.id]);
+    await dispatch<FetchDraftAction>({
+      type: 'resourceVersionCreatorPage/fetchDraft',
+    });
+  }
 
   function onClickCache() {
     dispatch<SaveDraftAction>({
