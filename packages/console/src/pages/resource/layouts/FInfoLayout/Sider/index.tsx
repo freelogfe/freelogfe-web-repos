@@ -24,7 +24,10 @@ interface SilderProps {
   };
 }
 
-function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, match, dispatch, route}: RouterTypes & SilderProps) {
+function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {}, match, dispatch, route}: RouterTypes & SilderProps) {
+
+  // TODO: 拉取草稿
+  const draftData = {version: '0.0.0'};
 
   React.useEffect(() => {
     if (match.params.id === info?.resourceId) {
@@ -74,7 +77,8 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
             className={match.path === '/resource/:id/auth' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/auth`)}
           >{i18nMessage('authorization_infomation')}</a>
-          {info?.policies.length === 0 && (<div style={{backgroundColor: 'red', borderRadius: '50%', width: 4, height: 4}}/>)}
+          {info?.policies.length === 0 && (
+            <div style={{backgroundColor: 'red', borderRadius: '50%', width: 4, height: 4}}/>)}
           <div style={{width: 75}}/>
         </div>
 
@@ -93,7 +97,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
                   <a className={styles.activatedRadio}>正在创建版本</a>
                 </div>)
               : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
-                <a onClick={gotoCreator}>{draftData.version || '未输入版本号'}（草稿）</a>
+                <a onClick={gotoCreator}>{draftData?.version || '未输入版本号'}（草稿）</a>
               </div>))
           }
 
@@ -101,7 +105,12 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {draftData}, m
             [...info?.resourceVersions].reverse().map((i) => (
               <div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
                 <a
-                  onClick={() => router.push(`/resource/${match.params.id}/version/${i.version}`)}
+                  onClick={() => {
+                    if (match.params.version === i.version) {
+                      return;
+                    }
+                    router.push(`/resource/${match.params.id}/version/${i.version}`);
+                  }}
                   className={(match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedRadio : ''}
                 >{i.version}</a>
               </div>))

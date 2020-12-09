@@ -135,18 +135,16 @@ function FSelectObject ({resourceObject, onChange, resourceType, errorText, onCh
               <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
             </Space>)
             : <Space size={30}>
-              <FNormalButton
-                theme={'weaken'}
-                onClick={() => setModalVisible(true)}
-              >{i18nMessage('choose_from_storage')}</FNormalButton>
               <FUpload
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
                 <FNormalButton
-                  theme={'weaken'}
                 >{i18nMessage('upload_from_local')}</FNormalButton>
               </FUpload>
+              <FNormalButton
+                onClick={() => setModalVisible(true)}
+              >{i18nMessage('choose_from_storage')}</FNormalButton>
             </Space>}
         </div>)
         : (<FObjectCard

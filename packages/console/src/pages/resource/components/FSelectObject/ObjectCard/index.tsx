@@ -50,7 +50,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
         </div>
       </div>
     </div>
-    <div style={{width: 10}}/>
+    {/*<div style={{width: 10}}/>*/}
     <a onClick={() => onClickDelete && onClickDelete()}
        className={styles.delete}>{progress !== null ? i18nMessage('cancel_uploading') : i18nMessage('remove')}</a>
   </div>)

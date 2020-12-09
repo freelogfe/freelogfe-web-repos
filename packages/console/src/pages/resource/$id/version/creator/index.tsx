@@ -7,7 +7,7 @@ import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FCircleButton, FNormalButton, FTextButton} from '@/components/FButton';
-import {Space} from 'antd';
+import {Space, Row, Col} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -15,17 +15,17 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction, ChangeVersionInputAction,
-  // ChangeVersionInputAction,
   CreateVersionAction, FetchDraftAction,
-  // ImportPreVersionAction, ObjectAddDepsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
-import {CopyOutlined} from '@ant-design/icons';
-import {FCopy} from "@/components/FIcons";
+import {CloseCircleFilled} from '@ant-design/icons';
+import {FClose, FCopy, FInfo} from "@/components/FIcons";
+import FTooltip from "@/components/FTooltip";
+import FBaseProperties from "@/components/FBaseProperties";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -141,6 +141,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
           />
+          <div style={{height: 5}}/>
+          <FBaseProperties basics={[]} additions={[]} disabledKeys={[]}/>
         </FEditorCard>
 
         <FEditorCard dot={false} title={i18nMessage('rely')}>
