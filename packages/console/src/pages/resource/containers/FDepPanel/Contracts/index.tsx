@@ -69,12 +69,13 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
           <div className={styles.PolicyGrammarName}>
             <Checkbox
               checked={k.checked}
+              disabled={k.status !== 0}
               onChange={(e) => onChangeChecked(e.target.checked, k)}
             />
             <div style={{width: 5}}/>
             <span>{k.title}</span>
             <div style={{width: 10}}/>
-            <label className={styles[k.status]}>{k.status === 'executing' ? '执行中' : '已终止'}</label>
+            <label className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>
           </div>
           <div style={{height: 15}}/>
           <pre className={styles.highlight}>{k.code}</pre>

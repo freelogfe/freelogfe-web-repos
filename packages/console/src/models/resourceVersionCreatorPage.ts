@@ -37,7 +37,8 @@ export type DepResources = WholeReadonly<{
     id: string;
     policyId: string;
     title: string;
-    status: 'executing' | 'stopped';
+    // status: 'executing' | 'stopped';
+    status: 0 | 1 | 2;
     code: string;
     date: string;
     versions: string[];
@@ -353,11 +354,11 @@ const Model: ResourceVersionCreatorModelType = {
           upthrowDisabled: !!dr.latestVersion,
           enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
             return {
-              checked: true,
+              checked: false,
               id: c.contractId,
               policyId: c.policyId,
               title: c.contractName,
-              status: c.isAuth ? 'executing' : 'stopped',
+              status: c.status,
               code: c.policyInfo.policyText,
               date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
               versions: coverageVersions.find((cv) => c.contractId === cv.contractId)

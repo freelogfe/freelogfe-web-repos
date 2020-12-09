@@ -29,8 +29,8 @@ import {FCopy} from "@/components/FIcons";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
-  version: ResourceVersionCreatorPageModelState,
-  resource: ResourceInfoModelState,
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState,
+  resourceInfo: ResourceInfoModelState,
   match: {
     params: {
       id: string;
@@ -38,7 +38,7 @@ interface VersionCreatorProps {
   };
 }
 
-function VersionCreator({dispatch, route, version, match, resource}: VersionCreatorProps & RouterTypes) {
+function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, resourceInfo}: VersionCreatorProps & RouterTypes) {
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -86,9 +86,17 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
     });
   }
 
-  const hasError: boolean = !version.version || !!version.versionErrorText
-    || !version.resourceObject || !!version.resourceObjectErrorText
-    || !!version.properties.find((ep) => {
+  const hasError: boolean =
+    // 版本
+    !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
+    // 对象
+    || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectErrorText
+    // 依赖
+    || !!resourceVersionCreatorPage.dependencies.find((dd) => {
+      return !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
+    })
+    // 自定义属性
+    || !!resourceVersionCreatorPage.properties.find((ep) => {
       return ep.key === '' || !!ep.keyError
         || ep.value === '' || !!ep.valueError
         || !!ep.descriptionError
@@ -104,7 +112,7 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
       <div className={styles.wrap}>
         <FEditorCard dot={true} title={i18nMessage('version_number')}>
           <FInput
-            value={version.version}
+            value={resourceVersionCreatorPage.version}
             onChange={(e) => {
               dispatch<ChangeVersionInputAction>({
                 type: 'resourceVersionCreatorPage/changeVersionInputAction',
@@ -112,14 +120,14 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
               });
             }}
             className={styles.versionInput}
-            errorText={version.versionErrorText}
+            errorText={resourceVersionCreatorPage.versionErrorText}
           />
         </FEditorCard>
 
         <FEditorCard dot={true} title={i18nMessage('release_object')}>
           <FSelectObject
-            resourceType={resource.info?.resourceType || ''}
-            resourceObject={version.resourceObject}
+            resourceType={resourceInfo.info?.resourceType || ''}
+            resourceObject={resourceVersionCreatorPage.resourceObject}
             onChange={(value, deps) => {
               onChange({resourceObject: value, resourceObjectErrorText: ''});
               if (!deps || deps.length === 0) {
@@ -130,7 +138,7 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
               //   payload: deps,
               // });
             }}
-            errorText={version.resourceObjectErrorText}
+            errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
           />
         </FEditorCard>
@@ -150,7 +158,7 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
                     type: 'resourceVersionCreatorPage/change',
                     payload: {
                       properties: [
-                        ...version.properties,
+                        ...resourceVersionCreatorPage.properties,
                         {
                           key: '',
                           keyError: '',
@@ -182,14 +190,14 @@ function VersionCreator({dispatch, route, version, match, resource}: VersionCrea
           <div style={{height: 30}}/>
 
           <FCustomProperties
-            dataSource={version.properties}
+            dataSource={resourceVersionCreatorPage.properties}
             onChange={(value) => onChange({properties: value})}
           />
         </FEditorCard>
 
         <FEditorCard dot={false} title={i18nMessage('version_description')}>
           <FBraftEditor
-            value={version.description}
+            value={resourceVersionCreatorPage.description}
             onChange={(value) => onChange({description: value})}
           />
         </FEditorCard>
@@ -220,6 +228,6 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
 }
 
 export default withRouter(connect(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-  version: resourceVersionCreatorPage,
-  resource: resourceInfo,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
+  resourceInfo: resourceInfo,
 }))(VersionCreator));
