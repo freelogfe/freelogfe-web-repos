@@ -24,7 +24,7 @@ export interface StorageObjectDepSelectorModelState {
   rSelect: '1' | '2' | '3';
   rInput: string;
 
-  // visibleOResourceType: string;
+  visibleOResourceType: string;
   // isLoadingTypelessO: 0 | 1;
   objectList: {
     objectId: string;
@@ -94,7 +94,7 @@ const Model: StorageObjectDepSelectorModelType = {
     rSelect: '1',
     rInput: '',
 
-    // visibleOResourceType: '',
+    visibleOResourceType: '',
     // isLoadingTypelessO: 1,
     objectList: [],
     oTotal: -1,
@@ -182,7 +182,7 @@ const Model: StorageObjectDepSelectorModelType = {
 
       const params: ObjectListParamsType = {
         bucketName: selector.oSelect,
-        // resourceType: selector.visibleOResourceType || undefined,
+        resourceType: selector.visibleOResourceType || undefined,
         isLoadingTypeless: 1,
         keywords: selector.oInput,
         skip: objectListData.length,

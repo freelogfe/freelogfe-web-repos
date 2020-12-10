@@ -126,6 +126,16 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             resourceType={resourceInfo.info?.resourceType || ''}
             resourceObject={resourceVersionCreatorPage.resourceObject}
             onChange={async (value, deps) => {
+              console.log(value, '#@ERWADFSASDFSADF');
+              if (!value) {
+                return onChange({
+                  resourceObject: null,
+                  resourceObjectErrorText: '',
+                  rawProperties: [],
+                  baseProperties: [],
+                  properties: [],
+                });
+              }
               await onChange({resourceObject: value, resourceObjectErrorText: ''});
               await dispatch<FetchRawPropsAction>({
                 type: 'resourceVersionCreatorPage/fetchRawProps',
@@ -240,10 +250,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         <FEditorCard dot={false} title={i18nMessage('rely')}>
           <FDepPanel/>
         </FEditorCard>
-
-        {/*<FEditorCard dot={false} title={i18nMessage('object_property')}>*/}
-        {/*  */}
-        {/*</FEditorCard>*/}
 
         <FEditorCard dot={false} title={i18nMessage('version_description')}>
           <FBraftEditor

@@ -161,9 +161,6 @@ function FSelectObject ({resourceObject, onChange, resourceType, errorText, onCh
       width={820}
       bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
-      {/*<Storage*/}
-      {/*  onSelect={onSelect}*/}
-      {/*/>*/}
       <FObjectSelector
         visibleResourceType={resourceType}
         // isLoadingTypeless={1}

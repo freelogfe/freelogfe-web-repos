@@ -38,12 +38,25 @@ function FObjectSelector({
                          }: FObjectSelectorProps) {
 
   React.useEffect(() => {
-    if (selector.oTotal === -1) {
-      dispatch<FetchObjectsAction>({
-        type: 'storageObjectDepSelector/fetchObjects',
-      });
-    }
+    // if (selector.oTotal === -1) {
+    //   dispatch<FetchObjectsAction>({
+    //     type: 'storageObjectDepSelector/fetchObjects',
+    //   });
+    // }
+    init();
   }, []);
+
+  async function init() {
+    await dispatch<ChangeAction>({
+      type: 'storageObjectDepSelector/change',
+      payload: {
+        visibleOResourceType: visibleResourceType,
+      },
+    });
+    await dispatch<FetchObjectsAction>({
+      type: 'storageObjectDepSelector/fetchObjects',
+    });
+  }
 
   // React.useEffect(() => {
   //   if (selector.oTotal === -1) {
