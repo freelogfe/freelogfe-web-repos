@@ -22,6 +22,7 @@ import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
+import {fileProperty, FilePropertyParamsType} from "@/services/storages";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -73,7 +74,38 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   dependencies: DepResources;
   depActivatedID: string;
 }> & {
-  properties: FCustomPropertiesProps['dataSource'];
+  rawProperties: {
+    key: string;
+    value: string;
+  }[];
+
+  baseProperties: {
+    key: string;
+    value: string;
+    description: string;
+  }[];
+  basePropertiesEditorVisible: boolean;
+  basePropertiesEditorData: {
+    key: string;
+    keyError: string;
+    value: string;
+    valueError: string;
+    description: string;
+    descriptionError: string;
+  }[];
+
+  propertiesDataVisible: boolean;
+  properties: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  }[];
 
   description: EditorState;
 };
@@ -101,6 +133,10 @@ export interface ChangeVersionInputAction extends AnyAction {
   payload: string;
 }
 
+export interface FetchRawPropsAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/fetchRawProps';
+}
+
 export interface AddDepsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/addDeps' | 'addDeps';
   payload: {
@@ -121,18 +157,13 @@ export interface ResourceVersionCreatorModelType {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
+    fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
-    // addADepByIDsAction: (action: AddADepByIDsAction, effects: EffectsCommandMap) => void;
-    // objectAddDeps: (action: ObjectAddDepsAction, effects: EffectsCommandMap) => void;
-    // dddDependenciesForDepRelation: (action: AddDependenciesForDepRelationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
-    // deleteDependencyByID: DvaReducer<ResourceVersionCreatorPageModelState, DeleteDependencyByIDAction>;
-    // onChangeDependenciesByID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDependenciesByIDAction>;
-    // onChangeDepActivatedID: DvaReducer<ResourceVersionCreatorPageModelState, OnChangeDepActivatedIDAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -147,11 +178,19 @@ const initStates: ResourceVersionCreatorPageModelState = {
   resourceObject: null,
   resourceObjectErrorText: '',
 
+  rawProperties: [],
+
+  baseProperties: [],
+  basePropertiesEditorVisible: false,
+  basePropertiesEditorData: [],
+
+  propertiesDataVisible: false,
+  properties: [],
+
   depRelationship: [],
   dependencies: [],
   depActivatedID: '',
 
-  properties: [],
 
   description: BraftEditor.createEditorState(''),
 
@@ -201,13 +240,27 @@ const Model: ResourceVersionCreatorModelType = {
           }
         }),
         resolveResources: resolveResources,
-        customPropertyDescriptors: resourceVersionCreatorPage.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => ({
-          key: i.key,
-          defaultValue: i.value,
-          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
-          candidateItems: i.customOption ? i.customOption.split(',') : [],
-          remark: i.description,
-        })),
+        customPropertyDescriptors: [
+          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+            return {
+              type: 'readonlyText',
+              key: i.key,
+              remark: i.description,
+              defaultValue: i.value,
+            };
+          }),
+          ...resourceVersionCreatorPage.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+            const isInput: boolean = i.custom === 'input';
+            const options: string[] = i.customOption.split(',');
+            return {
+              type: isInput ? 'editableText' : 'select',
+              key: i.key,
+              remark: i.description,
+              defaultValue: isInput ? i.defaultValue : options[0],
+              candidateItems: options,
+            };
+          }),
+        ],
         description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
 
@@ -276,6 +329,31 @@ const Model: ResourceVersionCreatorModelType = {
           versionVerify: 2,
           versionErrorText: versionErrorText,
         }
+      });
+    },
+    * fetchRawProps({}: FetchRawPropsAction, {select, put, call}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+      if (!resourceVersionCreatorPage.resourceObject) {
+        return;
+      }
+      const params: FilePropertyParamsType = {
+        sha1: resourceVersionCreatorPage.resourceObject.id,
+        resourceType: resourceVersionCreatorPage.resourceObject.type,
+      };
+
+      const {data} = yield call(fileProperty, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+            return {
+              key: rp[0],
+              value: rp[1],
+            };
+          }),
+        },
       });
     },
     * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {

@@ -15,7 +15,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction, ChangeVersionInputAction,
-  CreateVersionAction, FetchDraftAction,
+  CreateVersionAction, FetchDraftAction, FetchRawPropsAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -23,9 +23,11 @@ import {withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
 import {CloseCircleFilled} from '@ant-design/icons';
-import {FClose, FCopy, FInfo} from "@/components/FIcons";
+import {FClose, FCopy, FDown, FInfo} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import FBaseProperties from "@/components/FBaseProperties";
+import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
+import FUp from "@/components/FIcons/FUp";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -55,12 +57,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   }, [match.params.id]);
 
   async function init() {
-    await dispatch<ChangeAction>({
-      type: 'resourceVersionCreatorPage/change',
-      payload: {
-        resourceId: match.params.id,
-      }
-    });
+    await onChange({resourceId: match.params.id})
     await dispatch<FetchDraftAction>({
       type: 'resourceVersionCreatorPage/fetchDraft',
     });
@@ -79,8 +76,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     });
   }
 
-  function onChange(payload: ChangeAction['payload']) {
-    dispatch<ChangeAction>({
+  async function onChange(payload: ChangeAction['payload']) {
+    await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
     });
@@ -98,9 +95,9 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     // 自定义属性
     || !!resourceVersionCreatorPage.properties.find((ep) => {
       return ep.key === '' || !!ep.keyError
-        || ep.value === '' || !!ep.valueError
+        // || ep.value === '' || !!ep.valueError
         || !!ep.descriptionError
-        || (ep.allowCustom && ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
+        || (ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
     });
 
   return (<FInfoLayout>
@@ -128,11 +125,14 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
           <FSelectObject
             resourceType={resourceInfo.info?.resourceType || ''}
             resourceObject={resourceVersionCreatorPage.resourceObject}
-            onChange={(value, deps) => {
-              onChange({resourceObject: value, resourceObjectErrorText: ''});
-              if (!deps || deps.length === 0) {
-                return;
-              }
+            onChange={async (value, deps) => {
+              await onChange({resourceObject: value, resourceObjectErrorText: ''});
+              await dispatch<FetchRawPropsAction>({
+                type: 'resourceVersionCreatorPage/fetchRawProps',
+              });
+              // if (!deps || deps.length === 0) {
+              //   return;
+              // }
               // dispatch<ObjectAddDepsAction>({
               //   type: 'resourceVersionCreatorPage/objectAddDeps',
               //   payload: deps,
@@ -141,61 +141,109 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
           />
-          <div style={{height: 5}}/>
-          <FBaseProperties basics={[]} additions={[]} disabledKeys={[]}/>
+          {
+            resourceVersionCreatorPage.resourceObject && (<>
+              <div style={{height: 5}}/>
+              <FBaseProperties
+                basics={resourceVersionCreatorPage.rawProperties}
+                additions={resourceVersionCreatorPage.baseProperties}
+                onChangeAdditions={(value) => {
+                  onChange({baseProperties: value});
+                }}
+                rightTop={<Space size={20}>
+                  <FTextButton
+                    theme="primary"
+                    onClick={() => {
+                      onChange({
+                        basePropertiesEditorVisible: true,
+                        basePropertiesEditorData: resourceVersionCreatorPage.baseProperties.map((bp) => {
+                          return {
+                            ...bp,
+                            keyError: '',
+                            valueError: '',
+                            descriptionError: '',
+                          };
+                        }),
+                      });
+                    }}
+                  >补充属性</FTextButton>
+                  <FTextButton
+                    theme="primary"
+                    onClick={() => {
+
+                    }}
+                  >从上个版本导入</FTextButton>
+                </Space>}
+              />
+
+              <div style={{height: 20}}/>
+
+              <Space>
+                <a onClick={() => {
+                  onChange({
+                    propertiesDataVisible: !resourceVersionCreatorPage.propertiesDataVisible,
+                  });
+                }}>
+                  <span>自定义选项（高级）</span>
+                  {resourceVersionCreatorPage.propertiesDataVisible ? (<FUp/>) : (<FDown/>)}
+                </a>
+                <FInfo/>
+              </Space>
+
+              {
+                resourceVersionCreatorPage.propertiesDataVisible && (<>
+
+                  <div style={{height: 20}}/>
+
+                  <Space size={40}>
+                    <a
+                      onClick={() => {
+                        onChange({
+                          properties: [
+                            ...resourceVersionCreatorPage.properties,
+                            {
+                              key: '',
+                              keyError: '',
+                              description: '',
+                              descriptionError: '',
+                              custom: 'input',
+                              customOption: '',
+                              customOptionError: '',
+                              defaultValue: '',
+                              defaultValueError: '',
+                            },
+                          ],
+                        });
+                      }}
+                    >添加选项</a>
+                    <a>从上个版本导入</a>
+                  </Space>
+
+                  <div style={{height: 30}}/>
+
+                  <FCustomProperties
+                    dataSource={resourceVersionCreatorPage.properties}
+                    disabledKeys={[
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+                    ]}
+                    onChange={(value) => onChange({properties: value})}
+                  />
+                </>)
+              }
+
+            </>)
+          }
+
         </FEditorCard>
 
         <FEditorCard dot={false} title={i18nMessage('rely')}>
           <FDepPanel/>
         </FEditorCard>
 
-        <FEditorCard dot={false} title={i18nMessage('object_property')}>
-          <Space size={80}>
-            <Space size={10}>
-              <FCircleButton
-                // onClick={() => setModalVisible(true)}
-                theme="weaken"
-                onClick={() => {
-                  dispatch<ChangeAction>({
-                    type: 'resourceVersionCreatorPage/change',
-                    payload: {
-                      properties: [
-                        ...resourceVersionCreatorPage.properties,
-                        {
-                          key: '',
-                          keyError: '',
-                          value: '',
-                          valueError: '',
-                          description: '',
-                          descriptionError: '',
-                          allowCustom: false,
-                          custom: 'input',
-                          customOption: '',
-                          customOptionError: '',
-                        },
-                      ],
-                    },
-                  });
-                }}
-              />
-              <FContentText text={i18nMessage('create_property')}/>
-            </Space>
-            <Space size={10}>
-              <FCircleButton
-                theme="weaken"
-                icon={<FCopy/>}
-              />
-              <FContentText text={i18nMessage('import_from_previous_version')}/>
-            </Space>
-          </Space>
-
-          <div style={{height: 30}}/>
-
-          <FCustomProperties
-            dataSource={resourceVersionCreatorPage.properties}
-            onChange={(value) => onChange({properties: value})}
-          />
-        </FEditorCard>
+        {/*<FEditorCard dot={false} title={i18nMessage('object_property')}>*/}
+        {/*  */}
+        {/*</FEditorCard>*/}
 
         <FEditorCard dot={false} title={i18nMessage('version_description')}>
           <FBraftEditor
@@ -205,6 +253,39 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         </FEditorCard>
       </div>
     </FContentLayout>
+
+    <FBasePropsEditorDrawer
+      visible={resourceVersionCreatorPage.basePropertiesEditorVisible}
+      dataSource={resourceVersionCreatorPage.basePropertiesEditorData}
+      disabledKeys={[
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.properties.map<string>((pp) => pp.key),
+      ]}
+      onChange={(value) => {
+        onChange({
+          basePropertiesEditorData: value,
+        });
+      }}
+      onCancel={() => {
+        onChange({
+          basePropertiesEditorData: [],
+          basePropertiesEditorVisible: false,
+        });
+      }}
+      onConfirm={() => {
+        onChange({
+          basePropertiesEditorData: [],
+          basePropertiesEditorVisible: false,
+          baseProperties: resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+            return {
+              key: bped.key,
+              value: bped.value,
+              description: bped.description,
+            };
+          }),
+        })
+      }}
+    />
   </FInfoLayout>);
 }
 

@@ -5,7 +5,9 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState, StorageObjectEditorModelState} from '@/models/connect';
 import FResourceSelector from '@/containers/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';
-import {AddObjectDepOAction, AddObjectDepRAction, DeleteObjectDepAction} from '@/models/storageObjectEditor';
+import {AddObjectDepOAction, AddObjectDepRAction,
+  // DeleteObjectDepAction
+} from '@/models/storageObjectEditor';
 
 interface SelectDepsProps {
   dispatch: Dispatch;
@@ -30,12 +32,12 @@ function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) 
           }}
           onDelete={(value) => {
             // console.log(value, 'ddEDAFDSS');
-            dispatch<DeleteObjectDepAction>({
-              type: 'storageObjectEditor/deleteObjectDep',
-              payload: {
-                resourceName: value.name,
-              }
-            });
+            // dispatch<DeleteObjectDepAction>({
+            //   type: 'storageObjectEditor/deleteObjectDep',
+            //   payload: {
+            //     resourceName: value.name,
+            //   }
+            // });
           }}
         />
       </Tabs.TabPane>
@@ -52,12 +54,12 @@ function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) 
           }}
           onDelete={(value) => {
             // console.log(value, 'ddEDAFD243r5SS');
-            dispatch<DeleteObjectDepAction>({
-              type: 'storageObjectEditor/deleteObjectDep',
-              payload: {
-                objectName: value.name,
-              },
-            });
+            // dispatch<DeleteObjectDepAction>({
+            //   type: 'storageObjectEditor/deleteObjectDep',
+            //   payload: {
+            //     objectName: value.name,
+            //   },
+            // });
           }}
         />
       </Tabs.TabPane>

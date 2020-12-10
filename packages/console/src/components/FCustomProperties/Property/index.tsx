@@ -61,9 +61,6 @@ function Property({data, onChange}: PropertyProps) {
             onChange={(e) => {
               const value: string = e.target.value;
               let descriptionError: string = '';
-              // if (value === '') {
-              //   descriptionError = '请输入';
-              // } else
               if (value.length > 50) {
                 descriptionError = '不超过50个字符';
               }
@@ -151,7 +148,7 @@ function Property({data, onChange}: PropertyProps) {
             >
               <FInput
                 wrapClassName={styles.FInputWrap}
-                value={data.value}
+                value={data.defaultValue}
                 onChange={(e) => {
                   const value: string = e.target.value;
                   let valueError: string = '';
@@ -161,12 +158,12 @@ function Property({data, onChange}: PropertyProps) {
                     valueError = '不超过30个字符';
                   }
                   onChangeData({
-                    value: value,
-                    valueError: valueError,
+                    defaultValue: value,
+                    defaultValueError: valueError,
                   });
                 }}
               />
-              {data.valueError && <div className={styles.error}>{data.valueError}</div>}
+              {data.defaultValueError && <div className={styles.error}>{data.defaultValueError}</div>}
             </Field>)
           }
 

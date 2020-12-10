@@ -6,23 +6,23 @@ import Property from './Property';
 export interface Data {
   key: string;
   keyError: string;
-  // value: string;
-  // valueError?: string;
   description: string;
   descriptionError: string;
-  // allowCustom: boolean;
   custom: 'input' | 'select';
+  defaultValue: string;
+  defaultValueError: string;
   customOption: string;
   customOptionError: string;
 }
 
 export interface FCustomPropertiesProps {
   dataSource: Data[];
+  disabledKeys: string[];
 
   onChange?(dataSource: FCustomPropertiesProps['dataSource']): void;
 }
 
-function FCustomProperties({dataSource, onChange}: FCustomPropertiesProps) {
+function FCustomProperties({dataSource, disabledKeys, onChange}: FCustomPropertiesProps) {
 
   function onChangeProperty(value: Data, index: number) {
     // console.log(value, 'value38920jdskfj');
@@ -37,7 +37,9 @@ function FCustomProperties({dataSource, onChange}: FCustomPropertiesProps) {
   }
 
   function verifyDuplication(data: Data[]) {
-    const map: Map<string, number> = new Map<string, number>();
+    const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
+      return [dk, 1];
+    }));
     for (const item of data) {
       if (item.key === '') {
         continue;
