@@ -145,6 +145,11 @@ export interface AddDepsAction extends AnyAction {
   };
 }
 
+export interface ImportDepsFromObjectAction {
+  type: 'resourceVersionCreatorPage/importDepsFromObject';
+  payload: any;
+}
+
 export interface DeleteDependencyByIDAction extends AnyAction {
   type: 'resourceVersionCreatorPage/deleteDependencyByID';
   payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
@@ -160,6 +165,7 @@ export interface ResourceVersionCreatorModelType {
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
+    importDepsFromObject: (action: ImportDepsFromObjectAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -452,6 +458,38 @@ const Model: ResourceVersionCreatorModelType = {
           depActivatedID: resourceVersionCreatorPage.depActivatedID ? resourceVersionCreatorPage.depActivatedID : relationships[0].id,
         },
       })
+    },
+    * importDepsFromObject({payload}: ImportDepsFromObjectAction, {select, put, call}: EffectsCommandMap) {
+      // console.log(payload, '!!!@@@#$@#$#$');
+      const resources = payload.filter((p: any) => p.type === 'resource');
+      const objects = payload.filter((p: any) => p.type === 'resource');
+      const params: BatchInfoParamsType = {
+        resourceNames: resources.map((r: any) => r.name).join(','),
+      };
+      const {data} = yield call(batchInfo, params);
+      console.log(data, 'datadata24234');
+      const relationships: Relationships = data.map((d: any) => {
+        return {
+          id: d.resourceId,
+          children: d.baseUpcastResources.map((bur: any) => {
+            return {
+              id: bur.resourceId,
+            };
+          }),
+        };
+      });
+      yield put<AddDepsAction>({
+        type: 'addDeps',
+        payload: {
+          relationships,
+          versions: resources.map((r: any) => {
+            return {
+              id: r.resourceId,
+              // versionRange: r.
+            }
+          }),
+        },
+      });
     },
     * deleteDependencyByID({payload}: DeleteDependencyByIDAction, {select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({

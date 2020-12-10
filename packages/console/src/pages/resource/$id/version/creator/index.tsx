@@ -15,7 +15,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction, ChangeVersionInputAction,
-  CreateVersionAction, FetchDraftAction, FetchRawPropsAction,
+  CreateVersionAction, FetchDraftAction, FetchRawPropsAction, ImportDepsFromObjectAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -140,13 +140,14 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
               await dispatch<FetchRawPropsAction>({
                 type: 'resourceVersionCreatorPage/fetchRawProps',
               });
-              // if (!deps || deps.length === 0) {
-              //   return;
-              // }
-              // dispatch<ObjectAddDepsAction>({
-              //   type: 'resourceVersionCreatorPage/objectAddDeps',
-              //   payload: deps,
-              // });
+              // console.log(deps, 'deps2309jdfsalk;f');
+              if (!deps || deps.length === 0) {
+                return;
+              }
+              dispatch<ImportDepsFromObjectAction>({
+                type: 'resourceVersionCreatorPage/importDepsFromObject',
+                payload: deps,
+              });
             }}
             errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
