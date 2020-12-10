@@ -257,7 +257,7 @@ const Model: ResourceVersionCreatorModelType = {
               key: i.key,
               remark: i.description,
               defaultValue: isInput ? i.defaultValue : options[0],
-              candidateItems: options,
+              candidateItems: isInput ? undefined : options,
             };
           }),
         ],
