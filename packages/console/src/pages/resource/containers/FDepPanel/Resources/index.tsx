@@ -115,19 +115,23 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                 </div>
                 <div style={{height: 9}}/>
                 <FContentText type="additional2">
-                  <div>{rrr.resourceType} | {
-                    rrr.versions?.length === 0
-                      ? <span style={{paddingRight: 5}}>暂无版本</span>
-                      : <>
+                  <div>
+                    {/*{rrr.resourceType || '暂无类型'}*/}
+                    {rrr.resourceType}
+                    {rrr.resourceType ? ' | ' : ''}
+                    {
+                      rrr.versions?.length === 0
+                        ? <span style={{paddingRight: 5}}>暂无版本</span>
+                        : <>
                     <span
                       style={{paddingRight: 5}}>{i18nMessage('version_range')}：{rrr.versionRange}</span>
-                        <FVersionHandlerPopover
-                          value={rrr.versionRange}
-                          versionOptions={rrr.versions}
-                          onChange={(version) => onChangeVersion(version, i.id)}
-                        ><EditOutlined/></FVersionHandlerPopover>
-                      </>
-                  }
+                          <FVersionHandlerPopover
+                            value={rrr.versionRange}
+                            versionOptions={rrr.versions}
+                            onChange={(version) => onChangeVersion(version, i.id)}
+                          ><EditOutlined/></FVersionHandlerPopover>
+                        </>
+                    }
                   </div>
                 </FContentText>
                 <>
@@ -206,7 +210,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
           <FContentText text={i.title}/>
           <div style={{height: 5}}/>
           <FContentText type="additional2">
-            <div>{i.resourceType || ''}</div>
+            <div>{i.resourceType || '暂无类型'}</div>
           </FContentText>
           <>
             <div style={{height: 5}}/>

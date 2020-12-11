@@ -458,10 +458,10 @@ const Model: ResourceVersionCreatorModelType = {
           ],
           depActivatedID: resourceVersionCreatorPage.depActivatedID ? resourceVersionCreatorPage.depActivatedID : relationships[0].id,
         },
-      })
+      });
     },
     * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
-      console.log(payload, '!!!@@@#$@#$#$');
+      // console.log(payload, '!!!@@@#$@#$#$');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -475,6 +475,35 @@ const Model: ResourceVersionCreatorModelType = {
       const {data} = yield call(objectDetails, params);
       // console.log(data, 'OOOOasdfadsf');
 
+      const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
+      // console.log(depObjects, '9023jlkdfsj');
+      if (depObjects.length > 0) {
+        const allDepObjects: ResourceVersionCreatorPageModelState['dependencies'] = depObjects.map((dpo: any) => {
+          return {
+            id: dpo.name,
+            title: dpo.name,
+            resourceType: '',
+            status: 3,
+            versionRange: '',
+            versions: [],
+            upthrow: false,
+            upthrowDisabled: true,
+            enableReuseContracts: [],
+            enabledPolicies: [],
+          };
+        });
+        const allRelationship: ResourceVersionCreatorPageModelState['depRelationship'] = allDepObjects.map((oo) => {
+          return {id: oo.id, children: []};
+        });
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            dependencies: allDepObjects,
+            depRelationship: allRelationship,
+          }
+        });
+      }
+      
       const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
       // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
 
