@@ -119,8 +119,8 @@ export function createVersion({resourceId, ...params}: CreateVersionParamsType) 
 
 // 查看资源版本信息
 export interface ResourceVersionInfoParamsType1 {
-  version: string;
   resourceId: string;
+  version: string;
   projection?: string;
 }
 
