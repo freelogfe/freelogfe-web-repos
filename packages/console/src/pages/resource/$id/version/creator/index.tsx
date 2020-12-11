@@ -28,6 +28,7 @@ import FTooltip from "@/components/FTooltip";
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
+import {FetchDraftDataAction} from "@/models/resourceInfo";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -63,16 +64,22 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     });
   }
 
-  function onClickCache() {
-    dispatch<SaveDraftAction>({
+  async function onClickCache() {
+    await dispatch<SaveDraftAction>({
       type: 'resourceVersionCreatorPage/saveDraft',
+    });
+    await await dispatch<FetchDraftDataAction>({
+      type: 'resourceInfo/fetchDraftData',
     });
   }
 
-  function onClickCreate() {
-    dispatch<CreateVersionAction>({
+  async function onClickCreate() {
+    await dispatch<CreateVersionAction>({
       type: 'resourceVersionCreatorPage/createVersion',
       payload: match.params.id,
+    });
+    await dispatch<FetchDraftDataAction>({
+      type: 'resourceInfo/fetchDraftData',
     });
   }
 

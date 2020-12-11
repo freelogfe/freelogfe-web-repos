@@ -1,10 +1,16 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
-import {info} from "@/services/resources";
+import {info, lookDraft, LookDraftParamsType} from "@/services/resources";
 import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "@/models/resourceAuthPage";
+import BraftEditor from "braft-editor";
+// import {ChangeAction as VersionCreatorChangeAction} from "@/models/resourceVersionCreatorPage";
+import {ConnectState} from "@/models/connect";
+import {TempModelState} from "@/models/__template";
 
 export interface ResourceInfoModelState {
+  resourceID: string;
+
   info: null | {
     resourceId: string;
     resourceType: string;
@@ -32,6 +38,13 @@ export interface ResourceInfoModelState {
       resourceName: string;
     }[];
   };
+
+  draftData: null | { [key: string]: any };
+}
+
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'resourceInfo/change';
+  payload: Partial<ResourceInfoModelState>;
 }
 
 export interface ChangeInfoAction extends AnyAction {
@@ -44,14 +57,20 @@ export interface FetchDataSourceAction extends AnyAction {
   payload: string;
 }
 
+export interface FetchDraftDataAction extends AnyAction {
+  type: 'resourceInfo/fetchDraftData';
+}
+
 export interface ResourceInfoModelType {
   namespace: 'resourceInfo';
   state: WholeReadonly<ResourceInfoModelState>;
   effects: {
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+    fetchDraftData: (action: FetchDraftDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     changeInfo: DvaReducer<ResourceInfoModelState, ChangeInfoAction>;
+    change: DvaReducer<ResourceInfoModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
 }
@@ -60,7 +79,9 @@ const Model: ResourceInfoModelType = {
   namespace: 'resourceInfo',
 
   state: {
+    resourceID: '',
     info: null,
+    draftData: null,
   },
 
   effects: {
@@ -93,6 +114,29 @@ const Model: ResourceInfoModelType = {
       //   },
       // });
     },
+    * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {
+      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+        resourceInfo,
+      }));
+      const params: LookDraftParamsType = {
+        resourceId: resourceInfo.resourceID,
+      };
+      const {data} = yield call(lookDraft, params);
+      if (!data) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            draftData: null,
+          }
+        });
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          draftData: data.draftData,
+        }
+      });
+    }
   },
 
   reducers: {
@@ -100,6 +144,12 @@ const Model: ResourceInfoModelType = {
       return {
         ...state,
         info: action.payload
+      };
+    },
+    change(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
       };
     },
   },

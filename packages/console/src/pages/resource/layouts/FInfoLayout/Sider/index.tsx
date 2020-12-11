@@ -8,14 +8,14 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
-import {FetchDataSourceAction} from "@/models/resourceInfo";
-import {FetchDraftAction} from "@/models/resourceVersionCreatorPage";
+import {ChangeAction, FetchDataSourceAction} from "@/models/resourceInfo";
+import {FetchDraftDataAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 
 interface SilderProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
-  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
+  // resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   match: {
     params: {
       id: string;
@@ -24,44 +24,60 @@ interface SilderProps {
   };
 }
 
-function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {}, match, dispatch, route}: RouterTypes & SilderProps) {
+function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps) {
 
-  // TODO: 拉取草稿
-  const draftData = {version: '0.0.0'};
+  // React.useEffect(() => {
+  //   if (match.params.id === resourceInfo.info?.resourceId) {
+  //     return;
+  //   }
+  //   dispatch<FetchDataSourceAction>({
+  //     type: 'resourceInfo/fetchDataSource',
+  //     payload: match.params.id,
+  //   });
+  //   // dispatch<FetchDraftAction>({
+  //   //   type: 'resourceVersionCreatorPage/fetchDraft',
+  //   //   payload: match.params.id,
+  //   // });
+  // }, [resourceInfo.info, match.params.id]);
 
   React.useEffect(() => {
-    if (match.params.id === info?.resourceId) {
-      return;
-    }
+    onChangeMatchParamsId();
+  }, [match.params.id]);
+
+  async function onChangeMatchParamsId() {
+    await dispatch<ChangeAction>({
+      type: 'resourceInfo/change',
+      payload: {
+        resourceID: match.params.id,
+      }
+    });
+    dispatch<FetchDraftDataAction>({
+      type: 'resourceInfo/fetchDraftData',
+    });
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
     });
-    // dispatch<FetchDraftAction>({
-    //   type: 'resourceVersionCreatorPage/fetchDraft',
-    //   payload: match.params.id,
-    // });
-  }, [info, match.params.id]);
-
+  }
 
   function gotoCreator() {
     router.push(`/resource/${match.params.id}/version/creator`);
   }
 
-  if (!info) {
+  if (!resourceInfo.info) {
     return null;
   }
 
   return (<div className={styles.Sider}>
     <div style={{height: 40}}/>
     <FResourceCover
-      src={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
-      status={info?.status === 1 ? 'online' : 'stopped'}
+      src={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
+      status={resourceInfo.info?.status === 1 ? 'online' : 'stopped'}
     />
     <div style={{height: 15}}/>
-    <FContentText className={styles.breakWord} text={info?.resourceName}/>
+    <FContentText className={styles.breakWord} text={resourceInfo.info?.resourceName}/>
     <div style={{height: 10}}/>
-    <label className={styles.label}>{info.resourceType}</label>
+    <label className={styles.label}>{resourceInfo.info.resourceType}</label>
     <div style={{height: 15}}/>
     <div className={styles.radios}>
       <div style={{height: 20}}/>
@@ -77,7 +93,7 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {}, match, dis
             className={match.path === '/resource/:id/auth' ? styles.activatedRadio : ''}
             onClick={() => router.push(`/resource/${match.params.id}/auth`)}
           >{i18nMessage('authorization_infomation')}</a>
-          {info?.policies.length === 0 && (
+          {resourceInfo.info?.policies.length === 0 && (
             <div style={{backgroundColor: 'red', borderRadius: '50%', width: 4, height: 4}}/>)}
           <div style={{width: 75}}/>
         </div>
@@ -96,13 +112,13 @@ function Sider({resourceInfo: {info}, resourceVersionCreatorPage: {}, match, dis
                   {/*<a className={styles.activatedRadio}>{i18nMessage('unamed_version')}</a>*/}
                   <a className={styles.activatedRadio}>正在创建版本</a>
                 </div>)
-              : (draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
-                <a onClick={gotoCreator}>{draftData?.version || '未输入版本号'}（草稿）</a>
+              : (resourceInfo.draftData && (<div className={styles.radio + ' ' + styles.smallVersion}>
+                <a onClick={gotoCreator}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</a>
               </div>))
           }
 
           {
-            [...info?.resourceVersions].reverse().map((i) => (
+            [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
               <div key={i.versionId} className={styles.radio + ' ' + styles.smallVersion}>
                 <a
                   onClick={() => {
