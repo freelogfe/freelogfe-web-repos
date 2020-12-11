@@ -15,7 +15,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction, ChangeVersionInputAction,
-  CreateVersionAction, FetchDraftAction, FetchRawPropsAction, ImportDepsFromObjectAction,
+  CreateVersionAction, FetchDraftAction, FetchRawPropsAction, HandleObjectInfoAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -126,7 +126,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             resourceType={resourceInfo.info?.resourceType || ''}
             resourceObject={resourceVersionCreatorPage.resourceObject}
             onChange={async (value, deps) => {
-              console.log(value, '#@ERWADFSASDFSADF');
+              // console.log(value, '#@ERWADFSASDFSADF');
               if (!value) {
                 return onChange({
                   resourceObject: null,
@@ -140,14 +140,20 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
               await dispatch<FetchRawPropsAction>({
                 type: 'resourceVersionCreatorPage/fetchRawProps',
               });
-              // console.log(deps, 'deps2309jdfsalk;f');
-              if (!deps || deps.length === 0) {
-                return;
+
+              if (value.objectId) {
+                dispatch<HandleObjectInfoAction>({
+                  type: 'resourceVersionCreatorPage/handleObjectInfo',
+                  payload: value.objectId,
+                });
               }
-              dispatch<ImportDepsFromObjectAction>({
-                type: 'resourceVersionCreatorPage/importDepsFromObject',
-                payload: deps,
-              });
+              // console.log(deps, 'deps2309jdfsalk;f');
+              // if (!deps || deps.length === 0) {
+              //   return;
+              // }
+              // if (value.resourceOrObjectId)
+
+
             }}
             errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}

@@ -22,7 +22,7 @@ import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
-import {fileProperty, FilePropertyParamsType} from "@/services/storages";
+import {fileProperty, FilePropertyParamsType, objectDetails, ObjectDetailsParamsType2} from "@/services/storages";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -145,9 +145,9 @@ export interface AddDepsAction extends AnyAction {
   };
 }
 
-export interface ImportDepsFromObjectAction {
-  type: 'resourceVersionCreatorPage/importDepsFromObject';
-  payload: any;
+export interface HandleObjectInfoAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/handleObjectInfo';
+  payload: string; // 对象 id
 }
 
 export interface DeleteDependencyByIDAction extends AnyAction {
@@ -164,8 +164,8 @@ export interface ResourceVersionCreatorModelType {
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
+    handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
-    importDepsFromObject: (action: ImportDepsFromObjectAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -407,12 +407,13 @@ const Model: ResourceVersionCreatorModelType = {
         const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
 
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
+        const theVersion = versions?.find((v) => v.id === dr.resourceId);
         return {
           id: dr.resourceId,
           title: dr.resourceName,
           resourceType: dr.resourceType,
           status: dr.status,
-          versionRange: '^' + dr.latestVersion,
+          versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,
           upthrowDisabled: !!dr.latestVersion,
@@ -459,35 +460,60 @@ const Model: ResourceVersionCreatorModelType = {
         },
       })
     },
-    * importDepsFromObject({payload}: ImportDepsFromObjectAction, {select, put, call}: EffectsCommandMap) {
-      // console.log(payload, '!!!@@@#$@#$#$');
-      const resources = payload.filter((p: any) => p.type === 'resource');
-      const objects = payload.filter((p: any) => p.type === 'resource');
-      const params: BatchInfoParamsType = {
-        resourceNames: resources.map((r: any) => r.name).join(','),
+    * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
+      console.log(payload, '!!!@@@#$@#$#$');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depRelationship: [],
+          dependencies: [],
+        },
+      });
+      const params: ObjectDetailsParamsType2 = {
+        objectIdOrName: payload,
       };
-      const {data} = yield call(batchInfo, params);
-      console.log(data, 'datadata24234');
-      const relationships: Relationships = data.map((d: any) => {
+      const {data} = yield call(objectDetails, params);
+      // console.log(data, 'OOOOasdfadsf');
+
+      const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
+      // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
+
+      if (depResources.length === 0) {
+        return;
+      }
+
+      const params2: BatchInfoParamsType = {
+        resourceNames: depResources.map<string>((dr) => dr.name).join(','),
+      };
+      const {data: data2} = yield call(batchInfo, params2);
+      console.log(data2, '#ASGDFASDF');
+      const relations = data2.map((dd: any) => {
         return {
-          id: d.resourceId,
-          children: d.baseUpcastResources.map((bur: any) => {
+          id: dd.resourceId,
+          children: dd.baseUpcastResources.map((bur: any) => {
             return {
               id: bur.resourceId,
-            };
+            }
           }),
         };
       });
+
+      const versions = depResources.map((dr) => {
+        const resource = data2.find((d2: any) => d2.resourceName);
+        // resourceId: "5f969e229e5680002edd11e6"
+        // resourceName: "12345676789/theme001"
+        return {
+          id: resource.resourceId,
+          versionRange: dr.versionRange,
+        };
+      });
+      console.log(versions, 'versions0932jasdlf');
+
       yield put<AddDepsAction>({
         type: 'addDeps',
         payload: {
-          relationships,
-          versions: resources.map((r: any) => {
-            return {
-              id: r.resourceId,
-              // versionRange: r.
-            }
-          }),
+          relationships: relations,
+          versions: versions,
         },
       });
     },
@@ -666,45 +692,6 @@ const Model: ResourceVersionCreatorModelType = {
         ...payload,
       };
     },
-    // onChangeDependenciesByID(state: ResourceVersionCreatorPageModelState, action: OnChangeDependenciesByIDAction): ResourceVersionCreatorPageModelState {
-    //   const resources = state.dependencies;
-    //   const dependencies = resources.map((i) => {
-    //     if (i.id !== action.id) {
-    //       return i;
-    //     }
-    //     return {
-    //       ...i,
-    //       ...action.payload,
-    //     };
-    //   });
-    //
-    //   return {
-    //     ...state,
-    //     dependencies,
-    //   };
-    // },
-    // deleteDependencyByID(state: ResourceVersionCreatorPageModelState, action: DeleteDependencyByIDAction): ResourceVersionCreatorPageModelState {
-    //   const depRelationship = state.depRelationship.filter((i) => i.id !== action.payload);
-    //   const usedResourceID: string[] = [];
-    //   for (const i of depRelationship) {
-    //     usedResourceID.push(i.id);
-    //     for (const j of i.children) {
-    //       usedResourceID.push(j.id);
-    //     }
-    //   }
-    //   const dependencies = state.dependencies.filter((i) => usedResourceID.includes(i.id));
-    //   return {
-    //     ...state,
-    //     depRelationship,
-    //     dependencies,
-    //   };
-    // },
-    // onChangeDepActivatedID(state: ResourceVersionCreatorPageModelState, action: OnChangeDepActivatedIDAction): ResourceVersionCreatorPageModelState {
-    //   return {
-    //     ...state,
-    //     depActivatedID: action.payload
-    //   };
-    // },
   },
 
   subscriptions: {

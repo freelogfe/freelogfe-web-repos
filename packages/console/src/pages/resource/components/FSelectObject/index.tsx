@@ -27,6 +27,7 @@ export interface ResourceObject {
   readonly path: string;
   readonly type: string;
   readonly time: string;
+  objectId?: string;
 }
 
 export interface FSelectObject {
@@ -38,7 +39,7 @@ export interface FSelectObject {
   onChangeErrorText?(text: string): void;
 }
 
-function FSelectObject ({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
+function FSelectObject({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -61,6 +62,7 @@ function FSelectObject ({resourceObject, onChange, resourceType, errorText, onCh
       path: data.bucketName,
       type: resourceType,
       time: '',
+      objectId: obj.id,
     }, data.dependencies);
   }
 
