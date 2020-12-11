@@ -14,8 +14,14 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
-  ChangeAction, ChangeVersionInputAction,
-  CreateVersionAction, FetchDraftAction, FetchRawPropsAction, HandleObjectInfoAction,
+  ChangeAction,
+  ChangeVersionInputAction,
+  CreateVersionAction,
+  FetchDraftAction,
+  FetchRawPropsAction,
+  FetchResourceInfoAction,
+  HandleObjectInfoAction,
+  ImportLastVersionDataAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -58,9 +64,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   }, [match.params.id]);
 
   async function init() {
-    await onChange({resourceId: match.params.id})
-    await dispatch<FetchDraftAction>({
+    await onChange({resourceId: match.params.id});
+    dispatch<FetchDraftAction>({
       type: 'resourceVersionCreatorPage/fetchDraft',
+    });
+    dispatch<FetchResourceInfoAction>({
+      type: 'resourceVersionCreatorPage/fetchResourceInfo',
     });
   }
 
@@ -191,12 +200,20 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                       });
                     }}
                   >补充属性</FTextButton>
-                  <FTextButton
-                    theme="primary"
-                    onClick={() => {
+                  {
+                    resourceVersionCreatorPage.latestVersion
+                      ? (<FTextButton
+                        theme="primary"
+                        onClick={() => {
+                          dispatch<ImportLastVersionDataAction>({
+                            type: 'resourceVersionCreatorPage/importLastVersionData',
+                            payload: 'baseProps',
+                          });
+                        }}
+                      >从上个版本导入</FTextButton>)
+                      : undefined
+                  }
 
-                    }}
-                  >从上个版本导入</FTextButton>
                 </Space>}
               />
 
@@ -240,7 +257,15 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                         });
                       }}
                     >添加选项</a>
-                    <a>从上个版本导入</a>
+                    {
+                      resourceVersionCreatorPage.latestVersion && (<a onClick={() => {
+                        dispatch<ImportLastVersionDataAction>({
+                          type: 'resourceVersionCreatorPage/importLastVersionData',
+                          payload: 'optionProps',
+                        });
+                      }}>从上个版本导入</a>)
+                    }
+
                   </Space>
 
                   <div style={{height: 30}}/>

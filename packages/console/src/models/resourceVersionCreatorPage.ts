@@ -8,7 +8,7 @@ import {
   batchInfo,
   BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType,
+  CreateVersionParamsType, info, InfoParamsType,
   lookDraft,
   LookDraftParamsType, resolveResources,
   saveVersionsDraft,
@@ -62,6 +62,7 @@ export type Relationships = WholeReadonly<{
 
 export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   resourceId: string;
+  latestVersion: string;
 
   version: string;
   versionVerify: 0 | 2;
@@ -117,7 +118,10 @@ export interface ChangeAction extends AnyAction {
 
 export interface FetchDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchDraft';
-  // payload: string;
+}
+
+export interface FetchResourceInfoAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/fetchResourceInfo';
 }
 
 export interface CreateVersionAction extends AnyAction {
@@ -155,11 +159,17 @@ export interface DeleteDependencyByIDAction extends AnyAction {
   payload: ResourceVersionCreatorPageModelState['dependencies'][number]['id'];
 }
 
+export interface ImportLastVersionDataAction extends AnyAction {
+  type: 'importLastVersionData' | 'resourceVersionCreatorPage/importLastVersionData';
+  payload: 'baseProps' | 'optionProps' | 'deps';
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
+    fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
@@ -167,6 +177,7 @@ export interface ResourceVersionCreatorModelType {
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
+    importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -176,6 +187,7 @@ export interface ResourceVersionCreatorModelType {
 
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceId: '',
+  latestVersion: '',
 
   version: '',
   versionVerify: 0,
@@ -300,6 +312,23 @@ const Model: ResourceVersionCreatorModelType = {
           ...data.draftData,
           description: BraftEditor.createEditorState(data.draftData.description),
         }
+      });
+    },
+    * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+      const params: InfoParamsType = {
+        resourceIdOrName: resourceVersionCreatorPage.resourceId,
+        isLoadLatestVersionInfo: 1,
+      };
+      const {data} = yield call(info, params);
+      // console.log(data, '2093jdsl;kfasdf');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          latestVersion: data.latestVersion,
+        },
       });
     },
     * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
@@ -503,7 +532,7 @@ const Model: ResourceVersionCreatorModelType = {
           }
         });
       }
-      
+
       const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
       // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
 
@@ -569,6 +598,17 @@ const Model: ResourceVersionCreatorModelType = {
           depActivatedID,
         },
       });
+    },
+    * importLastVersionData({payload}: ImportLastVersionDataAction, {call, select, put}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+      const params: InfoParamsType = {
+        resourceIdOrName: resourceVersionCreatorPage.resourceId,
+        isLoadLatestVersionInfo: 1,
+      };
+      const {data} = yield call(info, params);
+      console.log(data, '2093jdsl;kfasdf');
     },
     // * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
     //   const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({

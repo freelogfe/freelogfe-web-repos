@@ -11,18 +11,18 @@ import Policies from './Policies';
 import IsUpthrow from './IsUpthrow';
 import UpthrowList from './UpthrowList';
 import Market from './Market';
-import {connect} from 'dva';
+import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {i18nMessage} from '@/utils/i18n';
 import {CloseCircleFilled} from '@ant-design/icons';
-import {DepResources} from '@/models/resourceVersionCreatorPage';
+import {DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
 
 export interface FDepPanelProps {
-  // dispatch: Dispatch;
+  dispatch: Dispatch;
   creator: ResourceVersionCreatorPageModelState;
 }
 
-function FDepPanel({creator}: FDepPanelProps) {
+function FDepPanel({dispatch, creator}: FDepPanelProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
@@ -36,13 +36,22 @@ function FDepPanel({creator}: FDepPanelProps) {
         />
         <FContentText text={i18nMessage('add_rely_resource')}/>
       </Space>
-      <Space size={10}>
-        <FCircleButton
-          theme="weaken"
-          icon={<CopyOutlined/>}
-        />
-        <FContentText text={i18nMessage('import_from_previous_version')}/>
-      </Space>
+      {
+        creator.latestVersion && (<Space size={10}>
+          <FCircleButton
+            theme="weaken"
+            icon={<CopyOutlined/>}
+            onClick={() => {
+              dispatch<ImportLastVersionDataAction>({
+                type: 'resourceVersionCreatorPage/importLastVersionData',
+                payload: 'deps',
+              });
+            }}
+          />
+          <FContentText text={i18nMessage('import_from_previous_version')}/>
+        </Space>)
+      }
+
     </Space>
 
     {
