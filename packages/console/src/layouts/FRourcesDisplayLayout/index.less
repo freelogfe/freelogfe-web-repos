@@ -3,12 +3,23 @@
 .container {
   width: 100%;
   height: 100%;
+  background-color: @f-sub-color2;
+
+  .header, .content {
+    width: 920px;
+    margin: 0 auto;
+  }
 
   .header {
-
+    height: 100px;
   }
 
   .content {
+    background-color: white;
+    min-height: 500px;
 
+    @media (min-width: 1700px) {
+      min-height: 600px;
+    }
   }
 }
