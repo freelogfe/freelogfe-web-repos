@@ -113,7 +113,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
       return ep.key === '' || !!ep.keyError
         // || ep.value === '' || !!ep.valueError
         || !!ep.descriptionError
-        || (ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
+        || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
     });
 
   return (<FInfoLayout>

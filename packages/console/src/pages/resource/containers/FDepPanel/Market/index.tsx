@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import {
-  AddDepsAction
+  AddDepsAction, DeleteDependencyByIDAction
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -103,7 +103,10 @@ function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: Mar
         disabledIDsOrNames={[resourceVersionCreatorPage.resourceId]}
         showRemoveIDsOrNames={resourceVersionCreatorPage.depRelationship.map<string>(((drs) => drs.id))}
         onDelete={(value) => {
-
+          dispatch<DeleteDependencyByIDAction>({
+            type: 'resourceVersionCreatorPage/deleteDependencyByID',
+            payload: value.id,
+          });
         }}
       />
     </div>

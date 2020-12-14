@@ -174,6 +174,7 @@ export interface ResourceVersionCreatorModelType {
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
+    // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
@@ -245,18 +246,22 @@ const Model: ResourceVersionCreatorModelType = {
               .map((c) => ({policyId: c.policyId})),
           ],
         }));
+
+      const directlyDependentIds: string[] = resourceVersionCreatorPage.depRelationship.map((drs) => drs.id);
       const params: CreateVersionParamsType = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.resourceObject?.id || '',
         filename: resourceVersionCreatorPage.resourceObject?.name || '',
         baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
-        dependencies: resourceVersionCreatorPage.dependencies.map((dep) => {
-          return {
-            resourceId: dep.id,
-            versionRange: dep.versionRange,
-          }
-        }),
+        dependencies: resourceVersionCreatorPage.dependencies
+          .filter((dep) => directlyDependentIds.includes(dep.id))
+          .map((dep) => {
+            return {
+              resourceId: dep.id,
+              versionRange: dep.versionRange,
+            }
+          }),
         resolveResources: resolveResources,
         customPropertyDescriptors: [
           ...resourceVersionCreatorPage.baseProperties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
@@ -402,6 +407,18 @@ const Model: ResourceVersionCreatorModelType = {
         ...relationships.map((r) => r.id),
         ...relationships.map((r) => r.children).flat().map((c) => c.id),
       ].filter((id) => !existIDs.includes(id));
+
+      if (allIDs.length === 0) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            depRelationship: [
+              ...relationships,
+              ...resourceVersionCreatorPage.depRelationship,
+            ],
+          },
+        });
+      }
 
       const params: BatchInfoParamsType = {
         resourceIds: allIDs.join(','),
@@ -588,14 +605,11 @@ const Model: ResourceVersionCreatorModelType = {
 
       const versions = depResources.map((dr) => {
         const resource = data2.find((d2: any) => d2.resourceName);
-        // resourceId: "5f969e229e5680002edd11e6"
-        // resourceName: "12345676789/theme001"
         return {
           id: resource.resourceId,
           versionRange: dr.versionRange,
         };
       });
-      // console.log(versions, 'versions0932jasdlf');
 
       yield put<AddDepsAction>({
         type: 'addDeps',
@@ -639,6 +653,110 @@ const Model: ResourceVersionCreatorModelType = {
       };
       const {data} = yield call(resourceVersionInfo, params);
       console.log(data, '2093jdsl;kfasdf');
+
+      if (payload === 'baseProps') {
+        const allKeys: string[] = [
+          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+            return rp.key;
+          }),
+          ...resourceVersionCreatorPage.properties.map((pp) => {
+            return pp.key;
+          }),
+        ];
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            basePropertiesEditorVisible: true,
+            basePropertiesEditorData: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type === 'readonlyText')
+              .map<StorageObjectEditorModelState['basePropertiesEditorData'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
+                  value: cpd.defaultValue,
+                  valueError: '',
+                  description: cpd.remark,
+                  descriptionError: '',
+                };
+              }),
+          }
+        });
+      }
+
+      if (payload === 'optionProps') {
+        const allKeys: string[] = [
+          ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+            return rp.key;
+          }),
+          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+            return pp.key;
+          }),
+        ];
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            properties: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type !== 'readonlyText')
+              .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
+                  description: cpd.remark,
+                  descriptionError: '',
+                  custom: cpd.type === 'editableText' ? 'input' : 'select',
+                  defaultValue: cpd.defaultValue,
+                  defaultValueError: '',
+                  customOption: cpd.candidateItems.join(','),
+                  customOptionError: '',
+                };
+              }),
+          }
+        });
+      }
+
+      if (payload === 'deps') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            depRelationship: [],
+            dependencies: [],
+          },
+        });
+        const params2: BatchInfoParamsType = {
+          resourceIds: (data.dependencies as any[]).map<string>((dr) => dr.resourceId).join(','),
+        };
+        const {data: data2} = yield call(batchInfo, params2);
+        // console.log(data2, '#ASGDFASDF');
+        const relations = data2.map((dd: any) => {
+          return {
+            id: dd.resourceId,
+            children: dd.baseUpcastResources.map((bur: any) => {
+              return {
+                id: bur.resourceId,
+              }
+            }),
+          };
+        });
+
+        const versions = (data.dependencies as any[]).map((dr) => {
+          return {
+            id: dr.resourceId,
+            versionRange: dr.versionRange,
+          };
+        });
+
+        yield put<AddDepsAction>({
+          type: 'addDeps',
+          payload: {
+            relationships: relations,
+            versions: versions,
+          },
+        });
+        // return yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {},
+        // });
+      }
     },
     // * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
     //   const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
