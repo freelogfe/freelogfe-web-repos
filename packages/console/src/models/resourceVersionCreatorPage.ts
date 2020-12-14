@@ -496,7 +496,7 @@ const Model: ResourceVersionCreatorModelType = {
         objectIdOrName: payload,
       };
       const {data} = yield call(objectDetails, params);
-      console.log(data, 'OOOOasdfadsf');
+      // console.log(data, 'OOOOasdfadsf');
 
       yield put<ChangeAction>({
         type: 'change',
