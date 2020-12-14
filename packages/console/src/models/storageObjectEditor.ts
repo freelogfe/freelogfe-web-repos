@@ -9,7 +9,7 @@ import {
   UpdateObjectParamsType
 } from "@/services/storages";
 import {ConnectState} from "@/models/connect";
-import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from "@/services/resources";
+import {batchInfo, BatchInfoParamsType, CreateVersionParamsType, info, InfoParamsType} from "@/services/resources";
 import {RESOURCE_TYPE} from "@/utils/regexp";
 
 interface DepR {
@@ -36,20 +36,54 @@ export interface StorageObjectEditorModelState {
   type: string;
   typeVerify: 1 | 2; // 1: 校验中；2: 校验完成
   typeError: string;
-  depRs: DepR[];
-  depOs: DepO[];
+
+  rawProperties: {
+    key: string;
+    value: string;
+  }[];
+
+  baseProperties: {
+    key: string;
+    value: string;
+    description: string;
+  }[];
+  basePropertiesEditorVisible: boolean;
+  basePropertiesEditorData: {
+    key: string;
+    keyError: string;
+    value: string;
+    valueError: string;
+    description: string;
+    descriptionError: string;
+  }[];
+
+  propertiesDataVisible: boolean;
   properties: {
     key: string;
-    keyError?: string;
-    value: string;
-    valueError?: string;
+    keyError: string;
     description: string;
-    descriptionError?: string;
-    allowCustom: boolean;
+    descriptionError: string;
     custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
     customOption: string;
     customOptionError: string;
   }[];
+
+  depRs: DepR[];
+  depOs: DepO[];
+  // properties: {
+  //   key: string;
+  //   keyError?: string;
+  //   value: string;
+  //   valueError?: string;
+  //   description: string;
+  //   descriptionError?: string;
+  //   allowCustom: boolean;
+  //   custom: 'input' | 'select';
+  //   customOption: string;
+  //   customOptionError: string;
+  // }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -75,14 +109,6 @@ export interface AddObjectDepOAction extends AnyAction {
   type: 'storageObjectEditor/addObjectDepO';
   payload: string;
 }
-
-// export interface DeleteObjectDepAction extends AnyAction {
-//   type: 'storageObjectEditor/deleteObjectDep';
-//   payload: {
-//     resourceName?: string;
-//     objectName?: string;
-//   };
-// }
 
 export interface OnChangeTypeAction extends AnyAction {
   type: 'storageObjectEditor/onChangeType';
@@ -120,9 +146,18 @@ const Model: StorageObjectEditorModelType = {
     typeVerify: 2,
     typeError: '',
     size: 0,
+
+    rawProperties: [],
+
+    baseProperties: [],
+    basePropertiesEditorVisible: false,
+    basePropertiesEditorData: [],
+
+    propertiesDataVisible: false,
+    properties: [],
+
     depRs: [],
     depOs: [],
-    properties: [],
   },
   effects: {
     * fetchInfo({payload}: FetchInfoAction, {call, put}: EffectsCommandMap) {
@@ -167,6 +202,7 @@ const Model: StorageObjectEditorModelType = {
           type: o.resourceType,
         }));
       }
+      console.log(data, '#Q@#$R@#FASD');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -177,23 +213,36 @@ const Model: StorageObjectEditorModelType = {
           sha1: data.sha1,
           type: data.resourceType,
           size: data.systemProperty.fileSize,
-          depRs: depRs,
-          depOs: depOs,
+          rawProperties: Object.entries(data.systemProperty).map((s: any) => ({
+            key: s[0],
+            value: s[1],
+          })),
+          baseProperties: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<StorageObjectEditorModelState['baseProperties'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                value: cpd.defaultValue,
+                description: cpd.remark,
+              };
+            }),
           properties: (data.customPropertyDescriptors as any[])
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
             .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
                 keyError: '',
-                value: cpd.defaultValue,
-                valueError: '',
                 description: cpd.remark,
                 descriptionError: '',
-                allowCustom: cpd.type !== 'readonlyText',
                 custom: cpd.type === 'editableText' ? 'input' : 'select',
+                defaultValue: cpd.defaultValue,
+                defaultValueError: '',
                 customOption: cpd.candidateItems.join(','),
                 customOptionError: '',
-              }
+              };
             }),
+          depRs: depRs,
+          depOs: depOs,
         },
       });
     },
@@ -285,28 +334,6 @@ const Model: StorageObjectEditorModelType = {
         }
       });
     },
-    // * deleteObjectDep({payload}: DeleteObjectDepAction, {put, select}: EffectsCommandMap) {
-    //   const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
-    //     storageObjectEditor,
-    //   }));
-    //
-    //   if (payload.resourceName) {
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         depRs: storageObjectEditor.depRs.filter((r) => r.name !== payload.resourceName),
-    //       },
-    //     });
-    //   }
-    //   if (payload.objectName) {
-    //     yield put<ChangeAction>({
-    //       type: 'change',
-    //       payload: {
-    //         depOs: storageObjectEditor.depOs.filter((r) => r.name !== payload.objectName),
-    //       },
-    //     });
-    //   }
-    // },
     * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
@@ -325,16 +352,27 @@ const Model: StorageObjectEditorModelType = {
             type: 'object',
           })),
         ],
-        customPropertyDescriptors: storageObjectEditor.properties
-          .map<NonNullable<UpdateObjectParamsType['customPropertyDescriptors']>[number]>((p) => {
+        customPropertyDescriptors: [
+          ...storageObjectEditor.baseProperties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
             return {
-              key: p.key,
-              defaultValue: p.value,
-              type: !p.allowCustom ? 'readonlyText' : p.custom === 'input' ? 'editableText' : 'select',
-              candidateItems: p.customOption ? p.customOption.split(',') : [],
-              remark: p.description,
+              type: 'readonlyText',
+              key: i.key,
+              remark: i.description,
+              defaultValue: i.value,
             };
           }),
+          ...storageObjectEditor.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+            const isInput: boolean = i.custom === 'input';
+            const options: string[] = i.customOption.split(',');
+            return {
+              type: isInput ? 'editableText' : 'select',
+              key: i.key,
+              remark: i.description,
+              defaultValue: isInput ? i.defaultValue : options[0],
+              candidateItems: isInput ? undefined : options,
+            };
+          }),
+        ],
       };
       yield call(updateObject, params);
     },

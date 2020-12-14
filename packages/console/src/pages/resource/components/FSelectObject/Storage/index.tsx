@@ -7,6 +7,7 @@ import {FNormalButton} from "@/components/FButton";
 import {bucketList} from "@/services/storages";
 import {FMenuProps} from "@/components/FMenu";
 import moment from 'moment'
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 export interface ResourceObject {
   readonly id: string;
@@ -73,7 +74,7 @@ export default function ({onSelect}: StorageProps) {
     <div className={styles.SelectBucket}>
       <div className={styles.filter}>
         <div className={styles.filterSelect}>
-          <FDropdown
+          <FDropdownMenu
             options={bucketOptions}
             text={selected === '-1' ? bucketOptions[0].text : selected}
             onChange={(value) => setSelected(value)}

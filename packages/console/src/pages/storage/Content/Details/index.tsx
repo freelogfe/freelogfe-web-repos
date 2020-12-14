@@ -8,7 +8,7 @@ import FEditorCard from '@/components/FEditorCard';
 import FCustomProperties from '@/components/FCustomProperties';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageObjectEditorModelState} from '@/models/connect';
+import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {resourceTypes} from '@/utils/globals';
 import {humanizeSize} from '@/utils/format';
 import {i18nMessage} from '@/utils/i18n';
@@ -23,6 +23,11 @@ import {
 } from '@/models/storageObjectEditor';
 import {FetchObjectsAction, UpdateAObjectAction} from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
+import {ImportLastVersionDataAction} from "@/models/resourceVersionCreatorPage";
+import FBaseProperties from "@/components/FBaseProperties";
+import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
+import FUp from "@/components/FIcons/FUp";
+import {FDown, FInfo} from "@/components/FIcons";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -34,9 +39,9 @@ function Details({editor, dispatch}: DetailsProps) {
 
   const hasError: boolean = !!editor.typeError || !!editor.properties.find((ep) => {
     return ep.key === '' || !!ep.keyError
-      || ep.value === '' || !!ep.valueError
+      // || ep.value === '' || !!ep.valueError
       || !!ep.descriptionError
-      || (ep.allowCustom && ep.custom === 'select' && (ep.customOption === '' || !!ep.customOptionError))
+      || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
   });
 
   function onChangeType(value: string) {
@@ -46,6 +51,13 @@ function Details({editor, dispatch}: DetailsProps) {
     dispatch<OnChangeTypeAction>({
       type: 'storageObjectEditor/onChangeType',
       payload: value,
+    });
+  }
+
+  async function onChange(payload: ChangeAction['payload']) {
+    await dispatch<ChangeAction>({
+      type: 'storageObjectEditor/change',
+      payload,
     });
   }
 
@@ -84,6 +96,89 @@ function Details({editor, dispatch}: DetailsProps) {
       </Space>
       <div style={{height: 17}}/>
       <div className={styles.size}>{humanizeSize(editor.size)}</div>
+      <div style={{height: 10}}/>
+      <FBaseProperties
+        basics={editor.rawProperties}
+        additions={editor.baseProperties}
+        onChangeAdditions={(value) => {
+          onChange({baseProperties: value});
+        }}
+        rightTop={<Space size={20}>
+          <FTextButton
+            theme="primary"
+            onClick={() => {
+              onChange({
+                basePropertiesEditorVisible: true,
+                basePropertiesEditorData: editor.baseProperties.map((bp) => {
+                  return {
+                    ...bp,
+                    keyError: '',
+                    valueError: '',
+                    descriptionError: '',
+                  };
+                }),
+              });
+            }}
+          >补充属性</FTextButton>
+        </Space>}
+      />
+
+      <div style={{height: 20}}/>
+
+      <Space>
+        <a onClick={() => {
+          onChange({
+            propertiesDataVisible: !editor.propertiesDataVisible,
+          });
+        }}>
+          <span>自定义选项（高级）</span>
+          {editor.propertiesDataVisible ? (<FUp/>) : (<FDown/>)}
+        </a>
+        <FInfo/>
+      </Space>
+
+      {
+        editor.propertiesDataVisible && (<>
+
+          <div style={{height: 20}}/>
+
+          <Space size={40}>
+            <a
+              onClick={() => {
+                onChange({
+                  properties: [
+                    ...editor.properties,
+                    {
+                      key: '',
+                      keyError: '',
+                      description: '',
+                      descriptionError: '',
+                      custom: 'input',
+                      customOption: '',
+                      customOptionError: '',
+                      defaultValue: '',
+                      defaultValueError: '',
+                    },
+                  ],
+                });
+              }}
+            >添加选项</a>
+
+          </Space>
+
+          <div style={{height: 30}}/>
+
+          <FCustomProperties
+            dataSource={editor.properties}
+            disabledKeys={[
+              ...editor.rawProperties.map<string>((rp) => rp.key),
+              ...editor.baseProperties.map<string>((pp) => pp.key),
+            ]}
+            onChange={(value) => onChange({properties: value})}
+          />
+        </>)
+      }
+
       <div style={{height: 25}}/>
       <FEditorCard title={'资源类型'}>
         <FAutoComplete
@@ -151,12 +246,11 @@ function Details({editor, dispatch}: DetailsProps) {
                     {
                       key: '',
                       keyError: '',
-                      value: '',
-                      valueError: '',
                       description: '',
                       descriptionError: '',
-                      allowCustom: false,
                       custom: 'input',
+                      defaultValue: '',
+                      defaultValueError: '',
                       customOption: '',
                       customOptionError: '',
                     },
@@ -184,7 +278,14 @@ function Details({editor, dispatch}: DetailsProps) {
       <div style={{height: 120}}/>
       <div className={styles.footer}>
         <Space size={30}>
-          <FTextButton>取消</FTextButton>
+          <FTextButton onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'storageObjectEditor/change',
+              payload: {
+                visible: false,
+              },
+            });
+          }}>取消</FTextButton>
           <FNormalButton
             disabled={editor.typeVerify === 1 || hasError}
             onClick={async () => {
@@ -218,6 +319,39 @@ function Details({editor, dispatch}: DetailsProps) {
         <SelectDeps/>
       </Drawer>
     </div>
+
+    <FBasePropsEditorDrawer
+      visible={editor.basePropertiesEditorVisible}
+      dataSource={editor.basePropertiesEditorData}
+      disabledKeys={[
+        ...editor.rawProperties.map<string>((rp) => rp.key),
+        ...editor.properties.map<string>((pp) => pp.key),
+      ]}
+      onChange={(value) => {
+        onChange({
+          basePropertiesEditorData: value,
+        });
+      }}
+      onCancel={() => {
+        onChange({
+          basePropertiesEditorData: [],
+          basePropertiesEditorVisible: false,
+        });
+      }}
+      onConfirm={() => {
+        onChange({
+          basePropertiesEditorData: [],
+          basePropertiesEditorVisible: false,
+          baseProperties: editor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+            return {
+              key: bped.key,
+              value: bped.value,
+              description: bped.description,
+            };
+          }),
+        });
+      }}
+    />
   </Drawer>);
 }
 

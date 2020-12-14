@@ -10,7 +10,7 @@ import {
   createVersion,
   CreateVersionParamsType, info, InfoParamsType,
   lookDraft,
-  LookDraftParamsType, resolveResources,
+  LookDraftParamsType, resolveResources, resourceVersionInfo, ResourceVersionInfoParamsType1,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
@@ -603,11 +603,11 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      const params: InfoParamsType = {
-        resourceIdOrName: resourceVersionCreatorPage.resourceId,
-        isLoadLatestVersionInfo: 1,
+      const params: ResourceVersionInfoParamsType1 = {
+        resourceId: resourceVersionCreatorPage.resourceId,
+        version: resourceVersionCreatorPage.latestVersion,
       };
-      const {data} = yield call(info, params);
+      const {data} = yield call(resourceVersionInfo, params);
       console.log(data, '2093jdsl;kfasdf');
     },
     // * importPreVersion({}: ImportPreVersionAction, {select, call, put}: EffectsCommandMap) {
