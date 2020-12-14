@@ -14,7 +14,7 @@ import {
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
-import {ConnectState, MarketPageModelState} from '@/models/connect';
+import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {router} from 'umi';
 import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
@@ -491,6 +491,13 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
       // console.log(payload, '!!!@@@#$@#$#$');
+
+      const params: ObjectDetailsParamsType2 = {
+        objectIdOrName: payload,
+      };
+      const {data} = yield call(objectDetails, params);
+      console.log(data, 'OOOOasdfadsf');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -498,11 +505,6 @@ const Model: ResourceVersionCreatorModelType = {
           dependencies: [],
         },
       });
-      const params: ObjectDetailsParamsType2 = {
-        objectIdOrName: payload,
-      };
-      const {data} = yield call(objectDetails, params);
-      // console.log(data, 'OOOOasdfadsf');
 
       const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
       // console.log(depObjects, '9023jlkdfsj');
@@ -527,6 +529,34 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
+            rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
+              key: s[0],
+              value: s[1],
+            })),
+            baseProperties: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type === 'readonlyText')
+              .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  value: cpd.defaultValue,
+                  description: cpd.remark,
+                };
+              }),
+            properties: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type !== 'readonlyText')
+              .map<ResourceVersionCreatorPageModelState['properties'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  keyError: '',
+                  description: cpd.remark,
+                  descriptionError: '',
+                  custom: cpd.type === 'editableText' ? 'input' : 'select',
+                  defaultValue: cpd.defaultValue,
+                  defaultValueError: '',
+                  customOption: cpd.candidateItems.join(','),
+                  customOptionError: '',
+                };
+              }),
             dependencies: allDepObjects,
             depRelationship: allRelationship,
           }
@@ -544,7 +574,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceNames: depResources.map<string>((dr) => dr.name).join(','),
       };
       const {data: data2} = yield call(batchInfo, params2);
-      console.log(data2, '#ASGDFASDF');
+      // console.log(data2, '#ASGDFASDF');
       const relations = data2.map((dd: any) => {
         return {
           id: dd.resourceId,
@@ -565,7 +595,7 @@ const Model: ResourceVersionCreatorModelType = {
           versionRange: dr.versionRange,
         };
       });
-      console.log(versions, 'versions0932jasdlf');
+      // console.log(versions, 'versions0932jasdlf');
 
       yield put<AddDepsAction>({
         type: 'addDeps',

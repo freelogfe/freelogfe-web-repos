@@ -124,19 +124,17 @@ const Model: ResourceVersionEditorModelType = {
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
 
-      // console.log(base, opt, ')OOIJLKJL:KJL:KJL');
-
       yield put<ChangeDataSourceAction>({
         type: 'changeDataSource',
         payload: {
           signingDate: moment(data.createDate).format('YYYY-MM-DD'),
           description: data.description,
-          rawProperties: Object.entries(data.systemProperty).map((sp) => {
-            return {
-              key: sp[0],
-              value: sp[1] as string,
-            };
-          }),
+          // rawProperties: Object.entries(data.systemProperty).map((sp) => {
+          //   return {
+          //     key: sp[0],
+          //     value: sp[1] as string,
+          //   };
+          // }),
           baseProperties: base.map((b: any) => {
             return {
               key: b.key,
@@ -207,7 +205,6 @@ const Model: ResourceVersionEditorModelType = {
         customPropertyDescriptors: customPropertyDescriptors,
       };
       yield call(updateResourceVersionInfo, params);
-
     },
   },
 
