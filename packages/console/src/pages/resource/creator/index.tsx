@@ -8,7 +8,7 @@ import {FNormalButton, FTextButton} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import FContentLayout from '@/pages/resource/layouts/FContentLayout';
+import FContentLayout from '@/layouts/FContentLayout';
 import {Space, AutoComplete} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
@@ -24,6 +24,7 @@ import {i18nMessage} from '@/utils/i18n';
 import {RouterTypes} from 'umi';
 import {resourceTypes} from '@/utils/globals';
 import {FCheck, FLoading} from '@/components/FIcons';
+import FFormLayout from "@/layouts/FFormLayout";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -66,14 +67,16 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
     })
   }
 
-  return (<FCenterLayout>
-    <FContentLayout header={<Header
+  return (<FContentLayout header={<Header
       disabled={resource.nameVerify !== 2 || resource.resourceTypeVerify !== 2
       || !!resource.nameErrorText || !!resource.resourceTypeErrorText || !!resource.introductionErrorText}
       onClickCreate={onClickCreate}
     />}>
-      <div className={styles.workspace}>
-        <FEditorCard title={i18nMessage('resource_name')} dot={true}>
+      <FFormLayout>
+        <FFormLayout.FBlock
+          title={i18nMessage('resource_name')}
+          dot={true}
+        >
           <div className={styles.resourceName}>
             <FContentText text={`${user.info?.username} /`}/>
             &nbsp;
@@ -99,9 +102,9 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             {resource.nameVerify === 1 && <FLoading/>}
             {resource.nameVerify === 2 && !resource.nameErrorText && <FCheck/>}
           </div>
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard title={i18nMessage('resource_type')} dot={true}>
+        <FFormLayout.FBlock title={i18nMessage('resource_type')} dot={true}>
           <FAutoComplete
             errorText={resource.resourceTypeErrorText}
             value={resource.resourceType}
@@ -113,9 +116,9 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             placeholder={i18nMessage('hint_choose_resource_type')}
             options={resourceTypes.map((i: string) => ({value: i}))}
           />
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard title={i18nMessage('resource_short_description')}>
+        <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
           <FIntroductionEditor
             value={resource.introduction}
             onChange={(e) => onChange({
@@ -124,29 +127,28 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             })}
             placeholder={i18nMessage('hint_enter_resource_short_description')}
           />
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard title={i18nMessage('resource_image')}>
+        <FFormLayout.FBlock title={i18nMessage('resource_image')}>
           <FUploadResourceCover
             value={resource.cover}
             onChange={(value) => onChange({
               cover: value
             })}
           />
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard title={i18nMessage('resource_tag')}>
+        <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
           <FLabelEditor
             values={resource.labels}
             onChange={(value) => onChange({
               labels: value,
             })}
           />
-        </FEditorCard>
-      </div>
+        </FFormLayout.FBlock>
+      </FFormLayout>
     </FContentLayout>
-    <div style={{height: 100}}/>
-  </FCenterLayout>);
+  );
 }
 
 interface HeaderProps {

@@ -1,31 +1,29 @@
 .styles {
-  padding: 25px 0;
+  //padding: 25px 0;
 }
 
 .title {
   display: flex;
   align-items: center;
-  position: relative;
+  //position: relative;
+  transform: translateX(-10px);
+}
+
+.prefix {
+  width: 3px;
+  height: 15px;
+  background: linear-gradient(180deg, #2784FF 0%, #C5DEFF 100%);
+  border-radius: 2px;
 }
 
 .dot {
   width: 4px;
   height: 4px;
-  //margin-right: 10px;
-  //margin-left: 36px;
   border-radius: 50%;
   background-color: #EE4040;
-  left: -14px;
-  top: 50%;
-  //transition: 0 -50%;
-  transform: translateY(-50%);
-  position: absolute;
 }
 
 .dotHidden {
   visibility: hidden;
 }
 
-.content {
-  padding: 0;
-}
