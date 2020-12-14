@@ -202,7 +202,7 @@ const Model: StorageObjectEditorModelType = {
           type: o.resourceType,
         }));
       }
-      console.log(data, '#Q@#$R@#FASD');
+      // console.log(data, '#Q@#$R@#FASD');
 
       yield put<ChangeAction>({
         type: 'change',

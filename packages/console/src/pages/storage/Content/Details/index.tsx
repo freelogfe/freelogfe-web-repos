@@ -67,11 +67,9 @@ function Details({editor, dispatch}: DetailsProps) {
     width={720}
     bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     onClose={() => {
-      dispatch<ChangeAction>({
-        type: 'storageObjectEditor/change',
-        payload: {
-          visible: false,
-        },
+      onChange({
+        visible: false,
+        propertiesDataVisible: false,
       });
     }}>
     <div className={styles.divContainer}>
@@ -262,28 +260,15 @@ function Details({editor, dispatch}: DetailsProps) {
           <FContentText text={'添加'}/>
         </Space>
         <div style={{height: 20}}/>
-        {/*<FCustomProperties*/}
-        {/*  dataSource={editor.properties}*/}
-        {/*  onChange={(value) => {*/}
-        {/*    dispatch<ChangeAction>({*/}
-        {/*      type: 'storageObjectEditor/change',*/}
-        {/*      payload: {*/}
-        {/*        properties: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*/>*/}
       </FEditorCard>
 
       <div style={{height: 120}}/>
       <div className={styles.footer}>
         <Space size={30}>
           <FTextButton onClick={() => {
-            dispatch<ChangeAction>({
-              type: 'storageObjectEditor/change',
-              payload: {
-                visible: false,
-              },
+            onChange({
+              visible: false,
+              propertiesDataVisible: false,
             });
           }}>取消</FTextButton>
           <FNormalButton
