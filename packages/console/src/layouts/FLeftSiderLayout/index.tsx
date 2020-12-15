@@ -3,7 +3,7 @@ import styles from './index.less';
 
 interface FLeftSiderLayoutProps {
 
-  type?: 'form' | 'table';
+  type?: 'form' | 'table' | 'empty';
 
   header: React.ReactNode;
   sider: React.ReactNode | React.ReactNodeArray;
@@ -33,13 +33,19 @@ function FLeftSiderLayout({children, header, sider, type}: FLeftSiderLayoutProps
       {sider}
     </div>
     <div className={styles.rightContent}>
-      <div className={[styles.header, type === 'table' ? styles.tableWidth : ''].join(' ')}>
-        {header}
-      </div>
-      <div className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
-        {children}
-      </div>
-      <div style={{height: 100}}/>
+      {
+        type === 'empty'
+          ? (children)
+          : (<>
+            <div className={[styles.header, type === 'table' ? styles.tableWidth : ''].join(' ')}>
+              {header}
+            </div>
+            <div className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
+              {children}
+            </div>
+            <div style={{height: 100}}/>
+          </>)
+      }
     </div>
   </div>);
 }

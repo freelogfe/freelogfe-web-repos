@@ -13,6 +13,8 @@ import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from "@/components/FNoDataTip";
 import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
 import FLoadingTip from "@/components/FLoadingTip";
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/node/$id/Sider";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -50,25 +52,25 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
     return (<FLoadingTip height={minHeight2}/>);
   }
 
-  if (nodeManagerPage.themeDataState === 'noData') {
-    return (<FNoDataTip
-      height={minHeight2}
-      tipText={'当前节点没有添加主题展品'}
-      btnText={'添加主题展品'}
-      onClick={() => {
-        dispatch<MarketChangeAction>({
-          type: 'marketPage/change',
-          payload: {
-            resourceType: 'theme',
-          }
-        });
-        router.push('/market');
-      }}
-    />);
-  }
+  // if (nodeManagerPage.themeDataState === 'noData') {
+  //   return (<FNoDataTip
+  //     height={minHeight2}
+  //     tipText={'当前节点没有添加主题展品'}
+  //     btnText={'添加主题展品'}
+  //     onClick={() => {
+  //       dispatch<MarketChangeAction>({
+  //         type: 'marketPage/change',
+  //         payload: {
+  //           resourceType: 'theme',
+  //         }
+  //       });
+  //       router.push('/market');
+  //     }}
+  //   />);
+  // }
 
-  return (<>
-    <div className={styles.header}>
+  return (<FLeftSiderLayout
+    header={<div className={styles.header}>
       <FTitleText type="h1" text={'主题管理'}/>
       <FInput
         className={styles.input}
@@ -81,55 +83,79 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           },
         })}
       />
-    </div>
-    {
-      nodeManagerPage.themeDataState === 'noSearchData'
-        ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
-        : (<div className={styles.body}>
-          {
-            nodeManagerPage.themeList.map((i) => (<div
-              className={styles.theme}
-              key={i.id}
-            >
-              <div className={styles.cover}>
-                <Space size={10}>
-                  <Label active={i.isOnline}/>
-                  {!i.isOnline && <FWarning/>}
-                </Space>
+    </div>}
+    sider={<Sider/>}
+    type={nodeManagerPage.themeDataState === 'noData' ? 'empty' : 'form'}
+  >
 
-                <img alt="" src={i.cover || imgSrc}/>
-                <div
-                  className={styles.action}
-                  style={{justifyContent: 'space-between'}}
-                >
-                  <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
-                  <span>|</span>
-                  <span>激活</span>
-                </div>
-              </div>
-              <div style={{height: 12}}/>
-              <FContentText
-                text={i.title}
-                singleRow
-              />
-              <div style={{height: 6}}/>
-              <FContentText type="additional1" text={'展示版本 1.0.10'}/>
-              <div style={{height: 15}}/>
-              <div className={styles.bottom}>
-                <div className={styles.polices}>
-                  {
-                    i.policies.map((p) => (<label>{p}</label>))
-                  }
-                </div>
-                <a onClick={() => null}>{i18nMessage('more_details')}>></a>
-              </div>
-            </div>))
+    {
+      nodeManagerPage.themeDataState === 'noData'
+        ? (<FNoDataTip
+          height={minHeight2}
+          tipText={'当前节点没有添加主题展品'}
+          btnText={'添加主题展品'}
+          onClick={() => {
+            dispatch<MarketChangeAction>({
+              type: 'marketPage/change',
+              payload: {
+                resourceType: 'theme',
+              }
+            });
+            router.push('/market');
+          }}
+        />)
+        : (<>
+          {
+            nodeManagerPage.themeDataState === 'noSearchData'
+              ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
+              : (<div className={styles.body}>
+                {
+                  nodeManagerPage.themeList.map((i) => (<div
+                    className={styles.theme}
+                    key={i.id}
+                  >
+                    <div className={styles.cover}>
+                      <Space size={10}>
+                        <Label active={i.isOnline}/>
+                        {!i.isOnline && <FWarning/>}
+                      </Space>
+
+                      <img alt="" src={i.cover || imgSrc}/>
+                      <div
+                        className={styles.action}
+                        style={{justifyContent: 'space-between'}}
+                      >
+                        <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
+                        <span>|</span>
+                        <span>激活</span>
+                      </div>
+                    </div>
+                    <div style={{height: 12}}/>
+                    <FContentText
+                      text={i.title}
+                      singleRow
+                    />
+                    <div style={{height: 6}}/>
+                    <FContentText type="additional1" text={'展示版本 1.0.10'}/>
+                    <div style={{height: 15}}/>
+                    <div className={styles.bottom}>
+                      <div className={styles.polices}>
+                        {
+                          i.policies.map((p) => (<label>{p}</label>))
+                        }
+                      </div>
+                      <a onClick={() => null}>{i18nMessage('more_details')}>></a>
+                    </div>
+                  </div>))
+                }
+                <div style={{width: 290}}/>
+                <div style={{width: 290}}/>
+              </div>)
           }
-          <div style={{width: 290}}/>
-          <div style={{width: 290}}/>
-        </div>)
+        </>)
     }
-  </>);
+
+  </FLeftSiderLayout>);
 }
 
 export default connect(({nodeManagerPage}: ConnectState) => ({

@@ -21,6 +21,8 @@ import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
 import FNoDataTip from "@/components/FNoDataTip";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FLoadingTip from "@/components/FLoadingTip";
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/node/$id/Sider";
 
 const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
   {
@@ -158,26 +160,27 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     return (<FLoadingTip height={minHeight2}/>);
   }
 
-  if (nodeManagerPage.exhibitDataState === 'noData') {
-    return (<FNoDataTip
-      height={minHeight2}
-      tipText={'当前节点没有添加展品'}
-      btnText={'进入资源市场'}
-      onClick={() => {
-        dispatch<MarketChangeAction>({
-          type: 'marketPage/change',
-          payload: {
-            resourceType: '-1',
-          }
-        });
-        router.push('/market');
-      }}
-    />);
-  }
+  // if (nodeManagerPage.exhibitDataState === 'noData') {
+  //   return (<FNoDataTip
+  //     height={minHeight2}
+  //     tipText={'当前节点没有添加展品'}
+  //     btnText={'进入资源市场'}
+  //     onClick={() => {
+  //       dispatch<MarketChangeAction>({
+  //         type: 'marketPage/change',
+  //         payload: {
+  //           resourceType: '-1',
+  //         }
+  //       });
+  //       router.push('/market');
+  //     }}
+  //   />);
+  // }
 
-  return (<>
-
-    <div className={styles.header}>
+  return (<FLeftSiderLayout
+    type={nodeManagerPage.exhibitDataState === 'noData' ? 'empty' : 'table'}
+    sider={<Sider/>}
+    header={<div className={styles.header}>
       <FTitleText type="h1" text={'展品管理'}/>
       <Space size={80}>
         <div>
@@ -225,39 +228,60 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
           />
         </div>
       </Space>
-    </div>
+    </div>}
+  >
+
     {
-      nodeManagerPage.exhibitDataState === 'noSearchData'
-        ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
-        : (<div className={styles.body}>
-          <FTable
-            columns={columns}
-            dataSource={dataSource as any}
-            pagination={false}
-          />
-          <div style={{height: 20}}/>
-          <div className={styles.pagination}>
-            <FPagination
-              current={nodeManagerPage.pageCurrent}
-              onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({
-                type: 'nodeManagerPage/onChangeExhibit',
-                payload: {
-                  pageCurrent: value,
-                },
-              })}
-              pageSize={nodeManagerPage.pageSize}
-              onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({
-                type: 'nodeManagerPage/onChangeExhibit',
-                payload: {
-                  pageSize: value,
-                },
-              })}
-              total={nodeManagerPage.totalNum}
-            />
-          </div>
-        </div>)
+      nodeManagerPage.exhibitDataState === 'noData' ? (<FNoDataTip
+        height={minHeight2}
+        tipText={'当前节点没有添加展品'}
+        btnText={'进入资源市场'}
+        onClick={() => {
+          dispatch<MarketChangeAction>({
+            type: 'marketPage/change',
+            payload: {
+              resourceType: '-1',
+            }
+          });
+          router.push('/market');
+        }}
+      />) : (<>
+        {
+          nodeManagerPage.exhibitDataState === 'noSearchData'
+            ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
+            : (<div className={styles.body}>
+              <FTable
+                columns={columns}
+                dataSource={dataSource as any}
+                pagination={false}
+              />
+              <div style={{height: 20}}/>
+              <div className={styles.pagination}>
+                <FPagination
+                  current={nodeManagerPage.pageCurrent}
+                  onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({
+                    type: 'nodeManagerPage/onChangeExhibit',
+                    payload: {
+                      pageCurrent: value,
+                    },
+                  })}
+                  pageSize={nodeManagerPage.pageSize}
+                  onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({
+                    type: 'nodeManagerPage/onChangeExhibit',
+                    payload: {
+                      pageSize: value,
+                    },
+                  })}
+                  total={nodeManagerPage.totalNum}
+                />
+              </div>
+            </div>)
+        }
+      </>)
     }
-  </>);
+
+
+  </FLeftSiderLayout>);
 }
 
 export default connect(({nodeManagerPage}: ConnectState) => ({

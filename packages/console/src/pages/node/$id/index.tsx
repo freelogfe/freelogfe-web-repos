@@ -51,12 +51,12 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
 
   }, [(match.params as any).id]);
 
-  return (<FSiderLayout sider={<Sider/>}>
+  return (<>
     {
       nodeManagerPage.showTheme ? <Themes/> : <Exhibits/>
     }
 
-  </FSiderLayout>);
+  </>);
 }
 
 

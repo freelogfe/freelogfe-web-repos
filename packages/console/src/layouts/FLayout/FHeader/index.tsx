@@ -45,7 +45,7 @@ function FHeader({global}: FHeaderProps) {
 
         <Node/>
 
-        <Contract/>
+        {/*<Contract/>*/}
 
       </div>
     </div>
