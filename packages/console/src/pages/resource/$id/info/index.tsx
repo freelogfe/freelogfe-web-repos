@@ -16,6 +16,10 @@ import {OnChangeInfoAction, ChangeAction} from "@/models/resourceInfoPage";
 import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {RouterTypes} from "umi";
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import FFormLayout from "@/layouts/FFormLayout";
+import FBlock from "@/layouts/FFormLayout/FBlock";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -57,23 +61,20 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
     });
   }
 
-  return (<FInfoLayout>
-    {info && <FContentLayout header={<FTitleText text={i18nMessage('resource_information')} type={'h2'}/>}>
-      <div className={styles.styles}>
-        <FEditorCard title={i18nMessage('resource_name')}>
+  return (
+    <FLeftSiderLayout
+      sider={<Sider/>}
+      header={<FTitleText text={i18nMessage('resource_information')} type={'h2'}/>}
+    >
+      {info && <FFormLayout>
+        {/*<div className={styles.styles}>*/}
+        <FFormLayout.FBlock title={i18nMessage('resource_name')}>
           <FContentText text={info?.resourceName}/>
-        </FEditorCard>
+        </FFormLayout.FBlock>
         <FEditorCard title={i18nMessage('resource_type')}>
           <FContentText text={info.resourceType}/>
         </FEditorCard>
-        {/*{info?.baseUpcastResources.length > 0 && <FEditorCard title={'基础上抛'}>*/}
-        {/*  <div className={styles.upthrow}>*/}
-        {/*    {*/}
-        {/*      info?.baseUpcastResources.map((i) => <label key={i.resourceId}>{i.resourceName}</label>)*/}
-        {/*    }*/}
-        {/*  </div>*/}
-        {/*</FEditorCard>}*/}
-        <FEditorCard title={i18nMessage('resource_short_description')}>
+        <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
 
           {
             !info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
@@ -131,8 +132,8 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
                 </div>) : null}
           </FHorn>
 
-        </FEditorCard>
-        <FEditorCard title={i18nMessage('resource_image')}>
+        </FFormLayout.FBlock>
+        <FFormLayout.FBlock title={i18nMessage('resource_image')}>
           <FUploadResourceCover
             value={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
             // onChange={(value) => dispatch<OnChangeCoverAction>({
@@ -145,8 +146,8 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
               id: info?.resourceId,
             })}
           />
-        </FEditorCard>
-        <FEditorCard title={i18nMessage('resource_tag')}>
+        </FFormLayout.FBlock>
+        <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
           <FLabelEditor
             values={info?.tags}
             // onChange={(value) => dispatch<OnChangeLabelsAction>({
@@ -159,10 +160,9 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
               id: info?.resourceId,
             })}
           />
-        </FEditorCard>
-      </div>
-    </FContentLayout>}
-  </FInfoLayout>)
+        </FFormLayout.FBlock>
+      </FFormLayout>}
+    </FLeftSiderLayout>)
 }
 
 export default connect(({resourceInfo, resourceInfoPage}: ConnectState) => ({

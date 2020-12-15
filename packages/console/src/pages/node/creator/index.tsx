@@ -15,6 +15,7 @@ import {
 } from "@/models/nodes";
 import {FCheck, FLoading} from '@/components/FIcons';
 import FInput from "@/components/FInput";
+import FContentLayout from "@/layouts/FContentLayout";
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -28,10 +29,10 @@ function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
     });
   }, []);
 
-  return (<FCenterLayout>
-    <div className={styles.header}>
-      <FTitleText type="h1" text={'创建节点'}/>
-    </div>
+  return (<FContentLayout header={<FTitleText type="h1" text={'创建节点'}/>}>
+    {/*<div className={styles.header}>*/}
+    {/*  */}
+    {/*</div>*/}
     <div className={styles.body}>
       <Space size={10}>
         <div className={styles.domain}>
@@ -87,7 +88,7 @@ function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
         })}
       >创建节点</FNormalButton>
     </div>
-  </FCenterLayout>);
+  </FContentLayout>);
 }
 
 export default connect(({nodes}: ConnectState) => ({

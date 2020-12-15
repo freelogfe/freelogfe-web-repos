@@ -4,7 +4,7 @@ import {Space} from "antd";
 import FBlock from './FBlock';
 
 interface FFormLayoutProps {
-  children: React.ReactNodeArray;
+  children: React.ReactNodeArray | React.ReactNode;
 }
 
 function FFormLayout({children}: FFormLayoutProps) {

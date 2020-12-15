@@ -4,15 +4,22 @@ import FSiderLayout from '@/layouts/FSiderLayout';
 import Sider from './Sider';
 import Content from './Content';
 import NoContent from './NoContent';
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import FContentLayout from "@/layouts/FContentLayout";
+import Header from "./Header";
 
 interface StorageProps {
 
 }
 
 function Storage({}: StorageProps) {
-  return (<FSiderLayout sider={<Sider/>}>
+  return (<FLeftSiderLayout
+    header={<Header/>}
+    sider={<Sider/>}
+    type="table"
+  >
     <Content/>
-  </FSiderLayout>);
+  </FLeftSiderLayout>);
 }
 
 export default Storage;

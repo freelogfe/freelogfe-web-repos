@@ -27,6 +27,7 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import {CSSProperties} from "react";
+import FContentLayout from "@/layouts/FContentLayout";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -129,8 +130,6 @@ function Content({storage, dispatch}: ContentProps) {
   }
 
   return (<div>
-
-    <Header/>
 
     {
       storage.total === -1 && (<FLoadingTip height={minHeight}/>)
