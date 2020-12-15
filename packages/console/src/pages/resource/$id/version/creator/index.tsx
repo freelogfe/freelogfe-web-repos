@@ -35,6 +35,9 @@ import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
 import {FetchDraftDataAction} from "@/models/resourceInfo";
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import FFormLayout from "@/layouts/FFormLayout";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -116,14 +119,17 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
     });
 
-  return (<FInfoLayout>
-    <FContentLayout header={<Header
-      onClickCreate={onClickCreate}
-      onClickCache={onClickCache}
-      disabledCreate={hasError}
-    />}>
-      <div className={styles.wrap}>
-        <FEditorCard dot={true} title={i18nMessage('version_number')}>
+  return (<>
+    <FLeftSiderLayout
+      sider={<Sider/>}
+      header={<Header
+        onClickCreate={onClickCreate}
+        onClickCache={onClickCache}
+        disabledCreate={hasError}
+      />}
+    >
+      <FFormLayout>
+        <FFormLayout.FBlock dot={true} title={i18nMessage('version_number')}>
           <FInput
             value={resourceVersionCreatorPage.version}
             onChange={(e) => {
@@ -135,9 +141,9 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             className={styles.versionInput}
             errorText={resourceVersionCreatorPage.versionErrorText}
           />
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard dot={true} title={i18nMessage('release_object')}>
+        <FFormLayout.FBlock dot={true} title={i18nMessage('release_object')}>
           <FSelectObject
             resourceType={resourceInfo.info?.resourceType || ''}
             resourceObject={resourceVersionCreatorPage.resourceObject}
@@ -284,20 +290,20 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             </>)
           }
 
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard dot={false} title={i18nMessage('rely')}>
+        <FFormLayout.FBlock dot={false} title={i18nMessage('rely')}>
           <FDepPanel/>
-        </FEditorCard>
+        </FFormLayout.FBlock>
 
-        <FEditorCard dot={false} title={i18nMessage('version_description')}>
+        <FFormLayout.FBlock dot={false} title={i18nMessage('version_description')}>
           <FBraftEditor
             value={resourceVersionCreatorPage.description}
             onChange={(value) => onChange({description: value})}
           />
-        </FEditorCard>
-      </div>
-    </FContentLayout>
+        </FFormLayout.FBlock>
+      </FFormLayout>
+    </FLeftSiderLayout>
 
     <FBasePropsEditorDrawer
       visible={resourceVersionCreatorPage.basePropertiesEditorVisible}
@@ -331,7 +337,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         })
       }}
     />
-  </FInfoLayout>);
+  </>);
 }
 
 interface HeaderProps {

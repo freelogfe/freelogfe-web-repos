@@ -28,6 +28,9 @@ import FSelect from "@/components/FSelect";
 import FTooltip from "@/components/FTooltip";
 import {FEdit, FInfo} from "@/components/FIcons";
 import {CUSTOM_KEY} from "@/utils/regexp";
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import FFormLayout from "@/layouts/FFormLayout";
 
 
 interface VersionEditorProps {
@@ -109,130 +112,175 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   }
 
   return (<>
-    <FInfoLayout>
-      <FContentLayout
-        header={<Header
-          version={version.version}
-          signingDate={version.signingDate}
-          resourceID={version.resourceID}
-          // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
-          onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
-        />}>
-        <div className={styles.styles}>
-          <FEditorCard title={i18nMessage('version_description')}>
+    <FLeftSiderLayout
+      sider={<Sider/>}
+      header={<Header
+        version={version.version}
+        signingDate={version.signingDate}
+        resourceID={version.resourceID}
+        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
+        onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
+      />}>
+      {/*<FContentLayout*/}
+      {/*  header={<Header*/}
+      {/*    version={version.version}*/}
+      {/*    signingDate={version.signingDate}*/}
+      {/*    resourceID={version.resourceID}*/}
+      {/*    // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}*/}
+      {/*    onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}*/}
+      {/*  />}>*/}
+      <FFormLayout>
+        <FFormLayout.FBlock title={i18nMessage('version_description')}>
 
-            {!version.description && !isEditing && (<Space size={10}>
-              <FCircleButton
-                onClick={() => setIsEditing(true)}
-                theme="weaken"
+          {!version.description && !isEditing && (<Space size={10}>
+            <FCircleButton
+              onClick={() => setIsEditing(true)}
+              theme="weaken"
+            />
+            <FContentText text={'添加'}/>
+          </Space>)}
+
+          {isEditing
+            ? (<FHorn extra={<Space size={10}>
+              <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
+              <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
+            </Space>}>
+              <FBraftEditor
+                value={editor}
+                // defaultValue={editorText}
+                onChange={(value) => setEditor(value)}
               />
-              <FContentText text={'添加'}/>
-            </Space>)}
-
-            {isEditing
-              ? (<FHorn extra={<Space size={10}>
-                <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
-                <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
-              </Space>}>
-                <FBraftEditor
-                  value={editor}
-                  // defaultValue={editorText}
-                  onChange={(value) => setEditor(value)}
+            </FHorn>)
+            : (version.description && (<FHorn extra={<FTextButton
+              onClick={() => setIsEditing(true)}
+              theme="primary"
+            >编辑</FTextButton>}>
+              <div className={styles.description}>
+                <div
+                  className={styles.container}
+                  dangerouslySetInnerHTML={{__html: version.description}}
                 />
-              </FHorn>)
-              : (version.description && (<FHorn extra={<FTextButton
-                onClick={() => setIsEditing(true)}
-                theme="primary"
-              >编辑</FTextButton>}>
-                <div className={styles.description}>
-                  <div
-                    className={styles.container}
-                    dangerouslySetInnerHTML={{__html: version.description}}
-                  />
-                </div>
-              </FHorn>))
-            }
-          </FEditorCard>
-          <FEditorCard title={i18nMessage('version_maps')}>
-            <div className={styles.diagram}/>
-          </FEditorCard>
+              </div>
+            </FHorn>))
+          }
+        </FFormLayout.FBlock>
+        <FFormLayout.FBlock title={i18nMessage('version_maps')}>
+          <div className={styles.diagram}/>
+        </FFormLayout.FBlock>
 
-          <FEditorCard title={'基础属性'}>
-            <div className={styles.attributesBody}>
-              <Row gutter={[20, 20]}>
-                {
-                  resourceVersionEditorPage.rawProperties.map((rp) => {
-                    return (<Col key={rp.key} span={6}>
-                      <FContentText text={rp.key} type="additional2"/>
-                      <div style={{height: 10}}/>
-                      <FContentText singleRow text={rp.value}/>
-                    </Col>)
-                  })
-                }
+        <FFormLayout.FBlock title={'基础属性'}>
+          <div className={styles.attributesBody}>
+            <Row gutter={[20, 20]}>
+              {
+                resourceVersionEditorPage.rawProperties.map((rp) => {
+                  return (<Col key={rp.key} span={6}>
+                    <FContentText text={rp.key} type="additional2"/>
+                    <div style={{height: 10}}/>
+                    <FContentText singleRow text={rp.value}/>
+                  </Col>)
+                })
+              }
 
-                {
-                  resourceVersionEditorPage.baseProperties.map((bp) => {
-                    return (<Col
-                      key={bp.key}
-                      span={6}
-                    >
-                      <div className={styles.baseProperty}>
-                        <div>
-                          <Space size={5}>
-                            <FContentText text={bp.key} type="additional2"/>
-                            {bp.description && (<FTooltip title={bp.description}><FInfo/></FTooltip>)}
-                          </Space>
-                          <div style={{height: 10}}/>
-                          <FContentText singleRow text={bp.value}/>
-                        </div>
-                        <FTextButton onClick={() => {
-                          dispatch<ChangeAction>({
-                            type: 'resourceVersionEditorPage/change',
-                            payload: {
-                              basePEditorVisible: true,
-                              basePKeyInput: bp.key,
-                              basePValueInput: bp.value,
-                              basePDescriptionInput: bp.description,
-                              basePDescriptionInputError: '',
-                            },
-                          });
-                        }}>
-                          <FEdit/>
-                        </FTextButton>
-                      </div>
-                    </Col>)
-                  })
-                }
-
-              </Row>
-            </div>
-          </FEditorCard>
-          {/*{properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>*/}
-          {
-            resourceVersionEditorPage.properties?.length > 0 && <FEditorCard title={'自定义选项'}>
-              <Space
-                className={styles.properties}
-                size={15}
-                direction="vertical"
-              >
-                {
-                  resourceVersionEditorPage.properties.map((ppp) => {
-                    return (<div key={ppp.key}>
-                      <div className={styles.Content}>
+              {
+                resourceVersionEditorPage.baseProperties.map((bp) => {
+                  return (<Col
+                    key={bp.key}
+                    span={6}
+                  >
+                    <div className={styles.baseProperty}>
+                      <div>
+                        <Space size={5}>
+                          <FContentText text={bp.key} type="additional2"/>
+                          {bp.description && (<FTooltip title={bp.description}><FInfo/></FTooltip>)}
+                        </Space>
                         <div style={{height: 10}}/>
-                        <Space size={20} className={styles.row}>
-                          <Field title={i18nMessage('key')} dot={true}>
-                            <FInput
-                              disabled
-                              wrapClassName={styles.FInputWrap}
-                              value={ppp.key}
-                            />
-                          </Field>
-                          <Field
-                            title={i18nMessage('property_remark')}
-                            topRight={!ppp.descriptionIsEditing ? (<FTextButton
-                              onClick={() => {
-                                dispatch<ChangeAction>({
+                        <FContentText singleRow text={bp.value}/>
+                      </div>
+                      <FTextButton onClick={() => {
+                        dispatch<ChangeAction>({
+                          type: 'resourceVersionEditorPage/change',
+                          payload: {
+                            basePEditorVisible: true,
+                            basePKeyInput: bp.key,
+                            basePValueInput: bp.value,
+                            basePDescriptionInput: bp.description,
+                            basePDescriptionInputError: '',
+                          },
+                        });
+                      }}>
+                        <FEdit/>
+                      </FTextButton>
+                    </div>
+                  </Col>)
+                })
+              }
+
+            </Row>
+          </div>
+        </FFormLayout.FBlock>
+
+        {/*{properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>*/}
+        {
+          resourceVersionEditorPage.properties?.length > 0 && <FFormLayout.FBlock title={'自定义选项'}>
+            <Space
+              className={styles.properties}
+              size={15}
+              direction="vertical"
+            >
+              {
+                resourceVersionEditorPage.properties.map((ppp) => {
+                  return (<div key={ppp.key}>
+                    <div className={styles.Content}>
+                      <div style={{height: 10}}/>
+                      <Space size={20} className={styles.row}>
+                        <Field title={i18nMessage('key')} dot={true}>
+                          <FInput
+                            disabled
+                            wrapClassName={styles.FInputWrap}
+                            value={ppp.key}
+                          />
+                        </Field>
+                        <Field
+                          title={i18nMessage('property_remark')}
+                          topRight={!ppp.descriptionIsEditing ? (<FTextButton
+                            onClick={() => {
+                              dispatch<ChangeAction>({
+                                type: 'resourceVersionEditorPage/change',
+                                payload: {
+                                  properties: resourceVersionEditorPage.properties.map((pt) => {
+                                    if (pt.key !== ppp.key) {
+                                      return pt;
+                                    }
+                                    return {
+                                      ...pt,
+                                      descriptionIsEditing: true,
+                                    };
+                                  })
+                                }
+                              });
+                            }}
+                          ><FEdit/></FTextButton>) : (<Space size={5}>
+                            <FTextButton onClick={() => {
+                              dispatch<ChangeAction>({
+                                type: 'resourceVersionEditorPage/change',
+                                payload: {
+                                  properties: resourceVersionEditorPage.properties.map((pt) => {
+                                    if (pt.key !== ppp.key) {
+                                      return pt;
+                                    }
+                                    return {
+                                      ...pt,
+                                      descriptionIsEditing: false,
+                                    };
+                                  })
+                                }
+                              });
+                            }}>取消</FTextButton>
+                            <FTextButton
+                              disabled={!!ppp.descriptionError}
+                              theme="primary"
+                              onClick={async () => {
+                                await dispatch<ChangeAction>({
                                   type: 'resourceVersionEditorPage/change',
                                   payload: {
                                     properties: resourceVersionEditorPage.properties.map((pt) => {
@@ -241,162 +289,124 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                                       }
                                       return {
                                         ...pt,
-                                        descriptionIsEditing: true,
-                                      };
-                                    })
-                                  }
-                                });
-                              }}
-                            ><FEdit/></FTextButton>) : (<Space size={5}>
-                              <FTextButton onClick={() => {
-                                dispatch<ChangeAction>({
-                                  type: 'resourceVersionEditorPage/change',
-                                  payload: {
-                                    properties: resourceVersionEditorPage.properties.map((pt) => {
-                                      if (pt.key !== ppp.key) {
-                                        return pt;
-                                      }
-                                      return {
-                                        ...pt,
+                                        description: pt.descriptionInput,
                                         descriptionIsEditing: false,
                                       };
                                     })
                                   }
                                 });
-                              }}>取消</FTextButton>
-                              <FTextButton
-                                disabled={!!ppp.descriptionError}
-                                theme="primary"
-                                onClick={async () => {
-                                  await dispatch<ChangeAction>({
-                                    type: 'resourceVersionEditorPage/change',
-                                    payload: {
-                                      properties: resourceVersionEditorPage.properties.map((pt) => {
-                                        if (pt.key !== ppp.key) {
-                                          return pt;
-                                        }
-                                        return {
-                                          ...pt,
-                                          description: pt.descriptionInput,
-                                          descriptionIsEditing: false,
-                                        };
-                                      })
-                                    }
-                                  });
-                                  await dispatch<SyncAllPropertiesAction>({
-                                    type: 'resourceVersionEditorPage/syncAllProperties',
-                                  });
-                                }}
-                              >保存</FTextButton>
-                            </Space>)}
-                          >
-                            <FInput
-                              wrapClassName={styles.FInputWrap}
-                              value={ppp.descriptionIsEditing ? ppp.descriptionInput : ppp.description}
-                              disabled={!ppp.descriptionIsEditing}
-                              errorText={ppp.descriptionError}
-                              onChange={(e) => {
-                                const value: string = e.target.value;
-                                let descriptionError: string = '';
-                                if (value.length > 50) {
-                                  descriptionError = '不超过50个字符';
-                                }
-                                dispatch<ChangeAction>({
-                                  type: 'resourceVersionEditorPage/change',
-                                  payload: {
-                                    properties: resourceVersionEditorPage.properties.map((pt) => {
-                                      if (pt.key !== ppp.key) {
-                                        return pt;
-                                      }
-                                      return {
-                                        ...pt,
-                                        descriptionInput: value,
-                                        descriptionError: descriptionError,
-                                      };
-                                    })
-                                  }
+                                await dispatch<SyncAllPropertiesAction>({
+                                  type: 'resourceVersionEditorPage/syncAllProperties',
                                 });
                               }}
-                            />
-                          </Field>
-                        </Space>
+                            >保存</FTextButton>
+                          </Space>)}
+                        >
+                          <FInput
+                            wrapClassName={styles.FInputWrap}
+                            value={ppp.descriptionIsEditing ? ppp.descriptionInput : ppp.description}
+                            disabled={!ppp.descriptionIsEditing}
+                            errorText={ppp.descriptionError}
+                            onChange={(e) => {
+                              const value: string = e.target.value;
+                              let descriptionError: string = '';
+                              if (value.length > 50) {
+                                descriptionError = '不超过50个字符';
+                              }
+                              dispatch<ChangeAction>({
+                                type: 'resourceVersionEditorPage/change',
+                                payload: {
+                                  properties: resourceVersionEditorPage.properties.map((pt) => {
+                                    if (pt.key !== ppp.key) {
+                                      return pt;
+                                    }
+                                    return {
+                                      ...pt,
+                                      descriptionInput: value,
+                                      descriptionError: descriptionError,
+                                    };
+                                  })
+                                }
+                              });
+                            }}
+                          />
+                        </Field>
+                      </Space>
 
-                        <div style={{height: 15}}/>
-                        <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
-                          <Field
+                      <div style={{height: 15}}/>
+                      <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
+                        <Field
+                          className={styles.FSelect}
+                          title={i18nMessage('value_input_mode')}
+                        >
+                          <FSelect
+                            disabled
+                            value={ppp.custom}
                             className={styles.FSelect}
-                            title={i18nMessage('value_input_mode')}
-                          >
-                            <FSelect
-                              disabled
-                              value={ppp.custom}
-                              className={styles.FSelect}
-                              dataSource={[
-                                {value: 'input', title: i18nMessage('textfield')},
-                                {value: 'select', title: i18nMessage('dropdownlist')},
-                              ]}
-                            />
-                          </Field>
+                            dataSource={[
+                              {value: 'input', title: i18nMessage('textfield')},
+                              {value: 'select', title: i18nMessage('dropdownlist')},
+                            ]}
+                          />
+                        </Field>
 
-                          {
-                            ppp.custom === 'select'
-                              ? (<Field
-                                dot={true}
-                                title={'自定义选项(首个选项为默认值)'}
-                                className={styles.customOptions}
-                              >
-                                <FInput
-                                  disabled
-                                  wrapClassName={styles.FInputWrap}
-                                  value={ppp.customOption}
-                                  onChange={(e) => {
-                                    const value: string = e.target.value;
-                                    let customOptionError: string = '';
+                        {
+                          ppp.custom === 'select'
+                            ? (<Field
+                              dot={true}
+                              title={'自定义选项(首个选项为默认值)'}
+                              className={styles.customOptions}
+                            >
+                              <FInput
+                                disabled
+                                wrapClassName={styles.FInputWrap}
+                                value={ppp.customOption}
+                                onChange={(e) => {
+                                  const value: string = e.target.value;
+                                  let customOptionError: string = '';
 
-                                    if (value === '') {
-                                      customOptionError = '请输入';
-                                    } else if (value.length > 500) {
-                                      customOptionError = '不超过500个字符';
-                                    }
+                                  if (value === '') {
+                                    customOptionError = '请输入';
+                                  } else if (value.length > 500) {
+                                    customOptionError = '不超过500个字符';
+                                  }
 
-                                  }}
-                                />
-                              </Field>)
-                              : (<Field
-                                // title={i18nMessage('value')}
-                                title={'自定义选项(填写一个默认值)'}
-                                dot={true}
-                              >
-                                <FInput
-                                  disabled
-                                  wrapClassName={styles.FInputWrap}
-                                  value={ppp.defaultValue}
-                                  onChange={(e) => {
-                                    const value: string = e.target.value;
-                                    let valueError: string = '';
-                                    if (value === '') {
-                                      valueError = '请输入';
-                                    } else if (value.length > 30) {
-                                      valueError = '不超过30个字符';
-                                    }
-                                  }}
-                                />
-                              </Field>)
-                          }
+                                }}
+                              />
+                            </Field>)
+                            : (<Field
+                              // title={i18nMessage('value')}
+                              title={'自定义选项(填写一个默认值)'}
+                              dot={true}
+                            >
+                              <FInput
+                                disabled
+                                wrapClassName={styles.FInputWrap}
+                                value={ppp.defaultValue}
+                                onChange={(e) => {
+                                  const value: string = e.target.value;
+                                  let valueError: string = '';
+                                  if (value === '') {
+                                    valueError = '请输入';
+                                  } else if (value.length > 30) {
+                                    valueError = '不超过30个字符';
+                                  }
+                                }}
+                              />
+                            </Field>)
+                        }
 
-                        </Space>
-                        <div style={{height: 15}}/>
-                      </div>
-                    </div>)
-                  })
-                }
-
-              </Space>
-            </FEditorCard>}
-        </div>
-      </FContentLayout>
-    </FInfoLayout>
-    <div style={{height: 100}}/>
+                      </Space>
+                      <div style={{height: 15}}/>
+                    </div>
+                  </div>)
+                })
+              }
+            </Space>
+          </FFormLayout.FBlock>}
+      </FFormLayout>
+      {/*</FContentLayout>*/}
+    </FLeftSiderLayout>
 
     <Drawer
       title={'编辑基础属性'}

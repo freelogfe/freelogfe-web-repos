@@ -24,6 +24,9 @@ import {
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {RouterTypes, withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
+import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
+import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import FFormLayout from "@/layouts/FFormLayout";
 
 const columns: any[] = [
   {
@@ -96,14 +99,13 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
     });
   }, []);
 
-  return (<FInfoLayout>
-    <FContentLayout header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
-      <div className={styles.styles}>
-        <FEditorCard title={i18nMessage('authorization_plan')}>
+  return (<FLeftSiderLayout sider={<Sider/>} header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
+      <FFormLayout>
+        <FFormLayout.FBlock title={i18nMessage('authorization_plan')}>
           <FPolicies/>
-        </FEditorCard>
+        </FFormLayout.FBlock>
         {
-          auth.contractsAuthorized?.length > 0 && (<FEditorCard title={i18nMessage('licencee_contract')}>
+          auth.contractsAuthorized?.length > 0 && (<FFormLayout.FBlock title={i18nMessage('licencee_contract')}>
             <FAuthPanel
               dataSource={auth.contractsAuthorized}
               onChangeActivatedResource={(value) => dispatch<ChangeAction>({
@@ -113,11 +115,11 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
                 },
               })}
             />
-          </FEditorCard>)
+          </FFormLayout.FBlock>)
         }
 
         {
-          auth.contractsAuthorize?.length > 0 && (<FEditorCard title={i18nMessage('authorizing_contracts')}>
+          auth.contractsAuthorize?.length > 0 && (<FFormLayout.FBlock title={i18nMessage('authorizing_contracts')}>
             <Table
               columns={columns}
               dataSource={auth.contractsAuthorize}
@@ -125,11 +127,10 @@ function Auth({dispatch, route, auth, match}: AuthProps & RouterTypes) {
               // title={() => 'Header'}
               // footer={() => 'Footer'}
             />
-          </FEditorCard>)
+          </FFormLayout.FBlock>)
         }
-      </div>
-    </FContentLayout>
-  </FInfoLayout>);
+      </FFormLayout>
+  </FLeftSiderLayout>);
 }
 
 export default withRouter(connect(({resourceAuthPage}: ConnectState) => ({
