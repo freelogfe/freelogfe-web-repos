@@ -29,88 +29,92 @@ function Sider({storage, dispatch}: SiderProps) {
   const customBuckets = storage.bucketList.filter((b) => b.bucketType === 1);
   const systemBuckets = storage.bucketList.filter((b) => b.bucketType === 2);
 
-  return (<div className={styles.sider}>
-    <div style={{height: 45}}/>
-    <div className={styles.title}>
-      <Space size={10}>
-        <FTitleText text={`我的存储空间`} type="form"/>
-        <FTitleText text={`${storage.bucketList.length}/5`} type="form"/>
-      </Space>
-      {
-        storage.bucketList.length < 5 && (<FCircleButton
-          theme="text"
-          onClick={() => dispatch<ChangeAction>({
-            type: 'storageHomePage/change',
-            payload: {
-              newBucketModalVisible: true,
-            },
-          })}
-        />)
-      }
+  return (<>
+    <div className={styles.sider}>
+      <div>
+        <div style={{height: 45}}/>
+        <div className={styles.title}>
+          <Space size={10}>
+            <FTitleText text={`我的存储空间`} type="form"/>
+            <FTitleText text={`${storage.bucketList.length}/5`} type="form"/>
+          </Space>
+          {
+            storage.bucketList.length < 5 && (<FCircleButton
+              theme="text"
+              onClick={() => dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  newBucketModalVisible: true,
+                },
+              })}
+            />)
+          }
+
+        </div>
+        <div style={{height: 18}}/>
+        {
+          customBuckets.length > 0 ? (<div className={styles.buckets}>
+            {
+              customBuckets
+                .map((b) => (<a
+                  key={b.bucketName}
+                  className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
+                  onClick={() => {
+                    if (storage.activatedBucket === b.bucketName) {
+                      return;
+                    }
+                    dispatch<OnChangeActivatedBucketAction>({
+                      type: 'storageHomePage/onChangeActivatedBucket',
+                      payload: b.bucketName,
+                    });
+                  }}
+                >
+                  <span>{b.bucketName}</span>
+                  {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <FDelete onClick={() => {
+                    dispatch<DeleteBucketByNameAction>({
+                      type: 'storageHomePage/deleteBucketByName',
+                      payload: b.bucketName,
+                    });
+                  }} style={{color: '#EE4040'}}/>}
+                </a>))
+            }
+          </div>) : (<FContentText
+            type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
+        }
+
+      </div>
+
+      <div>
+
+        <Progress
+          strokeWidth={6}
+          percent={storage.usedStorage / storage.totalStorage}
+          showInfo={false}
+          className={styles.progressBack}
+        />
+        <div className={styles.ratio}>{humanizeSize(storage.usedStorage)} / {humanizeSize(storage.totalStorage)}</div>
+
+        {systemBuckets.length > 0 && (<>
+          <div style={{height: 60}}/>
+
+          <div className={styles.title}>
+            <FTitleText text={'系统存储空间'} type="form"/>
+          </div>
+
+          <div style={{height: 18}}/>
+          <div className={styles.buckets}>
+            <a
+              className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
+              onClick={() => dispatch<OnChangeActivatedBucketAction>({
+                type: 'storageHomePage/onChangeActivatedBucket',
+                payload: '.UserNodeData',
+              })}>.Nodedata</a>
+          </div>
+        </>)}
+        <div style={{height: 40}}/>
+      </div>
 
     </div>
-    <div style={{height: 18}}/>
-    {
-      customBuckets.length > 0 ? (<div className={styles.buckets}>
-        {
-          customBuckets
-            .map((b) => (<a
-              key={b.bucketName}
-              className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
-              onClick={() => {
-                if (storage.activatedBucket === b.bucketName) {
-                  return;
-                }
-                dispatch<OnChangeActivatedBucketAction>({
-                  type: 'storageHomePage/onChangeActivatedBucket',
-                  payload: b.bucketName,
-                });
-              }}
-            >
-              <span>{b.bucketName}</span>
-              {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <FDelete onClick={() => {
-                dispatch<DeleteBucketByNameAction>({
-                  type: 'storageHomePage/deleteBucketByName',
-                  payload: b.bucketName,
-                });
-              }} style={{color: '#EE4040'}}/>}
-            </a>))
-        }
-      </div>) : (<FContentText
-        type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
-    }
-
-    <div style={{height: 130}}/>
-
-    <Progress
-      strokeWidth={6}
-      percent={storage.usedStorage / storage.totalStorage}
-      showInfo={false}
-      className={styles.progressBack}
-    />
-    <div className={styles.ratio}>{humanizeSize(storage.usedStorage)} / {humanizeSize(storage.totalStorage)}</div>
-
-    {systemBuckets.length > 0 && (<>
-      <div style={{height: 60}}/>
-
-      <div className={styles.title}>
-        <FTitleText text={'系统存储空间'} type="form"/>
-      </div>
-
-      <div style={{height: 18}}/>
-      <div className={styles.buckets}>
-        {/*{*/}
-        {/*  systemBuckets.map((b) => (*/}
-        <a
-          className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
-          onClick={() => dispatch<OnChangeActivatedBucketAction>({
-            type: 'storageHomePage/onChangeActivatedBucket',
-            payload: '.UserNodeData',
-          })}>.Nodedata</a>
-        {/*))*/}
-        {/*}*/}
-      </div>
-    </>)}
 
     <FModal
       title="创建Bucket"
@@ -158,7 +162,8 @@ function Sider({storage, dispatch}: SiderProps) {
         <div style={{height: 100}}/>
       </div>
     </FModal>
-  </div>);
+
+  </>);
 }
 
 export default connect(({storageHomePage}: ConnectState) => ({
