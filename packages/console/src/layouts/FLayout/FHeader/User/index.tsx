@@ -5,6 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
+import {completeUrlByDomain} from "@/utils/format";
 
 interface UserProps {
   dispatch: Dispatch;
@@ -23,13 +24,11 @@ function User({dispatch, user}: UserProps) {
     </div>
     <div className={styles.userPanelMenu}>
       <a onClick={() => {
-        let origin = 'http://${}.testfreelog.com';
-        if (window.location.origin.includes('.freelog.com')) {
-          origin = 'https://${}.freelog.com';
-        }
-        return window.location.replace(`${origin.replace('${}', 'www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
+        window.location.href = `${completeUrlByDomain('www')}/user/profile`;
       }}>个人中心</a>
-      <a>登出</a>
+      <a onClick={() => {
+        window.location.href = `${completeUrlByDomain('www')}/login`;
+      }}>登出</a>
     </div>
   </div>}>
     <a className={styles.avatar}>
