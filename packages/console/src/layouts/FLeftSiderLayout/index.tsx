@@ -50,7 +50,7 @@ function FLeftSiderLayout({children, header, sider, type, contentStyles, hasBott
             <div style={contentStyles} className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
               {children}
             </div>
-            {console.log(hasBottom, 'hasBottom2093ufsdaio')}
+            {/*{console.log(hasBottom, 'hasBottom2093ufsdaio')}*/}
             {
               hasBottom && (<div style={{height: 100}}/>)
             }

@@ -28,6 +28,9 @@ import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
 import {FDown, FInfo} from "@/components/FIcons";
+import FFormLayout from "@/layouts/FFormLayout";
+import FBlock from "@/layouts/FFormLayout/FBlock";
+import FDrawer from "@/components/FDrawer";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -61,11 +64,11 @@ function Details({editor, dispatch}: DetailsProps) {
     });
   }
 
-  return (<Drawer
+  return (<FDrawer
     title={'编辑对象信息'}
     visible={editor.visible}
+    // visible={true}
     width={720}
-    bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     onClose={() => {
       onChange({
         visible: false,
@@ -178,89 +181,91 @@ function Details({editor, dispatch}: DetailsProps) {
       }
 
       <div style={{height: 25}}/>
-      <FEditorCard title={'资源类型'}>
-        <FAutoComplete
-          errorText={editor.typeError}
-          value={editor.type}
-          debounce={300}
-          onDebounceChange={(value) => {
-            onChangeType(value);
-          }}
-          className={styles.FAutoComplete}
-          placeholder={i18nMessage('hint_choose_resource_type')}
-          options={resourceTypes.map((i: string) => ({value: i}))}
-        />
-      </FEditorCard>
-      <FEditorCard title={'依赖'}>
-        <Space size={10}>
-          <FCircleButton
-            onClick={() => setDepInfoVisible(true)}
-            theme="weaken"
+      <FFormLayout>
+        <FFormLayout.FBlock title={'资源类型'}>
+          <FAutoComplete
+            errorText={editor.typeError}
+            value={editor.type}
+            debounce={300}
+            onDebounceChange={(value) => {
+              onChangeType(value);
+            }}
+            className={styles.FAutoComplete}
+            placeholder={i18nMessage('hint_choose_resource_type')}
+            options={resourceTypes.map((i: string) => ({value: i}))}
           />
-          <FContentText text={'添加'}/>
-        </Space>
-        {
-          editor.depRs.length > 0 && (<DepsCards
-            title={'资源'}
-            dataSource={editor.depRs}
-            onChange={(value) => {
-              console.log(value, 'value2903jafdslkfa');
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  depRs: value as StorageObjectEditorModelState['depRs'],
-                },
-              });
-            }}
-          />)
-        }
+        </FFormLayout.FBlock>
+        <FFormLayout.FBlock title={'依赖'}>
+          <Space size={10}>
+            <FCircleButton
+              onClick={() => setDepInfoVisible(true)}
+              theme="weaken"
+            />
+            <FContentText text={'添加'}/>
+          </Space>
+          {
+            editor.depRs.length > 0 && (<DepsCards
+              title={'资源'}
+              dataSource={editor.depRs}
+              onChange={(value) => {
+                console.log(value, 'value2903jafdslkfa');
+                dispatch<ChangeAction>({
+                  type: 'storageObjectEditor/change',
+                  payload: {
+                    depRs: value as StorageObjectEditorModelState['depRs'],
+                  },
+                });
+              }}
+            />)
+          }
 
-        {
-          editor.depOs.length > 0 && (<DepsCards
-            title={'对象'}
-            dataSource={editor.depOs}
-            onChange={(value) => {
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  depOs: value as StorageObjectEditorModelState['depOs'],
-                },
-              });
-            }}
-          />)
-        }
+          {
+            editor.depOs.length > 0 && (<DepsCards
+              title={'对象'}
+              dataSource={editor.depOs}
+              onChange={(value) => {
+                dispatch<ChangeAction>({
+                  type: 'storageObjectEditor/change',
+                  payload: {
+                    depOs: value as StorageObjectEditorModelState['depOs'],
+                  },
+                });
+              }}
+            />)
+          }
 
-      </FEditorCard>
-      <FEditorCard title={'自定义属性'}>
-        <Space size={10}>
-          <FCircleButton
-            theme="weaken"
-            onClick={() => {
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  properties: [
-                    ...editor.properties,
-                    {
-                      key: '',
-                      keyError: '',
-                      description: '',
-                      descriptionError: '',
-                      custom: 'input',
-                      defaultValue: '',
-                      defaultValueError: '',
-                      customOption: '',
-                      customOptionError: '',
-                    },
-                  ],
-                },
-              });
-            }}
-          />
-          <FContentText text={'添加'}/>
-        </Space>
-        <div style={{height: 20}}/>
-      </FEditorCard>
+        </FFormLayout.FBlock>
+        {/*  <FFormLayout.FBlock title={'自定义属性'}>*/}
+        {/*    <Space size={10}>*/}
+        {/*      <FCircleButton*/}
+        {/*        theme="weaken"*/}
+        {/*        onClick={() => {*/}
+        {/*          dispatch<ChangeAction>({*/}
+        {/*            type: 'storageObjectEditor/change',*/}
+        {/*            payload: {*/}
+        {/*              properties: [*/}
+        {/*                ...editor.properties,*/}
+        {/*                {*/}
+        {/*                  key: '',*/}
+        {/*                  keyError: '',*/}
+        {/*                  description: '',*/}
+        {/*                  descriptionError: '',*/}
+        {/*                  custom: 'input',*/}
+        {/*                  defaultValue: '',*/}
+        {/*                  defaultValueError: '',*/}
+        {/*                  customOption: '',*/}
+        {/*                  customOptionError: '',*/}
+        {/*                },*/}
+        {/*              ],*/}
+        {/*            },*/}
+        {/*          });*/}
+        {/*        }}*/}
+        {/*      />*/}
+        {/*      <FContentText text={'添加'}/>*/}
+        {/*    </Space>*/}
+        {/*    <div style={{height: 20}}/>*/}
+        {/*  </FFormLayout.FBlock>*/}
+      </FFormLayout>
 
       <div style={{height: 120}}/>
       <div className={styles.footer}>
@@ -337,7 +342,7 @@ function Details({editor, dispatch}: DetailsProps) {
         });
       }}
     />
-  </Drawer>);
+  </FDrawer>);
 }
 
 export default connect(({storageObjectEditor}: ConnectState) => ({
