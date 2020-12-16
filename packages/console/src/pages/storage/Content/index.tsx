@@ -136,24 +136,26 @@ function Content({storage, dispatch}: ContentProps) {
     }
 
     {
-      storage.total === 0 && (<FNoDataTip
-        height={minHeight}
-        tipText={'当前Bucket还没有上传任何对象'}
-        btn={<FUpload
-          showUploadList={false}
-          multiple={true}
-          beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-            // console.log(file, FileList, 'beforeUpload 24ew890sio;');
-            if (file === fileList[fileList.length - 1]) {
-              // console.log('0923uiojfdaslk');
-              dispatch<UploadFilesAction>({
-                type: 'storageHomePage/uploadFiles',
-                payload: fileList,
-              });
-            }
-            return false;
-          }}><FNormalButton>上传对象</FNormalButton></FUpload>}
-      />)
+      storage.total === 0 && (<>
+        <FNoDataTip
+          height={minHeight}
+          tipText={'当前Bucket还没有上传任何对象'}
+          btn={<FUpload
+            showUploadList={false}
+            multiple={true}
+            beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+              // console.log(file, FileList, 'beforeUpload 24ew890sio;');
+              if (file === fileList[fileList.length - 1]) {
+                // console.log('0923uiojfdaslk');
+                dispatch<UploadFilesAction>({
+                  type: 'storageHomePage/uploadFiles',
+                  payload: fileList,
+                });
+              }
+              return false;
+            }}><FNormalButton>上传对象</FNormalButton></FUpload>}
+        />
+      </>)
     }
 
     {
@@ -189,7 +191,7 @@ function Content({storage, dispatch}: ContentProps) {
       </InfiniteScroll>)
     }
 
-    {!storage.isLoading && <div style={{height: 100}}/>}
+    {/*{!storage.isLoading && <div style={{height: 100}}/>}*/}
     <Details/>
     <FUploadTasksPanel/>
   </div>);

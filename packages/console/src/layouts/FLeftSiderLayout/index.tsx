@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
+import {CSSProperties} from "react";
 
 interface FLeftSiderLayoutProps {
 
@@ -8,9 +9,13 @@ interface FLeftSiderLayoutProps {
   header?: React.ReactNode;
   sider: React.ReactNode | React.ReactNodeArray;
   children: React.ReactNode | React.ReactNodeArray;
+
+  contentClassNames?: string;
+  contentStyles?: CSSProperties;
+  hasBottom?: boolean;
 }
 
-function FLeftSiderLayout({children, header, sider, type}: FLeftSiderLayoutProps) {
+function FLeftSiderLayout({children, header, sider, type, contentStyles, hasBottom = true}: FLeftSiderLayoutProps) {
 
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
 
@@ -42,10 +47,14 @@ function FLeftSiderLayout({children, header, sider, type}: FLeftSiderLayoutProps
             <div className={[styles.header, type === 'table' ? styles.tableWidth : ''].join(' ')}>
               {header}
             </div>
-            <div className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
+            <div style={contentStyles} className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
               {children}
             </div>
-            <div style={{height: 100}}/>
+            {console.log(hasBottom, 'hasBottom2093ufsdaio')}
+            {
+              hasBottom && (<div style={{height: 100}}/>)
+            }
+
           </>)
       }
     </div>

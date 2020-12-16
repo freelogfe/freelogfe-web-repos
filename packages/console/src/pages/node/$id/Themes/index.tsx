@@ -75,9 +75,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
     type="empty"
   >
 
-    {/*<div style={{height: 200}}/>*/}
-
-
     {
       nodeManagerPage.themeDataState === 'noData'
         ? (<FNoDataTip
@@ -95,7 +92,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           }}
         />)
         : (<>
-
           <div className={styles.header}>
             <FTitleText type="h1" text={'主题管理'}/>
             <FInput
@@ -141,7 +137,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                       singleRow
                     />
                     <div style={{height: 6}}/>
-                    <FContentText type="additional1" text={'展示版本 1.0.10'}/>
+                    <FContentText type="additional1" text={i.version}/>
                     <div style={{height: 15}}/>
                     <div className={styles.bottom}>
                       <div className={styles.polices}>

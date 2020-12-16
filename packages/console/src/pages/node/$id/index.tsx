@@ -24,11 +24,6 @@ interface NodeManagerProps extends RouterTypes {
 
 function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
 
-
-  // React.useEffect(() => {
-  //   console.log('NodeManager useEffect');
-  // }, []);
-
   React.useEffect(() => {
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
@@ -55,7 +50,6 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
     {
       nodeManagerPage.showTheme ? <Themes/> : <Exhibits/>
     }
-
   </>);
 }
 
