@@ -30,7 +30,9 @@ function FLeftSiderLayout({children, header, sider, type}: FLeftSiderLayoutProps
     style={{minHeight: minHeight}}
   >
     <div className={styles.Slider}>
-      {sider}
+      <div style={{height: minHeight}}>
+        {sider}
+      </div>
     </div>
     <div className={styles.rightContent}>
       {

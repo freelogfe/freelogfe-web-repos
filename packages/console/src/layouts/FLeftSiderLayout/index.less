@@ -9,6 +9,16 @@
     width: 280px;
     flex-shrink: 0;
     border-right: 1px solid @f-sub-color3;
+
+    & > div {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+    }
   }
 
   .rightContent {

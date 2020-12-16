@@ -40,6 +40,7 @@ function FLayout({children, global}: FLayoutProps) {
       <Layout.Header className={styles.header}>
         <FHeader/>
       </Layout.Header>
+      <div style={{height: 70}}/>
 
       <Layout.Content className={styles.Content}>{children}</Layout.Content>
 

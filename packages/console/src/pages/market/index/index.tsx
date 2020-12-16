@@ -11,6 +11,7 @@ import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {ChangeAction} from "@/models/marketPage";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 import FFooter from '@/layouts/FFooter';
+import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
 
 const navs = [
   {
@@ -62,7 +63,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
   }
 
   return (<>
-    <FCenterLayout>
+    <FResourcesDisplayLayout>
       <FAffixTabs
         options={navs}
         value={marketPage.tabValue}
@@ -71,7 +72,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
       />
       {marketPage.tabValue === '1' && <Resources/>}
       {marketPage.tabValue === '2' && <Examples/>}
-    </FCenterLayout>
+    </FResourcesDisplayLayout>
     {/*<FLayoutFooter/>*/}
     <FFooter/>
   </>);

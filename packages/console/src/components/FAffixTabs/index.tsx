@@ -15,20 +15,25 @@ interface FAffixTabsProps {
 }
 
 export default function ({options, value, onChange}: FAffixTabsProps) {
-  return (<Affix offsetTop={0}>
-    <Tabs
-      activeKey={value}
-      size="large"
-      className={styles.Tabs}
-      onChange={(value: any) => onChange && onChange(value)}
-      animated={false}
-      centered
-      // renderTabBar={(props: any, DefaultTabBar: React.ComponentClass) => <div>{DefaultTabBar}</div>}
-    >
-      {
-        options.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.value}/>))
-      }
-    </Tabs>
-  </Affix>);
+  return (<>
+    <div className={styles.styles}>
+      <div>
+        <Tabs
+          activeKey={value}
+          size="large"
+          className={styles.Tabs}
+          onChange={(value: any) => onChange && onChange(value)}
+          animated={false}
+          centered
+          // renderTabBar={(props: any, DefaultTabBar: React.ComponentClass) => <div>{DefaultTabBar}</div>}
+        >
+          {
+            options.map((i: Tab) => (<Tabs.TabPane tab={i.text} key={i.value}/>))
+          }
+        </Tabs>
+      </div>
+    </div>
+    <div style={{height: 55}}/>
+  </>);
 }
 

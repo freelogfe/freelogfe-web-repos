@@ -165,6 +165,7 @@ function FResourceCardsList({
             <div className={styles.bottomPadding}/>
             <div className={styles.bottomPadding}/>
           </div>
+          <div style={{height: 100}}/>
         </>)
         : (<FNoDataTip
           height={contentMinHeight}
@@ -174,17 +175,17 @@ function FResourceCardsList({
 
     {
       totalNum > dataSource.length && (<>
-        <div style={{height: 100}}/>
+
         <div className={styles.bottom}>
           <Button
             className={styles.loadMore}
             onClick={() => onloadMore && onloadMore()}
           >加载更多</Button>
         </div>
+        <div style={{height: 100}}/>
       </>)
     }
-    <div style={{height: 200}}/>
-
+    <div style={{height: 100}}/>
     {/*{totalNum > 10 && <>*/}
     {/*  <div style={{height: 10}}/>*/}
     {/*  <FPagination*/}

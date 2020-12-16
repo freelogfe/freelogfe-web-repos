@@ -134,6 +134,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         </Space>
       </Space>
     </div>
+    <div style={{height: 40}}/>
   </div>)
 }
 
