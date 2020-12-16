@@ -70,23 +70,13 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
   // }
 
   return (<FLeftSiderLayout
-    header={<div className={styles.header}>
-      <FTitleText type="h1" text={'主题管理'}/>
-      <FInput
-        className={styles.input}
-        theme="dark"
-        debounce={300}
-        onDebounceChange={(value) => dispatch<OnChangeThemeAction>({
-          type: 'nodeManagerPage/onChangeTheme',
-          payload: {
-            themeInputFilter: value,
-          },
-        })}
-      />
-    </div>}
+    // header={''}
     sider={<Sider/>}
-    type={nodeManagerPage.themeDataState === 'noData' ? 'empty' : 'form'}
+    type="empty"
   >
+
+    {/*<div style={{height: 200}}/>*/}
+
 
     {
       nodeManagerPage.themeDataState === 'noData'
@@ -105,6 +95,21 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           }}
         />)
         : (<>
+
+          <div className={styles.header}>
+            <FTitleText type="h1" text={'主题管理'}/>
+            <FInput
+              className={styles.input}
+              theme="dark"
+              debounce={300}
+              onDebounceChange={(value) => dispatch<OnChangeThemeAction>({
+                type: 'nodeManagerPage/onChangeTheme',
+                payload: {
+                  themeInputFilter: value,
+                },
+              })}
+            />
+          </div>
           {
             nodeManagerPage.themeDataState === 'noSearchData'
               ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)

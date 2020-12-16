@@ -85,7 +85,7 @@ axios.interceptors.response.use(function (response) {
     return downloadFile(response);
   }
 
-  console.log(data, 'data2390jasdflkf');
+  // console.log(data, 'data2390jasdflkf');
 
   if (data.errCode === 30 || data.errcode === 30) {
     return window.location.replace(`${completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);

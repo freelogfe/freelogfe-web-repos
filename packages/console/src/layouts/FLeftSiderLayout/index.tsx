@@ -5,7 +5,7 @@ interface FLeftSiderLayoutProps {
 
   type?: 'form' | 'table' | 'empty';
 
-  header: React.ReactNode;
+  header?: React.ReactNode;
   sider: React.ReactNode | React.ReactNodeArray;
   children: React.ReactNode | React.ReactNodeArray;
 }

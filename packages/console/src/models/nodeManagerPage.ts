@@ -199,7 +199,7 @@ const Model: NodeManagerModelType = {
       });
     },
     * fetchThemes({}: FetchThemesAction, {call, put, select}: EffectsCommandMap) {
-      console.log(23423423, '0923jfdslk');
+      // console.log(23423423, '0923jfdslk');
       const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
         nodeManagerPage,
       }));
