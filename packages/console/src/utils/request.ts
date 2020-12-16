@@ -2,6 +2,8 @@ import axios, {AxiosResponse} from 'axios';
 import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
 import FileSaver from 'file-saver';
+import {router} from "umi";
+import {completeUrlByDomain} from "@/utils/format";
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -69,16 +71,24 @@ axios.interceptors.response.use(function (response) {
   // Do something with response data
   NProgress.done();
   if (response.status !== 200) {
+
     const error = {
       description: codeMessage[response.status],
       message: response.status,
     };
+
     notification.error(error);
     throw new Error(JSON.stringify(error));
   }
   const {data, headers} = response;
   if (headers['content-disposition']?.includes('attachment;')) {
     return downloadFile(response);
+  }
+
+  console.log(data, 'data2390jasdflkf');
+
+  if (data.errCode === 30 || data.errcode === 30) {
+    return window.location.replace(`${completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
   }
 
   if ((data.errcode === undefined

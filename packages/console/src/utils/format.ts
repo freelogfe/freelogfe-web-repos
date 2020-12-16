@@ -27,11 +27,16 @@ export function formatDateTime(date: string, showTime: boolean = false) {
 }
 
 /**
- *
+ * 根据传入的子域名拼合成完整的适合的url
  */
 export function completeUrlByDomain(domain: string) {
-  if (!window.location.origin.includes('.com')) {
-    return `http://${domain}.testfreelog.com`;
+  // if (!window.location.origin.includes('.com')) {
+  //   return `http://${domain}.testfreelog.com`;
+  // }
+  // return `${window.location.protocol}//${domain}.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+  let origin = `http://${domain}.testfreelog.com`;
+  if (window.location.origin.includes('.freelog.com')) {
+    origin = `https://${domain}.freelog.com`;
   }
-  return `${window.location.protocol}//${domain}.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+  return origin;
 }

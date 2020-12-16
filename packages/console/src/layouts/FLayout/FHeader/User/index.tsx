@@ -22,7 +22,13 @@ function User({dispatch, user}: UserProps) {
       <FContentText text={user.info?.mobile || user.info?.email}/>
     </div>
     <div className={styles.userPanelMenu}>
-      <a>个人中心</a>
+      <a onClick={() => {
+        let origin = 'http://${}.testfreelog.com';
+        if (window.location.origin.includes('.freelog.com')) {
+          origin = 'https://${}.freelog.com';
+        }
+        return window.location.replace(`${origin.replace('${}', 'www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
+      }}>个人中心</a>
       <a>登出</a>
     </div>
   </div>}>
