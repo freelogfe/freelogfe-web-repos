@@ -23,28 +23,6 @@ interface ResourceDetailsProps extends RouterTypes {
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
-  // React.useEffect(() => {
-  //   console.log('index092jadfslkasdf');
-  // }, []);
-
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       // backgroundColor: 'white',
-  //     },
-  //   });
-  //   return () => {
-  //     // console.log('#E#####EEEEE');
-  //     dispatch<ChangeAction>({
-  //       type: 'global/change',
-  //       payload: {
-  //         // backgroundColor: '',
-  //       },
-  //     });
-  //   }
-  // }, []);
-
   React.useEffect(() => {
     // console.log((match.params as any).id, 'match98320j');
     if ((match.params as any).id === marketResourcePage.resourceId) {
@@ -56,7 +34,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
     });
   }, []);
 
-  return (<FCenterLayout>
+  return (<div className={styles.style}>
     <div className={styles.wrap}>
       <div style={{height: 40}}/>
       <Sign/>
@@ -93,7 +71,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
         <Viewport/>
       </div>
     </div>
-  </FCenterLayout>);
+  </div>);
 }
 
 
