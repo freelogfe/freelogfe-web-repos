@@ -4,6 +4,7 @@ import {Checkbox, Space} from "antd";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
+import {FContentText} from '@/components/FText';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -31,6 +32,7 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
           <Space size={5}>
             <Checkbox
               checked={p.checked}
+              disabled={p.status === 0}
               onChange={(e) => dispatch<ChangeAction>({
                 type: 'marketResourcePage/change',
                 payload: {
@@ -54,7 +56,7 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
                 }
               })}
             />
-            <span>{p.name}</span>
+            <Space size={10}>{p.name}{p.status === 0 && (<FContentText type="additional2">(已下线)</FContentText>)}</Space>
           </Space>
           <div style={{height: 15}}/>
           <pre>{p.text}</pre>

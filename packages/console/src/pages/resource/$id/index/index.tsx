@@ -15,28 +15,40 @@ import FDropdown from '@/components/FDropdown';
 import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import {Alert} from 'antd';
 
-interface ResourceDetailsProps extends RouterTypes {
+interface ResourceDetailsProps
+  // extends RouterTypes
+{
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState,
+  match: {
+    params: {
+      id: string;
+    };
+  };
 }
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
   React.useEffect(() => {
-    // console.log((match.params as any).id, 'match98320j');
-    if ((match.params as any).id === marketResourcePage.resourceId) {
-      return;
-    }
     dispatch<InitDataAction>({
       type: 'marketResourcePage/initData',
-      payload: (match.params as any).id,
+      payload: match.params.id,
     });
-  }, []);
+  }, [match.params.id]);
 
   return (<div className={styles.style}>
+
     <div className={styles.wrap}>
-      <div style={{height: 40}}/>
+      <div style={{height: 20}}/>
+      {
+        !!marketResourcePage.signResources.find((sr) => {
+          return sr.status === 0;
+        }) && (<Alert message={'当前上抛有未上线资源，不可用！'} type="error"/>)
+      }
+
+      <div style={{height: 20}}/>
       <Sign/>
       <div style={{height: 50}}/>
       <div className={styles.versionWrap}>
