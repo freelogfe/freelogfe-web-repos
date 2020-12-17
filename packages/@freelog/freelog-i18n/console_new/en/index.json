@@ -40,7 +40,7 @@
 	"limit_resource_image_size": "File can not exceed 5MB",
 	"freelog_versioning": "Version number sould follow the Semantic Versioning Specification.",
 	"authorization_issue_offline_resource": "The resource is offline and not available for authorization.",
-	"authorization_issue_circular_reply": "We do not suppot authorization of circular reply.",
+	"authorization_issue_circular_reply": "We do not suppot authorization of circular rely.",
 	"error_custom_meta": "Syntax error. Custom meta should follow ",
 	"reselect": "Reselect",
 	"check_it": "Check it",
