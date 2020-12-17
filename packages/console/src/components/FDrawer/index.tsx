@@ -11,22 +11,25 @@ interface FDrawerProps extends DrawerProps {
   title: string;
 }
 
-function FDrawer({children, title, onClose, ...props}: FDrawerProps) {
+function FDrawer({children, width, title, onClose, ...props}: FDrawerProps) {
   return (<Drawer
     title={null}
     headerStyle={{display: 'none'}}
-    // headerStyle={{fontWeight: 400, fontSize: 48}}
     bodyStyle={{padding: 0}}
+    width={width}
     onClose={onClose}
     {...props}
   >
-    <div className={styles.header}>
-      <FTitleText type="h2" text={title}/>
-      <FTextButton onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextButton>
-    </div>
-    <div className={styles.content}>
-      {children}
-    </div>
+    {/*<div style={{position: 'relative'}}>*/}
+      <div className={styles.header} style={{width: width}}>
+        <FTitleText type="h2" text={title}/>
+        <FTextButton onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextButton>
+      </div>
+      <div style={{height: 70}}/>
+      <div className={styles.content}>
+        {children}
+      </div>
+    {/*</div>*/}
   </Drawer>);
 }
 
