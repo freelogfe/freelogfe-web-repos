@@ -462,7 +462,7 @@ const Model: ResourceVersionCreatorModelType = {
           versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,
-          upthrowDisabled: !!dr.latestVersion,
+          upthrowDisabled: !dr.latestVersion,
           enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
             return {
               checked: false,
