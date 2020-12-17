@@ -115,7 +115,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectErrorText
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
-      return !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
+      return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
     })
     // 自定义属性
     || !!resourceVersionCreatorPage.properties.find((ep) => {
