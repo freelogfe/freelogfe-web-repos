@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styles from './index.less';
 import {FContentText, FTipText} from '@/components/FText';
-import {FCircleButton} from '@/components/FButton';
+import {FCircleButton, FNormalButton} from '@/components/FButton';
 import {CopyOutlined} from '@ant-design/icons';
 import {Space, Drawer} from 'antd';
 import Resources from './Resources';
@@ -16,6 +16,7 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {i18nMessage} from '@/utils/i18n';
 import {CloseCircleFilled} from '@ant-design/icons';
 import {DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
+import FDrawer from "@/components/FDrawer";
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -28,29 +29,45 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
   const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
   // console.log(resource, 'resource23qeasdj98io');
   return (<>
-    <Space size={80}>
-      <Space size={10}>
-        <FCircleButton
-          onClick={() => setModalVisible(true)}
-          theme="weaken"
-        />
-        <FContentText text={i18nMessage('add_rely_resource')}/>
-      </Space>
+    <Space size={30}>
+      {/*<Space size={10}>*/}
+      {/*  <FCircleButton*/}
+      {/*    onClick={() => setModalVisible(true)}*/}
+      {/*    theme="weaken"*/}
+      {/*  />*/}
+      {/*  <FContentText text={i18nMessage('add_rely_resource')}/>*/}
+      {/*</Space>*/}
+      <FNormalButton
+        onClick={() => setModalVisible(true)}
+        theme="grey"
+      >{i18nMessage('add_rely_resource')}</FNormalButton>
       {
-        creator.latestVersion && (<Space size={10}>
-          <FCircleButton
-            theme="weaken"
-            icon={<CopyOutlined/>}
-            onClick={() => {
-              dispatch<ImportLastVersionDataAction>({
-                type: 'resourceVersionCreatorPage/importLastVersionData',
-                payload: 'deps',
-              });
-            }}
-          />
-          <FContentText text={i18nMessage('import_from_previous_version')}/>
-        </Space>)
+        creator.latestVersion &&
+        <FNormalButton
+          theme="grey"
+          onClick={() => {
+            dispatch<ImportLastVersionDataAction>({
+              type: 'resourceVersionCreatorPage/importLastVersionData',
+              payload: 'deps',
+            });
+          }}
+        >{i18nMessage('import_from_previous_version')}</FNormalButton>
       }
+      {/*{*/}
+      {/*  creator.latestVersion && (<Space size={10}>*/}
+      {/*    <FCircleButton*/}
+      {/*      theme="weaken"*/}
+      {/*      icon={<CopyOutlined/>}*/}
+      {/*      onClick={() => {*/}
+      {/*        dispatch<ImportLastVersionDataAction>({*/}
+      {/*          type: 'resourceVersionCreatorPage/importLastVersionData',*/}
+      {/*          payload: 'deps',*/}
+      {/*        });*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*    <FContentText text={i18nMessage('import_from_previous_version')}/>*/}
+      {/*  </Space>)*/}
+      {/*}*/}
 
     </Space>
 
@@ -94,15 +111,14 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
       </>)
     }
 
-    <Drawer
+    <FDrawer
       title={'添加依赖'}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}
-      bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <Market/>
-    </Drawer>
+    </FDrawer>
   </>);
 }
 

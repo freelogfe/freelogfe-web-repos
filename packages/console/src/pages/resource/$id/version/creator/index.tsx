@@ -169,13 +169,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                   payload: value.objectId,
                 });
               }
-              // console.log(deps, 'deps2309jdfsalk;f');
-              // if (!deps || deps.length === 0) {
-              //   return;
-              // }
-              // if (value.resourceOrObjectId)
-
-
             }}
             errorText={resourceVersionCreatorPage.resourceObjectErrorText}
             onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
@@ -219,7 +212,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                       >从上个版本导入</FTextButton>)
                       : undefined
                   }
-
                 </Space>}
               />
 

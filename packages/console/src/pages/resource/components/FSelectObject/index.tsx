@@ -142,9 +142,11 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
                 showUploadList={false}
               >
                 <FNormalButton
+                  theme="grey"
                 >{i18nMessage('upload_from_local')}</FNormalButton>
               </FUpload>
               <FNormalButton
+                theme="grey"
                 onClick={() => setModalVisible(true)}
               >{i18nMessage('choose_from_storage')}</FNormalButton>
             </Space>}

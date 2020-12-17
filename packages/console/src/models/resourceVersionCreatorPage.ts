@@ -722,11 +722,18 @@ const Model: ResourceVersionCreatorModelType = {
             dependencies: [],
           },
         });
+
+        const depResourceIds: string = (data.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
+
+        if (depResourceIds.length === 0) {
+          return;
+        }
+
         const params2: BatchInfoParamsType = {
-          resourceIds: (data.dependencies as any[]).map<string>((dr) => dr.resourceId).join(','),
+          resourceIds: depResourceIds,
         };
         const {data: data2} = yield call(batchInfo, params2);
-        // console.log(data2, '#ASGDFASDF');
+        console.log(data2, '#ASGDFASDF');
         const relations = data2.map((dd: any) => {
           return {
             id: dd.resourceId,
