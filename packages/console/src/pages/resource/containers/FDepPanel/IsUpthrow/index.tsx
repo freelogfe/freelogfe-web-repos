@@ -68,7 +68,8 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
       <Radio
         style={{lineHeight: '16px'}}
         checked={!resource.upthrow}
-        disabled={resource.upthrowDisabled && resource.upthrow}
+        // disabled={resource.upthrowDisabled && resource.upthrow}
+        disabled={resource.upthrowDisabled}
         onClick={() => onChangeIsUpthrow(false)}
       />
       {/*<span style={{color: '#666'}}>{i18nMessage('info_sign_contract')}</span>*/}

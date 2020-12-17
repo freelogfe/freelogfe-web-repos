@@ -164,6 +164,10 @@ export interface ImportLastVersionDataAction extends AnyAction {
   payload: 'baseProps' | 'optionProps' | 'deps';
 }
 
+export interface LeaveAndClearDataAction extends AnyAction {
+  type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -179,6 +183,7 @@ export interface ResourceVersionCreatorModelType {
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
+    leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -462,7 +467,7 @@ const Model: ResourceVersionCreatorModelType = {
           versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,
-          upthrowDisabled: !dr.latestVersion,
+          upthrowDisabled: !!dr.latestVersion,
           enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
             return {
               checked: false,
@@ -760,6 +765,12 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
       }
+    },
+    * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
     },
   },
 

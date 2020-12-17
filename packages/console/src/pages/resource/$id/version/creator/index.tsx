@@ -21,7 +21,7 @@ import {
   FetchRawPropsAction,
   FetchResourceInfoAction,
   HandleObjectInfoAction,
-  ImportLastVersionDataAction,
+  ImportLastVersionDataAction, LeaveAndClearDataAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -64,6 +64,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   React.useEffect(() => {
     // console.log(match, 'creator902jfsadlk');
     init();
+
+    return () => {
+      dispatch<LeaveAndClearDataAction>({
+        type: 'resourceVersionCreatorPage/leaveAndClearData',
+      });
+    }
   }, [match.params.id]);
 
   async function init() {
