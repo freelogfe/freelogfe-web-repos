@@ -8,7 +8,7 @@ import {
   batchInfo,
   BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType, info, InfoParamsType,
+  CreateVersionParamsType, getResourceVersionBySha1, GetResourceVersionBySha1ParamsType, info, InfoParamsType,
   lookDraft,
   LookDraftParamsType, resolveResources, resourceVersionInfo, ResourceVersionInfoParamsType1,
   saveVersionsDraft,
@@ -70,6 +70,7 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
 
   resourceObject: FSelectObject['resourceObject'];
   resourceObjectErrorText: string;
+  resourceUsedSha1: string;
 
   depRelationship: Relationships;
   dependencies: DepResources;
@@ -172,6 +173,10 @@ export interface LeaveAndClearDataAction extends AnyAction {
   type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
 }
 
+export interface GoToResourceDetailsBySha1 extends AnyAction {
+  type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1';
+}
+
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -187,6 +192,7 @@ export interface ResourceVersionCreatorModelType {
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
+    goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
     leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
@@ -206,6 +212,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   resourceObject: null,
   resourceObjectErrorText: '',
+  resourceUsedSha1: '',
 
   rawProperties: [],
 
@@ -743,7 +750,7 @@ const Model: ResourceVersionCreatorModelType = {
           resourceIds: depResourceIds,
         };
         const {data: data2} = yield call(batchInfo, params2);
-        console.log(data2, '#ASGDFASDF');
+        // console.log(data2, '#ASGDFASDF');
         const relations = data2.map((dd: any) => {
           return {
             id: dd.resourceId,
@@ -770,6 +777,17 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
       }
+    },
+    * goToResourceDetailsBySha1({}: GoToResourceDetailsBySha1, {put, call, select}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      const params: GetResourceVersionBySha1ParamsType = {
+        fileSha1: resourceVersionCreatorPage.resourceUsedSha1,
+      };
+      const {data} = yield call(getResourceVersionBySha1, params);
+      console.log(data, '2134sdfa90j');
     },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

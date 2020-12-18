@@ -143,6 +143,18 @@ export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | Res
   })
 }
 
+// 根据sha1查询版本列表 (查询文件对象所挂载的资源及版本)
+export interface GetResourceVersionBySha1ParamsType {
+  fileSha1: string;
+  projection?: string;
+}
+
+export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersionBySha1ParamsType) {
+  return request.get(`/v2/resources/files/${fileSha1}/versions`, {
+    params,
+  });
+}
+
 // 更新资源版本信息
 export interface UpdateResourceVersionInfoParamsType {
   version: string;
@@ -174,6 +186,18 @@ export interface LookDraftParamsType {
 export function lookDraft(params: LookDraftParamsType) {
   return request.get(`/v2/resources/${params.resourceId}/versions/drafts`);
 }
+
+// 校验文件是否被引入资源
+export interface ResourceIsUsedByOtherParamsType {
+  fileSha1: string;
+}
+
+export function resourceIsUsedByOther(params: ResourceIsUsedByOtherParamsType) {
+  return request.get(`/v2/resources/versions/isCanBeCreate`, {
+    params,
+  });
+}
+
 
 // 下载资源文件
 export interface ResourcesDownloadParamsType {
