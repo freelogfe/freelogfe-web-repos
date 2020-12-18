@@ -9,7 +9,7 @@ import {ConnectState, NodesModelState} from '@/models/connect';
 import {
   ChangeAction,
   CreateNodeAction,
-  InitModelStateAction,
+  InitModelStatesAction,
   OnChangeDomainAction,
   OnChangeNameAction
 } from "@/models/nodes";
@@ -24,8 +24,8 @@ interface NodeCreatorProps {
 
 function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
   React.useEffect(() => {
-    dispatch<InitModelStateAction>({
-      type: 'nodes/initModelState',
+    dispatch<InitModelStatesAction>({
+      type: 'nodes/initModelStates',
     });
   }, []);
 

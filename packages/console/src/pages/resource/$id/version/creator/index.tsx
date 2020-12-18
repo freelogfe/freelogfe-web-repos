@@ -25,7 +25,7 @@ import {
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
-import {withRouter} from 'umi';
+import {router, withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
 import {CloseCircleFilled} from '@ant-design/icons';
@@ -38,6 +38,7 @@ import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
+import FNoDataTip from "@/components/FNoDataTip";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -51,6 +52,33 @@ interface VersionCreatorProps {
 }
 
 function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, resourceInfo}: VersionCreatorProps & RouterTypes) {
+
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 70);
+  }
+
+  if (!resourceInfo.hasPermission) {
+    return (<div>
+      <FNoDataTip
+        height={minHeight}
+        tipText={'403,没权限访问'}
+        btnText={'将前往首页'}
+        onClick={() => {
+          router.replace('/');
+        }}
+      />
+    </div>);
+  }
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({

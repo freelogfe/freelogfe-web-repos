@@ -5,15 +5,24 @@ import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceIn
 import {update} from "@/services/resources";
 import {MarketPageModelState} from "@/models/marketPage";
 
+// import {InitModelStatesAction} from "@/models/nodes";
+
 export interface ResourceInfoPageModelState {
+  resourceID: string;
+
   isEditing: boolean;
   editorText: string;
   introductionErrorText: string;
+  hasPermission: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceInfoPage/change';
   payload: Partial<ResourceInfoPageModelState>;
+}
+
+export interface InitModelStatesAction extends AnyAction {
+  type: 'resourceInfoPage/initModelStates';
 }
 
 export interface OnChangeIsEditingAction extends AnyAction {
@@ -32,11 +41,13 @@ export interface OnChangeInfoAction extends AnyAction {
   id: string;
 }
 
+
 export interface ResourceInfoPageModelType {
   namespace: 'resourceInfoPage';
   state: ResourceInfoPageModelState;
   effects: {
     onChangeInfo: (action: OnChangeInfoAction, effects: EffectsCommandMap) => void;
+    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -46,14 +57,19 @@ export interface ResourceInfoPageModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceInfoPageModelState = {
+  resourceID: '',
+
+  isEditing: false,
+  editorText: '',
+  introductionErrorText: '',
+  hasPermission: true,
+};
+
 const Model: ResourceInfoPageModelType = {
   namespace: 'resourceInfoPage',
 
-  state: {
-    isEditing: false,
-    editorText: '',
-    introductionErrorText: '',
-  },
+  state: initStates,
 
   effects: {
     * onChangeInfo(action: OnChangeInfoAction, {call, put, select}: EffectsCommandMap) {
@@ -67,6 +83,14 @@ const Model: ResourceInfoPageModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: action.id,
+      });
+
+
+    },
+    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
       });
     },
   },

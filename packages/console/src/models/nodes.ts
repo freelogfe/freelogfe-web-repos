@@ -44,16 +44,15 @@ export interface OnChangeDomainAction extends AnyAction {
   payload: string;
 }
 
-export interface InitModelStateAction extends AnyAction {
-  type: 'nodes/initModelState';
-  // payload: string;
+export interface InitModelStatesAction extends AnyAction {
+  type: 'nodes/initModelStates';
 }
 
 export interface NodesModelType {
   namespace: 'nodes';
   state: WholeReadonly<NodesModelState>;
   effects: {
-    initModelState: (action: InitModelStateAction, effects: EffectsCommandMap) => void;
+    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchNodes: (action: FetchNodesAction, effects: EffectsCommandMap) => void;
     createNode: (action: CreateNodeAction, effects: EffectsCommandMap) => void;
     onChangeName: (action: OnChangeNameAction, effects: EffectsCommandMap) => void;
@@ -84,7 +83,7 @@ const Model: NodesModelType = {
     ...initStates,
   },
   effects: {
-    * initModelState({}: InitModelStateAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,

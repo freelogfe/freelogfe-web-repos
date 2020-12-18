@@ -27,6 +27,7 @@ const config: IConfig | any = {
             {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
             // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
             {exact: true, path: 'example', component: '../pages/market/index', title: '示例节点'},
+            {component: './404'},
           ],
         },
         {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
@@ -36,6 +37,7 @@ const config: IConfig | any = {
             {exact: true, path: 'creator', component: '../pages/node/creator', title: '节点创建'},
             {exact: true, path: 'exhibit/:id', component: '../pages/node/exhibit/$id', title: '展品管理'},
             {exact: true, path: ':id', component: '../pages/node/$id', title: '节点管理'},
+            {component: './404'},
           ]
         },
         {
@@ -67,16 +69,23 @@ const config: IConfig | any = {
                           component: '../pages/resource/$id/version/$version/success',
                           title: '版本创建成功',
                         },
-                      ]
+                        {component: './404'},
+                      ],
                     },
-                  ]
+                    {component: './404'},
+                  ],
                 },
-              ]
-            }
+                {component: './404'},
+              ],
+            },
+            {component: './404'},
           ]
         },
-      ]
+        // {component: './403'},
+        {component: './404'},
+      ],
     },
+    {component: './404'},
   ],
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html

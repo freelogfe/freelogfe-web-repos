@@ -6,10 +6,11 @@ import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "
 import BraftEditor from "braft-editor";
 // import {ChangeAction as VersionCreatorChangeAction} from "@/models/resourceVersionCreatorPage";
 import {ConnectState} from "@/models/connect";
-import {TempModelState} from "@/models/__template";
 
 export interface ResourceInfoModelState {
   resourceID: string;
+
+  hasPermission: boolean;
 
   info: null | {
     resourceId: string;
@@ -58,7 +59,11 @@ export interface FetchDataSourceAction extends AnyAction {
 }
 
 export interface FetchDraftDataAction extends AnyAction {
-  type: 'resourceInfo/fetchDraftData';
+  type: 'resourceInfo/fetchDraftData' | 'fetchDraftData';
+}
+
+export interface InitModelStatesAction extends AnyAction {
+  type: 'resourceInfo/initModelStates';
 }
 
 export interface ResourceInfoModelType {
@@ -67,6 +72,7 @@ export interface ResourceInfoModelType {
   effects: {
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     fetchDraftData: (action: FetchDraftDataAction, effects: EffectsCommandMap) => void;
+    initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     changeInfo: DvaReducer<ResourceInfoModelState, ChangeInfoAction>;
@@ -75,49 +81,52 @@ export interface ResourceInfoModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceInfoModelState = {
+  resourceID: '',
+  info: null,
+  draftData: null,
+  hasPermission: true,
+};
+
 const Model: ResourceInfoModelType = {
   namespace: 'resourceInfo',
 
-  state: {
-    resourceID: '',
-    info: null,
-    draftData: null,
-  },
+  state: initStates,
 
   effects: {
-    * fetchDataSource({payload}: FetchDataSourceAction, {call, put}: EffectsCommandMap): Generator<any, void, any> {
+    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap): Generator<any, void, any> {
+      const {user}: ConnectState = yield select(({user}: ConnectState) => ({
+        user,
+      }));
       const params = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(info, params);
       // console.log(data, 'DDDDDDDD');
-      yield put<ChangeInfoAction>({
-        type: 'changeInfo',
-        payload: data,
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          info: data,
+          hasPermission: data.userId === user.info?.userId,
+        },
       });
 
-      // yield put<FetchPoliciesAction>({
-      //   type: 'resourceAuthPage/fetchPolicies',
-      //   payload: data.policies,
-      // });
-
-      // yield put<FetchAuthorizeAction>({
-      //   type: 'resourceAuthPage/fetchAuthorize',
-      //   payload: data.resourceId,
-      // });
-      //
-      // yield put<FetchAuthorizedAction>({
-      //   type: 'resourceAuthPage/fetchAuthorized',
-      //   payload: {
-      //     baseResourceId: data.resourceId
-      //   },
-      // });
+      if (data.userId === user.info?.userId) {
+        yield put<FetchDraftDataAction>({
+          type: 'fetchDraftData',
+        });
+      }
     },
     * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {
       const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
         resourceInfo,
       }));
+
+      if (!resourceInfo.hasPermission) {
+        return;
+      }
+
       const params: LookDraftParamsType = {
         resourceId: resourceInfo.resourceID,
       };
@@ -136,7 +145,13 @@ const Model: ResourceInfoModelType = {
           draftData: data.draftData,
         }
       });
-    }
+    },
+    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
   },
 
   reducers: {

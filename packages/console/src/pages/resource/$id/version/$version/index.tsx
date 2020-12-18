@@ -9,7 +9,7 @@ import {Col, Drawer, Row, Space} from 'antd';
 import {DownloadOutlined, CloseCircleFilled} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState} from '@/models/connect';
 import FHorn from '@/pages/resource/components/FHorn';
 import {
   UpdateDataSourceAction,
@@ -21,7 +21,7 @@ import BraftEditor, {EditorState} from 'braft-editor';
 import {i18nMessage} from '@/utils/i18n';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
-import {withRouter} from 'umi';
+import {router, withRouter} from 'umi';
 import {resourcesDownload} from "@/services/resources";
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
@@ -31,12 +31,14 @@ import {CUSTOM_KEY} from "@/utils/regexp";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
+import FNoDataTip from "@/components/FNoDataTip";
 
 
 interface VersionEditorProps {
   dispatch: Dispatch;
   version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
+  resourceInfo: ResourceInfoModelState;
   match: {
     params: {
       id: string;
@@ -45,11 +47,38 @@ interface VersionEditorProps {
   }
 }
 
-function VersionEditor({dispatch, route, version, resourceVersionEditorPage, match}: VersionEditorProps & RouterTypes) {
+function VersionEditor({dispatch, route, version, resourceVersionEditorPage, match, resourceInfo}: VersionEditorProps & RouterTypes) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
   // const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
+
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 70);
+  }
+
+  if (!resourceInfo.hasPermission) {
+    return (<div>
+      <FNoDataTip
+        height={minHeight}
+        tipText={'403,没权限访问'}
+        btnText={'将前往首页'}
+        onClick={() => {
+          router.replace('/');
+        }}
+      />
+    </div>);
+  }
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -550,9 +579,10 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   </>);
 }
 
-export default withRouter(connect(({resourceVersionEditorPage}: ConnectState) => ({
+export default withRouter(connect(({resourceVersionEditorPage, resourceInfo}: ConnectState) => ({
   version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
+  resourceInfo: resourceInfo,
 }))(VersionEditor));
 
 interface HeaderProps {
