@@ -3,7 +3,7 @@ import styles from './index.less';
 import FSiderLayout from '@/layouts/FSiderLayout';
 import Sider from './Sider';
 import Content from './Content';
-import NoContent from './NoContent';
+import NoBucket from './NoBucket';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import FContentLayout from "@/layouts/FContentLayout";
 import Header from "./Header";
@@ -15,13 +15,21 @@ interface StorageProps {
 }
 
 function Storage({storageHomePage}: StorageProps) {
+
+
+  if (storageHomePage.bucketList.length === 0) {
+    return (<>
+      <NoBucket/>
+      </>)
+  }
+
   return (<FLeftSiderLayout
     // contentClassName={storageHomePage.objectList.length === 0 ? styles.backgroundTransparent : ''}
     header={<Header/>}
     sider={<Sider/>}
     type="table"
     contentStyles={{
-      backgroundColor: storageHomePage.objectList.length === 0 ? 'transparent': undefined,
+      backgroundColor: storageHomePage.objectList.length === 0 ? 'transparent' : undefined,
       boxShadow: storageHomePage.objectList.length === 0 ? 'none' : undefined,
     }}
     hasBottom={storageHomePage.objectList.length !== 0}

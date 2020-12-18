@@ -44,6 +44,8 @@ function Sider({storage, dispatch}: SiderProps) {
               onClick={() => dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
+                  newBucketName: '',
+                  newBucketNameError: false,
                   newBucketModalVisible: true,
                 },
               })}

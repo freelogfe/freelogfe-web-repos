@@ -26,6 +26,7 @@ import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
+// import {} from '../NoBucket';
 import {CSSProperties} from "react";
 import FContentLayout from "@/layouts/FContentLayout";
 
@@ -127,6 +128,10 @@ function Content({storage, dispatch}: ContentProps) {
       type: 'storageHomePage/deleteObject',
       payload: record.id,
     })
+  }
+
+  if (storage.bucketList.length === 0 )  {
+    // return
   }
 
   return (<div>
