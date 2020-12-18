@@ -85,18 +85,18 @@ function Auth({dispatch, route, auth, match, resourceInfo}: AuthProps & RouterTy
     setMinHeight(window.innerHeight - 70);
   }
 
-  if (!resourceInfo.hasPermission) {
-    return (<div>
-      <FNoDataTip
-        height={minHeight}
-        tipText={'403,没权限访问'}
-        btnText={'将前往首页'}
-        onClick={() => {
-          router.replace('/');
-        }}
-      />
-    </div>);
-  }
+  // if (!resourceInfo.hasPermission) {
+  //   return (<div>
+  //     <FNoDataTip
+  //       height={minHeight}
+  //       tipText={'403,没权限访问'}
+  //       btnText={'将前往首页'}
+  //       onClick={() => {
+  //         router.replace('/');
+  //       }}
+  //     />
+  //   </div>);
+  // }
 
   React.useEffect(() => {
     // console.log(route, match, 'RM');

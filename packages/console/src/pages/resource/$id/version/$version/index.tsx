@@ -67,18 +67,18 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
     setMinHeight(window.innerHeight - 70);
   }
 
-  if (!resourceInfo.hasPermission) {
-    return (<div>
-      <FNoDataTip
-        height={minHeight}
-        tipText={'403,没权限访问'}
-        btnText={'将前往首页'}
-        onClick={() => {
-          router.replace('/');
-        }}
-      />
-    </div>);
-  }
+  // if (!resourceInfo.hasPermission) {
+  //   return (<div>
+  //     <FNoDataTip
+  //       height={minHeight}
+  //       tipText={'403,没权限访问'}
+  //       btnText={'将前往首页'}
+  //       onClick={() => {
+  //         router.replace('/');
+  //       }}
+  //     />
+  //   </div>);
+  // }
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({

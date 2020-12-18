@@ -29,7 +29,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
 
   return (<FDropdown
     // visible={true}
-    overlay={nodes.list.length === 0 ? (<div>
+    overlay={nodes.list.length > 0 ? (<div>
       <FMenu
         value={nodeId || ''}
         onClick={onClickNodes}

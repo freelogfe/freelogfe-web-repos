@@ -101,18 +101,18 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
     });
   }
 
-  if (!resourceInfo.hasPermission) {
-    return (<div>
-      <FNoDataTip
-        height={minHeight}
-        tipText={'403,没权限访问'}
-        btnText={'将前往首页'}
-        onClick={() => {
-          router.replace('/');
-        }}
-      />
-    </div>);
-  }
+  // if (!resourceInfo.hasPermission) {
+  //   return (<div>
+  //     <FNoDataTip
+  //       height={minHeight}
+  //       tipText={'403,没权限访问'}
+  //       btnText={'将前往首页'}
+  //       onClick={() => {
+  //         router.replace('/');
+  //       }}
+  //     />
+  //   </div>);
+  // }
 
   return (
     <FLeftSiderLayout
