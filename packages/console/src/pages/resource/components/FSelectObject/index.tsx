@@ -14,6 +14,7 @@ import {i18nMessage} from "@/utils/i18n";
 import FObjectSelector from "@/containers/FObjectSelector";
 import {getSHA1Hash} from "@/utils/tools";
 import {resourceIsUsedByOther, ResourceIsUsedByOtherParamsType} from "@/services/resources";
+import FDrawer from "@/components/FDrawer";
 
 const errorTexts = {
   duplicated: i18nMessage('resource_exist'),
@@ -188,12 +189,12 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         />)
     }
 
-    <Drawer
+    <FDrawer
       title={'选择对象'}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}
-      bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+      // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <FObjectSelector
         visibleResourceType={resourceType}
@@ -204,7 +205,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         // onDelete={(value) => console.log(value, '32dsfewc8ioj')}
         onDelete={() => onChange && onChange(null)}
       />
-    </Drawer>
+    </FDrawer>
   </div>);
 }
 

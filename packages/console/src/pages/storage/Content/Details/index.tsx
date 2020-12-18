@@ -300,14 +300,14 @@ function Details({editor, dispatch}: DetailsProps) {
         </Space>
       </div>
 
-      <Drawer
+      <FDrawer
         title="添加依赖"
         width={640}
         visible={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
       >
         <SelectDeps/>
-      </Drawer>
+      </FDrawer>
     </div>
 
     <FBasePropsEditorDrawer

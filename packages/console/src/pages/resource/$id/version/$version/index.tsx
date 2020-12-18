@@ -32,6 +32,7 @@ import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
+import FDrawer from "@/components/FDrawer";
 
 
 interface VersionEditorProps {
@@ -437,7 +438,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
       {/*</FContentLayout>*/}
     </FLeftSiderLayout>
 
-    <Drawer
+    <FDrawer
       title={'编辑基础属性'}
       onClose={() => {
         dispatch<ChangeAction>({
@@ -454,7 +455,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
       visible={resourceVersionEditorPage.basePEditorVisible}
       width={720}
       // className={styles}
-      bodyStyle={{paddingLeft: 40, paddingRight: 40, overflow: 'auto'}}
+      // bodyStyle={{paddingLeft: 40, paddingRight: 40, overflow: 'auto'}}
     >
       <Space
         size={20}
@@ -575,7 +576,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           >保存</FNormalButton>
         </div>
       </Space>
-    </Drawer>
+    </FDrawer>
   </>);
 }
 
