@@ -21,7 +21,7 @@ import {
   FetchRawPropsAction,
   FetchResourceInfoAction,
   HandleObjectInfoAction,
-  ImportLastVersionDataAction, LeaveAndClearDataAction,
+  ImportLastVersionDataAction, InitModelStatesAction, LeaveAndClearDataAction,
   SaveDraftAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
@@ -87,6 +87,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         route: route,
       },
     });
+
+    return () => {
+      dispatch<InitModelStatesAction>({
+        type: 'resourceVersionCreatorPage/initModelStates',
+      });
+    };
   }, [route]);
 
   React.useEffect(() => {

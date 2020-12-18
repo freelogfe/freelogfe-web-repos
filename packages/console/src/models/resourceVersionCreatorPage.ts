@@ -116,6 +116,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceVersionCreatorPageModelState>;
 }
 
+export interface InitModelStatesAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/initModelStates';
+}
+
 export interface FetchDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchDraft';
 }
@@ -184,6 +188,7 @@ export interface ResourceVersionCreatorModelType {
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
     leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
+    initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketPageModelState, ChangeAction>;
@@ -657,7 +662,7 @@ const Model: ResourceVersionCreatorModelType = {
         version: resourceVersionCreatorPage.latestVersion,
       };
       const {data} = yield call(resourceVersionInfo, params);
-      console.log(data, '2093jdsl;kfasdf');
+      // console.log(data, '2093jdsl;kfasdf');
 
       if (payload === 'baseProps') {
         const allKeys: string[] = [
@@ -767,6 +772,12 @@ const Model: ResourceVersionCreatorModelType = {
       }
     },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
+    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
