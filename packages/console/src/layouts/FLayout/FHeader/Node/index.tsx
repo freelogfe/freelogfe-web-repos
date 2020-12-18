@@ -29,7 +29,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
 
   return (<FDropdown
     // visible={true}
-    overlay={nodes.list.length > 0 ? (<div>
+    overlay={nodes.list.length === 0 ? (<div>
       <FMenu
         value={nodeId || ''}
         onClick={onClickNodes}
@@ -47,7 +47,12 @@ function Node({dispatch, nodes, global}: NodeProps) {
     </div>) : (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>
       <div style={{height: 30}}/>
-      <FNormalButton size="small">创建节点</FNormalButton>
+      <FNormalButton
+        size="small"
+        onClick={() => {
+          router.push('/node/creator');
+        }}
+      >创建节点</FNormalButton>
     </div>)}>
     <Nav
       onClick={() => null}
