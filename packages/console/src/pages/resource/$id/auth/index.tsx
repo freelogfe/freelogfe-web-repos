@@ -127,8 +127,12 @@ function Auth({dispatch, route, auth, match, resourceInfo}: AuthProps & RouterTy
     });
   }, []);
 
-  return (<FLeftSiderLayout sider={<Sider/>}
-                            header={<FTitleText text={i18nMessage('authorization_infomation')} type={'h2'}/>}>
+  return (<FLeftSiderLayout
+    sider={<Sider/>}
+    header={<FTitleText
+      text={i18nMessage('authorization_infomation')}
+      type="h1"
+    />}>
     <FFormLayout>
       <FFormLayout.FBlock title={i18nMessage('authorization_plan')}>
         <FPolicies/>

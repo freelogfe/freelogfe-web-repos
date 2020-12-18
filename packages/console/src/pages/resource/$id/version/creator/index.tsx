@@ -374,7 +374,7 @@ interface HeaderProps {
 
 function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={i18nMessage('create_new_version')} type={'h2'}/>
+    <FTitleText text={i18nMessage('create_new_version')} type="h1"/>
 
     <Space size={30}>
       <FTextButton onClick={onClickCache}>{i18nMessage('save_as_draft')}</FTextButton>

@@ -29,7 +29,10 @@ function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
     });
   }, []);
 
-  return (<FContentLayout header={<FTitleText type="h1" text={'创建节点'}/>}>
+  return (<FContentLayout header={<FTitleText
+    type="h1"
+    text={'创建节点'}/>}
+  >
     {/*<div className={styles.header}>*/}
     {/*  */}
     {/*</div>*/}

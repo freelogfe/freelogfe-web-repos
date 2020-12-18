@@ -158,7 +158,7 @@ interface HeaderProps {
 
 function Header({onClickCreate, disabled = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={i18nMessage('create_resource')} type={'h2'}/>
+    <FTitleText text={i18nMessage('create_resource')} type="h1"/>
 
     <Space size={30}>
       {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}

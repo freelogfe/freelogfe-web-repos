@@ -117,7 +117,10 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
   return (
     <FLeftSiderLayout
       sider={<Sider/>}
-      header={<FTitleText text={i18nMessage('resource_information')} type={'h2'}/>}
+      header={<FTitleText
+        text={i18nMessage('resource_information')}
+        type="h1"
+      />}
     >
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}

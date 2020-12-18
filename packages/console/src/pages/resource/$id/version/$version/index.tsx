@@ -597,7 +597,7 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
 
   return (
     <div className={styles.Header}>
-      <FTitleText text={version} type="h2"/>
+      <FTitleText text={version} type="h1"/>
       <div style={{height: 10}}/>
       <Space size={0}>
         <FContentText type="additional2" text={i18nMessage('release_date') + '：' + signingDate}/>
