@@ -51,10 +51,10 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
           <FSwitch
             checked={exhibitInfoPage.isOnline}
-            onChange={(value) => dispatch<UpdateStatusAction>({
-              type: 'exhibitInfoPage/updateStatus',
-              payload: value ? 1 : 0,
-            })}
+            // onChange={(value) => dispatch<UpdateStatusAction>({
+            //   type: 'exhibitInfoPage/updateStatus',
+            //   payload: value ? 1 : 0,
+            // })}
           />
         </Space>
       </div>
