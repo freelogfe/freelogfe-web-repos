@@ -169,6 +169,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
             </Space>)
             : <Space size={30}>
               <FUpload
+                accept={resourceType === 'image' ? 'image/*' : '*'}
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
