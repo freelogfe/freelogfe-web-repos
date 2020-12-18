@@ -28,7 +28,7 @@ function Resources({dispatch, resource}: ResourceProps) {
     setContentMinHeight(window.innerHeight - 140);
   }
 
-  if (resource.dataSource.length === 0 && !resource.inputText && resource.resourceType === '-1' && resource.resourceStatus === '-2') {
+  if (resource.dataSource.length === 0 && resource.inputText === '' && resource.resourceType === '-1' && resource.resourceStatus === '2') {
     return (<FNoDataTip
       height={contentMinHeight}
       tipText={'未创建任何资源'}
