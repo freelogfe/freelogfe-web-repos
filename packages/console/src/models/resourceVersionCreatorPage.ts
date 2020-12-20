@@ -392,7 +392,7 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      if (!resourceVersionCreatorPage.resourceObject) {
+      if (!resourceVersionCreatorPage.resourceObject || resourceVersionCreatorPage.resourceObject.id === '') {
         return;
       }
       const params: FilePropertyParamsType = {
