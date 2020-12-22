@@ -60,7 +60,7 @@ const CONTRACT_STATUS_TIPS = {
 
 export default {
   name: 'sign-policy-list',
-  // components: { ContractDetail, ContractPolicy },
+  components: { ContractDetail, ContractPolicy },
   props: {
     defaultContract: Object,
     contracts: {

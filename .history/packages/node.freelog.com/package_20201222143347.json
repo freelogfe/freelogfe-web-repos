@@ -7,7 +7,7 @@
   "scripts": {
     "deploy": "freelog-ci deploy",
     "dev": "lerna link && cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
-    "build": "rimraf  -rf ./dist/** && webpack --config ./config/webpack.prod.js",
+    "build": "rm -rf ./dist/** && webpack --config ./config/webpack.prod.js",
     "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
     "build:prod": "NODE_ENV=production npm run build",
     "build:beta": "NODE_ENV=beta npm run build",
@@ -26,7 +26,6 @@
     "element-ui": "^2.13.1",
     "import-html-entry": "^1.7.3",
     "qiankun": "^2.0.21",
-    "rimraf": "^3.0.2",
     "single-spa": "^5.5.2",
     "source-map-loader": "^0.2.4",
     "style-ext-html-webpack-plugin": "^4.1.2",

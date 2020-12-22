@@ -9,7 +9,7 @@
 import { execScripts } from 'import-html-entry'
 import { getExternalStyleSheets } from 'import-html-entry/lib/index'
 import { genLinkReplaceSymbol } from 'import-html-entry/lib/process-tpl'
-import { createSandboxContainer } from 'qiankun/lib/sandbox/index'
+import { createSandbox } from 'qiankun/lib/sandbox/index'
 import { registerApplication, start, mountRootParcel, RegisterApplicationConfig, LifeCycles, Parcel } from 'single-spa'
 import { isFunction } from './utils'
 
@@ -110,12 +110,12 @@ async function loodApp(app: ILoadableApp, configuration: ILoadableConfiguration 
   const appWrapper: HTMLElement| ShadowRoot = getAppWrapper(appName, stylesHTML + rawContainerContent, strictStyleIsolation)
   const appRootGetter = () => strictStyleIsolation ? appWrapper.shadowRoot : appWrapper
 
-  let global: any = window
+  let global: Window = window
   let mountSandbox = () => Promise.resolve()
   let unmountSandbox = () => Promise.resolve()
   if (sandbox) {
-    const sandboxInstance = createSandboxContainer(appName, appRootGetter, false, false)
-    global = sandboxInstance.instance
+    const sandboxInstance = createSandbox(appName, appRootGetter, false, false)
+    global = sandboxInstance.proxy
     mountSandbox = sandboxInstance.mount
     unmountSandbox = sandboxInstance.unmount
   }
