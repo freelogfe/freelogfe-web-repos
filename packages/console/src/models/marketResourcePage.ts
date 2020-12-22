@@ -67,9 +67,11 @@ export interface MarketResourcePageModelState {
     id: string;
     name: string;
     type: string;
+    status: 0 | 1;
     policies: {
       checked: boolean;
       id: string;
+      status: 0 | 1;
       name: string;
       text: string;
     }[];
@@ -285,12 +287,14 @@ const Model: MarketResourcePageModelType = {
             id: rs.resourceId,
             name: rs.resourceName,
             type: rs.resourceType,
+            status: rs.status,
             policies: rs.policies.map((rsp: any) => ({
-              checked: true,
+              checked: false,
               id: rsp.policyId,
               name: rsp.policyName,
               text: rsp.policyText,
-            }))
+              status: rsp.status,
+            })),
           }))
         },
       });

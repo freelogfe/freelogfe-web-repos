@@ -46,7 +46,20 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
     ? (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>
       <div style={{height: 30}}/>
-      <FNormalButton size="small">创建Bucket</FNormalButton>
+      <FNormalButton
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'storageHomePage/change',
+            payload: {
+              newBucketName: '',
+              newBucketNameError: false,
+              newBucketModalVisible: true,
+            },
+          });
+          router.push('/storage');
+        }}
+        size="small"
+      >创建Bucket</FNormalButton>
     </div>)
     : (<div>
       <FMenu
@@ -69,6 +82,8 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
             payload: {
+              newBucketName: '',
+              newBucketNameError: false,
               newBucketModalVisible: true,
             },
           });

@@ -7,6 +7,7 @@ import {Drawer, Space} from "antd";
 import {FFileText} from "@/components/FIcons";
 import {FNormalButton, FTextButton} from "@/components/FButton";
 import PolicyTemplates from "./PolicyTemplates";
+import FDrawer from "@/components/FDrawer";
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -47,12 +48,12 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
     setTextError(verifyText(value, usedTexts));
   }
 
-  return (<Drawer
+  return (<FDrawer
     title={'添加授权策略'}
     onClose={() => onCancel && onCancel()}
     visible={visible}
     width={720}
-    bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+    // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
     <FInput
       className={styles.newTitle}
@@ -102,7 +103,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
       </Space>
     </div>
 
-    <Drawer
+    <FDrawer
       width={640}
       visible={templateVisible}
       title={'策略模板'}
@@ -115,8 +116,8 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
           onChangeTextInput(p.text);
           setTemplateVisible(false);
         }}/>
-    </Drawer>
-  </Drawer>);
+    </FDrawer>
+  </FDrawer>);
 }
 
 export default FPolicyBuilder;

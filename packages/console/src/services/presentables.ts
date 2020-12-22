@@ -91,8 +91,8 @@ export function presentableDetails(params: PresentableDetailsParamsType1 | Prese
 // 查询展品分页列表
 export interface PresentablesParamsType {
   nodeId: number;
-  page?: number;
-  pageSize?: number;
+  skip?: number;
+  limit?: number;
   resourceType?: string;
   omitResourceType?: string;
   onlineStatus?: number;

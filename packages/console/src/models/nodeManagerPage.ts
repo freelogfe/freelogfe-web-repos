@@ -146,8 +146,9 @@ const Model: NodeManagerModelType = {
 
       const params: PresentablesParamsType = {
         nodeId: nodeManagerPage.nodeId,
-        page: nodeManagerPage.pageCurrent,
-        pageSize: nodeManagerPage.pageSize,
+        limit: 100,
+        // page: nodeManagerPage.pageCurrent,
+        // pageSize: nodeManagerPage.pageSize,
         keywords: nodeManagerPage.exhibitInputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.selectedStatus),
         resourceType: nodeManagerPage.selectedType === '-1' ? undefined : nodeManagerPage.selectedType,
@@ -206,6 +207,7 @@ const Model: NodeManagerModelType = {
 
       const params: PresentablesParamsType = {
         nodeId: nodeManagerPage.nodeId,
+        limit: 100,
         // page: nodeManagerPage.pageCurrent,
         // pageSize: nodeManagerPage.pageSize,
         keywords: nodeManagerPage.themeInputFilter || undefined,

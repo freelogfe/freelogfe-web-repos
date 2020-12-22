@@ -110,6 +110,14 @@ function Property({data, onChange}: PropertyProps) {
                   customOptionError = '不超过500个字符';
                 }
 
+                if (!customOptionError) {
+                  const allOptions = value.split(',');
+                  const setS = new Set(allOptions);
+                  if (setS.size !== allOptions.length) {
+                    customOptionError = '选项不能重复';
+                  }
+                }
+
                 onChangeData({
                   customOption: e.target.value,
                   customOptionError: customOptionError,

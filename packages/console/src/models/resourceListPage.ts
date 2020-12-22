@@ -97,6 +97,7 @@ const Model: ResourceListPageModelType = {
         isSelf: 1,
       };
       const {data} = yield call(list, params);
+      console.log(data, 'data')
 
       yield put<ChangeAction>({
         type: 'change',
@@ -114,6 +115,8 @@ const Model: ResourceListPageModelType = {
             })),
           ],
           totalNum: data.totalItem,
+          // dataSource: [],
+          // totalNum: 0,
         },
       });
     },

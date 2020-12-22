@@ -13,6 +13,8 @@ import {fileIsExist, objectDetails, ObjectDetailsParamsType2, uploadFile} from "
 import {i18nMessage} from "@/utils/i18n";
 import FObjectSelector from "@/containers/FObjectSelector";
 import {getSHA1Hash} from "@/utils/tools";
+import {resourceIsUsedByOther, ResourceIsUsedByOtherParamsType} from "@/services/resources";
+import FDrawer from "@/components/FDrawer";
 
 const errorTexts = {
   duplicated: i18nMessage('resource_exist'),
@@ -34,12 +36,15 @@ export interface FSelectObject {
   readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
   readonly onChange?: (file: FSelectObject['resourceObject'], deps?: { name: string; type: 'resource' | 'object'; versionRange: string; }[]) => void;
+
+  onError?(value: { sha1: string, errorText: string }): void;
+
   errorText?: string;
 
   onChangeErrorText?(text: string): void;
 }
 
-function FSelectObject({resourceObject, onChange, resourceType, errorText, onChangeErrorText}: FSelectObject) {
+function FSelectObject({resourceObject, onChange, resourceType, errorText, onChangeErrorText, onError}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -55,6 +60,16 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     };
     const {data} = await objectDetails(params);
     // console.log(data, '@#RCXFW');
+
+    const params3: ResourceIsUsedByOtherParamsType = {
+      fileSha1: data.sha1,
+    };
+
+    const {data: data3} = await resourceIsUsedByOther(params3);
+    if (!data3) {
+      return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
+    }
+
     onChange && onChange({
       id: data.sha1,
       name: data.objectName,
@@ -74,7 +89,22 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       return onChangeErrorText && onChangeErrorText(errorTexts.size);
     }
 
-    const sha1 = await getSHA1Hash(file);
+    const sha1: string = await getSHA1Hash(file);
+
+    const params3: ResourceIsUsedByOtherParamsType = {
+      fileSha1: sha1,
+    };
+
+    const {data: data3} = await resourceIsUsedByOther(params3);
+    if (!data3) {
+      setIsChecking(false);
+      // return onError && onError({
+      //   sha1: sha1,
+      //   errorText: '被别人使用',
+      // });
+      return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
+    }
+
     const {data: isExists} = await fileIsExist({sha1});
     // console.log(isExist[0], 'datadata23089ujsd');
     setIsChecking(false);
@@ -89,6 +119,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         time: '',
       });
     }
+
 
     onChange && onChange({
       id: '',
@@ -109,7 +140,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     });
 
     onChange && onChange({
-      id: data.sha1,
+      id: sha1,
       name: file.name,
       size: file.size,
       path: '',
@@ -127,8 +158,8 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
           {errorText &&
           <div className={styles.objectErrorInfo}>
             <span>{errorText}</span>
-            <span>&nbsp;&nbsp;</span>
-            {errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}
+            {/*<span>&nbsp;&nbsp;</span>*/}
+            {/*{errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}*/}
           </div>}
 
           {isChecking
@@ -138,6 +169,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
             </Space>)
             : <Space size={30}>
               <FUpload
+                accept={resourceType === 'image' ? 'image/*' : '*'}
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
@@ -158,12 +190,12 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         />)
     }
 
-    <Drawer
+    <FDrawer
       title={'选择对象'}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}
-      bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+      // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <FObjectSelector
         visibleResourceType={resourceType}
@@ -174,7 +206,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         // onDelete={(value) => console.log(value, '32dsfewc8ioj')}
         onDelete={() => onChange && onChange(null)}
       />
-    </Drawer>
+    </FDrawer>
   </div>);
 }
 

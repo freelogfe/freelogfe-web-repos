@@ -6,6 +6,7 @@ import FInput from "@/components/FInput";
 import {FCircleButton, FNormalButton, FTextButton} from "@/components/FButton";
 import {CUSTOM_KEY} from "@/utils/regexp";
 import {Data} from "@/components/FCustomProperties";
+import FDrawer from "@/components/FDrawer";
 
 interface FBasePropsEditorDrawerProps {
   visible: boolean;
@@ -70,7 +71,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     });
   }
 
-  return (<Drawer
+  return (<FDrawer
     title={'补充属性'}
     onClose={() => {
       onCancel && onCancel();
@@ -78,7 +79,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     visible={visible}
     width={720}
     // className={styles}
-    bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+    // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
     <Space
       size={30}
@@ -247,7 +248,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
         >确定</FNormalButton>
       </Space>
     </div>
-  </Drawer>);
+  </FDrawer>);
 }
 
 export default FBasePropsEditorDrawer;

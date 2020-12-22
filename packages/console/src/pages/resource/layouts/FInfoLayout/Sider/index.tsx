@@ -8,7 +8,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
-import {ChangeAction, FetchDataSourceAction} from "@/models/resourceInfo";
+import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import {FetchDraftDataAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 
@@ -42,6 +42,12 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
 
   React.useEffect(() => {
     onChangeMatchParamsId();
+
+    return () => {
+      dispatch<InitModelStatesAction>({
+        type: 'resourceInfo/initModelStates',
+      });
+    };
   }, [match.params.id]);
 
   async function onChangeMatchParamsId() {
@@ -51,9 +57,9 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         resourceID: match.params.id,
       }
     });
-    dispatch<FetchDraftDataAction>({
-      type: 'resourceInfo/fetchDraftData',
-    });
+    // dispatch<FetchDraftDataAction>({
+    //   type: 'resourceInfo/fetchDraftData',
+    // });
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,

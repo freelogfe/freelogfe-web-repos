@@ -9,7 +9,7 @@ import {ConnectState, NodesModelState} from '@/models/connect';
 import {
   ChangeAction,
   CreateNodeAction,
-  InitModelStateAction,
+  InitModelStatesAction,
   OnChangeDomainAction,
   OnChangeNameAction
 } from "@/models/nodes";
@@ -24,12 +24,15 @@ interface NodeCreatorProps {
 
 function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
   React.useEffect(() => {
-    dispatch<InitModelStateAction>({
-      type: 'nodes/initModelState',
+    dispatch<InitModelStatesAction>({
+      type: 'nodes/initModelStates',
     });
   }, []);
 
-  return (<FContentLayout header={<FTitleText type="h1" text={'创建节点'}/>}>
+  return (<FContentLayout header={<FTitleText
+    type="h1"
+    text={'创建节点'}/>}
+  >
     {/*<div className={styles.header}>*/}
     {/*  */}
     {/*</div>*/}

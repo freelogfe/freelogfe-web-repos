@@ -255,26 +255,26 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
                 dataSource={dataSource as any}
                 pagination={false}
               />
-              <div style={{height: 20}}/>
-              <div className={styles.pagination}>
-                <FPagination
-                  current={nodeManagerPage.pageCurrent}
-                  onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({
-                    type: 'nodeManagerPage/onChangeExhibit',
-                    payload: {
-                      pageCurrent: value,
-                    },
-                  })}
-                  pageSize={nodeManagerPage.pageSize}
-                  onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({
-                    type: 'nodeManagerPage/onChangeExhibit',
-                    payload: {
-                      pageSize: value,
-                    },
-                  })}
-                  total={nodeManagerPage.totalNum}
-                />
-              </div>
+              {/*<div style={{height: 20}}/>*/}
+              {/*<div className={styles.pagination}>*/}
+              {/*  <FPagination*/}
+              {/*    current={nodeManagerPage.pageCurrent}*/}
+              {/*    onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({*/}
+              {/*      type: 'nodeManagerPage/onChangeExhibit',*/}
+              {/*      payload: {*/}
+              {/*        pageCurrent: value,*/}
+              {/*      },*/}
+              {/*    })}*/}
+              {/*    pageSize={nodeManagerPage.pageSize}*/}
+              {/*    onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({*/}
+              {/*      type: 'nodeManagerPage/onChangeExhibit',*/}
+              {/*      payload: {*/}
+              {/*        pageSize: value,*/}
+              {/*      },*/}
+              {/*    })}*/}
+              {/*    total={nodeManagerPage.totalNum}*/}
+              {/*  />*/}
+              {/*</div>*/}
             </div>)
         }
       </>)

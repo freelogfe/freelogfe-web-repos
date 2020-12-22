@@ -14,6 +14,7 @@ import FixedFooter from './FixedFooter';
 import {router} from 'umi';
 import FTooltip from '@/components/FTooltip';
 import {ChangeAction} from '@/models/marketResourcePage';
+import FContentLayout from "@/layouts/FContentLayout";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -29,20 +30,19 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
     return null;
   }
 
-  return (<FCenterLayout>
-    <div className={styles.header}>
-      <FTitleText text={'确认签约'}/>
-      <div style={{width: 50}}/>
-      <div className={styles.headerResource}>
-        <img
-          alt={''}
-          src={marketResourcePage.resourceInfo?.cover || undefined}
-        />
-        <div style={{width: 8}}/>
-        <FContentText text={marketResourcePage.resourceInfo?.name}/>
-      </div>
+  return (<FContentLayout header={<div className={styles.header}>
+    <FTitleText text={'确认签约'}/>
+    <div style={{width: 50}}/>
+    <div className={styles.headerResource}>
+      <img
+        alt={''}
+        src={marketResourcePage.resourceInfo?.cover || undefined}
+      />
+      <div style={{width: 8}}/>
+      <FContentText text={marketResourcePage.resourceInfo?.name}/>
     </div>
-
+  </div>}>
+    
     <div className={styles.content}>
       <div>
         <FTitleText
@@ -100,7 +100,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
 
     <FixedFooter/>
 
-  </FCenterLayout>);
+  </FContentLayout>);
 }
 
 export default connect(({marketResourcePage, nodes}: ConnectState) => ({

@@ -11,6 +11,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<TempModelState>;
 }
 
+export interface InitModelStatesAction extends AnyAction {
+  type: 'initModelStates';
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo';
 }
@@ -20,6 +24,7 @@ export interface TempModelType {
   state: TempModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<TempModelState, ChangeAction>;
@@ -29,14 +34,22 @@ export interface TempModelType {
   };
 }
 
+const initStates: TempModelState = {
+  info: null,
+};
+
 const Model: TempModelType = {
   namespace: 'temp',
-  state: {
-    info: null,
-  },
+  state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
 
+    },
+    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
     },
   },
   reducers: {

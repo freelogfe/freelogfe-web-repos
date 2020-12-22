@@ -6,6 +6,8 @@ import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/models/connect";
 import {ChangeAction, OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
+import {FTextButton} from '@/components/FButton';
+import {router} from "umi";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
@@ -16,14 +18,14 @@ interface NodeSelectorProps {
 function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) {
   const selectedNode = nodes.list.find((n) => n.nodeId === marketResourcePage.selectedNodeID);
 
-  return (<Dropdown overlay={(
+  return (<Dropdown overlay={nodes.list.length > 0 ? (
     <Menu
       selectable={false}
       className={styles.Menu}
       mode="vertical"
       onClick={(param: any) => dispatch<OnChangeNodeSelectorAction>({
-          type: 'marketResourcePage/onChangeNodeSelector',
-          payload: Number(param.key),
+        type: 'marketResourcePage/onChangeNodeSelector',
+        payload: Number(param.key),
       })}
     >
       {
@@ -38,20 +40,34 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
         </Menu.Item>))
       }
     </Menu>
-  )}>
+  ) : (<span/>)}>
     <div className={styles.nodeSelector}>
       <Space size={10}>
-        <span className={styles.nodeSelectorLabel}>签约节点</span>
         {
-          selectedNode
-            ? (<FContentText
-              text={selectedNode.nodeName}/>)
-            : (<FContentText
-              type="negative"
-              text={'选择签约的节点…'}/>)
+          nodes.list.length === 0
+            ? (<>
+              <span className={styles.nodeSelectorLabel}>您还没有创建节点</span>
+              <FTextButton
+                theme="primary"
+                onClick={() => {
+                  router.push('/node/creator')
+                }}>创建节点</FTextButton>
+            </>)
+            : (<>
+              <span className={styles.nodeSelectorLabel}>签约节点</span>
+              {
+                selectedNode
+                  ? (<FContentText
+                    text={selectedNode.nodeName}/>)
+                  : (<FContentText
+                    type="negative"
+                    text={'选择签约的节点…'}/>)
+              }
+              {marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID || -1) && (
+                <span className={styles.contracted}>(已签约)</span>)}
+            </>)
         }
-        {marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID || -1) && (
-          <span className={styles.contracted}>(已签约)</span>)}
+
       </Space>
       <FDown/>
     </div>

@@ -11,23 +11,46 @@ import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState} from '@/models/connect';
-import {OnChangeInfoAction, ChangeAction} from "@/models/resourceInfoPage";
+import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState} from '@/models/connect';
+import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
 import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
-import {RouterTypes} from "umi";
+import {router, RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FBlock from "@/layouts/FFormLayout/FBlock";
+import FNoDataTip from "@/components/FNoDataTip";
+import {match} from "path-to-regexp";
 
 interface InfoProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState,
   resourceInfoPage: ResourceInfoPageModelState,
+  user: UserModelState;
+
+  match: {
+    params: {
+      id: string;
+    };
+  };
 }
 
-function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoProps & RouterTypes) {
+function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: InfoProps & RouterTypes) {
+
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setHeight);
+
+    return () => {
+      window.removeEventListener('resize', setHeight);
+    };
+  }, []);
+
+  function setHeight() {
+    setMinHeight(window.innerHeight - 70);
+  }
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -36,7 +59,24 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
         route: route,
       },
     });
+
+    dispatch<ChangeAction>({
+      type: 'resourceInfoPage/change',
+      payload: {
+        resourceID: match.params.id,
+      },
+    });
+
+    return () => {
+      dispatch<InitModelStatesAction>({
+        type: 'resourceInfoPage/initModelStates',
+      });
+    };
   }, [route]);
+
+  // React.useEffect(() => {
+  //
+  // }, []);
 
   // React.useEffect(() => {
   //   // setEditorText(info?.intro || '');
@@ -54,30 +94,46 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
     dispatch<ChangeAction>({
       type: 'resourceInfoPage/change',
       payload: {
-        editorText: bool ? info?.intro : '',
+        editorText: bool ? resourceInfo.info?.intro : '',
         isEditing: bool,
         introductionErrorText: '',
       },
     });
   }
 
+  // if (!resourceInfo.hasPermission) {
+  //   return (<div>
+  //     <FNoDataTip
+  //       height={minHeight}
+  //       tipText={'403,没权限访问'}
+  //       btnText={'将前往首页'}
+  //       onClick={() => {
+  //         router.replace('/');
+  //       }}
+  //     />
+  //   </div>);
+  // }
+
   return (
     <FLeftSiderLayout
       sider={<Sider/>}
-      header={<FTitleText text={i18nMessage('resource_information')} type={'h2'}/>}
+      header={<FTitleText
+        text={i18nMessage('resource_information')}
+        type="h1"
+      />}
     >
-      {info && <FFormLayout>
+      {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
         <FFormLayout.FBlock title={i18nMessage('resource_name')}>
-          <FContentText text={info?.resourceName}/>
+          <FContentText text={resourceInfo.info?.resourceName}/>
         </FFormLayout.FBlock>
         <FEditorCard title={i18nMessage('resource_type')}>
-          <FContentText text={info.resourceType}/>
+          <FContentText text={resourceInfo.info.resourceType}/>
         </FEditorCard>
         <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
 
           {
-            !info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
+            !resourceInfo.info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
               <FCircleButton
                 onClick={() => onChangeIsEditing(true)}
                 theme="weaken"
@@ -101,12 +157,12 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
                         type: 'resourceInfoPage/onChangeInfo',
                         // payload: {intro: resourceInfoPage.editor},
                         payload: {intro: resourceInfoPage.editorText},
-                        id: info?.resourceId,
+                        id: resourceInfo.info?.resourceId || '',
                       });
                     }}
                   >{i18nMessage('save')}</FTextButton>
                 </Space>)
-                : info?.intro
+                : resourceInfo.info?.intro
                 ? <FTextButton
                   theme="primary"
                   onClick={() => onChangeIsEditing(true)}
@@ -127,15 +183,15 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
                     },
                   })}
                 />)
-                : info?.intro ? (<div className={styles.aboutPanel}>
-                  <FContentText text={info?.intro}/>
+                : resourceInfo.info?.intro ? (<div className={styles.aboutPanel}>
+                  <FContentText text={resourceInfo.info?.intro}/>
                 </div>) : null}
           </FHorn>
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={i18nMessage('resource_image')}>
           <FUploadResourceCover
-            value={info?.coverImages.length > 0 ? info?.coverImages[0] : ''}
+            value={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
             // onChange={(value) => dispatch<OnChangeCoverAction>({
             //   type: 'resourceInfoPage/onChangeCover',
             //   payload: value,
@@ -143,13 +199,13 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
             onChange={(value) => dispatch<OnChangeInfoAction>({
               type: 'resourceInfoPage/onChangeInfo',
               payload: {coverImages: [value]},
-              id: info?.resourceId,
+              id: resourceInfo.info?.resourceId || ''
             })}
           />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
           <FLabelEditor
-            values={info?.tags}
+            values={resourceInfo.info?.tags}
             // onChange={(value) => dispatch<OnChangeLabelsAction>({
             //   type: 'resourceInfoPage/onChangeLabels',
             //   payload: value,
@@ -157,7 +213,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
             onChange={(value) => dispatch<OnChangeInfoAction>({
               type: 'resourceInfoPage/onChangeInfo',
               payload: {tags: value},
-              id: info?.resourceId,
+              id: resourceInfo.info?.resourceId || '',
             })}
           />
         </FFormLayout.FBlock>
@@ -165,7 +221,10 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo: {info}}: InfoPro
     </FLeftSiderLayout>)
 }
 
-export default connect(({resourceInfo, resourceInfoPage}: ConnectState) => ({
+export default connect(({resourceInfo, resourceInfoPage, user}: ConnectState) => ({
   resourceInfo: resourceInfo,
   resourceInfoPage: resourceInfoPage,
+  user: user,
 }))(Info);
+
+//has permission
