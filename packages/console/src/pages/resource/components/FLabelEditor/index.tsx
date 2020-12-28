@@ -16,14 +16,6 @@ export default function ({values = [], onChange}: FLabelEditor) {
   const [input, onChangeInput] = React.useState<string>('');
   const [errorText, onChangeErrorText] = React.useState<string>('');
 
-  // function onKeyDown(e: any) {
-  //   if (e.keyCode === 27) {
-  //     inputElement.blur();
-  //     onChangeErrorText('');
-  //     return onChangeInput('');
-  //   }
-  // }
-
   function onPressEnter(e: any) {
     const v = e.target.value;
     if (errorText) {
@@ -67,7 +59,8 @@ export default function ({values = [], onChange}: FLabelEditor) {
     {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <Input
-          className={styles.Input + ' ' + (errorText && styles.InputError)}
+          size="small"
+          className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
           placeholder={i18nMessage('hint_add_resource_tag')}
           ref={(i) => inputElement = i}
           value={input}
@@ -75,7 +68,9 @@ export default function ({values = [], onChange}: FLabelEditor) {
           // onKeyDown={onKeyDown}
           onPressEnter={onPressEnter}
         />
-        {errorText && <label>{errorText}</label>}
+        <div>
+          {errorText && <label>{errorText}</label>}
+        </div>
       </div>)
     }
 
