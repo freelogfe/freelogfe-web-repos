@@ -12,7 +12,7 @@ function FBlock({children, title, dot = false}: FBlockProps) {
   return (<div className={styles.styles}>
     <div className={styles.title}>
       <div className={styles.prefix}/>
-      <div style={{width: 7}}/>
+      <div style={{width: 5}}/>
       <FTitleText type={'h4'} text={title}/>
       <div style={{width: 5}}/>
       {
