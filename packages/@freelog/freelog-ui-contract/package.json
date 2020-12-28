@@ -1,6 +1,6 @@
 {
   "name": "@freelog/freelog-ui-contract",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "freelog components",
   "scripts": {
     "publish": "npm publish --access=public",

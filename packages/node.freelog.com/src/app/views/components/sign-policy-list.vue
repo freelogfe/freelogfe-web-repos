@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import ContractDetail from '@freelog/freelog-ui-contract/src/components/contract-detail/index.vue'
-import ContractPolicy from '@freelog/freelog-ui-contract/src/components/contract-policy/index.vue'
+// import ContractDetail from '@freelog/freelog-ui-contract/src/components/contract-detail/index.vue'
+// import ContractPolicy from '@freelog/freelog-ui-contract/src/components/contract-policy/index.vue'
 
 const CONTRACT_STATUS_TIPS = {
   '-1': "未创建合同",
@@ -60,7 +60,7 @@ const CONTRACT_STATUS_TIPS = {
 
 export default {
   name: 'sign-policy-list',
-  components: { ContractDetail, ContractPolicy },
+  // components: { ContractDetail, ContractPolicy },
   props: {
     defaultContract: Object,
     contracts: {
