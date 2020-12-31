@@ -64,7 +64,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
     dispatch<ChangeAction>({
       type: 'resourceCreatorPage/change',
       payload,
-    })
+    });
   }
 
   return (<FContentLayout header={<Header

@@ -37,6 +37,9 @@ interface ContentProps {
 
 function Content({storage, dispatch}: ContentProps) {
 
+  // console.log(storage)
+  const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
+
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
 
   React.useEffect(() => {
@@ -73,6 +76,8 @@ function Content({storage, dispatch}: ContentProps) {
       render(text: any, record: any) {
         return (<div className={styles.hoverVisible}>
           <ToolsBar
+            showDelete={!isUserDataBucket}
+            showEdit={!isUserDataBucket}
             onClickEdit={() => onClickEdit(record)}
             onClickDownload={() => downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => onClickDelete(record)}
@@ -130,9 +135,9 @@ function Content({storage, dispatch}: ContentProps) {
     })
   }
 
-  if (storage.bucketList.length === 0 )  {
-    // return
-  }
+  // if (storage.bucketList.length === 0) {
+  //   // return
+  // }
 
   return (<div>
 
@@ -208,6 +213,10 @@ export default connect(({storageHomePage}: ConnectState) => ({
 }))(Content);
 
 interface ToolsBarProps {
+  showEdit?: boolean;
+  showDownload?: boolean;
+  showDelete?: boolean;
+
   onClickEdit?(): void;
 
   onClickDownload?(): void;
@@ -215,23 +224,27 @@ interface ToolsBarProps {
   onClickDelete?(): void;
 }
 
-function ToolsBar({onClickEdit, onClickDownload, onClickDelete}: ToolsBarProps) {
+function ToolsBar({showEdit = true, showDownload = true, showDelete = true, onClickEdit, onClickDownload, onClickDelete}: ToolsBarProps) {
   return (<Space
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
-    <FTextButton
-      onClick={() => onClickEdit && onClickEdit()} theme={'primary'}
-    ><EditOutlined/></FTextButton>
-    {/*<FTextButton theme={'primary'}>*/}
-    {/*  <SendOutlined/>*/}
-    {/*</FTextButton>*/}
-    <FTextButton
-      onClick={() => onClickDownload && onClickDownload()}
-      theme={'primary'}
-    ><DownloadOutlined/></FTextButton>
-    <FTextButton
-      onClick={() => onClickDelete && onClickDelete()}
-      className={styles.Delete}
-    ><FDelete/></FTextButton>
+    {
+      showEdit && (<FTextButton
+        onClick={() => onClickEdit && onClickEdit()} theme={'primary'}
+      ><EditOutlined/></FTextButton>)
+    }
+    {
+      showDownload && (<FTextButton
+        onClick={() => onClickDownload && onClickDownload()}
+        theme={'primary'}
+      ><DownloadOutlined/></FTextButton>)
+    }
+    {
+      showDelete && (<FTextButton
+        onClick={() => onClickDelete && onClickDelete()}
+        className={styles.Delete}
+      ><FDelete/></FTextButton>)
+    }
+
   </Space>)
 }

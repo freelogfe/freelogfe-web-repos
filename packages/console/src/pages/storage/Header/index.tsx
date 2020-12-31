@@ -26,6 +26,7 @@ function Header({dispatch, storage}: HeaderProps) {
   if (!bucket) {
     return null;
   }
+  const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
 
   // const [fileObjects, setFileObjects] = React.useState<HeaderStates['fileObjects']>([]);
 
@@ -38,23 +39,26 @@ function Header({dispatch, storage}: HeaderProps) {
         <div>存储对象 {bucket.totalFileQuantity}</div>
       </Space>
     </div>
-    <FUpload
-      showUploadList={false}
-      multiple={true}
-      beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-        // console.log(file, FileList, 'beforeUpload 24ew890sio;');
-        if (file === fileList[fileList.length - 1]) {
-          // console.log('0923uiojfdaslk');
-          dispatch<UploadFilesAction>({
-            type: 'storageHomePage/uploadFiles',
-            payload: fileList,
-          });
-        }
-        return false;
-      }}
-    >
-      <FNormalButton>上传对象</FNormalButton>
-    </FUpload>
+    {
+      !isUserDataBucket && (<FUpload
+          showUploadList={false}
+          multiple={true}
+          beforeUpload={(file: RcFile, fileList: RcFile[]) => {
+            // console.log(file, FileList, 'beforeUpload 24ew890sio;');
+            if (file === fileList[fileList.length - 1]) {
+              // console.log('0923uiojfdaslk');
+              dispatch<UploadFilesAction>({
+                type: 'storageHomePage/uploadFiles',
+                payload: fileList,
+              });
+            }
+            return false;
+          }}
+        >
+          <FNormalButton>上传对象</FNormalButton>
+        </FUpload>
+      )
+    }
 
   </div>);
 }
