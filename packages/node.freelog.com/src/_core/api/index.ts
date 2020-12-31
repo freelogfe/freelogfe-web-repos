@@ -41,9 +41,9 @@ export interface pagingGetPresentablesParams {
   keywords?: string
   tags?: string
   resourceType?: string
-  page?: number
-  pageSize?: number
-  isOnline?: number
+  limit?: number
+  skip?: number   // pageSize?: number
+  onlineStatus?: number
 }
 export async function pagingGetPresentables(params: pagingGetPresentablesParams = {}): Promise<any> {
   return _fetch('/v1/presentables/authList', { data: params })

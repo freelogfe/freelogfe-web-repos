@@ -78,10 +78,10 @@ const webpackConfig = merge(baseConfig, {
       filename: '[name].[contenthash].css',
       chunkFilename: 'public/[id].[contenthash].css',
     }),
-    new StyleExtHtmlWebpackPlugin({
-      minify: true,
-      chunks: ['pagebuild-app']
-    }),
+    // new StyleExtHtmlWebpackPlugin({
+    //   minify: true,
+    //   chunks: ['pagebuild-app']
+    // }),
     // new ResourceHintWebpackPlugin(),
     // new ScriptExtHtmlWebpackPlugin({
     //   inline: ['pagebuild-core'],

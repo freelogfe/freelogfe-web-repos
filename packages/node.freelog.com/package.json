@@ -7,7 +7,7 @@
   "scripts": {
     "deploy": "freelog-ci deploy",
     "dev": "lerna link && cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
-    "build": "rimraf  -rf ./dist/** && webpack --config ./config/webpack.prod.js",
+    "build": "rimraf  -rf ./dist/** lerna link && webpack --config ./config/webpack.prod.js",
     "build:analyze": "NODE_ENV=production webpack --config ./config/webpack.analyze.js",
     "build:prod": "NODE_ENV=production npm run build",
     "build:beta": "NODE_ENV=beta npm run build",
@@ -34,7 +34,8 @@
     "typescript": "^3.8.3",
     "vue": "^2.6.11",
     "vue-i18n": "^8.17.3",
-    "web-report": "^1.0.8"
+    "web-report": "^1.0.8",
+    "antlr4": "4.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
