@@ -22,7 +22,7 @@
 	"upload_userdata": "Upload",
 	"privacity": "Privacy",
 	"display_userdata_in_storage": "Dispaly system bucket .NodeData",
-	"userdata_used_storage": "Your stored node data are currently using 5.6 MB of storage. ",
+	"userdata_used_storage": "Your stored node data are currently using {NodeDataUsedStorage} of storage. ",
 	"storage": "Storage",
 	"used_storage": "Storage",
 	"enter_nodedata": "Enter .NodeData",
