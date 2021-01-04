@@ -196,5 +196,6 @@
 	"alarm_exhibits_show_plan": "",
 	"alarm_exhibits_show_authorization": "",
 	"test1101": "1",
-	"msg_customdropdownlist": ""
+	"msg_customdropdownlist": "",
+	"msg_bucket_quantity_exceed": ""
 }
