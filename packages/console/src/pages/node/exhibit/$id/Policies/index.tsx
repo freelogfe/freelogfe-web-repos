@@ -16,16 +16,24 @@ interface PoliciesProps {
 }
 
 function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
+
+  const onlyOnePolicy = exhibitInfoPage.policies.filter((p) => p.status === 1).length === 1;
+
   return (<div>
     <Space size={15}>
-      <FTitleText text={'授权策略'} type="h3"/>
+      <FTitleText
+        text={'授权策略'}
+        type="h3"
+      />
       {
-        exhibitInfoPage.policies.length !== 0 && (<FCircleButton onClick={() => dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            addPolicyDrawerVisible: true,
-          }
-        })}/>)
+        exhibitInfoPage.policies.length !== 0 && (<FCircleButton
+          onClick={() => dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              addPolicyDrawerVisible: true,
+            }
+          })}
+        />)
       }
     </Space>
     <div style={{height: 20}}/>
@@ -52,7 +60,9 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
               key={p.id}
             >
               <div className={styles.title}>
-                <FContentText text={p.name}/>
+                <FContentText
+                  text={p.name}
+                />
                 <Space size={8}>
                   {
                     p.status === 1
@@ -60,6 +70,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
                       : (<label style={{color: '#B4B6BA'}}>已搁置</label>)
                   }
                   <FSwitch
+                    disabled={exhibitInfoPage.isOnline && onlyOnePolicy && p.status === 1}
                     checked={p.status === 1}
                     onChange={(value) => dispatch<UpdateAPolicyAction>({
                       type: 'exhibitInfoPage/updateAPolicy',
