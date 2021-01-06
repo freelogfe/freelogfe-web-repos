@@ -14,6 +14,8 @@ import RouterTypes from 'umi/routerTypes';
 import {nodeDetail} from '@/services/nodes';
 import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
+import FTooltip from "@/components/FTooltip";
+import {FWarning} from "@/components/FIcons";
 
 interface PresentableProps extends RouterTypes {
   dispatch: Dispatch;
@@ -50,12 +52,20 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
         <Space size={20}>
           <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
           <FSwitch
+            disabled={!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
             checked={exhibitInfoPage.isOnline}
             onChange={(value) => dispatch<UpdateStatusAction>({
               type: 'exhibitInfoPage/updateStatus',
               payload: value ? 1 : 0,
             })}
           />
+          {
+            !exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0 ? (
+              <FTooltip title={!exhibitInfoPage.isAuth ? exhibitInfoPage.authErrorText : '暂无上线策略'}>
+                <FWarning/>
+              </FTooltip>) : ''
+          }
+
         </Space>
       </div>
       <div className={styles.body}>

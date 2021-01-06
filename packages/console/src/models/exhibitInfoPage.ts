@@ -2,6 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {
+  batchAuth,
+  BatchAuthParamsType,
   presentableDetails,
   PresentableDetailsParamsType1,
   PresentablesOnlineParamsType,
@@ -27,6 +29,8 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   nodeName: string;
   pName: string;
   isOnline: boolean;
+  isAuth: boolean;
+  authErrorText: string;
 
   policies: {
     id: string;
@@ -184,8 +188,10 @@ const Model: ExhibitInfoPageModelType = {
     nodeId: -1,
     nodeName: '',
     pName: '',
-
     isOnline: false,
+    isAuth: true,
+    authErrorText: '',
+
     policies: [],
     addPolicyDrawerVisible: false,
     associated: [],
@@ -243,7 +249,17 @@ const Model: ExhibitInfoPageModelType = {
       const disabledRewriteKeys = [
         ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
       ];
-      // console.log(disabledRewriteKeys, 'disabledRewriteKeys3092hj2');
+
+      console.log(data, 'data2341234');
+
+      const params1: BatchAuthParamsType = {
+        nodeId: data.nodeId,
+        authType: 3,
+        presentableIds: data.presentableId,
+      };
+      const {data: data1} = yield call(batchAuth, params1);
+      console.log(data1, 'data1123434');
+      // presentableId
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -251,6 +267,8 @@ const Model: ExhibitInfoPageModelType = {
           nodeName: nodeName,
           pName: data.presentableName,
           isOnline: data.onlineStatus === 1,
+          isAuth: data1[0].isAuth,
+          authErrorText: data1[0].error,
           policies: data.policies.map((p: any) => ({
             id: p.policyId,
             name: p.policyName,
