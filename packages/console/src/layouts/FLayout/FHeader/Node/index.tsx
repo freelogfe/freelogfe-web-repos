@@ -40,7 +40,9 @@ function Node({dispatch, nodes, global}: NodeProps) {
         }))}
       />
       <a
-        onClick={() => router.push('/node/creator')}
+        onClick={() => {
+          router.push('/node/creator');
+        }}
         className={styles.newButton}>
         <FPlus/>
       </a>
@@ -55,7 +57,11 @@ function Node({dispatch, nodes, global}: NodeProps) {
       >创建节点</FNormalButton>
     </div>)}>
     <Nav
-      onClick={() => null}
+      onClick={() => {
+        nodes.list.length > 0
+          ? onClickNodes(nodes.list[0].nodeId.toString())
+          : router.push('/node/creator');
+      }}
       active={isCurrent}>{i18nMessage('node_manage')}</Nav>
   </FDropdown>);
 }
