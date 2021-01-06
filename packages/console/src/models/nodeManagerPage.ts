@@ -181,7 +181,7 @@ const Model: NodeManagerModelType = {
       };
 
       const {data} = yield call(presentables, params);
-      console.log(data, 'data1234');
+      // console.log(data, 'data1234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

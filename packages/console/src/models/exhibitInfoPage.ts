@@ -17,6 +17,7 @@ import {ConnectState} from '@/models/connect';
 import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 import {formatDateTime} from "@/utils/format";
+import fMessage from "@/components/fMessage";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -387,13 +388,17 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: exhibitInfoPage.presentableId,
         onlineStatus: payload,
       };
-      yield call(presentablesOnlineStatus, params);
+      const {data} = yield call(presentablesOnlineStatus, params);
+      if (!data) {
+        fMessage(exhibitInfoPage.resourceType === 'theme' ? '激活失败' : '上线失败', 'error');
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           isOnline: payload === 1,
         },
-      })
+      });
     },
     * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
