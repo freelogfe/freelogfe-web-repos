@@ -3,7 +3,13 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {completeUrlByDomain} from "@/utils/format";
-import {presentables, PresentablesParamsType} from "@/services/presentables";
+import {
+  presentables,
+  PresentablesOnlineParamsType,
+  presentablesOnlineStatus,
+  PresentablesParamsType
+} from "@/services/presentables";
+import fMessage from "@/components/fMessage";
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;
@@ -80,6 +86,22 @@ export interface OnChangeThemeAction extends AnyAction {
   };
 }
 
+export interface OnOnlineOrOfflineAction {
+  type: 'nodeManagerPage/onOnlineOrOffline';
+  payload: {
+    id: string;
+    onlineStatus: 0 | 1;
+  },
+}
+
+export interface OnActiveAction {
+  type: 'nodeManagerPage/onActive';
+  payload: {
+    id: string;
+    // onlineStatus: 0 | 1;
+  },
+}
+
 export interface NodeManagerModelType {
   namespace: 'nodeManagerPage';
   state: NodeManagerModelState;
@@ -87,6 +109,8 @@ export interface NodeManagerModelType {
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     onChangeExhibit: (action: OnChangeExhibitAction, effects: EffectsCommandMap) => void;
+    onOnlineOrOffline: (action: OnOnlineOrOfflineAction, effects: EffectsCommandMap) => void;
+    onActive: (action: OnActiveAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
     onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
   };
@@ -157,16 +181,17 @@ const Model: NodeManagerModelType = {
       };
 
       const {data} = yield call(presentables, params);
+      console.log(data, 'data1234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitList: data.dataList.map((i: any) => ({
+          exhibitList: (data.dataList as any[]).map<NodeManagerModelState['exhibitList'][number]>((i: any) => ({
             id: i.presentableId,
             cover: i.coverImages[0],
             title: i.presentableTitle,
             resourceName: i.presentableName,
             version: i.version,
-            isOnline: i.status,
+            isOnline: i.onlineStatus === 1,
             type: i.resourceInfo.resourceType,
             policies: [],
             resourceId: i.resourceInfo.resourceId,
@@ -222,21 +247,99 @@ const Model: NodeManagerModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          themeList: data.dataList.map((i: any) => ({
-            id: i.presentableId,
-            cover: i.coverImages[0],
-            title: i.presentableTitle,
-            // resourceName: i.presentableName,
-            version: i.version,
-            isOnline: i.status,
-            // type: i.resourceInfo.resourceType,
-            policies: [],
-            // resourceId: i.resourceInfo.resourceId,
-          })),
+          themeList: (data.dataList as any[]).map<NodeManagerModelState['themeList'][number]>((i: any) => {
+            return {
+              id: i.presentableId,
+              cover: i.coverImages[0],
+              title: i.presentableTitle,
+              // resourceName: i.presentableName,
+              version: i.version,
+              isOnline: i.onlineStatus === 1,
+              // type: i.resourceInfo.resourceType,
+              policies: [],
+              // resourceId: i.resourceInfo.resourceId,
+            };
+          }),
           themeDataState: data.totalItem !== 0 ? ''
             : nodeManagerPage.themeInputFilter === '' ? 'noData' : 'noSearchData',
         },
       });
+    },
+    * onOnlineOrOffline({payload}: OnOnlineOrOfflineAction, {call, put, select}: EffectsCommandMap) {
+      // console.log(payload, 'PPPPPP');
+      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+        nodeManagerPage,
+      }));
+
+      const params: PresentablesOnlineParamsType = {
+        presentableId: payload.id,
+        onlineStatus: payload.onlineStatus,
+      };
+      const {data} = yield call(presentablesOnlineStatus, params);
+      if (!data) {
+        fMessage('上线失败', 'error');
+        return;
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibitList: nodeManagerPage.exhibitList
+            .map((el) => {
+              if (payload.id !== el.id) {
+                return el;
+              }
+              return {
+                ...el,
+                isOnline: payload.onlineStatus === 1,
+              }
+            })
+            .filter((el) => {
+              if (nodeManagerPage.selectedStatus === '2') {
+                return true;
+              }
+              return el.isOnline === (nodeManagerPage.selectedStatus === '1')
+            }),
+        },
+      });
+    },
+    * onActive({payload}: OnActiveAction, {call, select, put}: EffectsCommandMap) {
+      const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
+        nodeManagerPage,
+      }));
+
+      const params: PresentablesOnlineParamsType = {
+        presentableId: payload.id,
+        onlineStatus: 1,
+      };
+      const {data} = yield call(presentablesOnlineStatus, params);
+      if (!data) {
+        fMessage('激活失败', 'error');
+        return;
+      }
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     exhibitList: nodeManagerPage.th
+      //       .map((el) => {
+      //         if (payload.id !== el.id) {
+      //           return el;
+      //         }
+      //         return {
+      //           ...el,
+      //           isOnline: payload.onlineStatus === 1,
+      //         }
+      //       })
+      //       .filter((el) => {
+      //         if (nodeManagerPage.selectedStatus === '2') {
+      //           return true;
+      //         }
+      //         return el.isOnline === (nodeManagerPage.selectedStatus === '1')
+      //       }),
+      //   },
+      // });
     },
     * onChangeTheme({payload}: OnChangeThemeAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

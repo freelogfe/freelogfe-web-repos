@@ -7,7 +7,7 @@ import {Space} from 'antd';
 import {FWarning} from '@/components/FIcons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
-import {OnChangeThemeAction} from "@/models/nodeManagerPage";
+import {OnActiveAction, OnChangeThemeAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {router} from "umi";
 import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from "@/components/FNoDataTip";
@@ -124,11 +124,23 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                       <img alt="" src={i.cover || imgSrc}/>
                       <div
                         className={styles.action}
-                        style={{justifyContent: 'space-between'}}
+                        style={{justifyContent: i.isOnline ? 'center' : 'space-between'}}
                       >
                         <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
-                        <span>|</span>
-                        <span>激活</span>
+                        {
+                          !i.isOnline && (<>
+                            <span>|</span>
+                            <span onClick={() => {
+                              dispatch<OnActiveAction>({
+                                type: 'nodeManagerPage/onActive',
+                                payload: {
+                                  id: i.id,
+                                }
+                              });
+                            }}>激活</span>
+                          </>)
+                        }
+
                       </div>
                     </div>
                     <div style={{height: 12}}/>

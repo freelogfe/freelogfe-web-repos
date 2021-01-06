@@ -16,96 +16,13 @@ import {router} from "umi";
 import {ColumnsType} from "antd/lib/table/interface";
 import FMenu from "@/components/FMenu";
 import {resourceTypes} from "@/utils/globals";
-import {ChangeAction, OnChangeExhibitAction} from "@/models/nodeManagerPage";
+import {ChangeAction, OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
 import FNoDataTip from "@/components/FNoDataTip";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/$id/Sider";
-
-const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
-  {
-    title: <FContentText text={'展品名称｜类型｜展品标题｜策略'}/>,
-
-    dataIndex: 'name',
-    key: 'name',
-    className: styles.tableName,
-    // width: 100,
-    render(_, record) {
-      return (<div className={styles.info}>
-        <img src={record.cover || imgSrc} alt={''}/>
-        <div style={{width: 10, flexShrink: 0}}/>
-        <div className={styles.infos}>
-          <FContentText
-            singleRow
-            text={record.resourceName}
-          />
-          <div className={styles.sub}>
-            <label>{record.type}</label>
-            <div style={{width: 5}}/>
-            <FContentText
-              type="additional2"
-              text={record.title}
-              singleRow
-            />
-          </div>
-          <div className={styles.polices}>
-            {
-              record.policies.map((l) => (<label key={l}>{l}</label>))
-            }
-          </div>
-        </div>
-      </div>);
-    },
-  },
-  {
-    title: '',
-    dataIndex: 'edit',
-    key: 'edit',
-    // width: 100,
-    className: styles.tableEdit,
-    render(_, record): any {
-      return (<Space size={25}>
-        <FTextButton
-          onClick={() => router.push('/node/exhibit/' + record.id)}
-          theme="primary"
-        >
-          <FEdit/>
-        </FTextButton>
-        <FTextButton
-          onClick={() => router.push('/resource/' + record.resourceId)}
-          theme="primary"
-        >
-          <FFileSearch/>
-        </FTextButton>
-      </Space>)
-    }
-  },
-  {
-    title: <FContentText text={'展示版本'}/>,
-    dataIndex: 'version',
-    key: 'version',
-    // width: 125,
-    className: styles.tableVersion,
-    render(_, record): any {
-      return (<FContentText text={record.version}/>)
-    },
-  },
-  {
-    title: <FContentText text={'上线'}/>,
-    dataIndex: 'status',
-    key: 'status',
-    // width: 65,
-    className: styles.tableStatus,
-    render(_, record): any {
-      return (<Space size={15}>
-        <FSwitch checked={record.isOnline}/>
-        {/*{record.isOnline || <FExclamation/>}*/}
-      </Space>)
-    }
-  },
-];
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -177,6 +94,100 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   //   />);
   // }
 
+  const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
+    {
+      title: <FContentText text={'展品名称｜类型｜展品标题｜策略'}/>,
+
+      dataIndex: 'name',
+      key: 'name',
+      className: styles.tableName,
+      // width: 100,
+      render(_, record) {
+        return (<div className={styles.info}>
+          <img src={record.cover || imgSrc} alt={''}/>
+          <div style={{width: 10, flexShrink: 0}}/>
+          <div className={styles.infos}>
+            <FContentText
+              singleRow
+              text={record.resourceName}
+            />
+            <div className={styles.sub}>
+              <label>{record.type}</label>
+              <div style={{width: 5}}/>
+              <FContentText
+                type="additional2"
+                text={record.title}
+                singleRow
+              />
+            </div>
+            <div className={styles.polices}>
+              {
+                record.policies.map((l) => (<label key={l}>{l}</label>))
+              }
+            </div>
+          </div>
+        </div>);
+      },
+    },
+    {
+      title: '',
+      dataIndex: 'edit',
+      key: 'edit',
+      // width: 100,
+      className: styles.tableEdit,
+      render(_, record): any {
+        return (<Space size={25}>
+          <FTextButton
+            onClick={() => router.push('/node/exhibit/' + record.id)}
+            theme="primary"
+          >
+            <FEdit/>
+          </FTextButton>
+          <FTextButton
+            onClick={() => router.push('/resource/' + record.resourceId)}
+            theme="primary"
+          >
+            <FFileSearch/>
+          </FTextButton>
+        </Space>)
+      }
+    },
+    {
+      title: <FContentText text={'展示版本'}/>,
+      dataIndex: 'version',
+      key: 'version',
+      // width: 125,
+      className: styles.tableVersion,
+      render(_, record): any {
+        return (<FContentText text={record.version}/>)
+      },
+    },
+    {
+      title: <FContentText text={'上线'}/>,
+      dataIndex: 'status',
+      key: 'status',
+      // width: 65,
+      className: styles.tableStatus,
+      render(_, record): any {
+        return (<Space size={15}>
+          <FSwitch
+            checked={record.isOnline}
+            onChange={(value) => {
+              dispatch<OnOnlineOrOfflineAction>({
+                type: 'nodeManagerPage/onOnlineOrOffline',
+                payload: {
+                  id: record.id,
+                  onlineStatus: value ? 1 : 0,
+                },
+              });
+            }}
+          />
+          {/*{record.isOnline || <FExclamation/>}*/}
+        </Space>)
+      }
+    },
+  ];
+
   return (<FLeftSiderLayout
     type={nodeManagerPage.exhibitDataState === 'noData' ? 'empty' : 'table'}
     sider={<Sider/>}
@@ -210,7 +221,9 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               },
             })}
           >
-            <span style={{cursor: 'pointer'}}>全部<FDown style={{marginLeft: 10}}/></span>
+            <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
+              return rso.value === nodeManagerPage.selectedStatus.toString();
+            })?.text}<FDown style={{marginLeft: 10}}/></span>
           </FDropdownMenu>
         </div>
         <div>
