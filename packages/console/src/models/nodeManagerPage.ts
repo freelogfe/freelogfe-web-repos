@@ -50,6 +50,7 @@ export type NodeManagerModelState = WholeReadonly<{
     version: string;
     isOnline: boolean;
     isAuth: boolean;
+    authErrorText: string;
   }[];
   themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
 }>;
@@ -181,11 +182,9 @@ const Model: NodeManagerModelType = {
         onlineStatus: Number(nodeManagerPage.selectedStatus),
         resourceType: nodeManagerPage.selectedType === '-1' ? undefined : nodeManagerPage.selectedType,
         omitResourceType: 'theme',
-        // isLoadPolicyInfo: 1,
       };
 
       const {data} = yield call(presentables, params);
-      console.log(data, 'data1234');
 
       let batchAuthPs: any[] = [];
       if (data.dataList.length > 0) {
@@ -199,7 +198,7 @@ const Model: NodeManagerModelType = {
         const {data: data1} = yield call(batchAuth, params1);
         batchAuthPs = data1;
       }
-      console.log(batchAuthPs, 'batchAuthPs290uopasdf');
+      // console.log(batchAuthPs, 'batchAuthPs290uopasdf');
       // !i.policies.find((p: any) => p.status === 1)
       yield put<ChangeAction>({
         type: 'change',
@@ -257,8 +256,6 @@ const Model: NodeManagerModelType = {
       const params: PresentablesParamsType = {
         nodeId: nodeManagerPage.nodeId,
         limit: 100,
-        // page: nodeManagerPage.pageCurrent,
-        // pageSize: nodeManagerPage.pageSize,
         keywords: nodeManagerPage.themeInputFilter || undefined,
         onlineStatus: 2,
         resourceType: 'theme',
@@ -266,20 +263,33 @@ const Model: NodeManagerModelType = {
 
       const {data} = yield call(presentables, params);
 
-      // console.log(data, 'data2390urijofdsf');
+      let batchAuthTs: any[] = [];
+      if (data.dataList.length > 0) {
+        const params1: BatchAuthParamsType = {
+          nodeId: nodeManagerPage.nodeId,
+          authType: 3,
+          presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
+            return dl.presentableId;
+          }).join(','),
+        };
+        const {data: data1} = yield call(batchAuth, params1);
+        batchAuthTs = data1;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           themeList: (data.dataList as any[]).map<NodeManagerModelState['themeList'][number]>((i: any) => {
+            const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
             return {
               id: i.presentableId,
               cover: i.coverImages[0],
               title: i.presentableTitle,
               version: i.version,
               isOnline: i.onlineStatus === 1,
-              policies: [],
-              isAuth: true,
+              policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+              isAuth: authInfo.isAuth,
+              authErrorText: authInfo.error,
             };
           }),
           themeDataState: data.totalItem !== 0 ? ''

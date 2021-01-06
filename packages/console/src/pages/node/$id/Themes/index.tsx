@@ -15,6 +15,7 @@ import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/$id/Sider";
+import FTooltip from "@/components/FTooltip";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -118,17 +119,19 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                     <div className={styles.cover}>
                       <Space size={10}>
                         <Label active={i.isOnline}/>
-                        {!i.isOnline && <FWarning/>}
+                        {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
+                          <FWarning/>
+                        </FTooltip> : ''}
                       </Space>
 
                       <img alt="" src={i.cover || imgSrc}/>
                       <div
                         className={styles.action}
-                        style={{justifyContent: i.isOnline ? 'center' : 'space-between'}}
+                        style={{justifyContent: i.isOnline || !i.isAuth || i.policies.length === 0 ? 'center' : 'space-between'}}
                       >
                         <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
                         {
-                          !i.isOnline && (<>
+                          !i.isOnline && i.isAuth && i.policies.length > 0 && (<>
                             <span>|</span>
                             <span onClick={() => {
                               dispatch<OnActiveAction>({

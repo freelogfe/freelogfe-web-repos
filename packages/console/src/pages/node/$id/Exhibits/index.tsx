@@ -184,9 +184,10 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               });
             }}
           />
-          {!record.isAuth || record.policies.length === 0 ? <FTooltip title={!record.isAuth ? record.authErrorText: '暂无上线策略'}>
-            <FWarning/>
-          </FTooltip>: ''}
+          {!record.isAuth || record.policies.length === 0 ?
+            <FTooltip title={!record.isAuth ? record.authErrorText : '暂无上线策略'}>
+              <FWarning/>
+            </FTooltip> : ''}
         </Space>)
       }
     },
