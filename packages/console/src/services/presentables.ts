@@ -151,3 +151,16 @@ export interface UpdateRewritePropertyParamsType {
 export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
   return request.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
 }
+
+// 批量获取展品授权结果
+export interface BatchAuthParamsType {
+  nodeId: number;
+  authType: 1 | 2 | 3; // 1:节点侧授权 2:资源侧授权 3:节点+资源侧授权
+  presentableIds: string;
+}
+
+export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
+  return request.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
+    params,
+  });
+}

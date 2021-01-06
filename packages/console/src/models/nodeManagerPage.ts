@@ -4,6 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {completeUrlByDomain} from "@/utils/format";
 import {
+  batchAuth, BatchAuthParamsType,
   presentables,
   PresentablesOnlineParamsType,
   presentablesOnlineStatus,
@@ -34,6 +35,8 @@ export type NodeManagerModelState = WholeReadonly<{
     isOnline: boolean;
     resourceId: string;
     version: string;
+    isAuth: boolean;
+    authErrorText: string;
   }[];
   totalNum: number;
   exhibitDataState: '' | 'noData' | 'noSearchData' | 'loading';
@@ -46,6 +49,7 @@ export type NodeManagerModelState = WholeReadonly<{
     policies: string[];
     version: string;
     isOnline: boolean;
+    isAuth: boolean;
   }[];
   themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
 }>;
@@ -181,21 +185,41 @@ const Model: NodeManagerModelType = {
       };
 
       const {data} = yield call(presentables, params);
-      // console.log(data, 'data1234');
+      console.log(data, 'data1234');
+
+      let batchAuthPs: any[] = [];
+      if (data.dataList.length > 0) {
+        const params1: BatchAuthParamsType = {
+          nodeId: nodeManagerPage.nodeId,
+          authType: 3,
+          presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
+            return dl.presentableId;
+          }).join(','),
+        };
+        const {data: data1} = yield call(batchAuth, params1);
+        batchAuthPs = data1;
+      }
+      console.log(batchAuthPs, 'batchAuthPs290uopasdf');
+      // !i.policies.find((p: any) => p.status === 1)
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitList: (data.dataList as any[]).map<NodeManagerModelState['exhibitList'][number]>((i: any) => ({
-            id: i.presentableId,
-            cover: i.coverImages[0],
-            title: i.presentableTitle,
-            resourceName: i.presentableName,
-            version: i.version,
-            isOnline: i.onlineStatus === 1,
-            type: i.resourceInfo.resourceType,
-            policies: [],
-            resourceId: i.resourceInfo.resourceId,
-          })),
+          exhibitList: (data.dataList as any[]).map<NodeManagerModelState['exhibitList'][number]>((i: any) => {
+            const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
+            return {
+              id: i.presentableId,
+              cover: i.coverImages[0],
+              title: i.presentableTitle,
+              resourceName: i.presentableName,
+              version: i.version,
+              isOnline: i.onlineStatus === 1,
+              type: i.resourceInfo.resourceType,
+              policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+              resourceId: i.resourceInfo.resourceId,
+              isAuth: authInfo.isAuth,
+              authErrorText: authInfo.error,
+            };
+          }),
           totalNum: data.totalItem,
           exhibitDataState: data.totalItem !== 0 ? ''
             : (nodeManagerPage.selectedType === '-1' && nodeManagerPage.selectedStatus === '2' && nodeManagerPage.exhibitInputFilter === '')
@@ -252,12 +276,10 @@ const Model: NodeManagerModelType = {
               id: i.presentableId,
               cover: i.coverImages[0],
               title: i.presentableTitle,
-              // resourceName: i.presentableName,
               version: i.version,
               isOnline: i.onlineStatus === 1,
-              // type: i.resourceInfo.resourceType,
               policies: [],
-              // resourceId: i.resourceInfo.resourceId,
+              isAuth: true,
             };
           }),
           themeDataState: data.totalItem !== 0 ? ''

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FDown, FEdit, FExclamation, FFileSearch} from '@/components/FIcons';
+import {FDown, FEdit, FExclamation, FFileSearch, FWarning} from '@/components/FIcons';
 import Header from '../Header';
 import FTable from '@/components/FTable';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
@@ -23,6 +23,7 @@ import FDropdownMenu from "@/components/FDropdownMenu";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/$id/Sider";
+import FTooltip from "@/components/FTooltip";
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -171,6 +172,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={15}>
           <FSwitch
+            disabled={!record.isAuth || record.policies.length === 0}
             checked={record.isOnline}
             onChange={(value) => {
               dispatch<OnOnlineOrOfflineAction>({
@@ -182,7 +184,9 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               });
             }}
           />
-          {/*{record.isOnline || <FExclamation/>}*/}
+          {!record.isAuth || record.policies.length === 0 ? <FTooltip title={!record.isAuth ? record.authErrorText: '暂无上线策略'}>
+            <FWarning/>
+          </FTooltip>: ''}
         </Space>)
       }
     },
@@ -268,26 +272,6 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
                 dataSource={dataSource as any}
                 pagination={false}
               />
-              {/*<div style={{height: 20}}/>*/}
-              {/*<div className={styles.pagination}>*/}
-              {/*  <FPagination*/}
-              {/*    current={nodeManagerPage.pageCurrent}*/}
-              {/*    onChangeCurrent={(value) => dispatch<OnChangeExhibitAction>({*/}
-              {/*      type: 'nodeManagerPage/onChangeExhibit',*/}
-              {/*      payload: {*/}
-              {/*        pageCurrent: value,*/}
-              {/*      },*/}
-              {/*    })}*/}
-              {/*    pageSize={nodeManagerPage.pageSize}*/}
-              {/*    onChangePageSize={(value) => dispatch<OnChangeExhibitAction>({*/}
-              {/*      type: 'nodeManagerPage/onChangeExhibit',*/}
-              {/*      payload: {*/}
-              {/*        pageSize: value,*/}
-              {/*      },*/}
-              {/*    })}*/}
-              {/*    total={nodeManagerPage.totalNum}*/}
-              {/*  />*/}
-              {/*</div>*/}
             </div>)
         }
       </>)
