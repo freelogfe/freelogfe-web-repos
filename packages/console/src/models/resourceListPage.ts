@@ -37,12 +37,17 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceListPageModelState>;
 }
 
+export interface ClearDataAction extends AnyAction {
+  type: 'resourceListPage/clearData';
+}
+
 export interface ResourceListPageModelType {
   namespace: 'resourceListPage';
   state: ResourceListPageModelState;
   effects: {
     changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+    clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceListPageModelState, ChangeAction>;
@@ -52,18 +57,20 @@ export interface ResourceListPageModelType {
   };
 }
 
+const initStates: ResourceListPageModelState = {
+  resourceType: '-1',
+  resourceStatus: '2',
+  inputText: '',
+  dataSource: [],
+  pageSize: 20,
+  totalNum: -1,
+};
+
 const Model: ResourceListPageModelType = {
 
   namespace: 'resourceListPage',
 
-  state: {
-    resourceType: '-1',
-    resourceStatus: '2',
-    inputText: '',
-    dataSource: [],
-    pageSize: 20,
-    totalNum: -1,
-  },
+  state: initStates,
 
   effects: {
     * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
@@ -97,7 +104,7 @@ const Model: ResourceListPageModelType = {
         isSelf: 1,
       };
       const {data} = yield call(list, params);
-      console.log(data, 'data')
+      // console.log(data, 'data')
 
       yield put<ChangeAction>({
         type: 'change',
@@ -115,9 +122,13 @@ const Model: ResourceListPageModelType = {
             })),
           ],
           totalNum: data.totalItem,
-          // dataSource: [],
-          // totalNum: 0,
         },
+      });
+    },
+    * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
       });
     },
   },
@@ -133,13 +144,13 @@ const Model: ResourceListPageModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      history.listen((listener) => {
-        if (listener.pathname === '/resource/list') {
-          dispatch<FetchDataSourceAction>({
-            type: 'fetchDataSource',
-          });
-        }
-      });
+      // history.listen((listener) => {
+      //   if (listener.pathname === '/resource/list') {
+      //     dispatch<FetchDataSourceAction>({
+      //       type: 'fetchDataSource',
+      //     });
+      //   }
+      // });
     },
 
   },

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  ChangeStatesAction, FetchDataSourceAction, ResourceListPageModelState
+  ChangeStatesAction, ClearDataAction, FetchDataSourceAction, ResourceListPageModelState
 } from "@/models/resourceListPage";
 import {router} from "umi";
 import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
@@ -27,6 +27,18 @@ function Resources({dispatch, resource}: ResourceProps) {
   function setHeight() {
     setContentMinHeight(window.innerHeight - 140);
   }
+
+  React.useEffect(() => {
+    dispatch<FetchDataSourceAction>({
+      type: 'resourceListPage/fetchDataSource',
+    });
+
+    return () => {
+      dispatch<ClearDataAction>({
+        type: 'resourceListPage/clearData',
+      });
+    };
+  }, []);
 
   if (resource.dataSource.length === 0 && resource.inputText === '' && resource.resourceType === '-1' && resource.resourceStatus === '2') {
     return (<FNoDataTip
