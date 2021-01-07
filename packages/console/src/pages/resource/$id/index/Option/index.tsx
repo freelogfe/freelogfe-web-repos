@@ -29,7 +29,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
             <Space size={10}>
               <FContentText text={i.key}/>
               <FTooltip
-                title={i.value}
+                title={i.description}
                 color={'#fff'}><FInfo/></FTooltip>
             </Space>
           </div>))

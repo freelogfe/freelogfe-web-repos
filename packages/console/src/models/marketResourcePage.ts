@@ -103,6 +103,7 @@ export interface MarketResourcePageModelState {
   options: {
     key: string;
     value: string;
+    description: string;
   }[];
 
   signExhibitName: string;
@@ -477,10 +478,14 @@ const Model: MarketResourcePageModelType = {
               })),
           ],
           options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
-            .map((p: any) => ({
-              key: p.key,
-              value: p.defaultValue,
-            })),
+            .map((p: any) => {
+              console.log(p, '@@@@@@#$#@$@#$@#');
+              return {
+                key: p.key,
+                value: p.defaultValue,
+                description: p.remark,
+              };
+            }),
         },
       });
     },
