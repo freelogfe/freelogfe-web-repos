@@ -24,7 +24,7 @@ export interface TempModelType {
   state: TempModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<TempModelState, ChangeAction>;
@@ -45,7 +45,7 @@ const Model: TempModelType = {
     * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
 
     },
-    * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,

@@ -3,9 +3,14 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
 import {router} from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
-import {ChangeStatesAction} from '@/models/resourceCollectPage';
-import {BoomJuiceAction} from '@/models/resourceCollectPage';
+import {
+  ChangeStatesAction,
+  BoomJuiceAction,
+  InitModelStatesAction,
+  FetchDataSourceAction
+} from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
+import FLoadingTip from "@/components/FLoadingTip";
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -28,7 +33,25 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
     setContentMinHeight(window.innerHeight - 140);
   }
 
-  console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
+  React.useEffect(() => {
+
+    dispatch<FetchDataSourceAction>({
+      type: 'resourceCollectPage/fetchDataSource',
+    });
+
+    return () => {
+      dispatch<InitModelStatesAction>({
+        type: 'resourceCollectPage/initModelStates',
+      });
+    };
+
+  }, []);
+
+  if (resource.totalNum === -1) {
+    return (<FLoadingTip height={contentMinHeight}/>)
+  }
+
+  // console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
   if (resource.dataSource.length === 0 && !resource.inputText && resource.resourceType === '-1' && resource.resourceStatus === '2') {
     return (<FNoDataTip
       height={contentMinHeight}

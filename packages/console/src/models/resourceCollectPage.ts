@@ -32,6 +32,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceCollectPageModelState>;
 }
 
+export interface InitModelStatesAction extends AnyAction {
+  type: 'resourceCollectPage/initModelStates';
+}
+
 export interface FetchDataSourceAction extends AnyAction {
   type: 'resourceCollectPage/fetchDataSource' | 'fetchDataSource';
   payload?: boolean; // 是否 restart
@@ -51,6 +55,7 @@ export interface ResourceCollectModelType {
   namespace: 'resourceCollectPage';
   state: ResourceCollectPageModelState;
   effects: {
+    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     boomJuice: (action: BoomJuiceAction, effects: EffectsCommandMap) => void;
@@ -61,20 +66,29 @@ export interface ResourceCollectModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceCollectPageModelState = {
+  resourceType: '-1',
+  resourceStatus: '2',
+  inputText: '',
+  dataSource: [],
+  pageSize: 20,
+  totalNum: -1,
+};
+
 const Model: ResourceCollectModelType = {
 
   namespace: 'resourceCollectPage',
 
-  state: {
-    resourceType: '-1',
-    resourceStatus: '2',
-    inputText: '',
-    dataSource: [],
-    pageSize: 20,
-    totalNum: -1,
-  },
+  state: initStates,
 
   effects: {
+    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+      console.log('InitModelStatesAction#@#@#@#@##@#');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
     * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -85,6 +99,7 @@ const Model: ResourceCollectModelType = {
       });
     },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+      console.log('FetchDataSourceAction23423434');
       const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
         resourceCollectPage,
       }));
@@ -152,13 +167,13 @@ const Model: ResourceCollectModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      history.listen((listener) => {
-        if (listener.pathname === '/resource/collect') {
-          dispatch<FetchDataSourceAction>({
-            type: 'fetchDataSource',
-          });
-        }
-      });
+      // history.listen((listener) => {
+      //   if (listener.pathname === '/resource/collect') {
+      //     dispatch<FetchDataSourceAction>({
+      //       type: 'fetchDataSource',
+      //     });
+      //   }
+      // });
     },
   },
 
