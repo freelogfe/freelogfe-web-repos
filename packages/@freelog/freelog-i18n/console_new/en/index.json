@@ -22,7 +22,7 @@
 	"upload_userdata": "Upload",
 	"privacity": "Privacy",
 	"display_userdata_in_storage": "Dispaly system bucket .NodeData",
-	"userdata_used_storage": "Your stored node data are currently using 5.6 MB of storage. ",
+	"userdata_used_storage": "Your stored node data are currently using {NodeDataUsedStorage} of storage. ",
 	"storage": "Storage",
 	"used_storage": "Storage",
 	"enter_nodedata": "Enter .NodeData",
@@ -40,7 +40,7 @@
 	"limit_resource_image_size": "File can not exceed 5MB",
 	"freelog_versioning": "Version number sould follow the Semantic Versioning Specification.",
 	"authorization_issue_offline_resource": "The resource is offline and not available for authorization.",
-	"authorization_issue_circular_reply": "We do not suppot authorization of circular reply.",
+	"authorization_issue_circular_reply": "We do not suppot authorization of circular rely.",
 	"error_custom_meta": "Syntax error. Custom meta should follow ",
 	"reselect": "Reselect",
 	"check_it": "Check it",
@@ -195,5 +195,7 @@
 	"version_range_incorrect": "",
 	"alarm_exhibits_show_plan": "",
 	"alarm_exhibits_show_authorization": "",
-	"test1101": "1"
+	"test1101": "1",
+	"msg_customdropdownlist": "",
+	"msg_bucket_quantity_exceed": ""
 }

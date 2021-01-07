@@ -195,5 +195,7 @@
 	"version_range_incorrect": "格式有误。版本范围输入应符合SemVer规范。",
 	"alarm_exhibits_show_plan": "请先添加并启用授权策略，再上线展品。",
 	"alarm_exhibits_show_authorization": "授权链异常，无法上线展品。",
-	"test1101": "1"
+	"test1101": "1",
+	"msg_customdropdownlist": "选项请用英文逗号分割，选框默认值为第一个选项",
+	"msg_bucket_quantity_exceed": "同一Freelog账号创建的存储空间总数不能超过5个"
 }
