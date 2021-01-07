@@ -83,7 +83,7 @@ const Model: ResourceCollectModelType = {
 
   effects: {
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
-      console.log('InitModelStatesAction#@#@#@#@##@#');
+      // console.log('InitModelStatesAction#@#@#@#@##@#');
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
@@ -99,7 +99,7 @@ const Model: ResourceCollectModelType = {
       });
     },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
-      console.log('FetchDataSourceAction23423434');
+      // console.log('FetchDataSourceAction23423434');
       const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
         resourceCollectPage,
       }));
