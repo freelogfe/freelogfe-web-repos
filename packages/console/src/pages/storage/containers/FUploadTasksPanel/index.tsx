@@ -16,6 +16,7 @@ import {
 import * as ahooks from 'ahooks';
 import FModal from '@/components/FModal';
 import {FTipText} from '@/components/FText';
+import {i18nMessage} from "@/utils/i18n";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -154,9 +155,13 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
       }}
       onCancel={() => {
         setModalVisible(false);
-      }}>
+      }}
+      cancelText={i18nMessage('countinue_upload')}
+      okText={i18nMessage('cancel_upload')}
+    >
       <div className={styles.modalContent}>
-        <FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>
+        {/*<FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>*/}
+        <FTipText text={i18nMessage('cancel_all_uploading_task')}/>
       </div>
     </FModal>
   </div>);
