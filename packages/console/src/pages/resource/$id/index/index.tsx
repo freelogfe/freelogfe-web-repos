@@ -56,7 +56,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       {
         !!marketResourcePage.signResources.find((sr) => {
           return sr.status === 0;
-        }) && (<Alert message={'当前上抛有未上线资源，不可用！'} type="error"/>)
+        }) && (<Alert message={'当前主资源或上抛有未上线资源，不可用！'} type="error"/>)
       }
 
       <div style={{height: 20}}/>
