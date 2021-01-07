@@ -7,6 +7,7 @@ import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
 import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FNoDataTip from "@/components/FNoDataTip";
+import FLoadingTip from "@/components/FLoadingTip";
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -40,6 +41,10 @@ function Resources({dispatch, resource}: ResourceProps) {
     };
   }, []);
 
+  if (resource.totalNum === -1) {
+    return (<FLoadingTip height={contentMinHeight}/>);
+  }
+
   if (resource.dataSource.length === 0 && resource.inputText === '' && resource.resourceType === '-1' && resource.resourceStatus === '2') {
     return (<FNoDataTip
       height={contentMinHeight}
@@ -55,6 +60,7 @@ function Resources({dispatch, resource}: ResourceProps) {
       payload,
     })
   }
+
 
   return (<FResourceCardsList
     resourceType={resource.resourceType}
