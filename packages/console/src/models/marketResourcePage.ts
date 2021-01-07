@@ -47,6 +47,8 @@ interface Policy {
 export interface MarketResourcePageModelState {
   resourceId: string;
 
+  isSignPage: boolean;
+
   resourceInfo: null | {
     cover: string;
     name: string;
@@ -117,6 +119,10 @@ export interface InitDataAction extends AnyAction {
   payload: string;
 }
 
+export interface ClearDataDataAction extends AnyAction {
+  type: 'marketResourcePage/clearData';
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
 }
@@ -157,6 +163,7 @@ interface MarketResourcePageModelType {
   state: MarketResourcePageModelState;
   effects: {
     initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
+    clearData: (action: ClearDataDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
@@ -174,42 +181,43 @@ interface MarketResourcePageModelType {
   };
 }
 
+const initStates: MarketResourcePageModelState = {
+  resourceId: '',
+  isSignPage: false,
+  resourceInfo: {
+    cover: '',
+    name: '',
+    type: '',
+    tags: [],
+    about: '',
+  },
+
+  popularity: 0,
+  hasCollect: false,
+
+  signedNodeIDs: [],
+  selectedNodeID: -1,
+
+  signResources: [],
+  signedResources: null,
+  signedResourceExhibitId: '',
+
+  allVersions: [],
+  version: '',
+  releaseTime: '',
+  description: '',
+
+  properties: [],
+
+  options: [],
+
+  signExhibitName: '',
+  signExhibitNameErrorTip: '',
+};
+
 const Model: MarketResourcePageModelType = {
   namespace: 'marketResourcePage',
-  state: {
-    resourceId: '',
-
-    resourceInfo: {
-      cover: '',
-      name: '',
-      type: '',
-      tags: [],
-      about: '',
-    },
-
-    popularity: 0,
-    hasCollect: false,
-
-    signedNodeIDs: [],
-    selectedNodeID: -1,
-
-    signResources: [],
-    signedResources: null,
-    signedResourceExhibitId: '',
-
-    allVersions: [],
-    version: '',
-    releaseTime: '',
-    description: '',
-    // showAllDescription: true,
-
-    properties: [],
-
-    options: [],
-
-    signExhibitName: '',
-    signExhibitNameErrorTip: '',
-  },
+  state: initStates,
   effects: {
     * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -225,6 +233,12 @@ const Model: MarketResourcePageModelType = {
 
       yield put<FetchCollectionInfoAction>({
         type: 'fetchCollectionInfo',
+      });
+    },
+    * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
       });
     },
     * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {

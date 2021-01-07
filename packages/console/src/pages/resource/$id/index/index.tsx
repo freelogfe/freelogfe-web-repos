@@ -12,10 +12,11 @@ import Option from './Option';
 import Viewport from '@/pages/resource/$id/index/Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import FDropdown from '@/components/FDropdown';
-import {FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
+import {ClearDataDataAction, FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
 import RouterTypes from 'umi/routerTypes';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert} from 'antd';
+import SignPage from './SignPage';
 
 interface ResourceDetailsProps
   // extends RouterTypes
@@ -36,7 +37,17 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       type: 'marketResourcePage/initData',
       payload: match.params.id,
     });
+
+    return () => {
+      dispatch<ClearDataDataAction>({
+        type: 'marketResourcePage/clearData',
+      });
+    };
   }, [match.params.id]);
+
+  if (marketResourcePage.isSignPage) {
+    return (<SignPage/>);
+  }
 
   return (<div className={styles.style}>
 
@@ -87,4 +98,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
 }
 
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(ResourceDetails);
+export default connect(({marketResourcePage}: ConnectState) => ({
+  marketResourcePage,
+}))(ResourceDetails);

@@ -4,7 +4,7 @@ import {FNormalButton, FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FLeft from '@/components/FIcons/FLeft';
 import {connect, Dispatch} from 'dva';
-import {MarketResourcePageModelState, SignContractAction} from "@/models/marketResourcePage";
+import {ChangeAction, MarketResourcePageModelState, SignContractAction} from "@/models/marketResourcePage";
 import {EXHIBIT_NAME} from "@/utils/regexp";
 import {ConnectState} from "@/models/connect";
 
@@ -19,7 +19,14 @@ function FixedFooter({dispatch, marketResourcePage}: FixedFooterProps) {
 
   return (<div className={styles.footer}>
     <div>
-      <FTextButton onClick={() => router.goBack()}>
+      <FTextButton onClick={() => {
+        dispatch<ChangeAction>({
+          type: 'marketResourcePage/change',
+          payload: {
+            isSignPage: false,
+          },
+        });
+      }}>
         <FLeft/>
         <>返回上一步</>
       </FTextButton>

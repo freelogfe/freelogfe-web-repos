@@ -51,7 +51,7 @@ const config: IConfig | any = {
               path: ':id',
               routes: [
                 {exact: true, path: '.', component: '../pages/resource/$id/index', title: '市场资源'},
-                {exact: true, path: 'sign', component: '../pages/resource/$id/sign', title: '市场资源'},
+                // {exact: true, path: 'sign', component: '../pages/resource/$id/sign', title: '市场资源'},
                 {exact: true, path: 'success', component: '../pages/resource/$id/success', title: '资源创建成功',},
                 {exact: true, path: 'info', component: '../pages/resource/$id/info', title: '资源信息'},
                 {exact: true, path: 'auth', component: '../pages/resource/$id/auth', title: '授权信息'},
