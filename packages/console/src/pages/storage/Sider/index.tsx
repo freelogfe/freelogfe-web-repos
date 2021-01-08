@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FCircleButton, FNormalButton} from '@/components/FButton';
-import {Progress, Space} from 'antd';
+import {Popconfirm, Progress, Space} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import {connect, Dispatch} from 'dva';
@@ -35,8 +35,14 @@ function Sider({storage, dispatch}: SiderProps) {
         <div style={{height: 45}}/>
         <div className={styles.title}>
           <Space size={10}>
-            <FTitleText text={`我的存储空间`} type="form"/>
-            <FTitleText text={`${storage.bucketList.length}/5`} type="form"/>
+            <FTitleText
+              text={`我的存储空间`}
+              type="form"
+            />
+            <FTitleText
+              text={`${storage.bucketList.length}/5`}
+              type="form"
+            />
           </Space>
           {
             storage.bucketList.length < 5 && (<FCircleButton
@@ -51,7 +57,6 @@ function Sider({storage, dispatch}: SiderProps) {
               })}
             />)
           }
-
         </div>
         <div style={{height: 18}}/>
         {
@@ -72,12 +77,19 @@ function Sider({storage, dispatch}: SiderProps) {
                   }}
                 >
                   <span>{b.bucketName}</span>
-                  {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <FDelete onClick={() => {
-                    dispatch<DeleteBucketByNameAction>({
-                      type: 'storageHomePage/deleteBucketByName',
-                      payload: b.bucketName,
-                    });
-                  }} style={{color: '#EE4040'}}/>}
+                  {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm
+                    title={'确定删除吗？'}
+                    onConfirm={() => {
+                      dispatch<DeleteBucketByNameAction>({
+                        type: 'storageHomePage/deleteBucketByName',
+                        payload: b.bucketName,
+                      });
+                    }}
+                  ><FDelete
+                    // onClick={}
+                    style={{color: '#EE4040'}}
+                  />
+                  </Popconfirm>}
                 </a>))
             }
           </div>) : (<FContentText
@@ -87,7 +99,6 @@ function Sider({storage, dispatch}: SiderProps) {
       </div>
 
       <div>
-
         <Progress
           strokeWidth={6}
           percent={storage.usedStorage / storage.totalStorage}

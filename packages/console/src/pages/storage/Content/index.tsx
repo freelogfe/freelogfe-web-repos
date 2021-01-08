@@ -2,15 +2,14 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import {Drawer, Row, Space, Col} from 'antd';
+import {Space, Popconfirm} from 'antd';
 import FTable from '@/components/FTable';
-import {EditOutlined, SnippetsOutlined, SendOutlined, DownloadOutlined, DeleteOutlined} from '@ant-design/icons';
+import {EditOutlined, DownloadOutlined} from '@ant-design/icons';
 import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
-import FPagination from '@/components/FPagination';
 import {
   DeleteObjectAction,
   // OnChangePaginationAction,
@@ -132,7 +131,7 @@ function Content({storage, dispatch}: ContentProps) {
     dispatch<DeleteObjectAction>({
       type: 'storageHomePage/deleteObject',
       payload: record.id,
-    })
+    });
   }
 
   // if (storage.bucketList.length === 0) {
@@ -201,7 +200,6 @@ function Content({storage, dispatch}: ContentProps) {
       </InfiniteScroll>)
     }
 
-    {/*{!storage.isLoading && <div style={{height: 100}}/>}*/}
     <Details/>
     <FUploadTasksPanel/>
   </div>);
@@ -240,10 +238,18 @@ function ToolsBar({showEdit = true, showDownload = true, showDelete = true, onCl
       ><DownloadOutlined/></FTextButton>)
     }
     {
-      showDelete && (<FTextButton
-        onClick={() => onClickDelete && onClickDelete()}
-        className={styles.Delete}
-      ><FDelete/></FTextButton>)
+      showDelete && (
+        <Popconfirm
+          title={'确定删除吗？'}
+          // okText="Yes"
+          // cancelText="No"
+          onConfirm={() => onClickDelete && onClickDelete()}
+        >
+          <FTextButton
+            className={styles.Delete}
+          ><FDelete/></FTextButton>
+        </Popconfirm>
+      )
     }
 
   </Space>)
