@@ -30,13 +30,6 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
   // console.log(resource, 'resource23qeasdj98io');
   return (<>
     <Space size={30}>
-      {/*<Space size={10}>*/}
-      {/*  <FCircleButton*/}
-      {/*    onClick={() => setModalVisible(true)}*/}
-      {/*    theme="weaken"*/}
-      {/*  />*/}
-      {/*  <FContentText text={i18nMessage('add_rely_resource')}/>*/}
-      {/*</Space>*/}
       <FNormalButton
         onClick={() => setModalVisible(true)}
         theme="grey"

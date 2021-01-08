@@ -351,11 +351,13 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadLatestVersionInfo: 1,
       };
       const {data} = yield call(info, params);
-      // console.log(data, '2093jdsl;kfasdf');
+      console.log(data, '2093jdsl;kfasdf');
+      // console.log(semver.inc('1.2.3', 'patch'), '########');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           latestVersion: data.latestVersion,
+          version: resourceVersionCreatorPage.version ? resourceVersionCreatorPage.version : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
         },
       });
     },

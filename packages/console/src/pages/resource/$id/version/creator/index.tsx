@@ -1,13 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
-import FContentLayout from '@/pages/resource/layouts/FContentLayout';
-import {FContentText, FTitleText} from '@/components/FText';
-import FEditorCard from '@/components/FEditorCard';
+import {FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FCircleButton, FNormalButton, FTextButton} from '@/components/FButton';
-import {Space, Row, Col} from 'antd';
+import {FNormalButton, FTextButton} from '@/components/FButton';
+import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -28,9 +25,7 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
 import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
-import {CloseCircleFilled} from '@ant-design/icons';
-import {FClose, FCopy, FDown, FInfo} from "@/components/FIcons";
-import FTooltip from "@/components/FTooltip";
+import {FDown, FInfo} from "@/components/FIcons";
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
@@ -38,7 +33,6 @@ import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import FNoDataTip from "@/components/FNoDataTip";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -108,11 +102,11 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
 
   async function init() {
     await onChange({resourceId: match.params.id});
-    dispatch<FetchDraftAction>({
-      type: 'resourceVersionCreatorPage/fetchDraft',
-    });
-    dispatch<FetchResourceInfoAction>({
+    await dispatch<FetchResourceInfoAction>({
       type: 'resourceVersionCreatorPage/fetchResourceInfo',
+    });
+    await dispatch<FetchDraftAction>({
+      type: 'resourceVersionCreatorPage/fetchDraft',
     });
   }
 
