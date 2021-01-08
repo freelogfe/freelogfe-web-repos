@@ -110,6 +110,27 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   }[];
 
   description: EditorState;
+
+  preVersionBaseProperties: {
+    key: string;
+    value: string;
+    description: string;
+  }[];
+
+  preVersionOptionProperties: {
+    key: string;
+    description: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    customOption: string;
+  }[];
+
+  preVersionDeps: {
+    relationships: Relationships;
+    versions: { id: string; versionRange: string }[];
+  };
+
+  // latestVersionData: null | any;
 };
 
 export interface ChangeAction extends AnyAction {
@@ -233,10 +254,14 @@ const initStates: ResourceVersionCreatorPageModelState = {
   dependencies: [],
   depActivatedID: '',
 
-
   description: BraftEditor.createEditorState(''),
 
-  // draftData: null,
+  preVersionBaseProperties: [],
+  preVersionOptionProperties: [],
+  preVersionDeps: {
+    relationships: [],
+    versions: [],
+  },
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -351,13 +376,87 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadLatestVersionInfo: 1,
       };
       const {data} = yield call(info, params);
-      console.log(data, '2093jdsl;kfasdf');
-      // console.log(semver.inc('1.2.3', 'patch'), '########');
+      // console.log(data, '2093jdsl;kfasdf');
+
+      let description: EditorState = BraftEditor.createEditorState('');
+      let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
+      let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
+      let preVersionDeps = {
+        relationships: [],
+        versions: [],
+      };
+      if (data.latestVersion) {
+        const params2: ResourceVersionInfoParamsType1 = {
+          resourceId: resourceVersionCreatorPage.resourceId,
+          version: data.latestVersion,
+        };
+        const {data: data2} = yield call(resourceVersionInfo, params2);
+        // console.log(data2, 'data2092384u0');
+        description = BraftEditor.createEditorState(data2.description);
+        preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
+          .filter((cpd: any) => cpd.type === 'readonlyText')
+          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
+            return {
+              key: cpd.key,
+              value: cpd.defaultValue,
+              description: cpd.remark,
+            };
+          });
+
+        preVersionOptionProperties = (data2.customPropertyDescriptors as any[])
+          .filter((cpd: any) => cpd.type !== 'readonlyText')
+          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd: any) => {
+            return {
+              key: cpd.key,
+              description: cpd.remark,
+              custom: cpd.type === 'editableText' ? 'input' : 'select',
+              defaultValue: cpd.defaultValue,
+              customOption: cpd.candidateItems.join(','),
+            };
+          });
+
+        const depResourceIds: string = (data2.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
+
+        if (depResourceIds.length > 0) {
+          const params3: BatchInfoParamsType = {
+            resourceIds: depResourceIds,
+          };
+          const {data: data3} = yield call(batchInfo, params3);
+          // console.log(data2, '#ASGDFASDF');
+          const relations: Relationships = data3.map((dd: any) => {
+            return {
+              id: dd.resourceId,
+              children: dd.baseUpcastResources.map((bur: any) => {
+                return {
+                  id: bur.resourceId,
+                }
+              }),
+            };
+          });
+
+          const versions = (data2.dependencies as any[]).map((dr: any) => {
+            return {
+              id: dr.resourceId,
+              versionRange: dr.versionRange,
+            };
+          });
+
+          preVersionDeps = {
+            relationships: relations as any,
+            versions: versions as any,
+          };
+        }
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           latestVersion: data.latestVersion,
           version: resourceVersionCreatorPage.version ? resourceVersionCreatorPage.version : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
+          preVersionBaseProperties,
+          preVersionOptionProperties,
+          preVersionDeps,
+          description,
         },
       });
     },
@@ -694,13 +793,9 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      const params: ResourceVersionInfoParamsType1 = {
-        resourceId: resourceVersionCreatorPage.resourceId,
-        version: resourceVersionCreatorPage.latestVersion,
-      };
-      const {data} = yield call(resourceVersionInfo, params);
-      // console.log(data, '2093jdsl;kfasdf');
 
+      // preVersionBaseProperties,
+      //   preVersionOptionProperties,
       if (payload === 'baseProps') {
         const allKeys: string[] = [
           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
@@ -714,15 +809,14 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             basePropertiesEditorVisible: true,
-            basePropertiesEditorData: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type === 'readonlyText')
-              .map<StorageObjectEditorModelState['basePropertiesEditorData'][number]>((cpd: any) => {
+            basePropertiesEditorData: resourceVersionCreatorPage.preVersionBaseProperties
+              .map<ResourceVersionCreatorPageModelState['basePropertiesEditorData'][number]>((cpd) => {
                 return {
                   key: cpd.key,
                   keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-                  value: cpd.defaultValue,
+                  value: cpd.value,
                   valueError: '',
-                  description: cpd.remark,
+                  description: cpd.description,
                   descriptionError: '',
                 };
               }),
@@ -742,18 +836,17 @@ const Model: ResourceVersionCreatorModelType = {
         return yield put<ChangeAction>({
           type: 'change',
           payload: {
-            properties: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
+            properties: resourceVersionCreatorPage.preVersionOptionProperties
+              .map<StorageObjectEditorModelState['properties'][number]>((cpd) => {
                 return {
                   key: cpd.key,
                   keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
-                  description: cpd.remark,
+                  description: cpd.description,
                   descriptionError: '',
-                  custom: cpd.type === 'editableText' ? 'input' : 'select',
+                  custom: cpd.custom,
                   defaultValue: cpd.defaultValue,
                   defaultValueError: '',
-                  customOption: cpd.candidateItems.join(','),
+                  customOption: cpd.customOption,
                   customOptionError: '',
                 };
               }),
@@ -770,40 +863,11 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
 
-        const depResourceIds: string = (data.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
-
-        if (depResourceIds.length === 0) {
-          return;
-        }
-
-        const params2: BatchInfoParamsType = {
-          resourceIds: depResourceIds,
-        };
-        const {data: data2} = yield call(batchInfo, params2);
-        // console.log(data2, '#ASGDFASDF');
-        const relations = data2.map((dd: any) => {
-          return {
-            id: dd.resourceId,
-            children: dd.baseUpcastResources.map((bur: any) => {
-              return {
-                id: bur.resourceId,
-              }
-            }),
-          };
-        });
-
-        const versions = (data.dependencies as any[]).map((dr) => {
-          return {
-            id: dr.resourceId,
-            versionRange: dr.versionRange,
-          };
-        });
-
         yield put<AddDepsAction>({
           type: 'addDeps',
           payload: {
-            relationships: relations,
-            versions: versions,
+            relationships: resourceVersionCreatorPage.preVersionDeps.relationships,
+            versions: resourceVersionCreatorPage.preVersionDeps.versions,
           },
         });
       }
