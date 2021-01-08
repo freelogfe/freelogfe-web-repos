@@ -72,18 +72,6 @@ export interface StorageObjectEditorModelState {
 
   depRs: DepR[];
   depOs: DepO[];
-  // properties: {
-  //   key: string;
-  //   keyError?: string;
-  //   value: string;
-  //   valueError?: string;
-  //   description: string;
-  //   descriptionError?: string;
-  //   allowCustom: boolean;
-  //   custom: 'input' | 'select';
-  //   customOption: string;
-  //   customOptionError: string;
-  // }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -105,9 +93,19 @@ export interface AddObjectDepRAction extends AnyAction {
   payload: string;
 }
 
+export interface DeleteObjectDepRAction extends AnyAction {
+  type: 'storageObjectEditor/deleteObjectDepR';
+  payload: string; // 资源名称
+}
+
 export interface AddObjectDepOAction extends AnyAction {
   type: 'storageObjectEditor/addObjectDepO';
   payload: string;
+}
+
+export interface DeleteObjectDepOAction extends AnyAction {
+  type: 'storageObjectEditor/deleteObjectDepO';
+  payload: string; // 对象全称
 }
 
 export interface OnChangeTypeAction extends AnyAction {
@@ -122,7 +120,9 @@ export interface StorageObjectEditorModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     onChangeType: (action: OnChangeTypeAction, effects: EffectsCommandMap) => void;
     addObjectDepR: (action: AddObjectDepRAction, effects: EffectsCommandMap) => void;
+    deleteObjectDepR: (action: DeleteObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
+    deleteObjectDepO: (action: DeleteObjectDepOAction, effects: EffectsCommandMap) => void;
     // deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
     updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
   };
@@ -313,6 +313,19 @@ const Model: StorageObjectEditorModelType = {
         },
       });
     },
+    * deleteObjectDepR({payload}: DeleteObjectDepRAction, {put, select}: EffectsCommandMap) {
+      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+        storageObjectEditor,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depRs: storageObjectEditor.depRs.filter((dr) => {
+            return dr.name !== payload;
+          }),
+        },
+      });
+    },
     * addObjectDepO({payload}: AddObjectDepOAction, {call, put, select}: EffectsCommandMap) {
       const params: ObjectDetailsParamsType2 = {
         objectIdOrName: payload,
@@ -332,6 +345,19 @@ const Model: StorageObjectEditorModelType = {
             },
           ],
         }
+      });
+    },
+    * deleteObjectDepO({payload}: DeleteObjectDepOAction, {select, put}: EffectsCommandMap) {
+      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+        storageObjectEditor,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          depOs: storageObjectEditor.depOs.filter((dr) => {
+            return dr.name !== payload;
+          }),
+        },
       });
     },
     * updateObjectInfo({}: UpdateObjectInfoAction, {call, select, put}: EffectsCommandMap) {

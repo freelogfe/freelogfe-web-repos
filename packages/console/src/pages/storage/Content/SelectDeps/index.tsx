@@ -5,7 +5,8 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState, StorageObjectEditorModelState} from '@/models/connect';
 import FResourceSelector from '@/containers/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';
-import {AddObjectDepOAction, AddObjectDepRAction,
+import {
+  AddObjectDepOAction, AddObjectDepRAction, DeleteObjectDepOAction, DeleteObjectDepRAction,
   // DeleteObjectDepAction
 } from '@/models/storageObjectEditor';
 
@@ -22,9 +23,7 @@ function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) 
       <Tabs.TabPane tab="资源" key="1">
         <FResourceSelector
           showRemoveIDsOrNames={storageObjectEditor.depRs.map((r) => r.name)}
-          // disabledIDsOrNames={[storageObjectEditor.bucketName + '/' + storageObjectEditor.objectName]}
           onSelect={(value) => {
-            // console.log(value, 'idid23ds9082;klq34jr;');
             dispatch<AddObjectDepRAction>({
               type: 'storageObjectEditor/addObjectDepR',
               payload: value.id,
@@ -32,12 +31,10 @@ function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) 
           }}
           onDelete={(value) => {
             // console.log(value, 'ddEDAFDSS');
-            // dispatch<DeleteObjectDepAction>({
-            //   type: 'storageObjectEditor/deleteObjectDep',
-            //   payload: {
-            //     resourceName: value.name,
-            //   }
-            // });
+            dispatch<DeleteObjectDepRAction>({
+              type: 'storageObjectEditor/deleteObjectDepR',
+              payload: value.name
+            });
           }}
         />
       </Tabs.TabPane>
@@ -54,12 +51,10 @@ function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) 
           }}
           onDelete={(value) => {
             // console.log(value, 'ddEDAFD243r5SS');
-            // dispatch<DeleteObjectDepAction>({
-            //   type: 'storageObjectEditor/deleteObjectDep',
-            //   payload: {
-            //     objectName: value.name,
-            //   },
-            // });
+            dispatch<DeleteObjectDepOAction>({
+              type: 'storageObjectEditor/deleteObjectDepO',
+              payload: value.name,
+            });
           }}
         />
       </Tabs.TabPane>

@@ -4,11 +4,11 @@ import FSiderLayout from '@/layouts/FSiderLayout';
 import Sider from './Sider';
 import Content from './Content';
 import NoBucket from './NoBucket';
-import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import FContentLayout from "@/layouts/FContentLayout";
-import Header from "./Header";
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import FContentLayout from '@/layouts/FContentLayout';
+import Header from './Header';
 import {connect} from 'dva';
-import {ConnectState, StorageHomePageModelState} from "@/models/connect";
+import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 
 interface StorageProps {
   storageHomePage: StorageHomePageModelState;
@@ -16,11 +16,8 @@ interface StorageProps {
 
 function Storage({storageHomePage}: StorageProps) {
 
-
   if (storageHomePage.bucketList.length === 0) {
-    return (<>
-      <NoBucket/>
-      </>)
+    return (<NoBucket/>);
   }
 
   return (<FLeftSiderLayout
@@ -33,9 +30,7 @@ function Storage({storageHomePage}: StorageProps) {
       boxShadow: storageHomePage.objectList.length === 0 ? 'none' : undefined,
     }}
     hasBottom={storageHomePage.objectList.length !== 0}
-  >
-    <Content/>
-  </FLeftSiderLayout>);
+  ><Content/></FLeftSiderLayout>);
 }
 
 export default connect(({storageHomePage}: ConnectState) => ({

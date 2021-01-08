@@ -235,36 +235,6 @@ function Details({editor, dispatch}: DetailsProps) {
           }
 
         </FFormLayout.FBlock>
-        {/*  <FFormLayout.FBlock title={'自定义属性'}>*/}
-        {/*    <Space size={10}>*/}
-        {/*      <FCircleButton*/}
-        {/*        theme="weaken"*/}
-        {/*        onClick={() => {*/}
-        {/*          dispatch<ChangeAction>({*/}
-        {/*            type: 'storageObjectEditor/change',*/}
-        {/*            payload: {*/}
-        {/*              properties: [*/}
-        {/*                ...editor.properties,*/}
-        {/*                {*/}
-        {/*                  key: '',*/}
-        {/*                  keyError: '',*/}
-        {/*                  description: '',*/}
-        {/*                  descriptionError: '',*/}
-        {/*                  custom: 'input',*/}
-        {/*                  defaultValue: '',*/}
-        {/*                  defaultValueError: '',*/}
-        {/*                  customOption: '',*/}
-        {/*                  customOptionError: '',*/}
-        {/*                },*/}
-        {/*              ],*/}
-        {/*            },*/}
-        {/*          });*/}
-        {/*        }}*/}
-        {/*      />*/}
-        {/*      <FContentText text={'添加'}/>*/}
-        {/*    </Space>*/}
-        {/*    <div style={{height: 20}}/>*/}
-        {/*  </FFormLayout.FBlock>*/}
       </FFormLayout>
 
       <div style={{height: 120}}/>
