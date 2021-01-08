@@ -30,7 +30,7 @@ const config: IConfig | any = {
             {component: './404'},
           ],
         },
-        {exact: true, path: 'storage', component: '../pages/storage', title: '储存空间'},
+        {exact: true, path: 'storage', component: '../pages/storage', title: '存储空间'},
         {
           path: 'node',
           routes: [
