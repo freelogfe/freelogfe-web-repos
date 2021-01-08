@@ -98,6 +98,7 @@ export interface MarketResourcePageModelState {
   properties: {
     key: string;
     value: string;
+    description?: string;
   }[];
 
   options: {
@@ -472,10 +473,14 @@ const Model: MarketResourcePageModelType = {
                 value: s[1],
               })),
             ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
-              .map((p: any) => ({
-                key: p.key,
-                value: p.defaultValue,
-              })),
+              .map((p: any) => {
+                // console.log(p, 'PPPPP()*UOI');
+                return {
+                  key: p.key,
+                  value: p.defaultValue,
+                  description: p.remark,
+                };
+              }),
           ],
           options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
             .map((p: any) => {

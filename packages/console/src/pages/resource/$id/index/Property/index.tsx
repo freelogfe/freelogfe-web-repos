@@ -3,6 +3,9 @@ import {FTitleText, FContentText} from '@/components/FText';
 import styles from './index.less';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
+import FTooltip from "@/components/FTooltip";
+import {FInfo} from "@/components/FIcons";
+import {Space} from "antd";
 
 interface PropertyProps {
   dispatch: Dispatch;
@@ -25,10 +28,9 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 0)
-                .map((p) => (<tr key={p.key}>
-                  <td><FContentText text={p.key} type="negative"/></td>
-                  <td><FContentText text={p.value}/></td>
-                </tr>))
+                .map((p) => {
+                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                })
             }
             </tbody>
           </table>
@@ -39,10 +41,9 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 1)
-                .map((p) => (<tr key={p.key}>
-                  <td><FContentText text={p.key} type="negative"/></td>
-                  <td><FContentText text={p.value}/></td>
-                </tr>))
+                .map((p) => {
+                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                })
             }
             </tbody>
           </table>
@@ -53,10 +54,9 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 2)
-                .map((p) => (<tr key={p.key}>
-                  <td><FContentText text={p.key} type="negative"/></td>
-                  <td><FContentText text={p.value}/></td>
-                </tr>))
+                .map((p) => {
+                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                })
             }
             </tbody>
           </table>
@@ -68,3 +68,22 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
 }
 
 export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Property);
+
+interface ItemProps {
+  tTey: string;
+  value: string;
+  description?: string;
+}
+
+function Item({tTey, value, description}: ItemProps) {
+  return (<tr key={tTey}>
+    <td>
+      <Space size={5}>
+        <FContentText text={tTey} type="negative"/>
+        {description && (
+          <FTooltip title={description}><FInfo/></FTooltip>)}
+      </Space>
+    </td>
+    <td><FContentText text={value}/></td>
+  </tr>);
+}
