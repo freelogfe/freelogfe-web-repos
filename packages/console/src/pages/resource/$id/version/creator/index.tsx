@@ -254,7 +254,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                       }}
                     >补充属性</FTextButton>
                     {
-                      resourceVersionCreatorPage.latestVersion
+                      resourceVersionCreatorPage.preVersionBaseProperties.length > 0
                         ? (<FTextButton
                           theme="primary"
                           onClick={() => {
@@ -310,7 +310,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                         }}
                       >添加选项</a>
                       {
-                        resourceVersionCreatorPage.latestVersion && (<a onClick={() => {
+                        resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<a onClick={() => {
                           dispatch<ImportLastVersionDataAction>({
                             type: 'resourceVersionCreatorPage/importLastVersionData',
                             payload: 'optionProps',

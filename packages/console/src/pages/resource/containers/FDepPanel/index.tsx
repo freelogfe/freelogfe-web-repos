@@ -35,7 +35,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
         theme="grey"
       >{i18nMessage('add_rely_resource')}</FNormalButton>
       {
-        creator.latestVersion &&
+        creator.preVersionDeps.relationships.length > 0 &&
         <FNormalButton
           theme="grey"
           onClick={() => {
