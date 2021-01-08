@@ -53,21 +53,6 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
           }}
         >{i18nMessage('import_from_previous_version')}</FNormalButton>
       }
-      {/*{*/}
-      {/*  creator.latestVersion && (<Space size={10}>*/}
-      {/*    <FCircleButton*/}
-      {/*      theme="weaken"*/}
-      {/*      icon={<CopyOutlined/>}*/}
-      {/*      onClick={() => {*/}
-      {/*        dispatch<ImportLastVersionDataAction>({*/}
-      {/*          type: 'resourceVersionCreatorPage/importLastVersionData',*/}
-      {/*          payload: 'deps',*/}
-      {/*        });*/}
-      {/*      }}*/}
-      {/*    />*/}
-      {/*    <FContentText text={i18nMessage('import_from_previous_version')}/>*/}
-      {/*  </Space>)*/}
-      {/*}*/}
 
     </Space>
 
@@ -112,7 +97,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
     }
 
     <FDrawer
-      title={'添加依赖'}
+      title={i18nMessage('add_rely_resource')}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}

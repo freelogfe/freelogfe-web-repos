@@ -120,7 +120,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     await dispatch<SaveDraftAction>({
       type: 'resourceVersionCreatorPage/saveDraft',
     });
-    await await dispatch<FetchDraftDataAction>({
+    await dispatch<FetchDraftDataAction>({
       type: 'resourceInfo/fetchDraftData',
     });
   }
