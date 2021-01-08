@@ -154,6 +154,11 @@ export interface AddDepsAction extends AnyAction {
   };
 }
 
+export interface AddDepsByMainIDsAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/dddDepsByMainIDs'
+  payload: string[]; // 主资源 ids
+}
+
 export interface HandleObjectInfoAction extends AnyAction {
   type: 'resourceVersionCreatorPage/handleObjectInfo';
   payload: string; // 对象 id
@@ -190,6 +195,7 @@ export interface ResourceVersionCreatorModelType {
     // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
+    dddDepsByMainIDs: (action: AddDepsByMainIDsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
     goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
@@ -523,6 +529,28 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
+    * dddDepsByMainIDs({payload}: AddDepsByMainIDsAction, {call, put}: EffectsCommandMap) {
+      const params: BatchInfoParamsType = {
+        resourceIds: payload.join(','),
+      };
+      const {data} = yield call(batchInfo, params);
+      // console.log(data, 'data198023h');
+      yield put<AddDepsAction>({
+        type: 'addDeps',
+        payload: {
+          relationships: data.map((d: any) => {
+            return {
+              id: d.resourceId,
+              children: d.baseUpcastResources.map((c: any) => {
+                return {
+                  id: c.resourceId,
+                };
+              }),
+            }
+          }),
+        },
+      });
+    },
     * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
       // console.log(payload, '!!!@@@#$@#$#$');
 
@@ -824,174 +852,22 @@ const Model: ResourceVersionCreatorModelType = {
 
 export default Model;
 
-function verify(data: any) {
-  const {version, latestVersion, fileSha1} = data;
-  let versionErrorText = '';
-  let resourceObjectErrorText = '';
-
-  if (!version) {
-    versionErrorText = '请输入版本号';
-  } else if (!semver.valid(version)) {
-    versionErrorText = '版本号不合法';
-  } else if (!semver.gt(version, latestVersion || '0.0.0')) {
-    versionErrorText = latestVersion ? `必须大于最新版本 ${latestVersion}` : '必须大于 0.0.0';
-  }
-
-  if (!fileSha1) {
-    resourceObjectErrorText = '请选择对象或上传文件';
-  }
-
-  return {versionErrorText, resourceObjectErrorText};
-}
-
-// interface HandleDepResourceParams {
-//   resourceInfo: any;
-//   allBaseUpthrowIds: string[];
-//   allNeedHandledIds: string[];
-//   allExistsIds: string[];
-// }
-
-// async function handleDepResource({allNeedHandledIds, resourceInfo, allBaseUpthrowIds, allExistsIds}: HandleDepResourceParams) {
-//   const arr: any[] = [];
+// function verify(data: any) {
+//   const {version, latestVersion, fileSha1} = data;
+//   let versionErrorText = '';
+//   let resourceObjectErrorText = '';
 //
-//   for (const [i, id] of Object.entries(allNeedHandledIds)) {
-//     if (allExistsIds.includes(id)) {
-//       continue;
-//     }
-//     let dep = await dddDependency(id, resourceInfo, allBaseUpthrowIds);
-//
-//     if (dep.status === 1) {
-//       const {data} = await cycleDependencyCheck({
-//         resourceId: resourceInfo.resourceId,
-//         dependencies: [{
-//           resourceId: id,
-//           versionRange: '',
-//         }],
-//       });
-//       // console.log(data, 'data');
-//       if (!data) {
-//         dep = {
-//           ...dep,
-//           status: 2,
-//         };
-//       }
-//     }
-//
-//     arr.push(dep);
+//   if (!version) {
+//     versionErrorText = '请输入版本号';
+//   } else if (!semver.valid(version)) {
+//     versionErrorText = '版本号不合法';
+//   } else if (!semver.gt(version, latestVersion || '0.0.0')) {
+//     versionErrorText = latestVersion ? `必须大于最新版本 ${latestVersion}` : '必须大于 0.0.0';
 //   }
 //
-//   return arr;
-// }
-
-// async function dddDependency(resourceId: string, resourceInfo: any, allBaseUpthrowIds: string[]) {
+//   if (!fileSha1) {
+//     resourceObjectErrorText = '请选择对象或上传文件';
+//   }
 //
-//   const resourcesParams: InfoParamsType = {
-//     resourceIdOrName: resourceId,
-//     isLoadPolicyInfo: 1,
-//   };
-//   const {data: resourceData} = await info(resourcesParams);
-//
-//   const contractsParams: ContractsParamsType = {
-//     identityType: 2,
-//     licensorId: resourceId,
-//     licenseeId: resourceInfo.resourceId,
-//     isLoadPolicyInfo: 1,
-//   };
-//   const {data: {dataList: contractsData}} = await contracts(contractsParams);
-//   // console.log(contractsData, 'contractsData24fsdzvrg');
-//   const allContractPolicyIds = contractsData.map((constract: any) => constract.policyId);
-//   // console.log(allContractPolicyIds, 'allContractPolicyIds23tg98piore');
-//   const resolveResourcesParams: ResolveResourcesParamsType = {
-//     resourceId: resourceInfo.resourceId,
-//   };
-//   const {data: resolveResourcesData} = await resolveResources(resolveResourcesParams);
-//   // console.log(resolveResourcesData, 'resolveResourcesDatae4w98wu3h');
-//   const dependency: DepResources[number] = {
-//     id: resourceData.resourceId,
-//     title: resourceData.resourceName,
-//     resourceType: resourceData.resourceType,
-//     status: resourceData.status,
-//     versionRange: resourceData.versionRange,
-//     versions: resourceData.resourceVersions.map((version: any) => version.version),
-//     upthrow: allBaseUpthrowIds.includes(resourceData.resourceId),
-//     upthrowDisabled: !!resourceInfo.latestVersion,
-//     enableReuseContracts: contractsData.map((c: any) => ({
-//       checked: true,
-//       id: c.contractId,
-//       policyId: c.policyId,
-//       title: c.contractName,
-//       status: c.isAuth ? 'executing' : 'stopped',
-//       code: c.policyInfo.policyText,
-//       date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-//       versions: resolveResourcesData
-//         .find((rr: any) => rr.resourceId === resourceData.resourceId)
-//         .versions
-//         .filter((rr: any) => {
-//           const allContractIds = rr.contracts.map((cs: any) => cs.contractId)
-//           return allContractIds.includes(c.contractId);
-//         })
-//         .map((rr: any) => rr.version),
-//     })),
-//     enabledPolicies: resourceData.policies
-//       .filter((policy: any) => !allContractPolicyIds.includes(policy.policyId))
-//       .map((policy: any) => {
-//         // console.log(policy, 'PPPPafwe98iokl');
-//         return {
-//           checked: false,
-//           id: policy.policyId,
-//           title: policy.policyName,
-//           code: policy.policyText,
-//           status: policy.status,
-//         };
-//       }),
-//   };
-//
-//   return dependency;
-// }
-
-// interface handleAddADepByIDDateParamsType {
-//   payload: string[];
-//   resourceInfo: any;
-//   dependencies: any;
-// }
-//
-// async function handleAddADepByIDDate({payload, resourceInfo, dependencies}: handleAddADepByIDDateParamsType) {
-// // console.log(payload, 'PPPPLLLLLL');
-//   const [id, ...ids] = payload;
-//   const relationship = {
-//     id: id,
-//     children: ids.map((i: string) => ({id: i})),
-//   };
-//   // console.log(relationship, 'relationship');
-//   // const {resourceDepRelationship, resourceInfo, dependencies, allExistsIds} = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-//   //   resourceDepRelationship: resourceVersionCreatorPage.depRelationship,
-//   //   resourceInfo: resourceInfo.info,
-//   //   dependencies: dependencies,
-//   //   allExistsIds: dependencies.map((r: any) => r.resourceId),
-//   // }));
-//   const handleDepResourcePrams: HandleDepResourceParams = {
-//     resourceInfo: resourceInfo,
-//     allBaseUpthrowIds: resourceInfo.baseUpcastResources?.map((up: any) => up.resourceId),
-//     allNeedHandledIds: payload,
-//     allExistsIds: dependencies.map((r: any) => r.resourceId),
-//   };
-//   const allDeps = await handleDepResource(handleDepResourcePrams);
-//   // console.log(allDeps, '开始change');
-//   return {
-//     relationship,
-//     allDeps,
-//   };
-//   // yield put<ChangeAction>({
-//   //   type: 'change',
-//   //   payload: {
-//   //     depRelationship: [
-//   //       relationship,
-//   //       ...resourceDepRelationship,
-//   //     ],
-//   //     dependencies: [
-//   //       ...dependencies,
-//   //       ...allDeps,
-//   //     ],
-//   //   }
-//   // });
+//   return {versionErrorText, resourceObjectErrorText};
 // }

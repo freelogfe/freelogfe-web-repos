@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import {
-  AddDepsAction, DeleteDependencyByIDAction
+  AddDepsAction, AddDepsByIDsAction, DeleteDependencyByIDAction
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -82,16 +82,9 @@ function Market({dispatch, resourceDepSelector, resourceVersionCreatorPage}: Mar
         loading={resourceDepSelector.totalItem === -1}
         stillMore={resourceDepSelector.resourceList.length < resourceDepSelector.totalItem}
         onSelect={(value) => {
-          dispatch<AddDepsAction>({
-            type: 'resourceVersionCreatorPage/addDeps',
-            payload: {
-              relationships: [{
-                id: value.id,
-                children: (value.baseUpcastResources as any[]).map<{ id: string }>((up: any) => ({
-                  id: up.resourceId,
-                })),
-              }],
-            },
+          dispatch<AddDepsByIDsAction>({
+            type: 'resourceVersionCreatorPage/dddDepsByMainIDs',
+            payload: [value.id],
           });
         }}
         onLoadMord={() => {

@@ -80,15 +80,18 @@ const Model: ResourceDepSelectorModelType = {
         totalItem = data.totalItem;
         resourceList = [
           ...resourceList,
-          ...(data.dataList as any[]).map<ResourceDepSelectorModelState['resourceList'][number]>((r: any) => ({
-            resourceId: r.resourceId,
-            resourceName: r.resourceName,
-            resourceType: r.resourceType,
-            updateDate: formatDateTime(r.resourceUpdateDate, true),
-            status: r.status,
-            latestVersion: r.latestVersion,
-            baseUpcastResources: r.baseUpcastResources,
-          })),
+          ...(data.dataList as any[]).map<ResourceDepSelectorModelState['resourceList'][number]>((r: any) => {
+            // console.log(r, 'r20893u4oi23');
+            return {
+              resourceId: r.resourceId,
+              resourceName: r.resourceName,
+              resourceType: r.resourceType,
+              updateDate: formatDateTime(r.resourceUpdateDate, true),
+              status: r.resourceStatus,
+              latestVersion: r.latestVersion,
+              baseUpcastResources: r.baseUpcastResources,
+            };
+          }),
         ];
       } else {
         const params: ListParamsType = {
