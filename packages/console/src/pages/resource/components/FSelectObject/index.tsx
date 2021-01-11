@@ -33,9 +33,10 @@ export interface ResourceObject {
 }
 
 export interface FSelectObject {
-  readonly resourceType: string;
-  readonly resourceObject?: ResourceObject | null;
-  readonly onChange?: (file: FSelectObject['resourceObject']) => void;
+  resourceType: string;
+  resourceObject?: ResourceObject | null;
+
+  onChange?(file: FSelectObject['resourceObject']): void;
 
   onError?(value: { sha1: string, errorText: string }): void;
 
@@ -43,6 +44,8 @@ export interface FSelectObject {
 
   onChangeErrorText?(text: string): void;
 }
+
+let uploadCancelHandler: any = null;
 
 function FSelectObject({resourceObject, onChange, resourceType, errorText, onChangeErrorText, onError}: FSelectObject) {
 
@@ -132,14 +135,19 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     });
 
     // TODO: 检查异常
-    const {data} = await uploadFile({
+    const [promise, cancel] = await uploadFile({
       file: file,
       resourceType: resourceType,
     }, {
       onUploadProgress(progressEvent: any) {
+        console.log(progressEvent, 'PPPPPPPPPEEEEEEEEE');
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
       },
-    });
+    }, true);
+    uploadCancelHandler = cancel;
+    // console.log(returns, 'returnsreturns1234');
+    await promise;
+    uploadCancelHandler = null;
 
     onChange && onChange({
       sha1: sha1,
@@ -187,7 +195,13 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
         : (<FObjectCard
           resourceObject={resourceObject}
           progress={progress}
-          onClickDelete={() => onChange && onChange(null)}
+          onClickDelete={() => {
+            if (uploadCancelHandler) {
+              uploadCancelHandler();
+              uploadCancelHandler = null;
+            }
+            onChange && onChange(null);
+          }}
         />)
     }
 
