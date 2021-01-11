@@ -454,8 +454,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
       }}
       visible={resourceVersionEditorPage.basePEditorVisible}
       width={720}
-      // className={styles}
-      // bodyStyle={{paddingLeft: 40, paddingRight: 40, overflow: 'auto'}}
     >
       <Space
         size={20}
@@ -471,24 +469,19 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           <FInput
             disabled={true}
             value={resourceVersionEditorPage.basePKeyInput}
-            // errorText={'ds.keyError'}
             className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let keyError: string = '';
-              if (value === '') {
-                keyError = '请输入';
-              } else if (value.length > 15) {
-                keyError = '不超过15个字符';
-              } else if (!CUSTOM_KEY.test(value)) {
-                keyError = `不符合${CUSTOM_KEY}`;
-              }
-              // onChangeData({
-              //   key: value,
-              //   keyError: keyError,
-              // }, index);
-            }}
-            placeholder={'输入key'}
+            // onChange={(e) => {
+            //   const value: string = e.target.value;
+            //   let keyError: string = '';
+            //   if (value === '') {
+            //     keyError = '请输入';
+            //   } else if (value.length > 15) {
+            //     keyError = '不超过15个字符';
+            //   } else if (!CUSTOM_KEY.test(value)) {
+            //     keyError = `不符合${CUSTOM_KEY}`;
+            //   }
+            // }}
+            // placeholder={'输入key'}
           />
         </div>
 

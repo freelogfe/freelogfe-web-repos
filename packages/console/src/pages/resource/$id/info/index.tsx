@@ -6,8 +6,6 @@ import {Space} from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
-import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FHorn from '@/pages/resource/components/FHorn';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
@@ -15,13 +13,10 @@ import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserMo
 import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
 import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
-import {router, RouterTypes} from "umi";
+import {RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import FBlock from "@/layouts/FFormLayout/FBlock";
-import FNoDataTip from "@/components/FNoDataTip";
-import {match} from "path-to-regexp";
 
 interface InfoProps {
   dispatch: Dispatch;
