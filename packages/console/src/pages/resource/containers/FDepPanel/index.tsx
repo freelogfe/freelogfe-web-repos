@@ -29,7 +29,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
   const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
   // console.log(resource, 'resource23qeasdj98io');
   return (<>
-    <Space size={30}>
+    <Space size={15}>
       <FNormalButton
         onClick={() => setModalVisible(true)}
         theme="grey"
