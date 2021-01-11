@@ -67,7 +67,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
               resource && resource.status !== 1 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
                 {resource.status === 0 && <FTipText text={'该资源已下线，无法获取授权。'} type="secondary"/>}
-                {resource.status === 2 && <FTipText text={'循环依赖不支持授权。'} type="secondary"/>}
+                {resource.status === 2 && <FTipText text={i18nMessage('authorization_issue_circular_reply')} type="secondary"/>}
                 {resource.status === 3 && <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>}
               </div>)
             }

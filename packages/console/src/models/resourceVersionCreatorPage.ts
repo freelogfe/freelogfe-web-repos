@@ -4,13 +4,22 @@ import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
-  batchGetCoverageVersions, BatchGetCoverageVersionsParamsType,
+  batchGetCoverageVersions,
+  BatchGetCoverageVersionsParamsType,
   batchInfo,
   BatchInfoParamsType,
   createVersion,
-  CreateVersionParamsType, getResourceVersionBySha1, GetResourceVersionBySha1ParamsType, info, InfoParamsType,
+  CreateVersionParamsType,
+  cycleDependencyCheck, CycleDependencyCheckParamsType,
+  getResourceVersionBySha1,
+  GetResourceVersionBySha1ParamsType,
+  info,
+  InfoParamsType,
   lookDraft,
-  LookDraftParamsType, resolveResources, resourceVersionInfo, ResourceVersionInfoParamsType1,
+  LookDraftParamsType,
+  resolveResources,
+  resourceVersionInfo,
+  ResourceVersionInfoParamsType1,
   saveVersionsDraft,
   SaveVersionsDraftParamsType
 } from '@/services/resources';
@@ -23,6 +32,7 @@ import * as semver from 'semver';
 import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
 import {fileProperty, FilePropertyParamsType, objectDetails, ObjectDetailsParamsType2} from "@/services/storages";
+import any = jasmine.any;
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -527,6 +537,7 @@ const Model: ResourceVersionCreatorModelType = {
 
       const existIDs: string[] = resourceVersionCreatorPage.dependencies.map<string>((dd) => dd.id);
 
+      // 本次要添加全部资源 ID
       const allIDs: string[] = [
         ...relationships.map((r) => r.id),
         ...relationships.map((r) => r.children).flat().map((c) => c.id),
@@ -563,6 +574,7 @@ const Model: ResourceVersionCreatorModelType = {
       const {data: data1} = yield call(batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
+      // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
       if (data1.length > 0) {
         const params2: BatchGetCoverageVersionsParamsType = {
@@ -615,6 +627,19 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
 
+      // 处理循环依赖的资源
+      const params2: BatchCycleDependencyCheckParams = {
+        resourceId: resourceVersionCreatorPage.resourceId,
+        dependencies: dependencies.map<{ resourceId: string; versionRange: string; }>((d) => {
+          return {
+            resourceId: d.id,
+            versionRange: d.versionRange,
+          };
+        }),
+      };
+      const cycleDependencyResourceID: string[] = yield call(batchCycleDependencyCheck, params2);
+      // console.log(cycleDependencyResourceID, 'data229380uidfs');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -624,7 +649,15 @@ const Model: ResourceVersionCreatorModelType = {
           ],
           dependencies: [
             ...resourceVersionCreatorPage.dependencies,
-            ...dependencies,
+            ...dependencies.map<DepResources[number]>((d) => {
+              if (!cycleDependencyResourceID.includes(d.id)) {
+                return d;
+              }
+              return {
+                ...d,
+                status: 2,
+              };
+            }),
           ],
           depActivatedID: resourceVersionCreatorPage.depActivatedID ? resourceVersionCreatorPage.depActivatedID : relationships[0].id,
         },
@@ -918,22 +951,37 @@ const Model: ResourceVersionCreatorModelType = {
 
 export default Model;
 
-// function verify(data: any) {
-//   const {version, latestVersion, fileSha1} = data;
-//   let versionErrorText = '';
-//   let resourceObjectErrorText = '';
-//
-//   if (!version) {
-//     versionErrorText = '请输入版本号';
-//   } else if (!semver.valid(version)) {
-//     versionErrorText = '版本号不合法';
-//   } else if (!semver.gt(version, latestVersion || '0.0.0')) {
-//     versionErrorText = latestVersion ? `必须大于最新版本 ${latestVersion}` : '必须大于 0.0.0';
-//   }
-//
-//   if (!fileSha1) {
-//     resourceObjectErrorText = '请选择对象或上传文件';
-//   }
-//
-//   return {versionErrorText, resourceObjectErrorText};
-// }
+// 批量检查是否循环依赖，返回循环依赖的 ID
+interface BatchCycleDependencyCheckParams {
+  resourceId: string;
+  dependencies: {
+    resourceId: string;
+    versionRange: string;
+  }[];
+}
+
+async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleDependencyCheckParams): Promise<string[]> {
+  const promises: Promise<any>[] = [];
+  for (const dependency of dependencies) {
+    const params: CycleDependencyCheckParamsType = {
+      resourceId: resourceId,
+      dependencies: [{
+        resourceId: dependency.resourceId,
+        versionRange: dependency.versionRange,
+      }],
+    };
+    promises.push(cycleDependencyCheck(params))
+  }
+  const results = await Promise.all(promises);
+
+  const resourceIDs: string[] = [];
+  // console.log(results, 'results12390j');
+  for (const [index, result] of Object.entries(results)) {
+    // console.log(index, value);
+    const {data} = result;
+    if (!data) {
+      resourceIDs.push(dependencies[Number(index)].resourceId)
+    }
+  }
+  return resourceIDs;
+}
