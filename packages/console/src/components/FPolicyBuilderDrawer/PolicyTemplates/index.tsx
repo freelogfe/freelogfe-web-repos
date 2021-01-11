@@ -9,7 +9,8 @@ interface PolicyTemplatesProps {
   onSelect?({title, text}: { title: string, text: string }): void;
 }
 
-const text1: string = 'for public:\n  initial:\n    active\n    terminate';
+const text1: string = `for public initial[active]:
+  terminate`;
 
 const text2: string =
   `for public:
