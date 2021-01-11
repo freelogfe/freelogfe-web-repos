@@ -496,17 +496,16 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
             value={resourceVersionEditorPage.basePValueInput}
             // errorText={ds.valueError}
             className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let valueError: string = '';
-              if (value === '') {
-                valueError = '请输入';
-              } else if (value.length > 30) {
-                valueError = '不超过30个字符';
-              }
-
-            }}
-            placeholder={'输入value'}
+            // onChange={(e) => {
+            //   const value: string = e.target.value;
+            //   let valueError: string = '';
+            //   if (value === '') {
+            //     valueError = '请输入';
+            //   } else if (value.length > 30) {
+            //     valueError = '不超过30个字符';
+            //   }
+            // }}
+            // placeholder={'输入value'}
           />
         </div>
 
