@@ -155,6 +155,18 @@ export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersi
   });
 }
 
+// 根据sha1查询资源列表 (查询文件对象所挂载的资源)
+export interface GetResourceBySha1ParamsType {
+  fileSha1: string;
+  projection?: string;
+}
+
+export function getResourceBySha1({fileSha1, ...params}: GetResourceBySha1ParamsType) {
+  return request.get(`/v2/resources/files/${fileSha1}`, {
+    params,
+  });
+}
+
 // 更新资源版本信息
 export interface UpdateResourceVersionInfoParamsType {
   version: string;

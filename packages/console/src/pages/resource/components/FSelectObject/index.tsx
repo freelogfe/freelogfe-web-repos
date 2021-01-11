@@ -19,7 +19,7 @@ import FDrawer from "@/components/FDrawer";
 const errorTexts = {
   duplicated: i18nMessage('resource_exist'),
   size: i18nMessage('limit_on_file_size'),
-  resourceType: i18nMessage('file_format_incorrect'),
+  resourceType: i18nMessage('error_wrongfileformat'),
 };
 
 export interface ResourceObject {
@@ -38,16 +38,18 @@ export interface FSelectObject {
 
   onChange?(file: FSelectObject['resourceObject']): void;
 
-  onError?(value: { sha1: string, errorText: string }): void;
+  onError?(value: { sha1: string, text: string }): void;
 
   errorText?: string;
 
-  onChangeErrorText?(text: string): void;
+  onClickDuplicatedLook?: () => void;
+
+  // onChangeErrorText?(text: string): void;
 }
 
 let uploadCancelHandler: any = null;
 
-function FSelectObject({resourceObject, onChange, resourceType, errorText, onChangeErrorText, onError}: FSelectObject) {
+function FSelectObject({resourceObject, onChange, resourceType, errorText, onError, onClickDuplicatedLook}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -68,11 +70,11 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
 
     const {data: data3} = await resourceIsUsedByOther(params3);
     if (!data3) {
-      return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
+      return onError && onError({
+        sha1: data.sha1,
+        text: errorTexts.duplicated
+      });
     }
-
-    // TODO: 检查类型是否匹配
-
 
     onChange && onChange({
       sha1: data.sha1,
@@ -91,7 +93,10 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     if (file.size > 50 * 1024 * 1024) {
       setIsChecking(false);
       // return setErrorT(errorTexts.size);
-      return onChangeErrorText && onChangeErrorText(errorTexts.size);
+      return onError && onError({
+        sha1: '',
+        text: errorTexts.size
+      });
     }
 
     const sha1: string = await getSHA1Hash(file);
@@ -103,7 +108,10 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     const {data: data3} = await resourceIsUsedByOther(params3);
     if (!data3) {
       setIsChecking(false);
-      return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
+      return onError && onError({
+        sha1: sha1,
+        text: errorTexts.duplicated
+      });
     }
 
     const {data: isExists} = await fileIsExist({sha1});
@@ -111,9 +119,6 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     setIsChecking(false);
 
     if (isExists[0].isExisting) {
-
-      // TODO: 检查类型是否匹配
-
 
       return onChange && onChange({
         sha1: sha1,
@@ -134,7 +139,6 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       time: '',
     });
 
-    // TODO: 检查异常
     const [promise, cancel] = await uploadFile({
       file: file,
       resourceType: resourceType,
@@ -146,8 +150,15 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     }, true);
     uploadCancelHandler = cancel;
     // console.log(returns, 'returnsreturns1234');
-    await promise;
+    const {data} = await promise;
     uploadCancelHandler = null;
+    console.log(data, 'data1241234');
+    if (!data) {
+      return onError && onError({
+        sha1: sha1,
+        text: errorTexts.resourceType,
+      });
+    }
 
     onChange && onChange({
       sha1: sha1,
@@ -171,7 +182,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
             </Space>)
             : <Space size={15}>
               <FUpload
-                accept={resourceType === 'image' ? 'image/*' : '*'}
+                // accept={resourceType === 'image' ? 'image/*' : '*'}
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
@@ -189,7 +200,10 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
           <div className={styles.objectErrorInfo}>
             <span>{errorText}</span>
             <span>&nbsp;&nbsp;</span>
-            {errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}
+            {errorText === errorTexts.duplicated && <FTextButton
+              theme="primary"
+              onClick={() => onClickDuplicatedLook && onClickDuplicatedLook()}
+            >查看</FTextButton>}
           </div>}
         </Space>)
         : (<FObjectCard

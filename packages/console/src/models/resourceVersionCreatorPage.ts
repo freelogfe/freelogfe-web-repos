@@ -10,7 +10,7 @@ import {
   BatchInfoParamsType,
   createVersion,
   CreateVersionParamsType,
-  cycleDependencyCheck, CycleDependencyCheckParamsType,
+  cycleDependencyCheck, CycleDependencyCheckParamsType, getResourceBySha1, GetResourceBySha1ParamsType,
   getResourceVersionBySha1,
   GetResourceVersionBySha1ParamsType,
   info,
@@ -33,6 +33,7 @@ import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType
 import moment from "moment";
 import {fileProperty, FilePropertyParamsType, objectDetails, ObjectDetailsParamsType2} from "@/services/storages";
 import any = jasmine.any;
+import {i18nMessage} from "@/utils/i18n";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -79,8 +80,12 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   versionErrorText: string;
 
   resourceObject: FSelectObject['resourceObject'];
-  resourceObjectErrorText: string;
-  resourceUsedSha1: string;
+  resourceObjectError: {
+    sha1: string;
+    text: string;
+  }
+  // resourceObjectErrorText: string;
+  // resourceUsedSha1: string;
 
   depRelationship: Relationships;
   dependencies: DepResources;
@@ -248,8 +253,12 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionErrorText: '',
 
   resourceObject: null,
-  resourceObjectErrorText: '',
-  resourceUsedSha1: '',
+  // resourceObjectErrorText: '',
+  // resourceUsedSha1: '',
+  resourceObjectError: {
+    sha1: '',
+    text: '',
+  },
 
   rawProperties: [],
 
@@ -518,6 +527,21 @@ const Model: ResourceVersionCreatorModelType = {
       };
 
       const {data} = yield call(fileProperty, params);
+
+      if (!data) {
+        return yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: [],
+            resourceObject: null,
+            resourceObjectError: {
+              sha1: resourceVersionCreatorPage.resourceObject.sha1,
+              text: i18nMessage('error_wrongfileformat'),
+            },
+          },
+        });
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -910,11 +934,12 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      const params: GetResourceVersionBySha1ParamsType = {
-        fileSha1: resourceVersionCreatorPage.resourceUsedSha1,
+      const params: GetResourceBySha1ParamsType = {
+        fileSha1: resourceVersionCreatorPage.resourceObjectError.sha1,
       };
-      const {data} = yield call(getResourceVersionBySha1, params);
-      console.log(data, '2134sdfa90j');
+      const {data} = yield call(getResourceBySha1, params);
+      // console.log(data, '2134sdfa90j');
+      router.push(`/resource/${data[0].resourceId}`)
     },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

@@ -140,7 +140,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     // 版本
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
     // 对象
-    || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectErrorText
+    || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectError.text
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
@@ -183,8 +183,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                 dispatch<ChangeAction>({
                   type: 'resourceVersionCreatorPage/change',
                   payload: {
-                    resourceUsedSha1: value.sha1,
-                    resourceObjectErrorText: ''
+                    resourceObjectError: value,
+                    resourceObject: null,
                   },
                 });
               }}
@@ -195,13 +195,16 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                 if (!value) {
                   return onChange({
                     resourceObject: null,
-                    resourceObjectErrorText: '',
+                    resourceObjectError: {
+                      sha1: '',
+                      text: '',
+                    },
                     rawProperties: [],
                     baseProperties: [],
                     properties: [],
                   });
                 }
-                await onChange({resourceObject: value, resourceObjectErrorText: ''});
+                await onChange({resourceObject: value, resourceObjectError: {sha1: '', text: ''}});
                 await dispatch<FetchRawPropsAction>({
                   type: 'resourceVersionCreatorPage/fetchRawProps',
                 });
@@ -213,8 +216,13 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                   });
                 }
               }}
-              errorText={resourceVersionCreatorPage.resourceObjectErrorText}
-              onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
+              errorText={resourceVersionCreatorPage.resourceObjectError.text}
+              // onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
+              onClickDuplicatedLook={() => {
+                dispatch<GoToResourceDetailsBySha1>({
+                  type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1'
+                });
+              }}
             />
             {/*{*/}
             {/*  resourceVersionCreatorPage.resourceUsedSha1 && (<>*/}
