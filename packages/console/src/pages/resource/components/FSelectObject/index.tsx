@@ -23,19 +23,19 @@ const errorTexts = {
 };
 
 export interface ResourceObject {
-  readonly id: string;
-  readonly name: string;
-  readonly size: number;
-  readonly path: string;
-  readonly type: string;
-  readonly time: string;
+  sha1: string;
+  name: string;
+  size: number;
+  path: string;
+  type: string;
+  time: string;
   objectId?: string;
 }
 
 export interface FSelectObject {
   readonly resourceType: string;
   readonly resourceObject?: ResourceObject | null;
-  readonly onChange?: (file: FSelectObject['resourceObject'], deps?: { name: string; type: 'resource' | 'object'; versionRange: string; }[]) => void;
+  readonly onChange?: (file: FSelectObject['resourceObject']) => void;
 
   onError?(value: { sha1: string, errorText: string }): void;
 
@@ -51,15 +51,13 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
   const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
+  // 选择对象
   async function onSelectObject(obj: { id: string; name: string; }) {
     setModalVisible(false);
-    // return onChange && onChange(resource);
-    // console.log(obj, 'obj903iodslk');
     const params: ObjectDetailsParamsType2 = {
       objectIdOrName: obj.id,
     };
     const {data} = await objectDetails(params);
-    // console.log(data, '@#RCXFW');
 
     const params3: ResourceIsUsedByOtherParamsType = {
       fileSha1: data.sha1,
@@ -70,20 +68,24 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
     }
 
+    // TODO: 检查类型是否匹配
+
+
     onChange && onChange({
-      id: data.sha1,
+      sha1: data.sha1,
       name: data.objectName,
       size: data.systemProperty.fileSize,
       path: data.bucketName,
       type: resourceType,
       time: '',
       objectId: obj.id,
-    }, data.dependencies);
+    });
   }
 
   async function beforeUpload(file: RcFile) {
     setIsChecking(true);
-    if (file.size > 50 * 1024 * 1024 * 1024) {
+    // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
+    if (file.size > 50 * 1024 * 1024) {
       setIsChecking(false);
       // return setErrorT(errorTexts.size);
       return onChangeErrorText && onChangeErrorText(errorTexts.size);
@@ -98,10 +100,6 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     const {data: data3} = await resourceIsUsedByOther(params3);
     if (!data3) {
       setIsChecking(false);
-      // return onError && onError({
-      //   sha1: sha1,
-      //   errorText: '被别人使用',
-      // });
       return onChangeErrorText && onChangeErrorText(errorTexts.duplicated);
     }
 
@@ -110,8 +108,12 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     setIsChecking(false);
 
     if (isExists[0].isExisting) {
+
+      // TODO: 检查类型是否匹配
+
+
       return onChange && onChange({
-        id: sha1,
+        sha1: sha1,
         name: file.name,
         size: file.size,
         path: '',
@@ -120,9 +122,8 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       });
     }
 
-
     onChange && onChange({
-      id: '',
+      sha1: '',
       name: file.name,
       size: file.size,
       path: '',
@@ -130,6 +131,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       time: '',
     });
 
+    // TODO: 检查异常
     const {data} = await uploadFile({
       file: file,
       resourceType: resourceType,
@@ -140,7 +142,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
     });
 
     onChange && onChange({
-      id: sha1,
+      sha1: sha1,
       name: file.name,
       size: file.size,
       path: '',
@@ -153,21 +155,13 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
   return (<div>
     {
       !resourceObject
-        ? (<div className={styles.object}>
-
-          {errorText &&
-          <div className={styles.objectErrorInfo}>
-            <span>{errorText}</span>
-            {/*<span>&nbsp;&nbsp;</span>*/}
-            {/*{errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}*/}
-          </div>}
-
+        ? (<Space size={50}>
           {isChecking
             ? (<Space size={50} className={styles.checking}>
               <span>{i18nMessage('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
               <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
             </Space>)
-            : <Space size={30}>
+            : <Space size={15}>
               <FUpload
                 accept={resourceType === 'image' ? 'image/*' : '*'}
                 beforeUpload={beforeUpload}
@@ -182,7 +176,14 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
                 onClick={() => setModalVisible(true)}
               >{i18nMessage('choose_from_storage')}</FNormalButton>
             </Space>}
-        </div>)
+
+          {errorText &&
+          <div className={styles.objectErrorInfo}>
+            <span>{errorText}</span>
+            <span>&nbsp;&nbsp;</span>
+            {errorText === errorTexts.duplicated && <FTextButton theme="primary">查看</FTextButton>}
+          </div>}
+        </Space>)
         : (<FObjectCard
           resourceObject={resourceObject}
           progress={progress}
@@ -195,15 +196,11 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onCha
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}
-      // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
     >
       <FObjectSelector
         visibleResourceType={resourceType}
-        // isLoadingTypeless={1}
-        // onSelect={(value) => console.log(value, '32dsf8ioj')}
         showRemoveIDsOrNames={[`${resourceObject?.path}/${resourceObject?.name}`]}
         onSelect={onSelectObject}
-        // onDelete={(value) => console.log(value, '32dsfewc8ioj')}
         onDelete={() => onChange && onChange(null)}
       />
     </FDrawer>

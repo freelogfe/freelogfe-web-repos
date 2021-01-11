@@ -190,7 +190,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
               }}
               resourceType={resourceInfo.info?.resourceType || ''}
               resourceObject={resourceVersionCreatorPage.resourceObject}
-              onChange={async (value, deps) => {
+              onChange={async (value) => {
                 // console.log(value, '#@ERWADFSASDFSADF');
                 if (!value) {
                   return onChange({

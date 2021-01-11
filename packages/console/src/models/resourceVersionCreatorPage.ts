@@ -309,7 +309,7 @@ const Model: ResourceVersionCreatorModelType = {
       const params: CreateVersionParamsType = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
-        fileSha1: resourceVersionCreatorPage.resourceObject?.id || '',
+        fileSha1: resourceVersionCreatorPage.resourceObject?.sha1 || '',
         filename: resourceVersionCreatorPage.resourceObject?.name || '',
         baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
         dependencies: resourceVersionCreatorPage.dependencies
@@ -509,11 +509,11 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      if (!resourceVersionCreatorPage.resourceObject || resourceVersionCreatorPage.resourceObject.id === '') {
+      if (!resourceVersionCreatorPage.resourceObject || resourceVersionCreatorPage.resourceObject.sha1 === '') {
         return;
       }
       const params: FilePropertyParamsType = {
-        sha1: resourceVersionCreatorPage.resourceObject.id,
+        sha1: resourceVersionCreatorPage.resourceObject.sha1,
         resourceType: resourceVersionCreatorPage.resourceObject.type,
       };
 
