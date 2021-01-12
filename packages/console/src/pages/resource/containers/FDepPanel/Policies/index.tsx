@@ -53,7 +53,9 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
     });
   }
 
-  if (resource.enabledPolicies.length === 0) {
+  const enabledPolicies = resource.enabledPolicies.filter((ep) => ep.status === 1);
+
+  if (enabledPolicies.length === 0) {
     return null;
   }
 
@@ -63,7 +65,7 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
     <FContentText type="additional2" text={'可签约的合约'}/>
     <div style={{height: 5}}/>
     <div className={styles.styles}>
-      {resource.enabledPolicies.map((i) => (
+      {enabledPolicies.map((i) => (
         <div key={i.id} className={styles.Policy}>
           <div className={styles.PolicyGrammar}>
             <div className={styles.PolicyName}>
