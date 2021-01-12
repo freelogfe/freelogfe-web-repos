@@ -2,15 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
 import {FContentText} from '@/components/FText';
-import {Space} from 'antd';
+import {Space, Popconfirm} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
-import {FetchDraftDataAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
+import {FPlus} from '@/components/FIcons';
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -106,8 +106,25 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
 
         <div className={styles.radio}>
           <a style={{cursor: 'default'}}>{i18nMessage('verions')}</a>
-          <FTextButton onClick={gotoCreator}><i
-            className="freelog fl-icon-add"/></FTextButton>
+          {
+            match.path !== '/resource/:id/version/creator' && <>
+              {
+                resourceInfo.draftData ? <Popconfirm
+                  title={i18nMessage('error_unreleasedverionexisted')}
+                  onConfirm={gotoCreator}
+                  // onCancel={cancel}
+                  okText="查看"
+                  // cancelText="No"
+                >
+                  <FTextButton><FPlus/></FTextButton>
+                </Popconfirm> : (<FTextButton
+                  onClick={gotoCreator}>
+                  <FPlus/>
+                </FTextButton>)
+              }
+            </>
+          }
+
         </div>
 
         <Space size={16} direction="vertical" className={styles.versions + ' ' + styles.Space}>
