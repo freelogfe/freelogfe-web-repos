@@ -20,6 +20,8 @@ export interface ResourceCreatorPageModelState {
 
   cover: string;
   labels: string[];
+
+  promptLeavePath: string,
 }
 
 export interface ChangeAction extends AnyAction {
@@ -75,6 +77,8 @@ const initStates: ResourceCreatorPageModelState = {
   cover: '',
 
   labels: [],
+
+  promptLeavePath: '',
 };
 
 const Model: ResourceCreatorPageModelType = {

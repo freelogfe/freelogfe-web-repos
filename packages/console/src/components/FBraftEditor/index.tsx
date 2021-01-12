@@ -8,13 +8,25 @@ import {ConnectState, GlobalModelState} from "@/models/connect";
 
 interface FBraftEditorProps extends BraftEditorProps {
   global: GlobalModelState;
+
+  value: EditorState;
+
+  onChange?(value: EditorState): void;
 }
 
-function FBraftEditor({global, ...props}: FBraftEditorProps) {
+function FBraftEditor({global, value, onChange, ...props}: FBraftEditorProps) {
 
   return (
     <BraftEditor
       {...props}
+      value={value}
+      onChange={(value1) => {
+        // console.log(value.toHTML(), value1.toHTML(), '###@#$@#');
+        if (value.toHTML() === value1.toHTML()) {
+          return;
+        }
+        onChange && onChange(value1);
+      }}
       language={global.locale === 'en-US' ? 'en' : 'zh'}
       className={styles.styles}
       controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}

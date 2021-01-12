@@ -83,13 +83,13 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   resourceObjectError: {
     sha1: string;
     text: string;
-  }
-  // resourceObjectErrorText: string;
-  // resourceUsedSha1: string;
+  };
 
   depRelationship: Relationships;
   dependencies: DepResources;
   depActivatedID: string;
+
+  dataIsDirty: boolean;
 }> & {
   rawProperties: {
     key: string;
@@ -145,7 +145,7 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
     versions: { id: string; versionRange: string }[];
   };
 
-  // latestVersionData: null | any;
+  promptLeavePath: string;
 };
 
 export interface ChangeAction extends AnyAction {
@@ -253,8 +253,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionErrorText: '',
 
   resourceObject: null,
-  // resourceObjectErrorText: '',
-  // resourceUsedSha1: '',
   resourceObjectError: {
     sha1: '',
     text: '',
@@ -281,6 +279,10 @@ const initStates: ResourceVersionCreatorPageModelState = {
     relationships: [],
     versions: [],
   },
+
+  dataIsDirty: false,
+
+  promptLeavePath: '',
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -383,7 +385,8 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           ...data.draftData,
           description: BraftEditor.createEditorState(data.draftData.description),
-        }
+          dataIsDirty: false,
+        },
       });
     },
     * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
@@ -483,15 +486,24 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
         resourceInfo, resourceVersionCreatorPage
       }));
+
       const params: SaveVersionsDraftParamsType = {
         resourceId: resourceInfo.info?.resourceId || '',
         draftData: {
           ...resourceVersionCreatorPage,
           description: resourceVersionCreatorPage.description.toHTML(),
+          dataIsDirty: false,
         },
       };
       yield call(saveVersionsDraft, params);
       fMessage('暂存草稿成功');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
+
     },
     * verifyVersionInput({}: VerifyVersionInputAction, {select, put}: EffectsCommandMap) {
       const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({

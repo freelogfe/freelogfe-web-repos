@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCenterLayout from '@/layouts/FCenterLayout';
 import {FTitleText, FContentText, FTipText} from '@/components/FText';
-import FEditorCard from '@/components/FEditorCard';
 import FInput from '@/components/FInput';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/layouts/FContentLayout';
-import {Space, AutoComplete} from 'antd';
+import {Space, Modal} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
 import {
@@ -21,20 +19,22 @@ import {
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {i18nMessage} from '@/utils/i18n';
-import {RouterTypes} from 'umi';
+import {router, RouterTypes} from 'umi';
 import {resourceTypes} from '@/utils/globals';
 import {FCheck, FLoading} from '@/components/FIcons';
 import FFormLayout from "@/layouts/FFormLayout";
+import * as H from "history";
+import Prompt from "umi/prompt";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
-  resource: ResourceCreatorPageModelState;
+  resourceCreatorPage: ResourceCreatorPageModelState;
   user: UserModelState;
 }
 
 // const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
-function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps & RouterTypes) {
+function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceCreatorProps & RouterTypes) {
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -67,9 +67,42 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
     });
   }
 
-  return (<FContentLayout header={<Header
-      disabled={resource.nameVerify !== 2 || resource.resourceTypeVerify !== 2
-      || !!resource.nameErrorText || !!resource.resourceTypeErrorText || !!resource.introductionErrorText}
+  return (<>
+    <Prompt
+      when={resourceCreatorPage.promptLeavePath === '' && (resourceCreatorPage.name !== '' || resourceCreatorPage.resourceType !== '' || resourceCreatorPage.introduction !== '' || resourceCreatorPage.cover !== '' || resourceCreatorPage.labels.length !== 0)}
+      message={(location: H.Location, action: H.Action) => {
+        // console.log(location, action, 'LAAAAL');
+        // return window.confirm('还没有创建资源，现在离开会导致信息丢失');
+        dispatch<ChangeAction>({
+          type: 'resourceCreatorPage/change',
+          payload: {
+            promptLeavePath: location.pathname,
+          }
+        });
+        Modal.confirm({
+          title: '还没有创建资源，现在离开会导致信息丢失',
+          // icon: </>,
+          // content: 'Some descriptions',
+          onOk() {
+            // console.log('OK');
+            router.push(location.pathname);
+          },
+          onCancel() {
+            // console.log('Cancel');
+            dispatch<ChangeAction>({
+              type: 'resourceCreatorPage/change',
+              payload: {
+                promptLeavePath: '',
+              }
+            });
+          },
+        });
+        return false;
+      }}
+    />
+    <FContentLayout header={<Header
+      disabled={resourceCreatorPage.nameVerify !== 2 || resourceCreatorPage.resourceTypeVerify !== 2
+      || !!resourceCreatorPage.nameErrorText || !!resourceCreatorPage.resourceTypeErrorText || !!resourceCreatorPage.introductionErrorText}
       onClickCreate={onClickCreate}
     />}>
       <FFormLayout>
@@ -81,8 +114,8 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
             <FContentText text={`${user.info?.username} /`}/>
             &nbsp;
             <FInput
-              errorText={resource.nameErrorText}
-              value={resource.name}
+              errorText={resourceCreatorPage.nameErrorText}
+              value={resourceCreatorPage.name}
               debounce={300}
               onDebounceChange={(value) => {
                 dispatch<OnChangeNameAction>({
@@ -99,15 +132,15 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
               lengthLimit={60}
             />
             <div style={{width: 10}}/>
-            {resource.nameVerify === 1 && <FLoading/>}
-            {resource.nameVerify === 2 && !resource.nameErrorText && <FCheck/>}
+            {resourceCreatorPage.nameVerify === 1 && <FLoading/>}
+            {resourceCreatorPage.nameVerify === 2 && !resourceCreatorPage.nameErrorText && <FCheck/>}
           </div>
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={i18nMessage('resource_type')} dot={true}>
           <FAutoComplete
-            errorText={resource.resourceTypeErrorText}
-            value={resource.resourceType}
+            errorText={resourceCreatorPage.resourceTypeErrorText}
+            value={resourceCreatorPage.resourceType}
             onChange={(value) => dispatch<OnChangeResourceTypeAction>({
               type: 'resourceCreatorPage/onChangeResourceType',
               payload: value,
@@ -120,7 +153,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
 
         <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
           <FIntroductionEditor
-            value={resource.introduction}
+            value={resourceCreatorPage.introduction}
             onChange={(e) => onChange({
               introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
               introduction: e.target.value
@@ -131,7 +164,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
 
         <FFormLayout.FBlock title={i18nMessage('resource_image')}>
           <FUploadResourceCover
-            value={resource.cover}
+            value={resourceCreatorPage.cover}
             onChange={(value) => onChange({
               cover: value
             })}
@@ -140,7 +173,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
 
         <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
           <FLabelEditor
-            values={resource.labels}
+            values={resourceCreatorPage.labels}
             onChange={(value) => onChange({
               labels: value,
             })}
@@ -148,7 +181,7 @@ function ResourceCreator({dispatch, route, resource, user}: ResourceCreatorProps
         </FFormLayout.FBlock>
       </FFormLayout>
     </FContentLayout>
-  );
+  </>);
 }
 
 interface HeaderProps {
@@ -175,6 +208,6 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
 }
 
 export default connect(({resourceCreatorPage, user}: ConnectState) => ({
-  resource: resourceCreatorPage,
+  resourceCreatorPage: resourceCreatorPage,
   user: user,
 }))(ResourceCreator);

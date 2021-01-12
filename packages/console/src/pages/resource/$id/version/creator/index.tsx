@@ -4,7 +4,7 @@ import {FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import {Space} from 'antd';
+import {Modal, Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -32,6 +32,8 @@ import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
+import Prompt from 'umi/prompt';
+import * as H from "history";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -59,6 +61,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   function setHeight() {
     setMinHeight(window.innerHeight - 70);
   }
+
+  // React.useEffect(() => {
+  //   window.addEventListener('onbeforeunload', () => {
+  //     return '1234';
+  //   });
+  // }, []);
 
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
@@ -153,6 +161,38 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     });
 
   return (<>
+      <Prompt
+        when={resourceVersionCreatorPage.promptLeavePath === '' && resourceVersionCreatorPage.dataIsDirty}
+        message={(location: H.Location, action: H.Action) => {
+          // console.log(location, action, 'LAAAAL');
+          // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
+            payload: {
+              promptLeavePath: location.pathname,
+            }
+          });
+          Modal.confirm({
+            title: '还没有保存草稿或发行，现在离开会导致信息丢失',
+            // icon: </>,
+            // content: 'Some descriptions',
+            onOk() {
+              // console.log('OK');
+              router.push(location.pathname);
+            },
+            onCancel() {
+              // console.log('Cancel');
+              dispatch<ChangeAction>({
+                type: 'resourceVersionCreatorPage/change',
+                payload: {
+                  promptLeavePath: '',
+                }
+              });
+            },
+          });
+          return false;
+        }}
+      />
       <FLeftSiderLayout
         sider={<Sider/>}
         header={<Header
@@ -162,7 +202,10 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         />}
       >
         <FFormLayout>
-          <FFormLayout.FBlock dot={true} title={i18nMessage('version_number')}>
+          <FFormLayout.FBlock
+            dot={true}
+            title={i18nMessage('version_number')}
+          >
             <FInput
               value={resourceVersionCreatorPage.version}
               onChange={(e) => {
@@ -170,6 +213,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                   type: 'resourceVersionCreatorPage/change',
                   payload: {
                     version: e.target.value,
+                    dataIsDirty: true,
                   },
                 });
               }}
@@ -209,9 +253,14 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                     rawProperties: [],
                     baseProperties: [],
                     properties: [],
+                    dataIsDirty: true,
                   });
                 }
-                await onChange({resourceObject: value, resourceObjectError: {sha1: '', text: ''}});
+                await onChange({
+                  resourceObject: value,
+                  resourceObjectError: {sha1: '', text: ''},
+                  dataIsDirty: true,
+                });
                 await dispatch<FetchRawPropsAction>({
                   type: 'resourceVersionCreatorPage/fetchRawProps',
                 });
@@ -231,16 +280,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                 });
               }}
             />
-            {/*{*/}
-            {/*  resourceVersionCreatorPage.resourceUsedSha1 && (<>*/}
-            {/*    <span className={styles.resourceError}>该资源已存在,请重新选择。</span>*/}
-            {/*    /!*<FTextButton onClick={() => {*!/*/}
-            {/*    /!*  dispatch<GoToResourceDetailsBySha1>({*!/*/}
-            {/*    /!*    type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1',*!/*/}
-            {/*    /!*  });*!/*/}
-            {/*    /!*}}>查看</FTextButton>*!/*/}
-            {/*  </>)*/}
-            {/*}*/}
 
             {
               resourceVersionCreatorPage.resourceObject && (<>
@@ -249,7 +288,10 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                   basics={resourceVersionCreatorPage.rawProperties}
                   additions={resourceVersionCreatorPage.baseProperties}
                   onChangeAdditions={(value) => {
-                    onChange({baseProperties: value});
+                    onChange({
+                      baseProperties: value,
+                      dataIsDirty: true,
+                    });
                   }}
                   rightTop={<Space size={20}>
                     <FTextButton
@@ -277,6 +319,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                               type: 'resourceVersionCreatorPage/importLastVersionData',
                               payload: 'baseProps',
                             });
+                            onChange({dataIsDirty: true})
                           }}
                         >从上个版本导入</FTextButton>)
                         : undefined
@@ -330,6 +373,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                             type: 'resourceVersionCreatorPage/importLastVersionData',
                             payload: 'optionProps',
                           });
+                          onChange({dataIsDirty: true,});
                         }}>从上个版本导入</a>)
                       }
 
@@ -343,7 +387,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
                         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
                       ]}
-                      onChange={(value) => onChange({properties: value})}
+                      onChange={(value) => {
+                        onChange({
+                          properties: value,
+                          dataIsDirty: true,
+                        });
+                      }}
                     />
                   </>)
                 }
@@ -360,7 +409,13 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
           <FFormLayout.FBlock dot={false} title={i18nMessage('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
-              onChange={(value) => onChange({description: value})}
+              onChange={(value) => {
+                // console.log('######!!~@#@!#!@');
+                onChange({
+                  description: value,
+                  dataIsDirty: true,
+                });
+              }}
             />
           </FFormLayout.FBlock>
         </FFormLayout>
