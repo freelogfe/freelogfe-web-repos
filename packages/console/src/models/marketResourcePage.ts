@@ -25,11 +25,9 @@ import {
   PresentableListParamsType
 } from "@/services/presentables";
 import {Simulate} from "react-dom/test-utils";
-import select = Simulate.select;
 import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
 import {router} from "umi";
 import {EXHIBIT_NAME} from "@/utils/regexp";
-
 
 interface Contract {
   id: string;
@@ -61,7 +59,6 @@ export interface MarketResourcePageModelState {
   hasCollect: boolean;
 
   signedNodeIDs: number[];
-  // selectedNodeDomain
   selectedNodeID: number;
 
   signResources: {
@@ -93,7 +90,6 @@ export interface MarketResourcePageModelState {
   releaseTime: string;
 
   description: string;
-  // showAllDescription: boolean;
 
   properties: {
     key: string;
@@ -142,10 +138,6 @@ export interface OnChangeNodeSelectorAction extends AnyAction {
   payload: number;
 }
 
-// export interface FetchSignedResourcesAction extends AnyAction {
-//   type: 'fetchSignResources';
-// }
-
 export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo';
 }
@@ -157,7 +149,6 @@ export interface OnChangeVersionAction extends AnyAction {
 
 export interface SignContractAction extends AnyAction {
   type: 'marketResourcePage/signContract';
-  // payload: string;
 }
 
 interface MarketResourcePageModelType {
@@ -170,7 +161,6 @@ interface MarketResourcePageModelType {
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
-    // fetchSignedResources: (action: FetchSignedResourcesAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
@@ -315,6 +305,10 @@ const Model: MarketResourcePageModelType = {
         },
       });
 
+      if (!data.latestVersion) {
+        return;
+      }
+
       yield put<FetchVersionInfoAction>({
         type: 'fetchVersionInfo',
       });
@@ -396,7 +390,7 @@ const Model: MarketResourcePageModelType = {
         resourceId: marketResourcePage.resourceId,
       };
       const {data} = yield call(presentableDetails, params);
-      console.log(data, 'datadata0923jsdfsd');
+      // console.log(data, 'datadata0923jsdfsd');
       const allContracts = data.resolveResources;
       // console.log(allContracts, 'datadata0923jsdfsd');
 

@@ -20,7 +20,6 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
 
   return (<Dropdown overlay={nodes.list.length > 0 ? (
     <Menu
-      selectable={false}
       className={styles.Menu}
       mode="vertical"
       onClick={(param: any) => dispatch<OnChangeNodeSelectorAction>({
@@ -67,7 +66,6 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
                 <span className={styles.contracted}>(已签约)</span>)}
             </>)
         }
-
       </Space>
       <FDown/>
     </div>

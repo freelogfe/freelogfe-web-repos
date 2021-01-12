@@ -138,9 +138,10 @@ export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | Res
       }
     });
   }
-  return request.get(`/v2/resources/versionss/detail`, {
+  
+  return request.get(`/v2/resources/versions/detail`, {
     params,
-  })
+  });
 }
 
 // 根据sha1查询版本列表 (查询文件对象所挂载的资源及版本)

@@ -61,38 +61,43 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
 
       <div style={{height: 20}}/>
       <Sign/>
+
       <div style={{height: 50}}/>
-      <div className={styles.versionWrap}>
-        <div className={styles.versionTitle}>
-          <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
-          <div style={{width: 15}}/>
-          <FContentText
-            text={'发布时间 ' + marketResourcePage.releaseTime}
-            type="additional1"
-          />
-          <div style={{width: 20}}/>
-          <FDropdownMenu
-            options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
-            onChange={(value) => {
-              // console.log(value, '3209jsd');
-              dispatch<OnChangeVersionAction>({
-                type: 'marketResourcePage/onChangeVersion',
-                payload: value,
-              });
-            }}
-          >
-            <a><FSwap/></a>
-          </FDropdownMenu>
-        </div>
 
-        <Description/>
+      {
+        marketResourcePage.version && (<div className={styles.versionWrap}>
+          <div className={styles.versionTitle}>
+            <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
+            <div style={{width: 15}}/>
+            <FContentText
+              text={'发布时间 ' + marketResourcePage.releaseTime}
+              type="additional1"
+            />
+            <div style={{width: 20}}/>
+            <FDropdownMenu
+              options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
+              onChange={(value) => {
+                // console.log(value, '3209jsd');
+                dispatch<OnChangeVersionAction>({
+                  type: 'marketResourcePage/onChangeVersion',
+                  payload: value,
+                });
+              }}
+            >
+              <a><FSwap/></a>
+            </FDropdownMenu>
+          </div>
 
-        <Property/>
+          <Description/>
 
-        <Option/>
+          <Property/>
 
-        <Viewport/>
-      </div>
+          <Option/>
+
+          <Viewport/>
+        </div>)
+      }
+
     </div>
   </div>);
 }
