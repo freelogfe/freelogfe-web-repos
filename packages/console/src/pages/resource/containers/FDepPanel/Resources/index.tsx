@@ -1,17 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FCircleButton} from '@/components/FButton';
+import {FCircleButton, FTextButton} from '@/components/FButton';
 import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
-// import VersionPopover from './VersionPopover';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction,
   DeleteDependencyByIDAction,
   DepResources,
-  // OnChangeDepActivatedIDAction,
-  // OnChangeDependenciesByIDAction
 } from '@/models/resourceVersionCreatorPage';
 import {i18nMessage} from '@/utils/i18n';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
@@ -28,27 +25,6 @@ interface DataS extends T {
 }
 
 function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
-
-  // React.useEffect(() => {
-  //   if (!dependencies.map((i) => i.id).includes(depActivatedID)) {
-  //     if (depRelationship.length > 0) {
-  //       onChangeResourcesActivated(depRelationship[0].id);
-  //     } else {
-  //       onChangeResourcesActivated('');
-  //     }
-  //   }
-  // }, [depActivatedID, depRelationship, onChangeResourcesActivated]);
-
-  // const dataSource: DataS[] = depRelationship.map((i) => {
-  //   return {
-  //     ...(dependencies.find((j) => j.id === i.id) as DepResources[number]),
-  //     unresolved: i.children.map((k) => {
-  //       return dependencies.find((l) => k.id === l.id) as DepResources[number];
-  //     })
-  //   }
-  // });
-
-  // console.log(dataSource, 'dataSourcedsssssdataSourcedataSource#@#@#@#@#');
 
   function onChangeVersion(version: DepResources[number]['versionRange'], id: DepResources[number]['id']) {
     const dependencies: ResourceVersionCreatorPageModelState['dependencies'] = resourceVersionCreatorPage.dependencies.map((dd) => {
@@ -69,20 +45,12 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
     });
   }
 
-  // function onChangeResourcesActivated(id: DepResources[number]['id']) {
-  //   dispatch<OnChangeDepActivatedIDAction>({
-  //     type: 'resourceVersionCreatorPage/onChangeDepActivatedID',
-  //     payload: id,
-  //   });
-  // }
-
   function onDeleteResource(id: DepResources[number]['id']) {
 
     dispatch<DeleteDependencyByIDAction>({
       type: 'resourceVersionCreatorPage/deleteDependencyByID',
       payload: id,
     });
-    // return onChange && onChange();
   }
 
   function onChangeActiveID(id: string) {
@@ -102,6 +70,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
       resourceVersionCreatorPage.depRelationship.map((i) => {
           const rrr: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies
             .find((dds) => dds.id === i.id) as ResourceVersionCreatorPageModelState['dependencies'][number];
+          // console.log(rrr.status, '######');
           return (<div key={rrr.id}>
             <div
               onClick={() => {
@@ -109,10 +78,18 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
               }}
               className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}>
               <div>
-                <div className={styles.title}>
-                  <FContentText text={rrr.title}/>
-                  {rrr.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
-                </div>
+                <FTextButton onClick={(e) => {
+                  e.stopPropagation();
+                  if (rrr.status === 3) {
+                    return window.open('/storage')
+                  }
+                  return window.open(`/resource/${rrr.id}`);
+                }}>
+                  <div className={styles.title}>
+                    <FContentText text={rrr.title}/>
+                    {rrr.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
+                  </div>
+                </FTextButton>
                 <div style={{height: 9}}/>
                 <FContentText type="additional2">
                   <div>
@@ -207,6 +184,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
             onClick && onClick(i.id);
           }}
           className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}>
+
           <FContentText text={i.title}/>
           <div style={{height: 5}}/>
           <FContentText type="additional2">
