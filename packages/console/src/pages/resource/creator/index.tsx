@@ -50,8 +50,19 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
       dispatch<ClearDataAction>({
         type: 'resourceCreatorPage/clearData',
       });
+      window.onbeforeunload = null;
     };
   }, []);
+
+  React.useEffect(() => {
+    // const func = () => 1234;
+    if (resourceCreatorPage.name !== '' || resourceCreatorPage.resourceType !== '' || resourceCreatorPage.introduction !== '' || resourceCreatorPage.cover !== '' || resourceCreatorPage.labels.length !== 0) {
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+
+  }, [resourceCreatorPage.name, resourceCreatorPage.resourceType, resourceCreatorPage.introduction, resourceCreatorPage.cover, resourceCreatorPage.labels]);
 
   function onClickCreate() {
     // console.log('onClickCreate', '0932jdlfsf');

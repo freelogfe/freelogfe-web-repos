@@ -55,12 +55,23 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
 
     return () => {
       window.removeEventListener('resize', setHeight);
+      window.onbeforeunload = null;
     };
   }, []);
 
   function setHeight() {
     setMinHeight(window.innerHeight - 70);
   }
+
+  React.useEffect(() => {
+    // const func = () => 1234;
+    if (resourceVersionCreatorPage.dataIsDirty) {
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+
+  }, [resourceVersionCreatorPage.dataIsDirty]);
 
   // React.useEffect(() => {
   //   window.addEventListener('onbeforeunload', () => {
