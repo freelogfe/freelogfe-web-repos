@@ -12,14 +12,13 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction,
-  ChangeVersionInputAction,
   CreateVersionAction,
   FetchDraftAction,
   FetchRawPropsAction,
   FetchResourceInfoAction, GoToResourceDetailsBySha1,
   HandleObjectInfoAction,
   ImportLastVersionDataAction, InitModelStatesAction, LeaveAndClearDataAction,
-  SaveDraftAction,
+  SaveDraftAction, VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
@@ -167,9 +166,17 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
             <FInput
               value={resourceVersionCreatorPage.version}
               onChange={(e) => {
-                dispatch<ChangeVersionInputAction>({
-                  type: 'resourceVersionCreatorPage/changeVersionInputAction',
-                  payload: e.target.value,
+                dispatch<ChangeAction>({
+                  type: 'resourceVersionCreatorPage/change',
+                  payload: {
+                    version: e.target.value,
+                  },
+                });
+              }}
+              onBlur={() => {
+                dispatch<VerifyVersionInputAction>({
+                  type: 'resourceVersionCreatorPage/verifyVersionInput',
+                  // payload: e.target.value,
                 });
               }}
               className={styles.versionInput}

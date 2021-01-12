@@ -173,9 +173,9 @@ export interface SaveDraftAction extends AnyAction {
   type: 'resourceVersionCreatorPage/saveDraft';
 }
 
-export interface ChangeVersionInputAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/changeVersionInputAction' | 'changeVersionInputAction';
-  payload: string;
+export interface VerifyVersionInputAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
+  // payload: string;
 }
 
 export interface FetchRawPropsAction extends AnyAction {
@@ -227,7 +227,7 @@ export interface ResourceVersionCreatorModelType {
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
-    changeVersionInputAction: (action: ChangeVersionInputAction, effects: EffectsCommandMap) => void;
+    verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
@@ -493,22 +493,23 @@ const Model: ResourceVersionCreatorModelType = {
       yield call(saveVersionsDraft, params);
       fMessage('暂存草稿成功');
     },
-    * changeVersionInputAction({payload}: ChangeVersionInputAction, {select, put}: EffectsCommandMap) {
-      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
+    * verifyVersionInput({}: VerifyVersionInputAction, {select, put}: EffectsCommandMap) {
+      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
         resourceInfo,
+        resourceVersionCreatorPage,
       }));
       let versionErrorText: string = '';
-      if (!payload) {
+      if (!resourceVersionCreatorPage.version) {
         versionErrorText = '请输入版本号';
-      } else if (!semver.valid(payload)) {
+      } else if (!semver.valid(resourceVersionCreatorPage.version)) {
         versionErrorText = '版本号不合法';
-      } else if (!semver.gt(payload, resourceInfo.info?.latestVersion || '0.0.0')) {
+      } else if (!semver.gt(resourceVersionCreatorPage.version, resourceInfo.info?.latestVersion || '0.0.0')) {
         versionErrorText = resourceInfo.info?.latestVersion ? `必须大于最新版本 ${resourceInfo.info?.latestVersion}` : '必须大于 0.0.0';
       }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          version: payload,
+          // version: resourceVersionCreatorPage.version,
           versionVerify: 2,
           versionErrorText: versionErrorText,
         }
