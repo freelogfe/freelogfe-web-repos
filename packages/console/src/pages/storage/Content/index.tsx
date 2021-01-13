@@ -28,6 +28,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 // import {} from '../NoBucket';
 import {CSSProperties} from "react";
 import FContentLayout from "@/layouts/FContentLayout";
+import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -201,6 +202,7 @@ function Content({storage, dispatch}: ContentProps) {
     }
 
     <Details/>
+
     <FUploadTasksPanel/>
   </div>);
 }

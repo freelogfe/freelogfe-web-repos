@@ -57,8 +57,16 @@ export interface StorageObjectEditorModelState {
     descriptionError: string;
   }[];
 
-  propertiesDataVisible: boolean;
-  properties: {
+  customOptionsDataVisible: boolean;
+  customOptionsData: {
+    key: string;
+    description: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    customOption: string;
+  }[];
+  customOptionsEditorVisible: boolean;
+  customOptionsEditorDataSource: {
     key: string;
     keyError: string;
     description: string;
@@ -153,8 +161,10 @@ const Model: StorageObjectEditorModelType = {
     basePropertiesEditorVisible: false,
     basePropertiesEditorData: [],
 
-    propertiesDataVisible: false,
-    properties: [],
+    customOptionsDataVisible: false,
+    customOptionsData: [],
+    customOptionsEditorVisible: false,
+    customOptionsEditorDataSource: [],
 
     depRs: [],
     depOs: [],
@@ -226,19 +236,19 @@ const Model: StorageObjectEditorModelType = {
                 description: cpd.remark,
               };
             }),
-          properties: (data.customPropertyDescriptors as any[])
+          customOptionsData: (data.customPropertyDescriptors as any[])
             .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<StorageObjectEditorModelState['properties'][number]>((cpd: any) => {
+            .map<StorageObjectEditorModelState['customOptionsData'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
-                keyError: '',
+                // keyError: '',
                 description: cpd.remark,
-                descriptionError: '',
+                // descriptionError: '',
                 custom: cpd.type === 'editableText' ? 'input' : 'select',
                 defaultValue: cpd.defaultValue,
-                defaultValueError: '',
+                // defaultValueError: '',
                 customOption: cpd.candidateItems.join(','),
-                customOptionError: '',
+                // customOptionError: '',
               };
             }),
           depRs: depRs,
@@ -387,7 +397,7 @@ const Model: StorageObjectEditorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...storageObjectEditor.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+          ...storageObjectEditor.customOptionsData.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
             const isInput: boolean = i.custom === 'input';
             const options: string[] = i.customOption.split(',');
             return {

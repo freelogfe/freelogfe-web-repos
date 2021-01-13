@@ -1,0 +1,23 @@
+@import '../../config.less';
+
+.styles {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+
+  & > div:first-child, & > div:nth-child(2) {
+    flex-shrink: 0;
+  }
+
+  & > div:nth-child(2) {
+    padding: 0 5px;
+    color: #D4D4D4;
+  }
+
+  & > div:last-child {
+    flex-shrink: 1;
+  }
+}

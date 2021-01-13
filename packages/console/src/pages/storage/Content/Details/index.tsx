@@ -31,24 +31,27 @@ import {FDown, FInfo} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
 import FBlock from "@/layouts/FFormLayout/FBlock";
 import FDrawer from "@/components/FDrawer";
+import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
+import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 
 interface DetailsProps {
   dispatch: Dispatch;
-  editor: StorageObjectEditorModelState;
+  storageObjectEditor: StorageObjectEditorModelState;
 }
 
-function Details({editor, dispatch}: DetailsProps) {
+function Details({storageObjectEditor, dispatch}: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
-  const hasError: boolean = !!editor.typeError || !!editor.properties.find((ep) => {
-    return ep.key === '' || !!ep.keyError
-      // || ep.value === '' || !!ep.valueError
-      || !!ep.descriptionError
-      || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
-  });
+  const hasError: boolean = !!storageObjectEditor.typeError;
+  // || !!storageObjectEditor.properties.find((ep) => {
+  //   return ep.key === '' || !!ep.keyError
+  //     // || ep.value === '' || !!ep.valueError
+  //     || !!ep.descriptionError
+  //     || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
+  // });
 
   function onChangeType(value: string) {
-    if (value === editor.type) {
+    if (value === storageObjectEditor.type) {
       return;
     }
     dispatch<OnChangeTypeAction>({
@@ -66,41 +69,41 @@ function Details({editor, dispatch}: DetailsProps) {
 
   return (<FDrawer
     title={'编辑对象信息'}
-    visible={editor.visible}
+    visible={storageObjectEditor.visible}
     // visible={true}
     width={720}
     onClose={() => {
       onChange({
         visible: false,
-        propertiesDataVisible: false,
+        customOptionsDataVisible: false,
       });
     }}>
     <div className={styles.divContainer}>
       <div style={{height: 10}}/>
       <Space size={15}>
         <FTitleText
-          text={`${editor.bucketName}/${editor.objectName}`}
+          text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
           type="h3"
         />
         <FCopyToClipboard
-          text={`${editor.bucketName}/${editor.objectName}`}
+          text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
           title={'复制对象名称'}
         />
         <FTextButton
           theme="primary"
           onClick={() => {
             downloadObject({
-              objectIdOrName: encodeURIComponent(`${editor.bucketName}/${editor.objectName}`)
+              objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
             });
           }}
         ><DownloadOutlined/></FTextButton>
       </Space>
       <div style={{height: 17}}/>
-      <div className={styles.size}>{humanizeSize(editor.size)}</div>
+      <div className={styles.size}>{humanizeSize(storageObjectEditor.size)}</div>
       <div style={{height: 10}}/>
       <FBaseProperties
-        basics={editor.rawProperties}
-        additions={editor.baseProperties}
+        basics={storageObjectEditor.rawProperties}
+        additions={storageObjectEditor.baseProperties}
         onChangeAdditions={(value) => {
           onChange({baseProperties: value});
         }}
@@ -110,7 +113,7 @@ function Details({editor, dispatch}: DetailsProps) {
             onClick={() => {
               onChange({
                 basePropertiesEditorVisible: true,
-                basePropertiesEditorData: editor.baseProperties.map((bp) => {
+                basePropertiesEditorData: storageObjectEditor.baseProperties.map((bp) => {
                   return {
                     ...bp,
                     keyError: '',
@@ -129,54 +132,68 @@ function Details({editor, dispatch}: DetailsProps) {
       <Space>
         <a onClick={() => {
           onChange({
-            propertiesDataVisible: !editor.propertiesDataVisible,
+            customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
           });
         }}>
           <span>自定义选项（高级）</span>
-          {editor.propertiesDataVisible ? (<FUp/>) : (<FDown/>)}
+          {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
         </a>
         <FInfo/>
       </Space>
 
       {
-        editor.propertiesDataVisible && (<>
+        storageObjectEditor.customOptionsDataVisible && (<>
 
           <div style={{height: 20}}/>
 
           <Space size={40}>
-            <a
-              onClick={() => {
-                onChange({
-                  properties: [
-                    ...editor.properties,
-                    {
-                      key: '',
-                      keyError: '',
-                      description: '',
-                      descriptionError: '',
-                      custom: 'input',
-                      customOption: '',
+            <a onClick={() => {
+              dispatch<ChangeAction>({
+                type: 'storageObjectEditor/change',
+                payload: {
+                  customOptionsEditorVisible: true,
+                  customOptionsEditorDataSource: storageObjectEditor.customOptionsData.map<StorageObjectEditorModelState['customOptionsEditorDataSource'][number]>((coeds) => {
+                    return {
+                      ...coeds,
                       customOptionError: '',
-                      defaultValue: '',
                       defaultValueError: '',
-                    },
-                  ],
-                });
-              }}
-            >添加选项</a>
+                      keyError: '',
+                      descriptionError: '',
+                    };
+                  }),
+                },
+              });
+            }}>添加选项</a>
 
           </Space>
 
-          <div style={{height: 30}}/>
+          <div style={{height: 20}}/>
+          {
+            storageObjectEditor.customOptionsData.length > 0 ? (
+                <FCustomOptionsCard
+                  dataSource={storageObjectEditor.customOptionsData.map((cod) => {
+                    return {
+                      key: cod.key,
+                      type: cod.custom === 'input' ? '输入框' : '选择框',
+                      description: cod.description,
+                      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
+                    };
+                  })}
+                  onDeleteKey={(value) => {
+                    dispatch<ChangeAction>({
+                      type: 'storageObjectEditor/change',
+                      payload: {
+                        customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
+                          return cod.key !== value;
+                        }),
+                      },
+                    })
+                  }}
+                />
+              )
+              : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+          }
 
-          <FCustomProperties
-            dataSource={editor.properties}
-            disabledKeys={[
-              ...editor.rawProperties.map<string>((rp) => rp.key),
-              ...editor.baseProperties.map<string>((pp) => pp.key),
-            ]}
-            onChange={(value) => onChange({properties: value})}
-          />
         </>)
       }
 
@@ -184,8 +201,8 @@ function Details({editor, dispatch}: DetailsProps) {
       <FFormLayout>
         <FFormLayout.FBlock title={'资源类型'}>
           <FAutoComplete
-            errorText={editor.typeError}
-            value={editor.type}
+            errorText={storageObjectEditor.typeError}
+            value={storageObjectEditor.type}
             debounce={300}
             onDebounceChange={(value) => {
               onChangeType(value);
@@ -204,11 +221,11 @@ function Details({editor, dispatch}: DetailsProps) {
             <FContentText text={'添加'}/>
           </Space>
           {
-            editor.depRs.length > 0 && (<DepsCards
+            storageObjectEditor.depRs.length > 0 && (<DepsCards
               title={'资源'}
-              dataSource={editor.depRs}
+              dataSource={storageObjectEditor.depRs}
               onChange={(value) => {
-                console.log(value, 'value2903jafdslkfa');
+                // console.log(value, 'value2903jafdslkfa');
                 dispatch<ChangeAction>({
                   type: 'storageObjectEditor/change',
                   payload: {
@@ -220,9 +237,9 @@ function Details({editor, dispatch}: DetailsProps) {
           }
 
           {
-            editor.depOs.length > 0 && (<DepsCards
+            storageObjectEditor.depOs.length > 0 && (<DepsCards
               title={'对象'}
-              dataSource={editor.depOs}
+              dataSource={storageObjectEditor.depOs}
               onChange={(value) => {
                 dispatch<ChangeAction>({
                   type: 'storageObjectEditor/change',
@@ -243,11 +260,11 @@ function Details({editor, dispatch}: DetailsProps) {
           <FTextButton onClick={() => {
             onChange({
               visible: false,
-              propertiesDataVisible: false,
+              customOptionsDataVisible: false,
             });
           }}>取消</FTextButton>
           <FNormalButton
-            disabled={editor.typeVerify === 1 || hasError}
+            disabled={storageObjectEditor.typeVerify === 1 || hasError}
             onClick={async () => {
               await dispatch<UpdateObjectInfoAction>({
                 type: 'storageObjectEditor/updateObjectInfo',
@@ -255,8 +272,8 @@ function Details({editor, dispatch}: DetailsProps) {
               dispatch<UpdateAObjectAction>({
                 type: 'storageHomePage/updateAObject',
                 payload: {
-                  id: editor.objectId,
-                  type: editor.type,
+                  id: storageObjectEditor.objectId,
+                  type: storageObjectEditor.type,
                 },
               });
               dispatch<ChangeAction>({
@@ -281,11 +298,11 @@ function Details({editor, dispatch}: DetailsProps) {
     </div>
 
     <FBasePropsEditorDrawer
-      visible={editor.basePropertiesEditorVisible}
-      dataSource={editor.basePropertiesEditorData}
+      visible={storageObjectEditor.basePropertiesEditorVisible}
+      dataSource={storageObjectEditor.basePropertiesEditorData}
       disabledKeys={[
-        ...editor.rawProperties.map<string>((rp) => rp.key),
-        ...editor.properties.map<string>((pp) => pp.key),
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
       ]}
       onChange={(value) => {
         onChange({
@@ -302,7 +319,7 @@ function Details({editor, dispatch}: DetailsProps) {
         onChange({
           basePropertiesEditorData: [],
           basePropertiesEditorVisible: false,
-          baseProperties: editor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+          baseProperties: storageObjectEditor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
             return {
               key: bped.key,
               value: bped.value,
@@ -312,9 +329,51 @@ function Details({editor, dispatch}: DetailsProps) {
         });
       }}
     />
+
+    <FCustomOptionsEditorDrawer
+      visible={storageObjectEditor.customOptionsEditorVisible}
+      onCancel={() => {
+        dispatch<ChangeAction>({
+          type: 'storageObjectEditor/change',
+          payload: {
+            customOptionsEditorVisible: false,
+            customOptionsEditorDataSource: [],
+          },
+        });
+      }}
+      dataSource={storageObjectEditor.customOptionsEditorDataSource}
+      disabledKeys={[
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
+      ]}
+      onChange={(value) => {
+        dispatch<ChangeAction>({
+          type: 'storageObjectEditor/change',
+          payload: {customOptionsEditorDataSource: value},
+        });
+      }}
+      onConfirm={() => {
+        dispatch<ChangeAction>({
+          type: 'storageObjectEditor/change',
+          payload: {
+            customOptionsData: storageObjectEditor.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+              return {
+                key: coeds.key,
+                defaultValue: coeds.defaultValue,
+                description: coeds.description,
+                custom: coeds.custom,
+                customOption: coeds.customOption,
+              };
+            }),
+            customOptionsEditorDataSource: [],
+            customOptionsEditorVisible: false,
+          }
+        })
+      }}
+    />
   </FDrawer>);
 }
 
 export default connect(({storageObjectEditor}: ConnectState) => ({
-  editor: storageObjectEditor,
+  storageObjectEditor: storageObjectEditor,
 }))(Details);
