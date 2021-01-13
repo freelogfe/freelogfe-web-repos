@@ -7,21 +7,29 @@ import styles from './index.less';
 import {UploadProps} from 'antd/lib/upload';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {uploadImage} from "@/services/storages";
+import {i18nMessage} from "@/utils/i18n";
 
 //extends UploadProps
 interface FUploadImageProps {
   children: React.ReactNode;
 
   onUploadSuccess?(url: string): void;
+
+  onError?(error: string): void;
 }
 
-export default function ({children, onUploadSuccess}: FUploadImageProps) {
+export default function ({children, onUploadSuccess, onError}: FUploadImageProps) {
 
   const uploadConfig = {
     accept: 'image/*',
+
     beforeUpload: (file: RcFile, FileList: RcFile[]) => {
-      // console.log(file, 'file1');
-      upload(file);
+      // console.log(file, 'file20934u23');
+      if (file.size > 5 * 1024 * 1024) {
+        onError && onError(i18nMessage('limit_resource_image_size'));
+      } else {
+        upload(file);
+      }
       return false;
     },
     onChange: (info: UploadChangeParam) => {
@@ -42,8 +50,20 @@ export default function ({children, onUploadSuccess}: FUploadImageProps) {
 
   return (
     <div className={styles.styles}>
-      <ImgCrop rotate grid aspect={4 / 3}>
-        <Upload{...uploadConfig}>
+      <ImgCrop
+        rotate
+        grid
+        aspect={4 / 3}
+        beforeCrop={(file) => {
+          // console.log(file, '#FSDFSDFSDF');
+          if (file.type.startsWith('image/')) {
+            return true;
+          }
+          onError && onError(i18nMessage('limit_resource_image_format'));
+          return false;
+        }}
+      >
+        <Upload {...uploadConfig}>
           {children}
         </Upload>
       </ImgCrop>

@@ -6,6 +6,7 @@ import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {uploadImage} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
 import {FCloudUpload} from "@/components/FIcons";
+import fMessage from "@/components/fMessage";
 
 interface FUploadResourceCoverProps {
   value?: string;
@@ -16,7 +17,12 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
 
   return (<div className={styles.cover}>
     {!value
-      ? (<FUploadImage onUploadSuccess={(url) => onChange && onChange(url)}>
+      ? (<FUploadImage
+        onUploadSuccess={(url) => onChange && onChange(url)}
+        onError={(err) => {
+          fMessage(err, 'error');
+        }}
+      >
         <a className={styles.FUploadImageChildren}>
           {/*<i className={'freelog fl-icon-shangchuanfengmian'}/>*/}
           <FCloudUpload/>
@@ -28,7 +34,12 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
       </div>)
     }
     <div className={styles.coverTip}>
-      {value && <FUploadImage onUploadSuccess={(url) => onChange && onChange(url)}>
+      {value && <FUploadImage
+        onUploadSuccess={(url) => onChange && onChange(url)}
+        onError={(err) => {
+          fMessage(err, 'error');
+        }}
+      >
         <a className={styles.ReUpload}>{i18nMessage('replace_resource_image')}</a>
       </FUploadImage>}
       <div style={{height: 15}}/>
@@ -38,12 +49,3 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
     </div>
   </div>);
 }
-
-// interface UploadProps {
-//   children?: React.ReactNode;
-//   on
-// }
-//
-// function Upload() {
-//
-// }
