@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from '@/components/FText';
+import {FContentText, FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
@@ -9,7 +9,12 @@ import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import {
+  ConnectState,
+  ResourceInfoModelState,
+  ResourceVersionCreatorPageModelState,
+  StorageObjectEditorModelState
+} from '@/models/connect';
 import {
   ChangeAction,
   CreateVersionAction,
@@ -34,6 +39,8 @@ import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";
+import FCustomOptionsCard from "@/components/FCustomOptionsCard";
+import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -157,14 +164,14 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
-    })
-    // 自定义属性
-    || !!resourceVersionCreatorPage.properties.find((ep) => {
-      return ep.key === '' || !!ep.keyError
-        // || ep.value === '' || !!ep.valueError
-        || !!ep.descriptionError
-        || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
     });
+  // 自定义属性
+  // || !!resourceVersionCreatorPage.properties.find((ep) => {
+  //   return ep.key === '' || !!ep.keyError
+  //     // || ep.value === '' || !!ep.valueError
+  //     || !!ep.descriptionError
+  //     || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
+  // });
 
   return (<>
       <Prompt
@@ -258,7 +265,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                     },
                     rawProperties: [],
                     baseProperties: [],
-                    properties: [],
+                    customOptionsData: [],
                     dataIsDirty: true,
                   });
                 }
@@ -338,17 +345,17 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                 <Space>
                   <a onClick={() => {
                     onChange({
-                      propertiesDataVisible: !resourceVersionCreatorPage.propertiesDataVisible,
+                      customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
                     });
                   }}>
                     <span>自定义选项（高级）</span>
-                    {resourceVersionCreatorPage.propertiesDataVisible ? (<FUp/>) : (<FDown/>)}
+                    {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
                   </a>
                   <FInfo/>
                 </Space>
 
                 {
-                  resourceVersionCreatorPage.propertiesDataVisible && (<>
+                  resourceVersionCreatorPage.customOptionsDataVisible && (<>
 
                     <div style={{height: 20}}/>
 
@@ -356,20 +363,20 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                       <a
                         onClick={() => {
                           onChange({
-                            properties: [
-                              ...resourceVersionCreatorPage.properties,
-                              {
-                                key: '',
+                            customOptionsEditorDataSource: resourceVersionCreatorPage.customOptionsData.map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cod) => {
+                              return {
+                                key: cod.key,
                                 keyError: '',
-                                description: '',
+                                description: cod.description,
                                 descriptionError: '',
-                                custom: 'input',
-                                customOption: '',
+                                custom: cod.custom,
+                                customOption: cod.customOption,
                                 customOptionError: '',
-                                defaultValue: '',
+                                defaultValue: cod.defaultValue,
                                 defaultValueError: '',
-                              },
-                            ],
+                              };
+                            }),
+                            customOptionsEditorVisible: true,
                           });
                         }}
                       >添加选项</a>
@@ -385,21 +392,47 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
 
                     </Space>
 
-                    <div style={{height: 30}}/>
+                    <div style={{height: 20}}/>
 
-                    <FCustomProperties
-                      dataSource={resourceVersionCreatorPage.properties}
-                      disabledKeys={[
-                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-                      ]}
-                      onChange={(value) => {
-                        onChange({
-                          properties: value,
-                          dataIsDirty: true,
-                        });
-                      }}
-                    />
+                    {
+                      resourceVersionCreatorPage.customOptionsData.length > 0 ? (
+                          <FCustomOptionsCard
+                            dataSource={resourceVersionCreatorPage.customOptionsData.map((cod) => {
+                              return {
+                                key: cod.key,
+                                type: cod.custom === 'input' ? '输入框' : '选择框',
+                                description: cod.description,
+                                value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
+                              };
+                            })}
+                            onDeleteKey={(value) => {
+                              dispatch<ChangeAction>({
+                                type: 'resourceVersionCreatorPage/change',
+                                payload: {
+                                  customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
+                                    return cod.key !== value;
+                                  }),
+                                },
+                              })
+                            }}
+                          />
+                        )
+                        : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+                    }
+
+                    {/*<FCustomProperties*/}
+                    {/*  dataSource={resourceVersionCreatorPage.properties}*/}
+                    {/*  disabledKeys={[*/}
+                    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+                    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
+                    {/*  ]}*/}
+                    {/*  onChange={(value) => {*/}
+                    {/*    onChange({*/}
+                    {/*      properties: value,*/}
+                    {/*      dataIsDirty: true,*/}
+                    {/*    });*/}
+                    {/*  }}*/}
+                    {/*/>*/}
                   </>)
                 }
 
@@ -432,7 +465,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
         dataSource={resourceVersionCreatorPage.basePropertiesEditorData}
         disabledKeys={[
           ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-          ...resourceVersionCreatorPage.properties.map<string>((pp) => pp.key),
+          ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
         ]}
         onChange={(value) => {
           onChange({
@@ -456,6 +489,48 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                 description: bped.description,
               };
             }),
+          })
+        }}
+      />
+
+      <FCustomOptionsEditorDrawer
+        visible={resourceVersionCreatorPage.customOptionsEditorVisible}
+        onCancel={() => {
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
+            payload: {
+              customOptionsEditorVisible: false,
+              customOptionsEditorDataSource: [],
+            },
+          });
+        }}
+        dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
+        disabledKeys={[
+          ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+          ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+        ]}
+        onChange={(value) => {
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
+            payload: {customOptionsEditorDataSource: value},
+          });
+        }}
+        onConfirm={() => {
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
+            payload: {
+              customOptionsData: resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+                return {
+                  key: coeds.key,
+                  defaultValue: coeds.defaultValue,
+                  description: coeds.description,
+                  custom: coeds.custom,
+                  customOption: coeds.customOption,
+                };
+              }),
+              customOptionsEditorDataSource: [],
+              customOptionsEditorVisible: false,
+            }
           })
         }}
       />

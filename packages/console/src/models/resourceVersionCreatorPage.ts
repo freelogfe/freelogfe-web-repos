@@ -2,7 +2,6 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
-import {FCustomPropertiesProps} from '@/components/FCustomProperties';
 import {
   batchGetCoverageVersions,
   BatchGetCoverageVersionsParamsType,
@@ -111,8 +110,16 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
     descriptionError: string;
   }[];
 
-  propertiesDataVisible: boolean;
-  properties: {
+  customOptionsDataVisible: boolean;
+  customOptionsData: {
+    key: string;
+    description: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    customOption: string;
+  }[];
+  customOptionsEditorVisible: boolean;
+  customOptionsEditorDataSource: {
     key: string;
     keyError: string;
     description: string;
@@ -264,8 +271,10 @@ const initStates: ResourceVersionCreatorPageModelState = {
   basePropertiesEditorVisible: false,
   basePropertiesEditorData: [],
 
-  propertiesDataVisible: false,
-  properties: [],
+  customOptionsDataVisible: false,
+  customOptionsData: [],
+  customOptionsEditorVisible: false,
+  customOptionsEditorDataSource: [],
 
   depRelationship: [],
   dependencies: [],
@@ -341,7 +350,7 @@ const Model: ResourceVersionCreatorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...resourceVersionCreatorPage.properties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
             const isInput: boolean = i.custom === 'input';
             const options: string[] = i.customOption.split(',');
             return {
@@ -782,19 +791,19 @@ const Model: ResourceVersionCreatorModelType = {
                   description: cpd.remark,
                 };
               }),
-            properties: (data.customPropertyDescriptors as any[])
+            customOptionsData: (data.customPropertyDescriptors as any[])
               .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['properties'][number]>((cpd: any) => {
+              .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
                 return {
                   key: cpd.key,
-                  keyError: '',
+                  // keyError: '',
                   description: cpd.remark,
-                  descriptionError: '',
+                  // descriptionError: '',
                   custom: cpd.type === 'editableText' ? 'input' : 'select',
                   defaultValue: cpd.defaultValue,
-                  defaultValueError: '',
+                  // defaultValueError: '',
                   customOption: cpd.candidateItems.join(','),
-                  customOptionError: '',
+                  // customOptionError: '',
                 };
               }),
             dependencies: allDepObjects,
@@ -878,7 +887,7 @@ const Model: ResourceVersionCreatorModelType = {
           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
             return rp.key;
           }),
-          ...resourceVersionCreatorPage.properties.map((pp) => {
+          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
             return pp.key;
           }),
         ];
@@ -913,8 +922,8 @@ const Model: ResourceVersionCreatorModelType = {
         return yield put<ChangeAction>({
           type: 'change',
           payload: {
-            properties: resourceVersionCreatorPage.preVersionOptionProperties
-              .map<StorageObjectEditorModelState['properties'][number]>((cpd) => {
+            customOptionsEditorDataSource: resourceVersionCreatorPage.preVersionOptionProperties
+              .map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cpd) => {
                 return {
                   key: cpd.key,
                   keyError: allKeys.includes(cpd.key) ? '键不能重复' : '',
@@ -927,6 +936,7 @@ const Model: ResourceVersionCreatorModelType = {
                   customOptionError: '',
                 };
               }),
+            customOptionsEditorVisible: true,
           }
         });
       }
