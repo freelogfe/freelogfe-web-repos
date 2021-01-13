@@ -3,7 +3,8 @@ import styles from './index.less';
 import {Space} from "antd";
 import {FContentText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
-import {FClose, FInfo} from "@/components/FIcons";
+import {FInfo} from "@/components/FIcons";
+import {CloseCircleFilled} from '@ant-design/icons';
 import FTooltip from "@/components/FTooltip";
 
 interface FCustomOptionsCardProps {
@@ -37,7 +38,7 @@ function FCustomOptionsCard({dataSource, onDeleteKey}: FCustomOptionsCardProps) 
             }
             <FTextButton onClick={() => {
               onDeleteKey && onDeleteKey(ds.key)
-            }}><FClose/></FTextButton>
+            }}><CloseCircleFilled/></FTextButton>
           </Space>
           <div className={styles.content}>
             <div><FContentText text={ds.type}/></div>
