@@ -49,6 +49,7 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
       type: 'resourceVersionCreatorPage/change',
       payload: {
         dependencies,
+        dataIsDirty: true,
       },
     });
   }

@@ -186,7 +186,7 @@ export interface AddDepsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/addDeps' | 'addDeps';
   payload: {
     relationships: Relationships;
-    versions?: { id: string; versionRange: string }[];
+    versions?: { id: string; versionRange: string; }[];
   };
 }
 
@@ -568,6 +568,13 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'resourceVersionCreatorPage/change',
+        payload: {
+          dataIsDirty: true,
+        },
+      });
+
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));

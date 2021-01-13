@@ -43,7 +43,8 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
             ...dds,
             upthrow: bool,
           }
-        })
+        }),
+        dataIsDirty: true,
       },
     });
   }

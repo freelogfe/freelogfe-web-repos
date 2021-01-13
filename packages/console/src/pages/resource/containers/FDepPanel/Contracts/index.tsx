@@ -51,6 +51,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
       type: 'resourceVersionCreatorPage/change',
       payload: {
         dependencies: dependencies,
+        dataIsDirty: true,
       },
     });
   }

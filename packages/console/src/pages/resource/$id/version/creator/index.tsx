@@ -73,11 +73,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
 
-  // React.useEffect(() => {
-  //   window.addEventListener('onbeforeunload', () => {
-  //     return '1234';
-  //   });
-  // }, []);
 
   // if (!resourceInfo.hasPermission) {
   //   return (<div>

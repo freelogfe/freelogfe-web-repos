@@ -15,7 +15,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {i18nMessage} from '@/utils/i18n';
 import {CloseCircleFilled} from '@ant-design/icons';
-import {DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
+import {ChangeAction, DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
 import FDrawer from "@/components/FDrawer";
 
 export interface FDepPanelProps {
@@ -42,6 +42,12 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
             dispatch<ImportLastVersionDataAction>({
               type: 'resourceVersionCreatorPage/importLastVersionData',
               payload: 'deps',
+            });
+            dispatch<ChangeAction>({
+              type: 'resourceVersionCreatorPage/change',
+              payload: {
+                dataIsDirty: true,
+              },
             });
           }}
         >{i18nMessage('import_from_previous_version')}</FNormalButton>
