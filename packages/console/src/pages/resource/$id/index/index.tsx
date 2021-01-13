@@ -60,6 +60,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       }
 
       <div style={{height: 20}}/>
+
       <Sign/>
 
       <div style={{height: 50}}/>

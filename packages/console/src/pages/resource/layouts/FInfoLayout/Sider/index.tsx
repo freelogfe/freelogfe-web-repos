@@ -81,7 +81,9 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       status={resourceInfo.info?.status === 1 ? 'online' : 'stopped'}
     />
     <div style={{height: 15}}/>
-    <FContentText className={styles.breakWord} text={resourceInfo.info?.resourceName}/>
+    <FTextButton onClick={() => router.push(`/resource/${resourceInfo.info?.resourceId}`)}>
+      <FContentText className={styles.breakWord} text={resourceInfo.info?.resourceName}/>
+    </FTextButton>
     <div style={{height: 10}}/>
     <label className={styles.label}>{resourceInfo.info.resourceType}</label>
     <div style={{height: 15}}/>
