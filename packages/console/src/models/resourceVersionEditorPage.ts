@@ -32,6 +32,7 @@ export interface ResourceVersionEditorPageModelState {
   basePEditorVisible: boolean;
   basePKeyInput: string;
   basePValueInput: string;
+  basePValueInputError: string;
   basePDescriptionInput: string;
   basePDescriptionInputError: string;
 
@@ -103,6 +104,7 @@ const Model: ResourceVersionEditorModelType = {
     basePEditorVisible: false,
     basePKeyInput: '',
     basePValueInput: '',
+    basePValueInputError: '',
     basePDescriptionInput: '',
     basePDescriptionInputError: '',
 

@@ -457,18 +457,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
             disabled={true}
             value={resourceVersionEditorPage.basePKeyInput}
             className={styles.input}
-            // onChange={(e) => {
-            //   const value: string = e.target.value;
-            //   let keyError: string = '';
-            //   if (value === '') {
-            //     keyError = '请输入';
-            //   } else if (value.length > 15) {
-            //     keyError = '不超过15个字符';
-            //   } else if (!CUSTOM_KEY.test(value)) {
-            //     keyError = `不符合${CUSTOM_KEY}`;
-            //   }
-            // }}
-            // placeholder={'输入key'}
           />
         </div>
 
@@ -479,21 +467,31 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           </div>
           <div style={{height: 5}}/>
           <FInput
-            disabled={true}
             value={resourceVersionEditorPage.basePValueInput}
-            // errorText={ds.valueError}
+            // errorText={}
             className={styles.input}
-            // onChange={(e) => {
-            //   const value: string = e.target.value;
-            //   let valueError: string = '';
-            //   if (value === '') {
-            //     valueError = '请输入';
-            //   } else if (value.length > 30) {
-            //     valueError = '不超过30个字符';
-            //   }
-            // }}
-            // placeholder={'输入value'}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let valueError: string = '';
+              if (value === '') {
+                valueError = '请输入';
+              } else if (value.length > 30) {
+                valueError = '不超过30个字符';
+              }
+              dispatch<ChangeAction>({
+                type: 'resourceVersionEditorPage/change',
+                payload: {
+                  basePValueInput: value,
+                  basePValueInputError: valueError,
+                }
+              });
+            }}
+            placeholder={'输入value'}
           />
+          {resourceVersionEditorPage.basePValueInputError && (<>
+            <div style={{height: 5}}/>
+            <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>
+          </>)}
         </div>
 
         <div className={styles.input}>
@@ -526,7 +524,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         <div style={{height: 20}}/>
         <div className={styles.save}>
           <FNormalButton
-            disabled={!!resourceVersionEditorPage.basePDescriptionInputError}
+            disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
             onClick={async () => {
               await dispatch<ChangeAction>({
                 type: 'resourceVersionEditorPage/change',
