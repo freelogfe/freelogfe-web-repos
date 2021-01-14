@@ -114,15 +114,15 @@ function Sider({storage, dispatch}: SiderProps) {
             <FTitleText text={'系统存储空间'} type="form"/>
           </div>
 
-          <div style={{height: 18}}/>
-          <div className={styles.buckets}>
-            <a
-              className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}
-              onClick={() => dispatch<OnChangeActivatedBucketAction>({
-                type: 'storageHomePage/onChangeActivatedBucket',
-                payload: '.UserNodeData',
-              })}>.Nodedata</a>
-          </div>
+          {/*<div style={{height: 18}}/>*/}
+          {/*<div className={styles.buckets}>*/}
+          {/*  <a*/}
+          {/*    className={storage.activatedBucket === '.UserNodeData' ? styles.bucketActive : ''}*/}
+          {/*    onClick={() => dispatch<OnChangeActivatedBucketAction>({*/}
+          {/*      type: 'storageHomePage/onChangeActivatedBucket',*/}
+          {/*      payload: '.UserNodeData',*/}
+          {/*    })}>.Nodedata</a>*/}
+          {/*</div>*/}
         </>)}
         <div style={{height: 40}}/>
       </div>

@@ -161,19 +161,21 @@ const Model: StorageHomePageModelType = {
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
       const params: BucketListParamsType = {
-        bucketType: 0,
+        // bucketType: 0,
+        bucketType: 1,
       };
       const {data} = yield call(bucketList, params);
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bucketList: data.map((i: any) => ({
-            bucketName: i.bucketName,
-            bucketType: i.bucketType,
-            createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
-            totalFileQuantity: i.totalFileQuantity,
-          })),
+          bucketList: data
+            .map((i: any) => ({
+              bucketName: i.bucketName,
+              bucketType: i.bucketType,
+              createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
+              totalFileQuantity: i.totalFileQuantity,
+            })),
         },
       });
       yield put<OnChangeActivatedBucketAction>({
