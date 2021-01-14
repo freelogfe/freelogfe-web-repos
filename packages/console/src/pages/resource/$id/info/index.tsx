@@ -201,10 +201,6 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
         <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
           <FLabelEditor
             values={resourceInfo.info?.tags}
-            // onChange={(value) => dispatch<OnChangeLabelsAction>({
-            //   type: 'resourceInfoPage/onChangeLabels',
-            //   payload: value,
-            // })}
             onChange={(value) => dispatch<OnChangeInfoAction>({
               type: 'resourceInfoPage/onChangeInfo',
               payload: {tags: value},

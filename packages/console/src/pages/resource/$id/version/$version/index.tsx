@@ -1,12 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import {FContentText, FTitleText} from '@/components/FText';
-import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
-import FEditorCard from '@/components/FEditorCard';
 import {FCircleButton, FTextButton, FNormalButton} from '@/components/FButton';
-import {Col, Drawer, Row, Space} from 'antd';
-import {DownloadOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {Col, Row, Space} from 'antd';
+import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState} from '@/models/connect';
@@ -52,7 +49,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
-  // const [properties, setProperties] = React.useState<ResourceVersionEditorPageModelState['properties']>([]);
 
   const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
 
@@ -151,14 +147,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
         onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
-      {/*<FContentLayout*/}
-      {/*  header={<Header*/}
-      {/*    version={version.version}*/}
-      {/*    signingDate={version.signingDate}*/}
-      {/*    resourceID={version.resourceID}*/}
-      {/*    // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}*/}
-      {/*    onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}*/}
-      {/*  />}>*/}
       <FFormLayout>
         <FFormLayout.FBlock title={i18nMessage('version_description')}>
 
@@ -249,7 +237,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           </div>
         </FFormLayout.FBlock>
 
-        {/*{properties?.length > 0 && <FEditorCard title={i18nMessage('object_property')}>*/}
         {
           resourceVersionEditorPage.properties?.length > 0 && <FFormLayout.FBlock title={'自定义选项'}>
             <Space
