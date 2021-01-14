@@ -171,3 +171,16 @@
 .errorTip {
   color: @f-error-color1;
 }
+
+.customOption {
+  width: 100%;
+
+  & > div:first-child {
+    width: 100%;
+    flex-shrink: 1;
+  }
+
+  & > div:last-child {
+    flex-shrink: 0;
+  }
+}

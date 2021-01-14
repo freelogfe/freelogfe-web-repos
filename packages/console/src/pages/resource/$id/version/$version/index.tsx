@@ -238,15 +238,15 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.properties?.length > 0 && <FFormLayout.FBlock title={'自定义选项'}>
+          resourceVersionEditorPage.customOptions?.length > 0 && <FFormLayout.FBlock title={'自定义选项'}>
             <Space
               className={styles.properties}
               size={15}
               direction="vertical"
             >
               {
-                resourceVersionEditorPage.properties.map((ppp) => {
-                  return (<div key={ppp.key}>
+                resourceVersionEditorPage.customOptions.map((ppp) => {
+                  return (<Space className={styles.customOption} key={ppp.key}>
                     <div className={styles.Content}>
                       <div style={{height: 10}}/>
                       <Space size={20} className={styles.row}>
@@ -257,95 +257,11 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                             value={ppp.key}
                           />
                         </Field>
-                        <Field
-                          title={i18nMessage('property_remark')}
-                          topRight={!ppp.descriptionIsEditing ? (<FTextButton
-                            onClick={() => {
-                              dispatch<ChangeAction>({
-                                type: 'resourceVersionEditorPage/change',
-                                payload: {
-                                  properties: resourceVersionEditorPage.properties.map((pt) => {
-                                    if (pt.key !== ppp.key) {
-                                      return pt;
-                                    }
-                                    return {
-                                      ...pt,
-                                      descriptionIsEditing: true,
-                                    };
-                                  })
-                                }
-                              });
-                            }}
-                          ><FEdit/></FTextButton>) : (<Space size={5}>
-                            <FTextButton onClick={() => {
-                              dispatch<ChangeAction>({
-                                type: 'resourceVersionEditorPage/change',
-                                payload: {
-                                  properties: resourceVersionEditorPage.properties.map((pt) => {
-                                    if (pt.key !== ppp.key) {
-                                      return pt;
-                                    }
-                                    return {
-                                      ...pt,
-                                      descriptionIsEditing: false,
-                                    };
-                                  })
-                                }
-                              });
-                            }}>取消</FTextButton>
-                            <FTextButton
-                              disabled={!!ppp.descriptionError}
-                              theme="primary"
-                              onClick={async () => {
-                                await dispatch<ChangeAction>({
-                                  type: 'resourceVersionEditorPage/change',
-                                  payload: {
-                                    properties: resourceVersionEditorPage.properties.map((pt) => {
-                                      if (pt.key !== ppp.key) {
-                                        return pt;
-                                      }
-                                      return {
-                                        ...pt,
-                                        description: pt.descriptionInput,
-                                        descriptionIsEditing: false,
-                                      };
-                                    })
-                                  }
-                                });
-                                await dispatch<SyncAllPropertiesAction>({
-                                  type: 'resourceVersionEditorPage/syncAllProperties',
-                                });
-                              }}
-                            >保存</FTextButton>
-                          </Space>)}
-                        >
+                        <Field title={i18nMessage('property_remark')}>
                           <FInput
                             wrapClassName={styles.FInputWrap}
-                            value={ppp.descriptionIsEditing ? ppp.descriptionInput : ppp.description}
-                            disabled={!ppp.descriptionIsEditing}
-                            errorText={ppp.descriptionError}
-                            onChange={(e) => {
-                              const value: string = e.target.value;
-                              let descriptionError: string = '';
-                              if (value.length > 50) {
-                                descriptionError = '不超过50个字符';
-                              }
-                              dispatch<ChangeAction>({
-                                type: 'resourceVersionEditorPage/change',
-                                payload: {
-                                  properties: resourceVersionEditorPage.properties.map((pt) => {
-                                    if (pt.key !== ppp.key) {
-                                      return pt;
-                                    }
-                                    return {
-                                      ...pt,
-                                      descriptionInput: value,
-                                      descriptionError: descriptionError,
-                                    };
-                                  })
-                                }
-                              });
-                            }}
+                            value={ppp.description}
+                            disabled
                           />
                         </Field>
                       </Space>
@@ -378,17 +294,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                                 disabled
                                 wrapClassName={styles.FInputWrap}
                                 value={ppp.customOption}
-                                onChange={(e) => {
-                                  const value: string = e.target.value;
-                                  let customOptionError: string = '';
-
-                                  if (value === '') {
-                                    customOptionError = '请输入';
-                                  } else if (value.length > 500) {
-                                    customOptionError = '不超过500个字符';
-                                  }
-
-                                }}
                               />
                             </Field>)
                             : (<Field
@@ -400,15 +305,6 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                                 disabled
                                 wrapClassName={styles.FInputWrap}
                                 value={ppp.defaultValue}
-                                onChange={(e) => {
-                                  const value: string = e.target.value;
-                                  let valueError: string = '';
-                                  if (value === '') {
-                                    valueError = '请输入';
-                                  } else if (value.length > 30) {
-                                    valueError = '不超过30个字符';
-                                  }
-                                }}
                               />
                             </Field>)
                         }
@@ -416,7 +312,26 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                       </Space>
                       <div style={{height: 15}}/>
                     </div>
-                  </div>)
+
+                    <div>
+                      <FTextButton onClick={() => {
+                        dispatch<ChangeAction>({
+                          type: 'resourceVersionEditorPage/change',
+                          payload: {
+                            customOptionEditorVisible: true,
+                            customOptionKey: ppp.key,
+                            customOptionDescription: ppp.defaultValue,
+                            customOptionDescriptionError: '',
+                            customOptionCustom: ppp.custom,
+                            customOptionDefaultValue: ppp.defaultValue,
+                            customOptionDefaultValueError: '',
+                            customOptionCustomOption: ppp.customOption,
+                            customOptionCustomOptionError: '',
+                          },
+                        });
+                      }}><FEdit/></FTextButton>
+                    </div>
+                  </Space>)
                 })
               }
             </Space>
@@ -521,38 +436,231 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           />
         </div>
 
-        <div style={{height: 20}}/>
-        <div className={styles.save}>
-          <FNormalButton
-            disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
-            onClick={async () => {
-              await dispatch<ChangeAction>({
-                type: 'resourceVersionEditorPage/change',
-                payload: {
-                  baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                    if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                      return bp;
+      </Space>
+
+      <div style={{height: 20}}/>
+      <div className={styles.save}>
+        <FNormalButton
+          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
+          onClick={async () => {
+            await dispatch<ChangeAction>({
+              type: 'resourceVersionEditorPage/change',
+              payload: {
+                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
+                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
+                    return bp;
+                  }
+                  return {
+                    ...bp,
+                    value: resourceVersionEditorPage.basePValueInput,
+                    description: resourceVersionEditorPage.basePDescriptionInput,
+                  };
+                }),
+                basePEditorVisible: false,
+                basePKeyInput: '',
+                basePValueInput: '',
+                basePDescriptionInput: '',
+                basePDescriptionInputError: '',
+              }
+            });
+            await dispatch<SyncAllPropertiesAction>({
+              type: 'resourceVersionEditorPage/syncAllProperties',
+            });
+          }}
+        >保存</FNormalButton>
+      </div>
+    </FDrawer>
+
+    <FDrawer
+      title={'编辑自定义属性'}
+      onClose={() => {
+        dispatch<ChangeAction>({
+          type: 'resourceVersionEditorPage/change',
+          payload: {
+            basePEditorVisible: false,
+            basePKeyInput: '',
+            basePValueInput: '',
+            basePDescriptionInput: '',
+            basePDescriptionInputError: '',
+          },
+        });
+      }}
+      visible={resourceVersionEditorPage.customOptionEditorVisible}
+      width={720}
+    >
+      <Space
+        className={styles.properties}
+        size={15}
+        direction="vertical"
+      >
+        <div>
+          <div className={styles.Content}>
+            <div style={{height: 10}}/>
+            <Space size={20} className={styles.row}>
+              <Field title={i18nMessage('key')} dot={true}>
+                <FInput
+                  disabled
+                  wrapClassName={styles.FInputWrap}
+                  value={resourceVersionEditorPage.customOptionKey}
+                />
+              </Field>
+              <Field title={i18nMessage('property_remark')}>
+                <FInput
+                  wrapClassName={styles.FInputWrap}
+                  // errorText={resourceVersionEditorPage.customOptionDescriptionError}
+                  value={resourceVersionEditorPage.customOptionDescription}
+                  onChange={(e) => {
+                    const value: string = e.target.value;
+                    let descriptionError: string = '';
+                    if (value.length > 50) {
+                      descriptionError = '不超过50个字符';
                     }
-                    return {
-                      ...bp,
-                      value: resourceVersionEditorPage.basePValueInput,
-                      description: resourceVersionEditorPage.basePDescriptionInput,
-                    };
-                  }),
-                  basePEditorVisible: false,
-                  basePKeyInput: '',
-                  basePValueInput: '',
-                  basePDescriptionInput: '',
-                  basePDescriptionInputError: '',
-                }
-              });
-              await dispatch<SyncAllPropertiesAction>({
-                type: 'resourceVersionEditorPage/syncAllProperties',
-              });
-            }}
-          >保存</FNormalButton>
+                    dispatch<ChangeAction>({
+                      type: 'resourceVersionEditorPage/change',
+                      payload: {
+                        customOptionDescription: value,
+                        customOptionDescriptionError: descriptionError,
+                      },
+                    });
+                  }}
+                />
+                {resourceVersionEditorPage.customOptionDescriptionError && (<>
+                  <div style={{height: 5}}/>
+                  <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionDescriptionError}</div>
+                </>)}
+              </Field>
+            </Space>
+
+            <div style={{height: 15}}/>
+            <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
+              <Field
+                className={styles.FSelect}
+                title={i18nMessage('value_input_mode')}
+              >
+                <FSelect
+                  disabled
+                  value={resourceVersionEditorPage.customOptionCustom}
+                  className={styles.FSelect}
+                  dataSource={[
+                    {value: 'input', title: i18nMessage('textfield')},
+                    {value: 'select', title: i18nMessage('dropdownlist')},
+                  ]}
+                />
+              </Field>
+
+              {
+                resourceVersionEditorPage.customOptionCustom === 'select'
+                  ? (<Field
+                    dot={true}
+                    title={'自定义选项(首个选项为默认值)'}
+                    className={styles.customOptions}
+                  >
+                    <FInput
+                      wrapClassName={styles.FInputWrap}
+                      value={resourceVersionEditorPage.customOptionCustomOption}
+                      onChange={(e) => {
+                        const value: string = e.target.value;
+                        let customOptionError: string = '';
+
+                        if (value === '') {
+                          customOptionError = '请输入';
+                        } else if (value.length > 500) {
+                          customOptionError = '不超过500个字符';
+                        }
+
+                        if (!customOptionError) {
+                          const allOptions = value.split(',');
+                          const setS = new Set(allOptions);
+                          if (setS.size !== allOptions.length) {
+                            customOptionError = '选项不能重复';
+                          }
+                        }
+
+                        dispatch<ChangeAction>({
+                          type: 'resourceVersionEditorPage/change',
+                          payload: {
+                            customOptionCustomOption: value,
+                            customOptionCustomOptionError: customOptionError,
+                          },
+                        });
+
+                      }}
+                    />
+                    {resourceVersionEditorPage.customOptionCustomOptionError && (<>
+                      <div style={{height: 5}}/>
+                      <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionCustomOptionError}</div>
+                    </>)}
+                  </Field>)
+                  : (<Field
+                    // title={i18nMessage('value')}
+                    title={'自定义选项(填写一个默认值)'}
+                    dot={true}
+                  >
+                    <FInput
+                      wrapClassName={styles.FInputWrap}
+                      value={resourceVersionEditorPage.customOptionDefaultValue}
+                      onChange={(e) => {
+                        const value: string = e.target.value;
+                        let valueError: string = '';
+                        if (value === '') {
+                          valueError = '请输入';
+                        } else if (value.length > 30) {
+                          valueError = '不超过30个字符';
+                        }
+
+                        dispatch<ChangeAction>({
+                          type: 'resourceVersionEditorPage/change',
+                          payload: {
+                            customOptionDefaultValue: value,
+                            customOptionDefaultValueError: valueError,
+                          },
+                        });
+                      }}
+                    />
+                    {resourceVersionEditorPage.customOptionDefaultValueError && (<>
+                      <div style={{height: 5}}/>
+                      <div className={styles.errorTip}>{resourceVersionEditorPage.customOptionDefaultValueError}</div>
+                    </>)}
+                  </Field>)
+              }
+
+            </Space>
+            <div style={{height: 15}}/>
+          </div>
         </div>
       </Space>
+
+      <div style={{height: 20}}/>
+      <div className={styles.save}>
+        <FNormalButton
+          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
+          onClick={async () => {
+            await dispatch<ChangeAction>({
+              type: 'resourceVersionEditorPage/change',
+              payload: {
+                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
+                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
+                    return bp;
+                  }
+                  return {
+                    ...bp,
+                    value: resourceVersionEditorPage.basePValueInput,
+                    description: resourceVersionEditorPage.basePDescriptionInput,
+                  };
+                }),
+                basePEditorVisible: false,
+                basePKeyInput: '',
+                basePValueInput: '',
+                basePDescriptionInput: '',
+                basePDescriptionInputError: '',
+              }
+            });
+            await dispatch<SyncAllPropertiesAction>({
+              type: 'resourceVersionEditorPage/syncAllProperties',
+            });
+          }}
+        >保存</FNormalButton>
+      </div>
     </FDrawer>
   </>);
 }

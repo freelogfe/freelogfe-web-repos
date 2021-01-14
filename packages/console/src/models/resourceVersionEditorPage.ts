@@ -36,18 +36,23 @@ export interface ResourceVersionEditorPageModelState {
   basePDescriptionInput: string;
   basePDescriptionInputError: string;
 
-  properties: {
+  customOptions: {
     key: string;
-
     description: string;
-    descriptionIsEditing: boolean;
-    descriptionInput: string;
-    descriptionError: string;
-
     custom: 'input' | 'select';
     defaultValue: string;
     customOption: string;
   }[];
+  customOptionEditorVisible: boolean;
+  customOptionKey: string;
+  customOptionDescription: string;
+  customOptionDescriptionError: string;
+  customOptionCustom: 'select' | 'input';
+  customOptionDefaultValue: string;
+  customOptionDefaultValueError: string;
+  customOptionCustomOption: string;
+  customOptionCustomOptionError: string;
+
 }
 
 export interface ChangeAction extends AnyAction {
@@ -108,7 +113,16 @@ const Model: ResourceVersionEditorModelType = {
     basePDescriptionInput: '',
     basePDescriptionInputError: '',
 
-    properties: [],
+    customOptions: [],
+    customOptionEditorVisible: false,
+    customOptionKey: '',
+    customOptionDescription: '',
+    customOptionDescriptionError: '',
+    customOptionCustom: 'input',
+    customOptionDefaultValue: '',
+    customOptionDefaultValueError: '',
+    customOptionCustomOption: '',
+    customOptionCustomOptionError: '',
   },
 
   effects: {
@@ -144,7 +158,7 @@ const Model: ResourceVersionEditorModelType = {
               description: b.remark
             };
           }),
-          properties: opt.map((i: any) => ({
+          customOptions: opt.map((i: any) => ({
             key: i.key,
             value: i.defaultValue,
 
@@ -189,7 +203,7 @@ const Model: ResourceVersionEditorModelType = {
             remark: bp.description,
           };
         }),
-        ...resourceVersionEditorPage.properties.map((pp) => {
+        ...resourceVersionEditorPage.customOptions.map((pp) => {
           const isInput: boolean = pp.custom === 'input';
           const options: string[] = pp.customOption.split(',');
           return {
