@@ -15,6 +15,8 @@ import {
 } from '@/models/storageHomePage';
 import {humanizeSize} from '@/utils/format';
 import {FDelete} from "@/components/FIcons";
+import FTooltip from "@/components/FTooltip";
+import {i18nMessage} from "@/utils/i18n";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -45,17 +47,25 @@ function Sider({storage, dispatch}: SiderProps) {
             />
           </Space>
           {
-            storage.bucketList.length < 5 && (<FCircleButton
-              theme="text"
-              onClick={() => dispatch<ChangeAction>({
-                type: 'storageHomePage/change',
-                payload: {
-                  newBucketName: '',
-                  newBucketNameError: false,
-                  newBucketModalVisible: true,
-                },
-              })}
-            />)
+            storage.bucketList.length < 5
+              ? (<FCircleButton
+                theme="text"
+                onClick={() => dispatch<ChangeAction>({
+                  type: 'storageHomePage/change',
+                  payload: {
+                    newBucketName: '',
+                    newBucketNameError: false,
+                    newBucketModalVisible: true,
+                  },
+                })}
+              />)
+              :(<FTooltip title={i18nMessage('msg_bucket_quantity_exceed ')}>
+                <div><FCircleButton
+                  theme="text"
+                  size="small"
+                  // disabled
+                /></div>
+              </FTooltip>)
           }
         </div>
         <div style={{height: 18}}/>
