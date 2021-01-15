@@ -100,7 +100,12 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       })
     }}
     onClickDetails={(id) => router.push(`/resource/${id}`)}
-    onClickMore={() => null}
+    onClickMore={() => {
+      dispatch<FetchDataSourceAction>({
+        type: 'resourceCollectPage/fetchDataSource',
+        payload: false,
+      });
+    }}
   />);
 }
 
