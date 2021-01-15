@@ -50,19 +50,21 @@ export default function ({
               <div className={styles.CoverMaskNav}>
                 {
                   type === 'favorite'
-                    ? (
+                    ? (<div className={styles.favorite}>
+                      <a onClick={() => onClickDetails && onClickDetails()}>{i18nMessage('resource_details')}</a>
+                      <span>|</span>
                       <a onClick={() => onBoomJuice && onBoomJuice()}>{i18nMessage('remove_from_collection')}</a>
-                    )
+                    </div>)
                     : (
-                      <>
+                      <div className={styles.resources}>
                         <a
                           onClick={() => onClickDetails && onClickDetails()}>{i18nMessage('resource_details')}</a>
-                        <Divider className={styles.Divider} type="vertical"/>
+                        <span>|</span>
                         <a onClick={() => onClickEditing && onClickEditing()}>{i18nMessage('edit_resource')}</a>
-                        <Divider className={styles.Divider} type="vertical"/>
+                        <span>|</span>
                         <a
                           onClick={() => onClickRevision && onClickRevision()}>{i18nMessage('update_resource')}</a>
-                      </>
+                      </div>
                     )
                 }
               </div>
@@ -95,7 +97,7 @@ export default function ({
               resource.policy.map((i: string) => <Policy key={i} text={i}/>)
             }
           </div>
-          <a onClick={() => onClickMore && onClickMore()}>{i18nMessage('more_details')}>></a>
+          {/*<a onClick={() => onClickMore && onClickMore()}>{i18nMessage('more_details')}>></a>*/}
         </div>
       </div>
     </div>
