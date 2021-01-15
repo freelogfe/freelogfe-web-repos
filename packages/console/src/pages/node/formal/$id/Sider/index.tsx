@@ -7,13 +7,19 @@ import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
+import {router, withRouter} from "umi";
 
 interface SiderProps {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
+  match: {
+    params: {
+      id: string;
+    }
+  }
 }
 
-function Sider({dispatch, nodeManagerPage}: SiderProps) {
+function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
 
   // React.useEffect(() => {
   //   console.log('Sider useEffect');
@@ -30,7 +36,7 @@ function Sider({dispatch, nodeManagerPage}: SiderProps) {
       <div className={styles.selector}>
         <div style={{height: 30}}/>
         <a
-          className={!nodeManagerPage.showTheme ? styles.active: ''}
+          className={!nodeManagerPage.showTheme ? styles.active : ''}
           onClick={() => dispatch<ChangeAction>({
             type: 'nodeManagerPage/change',
             payload: {
@@ -40,7 +46,7 @@ function Sider({dispatch, nodeManagerPage}: SiderProps) {
         >展品管理</a>
         <div style={{height: 16}}/>
         <a
-          className={nodeManagerPage.showTheme ? styles.active: ''}
+          className={nodeManagerPage.showTheme ? styles.active : ''}
           onClick={() => dispatch<ChangeAction>({
             type: 'nodeManagerPage/change',
             payload: {
@@ -51,10 +57,12 @@ function Sider({dispatch, nodeManagerPage}: SiderProps) {
       </div>
     </div>
 
-    <Button>进入测试节点</Button>
+    <Button onClick={() => {
+      router.push(`/node/${match.params.id}/informal`);
+    }}>进入测试节点</Button>
   </div>);
 }
 
-export default connect(({nodeManagerPage}: ConnectState) => ({
+export default withRouter(connect(({nodeManagerPage}: ConnectState) => ({
   nodeManagerPage
-}))(Sider);
+}))(Sider));

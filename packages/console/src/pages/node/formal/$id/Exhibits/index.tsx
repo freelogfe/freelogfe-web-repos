@@ -22,7 +22,7 @@ import FNoDataTip from "@/components/FNoDataTip";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/node/$id/Sider";
+import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
 
 interface ExhibitsProps {
@@ -139,7 +139,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={25}>
           <FTextButton
-            onClick={() => router.push('/node/exhibit/' + record.id)}
+            onClick={() => router.push('/node/exhibit/formal/' + record.id)}
             theme="primary"
           >
             <FEdit/>

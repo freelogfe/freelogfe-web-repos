@@ -14,7 +14,7 @@ import FNoDataTip from "@/components/FNoDataTip";
 import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/node/$id/Sider";
+import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
 
 interface ThemesProps {
@@ -129,7 +129,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                         className={styles.action}
                         style={{justifyContent: i.isOnline || !i.isAuth || i.policies.length === 0 ? 'center' : 'space-between'}}
                       >
-                        <span onClick={() => router.push('/node/exhibit/' + i.id)}>编辑</span>
+                        <span onClick={() => router.push('/node/exhibit/formal/' + i.id)}>编辑</span>
                         {
                           !i.isOnline && i.isAuth && i.policies.length > 0 && (<>
                             <span>|</span>

@@ -20,11 +20,13 @@ interface NodeProps {
 function Node({dispatch, nodes, global}: NodeProps) {
 
   const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = /\/node\/(\d*$)/.test(cRoute.pathname);
-  const nodeId: string | null = (cRoute.pathname.match(/\/node\/(\d*$)/) || [null, null])[1];
+  const isCurrent: boolean = /\/node\/(\d*)\/formal/.test(cRoute.pathname) || /\/node\/(\d*)\/informal/.test(cRoute.pathname);
+  // console.log(isCurrent, 'isCurrent');
+  // console.log(cRoute.pathname, 'cRoute.pathname');
+  const nodeId: string | null = (cRoute.pathname.match(/\/node\/(\d*)\/formal/) || cRoute.pathname.match(/\/node\/(\d*)\/informal/) || [null, null])[1];
 
   function onClickNodes(value: string) {
-    return router.push('/node/' + value);
+    return router.push('/node/' + value + '/formal');
   }
 
   return (<FDropdown
