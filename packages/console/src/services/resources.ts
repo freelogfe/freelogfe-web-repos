@@ -138,7 +138,7 @@ export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | Res
       }
     });
   }
-  
+
   return request.get(`/v2/resources/versions/detail`, {
     params,
   });
@@ -173,8 +173,19 @@ export interface UpdateResourceVersionInfoParamsType {
   version: string;
   resourceId: string;
   description?: string;
-  customPropertyDescriptors?: CreateVersionParamsType['customPropertyDescriptors'];
-  resolveResources?: CreateVersionParamsType['resolveResources'];
+  customPropertyDescriptors?: {
+    key: string;
+    defaultValue: string;
+    type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+    candidateItems?: string[];
+    remark?: string;
+  }[];
+  resolveResources?: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
 }
 
 export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParamsType) {

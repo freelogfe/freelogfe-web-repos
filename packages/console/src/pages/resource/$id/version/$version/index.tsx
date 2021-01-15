@@ -320,7 +320,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                           payload: {
                             customOptionEditorVisible: true,
                             customOptionKey: ppp.key,
-                            customOptionDescription: ppp.defaultValue,
+                            customOptionDescription: ppp.description,
                             customOptionDescriptionError: '',
                             customOptionCustom: ppp.custom,
                             customOptionDefaultValue: ppp.defaultValue,
@@ -477,11 +477,15 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         dispatch<ChangeAction>({
           type: 'resourceVersionEditorPage/change',
           payload: {
-            basePEditorVisible: false,
-            basePKeyInput: '',
-            basePValueInput: '',
-            basePDescriptionInput: '',
-            basePDescriptionInputError: '',
+            customOptionEditorVisible: false,
+            customOptionKey: '',
+            customOptionDescription: '',
+            customOptionDescriptionError: '',
+            customOptionCustom: 'input',
+            customOptionDefaultValue: '',
+            customOptionDefaultValueError: '',
+            customOptionCustomOption: '',
+            customOptionCustomOptionError: '',
           },
         });
       }}
@@ -633,26 +637,32 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
       <div style={{height: 20}}/>
       <div className={styles.save}>
         <FNormalButton
-          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
+          disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}
           onClick={async () => {
             await dispatch<ChangeAction>({
               type: 'resourceVersionEditorPage/change',
               payload: {
-                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                    return bp;
-                  }
-                  return {
-                    ...bp,
-                    value: resourceVersionEditorPage.basePValueInput,
-                    description: resourceVersionEditorPage.basePDescriptionInput,
-                  };
-                }),
-                basePEditorVisible: false,
-                basePKeyInput: '',
-                basePValueInput: '',
-                basePDescriptionInput: '',
-                basePDescriptionInputError: '',
+                customOptions: resourceVersionEditorPage.customOptions
+                  .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
+                    if (bp.key !== resourceVersionEditorPage.customOptionKey) {
+                      return bp;
+                    }
+                    return {
+                      ...bp,
+                      description: resourceVersionEditorPage.customOptionDescription,
+                      defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
+                      customOption: resourceVersionEditorPage.customOptionCustomOption,
+                    };
+                  }),
+                customOptionEditorVisible: false,
+                customOptionKey: '',
+                customOptionDescription: '',
+                customOptionDescriptionError: '',
+                customOptionCustom: 'input',
+                customOptionDefaultValue: '',
+                customOptionDefaultValueError: '',
+                customOptionCustomOption: '',
+                customOptionCustomOptionError: '',
               }
             });
             await dispatch<SyncAllPropertiesAction>({
