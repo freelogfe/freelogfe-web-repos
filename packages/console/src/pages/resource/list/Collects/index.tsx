@@ -99,6 +99,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
         payload: id.toString(),
       })
     }}
+    onClickDetails={(id) => router.push(`/resource/${id}`)}
     onClickMore={() => null}
   />);
 }
