@@ -69,6 +69,23 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
     }}
     visible={visible}
     width={720}
+    topRight={<Space size={30}>
+      <FTextButton
+        onClick={() => {
+          onCancel && onCancel()
+        }}
+      >取消</FTextButton>
+      <FNormalButton
+        disabled={!!dataSource.find((eds) => {
+          return !eds.key || !!eds.keyError
+            || (eds.custom === 'select' ? (eds.customOption === '' || !!eds.customOptionError) : (eds.defaultValue === '' || !!eds.defaultValueError))
+            || !!eds.descriptionError;
+        })}
+        onClick={() => {
+          onConfirm && onConfirm();
+        }}
+      >确定</FNormalButton>
+    </Space>}
     // className={styles}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
@@ -107,26 +124,10 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
       />
     </Space>
 
-    <div style={{height: 120}}/>
-    <div className={styles.footer}>
-      <Space size={30}>
-        <FTextButton
-          onClick={() => {
-            onCancel && onCancel()
-          }}
-        >取消</FTextButton>
-        <FNormalButton
-          disabled={!!dataSource.find((eds) => {
-            return !eds.key || !!eds.keyError
-              || (eds.custom === 'select' ? (eds.customOption === '' || !!eds.customOptionError) : (eds.defaultValue === '' || !!eds.defaultValueError))
-              || !!eds.descriptionError;
-          })}
-          onClick={() => {
-            onConfirm && onConfirm();
-          }}
-        >确定</FNormalButton>
-      </Space>
-    </div>
+    {/*<div style={{height: 120}}/>*/}
+    {/*<div className={styles.footer}>*/}
+    {/*  */}
+    {/*</div>*/}
   </FDrawer>);
 }
 

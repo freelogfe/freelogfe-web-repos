@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Drawer, Space} from "antd";
+import {Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
 import {FCircleButton, FNormalButton, FTextButton} from "@/components/FButton";
 import {CUSTOM_KEY} from "@/utils/regexp";
-import {Data} from "@/components/FCustomProperties";
+// import {Data} from "@/components/FCustomProperties";
 import FDrawer from "@/components/FDrawer";
 
 interface FBasePropsEditorDrawerProps {
@@ -78,8 +78,23 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     }}
     visible={visible}
     width={720}
-    // className={styles}
-    // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
+    topRight={<Space size={30}>
+      <FTextButton
+        onClick={() => {
+          onCancel && onCancel()
+        }}
+      >取消</FTextButton>
+      <FNormalButton
+        disabled={!!dataSource.find((eds) => {
+          return !eds.key || !!eds.keyError
+            || !eds.value || !!eds.valueError
+            || !!eds.descriptionError;
+        })}
+        onClick={() => {
+          onConfirm && onConfirm();
+        }}
+      >确定</FNormalButton>
+    </Space>}
   >
     <Space
       size={30}
@@ -209,45 +224,10 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
       />
     </Space>
 
-    <div style={{height: 120}}/>
-    <div className={styles.footer}>
-      <Space size={30}>
-        <FTextButton
-          onClick={() => {
-            onCancel && onCancel()
-          }}
-        >取消</FTextButton>
-        <FNormalButton
-          disabled={!!dataSource.find((eds) => {
-            return !eds.key || !!eds.keyError
-              || !eds.value || !!eds.valueError
-              || !!eds.descriptionError;
-          })}
-          onClick={() => {
-            onConfirm && onConfirm();
-          }}
-          // disabled={editor.typeVerify === 1 || hasError}
-          // onClick={async () => {
-          //   await dispatch<UpdateObjectInfoAction>({
-          //     type: 'storageObjectEditor/updateObjectInfo',
-          //   });
-          //   dispatch<UpdateAObjectAction>({
-          //     type: 'storageHomePage/updateAObject',
-          //     payload: {
-          //       id: editor.objectId,
-          //       type: editor.type,
-          //     },
-          //   });
-          //   dispatch<ChangeAction>({
-          //     type: 'storageObjectEditor/change',
-          //     payload: {
-          //       visible: false,
-          //     }
-          //   });
-          // }}
-        >确定</FNormalButton>
-      </Space>
-    </div>
+    {/*<div style={{height: 120}}/>*/}
+    {/*<div className={styles.footer}>*/}
+    {/*  */}
+    {/*</div>*/}
   </FDrawer>);
 }
 

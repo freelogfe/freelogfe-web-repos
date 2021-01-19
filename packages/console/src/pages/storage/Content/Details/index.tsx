@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {DownloadOutlined} from '@ant-design/icons';
+// import {DownloadOutlined} from '@ant-design/icons';
 import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
-import {Space, Drawer} from 'antd';
-import FEditorCard from '@/components/FEditorCard';
-import FCustomProperties from '@/components/FCustomProperties';
+import {Space} from 'antd';
+// import FEditorCard from '@/components/FEditorCard';
+// import FCustomProperties from '@/components/FCustomProperties';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
@@ -23,16 +23,17 @@ import {
 } from '@/models/storageObjectEditor';
 import {FetchObjectsAction, UpdateAObjectAction} from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
-import {ImportLastVersionDataAction} from "@/models/resourceVersionCreatorPage";
+// import {ImportLastVersionDataAction} from "@/models/resourceVersionCreatorPage";
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
 import {FDown, FInfo} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
-import FBlock from "@/layouts/FFormLayout/FBlock";
+// import FBlock from "@/layouts/FFormLayout/FBlock";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
+import FDownload from "@/components/FIcons/FDownload";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -72,6 +73,35 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
     visible={storageObjectEditor.visible}
     // visible={true}
     width={720}
+    topRight={<Space size={30}>
+      <FTextButton onClick={() => {
+        onChange({
+          visible: false,
+          customOptionsDataVisible: false,
+        });
+      }}>取消</FTextButton>
+      <FNormalButton
+        disabled={storageObjectEditor.typeVerify === 1 || hasError}
+        onClick={async () => {
+          await dispatch<UpdateObjectInfoAction>({
+            type: 'storageObjectEditor/updateObjectInfo',
+          });
+          dispatch<UpdateAObjectAction>({
+            type: 'storageHomePage/updateAObject',
+            payload: {
+              id: storageObjectEditor.objectId,
+              type: storageObjectEditor.type,
+            },
+          });
+          dispatch<ChangeAction>({
+            type: 'storageObjectEditor/change',
+            payload: {
+              visible: false,
+            }
+          });
+        }}
+      >保存</FNormalButton>
+    </Space>}
     onClose={() => {
       onChange({
         visible: false,
@@ -96,7 +126,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
             });
           }}
-        ><DownloadOutlined/></FTextButton>
+        ><FDownload/></FTextButton>
       </Space>
       <div style={{height: 17}}/>
       <div className={styles.size}>{humanizeSize(storageObjectEditor.size)}</div>
@@ -254,38 +284,10 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         </FFormLayout.FBlock>
       </FFormLayout>
 
-      <div style={{height: 120}}/>
-      <div className={styles.footer}>
-        <Space size={30}>
-          <FTextButton onClick={() => {
-            onChange({
-              visible: false,
-              customOptionsDataVisible: false,
-            });
-          }}>取消</FTextButton>
-          <FNormalButton
-            disabled={storageObjectEditor.typeVerify === 1 || hasError}
-            onClick={async () => {
-              await dispatch<UpdateObjectInfoAction>({
-                type: 'storageObjectEditor/updateObjectInfo',
-              });
-              dispatch<UpdateAObjectAction>({
-                type: 'storageHomePage/updateAObject',
-                payload: {
-                  id: storageObjectEditor.objectId,
-                  type: storageObjectEditor.type,
-                },
-              });
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  visible: false,
-                }
-              });
-            }}
-          >保存</FNormalButton>
-        </Space>
-      </div>
+      {/*<div style={{height: 120}}/>*/}
+      {/*<div className={styles.footer}>*/}
+      {/*  */}
+      {/*</div>*/}
 
       <FDrawer
         title="添加依赖"

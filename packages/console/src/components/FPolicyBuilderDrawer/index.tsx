@@ -53,6 +53,18 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
     onClose={() => onCancel && onCancel()}
     visible={visible}
     width={720}
+    topRight={<Space size={30}>
+      <FTextButton onClick={() => onCancel && onCancel()}>取消</FTextButton>
+      <FNormalButton
+        onClick={() => {
+          onConfirm && onConfirm({
+            title,
+            text,
+          });
+        }}
+        disabled={title === '' || text === '' || !!titleError || !!textError}
+      >确定</FNormalButton>
+    </Space>}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
     <FInput
@@ -89,18 +101,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
           <span>策略模板</span>
         </Space>
       </a>
-      <Space size={30}>
-        <FTextButton onClick={() => onCancel && onCancel()}>取消</FTextButton>
-        <FNormalButton
-          onClick={() => {
-            onConfirm && onConfirm({
-              title,
-              text,
-            });
-          }}
-          disabled={title === '' || text === '' || !!titleError || !!textError}
-        >确定</FNormalButton>
-      </Space>
+
     </div>
 
     <FDrawer

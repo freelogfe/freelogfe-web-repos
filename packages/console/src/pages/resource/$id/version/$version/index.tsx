@@ -30,6 +30,7 @@ import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
+import FDownload from "@/components/FIcons/FDownload";
 
 
 interface VersionEditorProps {
@@ -133,6 +134,36 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
           candidateItems: i.customOption ? i.customOption.split(',') : [],
           remark: i.description,
         })),
+      }
+    });
+  }
+
+  function onCloseCustomOptionDrawer() {
+    dispatch<ChangeAction>({
+      type: 'resourceVersionEditorPage/change',
+      payload: {
+        customOptionEditorVisible: false,
+        customOptionKey: '',
+        customOptionDescription: '',
+        customOptionDescriptionError: '',
+        customOptionCustom: 'input',
+        customOptionDefaultValue: '',
+        customOptionDefaultValueError: '',
+        customOptionCustomOption: '',
+        customOptionCustomOptionError: '',
+      },
+    });
+  }
+
+  function onCloseBaseAttrDrawer() {
+    dispatch<ChangeAction>({
+      type: 'resourceVersionEditorPage/change',
+      payload: {
+        basePEditorVisible: false,
+        basePKeyInput: '',
+        basePValueInput: '',
+        basePDescriptionInput: '',
+        basePDescriptionInputError: '',
       }
     });
   }
@@ -343,19 +374,46 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
     <FDrawer
       title={'编辑基础属性'}
       onClose={() => {
-        dispatch<ChangeAction>({
-          type: 'resourceVersionEditorPage/change',
-          payload: {
-            basePEditorVisible: false,
-            basePKeyInput: '',
-            basePValueInput: '',
-            basePDescriptionInput: '',
-            basePDescriptionInputError: '',
-          }
-        });
+        onCloseBaseAttrDrawer();
       }}
       visible={resourceVersionEditorPage.basePEditorVisible}
       width={720}
+      topRight={<Space size={30}>
+        <FTextButton
+          onClick={() => {
+            onCloseBaseAttrDrawer();
+          }}
+        >取消</FTextButton>
+
+        <FNormalButton
+          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
+          onClick={async () => {
+            await dispatch<ChangeAction>({
+              type: 'resourceVersionEditorPage/change',
+              payload: {
+                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
+                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
+                    return bp;
+                  }
+                  return {
+                    ...bp,
+                    value: resourceVersionEditorPage.basePValueInput,
+                    description: resourceVersionEditorPage.basePDescriptionInput,
+                  };
+                }),
+                basePEditorVisible: false,
+                basePKeyInput: '',
+                basePValueInput: '',
+                basePDescriptionInput: '',
+                basePDescriptionInputError: '',
+              }
+            });
+            await dispatch<SyncAllPropertiesAction>({
+              type: 'resourceVersionEditorPage/syncAllProperties',
+            });
+          }}
+        >保存</FNormalButton>
+      </Space>}
     >
       <Space
         size={20}
@@ -438,29 +496,52 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
 
       </Space>
 
-      <div style={{height: 20}}/>
-      <div className={styles.save}>
+      {/*<div style={{height: 20}}/>*/}
+      {/*<div className={styles.save}>*/}
+      {/*  */}
+      {/*</div>*/}
+    </FDrawer>
+
+    <FDrawer
+      title={'编辑自定义属性'}
+      onClose={() => {
+        onCloseCustomOptionDrawer();
+      }}
+      visible={resourceVersionEditorPage.customOptionEditorVisible}
+      width={720}
+      topRight={<Space size={30}>
+        <FTextButton
+          onClick={() => {
+            onCloseCustomOptionDrawer();
+          }}
+        >取消</FTextButton>
         <FNormalButton
-          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
+          disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}
           onClick={async () => {
             await dispatch<ChangeAction>({
               type: 'resourceVersionEditorPage/change',
               payload: {
-                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                    return bp;
-                  }
-                  return {
-                    ...bp,
-                    value: resourceVersionEditorPage.basePValueInput,
-                    description: resourceVersionEditorPage.basePDescriptionInput,
-                  };
-                }),
-                basePEditorVisible: false,
-                basePKeyInput: '',
-                basePValueInput: '',
-                basePDescriptionInput: '',
-                basePDescriptionInputError: '',
+                customOptions: resourceVersionEditorPage.customOptions
+                  .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
+                    if (bp.key !== resourceVersionEditorPage.customOptionKey) {
+                      return bp;
+                    }
+                    return {
+                      ...bp,
+                      description: resourceVersionEditorPage.customOptionDescription,
+                      defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
+                      customOption: resourceVersionEditorPage.customOptionCustomOption,
+                    };
+                  }),
+                customOptionEditorVisible: false,
+                customOptionKey: '',
+                customOptionDescription: '',
+                customOptionDescriptionError: '',
+                customOptionCustom: 'input',
+                customOptionDefaultValue: '',
+                customOptionDefaultValueError: '',
+                customOptionCustomOption: '',
+                customOptionCustomOptionError: '',
               }
             });
             await dispatch<SyncAllPropertiesAction>({
@@ -468,29 +549,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
             });
           }}
         >保存</FNormalButton>
-      </div>
-    </FDrawer>
-
-    <FDrawer
-      title={'编辑自定义属性'}
-      onClose={() => {
-        dispatch<ChangeAction>({
-          type: 'resourceVersionEditorPage/change',
-          payload: {
-            customOptionEditorVisible: false,
-            customOptionKey: '',
-            customOptionDescription: '',
-            customOptionDescriptionError: '',
-            customOptionCustom: 'input',
-            customOptionDefaultValue: '',
-            customOptionDefaultValueError: '',
-            customOptionCustomOption: '',
-            customOptionCustomOptionError: '',
-          },
-        });
-      }}
-      visible={resourceVersionEditorPage.customOptionEditorVisible}
-      width={720}
+      </Space>}
     >
       <Space
         className={styles.properties}
@@ -635,42 +694,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
       </Space>
 
       <div style={{height: 20}}/>
-      <div className={styles.save}>
-        <FNormalButton
-          disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}
-          onClick={async () => {
-            await dispatch<ChangeAction>({
-              type: 'resourceVersionEditorPage/change',
-              payload: {
-                customOptions: resourceVersionEditorPage.customOptions
-                  .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
-                    if (bp.key !== resourceVersionEditorPage.customOptionKey) {
-                      return bp;
-                    }
-                    return {
-                      ...bp,
-                      description: resourceVersionEditorPage.customOptionDescription,
-                      defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
-                      customOption: resourceVersionEditorPage.customOptionCustomOption,
-                    };
-                  }),
-                customOptionEditorVisible: false,
-                customOptionKey: '',
-                customOptionDescription: '',
-                customOptionDescriptionError: '',
-                customOptionCustom: 'input',
-                customOptionDefaultValue: '',
-                customOptionDefaultValueError: '',
-                customOptionCustomOption: '',
-                customOptionCustomOptionError: '',
-              }
-            });
-            await dispatch<SyncAllPropertiesAction>({
-              type: 'resourceVersionEditorPage/syncAllProperties',
-            });
-          }}
-        >保存</FNormalButton>
-      </div>
+      {/*<div className={styles.save}>*/}
+      {/*  */}
+      {/*</div>*/}
     </FDrawer>
   </>);
 }
@@ -701,7 +727,7 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
         <FContentText type="additional2" text={i18nMessage('object_id') + '：' + resourceID}/>
         <div style={{width: 20}}/>
         <FTextButton theme="primary">
-          <DownloadOutlined
+          <FDownload
             onClick={() => onClickDownload && onClickDownload()}
             style={{fontSize: 16, fontWeight: 600}}
           />
