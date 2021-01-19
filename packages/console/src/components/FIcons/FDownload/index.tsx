@@ -3,16 +3,15 @@ import styles from './index.less';
 import {EditOutlined} from '@ant-design/icons';
 import {CSSProperties} from "react";
 
-interface FFileTextProps {
+interface FDownloadProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FEdit({...props}: FFileTextProps) {
-  // return (<EditOutlined {...props}/>);
+function FDownload({...props}: FDownloadProps) {
   return (<i className="freelog fl-icon-xiazai1" {...props} />);
 }
 
-export default FEdit;
+export default FDownload;

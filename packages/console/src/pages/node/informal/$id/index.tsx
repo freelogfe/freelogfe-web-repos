@@ -11,6 +11,15 @@ import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
 import FSwitch from "@/components/FSwitch";
 import {OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import FTooltip from "@/components/FTooltip";
+import FMappingRuleAdd from "@/components/FIcons/FMappingRuleAdd";
+import FMappingRuleAttr from "@/components/FIcons/FMappingRuleAttr";
+import FMappingRuleCover from "@/components/FIcons/FMappingRuleCover";
+import FMappingRuleLabel from "@/components/FIcons/FMappingRuleLabel";
+import FMappingRuleOffline from "@/components/FIcons/FMappingRuleOffline";
+import FMappingRuleOnline from "@/components/FIcons/FMappingRuleOnline";
+import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
+import FMappingRuleTitle from "@/components/FIcons/FMappingRuleTitle";
+import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
 
 interface InformalNodeProps {
   match: {
@@ -90,7 +99,21 @@ const columns = [
           </div>
         </div>
         <Space size={16}>
-
+          {/*{*/}
+          {/*  true ? <span></span>*/}
+          {/*}*/}
+          <>
+            <FMappingRuleAdd/>
+            <FEdit/>
+            <FMappingRuleAttr/>
+            <FMappingRuleCover/>
+            <FMappingRuleLabel/>
+            <FMappingRuleOffline/>
+            <FMappingRuleOnline/>
+            <FMappingRuleReplace/>
+            <FMappingRuleTitle/>
+            <FMappingRuleVersion/>
+          </>
         </Space>
       </div>);
     }

@@ -10,7 +10,7 @@ interface FMappingRuleReplaceProps {
 }
 
 function FMappingRuleReplace({className, ...props}: FMappingRuleReplaceProps) {
-  return (<i className={['freelog', 'fl-icon-tihuani', className].join(' ')} {...props} />);
+  return (<i className={['freelog', 'fl-icon-tihuan', className].join(' ')} {...props} />);
 }
 
 export default FMappingRuleReplace;
