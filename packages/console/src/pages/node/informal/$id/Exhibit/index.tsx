@@ -15,11 +15,12 @@ import FMappingRuleOnline from "@/components/FIcons/FMappingRuleOnline";
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
 import FMappingRuleTitle from "@/components/FIcons/FMappingRuleTitle";
 import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
-import {FTextButton} from "@/components/FButton";
+import {FNormalButton, FTextButton} from "@/components/FButton";
 import FSwitch from "@/components/FSwitch";
 import FTooltip from "@/components/FTooltip";
 import FAdd from "@/components/FIcons/FAdd";
 import FDropdownMenu from "@/components/FDropdownMenu";
+import FDrawer from "@/components/FDrawer";
 
 const dataSource = [
   {
@@ -231,13 +232,27 @@ function Exhibit({}: ExhibitProps) {
       </Space>
     </div>
     <div className={styles.body}>
-      <FTable
-        className={styles.table}
-        dataSource={dataSource}
-        columns={columns}
-        rowClassName={styles.rowClassName}
-      />
+      <div>
+        <FTable
+          className={styles.table}
+          dataSource={dataSource}
+          columns={columns}
+          rowClassName={styles.rowClassName}
+        />
+      </div>
     </div>
+    <div style={{height: 100}}/>
+
+    <FDrawer
+      title={'添加测试展品'}
+      visible={false}
+      topRight={<Space size={30}>
+        <FTextButton>取消</FTextButton>
+        <FNormalButton>添加</FNormalButton>
+      </Space>}>
+
+
+    </FDrawer>
   </>);
 }
 

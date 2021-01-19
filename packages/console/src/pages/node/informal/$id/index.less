@@ -17,6 +17,7 @@
   display: flex;
   width: 100%;
   align-items: stretch;
+  flex-direction: row-reverse;
 
   .sider {
     width: 280px;
@@ -24,10 +25,14 @@
     //background-color: #AED0FF;
     //box-shadow: -1px 0px 0px 0px #E5E7EB;
     border-right: 1px solid #E4E7EB;
+    position: fixed;
+    top: calc(70px + 24px);
+    left: 0;
+    bottom: 0;
   }
 
   .content {
-    width: 100%;
+    width: calc(100% - 280px);
     flex-shrink: 1;
     //background-color: #529DFF;
   }

@@ -9,27 +9,29 @@ import {FClose} from '@/components/FIcons';
 interface FDrawerProps extends DrawerProps {
   children: React.ReactNode | React.ReactNodeArray;
   title: string;
+  // width?: number | string;
+  topRight?: React.ReactNode;
 }
 
-function FDrawer({children, width, title, onClose, ...props}: FDrawerProps) {
+function FDrawer({children, topRight, width = 720, title, onClose, ...props}: FDrawerProps) {
   return (<Drawer
     title={null}
     headerStyle={{display: 'none'}}
     bodyStyle={{padding: 0}}
-    width={width}
+    width={width || 720}
     onClose={onClose}
     {...props}
   >
-    {/*<div style={{position: 'relative'}}>*/}
-      <div className={styles.header} style={{width: width}}>
-        <FTitleText type="h2" text={title}/>
-        <FTextButton onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextButton>
-      </div>
-      <div style={{height: 70}}/>
-      <div className={styles.content}>
-        {children}
-      </div>
-    {/*</div>*/}
+    <div className={styles.header} style={{width: width}}>
+      <FTitleText type="h2" text={title}/>
+      {
+        topRight || (<FTextButton onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextButton>)
+      }
+    </div>
+    <div style={{height: 70}}/>
+    <div className={styles.content}>
+      {children}
+    </div>
   </Drawer>);
 }
 
