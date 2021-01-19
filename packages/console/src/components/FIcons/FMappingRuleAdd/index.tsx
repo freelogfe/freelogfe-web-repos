@@ -2,15 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
 
-interface FFileTextProps {
+interface FMappingRuleAddProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FEdit({className, ...props}: FFileTextProps) {
-  return (<i className={['freelog', 'fl-icon-xinzeng', className].join(' ')} {...props} />);
+function FMappingRuleAdd({className, ...props}: FMappingRuleAddProps) {
+  return (<i className={['freelog', 'fl-icon-xinzengdezhanpin', className].join(' ')} {...props} />);
 }
 
-export default FEdit;
+export default FMappingRuleAdd;

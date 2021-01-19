@@ -2,15 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
 
-interface FFileTextProps {
+interface FMappingRuleReplaceProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FEdit({className, ...props}: FFileTextProps) {
+function FMappingRuleReplace({className, ...props}: FMappingRuleReplaceProps) {
   return (<i className={['freelog', 'fl-icon-tihuani', className].join(' ')} {...props} />);
 }
 
-export default FEdit;
+export default FMappingRuleReplace;

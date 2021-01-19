@@ -2,15 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
 
-interface FFileTextProps {
+interface FMappingRuleVersionProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FEdit({className, ...props}: FFileTextProps) {
+function FMappingRuleVersion({className, ...props}: FMappingRuleVersionProps) {
   return (<i className={['freelog', 'fl-icon-banben', className].join(' ')} {...props} />);
 }
 
-export default FEdit;
+export default FMappingRuleVersion;
