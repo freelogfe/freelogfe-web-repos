@@ -1,0 +1,105 @@
+@import '../../../../../config.less';
+
+.header {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+.body {
+  padding: 0 20px;
+
+  .table {
+    //width: 100%;
+    width: 1120px;
+
+    .rowClassName {
+
+      .hoverVisible {
+        visibility: hidden;
+      }
+
+      &:hover {
+        .hoverVisible {
+          visibility: visible;
+        }
+      }
+
+    }
+
+    .cover {
+      width: 120px;
+      height: 90px;
+      background-image: url("../../../../../assets/default-resource-cover.jpg");
+      background-size: cover;
+      position: relative;
+
+      & > img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .resource, .object, .exhibit {
+        padding: 4px 5px;
+        border-radius: 2px;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        font-size: 12px;
+      }
+
+      .resource {
+        color: @f-success-color1;
+        background-color: @f-success-color2;
+      }
+
+      .object {
+        color: @f-warning-color1;
+        background-color: @f-warning-color2;
+      }
+
+      .exhibit {
+        color: #666;
+        background-color: #E0E0E0;
+      }
+    }
+
+    .name {
+      //display: block;
+      display: flex;
+      height: 90px;
+      flex-direction: column;
+      width: calc(542px);
+      overflow: hidden;
+      justify-content: space-between;
+    }
+
+    .type {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      & > label {
+        border: 1px solid #C4C4C4;
+        font-size: 12px;
+        color: #999;
+        line-height: 18px;
+        padding: 0 5px;
+        border-radius: 9px;
+        flex-shrink: 0;
+      }
+
+      & > div {
+        padding: 5px;
+        flex-shrink: 1;
+      }
+    }
+  }
+
+  .Delete {
+    color: @f-error-color1;
+  }
+}
