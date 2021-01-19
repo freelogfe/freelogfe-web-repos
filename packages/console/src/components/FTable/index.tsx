@@ -7,8 +7,9 @@ interface FTableProps extends TableProps<any> {
 
 }
 
-function FTable({...props}: FTableProps) {
+function FTable({className, ...props}: FTableProps) {
   return (<Table
+    className={[className, styles.styles].join(' ')}
     pagination={false}
     {...props}
   />);

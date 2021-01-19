@@ -18,6 +18,8 @@ import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
 import {FTextButton} from "@/components/FButton";
 import FSwitch from "@/components/FSwitch";
 import FTooltip from "@/components/FTooltip";
+import FAdd from "@/components/FIcons/FAdd";
+import FDropdownMenu from "@/components/FDropdownMenu";
 
 const dataSource = [
   {
@@ -222,9 +224,9 @@ function Exhibit({}: ExhibitProps) {
     <div className={styles.header}>
       <FTitleText text={'展品管理'}/>
       <Space size={30}>
-        <div><FContentText text={'新增测试展品'}/></div>
-        <div><FContentText text={'资源替换'}/></div>
-        <div><FContentText text={'筛选'}/></div>
+        <Space size={5}><FAdd/><FContentText text={'新增测试展品'}/></Space>
+        <Space size={5}><FMappingRuleReplace/><FContentText text={'资源替换'}/></Space>
+        <div><FDropdownMenu options={[{value: '1234', text: '1234'}]} text={'筛选'}/></div>
         <div><FInput theme={'dark'}/></div>
       </Space>
     </div>
