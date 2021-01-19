@@ -8,7 +8,10 @@ interface FTableProps extends TableProps<any> {
 }
 
 function FTable({...props}: FTableProps) {
-  return (<Table {...props}/>);
+  return (<Table
+    pagination={false}
+    {...props}
+  />);
 }
 
 export default FTable;

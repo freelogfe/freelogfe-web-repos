@@ -10,7 +10,7 @@ interface Error404Props {
 
 function Error404({}: Error404Props) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 140);
+  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
 
   React.useEffect(() => {
     window.addEventListener('resize', setHeight);

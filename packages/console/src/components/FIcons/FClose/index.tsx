@@ -1,13 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
-import {CloseOutlined} from '@ant-design/icons';
+import {CSSProperties} from "react";
 
-interface FCloseProps {
+interface FFileTextProps {
+  className?: string;
+  style?: CSSProperties;
 
+  onClick?(): void;
 }
 
-function FClose({...props}: FCloseProps) {
-  return (<CloseOutlined {...props}/>);
+function FEdit({className, ...props}: FFileTextProps) {
+  return (<i className={['freelog', 'fl-icon-guanbi', className].join(' ')} {...props} />);
 }
 
-export default FClose;
+export default FEdit;

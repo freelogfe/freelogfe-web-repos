@@ -10,7 +10,7 @@ interface FFileTextProps {
 }
 
 function FEdit({className, ...props}: FFileTextProps) {
-  return (<i className={['freelog', 'fl-icon-bianji', className].join(' ')} {...props} />);
+  return (<i className={['freelog', 'fl-icon-tihuani', className].join(' ')} {...props} />);
 }
 
 export default FEdit;
