@@ -18,7 +18,7 @@ import {
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
-import {FDelete} from "@/components/FIcons";
+import {FDelete, FEdit} from "@/components/FIcons";
 import FNoDataTip from "@/components/FNoDataTip";
 import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 import FUpload from "@/components/FUpload";
@@ -29,6 +29,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import {CSSProperties} from "react";
 import FContentLayout from "@/layouts/FContentLayout";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
+import FDownload from "@/components/FIcons/FDownload";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -231,13 +232,13 @@ function ToolsBar({showEdit = true, showDownload = true, showDelete = true, onCl
     {
       showEdit && (<FTextButton
         onClick={() => onClickEdit && onClickEdit()} theme={'primary'}
-      ><EditOutlined/></FTextButton>)
+      ><FEdit/></FTextButton>)
     }
     {
       showDownload && (<FTextButton
         onClick={() => onClickDownload && onClickDownload()}
         theme={'primary'}
-      ><DownloadOutlined/></FTextButton>)
+      ><FDownload/></FTextButton>)
     }
     {
       showDelete && (

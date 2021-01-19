@@ -60,7 +60,6 @@ function InformalNode({match}: InformalNodeProps) {
         <Sider/>
       </div>
 
-
       <div className={styles.content}>
         <Exhibit/>
       </div>

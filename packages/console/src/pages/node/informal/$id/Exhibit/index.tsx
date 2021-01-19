@@ -245,7 +245,7 @@ function Exhibit({}: ExhibitProps) {
 
     <FDrawer
       title={'添加测试展品'}
-      visible={false}
+      visible={true}
       topRight={<Space size={30}>
         <FTextButton>取消</FTextButton>
         <FNormalButton>添加</FNormalButton>
