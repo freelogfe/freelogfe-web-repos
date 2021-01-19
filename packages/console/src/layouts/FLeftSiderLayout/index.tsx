@@ -17,25 +17,12 @@ interface FLeftSiderLayoutProps {
 
 function FLeftSiderLayout({children, header, sider, type, contentStyles, hasBottom = true}: FLeftSiderLayoutProps) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 70);
-  }
-
   return (<div
     className={styles.leftRight}
-    style={{minHeight: minHeight}}
+    style={{minHeight: 'calc(100vh - 70px)'}}
   >
     <div className={styles.Slider}>
-      <div style={{height: minHeight}}>
+      <div style={{height: 'calc(100vh - 70px)'}}>
         {sider}
       </div>
     </div>

@@ -70,19 +70,6 @@ function FResourceCardsList({
   const [typeText, setTypeText] = React.useState('');
   const [statusText, setStatusText] = React.useState('');
 
-  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 220);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    }
-  }, []);
-
-  function setHeight() {
-    setContentMinHeight(window.innerHeight - 220);
-  }
-
   React.useEffect(() => {
     const selectedType: any = resourceTypeOptions.find((i) => i.value === resourceType);
     setTypeText(selectedType?.text || selectedType?.value);
@@ -168,7 +155,7 @@ function FResourceCardsList({
           <div style={{height: 100}}/>
         </>)
         : (<FNoDataTip
-          height={contentMinHeight}
+          height={'calc(100vh - 220px)'}
           tipText={'没有符合条件的资源'}
         />)
     }

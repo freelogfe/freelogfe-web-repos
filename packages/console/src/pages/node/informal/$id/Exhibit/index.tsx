@@ -56,23 +56,9 @@ interface ExhibitProps {
 
 function Exhibit({}: ExhibitProps) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 94);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 94);
-  }
-
   if (false) {
     return (<FNoDataTip
-      height={minHeight}
+      height={'calc(100vh - 94px)'}
       tipText={'当前测试节点没有添加展品'}
       btnText={'添加测试展品'}
     />);

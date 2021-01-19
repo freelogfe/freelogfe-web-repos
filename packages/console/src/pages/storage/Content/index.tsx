@@ -41,19 +41,6 @@ function Content({storage, dispatch}: ContentProps) {
   // console.log(storage)
   const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 170);
-  }
-
   const columns = [
     {
       title: '对象名称',
@@ -143,13 +130,13 @@ function Content({storage, dispatch}: ContentProps) {
   return (<div>
 
     {
-      storage.total === -1 && (<FLoadingTip height={minHeight}/>)
+      storage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'}/>)
     }
 
     {
       storage.total === 0 && (<>
         <FNoDataTip
-          height={minHeight}
+          height={'calc(100vh - 170px)'}
           tipText={'当前Bucket还没有上传任何对象'}
           btn={<FUpload
             showUploadList={false}

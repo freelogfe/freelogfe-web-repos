@@ -51,24 +51,10 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 70);
-  }
-
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
   //     <FNoDataTip
-  //       height={minHeight}
+  //       height={}
   //       tipText={'403,没权限访问'}
   //       btnText={'将前往首页'}
   //       onClick={() => {

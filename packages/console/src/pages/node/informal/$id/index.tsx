@@ -34,27 +34,12 @@ interface InformalNodeProps {
 
 function InformalNode({match}: InformalNodeProps) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 94);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 94);
-  }
-
-
   return (<div>
     <div className={styles.headerTip}>这里是测试节点管理页面，如需管理正式节点，你可以 <a onClick={() => {
       router.push(`/node/${match.params.id}/formal`);
     }}>进入正式节点</a></div>
     <div style={{height: 24}}/>
-    <div style={{minHeight: minHeight}} className={styles.container}>
+    <div style={{minHeight: 'calc(100vh - 94px)'}} className={styles.container}>
 
       <div className={styles.sider}>
         <Sider/>

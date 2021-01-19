@@ -55,21 +55,6 @@ interface VersionCreatorProps {
 
 function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, resourceInfo}: VersionCreatorProps & RouterTypes) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-      window.onbeforeunload = null;
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 70);
-  }
-
   React.useEffect(() => {
     // const func = () => 1234;
     if (resourceVersionCreatorPage.dataIsDirty) {
@@ -84,7 +69,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
   //     <FNoDataTip
-  //       height={minHeight}
+  //       height={}
   //       tipText={'403,没权限访问'}
   //       btnText={'将前往首页'}
   //       onClick={() => {

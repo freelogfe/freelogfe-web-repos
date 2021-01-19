@@ -4,7 +4,7 @@ import {FTipText} from "../FText";
 import {FNormalButton} from "../FButton";
 
 interface FNoDataTipProps {
-  height: number;
+  height: number | string;
   tipText: string;
   btnText?: string;
   btn?: React.ReactNode;
@@ -23,7 +23,7 @@ function FNoDataTip({height, tipText, btnText, btn, onClick}: FNoDataTipProps) {
         type="primary"
         text={tipText}
       />
-      
+
       {
         btnText && (<>
           <div style={{height: 30}}/>

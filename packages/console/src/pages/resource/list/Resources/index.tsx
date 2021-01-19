@@ -16,19 +16,6 @@ interface ResourceProps {
 
 function Resources({dispatch, resource}: ResourceProps) {
 
-  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 220);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setContentMinHeight(window.innerHeight - 140);
-  }
-
   React.useEffect(() => {
     dispatch<FetchDataSourceAction>({
       type: 'resourceListPage/fetchDataSource',
@@ -42,12 +29,12 @@ function Resources({dispatch, resource}: ResourceProps) {
   }, []);
 
   if (resource.totalNum === -1) {
-    return (<FLoadingTip height={contentMinHeight}/>);
+    return (<FLoadingTip height={'calc(100vh - 140px)'}/>);
   }
 
   if (resource.dataSource.length === 0 && resource.inputText === '' && resource.resourceType === '-1' && resource.resourceStatus === '2') {
     return (<FNoDataTip
-      height={contentMinHeight}
+      height={'calc(100vh - 140px)'}
       tipText={'未创建任何资源'}
       btnText={'创建资源'}
       onClick={() => router.push('/resource/creator')}

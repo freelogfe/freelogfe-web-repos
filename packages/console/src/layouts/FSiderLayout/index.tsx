@@ -9,22 +9,10 @@ interface FSiderLayoutProps {
 }
 
 export default function ({sider, children}: FSiderLayoutProps) {
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 70);
-  }
 
   return (<div
     className={styles.leftRight}
-    style={{minHeight: minHeight}}
+    style={{minHeight: 'calc(100vh - 70px)'}}
   >
     <div className={styles.Slider}>
       {sider}

@@ -3,7 +3,7 @@ import styles from './index.less';
 import {FLoading} from "@/components/FIcons";
 
 interface FLoadingTipProps {
-  height: number;
+  height: number | string;
   // tipText: string;
   // btnText?: string;
 

@@ -13,23 +13,9 @@ interface FCenterLayoutProps {
 
 function FCenterLayout({children, global}: FCenterLayoutProps) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 140);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 140);
-  }
-
   return (<>
     <div
-      style={{minHeight: minHeight}}
+      style={{minHeight: 'calc(100vh - 140px)'}}
       className={styles.content}
     >
       <div>{children}</div>

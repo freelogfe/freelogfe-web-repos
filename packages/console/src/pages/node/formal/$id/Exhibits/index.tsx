@@ -43,44 +43,18 @@ const resourceStatusOptions = [
 
 function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 170);
-  const [minHeight2, setMinHeight2] = React.useState<number>(window.innerHeight - 70);
-
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 170);
-  }
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight2);
-    return () => {
-      window.removeEventListener('resize', setHeight2);
-    };
-  }, []);
-
-  function setHeight2() {
-    setMinHeight2(window.innerHeight - 70);
-  }
-
   const dataSource: NodeManagerModelState['exhibitList'] = nodeManagerPage.exhibitList.map((i) => ({
     key: i.id,
     ...i,
   }));
 
   if (nodeManagerPage.exhibitDataState === 'loading') {
-    return (<FLoadingTip height={minHeight2}/>);
+    return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
   }
 
   // if (nodeManagerPage.exhibitDataState === 'noData') {
   //   return (<FNoDataTip
-  //     height={minHeight2}
+  //     height={}
   //     tipText={'当前节点没有添加展品'}
   //     btnText={'进入资源市场'}
   //     onClick={() => {
@@ -251,7 +225,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
 
     {
       nodeManagerPage.exhibitDataState === 'noData' ? (<FNoDataTip
-        height={minHeight2}
+        height={'calc(100vh - 70px)'}
         tipText={'当前节点没有添加展品'}
         btnText={'进入资源市场'}
         onClick={() => {
@@ -266,7 +240,10 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       />) : (<>
         {
           nodeManagerPage.exhibitDataState === 'noSearchData'
-            ? (<FNoDataTip height={minHeight} tipText={'无搜索结果'}/>)
+            ? (<FNoDataTip
+              height={'calc(100vh - 170px)'}
+              tipText={'无搜索结果'}
+            />)
             : (<div className={styles.body}>
               <FTable
                 columns={columns}

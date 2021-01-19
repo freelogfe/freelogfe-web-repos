@@ -22,20 +22,6 @@ interface ResourcesProps {
 
 function Resources({dispatch, market}: ResourcesProps) {
 
-  const [contentMinHeight, setContentMinHeight] = React.useState<number>(window.innerHeight - 275);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    }
-  }, []);
-
-  function setHeight() {
-    setContentMinHeight(window.innerHeight - 275);
-  }
-
-  // <FNoDataTip height={} tipText={}
   return (<>
     <div style={{height: 30}}/>
     <div className={styles.filter}>
@@ -101,7 +87,7 @@ function Resources({dispatch, market}: ResourcesProps) {
           <div style={{height: 200}}/>
         </>)
         : (<FNoDataTip
-          height={contentMinHeight}
+          height={'calc(100vh - 275px)'}
           tipText={'没有符合条件的资源'}
         />)
     }

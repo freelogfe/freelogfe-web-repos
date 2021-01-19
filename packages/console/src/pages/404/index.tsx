@@ -10,24 +10,9 @@ interface Error404Props {
 
 function Error404({}: Error404Props) {
 
-  const [minHeight, setMinHeight] = React.useState<number>(window.innerHeight - 70);
-
-  React.useEffect(() => {
-    window.addEventListener('resize', setHeight);
-
-    return () => {
-      window.removeEventListener('resize', setHeight);
-    };
-  }, []);
-
-  function setHeight() {
-    setMinHeight(window.innerHeight - 70);
-  }
-
-
   return (<div>
     <FNoDataTip
-      height={minHeight}
+      height={'calc(100vh - 70px)'}
       tipText={'404,页面不见了'}
       btnText={'将前往首页'}
       onClick={() => {
