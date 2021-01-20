@@ -2,19 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
-import {Button, Popconfirm, Space} from "antd";
+import {Popover, Popconfirm, Space} from "antd";
 import FInput from "@/components/FInput";
 import FTable from "@/components/FTable";
-import FMappingRuleAdd from "@/components/FIcons/FMappingRuleAdd";
-import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
-import FMappingRuleAttr from "@/components/FIcons/FMappingRuleAttr";
-import FMappingRuleCover from "@/components/FIcons/FMappingRuleCover";
-import FMappingRuleLabel from "@/components/FIcons/FMappingRuleLabel";
-import FMappingRuleOffline from "@/components/FIcons/FMappingRuleOffline";
-import FMappingRuleOnline from "@/components/FIcons/FMappingRuleOnline";
+import {FDelete, FEdit, FFileSearch, FLine, FWarning} from "@/components/FIcons";
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
-import FMappingRuleTitle from "@/components/FIcons/FMappingRuleTitle";
-import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
 import {FNormalButton, FTextButton} from "@/components/FButton";
 import FSwitch from "@/components/FSwitch";
 import FTooltip from "@/components/FTooltip";
@@ -25,6 +17,7 @@ import FSelect from "@/components/FSelect";
 import FCheckbox from "@/components/FCheckbox";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
+import MappingRule from "./MappingRule";
 
 const dataSource = [
   {
@@ -33,72 +26,72 @@ const dataSource = [
     age: 32,
     address: '西湖区湖底公园1号',
   },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '3',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '4',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '5',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '6',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '7',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '8',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '9',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '10',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '11',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '12',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  }, {
-    key: '13',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
+  // {
+  //   key: '2',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
+  // {
+  //   key: '3',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
+  // {
+  //   key: '4',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
+  // {
+  //   key: '5',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
+  // {
+  //   key: '6',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
+  // {
+  //   key: '7',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '8',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '9',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '10',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '11',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '12',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // }, {
+  //   key: '13',
+  //   name: '胡彦祖',
+  //   age: 42,
+  //   address: '西湖区湖底公园1号',
+  // },
 
 ];
 
@@ -138,13 +131,13 @@ interface ExhibitProps {
 
 function Exhibit({}: ExhibitProps) {
 
-  // if (false) {
-  //   return (<FNoDataTip
-  //     height={'calc(100vh - 94px)'}
-  //     tipText={'当前测试节点没有添加展品'}
-  //     btnText={'添加测试展品'}
-  //   />);
-  // }
+  if (false) {
+    return (<FNoDataTip
+      height={'calc(100vh - 94px)'}
+      tipText={'当前测试节点没有添加展品'}
+      btnText={'添加测试展品'}
+    />);
+  }
 
   const columns = [
     {
@@ -169,7 +162,7 @@ function Exhibit({}: ExhibitProps) {
       title: (<FContentText text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
       dataIndex: 'name',
       key: 'name',
-      render() {
+      render(text: any, record: any) {
         return (<div className={styles.name}>
           <FTitleText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
@@ -187,23 +180,9 @@ function Exhibit({}: ExhibitProps) {
               />
             </div>
           </div>
-          <Space size={16}>
-            {/*{*/}
-            {/*  true ? <span></span>*/}
-            {/*}*/}
-            <>
-              <FMappingRuleAdd/>
-              <FEdit/>
-              <FMappingRuleAttr/>
-              <FMappingRuleCover/>
-              <FMappingRuleLabel/>
-              <FMappingRuleOffline/>
-              <FMappingRuleOnline/>
-              <FMappingRuleReplace/>
-              <FMappingRuleTitle/>
-              <FMappingRuleVersion/>
-            </>
-          </Space>
+          <div>
+            <MappingRule/>
+          </div>
         </div>);
       }
     },
@@ -217,29 +196,7 @@ function Exhibit({}: ExhibitProps) {
           style={{width: 110}}
           className={styles.hoverVisible}
         >
-          <Space size={25}>
-            <FTextButton
-              // onClick={() => router.push('/node/exhibit/formal/' + record.id)}
-              theme="primary"
-            >
-              <FEdit/>
-            </FTextButton>
-            <FTextButton
-              // onClick={() => router.push('/resource/' + record.resourceId)}
-              theme="primary"
-            >
-              <FFileSearch/>
-            </FTextButton>
-
-            <Popconfirm
-              title={'确定删除吗？'}
-              // onConfirm={() => onClickDelete && onClickDelete()}
-            >
-              <FTextButton
-                className={styles.Delete}
-              ><FDelete/></FTextButton>
-            </Popconfirm>
-          </Space>
+          <Actions/>
         </div>);
       },
     },
@@ -379,3 +336,38 @@ function Exhibit({}: ExhibitProps) {
 }
 
 export default Exhibit;
+
+function Actions() {
+
+  let refDom: any = null;
+
+  return (<div ref={(ref) => refDom = ref}>
+    <Space size={25}>
+      <FTextButton
+        // onClick={() => router.push('/node/exhibit/formal/' + record.id)}
+        theme="primary"
+      >
+        <FEdit/>
+      </FTextButton>
+      <FTextButton
+        // onClick={() => router.push('/resource/' + record.resourceId)}
+        theme="primary"
+      >
+        <FFileSearch/>
+      </FTextButton>
+
+      <Popconfirm
+        title={'确定删除吗？'}
+        // style={{width: 200}}
+        overlayStyle={{width: 150}}
+        trigger="hover"
+        getPopupContainer={() => refDom}
+        // onConfirm={() => onClickDelete && onClickDelete()}
+      >
+        <FTextButton
+          className={styles.Delete}
+        ><FDelete/></FTextButton>
+      </Popconfirm>
+    </Space>
+  </div>);
+}

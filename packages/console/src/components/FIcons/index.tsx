@@ -1,26 +1,46 @@
 import * as React from 'react';
+
+import FAdd from './FAdd';
+import FCheck from './FCheck';
+import FClose from './FClose';
+import FCloudUpload from './FCloudUpload';
+import FCopy from './FCopy';
 import FDelete from './FDelete';
-import FFavorite from './FFavorite';
+import FDoubleDown from './FDoubleDown';
+import FDoubleUp from './FDoubleUp';
 import FDown from './FDown';
-import FSwap from './FSwap';
-import FInfo from './FInfo';
-import FFileText from './FFileText';
-import FFileSearch from './FFileSearch';
+import FDownload from './FDownload';
 import FEdit from './FEdit';
 import FExclamation from './FExclamation';
-import FClose from './FClose';
-import FDoubleUp from './FDoubleUp';
-import FPlus from './FPlus';
-import FWarning from './FWarning';
-import FCopy from './FCopy';
-import FCloudUpload from './FCloudUpload';
-import FCheck from './FCheck';
+import FFavorite from './FFavorite';
+import FFileSearch from './FFileSearch';
+import FFileText from './FFileText';
+import FInfo from './FInfo';
+import FLeft from './FLeft';
+import FLine from './FLine';
 import FLoading from './FLoading';
-import FDoubleDown from './FDoubleDown';
-// import FLoading from './FLoading';
+import FMappingRuleAdd from './FMappingRuleAdd';
+import FMappingRuleAttr from './FMappingRuleAttr';
+import FMappingRuleCover from './FMappingRuleCover';
+import FMappingRuleLabel from './FMappingRuleLabel';
+import FMappingRuleOffline from './FMappingRuleOffline';
+import FMappingRuleOnline from './FMappingRuleOnline';
+import FMappingRuleReplace from './FMappingRuleReplace';
+import FMappingRuleTitle from './FMappingRuleTitle';
+import FMappingRuleVersion from './FMappingRuleVersion';
+import FObject from './FObject';
+// TODO: 换成 add
+import FPlus from './FPlus';
+import FRedo from './FRedo';
+import FSwap from './FSwap';
+import FWarning from './FWarning';
 
 export {
+  FAdd,
+  FDownload,
+  FLeft,
   FDelete,
+  FLine,
   FFavorite,
   FDown,
   FSwap,
@@ -38,4 +58,15 @@ export {
   FCloudUpload,
   FCheck,
   FLoading,
-}
+  FMappingRuleAdd,
+  FMappingRuleAttr,
+  FMappingRuleCover,
+  FMappingRuleLabel,
+  FMappingRuleOffline,
+  FMappingRuleReplace,
+  FMappingRuleTitle,
+  FMappingRuleVersion,
+  FObject,
+  FRedo,
+  FMappingRuleOnline,
+};
