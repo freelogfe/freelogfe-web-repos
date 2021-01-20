@@ -111,3 +111,41 @@
     color: @f-error-color1;
   }
 }
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list {
+  .item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #E5E7EB;
+
+    .itemContent {
+
+      width: calc(100% - 40px);
+
+      .itemName {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        & > div:first-child {
+          max-width: calc(100% - 100px);
+        }
+      }
+    }
+
+  }
+}
+
+.footer {
+  text-align: center;
+  //margin-top: 12px;
+  line-height: 32px;
+}
