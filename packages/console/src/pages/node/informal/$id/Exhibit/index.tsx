@@ -24,6 +24,7 @@ import FDrawer from "@/components/FDrawer";
 import FSelect from "@/components/FSelect";
 import FCheckbox from "@/components/FCheckbox";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import FInfiniteScroll from "@/components/FInfiniteScroll";
 
 const dataSource = [
   {
@@ -46,6 +47,54 @@ const dataSource = [
   },
   {
     key: '4',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '5',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '6',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '7',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '8',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '9',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '10',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '11',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '12',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  }, {
+    key: '13',
     name: '胡彦祖',
     age: 42,
     address: '西湖区湖底公园1号',
@@ -240,7 +289,11 @@ function Exhibit({}: ExhibitProps) {
     },
   ];
 
-  return (<>
+  return (<FInfiniteScroll
+    loadMore={() => {
+      console.log('1234#####');
+    }}
+  >
     <div className={styles.header}>
       <FTitleText text={'展品管理'}/>
       <Space size={30}>
@@ -322,7 +375,7 @@ function Exhibit({}: ExhibitProps) {
             </div>))
       }
     </FDrawer>
-  </>);
+  </FInfiniteScroll>);
 }
 
 export default Exhibit;

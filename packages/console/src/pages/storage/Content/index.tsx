@@ -4,15 +4,12 @@ import {FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space, Popconfirm} from 'antd';
 import FTable from '@/components/FTable';
-import {EditOutlined, DownloadOutlined} from '@ant-design/icons';
-import Header from '../Header';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import {
   DeleteObjectAction,
-  // OnChangePaginationAction,
   UploadFilesAction,
   ChangeAction as HomePageChangeAction, FetchObjectsAction
 } from '@/models/storageHomePage';
@@ -25,10 +22,6 @@ import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
-// import {} from '../NoBucket';
-import {CSSProperties} from "react";
-import FContentLayout from "@/layouts/FContentLayout";
-import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FDownload from "@/components/FIcons/FDownload";
 
 interface ContentProps {
@@ -38,7 +31,6 @@ interface ContentProps {
 
 function Content({storage, dispatch}: ContentProps) {
 
-  // console.log(storage)
   const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
 
   const columns = [
@@ -122,10 +114,6 @@ function Content({storage, dispatch}: ContentProps) {
       payload: record.id,
     });
   }
-
-  // if (storage.bucketList.length === 0) {
-  //   // return
-  // }
 
   return (<div>
 
