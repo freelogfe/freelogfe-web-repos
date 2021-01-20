@@ -219,6 +219,7 @@ function ToolsBar({showEdit = true, showDownload = true, showDelete = true, onCl
       showDelete && (
         <Popconfirm
           title={'确定删除吗？'}
+          trigger="hover"
           // okText="Yes"
           // cancelText="No"
           onConfirm={() => onClickDelete && onClickDelete()}
