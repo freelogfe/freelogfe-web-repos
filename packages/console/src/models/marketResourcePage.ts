@@ -28,6 +28,7 @@ import {Simulate} from "react-dom/test-utils";
 import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
 import {router} from "umi";
 import {EXHIBIT_NAME} from "@/utils/regexp";
+import {exhibitManagement} from "@/utils/path-assembler";
 
 interface Contract {
   id: string;
@@ -547,7 +548,8 @@ const Model: MarketResourcePageModelType = {
       };
       const {data} = yield call(createPresentable, params);
       // console.log(data, 'data0923ure2p3oi');
-      router.push(`/node/exhibit/${data.presentableId}`);
+      // router.push(`/node/exhibit/${data.presentableId}`);
+      router.push(exhibitManagement({exhibitID: data.presentableId}));
     },
   },
   reducers: {

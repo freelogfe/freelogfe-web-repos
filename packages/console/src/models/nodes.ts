@@ -4,6 +4,7 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {create, CreateParamsType, nodeDetail, NodeDetailParamsType2, nodes, NodesParamsType} from "@/services/nodes";
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
+import {nodeManagement} from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -123,7 +124,8 @@ const Model: NodesModelType = {
 
       const {data} = yield call(create, params);
 
-      router.push('/node/' + data.nodeId);
+      // router.push('/node/' + data.nodeId + '/formal');
+      router.push(nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
 

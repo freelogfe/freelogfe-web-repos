@@ -22,6 +22,7 @@ import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
 import FNoDataTip from "@/components/FNoDataTip";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
+import {nodeManagement} from "@/utils/path-assembler";
 
 interface InformalNodeProps {
   match: {
@@ -36,7 +37,8 @@ function InformalNode({match}: InformalNodeProps) {
 
   return (<div>
     <div className={styles.headerTip}>这里是测试节点管理页面，如需管理正式节点，你可以 <a onClick={() => {
-      router.push(`/node/${match.params.id}/formal`);
+      // router.push(`/node/${match.params.id}/formal`);
+      router.push(nodeManagement({nodeID: Number(match.params.id)}));
     }}>进入正式节点</a></div>
     <div style={{height: 24}}/>
     <div style={{minHeight: 'calc(100vh - 94px)'}} className={styles.container}>

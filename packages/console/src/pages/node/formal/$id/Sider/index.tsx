@@ -8,6 +8,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
 import {router, withRouter} from "umi";
+import {informNodeManagement, nodeManagement} from "@/utils/path-assembler";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -58,7 +59,8 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
     </div>
 
     <Button onClick={() => {
-      router.push(`/node/${match.params.id}/informal`);
+      // router.push(`/node/${match.params.id}/informal`);
+      router.push(informNodeManagement({nodeID: Number(match.params.id)}));
     }}>进入测试节点</Button>
   </div>);
 }

@@ -16,6 +16,7 @@ import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
+import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
 
 interface PresentableProps extends RouterTypes {
   dispatch: Dispatch;
@@ -42,7 +43,8 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
       <div className={styles.header}>
         <div className={styles.nav}>
           <FTextButton onClick={() => {
-            router.push(`/node/${exhibitInfoPage.nodeId}`)
+            // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
+            router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));
           }}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>

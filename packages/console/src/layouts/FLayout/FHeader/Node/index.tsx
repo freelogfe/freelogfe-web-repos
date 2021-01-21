@@ -10,6 +10,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
+import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
 
 interface NodeProps {
   dispatch: Dispatch;
@@ -26,7 +27,8 @@ function Node({dispatch, nodes, global}: NodeProps) {
   const nodeId: string | null = (cRoute.pathname.match(/\/node\/(\d*)\/formal/) || cRoute.pathname.match(/\/node\/(\d*)\/informal/) || [null, null])[1];
 
   function onClickNodes(value: string) {
-    return router.push('/node/' + value + '/formal');
+    // return router.push('/node/' + value + '/formal');
+    return router.push(nodeManagement({nodeID: Number(value)}));
   }
 
   return (<FDropdown
@@ -43,7 +45,8 @@ function Node({dispatch, nodes, global}: NodeProps) {
       />
       <a
         onClick={() => {
-          router.push('/node/creator');
+          // router.push('/node/creator');
+          router.push(nodeCreator());
         }}
         className={styles.newButton}>
         <FPlus/>
@@ -54,7 +57,8 @@ function Node({dispatch, nodes, global}: NodeProps) {
       <FNormalButton
         size="small"
         onClick={() => {
-          router.push('/node/creator');
+          // router.push('/node/creator');
+          router.push(nodeCreator());
         }}
       >创建节点</FNormalButton>
     </div>)}>
@@ -62,7 +66,8 @@ function Node({dispatch, nodes, global}: NodeProps) {
       onClick={() => {
         nodes.list.length > 0
           ? onClickNodes(nodes.list[0].nodeId.toString())
-          : router.push('/node/creator');
+          // : router.push('/node/creator');
+          : router.push(nodeCreator());
       }}
       active={isCurrent}>{i18nMessage('node_manage')}</Nav>
   </FDropdown>);

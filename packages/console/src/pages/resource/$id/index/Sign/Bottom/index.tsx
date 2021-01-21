@@ -5,6 +5,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {router} from 'umi';
 import {ChangeAction} from "@/models/marketResourcePage";
+import {exhibitManagement} from "@/utils/path-assembler";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -36,7 +37,10 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
           }}
         >签约</FNormalButton>)
         : (<span>该资源已签约，可进入<a
-          onClick={() => router.push(`/node/exhibit/${marketResourcePage.signedResourceExhibitId}`)}>展品管理</a>进行授权管理</span>)
+          onClick={() => {
+            // router.push(`/node/exhibit/${marketResourcePage.signedResourceExhibitId}`)
+            router.push(exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId}));
+          }}>展品管理</a>进行授权管理</span>)
     }
 
   </div>);

@@ -4,6 +4,7 @@ import FMenu from "@/components/FMenu";
 import {FCircleButton} from "@/components/FButton";
 import FDropdown from "@/components/FDropdown";
 import {router} from "umi";
+import {nodeCreator} from "@/utils/path-assembler";
 
 interface CreateProps {
 
@@ -27,7 +28,7 @@ function Create({}: CreateProps) {
       return router.push('/resource/creator');
     }
     if (value === '2') {
-      return router.push('/node/creator');
+      return router.push(nodeCreator());
     }
   }
 

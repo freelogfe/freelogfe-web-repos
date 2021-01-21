@@ -24,6 +24,7 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
+import {exhibitManagement} from "@/utils/path-assembler";
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -113,7 +114,10 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={25}>
           <FTextButton
-            onClick={() => router.push('/node/exhibit/formal/' + record.id)}
+            onClick={() => {
+              // router.push('/node/exhibit/formal/' + record.id)
+              router.push(exhibitManagement({exhibitID: record.id}));
+            }}
             theme="primary"
           >
             <FEdit/>

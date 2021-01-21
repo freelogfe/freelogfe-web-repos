@@ -16,6 +16,7 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
+import {exhibitManagement, nodeCreator} from "@/utils/path-assembler";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -104,7 +105,10 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                         className={styles.action}
                         style={{justifyContent: i.isOnline || !i.isAuth || i.policies.length === 0 ? 'center' : 'space-between'}}
                       >
-                        <span onClick={() => router.push('/node/exhibit/formal/' + i.id)}>编辑</span>
+                        <span onClick={() => {
+                          // router.push('/node/exhibit/formal/' + i.id)
+                          router.push(exhibitManagement({exhibitID: i.id}));
+                        }}>编辑</span>
                         {
                           !i.isOnline && i.isAuth && i.policies.length > 0 && (<>
                             <span>|</span>
