@@ -1,30 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
 import {router, withRouter} from "umi";
-import FCopyToClipboard from "@/components/FCopyToClipboard";
-import {FTitleText, FContentText} from '@/components/FText';
-import {Popconfirm, Space} from "antd";
-import FInput from "@/components/FInput";
-import FTable from "@/components/FTable";
-import {FTextButton} from "@/components/FButton";
-import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
-import FSwitch from "@/components/FSwitch";
-import FTooltip from "@/components/FTooltip";
-import FMappingRuleAdd from "@/components/FIcons/FMappingRuleAdd";
-import FMappingRuleAttr from "@/components/FIcons/FMappingRuleAttr";
-import FMappingRuleCover from "@/components/FIcons/FMappingRuleCover";
-import FMappingRuleLabel from "@/components/FIcons/FMappingRuleLabel";
-import FMappingRuleOffline from "@/components/FIcons/FMappingRuleOffline";
-import FMappingRuleOnline from "@/components/FIcons/FMappingRuleOnline";
-import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
-import FMappingRuleTitle from "@/components/FIcons/FMappingRuleTitle";
-import FMappingRuleVersion from "@/components/FIcons/FMappingRuleVersion";
-import FNoDataTip from "@/components/FNoDataTip";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {nodeManagement} from "@/utils/path-assembler";
+import {connect, Dispatch} from "dva";
+import {InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
+import {ConnectState} from "@/models/connect";
+import Theme from "./Theme";
+import MappingRule from "./MappingRule";
 
 interface InformalNodeProps {
+  dispatch: Dispatch;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
   match: {
     params: {
       id: string;
@@ -33,7 +21,7 @@ interface InformalNodeProps {
 }
 
 
-function InformalNode({match}: InformalNodeProps) {
+function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
 
   return (<div>
     <div className={styles.headerTip}>这里是测试节点管理页面，如需管理正式节点，你可以 <a onClick={() => {
@@ -48,10 +36,14 @@ function InformalNode({match}: InformalNodeProps) {
       </div>
 
       <div className={styles.content}>
-        <Exhibit/>
+        {informalNodeManagerPage.showPage === 'exhibit' && <Exhibit/>}
+        {informalNodeManagerPage.showPage === 'theme' && <Theme/>}
+        {informalNodeManagerPage.showPage === 'mappingRule' && <MappingRule/>}
       </div>
     </div>
   </div>);
 }
 
-export default withRouter(InformalNode);
+export default withRouter(connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
+}))(InformalNode));

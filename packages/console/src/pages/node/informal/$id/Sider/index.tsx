@@ -2,12 +2,18 @@ import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
 import FCopyToClipboard from "@/components/FCopyToClipboard";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+import {withRouter} from "umi";
+import {ChangeAction} from "@/models/informalNodeManagerPage";
 
 interface SiderProps {
+  dispatch: Dispatch;
 
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Sider({}: SiderProps) {
+function Sider({dispatch, informalNodeManagerPage}: SiderProps) {
   return (<>
     <div style={{height: 35}}/>
     <div className={styles.title}>
@@ -25,11 +31,47 @@ function Sider({}: SiderProps) {
     </Space>
     <div style={{height: 35}}/>
     <div className={styles.navs}>
-      <div className={styles.activated}>展品管理</div>
-      <div>主题管理</div>
-      <div>映射规则管理</div>
+      <div
+        className={informalNodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'informalNodeManagerPage/change',
+            payload: {
+              showPage: 'exhibit',
+            },
+          });
+        }}
+      >展品管理
+      </div>
+      <div
+        className={informalNodeManagerPage.showPage === 'theme' ? styles.activated : ''}
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'informalNodeManagerPage/change',
+            payload: {
+              showPage: 'theme',
+            },
+          });
+        }}
+      >主题管理</div>
+      <div
+        className={informalNodeManagerPage.showPage === 'mappingRule' ? styles.activated : ''}
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'informalNodeManagerPage/change',
+            payload: {
+              showPage: 'mappingRule',
+            },
+          });
+        }}
+      >映射规则管理</div>
     </div>
   </>);
 }
 
-export default Sider;
+
+// export default connect(({informalNodeManagerPage}:ConnectState) => ({})(Sider);
+
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
+}))(Sider);

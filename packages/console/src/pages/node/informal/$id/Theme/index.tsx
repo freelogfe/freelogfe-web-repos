@@ -7,7 +7,7 @@ interface ThemeProps {
 
 function Theme({}: ThemeProps) {
   return (<div>
-    
+    Theme
   </div>);
 }
 
