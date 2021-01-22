@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
-import {Popover, Popconfirm, Space} from "antd";
+import {Popconfirm, Space} from "antd";
 import FInput from "@/components/FInput";
 import FTable from "@/components/FTable";
 import {FDelete, FEdit, FFileSearch, FLine, FWarning} from "@/components/FIcons";
@@ -18,6 +18,15 @@ import FCheckbox from "@/components/FCheckbox";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import MappingRule from "./MappingRule";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+import {ChangeAction} from "@/models/informalNodeManagerPage";
+import FModal from "@/components/FModal";
+import {SwapRightOutlined} from '@ant-design/icons';
+import {Radio} from 'antd';
+import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
+import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
+import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
 
 const dataSource = [
   {
@@ -126,10 +135,11 @@ const list: {
 }];
 
 interface ExhibitProps {
-
+  dispatch: Dispatch;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Exhibit({}: ExhibitProps) {
+function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
 
   if (false) {
     return (<FNoDataTip
@@ -137,6 +147,15 @@ function Exhibit({}: ExhibitProps) {
       tipText={'当前测试节点没有添加展品'}
       btnText={'添加测试展品'}
     />);
+  }
+
+  function onChange(value: Partial<InformalNodeManagerPageModelState>) {
+    dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload: {
+        ...value,
+      },
+    });
   }
 
   const columns = [
@@ -254,8 +273,23 @@ function Exhibit({}: ExhibitProps) {
     <div className={styles.header}>
       <FTitleText text={'展品管理'}/>
       <Space size={30}>
-        <Space size={5}><FAdd/><FContentText text={'新增测试展品'}/></Space>
-        <Space size={5}><FMappingRuleReplace/><FContentText text={'资源替换'}/></Space>
+        <Space size={5}>
+          <FTextButton onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'informalNodeManagerPage/change',
+              payload: {
+                addExhibitDrawerVisible: true,
+              },
+            });
+          }}><FAdd/></FTextButton>
+          <FContentText text={'新增测试展品'}/>
+        </Space>
+        <Space size={5}>
+          <FTextButton onClick={() => {
+
+          }}><FMappingRuleReplace/></FTextButton>
+          <FContentText text={'资源替换'}/>
+        </Space>
         <div><FDropdownMenu options={[{value: '1234', text: '1234'}]} text={'筛选'}/></div>
         <div><FInput theme={'dark'}/></div>
       </Space>
@@ -272,13 +306,50 @@ function Exhibit({}: ExhibitProps) {
     </div>
     <div style={{height: 100}}/>
 
+    <FModal
+      title={null}
+      width={947}
+      visible={informalNodeManagerPage.replaceHandlerModalVisible}
+      closable={false}
+    >
+      <div className={styles.replaceHandler}>
+        <div className={styles.replacer}>
+          <FTitleText type="h5" text={'选择替换资源'}/>
+          <div style={{height: 5}}/>
+          <div className={styles.content}>
+            <Replacer/>
+          </div>
+
+        </div>
+        <div className={styles.arrow}>
+          <SwapRightOutlined style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}/>
+        </div>
+        <div className={styles.replaced}>
+          <FTitleText type="h5" text={'选择被替换资源'}/>
+          <div style={{height: 5}}/>
+          <div className={styles.content}>
+            <Replaced/>
+          </div>
+        </div>
+      </div>
+    </FModal>
+
     <FDrawer
       title={'添加测试展品'}
-      visible={false}
+      visible={informalNodeManagerPage.addExhibitDrawerVisible}
       topRight={<Space size={30}>
         <FTextButton>取消</FTextButton>
         <FNormalButton>添加</FNormalButton>
-      </Space>}>
+      </Space>}
+      onClose={() => {
+        dispatch<ChangeAction>({
+          type: 'informalNodeManagerPage/change',
+          payload: {
+            addExhibitDrawerVisible: false,
+          },
+        });
+      }}
+    >
       <div className={styles.filter}>
         <FSelect
           value={'market'}
@@ -335,7 +406,9 @@ function Exhibit({}: ExhibitProps) {
   </FInfiniteScroll>);
 }
 
-export default Exhibit;
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
+}))(Exhibit);
 
 function Actions() {
 

@@ -1,0 +1,52 @@
+@import '../../../../../../config.less';
+
+.replacerHeader {
+  padding: 0 15px;
+  border-bottom: 1px solid #D8D8D8;
+  display: flex;
+
+  a {
+    font-size: 14px;
+    color: #333;
+    line-height: 48px;
+    display: inline-block;
+    box-sizing: content-box;
+
+    &.activated {
+      color: @f-primary-color;
+      border-bottom: 2px solid @f-primary-color;
+    }
+  }
+}
+
+.replacerBody {
+  .replacerFilter {
+    padding: 0 15px;
+
+    .replacerFilterInput {
+      width: 100%;
+    }
+  }
+
+  .replacerList {
+    width: 100%;
+    padding: 0 15px;
+
+    .replacerListItem {
+      display: flex;
+      justify-content: space-between;
+
+      .replacerListItemContent {
+        width: 376px;
+
+        & > div:first-child {
+          & > div:last-child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+        }
+      }
+    }
+  }
+}

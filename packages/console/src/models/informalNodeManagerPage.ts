@@ -4,6 +4,23 @@ import {EffectsCommandMap, Subscription} from 'dva';
 
 export type InformalNodeManagerPageModelState = WholeReadonly<{
   showPage: 'exhibit' | 'theme' | 'mappingRule';
+
+  addExhibitDrawerVisible: boolean;
+
+  replaceHandlerModalVisible: boolean;
+  replacerActivatedTab: 'market' | 'resource' | 'collection';
+  replacerInput: string;
+  replacerList: {
+    id: string;
+    checked: boolean;
+    name: string;
+    status: 'online' | 'offline' | 'unreleased';
+    type: string;
+    latestVersion: string;
+    version: string;
+    date: string;
+  }[];
+
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -36,6 +53,31 @@ interface InformalNodeManagerPageModelType {
 
 const initStates: InformalNodeManagerPageModelState = {
   showPage: 'exhibit',
+
+  addExhibitDrawerVisible: false,
+
+  replaceHandlerModalVisible: true,
+  replacerActivatedTab: 'market',
+  replacerInput: '',
+  replacerList: [{
+    id: '1',
+    checked: false,
+    name: 'yuliang/package.json',
+    type: 'json',
+    latestVersion: '1.0.1',
+    version: '1.1.1',
+    date: '2021-11-22',
+    status: 'online',
+  }, {
+    id: '2',
+    checked: true,
+    name: 'Freelog/blog-theme',
+    type: 'json',
+    latestVersion: '1.0.1',
+    version: '1.1.1',
+    date: '2021-11-22',
+    status: 'online',
+  }],
 };
 
 const Model: InformalNodeManagerPageModelType = {
