@@ -304,7 +304,6 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
         />
       </div>
     </div>
-    <div style={{height: 100}}/>
 
     <FModal
       title={null}

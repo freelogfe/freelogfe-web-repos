@@ -106,8 +106,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
       </div>
     </div>
-
-    <div style={{height: 100}}/>
   </>);
 }
 

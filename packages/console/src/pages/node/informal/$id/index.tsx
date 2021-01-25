@@ -39,6 +39,7 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
         {informalNodeManagerPage.showPage === 'exhibit' && <Exhibit/>}
         {informalNodeManagerPage.showPage === 'theme' && <Theme/>}
         {informalNodeManagerPage.showPage === 'mappingRule' && <MappingRule/>}
+        <div style={{height: 100}}/>
       </div>
     </div>
   </div>);
