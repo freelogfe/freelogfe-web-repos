@@ -21,6 +21,8 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
 
+  themeList: { id: string; }[];
+
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -52,11 +54,11 @@ interface InformalNodeManagerPageModelType {
 }
 
 const initStates: InformalNodeManagerPageModelState = {
-  showPage: 'exhibit',
+  showPage: 'theme',
 
   addExhibitDrawerVisible: false,
 
-  replaceHandlerModalVisible: true,
+  replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',
   replacerInput: '',
   replacerList: [{
@@ -78,6 +80,14 @@ const initStates: InformalNodeManagerPageModelState = {
     date: '2021-11-22',
     status: 'online',
   }],
+
+  themeList: [
+    {id: '1'},
+    {id: '2'},
+    {id: '3'},
+    {id: '4'},
+    {id: '5'},
+  ]
 };
 
 const Model: InformalNodeManagerPageModelType = {
