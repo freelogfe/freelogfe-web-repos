@@ -1,1 +1,53 @@
-@import '../../config.less';
+@import '../../../../../config.less';
+
+.header {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+
+  .headerLeft {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.body {
+  padding: 0 20px;
+
+  .ruleList {
+    width: 100%;
+
+    .ruleCard {
+      background: white;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      padding: 0 20px;
+      width: 100%;
+
+      .ruleCardHeader {
+        padding: 15px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ruleCardBody {
+        padding: 15px 0 15px 30px;
+        border-top: 1px solid #E5E7EB;
+
+        .ruleCardBodyList {
+          width: 100%;
+
+          .ruleCardBodyListItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+        }
+      }
+    }
+  }
+}

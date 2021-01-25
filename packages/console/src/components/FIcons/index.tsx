@@ -29,11 +29,14 @@ import FMappingRuleReplace from './FMappingRuleReplace';
 import FMappingRuleTitle from './FMappingRuleTitle';
 import FMappingRuleVersion from './FMappingRuleVersion';
 import FObject from './FObject';
-// TODO: 换成 add
 import FPlus from './FPlus';
 import FRedo from './FRedo';
 import FSwap from './FSwap';
 import FWarning from './FWarning';
+import FExit from './FExit';
+import FExport from './FExport';
+import FImport from './FImport';
+import FCode from './FCode';
 
 export {
   FAdd,
@@ -69,4 +72,8 @@ export {
   FObject,
   FRedo,
   FMappingRuleOnline,
+  FExit,
+  FExport,
+  FImport,
+  FCode,
 };
