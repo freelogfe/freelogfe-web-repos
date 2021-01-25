@@ -17,7 +17,11 @@
     flex-wrap: wrap;
 
     & > div {
-      width: calc(100% / 3);
+      width: calc(100% / 4);
+
+      @media (max-width: 1600px) {
+        width: calc(100% / 3);
+      }
     }
 
     .item {
