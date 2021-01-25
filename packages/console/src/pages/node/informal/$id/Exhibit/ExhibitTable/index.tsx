@@ -1,0 +1,186 @@
+import * as React from 'react';
+import styles from './index.less';
+import FTable from "@/components/FTable";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+import {ColumnsType} from "antd/lib/table/interface";
+import {FContentText, FTitleText} from "@/components/FText";
+import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
+import {router} from "umi";
+import {informExhibitManagement} from "@/utils/path-assembler";
+import {Popconfirm, Space} from "antd";
+import FSwitch from "@/components/FSwitch";
+import FTooltip from "@/components/FTooltip";
+import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
+import {FTextButton} from "@/components/FButton";
+import * as imgSrc from '@/assets/default-resource-cover.jpg';
+
+interface ExhibitTableProps {
+  dispatch: Dispatch;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
+}
+
+function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
+
+  const columns: ColumnsType<InformalNodeManagerPageModelState['exhibitList'][number]> = [
+    {
+      title: (<FContentText text={'来源｜封面'}/>),
+      dataIndex: 'cover',
+      key: 'cover',
+      width: 120,
+      render() {
+        return (<div className={styles.cover}>
+          <img
+            src={imgSrc}
+            alt={''}
+            loading="lazy"
+          />
+          {true && <label className={styles.resource}>资源</label>}
+          <label className={styles.object}>对象</label>
+          <label className={styles.exhibit}>展品</label>
+        </div>);
+      },
+    },
+    {
+      title: (<FContentText text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
+      dataIndex: 'name',
+      key: 'name',
+      render(text, record) {
+        return (<div className={styles.name}>
+          <FTitleText
+            // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
+            text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展'}
+            type="h4"
+            singleRow
+          />
+          <div className={styles.type}>
+            <label>image</label>
+            <div>
+              <FContentText
+                type="additional2"
+                text={'这里是展品标题这里是展品标题这里是展品标题这里这里是展品标题这'}
+                singleRow
+              />
+            </div>
+          </div>
+          <div>
+            <MappingRule/>
+          </div>
+        </div>);
+      }
+    },
+    {
+      title: <FContentText text={''}/>,
+      dataIndex: 'action',
+      key: 'action',
+      width: 110,
+      render(text: any, record) {
+        return (<div
+          style={{width: 110}}
+          className={styles.hoverVisible}
+        >
+          <Actions
+            onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
+          />
+        </div>);
+      },
+    },
+    {
+      title: <FContentText text={'展示版本'}/>,
+      dataIndex: 'version',
+      key: 'version',
+      width: 123,
+      render() {
+        return (<div style={{width: 123}}>
+          <FContentText text={'1.0.10'}/>
+        </div>);
+      },
+    },
+    {
+      title: <FContentText text={'上线'}/>,
+      dataIndex: 'online',
+      key: 'online',
+      width: 65,
+      render() {
+        return (<div style={{width: 65}}>
+          <Space size={15}>
+            <FSwitch
+              disabled={false}
+              // checked={record.isOnline}
+              onChange={(value) => {
+                // dispatch<OnOnlineOrOfflineAction>({
+                //   type: 'nodeManagerPage/onOnlineOrOffline',
+                //   payload: {
+                //     id: record.id,
+                //     onlineStatus: value ? 1 : 0,
+                //   },
+                // });
+              }}
+            />
+            {/*{!record.isAuth || record.policies.length === 0 ?*/}
+            <FTooltip
+              // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
+              title={'暂无上线策略'}
+            >
+              <FWarning/>
+            </FTooltip>
+            {/*: ''}*/}
+          </Space>
+        </div>);
+      },
+    },
+  ];
+
+  return (<FTable
+    className={styles.table}
+    dataSource={informalNodeManagerPage.exhibitList}
+    columns={columns}
+    rowClassName={styles.rowClassName}
+  />);
+}
+
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
+}))(ExhibitTable);
+
+interface ActionsProps {
+  onEdit?(): void;
+
+  onSearch?(): void;
+
+  onDelete?(): void;
+}
+
+function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
+  let refDom: any = null;
+
+  return (<div ref={(ref) => refDom = ref}>
+    <Space size={25}>
+      <FTextButton
+        theme="primary"
+        onClick={() => onEdit && onEdit()}
+      >
+        <FEdit/>
+      </FTextButton>
+      <FTextButton
+        theme="primary"
+        onClick={() => onSearch && onSearch()}
+      >
+        <FFileSearch/>
+      </FTextButton>
+
+      <Popconfirm
+        title={'确定删除吗？'}
+        // style={{width: 200}}
+        overlayStyle={{width: 150}}
+        trigger="hover"
+        getPopupContainer={() => refDom}
+        onConfirm={() => onDelete && onDelete()}
+      >
+        <FTextButton
+          className={styles.Delete}
+        ><FDelete/></FTextButton>
+      </Popconfirm>
+    </Space>
+  </div>);
+}

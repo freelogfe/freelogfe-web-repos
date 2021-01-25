@@ -4,12 +4,8 @@ import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
 import {Popconfirm, Space} from "antd";
 import FInput from "@/components/FInput";
-import FTable from "@/components/FTable";
-import {FDelete, FEdit, FFileSearch, FLine, FWarning} from "@/components/FIcons";
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
 import {FNormalButton, FTextButton} from "@/components/FButton";
-import FSwitch from "@/components/FSwitch";
-import FTooltip from "@/components/FTooltip";
 import FAdd from "@/components/FIcons/FAdd";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FDrawer from "@/components/FDrawer";
@@ -17,92 +13,14 @@ import FSelect from "@/components/FSelect";
 import FCheckbox from "@/components/FCheckbox";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
-import MappingRule from "./MappingRule";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
-import {Radio} from 'antd';
-import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
 import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
-
-const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  },
-  // {
-  //   key: '2',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-  // {
-  //   key: '3',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-  // {
-  //   key: '4',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-  // {
-  //   key: '5',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-  // {
-  //   key: '6',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-  // {
-  //   key: '7',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '8',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '9',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '10',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '11',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '12',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // }, {
-  //   key: '13',
-  //   name: '胡彦祖',
-  //   age: 42,
-  //   address: '西湖区湖底公园1号',
-  // },
-
-];
+import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 
 const list: {
   id: string;
@@ -158,113 +76,6 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
     });
   }
 
-  const columns = [
-    {
-      title: (<FContentText text={'来源｜封面'}/>),
-      dataIndex: 'cover',
-      key: 'cover',
-      width: 120,
-      render() {
-        return (<div className={styles.cover}>
-          <img
-            src={'//cn.bing.com/th?id=OHR.FichtelbergWinter_ZH-CN9274877146_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp'}
-            alt={''}
-            loading="lazy"
-          />
-          <label className={styles.resource}>资源</label>
-          {/*<label className={styles.object}>对象</label>*/}
-          {/*<label className={styles.exhibit}>展品</label>*/}
-        </div>);
-      },
-    },
-    {
-      title: (<FContentText text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
-      dataIndex: 'name',
-      key: 'name',
-      render(text: any, record: any) {
-        return (<div className={styles.name}>
-          <FTitleText
-            // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
-            text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展'}
-            type="h4"
-            singleRow
-          />
-          <div className={styles.type}>
-            <label>image</label>
-            <div>
-              <FContentText
-                type="additional2"
-                text={'这里是展品标题这里是展品标题这里是展品标题这里这里是展品标题这'}
-                singleRow
-              />
-            </div>
-          </div>
-          <div>
-            <MappingRule/>
-          </div>
-        </div>);
-      }
-    },
-    {
-      title: <FContentText text={''}/>,
-      dataIndex: 'action',
-      key: 'action',
-      width: 110,
-      render() {
-        return (<div
-          style={{width: 110}}
-          className={styles.hoverVisible}
-        >
-          <Actions/>
-        </div>);
-      },
-    },
-    {
-      title: <FContentText text={'展示版本'}/>,
-      dataIndex: 'version',
-      key: 'version',
-      width: 123,
-      render() {
-        return (<div style={{width: 123}}>
-          <FContentText text={'1.0.10'}/>
-        </div>);
-      },
-    },
-    {
-      title: <FContentText text={'上线'}/>,
-      dataIndex: 'online',
-      key: 'online',
-      width: 65,
-      render() {
-        return (<div style={{width: 65}}>
-          <Space size={15}>
-            <FSwitch
-              disabled={false}
-              // checked={record.isOnline}
-              onChange={(value) => {
-                // dispatch<OnOnlineOrOfflineAction>({
-                //   type: 'nodeManagerPage/onOnlineOrOffline',
-                //   payload: {
-                //     id: record.id,
-                //     onlineStatus: value ? 1 : 0,
-                //   },
-                // });
-              }}
-            />
-            {/*{!record.isAuth || record.policies.length === 0 ?*/}
-            <FTooltip
-              // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
-              title={'暂无上线策略'}
-            >
-              <FWarning/>
-            </FTooltip>
-            {/*: ''}*/}
-          </Space>
-        </div>);
-      },
-    },
-  ];
-
   return (<FInfiniteScroll
     loadMore={() => {
       console.log('1234#####');
@@ -296,12 +107,7 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
     </div>
     <div className={styles.body}>
       <div>
-        <FTable
-          className={styles.table}
-          dataSource={dataSource}
-          columns={columns}
-          rowClassName={styles.rowClassName}
-        />
+        <ExhibitTable/>
       </div>
     </div>
 
@@ -409,37 +215,4 @@ export default connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
 }))(Exhibit);
 
-function Actions() {
 
-  let refDom: any = null;
-
-  return (<div ref={(ref) => refDom = ref}>
-    <Space size={25}>
-      <FTextButton
-        // onClick={() => router.push('/node/exhibit/formal/' + record.id)}
-        theme="primary"
-      >
-        <FEdit/>
-      </FTextButton>
-      <FTextButton
-        // onClick={() => router.push('/resource/' + record.resourceId)}
-        theme="primary"
-      >
-        <FFileSearch/>
-      </FTextButton>
-
-      <Popconfirm
-        title={'确定删除吗？'}
-        // style={{width: 200}}
-        overlayStyle={{width: 150}}
-        trigger="hover"
-        getPopupContainer={() => refDom}
-        // onConfirm={() => onClickDelete && onClickDelete()}
-      >
-        <FTextButton
-          className={styles.Delete}
-        ><FDelete/></FTextButton>
-      </Popconfirm>
-    </Space>
-  </div>);
-}

@@ -21,9 +21,12 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
 
+
   themeList: { id: string; }[];
 
-}>;
+}> & {
+  exhibitList: { id: string; key: string; }[];
+};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
@@ -54,7 +57,7 @@ interface InformalNodeManagerPageModelType {
 }
 
 const initStates: InformalNodeManagerPageModelState = {
-  showPage: 'mappingRule',
+  showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
 
@@ -81,13 +84,21 @@ const initStates: InformalNodeManagerPageModelState = {
     status: 'online',
   }],
 
+  exhibitList: [
+    {id: '1', key: '1'},
+    {id: '2', key: '2'},
+    {id: '3', key: '3'},
+    {id: '4', key: '4'},
+    {id: '5', key: '5'},
+  ],
+
   themeList: [
     {id: '1'},
     {id: '2'},
     {id: '3'},
     {id: '4'},
     {id: '5'},
-  ]
+  ],
 };
 
 const Model: InformalNodeManagerPageModelType = {
