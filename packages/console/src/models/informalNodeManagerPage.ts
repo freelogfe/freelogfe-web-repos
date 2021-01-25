@@ -54,7 +54,7 @@ interface InformalNodeManagerPageModelType {
 }
 
 const initStates: InformalNodeManagerPageModelState = {
-  showPage: 'theme',
+  showPage: 'mappingRule',
 
   addExhibitDrawerVisible: false,
 

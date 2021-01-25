@@ -7,7 +7,7 @@ interface MappingRuleProps {
 
 function MappingRule({}: MappingRuleProps) {
   return (<div>
-    MappingRule
+    
   </div>);
 }
 

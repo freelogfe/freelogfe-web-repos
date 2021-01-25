@@ -15,6 +15,7 @@ import {
   FMappingRuleVersion
 } from "@/components/FIcons";
 import FPopover from "@/components/FPopover";
+import TypesCaption from "@/pages/node/informal/$id/components/TypesCaption";
 
 interface MappingRuleProps {
 
@@ -49,25 +50,7 @@ function MappingRule({}: MappingRuleProps) {
         type="h5"
         text={'映射规则'}
       />
-
-      <div className={styles.popoverTitleTip}>
-        <div style={{width: 5}}/>
-        <FContentText text={'('} type="additional2"/>
-        <div style={{width: 5}}/>
-        <i className={styles.exhibitDot}/>
-        <div style={{width: 5}}/>
-        <FContentText text={'展品'} type="additional2"/>
-        <div style={{width: 15}}/>
-        <i className={styles.resourceDot}/>
-        <div style={{width: 5}}/>
-        <FContentText text={'资源'} type="additional2"/>
-        <div style={{width: 15}}/>
-        <i className={styles.objectDot}/>
-        <div style={{width: 5}}/>
-        <FContentText text={'对象'} type="additional2"/>
-        <div style={{width: 5}}/>
-        <FContentText text={')'} type="additional2"/>
-      </div>
+      <TypesCaption/>
     </div>}
   >
     <Space size={16}>
