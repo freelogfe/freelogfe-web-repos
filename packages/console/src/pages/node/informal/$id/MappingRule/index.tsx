@@ -25,10 +25,10 @@ interface MappingRuleProps {
 
 function MappingRule({}: MappingRuleProps) {
 
-  if (true) {
+  if (false) {
     return (<>
       <Header/>
-      <div className={styles.codeMirror}>
+      <div className={styles.codeMirrorBody}>
         <div>
           <FCodemirror
             value={''}
