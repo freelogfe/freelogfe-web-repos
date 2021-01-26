@@ -5,27 +5,49 @@ import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {withRouter} from "umi";
-import {ChangeAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchExhibitListAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
+import {RouteComponentProps} from "react-router";
 
-interface SiderProps {
+interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
 
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Sider({dispatch, informalNodeManagerPage}: SiderProps) {
+function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
+
+  React.useEffect(() => {
+    initData();
+  }, []);
+
+  async function initData() {
+    await dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload: {
+        nodeID: Number(match.params.id),
+      },
+    });
+
+    await dispatch<FetchInfoAction>({
+      type: 'informalNodeManagerPage/fetchInfo',
+    });
+
+  }
+
   return (<>
     <div style={{height: 35}}/>
     <div className={styles.title}>
-      <label>text</label>
+      <label>test</label>
       &nbsp;&nbsp;
-      <span>The official node of freelog</span>
+      <span>{informalNodeManagerPage.nodeName}</span>
     </div>
     <div style={{height: 15}}/>
     <Space size={5} className={styles.url}>
-      <a>node.testfreelog.com</a>
+      <a onClick={() => {
+        window.open(informalNodeManagerPage.testNodeUrl);
+      }}>{informalNodeManagerPage.testNodeUrl}</a>
       <FCopyToClipboard
-        text={'复制成功'}
+        text={informalNodeManagerPage.testNodeUrl}
         title={'复制测试节点地址'}
       />
     </Space>
@@ -53,7 +75,8 @@ function Sider({dispatch, informalNodeManagerPage}: SiderProps) {
             },
           });
         }}
-      >主题管理</div>
+      >主题管理
+      </div>
       <div
         className={informalNodeManagerPage.showPage === 'mappingRule' ? styles.activated : ''}
         onClick={() => {
@@ -64,7 +87,8 @@ function Sider({dispatch, informalNodeManagerPage}: SiderProps) {
             },
           });
         }}
-      >映射规则管理</div>
+      >映射规则管理
+      </div>
     </div>
   </>);
 }
@@ -72,6 +96,6 @@ function Sider({dispatch, informalNodeManagerPage}: SiderProps) {
 
 // export default connect(({informalNodeManagerPage}:ConnectState) => ({})(Sider);
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default withRouter(connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
-}))(Sider);
+}))(Sider));

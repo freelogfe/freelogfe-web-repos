@@ -1,8 +1,22 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
+import {ConnectState} from "@/models/connect";
+import {
+  rulesRematch,
+  RulesRematchParamsType,
+  testNodeRules,
+  testResources,
+  TestResourcesParamsType
+} from "@/services/informalNodes";
+import {completeUrlByDomain} from "@/utils/format";
 
 export type InformalNodeManagerPageModelState = WholeReadonly<{
+  nodeID: number;
+  nodeName: string;
+  nodeUrl: string;
+  testNodeUrl: string;
+
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
@@ -38,7 +52,11 @@ export interface InitModelStatesAction extends AnyAction {
 }
 
 export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo';
+  type: 'informalNodeManagerPage/fetchInfo';
+}
+
+export interface FetchExhibitListAction extends AnyAction {
+  type: 'informalNodeManagerPage/fetchExhibitList';
 }
 
 interface InformalNodeManagerPageModelType {
@@ -47,6 +65,7 @@ interface InformalNodeManagerPageModelType {
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformalNodeManagerPageModelState, ChangeAction>;
@@ -57,6 +76,11 @@ interface InformalNodeManagerPageModelType {
 }
 
 const initStates: InformalNodeManagerPageModelState = {
+
+  nodeID: -1,
+  nodeName: '',
+  nodeUrl: '',
+  testNodeUrl: '',
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
@@ -105,14 +129,60 @@ const Model: InformalNodeManagerPageModelType = {
   namespace: 'informalNodeManagerPage',
   state: initStates,
   effects: {
-    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
+    * fetchInfo({}: FetchInfoAction, {select, put}: EffectsCommandMap) {
+      const {nodes, informalNodeManagerPage}: ConnectState = yield select(({nodes, informalNodeManagerPage}: ConnectState) => ({
+        nodes,
+        informalNodeManagerPage,
+      }));
+
+      const currentNode = nodes.list.find((n) => n.nodeId === informalNodeManagerPage.nodeID);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeName: currentNode?.nodeName,
+          nodeUrl: completeUrlByDomain(currentNode?.nodeDomain || ''),
+          testNodeUrl: completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
+        },
+      });
 
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, {put,}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
+    },
+    * fetchExhibitList({}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const params1: RuleMatchParams = {
+        nodeID: informalNodeManagerPage.nodeID,
+      };
+      const bool: boolean = yield call(ruleMatch, params1);
+      // console.log(bool, 'bool1234');
+
+      const params: TestResourcesParamsType = {
+        nodeId: informalNodeManagerPage.nodeID,
+        onlineStatus: 2,
+        omitResourceType: 'theme',
+      };
+
+      const {data} = yield call(testResources, params);
+      // console.log(data, 'DDD@@@@@');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
+            return {
+              id: dl.testResourceId,
+              key: dl.testResourceId,
+            };
+          }),
+        }
+      })
     },
   },
   reducers: {
@@ -131,3 +201,33 @@ const Model: InformalNodeManagerPageModelType = {
 };
 
 export default Model;
+
+interface RuleMatchParams {
+  nodeID: number;
+}
+
+async function ruleMatch({nodeID}: RuleMatchParams): Promise<boolean> {
+  const params: RulesRematchParamsType = {
+    nodeId: nodeID,
+  };
+
+  await rulesRematch(params);
+
+  while (true) {
+    const response = await testNodeRules({nodeId: nodeID});
+    // console.log(response, 'response1234');
+    if (response.data.status === 1) {
+      await sleep();
+    } else {
+      return response.data.status === 3;
+    }
+  }
+
+  function sleep(ms: number = 500) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, ms);
+    });
+  }
+}

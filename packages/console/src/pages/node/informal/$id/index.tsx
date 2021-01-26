@@ -5,10 +5,17 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {nodeManagement} from "@/utils/path-assembler";
 import {connect, Dispatch} from "dva";
-import {InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
+import {
+  ChangeAction,
+  FetchExhibitListAction,
+  FetchInfoAction,
+  InformalNodeManagerPageModelState
+} from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
 import MappingRule from "./MappingRule";
+import {Simulate} from "react-dom/test-utils";
+import change = Simulate.change;
 
 interface InformalNodeProps {
   dispatch: Dispatch;
@@ -22,6 +29,11 @@ interface InformalNodeProps {
 
 
 function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
+
+  React.useEffect(() => {
+    // initData();
+  }, []);
+
 
   return (<div>
     <div className={styles.headerTip}>这里是测试节点管理页面，如需管理正式节点，你可以 <a onClick={() => {

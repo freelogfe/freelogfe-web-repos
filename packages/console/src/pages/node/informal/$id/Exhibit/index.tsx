@@ -15,7 +15,7 @@ import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchExhibitListAction} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
 import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
@@ -58,6 +58,17 @@ interface ExhibitProps {
 }
 
 function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
+
+  React.useEffect(() => {
+    // console.log('exhibit');
+    initData();
+  }, []);
+
+  async function initData() {
+    await dispatch<FetchExhibitListAction>({
+      type: 'informalNodeManagerPage/fetchExhibitList',
+    });
+  }
 
   if (false) {
     return (<FNoDataTip

@@ -21,9 +21,8 @@ import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/r
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 
-export type ExhibitInfoPageModelState = WholeReadonly<{
+export type InformExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
-  // info: null | {};
 
   nodeId: number;
   nodeName: string;
@@ -103,16 +102,16 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
 }>;
 
 export interface ChangeAction extends AnyAction {
-  type: 'change' | 'exhibitInfoPage/change';
-  payload: Partial<ExhibitInfoPageModelState>;
+  type: 'change' | 'informExhibitInfoPage/change';
+  payload: Partial<InformExhibitInfoPageModelState>;
 }
 
 export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo' | 'exhibitInfoPage/fetchInfo';
+  type: 'fetchInfo' | 'informExhibitInfoPage/fetchInfo';
 }
 
 export interface AddAPolicyAction extends AnyAction {
-  type: 'exhibitInfoPage/addAPolicy';
+  type: 'informExhibitInfoPage/addAPolicy';
   payload: {
     title: string;
     text: string;
@@ -120,7 +119,7 @@ export interface AddAPolicyAction extends AnyAction {
 }
 
 export interface UpdateAPolicyAction extends AnyAction {
-  type: 'exhibitInfoPage/updateAPolicy';
+  type: 'informExhibitInfoPage/updateAPolicy';
   payload: {
     id: string;
     status: 0 | 1
@@ -128,7 +127,7 @@ export interface UpdateAPolicyAction extends AnyAction {
 }
 
 export interface UpdateBaseInfoAction extends AnyAction {
-  type: 'exhibitInfoPage/updateBaseInfo';
+  type: 'informExhibitInfoPage/updateBaseInfo';
   payload: {
     pCover?: string;
     pTitle?: string;
@@ -137,12 +136,12 @@ export interface UpdateBaseInfoAction extends AnyAction {
 }
 
 export interface UpdateStatusAction extends AnyAction {
-  type: 'exhibitInfoPage/updateStatus';
+  type: 'informExhibitInfoPage/updateStatus';
   payload: 0 | 1;
 }
 
 export interface UpdateRelationAction extends AnyAction {
-  type: 'exhibitInfoPage/updateRelation';
+  type: 'informExhibitInfoPage/updateRelation';
   payload: {
     resourceId: string;
     policyId: string;
@@ -150,18 +149,18 @@ export interface UpdateRelationAction extends AnyAction {
 }
 
 export interface UpdateRewriteAction extends AnyAction {
-  type: 'exhibitInfoPage/updateRewrite';
+  type: 'informExhibitInfoPage/updateRewrite';
   // payload:
 }
 
 export interface ChangeVersionAction extends AnyAction {
-  type: 'exhibitInfoPage/changeVersion';
+  type: 'informExhibitInfoPage/changeVersion';
   payload: string;
 }
 
 export interface ExhibitInfoPageModelType {
-  namespace: 'exhibitInfoPage';
-  state: ExhibitInfoPageModelState;
+  namespace: 'informExhibitInfoPage';
+  state: InformExhibitInfoPageModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
@@ -173,7 +172,7 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
+    change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
@@ -181,7 +180,7 @@ export interface ExhibitInfoPageModelType {
 }
 
 const Model: ExhibitInfoPageModelType = {
-  namespace: 'exhibitInfoPage',
+  namespace: 'informExhibitInfoPage',
   state: {
     presentableId: '',
 
@@ -316,7 +315,7 @@ const Model: ExhibitInfoPageModelType = {
           pCustomAttrs: [
             ...(data.resourceCustomPropertyDescriptors as any[])
               .filter((rd: any) => rd.type !== 'readonlyText')
-              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
+              .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
                 const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
                 const value = prp ? prp.value : rd.defaultValue;
                 return {
@@ -332,7 +331,7 @@ const Model: ExhibitInfoPageModelType = {
               }),
             ...(data.presentableRewriteProperty as any[])
               .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-              .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
+              .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
                 key: pr.key,
                 value: pr.value,
                 newValue: pr.value,
@@ -446,8 +445,8 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
-      const pCustomAttrs: ExhibitInfoPageModelState['pCustomAttrs'] = exhibitInfoPage.pCustomAttrs
-        .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pc) => {
+      const pCustomAttrs: InformExhibitInfoPageModelState['pCustomAttrs'] = exhibitInfoPage.pCustomAttrs
+        .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pc) => {
           return {
             ...pc,
             value: pc.newValueError ? pc.value : pc.newValue,
