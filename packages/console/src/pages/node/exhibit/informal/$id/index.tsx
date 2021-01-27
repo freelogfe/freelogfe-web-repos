@@ -25,8 +25,9 @@ import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
-import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
+import {informExhibitManagement, informNodeManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
+import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -40,17 +41,18 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
 
     initDate();
 
-    // dispatch<FetchInfoAction>({
-    //   type: 'exhibitInfoPage/fetchInfo',
-    // });
   }, []);
 
   async function initDate() {
     await dispatch<ChangeAction>({
       type: 'informExhibitInfoPage/change',
       payload: {
-        // informExhibitID:
+        informExhibitID: match.params.id,
       },
+    });
+
+    await dispatch<FetchInfoAction>({
+      type: 'informExhibitInfoPage/fetchInfo',
     });
   }
 
@@ -58,9 +60,11 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
+          <label>test</label>
+          <div style={{width: 5}}/>
           <FTextButton onClick={() => {
             // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
-            // router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));
+            router.push(informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
           }}><FContentText
             type="negative"
             text={informExhibitInfoPage.nodeName}
@@ -69,6 +73,8 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
           <FTitleText text={informExhibitInfoPage.informExhibitName}/>
+          <div style={{width: 20}}/>
+          <MappingRule/>
         </div>
         <Space size={20}>
           <span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
