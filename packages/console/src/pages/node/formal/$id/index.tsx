@@ -13,8 +13,9 @@ import {
   NodeManagerModelState
 } from '@/models/nodeManagerPage';
 import {ConnectState} from '@/models/connect';
+import {RouteComponentProps} from "react-router";
 
-interface NodeManagerProps extends RouterTypes {
+interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
 }

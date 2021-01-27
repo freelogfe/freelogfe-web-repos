@@ -17,17 +17,16 @@ import RouterTypes from 'umi/routerTypes';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert} from 'antd';
 import SignPage from './SignPage';
+import {RouteComponentProps} from "react-router";
 
-interface ResourceDetailsProps
-  // extends RouterTypes
-{
+interface ResourceDetailsProps extends RouteComponentProps<{ id: string }>{
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState,
-  match: {
-    params: {
-      id: string;
-    };
-  };
+  // match: {
+  //   params: {
+  //     id: string;
+  //   };
+  // };
 }
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {

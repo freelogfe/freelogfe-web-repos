@@ -17,8 +17,9 @@ import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
+import {RouteComponentProps} from "react-router";
 
-interface PresentableProps extends RouterTypes {
+interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   exhibitInfoPage: ExhibitInfoPageModelState;
 }

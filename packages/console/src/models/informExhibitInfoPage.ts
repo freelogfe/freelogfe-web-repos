@@ -22,22 +22,14 @@ import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 
 export type InformExhibitInfoPageModelState = WholeReadonly<{
-  presentableId: string;
+  informExhibitID: string;
 
-  nodeId: number;
+  nodeID: number;
   nodeName: string;
-  pName: string;
+  informExhibitName: string;
   isOnline: boolean;
   isAuth: boolean;
   authErrorText: string;
-
-  policies: {
-    id: string;
-    name: string;
-    text: string;
-    status: 0 | 1;
-  }[];
-  addPolicyDrawerVisible: boolean;
 
   associated: {
     selected: boolean;
@@ -163,8 +155,6 @@ export interface ExhibitInfoPageModelType {
   state: InformExhibitInfoPageModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
-    updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
     updateBaseInfo: (action: UpdateBaseInfoAction, effects: EffectsCommandMap) => void;
     updateStatus: (action: UpdateStatusAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
@@ -182,17 +172,15 @@ export interface ExhibitInfoPageModelType {
 const Model: ExhibitInfoPageModelType = {
   namespace: 'informExhibitInfoPage',
   state: {
-    presentableId: '',
+    informExhibitID: '',
 
-    nodeId: -1,
+    nodeID: -1,
     nodeName: '',
-    pName: '',
+    informExhibitName: '',
     isOnline: false,
     isAuth: true,
     authErrorText: '',
 
-    policies: [],
-    addPolicyDrawerVisible: false,
     associated: [],
 
     pCover: '',
@@ -228,158 +216,96 @@ const Model: ExhibitInfoPageModelType = {
         nodes,
       }));
 
-      const params: PresentableDetailsParamsType1 = {
-        presentableId: exhibitInfoPage.presentableId,
-        isLoadCustomPropertyDescriptors: 1,
-        isLoadPolicyInfo: 1,
-      };
-      const {data} = yield call(presentableDetails, params);
-
-      const parmas: InfoParamsType = {
-        resourceIdOrName: data.resourceInfo.resourceId,
-      };
-      const {data: data2} = yield call(info, parmas);
-      // console.log(data2, 'data2309jdsfa');
-
-      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
-
-      const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
-
-      const disabledRewriteKeys = [
-        ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
-      ];
-
-      console.log(data, 'data2341234');
-
-      const params1: BatchAuthParamsType = {
-        nodeId: data.nodeId,
-        authType: 3,
-        presentableIds: data.presentableId,
-      };
-      const {data: data1} = yield call(batchAuth, params1);
       // console.log(data1, 'data1123434');
-      // presentableId
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          nodeId: data.nodeId,
-          nodeName: nodeName,
-          pName: data.presentableName,
-          isOnline: data.onlineStatus === 1,
-          isAuth: data1[0].isAuth,
-          authErrorText: data1[0].error,
-          policies: data.policies.map((p: any) => ({
-            id: p.policyId,
-            name: p.policyName,
-            text: p.policyText,
-            status: p.status,
-          })),
-          associated: result.map((r, index) => ({
-            selected: index === 0,
-            id: r.resourceId,
-            name: r.resourceName,
-            type: r.resourceType,
-            contracts: r.contracts.map((c) => ({
-              name: c.contractName,
-              status: c.status,
-              id: c.contractId,
-              text: c.policyText,
-              createTime: formatDateTime(c.createDate),
-              policyId: c.policyId,
-            })),
-            policies: r.policies.map((p) => ({
-              id: p.policyId,
-              name: p.policyName,
-              text: p.policyText,
-            }))
-          })),
-          pCover: data.coverImages[0] || '',
-          pTitle: data.presentableTitle,
-          pTags: data.tags,
 
-          allVersions: data2.resourceVersions.map((d2: any) => d2.version),
-          version: data.version,
-
-          pBaseAttrs: [
-            ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
-              key: s[0],
-              value: s[1],
-            })),
-            ...data.resourceCustomPropertyDescriptors
-              .filter((rd: any) => rd.type === 'readonlyText')
-              .map((rd: any) => ({
-                key: rd.key,
-                value: rd.defaultValue,
-              })),
-          ],
-          pCustomAttrs: [
-            ...(data.resourceCustomPropertyDescriptors as any[])
-              .filter((rd: any) => rd.type !== 'readonlyText')
-              .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
-                const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
-                const value = prp ? prp.value : rd.defaultValue;
-                return {
-                  key: rd?.key,
-                  option: rd.type === 'select' ? rd.candidateItems : [],
-                  defaultValue: rd.defaultValue,
-                  value: value,
-                  remark: rd.remark,
-                  newValue: value,
-                  newValueError: '',
-                  isEditing: false,
-                };
-              }),
-            ...(data.presentableRewriteProperty as any[])
-              .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-              .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
-                key: pr.key,
-                value: pr.value,
-                newValue: pr.value,
-                newValueError: '',
-                remark: pr.remark,
-                isEditing: false,
-              })),
-          ],
-
-          resourceId: data2.resourceId,
-          resourceName: data2.resourceName,
-          resourceType: data2.resourceType,
-          resourceCover: data2.coverImages[0] || '',
-        },
-      })
-    },
-    * addAPolicy({payload}: AddAPolicyAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
-        exhibitInfoPage,
-      }));
-      const params: UpdatePresentableParamsType = {
-        presentableId: exhibitInfoPage.presentableId,
-        addPolicies: [{
-          policyName: payload.title,
-          policyText: payload.text,
-          status: 1,
-        }],
-      };
-      yield call(updatePresentable, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
-      });
-    },
-    * updateAPolicy({payload}: UpdateAPolicyAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
-        exhibitInfoPage,
-      }));
-      const params: UpdatePresentableParamsType = {
-        presentableId: exhibitInfoPage.presentableId,
-        updatePolicies: [{
-          policyId: payload.id,
-          status: payload.status,
-        }],
-      };
-      yield call(updatePresentable, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     nodeId: data.nodeId,
+      //     nodeName: nodeName,
+      //     pName: data.presentableName,
+      //     isOnline: data.onlineStatus === 1,
+      //     isAuth: data1[0].isAuth,
+      //     authErrorText: data1[0].error,
+      //     policies: data.policies.map((p: any) => ({
+      //       id: p.policyId,
+      //       name: p.policyName,
+      //       text: p.policyText,
+      //       status: p.status,
+      //     })),
+      //     associated: result.map((r, index) => ({
+      //       selected: index === 0,
+      //       id: r.resourceId,
+      //       name: r.resourceName,
+      //       type: r.resourceType,
+      //       contracts: r.contracts.map((c) => ({
+      //         name: c.contractName,
+      //         status: c.status,
+      //         id: c.contractId,
+      //         text: c.policyText,
+      //         createTime: formatDateTime(c.createDate),
+      //         policyId: c.policyId,
+      //       })),
+      //       policies: r.policies.map((p) => ({
+      //         id: p.policyId,
+      //         name: p.policyName,
+      //         text: p.policyText,
+      //       }))
+      //     })),
+      //     pCover: data.coverImages[0] || '',
+      //     pTitle: data.presentableTitle,
+      //     pTags: data.tags,
+      //
+      //     allVersions: data2.resourceVersions.map((d2: any) => d2.version),
+      //     version: data.version,
+      //
+      //     pBaseAttrs: [
+      //       ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
+      //         key: s[0],
+      //         value: s[1],
+      //       })),
+      //       ...data.resourceCustomPropertyDescriptors
+      //         .filter((rd: any) => rd.type === 'readonlyText')
+      //         .map((rd: any) => ({
+      //           key: rd.key,
+      //           value: rd.defaultValue,
+      //         })),
+      //     ],
+      //     pCustomAttrs: [
+      //       ...(data.resourceCustomPropertyDescriptors as any[])
+      //         .filter((rd: any) => rd.type !== 'readonlyText')
+      //         .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((rd: any) => {
+      //           const prp = data.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+      //           const value = prp ? prp.value : rd.defaultValue;
+      //           return {
+      //             key: rd?.key,
+      //             option: rd.type === 'select' ? rd.candidateItems : [],
+      //             defaultValue: rd.defaultValue,
+      //             value: value,
+      //             remark: rd.remark,
+      //             newValue: value,
+      //             newValueError: '',
+      //             isEditing: false,
+      //           };
+      //         }),
+      //       ...(data.presentableRewriteProperty as any[])
+      //         .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
+      //         .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pr: any) => ({
+      //           key: pr.key,
+      //           value: pr.value,
+      //           newValue: pr.value,
+      //           newValueError: '',
+      //           remark: pr.remark,
+      //           isEditing: false,
+      //         })),
+      //     ],
+      //
+      //     resourceId: data2.resourceId,
+      //     resourceName: data2.resourceName,
+      //     resourceType: data2.resourceType,
+      //     resourceCover: data2.coverImages[0] || '',
+      //   },
+      // })
     },
     * updateBaseInfo({payload}: UpdateBaseInfoAction, {select, call, put}: EffectsCommandMap) {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({

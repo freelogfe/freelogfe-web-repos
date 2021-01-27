@@ -18,6 +18,7 @@ import {
 } from "../components/MappingRules";
 import FCodemirror from "@/components/FCodemirror";
 import {FNormalButton} from "@/components/FButton";
+import {RouteComponentProps} from "react-router";
 
 interface MappingRuleProps {
 

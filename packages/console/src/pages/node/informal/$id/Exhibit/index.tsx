@@ -21,6 +21,7 @@ import {SwapRightOutlined} from '@ant-design/icons';
 import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
 import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
+import {RouteComponentProps} from "react-router";
 
 const list: {
   id: string;

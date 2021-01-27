@@ -14,17 +14,11 @@ import {
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
 import MappingRule from "./MappingRule";
-import {Simulate} from "react-dom/test-utils";
-import change = Simulate.change;
+import {RouteComponentProps} from "react-router";
 
-interface InformalNodeProps {
+interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
-  match: {
-    params: {
-      id: string;
-    }
-  }
 }
 
 

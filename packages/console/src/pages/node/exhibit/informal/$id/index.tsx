@@ -8,12 +8,17 @@ import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
+import {
+  ConnectState,
+  ExhibitInfoPageModelState,
+  InformalNodeManagerPageModelState,
+  InformExhibitInfoPageModelState
+} from '@/models/connect';
 import {
   ChangeAction,
   FetchInfoAction,
   UpdateStatusAction,
-} from '@/models/exhibitInfoPage';
+} from '@/models/informExhibitInfoPage';
 import RouterTypes from 'umi/routerTypes';
 import {nodeDetail} from '@/services/nodes';
 import {FTextButton} from '@/components/FButton';
@@ -21,26 +26,33 @@ import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
+import {RouteComponentProps} from "react-router";
 
-interface PresentableProps extends RouterTypes {
+interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
-  exhibitInfoPage: ExhibitInfoPageModelState;
+  // exhibitInfoPage: ExhibitInfoPageModelState;
+  informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
+function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProps) {
 
   React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+
+    initDate();
+
+    // dispatch<FetchInfoAction>({
+    //   type: 'exhibitInfoPage/fetchInfo',
+    // });
+  }, []);
+
+  async function initDate() {
+    await dispatch<ChangeAction>({
+      type: 'informExhibitInfoPage/change',
       payload: {
-        presentableId: (match.params as any).id,
+        // informExhibitID:
       },
     });
-
-    dispatch<FetchInfoAction>({
-      type: 'exhibitInfoPage/fetchInfo',
-    });
-  }, []);
+  }
 
   return (<div className={styles.styles}>
     <div>
@@ -48,29 +60,29 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
         <div className={styles.nav}>
           <FTextButton onClick={() => {
             // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
-            router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));
-          }}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>
+            // router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));
+          }}><FContentText
+            type="negative"
+            text={informExhibitInfoPage.nodeName}
+          /></FTextButton>
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
-          <FTitleText text={exhibitInfoPage.pName}/>
+          <FTitleText text={informExhibitInfoPage.informExhibitName}/>
         </div>
         <Space size={20}>
-          <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
+          <span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
           <FSwitch
-            disabled={!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
-            checked={exhibitInfoPage.isOnline}
-            onChange={(value) => dispatch<UpdateStatusAction>({
-              type: 'exhibitInfoPage/updateStatus',
-              payload: value ? 1 : 0,
-            })}
+            // disabled={!informExhibitInfoPage.isAuth || informExhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
+            // checked={informExhibitInfoPage.isOnline}
+            // onChange={(value) => dispatch<UpdateStatusAction>({
+            //   type: 'exhibitInfoPage/updateStatus',
+            //   payload: value ? 1 : 0,
+            // })}
           />
-          {
-            !exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0 ? (
-              <FTooltip title={!exhibitInfoPage.isAuth ? exhibitInfoPage.authErrorText : '暂无上线策略'}>
-                <FWarning/>
-              </FTooltip>) : ''
-          }
+          {/*<FTooltip title={!informExhibitInfoPage.isAuth ? informExhibitInfoPage.authErrorText : '暂无上线策略'}>*/}
+          {/*  <FWarning/>*/}
+          {/*</FTooltip>*/}
         </Space>
       </div>
       <div className={styles.body}>
@@ -91,6 +103,6 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
   </div>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
-  exhibitInfoPage,
+export default connect(({informExhibitInfoPage}: ConnectState) => ({
+  informExhibitInfoPage,
 }))(Presentable);
