@@ -34,12 +34,21 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     version: string;
     date: string;
   }[];
-
-
   themeList: { id: string; }[];
-
 }> & {
-  exhibitList: { id: string; key: string; }[];
+  exhibitList: {
+    key: string;
+    id: string;
+    cover: string;
+    name: string;
+    title: string;
+    rules: [];
+    version: string;
+    isOnline: boolean;
+    resourceId: string;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
 };
 
 export interface ChangeAction extends AnyAction {
@@ -108,13 +117,7 @@ const initStates: InformalNodeManagerPageModelState = {
     status: 'online',
   }],
 
-  exhibitList: [
-    {id: '1', key: '1'},
-    {id: '2', key: '2'},
-    {id: '3', key: '3'},
-    {id: '4', key: '4'},
-    {id: '5', key: '5'},
-  ],
+  exhibitList: [],
 
   themeList: [
     {id: '1'},
@@ -171,7 +174,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      // console.log(data, 'DDD@@@@@');
+      console.log(data, 'DDD@@@@@');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -179,6 +182,15 @@ const Model: InformalNodeManagerPageModelType = {
             return {
               id: dl.testResourceId,
               key: dl.testResourceId,
+              cover: dl.stateInfo.coverInfo.coverImages[0] || '',
+              name: dl.originInfo.name,
+              title: dl.stateInfo.titleInfo.title,
+              rules: [],
+              version: dl.originInfo.version,
+              isOnline: dl.status === 1,
+              resourceId: dl.originInfo.id,
+              isAuth: true,
+              authErrorText: '',
             };
           }),
         }

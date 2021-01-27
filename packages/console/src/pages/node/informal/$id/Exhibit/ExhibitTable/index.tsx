@@ -14,6 +14,7 @@ import FTooltip from "@/components/FTooltip";
 import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
 import {FTextButton} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -28,16 +29,19 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
-      render() {
+      render(text, record) {
         return (<div className={styles.cover}>
           <img
-            src={imgSrc}
+            src={record.cover || imgSrc}
             alt={''}
             loading="lazy"
           />
-          {true && <label className={styles.resource}>资源</label>}
-          <label className={styles.object}>对象</label>
-          <label className={styles.exhibit}>展品</label>
+
+          <div className={styles.Identity}>
+            <FIdentityTypeBadge/>
+          </div>
+          {/*<label className={styles.object}>对象</label>*/}
+          {/*<label className={styles.exhibit}>展品</label>*/}
         </div>);
       },
     },

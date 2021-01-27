@@ -15,7 +15,7 @@ function FInfiniteScroll({children, loadMore, ...props}: FInfiniteScrollProps) {
   return (<InfiniteScroll
     // pageStart={0}
     loadMore={() => {
-      console.log('######@!@#$!@#$@');
+      // console.log('######@!@#$!@#$@');
     }}
     hasMore={true}
     // loader={<div className="loader" key={0}>Loading ...</div>}
