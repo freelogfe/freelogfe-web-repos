@@ -4,31 +4,29 @@ import {FContentText, FTitleText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
+import {ConnectState, ExhibitInfoPageModelState, InformExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
 
 interface ContractsProps {
   dispatch: Dispatch;
-  exhibitInfoPage: ExhibitInfoPageModelState;
+  informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
+function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
 
-  if (exhibitInfoPage.associated.length === 0) {
+  if (informExhibitInfoPage.associated.length === 0) {
     return null;
   }
 
-  const [mainResource, ...otherResource] = exhibitInfoPage.associated;
+  const [mainResource, ...otherResource] = informExhibitInfoPage.associated;
 
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
-
-  // console.log(mainResource, 'mainResource9032jhf');
+  const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
       payload: {
-        associated: exhibitInfoPage.associated.map((a) => ({
+        associated: informExhibitInfoPage.associated.map((a) => ({
           ...a,
           selected: a.id === id
         })),
@@ -37,7 +35,10 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   }
 
   return (<div>
-    <FTitleText text={'关联合约'} type="h3"/>
+    <FTitleText
+      text={'关联合约'}
+      type="h3"
+    />
 
     <div style={{height: 20}}/>
 
@@ -161,6 +162,6 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   </div>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
-  exhibitInfoPage,
+export default connect(({informExhibitInfoPage}: ConnectState) => ({
+  informExhibitInfoPage,
 }))(Contracts);

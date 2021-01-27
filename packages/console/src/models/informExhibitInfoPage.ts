@@ -20,6 +20,7 @@ import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
+import {testResourceDetails, TestResourceDetailsParamsType} from "@/services/informalNodes";
 
 export type InformExhibitInfoPageModelState = WholeReadonly<{
   informExhibitID: string;
@@ -181,7 +182,27 @@ const Model: ExhibitInfoPageModelType = {
     isAuth: true,
     authErrorText: '',
 
-    associated: [],
+    associated: [
+      {
+        selected: true,
+        id: '1',
+        name: 'resource/name1',
+        type: 'image',
+        contracts: [{
+          name: '策略1',
+          status: 1,
+          id: '3451324kl34iojlksfd',
+          text: '1234:\n  execute\n  result',
+          createTime: '2020-12-31',
+          policyId: '908jksdff',
+        }],
+        policies: [{
+          id: '238942u3j4io',
+          name: 'name23223',
+          text: '234',
+        }],
+      },
+    ],
 
     pCover: '',
     pTitle: '',
@@ -211,18 +232,49 @@ const Model: ExhibitInfoPageModelType = {
   },
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage, nodes}: ConnectState = yield select(({exhibitInfoPage, nodes}: ConnectState) => ({
-        exhibitInfoPage,
+      const {informExhibitInfoPage, nodes}: ConnectState = yield select(({informExhibitInfoPage, nodes}: ConnectState) => ({
+        informExhibitInfoPage,
         nodes,
       }));
 
-      // console.log(data1, 'data1123434');
+      const params: TestResourceDetailsParamsType = {
+        testResourceId: informExhibitInfoPage.informExhibitID,
+      };
+      const {data} = yield call(testResourceDetails, params);
+
+      const currentNode = nodes.list.find((n) => n.nodeId === data.nodeId);
+
+      console.log(data, '#######');
+
+      const params1: InfoParamsType = {
+        resourceIdOrName: data.originInfo.id,
+      };
+
+      const {data: data1} = yield call(info, params1);
+      console.log(data1, '##@#$@#$@#');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeID: data.nodeId,
+          nodeName: currentNode?.nodeName,
+          informExhibitName: data.testResourceName,
+          pCover: data.stateInfo.coverInfo.coverImages[0] || '',
+          pTitle: data.stateInfo.titleInfo.title || '',
+          pTags: data.stateInfo.tagInfo.tags || [],
+          allVersions: data.originInfo.versions || [],
+          version: data.originInfo.version || '',
+          resourceId: data.originInfo.id,
+          resourceName: data1.resourceName,
+          resourceType: data1.resourceType,
+          resourceCover: data1.coverImages[0] || '',
+        },
+      });
 
       // yield put<ChangeAction>({
       //   type: 'change',
       //   payload: {
-      //     nodeId: data.nodeId,
-      //     nodeName: nodeName,
+
       //     pName: data.presentableName,
       //     isOnline: data.onlineStatus === 1,
       //     isAuth: data1[0].isAuth,

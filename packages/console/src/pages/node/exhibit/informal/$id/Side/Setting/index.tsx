@@ -9,28 +9,28 @@ import FRedo from "@/components/FIcons/FRedo";
 import {
   ChangeAction,
   ChangeVersionAction,
-  ExhibitInfoPageModelState,
+  // ExhibitInfoPageModelState,
   UpdateRewriteAction
-} from "@/models/exhibitInfoPage";
+} from "@/models/informExhibitInfoPage";
 import FSelect from "@/components/FSelect";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
-import {ConnectState} from "@/models/connect";
+import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 import FModal from "@/components/FModal";
 import {FDoubleDown, FDoubleUp} from "@/components/FIcons";
 
 interface SettingProps {
   dispatch: Dispatch;
-  exhibitInfoPage: ExhibitInfoPageModelState;
+  informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Setting({dispatch, exhibitInfoPage}: SettingProps) {
+function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
 
   function onChangeCustomAttrs({key, value}: { key: string; value: string }, update: boolean = false) {
     dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+      type: 'informExhibitInfoPage/change',
       payload: {
-        pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
+        pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
           if (pCustomAttr.key !== key) {
             return pCustomAttr;
           }
@@ -44,7 +44,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
     });
     if (update) {
       dispatch<UpdateRewriteAction>({
-        type: 'exhibitInfoPage/updateRewrite',
+        type: 'informExhibitInfoPage/updateRewrite',
       });
     }
   }
@@ -56,19 +56,19 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
     <FTitleText text={'展示版本'} type="form"/>
     <div style={{height: 15}}/>
     <FDropdownMenu
-      options={[...exhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}
+      options={[...informExhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}
       onChange={(value) => {
         dispatch<ChangeVersionAction>({
-          type: 'exhibitInfoPage/changeVersion',
+          type: 'informExhibitInfoPage/changeVersion',
           payload: value,
         });
       }}
     >
-      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={exhibitInfoPage.version}/><FSwap/></Space>
+      <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.version}/><FSwap/></Space>
     </FDropdownMenu>
 
     {
-      exhibitInfoPage.settingUnfold && (<>
+      informExhibitInfoPage.settingUnfold && (<>
         <div style={{height: 30}}/>
 
         <FTitleText text={'基础属性'} type="form"/>
@@ -77,7 +77,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           <table>
             <tbody>
             {
-              exhibitInfoPage.pBaseAttrs.map((pb) => (<tr key={pb.key}>
+              informExhibitInfoPage.pBaseAttrs.map((pb) => (<tr key={pb.key}>
                 <td><FContentText text={pb.key}/></td>
                 <td><FContentText text={pb.value}/></td>
               </tr>))
@@ -93,7 +93,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
 
         <div className={styles.options}>
           {
-            exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
+            informExhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
               <div className={styles.optionTitle}>
                 <FContentText text={pc.key}/>
                 {
@@ -108,14 +108,14 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                       <FTextButton
                         theme="primary"
                         onClick={() => {
-                          const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                          const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
                           if (!editing) {
                             return;
                           }
                           dispatch<ChangeAction>({
-                            type: 'exhibitInfoPage/change',
+                            type: 'informExhibitInfoPage/change',
                             payload: {
-                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                              pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
                                 ...pCustomAttr,
                                 isEditing: pCustomAttr.key === pc.key,
                               })),
@@ -130,15 +130,15 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                         style={{color: '#EE4040', cursor: 'pointer'}}
                         onClick={() => {
                           dispatch<ChangeAction>({
-                            type: 'exhibitInfoPage/change',
+                            type: 'informExhibitInfoPage/change',
                             payload: {
-                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                              pCustomAttrs: informExhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
                                 return pc.key !== pCustomAttr.key;
                               }),
                             },
                           });
                           dispatch<UpdateRewriteAction>({
-                            type: 'exhibitInfoPage/updateRewrite',
+                            type: 'informExhibitInfoPage/updateRewrite',
                           });
                         }}
                       />
@@ -164,7 +164,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                       onChangeCustomAttrs({key: pc.key, value: e.target.value});
                     }}
                     onBlur={() => dispatch<UpdateRewriteAction>({
-                      type: 'exhibitInfoPage/updateRewrite',
+                      type: 'informExhibitInfoPage/updateRewrite',
                     })}
                   />)
               }
@@ -177,7 +177,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           <FCircleButton
             theme="text"
             onClick={() => dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
+              type: 'informExhibitInfoPage/change',
               payload: {
                 pAddCustomModalVisible: true,
                 pAddCustomKey: '',
@@ -198,54 +198,54 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
     <div style={{display: 'flex', justifyContent: 'center'}}>
       <FTextButton onClick={() => {
         dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
+          type: 'informExhibitInfoPage/change',
           payload: {
-            settingUnfold: !exhibitInfoPage.settingUnfold,
+            settingUnfold: !informExhibitInfoPage.settingUnfold,
           },
         });
-      }}>{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextButton>
+      }}>{informExhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextButton>
     </div>
 
     <FModal
       title={'添加自定义选项'}
       width={560}
-      visible={exhibitInfoPage.pAddCustomModalVisible || !!exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
+      visible={informExhibitInfoPage.pAddCustomModalVisible || !!informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
       okText={'添加'}
       okButtonProps={{
         disabled:
-          !!exhibitInfoPage.pAddCustomKeyError || exhibitInfoPage.pAddCustomKey === ''
-          || !!exhibitInfoPage.pAddCustomValueError || exhibitInfoPage.pAddCustomValue === ''
-          || !!exhibitInfoPage.pAddCustomDescriptionError
+          !!informExhibitInfoPage.pAddCustomKeyError || informExhibitInfoPage.pAddCustomKey === ''
+          || !!informExhibitInfoPage.pAddCustomValueError || informExhibitInfoPage.pAddCustomValue === ''
+          || !!informExhibitInfoPage.pAddCustomDescriptionError
       }}
       onCancel={() => dispatch<ChangeAction>({
-        type: 'exhibitInfoPage/change',
+        type: 'informExhibitInfoPage/change',
         payload: {
           pAddCustomModalVisible: false,
-          pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+          pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
             ...pCustomAttr,
             isEditing: false,
           })),
         },
       })}
       onOk={() => {
-        const editing = exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
+        const editing = informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
         if (editing) {
           dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
+            type: 'informExhibitInfoPage/change',
             payload: {
-              pCustomAttrs: exhibitInfoPage.pCustomAttrs
+              pCustomAttrs: informExhibitInfoPage.pCustomAttrs
                 // .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
-                .map<ExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
+                .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
                   if (!pCustomAtt.isEditing) {
                     return pCustomAtt;
                   }
                   return {
                     ...pCustomAtt,
-                    key: exhibitInfoPage.pAddCustomKey,
-                    value: exhibitInfoPage.pAddCustomValue,
-                    newValue: exhibitInfoPage.pAddCustomValue,
+                    key: informExhibitInfoPage.pAddCustomKey,
+                    value: informExhibitInfoPage.pAddCustomValue,
+                    newValue: informExhibitInfoPage.pAddCustomValue,
                     newValueError: '',
-                    remark: exhibitInfoPage.pAddCustomDescription,
+                    remark: informExhibitInfoPage.pAddCustomDescription,
                     isEditing: false,
                   };
                 }),
@@ -253,17 +253,17 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           });
         } else {
           dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
+            type: 'informExhibitInfoPage/change',
             payload: {
               pCustomAttrs: [
-                ...exhibitInfoPage.pCustomAttrs
-                  .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey),
+                ...informExhibitInfoPage.pCustomAttrs
+                  .filter((pCustomAttr) => pCustomAttr.key !== informExhibitInfoPage.pAddCustomKey),
                 {
-                  key: exhibitInfoPage.pAddCustomKey,
-                  value: exhibitInfoPage.pAddCustomValue,
-                  newValue: exhibitInfoPage.pAddCustomValue,
+                  key: informExhibitInfoPage.pAddCustomKey,
+                  value: informExhibitInfoPage.pAddCustomValue,
+                  newValue: informExhibitInfoPage.pAddCustomValue,
                   newValueError: '',
-                  remark: exhibitInfoPage.pAddCustomDescription,
+                  remark: informExhibitInfoPage.pAddCustomDescription,
                   isEditing: false,
                 }
               ],
@@ -272,7 +272,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
           });
         }
         dispatch<UpdateRewriteAction>({
-          type: 'exhibitInfoPage/updateRewrite',
+          type: 'informExhibitInfoPage/updateRewrite',
         });
       }}
     >
@@ -285,11 +285,11 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div style={{height: 5}}/>
         <FInput
           className={styles.modalBodyInput}
-          value={exhibitInfoPage.pAddCustomKey}
-          errorText={exhibitInfoPage.pAddCustomKeyError}
+          value={informExhibitInfoPage.pAddCustomKey}
+          errorText={informExhibitInfoPage.pAddCustomKeyError}
           onChange={(e) => {
-            const baseKeys: string[] = exhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
-            const customKeys: string[] = exhibitInfoPage.pCustomAttrs
+            const baseKeys: string[] = informExhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
+            const customKeys: string[] = informExhibitInfoPage.pCustomAttrs
               .filter((pc) => !pc.isEditing)
               .map<string>((pc) => pc.key);
             const value: string = e.target.value;
@@ -300,7 +300,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
               pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
             }
             dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
+              type: 'informExhibitInfoPage/change',
               payload: {
                 pAddCustomKey: value,
                 pAddCustomKeyError: pAddCustomKeyError,
@@ -317,12 +317,12 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div style={{height: 5}}/>
         <FInput
           className={styles.modalBodyInput}
-          value={exhibitInfoPage.pAddCustomValue}
-          errorText={exhibitInfoPage.pAddCustomValueError}
+          value={informExhibitInfoPage.pAddCustomValue}
+          errorText={informExhibitInfoPage.pAddCustomValueError}
           onChange={(e) => {
             const value: string = e.target.value;
             dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
+              type: 'informExhibitInfoPage/change',
               payload: {
                 pAddCustomValue: value,
                 pAddCustomValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
@@ -337,12 +337,12 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div style={{height: 5}}/>
         <FInput
           className={styles.modalBodyInput}
-          value={exhibitInfoPage.pAddCustomDescription}
-          errorText={exhibitInfoPage.pAddCustomDescriptionError}
+          value={informExhibitInfoPage.pAddCustomDescription}
+          errorText={informExhibitInfoPage.pAddCustomDescriptionError}
           onChange={(e) => {
             const value: string = e.target.value;
             dispatch<ChangeAction>({
-              type: 'exhibitInfoPage/change',
+              type: 'informExhibitInfoPage/change',
               payload: {
                 pAddCustomDescription: value,
                 pAddCustomDescriptionError: (value.length > 50) ? '0~50个字符' : '',
@@ -355,6 +355,6 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
   </>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
-  exhibitInfoPage,
+export default connect(({informExhibitInfoPage}: ConnectState) => ({
+  informExhibitInfoPage,
 }))(Setting);

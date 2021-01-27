@@ -26,7 +26,7 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
       payload: {
-        nodeId: Number((match.params as any).id),
+        nodeId: Number(match.params.id),
       },
     });
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import FUploadImage from "@/components/FUploadImage";
-import {ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, UpdateBaseInfoAction} from "@/models/informExhibitInfoPage";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
@@ -10,24 +10,24 @@ import FInput from "@/components/FInput";
 import {FNormalButton, FTextButton} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
-import {ConnectState} from "@/models/connect";
+import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 
 interface InfoProps {
   dispatch: Dispatch;
-  exhibitInfoPage: ExhibitInfoPageModelState;
+  informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Info({dispatch, exhibitInfoPage}: InfoProps) {
+function Info({dispatch, informExhibitInfoPage}: InfoProps) {
   function onChangePInputTitle(value: string | null) {
     dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+      type: 'informExhibitInfoPage/change',
       payload: {
         pInputTitle: value,
       },
     });
   }
 
-  if (exhibitInfoPage.resourceType === 'theme') {
+  if (informExhibitInfoPage.resourceType === 'theme') {
     return null;
   }
 
@@ -37,7 +37,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
 
     <FUploadImage
       onUploadSuccess={(url: string) => dispatch<UpdateBaseInfoAction>({
-        type: 'exhibitInfoPage/updateBaseInfo',
+        type: 'informExhibitInfoPage/updateBaseInfo',
         payload: {
           pCover: url,
         },
@@ -45,7 +45,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
       <div className={styles.cover}>
         <img
           alt=""
-          src={exhibitInfoPage.pCover || imgSrc}
+          src={informExhibitInfoPage.pCover || imgSrc}
         />
         <div>
           <FEdit style={{fontSize: 32}}/>
@@ -60,15 +60,15 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
     <FTitleText text={'展品标题'} type="form"/>
     <div style={{height: 15}}/>
     {
-      exhibitInfoPage.pInputTitle === null
+      informExhibitInfoPage.pInputTitle === null
         ? (<Space size={10}>
-          <FContentText text={exhibitInfoPage.pTitle}/>
-          <a onClick={() => onChangePInputTitle(exhibitInfoPage.pTitle)}><FEdit/></a>
+          <FContentText text={informExhibitInfoPage.pTitle}/>
+          <a onClick={() => onChangePInputTitle(informExhibitInfoPage.pTitle)}><FEdit/></a>
         </Space>)
         : (<>
           <FInput
             className={styles.Input}
-            value={exhibitInfoPage.pInputTitle || ''}
+            value={informExhibitInfoPage.pInputTitle || ''}
             onChange={(e) => onChangePInputTitle(e.target.value)}
           />
           <div style={{height: 10}}/>
@@ -82,9 +82,9 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
               size="small"
               onClick={() => {
                 dispatch<UpdateBaseInfoAction>({
-                  type: 'exhibitInfoPage/updateBaseInfo',
+                  type: 'informExhibitInfoPage/updateBaseInfo',
                   payload: {
-                    pTitle: exhibitInfoPage.pInputTitle || '',
+                    pTitle: informExhibitInfoPage.pInputTitle || '',
                   },
                 });
                 onChangePInputTitle(null);
@@ -99,10 +99,10 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
     <FTitleText text={'展品标签'} type="form"/>
     <div style={{height: 15}}/>
     <FLabelEditor
-      values={exhibitInfoPage.pTags}
+      values={informExhibitInfoPage.pTags}
       onChange={(value) => {
         dispatch<UpdateBaseInfoAction>({
-          type: 'exhibitInfoPage/updateBaseInfo',
+          type: 'informExhibitInfoPage/updateBaseInfo',
           payload: {
             pTags: value,
           },
@@ -113,6 +113,6 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
   </>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
-  exhibitInfoPage,
+export default connect(({informExhibitInfoPage}: ConnectState) => ({
+  informExhibitInfoPage,
 }))(Info);
