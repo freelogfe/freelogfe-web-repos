@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from "@/components/FText";
 import {Space} from "antd";
-import {FImport, FExport, FDelete, FCode, FWarning} from "@/components/FIcons";
+import {FImport, FExport, FDelete, FCode, FWarning, FExit} from "@/components/FIcons";
 import TypesCaption from "../components/TypesCaption";
 import {
   AttrRule,
@@ -19,85 +19,173 @@ import {
 import FCodemirror from "@/components/FCodemirror";
 import {FNormalButton} from "@/components/FButton";
 import {RouteComponentProps} from "react-router";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+import {ChangeAction, CreateRulesAction, FetchRulesAction} from "@/models/informalNodeManagerPage";
+
+const {compile} = require('@freelog/nmr_translator');
 
 interface MappingRuleProps {
+  dispatch: Dispatch;
 
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function MappingRule({}: MappingRuleProps) {
+function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
-  if (false) {
-    return (<>
-      <Header/>
-      <div className={styles.codeMirrorBody}>
-        <div>
-          <FCodemirror
-            value={''}
-            onChange={(value) => {
-              // onChangeTextInput(value);
-            }}
-          />
-          <div style={{height: 15}}/>
-          <FNormalButton>校验并保存</FNormalButton>
-        </div>
-      </div>
-    </>);
-  }
+  React.useEffect(() => {
+    dispatch<FetchRulesAction>({
+      type: 'informalNodeManagerPage/fetchRules'
+    });
+  }, []);
 
   return (<>
-    <Header/>
-    <div className={styles.ruleListBody}>
-      <Space className={styles.ruleList} direction="vertical">
-        <div className={styles.ruleCard}>
-          <div className={styles.ruleCardHeader}>
-            <AddRule/>
-            <FWarning/>
-          </div>
-          <div className={styles.ruleCardBody}>
-            <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
-              <div className={styles.ruleCardBodyListItem}>
-                <ReplaceRule/>
-                <FWarning/>
-              </div>
-            </Space>
-          </div>
-        </div>
+    <div className={styles.header}>
+      <div className={styles.headerLeft}>
+        <FTitleText text={'展品管理'}/>
+        <div style={{width: 10}}/>
+        <TypesCaption/>
+        <div style={{width: 50}}/>
+        <Space size={30}>
+          <a><FImport/> <span>导入</span></a>
+          <a><FExport/> <span>导入</span></a>
+          <a style={{}}><FDelete/> <span>删除</span></a>
+        </Space>
+      </div>
 
-        <div className={styles.ruleCard}>
-          <div className={styles.ruleCardHeader}>
-            <AddRule/>
-            <FWarning/>
+      {
+        informalNodeManagerPage.isCodeEditing
+          ? (<a onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'informalNodeManagerPage/change',
+              payload: {
+                isCodeEditing: false,
+              },
+            });
+          }}><FExit/> 退出代码模式</a>)
+          : (<a onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'informalNodeManagerPage/change',
+              payload: {
+                isCodeEditing: true,
+              },
+            });
+          }}><FCode/> 进入代码模式</a>)
+      }
+
+    </div>
+
+    {
+      informalNodeManagerPage.isCodeEditing
+        ? (<div className={styles.codeMirrorBody}>
+          <div>
+            <FCodemirror
+              value={informalNodeManagerPage.codeInput}
+              onChange={(value) => {
+                dispatch<ChangeAction>({
+                  type: 'informalNodeManagerPage/change',
+                  payload: {
+                    codeInput: value,
+                  },
+                });
+              }}
+            />
+            <div style={{height: 15}}/>
+            <FNormalButton onClick={() => {
+              const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
+              console.log(errors, '!@!@#$@#$123423');
+              console.log(errorObjects, '!@!@#$@#$890079');
+              if (errors.length > 0) {
+                return dispatch<ChangeAction>({
+                  type: 'informalNodeManagerPage/change',
+                  payload: {
+                    codeCompileErrors: errorObjects,
+                  },
+                });
+              }
+              dispatch<CreateRulesAction>({
+                type: 'informalNodeManagerPage/createRules',
+              });
+            }}>校验并保存</FNormalButton>
+            {
+              informalNodeManagerPage.codeCompileErrors && (<div className={styles.codeCompileErrors}>
+                <div style={{height: 20}}/>
+                <div className={styles.errorTitle}>编译错误，请检查更正后提交。</div>
+                <div style={{height: 20}}/>
+                <Space className={styles.errorList} size={5} direction="vertical">
+                  {
+                    informalNodeManagerPage.codeCompileErrors.map((cme, index) => {
+                      return (<div key={index} className={styles.errorListItem}>
+                        <div>•</div>
+                        <div style={{width: 5}}/>
+                        <div>
+                          {
+                            cme.line >= 0 && (<div>
+                              <div>规则语句：</div>
+                              <div>{`${cme.line}:${cme.charPositionInLine} ${cme.offendingSymbol}`}</div>
+                            </div>)
+                          }
+
+                          <div>
+                            <div>错误提示：</div>
+                            <div>{cme.msg}</div>
+                          </div>
+                        </div>
+                      </div>);
+                    })
+                  }
+                </Space>
+              </div>)
+            }
+
           </div>
-          <div className={styles.ruleCardBody}>
-            <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
-              <div className={styles.ruleCardBodyListItem}>
-                <ReplaceRule/>
+        </div>)
+        : (<div className={styles.ruleListBody}>
+          <Space className={styles.ruleList} direction="vertical">
+            <div className={styles.ruleCard}>
+              <div className={styles.ruleCardHeader}>
+                <AddRule/>
                 <FWarning/>
               </div>
-            </Space>
-          </div>
-        </div>
-      </Space>
-    </div>
+              <div className={styles.ruleCardBody}>
+                <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
+                  <div className={styles.ruleCardBodyListItem}>
+                    <ReplaceRule/>
+                    <FWarning/>
+                  </div>
+                </Space>
+              </div>
+            </div>
+
+            <div className={styles.ruleCard}>
+              <div className={styles.ruleCardHeader}>
+                <AddRule/>
+                <FWarning/>
+              </div>
+              <div className={styles.ruleCardBody}>
+                <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
+                  <div className={styles.ruleCardBodyListItem}>
+                    <ReplaceRule/>
+                    <FWarning/>
+                  </div>
+                </Space>
+              </div>
+            </div>
+          </Space>
+        </div>)
+    }
+
   </>);
 }
 
-export default MappingRule;
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
+}))(MappingRule);
 
-function Header() {
-  return (<div className={styles.header}>
-    <div className={styles.headerLeft}>
-      <FTitleText text={'展品管理'}/>
-      <div style={{width: 10}}/>
-      <TypesCaption/>
-      <div style={{width: 50}}/>
-      <Space size={30}>
-        <a><FImport/> <span>导入</span></a>
-        <a><FExport/> <span>导入</span></a>
-        <a style={{}}><FDelete/> <span>删除</span></a>
-      </Space>
-    </div>
-
-    <a><FCode/> 进入代码模式</a>
-  </div>);
-}
+// interface HeaderProps {
+//   onClickInCode?(): void;
+// }
+//
+// function Header({onClickInCode}: HeaderProps) {
+//   return ();
+// }

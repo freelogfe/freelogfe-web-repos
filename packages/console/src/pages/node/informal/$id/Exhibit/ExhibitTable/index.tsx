@@ -7,7 +7,7 @@ import {ColumnsType} from "antd/lib/table/interface";
 import {FContentText, FTitleText} from "@/components/FText";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {router} from "umi";
-import {informExhibitManagement} from "@/utils/path-assembler";
+import {informExhibitManagement, resourceDetails, resourceInfo} from "@/utils/path-assembler";
 import {Popconfirm, Space} from "antd";
 import FSwitch from "@/components/FSwitch";
 import FTooltip from "@/components/FTooltip";
@@ -53,7 +53,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
         return (<div className={styles.name}>
           <FTitleText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
-            text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展这里是展品名称这里是名称名称这里是展'}
+            text={record.name}
             type="h4"
             singleRow
           />
@@ -62,7 +62,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             <div>
               <FContentText
                 type="additional2"
-                text={'这里是展品标题这里是展品标题这里是展品标题这里这里是展品标题这'}
+                text={record.title}
                 singleRow
               />
             </div>
@@ -85,6 +85,8 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
         >
           <Actions
             onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
+            onSearch={() => router.push(resourceDetails({resourceID: record.resourceId}))}
+            onDelete={() => null}
           />
         </div>);
       },
@@ -94,9 +96,9 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       dataIndex: 'version',
       key: 'version',
       width: 123,
-      render() {
+      render(text: any, record) {
         return (<div style={{width: 123}}>
-          <FContentText text={'1.0.10'}/>
+          <FContentText text={record.version}/>
         </div>);
       },
     },
@@ -105,12 +107,12 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       dataIndex: 'online',
       key: 'online',
       width: 65,
-      render() {
+      render(text: any, record) {
         return (<div style={{width: 65}}>
           <Space size={15}>
             <FSwitch
               disabled={false}
-              // checked={record.isOnline}
+              checked={record.isOnline}
               onChange={(value) => {
                 // dispatch<OnOnlineOrOfflineAction>({
                 //   type: 'nodeManagerPage/onOnlineOrOffline',

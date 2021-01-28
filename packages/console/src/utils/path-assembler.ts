@@ -1,3 +1,74 @@
+// 市场
+interface MarketParamsType {
+  // nodeID: number;
+}
+
+export function market({}: MarketParamsType = {}): string {
+  return `/market`;
+}
+
+// 资源详情
+interface ResourceDetailsParamsType {
+  resourceID: string;
+}
+
+export function resourceDetails({resourceID}: ResourceDetailsParamsType): string {
+  return `/resource/${resourceID}`;
+}
+
+// 我的资源
+interface MyResourcesParamsType {
+}
+
+export function myResources({}: MyResourcesParamsType = {}): string {
+  return `/resource/list`;
+}
+
+// 我的收藏
+interface MyCollectsParamsType {
+}
+
+export function myCollects({}: MyCollectsParamsType = {}): string {
+  return `/resource/collect`;
+}
+
+// 资源信息
+interface ResourceInfoParamsType {
+  resourceID: string;
+}
+
+export function resourceInfo({resourceID}: ResourceInfoParamsType): string {
+  return `/resource/${resourceID}/info`;
+}
+
+// 资源授权
+interface ResourceAuthParamsType {
+  resourceID: string;
+}
+
+export function resourceAuth({resourceID}: ResourceAuthParamsType): string {
+  return `/resource/${resourceID}/auth`;
+}
+
+// 资源创建
+interface ResourceCreateVersionParamsType {
+  resourceID: string;
+}
+
+export function resourceCreateVersion({resourceID}: ResourceCreateVersionParamsType): string {
+  return `/resource/${resourceID}/version/creator`;
+}
+
+// 资源版本信息
+interface ResourceVersionParamsType {
+  resourceID: string;
+  version: string;
+}
+
+export function resourceVersion({resourceID, version}: ResourceVersionParamsType): string {
+  return `/resource/${resourceID}/version/${version}`;
+}
+
 // 节点创建
 interface NodeCreatorParamsType {
   // nodeID: number;

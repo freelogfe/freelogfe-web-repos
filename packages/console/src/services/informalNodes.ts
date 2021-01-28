@@ -18,6 +18,16 @@ export function testResources({nodeId, ...params}: TestResourcesParamsType) {
   });
 }
 
+// 创建节点测试规则
+export interface CreateRulesParamsType {
+  nodeId: number;
+  testRuleText: string;
+}
+
+export function createRules({nodeId, testRuleText}: CreateRulesParamsType) {
+  return request.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
+}
+
 // 查看节点当前测试规则
 export interface TestNodeRulesParamsType {
   nodeId: number;

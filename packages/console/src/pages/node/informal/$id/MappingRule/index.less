@@ -60,5 +60,33 @@
     padding: 20px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border-radius: 6px;
+
+    .codeCompileErrors {
+      .errorTitle {
+        color: @f-error-color1;
+      }
+
+      .errorList {
+        .errorListItem {
+          display: flex;
+          color: #666;
+          font-size: 12px;
+          line-height: 18px;
+
+          & > div:first-child {
+            font-size: 18px;
+          }
+
+          & > div:last-child {
+            display: flex;
+            flex-direction: column;
+
+            & > div {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
   }
 }

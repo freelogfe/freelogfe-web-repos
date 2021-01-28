@@ -3,9 +3,10 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {
+  createRules, CreateRulesParamsType,
   rulesRematch,
   RulesRematchParamsType,
-  testNodeRules,
+  testNodeRules, TestNodeRulesParamsType,
   testResources,
   TestResourcesParamsType
 } from "@/services/informalNodes";
@@ -35,6 +36,16 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
   themeList: { id: string; }[];
+
+  isCodeEditing: boolean;
+  codeInput: string;
+  codeCompileErrors: null | {
+    charPositionInLine: number;
+    line: number;
+    msg: string;
+    offendingSymbol: string;
+  }[];
+
 }> & {
   exhibitList: {
     key: string;
@@ -68,6 +79,14 @@ export interface FetchExhibitListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchExhibitList';
 }
 
+export interface FetchRulesAction extends AnyAction {
+  type: 'informalNodeManagerPage/fetchRules';
+}
+
+export interface CreateRulesAction extends AnyAction {
+  type: 'informalNodeManagerPage/createRules';
+}
+
 interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
   state: InformalNodeManagerPageModelState;
@@ -75,6 +94,8 @@ interface InformalNodeManagerPageModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
+    fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
+    createRules: (action: CreateRulesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformalNodeManagerPageModelState, ChangeAction>;
@@ -90,7 +111,7 @@ const initStates: InformalNodeManagerPageModelState = {
   nodeName: '',
   nodeUrl: '',
   testNodeUrl: '',
-  showPage: 'exhibit',
+  showPage: 'mappingRule',
 
   addExhibitDrawerVisible: false,
 
@@ -126,6 +147,10 @@ const initStates: InformalNodeManagerPageModelState = {
     {id: '4'},
     {id: '5'},
   ],
+
+  isCodeEditing: true,
+  codeInput: '',
+  codeCompileErrors: null,
 };
 
 const Model: InformalNodeManagerPageModelType = {
@@ -196,6 +221,46 @@ const Model: InformalNodeManagerPageModelType = {
         }
       })
     },
+    * createRules({}: CreateRulesAction, {select, call}: EffectsCommandMap) {
+
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const params: CreateRulesParamsType = {
+        nodeId: informalNodeManagerPage.nodeID,
+        testRuleText: informalNodeManagerPage.codeInput,
+      };
+      const {data} = yield call(createRules, params);
+
+      const params1: RuleMatchParams = {
+        nodeID: informalNodeManagerPage.nodeID,
+      };
+      console.log(data, 'DDDDDDAAAAasdfcxvas');
+      const bool: boolean = yield call(ruleMatch, params1);
+      console.log(bool, 'bool123423');
+
+    },
+    * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const params: TestNodeRulesParamsType = {
+        nodeId: informalNodeManagerPage.nodeID,
+      };
+
+      const {data} = yield call(testNodeRules, params);
+      console.log(data, '!@#$@#DFASEF');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          codeInput: data.ruleText,
+        },
+      });
+
+    },
   },
   reducers: {
     change(state, {payload}) {
@@ -235,7 +300,7 @@ async function ruleMatch({nodeID}: RuleMatchParams): Promise<boolean> {
     }
   }
 
-  function sleep(ms: number = 500) {
+  function sleep(ms: number = 200) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve()
