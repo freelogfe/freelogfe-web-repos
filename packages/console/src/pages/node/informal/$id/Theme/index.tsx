@@ -4,7 +4,7 @@ import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import {FTextButton} from "@/components/FButton";
-import {ChangeAction, InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchThemeListAction, InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
@@ -14,6 +14,8 @@ import {Dispatch, connect} from 'dva';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
+import FLoadingTip from "@/components/FLoadingTip";
+import {informExhibitManagement} from "@/utils/path-assembler";
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -23,7 +25,17 @@ interface ThemeProps {
 
 function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
-  if (false) {
+  React.useEffect(() => {
+    dispatch<FetchThemeListAction>({
+      type: 'informalNodeManagerPage/fetchThemeList',
+    });
+  }, []);
+
+  if (informalNodeManagerPage.themeListIsLoading) {
+    return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
+  }
+
+  if (informalNodeManagerPage.themeList.length === 0) {
     return (<FNoDataTip
       height={'calc(100vh - 94px)'}
       tipText={'当前节点没有添加主题展品'}
@@ -56,10 +68,10 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           informalNodeManagerPage.themeList.map((t) => {
             return (<div key={t.id} className={styles.item}>
               <div className={styles.cover}>
-                <img src={imgSrc} alt=""/>
+                <img src={t.cover || imgSrc} alt=""/>
                 <div className={styles.coverLabel}>
                   {
-                    false
+                    t.isOnline
                       ? (<label className={styles.activated}>已激活</label>)
                       : (<>
                         <label className={styles.nonActivated}>未激活</label>
@@ -70,12 +82,14 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                 </div>
                 <div className={styles.coverFooter}>
                   {
-                    false
+                    t.isOnline
                       ? (<span onClick={() => {
+                        router.push(informExhibitManagement({exhibitID: t.id}));
                       }}>编辑</span>)
                       : (<div>
                         <div style={{width: 1}}/>
                         <span onClick={() => {
+                          router.push(informExhibitManagement({exhibitID: t.id}));
                         }}>编辑</span>
                         <span>|</span>
                         <span onClick={() => {
@@ -83,18 +97,20 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                         <div style={{width: 1}}/>
                       </div>)
                   }
-
                 </div>
               </div>
               <div style={{height: 12}}/>
               <div className={styles.itemTitle}>
                 <FIdentityTypeBadge/>
                 <div style={{width: 5}}/>
-                <FTitleText type="h5" text={'markdown阅读器'} singleRow/>
+                <FTitleText type="h5" text={t.name} singleRow/>
               </div>
               <div style={{height: 6}}/>
               <div className={styles.itemVersion}>
-                <FContentText text={'展示版本 1.0.10'} type="additional1"/>
+                <FContentText
+                  text={`展示版本 ${t.version}`}
+                  type="additional1"
+                />
               </div>
               <div style={{height: 10}}/>
               <div className={styles.itemBar}>

@@ -86,7 +86,9 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
           <Actions
             onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
             onSearch={() => router.push(resourceDetails({resourceID: record.resourceId}))}
-            onDelete={() => null}
+            onDelete={!!record.associatedExhibitID ? undefined : () => {
+
+            }}
           />
         </div>);
       },
@@ -139,7 +141,12 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
 
   return (<FTable
     className={styles.table}
-    dataSource={informalNodeManagerPage.exhibitList}
+    dataSource={informalNodeManagerPage.exhibitList.map((el) => {
+      return {
+        key: el.id,
+        ...el,
+      };
+    })}
     columns={columns}
     rowClassName={styles.rowClassName}
   />);
@@ -162,31 +169,39 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
 
   return (<div ref={(ref) => refDom = ref}>
     <Space size={25}>
-      <FTextButton
-        theme="primary"
-        onClick={() => onEdit && onEdit()}
-      >
-        <FEdit/>
-      </FTextButton>
-      <FTextButton
-        theme="primary"
-        onClick={() => onSearch && onSearch()}
-      >
-        <FFileSearch/>
-      </FTextButton>
+      {
+        onEdit && (<FTextButton
+          theme="primary"
+          onClick={() => onEdit()}
+        >
+          <FEdit/>
+        </FTextButton>)
+      }
 
-      <Popconfirm
-        title={'确定删除吗？'}
-        // style={{width: 200}}
-        overlayStyle={{width: 150}}
-        trigger="hover"
-        getPopupContainer={() => refDom}
-        onConfirm={() => onDelete && onDelete()}
-      >
-        <FTextButton
-          className={styles.Delete}
-        ><FDelete/></FTextButton>
-      </Popconfirm>
+      {
+        onSearch && (<FTextButton
+          theme="primary"
+          onClick={() => onSearch()}
+        >
+          <FFileSearch/>
+        </FTextButton>)
+      }
+
+      {
+        onDelete && (<Popconfirm
+          title={'确定删除吗？'}
+          // style={{width: 200}}
+          overlayStyle={{width: 150}}
+          trigger="hover"
+          getPopupContainer={() => refDom}
+          onConfirm={() => onDelete()}
+        >
+          <FTextButton
+            className={styles.Delete}
+          ><FDelete/></FTextButton>
+        </Popconfirm>)
+      }
+
     </Space>
   </div>);
 }

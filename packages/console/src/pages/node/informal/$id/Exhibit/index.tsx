@@ -22,6 +22,7 @@ import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
 import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import {RouteComponentProps} from "react-router";
+import FLoadingTip from "@/components/FLoadingTip";
 
 const list: {
   id: string;
@@ -71,7 +72,11 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
     });
   }
 
-  if (false) {
+  if (informalNodeManagerPage.exhibitListIsLoading) {
+    return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
+  }
+
+  if (informalNodeManagerPage.exhibitList.length === 0) {
     return (<FNoDataTip
       height={'calc(100vh - 94px)'}
       tipText={'当前测试节点没有添加展品'}

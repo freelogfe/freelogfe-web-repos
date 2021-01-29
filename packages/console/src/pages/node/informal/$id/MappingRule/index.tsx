@@ -171,6 +171,15 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               </div>)
             }
 
+            {
+              informalNodeManagerPage.codeSaveSuccess && (<>
+                <div style={{height: 20}}/>
+                <div className={styles.codeSaveSuccess}>
+                  校验并保存成功。
+                </div>
+              </>)
+            }
+
           </div>
         </div>)
         : (<div className={styles.ruleListBody}>
