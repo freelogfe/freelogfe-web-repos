@@ -39,13 +39,17 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   isCodeEditing: boolean;
   codeInput: string;
+  codeIsDirty: boolean;
+  codeIsChecking: boolean;
   codeCompileErrors: null | {
     charPositionInLine: number;
     line: number;
     msg: string;
     offendingSymbol: string;
   }[];
-
+  codeExecutionError: null | {
+    msg: string;
+  }[];
 }> & {
   exhibitList: {
     key: string;
@@ -83,8 +87,8 @@ export interface FetchRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchRules';
 }
 
-export interface CreateRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/createRules';
+export interface SaveRulesAction extends AnyAction {
+  type: 'informalNodeManagerPage/saveRules';
 }
 
 interface InformalNodeManagerPageModelType {
@@ -95,7 +99,7 @@ interface InformalNodeManagerPageModelType {
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
-    createRules: (action: CreateRulesAction, effects: EffectsCommandMap) => void;
+    saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformalNodeManagerPageModelState, ChangeAction>;
@@ -150,7 +154,10 @@ const initStates: InformalNodeManagerPageModelState = {
 
   isCodeEditing: true,
   codeInput: '',
+  codeIsDirty: false,
+  codeIsChecking: false,
   codeCompileErrors: null,
+  codeExecutionError: null,
 };
 
 const Model: InformalNodeManagerPageModelType = {
@@ -186,10 +193,15 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const params1: RuleMatchParams = {
+      const params2: RulesRematchParamsType = {
+        nodeId: informalNodeManagerPage.nodeID,
+      };
+      yield call(rulesRematch, params2);
+
+      const params1: ruleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
       };
-      const bool: boolean = yield call(ruleMatch, params1);
+      yield call(ruleMatchStatus, params1);
       // console.log(bool, 'bool1234');
 
       const params: TestResourcesParamsType = {
@@ -199,7 +211,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      console.log(data, 'DDD@@@@@');
+      // console.log(data, 'DDD@@@@@');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -221,11 +233,19 @@ const Model: InformalNodeManagerPageModelType = {
         }
       })
     },
-    * createRules({}: CreateRulesAction, {select, call}: EffectsCommandMap) {
-
+    * saveRules({}: SaveRulesAction, {select, call, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          codeIsChecking: true,
+          codeCompileErrors: null,
+          codeExecutionError: null,
+        },
+      });
 
       const params: CreateRulesParamsType = {
         nodeId: informalNodeManagerPage.nodeID,
@@ -233,13 +253,27 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const {data} = yield call(createRules, params);
 
-      const params1: RuleMatchParams = {
+      const params1: ruleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
       };
-      console.log(data, 'DDDDDDAAAAasdfcxvas');
-      const bool: boolean = yield call(ruleMatch, params1);
-      console.log(bool, 'bool123423');
-
+      const {data: data1} = yield call(ruleMatchStatus, params1);
+      //codeExecutionError
+      console.log(data1, 'data11234');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          codeIsChecking: false,
+          codeExecutionError: data1.testRules.filter((tr: any) => {
+            return tr.matchErrors.length > 0;
+          }).map((tr: any) => {
+            return tr.matchErrors.map((me: string) => {
+              return {
+                msg: me,
+              };
+            });
+          }).flat(),
+        },
+      });
     },
     * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
@@ -279,16 +313,14 @@ const Model: InformalNodeManagerPageModelType = {
 
 export default Model;
 
-interface RuleMatchParams {
+interface ruleMatchStatusParams {
   nodeID: number;
 }
 
-async function ruleMatch({nodeID}: RuleMatchParams): Promise<boolean> {
+async function ruleMatchStatus({nodeID}: ruleMatchStatusParams): Promise<any> {
   const params: RulesRematchParamsType = {
     nodeId: nodeID,
   };
-
-  await rulesRematch(params);
 
   while (true) {
     const response = await testNodeRules({nodeId: nodeID});
@@ -296,7 +328,10 @@ async function ruleMatch({nodeID}: RuleMatchParams): Promise<boolean> {
     if (response.data.status === 1) {
       await sleep();
     } else {
-      return response.data.status === 3;
+      if (response.data.status === 2) {
+        throw new Error('匹配失败');
+      }
+      return response;
     }
   }
 

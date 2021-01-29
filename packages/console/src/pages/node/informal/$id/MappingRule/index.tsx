@@ -21,7 +21,7 @@ import {FNormalButton} from "@/components/FButton";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {ChangeAction, CreateRulesAction, FetchRulesAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -86,27 +86,36 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   type: 'informalNodeManagerPage/change',
                   payload: {
                     codeInput: value,
+                    codeIsDirty: true,
                   },
                 });
               }}
             />
             <div style={{height: 15}}/>
-            <FNormalButton onClick={() => {
-              const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
-              console.log(errors, '!@!@#$@#$123423');
-              console.log(errorObjects, '!@!@#$@#$890079');
-              if (errors.length > 0) {
-                return dispatch<ChangeAction>({
+            <FNormalButton
+              loading={informalNodeManagerPage.codeIsChecking}
+              disabled={!informalNodeManagerPage.codeIsDirty && !informalNodeManagerPage.codeIsChecking}
+              onClick={() => {
+                dispatch<ChangeAction>({
                   type: 'informalNodeManagerPage/change',
                   payload: {
-                    codeCompileErrors: errorObjects,
+                    codeIsDirty: false,
                   },
                 });
-              }
-              dispatch<CreateRulesAction>({
-                type: 'informalNodeManagerPage/createRules',
-              });
-            }}>校验并保存</FNormalButton>
+                const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
+                if (errorObjects.length > 0) {
+                  return dispatch<ChangeAction>({
+                    type: 'informalNodeManagerPage/change',
+                    payload: {
+                      codeCompileErrors: errorObjects,
+                    },
+                  });
+                }
+                dispatch<SaveRulesAction>({
+                  type: 'informalNodeManagerPage/saveRules',
+                });
+              }}
+            >{informalNodeManagerPage.codeIsChecking ? '校验中' : '校验并保存'}</FNormalButton>
             {
               informalNodeManagerPage.codeCompileErrors && (<div className={styles.codeCompileErrors}>
                 <div style={{height: 20}}/>
@@ -120,12 +129,36 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         <div style={{width: 5}}/>
                         <div>
                           {
-                            cme.line >= 0 && (<div>
+                            !!cme.offendingSymbol && (<div>
                               <div>规则语句：</div>
                               <div>{`${cme.line}:${cme.charPositionInLine} ${cme.offendingSymbol}`}</div>
                             </div>)
                           }
 
+                          <div>
+                            <div>错误提示：</div>
+                            <div>{cme.msg}</div>
+                          </div>
+                        </div>
+                      </div>);
+                    })
+                  }
+                </Space>
+              </div>)
+            }
+
+            {
+              informalNodeManagerPage.codeExecutionError && (<div className={styles.codeExecutionError}>
+                <div style={{height: 20}}/>
+                <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
+                <div style={{height: 20}}/>
+                <Space className={styles.errorList} size={5} direction="vertical">
+                  {
+                    informalNodeManagerPage.codeExecutionError.map((cme, index) => {
+                      return (<div key={index} className={styles.errorListItem}>
+                        <div>•</div>
+                        <div style={{width: 5}}/>
+                        <div>
                           <div>
                             <div>错误提示：</div>
                             <div>{cme.msg}</div>
