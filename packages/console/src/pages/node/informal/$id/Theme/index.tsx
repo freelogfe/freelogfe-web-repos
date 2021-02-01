@@ -66,7 +66,10 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
       <div className={styles.list}>
         {
           informalNodeManagerPage.themeList.map((t) => {
-            return (<div key={t.id} className={styles.item}>
+            return (<div
+              key={t.id}
+              className={styles.item}
+            >
               <div className={styles.cover}>
                 <img src={t.cover || imgSrc} alt=""/>
                 <div className={styles.coverLabel}>
@@ -103,7 +106,11 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               <div className={styles.itemTitle}>
                 <FIdentityTypeBadge/>
                 <div style={{width: 5}}/>
-                <FTitleText type="h5" text={t.name} singleRow/>
+                <FTitleText
+                  type="h5"
+                  text={t.name}
+                  singleRow
+                />
               </div>
               <div style={{height: 6}}/>
               <div className={styles.itemVersion}>
@@ -119,7 +126,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             </div>);
           })
         }
-
       </div>
     </div>
   </>);

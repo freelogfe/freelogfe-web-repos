@@ -186,13 +186,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
           <Space className={styles.ruleList} direction="vertical">
             <div className={styles.ruleCard}>
               <div className={styles.ruleCardHeader}>
-                <AddRule/>
+                {/*<AddRule source={{}}/>*/}
                 <FWarning/>
               </div>
               <div className={styles.ruleCardBody}>
                 <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
                   <div className={styles.ruleCardBodyListItem}>
-                    <ReplaceRule/>
+                    {/*<ReplaceRule/>*/}
                     <FWarning/>
                   </div>
                 </Space>
@@ -201,13 +201,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
             <div className={styles.ruleCard}>
               <div className={styles.ruleCardHeader}>
-                <AddRule/>
+                {/*<AddRule/>*/}
                 <FWarning/>
               </div>
               <div className={styles.ruleCardBody}>
                 <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
                   <div className={styles.ruleCardBodyListItem}>
-                    <ReplaceRule/>
+                    {/*<ReplaceRule/>*/}
                     <FWarning/>
                   </div>
                 </Space>

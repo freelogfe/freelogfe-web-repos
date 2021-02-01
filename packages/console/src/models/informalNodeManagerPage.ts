@@ -92,10 +92,6 @@ export interface FetchInfoAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchInfo';
 }
 
-// export interface RematchRulesAction extends AnyAction {
-//   type: 'informalNodeManagerPage/rematchRules' | 'rematchRules';
-// }
-
 export interface FetchExhibitListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchExhibitList';
 }
@@ -138,7 +134,7 @@ const initStates: InformalNodeManagerPageModelState = {
   nodeName: '',
   nodeUrl: '',
   testNodeUrl: '',
-  showPage: 'theme',
+  showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
 
@@ -208,21 +204,6 @@ const Model: InformalNodeManagerPageModelType = {
         payload: initStates,
       });
     },
-    // * rematchRules({}: RematchRulesAction, {select, call}: EffectsCommandMap) {
-    //   const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
-    //     informalNodeManagerPage,
-    //   }));
-    //
-    //   const params2: RulesRematchParamsType = {
-    //     nodeId: informalNodeManagerPage.nodeID,
-    //   };
-    //   yield call(rulesRematch, params2);
-    //
-    //   const params1: ruleMatchStatusParams = {
-    //     nodeID: informalNodeManagerPage.nodeID,
-    //   };
-    //   yield call(ruleMatchStatus, params1);
-    // },
     * fetchExhibitList({}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
 
       yield put<ChangeAction>({
@@ -325,6 +306,7 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
+
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -334,7 +316,6 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testNodeRules, params);
-      // console.log(data, '!@#$@#DFASEF');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -370,17 +351,19 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const {data: data1} = yield call(ruleMatchStatus, params1);
 
-      const codeExecutionError = data1.testRules.filter((tr: any) => {
-        return tr.matchErrors.length > 0;
-      }).map((tr: any) => {
-        return tr.matchErrors.map((me: string) => {
-          return {
-            msg: me,
-          };
-        });
-      }).flat();
+      const codeExecutionError = data1.testRules
+        .filter((tr: any) => {
+          return tr.matchErrors.length > 0;
+        })
+        .map((tr: any) => {
+          return tr.matchErrors.map((me: string) => {
+            return {
+              msg: me,
+            };
+          });
+        })
+        .flat();
 
-      console.log(codeExecutionError, 'codeExecutionError109234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

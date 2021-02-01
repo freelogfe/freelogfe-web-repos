@@ -251,7 +251,7 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const {data: data1} = yield call(info, params1);
-      console.log(data1, '##@#$@#$@#');
+      // console.log(data1, '##@#$@#$@#');
 
       yield put<ChangeAction>({
         type: 'change',

@@ -49,7 +49,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       title: (<FContentText text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
       dataIndex: 'name',
       key: 'name',
-      render(text, record) {
+      render(text, record, index) {
         return (<div className={styles.name}>
           <FTitleText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
@@ -68,7 +68,126 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             </div>
           </div>
           <div>
-            <MappingRule/>
+            {
+              index === 0 && (<MappingRule
+                add={{
+                  exhibit: 'freelog白皮书',
+                  source: {
+                    type: 'resource',
+                    name: 'Stefan/freelog白皮书',
+                  }
+                }}
+                version={'1.0.0'}
+                labels={['label1', 'label2', 'label3']}
+                online={true}
+                title={'标题1'}
+                cover={'png'}
+                replaces={[{
+                  replaced: 'Stefan/freelog平台设计规范目录',
+                  replacer: {
+                    type: 'object',
+                    name: 'bucket_3/mock_resource_3'
+                  },
+                  scope: [
+                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
+                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
+                  ],
+                }]}
+                attrs={[{
+                  type: 'add',
+                  theKey: 'key1',
+                  value: 'value1',
+                  description: '描述1',
+                }, {
+                  type: 'add',
+                  theKey: 'key2',
+                  value: 'value2',
+                }, {
+                  type: 'delete',
+                  theKey: 'key3',
+                }]}
+              />)
+            }
+
+            {
+              index === 1 && (<MappingRule
+                alter={'展品1'}
+                version={'1.0.0'}
+                labels={['label1', 'label2', 'label3']}
+                online={true}
+                title={'标题1'}
+                cover={'png'}
+                replaces={[{
+                  replaced: 'Stefan/freelog平台设计规范目录',
+                  replacer: {
+                    type: 'object',
+                    name: 'bucket_3/mock_resource_3'
+                  },
+                  scope: [
+                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
+                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
+                  ],
+                }]}
+                attrs={[{
+                  type: 'add',
+                  theKey: 'key1',
+                  value: 'value1',
+                  description: '描述1',
+                }, {
+                  type: 'add',
+                  theKey: 'key2',
+                  value: 'value2',
+                }, {
+                  type: 'delete',
+                  theKey: 'key3',
+                }]}
+              />)
+            }
+
+            {
+              index === 2 && (<MappingRule
+                add={{
+                  exhibit: 'freelog白皮书',
+                  source: {
+                    type: 'resource',
+                    name: 'Stefan/freelog白皮书',
+                  }
+                }}
+                active={'freelog白皮书'}
+                version={'1.0.0'}
+                labels={['label1', 'label2', 'label3']}
+                online={true}
+                title={'标题1'}
+                cover={'png'}
+                replaces={[{
+                  replaced: 'Stefan/freelog平台设计规范目录',
+                  replacer: {
+                    type: 'object',
+                    name: 'bucket_3/mock_resource_3'
+                  },
+                  scope: [
+                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
+                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
+                  ],
+                }]}
+                attrs={[{
+                  type: 'add',
+                  theKey: 'key1',
+                  value: 'value1',
+                  description: '描述1',
+                }, {
+                  type: 'add',
+                  theKey: 'key2',
+                  value: 'value2',
+                }, {
+                  type: 'delete',
+                  theKey: 'key3',
+                }]}
+              />)
+            }
+
+            {index !== 0 && index !== 1 && index !== 2 && <MappingRule/>}
+
           </div>
         </div>);
       }
