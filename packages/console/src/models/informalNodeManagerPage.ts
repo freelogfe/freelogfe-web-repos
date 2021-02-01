@@ -3,12 +3,14 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {
-  createRules, CreateRulesParamsType,
+  createRules,
+  CreateRulesParamsType,
   rulesRematch,
   RulesRematchParamsType,
-  testNodeRules, TestNodeRulesParamsType,
+  testNodeRules,
+  TestNodeRulesParamsType,
   testResources,
-  TestResourcesParamsType
+  TestResourcesParamsType,
 } from "@/services/informalNodes";
 import {completeUrlByDomain} from "@/utils/format";
 
@@ -42,7 +44,36 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     associatedExhibitID: string;
     name: string;
     title: string;
-    rules: [];
+    rules: {
+      add?: {
+        exhibit: string;
+        source: {
+          type: 'resource' | 'object';
+          name: string;
+        };
+      };
+      alter?: string;
+      version?: string;
+      cover?: string;
+      title?: string;
+      online?: boolean;
+      offline?: boolean;
+      labels?: string[];
+      replaces?: {
+        replacer: {
+          type: 'resource' | 'object';
+          name: string;
+        };
+        replaced: string;
+        scope: string[][];
+      }[];
+      attrs?: {
+        type: 'add' | 'delete',
+        theKey: string;
+        value?: string;
+        description?: string;
+      }[];
+    }[];
     version: string;
     isOnline: boolean;
     resourceId: string;
@@ -233,12 +264,68 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      // console.log(data, 'DDD@@@@@');
+      console.log(data, 'DDD@@@@@');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           exhibitListIsLoading: false,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
+            const operations: string[] = dl.rules.operations;
+            const stateInfo = dl.stateInfo;
+
+            const rules: InformalNodeManagerPageModelState['exhibitList'][number]['rules'] = operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
+              const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number] = {
+                add: o === 'add' ? {
+                  exhibit: dl.testResourceName,
+                  source: {
+                    type: stateInfo.type,
+                    name: stateInfo.name,
+                  }
+                } : undefined,
+                alter: o === 'alter' ? dl.testResourceName : undefined,
+                labels: o === 'setTags' ? stateInfo.tagInfo.tags : undefined,
+                title: o === 'setTitle' ? stateInfo.titleInfo.title : undefined,
+                cover: o === 'setCover' ? stateInfo.coverInfo.coverImages[0] : undefined
+              };
+              //coverInfo:
+              // coverImages: ["https://cn.bing.com/th?id=OHR.RedRobin_ZH-CN4148689161_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0"]
+              // ruleId: "88325cef8778f28bffed94d39d2291d8"
+              // __proto__: Object
+              // onlineStatusInfo:
+              // onlineStatus: 1
+              // ruleId: "88325cef8778f28bffed94d39d2291d8"
+              // __proto__: Object
+              // propertyInfo:
+              // ruleId: "88325cef8778f28bffed94d39d2291d8"
+              // testResourceProperty: (4) [{…}, {…}, {…}, {…}]
+              // __proto__: Object
+              // tagInfo:
+              // ruleId: "88325cef8778f28bffed94d39d2291d8"
+              // tags: (3) ["34535", "label2", "label3"]
+              // __proto__: Object
+              // themeInfo:
+              // isActivatedTheme: 0
+              // ruleId: "default"
+              // __proto__: Object
+              // titleInfo:
+              // ruleId: "88325cef8778f28bffed94d39d2291d8"
+              // title: "我的资源"
+              // __proto__: Object
+              if (o === 'setCover') {
+
+              }
+              if (o === 'setAttr') {
+
+              }
+              if (o === 'setOnlineStatus') {
+
+              }
+              if (o === 'replace') {
+
+              }
+              return rule;
+            });
+
             return {
               id: dl.testResourceId,
               key: dl.testResourceId,
@@ -284,7 +371,9 @@ const Model: InformalNodeManagerPageModelType = {
         limit: 100,
       };
       const {data} = yield call(testResources, params);
-      // console.log(data, '\\\\\\\\\\\@@@@@');
+      console.log(data, '\\\\\\\\\\\@@@@@');
+
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {

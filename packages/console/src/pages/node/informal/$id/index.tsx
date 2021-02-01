@@ -6,10 +6,7 @@ import Exhibit from './Exhibit';
 import {nodeManagement} from "@/utils/path-assembler";
 import {connect, Dispatch} from "dva";
 import {
-  ChangeAction,
-  FetchExhibitListAction,
-  FetchInfoAction,
-  InformalNodeManagerPageModelState
+  InformalNodeManagerPageModelState,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
@@ -21,13 +18,11 @@ interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-
 function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
 
   React.useEffect(() => {
     // initData();
   }, []);
-
 
   return (<div>
     <div className={styles.headerTip}>这里是测试节点管理页面，如需管理正式节点，你可以 <a onClick={() => {
