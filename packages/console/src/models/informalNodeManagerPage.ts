@@ -1,4 +1,4 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
+import {DvaReducer, WholeMutable, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
@@ -23,6 +23,18 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
+  addExhibitOptions: { value: string; title: string }[];
+  addExhibitSelectValue: string;
+  addExhibitInputValue: string;
+  addExhibitCheckedList: {
+    id: string;
+    checked: boolean;
+    name: string;
+    identity: 'resource' | 'object';
+    type: string;
+    updateTime: string;
+    status: 'online' | 'offline' | 'unreleased';
+  }[];
 
   replaceHandlerModalVisible: boolean;
   replacerActivatedTab: 'market' | 'resource' | 'collection';
@@ -44,7 +56,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     associatedExhibitID: string;
     name: string;
     title: string;
-    rules: {
+    rule: {
       add?: {
         exhibit: string;
         source: {
@@ -73,7 +85,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
         value?: string;
         description?: string;
       }[];
-    }[];
+    };
     version: string;
     isOnline: boolean;
     resourceId: string;
@@ -168,6 +180,38 @@ const initStates: InformalNodeManagerPageModelState = {
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
+  addExhibitOptions: [
+    {value: '!market', title: '资源市场'},
+    {value: '!resource', title: '我的资源'},
+    {value: '!collection', title: '我的收藏'},
+  ],
+  addExhibitSelectValue: '!market',
+  addExhibitInputValue: '',
+  addExhibitCheckedList: [{
+    id: '1',
+    checked: false,
+    identity: 'resource',
+    name: 'freeman/freelog白皮书',
+    type: 'markdown',
+    updateTime: '2019/02/10 12:1',
+    status: 'online',
+  }, {
+    id: '2',
+    checked: true,
+    identity: 'resource',
+    name: 'Stefan/文档配图_01',
+    type: '',
+    updateTime: '2019/02/10 12:1',
+    status: 'offline',
+  }, {
+    id: '3',
+    checked: true,
+    identity: 'resource',
+    name: 'Stefan/markdown阅读器',
+    type: '',
+    updateTime: '2019/02/10 12:1',
+    status: 'unreleased',
+  }],
 
   replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',
@@ -253,7 +297,7 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: true,
       };
 
-      yield call(ruleMatchStatus, params2);
+      const {data: data1} = yield call(ruleMatchStatus, params2);
       // console.log(bool, 'bool1234');
 
       const params: TestResourcesParamsType = {
@@ -265,66 +309,41 @@ const Model: InformalNodeManagerPageModelType = {
 
       const {data} = yield call(testResources, params);
       console.log(data, 'DDD@@@@@');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           exhibitListIsLoading: false,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
-            const operations: string[] = dl.rules.operations;
+            const operations: string[] = [];
+            // console.log(operations, 'operations12334');
             const stateInfo = dl.stateInfo;
 
-            const rules: InformalNodeManagerPageModelState['exhibitList'][number]['rules'] = operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-              const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number] = {
-                add: o === 'add' ? {
-                  exhibit: dl.testResourceName,
-                  source: {
-                    type: stateInfo.type,
-                    name: stateInfo.name,
-                  }
-                } : undefined,
-                alter: o === 'alter' ? dl.testResourceName : undefined,
-                labels: o === 'setTags' ? stateInfo.tagInfo.tags : undefined,
-                title: o === 'setTitle' ? stateInfo.titleInfo.title : undefined,
-                cover: o === 'setCover' ? stateInfo.coverInfo.coverImages[0] : undefined
-              };
-              //coverInfo:
-              // coverImages: ["https://cn.bing.com/th?id=OHR.RedRobin_ZH-CN4148689161_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4&r=0"]
-              // ruleId: "88325cef8778f28bffed94d39d2291d8"
-              // __proto__: Object
-              // onlineStatusInfo:
-              // onlineStatus: 1
-              // ruleId: "88325cef8778f28bffed94d39d2291d8"
-              // __proto__: Object
-              // propertyInfo:
-              // ruleId: "88325cef8778f28bffed94d39d2291d8"
-              // testResourceProperty: (4) [{…}, {…}, {…}, {…}]
-              // __proto__: Object
-              // tagInfo:
-              // ruleId: "88325cef8778f28bffed94d39d2291d8"
-              // tags: (3) ["34535", "label2", "label3"]
-              // __proto__: Object
-              // themeInfo:
-              // isActivatedTheme: 0
-              // ruleId: "default"
-              // __proto__: Object
-              // titleInfo:
-              // ruleId: "88325cef8778f28bffed94d39d2291d8"
-              // title: "我的资源"
-              // __proto__: Object
-              if (o === 'setCover') {
-
-              }
-              if (o === 'setAttr') {
-
-              }
-              if (o === 'setOnlineStatus') {
-
-              }
-              if (o === 'replace') {
-
-              }
-              return rule;
-            });
+            // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
+            const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
+              add: operations.includes('add') ? {
+                exhibit: dl.testResourceName,
+                source: {
+                  type: stateInfo.type,
+                  name: stateInfo.name,
+                }
+              } : undefined,
+              alter: operations.includes('alter') ? dl.testResourceName : undefined,
+              labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+              title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+              cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+              online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
+              offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+              // attrs:
+            };
+            // propertyInfo:
+            // ruleId: "88325cef8778f28bffed94d39d2291d8"
+            // testResourceProperty: (4) [{…}, {…}, {…}, {…}]
+            // __proto__: Object
+            // themeInfo:
+            // isActivatedTheme: 0
+            // ruleId: "default"
+            // __proto__: Object
 
             return {
               id: dl.testResourceId,
@@ -333,7 +352,7 @@ const Model: InformalNodeManagerPageModelType = {
               cover: dl.stateInfo.coverInfo.coverImages[0] || '',
               name: dl.testResourceName,
               title: dl.stateInfo.titleInfo.title,
-              rules: [],
+              rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.status === 1,
               resourceId: dl.originInfo.id,
@@ -345,7 +364,6 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchThemeList({}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -373,7 +391,6 @@ const Model: InformalNodeManagerPageModelType = {
       const {data} = yield call(testResources, params);
       console.log(data, '\\\\\\\\\\\@@@@@');
 
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -395,7 +412,6 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
-
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));

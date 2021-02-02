@@ -14,7 +14,7 @@ import FCheckbox from "@/components/FCheckbox";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
 import {ChangeAction, FetchExhibitListAction} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
@@ -23,43 +23,15 @@ import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import {RouteComponentProps} from "react-router";
 import FLoadingTip from "@/components/FLoadingTip";
-
-const list: {
-  id: string;
-  checked: boolean;
-  name: string;
-  type: string;
-  updateTime: string;
-  status: 'online' | 'offline' | 'unreleased';
-}[] = [{
-  id: '1',
-  checked: false,
-  name: 'freeman/freelog白皮书',
-  type: 'markdown',
-  updateTime: '2019/02/10 12:1',
-  status: 'online',
-}, {
-  id: '2',
-  checked: true,
-  name: 'Stefan/文档配图_01',
-  type: '',
-  updateTime: '2019/02/10 12:1',
-  status: 'offline',
-}, {
-  id: '3',
-  checked: true,
-  name: 'Stefan/markdown阅读器',
-  type: '',
-  updateTime: '2019/02/10 12:1',
-  status: 'unreleased',
-}];
+import {WholeMutable} from "@/models/shared";
 
 interface ExhibitProps {
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
+  storageHomePage: StorageHomePageModelState;
 }
 
-function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
+function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitProps) {
 
   React.useEffect(() => {
     // console.log('exhibit');
@@ -103,22 +75,22 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
       <Space size={30}>
         <Space size={5}>
           <FTextButton onClick={() => {
-            dispatch<ChangeAction>({
-              type: 'informalNodeManagerPage/change',
-              payload: {
-                addExhibitDrawerVisible: true,
-              },
-            });
+            onChange({addExhibitDrawerVisible: true});
           }}><FAdd/></FTextButton>
           <FContentText text={'新增测试展品'}/>
         </Space>
         <Space size={5}>
           <FTextButton onClick={() => {
-
+            onChange({replaceHandlerModalVisible: true});
           }}><FMappingRuleReplace/></FTextButton>
           <FContentText text={'资源替换'}/>
         </Space>
-        <div><FDropdownMenu options={[{value: '1234', text: '1234'}]} text={'筛选'}/></div>
+        <div>
+          <FDropdownMenu
+            options={[{value: '1234', text: '1234'}]}
+            text={'筛选'}
+          />
+        </div>
         <div><FInput theme={'dark'}/></div>
       </Space>
     </div>
@@ -133,6 +105,9 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
       width={947}
       visible={informalNodeManagerPage.replaceHandlerModalVisible}
       closable={false}
+      onCancel={() => {
+        onChange({replaceHandlerModalVisible: false});
+      }}
     >
       <div className={styles.replaceHandler}>
         <div className={styles.replacer}>
@@ -164,49 +139,73 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
         <FNormalButton>添加</FNormalButton>
       </Space>}
       onClose={() => {
-        dispatch<ChangeAction>({
-          type: 'informalNodeManagerPage/change',
-          payload: {
-            addExhibitDrawerVisible: false,
-          },
-        });
+        onChange({addExhibitDrawerVisible: false});
       }}
     >
       <div className={styles.filter}>
         <FSelect
-          value={'market'}
+          value={informalNodeManagerPage.addExhibitSelectValue}
           dataSource={[
-            {value: 'market', title: '资源市场'},
-            {value: 'resource', title: '我的资源'},
-            {value: 'collection', title: '我的收藏'},
+            ...informalNodeManagerPage.addExhibitOptions as WholeMutable<InformalNodeManagerPageModelState['addExhibitOptions']>,
+            ...storageHomePage.bucketList.map<InformalNodeManagerPageModelState['addExhibitOptions'][number]>((b) => {
+              return {
+                value: b.bucketName,
+                title: b.bucketName,
+              };
+            })
           ]}
+          onChange={(value) => {
+            onChange({addExhibitSelectValue: value});
+          }}
         />
-        <FInput theme="dark"/>
+        <FInput
+          value={informalNodeManagerPage.addExhibitInputValue}
+          onChange={(e) => {
+            onChange({addExhibitInputValue: e.target.value});
+          }}
+          theme="dark"
+        />
       </div>
       <div style={{height: 15}}/>
       <div className={styles.list}>
         {
-          list.map((l) => {
-            return (<div key={l.id} className={styles.item}>
-              <FCheckbox checked={l.checked}/>
-              <div style={{width: 15}}/>
-              <div className={styles.itemContent}>
-                <div className={styles.itemName}>
-                  <FContentText
-                    singleRow
-                    text={l.name}
-                  />
-                  <div style={{width: 5}}/>
-                  <FResourceStatusBadge status={l.status}/>
-                </div>
-                <div style={{height: 2}}/>
-                <FContentText
-                  text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
-                  type="additional2"
+          informalNodeManagerPage.addExhibitCheckedList
+            .map((l, i, arr) => {
+              return (<div key={l.id} className={styles.item}>
+                <FCheckbox
+                  checked={l.checked}
+                  onChange={(e) => {
+                    onChange({
+                      addExhibitCheckedList: arr.map((a) => {
+                        if (a.id !== l.id) {
+                          return a;
+                        }
+                        return {
+                          ...a,
+                          checked: e.target.checked,
+                        };
+                      }),
+                    })
+                  }}
                 />
-              </div>
-            </div>);
-          })
+                <div style={{width: 15}}/>
+                <div className={styles.itemContent}>
+                  <div className={styles.itemName}>
+                    <FContentText
+                      singleRow
+                      text={l.name}
+                    />
+                    <div style={{width: 5}}/>
+                    <FResourceStatusBadge status={l.status}/>
+                  </div>
+                  <div style={{height: 2}}/>
+                  <FContentText
+                    text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
+                    type="additional2"
+                  />
+                </div>
+              </div>);
+            })
         }
 
       </div>
@@ -228,8 +227,9 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
   </FInfiniteScroll>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState) => ({
   informalNodeManagerPage,
+  storageHomePage,
 }))(Exhibit);
 
 
