@@ -8,10 +8,6 @@ import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
 import {FNormalButton, FTextButton} from "@/components/FButton";
 import FAdd from "@/components/FIcons/FAdd";
 import FDropdownMenu from "@/components/FDropdownMenu";
-import FDrawer from "@/components/FDrawer";
-import FSelect from "@/components/FSelect";
-import FCheckbox from "@/components/FCheckbox";
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
@@ -24,6 +20,7 @@ import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import {RouteComponentProps} from "react-router";
 import FLoadingTip from "@/components/FLoadingTip";
 import {WholeMutable} from "@/models/shared";
+import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -100,6 +97,15 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       </div>
     </div>
 
+    <AddInformExhibitDrawer
+      visible={informalNodeManagerPage.addExhibitDrawerVisible}
+      onCancel={() => {
+        onChange({
+          addExhibitDrawerVisible: false,
+        });
+      }}
+    />
+
     <FModal
       title={null}
       width={947}
@@ -131,99 +137,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       </div>
     </FModal>
 
-    <FDrawer
-      title={'添加测试展品'}
-      visible={informalNodeManagerPage.addExhibitDrawerVisible}
-      topRight={<Space size={30}>
-        <FTextButton>取消</FTextButton>
-        <FNormalButton>添加</FNormalButton>
-      </Space>}
-      onClose={() => {
-        onChange({addExhibitDrawerVisible: false});
-      }}
-    >
-      <div className={styles.filter}>
-        <FSelect
-          value={informalNodeManagerPage.addExhibitSelectValue}
-          dataSource={[
-            ...informalNodeManagerPage.addExhibitOptions as WholeMutable<InformalNodeManagerPageModelState['addExhibitOptions']>,
-            ...storageHomePage.bucketList.map<InformalNodeManagerPageModelState['addExhibitOptions'][number]>((b) => {
-              return {
-                value: b.bucketName,
-                title: b.bucketName,
-              };
-            })
-          ]}
-          onChange={(value) => {
-            onChange({addExhibitSelectValue: value});
-          }}
-        />
-        <FInput
-          value={informalNodeManagerPage.addExhibitInputValue}
-          onChange={(e) => {
-            onChange({addExhibitInputValue: e.target.value});
-          }}
-          theme="dark"
-        />
-      </div>
-      <div style={{height: 15}}/>
-      <div className={styles.list}>
-        {
-          informalNodeManagerPage.addExhibitCheckedList
-            .map((l, i, arr) => {
-              return (<div key={l.id} className={styles.item}>
-                <FCheckbox
-                  checked={l.checked}
-                  onChange={(e) => {
-                    onChange({
-                      addExhibitCheckedList: arr.map((a) => {
-                        if (a.id !== l.id) {
-                          return a;
-                        }
-                        return {
-                          ...a,
-                          checked: e.target.checked,
-                        };
-                      }),
-                    })
-                  }}
-                />
-                <div style={{width: 15}}/>
-                <div className={styles.itemContent}>
-                  <div className={styles.itemName}>
-                    <FContentText
-                      singleRow
-                      text={l.name}
-                    />
-                    <div style={{width: 5}}/>
-                    <FResourceStatusBadge status={l.status}/>
-                  </div>
-                  <div style={{height: 2}}/>
-                  <FContentText
-                    text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
-                    type="additional2"
-                  />
-                </div>
-              </div>);
-            })
-        }
 
-      </div>
-
-      <div style={{height: 20}}/>
-      {
-        false
-          ? (<div className={styles.footer}>
-            <FNormalButton
-              // onClick={() => onLoadMord && onLoadMord()}
-            >加载更多</FNormalButton>
-          </div>)
-          : (['2'].length > 0 && (
-            <div style={{textAlign: 'center', padding: '10px 0'}}>
-              <FContentText type="additional1" text={'没有更多了~'}/>
-            </div>))
-      }
-    </FDrawer>
   </FInfiniteScroll>);
 }
 

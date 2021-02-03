@@ -23,18 +23,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
-  addExhibitOptions: { value: string; title: string }[];
-  addExhibitSelectValue: string;
-  addExhibitInputValue: string;
-  addExhibitCheckedList: {
-    id: string;
-    checked: boolean;
-    name: string;
-    identity: 'resource' | 'object';
-    type: string;
-    updateTime: string;
-    status: 'online' | 'offline' | 'unreleased';
-  }[];
+
 
   replaceHandlerModalVisible: boolean;
   replacerActivatedTab: 'market' | 'resource' | 'collection';
@@ -151,6 +140,8 @@ export interface SaveRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/saveRules';
 }
 
+
+
 interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
   state: InformalNodeManagerPageModelState;
@@ -179,39 +170,8 @@ const initStates: InformalNodeManagerPageModelState = {
   testNodeUrl: '',
   showPage: 'exhibit',
 
-  addExhibitDrawerVisible: false,
-  addExhibitOptions: [
-    {value: '!market', title: '资源市场'},
-    {value: '!resource', title: '我的资源'},
-    {value: '!collection', title: '我的收藏'},
-  ],
-  addExhibitSelectValue: '!market',
-  addExhibitInputValue: '',
-  addExhibitCheckedList: [{
-    id: '1',
-    checked: false,
-    identity: 'resource',
-    name: 'freeman/freelog白皮书',
-    type: 'markdown',
-    updateTime: '2019/02/10 12:1',
-    status: 'online',
-  }, {
-    id: '2',
-    checked: true,
-    identity: 'resource',
-    name: 'Stefan/文档配图_01',
-    type: '',
-    updateTime: '2019/02/10 12:1',
-    status: 'offline',
-  }, {
-    id: '3',
-    checked: true,
-    identity: 'resource',
-    name: 'Stefan/markdown阅读器',
-    type: '',
-    updateTime: '2019/02/10 12:1',
-    status: 'unreleased',
-  }],
+  addExhibitDrawerVisible: true,
+
 
   replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',
@@ -308,7 +268,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      console.log(data, 'DDD@@@@@');
+      // console.log(data, 'DDD@@@@@');
 
       yield put<ChangeAction>({
         type: 'change',
