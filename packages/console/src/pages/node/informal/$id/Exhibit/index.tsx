@@ -104,6 +104,12 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           addExhibitDrawerVisible: false,
         });
       }}
+      onConfirm={(value) => {
+        console.log(value, 'VVVVVV');
+        onChange({
+          addExhibitDrawerVisible: false,
+        });
+      }}
     />
 
     <FModal

@@ -170,8 +170,7 @@ const initStates: InformalNodeManagerPageModelState = {
   testNodeUrl: '',
   showPage: 'exhibit',
 
-  addExhibitDrawerVisible: true,
-
+  addExhibitDrawerVisible: false,
 
   replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',

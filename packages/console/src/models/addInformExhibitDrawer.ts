@@ -231,7 +231,7 @@ const Model: AddInformExhibitType = {
       };
 
       const {data} = yield call(objectList, params);
-      console.log(data, 'data1q2349ojmdfsl');
+      // console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

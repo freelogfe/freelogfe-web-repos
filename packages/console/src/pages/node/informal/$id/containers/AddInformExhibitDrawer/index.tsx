@@ -19,12 +19,14 @@ interface AddInformExhibitDrawerProps {
 
   onCancel?(): void;
 
+  onConfirm?(value: { identity: 'resource' | 'object'; names: string[]; }): void;
+
   dispatch: Dispatch;
   addInformExhibitDrawer: AddInformExhibitDrawerModelState;
   storageHomePage: StorageHomePageModelState;
 }
 
-function AddInformExhibitDrawer({visible = false, onCancel, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
+function AddInformExhibitDrawer({visible = false, onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
 
   React.useEffect(() => {
     dispatch<FetchAddExhibitListAction>({
@@ -44,13 +46,34 @@ function AddInformExhibitDrawer({visible = false, onCancel, dispatch, addInformE
     }
   }
 
+  function onClickConfirm() {
+    let identity: 'resource' | 'object' = 'resource';
+    if (!addInformExhibitDrawer.addExhibitSelectValue.startsWith('!')) {
+      identity = 'object';
+    }
+    const value: { identity: 'resource' | 'object'; names: string[]; } = {
+      identity,
+      names: addInformExhibitDrawer.addExhibitCheckedList
+        .filter((ex) => ex.checked)
+        .map<string>((ex) => {
+          return ex.name;
+        }),
+    };
+    // onCancel && onCancel();
+    onConfirm && onConfirm(value);
+  }
+
   return (<FDrawer
     title={'添加测试展品'}
     // visible={informalNodeManagerPage.addExhibitDrawerVisible}
     visible={visible}
     topRight={<Space size={30}>
-      <FTextButton>取消</FTextButton>
-      <FNormalButton>添加</FNormalButton>
+      <FTextButton onClick={() => {
+        onCancel && onCancel();
+      }}>取消</FTextButton>
+      <FNormalButton onClick={() => {
+        onClickConfirm();
+      }}>添加</FNormalButton>
     </Space>}
     onClose={() => {
       onCancel && onCancel();
@@ -115,7 +138,7 @@ function AddInformExhibitDrawer({visible = false, onCancel, dispatch, addInformE
                     text={l.name}
                   />
                   <div style={{width: 5}}/>
-                  <FResourceStatusBadge status={l.status}/>
+                  {l.status && <FResourceStatusBadge status={l.status}/>}
                 </div>
                 <div style={{height: 2}}/>
                 <FContentText
