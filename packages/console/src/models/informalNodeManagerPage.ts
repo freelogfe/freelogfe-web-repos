@@ -348,7 +348,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: 100,
       };
       const {data} = yield call(testResources, params);
-      console.log(data, '\\\\\\\\\\\@@@@@');
+      // console.log(data, '\\\\\\\\\\\@@@@@');
 
       yield put<ChangeAction>({
         type: 'change',

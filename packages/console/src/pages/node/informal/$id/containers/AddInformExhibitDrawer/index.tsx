@@ -4,7 +4,6 @@ import {FNormalButton, FTextButton} from "@/components/FButton";
 import styles from "@/pages/node/informal/$id/Exhibit/index.less";
 import FSelect from "@/components/FSelect";
 import {WholeMutable} from "@/models/shared";
-import {InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
 import FInput from "@/components/FInput";
 import FCheckbox from "@/components/FCheckbox";
 import {FContentText} from "@/components/FText";
@@ -16,6 +15,9 @@ import {ChangeAction, FetchAddExhibitListAction} from "@/models/addInformExhibit
 
 interface AddInformExhibitDrawerProps {
   visible?: boolean;
+  isTheme?: boolean;
+  disabledResourceNames?: string[];
+  disabledObjectNames?: string[];
 
   onCancel?(): void;
 
@@ -26,11 +28,16 @@ interface AddInformExhibitDrawerProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-function AddInformExhibitDrawer({visible = false, onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
+function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResourceNames = [], disabledObjectNames = [], onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
 
   React.useEffect(() => {
     dispatch<FetchAddExhibitListAction>({
       type: 'addInformExhibitDrawer/fetchAddExhibitList'
+    });
+    onChange({
+      isTheme,
+      disabledResourceNames,
+      disabledObjectNames,
     });
   }, []);
 
@@ -116,6 +123,7 @@ function AddInformExhibitDrawer({visible = false, onCancel, onConfirm, dispatch,
             return (<div key={l.id} className={styles.item}>
               <FCheckbox
                 checked={l.checked}
+                disabled={l.disabled}
                 onChange={(e) => {
                   onChange({
                     addExhibitCheckedList: arr.map((a) => {

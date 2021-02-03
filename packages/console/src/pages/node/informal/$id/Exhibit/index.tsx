@@ -105,11 +105,13 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         });
       }}
       onConfirm={(value) => {
-        console.log(value, 'VVVVVV');
+        // console.log(value, 'VVVVVV');
         onChange({
           addExhibitDrawerVisible: false,
         });
       }}
+      // disabledResourceNames={['yanghongtian/设计规范文档']}
+      // disabledObjectNames={['234234/th002.jpeg']}
     />
 
     <FModal

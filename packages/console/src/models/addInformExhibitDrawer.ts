@@ -8,11 +8,16 @@ import {collectionResources, CollectionResourcesParamsType} from "@/services/col
 import {objectList, ObjectListParamsType} from "@/services/storages";
 
 export type AddInformExhibitDrawerModelState = WholeReadonly<{
+  isTheme: boolean;
+  disabledResourceNames: string[];
+  disabledObjectNames: string[];
+
   addExhibitOptions: { value: string; title: string }[];
   addExhibitSelectValue: string;
   addExhibitInputValue: string;
   addExhibitCheckedList: {
     id: string;
+    disabled: boolean;
     checked: boolean;
     name: string;
     identity: 'resource' | 'object';
@@ -77,6 +82,10 @@ interface AddInformExhibitType {
 }
 
 const initStates: AddInformExhibitDrawerModelState = {
+  isTheme: false,
+  disabledResourceNames: [],
+  disabledObjectNames: [],
+
   addExhibitOptions: [
     {value: '!market', title: '资源市场'},
     {value: '!resource', title: '我的资源'},
@@ -133,6 +142,7 @@ const Model: AddInformExhibitType = {
         // resourceType:''
         skip: 0,
         limit: 10,
+
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -142,8 +152,10 @@ const Model: AddInformExhibitType = {
         type: 'change',
         payload: {
           addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
+            const resourceName: string = data.username + '/' + exhibit.resourceName;
             return {
               id: exhibit.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
               checked: false,
               identity: 'resource',
               name: exhibit.resourceName,
@@ -164,6 +176,7 @@ const Model: AddInformExhibitType = {
         skip: 0,
         limit: 10,
         isSelf: 1,
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -173,8 +186,10 @@ const Model: AddInformExhibitType = {
         type: 'change',
         payload: {
           addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
+            const resourceName: string = data.username + '/' + exhibit.resourceName;
             return {
               id: exhibit.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
               checked: false,
               identity: 'resource',
               name: exhibit.resourceName,
@@ -205,8 +220,10 @@ const Model: AddInformExhibitType = {
         type: 'change',
         payload: {
           addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
+            const resourceName: string = data.authorName + '/' + exhibit.resourceName;
             return {
               id: exhibit.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
               checked: false,
               identity: 'resource',
               name: exhibit.resourceName,
@@ -231,13 +248,15 @@ const Model: AddInformExhibitType = {
       };
 
       const {data} = yield call(objectList, params);
-      // console.log(data, 'data1q2349ojmdfsl');
+      console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
+            const objectName: string = data.bucketName + '/' + data.objectName;
             return {
               id: exhibit.objectId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(objectName),
               checked: false,
               identity: 'object',
               name: exhibit.objectName,
