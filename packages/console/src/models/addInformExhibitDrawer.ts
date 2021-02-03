@@ -147,21 +147,20 @@ const Model: AddInformExhibitType = {
       };
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(list, params);
-      // console.log(data, 'data13453');
+      console.log(data, 'data13453');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
-            const resourceName: string = data.username + '/' + exhibit.resourceName;
+          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
             return {
-              id: exhibit.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
+              id: rs.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
               checked: false,
               identity: 'resource',
-              name: exhibit.resourceName,
-              type: exhibit.resourceType,
-              updateTime: formatDateTime(exhibit.updateDate),
-              status: exhibit.status === 1 ? '' : (exhibit.latestVersion ? 'offline' : 'unreleased'),
+              name: rs.resourceName,
+              type: rs.resourceType,
+              updateTime: formatDateTime(rs.updateDate),
+              status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
         },
@@ -185,17 +184,16 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
-            const resourceName: string = data.username + '/' + exhibit.resourceName;
+          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
             return {
-              id: exhibit.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
+              id: rs.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
               checked: false,
               identity: 'resource',
-              name: exhibit.resourceName,
-              type: exhibit.resourceType,
-              updateTime: formatDateTime(exhibit.updateDate),
-              status: exhibit.status === 1 ? '' : (exhibit.latestVersion ? 'offline' : 'unreleased'),
+              name: rs.resourceName,
+              type: rs.resourceType,
+              updateTime: formatDateTime(rs.updateDate),
+              status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
         },
@@ -219,17 +217,16 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
-            const resourceName: string = data.authorName + '/' + exhibit.resourceName;
+          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
             return {
-              id: exhibit.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(resourceName),
+              id: rs.resourceId,
+              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
               checked: false,
               identity: 'resource',
-              name: exhibit.resourceName,
-              type: exhibit.resourceType,
-              updateTime: formatDateTime(exhibit.updateDate),
-              status: exhibit.resourceStatus === 1 ? '' : (exhibit.latestVersion ? 'offline' : 'unreleased'),
+              name: rs.resourceName,
+              type: rs.resourceType,
+              updateTime: formatDateTime(rs.updateDate),
+              status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
         },
@@ -252,16 +249,17 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((exhibit) => {
-            const objectName: string = data.bucketName + '/' + data.objectName;
+          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
+            const objectName: string = ob.bucketName + '/' + ob.objectName;
+            console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '#####');
             return {
-              id: exhibit.objectId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(objectName),
+              id: ob.objectId,
+              disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
               checked: false,
               identity: 'object',
-              name: exhibit.objectName,
-              type: exhibit.resourceType,
-              updateTime: formatDateTime(exhibit.updateDate),
+              name: objectName,
+              type: ob.resourceType,
+              updateTime: formatDateTime(ob.updateDate),
               status: '',
             };
           }),

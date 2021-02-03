@@ -110,8 +110,8 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           addExhibitDrawerVisible: false,
         });
       }}
-      // disabledResourceNames={['yanghongtian/设计规范文档']}
-      // disabledObjectNames={['234234/th002.jpeg']}
+      disabledResourceNames={['Freelog/blog-theme']}
+      disabledObjectNames={['234234/th002.jpeg']}
     />
 
     <FModal
