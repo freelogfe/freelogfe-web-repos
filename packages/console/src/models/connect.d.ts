@@ -21,6 +21,7 @@ import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
 import {AddInformExhibitDrawerModelState} from './addInformExhibitDrawer';
+import {ReplaceInformExhibitState} from './replaceInformExhibitModal';
 
 export {
   // RouterHistoriesModelState,
@@ -47,6 +48,7 @@ export {
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
   AddInformExhibitDrawerModelState,
+  ReplaceInformExhibitState,
 };
 
 export interface ConnectState {
@@ -74,4 +76,5 @@ export interface ConnectState {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
   addInformExhibitDrawer: AddInformExhibitDrawerModelState;
+  replaceInformExhibit: ReplaceInformExhibitState;
 }

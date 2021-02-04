@@ -172,7 +172,7 @@ const initStates: InformalNodeManagerPageModelState = {
 
   addExhibitDrawerVisible: false,
 
-  replaceHandlerModalVisible: false,
+  replaceHandlerModalVisible: true,
   replacerActivatedTab: 'market',
   replacerInput: '',
   replacerList: [{

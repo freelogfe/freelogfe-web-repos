@@ -13,14 +13,15 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
 import {ChangeAction, FetchExhibitListAction} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
-import {SwapRightOutlined} from '@ant-design/icons';
-import Replacer from "@/pages/node/informal/$id/Exhibit/Replacer";
-import Replaced from "@/pages/node/informal/$id/Exhibit/Replaced";
+
+import Replacer from "@/pages/node/informal/$id/containers/FReplaceModal/Replacer";
+import Replaced from "@/pages/node/informal/$id/containers/FReplaceModal/Replaced";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import {RouteComponentProps} from "react-router";
 import FLoadingTip from "@/components/FLoadingTip";
 import {WholeMutable} from "@/models/shared";
 import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
+import FReplaceModal from '../containers/FReplaceModal';
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -114,38 +115,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       disabledObjectNames={['234234/th002.jpeg']}
     />
 
-    <FModal
-      title={null}
-      width={947}
+    <FReplaceModal
       visible={informalNodeManagerPage.replaceHandlerModalVisible}
-      closable={false}
-      onCancel={() => {
-        onChange({replaceHandlerModalVisible: false});
-      }}
-    >
-      <div className={styles.replaceHandler}>
-        <div className={styles.replacer}>
-          <FTitleText type="h5" text={'选择替换资源'}/>
-          <div style={{height: 5}}/>
-          <div className={styles.content}>
-            <Replacer/>
-          </div>
-
-        </div>
-        <div className={styles.arrow}>
-          <SwapRightOutlined style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}/>
-        </div>
-        <div className={styles.replaced}>
-          <FTitleText type="h5" text={'选择被替换资源'}/>
-          <div style={{height: 5}}/>
-          <div className={styles.content}>
-            <Replaced/>
-          </div>
-        </div>
-      </div>
-    </FModal>
-
-
+    />
   </FInfiniteScroll>);
 }
 
@@ -153,5 +125,3 @@ export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState
   informalNodeManagerPage,
   storageHomePage,
 }))(Exhibit);
-
-
