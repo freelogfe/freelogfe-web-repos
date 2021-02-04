@@ -103,7 +103,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
           value={replaceInformExhibit.replacedKeywords}
           debounce={300}
           onDebounceChange={(value) => {
-            console.log(value, 'value!@#$');
+            // console.log(value, 'value!@#$');
             onChange({replacerKeywords: value}, true);
           }}
         />
@@ -113,7 +113,12 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
         {
           replaceInformExhibit.replacerResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
-              <Radio checked={false}/>
+              <Radio
+                checked={rl.name === replaceInformExhibit.checkedResourceName}
+                onClick={() => {
+                  onChange({checkedResourceName: rl.name})
+                }}
+              />
               <div className={styles.replacerListItemContent}>
                 <div>
                   <div>
