@@ -28,6 +28,20 @@ export function createRules({nodeId, testRuleText}: CreateRulesParamsType) {
   return request.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
 }
 
+// 搜索测试资源依赖树
+export interface DependencyTreeParamsType {
+  nodeId: number;
+  keywords: string;
+}
+
+export function dependencyTree({nodeId, keywords}: DependencyTreeParamsType) {
+  return request.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
+    params: {
+      keywords,
+    },
+  });
+}
+
 // 查看节点当前测试规则
 export interface TestNodeRulesParamsType {
   nodeId: number;
@@ -37,6 +51,19 @@ export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
   return request.get(`/v2/testNodes/${nodeId}/rules`, {});
 }
 
+// 获取并过滤资源依赖树
+export interface DependencyTreeFilterParamsType {
+  testResourceId: string;
+  dependentEntityId: string;
+  dependentEntityVersionRange?: string;
+}
+
+export function dependencyTreeFilter({testResourceId, ...params}: DependencyTreeFilterParamsType) {
+  return request.get(`/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`, {
+    params
+  });
+}
+
 // 查看测试资源详情
 export interface TestResourceDetailsParamsType {
   testResourceId: string;
@@ -44,6 +71,19 @@ export interface TestResourceDetailsParamsType {
 
 export function testResourceDetails({testResourceId}: TestResourceDetailsParamsType) {
   return request.get(`/v2/testNodes/testResources/${testResourceId}`);
+}
+
+// 查询包含指定依赖的测试资源
+export interface SearchTestResourcesByDependencyParamsType {
+  nodeId: number;
+  dependentEntityId: string;
+  dependentEntityVersionRange: string;
+}
+
+export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestResourcesByDependencyParamsType) {
+  return request.get(`/v2/testNodes/${nodeId}/testResources/searchByDependency`, {
+    params,
+  });
 }
 
 // 重新匹配节点测试规则
