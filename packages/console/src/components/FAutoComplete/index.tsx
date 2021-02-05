@@ -15,7 +15,9 @@ interface FAutoCompleteProps extends AutoCompleteProps {
 }
 
 function FAutoComplete({value, autoRef, errorText, debounce, onDebounceChange, onChange, ...props}: FAutoCompleteProps) {
+
   const [inputText, setInputText] = React.useState<string>(value || '');
+
   const {run} = useDebounceFn(
     () => {
       onDebounceChange && onDebounceChange(inputText);

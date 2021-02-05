@@ -116,6 +116,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     />
 
     <FReplaceModal
+      nodeID={informalNodeManagerPage.nodeID}
       visible={informalNodeManagerPage.replaceHandlerModalVisible}
     />
   </FInfiniteScroll>);

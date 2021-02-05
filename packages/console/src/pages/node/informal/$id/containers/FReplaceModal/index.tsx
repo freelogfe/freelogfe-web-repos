@@ -5,14 +5,31 @@ import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
+import {connect, Dispatch} from 'dva';
+import {ChangeAction} from "@/models/replaceInformExhibitModal";
+import {withRouter} from "umi";
+import {ConnectState} from "@/models/connect";
 
 interface FReplaceModalProps {
+  nodeID: number;
   visible?: boolean;
 
   onCancel?(): void;
+
+  dispatch: Dispatch;
 }
 
-function FReplaceModal({visible, onCancel}: FReplaceModalProps) {
+function FReplaceModal({visible, onCancel, dispatch, nodeID}: FReplaceModalProps) {
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'replaceInformExhibit/change',
+      payload: {
+        nodeID: nodeID,
+      }
+    })
+  }, [nodeID]);
+
   return (<FModal
     title={null}
     width={947}
@@ -44,4 +61,4 @@ function FReplaceModal({visible, onCancel}: FReplaceModalProps) {
   </FModal>);
 }
 
-export default FReplaceModal;
+export default connect(({}: ConnectState) => ({}))(FReplaceModal);

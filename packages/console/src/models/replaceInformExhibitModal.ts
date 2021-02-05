@@ -12,6 +12,7 @@ import {
   // FetchMarketAction,
   // FetchMyResourcesAction, FetchObjectAction
 } from "@/models/addInformExhibitDrawer";
+import {dependencyTree, DependencyTreeParamsType} from "@/services/informalNodes";
 
 interface TreeNode {
   title: string;
@@ -20,6 +21,7 @@ interface TreeNode {
 }
 
 export type ReplaceInformExhibitState = WholeReadonly<{
+  nodeID: number;
   replacerOriginOptions: { value: string; title: string }[];
   replacerOrigin: '!market' | '!resource' | '!collection' | string;
   replacerKeywords: string;
@@ -36,7 +38,14 @@ export type ReplaceInformExhibitState = WholeReadonly<{
   checkedResourceName: string;
 
   replacedKeywords: string;
-  replacedVersions: string[];
+  replacedDependencyTreeList: string[];
+  replacedSelectDependency: null | {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versions: string[],
+  }
+  // replacedVersions: string[];
   replacedVersion: string;
   treeData: TreeNode[];
 }>;
@@ -79,6 +88,10 @@ export interface FetchObjectAction extends AnyAction {
   payload?: boolean; // 是否 restart
 }
 
+export interface FetchDependencyTreeAction extends AnyAction {
+  type: 'replaceInformExhibit/fetchDependencyTree';
+}
+
 interface ReplaceInformExhibitModelType {
   namespace: 'replaceInformExhibit';
   state: ReplaceInformExhibitState;
@@ -90,6 +103,8 @@ interface ReplaceInformExhibitModelType {
     fetchMyResources: (action: FetchMyResourcesAction, effects: EffectsCommandMap) => void;
     fetchCollection: (action: FetchCollectionAction, effects: EffectsCommandMap) => void;
     fetchObject: (action: FetchObjectAction, effects: EffectsCommandMap) => void;
+
+    fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ReplaceInformExhibitState, ChangeAction>;
@@ -100,6 +115,7 @@ interface ReplaceInformExhibitModelType {
 }
 
 const initStates: ReplaceInformExhibitState = {
+  nodeID: -1,
   replacerOriginOptions: [
     {value: '!market', title: '资源市场'},
     {value: '!resource', title: '我的资源'},
@@ -120,8 +136,9 @@ const initStates: ReplaceInformExhibitState = {
   checkedResourceName: '2341234',
 
   replacedKeywords: '',
-  replacedVersions: ['1.1.1'],
-  replacedVersion: '1.1.1',
+  replacedDependencyTreeList: [],
+  replacedSelectDependency: null,
+  replacedVersion: '',
   treeData: []
 };
 
@@ -270,7 +287,7 @@ const Model: ReplaceInformExhibitModelType = {
       };
 
       const {data} = yield call(objectList, params);
-      console.log(data, 'data1q2349ojmdfsl');
+      // console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -294,12 +311,37 @@ const Model: ReplaceInformExhibitModelType = {
       });
 
     },
+    * fetchDependencyTree({}: FetchDependencyTreeAction, {put, select, call}: EffectsCommandMap) {
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
+
+      const params: DependencyTreeParamsType = {
+        nodeId: replaceInformExhibit.nodeID,
+        keywords: replaceInformExhibit.replacedKeywords,
+      };
+
+      const {data} = yield call(dependencyTree, params);
+      // console.log(data, '##@ADSFASDFSDCX');
+
+      let replacedSelectDependency = data.find((d: any) => d.name === replaceInformExhibit.replacedKeywords);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacedDependencyTreeList: data.map((d: any) => d.name),
+          replacedSelectDependency: replacedSelectDependency || null,
+          replacedVersion: '',
+        },
+      });
+
+    },
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
+
   },
   reducers: {
     change(state, {payload}) {

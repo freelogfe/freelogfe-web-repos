@@ -4,12 +4,17 @@ import FInput from "@/components/FInput";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import {FContentText} from '@/components/FText';
 import {Tree} from 'antd';
+import FAutoComplete from "@/components/FAutoComplete";
+import {connect, Dispatch} from 'dva';
+import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
+import {ChangeAction, FetchDependencyTreeAction} from "@/models/replaceInformExhibitModal";
 
 interface ReplacedProps {
-
+  dispatch: Dispatch;
+  replaceInformExhibit: ReplaceInformExhibitState;
 }
 
-function Replaced({}: ReplacedProps) {
+function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
   const treeData = [
     {
       title: '0-0',
@@ -54,16 +59,49 @@ function Replaced({}: ReplacedProps) {
     },
   ];
 
+  async function onChange(payload: Partial<ReplaceInformExhibitState>) {
+    await dispatch<ChangeAction>({
+      type: 'replaceInformExhibit/change',
+      payload: payload,
+    });
+  }
+
   return (<>
     <div style={{height: 15}}/>
     <div className={styles.filter}>
-      <FInput
-        theme="dark"
-        wrapClassName={styles.filterInput}
+      <FAutoComplete
+        value={replaceInformExhibit.replacedKeywords}
+        options={replaceInformExhibit.replacedDependencyTreeList.map<{ value: string; }>((dt) => {
+          return {
+            value: dt,
+          };
+        })}
+        debounce={300}
+        className={styles.filterInput}
+        onDebounceChange={async (value) => {
+          // console.log(value, 'value1232adsjpkl;l;sdf4');
+          await onChange({replacedKeywords: value});
+          await dispatch<FetchDependencyTreeAction>({
+            type: 'replaceInformExhibit/fetchDependencyTree',
+          });
+        }}
       />
-      <FDropdownMenu options={[{value: '1.1.1'}]}>
-        <FContentText type="additional2" text={'选择版本'}/>
-      </FDropdownMenu>
+      {
+        replaceInformExhibit.replacedSelectDependency?.versions &&
+        replaceInformExhibit.replacedSelectDependency.versions.length > 0 &&
+        (<FDropdownMenu
+          options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
+          onChange={(value) => {
+            onChange({replacedVersion: value});
+          }}
+        >
+          <FContentText
+            type="additional2"
+            text={replaceInformExhibit.replacedVersion || '选择版本'}
+          />
+        </FDropdownMenu>)
+      }
+
     </div>
     <div style={{height: 15}}/>
     <div className={styles.treeArea}>
@@ -82,4 +120,6 @@ function Replaced({}: ReplacedProps) {
   </>);
 }
 
-export default Replaced;
+export default connect(({replaceInformExhibit}: ConnectState) => ({
+  replaceInformExhibit
+}))(Replaced);

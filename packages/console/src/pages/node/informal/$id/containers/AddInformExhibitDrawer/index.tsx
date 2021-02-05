@@ -109,9 +109,9 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
         onDebounceChange={(value) => {
           onChange({addExhibitInputValue: value}, true);
         }}
-        // onChange={(e) => {
-        //   onChange({addExhibitInputValue: e.target.value});
-        // }}
+        onChange={(e) => {
+          onChange({addExhibitInputValue: e.target.value});
+        }}
         theme="dark"
       />
     </div>

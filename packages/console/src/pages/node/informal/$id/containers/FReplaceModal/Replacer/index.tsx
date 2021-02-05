@@ -27,7 +27,7 @@ interface ReplacerProps {
 function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerProps) {
 
   React.useEffect(() => {
-    console.log('@#SDFGDFXVXCZVXZCVSfd');
+    // console.log('@#SDFGDFXVXCZVXZCVSfd');
     dispatch<FetchReplacerListAction>({
       type: 'replaceInformExhibit/fetchReplacerList',
     });
@@ -100,7 +100,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
         <FInput
           theme="dark"
           wrapClassName={styles.replacerFilterInput}
-          value={replaceInformExhibit.replacedKeywords}
+          value={replaceInformExhibit.replacerKeywords}
           debounce={300}
           onDebounceChange={(value) => {
             // console.log(value, 'value!@#$');

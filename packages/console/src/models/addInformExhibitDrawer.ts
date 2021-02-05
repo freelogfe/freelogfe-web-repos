@@ -147,7 +147,7 @@ const Model: AddInformExhibitType = {
       };
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(list, params);
-      console.log(data, 'data13453');
+      // console.log(data, 'data98jhksjkdaf13453');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
