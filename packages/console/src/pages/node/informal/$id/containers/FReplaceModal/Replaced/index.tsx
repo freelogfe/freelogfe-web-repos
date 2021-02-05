@@ -7,7 +7,9 @@ import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
-import {ChangeAction, FetchDependencyTreeAction} from "@/models/replaceInformExhibitModal";
+import {ChangeAction, FetchDependencyTreeAction, TreeNode} from "@/models/replaceInformExhibitModal";
+import {WholeMutable} from "@/models/shared";
+import {dependencyTreeFilter, DependencyTreeFilterParamsType} from "@/services/informalNodes";
 
 interface ReplacedProps {
   dispatch: Dispatch;
@@ -107,6 +109,36 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
     <div className={styles.treeArea}>
       <Tree
         checkable
+        loadData={async (node: any) => {
+          console.log(node, 'n2390jlkjdsfdsf');
+          // if (!replaceInformExhibit.replacedSelectDependency) {
+          //   return false;
+          // }
+          const params: DependencyTreeFilterParamsType = {
+            testResourceId: node.key,
+            dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
+          };
+          const {data} = await dependencyTreeFilter(params);
+          console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
+          const result = updateTreeData(
+            replaceInformExhibit.treeData as TreeNode[],
+            node.key,
+            data.map((d: any) => {
+              return {
+                key: d.id,
+                title: d.name,
+                // children: ddependencies
+              };
+            }),
+          );
+          console.log(result, 'result2094uo1234u234');
+          await dispatch<ChangeAction>({
+            type: 'replaceInformExhibit/change',
+            payload: {
+              treeData: result,
+            }
+          });
+        }}
         // onExpand={onExpand}
         // expandedKeys={expandedKeys}
         // autoExpandParent={autoExpandParent}
@@ -114,7 +146,8 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         // checkedKeys={checkedKeys}
         // onSelect={onSelect}
         // selectedKeys={selectedKeys}
-        treeData={treeData}
+        treeData={replaceInformExhibit.treeData as WholeMutable<ReplaceInformExhibitState['treeData']>}
+        // treeData={treeData}
       />
     </div>
   </>);
@@ -123,3 +156,27 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
 export default connect(({replaceInformExhibit}: ConnectState) => ({
   replaceInformExhibit
 }))(Replaced);
+
+// interface DataNode {
+//   title: string;
+//   key: string;
+//   isLeaf?: boolean;
+//   children?: DataNode[];
+// }
+
+function updateTreeData(list: TreeNode[], key: React.Key, children: TreeNode[]): TreeNode[] {
+  return list.map(node => {
+    if (node.key === key) {
+      return {
+        ...node,
+        children,
+      };
+    } else if (node.children) {
+      return {
+        ...node,
+        children: updateTreeData(node.children, key, children),
+      };
+    }
+    return node;
+  });
+}

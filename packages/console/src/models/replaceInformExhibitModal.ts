@@ -12,11 +12,16 @@ import {
   // FetchMarketAction,
   // FetchMyResourcesAction, FetchObjectAction
 } from "@/models/addInformExhibitDrawer";
-import {dependencyTree, DependencyTreeParamsType} from "@/services/informalNodes";
+import {
+  dependencyTree,
+  DependencyTreeParamsType, searchTestResourcesByDependency,
+  SearchTestResourcesByDependencyParamsType
+} from "@/services/informalNodes";
 
-interface TreeNode {
+export interface TreeNode {
   title: string;
   key: string;
+  isLeaf?: boolean;
   children?: TreeNode[];
 }
 
@@ -88,8 +93,16 @@ export interface FetchObjectAction extends AnyAction {
   payload?: boolean; // 是否 restart
 }
 
+// export interface FetchExhibitDependencyAction extends AnyAction {
+//   type: 'replaceInformExhibit/fetchExhibitDependency';
+// }
+
 export interface FetchDependencyTreeAction extends AnyAction {
-  type: 'replaceInformExhibit/fetchDependencyTree';
+  type: 'replaceInformExhibit/fetchDependencyTree' | 'fetchDependencyTree';
+}
+
+export interface FetchExhibitByDependencyAction extends AnyAction {
+  type: 'replaceInformExhibit/fetchExhibitByDependency' | 'fetchExhibitByDependency';
 }
 
 interface ReplaceInformExhibitModelType {
@@ -103,8 +116,8 @@ interface ReplaceInformExhibitModelType {
     fetchMyResources: (action: FetchMyResourcesAction, effects: EffectsCommandMap) => void;
     fetchCollection: (action: FetchCollectionAction, effects: EffectsCommandMap) => void;
     fetchObject: (action: FetchObjectAction, effects: EffectsCommandMap) => void;
-
     fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
+    fetchExhibitByDependency: (action: FetchExhibitByDependencyAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ReplaceInformExhibitState, ChangeAction>;
@@ -333,7 +346,38 @@ const Model: ReplaceInformExhibitModelType = {
           replacedVersion: '',
         },
       });
+      if (replacedSelectDependency) {
+        yield put<FetchExhibitByDependencyAction>({
+          type: 'fetchExhibitByDependency',
+        });
+      }
+    },
+    * fetchExhibitByDependency({}: FetchExhibitByDependencyAction, {select, call, put}: EffectsCommandMap) {
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
 
+      if (!replaceInformExhibit.replacedSelectDependency) {
+        return;
+      }
+
+      const params: SearchTestResourcesByDependencyParamsType = {
+        nodeId: replaceInformExhibit.nodeID,
+        dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
+      };
+      const {data} = yield call(searchTestResourcesByDependency, params);
+      console.log(data, 'data!@EWFASDfasdfsad');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          treeData: (data as any[]).map<ReplaceInformExhibitState['treeData'][number]>((d: any) => {
+            return {
+              key: d.testResourceId,
+              title: d.testResourceName,
+            };
+          }),
+        }
+      })
     },
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

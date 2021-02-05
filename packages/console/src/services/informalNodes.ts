@@ -77,7 +77,7 @@ export function testResourceDetails({testResourceId}: TestResourceDetailsParamsT
 export interface SearchTestResourcesByDependencyParamsType {
   nodeId: number;
   dependentEntityId: string;
-  dependentEntityVersionRange: string;
+  dependentEntityVersionRange?: string;
 }
 
 export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestResourcesByDependencyParamsType) {
