@@ -17,49 +17,6 @@ interface ReplacedProps {
 }
 
 function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
-  const treeData = [
-    {
-      title: '0-0',
-      key: '0-0',
-      children: [
-        {
-          title: '0-0-0',
-          key: '0-0-0',
-          children: [
-            {title: '0-0-0-0', key: '0-0-0-0'},
-            {title: '0-0-0-1', key: '0-0-0-1'},
-            {title: '0-0-0-2', key: '0-0-0-2'},
-          ],
-        },
-        {
-          title: '0-0-1',
-          key: '0-0-1',
-          children: [
-            {title: '0-0-1-0', key: '0-0-1-0'},
-            {title: '0-0-1-1', key: '0-0-1-1'},
-            {title: '0-0-1-2', key: '0-0-1-2'},
-          ],
-        },
-        {
-          title: '0-0-2',
-          key: '0-0-2',
-        },
-      ],
-    },
-    {
-      title: '0-1',
-      key: '0-1',
-      children: [
-        {title: '0-1-0-0', key: '0-1-0-0'},
-        {title: '0-1-0-1', key: '0-1-0-1'},
-        {title: '0-1-0-2', key: '0-1-0-2'},
-      ],
-    },
-    {
-      title: '0-2',
-      key: '0-2',
-    },
-  ];
 
   async function onChange(payload: Partial<ReplaceInformExhibitState>) {
     await dispatch<ChangeAction>({
@@ -110,42 +67,40 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
       <Tree
         checkable
         loadData={async (node: any) => {
-          console.log(node, 'n2390jlkjdsfdsf');
-          // if (!replaceInformExhibit.replacedSelectDependency) {
-          //   return false;
-          // }
+          // console.log(node, 'n2390jlkjdsfdsf');
+          if (node.pos.split('-').length !== 2) {
+            return;
+          }
           const params: DependencyTreeFilterParamsType = {
             testResourceId: node.key,
             dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
           };
           const {data} = await dependencyTreeFilter(params);
-          console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
-          const result = updateTreeData(
-            replaceInformExhibit.treeData as TreeNode[],
-            node.key,
-            data.map((d: any) => {
-              return {
-                key: d.id,
-                title: d.name,
-                // children: ddependencies
-              };
-            }),
-          );
-          console.log(result, 'result2094uo1234u234');
+          // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
+          const result = updateTreeData({
+            list: replaceInformExhibit.treeData as TreeNode[],
+            key: node.key,
+            children: organizeData(data, node.key),
+          });
+
+          // console.log(result, 'result2094uo1234u234');
           await dispatch<ChangeAction>({
             type: 'replaceInformExhibit/change',
             payload: {
               treeData: result,
-            }
+            },
           });
         }}
-        // onExpand={onExpand}
-        // expandedKeys={expandedKeys}
-        // autoExpandParent={autoExpandParent}
-        // onCheck={onCheck}
-        // checkedKeys={checkedKeys}
-        // onSelect={onSelect}
-        // selectedKeys={selectedKeys}
+        checkedKeys={replaceInformExhibit.checkedKeys as string[]}
+        onCheck={(checkedKeys) => {
+          console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
+          dispatch<ChangeAction>({
+            type: 'replaceInformExhibit/change',
+            payload: {
+              checkedKeys: checkedKeys as string[],
+            }
+          })
+        }}
         treeData={replaceInformExhibit.treeData as WholeMutable<ReplaceInformExhibitState['treeData']>}
         // treeData={treeData}
       />
@@ -154,17 +109,16 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
 }
 
 export default connect(({replaceInformExhibit}: ConnectState) => ({
-  replaceInformExhibit
+  replaceInformExhibit,
 }))(Replaced);
 
-// interface DataNode {
-//   title: string;
-//   key: string;
-//   isLeaf?: boolean;
-//   children?: DataNode[];
-// }
+interface UpdateTreeDataParams {
+  list: TreeNode[];
+  key: React.Key;
+  children: TreeNode[];
+}
 
-function updateTreeData(list: TreeNode[], key: React.Key, children: TreeNode[]): TreeNode[] {
+function updateTreeData({list, key, children}: UpdateTreeDataParams): TreeNode[] {
   return list.map(node => {
     if (node.key === key) {
       return {
@@ -174,9 +128,42 @@ function updateTreeData(list: TreeNode[], key: React.Key, children: TreeNode[]):
     } else if (node.children) {
       return {
         ...node,
-        children: updateTreeData(node.children, key, children),
+        children: updateTreeData({
+          list: node.children,
+          key,
+          children,
+        }),
       };
     }
     return node;
+  });
+}
+
+interface OrganizeData {
+  id: string;
+  name: string;
+  type: string;
+  dependencies: OrganizeData[];
+}
+
+function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
+
+  return data.map<TreeNode>((d) => {
+    const key = parentKey + '-' + d.id;
+
+    if (d.dependencies.length === 0) {
+      return {
+        title: d.name,
+        key,
+        isLeaf: true,
+      };
+    }
+
+    return {
+      title: d.name,
+      key,
+      isLeaf: false,
+      children: organizeData(d.dependencies, key),
+    };
   });
 }

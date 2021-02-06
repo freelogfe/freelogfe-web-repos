@@ -10,7 +10,8 @@ import {
   // FetchAddExhibitListAction,
   // FetchCollectionAction,
   // FetchMarketAction,
-  // FetchMyResourcesAction, FetchObjectAction
+  // FetchMyResourcesAction,
+  // FetchObjectAction,
 } from "@/models/addInformExhibitDrawer";
 import {
   dependencyTree,
@@ -53,6 +54,7 @@ export type ReplaceInformExhibitState = WholeReadonly<{
   // replacedVersions: string[];
   replacedVersion: string;
   treeData: TreeNode[];
+  checkedKeys: string[];
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -143,8 +145,8 @@ const initStates: ReplaceInformExhibitState = {
     type: 'image',
     updateTime: '2002-01-01',
     status: '',
-    versions: ['1.1.1'],
-    version: '1.1.1',
+    versions: [],
+    version: '',
   }],
   checkedResourceName: '2341234',
 
@@ -152,7 +154,8 @@ const initStates: ReplaceInformExhibitState = {
   replacedDependencyTreeList: [],
   replacedSelectDependency: null,
   replacedVersion: '',
-  treeData: []
+  treeData: [],
+  checkedKeys: [],
 };
 
 const Model: ReplaceInformExhibitModelType = {
@@ -193,7 +196,7 @@ const Model: ReplaceInformExhibitModelType = {
         keywords: replaceInformExhibit.replacerKeywords,
       };
       const {data} = yield call(list, params);
-      // console.log(data, 'data134@@@#@#@##@@@@@53');
+      console.log(data, 'data134@@@#@#@##@@@@@53');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -245,8 +248,10 @@ const Model: ReplaceInformExhibitModelType = {
               type: rs.resourceType,
               updateTime: formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              versions: ['1.1.1'],
-              version: '1.1.1',
+              versions: rs.resourceVersions.map((rv: any) => {
+                return rv.version;
+              }),
+              version: rs.latestVersion,
             };
           }),
         },
@@ -300,7 +305,7 @@ const Model: ReplaceInformExhibitModelType = {
       };
 
       const {data} = yield call(objectList, params);
-      // console.log(data, 'data1q2349ojmdfsl');
+      console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -317,7 +322,7 @@ const Model: ReplaceInformExhibitModelType = {
               updateTime: formatDateTime(ob.updateDate),
               status: '',
               versions: ['1.1.1'],
-              version: '1.1.1',
+              version: '',
             };
           }),
         },
@@ -366,7 +371,7 @@ const Model: ReplaceInformExhibitModelType = {
         dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
       };
       const {data} = yield call(searchTestResourcesByDependency, params);
-      console.log(data, 'data!@EWFASDfasdfsad');
+      // console.log(data, 'data!@EWFASDfasdfsad');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -385,7 +390,6 @@ const Model: ReplaceInformExhibitModelType = {
         payload: initStates,
       });
     },
-
   },
   reducers: {
     change(state, {payload}) {

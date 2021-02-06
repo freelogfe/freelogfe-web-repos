@@ -130,11 +130,20 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                       text={`${rl.type} | ${rl.version || '暂无版本'} | ${rl.updateTime}`}
                       type="additional2"
                     />
-                    <FVersionHandlerPopover
-                      value={rl.version}
-                      versionOptions={rl.versions}>
-                      <FTextButton style={{fontSize: 12}}>选择版本</FTextButton>
-                    </FVersionHandlerPopover>
+                    {
+                      rl.version && (<FVersionHandlerPopover
+                        value={rl.version}
+                        versionOptions={rl.versions}
+                        onChange={() => {
+                          dispatch<ChangeAction>({
+                            type: 'replaceInformExhibit/change'
+                          })
+                        }}
+                      >
+                        <FTextButton style={{fontSize: 12}}>选择版本</FTextButton>
+                      </FVersionHandlerPopover>)
+                    }
+
                   </div>
                 </div>
 

@@ -6,7 +6,7 @@ import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
-import {ChangeAction} from "@/models/replaceInformExhibitModal";
+import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
 import {withRouter} from "umi";
 import {ConnectState} from "@/models/connect";
 
@@ -17,9 +17,10 @@ interface FReplaceModalProps {
   onCancel?(): void;
 
   dispatch: Dispatch;
+  replaceInformExhibit: ReplaceInformExhibitState;
 }
 
-function FReplaceModal({visible, onCancel, dispatch, nodeID}: FReplaceModalProps) {
+function FReplaceModal({visible, onCancel, dispatch, nodeID, replaceInformExhibit}: FReplaceModalProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -37,6 +38,9 @@ function FReplaceModal({visible, onCancel, dispatch, nodeID}: FReplaceModalProps
     closable={false}
     onCancel={() => {
       onCancel && onCancel();
+    }}
+    okButtonProps={{
+      disabled: !!replaceInformExhibit.replacerOrigin,
     }}
   >
     <div className={styles.replaceHandler}>
@@ -61,4 +65,6 @@ function FReplaceModal({visible, onCancel, dispatch, nodeID}: FReplaceModalProps
   </FModal>);
 }
 
-export default connect(({}: ConnectState) => ({}))(FReplaceModal);
+export default connect(({replaceInformExhibit}: ConnectState) => ({
+  replaceInformExhibit,
+}))(FReplaceModal);
