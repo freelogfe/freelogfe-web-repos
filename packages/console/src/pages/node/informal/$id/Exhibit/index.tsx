@@ -118,6 +118,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     <FReplaceModal
       nodeID={informalNodeManagerPage.nodeID}
       visible={informalNodeManagerPage.replaceHandlerModalVisible}
+      onCancel={() => {
+        onChange({replaceHandlerModalVisible: false});
+      }}
     />
   </FInfiniteScroll>);
 }

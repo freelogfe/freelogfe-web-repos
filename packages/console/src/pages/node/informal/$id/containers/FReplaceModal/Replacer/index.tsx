@@ -135,9 +135,9 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                         value={rl.version}
                         versionOptions={rl.versions}
                         onChange={() => {
-                          dispatch<ChangeAction>({
-                            type: 'replaceInformExhibit/change'
-                          })
+                          // dispatch<ChangeAction>({
+                          //   type: 'replaceInformExhibit/change'
+                          // })
                         }}
                       >
                         <FTextButton style={{fontSize: 12}}>选择版本</FTextButton>
