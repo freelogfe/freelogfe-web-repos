@@ -245,13 +245,13 @@ const Model: AddInformExhibitType = {
       };
 
       const {data} = yield call(objectList, params);
-      console.log(data, 'data1q2349ojmdfsl');
+      // console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
             const objectName: string = ob.bucketName + '/' + ob.objectName;
-            console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '#####');
+            // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
             return {
               id: ob.objectId,
               disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),

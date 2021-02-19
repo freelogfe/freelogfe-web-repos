@@ -244,7 +244,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const currentNode = nodes.list.find((n) => n.nodeId === data.nodeId);
 
-      console.log(data, '#######');
+      // console.log(data, '#######32409jkldfsmdslkdsf');
 
       const params1: InfoParamsType = {
         resourceIdOrName: data.originInfo.id,

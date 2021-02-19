@@ -42,6 +42,18 @@ export function dependencyTree({nodeId, keywords}: DependencyTreeParamsType) {
   });
 }
 
+// 追加节点的测试规则 (在现有测试规则尾部追加新的测试规则)
+export interface PutRulesParamsType {
+  nodeId: number;
+  additionalTestRule: string;
+}
+
+export function putRules({nodeId, additionalTestRule}: PutRulesParamsType) {
+  return request.put(`/v2/testNodes/${nodeId}/rules`, {
+    additionalTestRule,
+  });
+}
+
 // 查看节点当前测试规则
 export interface TestNodeRulesParamsType {
   nodeId: number;

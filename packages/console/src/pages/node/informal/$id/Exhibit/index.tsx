@@ -11,7 +11,7 @@ import FDropdownMenu from "@/components/FDropdownMenu";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
-import {ChangeAction, FetchExhibitListAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchExhibitListAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
 
 import Replacer from "@/pages/node/informal/$id/containers/FReplaceModal/Replacer";
@@ -22,6 +22,8 @@ import FLoadingTip from "@/components/FLoadingTip";
 import {WholeMutable} from "@/models/shared";
 import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
+
+const {decompile} = require('@freelog/nmr_translator');
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -39,6 +41,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   async function initData() {
     await dispatch<FetchExhibitListAction>({
       type: 'informalNodeManagerPage/fetchExhibitList',
+      payload: true,
     });
   }
 
@@ -46,13 +49,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
-  if (informalNodeManagerPage.exhibitList.length === 0) {
-    return (<FNoDataTip
-      height={'calc(100vh - 94px)'}
-      tipText={'当前测试节点没有添加展品'}
-      btnText={'添加测试展品'}
-    />);
-  }
+  // if (informalNodeManagerPage.exhibitList.length === 0) {
+  //   return ();
+  // }
 
   function onChange(value: Partial<InformalNodeManagerPageModelState>) {
     dispatch<ChangeAction>({
@@ -63,40 +62,54 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     });
   }
 
-  return (<FInfiniteScroll
-    loadMore={() => {
-      console.log('1234#####');
-    }}
-  >
-    <div className={styles.header}>
-      <FTitleText text={'展品管理'}/>
-      <Space size={30}>
-        <Space size={5}>
-          <FTextButton onClick={() => {
+  return (<>
+    {
+      informalNodeManagerPage.exhibitList.length === 0
+        ? (<FNoDataTip
+          height={'calc(100vh - 94px)'}
+          tipText={'当前测试节点没有添加展品'}
+          btnText={'添加测试展品'}
+          onClick={() => {
+            console.log('@#$!@#$!@#$@#$90j.k23');
             onChange({addExhibitDrawerVisible: true});
-          }}><FAdd/></FTextButton>
-          <FContentText text={'新增测试展品'}/>
-        </Space>
-        <Space size={5}>
-          <FTextButton onClick={() => {
-            onChange({replaceHandlerModalVisible: true});
-          }}><FMappingRuleReplace/></FTextButton>
-          <FContentText text={'资源替换'}/>
-        </Space>
-        <div>
-          <FDropdownMenu
-            options={[{value: '1234', text: '1234'}]}
-            text={'筛选'}
-          />
-        </div>
-        <div><FInput theme={'dark'}/></div>
-      </Space>
-    </div>
-    <div className={styles.body}>
-      <div>
-        <ExhibitTable/>
-      </div>
-    </div>
+          }}
+        />)
+        : (<FInfiniteScroll
+          loadMore={() => {
+            console.log('1234####0-p23[k,l;dsf#');
+          }}
+        >
+          <div className={styles.header}>
+            <FTitleText text={'展品管理'}/>
+            <Space size={30}>
+              <Space size={5}>
+                <FTextButton onClick={() => {
+                  onChange({addExhibitDrawerVisible: true});
+                }}><FAdd/></FTextButton>
+                <FContentText text={'新增测试展品'}/>
+              </Space>
+              <Space size={5}>
+                <FTextButton onClick={() => {
+                  onChange({replaceHandlerModalVisible: true});
+                }}><FMappingRuleReplace/></FTextButton>
+                <FContentText text={'资源替换'}/>
+              </Space>
+              <div>
+                <FDropdownMenu
+                  options={[{value: '1234', text: '1234'}]}
+                  text={'筛选'}
+                />
+              </div>
+              <div><FInput theme={'dark'}/></div>
+            </Space>
+          </div>
+          <div className={styles.body}>
+            <div>
+              <ExhibitTable/>
+            </div>
+          </div>
+        </FInfiniteScroll>)
+    }
 
     <AddInformExhibitDrawer
       visible={informalNodeManagerPage.addExhibitDrawerVisible}
@@ -106,7 +119,24 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         });
       }}
       onConfirm={(value) => {
-        // console.log(value, 'VVVVVV');
+        console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
+        dispatch<SaveDataRulesAction>({
+          type: 'informalNodeManagerPage/saveDataRules',
+          payload: {
+            type: 'append',
+            data: value.names.map((n) => {
+              return {
+                operation: 'add',
+                exhibitName: n.replace('/', '_'),
+                candidate: {
+                  name: n,
+                  versionRange: 'latest',
+                  type: value.identity,
+                },
+              };
+            }),
+          },
+        });
         onChange({
           addExhibitDrawerVisible: false,
         });
@@ -122,7 +152,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         onChange({replaceHandlerModalVisible: false});
       }}
     />
-  </FInfiniteScroll>);
+  </>);
 }
 
 export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState) => ({

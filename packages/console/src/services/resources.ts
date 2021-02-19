@@ -222,7 +222,6 @@ export function resourceIsUsedByOther(params: ResourceIsUsedByOtherParamsType) {
   });
 }
 
-
 // 下载资源文件
 export interface ResourcesDownloadParamsType {
   resourceId: string;

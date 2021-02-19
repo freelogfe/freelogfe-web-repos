@@ -4,7 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {
   createRules,
-  CreateRulesParamsType,
+  CreateRulesParamsType, putRules, PutRulesParamsType,
   rulesRematch,
   RulesRematchParamsType,
   testNodeRules,
@@ -13,6 +13,8 @@ import {
   TestResourcesParamsType,
 } from "@/services/informalNodes";
 import {completeUrlByDomain} from "@/utils/format";
+
+const {decompile} = require('@freelog/nmr_translator');
 
 export type InformalNodeManagerPageModelState = WholeReadonly<{
   nodeID: number;
@@ -23,7 +25,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
-
 
   replaceHandlerModalVisible: boolean;
   replacerActivatedTab: 'market' | 'resource' | 'collection';
@@ -45,6 +46,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     associatedExhibitID: string;
     name: string;
     title: string;
+    identity: 'resource' | 'object';
     rule: {
       add?: {
         exhibit: string;
@@ -126,10 +128,12 @@ export interface FetchInfoAction extends AnyAction {
 
 export interface FetchExhibitListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchExhibitList';
+  payload: boolean;
 }
 
 export interface FetchThemeListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchThemeList';
+  payload: boolean;
 }
 
 export interface FetchRulesAction extends AnyAction {
@@ -140,7 +144,38 @@ export interface SaveRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/saveRules';
 }
 
+interface ICandidate {
+  name: string;
+  versionRange?: string;
+  type: 'resource' | 'object';
+}
 
+export interface SaveDataRulesAction extends AnyAction {
+  type: 'informalNodeManagerPage/saveDataRules';
+  payload: {
+    type: 'append' | 'replace';
+    data: {
+      operation: 'add' | 'alter';
+      exhibitName: string;
+      candidate?: ICandidate;
+      labels?: string[];
+      replace?: {
+        replaced: ICandidate;
+        replacer: ICandidate;
+        scopes: ICandidate[][];
+      }[];
+      online?: boolean;
+      cover?: string;
+      title?: string;
+      attrs?: {
+        operation: 'add' | 'delete';
+        key: string;
+        value?: string;
+        description?: string;
+      }[];
+    }[];
+  }
+}
 
 interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
@@ -153,6 +188,7 @@ interface InformalNodeManagerPageModelType {
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
+    saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformalNodeManagerPageModelState, ChangeAction>;
@@ -239,7 +275,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: initStates,
       });
     },
-    * fetchExhibitList({}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchExhibitList({payload = true}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -254,7 +290,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
-        isRematch: true,
+        isRematch: payload,
       };
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
@@ -268,7 +304,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      // console.log(data, 'DDD@@@@@');
+      console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -312,6 +348,7 @@ const Model: InformalNodeManagerPageModelType = {
               cover: dl.stateInfo.coverInfo.coverImages[0] || '',
               name: dl.testResourceName,
               title: dl.stateInfo.titleInfo.title,
+              identity: dl.originInfo.type,
               rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.status === 1,
@@ -323,7 +360,7 @@ const Model: InformalNodeManagerPageModelType = {
         }
       });
     },
-    * fetchThemeList({}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchThemeList({payload = true}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -337,7 +374,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
-        isRematch: true,
+        isRematch: payload,
       };
 
       yield call(ruleMatchStatus, params2);
@@ -439,6 +476,44 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
 
+    * saveDataRules({payload}: SaveDataRulesAction, {call, select, put}: EffectsCommandMap) {
+
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      console.log(payload.data, 'payload.data0923jlkfasdfasdf');
+      const text = decompile(payload.data);
+      console.log(text, 'text1234fklsadj');
+
+      if (payload.type === 'append') {
+        const params: PutRulesParamsType = {
+          nodeId: informalNodeManagerPage.nodeID,
+          additionalTestRule: text,
+        };
+        const {data} = yield call(putRules, params);
+      }
+      if (payload.type === 'replace') {
+        const params: CreateRulesParamsType = {
+          nodeId: informalNodeManagerPage.nodeID,
+          testRuleText: text,
+        };
+        const {data} = yield call(createRules, params);
+      }
+
+      if (informalNodeManagerPage.showPage === 'exhibit') {
+        yield put<FetchExhibitListAction>({
+          type: 'informalNodeManagerPage/fetchExhibitList',
+          payload: false,
+        });
+      }
+      if (informalNodeManagerPage.showPage === 'theme') {
+        yield put<FetchThemeListAction>({
+          type: 'informalNodeManagerPage/fetchThemeList',
+          payload: false,
+        });
+      }
+    },
   },
   reducers: {
     change(state, {payload}) {
