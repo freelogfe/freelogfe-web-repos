@@ -15,6 +15,9 @@ import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
 import {FTextButton} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
+import {SaveDataRulesAction} from "@/models/informalNodeManagerPage";
+
+const {compile} = require('@freelog/nmr_translator');
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -204,9 +207,23 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
         >
           <Actions
             onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
-            onSearch={() => router.push(resourceDetails({resourceID: record.resourceId}))}
+            onSearch={() => {
+              if (record.identity === 'resource') {
+                router.push(resourceDetails({resourceID: record.originId}));
+              }
+            }}
             onDelete={!!record.associatedExhibitID ? undefined : () => {
-
+              const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+              // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
+              dispatch<SaveDataRulesAction>({
+                type: 'informalNodeManagerPage/saveDataRules',
+                payload: {
+                  type: 'replace',
+                  data: rules.filter((r) => {
+                    return r.exhibitName !== record.name;
+                  }),
+                },
+              });
             }}
           />
         </div>);
@@ -235,13 +252,23 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               disabled={false}
               checked={record.isOnline}
               onChange={(value) => {
-                // dispatch<OnOnlineOrOfflineAction>({
-                //   type: 'nodeManagerPage/onOnlineOrOffline',
-                //   payload: {
-                //     id: record.id,
-                //     onlineStatus: value ? 1 : 0,
-                //   },
-                // });
+                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
+                dispatch<SaveDataRulesAction>({
+                  type: 'informalNodeManagerPage/saveDataRules',
+                  payload: {
+                    type: 'replace',
+                    data: rules.map((r) => {
+                      if (r.exhibitName !== record.name) {
+                        return r;
+                      }
+                      return {
+                        ...r,
+                        online: value,
+                      };
+                    }),
+                  },
+                });
               }}
             />
             {/*{!record.isAuth || record.policies.length === 0 ?*/}

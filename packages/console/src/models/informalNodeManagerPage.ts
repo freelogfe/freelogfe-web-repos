@@ -21,6 +21,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
+  ruleText: string;
 
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
@@ -47,6 +48,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     name: string;
     title: string;
     identity: 'resource' | 'object';
+    originId: string;
     rule: {
       add?: {
         exhibit: string;
@@ -79,7 +81,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     };
     version: string;
     isOnline: boolean;
-    resourceId: string;
     isAuth: boolean;
     authErrorText: string;
   }[];
@@ -127,12 +128,12 @@ export interface FetchInfoAction extends AnyAction {
 }
 
 export interface FetchExhibitListAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchExhibitList';
+  type: 'informalNodeManagerPage/fetchExhibitList' | 'fetchExhibitList';
   payload: boolean;
 }
 
 export interface FetchThemeListAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchThemeList';
+  type: 'informalNodeManagerPage/fetchThemeList' | 'fetchThemeList';
   payload: boolean;
 }
 
@@ -204,6 +205,7 @@ const initStates: InformalNodeManagerPageModelState = {
   nodeName: '',
   nodeUrl: '',
   testNodeUrl: '',
+  ruleText: '',
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
@@ -294,7 +296,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
-      // console.log(bool, 'bool1234');
+      console.log(data1, 'bool1234');
 
       const params: TestResourcesParamsType = {
         nodeId: informalNodeManagerPage.nodeID,
@@ -309,6 +311,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          ruleText: data1.ruleText,
           exhibitListIsLoading: false,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
             const operations: string[] = [];
@@ -352,7 +355,7 @@ const Model: InformalNodeManagerPageModelType = {
               rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.status === 1,
-              resourceId: dl.originInfo.id,
+              originId: dl.originInfo.id,
               isAuth: true,
               authErrorText: '',
             };
@@ -377,7 +380,7 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: payload,
       };
 
-      yield call(ruleMatchStatus, params2);
+      const {data: data1} = yield call(ruleMatchStatus, params2);
 
       const params: TestResourcesParamsType = {
         nodeId: informalNodeManagerPage.nodeID,
@@ -391,6 +394,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          ruleText: data1.ruleText,
           themeListIsLoading: false,
           themeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themeList'][number]>((dl) => {
             // console.log(dl, 'dl1234213');
@@ -469,6 +473,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          ruleText: data1.ruleText,
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           codeSaveSuccess: codeExecutionError.length === 0 ? true : null,
@@ -503,13 +508,13 @@ const Model: InformalNodeManagerPageModelType = {
 
       if (informalNodeManagerPage.showPage === 'exhibit') {
         yield put<FetchExhibitListAction>({
-          type: 'informalNodeManagerPage/fetchExhibitList',
+          type: 'fetchExhibitList',
           payload: false,
         });
       }
       if (informalNodeManagerPage.showPage === 'theme') {
         yield put<FetchThemeListAction>({
-          type: 'informalNodeManagerPage/fetchThemeList',
+          type: 'fetchThemeList',
           payload: false,
         });
       }
