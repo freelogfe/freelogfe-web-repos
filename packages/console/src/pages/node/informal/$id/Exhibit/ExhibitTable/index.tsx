@@ -254,31 +254,47 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               onChange={(value) => {
                 const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
                 // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
+
+                const rule = rules.find((r) => r.exhibitName === record.name);
+
+                let data;
+
+                if (rule) {
+                  data = rules.map((r) => {
+                    if (r.exhibitName !== record.name) {
+                      return r;
+                    }
+                    return {
+                      ...r,
+                      online: value,
+                    };
+                  })
+                } else {
+                  data = [
+                    ...rules,
+                    {
+                      operation: 'alter',
+                      exhibitName: record.name,
+                      online: value,
+                    }
+                  ]
+                }
+
                 dispatch<SaveDataRulesAction>({
                   type: 'informalNodeManagerPage/saveDataRules',
                   payload: {
                     type: 'replace',
-                    data: rules.map((r) => {
-                      if (r.exhibitName !== record.name) {
-                        return r;
-                      }
-                      return {
-                        ...r,
-                        online: value,
-                      };
-                    }),
+                    data: data,
                   },
                 });
               }}
             />
-            {/*{!record.isAuth || record.policies.length === 0 ?*/}
-            <FTooltip
-              // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}
-              title={'暂无上线策略'}
-            >
-              <FWarning/>
-            </FTooltip>
-            {/*: ''}*/}
+            {/*<FTooltip*/}
+            {/*  // title={!record.isAuth ? record.authErrorText : '暂无上线策略'}*/}
+            {/*  title={'暂无上线策略'}*/}
+            {/*>*/}
+            {/*  <FWarning/>*/}
+            {/*</FTooltip>*/}
           </Space>
         </div>);
       },

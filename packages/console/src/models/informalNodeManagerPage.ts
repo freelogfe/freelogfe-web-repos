@@ -335,15 +335,6 @@ const Model: InformalNodeManagerPageModelType = {
               offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
               // attrs:
             };
-            // propertyInfo:
-            // ruleId: "88325cef8778f28bffed94d39d2291d8"
-            // testResourceProperty: (4) [{…}, {…}, {…}, {…}]
-            // __proto__: Object
-            // themeInfo:
-            // isActivatedTheme: 0
-            // ruleId: "default"
-            // __proto__: Object
-
             return {
               id: dl.testResourceId,
               key: dl.testResourceId,
@@ -354,7 +345,7 @@ const Model: InformalNodeManagerPageModelType = {
               identity: dl.originInfo.type,
               rule: rule,
               version: dl.originInfo.version,
-              isOnline: dl.status === 1,
+              isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
               originId: dl.originInfo.id,
               isAuth: true,
               authErrorText: '',
@@ -489,7 +480,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       console.log(payload.data, 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
-      console.log(text, 'text1234fklsadj');
+      // console.log(text, 'text1234fklsadj');
 
       if (payload.type === 'append') {
         const params: PutRulesParamsType = {
