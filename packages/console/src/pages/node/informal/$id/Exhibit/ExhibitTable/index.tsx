@@ -71,126 +71,18 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             </div>
           </div>
           <div>
-            {
-              index === 0 && (<MappingRule
-                add={{
-                  exhibit: 'freelog白皮书',
-                  source: {
-                    type: 'resource',
-                    name: 'Stefan/freelog白皮书',
-                  }
-                }}
-                version={'1.0.0'}
-                labels={['label1', 'label2', 'label3']}
-                online={true}
-                title={'标题1'}
-                cover={'png'}
-                replaces={[{
-                  replaced: 'Stefan/freelog平台设计规范目录',
-                  replacer: {
-                    type: 'object',
-                    name: 'bucket_3/mock_resource_3'
-                  },
-                  scope: [
-                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
-                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
-                  ],
-                }]}
-                attrs={[{
-                  type: 'add',
-                  theKey: 'key1',
-                  value: 'value1',
-                  description: '描述1',
-                }, {
-                  type: 'add',
-                  theKey: 'key2',
-                  value: 'value2',
-                }, {
-                  type: 'delete',
-                  theKey: 'key3',
-                }]}
-              />)
-            }
-
-            {
-              index === 1 && (<MappingRule
-                alter={'展品1'}
-                version={'1.0.0'}
-                labels={['label1', 'label2', 'label3']}
-                online={true}
-                title={'标题1'}
-                cover={'png'}
-                replaces={[{
-                  replaced: 'Stefan/freelog平台设计规范目录',
-                  replacer: {
-                    type: 'object',
-                    name: 'bucket_3/mock_resource_3'
-                  },
-                  scope: [
-                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
-                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
-                  ],
-                }]}
-                attrs={[{
-                  type: 'add',
-                  theKey: 'key1',
-                  value: 'value1',
-                  description: '描述1',
-                }, {
-                  type: 'add',
-                  theKey: 'key2',
-                  value: 'value2',
-                }, {
-                  type: 'delete',
-                  theKey: 'key3',
-                }]}
-              />)
-            }
-
-            {
-              index === 2 && (<MappingRule
-                add={{
-                  exhibit: 'freelog白皮书',
-                  source: {
-                    type: 'resource',
-                    name: 'Stefan/freelog白皮书',
-                  }
-                }}
-                active={'freelog白皮书'}
-                version={'1.0.0'}
-                labels={['label1', 'label2', 'label3']}
-                online={true}
-                title={'标题1'}
-                cover={'png'}
-                replaces={[{
-                  replaced: 'Stefan/freelog平台设计规范目录',
-                  replacer: {
-                    type: 'object',
-                    name: 'bucket_3/mock_resource_3'
-                  },
-                  scope: [
-                    ['user1/resource1', 'user1/resource2', 'user1/resource3'],
-                    ['user2/resource1', 'user2/resource2', 'user2/resource3'],
-                  ],
-                }]}
-                attrs={[{
-                  type: 'add',
-                  theKey: 'key1',
-                  value: 'value1',
-                  description: '描述1',
-                }, {
-                  type: 'add',
-                  theKey: 'key2',
-                  value: 'value2',
-                }, {
-                  type: 'delete',
-                  theKey: 'key3',
-                }]}
-              />)
-            }
-
-            {index !== 0 && index !== 1 && index !== 2 && <MappingRule/>}
-
+            <MappingRule
+              {...record.rule}
+                // add={record.rule.add}
+                // alter={record.rule.alter}
+                // version={record.rule.version}
+                // labels={record.rule.labels}
+                // online={record.rule.online}
+                // title={record.rule.title}
+                // cover={record.rule.cover}
+                // replaces={record.rule.replaces}
+                // attrs={record.rule.attrs}
+              />
           </div>
         </div>);
       }

@@ -22,8 +22,22 @@ import FLoadingTip from "@/components/FLoadingTip";
 import {WholeMutable} from "@/models/shared";
 import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
+import {OnChangeExhibitAction} from "@/models/nodeManagerPage";
+import {FDown} from "@/components/FIcons";
+import {resourceTypes} from "@/utils/globals";
 
 const {decompile} = require('@freelog/nmr_translator');
+
+const resourceTypeOptions = [
+  {text: '全部', value: '-1'},
+  ...resourceTypes.map((i) => ({value: i, text: i}))
+];
+
+const resourceStatusOptions = [
+  {text: '全部', value: '2'},
+  {text: '已上线', value: '1'},
+  {text: '已下线', value: '0'},
+];
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -95,10 +109,36 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <FContentText text={'资源替换'}/>
               </Space>
               <div>
+                <span>类型：</span>
                 <FDropdownMenu
-                  options={[{value: '1234', text: '1234'}]}
-                  text={'筛选'}
-                />
+                  options={resourceTypeOptions}
+                  onChange={(value) => dispatch<OnChangeExhibitAction>({
+                    type: 'nodeManagerPage/onChangeExhibit',
+                    payload: {
+                      selectedType: value,
+                    },
+                  })}
+                >
+            <span
+              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === informalNodeManagerPage.selectedType)?.text || ''}<FDown
+              style={{marginLeft: 8}}/></span>
+                </FDropdownMenu>
+              </div>
+              <div>
+                <span>状态：</span>
+                <FDropdownMenu
+                  options={resourceStatusOptions}
+                  onChange={(value) => dispatch<OnChangeExhibitAction>({
+                    type: 'nodeManagerPage/onChangeExhibit',
+                    payload: {
+                      selectedStatus: value,
+                    },
+                  })}
+                >
+            <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
+              return rso.value === informalNodeManagerPage.selectedStatus.toString();
+            })?.text}<FDown style={{marginLeft: 10}}/></span>
+                </FDropdownMenu>
               </div>
               <div><FInput theme={'dark'}/></div>
             </Space>

@@ -41,6 +41,38 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
 
+  selectedType: '-1' | string;
+  selectedStatus: '0' | '1' | '2';
+
+  exhibitListIsLoading: boolean;
+
+  themeList: {
+    id: string;
+    name: string;
+    cover: string;
+    version: string;
+    rules: any[];
+    isOnline: boolean;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
+  themeListIsLoading: boolean;
+
+  isCodeEditing: boolean;
+  codeInput: string;
+  codeIsDirty: boolean;
+  codeIsChecking: boolean;
+  codeCompileErrors: null | {
+    charPositionInLine: number;
+    line: number;
+    msg: string;
+    offendingSymbol: string;
+  }[];
+  codeExecutionError: null | {
+    msg: string;
+  }[];
+  codeSaveSuccess: null | true;
+}> & {
   exhibitList: {
     id: string;
     cover: string;
@@ -84,35 +116,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     isAuth: boolean;
     authErrorText: string;
   }[];
-  exhibitListIsLoading: boolean;
-
-  themeList: {
-    id: string;
-    name: string;
-    cover: string;
-    version: string;
-    rules: any[];
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-  }[];
-  themeListIsLoading: boolean;
-
-  isCodeEditing: boolean;
-  codeInput: string;
-  codeIsDirty: boolean;
-  codeIsChecking: boolean;
-  codeCompileErrors: null | {
-    charPositionInLine: number;
-    line: number;
-    msg: string;
-    offendingSymbol: string;
-  }[];
-  codeExecutionError: null | {
-    msg: string;
-  }[];
-  codeSaveSuccess: null | true;
-}>;
+};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
@@ -234,6 +238,8 @@ const initStates: InformalNodeManagerPageModelState = {
     status: 'online',
   }],
 
+  selectedType: '-1',
+  selectedStatus: '2',
   exhibitList: [],
   exhibitListIsLoading: false,
 
@@ -314,7 +320,7 @@ const Model: InformalNodeManagerPageModelType = {
           ruleText: data1.ruleText,
           exhibitListIsLoading: false,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
-            const operations: string[] = [];
+            const operations: string[] = dl.rules[0]?.operations || [];
             // console.log(operations, 'operations12334');
             const stateInfo = dl.stateInfo;
 
