@@ -4,7 +4,12 @@ import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import {FTextButton} from "@/components/FButton";
-import {ChangeAction, FetchThemeListAction, InformalNodeManagerPageModelState} from "@/models/informalNodeManagerPage";
+import {
+  ChangeAction,
+  FetchThemeListAction,
+  InformalNodeManagerPageModelState,
+  SaveDataRulesAction
+} from "@/models/informalNodeManagerPage";
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
@@ -16,6 +21,8 @@ import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
 import {informExhibitManagement} from "@/utils/path-assembler";
+import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
+const {compile} = require('@freelog/nmr_translator');
 
 interface ThemeProps {
   dispatch: Dispatch;
@@ -36,99 +43,189 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
-  if (informalNodeManagerPage.themeList.length === 0) {
-    return (<FNoDataTip
-      height={'calc(100vh - 94px)'}
-      tipText={'当前节点没有添加主题展品'}
-      btnText={'添加测试主题展品'}
-    />);
+  // if (informalNodeManagerPage.themeList.length === 0) {
+  //   return ();
+  // }
+
+  function onChange(value: Partial<InformalNodeManagerPageModelState>) {
+    dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload: {
+        ...value,
+      },
+    });
   }
 
   return (<>
-    <div className={styles.header}>
-      <FTitleText text={'展品管理'}/>
-      <Space size={30}>
-        <Space size={5}>
-          <FTextButton onClick={() => {
-            // dispatch<ChangeAction>({
-            //   type: 'informalNodeManagerPage/change',
-            //   payload: {
-            //     addExhibitDrawerVisible: true,
-            //   },
-            // });
-          }}><FAdd/></FTextButton>
-          <FContentText text={'新增测试展品'}/>
-        </Space>
-        <div><FInput theme={'dark'}/></div>
-      </Space>
-    </div>
-
-    <div className={styles.body}>
-      <div className={styles.list}>
-        {
-          informalNodeManagerPage.themeList.map((t) => {
-            return (<div
-              key={t.id}
-              className={styles.item}
-            >
-              <div className={styles.cover}>
-                <img src={t.cover || imgSrc} alt=""/>
-                <div className={styles.coverLabel}>
-                  {
-                    t.isOnline
-                      ? (<label className={styles.activated}>已激活</label>)
-                      : (<>
-                        <label className={styles.nonActivated}>未激活</label>
-                        <div style={{width: 10}}/>
-                        <FWarning/>
-                      </>)
-                  }
-                </div>
-                <div className={styles.coverFooter}>
-                  {
-                    t.isOnline
-                      ? (<span onClick={() => {
-                        router.push(informExhibitManagement({exhibitID: t.id}));
-                      }}>编辑</span>)
-                      : (<div>
-                        <div style={{width: 1}}/>
-                        <span onClick={() => {
-                          router.push(informExhibitManagement({exhibitID: t.id}));
-                        }}>编辑</span>
-                        <span>|</span>
-                        <span onClick={() => {
-                        }}>激活</span>
-                        <div style={{width: 1}}/>
-                      </div>)
-                  }
-                </div>
-              </div>
-              <div style={{height: 12}}/>
-              <div className={styles.itemTitle}>
-                <FIdentityTypeBadge/>
-                <div style={{width: 5}}/>
-                <FTitleText
-                  type="h5"
-                  text={t.name}
-                  singleRow
-                />
-              </div>
-              <div style={{height: 6}}/>
-              <div className={styles.itemVersion}>
+    {
+      informalNodeManagerPage.themeList.length === 0
+        ? (<FNoDataTip
+          height={'calc(100vh - 94px)'}
+          tipText={'当前节点没有添加主题展品'}
+          btnText={'添加测试主题展品'}
+          onClick={() => {
+            onChange({
+              addThemeDrawerVisible: true,
+            });
+          }}
+        />)
+        : (<>
+          <div className={styles.header}>
+            <FTitleText text={'展品管理'}/>
+            <Space size={30}>
+              <Space size={5}>
+                <FTextButton
+                  onClick={() => {
+                    onChange({
+                      addThemeDrawerVisible: true,
+                    });
+                  }}><FAdd/></FTextButton>
                 <FContentText
-                  text={`展示版本 ${t.version}`}
-                  type="additional1"
+                  text={'新增测试展品'}
                 />
-              </div>
-              <div style={{height: 10}}/>
-              <div className={styles.itemBar}>
-                <MappingRule/>
-              </div>
-            </div>);
-          })
-        }
-      </div>
-    </div>
+              </Space>
+              <div><FInput theme={'dark'}/></div>
+            </Space>
+          </div>
+
+          <div className={styles.body}>
+            <div className={styles.list}>
+              {
+                informalNodeManagerPage.themeList.map((t) => {
+                  return (<div
+                    key={t.id}
+                    className={styles.item}
+                  >
+                    <div className={styles.cover}>
+                      <img src={t.cover || imgSrc} alt=""/>
+                      <div className={styles.coverLabel}>
+                        {
+                          t.isOnline
+                            ? (<label className={styles.activated}>已激活</label>)
+                            : (<>
+                              <label className={styles.nonActivated}>未激活</label>
+                              <div style={{width: 10}}/>
+                              <FWarning/>
+                            </>)
+                        }
+                      </div>
+                      <div className={styles.coverFooter}>
+                        {
+                          t.isOnline
+                            ? (<span onClick={() => {
+                              router.push(informExhibitManagement({exhibitID: t.id}));
+                            }}>编辑</span>)
+                            : (<div>
+                              <div style={{width: 1}}/>
+                              <span onClick={() => {
+                                router.push(informExhibitManagement({exhibitID: t.id}));
+                              }}>编辑</span>
+                              <span>|</span>
+                              <span onClick={() => {
+                                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                                console.log(rules, 'rules1234234');
+                                const rule = rules.find((r) => r.themeName);
+
+                                let data;
+
+                                if (rule) {
+                                  data = rules.map((r) => {
+                                    if (!r.themeName) {
+                                      return r;
+                                    }
+                                    return {
+                                      ...r,
+                                      themeName: t.name,
+                                    };
+                                  })
+                                } else {
+                                  data = [
+                                    ...rules,
+                                    {
+                                      operation: 'activate_theme',
+                                      themeName: t.name,
+                                    }
+                                  ]
+                                }
+                                console.log(rule, 'rule21930usdf');
+
+                                dispatch<SaveDataRulesAction>({
+                                  type: 'informalNodeManagerPage/saveDataRules',
+                                  payload: {
+                                    type: 'replace',
+                                    data: data,
+                                  },
+                                });
+                              }}>激活</span>
+                              <div style={{width: 1}}/>
+                            </div>)
+                        }
+                      </div>
+                    </div>
+                    <div style={{height: 12}}/>
+                    <div className={styles.itemTitle}>
+                      <FIdentityTypeBadge/>
+                      <div style={{width: 5}}/>
+                      <FTitleText
+                        type="h5"
+                        text={t.name}
+                        singleRow
+                      />
+                    </div>
+                    <div style={{height: 6}}/>
+                    <div className={styles.itemVersion}>
+                      <FContentText
+                        text={`展示版本 ${t.version}`}
+                        type="additional1"
+                      />
+                    </div>
+                    <div style={{height: 10}}/>
+                    <div className={styles.itemBar}>
+                      <MappingRule
+                        {...t.rule}
+                      />
+                    </div>
+                  </div>);
+                })
+              }
+            </div>
+          </div>
+        </>)
+    }
+
+    <AddInformExhibitDrawer
+      visible={informalNodeManagerPage.addThemeDrawerVisible}
+      onCancel={() => {
+        onChange({
+          addThemeDrawerVisible: false,
+        });
+      }}
+      onConfirm={(value) => {
+        // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
+        dispatch<SaveDataRulesAction>({
+          type: 'informalNodeManagerPage/saveDataRules',
+          payload: {
+            type: 'append',
+            data: value.names.map((n) => {
+              return {
+                operation: 'add',
+                exhibitName: n.replace('/', '_'),
+                candidate: {
+                  name: n,
+                  versionRange: 'latest',
+                  type: value.identity,
+                },
+              };
+            }),
+          },
+        });
+        onChange({
+          addExhibitDrawerVisible: false,
+        });
+      }}
+      disabledResourceNames={['Freelog/blog-theme']}
+      disabledObjectNames={['234234/th002.jpeg']}
+    />
   </>);
 }
 

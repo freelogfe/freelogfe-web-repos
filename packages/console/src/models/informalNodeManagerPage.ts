@@ -16,6 +16,38 @@ import {completeUrlByDomain} from "@/utils/format";
 
 const {decompile} = require('@freelog/nmr_translator');
 
+interface IMappingRule {
+  add?: {
+    exhibit: string;
+    source: {
+      type: 'resource' | 'object';
+      name: string;
+    };
+  };
+  alter?: string;
+  active?: string;
+  version?: string;
+  cover?: string;
+  title?: string;
+  online?: boolean;
+  offline?: boolean;
+  labels?: string[];
+  replaces?: {
+    replacer: {
+      type: 'resource' | 'object';
+      name: string;
+    };
+    replaced: string;
+    scope: string[][];
+  }[];
+  attrs?: {
+    type: 'add' | 'delete',
+    theKey: string;
+    value?: string;
+    description?: string;
+  }[];
+}
+
 export type InformalNodeManagerPageModelState = WholeReadonly<{
   nodeID: number;
   nodeName: string;
@@ -46,17 +78,8 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   exhibitListIsLoading: boolean;
 
-  themeList: {
-    id: string;
-    name: string;
-    cover: string;
-    version: string;
-    rules: any[];
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-  }[];
   themeListIsLoading: boolean;
+  addThemeDrawerVisible: boolean;
 
   isCodeEditing: boolean;
   codeInput: string;
@@ -81,37 +104,19 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     title: string;
     identity: 'resource' | 'object';
     originId: string;
-    rule: {
-      add?: {
-        exhibit: string;
-        source: {
-          type: 'resource' | 'object';
-          name: string;
-        };
-      };
-      alter?: string;
-      version?: string;
-      cover?: string;
-      title?: string;
-      online?: boolean;
-      offline?: boolean;
-      labels?: string[];
-      replaces?: {
-        replacer: {
-          type: 'resource' | 'object';
-          name: string;
-        };
-        replaced: string;
-        scope: string[][];
-      }[];
-      attrs?: {
-        type: 'add' | 'delete',
-        theKey: string;
-        value?: string;
-        description?: string;
-      }[];
-    };
+    rule: IMappingRule;
     version: string;
+    isOnline: boolean;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
+
+  themeList: {
+    id: string;
+    name: string;
+    cover: string;
+    version: string;
+    rule: IMappingRule;
     isOnline: boolean;
     isAuth: boolean;
     authErrorText: string;
@@ -245,6 +250,7 @@ const initStates: InformalNodeManagerPageModelState = {
 
   themeList: [],
   themeListIsLoading: false,
+  addThemeDrawerVisible: false,
 
   isCodeEditing: true,
   codeInput: '',
@@ -394,12 +400,32 @@ const Model: InformalNodeManagerPageModelType = {
           ruleText: data1.ruleText,
           themeListIsLoading: false,
           themeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themeList'][number]>((dl) => {
-            // console.log(dl, 'dl1234213');
+            const operations: string[] = dl.rules[0]?.operations || [];
+            // console.log(operations, 'operations12334');
+            const stateInfo = dl.stateInfo;
+
+            // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
+            const rule: InformalNodeManagerPageModelState['themeList'][number]['rule'] = {
+              add: operations.includes('add') ? {
+                exhibit: dl.testResourceName,
+                source: {
+                  type: stateInfo.type,
+                  name: stateInfo.name,
+                }
+              } : undefined,
+              alter: operations.includes('alter') ? dl.testResourceName : undefined,
+              labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+              title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+              cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+              online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
+              offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+              // attrs:
+            };
             return {
               id: dl.testResourceId,
               cover: dl.stateInfo.coverInfo.coverImages[0] || '',
               name: dl.testResourceName,
-              rules: [],
+              rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
               isAuth: true,

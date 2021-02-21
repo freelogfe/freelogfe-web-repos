@@ -159,7 +159,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         });
       }}
       onConfirm={(value) => {
-        console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
+        // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
         dispatch<SaveDataRulesAction>({
           type: 'informalNodeManagerPage/saveDataRules',
           payload: {
