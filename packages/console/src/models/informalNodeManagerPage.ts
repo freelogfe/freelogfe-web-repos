@@ -366,7 +366,7 @@ const Model: InformalNodeManagerPageModelType = {
               rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
-              originId: dl.originInfo.id,
+              originId: dl.originInfo.name,
               isAuth: true,
               authErrorText: '',
             };

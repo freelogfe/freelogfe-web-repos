@@ -135,7 +135,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
                         checked: e.target.checked,
                       };
                     }),
-                  })
+                  });
                 }}
               />
               <div style={{width: 15}}/>

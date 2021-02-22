@@ -159,11 +159,6 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
               ? (<FNoDataTip
                 height={'calc(100vh - 294px)'}
                 tipText={'无筛选结果'}
-                // btnText={'添加测试展品'}
-                // onClick={() => {
-                //   console.log('@#$!@#$!@#$@#$90j.k23');
-                //   onChange({addExhibitDrawerVisible: true});
-                // }}
               />)
               : (<div className={styles.body}>
                 <div>
@@ -205,8 +200,8 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           addExhibitDrawerVisible: false,
         });
       }}
-      disabledResourceNames={['Freelog/blog-theme']}
-      disabledObjectNames={['234234/th002.jpeg']}
+      disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'resource').map((e) => e.originId)}
+      disabledObjectNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'object').map((e) => e.originId)}
     />
 
     <FReplaceModal
