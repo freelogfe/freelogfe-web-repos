@@ -33,7 +33,7 @@ const {decompile} = require('@freelog/nmr_translator');
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
-  ...resourceTypes.map((i) => ({value: i, text: i}))
+  ...resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
 ];
 
 const resourceStatusOptions = [
@@ -83,7 +83,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
 
   return (<>
     {
-      informalNodeManagerPage.exhibitList.length === 0
+      informalNodeManagerPage.exhibitList.length === 0 && informalNodeManagerPage.selectedType === '-1' && informalNodeManagerPage.selectedStatus === '2'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前测试节点没有添加展品'}
@@ -154,11 +154,24 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
               <div><FInput theme={'dark'}/></div>
             </Space>
           </div>
-          <div className={styles.body}>
-            <div>
-              <ExhibitTable/>
-            </div>
-          </div>
+          {
+            informalNodeManagerPage.exhibitList.length === 0
+              ? (<FNoDataTip
+                height={'calc(100vh - 294px)'}
+                tipText={'无筛选结果'}
+                // btnText={'添加测试展品'}
+                // onClick={() => {
+                //   console.log('@#$!@#$!@#$@#$90j.k23');
+                //   onChange({addExhibitDrawerVisible: true});
+                // }}
+              />)
+              : (<div className={styles.body}>
+                <div>
+                  <ExhibitTable/>
+                </div>
+              </div>)
+          }
+
         </FInfiniteScroll>)
     }
 
