@@ -10,6 +10,19 @@ import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExh
 import {withRouter} from "umi";
 import {ConnectState} from "@/models/connect";
 
+interface ICandidate {
+  name: string;
+  versionRange?: string;
+  type: 'resource' | 'object';
+}
+
+type IConfirmValue = {
+  exhibitName: string;
+  replaced: ICandidate;
+  replacer: ICandidate;
+  scopes: ICandidate[][];
+}[];
+
 interface FReplaceModalProps {
   nodeID: number;
   visible?: boolean;
@@ -18,9 +31,11 @@ interface FReplaceModalProps {
 
   dispatch: Dispatch;
   replaceInformExhibit: ReplaceInformExhibitState;
+
+  onConfirm?(value: IConfirmValue): void;
 }
 
-function FReplaceModal({visible, onCancel, dispatch, nodeID, replaceInformExhibit}: FReplaceModalProps) {
+function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceInformExhibit}: FReplaceModalProps) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -40,7 +55,57 @@ function FReplaceModal({visible, onCancel, dispatch, nodeID, replaceInformExhibi
       onCancel && onCancel();
     }}
     okButtonProps={{
-      disabled: !!replaceInformExhibit.replacerOrigin,
+      disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.checkedKeys.length === 0,
+    }}
+    onOk={() => {
+      const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.checkedKeys as string[]).map<string[]>((r) => {
+        return r.split('-');
+      });
+      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_');
+      const resultObj: { [key: string]: ICandidate[][] } = {};
+      for (const simplifiedResult of simplifiedResults) {
+        resultObj[simplifiedResult[0]] = [];
+      }
+      for (const simplifiedResult of simplifiedResults) {
+        const [key, ...arr] = simplifiedResult;
+        // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
+        resultObj[key].push(arr.map((o: string) => {
+          if (o.startsWith('$')) {
+            return {
+              name: o.replace('$', ''),
+              type: 'resource',
+            }
+          } else {
+            return {
+              name: o.replace('#', ''),
+              type: 'object',
+            }
+          }
+        }));
+      }
+      console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+      const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
+        return rr.name === replaceInformExhibit.checkedResourceName;
+      });
+      console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
+      const results: IConfirmValue = [];
+      for (const [exhibitName, scopes] of Object.entries(resultObj)) {
+        results.push({
+          exhibitName: exhibitName,
+          replaced: {
+            name: replaceInformExhibit.replacedSelectDependency?.name || '',
+            versionRange: replaceInformExhibit.replacedVersion,
+            type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
+          },
+          replacer: {
+            name: replacerData?.name || '',
+            versionRange: replacerData?.version || '',
+            type: replacerData?.identity || 'object',
+          },
+          scopes: scopes,
+        });
+      }
+      onConfirm && onConfirm(results);
     }}
   >
     <div className={styles.replaceHandler}>
@@ -68,3 +133,15 @@ function FReplaceModal({visible, onCancel, dispatch, nodeID, replaceInformExhibi
 export default connect(({replaceInformExhibit}: ConnectState) => ({
   replaceInformExhibit,
 }))(FReplaceModal);
+
+function simplifiedRelationship(relation: string[]): string[] {
+  let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
+
+  for (let i = 0; i < arr.length; i++) {
+    const current: string = arr[i];
+    arr = arr.filter((a) => {
+      return a === current || !a.startsWith(current);
+    })
+  }
+  return arr;
+}

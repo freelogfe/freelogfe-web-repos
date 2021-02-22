@@ -72,7 +72,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
             return;
           }
           const params: DependencyTreeFilterParamsType = {
-            testResourceId: node.key,
+            testResourceId: node.id,
             dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
           };
           const {data} = await dependencyTreeFilter(params);
@@ -147,14 +147,15 @@ interface OrganizeData {
 }
 
 function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
-
+  console.log(data, 'data2WQR@#SDfolkj;lk');
   return data.map<TreeNode>((d) => {
-    const key = parentKey + '-' + d.id;
+    const key = parentKey + '-' + (d.type === 'resource' ? '$' : '#') + d.id;
 
     if (d.dependencies.length === 0) {
       return {
         title: d.name,
         key,
+        id: d.id,
         isLeaf: true,
       };
     }
@@ -162,6 +163,7 @@ function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] 
     return {
       title: d.name,
       key,
+      id: d.id,
       isLeaf: false,
       children: organizeData(d.dependencies, key),
     };

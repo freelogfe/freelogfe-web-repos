@@ -210,6 +210,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       onCancel={() => {
         onChange({replaceHandlerModalVisible: false});
       }}
+      onConfirm={(value) => {
+        console.log(value, '@#ASDFASDfloj98p');
+      }}
     />
   </>);
 }

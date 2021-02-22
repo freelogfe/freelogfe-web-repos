@@ -73,26 +73,6 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
           onChange({replacerOrigin: value}, true);
         }}
       />
-      {/*<a*/}
-      {/*  className={replaceInformExhibit.replacerOrigin === 'market' ? styles.activated : ''}*/}
-      {/*  onClick={() => {*/}
-      {/*    onChange({replacerActivatedTab: 'market'});*/}
-      {/*  }}*/}
-      {/*>资源市场</a>*/}
-      {/*<div style={{width: 20}}/>*/}
-      {/*<a*/}
-      {/*  className={informalNodeManagerPage.replacerActivatedTab === 'resource' ? styles.activated : ''}*/}
-      {/*  onClick={() => {*/}
-      {/*    onChange({replacerActivatedTab: 'resource'});*/}
-      {/*  }}*/}
-      {/*>我的资源</a>*/}
-      {/*<div style={{width: 20}}/>*/}
-      {/*<a*/}
-      {/*  className={informalNodeManagerPage.replacerActivatedTab === 'collection' ? styles.activated : ''}*/}
-      {/*  onClick={() => {*/}
-      {/*    onChange({replacerActivatedTab: 'collection'});*/}
-      {/*  }}*/}
-      {/*>我的收藏</a>*/}
     </div>
     <div style={{height: 15}}/>
     <div className={styles.replacerBody}>

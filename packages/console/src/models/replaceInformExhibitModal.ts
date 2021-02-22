@@ -22,6 +22,7 @@ import {
 export interface TreeNode {
   title: string;
   key: string;
+  id: string;
   isLeaf?: boolean;
   children?: TreeNode[];
 }
@@ -53,6 +54,7 @@ export type ReplaceInformExhibitState = WholeReadonly<{
   }
   // replacedVersions: string[];
   replacedVersion: string;
+  // replacedIdentity: 'object' | 'resource';
   treeData: TreeNode[];
   checkedKeys: string[];
 }>;
@@ -148,7 +150,7 @@ const initStates: ReplaceInformExhibitState = {
     versions: [],
     version: '',
   }],
-  checkedResourceName: '2341234',
+  checkedResourceName: '',
 
   replacedKeywords: '',
   replacedDependencyTreeList: [],
@@ -343,6 +345,7 @@ const Model: ReplaceInformExhibitModelType = {
       // console.log(data, '##@ADSFASDFSDCX');
 
       let replacedSelectDependency = data.find((d: any) => d.name === replaceInformExhibit.replacedKeywords);
+      console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -371,13 +374,14 @@ const Model: ReplaceInformExhibitModelType = {
         dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
       };
       const {data} = yield call(searchTestResourcesByDependency, params);
-      // console.log(data, 'data!@EWFASDfasdfsad');
+      console.log(data, 'data!@EWFASDfasdfsad');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           treeData: (data as any[]).map<ReplaceInformExhibitState['treeData'][number]>((d: any) => {
             return {
-              key: d.testResourceId,
+              key: d.testResourceName,
+              id: d.testResourceId,
               title: d.testResourceName,
             };
           }),
