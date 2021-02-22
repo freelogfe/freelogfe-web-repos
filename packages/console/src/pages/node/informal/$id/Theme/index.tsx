@@ -35,7 +35,9 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
   React.useEffect(() => {
     dispatch<FetchThemeListAction>({
       type: 'informalNodeManagerPage/fetchThemeList',
-      payload: true,
+      payload: {
+        isRematch: true,
+      },
     });
   }, []);
 
