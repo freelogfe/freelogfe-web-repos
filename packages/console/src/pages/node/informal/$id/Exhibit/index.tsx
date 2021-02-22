@@ -11,7 +11,11 @@ import FDropdownMenu from "@/components/FDropdownMenu";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
-import {ChangeAction, FetchExhibitListAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
+import {
+  ChangeAction,
+  FetchExhibitListAction,
+  SaveDataRulesAction,
+} from "@/models/informalNodeManagerPage";
 import FModal from "@/components/FModal";
 
 import Replacer from "@/pages/node/informal/$id/containers/FReplaceModal/Replacer";
@@ -22,7 +26,6 @@ import FLoadingTip from "@/components/FLoadingTip";
 import {WholeMutable} from "@/models/shared";
 import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
-import {OnChangeExhibitAction} from "@/models/nodeManagerPage";
 import {FDown} from "@/components/FIcons";
 import {resourceTypes} from "@/utils/globals";
 
@@ -55,7 +58,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   async function initData() {
     await dispatch<FetchExhibitListAction>({
       type: 'informalNodeManagerPage/fetchExhibitList',
-      payload: true,
+      payload: {
+        isRematch: true,
+      },
     });
   }
 
@@ -67,8 +72,8 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   //   return ();
   // }
 
-  function onChange(value: Partial<InformalNodeManagerPageModelState>) {
-    dispatch<ChangeAction>({
+  async function onChange(value: Partial<InformalNodeManagerPageModelState>) {
+    await dispatch<ChangeAction>({
       type: 'informalNodeManagerPage/change',
       payload: {
         ...value,
@@ -112,12 +117,15 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <span>类型：</span>
                 <FDropdownMenu
                   options={resourceTypeOptions}
-                  onChange={(value) => dispatch<OnChangeExhibitAction>({
-                    type: 'nodeManagerPage/onChangeExhibit',
-                    payload: {
-                      selectedType: value,
-                    },
-                  })}
+                  onChange={async (value) => {
+                    await onChange({selectedType: value});
+                    await dispatch<FetchExhibitListAction>({
+                      type: 'informalNodeManagerPage/fetchExhibitList',
+                      payload: {
+                        isRematch: false,
+                      },
+                    });
+                  }}
                 >
             <span
               style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === informalNodeManagerPage.selectedType)?.text || ''}<FDown
@@ -128,12 +136,15 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <span>状态：</span>
                 <FDropdownMenu
                   options={resourceStatusOptions}
-                  onChange={(value) => dispatch<OnChangeExhibitAction>({
-                    type: 'nodeManagerPage/onChangeExhibit',
-                    payload: {
-                      selectedStatus: value,
-                    },
-                  })}
+                  onChange={async (value) => {
+                    await onChange({selectedStatus: value as '0'})
+                    await dispatch<FetchExhibitListAction>({
+                      type: 'informalNodeManagerPage/fetchExhibitList',
+                      payload: {
+                        isRematch: false,
+                      },
+                    });
+                  }}
                 >
             <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
               return rso.value === informalNodeManagerPage.selectedStatus.toString();

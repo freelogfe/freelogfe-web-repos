@@ -138,12 +138,18 @@ export interface FetchInfoAction extends AnyAction {
 
 export interface FetchExhibitListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchExhibitList' | 'fetchExhibitList';
-  payload: boolean;
+  payload: {
+    isRematch?: boolean;
+    isRestart?: boolean;
+  };
 }
 
 export interface FetchThemeListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchThemeList' | 'fetchThemeList';
-  payload: boolean;
+  payload: {
+    isRematch?: boolean;
+    isRestart?: boolean;
+  };
 }
 
 export interface FetchRulesAction extends AnyAction {
@@ -289,7 +295,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: initStates,
       });
     },
-    * fetchExhibitList({payload = true}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchExhibitList({payload: {isRematch = true, isRestart}}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -304,16 +310,17 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
-        isRematch: payload,
+        isRematch: isRematch,
       };
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
-      console.log(data1, 'bool1234');
+      // console.log(data1, 'bool1234');
 
       const params: TestResourcesParamsType = {
         nodeId: informalNodeManagerPage.nodeID,
-        onlineStatus: 2,
+        onlineStatus: Number(informalNodeManagerPage.selectedStatus) as 2,
         omitResourceType: 'theme',
+        resourceType: informalNodeManagerPage.selectedType === '-1' ? undefined : informalNodeManagerPage.selectedType,
         limit: 100,
       };
 
@@ -367,7 +374,7 @@ const Model: InformalNodeManagerPageModelType = {
         }
       });
     },
-    * fetchThemeList({payload = true}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -381,7 +388,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
-        isRematch: payload,
+        isRematch: isRematch,
       };
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
@@ -393,13 +400,13 @@ const Model: InformalNodeManagerPageModelType = {
         limit: 100,
       };
       const {data} = yield call(testResources, params);
-      console.log(data, '890234ujndlskfl;asd@@@@');
+      // console.log(data, '890234ujndlskfl;asd@@@@');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
         return dd.stateInfo.themeInfo.ruleId !== 'default';
       })?.testResourceName || null;
 
-      console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
+      // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -518,7 +525,7 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      console.log(payload.data, 'payload.data0923jlkfasdfasdf');
+      // console.log(payload.data, 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
       // console.log(text, 'text1234fklsadj');
 
@@ -540,13 +547,17 @@ const Model: InformalNodeManagerPageModelType = {
       if (informalNodeManagerPage.showPage === 'exhibit') {
         yield put<FetchExhibitListAction>({
           type: 'fetchExhibitList',
-          payload: false,
+          payload: {
+            isRematch: false,
+          },
         });
       }
       if (informalNodeManagerPage.showPage === 'theme') {
         yield put<FetchThemeListAction>({
           type: 'fetchThemeList',
-          payload: false,
+          payload: {
+            isRematch: false,
+          },
         });
       }
     },
