@@ -346,6 +346,7 @@ const Model: InformalNodeManagerPageModelType = {
               online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
               offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
               // attrs:
+              // active
             };
             return {
               id: dl.testResourceId,
@@ -392,7 +393,13 @@ const Model: InformalNodeManagerPageModelType = {
         limit: 100,
       };
       const {data} = yield call(testResources, params);
-      // console.log(data, '\\\\\\\\\\\@@@@@');
+      console.log(data, '890234ujndlskfl;asd@@@@');
+
+      const activatedTheme: string | null = data.dataList.find((dd: any) => {
+        return dd.stateInfo.themeInfo.ruleId !== 'default';
+      })?.testResourceName || null;
+
+      console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -417,9 +424,10 @@ const Model: InformalNodeManagerPageModelType = {
               labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
               title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
               cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-              online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
-              offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+              // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+              // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
               // attrs:
+              active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
             };
             return {
               id: dl.testResourceId,
@@ -427,7 +435,7 @@ const Model: InformalNodeManagerPageModelType = {
               name: dl.testResourceName,
               rule: rule,
               version: dl.originInfo.version,
-              isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
+              isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
               isAuth: true,
               authErrorText: '',
             };
