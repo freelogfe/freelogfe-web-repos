@@ -72,21 +72,24 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
         if (arr.length === 0) {
           continue;
         }
+        console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
         resultObj[key].push(arr.map((o: string) => {
           if (o.startsWith('$')) {
             return {
               name: o.replace('$', ''),
               type: 'resource',
+              versionRange: 'latest',
             }
           } else {
             return {
               name: o.replace('#', ''),
               type: 'object',
+              versionRange: 'latest',
             }
           }
         }));
       }
-      console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
       const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
         return rr.name === replaceInformExhibit.checkedResourceName;
       });
@@ -97,12 +100,12 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
           exhibitName: exhibitName,
           replaced: {
             name: replaceInformExhibit.replacedSelectDependency?.name || '',
-            versionRange: replaceInformExhibit.replacedVersion,
+            versionRange: replaceInformExhibit.replacedVersion || 'latest',
             type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
           },
           replacer: {
             name: replacerData?.name || '',
-            versionRange: replacerData?.version || '',
+            versionRange: replacerData?.version || 'latest',
             type: replacerData?.identity || 'object',
           },
           scopes: scopes,

@@ -1,0 +1,41 @@
+[
+  {
+    "text": "add $12345676789/AAAAA as 12345676789_AAAAA\n\tdo\n\tend",
+    "operation": "add",
+    "exhibitName": "12345676789_AAAAA",
+    "candidate": {
+      "name": "12345676789/AAAAA",
+      "versionRange": "latest",
+      "type": "resource"
+    },
+    "replaces": [
+      {
+        "exhibitName": "12345676789_AAAAA",
+        "replaced": {
+          "name": "12345676789/D",
+          "versionRange": "latest",
+          "type": "resource"
+        },
+        "replacer": {
+          "name": "12345676789/haveDep2",
+          "versionRange": "0.0.4",
+          "type": "resource"
+        },
+        "scopes": [
+          [
+            {
+              "name": "12345676789/AAAAA",
+              "type": "resource",
+              "versionRange": "latest"
+            },
+            {
+              "name": "12345676789/BBBBB",
+              "type": "resource",
+              "versionRange": "latest"
+            }
+          ]
+        ]
+      }
+    ]
+  }
+]

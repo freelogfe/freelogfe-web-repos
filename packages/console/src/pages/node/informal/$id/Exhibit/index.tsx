@@ -29,7 +29,7 @@ import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
 import {resourceTypes} from "@/utils/globals";
 
-const {decompile} = require('@freelog/nmr_translator');
+const {decompile, compile} = require('@freelog/nmr_translator');
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -226,7 +226,48 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         onChange({replaceHandlerModalVisible: false});
       }}
       onConfirm={(value) => {
-        console.log(value, '@#ASDFASDfloj98p');
+        // console.log(value, '@#ASDFASDfloj98p');
+        const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+        console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+
+        for (const v of value) {
+          const rule = rules.find((r) => v.exhibitName === r.exhibitName)
+          if (rule) {
+            let replaces = rule.replaces || [];
+            rule.replaces = [
+              ...replaces,
+              v,
+            ]
+          } else {
+            rules.push({
+              operation: 'alter',
+              exhibitName: v.exhibitName,
+              replaces: [v]
+            });
+          }
+        }
+        // const nowRules: any[] = rules.map<any>((r) => {
+        //   const v = value.find((vv) => vv.exhibitName === r.exhibitName);
+        //   if (!v) {
+        //     return r;
+        //   }
+        //   let replaces = r.replaces || [];
+        //   return {
+        //     ...r,
+        //     replaces: [
+        //       ...replaces,
+        //       v,
+        //     ],
+        //   }
+        // });
+        console.log(rules, 'nowRules0923jlkfds()UOIJ');
+        dispatch<SaveDataRulesAction>({
+          type: 'informalNodeManagerPage/saveDataRules',
+          payload: {
+            type: 'replace',
+            data: rules,
+          },
+        });
       }}
     />
   </>);

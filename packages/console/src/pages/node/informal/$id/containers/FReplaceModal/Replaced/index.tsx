@@ -93,7 +93,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         }}
         checkedKeys={replaceInformExhibit.checkedKeys as string[]}
         onCheck={(checkedKeys) => {
-          console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
+          // console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
           dispatch<ChangeAction>({
             type: 'replaceInformExhibit/change',
             payload: {
@@ -147,9 +147,9 @@ interface OrganizeData {
 }
 
 function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
-  console.log(data, 'data2WQR@#SDfolkj;lk');
+  // console.log(data, 'data2WQR@#SDfolkj;lk');
   return data.map<TreeNode>((d) => {
-    const key = parentKey + '-' + (d.type === 'resource' ? '$' : '#') + d.id;
+    const key = parentKey + '-' + (d.type === 'resource' ? '$' : '#') + d.name;
 
     if (d.dependencies.length === 0) {
       return {

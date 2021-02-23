@@ -328,7 +328,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(testResources, params);
-      console.log(data, 'DDD@@@@890j23poijrl;adsf@');
+      // console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -528,9 +528,10 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      // console.log(payload.data, 'payload.data0923jlkfasdfasdf');
+      console.log(payload.data, 'payload.data0923jlkfasdfasdf');
+      // console.log(JSON.stringify(payload.data), 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
-      // console.log(text, 'text1234fklsadj');
+      console.log(text, 'text1234fklsadj');
 
       if (payload.type === 'append') {
         const params: PutRulesParamsType = {
@@ -539,6 +540,7 @@ const Model: InformalNodeManagerPageModelType = {
         };
         const {data} = yield call(putRules, params);
       }
+
       if (payload.type === 'replace') {
         const params: CreateRulesParamsType = {
           nodeId: informalNodeManagerPage.nodeID,

@@ -198,7 +198,7 @@ const Model: ReplaceInformExhibitModelType = {
         keywords: replaceInformExhibit.replacerKeywords,
       };
       const {data} = yield call(list, params);
-      console.log(data, 'data134@@@#@#@##@@@@@53');
+      // console.log(data, 'data134@@@#@#@##@@@@@53');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -345,7 +345,7 @@ const Model: ReplaceInformExhibitModelType = {
       // console.log(data, '##@ADSFASDFSDCX');
 
       let replacedSelectDependency = data.find((d: any) => d.name === replaceInformExhibit.replacedKeywords);
-      console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
+      // console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -374,7 +374,7 @@ const Model: ReplaceInformExhibitModelType = {
         dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
       };
       const {data} = yield call(searchTestResourcesByDependency, params);
-      console.log(data, 'data!@EWFASDfasdfsad');
+      // console.log(data, 'data!@EWFASDfasdfsad');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
