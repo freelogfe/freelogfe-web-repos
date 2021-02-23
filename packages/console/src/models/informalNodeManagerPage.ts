@@ -75,6 +75,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   selectedType: '-1' | string;
   selectedStatus: '0' | '1' | '2';
+  filterKeywords: string;
 
   exhibitListIsLoading: boolean;
 
@@ -251,6 +252,7 @@ const initStates: InformalNodeManagerPageModelState = {
 
   selectedType: '-1',
   selectedStatus: '2',
+  filterKeywords: '',
   exhibitList: [],
   exhibitListIsLoading: false,
 
@@ -322,6 +324,7 @@ const Model: InformalNodeManagerPageModelType = {
         omitResourceType: 'theme',
         resourceType: informalNodeManagerPage.selectedType === '-1' ? undefined : informalNodeManagerPage.selectedType,
         limit: 100,
+        keywords: informalNodeManagerPage.filterKeywords || undefined,
       };
 
       const {data} = yield call(testResources, params);

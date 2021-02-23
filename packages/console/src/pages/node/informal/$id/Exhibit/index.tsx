@@ -83,13 +83,13 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
 
   return (<>
     {
-      informalNodeManagerPage.exhibitList.length === 0 && informalNodeManagerPage.selectedType === '-1' && informalNodeManagerPage.selectedStatus === '2'
+      informalNodeManagerPage.exhibitList.length === 0 && informalNodeManagerPage.selectedType === '-1' && informalNodeManagerPage.selectedStatus === '2' && informalNodeManagerPage.filterKeywords === ''
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前测试节点没有添加展品'}
           btnText={'添加测试展品'}
           onClick={() => {
-            console.log('@#$!@#$!@#$@#$90j.k23');
+            // console.log('@#$!@#$!@#$@#$90j.k23');
             onChange({addExhibitDrawerVisible: true});
           }}
         />)
@@ -137,7 +137,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <FDropdownMenu
                   options={resourceStatusOptions}
                   onChange={async (value) => {
-                    await onChange({selectedStatus: value as '0'})
+                    await onChange({selectedStatus: value as '0'});
                     await dispatch<FetchExhibitListAction>({
                       type: 'informalNodeManagerPage/fetchExhibitList',
                       payload: {
@@ -151,7 +151,22 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             })?.text}<FDown style={{marginLeft: 10}}/></span>
                 </FDropdownMenu>
               </div>
-              <div><FInput theme={'dark'}/></div>
+              <div>
+                <FInput
+                  theme={'dark'}
+                  value={informalNodeManagerPage.filterKeywords}
+                  debounce={300}
+                  onDebounceChange={async (value) => {
+                    await onChange({filterKeywords: value});
+                    await dispatch<FetchExhibitListAction>({
+                      type: 'informalNodeManagerPage/fetchExhibitList',
+                      payload: {
+                        isRematch: false,
+                      },
+                    });
+                  }}
+                />
+              </div>
             </Space>
           </div>
           {
