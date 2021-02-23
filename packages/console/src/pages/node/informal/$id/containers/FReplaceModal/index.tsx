@@ -69,6 +69,9 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       for (const simplifiedResult of simplifiedResults) {
         const [key, ...arr] = simplifiedResult;
         // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
+        if (arr.length === 0) {
+          continue;
+        }
         resultObj[key].push(arr.map((o: string) => {
           if (o.startsWith('$')) {
             return {
