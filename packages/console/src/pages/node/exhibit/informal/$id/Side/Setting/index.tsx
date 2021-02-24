@@ -87,7 +87,10 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     {/*</div>*/}
     {/*<div style={{height: 30}}/>*/}
 
-    <FTitleText text={'自定义选项'} type="form"/>
+    <FTitleText
+      text={'自定义选项'}
+      type="form"
+    />
 
     <div style={{height: 15}}/>
 
@@ -101,7 +104,10 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                 ? (<FTextButton
                   theme="primary"
                   onClick={() => {
-                    onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                    onChangeCustomAttrs({
+                      key: pc.key,
+                      value: pc.defaultValue || '',
+                    }, true);
                   }}
                 ><FRedo/></FTextButton>)
                 : (<Space size={10}>

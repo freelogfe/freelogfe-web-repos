@@ -528,10 +528,10 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      console.log(payload.data, 'payload.data0923jlkfasdfasdf');
+      // console.log(payload.data, 'payload.data0923jlkfasdfasdf');
       // console.log(JSON.stringify(payload.data), 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
-      console.log(text, 'text1234fklsadj');
+      // console.log(text, 'text1234fklsadj');
 
       if (payload.type === 'append') {
         const params: PutRulesParamsType = {
