@@ -47,6 +47,9 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
           await onChange({pCover: url});
           await dispatch<SyncRulesAction>({
             type: 'informExhibitInfoPage/syncRules',
+            payload: {
+              cover: url,
+            },
           });
         }}>
         <div className={styles.cover}>
@@ -100,6 +103,9 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
                   });
                   await dispatch<SyncRulesAction>({
                     type: 'informExhibitInfoPage/syncRules',
+                    payload: {
+                      title: informExhibitInfoPage.pInputTitle || '',
+                    },
                   });
                 }}
               >确定</FNormalButton>
@@ -113,13 +119,16 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       <div style={{height: 15}}/>
       <FLabelEditor
         values={informExhibitInfoPage.pTags}
-        onChange={(value) => {
-          // dispatch<UpdateBaseInfoAction>({
-          //   type: 'informExhibitInfoPage/updateBaseInfo',
-          //   payload: {
-          //     pTags: value,
-          //   },
-          // });
+        onChange={async (value) => {
+          await onChange({
+            pTags: value,
+          });
+          await dispatch<SyncRulesAction>({
+            type: 'informExhibitInfoPage/syncRules',
+            payload: {
+              labels: value,
+            },
+          });
         }}
       />
       <div style={{height: 30}}/>

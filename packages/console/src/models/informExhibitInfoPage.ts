@@ -96,7 +96,12 @@ export interface FetchInfoAction extends AnyAction {
 }
 
 export interface SyncRulesAction extends AnyAction {
-  type: 'informExhibitInfoPage/syncRules'
+  type: 'informExhibitInfoPage/syncRules';
+  payload: {
+    cover?: string;
+    labels?: string[];
+    title?: string;
+  };
 }
 
 export interface ExhibitInfoPageModelType {
@@ -215,7 +220,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * syncRules({}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
+    * syncRules({payload}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -236,12 +241,12 @@ const Model: ExhibitInfoPageModelType = {
 
       let newRulesObj = [];
 
-      const cr = {
-        cover: informExhibitInfoPage.pCover,
-        // labels: [],
-        title: informExhibitInfoPage.pTitle,
-        // attrs:
-      };
+      // const cr = {
+      //   cover: informExhibitInfoPage.pCover,
+      //   labels: informExhibitInfoPage.pTags,
+      //   title: informExhibitInfoPage.pTitle,
+      //   // attrs:
+      // };
 
       if (currentRule) {
         newRulesObj = rules.map((ro: any) => {
@@ -250,7 +255,7 @@ const Model: ExhibitInfoPageModelType = {
           }
           return {
             ...ro,
-            ...cr,
+            ...payload,
           };
         })
       } else {
@@ -259,7 +264,7 @@ const Model: ExhibitInfoPageModelType = {
           {
             operation: 'alter',
             exhibitName: informExhibitInfoPage.informExhibitName,
-            ...cr,
+            ...payload,
           }
         ]
       }
