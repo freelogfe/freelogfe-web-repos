@@ -49,25 +49,9 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   pTitle: string;
   pInputTitle: string | null;
   pTags: string[];
-
-  // allVersions: string[];
-  // version: string;
-
-  // settingUnfold: boolean;
-
-  // pBaseAttrs: {
-  //   key: string;
-  //   value: string;
-  // }[];
-
   pCustomAttrs: {
-    // defaultValue?: string; // 如果该属性存在说明是继承过来的属性，如果不存在则为新添加属性
-    // option?: string[]; // 如果属性不存在或length为0表示输入框，否则为选择框
-
     key: string;
     value: string; // 最终向服务端提交的value数据
-    newValue: string;  // 输入框显示的值
-    newValueError: string; // 输入框校验的实时提醒错误信息
     remark: string;
     isEditing: boolean; // 是否弹窗来编辑此属性
   }[];
@@ -101,6 +85,12 @@ export interface SyncRulesAction extends AnyAction {
     cover?: string;
     labels?: string[];
     title?: string;
+    attrs?: {
+      operation: 'add' | 'delete';
+      key: string;
+      value?: string;
+      description?: string;
+    }[];
   };
 }
 
@@ -192,7 +182,6 @@ const Model: ExhibitInfoPageModelType = {
       const {data} = yield call(testResourceDetails, params);
 
       const currentNode = nodes.list.find((n) => n.nodeId === data.nodeId);
-
       // console.log(data, '#######32409jkldfsmdslkdsf');
 
       const params1: InfoParamsType = {
@@ -200,7 +189,6 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const {data: data1} = yield call(info, params1);
-      // console.log(data1, '##@#$@#$@#');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -217,8 +205,44 @@ const Model: ExhibitInfoPageModelType = {
           resourceName: data1.resourceName,
           resourceType: data1.resourceType,
           resourceCover: data1.coverImages[0] || '',
+
+          // pCustomAttrs: currentRule.map((cr) => {
+          //
+          // })
         },
       });
+
+
+      const params2: RuleMatchStatusParams = {
+        nodeID: data.nodeId,
+        isRematch: false,
+      };
+      const {data: data2} = yield call(ruleMatchStatus, params2);
+      console.log(data1, '##@#$@#$@#');
+
+      const {rules} = compile(data2.ruleText);
+      console.log(rules, 'rulesiuhfwe89i34FFEWFP)(*');
+
+      const currentRule = rules.find((ro: any) => {
+        return ro.exhibitName === data.testResourceName;
+      });
+
+      console.log(currentRule, 'currentRule9283hdsfjkhdslkf');
+
+      yield put<ChangeAction>({
+        type: 'informExhibitInfoPage/change',
+        payload: {
+          pCustomAttrs: currentRule.attrs.map((cr: any) => {
+            return {
+              remark: cr.description,
+              key: cr.key,
+              // operation: "add"
+              value: cr.value,
+              isEditing: false,
+            };
+          }),
+        }
+      })
     },
     * syncRules({payload}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
@@ -239,15 +263,7 @@ const Model: ExhibitInfoPageModelType = {
         return ro.exhibitName === informExhibitInfoPage.informExhibitName;
       });
 
-      let newRulesObj = [];
-
-      // const cr = {
-      //   cover: informExhibitInfoPage.pCover,
-      //   labels: informExhibitInfoPage.pTags,
-      //   title: informExhibitInfoPage.pTitle,
-      //   // attrs:
-      // };
-
+      let newRulesObj;
       if (currentRule) {
         newRulesObj = rules.map((ro: any) => {
           if (ro.exhibitName !== informExhibitInfoPage.informExhibitName) {
@@ -268,7 +284,7 @@ const Model: ExhibitInfoPageModelType = {
           }
         ]
       }
-      console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
+      // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
       const text = decompile(newRulesObj);
       // console.log(text, 'newRulesObj90ij32.dsfsdf');
 

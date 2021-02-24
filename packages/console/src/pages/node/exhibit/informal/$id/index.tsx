@@ -17,7 +17,7 @@ import {
 import {
   ChangeAction,
   FetchInfoAction,
-  UpdateStatusAction,
+  // UpdateStatusAction,
 } from '@/models/informExhibitInfoPage';
 import RouterTypes from 'umi/routerTypes';
 import {nodeDetail} from '@/services/nodes';

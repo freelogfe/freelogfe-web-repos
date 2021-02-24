@@ -7,10 +7,10 @@ import {FDelete, FEdit, FSwap} from "@/components/FIcons";
 import {FCircleButton, FTextButton} from "@/components/FButton";
 import FRedo from "@/components/FIcons/FRedo";
 import {
-  ChangeAction,
-  ChangeVersionAction,
+  ChangeAction, SyncRulesAction,
+  // ChangeVersionAction,
   // ExhibitInfoPageModelState,
-  UpdateRewriteAction
+  // UpdateRewriteAction
 } from "@/models/informExhibitInfoPage";
 import FSelect from "@/components/FSelect";
 import FInput from "@/components/FInput";
@@ -27,26 +27,26 @@ interface SettingProps {
 function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
 
   function onChangeCustomAttrs({key, value}: { key: string; value: string }, update: boolean = false) {
-    dispatch<ChangeAction>({
-      type: 'informExhibitInfoPage/change',
-      payload: {
-        pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
-          if (pCustomAttr.key !== key) {
-            return pCustomAttr;
-          }
-          return {
-            ...pCustomAttr,
-            newValue: value,
-            newValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
-          };
-        }),
-      }
-    });
-    if (update) {
-      dispatch<UpdateRewriteAction>({
-        type: 'informExhibitInfoPage/updateRewrite',
-      });
-    }
+    // dispatch<ChangeAction>({
+    //   type: 'informExhibitInfoPage/change',
+    //   payload: {
+    //     pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
+    //       if (pCustomAttr.key !== key) {
+    //         return pCustomAttr;
+    //       }
+    //       return {
+    //         ...pCustomAttr,
+    //         newValue: value,
+    //         newValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
+    //       };
+    //     }),
+    //   }
+    // });
+    // if (update) {
+    //   dispatch<UpdateRewriteAction>({
+    //     type: 'informExhibitInfoPage/updateRewrite',
+    //   });
+    // }
   }
 
   return (<>
@@ -99,81 +99,60 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         informExhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
           <div className={styles.optionTitle}>
             <FContentText text={pc.key}/>
-            {
-              pc.defaultValue
-                ? (<FTextButton
-                  theme="primary"
-                  onClick={() => {
-                    onChangeCustomAttrs({
-                      key: pc.key,
-                      value: pc.defaultValue || '',
-                    }, true);
-                  }}
-                ><FRedo/></FTextButton>)
-                : (<Space size={10}>
-                  <FTextButton
-                    theme="primary"
-                    onClick={() => {
-                      const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                      if (!editing) {
-                        return;
-                      }
-                      dispatch<ChangeAction>({
-                        type: 'informExhibitInfoPage/change',
-                        payload: {
-                          pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                            ...pCustomAttr,
-                            isEditing: pCustomAttr.key === pc.key,
-                          })),
-                          pAddCustomKey: editing.key,
-                          pAddCustomValue: editing.value,
-                          pAddCustomDescription: editing.remark,
-                        },
-                      });
-                    }}
-                  ><FEdit/></FTextButton>
-                  <FDelete
-                    style={{color: '#EE4040', cursor: 'pointer'}}
-                    onClick={() => {
-                      dispatch<ChangeAction>({
-                        type: 'informExhibitInfoPage/change',
-                        payload: {
-                          pCustomAttrs: informExhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
-                            return pc.key !== pCustomAttr.key;
-                          }),
-                        },
-                      });
-                      dispatch<UpdateRewriteAction>({
-                        type: 'informExhibitInfoPage/updateRewrite',
-                      });
-                    }}
-                  />
-                </Space>)
-            }
+
+            <Space size={10}>
+              <FTextButton
+                theme="primary"
+                onClick={() => {
+                  const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                  if (!editing) {
+                    return;
+                  }
+                  dispatch<ChangeAction>({
+                    type: 'informExhibitInfoPage/change',
+                    payload: {
+                      pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                        ...pCustomAttr,
+                        isEditing: pCustomAttr.key === pc.key,
+                      })),
+                      pAddCustomKey: editing.key,
+                      pAddCustomValue: editing.value,
+                      pAddCustomDescription: editing.remark,
+                    },
+                  });
+                }}
+              ><FEdit/></FTextButton>
+              <FDelete
+                style={{color: '#EE4040', cursor: 'pointer'}}
+                onClick={() => {
+                  dispatch<ChangeAction>({
+                    type: 'informExhibitInfoPage/change',
+                    payload: {
+                      pCustomAttrs: informExhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                        return pc.key !== pCustomAttr.key;
+                      }),
+                    },
+                  });
+                  // dispatch<UpdateRewriteAction>({
+                  //   type: 'informExhibitInfoPage/updateRewrite',
+                  // });
+                }}
+              />
+            </Space>
+
           </div>
           <div style={{height: 5}}/>
-          {
-            (pc.option && pc.option.length > 0)
-              ? (<FSelect
-                className={styles.FSelect}
-                value={pc.value}
-                dataSource={pc.option.map((d) => ({value: d, title: d}))}
-                onChange={(value) => {
-                  onChangeCustomAttrs({key: pc.key, value: value}, true);
-                }}
-              />)
-              : (<FInput
-                className={styles.FInput}
-                value={pc.newValue}
-                errorText={pc.newValueError}
-                onChange={(e) => {
-                  onChangeCustomAttrs({key: pc.key, value: e.target.value});
-                }}
-                onBlur={() => dispatch<UpdateRewriteAction>({
-                  type: 'informExhibitInfoPage/updateRewrite',
-                })}
-              />)
-          }
+          <FInput
+            className={styles.FInput}
+            value={pc.value}
+            // errorText={pc.newValueError}
+            onChange={(e) => {
+              onChangeCustomAttrs({key: pc.key, value: e.target.value});
+            }}
+            // onBlur={() => dispatch<UpdateRewriteAction>({
+            //   type: 'informExhibitInfoPage/updateRewrite',
+            // })}
+          />
         </div>))
       }
     </div>
@@ -234,51 +213,62 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       })}
       onOk={() => {
         const editing = informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
+
+        let pCustomAttrs;
         if (editing) {
-          dispatch<ChangeAction>({
-            type: 'informExhibitInfoPage/change',
-            payload: {
-              pCustomAttrs: informExhibitInfoPage.pCustomAttrs
-                // .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
-                .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
-                  if (!pCustomAtt.isEditing) {
-                    return pCustomAtt;
-                  }
-                  return {
-                    ...pCustomAtt,
-                    key: informExhibitInfoPage.pAddCustomKey,
-                    value: informExhibitInfoPage.pAddCustomValue,
-                    newValue: informExhibitInfoPage.pAddCustomValue,
-                    newValueError: '',
-                    remark: informExhibitInfoPage.pAddCustomDescription,
-                    isEditing: false,
-                  };
-                }),
-            }
-          });
+          pCustomAttrs = informExhibitInfoPage.pCustomAttrs
+            // .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
+            .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
+              if (!pCustomAtt.isEditing) {
+                return pCustomAtt;
+              }
+              return {
+                ...pCustomAtt,
+                key: informExhibitInfoPage.pAddCustomKey,
+                value: informExhibitInfoPage.pAddCustomValue,
+                // newValue: informExhibitInfoPage.pAddCustomValue,
+                // newValueError: '',
+                remark: informExhibitInfoPage.pAddCustomDescription,
+                isEditing: false,
+              };
+            });
         } else {
-          dispatch<ChangeAction>({
-            type: 'informExhibitInfoPage/change',
-            payload: {
-              pCustomAttrs: [
-                ...informExhibitInfoPage.pCustomAttrs
-                  .filter((pCustomAttr) => pCustomAttr.key !== informExhibitInfoPage.pAddCustomKey),
-                {
-                  key: informExhibitInfoPage.pAddCustomKey,
-                  value: informExhibitInfoPage.pAddCustomValue,
-                  newValue: informExhibitInfoPage.pAddCustomValue,
-                  newValueError: '',
-                  remark: informExhibitInfoPage.pAddCustomDescription,
-                  isEditing: false,
-                }
-              ],
-              pAddCustomModalVisible: false,
-            },
-          });
+          pCustomAttrs = [
+            ...informExhibitInfoPage.pCustomAttrs
+              .filter((pCustomAttr) => pCustomAttr.key !== informExhibitInfoPage.pAddCustomKey),
+            {
+              key: informExhibitInfoPage.pAddCustomKey,
+              value: informExhibitInfoPage.pAddCustomValue,
+              // newValue: informExhibitInfoPage.pAddCustomValue,
+              // newValueError: '',
+              remark: informExhibitInfoPage.pAddCustomDescription,
+              isEditing: false,
+            }
+          ];
         }
-        dispatch<UpdateRewriteAction>({
-          type: 'informExhibitInfoPage/updateRewrite',
+
+        dispatch<ChangeAction>({
+          type: 'informExhibitInfoPage/change',
+          payload: {
+            pCustomAttrs: pCustomAttrs,
+            pAddCustomModalVisible: false,
+          }
         });
+
+        dispatch<SyncRulesAction>({
+          type: 'informExhibitInfoPage/syncRules',
+          payload: {
+            attrs: pCustomAttrs.map((pca) => {
+              return {
+                operation: 'add',
+                key: pca.key,
+                value: pca.value,
+                description: pca.remark,
+              };
+            }),
+          },
+        });
+
       }}
     >
       <div className={styles.modalBody}>
@@ -293,7 +283,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           value={informExhibitInfoPage.pAddCustomKey}
           errorText={informExhibitInfoPage.pAddCustomKeyError}
           onChange={(e) => {
-            const baseKeys: string[] = informExhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
+            // const baseKeys: string[] = informExhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
             const customKeys: string[] = informExhibitInfoPage.pCustomAttrs
               .filter((pc) => !pc.isEditing)
               .map<string>((pc) => pc.key);
@@ -301,7 +291,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
             let pAddCustomKeyError: string = '';
             if (!/^[a-zA-Z0-9_]{1,20}$/.test(value)) {
               pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
-            } else if ([...baseKeys, ...customKeys].includes(value)) {
+            } else if ([...customKeys].includes(value)) {
               pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
             }
             dispatch<ChangeAction>({
