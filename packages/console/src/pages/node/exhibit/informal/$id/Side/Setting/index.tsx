@@ -125,17 +125,28 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
               <FDelete
                 style={{color: '#EE4040', cursor: 'pointer'}}
                 onClick={() => {
+                  const pCustomAttrs = informExhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                    return pc.key !== pCustomAttr.key;
+                  });
                   dispatch<ChangeAction>({
                     type: 'informExhibitInfoPage/change',
                     payload: {
-                      pCustomAttrs: informExhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
-                        return pc.key !== pCustomAttr.key;
+                      pCustomAttrs: pCustomAttrs,
+                    },
+                  });
+                  dispatch<SyncRulesAction>({
+                    type: 'informExhibitInfoPage/syncRules',
+                    payload: {
+                      attrs: pCustomAttrs.map((pca) => {
+                        return {
+                          operation: 'add',
+                          key: pca.key,
+                          value: pca.value,
+                          description: pca.remark,
+                        };
                       }),
                     },
                   });
-                  // dispatch<UpdateRewriteAction>({
-                  //   type: 'informExhibitInfoPage/updateRewrite',
-                  // });
                 }}
               />
             </Space>

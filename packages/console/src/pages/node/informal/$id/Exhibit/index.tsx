@@ -246,20 +246,6 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             });
           }
         }
-        // const nowRules: any[] = rules.map<any>((r) => {
-        //   const v = value.find((vv) => vv.exhibitName === r.exhibitName);
-        //   if (!v) {
-        //     return r;
-        //   }
-        //   let replaces = r.replaces || [];
-        //   return {
-        //     ...r,
-        //     replaces: [
-        //       ...replaces,
-        //       v,
-        //     ],
-        //   }
-        // });
         console.log(rules, 'nowRules0923jlkfds()UOIJ');
         dispatch<SaveDataRulesAction>({
           type: 'informalNodeManagerPage/saveDataRules',
