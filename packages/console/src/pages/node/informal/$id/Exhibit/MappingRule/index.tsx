@@ -72,6 +72,8 @@ function MappingRule({
     return (<FLine/>);
   }
 
+  // console.log(attrs, 'attrs@#RFSADj89HJUIO:');
+
   return (<FPopover
     // visible={true}
     content={<Space

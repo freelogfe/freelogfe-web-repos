@@ -14,7 +14,7 @@ import {
 } from "@/services/informalNodes";
 import {completeUrlByDomain} from "@/utils/format";
 
-const {decompile} = require('@freelog/nmr_translator');
+const {decompile, compile} = require('@freelog/nmr_translator');
 
 interface IMappingRule {
   add?: {
@@ -330,6 +330,8 @@ const Model: InformalNodeManagerPageModelType = {
       const {data} = yield call(testResources, params);
       // console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
+      const {rules: rulesObj} = compile(data1.ruleText);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -340,6 +342,13 @@ const Model: InformalNodeManagerPageModelType = {
             // console.log(operations, 'operations12334');
             const stateInfo = dl.stateInfo;
 
+            const rulesObjRule = rulesObj.find((ro: any) => {
+              // console.log(ro, dl, '#############***********;ojsifw389');
+              return ro.exhibitName === dl.testResourceName;
+            });
+
+            // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
+
             // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
             const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
               add: operations.includes('add') ? {
@@ -347,7 +356,7 @@ const Model: InformalNodeManagerPageModelType = {
                 source: {
                   type: stateInfo.type,
                   name: stateInfo.name,
-                }
+                },
               } : undefined,
               alter: operations.includes('alter') ? dl.testResourceName : undefined,
               labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
@@ -355,7 +364,14 @@ const Model: InformalNodeManagerPageModelType = {
               cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
               online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
               offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-              // attrs:
+              attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+                return {
+                  type: a.operation,
+                  theKey: a.key,
+                  value: a.value,
+                  description: a.description,
+                };
+              }) : undefined,
               // active
             };
             return {
@@ -410,6 +426,8 @@ const Model: InformalNodeManagerPageModelType = {
       })?.testResourceName || null;
 
       // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
+      const {rules: rulesObj} = compile(data1.ruleText);
+      // console.log(rulesObj, 'rulesObjiosfjewwef');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -420,6 +438,13 @@ const Model: InformalNodeManagerPageModelType = {
             const operations: string[] = dl.rules[0]?.operations || [];
             // console.log(operations, 'operations12334');
             const stateInfo = dl.stateInfo;
+
+            const rulesObjRule = rulesObj.find((ro: any) => {
+              // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
+              return ro.exhibitName === dl.testResourceName;
+            });
+
+            // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
 
             // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
             const rule: InformalNodeManagerPageModelState['themeList'][number]['rule'] = {
@@ -436,7 +461,14 @@ const Model: InformalNodeManagerPageModelType = {
               cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
               // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
               // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-              // attrs:
+              attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+                return {
+                  type: a.operation,
+                  theKey: a.key,
+                  value: a.value,
+                  description: a.description,
+                };
+              }) : undefined,
               active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
             };
             return {

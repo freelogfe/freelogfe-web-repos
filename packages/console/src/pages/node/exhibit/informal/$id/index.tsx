@@ -78,7 +78,9 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
           <div style={{width: 2}}/>
           <FTitleText text={informExhibitInfoPage.informExhibitName}/>
           <div style={{width: 20}}/>
-          <MappingRule/>
+          <MappingRule
+
+          />
         </div>
         <Space size={20}>
           {
