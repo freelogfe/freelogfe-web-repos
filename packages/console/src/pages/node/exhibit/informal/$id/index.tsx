@@ -16,15 +16,10 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  FetchInfoAction,
-  // UpdateStatusAction,
+  FetchInfoAction, SyncRulesAction,
 } from '@/models/informExhibitInfoPage';
-import RouterTypes from 'umi/routerTypes';
-import {nodeDetail} from '@/services/nodes';
 import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
-import FTooltip from "@/components/FTooltip";
-import {FWarning} from "@/components/FIcons";
 import {informExhibitManagement, informNodeManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
@@ -56,6 +51,15 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
     });
   }
 
+  async function onChange(value: Partial<InformExhibitInfoPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'informExhibitInfoPage/change',
+      payload: {
+        ...value,
+      },
+    });
+  }
+
   return (<div className={styles.styles}>
     <div>
       <div className={styles.header}>
@@ -77,11 +81,33 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
           <MappingRule/>
         </div>
         <Space size={20}>
-          <span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
+          {
+            informExhibitInfoPage.resourceType === 'theme'
+              ? (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
+              : (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已上线' : '未上线'}</span>)
+          }
+
           <FSwitch
-            // disabled={!informExhibitInfoPage.isAuth || informExhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
+            disabled={informExhibitInfoPage.isOnline && informExhibitInfoPage.resourceType === 'theme'}
             checked={informExhibitInfoPage.isOnline}
             onChange={(value) => {
+              onChange({isOnline: value});
+
+              if (informExhibitInfoPage.resourceType === 'theme') {
+                dispatch<SyncRulesAction>({
+                  type: 'informExhibitInfoPage/syncRules',
+                  payload: {
+                    active: value,
+                  },
+                });
+              } else {
+                dispatch<SyncRulesAction>({
+                  type: 'informExhibitInfoPage/syncRules',
+                  payload: {
+                    online: value,
+                  },
+                });
+              }
 
             }}
           />

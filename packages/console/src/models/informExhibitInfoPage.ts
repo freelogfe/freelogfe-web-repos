@@ -91,6 +91,8 @@ export interface SyncRulesAction extends AnyAction {
       value?: string;
       description?: string;
     }[];
+    online?: boolean;
+    active?: boolean;
   };
 }
 
@@ -217,27 +219,26 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
-
       const params2: RuleMatchStatusParams = {
         nodeID: data.nodeId,
         isRematch: false,
       };
       const {data: data2} = yield call(ruleMatchStatus, params2);
-      console.log(data1, '##@#$@#$@#');
+      // console.log(data1, '##@#$@#$@#');
 
       const {rules} = compile(data2.ruleText);
-      console.log(rules, 'rulesiuhfwe89i34FFEWFP)(*');
+      // console.log(rules, 'rulesiuhfwe89i34FFEWFP)(*');
 
       const currentRule = rules.find((ro: any) => {
         return ro.exhibitName === data.testResourceName;
       });
 
-      console.log(currentRule, 'currentRule9283hdsfjkhdslkf');
+      // console.log(currentRule, 'currentRule9283hdsfjkhdslkf');
 
       yield put<ChangeAction>({
-        type: 'informExhibitInfoPage/change',
+        type: 'change',
         payload: {
-          pCustomAttrs: currentRule.attrs.map((cr: any) => {
+          pCustomAttrs: currentRule?.attrs?.map((cr: any) => {
             return {
               remark: cr.description,
               key: cr.key,
@@ -245,7 +246,7 @@ const Model: ExhibitInfoPageModelType = {
               value: cr.value,
               isEditing: false,
             };
-          }),
+          }) || [],
         }
       })
     },
@@ -264,31 +265,52 @@ const Model: ExhibitInfoPageModelType = {
       const {rules} = compile(data1.ruleText);
       // console.log(rules, '@##RFSDFSDFASD90就；sdf89');
 
-      const currentRule = rules.find((ro: any) => {
-        return ro.exhibitName === informExhibitInfoPage.informExhibitName;
-      });
-
       let newRulesObj;
-      if (currentRule) {
-        newRulesObj = rules.map((ro: any) => {
-          if (ro.exhibitName !== informExhibitInfoPage.informExhibitName) {
-            return ro;
-          }
-          return {
-            ...ro,
-            ...payload,
-          };
-        })
+
+      if (payload.active !== undefined) {
+        console.log(payload.active, 'payload.active@SADFioJpoiu908sfup9OI:)_I');
+
+        newRulesObj = rules.filter((r: any) => {
+          return r.operation !== 'activate_theme';
+        });
+
+        if (payload.active) {
+          newRulesObj = [
+            ...newRulesObj,
+            {
+              operation: 'activate_theme',
+              themeName: informExhibitInfoPage.informExhibitName,
+            },
+          ];
+        }
+        // console.log(rules1, 'rules1!Q@#RFcdios89joe');
       } else {
-        newRulesObj = [
-          ...rules,
-          {
-            operation: 'alter',
-            exhibitName: informExhibitInfoPage.informExhibitName,
-            ...payload,
-          }
-        ]
+        const currentRule = rules.find((ro: any) => {
+          return ro.exhibitName === informExhibitInfoPage.informExhibitName;
+        });
+
+        if (currentRule) {
+          newRulesObj = rules.map((ro: any) => {
+            if (ro.exhibitName !== informExhibitInfoPage.informExhibitName) {
+              return ro;
+            }
+            return {
+              ...ro,
+              ...payload,
+            };
+          });
+        } else {
+          newRulesObj = [
+            ...rules,
+            {
+              operation: 'alter',
+              exhibitName: informExhibitInfoPage.informExhibitName,
+              ...payload,
+            },
+          ];
+        }
       }
+
       // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
       const text = decompile(newRulesObj);
       // console.log(text, 'newRulesObj90ij32.dsfsdf');
