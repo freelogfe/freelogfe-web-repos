@@ -190,12 +190,21 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data1} = yield call(info, params1);
 
+      let isOnline: boolean;
+
+      if (data.resourceType === 'theme') {
+        isOnline = data.stateInfo.themeInfo.isActivatedTheme === 1;
+      } else {
+        isOnline = (data.stateInfo.onlineStatusInfo.onlineStatus === 1);
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeID: data.nodeId,
           nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
+          isOnline: isOnline,
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],

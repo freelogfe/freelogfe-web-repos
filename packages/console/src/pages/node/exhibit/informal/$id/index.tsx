@@ -80,11 +80,10 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
           <span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
           <FSwitch
             // disabled={!informExhibitInfoPage.isAuth || informExhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
-            // checked={informExhibitInfoPage.isOnline}
-            // onChange={(value) => dispatch<UpdateStatusAction>({
-            //   type: 'exhibitInfoPage/updateStatus',
-            //   payload: value ? 1 : 0,
-            // })}
+            checked={informExhibitInfoPage.isOnline}
+            onChange={(value) => {
+
+            }}
           />
           {/*<FTooltip title={!informExhibitInfoPage.isAuth ? informExhibitInfoPage.authErrorText : '暂无上线策略'}>*/}
           {/*  <FWarning/>*/}
