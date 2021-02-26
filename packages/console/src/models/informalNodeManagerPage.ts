@@ -119,6 +119,35 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     isAuth: boolean;
     authErrorText: string;
   }[];
+
+  mappingRule: {
+    add?: {
+      exhibit: string;
+      source: {
+        type: 'resource' | 'object';
+        name: string;
+      };
+    };
+    alter?: string;
+    active?: string;
+    version?: string;
+    cover?: string;
+    title?: string;
+    online?: boolean;
+    offline?: boolean;
+    labels?: string[];
+    replaces?: {
+      replaced: ICandidate;
+      replacer: ICandidate;
+      scopes: ICandidate[][];
+    }[];
+    attrs?: {
+      type: 'add' | 'delete',
+      theKey: string;
+      value?: string;
+      description?: string;
+    }[];
+  }[];
 };
 
 export interface ChangeAction extends AnyAction {
@@ -257,13 +286,15 @@ const initStates: InformalNodeManagerPageModelState = {
   themeListIsLoading: false,
   addThemeDrawerVisible: false,
 
-  isCodeEditing: true,
+  isCodeEditing: false,
   codeInput: '',
   codeIsDirty: false,
   codeIsChecking: false,
   codeCompileErrors: null,
   codeExecutionError: null,
   codeSaveSuccess: null,
+
+  mappingRule: [],
 };
 
 const Model: InformalNodeManagerPageModelType = {

@@ -14,7 +14,7 @@ import {
   LabelRule,
   CoverRule,
   AlterRule,
-  AddRule
+  AddRule, ActiveRule
 } from "../components/MappingRules";
 import FCodemirror from "@/components/FCodemirror";
 import {FNormalButton} from "@/components/FButton";
@@ -38,6 +38,41 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       type: 'informalNodeManagerPage/fetchRules'
     });
   }, []);
+
+  const {rules} = compile(informalNodeManagerPage.ruleText);
+  console.log(rules, '@#$RASDF)(JULK');
+  const rulesObj = rules.map((r: any) => {
+    if (r.operation === 'activate_theme') {
+      return {
+        active: r.themeName,
+      };
+    }
+    return {
+      add: r.operation === 'add' ? {
+        exhibit: r.exhibitName,
+        source: {
+          type: r.candidate.type,
+          name: r.candidate.name,
+        },
+      } : undefined,
+      alter: r.operation === 'alter' ? r.exhibitName : undefined,
+      cover: r.cover,
+      title: r.title,
+      online: r.online === true,
+      offline: r.online === false,
+      labels: r.labels,
+      replaces: r.replaces,
+      // attrs: r.attrs?.map((a: any) => {
+      //   return {
+      //     type: a.operation,
+      //     theKey: a.key,
+      //     value: a.value,
+      //     description: a.description,
+      //   };
+      // }) || undefined,
+    };
+  });
+  console.log(rulesObj, 'rulesObjQ#@FDSZfj()Uew');
 
   return (<>
     <div className={styles.header}>
@@ -183,36 +218,72 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
           </div>
         </div>)
         : (<div className={styles.ruleListBody}>
-          <Space className={styles.ruleList} direction="vertical">
-            <div className={styles.ruleCard}>
-              <div className={styles.ruleCardHeader}>
-                {/*<AddRule source={{}}/>*/}
-                <FWarning/>
-              </div>
-              <div className={styles.ruleCardBody}>
-                <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
-                  <div className={styles.ruleCardBodyListItem}>
-                    {/*<ReplaceRule/>*/}
-                    <FWarning/>
+          <Space
+            className={styles.ruleList}
+            direction="vertical"
+          >
+            {
+              rulesObj.map((obj: any, index: number) => {
+                return (<div
+                  key={index}
+                  className={styles.ruleCard}
+                >
+                  <div className={styles.ruleCardHeader}>
+                    {obj.add && <AddRule  {...obj.add}/>}
+                    {obj.alter && <AlterRule alter={obj.alter}/>}
+                    {obj.active && <ActiveRule active={obj.active}/>}
                   </div>
-                </Space>
-              </div>
-            </div>
+                  {
+                    !(!obj.cover && !obj.title && !obj.labels && !obj.online && !obj.offline && !obj.replaces && !obj.attrs)
+                    && (<div className={styles.ruleCardBody}>
+                      <Space
+                        className={styles.ruleCardBodyList}
+                        size={15}
+                        direction="vertical"
+                      >
 
-            <div className={styles.ruleCard}>
-              <div className={styles.ruleCardHeader}>
-                {/*<AddRule/>*/}
-                <FWarning/>
-              </div>
-              <div className={styles.ruleCardBody}>
-                <Space className={styles.ruleCardBodyList} size={15} direction="vertical">
-                  <div className={styles.ruleCardBodyListItem}>
-                    {/*<ReplaceRule/>*/}
-                    <FWarning/>
-                  </div>
-                </Space>
-              </div>
-            </div>
+                        {/*{version && <VersionRule version={version}/>}*/}
+                        {obj.cover && <div className={styles.ruleCardBodyListItem}><CoverRule cover={obj.cover}/></div>}
+                        {obj.title && <div className={styles.ruleCardBodyListItem}><TitleRule title={obj.title}/></div>}
+                        {obj.labels &&
+                        <div className={styles.ruleCardBodyListItem}><LabelRule labels={obj.labels}/></div>}
+                        {obj.online &&
+                        <div className={styles.ruleCardBodyListItem}><OnlineRule online={obj.online}/></div>}
+                        {obj.offline &&
+                        <div className={styles.ruleCardBodyListItem}><OfflineRule offline={obj.offline}/></div>}
+                        {obj.replaces && obj.replaces.map((replace: any, replaceIndex: any) => {
+                          return (<div className={styles.ruleCardBodyListItem}><ReplaceRule
+                            key={replaceIndex}
+                            {...replace}
+                          /></div>);
+                        })}
+                        {obj.attrs && obj.attrs.map((attr: any, attrIndex: any) => {
+                          return (
+                            <div className={styles.ruleCardBodyListItem}><AttrRule key={attrIndex} {...attr}/></div>);
+                        })}
+
+                      </Space>
+                    </div>)
+                  }
+                </div>);
+              })
+            }
+
+
+            {/*<div className={styles.ruleCard}>*/}
+            {/*  <div className={styles.ruleCardHeader}>*/}
+            {/*    /!*<AddRule/>*!/*/}
+            {/*    <FWarning/>*/}
+            {/*  </div>*/}
+            {/*  <div className={styles.ruleCardBody}>*/}
+            {/*    <Space className={styles.ruleCardBodyList} size={15} direction="vertical">*/}
+            {/*      <div className={styles.ruleCardBodyListItem}>*/}
+            {/*        /!*<ReplaceRule/>*!/*/}
+            {/*        <FWarning/>*/}
+            {/*      </div>*/}
+            {/*    </Space>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
           </Space>
         </div>)
     }
