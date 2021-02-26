@@ -31,6 +31,12 @@ import {
 } from "../../components/MappingRules";
 import FMappingRuleActive from "@/components/FIcons/FMappingRuleActive";
 
+interface ICandidate {
+  name: string;
+  versionRange: string;
+  type: 'resource' | 'object';
+}
+
 interface MappingRuleProps {
   add?: {
     exhibit: string;
@@ -48,12 +54,9 @@ interface MappingRuleProps {
   offline?: boolean;
   labels?: string[];
   replaces?: {
-    replacer: {
-      type: 'resource' | 'object';
-      name: string;
-    };
-    replaced: string;
-    scope: string[][];
+    replaced: ICandidate;
+    replacer: ICandidate;
+    scopes: ICandidate[][];
   }[];
   attrs?: {
     type: 'add' | 'delete',
@@ -91,7 +94,10 @@ function MappingRule({
       {online && <OnlineRule online={online}/>}
       {offline && <OfflineRule offline={offline}/>}
       {replaces && replaces.map((replace, replaceIndex) => {
-        return (<ReplaceRule key={replaceIndex} {...replace}/>);
+        return (<ReplaceRule
+          key={replaceIndex}
+          {...replace}
+        />);
       })}
       {attrs && attrs.map((attr, attrIndex) => {
         return (<AttrRule key={attrIndex} {...attr}/>);

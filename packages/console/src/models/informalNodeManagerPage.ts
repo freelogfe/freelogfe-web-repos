@@ -33,12 +33,9 @@ interface IMappingRule {
   offline?: boolean;
   labels?: string[];
   replaces?: {
-    replacer: {
-      type: 'resource' | 'object';
-      name: string;
-    };
-    replaced: string;
-    scope: string[][];
+    replaced: ICandidate;
+    replacer: ICandidate;
+    scopes: ICandidate[][];
   }[];
   attrs?: {
     type: 'add' | 'delete',
@@ -372,7 +369,7 @@ const Model: InformalNodeManagerPageModelType = {
                   description: a.description,
                 };
               }) : undefined,
-              // active
+              replaces: rulesObjRule?.replaces,
             };
             return {
               id: dl.testResourceId,
@@ -470,6 +467,7 @@ const Model: InformalNodeManagerPageModelType = {
                 };
               }) : undefined,
               active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+              replaces: rulesObjRule?.replaces,
             };
             return {
               id: dl.testResourceId,
