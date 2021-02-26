@@ -78,9 +78,24 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
           <div style={{width: 2}}/>
           <FTitleText text={informExhibitInfoPage.informExhibitName}/>
           <div style={{width: 20}}/>
-          <MappingRule
+          {/*{...informExhibitInfoPage.mappingRule}*/}
+          {
+            informExhibitInfoPage.mappingRule
+              ? (<MappingRule
+                add={informExhibitInfoPage.mappingRule.add}
+                alter={informExhibitInfoPage.mappingRule.alter}
+                active={informExhibitInfoPage.mappingRule.active}
+                cover={informExhibitInfoPage.mappingRule.cover}
+                title={informExhibitInfoPage.mappingRule.title}
+                online={informExhibitInfoPage.mappingRule.online}
+                offline={informExhibitInfoPage.mappingRule.offline}
+                labels={informExhibitInfoPage.mappingRule.labels}
+                replaces={informExhibitInfoPage.mappingRule.replaces}
+                attrs={informExhibitInfoPage.mappingRule.attrs}
+              />)
+              : (<MappingRule/>)
+          }
 
-          />
         </div>
         <Space size={20}>
           {

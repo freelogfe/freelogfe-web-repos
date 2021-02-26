@@ -28,34 +28,6 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   nodeName: string;
   informExhibitName: string;
   isOnline: boolean;
-  mappingRule: {
-    add?: {
-      exhibit: string;
-      source: {
-        type: 'resource' | 'object';
-        name: string;
-      };
-    };
-    alter?: string;
-    active?: string;
-    version?: string;
-    cover?: string;
-    title?: string;
-    online?: boolean;
-    offline?: boolean;
-    labels?: string[];
-    replaces?: {
-      replaced: ICandidate;
-      replacer: ICandidate;
-      scopes: ICandidate[][];
-    }[];
-    attrs?: {
-      type: 'add' | 'delete',
-      theKey: string;
-      value?: string;
-      description?: string;
-    }
-  } | null;
 
   associated: {
     selected: boolean;
@@ -100,7 +72,36 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   resourceName: string;
   resourceType: string;
   resourceCover: string;
-}>;
+}> & {
+  mappingRule: {
+    add?: {
+      exhibit: string;
+      source: {
+        type: 'resource' | 'object';
+        name: string;
+      };
+    };
+    alter?: string;
+    active?: string;
+    version?: string;
+    cover?: string;
+    title?: string;
+    online?: boolean;
+    offline?: boolean;
+    labels?: string[];
+    replaces?: {
+      replaced: ICandidate;
+      replacer: ICandidate;
+      scopes: ICandidate[][];
+    }[];
+    attrs?: {
+      type: 'add' | 'delete',
+      theKey: string;
+      value?: string;
+      description?: string;
+    }[];
+  } | null;
+};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informExhibitInfoPage/change';
@@ -258,8 +259,39 @@ const Model: ExhibitInfoPageModelType = {
         return ro.exhibitName === data.testResourceName;
       });
 
+      const currentThemeRule = rules.find((ro: any) => {
+        return ro.themeName === data.testResourceName;
+      });
+
       // console.log(currentRule, 'currentRule9283hdsfjkhdslkf');
 
+      const eRule = currentRule ? {
+        add: currentRule.operation === 'add' ? {
+          exhibit: currentRule.exhibitName,
+          source: {
+            type: currentRule.candidate.type,
+            name: currentRule.candidate.name,
+          },
+        } : undefined,
+        alter: currentRule.operation === 'alter' ? currentRule.exhibitName : undefined,
+        cover: currentRule.cover,
+        title: currentRule.title,
+        online: currentRule.online === true,
+        offline: currentRule.online === false,
+        labels: currentRule.labels,
+        replaces: currentRule.replaces,
+        attrs: currentRule.attrs.map((a: any) => {
+          return {
+            type: a.operation,
+            theKey: a.key,
+            value: a.value,
+            description: a.description,
+          };
+        }),
+      } : {};
+      const tRule = {
+        active: currentThemeRule || undefined,
+      };
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -272,7 +304,10 @@ const Model: ExhibitInfoPageModelType = {
               isEditing: false,
             };
           }) || [],
-          mappingRule: currentRule || null,
+          mappingRule: {
+            ...eRule,
+            ...tRule,
+          },
         }
       });
     },
