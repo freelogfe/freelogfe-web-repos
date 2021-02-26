@@ -183,7 +183,7 @@ export function AttrRule({type, theKey, value, description}: AttrRuleProps) {
 
 interface ICandidate {
   name: string;
-  versionRange: string;
+  versionRange?: string;
   type: 'resource' | 'object';
 }
 
