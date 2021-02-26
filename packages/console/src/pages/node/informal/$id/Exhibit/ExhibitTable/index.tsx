@@ -71,11 +71,23 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             </div>
           </div>
           <div>
+            {/*{...record.rule}*/}
             <MappingRule
-              {...record.rule}
+              add={record.rule.add}
+              alter={record.rule.alter}
+              active={record.rule.active}
+              version={record.rule.version}
+              cover={record.rule.cover}
+              title={record.rule.title}
+              online={record.rule.online}
+              offline={record.rule.online}
+              labels={record.rule.labels}
+              replaces={record.rule.replaces}
+              attrs={record.rule.attrs}
             />
           </div>
-        </div>);
+        </div>)
+          ;
       }
     },
     {

@@ -33,7 +33,7 @@ import FMappingRuleActive from "@/components/FIcons/FMappingRuleActive";
 
 interface ICandidate {
   name: string;
-  versionRange: string;
+  versionRange?: string;
   type: 'resource' | 'object';
 }
 

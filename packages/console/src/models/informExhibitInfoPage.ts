@@ -15,6 +15,12 @@ import {
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
+interface ICandidate {
+  name: string;
+  versionRange: string;
+  type: 'resource' | 'object';
+}
+
 export type InformExhibitInfoPageModelState = WholeReadonly<{
   informExhibitID: string;
 
@@ -22,8 +28,34 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   nodeName: string;
   informExhibitName: string;
   isOnline: boolean;
-  // isAuth: boolean;
-  // authErrorText: string;
+  mappingRule: {
+    add?: {
+      exhibit: string;
+      source: {
+        type: 'resource' | 'object';
+        name: string;
+      };
+    };
+    alter?: string;
+    active?: string;
+    version?: string;
+    cover?: string;
+    title?: string;
+    online?: boolean;
+    offline?: boolean;
+    labels?: string[];
+    replaces?: {
+      replaced: ICandidate;
+      replacer: ICandidate;
+      scopes: ICandidate[][];
+    }[];
+    attrs?: {
+      type: 'add' | 'delete',
+      theKey: string;
+      value?: string;
+      description?: string;
+    }
+  } | null;
 
   associated: {
     selected: boolean;
@@ -120,8 +152,7 @@ const Model: ExhibitInfoPageModelType = {
     nodeName: '',
     informExhibitName: '',
     isOnline: false,
-    // isAuth: true,
-    // authErrorText: '',
+    mappingRule: null,
 
     associated: [
       {
@@ -150,12 +181,6 @@ const Model: ExhibitInfoPageModelType = {
     pInputTitle: null,
     pTags: [],
 
-    // allVersions: [],
-    // version: '',
-
-    // settingUnfold: false,
-
-    // pBaseAttrs: [],
     pCustomAttrs: [],
 
     pAddCustomModalVisible: false,
@@ -247,8 +272,9 @@ const Model: ExhibitInfoPageModelType = {
               isEditing: false,
             };
           }) || [],
+          mappingRule: currentRule || null,
         }
-      })
+      });
     },
     * syncRules({payload}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
