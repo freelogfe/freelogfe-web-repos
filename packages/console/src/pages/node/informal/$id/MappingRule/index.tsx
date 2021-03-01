@@ -75,6 +75,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       // }) || undefined,
     };
   });
+
   // console.log(rulesObj, 'rulesObjQ#@FDSZfj()Uew');
 
   async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
@@ -106,17 +107,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   codeInput: exportText,
                   isCodeEditing: true,
                 });
-                // const result = compile(exportText)
-                // if(result.errors != null) {
-                //   self.$message.error({
-                //     dangerouslyUseHTMLString: true,
-                //     duration: 5000,
-                //     message: self.$i18n.t('node.errors[1]') + "<br/>" + result.errors.join('<br/>')
-                //   })
-                // }else {
-                //   self.rulesText = self.rulesText + '\n' + exportText
-                //   self.editorVisible = true
-                // }
               };
               return false;
             }}
