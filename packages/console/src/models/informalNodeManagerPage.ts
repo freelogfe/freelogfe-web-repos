@@ -148,7 +148,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     msg: string;
   }[];
   codeSaveSuccess: null | true;
-}> & {};
+}>;
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
@@ -255,26 +255,8 @@ const initStates: InformalNodeManagerPageModelState = {
   replaceHandlerModalVisible: false,
 
   replacerActivatedTab: 'market',
+  replacerList: [],
   replacerInput: '',
-  replacerList: [{
-    id: '1',
-    checked: false,
-    name: 'yuliang/package.json',
-    type: 'json',
-    latestVersion: '1.0.1',
-    version: '1.1.1',
-    date: '2021-11-22',
-    status: 'online',
-  }, {
-    id: '2',
-    checked: true,
-    name: 'Freelog/blog-theme',
-    type: 'json',
-    latestVersion: '1.0.1',
-    version: '1.1.1',
-    date: '2021-11-22',
-    status: 'online',
-  }],
 
   selectedType: '-1',
   selectedStatus: '2',
@@ -420,7 +402,7 @@ const Model: InformalNodeManagerPageModelType = {
               authErrorText: '',
             };
           }),
-        }
+        },
       });
     },
     * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
@@ -533,7 +515,6 @@ const Model: InformalNodeManagerPageModelType = {
           codeInput: data.ruleText,
         },
       });
-
     },
     * saveRules({}: SaveRulesAction, {select, call, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
