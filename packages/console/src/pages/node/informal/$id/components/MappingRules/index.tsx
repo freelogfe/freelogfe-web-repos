@@ -29,7 +29,6 @@ export function AddRule({exhibit, source}: AddRuleProps) {
       <div><label
         className={source.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{source.name}</label>
       </div>
-
     </div>
   </div>);
 }

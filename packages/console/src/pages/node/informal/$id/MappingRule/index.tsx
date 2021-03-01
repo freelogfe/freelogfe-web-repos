@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from "@/components/FText";
-import {Space} from "antd";
+import {Space, Upload} from "antd";
 import {FImport, FExport, FDelete, FCode, FWarning, FExit} from "@/components/FIcons";
 import TypesCaption from "../components/TypesCaption";
 import {
@@ -23,6 +23,8 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
+import FUpload from "@/components/FUpload";
+import FCheckbox from "@/components/FCheckbox";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -41,7 +43,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   }, []);
 
   const {rules} = compile(informalNodeManagerPage.ruleText);
-  console.log(rules, '@#$RASDF)(JULK');
+  // console.log(rules, '@#$RASDF)(JULK');
   const rulesObj = rules.map((r: any) => {
     if (r.operation === 'activate_theme') {
       return {
@@ -73,7 +75,14 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       // }) || undefined,
     };
   });
-  console.log(rulesObj, 'rulesObjQ#@FDSZfj()Uew');
+  // console.log(rulesObj, 'rulesObjQ#@FDSZfj()Uew');
+
+  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload,
+    });
+  }
 
   return (<>
     <div className={styles.header}>
@@ -83,36 +92,57 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         <TypesCaption/>
         <div style={{width: 50}}/>
         <Space size={30}>
-          <a onClick={() => {
-
-          }}><FImport/> <span>导入</span></a>
+          <FUpload
+            accept={'text/plain'}
+            beforeUpload={(file) => {
+              // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
+              const reader = new FileReader();
+              reader.readAsText(file);
+              reader.onload = function (evt: any) {
+                // console.log(evt, 'evt@#RFDSf0(UJo90jsdal;f');
+                const exportText = evt.target.result;
+                // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
+                onChange({
+                  codeInput: exportText,
+                  isCodeEditing: true,
+                });
+                // const result = compile(exportText)
+                // if(result.errors != null) {
+                //   self.$message.error({
+                //     dangerouslyUseHTMLString: true,
+                //     duration: 5000,
+                //     message: self.$i18n.t('node.errors[1]') + "<br/>" + result.errors.join('<br/>')
+                //   })
+                // }else {
+                //   self.rulesText = self.rulesText + '\n' + exportText
+                //   self.editorVisible = true
+                // }
+              };
+              return false;
+            }}
+            showUploadList={false}
+          >
+            <a><FImport/> <span>导入</span></a>
+          </FUpload>
           <a onClick={() => {
             const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-            // const file = new File([informalNodeManagerPage.codeInput], fileName, {type: 'text/plain'});
-            // window.location.href = window.URL.createObjectURL(file);
             const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
             FileSaver.saveAs(blob, fileName);
           }}><FExport/> <span>导出</span></a>
-          <a style={{}}><FDelete/> <span>删除</span></a>
+          {/*<a style={{}}><FDelete/> <span>删除</span></a>*/}
         </Space>
       </div>
 
       {
         informalNodeManagerPage.isCodeEditing
           ? (<a onClick={() => {
-            dispatch<ChangeAction>({
-              type: 'informalNodeManagerPage/change',
-              payload: {
-                isCodeEditing: false,
-              },
+            onChange({
+              isCodeEditing: false,
             });
           }}><FExit/> 退出代码模式</a>)
           : (<a onClick={() => {
-            dispatch<ChangeAction>({
-              type: 'informalNodeManagerPage/change',
-              payload: {
-                isCodeEditing: true,
-              },
+            onChange({
+              isCodeEditing: true,
             });
           }}><FCode/> 进入代码模式</a>)
       }
@@ -126,33 +156,31 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <FCodemirror
               value={informalNodeManagerPage.codeInput}
               onChange={(value) => {
-                dispatch<ChangeAction>({
-                  type: 'informalNodeManagerPage/change',
-                  payload: {
-                    codeInput: value,
-                    codeIsDirty: true,
-                  },
+                onChange({
+                  codeInput: value,
+                  codeIsDirty: true,
                 });
               }}
+
             />
             <div style={{height: 15}}/>
             <FNormalButton
               loading={informalNodeManagerPage.codeIsChecking}
               disabled={!informalNodeManagerPage.codeIsDirty && !informalNodeManagerPage.codeIsChecking}
               onClick={() => {
-                dispatch<ChangeAction>({
-                  type: 'informalNodeManagerPage/change',
-                  payload: {
-                    codeIsDirty: false,
-                  },
+                onChange({
+                  codeIsDirty: false,
                 });
                 const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
                 if (errorObjects.length > 0) {
-                  return dispatch<ChangeAction>({
-                    type: 'informalNodeManagerPage/change',
-                    payload: {
-                      codeCompileErrors: errorObjects,
-                    },
+                  // return dispatch<ChangeAction>({
+                  //   type: 'informalNodeManagerPage/change',
+                  //   payload: {
+                  //     codeCompileErrors: errorObjects,
+                  //   },
+                  // });
+                  return onChange({
+                    codeCompileErrors: errorObjects,
                   });
                 }
                 dispatch<SaveRulesAction>({
@@ -238,7 +266,45 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   className={styles.ruleCard}
                 >
                   <div className={styles.ruleCardHeader}>
-                    {obj.add && <AddRule  {...obj.add}/>}
+                    {/*<FCheckbox*/}
+                    {/*  checked={*/}
+                    {/*    informalNodeManagerPage.checkedExhibitName.includes(obj.alter)*/}
+                    {/*    || informalNodeManagerPage.checkedExhibitName.includes(obj.add?.exhibit || '')*/}
+                    {/*    || informalNodeManagerPage.checkedThemeName === obj.active*/}
+                    {/*  }*/}
+                    {/*  onChange={(e) => {*/}
+                    {/*    const exhibitName: string = obj.alter || obj.add?.exhibit || '';*/}
+                    {/*    const themeName: string = obj.active || '';*/}
+                    {/*    if (e.target.checked) {*/}
+                    {/*      if (exhibitName) {*/}
+                    {/*        onChange({*/}
+                    {/*          checkedExhibitName: [*/}
+                    {/*            ...informalNodeManagerPage.checkedExhibitName,*/}
+                    {/*            exhibitName,*/}
+                    {/*          ],*/}
+                    {/*        });*/}
+                    {/*      } else {*/}
+                    {/*        onChange({*/}
+                    {/*          checkedThemeName: themeName,*/}
+                    {/*        });*/}
+                    {/*      }*/}
+                    {/*    } else {*/}
+                    {/*      if (exhibitName) {*/}
+                    {/*        onChange({*/}
+                    {/*          checkedExhibitName: informalNodeManagerPage.checkedExhibitName.filter((ce) => {*/}
+                    {/*            return ce !== exhibitName;*/}
+                    {/*          }),*/}
+                    {/*        });*/}
+                    {/*      } else {*/}
+                    {/*        onChange({*/}
+                    {/*          checkedThemeName: '',*/}
+                    {/*        });*/}
+                    {/*      }*/}
+                    {/*    }*/}
+                    {/*  }}*/}
+                    {/*/>*/}
+                    {/*<div style={{width: 20}}/>*/}
+                    {obj.add && <AddRule {...obj.add}/>}
                     {obj.alter && <AlterRule alter={obj.alter}/>}
                     {obj.active && <ActiveRule active={obj.active}/>}
                   </div>
@@ -250,7 +316,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         size={15}
                         direction="vertical"
                       >
-
                         {/*{version && <VersionRule version={version}/>}*/}
                         {obj.cover && <div className={styles.ruleCardBodyListItem}><CoverRule cover={obj.cover}/></div>}
                         {obj.title && <div className={styles.ruleCardBodyListItem}><TitleRule title={obj.title}/></div>}
@@ -276,22 +341,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 </div>);
               })
             }
-
-
-            {/*<div className={styles.ruleCard}>*/}
-            {/*  <div className={styles.ruleCardHeader}>*/}
-            {/*    /!*<AddRule/>*!/*/}
-            {/*    <FWarning/>*/}
-            {/*  </div>*/}
-            {/*  <div className={styles.ruleCardBody}>*/}
-            {/*    <Space className={styles.ruleCardBodyList} size={15} direction="vertical">*/}
-            {/*      <div className={styles.ruleCardBodyListItem}>*/}
-            {/*        /!*<ReplaceRule/>*!/*/}
-            {/*        <FWarning/>*/}
-            {/*      </div>*/}
-            {/*    </Space>*/}
-            {/*  </div>*/}
-            {/*</div>*/}
           </Space>
         </div>)
     }

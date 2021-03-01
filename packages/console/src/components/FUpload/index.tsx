@@ -6,6 +6,8 @@ interface FUploadProps extends UploadProps {
   children?: React.ReactNode;
 }
 
-export default function ({children, ...props}: FUploadProps) {
+function FUpload({children, ...props}: FUploadProps) {
   return <Upload {...props}>{children}</Upload>
 }
+
+export default FUpload;

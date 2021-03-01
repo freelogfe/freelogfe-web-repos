@@ -1,7 +1,7 @@
 import {DvaReducer, WholeMutable, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
+import {ConnectState} from '@/models/connect';
 import {
   createRules,
   CreateRulesParamsType, putRules, PutRulesParamsType,
@@ -11,7 +11,7 @@ import {
   TestNodeRulesParamsType,
   testResources,
   TestResourcesParamsType,
-} from "@/services/informalNodes";
+} from '@/services/informalNodes';
 import {completeUrlByDomain} from "@/utils/format";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
@@ -54,6 +54,21 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
+  exhibitList: {
+    id: string;
+    cover: string;
+    associatedExhibitID: string;
+    name: string;
+    title: string;
+    identity: 'resource' | 'object';
+    originId: string;
+    rule: IMappingRule;
+    version: string;
+    isOnline: boolean;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
+
   addExhibitDrawerVisible: boolean;
 
   replaceHandlerModalVisible: boolean;
@@ -70,45 +85,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
 
-  selectedType: '-1' | string;
-  selectedStatus: '0' | '1' | '2';
-  filterKeywords: string;
-
-  exhibitListIsLoading: boolean;
-
-  themeListIsLoading: boolean;
-  addThemeDrawerVisible: boolean;
-
-  isCodeEditing: boolean;
-  codeInput: string;
-  codeIsDirty: boolean;
-  codeIsChecking: boolean;
-  codeCompileErrors: null | {
-    charPositionInLine: number;
-    line: number;
-    msg: string;
-    offendingSymbol: string;
-  }[];
-  codeExecutionError: null | {
-    msg: string;
-  }[];
-  codeSaveSuccess: null | true;
-}> & {
-  exhibitList: {
-    id: string;
-    cover: string;
-    associatedExhibitID: string;
-    name: string;
-    title: string;
-    identity: 'resource' | 'object';
-    originId: string;
-    rule: IMappingRule;
-    version: string;
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-  }[];
-
   themeList: {
     id: string;
     name: string;
@@ -119,6 +95,14 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     isAuth: boolean;
     authErrorText: string;
   }[];
+  selectedType: '-1' | string;
+  selectedStatus: '0' | '1' | '2';
+  filterKeywords: string;
+
+  exhibitListIsLoading: boolean;
+
+  themeListIsLoading: boolean;
+  addThemeDrawerVisible: boolean;
 
   mappingRule: {
     add?: {
@@ -148,7 +132,23 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
       description?: string;
     }[];
   }[];
-};
+  checkedExhibitName: string[];
+  checkedThemeName: string;
+  isCodeEditing: boolean;
+  codeInput: string;
+  codeIsDirty: boolean;
+  codeIsChecking: boolean;
+  codeCompileErrors: null | {
+    charPositionInLine: number;
+    line: number;
+    msg: string;
+    offendingSymbol: string;
+  }[];
+  codeExecutionError: null | {
+    msg: string;
+  }[];
+  codeSaveSuccess: null | true;
+}> & {};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
@@ -295,6 +295,8 @@ const initStates: InformalNodeManagerPageModelState = {
   codeSaveSuccess: null,
 
   mappingRule: [],
+  checkedExhibitName: [],
+  checkedThemeName: '',
 };
 
 const Model: InformalNodeManagerPageModelType = {
