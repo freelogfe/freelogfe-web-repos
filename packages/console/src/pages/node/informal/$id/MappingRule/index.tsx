@@ -22,6 +22,7 @@ import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
+import FileSaver from 'file-saver';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -82,8 +83,16 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         <TypesCaption/>
         <div style={{width: 50}}/>
         <Space size={30}>
-          <a><FImport/> <span>导入</span></a>
-          <a><FExport/> <span>导入</span></a>
+          <a onClick={() => {
+
+          }}><FImport/> <span>导入</span></a>
+          <a onClick={() => {
+            const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+            // const file = new File([informalNodeManagerPage.codeInput], fileName, {type: 'text/plain'});
+            // window.location.href = window.URL.createObjectURL(file);
+            const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
+            FileSaver.saveAs(blob, fileName);
+          }}><FExport/> <span>导出</span></a>
           <a style={{}}><FDelete/> <span>删除</span></a>
         </Space>
       </div>
@@ -252,14 +261,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         {obj.offline &&
                         <div className={styles.ruleCardBodyListItem}><OfflineRule offline={obj.offline}/></div>}
                         {obj.replaces && obj.replaces.map((replace: any, replaceIndex: any) => {
-                          return (<div className={styles.ruleCardBodyListItem}><ReplaceRule
-                            key={replaceIndex}
+                          return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
                             {...replace}
                           /></div>);
                         })}
                         {obj.attrs && obj.attrs.map((attr: any, attrIndex: any) => {
                           return (
-                            <div className={styles.ruleCardBodyListItem}><AttrRule key={attrIndex} {...attr}/></div>);
+                            <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule  {...attr}/></div>);
                         })}
 
                       </Space>
@@ -302,3 +310,11 @@ export default connect(({informalNodeManagerPage}: ConnectState) => ({
 // function Header({onClickInCode}: HeaderProps) {
 //   return ();
 // }
+
+// function downloadTextUrl(rules) {
+//   const rulesText = rules.map(r => r.text).join('\n')
+//   const fileName = `测试节点.映射规则.${this.nodeId}.txt`
+//   const file = new File([rulesText], fileName, { type: 'text/plain' })
+//   const url = window.URL.createObjectURL(file)
+//   return [ url, fileName ]
+// },
