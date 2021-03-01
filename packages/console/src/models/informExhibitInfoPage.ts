@@ -226,6 +226,8 @@ const Model: ExhibitInfoPageModelType = {
         isOnline = (data.stateInfo.onlineStatusInfo.onlineStatus === 1);
       }
 
+      console.log(data, 'data@#ASDfjoisudfijowe');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -238,10 +240,10 @@ const Model: ExhibitInfoPageModelType = {
           pTags: data.stateInfo.tagInfo.tags || [],
           // allVersions: data.originInfo.versions || [],
           // version: data.originInfo.version || '',
-          resourceId: data.originInfo.id,
-          resourceName: data1.resourceName,
-          resourceType: data1.resourceType,
-          resourceCover: data1.coverImages[0] || '',
+          resourceId: data.originInfo.id || '',
+          resourceName: data1?.resourceName || '',
+          resourceType: data1?.resourceType || '',
+          resourceCover: data1?.coverImages[0] || '',
         },
       });
 
@@ -280,7 +282,7 @@ const Model: ExhibitInfoPageModelType = {
         offline: currentRule.online === false,
         labels: currentRule.labels,
         replaces: currentRule.replaces,
-        attrs: currentRule.attrs.map((a: any) => {
+        attrs: currentRule.attrs?.map((a: any) => {
           return {
             type: a.operation,
             theKey: a.key,
