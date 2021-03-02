@@ -28,8 +28,13 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 0)
-                .map((p) => {
-                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                .map((p, index) => {
+                  return (<Item
+                    key={index}
+                    tTey={p.key}
+                    value={p.value}
+                    description={p.description}
+                  />);
                 })
             }
             </tbody>
@@ -41,8 +46,13 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 1)
-                .map((p) => {
-                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                .map((p, index) => {
+                  return (<Item
+                    key={index}
+                    tTey={p.key}
+                    value={p.value}
+                    description={p.description}
+                  />);
                 })
             }
             </tbody>
@@ -54,8 +64,13 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
             <tbody>
             {
               properties.filter((p, i) => i % 3 === 2)
-                .map((p) => {
-                  return (<Item tTey={p.key} value={p.value} description={p.description}/>);
+                .map((p, index) => {
+                  return (<Item
+                    key={index}
+                    tTey={p.key}
+                    value={p.value}
+                    description={p.description}
+                  />);
                 })
             }
             </tbody>
