@@ -135,13 +135,11 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
       </div>
       <div className={styles.body}>
         <div className={styles.content}>
-          <div>
-            {/*<Policies/>*/}
-            {/*<div style={{height: 50}}/>*/}
+          <Space direction="vertical" size={50}>
             <Contracts/>
-            <div style={{height: 50}}/>
+            {/*<div style={{height: 50}}/>*/}
             <Viewports/>
-          </div>
+          </Space>
         </div>
         <div style={{width: 10}}/>
         <Side/>

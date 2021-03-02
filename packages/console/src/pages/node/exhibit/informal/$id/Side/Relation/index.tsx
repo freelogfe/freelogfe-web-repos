@@ -11,6 +11,10 @@ interface RelationProps {
 }
 
 function Relation({informExhibitInfoPage}: RelationProps) {
+  if (!informExhibitInfoPage.resourceId) {
+    return null;
+  }
+
   return (<div className={styles.info}>
     <FTitleText text={'关联资源'} type="h4"/>
     <div style={{height: 20}}/>

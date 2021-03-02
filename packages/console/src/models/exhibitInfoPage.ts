@@ -239,6 +239,7 @@ const Model: ExhibitInfoPageModelType = {
       const parmas: InfoParamsType = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
+
       const {data: data2} = yield call(info, parmas);
       // console.log(data2, 'data2309jdsfa');
 
@@ -347,7 +348,7 @@ const Model: ExhibitInfoPageModelType = {
           resourceType: data2.resourceType,
           resourceCover: data2.coverImages[0] || '',
         },
-      })
+      });
     },
     * addAPolicy({payload}: AddAPolicyAction, {call, select, put}: EffectsCommandMap) {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({

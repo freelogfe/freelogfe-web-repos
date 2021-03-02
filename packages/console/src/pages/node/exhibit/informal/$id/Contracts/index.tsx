@@ -5,7 +5,7 @@ import {FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState, InformExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
+import {ChangeAction, UpdateRelationAction} from "@/models/informExhibitInfoPage";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -18,13 +18,14 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
     return null;
   }
 
-  const [mainResource, ...otherResource] = informExhibitInfoPage.associated;
+  const otherResource = informExhibitInfoPage.associated;
 
   const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
+  console.log(selectedResource, 'selectedResource@#RFasdj90ujlkjlkp0[');
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+      type: 'informExhibitInfoPage/change',
       payload: {
         associated: informExhibitInfoPage.associated.map((a) => ({
           ...a,
@@ -44,33 +45,33 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
-        <div className={styles.signLeftNav}>主资源</div>
+        {/*<div className={styles.signLeftNav}>主资源</div>*/}
 
-        <a
-          className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}
-          onClick={() => onChangeSelect(mainResource.id)}
-        >
-          <FTitleText
-            type="h5"
-            text={mainResource.name}
-            singleRow
-          />
-          <div style={{height: 5}}/>
-          <FContentText
-            type="additional2"
-            text={mainResource.type}
-          />
-          <div style={{height: 5}}/>
-          <div className={styles.policeTags}>
-            {
-              mainResource.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
-            }
-          </div>
-        </a>
+        {/*<a*/}
+        {/*  className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}*/}
+        {/*  onClick={() => onChangeSelect(mainResource.id)}*/}
+        {/*>*/}
+        {/*  <FTitleText*/}
+        {/*    type="h5"*/}
+        {/*    text={mainResource.name}*/}
+        {/*    singleRow*/}
+        {/*  />*/}
+        {/*  <div style={{height: 5}}/>*/}
+        {/*  <FContentText*/}
+        {/*    type="additional2"*/}
+        {/*    text={mainResource.type}*/}
+        {/*  />*/}
+        {/*  <div style={{height: 5}}/>*/}
+        {/*  <div className={styles.policeTags}>*/}
+        {/*    {*/}
+        {/*      mainResource.contracts.map((c) => (<label key={c.id}>{c.name}</label>))*/}
+        {/*    }*/}
+        {/*  </div>*/}
+        {/*</a>*/}
 
-        {
-          otherResource.length > 0 && (<div className={styles.signLeftNav}>基础上抛</div>)
-        }
+        {/*{*/}
+        {/*  otherResource.length > 0 && (<div className={styles.signLeftNav}>基础上抛</div>)*/}
+        {/*}*/}
 
         {
           otherResource.map((r) => (<a
@@ -100,31 +101,35 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
 
       <div className={styles.signRight}>
         <div>
-          <div className={styles.smallTitle}>当前合约</div>
-          <div style={{height: 5}}/>
           {
-            selectedResource?.contracts.map((c) => (<div
-              key={c.id}
-              className={styles.Contracts}
-            >
-              <div className={styles.content}>
-                <Space size={5}>
-                  <span>{c.name}</span>
-                  <label className={styles.executing}>执行中</label>
-                </Space>
-                <div style={{height: 10}}/>
-                <pre>{c.text}</pre>
-                <div style={{height: 10}}/>
-              </div>
-              <div className={styles.footer}>
-                <div>
-                  合约ID {c.id}
-                </div>
-                <div>
-                  签约时间 {c.createTime}
-                </div>
-              </div>
-            </div>))
+            selectedResource?.contracts && selectedResource?.contracts.length > 0 && (<>
+              <div className={styles.smallTitle}>当前合约</div>
+              <div style={{height: 5}}/>
+              {
+                selectedResource?.contracts.map((c) => (<div
+                  key={c.id}
+                  className={styles.Contracts}
+                >
+                  <div className={styles.content}>
+                    <Space size={5}>
+                      <span>{c.name}</span>
+                      <label className={styles.executing}>执行中</label>
+                    </Space>
+                    <div style={{height: 10}}/>
+                    <pre>{c.text}</pre>
+                    <div style={{height: 10}}/>
+                  </div>
+                  <div className={styles.footer}>
+                    <div>
+                      合约ID {c.id}
+                    </div>
+                    <div>
+                      签约时间 {c.createTime}
+                    </div>
+                  </div>
+                </div>))
+              }
+            </>)
           }
 
           {
@@ -141,13 +146,16 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
                     <span>{p.name}</span>
                     <a
                       className={styles.singPolicyHeaderBtn}
-                      onClick={() => dispatch<UpdateRelationAction>({
-                        type: 'exhibitInfoPage/updateRelation',
-                        payload: {
-                          resourceId: selectedResource.id,
-                          policyId: p.id,
-                        }
-                      })}
+                      onClick={() => {
+                        console.log(selectedResource, 'selectedResource#FSDjf89uew2323');
+                        dispatch<UpdateRelationAction>({
+                          type: 'informExhibitInfoPage/updateRelation',
+                          payload: {
+                            resourceId: selectedResource.id,
+                            policyId: p.id,
+                          }
+                        });
+                      }}
                     >签约</a>
                   </div>
                   <div style={{height: 15}}/>

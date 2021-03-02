@@ -12,6 +12,8 @@ import {
   testResourceDetails,
   TestResourceDetailsParamsType
 } from "@/services/informalNodes";
+import {formatDateTime} from "@/utils/format";
+import {updatePresentable, UpdatePresentableParamsType} from "@/services/presentables";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -135,12 +137,21 @@ export interface ExhibitInfoPageModelType {
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
+    updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
+  };
+}
+
+export interface UpdateRelationAction extends AnyAction {
+  type: 'informExhibitInfoPage/updateRelation';
+  payload: {
+    resourceId: string;
+    policyId: string;
   };
 }
 
@@ -155,27 +166,7 @@ const Model: ExhibitInfoPageModelType = {
     isOnline: false,
     mappingRule: null,
 
-    associated: [
-      {
-        selected: true,
-        id: '1',
-        name: 'resource/name1',
-        type: 'image',
-        contracts: [{
-          name: '策略1',
-          status: 1,
-          id: '3451324kl34iojlksfd',
-          text: '1234:\n  execute\n  result',
-          createTime: '2020-12-31',
-          policyId: '908jksdff',
-        }],
-        policies: [{
-          id: '238942u3j4io',
-          name: 'name23223',
-          text: '234',
-        }],
-      },
-    ],
+    associated: [],
 
     pCover: '',
     pTitle: '',
@@ -212,11 +203,17 @@ const Model: ExhibitInfoPageModelType = {
       const currentNode = nodes.list.find((n) => n.nodeId === data.nodeId);
       // console.log(data, '#######32409jkldfsmdslkdsf');
 
+      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
+
+      // console.log(result, 'resultQ#$GFADSJf098uj5234');
+
       const params1: InfoParamsType = {
         resourceIdOrName: data.originInfo.id,
       };
 
       const {data: data1} = yield call(info, params1);
+
+      // console.log(data1, 'data1data1data1@#ASDFASDFASDF');
 
       let isOnline: boolean;
 
@@ -225,9 +222,7 @@ const Model: ExhibitInfoPageModelType = {
       } else {
         isOnline = (data.stateInfo.onlineStatusInfo.onlineStatus === 1);
       }
-
-      console.log(data, 'data@#ASDfjoisudfijowe');
-
+      // console.log(data, 'data@#ASDfjoisudfijowe');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -240,10 +235,30 @@ const Model: ExhibitInfoPageModelType = {
           pTags: data.stateInfo.tagInfo.tags || [],
           // allVersions: data.originInfo.versions || [],
           // version: data.originInfo.version || '',
-          resourceId: data.originInfo.id || '',
+          resourceId: data?.resourceId || '',
           resourceName: data1?.resourceName || '',
           resourceType: data1?.resourceType || '',
           resourceCover: data1?.coverImages[0] || '',
+
+          associated: result.map((r, index) => ({
+            selected: index === 0,
+            id: r.resourceId,
+            name: r.resourceName,
+            type: r.resourceType,
+            contracts: r.contracts.map((c) => ({
+              name: c.contractName,
+              status: c.status,
+              id: c.contractId,
+              text: c.policyText,
+              createTime: formatDateTime(c.createDate),
+              policyId: c.policyId,
+            })),
+            policies: r.policies.map((p) => ({
+              id: p.policyId,
+              name: p.policyName,
+              text: p.policyText,
+            })),
+          })),
         },
       });
 
@@ -384,6 +399,34 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data} = yield call(createRules, params);
     },
+    * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+      const resource = informExhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
+      console.log(resource, '$#@$#$@#+++++++++++');
+      if (resource?.contracts && resource?.contracts.length > 0) {
+        const params: UpdatePresentableParamsType = {
+          // presentableId: informExhibitInfoPage?.presentableId || '',
+          presentableId: '',
+          resolveResources: [
+            {
+              resourceId: resource?.id || '',
+              contracts: [
+                ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
+                {policyId: payload.policyId},
+              ],
+            },
+          ],
+        };
+        yield call(updatePresentable, params);
+        yield put<FetchInfoAction>({
+          type: 'fetchInfo',
+        });
+      } else {
+
+      }
+    },
   },
   reducers: {
     change(state, {payload}) {
@@ -433,8 +476,11 @@ type HandleRelationResult = {
 }[];
 
 async function handleRelation(params: HandleRelationParams): Promise<HandleRelationResult> {
-  // console.log(params, 'params0923jafdsl');
+  console.log(params, 'params0923jafdsl');
   const resourceIds: string[] = params.map((r) => r.resourceId);
+  if (resourceIds.length === 0) {
+    return [];
+  }
   const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
   const contractPolicyIds: string[] = params.map((c) => c.contracts.map((cs) => cs.policyId)).flat();
 
@@ -448,8 +494,10 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
     isLoadPolicyInfo: 1,
   };
 
-  const [{data: data0}, {data: data1}]: any = await Promise.all([batchInfo(params0), batchContracts(params1)]);
+  const {data: data0}: any = await batchInfo(params0);
   // console.log(data0, data1, 'data0, data123rfsda');
+  const {data: data1}: any = params1.contractIds ? (await batchContracts(params1)) : {data: []};
+
 
   const result = params.map((r) => {
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
@@ -521,3 +569,4 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
     });
   }
 }
+

@@ -67,7 +67,10 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
 
       <div style={{height: 20}}/>
 
-      <FTitleText text={'展品标题'} type="form"/>
+      <FTitleText
+        text={'展品标题'}
+        type="form"
+      />
       <div style={{height: 15}}/>
       {
         informExhibitInfoPage.pInputTitle === null
