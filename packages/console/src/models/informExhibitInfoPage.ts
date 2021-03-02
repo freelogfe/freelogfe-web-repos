@@ -8,12 +8,17 @@ import {
   createRules,
   CreateRulesParamsType,
   rulesRematch,
-  RulesRematchParamsType, testNodeRules,
+  RulesRematchParamsType, testNodeRules, TestNodeRulesParamsType,
   testResourceDetails,
-  TestResourceDetailsParamsType
+  TestResourceDetailsParamsType, updateTestResourceContracts, UpdateTestResourceContractsParamsType
 } from "@/services/informalNodes";
 import {formatDateTime} from "@/utils/format";
-import {updatePresentable, UpdatePresentableParamsType} from "@/services/presentables";
+import {
+  createPresentable,
+  CreatePresentableParamsType,
+  updatePresentable,
+  UpdatePresentableParamsType
+} from "@/services/presentables";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -205,7 +210,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
-      // console.log(result, 'resultQ#$GFADSJf098uj5234');
+      console.log(result, 'resultQ#$GFADSJf098uj5234');
 
       const params1: InfoParamsType = {
         resourceIdOrName: data.originInfo.id,
@@ -233,8 +238,6 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          // allVersions: data.originInfo.versions || [],
-          // version: data.originInfo.version || '',
           resourceId: data?.resourceId || '',
           resourceName: data1?.resourceName || '',
           resourceType: data1?.resourceType || '',
@@ -400,32 +403,29 @@ const Model: ExhibitInfoPageModelType = {
       const {data} = yield call(createRules, params);
     },
     * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
       const resource = informExhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
-      console.log(resource, '$#@$#$@#+++++++++++');
-      if (resource?.contracts && resource?.contracts.length > 0) {
-        const params: UpdatePresentableParamsType = {
-          // presentableId: informExhibitInfoPage?.presentableId || '',
-          presentableId: '',
-          resolveResources: [
-            {
-              resourceId: resource?.id || '',
-              contracts: [
-                ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
-                {policyId: payload.policyId},
-              ],
-            },
-          ],
-        };
-        yield call(updatePresentable, params);
-        yield put<FetchInfoAction>({
-          type: 'fetchInfo',
-        });
-      } else {
-
-      }
+      // console.log(resource, '$#@$#$@#+++++++++++');
+      // if (resource?.contracts && resource?.contracts.length > 0) {
+      const params: UpdateTestResourceContractsParamsType = {
+        // presentableId: informExhibitInfoPage?.presentableId || '',
+        testResourceId: informExhibitInfoPage.informExhibitID,
+        resolveResources: [
+          {
+            resourceId: resource?.id || '',
+            contracts: [
+              ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
+              {policyId: payload.policyId},
+            ],
+          },
+        ],
+      };
+      yield call(updateTestResourceContracts, params);
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
     },
   },
   reducers: {
@@ -482,7 +482,6 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
     return [];
   }
   const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
-  const contractPolicyIds: string[] = params.map((c) => c.contracts.map((cs) => cs.policyId)).flat();
 
   const params0: BatchInfoParamsType = {
     resourceIds: resourceIds.join(','),
@@ -495,12 +494,15 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   };
 
   const {data: data0}: any = await batchInfo(params0);
-  // console.log(data0, data1, 'data0, data123rfsda');
+  console.log(data0, 'data0, data123rfsdadata0');
   const {data: data1}: any = params1.contractIds ? (await batchContracts(params1)) : {data: []};
-
+  console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
 
   const result = params.map((r) => {
+    const contractPolicyIds: string[] = r.contracts.map((cs) => cs.policyId);
+
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
+    console.log(resource, '2093jrlwkfladskfdslklresource');
     return {
       resourceId: resource.resourceId,
       resourceName: resource.resourceName,

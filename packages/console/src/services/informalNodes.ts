@@ -63,6 +63,21 @@ export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
   return request.get(`/v2/testNodes/${nodeId}/rules`, {});
 }
 
+// 更新测试资源的授权合约
+export interface UpdateTestResourceContractsParamsType {
+  testResourceId: string;
+  resolveResources: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
+}
+
+export function updateTestResourceContracts({testResourceId, ...params}: UpdateTestResourceContractsParamsType) {
+  return request.put(`/v2/testNodes/testResources/${testResourceId}`, params);
+}
+
 // 获取并过滤资源依赖树
 export interface DependencyTreeFilterParamsType {
   testResourceId: string;

@@ -21,7 +21,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
   const otherResource = informExhibitInfoPage.associated;
 
   const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
-  console.log(selectedResource, 'selectedResource@#RFasdj90ujlkjlkp0[');
+  // console.log(selectedResource, 'selectedResource@#RFasdj90ujlkjlkp0[');
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
@@ -147,7 +147,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
                     <a
                       className={styles.singPolicyHeaderBtn}
                       onClick={() => {
-                        console.log(selectedResource, 'selectedResource#FSDjf89uew2323');
+                        // console.log(selectedResource, 'selectedResource#FSDjf89uew2323');
                         dispatch<UpdateRelationAction>({
                           type: 'informExhibitInfoPage/updateRelation',
                           payload: {
