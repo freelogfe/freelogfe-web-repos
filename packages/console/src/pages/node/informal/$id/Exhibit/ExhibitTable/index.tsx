@@ -15,7 +15,7 @@ import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
 import {FTextButton} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
-import {SaveDataRulesAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -107,10 +107,10 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                 router.push(resourceDetails({resourceID: record.originId}));
               }
             }}
-            onDelete={!!record.associatedExhibitID ? undefined : () => {
+            onDelete={!!record.associatedExhibitID ? undefined : async () => {
               const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
               // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
-              dispatch<SaveDataRulesAction>({
+              await dispatch<SaveDataRulesAction>({
                 type: 'informalNodeManagerPage/saveDataRules',
                 payload: {
                   type: 'replace',
@@ -119,6 +119,14 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                   }),
                 },
               });
+
+              await onChange({
+                exhibitList: informalNodeManagerPage.exhibitList.filter((e) => {
+                  console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
+                  return e.name !== record.name;
+                }),
+              });
+
             }}
           />
         </div>);
@@ -146,7 +154,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             <FSwitch
               disabled={false}
               checked={record.isOnline}
-              onChange={(value) => {
+              onChange={async (value) => {
                 const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
                 // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
 
@@ -175,12 +183,29 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                   ]
                 }
 
-                dispatch<SaveDataRulesAction>({
+                await dispatch<SaveDataRulesAction>({
                   type: 'informalNodeManagerPage/saveDataRules',
                   payload: {
                     type: 'replace',
                     data: data,
                   },
+                });
+
+                console.log(value, 'value0923jrlkasdjflasdf');
+
+                await onChange({
+                  exhibitList: informalNodeManagerPage.exhibitList
+                    .map((e) => {
+                      // console.log(e.name, record.name, '@#ADSFASDFj98ueijow;fjlasdkf');
+                      if (e.name !== record.name) {
+                        return e;
+                      }
+
+                      return {
+                        ...e,
+                        isOnline: value,
+                      };
+                    }),
                 });
               }}
             />
@@ -195,6 +220,13 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       },
     },
   ];
+
+  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload,
+    });
+  }
 
   return (<FTable
     className={styles.table}

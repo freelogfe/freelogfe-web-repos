@@ -595,22 +595,22 @@ const Model: InformalNodeManagerPageModelType = {
         const {data} = yield call(createRules, params);
       }
 
-      if (informalNodeManagerPage.showPage === 'exhibit') {
-        yield put<FetchExhibitListAction>({
-          type: 'fetchExhibitList',
-          payload: {
-            isRematch: false,
-          },
-        });
-      }
-      if (informalNodeManagerPage.showPage === 'theme') {
-        yield put<FetchThemeListAction>({
-          type: 'fetchThemeList',
-          payload: {
-            isRematch: false,
-          },
-        });
-      }
+      // if (informalNodeManagerPage.showPage === 'exhibit') {
+      //   yield put<FetchExhibitListAction>({
+      //     type: 'fetchExhibitList',
+      //     payload: {
+      //       isRematch: false,
+      //     },
+      //   });
+      // }
+      // if (informalNodeManagerPage.showPage === 'theme') {
+      //   yield put<FetchThemeListAction>({
+      //     type: 'fetchThemeList',
+      //     payload: {
+      //       isRematch: false,
+      //     },
+      //   });
+      // }
     },
   },
   reducers: {

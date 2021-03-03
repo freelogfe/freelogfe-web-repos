@@ -72,12 +72,10 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   //   return ();
   // }
 
-  async function onChange(value: Partial<InformalNodeManagerPageModelState>) {
+  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'informalNodeManagerPage/change',
-      payload: {
-        ...value,
-      },
+      payload,
     });
   }
 
@@ -192,9 +190,12 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           addExhibitDrawerVisible: false,
         });
       }}
-      onConfirm={(value) => {
+      onConfirm={async (value) => {
         // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-        dispatch<SaveDataRulesAction>({
+        onChange({
+          addExhibitDrawerVisible: false,
+        });
+        await dispatch<SaveDataRulesAction>({
           type: 'informalNodeManagerPage/saveDataRules',
           payload: {
             type: 'append',
@@ -211,8 +212,11 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             }),
           },
         });
-        onChange({
-          addExhibitDrawerVisible: false,
+        await dispatch<FetchExhibitListAction>({
+          type: 'informalNodeManagerPage/fetchExhibitList',
+          payload: {
+            isRematch: false,
+          },
         });
       }}
       disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'resource').map((e) => e.originId)}
