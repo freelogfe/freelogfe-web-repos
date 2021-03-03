@@ -106,6 +106,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 onChange({
                   codeInput: exportText,
                   isCodeEditing: true,
+                  codeIsDirty: true,
                 });
               };
               return false;
@@ -341,19 +342,3 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 export default connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
 }))(MappingRule);
-
-// interface HeaderProps {
-//   onClickInCode?(): void;
-// }
-//
-// function Header({onClickInCode}: HeaderProps) {
-//   return ();
-// }
-
-// function downloadTextUrl(rules) {
-//   const rulesText = rules.map(r => r.text).join('\n')
-//   const fileName = `测试节点.映射规则.${this.nodeId}.txt`
-//   const file = new File([rulesText], fileName, { type: 'text/plain' })
-//   const url = window.URL.createObjectURL(file)
-//   return [ url, fileName ]
-// },
