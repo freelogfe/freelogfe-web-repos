@@ -192,7 +192,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       }}
       onConfirm={async (value) => {
         // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-        onChange({
+        await onChange({
           addExhibitDrawerVisible: false,
         });
         await dispatch<SaveDataRulesAction>({

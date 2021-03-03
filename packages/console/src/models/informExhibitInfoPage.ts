@@ -205,7 +205,6 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data} = yield call(testResourceDetails, params);
 
-
       // console.log(data, '#######32409jkldfsmdslkdsf');
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
@@ -353,7 +352,7 @@ const Model: ExhibitInfoPageModelType = {
       let newRulesObj;
 
       if (payload.active !== undefined) {
-        console.log(payload.active, 'payload.active@SADFioJpoiu908sfup9OI:)_I');
+        // console.log(payload.active, 'payload.active@SADFioJpoiu908sfup9OI:)_I');
 
         newRulesObj = rules.filter((r: any) => {
           return r.operation !== 'activate_theme';

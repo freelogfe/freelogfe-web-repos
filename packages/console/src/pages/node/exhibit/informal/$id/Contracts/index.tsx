@@ -126,7 +126,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
                           payload: {
                             resourceId: selectedResource.id,
                             policyId: p.id,
-                          }
+                          },
                         });
                       }}
                     >签约</a>

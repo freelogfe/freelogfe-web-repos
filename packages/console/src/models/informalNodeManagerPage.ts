@@ -22,6 +22,7 @@ interface IMappingRule {
     source: {
       type: 'resource' | 'object';
       name: string;
+      version?: string;
     };
   };
   alter?: string;
@@ -80,34 +81,35 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   themeListIsLoading: boolean;
   addThemeDrawerVisible: boolean;
 
-  mappingRule: {
-    add?: {
-      exhibit: string;
-      source: {
-        type: 'resource' | 'object';
-        name: string;
-      };
-    };
-    alter?: string;
-    active?: string;
-    version?: string;
-    cover?: string;
-    title?: string;
-    online?: boolean;
-    offline?: boolean;
-    labels?: string[];
-    replaces?: {
-      replaced: ICandidate;
-      replacer: ICandidate;
-      scopes: ICandidate[][];
-    }[];
-    attrs?: {
-      type: 'add' | 'delete',
-      theKey: string;
-      value?: string;
-      description?: string;
-    }[];
-  }[];
+  // mappingRule: {
+  //   add?: {
+  //     exhibit: string;
+  //     source: {
+  //       type: 'resource' | 'object';
+  //       name: string;
+  //     };
+  //   };
+  //   alter?: string;
+  //   active?: string;
+  //   version?: string;
+  //   cover?: string;
+  //   title?: string;
+  //   online?: boolean;
+  //   offline?: boolean;
+  //   labels?: string[];
+  //   replaces?: {
+  //     replaced: ICandidate;
+  //     replacer: ICandidate;
+  //     scopes: ICandidate[][];
+  //   }[];
+  //   attrs?: {
+  //     type: 'add' | 'delete',
+  //     theKey: string;
+  //     value?: string;
+  //     description?: string;
+  //   }[];
+  // }[];
+  mappingRule: IMappingRule[];
   checkedExhibitName: string[];
   checkedThemeName: string;
   isCodeEditing: boolean;
@@ -365,18 +367,22 @@ const Model: InformalNodeManagerPageModelType = {
               return ro.exhibitName === dl.testResourceName;
             });
 
+            console.log(stateInfo, 'stateInfo@!#$ASDFj09uo;i');
             // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
 
+            // console.log(dl, '#W@ASDFASDFA');
             // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
             const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
               add: operations.includes('add') ? {
                 exhibit: dl.testResourceName,
                 source: {
-                  type: stateInfo.type,
-                  name: stateInfo.name,
+                  type: dl.originInfo.type,
+                  name: dl.originInfo.name,
+                  version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
                 },
               } : undefined,
               alter: operations.includes('alter') ? dl.testResourceName : undefined,
+              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
               labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
               title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
               cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,

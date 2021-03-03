@@ -16,6 +16,7 @@ interface AddRuleProps {
   source: {
     type: 'resource' | 'object';
     name: string;
+    version?: string;
   };
 }
 

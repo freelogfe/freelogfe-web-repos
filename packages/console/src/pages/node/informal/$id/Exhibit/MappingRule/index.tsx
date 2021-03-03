@@ -84,7 +84,7 @@ function MappingRule({
       direction="vertical"
       size={15}
     >
-      {add && <AddRule  {...add}/>}
+      {add && <AddRule {...add}/>}
       {alter && <AlterRule alter={alter}/>}
       {active && <ActiveRule active={active}/>}
       {version && <VersionRule version={version}/>}

@@ -31,10 +31,10 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
     return null;
   }
 
-  async function onChange(value: Partial<InformExhibitInfoPageModelState>) {
+  async function onChange(payload: Partial<InformExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'informExhibitInfoPage/change',
-      payload: value,
+      payload,
     });
   }
 
@@ -123,8 +123,13 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       }
       <div style={{height: 30}}/>
 
-      <FTitleText text={'展品标签'} type="form"/>
+      <FTitleText
+        text={'展品标签'}
+        type="form"
+      />
+
       <div style={{height: 15}}/>
+
       <FLabelEditor
         values={informExhibitInfoPage.pTags}
         onChange={async (value) => {
@@ -139,7 +144,10 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
           });
         }}
       />
-      <div style={{height: 30}}/>
+
+      <div
+        style={{height: 30}}
+      />
     </>
   );
 }
