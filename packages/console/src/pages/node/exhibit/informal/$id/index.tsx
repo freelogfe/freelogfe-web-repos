@@ -87,6 +87,7 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
               ? (<MappingRule
                 add={informExhibitInfoPage.mappingRule.add}
                 alter={informExhibitInfoPage.mappingRule.alter}
+                version={informExhibitInfoPage.mappingRule?.version}
                 active={informExhibitInfoPage.mappingRule.active}
                 cover={informExhibitInfoPage.mappingRule.cover}
                 title={informExhibitInfoPage.mappingRule.title}

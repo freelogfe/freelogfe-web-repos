@@ -367,7 +367,7 @@ const Model: InformalNodeManagerPageModelType = {
               return ro.exhibitName === dl.testResourceName;
             });
 
-            console.log(stateInfo, 'stateInfo@!#$ASDFj09uo;i');
+            // console.log(stateInfo, 'stateInfo@!#$ASDFj09uo;i');
             // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
 
             // console.log(dl, '#W@ASDFASDFA');
