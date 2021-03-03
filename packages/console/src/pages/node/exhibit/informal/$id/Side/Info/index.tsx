@@ -75,14 +75,19 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       {
         informExhibitInfoPage.pInputTitle === null
           ? (<Space size={10}>
-            <FContentText text={informExhibitInfoPage.pTitle}/>
+            <div style={{
+              maxWidth: 192,
+              overflowWrap: 'break-word',
+            }}>
+              <FContentText text={informExhibitInfoPage.pTitle}/>
+            </div>
             <a onClick={() => {
               onChange({pInputTitle: informExhibitInfoPage.pTitle});
             }}><FEdit/></a>
           </Space>)
           : (<>
             <FInput
-              className={styles.Input}
+              className={styles.FInput}
               value={informExhibitInfoPage.pInputTitle || ''}
               onChange={(e) => {
                 onChange({pInputTitle: e.target.value});
