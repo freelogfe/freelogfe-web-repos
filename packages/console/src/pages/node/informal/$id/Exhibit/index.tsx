@@ -231,13 +231,13 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
 
         for (const v of value) {
-          const rule = rules.find((r) => v.exhibitName === r.exhibitName)
+          const rule = rules.find((r) => v.exhibitName === r.exhibitName);
           if (rule) {
             let replaces = rule.replaces || [];
             rule.replaces = [
               ...replaces,
               v,
-            ]
+            ];
           } else {
             rules.push({
               operation: 'alter',

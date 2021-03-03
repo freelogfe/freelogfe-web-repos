@@ -210,7 +210,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
-      console.log(result, 'resultQ#$GFADSJf098uj5234');
+      // console.log(result, 'resultQ#$GFADSJf098uj5234');
 
       const params1: InfoParamsType = {
         resourceIdOrName: data.originInfo.id,
