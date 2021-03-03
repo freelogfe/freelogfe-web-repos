@@ -212,7 +212,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                           ...e.rule,
                           online: value ? true : undefined,
                           offline: !value ? true : undefined,
-                        }
+                        },
                       };
                     }),
                 });
