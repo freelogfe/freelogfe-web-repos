@@ -219,8 +219,8 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           },
         });
       }}
-      disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'resource').map((e) => e.originId)}
-      disabledObjectNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'object').map((e) => e.originId)}
+      disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'resource').map((e) => e.originInfo.name)}
+      disabledObjectNames={informalNodeManagerPage.exhibitList.filter((e) => e.identity === 'object').map((e) => e.originInfo.name)}
     />
 
     <FReplaceModal

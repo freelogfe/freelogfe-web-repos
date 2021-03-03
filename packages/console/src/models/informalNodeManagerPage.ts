@@ -55,7 +55,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
 
-
   addExhibitDrawerVisible: boolean;
 
   replaceHandlerModalVisible: boolean;
@@ -143,7 +142,11 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     name: string;
     title: string;
     identity: 'resource' | 'object';
-    originId: string;
+    originInfo: {
+      id: string;
+      name: string;
+      type: 'resource' | 'object';
+    };
     rule: IMappingRule;
     version: string;
     isOnline: boolean;
@@ -399,7 +402,7 @@ const Model: InformalNodeManagerPageModelType = {
               rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
-              originId: dl.originInfo.name,
+              originInfo: dl.originInfo,
               isAuth: true,
               authErrorText: '',
             };

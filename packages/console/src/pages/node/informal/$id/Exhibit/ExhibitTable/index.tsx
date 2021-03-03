@@ -102,11 +102,15 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
         >
           <Actions
             onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
-            onSearch={() => {
+            onSearch={record.originInfo.type === 'resource' ? () => {
               if (record.identity === 'resource') {
-                router.push(resourceDetails({resourceID: record.originId}));
+                console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
+                if (record.originInfo.type === 'resource') {
+                  router.push(resourceDetails({resourceID: record.originInfo.id}));
+                }
+
               }
-            }}
+            } : undefined}
             onDelete={!!record.associatedExhibitID ? undefined : async () => {
               const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
               // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
@@ -191,7 +195,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                   },
                 });
 
-                console.log(value, 'value0923jrlkasdjflasdf');
+                // console.log(value, 'value0923jrlkasdjflasdf');
 
                 await onChange({
                   exhibitList: informalNodeManagerPage.exhibitList
