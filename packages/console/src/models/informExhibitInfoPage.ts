@@ -32,7 +32,7 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   informExhibitID: string;
 
   nodeID: number;
-  nodeName: string;
+  // nodeName: string;
   informExhibitName: string;
   isOnline: boolean;
 
@@ -166,7 +166,7 @@ const Model: ExhibitInfoPageModelType = {
     informExhibitID: '',
 
     nodeID: -1,
-    nodeName: '',
+    // nodeName: '',
     informExhibitName: '',
     isOnline: false,
     mappingRule: null,
@@ -205,7 +205,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data} = yield call(testResourceDetails, params);
 
-      const currentNode = nodes.list.find((n) => n.nodeId === data.nodeId);
+
       // console.log(data, '#######32409jkldfsmdslkdsf');
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
@@ -233,7 +233,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           nodeID: data.nodeId,
-          nodeName: currentNode?.nodeName,
+          // nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
           isOnline: isOnline,
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
@@ -480,7 +480,7 @@ type HandleRelationResult = {
 }[];
 
 async function handleRelation(params: HandleRelationParams): Promise<HandleRelationResult> {
-  console.log(params, 'params0923jafdsl');
+  // console.log(params, 'params0923jafdsl9023ujioafdsl');
   const resourceIds: string[] = params.map((r) => r.resourceId);
   if (resourceIds.length === 0) {
     return [];

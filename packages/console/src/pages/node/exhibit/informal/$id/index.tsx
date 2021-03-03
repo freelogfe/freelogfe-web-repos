@@ -12,7 +12,7 @@ import {
   ConnectState,
   ExhibitInfoPageModelState,
   InformalNodeManagerPageModelState,
-  InformExhibitInfoPageModelState
+  InformExhibitInfoPageModelState, NodesModelState
 } from '@/models/connect';
 import {
   ChangeAction,
@@ -28,9 +28,10 @@ interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   // exhibitInfoPage: ExhibitInfoPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
+  nodes: NodesModelState;
 }
 
-function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProps) {
+function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhibitProps) {
 
   React.useEffect(() => {
 
@@ -71,7 +72,7 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
             router.push(informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
           }}><FContentText
             type="negative"
-            text={informExhibitInfoPage.nodeName}
+            text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
           /></FTextButton>
           <div style={{width: 2}}/>
           <FContentText
@@ -149,6 +150,7 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
   </div>);
 }
 
-export default connect(({informExhibitInfoPage}: ConnectState) => ({
+export default connect(({informExhibitInfoPage, nodes}: ConnectState) => ({
   informExhibitInfoPage,
+  nodes,
 }))(Presentable);
