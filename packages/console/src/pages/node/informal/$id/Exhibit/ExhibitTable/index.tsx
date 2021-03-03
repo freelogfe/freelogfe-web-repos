@@ -80,7 +80,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               cover={record.rule.cover}
               title={record.rule.title}
               online={record.rule.online}
-              offline={record.rule.online}
+              offline={record.rule.offline}
               labels={record.rule.labels}
               replaces={record.rule.replaces}
               attrs={record.rule.attrs}
@@ -184,7 +184,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                       exhibitName: record.name,
                       online: value,
                     }
-                  ]
+                  ];
                 }
 
                 await dispatch<SaveDataRulesAction>({
@@ -208,6 +208,11 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                       return {
                         ...e,
                         isOnline: value,
+                        rule: {
+                          ...e.rule,
+                          online: value ? true : undefined,
+                          offline: !value ? true : undefined,
+                        }
                       };
                     }),
                 });
