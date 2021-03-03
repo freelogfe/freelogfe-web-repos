@@ -54,20 +54,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
-  exhibitList: {
-    id: string;
-    cover: string;
-    associatedExhibitID: string;
-    name: string;
-    title: string;
-    identity: 'resource' | 'object';
-    originId: string;
-    rule: IMappingRule;
-    version: string;
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-  }[];
+
 
   addExhibitDrawerVisible: boolean;
 
@@ -148,7 +135,22 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     msg: string;
   }[];
   codeSaveSuccess: null | true;
-}>;
+}> & {
+  exhibitList: {
+    id: string;
+    cover: string;
+    associatedExhibitID: string;
+    name: string;
+    title: string;
+    identity: 'resource' | 'object';
+    originId: string;
+    rule: IMappingRule;
+    version: string;
+    isOnline: boolean;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
+};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
