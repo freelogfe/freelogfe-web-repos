@@ -228,6 +228,7 @@ const Model: ExhibitInfoPageModelType = {
         isOnline = (data.stateInfo.onlineStatusInfo.onlineStatus === 1);
       }
       // console.log(data, 'data@#ASDfjoisudfijowe');
+      const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -243,25 +244,28 @@ const Model: ExhibitInfoPageModelType = {
           resourceType: data1?.resourceType || '',
           resourceCover: data1?.coverImages[0] || '',
 
-          associated: result.map((r, index) => ({
-            selected: index === 0,
-            id: r.resourceId,
-            name: r.resourceName,
-            type: r.resourceType,
-            contracts: r.contracts.map((c) => ({
-              name: c.contractName,
-              status: c.status,
-              id: c.contractId,
-              text: c.policyText,
-              createTime: formatDateTime(c.createDate),
-              policyId: c.policyId,
-            })),
-            policies: r.policies.map((p) => ({
-              id: p.policyId,
-              name: p.policyName,
-              text: p.policyText,
-            })),
-          })),
+          associated: result.map((r, index, arr) => {
+
+            return {
+              selected: selectedID ? selectedID === r.resourceId : index === 0,
+              id: r.resourceId,
+              name: r.resourceName,
+              type: r.resourceType,
+              contracts: r.contracts.map((c) => ({
+                name: c.contractName,
+                status: c.status,
+                id: c.contractId,
+                text: c.policyText,
+                createTime: formatDateTime(c.createDate),
+                policyId: c.policyId,
+              })),
+              policies: r.policies.map((p) => ({
+                id: p.policyId,
+                name: p.policyName,
+                text: p.policyText,
+              })),
+            };
+          }),
         },
       });
 
