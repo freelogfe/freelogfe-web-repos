@@ -71,16 +71,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     date: string;
   }[];
 
-  themeList: {
-    id: string;
-    name: string;
-    cover: string;
-    version: string;
-    rule: IMappingRule;
-    isOnline: boolean;
-    isAuth: boolean;
-    authErrorText: string;
-  }[];
   selectedType: '-1' | string;
   selectedStatus: '0' | '1' | '2';
   filterKeywords: string;
@@ -149,6 +139,17 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     };
     rule: IMappingRule;
     version: string;
+    isOnline: boolean;
+    isAuth: boolean;
+    authErrorText: string;
+  }[];
+
+  themeList: {
+    id: string;
+    name: string;
+    cover: string;
+    version: string;
+    rule: IMappingRule;
     isOnline: boolean;
     isAuth: boolean;
     authErrorText: string;

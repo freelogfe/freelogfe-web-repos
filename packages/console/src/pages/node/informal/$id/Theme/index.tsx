@@ -22,6 +22,7 @@ import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
 import {informExhibitManagement} from "@/utils/path-assembler";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
+
 const {compile} = require('@freelog/nmr_translator');
 
 interface ThemeProps {
@@ -93,7 +94,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           <div className={styles.body}>
             <div className={styles.list}>
               {
-                informalNodeManagerPage.themeList.map((t) => {
+                informalNodeManagerPage.themeList.map((t, index, arr) => {
                   return (<div
                     key={t.id}
                     className={styles.item}
@@ -139,17 +140,17 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                       ...r,
                                       themeName: t.name,
                                     };
-                                  })
+                                  });
                                 } else {
                                   data = [
                                     ...rules,
                                     {
                                       operation: 'activate_theme',
                                       themeName: t.name,
-                                    }
-                                  ]
+                                    },
+                                  ];
                                 }
-                                console.log(rule, 'rule21930usdf');
+                                // console.log(rule, 'rule21930usdf');
 
                                 dispatch<SaveDataRulesAction>({
                                   type: 'informalNodeManagerPage/saveDataRules',
@@ -158,6 +159,21 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                     data: data,
                                   },
                                 });
+                                onChange({
+                                  themeList: arr.map((ttt) => {
+                                    if (ttt.id !== t.id) {
+                                      return {
+                                        ...ttt,
+                                        isOnline: false,
+                                      };
+                                    }
+                                    return {
+                                      ...ttt,
+                                      isOnline: true,
+                                    };
+                                  }),
+                                  // mappingRule
+                                })
                               }}>激活</span>
                               <div style={{width: 1}}/>
                             </div>)
