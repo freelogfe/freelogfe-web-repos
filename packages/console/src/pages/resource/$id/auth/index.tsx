@@ -1,11 +1,8 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FInfoLayout from '@/pages/resource/layouts/FInfoLayout';
-import FContentLayout from '@/pages/resource/layouts/FContentLayout';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
-import FEditorCard from '@/components/FEditorCard';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Table} from 'antd';
@@ -19,7 +16,6 @@ import {
   ChangeAction,
   FetchAuthorizeAction,
   FetchAuthorizedAction,
-  UpdatePoliciesAction
 } from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, RouterTypes, withRouter} from 'umi';

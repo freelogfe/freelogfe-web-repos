@@ -74,7 +74,10 @@ function Presentable({dispatch, match, informExhibitInfoPage}: InformExhibitProp
             text={informExhibitInfoPage.nodeName}
           /></FTextButton>
           <div style={{width: 2}}/>
-          <FContentText type="negative" text={'>'}/>
+          <FContentText
+            type="negative"
+            text={'>'}
+          />
           <div style={{width: 2}}/>
           <FTitleText text={informExhibitInfoPage.informExhibitName}/>
           <div style={{width: 20}}/>

@@ -93,7 +93,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
         return rr.name === replaceInformExhibit.checkedResourceName;
       });
-      console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
+      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
       const results: IConfirmValue = [];
       for (const [exhibitName, scopes] of Object.entries(resultObj)) {
         results.push({

@@ -246,7 +246,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             });
           }
         }
-        console.log(rules, 'nowRules0923jlkfds()UOIJ');
+        // console.log(rules, 'nowRules0923jlkfds()UOIJ');
         dispatch<SaveDataRulesAction>({
           type: 'informalNodeManagerPage/saveDataRules',
           payload: {
@@ -254,6 +254,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             data: rules,
           },
         });
+        onChange({replaceHandlerModalVisible: false});
       }}
     />
   </>);

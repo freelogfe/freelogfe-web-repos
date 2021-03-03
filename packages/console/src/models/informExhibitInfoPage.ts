@@ -494,15 +494,15 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   };
 
   const {data: data0}: any = await batchInfo(params0);
-  console.log(data0, 'data0, data123rfsdadata0');
+  // console.log(data0, 'data0, data123rfsdadata0');
   const {data: data1}: any = params1.contractIds ? (await batchContracts(params1)) : {data: []};
-  console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
+  // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
 
   const result = params.map((r) => {
     const contractPolicyIds: string[] = r.contracts.map((cs) => cs.policyId);
 
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
-    console.log(resource, '2093jrlwkfladskfdslklresource');
+    // console.log(resource, '2093jrlwkfladskfdslklresource');
     return {
       resourceId: resource.resourceId,
       resourceName: resource.resourceName,

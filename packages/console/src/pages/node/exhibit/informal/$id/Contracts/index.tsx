@@ -45,33 +45,6 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
-        {/*<div className={styles.signLeftNav}>主资源</div>*/}
-
-        {/*<a*/}
-        {/*  className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}*/}
-        {/*  onClick={() => onChangeSelect(mainResource.id)}*/}
-        {/*>*/}
-        {/*  <FTitleText*/}
-        {/*    type="h5"*/}
-        {/*    text={mainResource.name}*/}
-        {/*    singleRow*/}
-        {/*  />*/}
-        {/*  <div style={{height: 5}}/>*/}
-        {/*  <FContentText*/}
-        {/*    type="additional2"*/}
-        {/*    text={mainResource.type}*/}
-        {/*  />*/}
-        {/*  <div style={{height: 5}}/>*/}
-        {/*  <div className={styles.policeTags}>*/}
-        {/*    {*/}
-        {/*      mainResource.contracts.map((c) => (<label key={c.id}>{c.name}</label>))*/}
-        {/*    }*/}
-        {/*  </div>*/}
-        {/*</a>*/}
-
-        {/*{*/}
-        {/*  otherResource.length > 0 && (<div className={styles.signLeftNav}>基础上抛</div>)*/}
-        {/*}*/}
 
         {
           otherResource.map((r) => (<a

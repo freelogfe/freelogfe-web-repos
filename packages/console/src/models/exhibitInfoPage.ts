@@ -251,7 +251,7 @@ const Model: ExhibitInfoPageModelType = {
         ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
       ];
 
-      console.log(data, 'data2341234');
+      // console.log(data, 'data2341234');
 
       const params1: BatchAuthParamsType = {
         nodeId: data.nodeId,
