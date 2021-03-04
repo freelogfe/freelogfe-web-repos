@@ -4,7 +4,6 @@ import Discover from "@/layouts/FLayout/FHeader/Discover";
 import Storage from "@/layouts/FLayout/FHeader/Storage";
 import Resource from "@/layouts/FLayout/FHeader/Resource";
 import Node from "@/layouts/FLayout/FHeader/Node";
-import Contract from "@/layouts/FLayout/FHeader/Contract";
 import Search from "@/layouts/FLayout/FHeader/Search";
 import Create from "@/layouts/FLayout/FHeader/Create";
 import User from "@/layouts/FLayout/FHeader/User";
@@ -46,8 +45,6 @@ function FHeader({global}: FHeaderProps) {
         <Resource/>
 
         <Node/>
-
-        {/*<Contract/>*/}
 
       </div>
     </div>
