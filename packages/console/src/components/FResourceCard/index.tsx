@@ -40,8 +40,11 @@ export default function ({
       <div className={styles.Cover}>
         {
           resource.cover && (<img
+            // srcSet
             src={resource.cover}
-            alt=""/>)
+            loading="lazy"
+            alt=""
+          />)
         }
 
         {
@@ -86,9 +89,14 @@ export default function ({
         />
         <div style={{height: '6px'}}/>
         <div className={styles.MetaInfo}>
-          <FContentText type="additional1" text={resource.type}/>
-          <FContentText type="additional1"
-                        text={resource.version ? (i18nMessage('latest_version') + ' ' + resource.version) : '暂无版本'}/>
+          <FContentText
+            type="additional1"
+            text={resource.type}
+          />
+          <FContentText
+            type="additional1"
+            text={resource.version ? (i18nMessage('latest_version') + ' ' + resource.version) : '暂无版本'}
+          />
         </div>
         <div style={{height: '15px'}}/>
         <div className={styles.MetaFooter}>
