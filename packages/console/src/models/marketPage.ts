@@ -108,7 +108,7 @@ const Model: MarketModelType = {
 
       const params: ListParamsType = {
         skip: dataSource.length,
-        limit: 20,
+        limit: 100,
         startResourceId: dataSource[0]?.id,
         keywords: marketPage.inputText,
         resourceType: marketPage.resourceType === '-1' ? undefined : marketPage.resourceType,
