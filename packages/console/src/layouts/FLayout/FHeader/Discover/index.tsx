@@ -35,17 +35,19 @@ function Discover({global, marketPage}: DiscoverProps) {
     // console.log(params, 'paramsparams');
     if (value === '1' && cRoute.pathname !== '/market') {
       return router.push(market());
-    } else if (value === '2' && cRoute.pathname !== '/market/example') {
+    } else if (value === '2') {
       // return router.push('/market/example');
-      return ;
+      return window.open('https://f-presentations.freelog.com');
     }
   }
 
-  return (<FDropdown overlay={<FMenu
-    value={isCurrent ? marketPage.tabValue : ''}
-    onClick={onDiscoverClick}
-    options={discoverOptions}
-  />}>
+  return (<FDropdown
+    overlay={<FMenu
+      value={isCurrent ? marketPage.tabValue : ''}
+      onClick={onDiscoverClick}
+      options={discoverOptions}
+    />}
+  >
     <Nav
       onClick={() => onDiscoverClick('1')}
       href={market()}
