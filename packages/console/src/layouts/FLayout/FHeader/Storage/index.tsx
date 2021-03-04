@@ -17,6 +17,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
+import {storage} from "@/utils/path-assembler";
 
 interface StorageProps {
   dispatch: Dispatch;
@@ -94,7 +95,11 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
       </a>
     </div>)
   }>
-    <Nav active={isCurrent} onClick={onClickStorage}>{i18nMessage('storage')}</Nav>
+    <Nav
+      active={isCurrent}
+      // onClick={onClickStorage}
+      href={storage()}
+    >{i18nMessage('storage')}</Nav>
   </FDropdown>);
 }
 

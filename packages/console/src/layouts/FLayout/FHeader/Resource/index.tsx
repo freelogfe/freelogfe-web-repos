@@ -8,6 +8,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {router} from "umi";
 import Nav from "../../components/Nav";
+import {myResources} from "@/utils/path-assembler";
 
 const resourcesOptions = [
   {
@@ -45,7 +46,8 @@ function Resource({global}: ResourceProps) {
       options={resourcesOptions}
     />}>
     <Nav
-      onClick={() => onClickResource('1')}
+      // onClick={() => onClickResource('1')}
+      href={myResources()}
       active={isCurrent}>{i18nMessage('resource_manage')}</Nav>
   </FDropdown>);
 }

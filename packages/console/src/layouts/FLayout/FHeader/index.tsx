@@ -32,7 +32,6 @@ function FHeader({global}: FHeaderProps) {
 
   return (<>
     <div className={styles.headerLeft}>
-      {console.log(market(), 'market()2903jlaksdf')}
       <a
         // onClick={() => onDiscoverClick('1')}
         href={market()}
