@@ -50,15 +50,18 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         active: r.themeName,
       };
     }
+    console.log(r, 'wjofldskafj;lasdkf');
     return {
       add: r.operation === 'add' ? {
         exhibit: r.exhibitName,
         source: {
           type: r.candidate.type,
           name: r.candidate.name,
+          // version: r.candidate.versionRange,
         },
       } : undefined,
       alter: r.operation === 'alter' ? r.exhibitName : undefined,
+      // version: r.candidate.versionRange,
       cover: r.cover,
       title: r.title,
       online: r.online === true,
@@ -242,7 +245,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 </div>
               </>)
             }
-
           </div>
         </div>)
         : (<div className={styles.ruleListBody}>
@@ -307,7 +309,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         size={15}
                         direction="vertical"
                       >
-                        {/*{version && <VersionRule version={version}/>}*/}
+                        {obj.version && <VersionRule version={obj.version}/>}
                         {obj.cover && <div className={styles.ruleCardBodyListItem}><CoverRule cover={obj.cover}/></div>}
                         {obj.title && <div className={styles.ruleCardBodyListItem}><TitleRule title={obj.title}/></div>}
                         {obj.labels &&
