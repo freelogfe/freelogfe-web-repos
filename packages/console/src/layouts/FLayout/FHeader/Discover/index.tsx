@@ -4,10 +4,11 @@ import styles from './index.less';
 import FMenu from "@/components/FMenu";
 import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
-import {router} from "umi";
+import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
+import {market} from "@/utils/path-assembler";
 
 const discoverOptions = [
   {
@@ -33,10 +34,10 @@ function Discover({global, marketPage}: DiscoverProps) {
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
     if (value === '1' && cRoute.pathname !== '/market') {
-      return router.push('/market');
+      return router.push(market());
     } else if (value === '2' && cRoute.pathname !== '/market/example') {
       // return router.push('/market/example');
-      return window.open('https://f-presentations.freelog.com');
+      return ;
     }
   }
 
@@ -47,6 +48,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   />}>
     <Nav
       onClick={() => onDiscoverClick('1')}
+      href={market()}
       active={isCurrent}
     >
       {i18nMessage('explorer')}

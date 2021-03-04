@@ -114,4 +114,12 @@ export function informExhibitManagement({exhibitID}: InformExhibitManagementPara
   return `/node/exhibit/informal/${exhibitID}`;
 }
 
+// 存储空间
+interface StorageParamsType {
+  exhibitID: string;
+}
+
+export function storage({exhibitID}: StorageParamsType): string {
+  return `/storage`;
+}
 

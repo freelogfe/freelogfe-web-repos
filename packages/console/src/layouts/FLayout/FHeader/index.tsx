@@ -12,6 +12,7 @@ import {Layout} from "antd";
 import {router} from "umi";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
+import {market} from "@/utils/path-assembler";
 
 interface FHeaderProps {
   global: GlobalModelState;
@@ -22,7 +23,7 @@ function FHeader({global}: FHeaderProps) {
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
     if (value === '1' && global.routerHistories[global.routerHistories.length - 1].pathname !== '/market') {
-      return router.push('/market');
+      return router.push(market());
     }
     if (value === '2' && !global.routerHistories[global.routerHistories.length - 1].pathname.startsWith('/example')) {
       return router.push('/example');
@@ -31,8 +32,10 @@ function FHeader({global}: FHeaderProps) {
 
   return (<>
     <div className={styles.headerLeft}>
+      {console.log(market(), 'market()2903jlaksdf')}
       <a
-        onClick={() => onDiscoverClick('1')}
+        // onClick={() => onDiscoverClick('1')}
+        href={market()}
         className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
       />
       <div className={styles.MenuBar}>
@@ -61,6 +64,6 @@ function FHeader({global}: FHeaderProps) {
   </>);
 }
 
-export default connect(({global}:ConnectState) => ({
+export default connect(({global}: ConnectState) => ({
   global,
 }))(FHeader);
