@@ -41,6 +41,7 @@ export interface ListParamsType {
   limit?: number;
   keywords?: string;
   resourceType?: string;
+  omitResourceType?: string;
   isSelf?: 0 | 1;
   status?: 0 | 1 | 2;
   startResourceId?: string;

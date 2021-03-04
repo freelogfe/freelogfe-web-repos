@@ -21,6 +21,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
   const otherResource = informExhibitInfoPage.associated;
 
   const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
+
   // console.log(selectedResource, 'selectedResource@#RFasdj90ujlkjlkp0[');
 
   function onChangeSelect(id: string) {
@@ -70,6 +71,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
             </div>
           </a>))
         }
+
       </div>
 
       <div className={styles.signRight}>

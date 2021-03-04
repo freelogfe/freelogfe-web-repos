@@ -31,15 +31,20 @@ interface AddInformExhibitDrawerProps {
 function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResourceNames = [], disabledObjectNames = [], onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
 
   React.useEffect(() => {
-    dispatch<FetchAddExhibitListAction>({
-      type: 'addInformExhibitDrawer/fetchAddExhibitList'
-    });
-    onChange({
+    init();
+  }, []);
+
+  async function init() {
+    await onChange({
       isTheme,
       disabledResourceNames,
       disabledObjectNames,
     });
-  }, []);
+
+    dispatch<FetchAddExhibitListAction>({
+      type: 'addInformExhibitDrawer/fetchAddExhibitList'
+    });
+  }
 
   async function onChange(value: Partial<AddInformExhibitDrawerModelState>, loadData: boolean = false) {
     await dispatch<ChangeAction>({

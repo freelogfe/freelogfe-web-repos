@@ -142,7 +142,8 @@ const Model: AddInformExhibitType = {
         // resourceType:''
         skip: 0,
         limit: 10,
-
+        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -175,7 +176,8 @@ const Model: AddInformExhibitType = {
         skip: 0,
         limit: 10,
         isSelf: 1,
-        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -209,6 +211,8 @@ const Model: AddInformExhibitType = {
         skip: 0,
         limit: 10,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
+        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
       };
 
       const {data} = yield call(collectionResources, params);
