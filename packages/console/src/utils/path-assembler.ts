@@ -122,3 +122,12 @@ export function storage({}: StorageParamsType = {}): string {
   return `/storage`;
 }
 
+// 对象详情
+interface ObjectDetailsParamsType {
+  objectID: string;
+}
+
+export function objectDetails({objectID}: ObjectDetailsParamsType): string {
+  return `/storage`;
+}
+

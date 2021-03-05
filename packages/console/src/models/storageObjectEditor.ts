@@ -13,8 +13,10 @@ import {batchInfo, BatchInfoParamsType, CreateVersionParamsType, info, InfoParam
 import {RESOURCE_TYPE} from "@/utils/regexp";
 
 interface DepR {
+  id: string;
   name: string;
   type: string;
+  identity: 'resource';
   version: string;
   versions: string[];
   status: 0 | 1;
@@ -22,8 +24,10 @@ interface DepR {
 }
 
 interface DepO {
+  id: string;
   name: string;
   type: string;
+  identity: 'object';
 }
 
 export interface StorageObjectEditorModelState {
@@ -191,8 +195,10 @@ const Model: StorageObjectEditorModelType = {
         // console.log(data, 'data1234234');
         depRs = (data as any[]).map<StorageObjectEditorModelState['depRs'][number]>((r: any) => {
           return {
+            id: r.resourceId,
             name: r.resourceName,
             type: r.resourceType,
+            identity: 'resource',
             version: resources.find((sr) => sr.name === r.resourceName)?.versionRange,
             status: r.status,
             baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
@@ -208,8 +214,10 @@ const Model: StorageObjectEditorModelType = {
         const {data} = yield call(batchObjectList, params);
 
         depOs = (data as any[]).map<StorageObjectEditorModelState['depOs'][number]>((o: any) => ({
+          id: o.objectId,
           name: o.bucketName + '/' + o.objectName,
           type: o.resourceType,
+          identity: 'object',
         }));
       }
       // console.log(data, '#Q@#$R@#FASD');
@@ -312,8 +320,10 @@ const Model: StorageObjectEditorModelType = {
           depRs: [
             ...storageObjectEditor.depRs,
             {
+              id: data.resourceId,
               name: data.resourceName,
               type: data.resourceType,
+              identity: 'resource',
               version: '^' + data.latestVersion,
               status: data.status,
               baseUpthrows: data.baseUpcastResources?.map((b: any) => b.resourceName),
@@ -350,8 +360,10 @@ const Model: StorageObjectEditorModelType = {
           depOs: [
             ...storageObjectEditor.depOs,
             {
+              id: data.objectId,
               name: `${data.bucketName}/${data.objectName}`,
               type: data.resourceType,
+              identity: 'object',
             },
           ],
         }

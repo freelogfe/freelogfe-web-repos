@@ -7,13 +7,16 @@ import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FEdit} from "@/components/FIcons";
+import {objectDetails, resourceDetails, resourceInfo} from "@/utils/path-assembler";
 
 interface DepsCardsProps {
   title: string;
   // dataSource: StorageObjectEditorModelState['depRs'] | StorageObjectEditorModelState['depOs'];
   dataSource: {
+    id: string;
     name: string;
     type: string;
+    identity: 'resource' | 'object';
     version?: string;
     versions?: string[];
     status?: 0 | 1;
@@ -45,11 +48,17 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         dataSource.map((d, i: number) => (<div key={d.name} className={styles.resource}>
           <div className={styles.resourceLeft}>
             <div className={styles.resourceTitle}>
-              <FContentText
-                singleRow={true}
-                text={d.name}
-                className={styles.resourceName}
-              />
+              <a href={d.identity === 'resource' ? resourceDetails({
+                resourceID: d.id,
+              }) : objectDetails({
+                objectID: d.id,
+              })}>
+                <FContentText
+                  singleRow={true}
+                  text={d.name}
+                  className={styles.resourceName}
+                />
+              </a>
               {d.status === 0 && <span className={styles.notOnline}>未上线</span>}
             </div>
             <div style={{height: 9}}/>
