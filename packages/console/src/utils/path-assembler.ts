@@ -1,3 +1,5 @@
+import * as H from "history";
+
 // 市场
 interface MarketParamsType {
   // nodeID: number;
@@ -115,19 +117,35 @@ export function informExhibitManagement({exhibitID}: InformExhibitManagementPara
 }
 
 // 存储空间
-interface StorageParamsType {
+interface StorageSpaceParamsType {
+  bucketName: string;
 }
 
-export function storage({}: StorageParamsType = {}): string {
-  return `/storage`;
+// | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
+export function storageSpace({bucketName}: StorageSpaceParamsType): H.LocationDescriptor<H.LocationState> {
+  return {
+    pathname: '/storage',
+    // @ts-ignore
+    query: {
+      bucketName,
+    },
+  };
 }
 
 // 对象详情
 interface ObjectDetailsParamsType {
+  bucketName: string;
   objectID: string;
 }
 
-export function objectDetails({objectID}: ObjectDetailsParamsType): string {
-  return `/storage`;
+export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): H.LocationDescriptor<H.LocationState> | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>) {
+  return {
+    pathname: '/storage',
+    // @ts-ignore
+    query: {
+      bucketName,
+      objectID,
+    },
+  };
 }
 

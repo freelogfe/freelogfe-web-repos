@@ -7,14 +7,56 @@ import NoBucket from './NoBucket';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 // import FContentLayout from '@/layouts/FContentLayout';
 import Header from './Header';
-import {connect} from 'dva';
+import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {OnChangeActivatedBucketAction} from "@/models/storageHomePage";
+import {withRouter} from 'umi';
+import {RouteComponentProps} from "react-router";
+import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
 
-interface StorageProps {
+interface StorageProps extends RouteComponentProps<{}> {
+  dispatch: Dispatch;
   storageHomePage: StorageHomePageModelState;
 }
 
-function Storage({storageHomePage}: StorageProps) {
+function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
+
+  // console.log(history, 'match@#$RQSfjk908u09ujadsfasd');
+  React.useEffect(() => {
+    // console.log((history.location as any).query.bucketName, 'history.location.query.bucketName');
+    // console.log()
+    if (!(history.location as any).query.bucketName) {
+      return;
+    }
+    dispatch<OnChangeActivatedBucketAction>({
+      type: 'storageHomePage/onChangeActivatedBucket',
+      payload: (history.location as any).query.bucketName,
+    });
+  }, [(history.location as any).query.bucketName]);
+
+  React.useEffect(() => {
+    // console.log((history.location as any).query, 'history.location.query.bucketName');
+    // if (!(history.location as any).query.objectID) {
+    //   return;
+    // }
+    fetchObjectInfo();
+  }, [(history.location as any).query.objectID]);
+
+  async function fetchObjectInfo() {
+    await dispatch<ChangeAction>({
+      type: 'storageObjectEditor/change',
+      payload: {objectId: (history.location as any).query.objectID || ''},
+    });
+
+    await dispatch<FetchInfoAction>({
+      type: 'storageObjectEditor/fetchInfo',
+      payload: (history.location as any).query.objectID,
+    });
+  }
+
+  if (!storageHomePage.bucketList) {
+    return null;
+  }
 
   if (storageHomePage.bucketList.length === 0) {
     return (<NoBucket/>);
@@ -33,6 +75,6 @@ function Storage({storageHomePage}: StorageProps) {
   ><Content/></FLeftSiderLayout>);
 }
 
-export default connect(({storageHomePage}: ConnectState) => ({
+export default withRouter(connect(({storageHomePage}: ConnectState) => ({
   storageHomePage,
-}))(Storage);
+}))(Storage));

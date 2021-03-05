@@ -6,7 +6,7 @@ import {Space, Popconfirm} from 'antd';
 import FTable from '@/components/FTable';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {ConnectState, NodeManagerModelState, StorageHomePageModelState} from '@/models/connect';
 import {downloadObject} from '@/services/storages';
 import {
   DeleteObjectAction,
@@ -23,6 +23,9 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
+import {objectDetails} from "@/utils/path-assembler";
+import {ColumnsType} from "antd/lib/table/interface";
+import {Link} from 'umi';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -33,7 +36,7 @@ function Content({storage, dispatch}: ContentProps) {
 
   const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
 
-  const columns = [
+  const columns: ColumnsType<NonNullable<StorageHomePageModelState['objectList']>[number]> = [
     {
       title: '对象名称',
       dataIndex: 'name',
@@ -53,12 +56,14 @@ function Content({storage, dispatch}: ContentProps) {
       dataIndex: 'tool',
       key: 'tool',
       width: 180,
-      render(text: any, record: any) {
+      render(text: any, record) {
         return (<div className={styles.hoverVisible}>
           <ToolsBar
+            bucketName={record.bucketName}
+            objectID={record.id}
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
-            onClickEdit={() => onClickEdit(record)}
+            // onClickEdit={() => onClickEdit(record)}
             onClickDownload={() => downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => onClickDelete(record)}
           />
@@ -95,18 +100,18 @@ function Content({storage, dispatch}: ContentProps) {
     },
   ];
 
-  function onClickEdit(record: any) {
-    dispatch<FetchInfoAction>({
-      type: 'storageObjectEditor/fetchInfo',
-      payload: record.id,
-    });
-    dispatch<ChangeAction>({
-      type: 'storageObjectEditor/change',
-      payload: {
-        visible: true,
-      },
-    });
-  }
+  // function onClickEdit(record) {
+  //   dispatch<FetchInfoAction>({
+  //     type: 'storageObjectEditor/fetchInfo',
+  //     payload: record.id,
+  //   });
+  //   dispatch<ChangeAction>({
+  //     type: 'storageObjectEditor/change',
+  //     payload: {
+  //       visible: true,
+  //     },
+  //   });
+  // }
 
   function onClickDelete(record: any) {
     dispatch<DeleteObjectAction>({
@@ -189,25 +194,28 @@ export default connect(({storageHomePage}: ConnectState) => ({
 }))(Content);
 
 interface ToolsBarProps {
+  bucketName: string;
+  objectID: string;
   showEdit?: boolean;
   showDownload?: boolean;
   showDelete?: boolean;
 
-  onClickEdit?(): void;
+  // onClickEdit?(): void;
 
   onClickDownload?(): void;
 
   onClickDelete?(): void;
 }
 
-function ToolsBar({showEdit = true, showDownload = true, showDelete = true, onClickEdit, onClickDownload, onClickDelete}: ToolsBarProps) {
+function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, showDelete = true, onClickDownload, onClickDelete}: ToolsBarProps) {
   return (<Space
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
-      showEdit && (<FTextButton
-        onClick={() => onClickEdit && onClickEdit()} theme={'primary'}
-      ><FEdit/></FTextButton>)
+      showEdit && (<Link to={objectDetails({
+        bucketName,
+        objectID: objectID,
+      })}><FEdit/></Link>)
     }
     {
       showDownload && (<FTextButton

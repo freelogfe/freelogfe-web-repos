@@ -97,7 +97,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
         value={addInformExhibitDrawer.addExhibitSelectValue}
         dataSource={[
           ...addInformExhibitDrawer.addExhibitOptions as WholeMutable<AddInformExhibitDrawerModelState['addExhibitOptions']>,
-          ...storageHomePage.bucketList.map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
+          ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
             return {
               value: b.bucketName,
               title: b.bucketName,

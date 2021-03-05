@@ -34,6 +34,8 @@ import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FDownload from "@/components/FIcons/FDownload";
+import {router} from "umi";
+import {storageSpace} from "@/utils/path-assembler";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -70,15 +72,17 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
   return (<FDrawer
     title={'编辑对象信息'}
-    visible={storageObjectEditor.visible}
+    // visible={storageObjectEditor.visible}
     // visible={true}
+    visible={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
       <FTextButton onClick={() => {
         onChange({
-          visible: false,
+          // visible: false,
           customOptionsDataVisible: false,
         });
+        router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
       }}>取消</FTextButton>
       <FNormalButton
         disabled={storageObjectEditor.typeVerify === 1 || hasError}
@@ -93,20 +97,21 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               type: storageObjectEditor.type,
             },
           });
-          dispatch<ChangeAction>({
-            type: 'storageObjectEditor/change',
-            payload: {
-              visible: false,
-            }
-          });
+          router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
+          // dispatch<ChangeAction>({
+          //   type: 'storageObjectEditor/change',
+          //   payload: {
+          //     visible: false,
+          //   }
+          // });
         }}
       >保存</FNormalButton>
     </Space>}
     onClose={() => {
       onChange({
-        visible: false,
         customOptionsDataVisible: false,
       });
+      router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
     }}>
     <div className={styles.divContainer}>
       <div style={{height: 10}}/>

@@ -45,7 +45,10 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
     <div style={{height: 15}}/>
     <div className={styles.resources}>
       {
-        dataSource.map((d, i: number) => (<div key={d.name} className={styles.resource}>
+        dataSource.map((d, i: number) => (<div
+          key={d.name}
+          className={styles.resource}
+        >
           <div className={styles.resourceLeft}>
             <div className={styles.resourceTitle}>
               <a href={d.identity === 'resource' ? resourceDetails({

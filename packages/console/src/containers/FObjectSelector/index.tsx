@@ -76,7 +76,7 @@ function FObjectSelector({
 
   const selectOptions = [
     ...defaultSelectOptions,
-    ...storageHomePage.bucketList.map((b) => ({
+    ...(storageHomePage.bucketList || []).map((b) => ({
       value: b.bucketName,
       text: b.bucketName,
     })),

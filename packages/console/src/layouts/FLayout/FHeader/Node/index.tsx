@@ -11,6 +11,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
 import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
+import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 interface NodeProps {
   dispatch: Dispatch;
@@ -59,15 +60,11 @@ function Node({dispatch, nodes, global}: NodeProps) {
         }}
       >创建节点</FNormalButton>
     </div>)}>
-    <Nav
-      // onClick={() => {
-      //   nodes.list.length > 0
-      //     ? onClickNodes(nodes.list[0].nodeId.toString())
-      //     // : router.push('/node/creator');
-      //     : router.push(nodeCreator());
-      // }}
-      href={nodes.list.length == 0 ? nodeCreator() : nodeManagement({nodeID: nodes.list[0].nodeId})}
-      active={isCurrent}>{i18nMessage('node_manage')}</Nav>
+    <FNavLink
+      text={i18nMessage('node_manage')}
+      to={nodes.list.length == 0 ? nodeCreator() : nodeManagement({nodeID: nodes.list[0].nodeId})}
+      active={isCurrent}
+    />
   </FDropdown>);
 }
 

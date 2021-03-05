@@ -17,7 +17,10 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
-import {storage} from "@/utils/path-assembler";
+import {storageSpace} from "@/utils/path-assembler";
+import {RouteComponentProps} from "react-router";
+import {withRouter} from 'umi';
+import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 interface StorageProps {
   dispatch: Dispatch;
@@ -27,11 +30,14 @@ interface StorageProps {
 }
 
 function Storage({dispatch, storageHomePage, global}: StorageProps) {
-
   const cRoute = global.routerHistories[global.routerHistories.length - 1];
   const isCurrent: boolean = cRoute.pathname.startsWith('/storage');
 
   React.useEffect(() => {
+    console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
+    if (storageHomePage.bucketList) {
+      return;
+    }
     dispatch<FetchBucketsAction>({
       type: 'storageHomePage/fetchBuckets',
     });
@@ -43,7 +49,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
     }
   }
 
-  return (<FDropdown overlay={storageHomePage.bucketList.length === 0
+  return (<FDropdown overlay={(storageHomePage.bucketList || []).length === 0
     ? (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>
       <div style={{height: 30}}/>
@@ -72,7 +78,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           });
           onClickStorage();
         }}
-        options={storageHomePage.bucketList.map((b) => ({
+        options={(storageHomePage.bucketList || []).map((b) => ({
           text: b.bucketName,
           // value: n.nodeDomain,
           value: b.bucketName,
@@ -95,11 +101,15 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
       </a>
     </div>)
   }>
-    <Nav
+    <FNavLink
       active={isCurrent}
-      // onClick={onClickStorage}
-      href={storage()}
-    >{i18nMessage('storage')}</Nav>
+      text={i18nMessage('storage')}
+      to={storageSpace({
+        bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
+          ? storageHomePage.bucketList[0].bucketName
+          : '',
+      })}
+    />
   </FDropdown>);
 }
 

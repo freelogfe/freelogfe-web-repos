@@ -31,7 +31,7 @@ interface DepO {
 }
 
 export interface StorageObjectEditorModelState {
-  visible: boolean;
+  // visible: boolean;
   objectId: string;
   bucketName: string;
   objectName: string;
@@ -149,7 +149,7 @@ export interface StorageObjectEditorModelType {
 const Model: StorageObjectEditorModelType = {
   namespace: 'storageObjectEditor',
   state: {
-    visible: false,
+    // visible: false,
     objectId: '',
     bucketName: '',
     objectName: '',
@@ -175,6 +175,9 @@ const Model: StorageObjectEditorModelType = {
   },
   effects: {
     * fetchInfo({payload}: FetchInfoAction, {call, put}: EffectsCommandMap) {
+      if (!payload) {
+        return;
+      }
       const params: ObjectDetailsParamsType2 = {
         objectIdOrName: payload,
       };

@@ -9,6 +9,7 @@ import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
 import {market} from "@/utils/path-assembler";
+import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 const discoverOptions = [
   {
@@ -48,13 +49,12 @@ function Discover({global, marketPage}: DiscoverProps) {
       options={discoverOptions}
     />}
   >
-    <Nav
-      onClick={() => onDiscoverClick('1')}
-      href={market()}
+    <FNavLink
+      // onClick={() => onDiscoverClick('1')}
+      text={i18nMessage('explorer')}
+      to={market()}
       active={isCurrent}
-    >
-      {i18nMessage('explorer')}
-    </Nav>
+    />
   </FDropdown>);
 }
 

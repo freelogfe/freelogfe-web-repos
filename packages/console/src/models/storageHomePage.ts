@@ -32,7 +32,7 @@ export interface StorageHomePageModelState {
     bucketType: 0 | 1 | 2;
     createDate: string;
     totalFileQuantity: number;
-  }[];
+  }[] | null;
   activatedBucket: string;
   totalStorage: number;
   usedStorage: number;
@@ -41,6 +41,7 @@ export interface StorageHomePageModelState {
     key: string;
     id: string;
     name: string;
+    bucketName: string;
     type: string;
     size: number;
     updateTime: string;
@@ -144,7 +145,7 @@ const Model: StorageHomePageModelType = {
     newBucketNameError: false,
     newBucketModalVisible: false,
 
-    bucketList: [],
+    bucketList: null,
     activatedBucket: '',
     totalStorage: -1,
     usedStorage: -1,
@@ -178,14 +179,14 @@ const Model: StorageHomePageModelType = {
             })),
         },
       });
-      yield put<OnChangeActivatedBucketAction>({
-        type: 'onChangeActivatedBucket',
-        payload: data?.length > 0
-          ? (data.map((b: any) => b.bucketName).includes(storageHomePage.activatedBucket)
-            ? storageHomePage.activatedBucket
-            : data[0].bucketName)
-          : '',
-      });
+      // yield put<OnChangeActivatedBucketAction>({
+      //   type: 'onChangeActivatedBucket',
+      //   payload: data?.length > 0
+      //     ? (data.map((b: any) => b.bucketName).includes(storageHomePage.activatedBucket)
+      //       ? storageHomePage.activatedBucket
+      //       : data[0].bucketName)
+      //     : '',
+      // });
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
@@ -434,6 +435,7 @@ function transformTableData(i: any) {
     dataIndex: i.objectId,
     id: i.objectId,
     name: i.objectName,
+    bucketName: i.bucketName,
     type: i.resourceType,
     size: humanizeSize(i.systemProperty.fileSize),
     updateTime: formatDateTime(i.updateDate, true),

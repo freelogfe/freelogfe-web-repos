@@ -17,10 +17,12 @@ import {humanizeSize} from '@/utils/format';
 import {FDelete} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
+import {NavLink} from 'umi';
+import {storageSpace} from "@/utils/path-assembler";
 
 interface SiderProps {
   dispatch: Dispatch;
-  storage: StorageHomePageModelState,
+  storage: StorageHomePageModelState;
 }
 
 
@@ -28,8 +30,15 @@ function Sider({storage, dispatch}: SiderProps) {
 
   // const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
-  const customBuckets = storage.bucketList.filter((b) => b.bucketType === 1);
-  const systemBuckets = storage.bucketList.filter((b) => b.bucketType === 2);
+  const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
+  const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
+
+  // React.useEffect(() => {
+  //     dispatch<OnChangeActivatedBucketAction>({
+  //       type: 'storageHomePage/onChangeActivatedBucket',
+  //       payload: b.bucketName,
+  //     });
+  // }, []);
 
   return (<>
     <div className={styles.sider}>
@@ -42,12 +51,12 @@ function Sider({storage, dispatch}: SiderProps) {
               type="form"
             />
             <FTitleText
-              text={`${storage.bucketList.length}/5`}
+              text={`${(storage.bucketList || []).length}/5`}
               type="form"
             />
           </Space>
           {
-            storage.bucketList.length < 5
+            (storage.bucketList || []).length < 5
               ? (<FCircleButton
                 theme="text"
                 onClick={() => dispatch<ChangeAction>({
@@ -59,7 +68,7 @@ function Sider({storage, dispatch}: SiderProps) {
                   },
                 })}
               />)
-              :(<FTooltip title={i18nMessage('msg_bucket_quantity_exceed ')}>
+              : (<FTooltip title={i18nMessage('msg_bucket_quantity_exceed ')}>
                 <div><FCircleButton
                   theme="text"
                   size="small"
@@ -69,22 +78,28 @@ function Sider({storage, dispatch}: SiderProps) {
           }
         </div>
         <div style={{height: 18}}/>
+        {/*storage*/}
         {
           customBuckets.length > 0 ? (<div className={styles.buckets}>
             {
               customBuckets
-                .map((b) => (<a
+                .map((b) => (<NavLink
                   key={b.bucketName}
-                  className={storage.activatedBucket === b.bucketName ? styles.bucketActive : ''}
-                  onClick={() => {
-                    if (storage.activatedBucket === b.bucketName) {
-                      return;
-                    }
-                    dispatch<OnChangeActivatedBucketAction>({
-                      type: 'storageHomePage/onChangeActivatedBucket',
-                      payload: b.bucketName,
-                    });
-                  }}
+                  className={storage.activatedBucket === b.bucketName
+                    ? styles.bucketActive
+                    : ''}
+                  to={storageSpace({
+                    bucketName: b.bucketName,
+                  })}
+                  // onClick={() => {
+                  //   if (storage.activatedBucket === b.bucketName) {
+                  //     return;
+                  //   }
+                  //   dispatch<OnChangeActivatedBucketAction>({
+                  //     type: 'storageHomePage/onChangeActivatedBucket',
+                  //     payload: b.bucketName,
+                  //   });
+                  // }}
                 >
                   <span>{b.bucketName}</span>
                   {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm
@@ -100,7 +115,7 @@ function Sider({storage, dispatch}: SiderProps) {
                     style={{color: '#EE4040'}}
                   />
                   </Popconfirm>}
-                </a>))
+                </NavLink>))
             }
           </div>) : (<FContentText
             type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)

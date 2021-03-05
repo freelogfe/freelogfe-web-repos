@@ -62,7 +62,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
         value={replaceInformExhibit.replacerOrigin}
         dataSource={[
           ...replaceInformExhibit.replacerOriginOptions as WholeMutable<ReplaceInformExhibitState['replacerOriginOptions']>,
-          ...storageHomePage.bucketList.map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
+          ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
             return {
               value: b.bucketName,
               title: b.bucketName,
