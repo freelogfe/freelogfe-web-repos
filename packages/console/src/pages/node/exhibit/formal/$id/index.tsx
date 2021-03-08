@@ -11,13 +11,14 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
 import {ChangeAction, FetchInfoAction, UpdateStatusAction} from '@/models/exhibitInfoPage';
 import RouterTypes from 'umi/routerTypes';
-import {nodeDetail} from '@/services/nodes';
+// import {details} from '@/services/nodes';
 import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
+import FLink from "@/components/FLink";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -43,17 +44,24 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
-          <FTextButton onClick={() => {
-            // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
-            router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));
-          }}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>
+          {/*<FTextButton onClick={() => {*/}
+          {/*  router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));*/}
+          {/*}}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>*/}
+          <FLink to={nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
+            <FContentText type="negative" text={exhibitInfoPage.nodeName}/>
+          </FLink>
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
           <FTitleText text={exhibitInfoPage.pName}/>
         </div>
         <Space size={20}>
-          <span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '上线' : '未上线'}</span>
+          {
+            exhibitInfoPage.resourceType === 'theme'
+              ? (<span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
+              : (<span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '已上线' : '未上线'}</span>)
+          }
+
           <FSwitch
             disabled={!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
             checked={exhibitInfoPage.isOnline}
