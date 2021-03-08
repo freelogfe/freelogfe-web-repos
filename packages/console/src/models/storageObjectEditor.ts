@@ -14,7 +14,8 @@ import {
 import {ConnectState} from "@/models/connect";
 import {batchInfo, BatchInfoParamsType, CreateVersionParamsType, info, InfoParamsType} from "@/services/resources";
 import {RESOURCE_TYPE} from "@/utils/regexp";
-import {linkToObjectDetails, linkToResourceDetails,} from "@/utils/path-assembler";
+// import {linkToObjectDetails, linkToResourceDetails} from "@/utils/path-assembler";
+import LinkTo from "@/utils/path-assembler";
 
 interface DepR {
   id: string;
@@ -215,7 +216,7 @@ const Model: StorageObjectEditorModelType = {
             status: r.status,
             baseUpthrows: r.baseUpcastResources.map((sr: any) => sr.resourceName),
             versions: r.resourceVersions.map((rv: any) => rv.version),
-            linkTo: linkToResourceDetails({
+            linkTo: LinkTo.resourceDetails({
               resourceID: r.resourceId,
             }),
           };
@@ -233,7 +234,7 @@ const Model: StorageObjectEditorModelType = {
           name: o.bucketName + '/' + o.objectName,
           type: o.resourceType,
           identity: 'object',
-          linkTo: linkToObjectDetails({
+          linkTo: LinkTo.objectDetails({
             bucketName: o.bucketName,
             objectID: o.objectId,
           }),
@@ -347,7 +348,7 @@ const Model: StorageObjectEditorModelType = {
               status: data.status,
               baseUpthrows: data.baseUpcastResources?.map((b: any) => b.resourceName),
               versions: data.resourceVersions.map((rv: any) => rv.version),
-              linkTo: linkToResourceDetails({
+              linkTo: LinkTo.resourceDetails({
                 resourceID: data.resourceId,
               }),
             },
@@ -386,7 +387,7 @@ const Model: StorageObjectEditorModelType = {
               name: `${data.bucketName}/${data.objectName}`,
               type: data.resourceType,
               identity: 'object',
-              linkTo: linkToObjectDetails({
+              linkTo: LinkTo.objectDetails({
                 bucketName: data.bucketName,
                 objectID: data.objectId,
               }),

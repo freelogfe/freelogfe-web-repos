@@ -85,9 +85,6 @@ function Sider({storage, dispatch}: SiderProps) {
               customBuckets
                 .map((b) => {
                   console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
-                  console.log(storageSpace({
-                    bucketName: b.bucketName,
-                  }), '@Q#TRFDs09jol;kjsdl;kfj;asdf');
                   return (<Link
                     key={b.bucketName}
                     className={storage.activatedBucket === b.bucketName
@@ -96,15 +93,6 @@ function Sider({storage, dispatch}: SiderProps) {
                     to={storageSpace({
                       bucketName: b.bucketName,
                     })}
-                    // onClick={() => {
-                    //   if (storage.activatedBucket === b.bucketName) {
-                    //     return;
-                    //   }
-                    //   dispatch<OnChangeActivatedBucketAction>({
-                    //     type: 'storageHomePage/onChangeActivatedBucket',
-                    //     payload: b.bucketName,
-                    //   });
-                    // }}
                   >
                     <span>{b.bucketName}</span>
                     {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm

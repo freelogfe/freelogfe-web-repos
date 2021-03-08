@@ -1,5 +1,6 @@
 import * as H from "history";
 
+
 // type TReturnType = H.LocationDescriptor<H.LocationState>;
 type TReturnType = string;
 
@@ -17,7 +18,7 @@ interface ResourceDetailsParamsType {
   resourceID: string;
 }
 
-export function linkToResourceDetails({resourceID}: ResourceDetailsParamsType): TReturnType {
+export function resourceDetails({resourceID}: ResourceDetailsParamsType): TReturnType {
   return `/resource/${resourceID}`;
 }
 
@@ -142,7 +143,7 @@ interface ObjectDetailsParamsType {
   objectID: string;
 }
 
-export function linkToObjectDetails({bucketName, objectID}: ObjectDetailsParamsType): TReturnType {
+export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): TReturnType {
   return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
   // return {
   //   pathname: '/storage',
@@ -154,3 +155,23 @@ export function linkToObjectDetails({bucketName, objectID}: ObjectDetailsParamsT
   // };
 }
 
+const LinkTo = {
+  market,
+  resourceDetails,
+  myResources,
+  myCollects,
+  resourceInfo,
+  resourceAuth,
+  resourceCreateVersion,
+  resourceVersion,
+  nodeCreator,
+  nodeManagement,
+  exhibitManagement,
+  informNodeManagement,
+  informExhibitManagement,
+  storageSpace,
+  // linkToObjectDetails
+  objectDetails,
+};
+
+export default LinkTo;

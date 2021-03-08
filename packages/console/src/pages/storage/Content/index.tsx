@@ -23,7 +23,8 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
-import {linkToObjectDetails, objectDetails} from "@/utils/path-assembler";
+// import {linkToObjectDetails, objectDetails} from "@/utils/path-assembler";
+import LinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 
@@ -212,7 +213,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
-      showEdit && (<Link to={linkToObjectDetails({
+      showEdit && (<Link to={LinkTo.objectDetails({
         bucketName,
         objectID: objectID,
       })}><FEdit/></Link>)
