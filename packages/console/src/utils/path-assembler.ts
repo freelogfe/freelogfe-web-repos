@@ -123,13 +123,14 @@ interface StorageSpaceParamsType {
 
 // | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
 export function storageSpace({bucketName}: StorageSpaceParamsType): H.LocationDescriptor<H.LocationState> {
-  return {
-    pathname: '/storage',
-    // @ts-ignore
-    query: {
-      bucketName,
-    },
-  };
+  return `/storage?bucketName=${bucketName}`;
+  // return {
+  //   pathname: '/storage',
+  //   // @ts-ignore
+  //   query: {
+  //     bucketName,
+  //   },
+  // };
 }
 
 // 对象详情
@@ -139,13 +140,14 @@ interface ObjectDetailsParamsType {
 }
 
 export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): H.LocationDescriptor<H.LocationState> | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>) {
-  return {
-    pathname: '/storage',
-    // @ts-ignore
-    query: {
-      bucketName,
-      objectID,
-    },
-  };
+  return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
+  // return {
+  //   pathname: '/storage',
+  //   // @ts-ignore
+  //   query: {
+  //     bucketName,
+  //     objectID,
+  //   },
+  // };
 }
 

@@ -17,7 +17,7 @@ import {humanizeSize} from '@/utils/format';
 import {FDelete} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
-import {NavLink} from 'umi';
+import {Link} from 'umi';
 import {storageSpace} from "@/utils/path-assembler";
 
 interface SiderProps {
@@ -83,39 +83,45 @@ function Sider({storage, dispatch}: SiderProps) {
           customBuckets.length > 0 ? (<div className={styles.buckets}>
             {
               customBuckets
-                .map((b) => (<NavLink
-                  key={b.bucketName}
-                  className={storage.activatedBucket === b.bucketName
-                    ? styles.bucketActive
-                    : ''}
-                  to={storageSpace({
+                .map((b) => {
+                  console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
+                  console.log(storageSpace({
                     bucketName: b.bucketName,
-                  })}
-                  // onClick={() => {
-                  //   if (storage.activatedBucket === b.bucketName) {
-                  //     return;
-                  //   }
-                  //   dispatch<OnChangeActivatedBucketAction>({
-                  //     type: 'storageHomePage/onChangeActivatedBucket',
-                  //     payload: b.bucketName,
-                  //   });
-                  // }}
-                >
-                  <span>{b.bucketName}</span>
-                  {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm
-                    title={'确定删除吗？'}
-                    onConfirm={() => {
-                      dispatch<DeleteBucketByNameAction>({
-                        type: 'storageHomePage/deleteBucketByName',
-                        payload: b.bucketName,
-                      });
-                    }}
-                  ><FDelete
-                    // onClick={}
-                    style={{color: '#EE4040'}}
-                  />
-                  </Popconfirm>}
-                </NavLink>))
+                  }), '@Q#TRFDs09jol;kjsdl;kfj;asdf');
+                  return (<Link
+                    key={b.bucketName}
+                    className={storage.activatedBucket === b.bucketName
+                      ? styles.bucketActive
+                      : ''}
+                    to={storageSpace({
+                      bucketName: b.bucketName,
+                    })}
+                    // onClick={() => {
+                    //   if (storage.activatedBucket === b.bucketName) {
+                    //     return;
+                    //   }
+                    //   dispatch<OnChangeActivatedBucketAction>({
+                    //     type: 'storageHomePage/onChangeActivatedBucket',
+                    //     payload: b.bucketName,
+                    //   });
+                    // }}
+                  >
+                    <span>{b.bucketName}</span>
+                    {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm
+                      title={'确定删除吗？'}
+                      onConfirm={() => {
+                        dispatch<DeleteBucketByNameAction>({
+                          type: 'storageHomePage/deleteBucketByName',
+                          payload: b.bucketName,
+                        });
+                      }}
+                    ><FDelete
+                      // onClick={}
+                      style={{color: '#EE4040'}}
+                    />
+                    </Popconfirm>}
+                  </Link>);
+                })
             }
           </div>) : (<FContentText
             type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
