@@ -178,7 +178,7 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: PresentablesParamsType = {
+      const params: Parameters<typeof presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: 100,
         // page: nodeManagerPage.pageCurrent,
