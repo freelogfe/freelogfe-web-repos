@@ -6,7 +6,7 @@ import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Modal, Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
-import FCustomProperties from '@/components/FCustomProperties';
+// import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {
@@ -405,19 +405,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                         : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
                     }
 
-                    {/*<FCustomProperties*/}
-                    {/*  dataSource={resourceVersionCreatorPage.properties}*/}
-                    {/*  disabledKeys={[*/}
-                    {/*    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
-                    {/*    ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),*/}
-                    {/*  ]}*/}
-                    {/*  onChange={(value) => {*/}
-                    {/*    onChange({*/}
-                    {/*      properties: value,*/}
-                    {/*      dataIsDirty: true,*/}
-                    {/*    });*/}
-                    {/*  }}*/}
-                    {/*/>*/}
                   </>)
                 }
 

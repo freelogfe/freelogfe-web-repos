@@ -124,6 +124,9 @@ const Model: NodesModelType = {
 
       const {data} = yield call(create, params);
 
+      yield put<FetchNodesAction>({
+        type: 'fetchNodes',
+      });
       // router.push('/node/' + data.nodeId + '/formal');
       router.push(nodeManagement({nodeID: data.nodeId}));
     },

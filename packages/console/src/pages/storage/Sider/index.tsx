@@ -84,7 +84,7 @@ function Sider({storage, dispatch}: SiderProps) {
             {
               customBuckets
                 .map((b) => {
-                  console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
+                  // console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
                   return (<Link
                     key={b.bucketName}
                     className={storage.activatedBucket === b.bucketName

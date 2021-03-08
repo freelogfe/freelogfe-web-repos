@@ -11,6 +11,8 @@ import {
   PresentablesParamsType
 } from "@/services/presentables";
 import fMessage from "@/components/fMessage";
+import {ApiServer, ApiServerParamsType} from "@/services";
+import * as nodes from "@/services/nodes";
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;
@@ -60,7 +62,7 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<NodeManagerModelState>;
 }
 
-export interface FetchNodeInfoAction {
+export interface FetchNodeInfoAction extends AnyAction {
   type: 'nodeManagerPage/fetchNodeInfo';
 }
 
@@ -151,20 +153,23 @@ const Model: NodeManagerModelType = {
     themeDataState: 'loading',
   },
   effects: {
-    * fetchNodeInfo({}: FetchNodeInfoAction, {put, select}: EffectsCommandMap) {
+    * fetchNodeInfo({}: FetchNodeInfoAction, {put, select, call}: EffectsCommandMap) {
       const {nodes, nodeManagerPage}: ConnectState = yield select(({nodes, nodeManagerPage}: ConnectState) => ({
-        nodes,
         nodeManagerPage,
       }));
 
-      const currentNode = nodes.list.find((n) => n.nodeId === nodeManagerPage.nodeId);
+      const params: Parameters<typeof ApiServer.nodes.details>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+      };
+
+      const {data} = yield call(ApiServer.nodes.details, params);
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeName: currentNode?.nodeName,
-          nodeUrl: completeUrlByDomain(currentNode?.nodeDomain || ''),
-          testNodeUrl: completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
+          nodeName: data?.nodeName,
+          nodeUrl: completeUrlByDomain(data?.nodeDomain || ''),
+          testNodeUrl: completeUrlByDomain('t.' + (data?.nodeDomain || '')),
         },
       });
     },

@@ -20,7 +20,7 @@ export interface NodeDetailParamsType2 {
   nodeDomain?: string;
 }
 
-export function nodeDetail(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
+export function details(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
   if ((params as NodeDetailParamsType1).nodeId) {
     return request.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
   }
