@@ -111,7 +111,9 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       onChange({
         customOptionsDataVisible: false,
       });
-      router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
+      router.push(storageSpace({
+        bucketName: storageObjectEditor.bucketName,
+      }));
     }}>
     <div className={styles.divContainer}>
       <div style={{height: 10}}/>

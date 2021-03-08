@@ -7,7 +7,8 @@ import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FEdit} from "@/components/FIcons";
-import {objectDetails, resourceDetails, resourceInfo} from "@/utils/path-assembler";
+import {resourceInfo} from "@/utils/path-assembler";
+import {Link} from 'umi';
 
 interface DepsCardsProps {
   title: string;
@@ -21,7 +22,10 @@ interface DepsCardsProps {
     versions?: string[];
     status?: 0 | 1;
     baseUpthrows?: string[];
+    linkTo: string;
   }[];
+
+  // linkTo: string;
 
   // onDelete?(name: string): void;
   onChange?(value: DepsCardsProps['dataSource']): void;
@@ -51,17 +55,19 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         >
           <div className={styles.resourceLeft}>
             <div className={styles.resourceTitle}>
-              <a href={d.identity === 'resource' ? resourceDetails({
-                resourceID: d.id,
-              }) : objectDetails({
-                objectID: d.id,
-              })}>
+              {/*<a href={d.identity === 'resource' ? resourceDetails({*/}
+              {/*  resourceID: d.id,*/}
+              {/*}) : objectDetails({*/}
+              {/*  objectID: d.id,*/}
+              {/*})}>*/}
+              <Link to={d.linkTo}>
                 <FContentText
                   singleRow={true}
                   text={d.name}
                   className={styles.resourceName}
                 />
-              </a>
+              </Link>
+              {/*</a>*/}
               {d.status === 0 && <span className={styles.notOnline}>未上线</span>}
             </div>
             <div style={{height: 9}}/>

@@ -1,11 +1,14 @@
 import * as H from "history";
 
+// type TReturnType = H.LocationDescriptor<H.LocationState>;
+type TReturnType = string;
+
 // 市场
 interface MarketParamsType {
   // nodeID: number;
 }
 
-export function market({}: MarketParamsType = {}): string {
+export function market({}: MarketParamsType = {}): TReturnType {
   return `/market`;
 }
 
@@ -14,7 +17,7 @@ interface ResourceDetailsParamsType {
   resourceID: string;
 }
 
-export function resourceDetails({resourceID}: ResourceDetailsParamsType): string {
+export function linkToResourceDetails({resourceID}: ResourceDetailsParamsType): TReturnType {
   return `/resource/${resourceID}`;
 }
 
@@ -22,7 +25,7 @@ export function resourceDetails({resourceID}: ResourceDetailsParamsType): string
 interface MyResourcesParamsType {
 }
 
-export function myResources({}: MyResourcesParamsType = {}): string {
+export function myResources({}: MyResourcesParamsType = {}): TReturnType {
   return `/resource/list`;
 }
 
@@ -30,7 +33,7 @@ export function myResources({}: MyResourcesParamsType = {}): string {
 interface MyCollectsParamsType {
 }
 
-export function myCollects({}: MyCollectsParamsType = {}): string {
+export function myCollects({}: MyCollectsParamsType = {}): TReturnType {
   return `/resource/collect`;
 }
 
@@ -39,7 +42,7 @@ interface ResourceInfoParamsType {
   resourceID: string;
 }
 
-export function resourceInfo({resourceID}: ResourceInfoParamsType): string {
+export function resourceInfo({resourceID}: ResourceInfoParamsType): TReturnType {
   return `/resource/${resourceID}/info`;
 }
 
@@ -48,7 +51,7 @@ interface ResourceAuthParamsType {
   resourceID: string;
 }
 
-export function resourceAuth({resourceID}: ResourceAuthParamsType): string {
+export function resourceAuth({resourceID}: ResourceAuthParamsType): TReturnType {
   return `/resource/${resourceID}/auth`;
 }
 
@@ -57,7 +60,7 @@ interface ResourceCreateVersionParamsType {
   resourceID: string;
 }
 
-export function resourceCreateVersion({resourceID}: ResourceCreateVersionParamsType): string {
+export function resourceCreateVersion({resourceID}: ResourceCreateVersionParamsType): TReturnType {
   return `/resource/${resourceID}/version/creator`;
 }
 
@@ -67,7 +70,7 @@ interface ResourceVersionParamsType {
   version: string;
 }
 
-export function resourceVersion({resourceID, version}: ResourceVersionParamsType): string {
+export function resourceVersion({resourceID, version}: ResourceVersionParamsType): TReturnType {
   return `/resource/${resourceID}/version/${version}`;
 }
 
@@ -76,7 +79,7 @@ interface NodeCreatorParamsType {
   // nodeID: number;
 }
 
-export function nodeCreator({}: NodeCreatorParamsType = {}): string {
+export function nodeCreator({}: NodeCreatorParamsType = {}): TReturnType {
   return `/node/creator`;
 }
 
@@ -85,7 +88,7 @@ interface NodeManagementParamsType {
   nodeID: number;
 }
 
-export function nodeManagement({nodeID}: NodeManagementParamsType): string {
+export function nodeManagement({nodeID}: NodeManagementParamsType): TReturnType {
   return `/node/${nodeID}/formal`;
 }
 
@@ -94,7 +97,7 @@ interface ExhibitManagementParamsType {
   exhibitID: string;
 }
 
-export function exhibitManagement({exhibitID}: ExhibitManagementParamsType): string {
+export function exhibitManagement({exhibitID}: ExhibitManagementParamsType): TReturnType {
   return `/node/exhibit/formal/${exhibitID}`;
 }
 
@@ -103,7 +106,7 @@ interface InformNodeManagementParamsType {
   nodeID: number;
 }
 
-export function informNodeManagement({nodeID}: InformNodeManagementParamsType): string {
+export function informNodeManagement({nodeID}: InformNodeManagementParamsType): TReturnType {
   return `/node/${nodeID}/informal`;
 }
 
@@ -112,7 +115,7 @@ interface InformExhibitManagementParamsType {
   exhibitID: string;
 }
 
-export function informExhibitManagement({exhibitID}: InformExhibitManagementParamsType): string {
+export function informExhibitManagement({exhibitID}: InformExhibitManagementParamsType): TReturnType {
   return `/node/exhibit/informal/${exhibitID}`;
 }
 
@@ -122,7 +125,7 @@ interface StorageSpaceParamsType {
 }
 
 // | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
-export function storageSpace({bucketName}: StorageSpaceParamsType): H.LocationDescriptor<H.LocationState> {
+export function storageSpace({bucketName}: StorageSpaceParamsType): TReturnType {
   return `/storage?bucketName=${bucketName}`;
   // return {
   //   pathname: '/storage',
@@ -139,7 +142,7 @@ interface ObjectDetailsParamsType {
   objectID: string;
 }
 
-export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): H.LocationDescriptor<H.LocationState> | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>) {
+export function linkToObjectDetails({bucketName, objectID}: ObjectDetailsParamsType): TReturnType {
   return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
   // return {
   //   pathname: '/storage',
