@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FCircleButton, FNormalButton} from '@/components/FButton';
-import {Popconfirm, Progress, Space} from 'antd';
+import {Popconfirm, Progress, Space, Modal} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import {connect, Dispatch} from 'dva';
@@ -14,7 +14,7 @@ import {
   OnChangeActivatedBucketAction
 } from '@/models/storageHomePage';
 import {humanizeSize} from '@/utils/format';
-import {FDelete} from "@/components/FIcons";
+import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
 import {Link} from 'umi';
@@ -35,9 +35,12 @@ function Sider({storage, dispatch}: SiderProps) {
   const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
   const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
 
+  const [deletingBucket, setDeletingBucket] = React.useState<string>('');
+
   return (<>
     <div
       className={styles.sider}
+      ref={siderRef}
     >
       <div>
         <div style={{height: 30}}/>
@@ -80,15 +83,6 @@ function Sider({storage, dispatch}: SiderProps) {
             {
               customBuckets
                 .map((b) => {
-                  // console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
-                  // return (<BucketLink
-                  //   isActivated={storage.activatedBucket === b.bucketName}
-                  //   bucketName={b.bucketName}
-                  //   allowDeletion={b.totalFileQuantity === 0}
-                  //   onConfirmDelete={() => {
-
-                  //   }}
-                  // />);
                   return (<Link
                     className={storage.activatedBucket === b.bucketName
                       ? styles.activated
@@ -102,24 +96,41 @@ function Sider({storage, dispatch}: SiderProps) {
                       trigger={'hover'}
                       title={'删除'}
                       placement={'bottomLeft'}
+                      arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
-                      <FDelete
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          // console.log('@#@#$dsiofud890saufoisdajfl;sd');
-                          if (b.totalFileQuantity === 0) {
-                            dispatch<DeleteBucketByNameAction>({
-                              type: 'storageHomePage/deleteBucketByName',
-                              payload: b.bucketName,
-                            });
-                          } else {
-                            fMessage('该存储空间内还有未删除模拟资源', 'warning');
-                          }
-                        }}
-                        className={styles.bucketDeleteBtn}
-                      />
+                      <a>
+                        <FDelete
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            // console.log('@#@#$dsiofud890saufoisdajfl;sd');
+                            if (b.totalFileQuantity === 0) {
+                              Modal.confirm({
+                                // title: <div></div>,
+                                // icon: <FWarning style={{display: 'inline-block'}}/>,
+                                icon: null,
+                                content: (<Space size={10}>
+                                  <FWarning style={{display: 'inline-block'}}/>
+                                  <span>存储空间一旦删除则无法恢复，确认删除吗？</span>
+                                </Space>),
+                                okText: '确认',
+                                cancelText: '取消',
+                                onOk() {
+                                  dispatch<DeleteBucketByNameAction>({
+                                    type: 'storageHomePage/deleteBucketByName',
+                                    payload: b.bucketName,
+                                  });
+                                },
+                              });
+
+                            } else {
+                              fMessage('该存储空间内还有未删除模拟资源', 'warning');
+                            }
+                          }}
+                          className={styles.bucketDeleteBtn}
+                        />
+                      </a>
                     </FTooltip>
                   </Link>);
                 })
@@ -214,70 +225,3 @@ function Sider({storage, dispatch}: SiderProps) {
 export default connect(({storageHomePage}: ConnectState) => ({
   storage: storageHomePage,
 }))(Sider);
-
-interface DeleteButtonProps {
-  isActivated: boolean;
-  bucketName: string;
-  allowDeletion: boolean;
-
-  onConfirmDelete?(): void;
-}
-
-function BucketLink({isActivated, bucketName, allowDeletion, onConfirmDelete}: DeleteButtonProps) {
-
-  const theLinkRef = React.useRef<any>(null);
-
-  return (<Link
-    className={isActivated
-      ? styles.activated
-      : ''}
-    to={LinkTo.storageSpace({
-      bucketName: bucketName,
-    })}
-    ref={theLinkRef}
-  >
-    <span>{bucketName}</span>
-    {
-      allowDeletion
-        ? (<Popconfirm
-          title={'存储空间一旦删除则无法恢复，确认删除吗？'}
-          onConfirm={(e) => {
-            e?.stopPropagation();
-            e?.preventDefault();
-            onConfirmDelete && onConfirmDelete();
-          }}
-          onCancel={(e) => {
-            e?.stopPropagation();
-            e?.preventDefault();
-          }}
-          // autoAdjustOverflow={false}
-          placement={'top'}
-          getPopupContainer={() => theLinkRef.current}
-        >
-          <FTooltip
-            trigger={'hover'}
-            title={'删除'}
-            placement={'bottomLeft'}
-            getPopupContainer={() => theLinkRef.current}
-          >
-            <FDelete className={styles.bucketDeleteBtn}/>
-          </FTooltip>
-        </Popconfirm>)
-        : (<FTooltip
-          trigger={'hover'}
-          title={'删除'}
-          placement={'bottomLeft'}
-          getPopupContainer={() => theLinkRef.current}
-        >
-          <span onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            // console.log('@#@#$dsiofud890saufoisdajfl;sd');
-            fMessage('该存储空间内还有未删除模拟资源', 'warning');
-          }}>
-            <FDelete className={styles.bucketDeleteBtn}/>
-          </span>
-        </FTooltip>)
-    }
-  </Link>);
-}
