@@ -7,7 +7,7 @@ interface FDeleteProps {
   className?: string;
   style?: CSSProperties;
 
-  onClick?(): void;
+  // onClick?(): void;
 }
 
 function FDelete({className, ...props}: FDeleteProps) {

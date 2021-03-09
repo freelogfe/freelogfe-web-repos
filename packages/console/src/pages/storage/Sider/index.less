@@ -1,5 +1,5 @@
 .sider {
-  padding: 0 40px;
+  //padding: 0 40px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -11,37 +11,75 @@
 }
 
 .title {
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #E4E7EB;
-  padding-bottom: 15px;
+  //border-bottom: 1px solid #E4E7EB;
+  //padding-bottom: 15px;
   height: 26px;
   box-sizing: content-box;
 }
 
-.buckets {
+//.buckets {
+//  & > a {
+//    line-height: 44px;
+//    border-radius: 22px;
+//    //display: block;
+//    padding: 0 20px;
+//    margin-bottom: 6px;
+//    color: #222;
+
+//  }
+//}
+
+.navs {
+  display: flex;
+  flex-direction: column;
+
   & > a {
-    line-height: 44px;
-    border-radius: 22px;
-    //display: block;
-    padding: 0 20px;
-    margin-bottom: 6px;
+    padding: 0 40px;
+    height: 50px;
     color: #222;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+
+    &:hover {
+      .bucketDeleteBtn {
+        visibility: visible;
+      }
+    }
+
+    &.activated {
+      background: #F4F5F7;
+      color: #2784FF;
+    }
+
+    .bucketDeleteBtn {
+      color: #EE4040;
+      visibility: hidden;
+    }
+
   }
 }
 
-a.bucketActive {
-  background-color: #EEF6FF;
-  color: #2784FF;
+.statistics {
+  padding: 0 40px;
 }
 
-.progressBack {
-  //background-color: #EBEBEB;
-}
+//a.bucketActive {
+//  background-color: #EEF6FF;
+//  color: #2784FF;
+//}
+
+//.progressBack {
+//  //background-color: #EBEBEB;
+//}
 
 .ratio {
   color: #000;

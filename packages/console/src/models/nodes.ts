@@ -3,8 +3,9 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
-import {nodeManagement} from "@/utils/path-assembler";
+// import {nodeManagement} from "@/utils/path-assembler";
 import {ApiServer} from "@/services";
+import LinkTo from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -128,7 +129,7 @@ const Model: NodesModelType = {
         type: 'fetchNodes',
       });
       // router.push('/node/' + data.nodeId + '/formal');
-      router.push(nodeManagement({nodeID: data.nodeId}));
+      router.push(LinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
 

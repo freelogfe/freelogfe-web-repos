@@ -8,11 +8,10 @@ import {
   presentables,
   PresentablesOnlineParamsType,
   presentablesOnlineStatus,
-  PresentablesParamsType
+  PresentablesParamsType,
 } from "@/services/presentables";
 import fMessage from "@/components/fMessage";
 import {ApiServer} from "@/services";
-import * as nodes from "@/services/nodes";
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;

@@ -170,7 +170,6 @@ const LinkTo = {
   informNodeManagement,
   informExhibitManagement,
   storageSpace,
-  // linkToObjectDetails
   objectDetails,
 };
 
