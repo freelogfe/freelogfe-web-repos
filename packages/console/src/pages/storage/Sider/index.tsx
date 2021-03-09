@@ -31,6 +31,7 @@ interface SiderProps {
 
 function Sider({storage, dispatch}: SiderProps) {
 
+  const siderRef = React.useRef<any>(null);
   const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
   const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
 
@@ -80,17 +81,47 @@ function Sider({storage, dispatch}: SiderProps) {
               customBuckets
                 .map((b) => {
                   // console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
-                  return (<BucketLink
-                    isActivated={storage.activatedBucket === b.bucketName}
-                    bucketName={b.bucketName}
-                    allowDeletion={b.totalFileQuantity === 0}
-                    onConfirmDelete={() => {
-                      dispatch<DeleteBucketByNameAction>({
-                        type: 'storageHomePage/deleteBucketByName',
-                        payload: b.bucketName,
-                      });
-                    }}
-                  />);
+                  // return (<BucketLink
+                  //   isActivated={storage.activatedBucket === b.bucketName}
+                  //   bucketName={b.bucketName}
+                  //   allowDeletion={b.totalFileQuantity === 0}
+                  //   onConfirmDelete={() => {
+
+                  //   }}
+                  // />);
+                  return (<Link
+                    className={storage.activatedBucket === b.bucketName
+                      ? styles.activated
+                      : ''}
+                    to={LinkTo.storageSpace({
+                      bucketName: b.bucketName,
+                    })}
+                  >
+                    <span>{b.bucketName}</span>
+                    <FTooltip
+                      trigger={'hover'}
+                      title={'删除'}
+                      placement={'bottomLeft'}
+                      getPopupContainer={() => siderRef.current}
+                    >
+                      <FDelete
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          // console.log('@#@#$dsiofud890saufoisdajfl;sd');
+                          if (b.totalFileQuantity === 0) {
+                            dispatch<DeleteBucketByNameAction>({
+                              type: 'storageHomePage/deleteBucketByName',
+                              payload: b.bucketName,
+                            });
+                          } else {
+                            fMessage('该存储空间内还有未删除模拟资源', 'warning');
+                          }
+                        }}
+                        className={styles.bucketDeleteBtn}
+                      />
+                    </FTooltip>
+                  </Link>);
                 })
             }
           </div>) : (<FContentText
@@ -219,7 +250,8 @@ function BucketLink({isActivated, bucketName, allowDeletion, onConfirmDelete}: D
             e?.stopPropagation();
             e?.preventDefault();
           }}
-          placement={'right'}
+          // autoAdjustOverflow={false}
+          placement={'top'}
           getPopupContainer={() => theLinkRef.current}
         >
           <FTooltip

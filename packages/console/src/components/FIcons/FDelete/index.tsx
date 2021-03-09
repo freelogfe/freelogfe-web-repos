@@ -7,11 +7,12 @@ interface FDeleteProps {
   className?: string;
   style?: CSSProperties;
 
-  // onClick?(): void;
+  onClick?(e:any): void;
 }
 
 function FDelete({className, ...props}: FDeleteProps) {
-  return (<i className={['freelog', 'fl-icon-shanchu', className].join(' ')} {...props} />);
+  return (<i
+    className={['freelog', 'fl-icon-shanchu', className].join(' ')} {...props} />);
 }
 
 export default FDelete;
