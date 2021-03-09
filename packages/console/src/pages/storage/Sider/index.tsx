@@ -18,7 +18,10 @@ import {FDelete} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
 import {Link} from 'umi';
-import {storageSpace} from "@/utils/path-assembler";
+import LinkTo from "@/utils/path-assembler";
+import fMessage from "@/components/fMessage";
+
+// import {storageSpace} from "@/utils/path-assembler";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -28,22 +31,15 @@ interface SiderProps {
 
 function Sider({storage, dispatch}: SiderProps) {
 
-  // const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-
   const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
   const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
 
-  // React.useEffect(() => {
-  //     dispatch<OnChangeActivatedBucketAction>({
-  //       type: 'storageHomePage/onChangeActivatedBucket',
-  //       payload: b.bucketName,
-  //     });
-  // }, []);
-
   return (<>
-    <div className={styles.sider}>
+    <div
+      className={styles.sider}
+    >
       <div>
-        <div style={{height: 45}}/>
+        <div style={{height: 30}}/>
         <div className={styles.title}>
           <Space size={10}>
             <FTitleText
@@ -77,38 +73,24 @@ function Sider({storage, dispatch}: SiderProps) {
               </FTooltip>)
           }
         </div>
-        <div style={{height: 18}}/>
-        {/*storage*/}
+        <div style={{height: 30}}/>
         {
-          customBuckets.length > 0 ? (<div className={styles.buckets}>
+          customBuckets.length > 0 ? (<div className={styles.navs}>
             {
               customBuckets
                 .map((b) => {
                   // console.log(b.bucketName, 'b.bucketName0923jrlfsdkf');
-                  return (<Link
-                    key={b.bucketName}
-                    className={storage.activatedBucket === b.bucketName
-                      ? styles.bucketActive
-                      : ''}
-                    to={storageSpace({
-                      bucketName: b.bucketName,
-                    })}
-                  >
-                    <span>{b.bucketName}</span>
-                    {storage.activatedBucket === b.bucketName && b.totalFileQuantity === 0 && <Popconfirm
-                      title={'确定删除吗？'}
-                      onConfirm={() => {
-                        dispatch<DeleteBucketByNameAction>({
-                          type: 'storageHomePage/deleteBucketByName',
-                          payload: b.bucketName,
-                        });
-                      }}
-                    ><FDelete
-                      // onClick={}
-                      style={{color: '#EE4040'}}
-                    />
-                    </Popconfirm>}
-                  </Link>);
+                  return (<BucketLink
+                    isActivated={storage.activatedBucket === b.bucketName}
+                    bucketName={b.bucketName}
+                    allowDeletion={b.totalFileQuantity === 0}
+                    onConfirmDelete={() => {
+                      dispatch<DeleteBucketByNameAction>({
+                        type: 'storageHomePage/deleteBucketByName',
+                        payload: b.bucketName,
+                      });
+                    }}
+                  />);
                 })
             }
           </div>) : (<FContentText
@@ -117,7 +99,7 @@ function Sider({storage, dispatch}: SiderProps) {
 
       </div>
 
-      <div>
+      <div className={styles.statistics}>
         <Progress
           strokeWidth={6}
           percent={storage.usedStorage / storage.totalStorage}
@@ -201,3 +183,69 @@ function Sider({storage, dispatch}: SiderProps) {
 export default connect(({storageHomePage}: ConnectState) => ({
   storage: storageHomePage,
 }))(Sider);
+
+interface DeleteButtonProps {
+  isActivated: boolean;
+  bucketName: string;
+  allowDeletion: boolean;
+
+  onConfirmDelete?(): void;
+}
+
+function BucketLink({isActivated, bucketName, allowDeletion, onConfirmDelete}: DeleteButtonProps) {
+
+  const theLinkRef = React.useRef<any>(null);
+
+  return (<Link
+    className={isActivated
+      ? styles.activated
+      : ''}
+    to={LinkTo.storageSpace({
+      bucketName: bucketName,
+    })}
+    ref={theLinkRef}
+  >
+    <span>{bucketName}</span>
+    {
+      allowDeletion
+        ? (<Popconfirm
+          title={'存储空间一旦删除则无法恢复，确认删除吗？'}
+          onConfirm={(e) => {
+            e?.stopPropagation();
+            e?.preventDefault();
+            onConfirmDelete && onConfirmDelete();
+          }}
+          onCancel={(e) => {
+            e?.stopPropagation();
+            e?.preventDefault();
+          }}
+          placement={'right'}
+          getPopupContainer={() => theLinkRef.current}
+        >
+          <FTooltip
+            trigger={'hover'}
+            title={'删除'}
+            placement={'bottomLeft'}
+            getPopupContainer={() => theLinkRef.current}
+          >
+            <FDelete className={styles.bucketDeleteBtn}/>
+          </FTooltip>
+        </Popconfirm>)
+        : (<FTooltip
+          trigger={'hover'}
+          title={'删除'}
+          placement={'bottomLeft'}
+          getPopupContainer={() => theLinkRef.current}
+        >
+          <span onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            // console.log('@#@#$dsiofud890saufoisdajfl;sd');
+            fMessage('该存储空间内还有未删除模拟资源', 'warning');
+          }}>
+            <FDelete className={styles.bucketDeleteBtn}/>
+          </span>
+        </FTooltip>)
+    }
+  </Link>);
+}
