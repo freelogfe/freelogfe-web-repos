@@ -1,5 +1,6 @@
-import * as nodes from './nodes';
+import * as Node from './nodes';
+// import * as nodes from './presentables';
 
 export const ApiServer = {
-  nodes,
+  Node,
 };

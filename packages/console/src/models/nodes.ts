@@ -1,10 +1,10 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {create, CreateParamsType, nodeDetail, NodeDetailParamsType2, nodes, NodesParamsType} from "@/services/nodes";
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
 import {nodeManagement} from "@/utils/path-assembler";
+import {ApiServer} from "@/services";
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -91,10 +91,10 @@ const Model: NodesModelType = {
       });
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
-      const params: NodesParamsType = {
+      const params: Parameters<typeof ApiServer.Node.nodes>[0] = {
         limit: 100,
       };
-      const {data} = yield call(nodes, params);
+      const {data} = yield call(ApiServer.Node.nodes, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -117,12 +117,12 @@ const Model: NodesModelType = {
         return;
       }
 
-      const params: CreateParamsType = {
+      const params: Parameters<typeof ApiServer.Node.create>[0] = {
         nodeDomain: nodes.nodeDomain,
         nodeName: nodes.nodeName,
       };
 
-      const {data} = yield call(create, params);
+      const {data} = yield call(ApiServer.Node.create, params);
 
       yield put<FetchNodesAction>({
         type: 'fetchNodes',
@@ -153,10 +153,10 @@ const Model: NodesModelType = {
       }
 
       if (!nameError) {
-        const params2: NodeDetailParamsType2 = {
+        const params2: Parameters<typeof ApiServer.Node.details>[0] = {
           nodeName: nodes.nodeName,
         };
-        const {data: data2} = yield call(nodeDetail, params2);
+        const {data: data2} = yield call(ApiServer.Node.details, params2);
         if (data2) {
           nameError = '该节点名称已经存在或已经被其它用户使用';
         }
@@ -193,10 +193,10 @@ const Model: NodesModelType = {
       }
 
       if (!domainError) {
-        const params1: NodeDetailParamsType2 = {
+        const params1: Parameters<typeof ApiServer.Node.details>[0] = {
           nodeDomain: nodes.nodeDomain,
         };
-        const {data: data1} = yield call(nodeDetail, params1);
+        const {data: data1} = yield call(ApiServer.Node.details, params1);
         if (data1) {
           domainError = '该节点地址已经存在或已经被其它用户使用';
         }

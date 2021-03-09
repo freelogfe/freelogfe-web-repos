@@ -11,7 +11,7 @@ import {
   PresentablesParamsType
 } from "@/services/presentables";
 import fMessage from "@/components/fMessage";
-import {ApiServer, ApiServerParamsType} from "@/services";
+import {ApiServer} from "@/services";
 import * as nodes from "@/services/nodes";
 
 export type NodeManagerModelState = WholeReadonly<{
@@ -158,11 +158,11 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.nodes.details>[0] = {
+      const params: Parameters<typeof ApiServer.Node.details>[0] = {
         nodeId: nodeManagerPage.nodeId,
       };
 
-      const {data} = yield call(ApiServer.nodes.details, params);
+      const {data} = yield call(ApiServer.Node.details, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -193,7 +193,7 @@ const Model: NodeManagerModelType = {
 
       let batchAuthPs: any[] = [];
       if (data.dataList.length > 0) {
-        const params1: BatchAuthParamsType = {
+        const params1: Parameters<typeof batchAuth>[0] = {
           nodeId: nodeManagerPage.nodeId,
           authType: 3,
           presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
