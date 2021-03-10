@@ -16,7 +16,6 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
-import Nav from "../../components/Nav";
 import LinkTo, {storageSpace} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import {withRouter} from 'umi';

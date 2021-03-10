@@ -7,7 +7,6 @@ import FDropdown from "@/components/FDropdown";
 import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
-import Nav from "../../components/Nav";
 import {market} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 

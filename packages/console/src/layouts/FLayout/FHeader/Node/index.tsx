@@ -9,7 +9,6 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
-import Nav from "../../components/Nav";
 import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
