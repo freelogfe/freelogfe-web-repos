@@ -6,11 +6,13 @@ import UploadSuccess from '../UploadSuccess';
 import UploadCancel from '../UploadCancel';
 import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
-import {RcFile} from 'antd/lib/upload/interface';
 import {humanizeSize} from '@/utils/format';
-import {batchObjectList, BatchObjectListParamsType, uploadFile} from '@/services/storages';
 import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
+import {ApiServer} from "@/services";
+import {Modal, Space} from "antd";
+import {FWarning} from "@/components/FIcons";
+import {i18nMessage} from "@/utils/i18n";
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -53,11 +55,11 @@ function Task({
   }, []);
 
   async function verifySameName() {
-    const params1: BatchObjectListParamsType = {
+    const params1: Parameters<typeof ApiServer.Storage.batchObjectList>[0] = {
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
-    const {data: data1} = await batchObjectList(params1);
+    const {data: data1} = await ApiServer.Storage.batchObjectList(params1);
     // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       startUploadFile();
@@ -66,31 +68,87 @@ function Task({
     }
   }
 
-  async function startUploadFile() {
+  async function startUploadFile(isVerifyTypeCompatible: boolean = false) {
     if (file.exist) {
-      setStatus('success');
-      onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
-      return;
-    }
-    const [promise, cancel]: any = uploadFile({file: file.file}, {
-      onUploadProgress(progressEvent) {
-        setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-      },
-    }, true);
+      if (isVerifyTypeCompatible) {
+        if (await verifyTypeCompatible({
+          objectName: bucketName + '/' + file.name,
+          sha1: file.sha1,
+        })) {
+          setStatus('success');
+          onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+        } else {
+          Modal.confirm({
+            icon: null,
+            content: (<Space size={10}>
+              <FWarning style={{display: 'inline-block'}}/>
+              <span>文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？</span>
+            </Space>),
+            onOk() {
+              setStatus('success');
+              onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+            },
+          });
+        }
+      } else {
+        setStatus('success');
+        onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+      }
 
-    cancels.set(file.uid, cancel);
-    setStatus('uploading');
-    setProgress(0);
-    try {
-      const {data} = await promise;
-      setStatus('success');
-      onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: data.sha1});
-    } catch (e) {
-      if (status !== 'uploading') {
-        setStatus('failed');
-        onFail && onFail({uid: file.uid, objectName: file.name});
+    } else {
+      const params: Parameters<typeof ApiServer.Storage.uploadFile>[0] = {
+        file: file.file
+      };
+      const [promise, cancel]: any = ApiServer.Storage.uploadFile(params, {
+        onUploadProgress(progressEvent) {
+          setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+        },
+      }, true);
+
+      cancels.set(file.uid, cancel);
+      setStatus('uploading');
+      setProgress(0);
+      try {
+        const {data} = await promise;
+
+        if (isVerifyTypeCompatible) {
+          if (await verifyTypeCompatible({
+            objectName: bucketName + '/' + file.name,
+            sha1: file.sha1,
+          })) {
+            setStatus('success');
+            onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+          } else {
+            Modal.confirm({
+              icon: null,
+              content: (<Space size={10}>
+                <FWarning style={{display: 'inline-block'}}/>
+                <span>文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？</span>
+              </Space>),
+              onOk() {
+                setStatus('success');
+                onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+              },
+              onCancel() {
+                setStatus('failed');
+              },
+            });
+          }
+        } else {
+          setStatus('success');
+          onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
+        }
+        // setStatus('success');
+        // onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: data.sha1});
+      } catch (e) {
+        if (status !== 'uploading') {
+          setStatus('failed');
+          onFail && onFail({uid: file.uid, objectName: file.name});
+        }
       }
     }
+
+
   }
 
   return (<div className={styles.taskItem}>
@@ -127,8 +185,7 @@ function Task({
     }
     {
       status === 'sameName' && (<UploadSameName onClick={() => {
-        startUploadFile();
-        // verifySameName();
+        startUploadFile(true);
       }}/>)
     }
     {
@@ -141,10 +198,26 @@ function Task({
 
 export default Task;
 
-// interface TaskInfo {
-//   uid: string;
-//   file: RcFile;
-//   state: 'uploading' | 'success' | 'canceled' | 'failure' | ' duplication';
-//   canceler: Canceler;
-//   progress: number;
-// }
+interface VerifyTypeCompatibleParamsType {
+  objectName: string;
+  sha1: string;
+}
+
+async function verifyTypeCompatible({objectName, sha1}: VerifyTypeCompatibleParamsType): Promise<boolean> {
+  const params: Parameters<typeof ApiServer.Storage.objectDetails>[0] = {
+    objectIdOrName: objectName,
+  };
+
+  const {data} = await ApiServer.Storage.objectDetails(params);
+  if (!data.resourceType) {
+    return true;
+  }
+
+  const params1: Parameters<typeof ApiServer.Storage.fileProperty>[0] = {
+    sha1: sha1,
+    resourceType: data.resourceType,
+  };
+
+  const {data: data1} = await ApiServer.Storage.fileProperty(params1);
+  return !!data1;
+}
