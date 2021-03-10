@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-// import sharedStyles from '../index.less';
 import FMenu from "@/components/FMenu";
 import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {router} from "umi";
-import Nav from "../../components/Nav";
 import {myResources} from "@/utils/path-assembler";
+import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 const resourcesOptions = [
   {
@@ -45,10 +44,11 @@ function Resource({global}: ResourceProps) {
       onClick={onClickResource}
       options={resourcesOptions}
     />}>
-    <Nav
-      // onClick={() => onClickResource('1')}
-      href={myResources()}
-      active={isCurrent}>{i18nMessage('resource_manage')}</Nav>
+    <FNavLink
+      to={myResources()}
+      active={isCurrent}
+      text={i18nMessage('resource_manage')}
+    />
   </FDropdown>);
 }
 
