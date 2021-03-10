@@ -17,7 +17,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import Nav from "../../components/Nav";
-import {storageSpace} from "@/utils/path-assembler";
+import LinkTo, {storageSpace} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import {withRouter} from 'umi';
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
@@ -45,7 +45,12 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
 
   function onClickStorage() {
     if (!isCurrent) {
-      return router.push('/storage');
+      return router.push(LinkTo.storageSpace({
+        bucketName: (storageHomePage.bucketList
+          && storageHomePage.bucketList[0]
+          && storageHomePage.bucketList[0].bucketName)
+          || '',
+      }));
     }
   }
 
@@ -72,11 +77,13 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
       <FMenu
         value={isCurrent ? storageHomePage.activatedBucket : ''}
         onClick={(value) => {
-          dispatch<OnChangeActivatedBucketAction>({
-            type: 'storageHomePage/onChangeActivatedBucket',
-            payload: value,
-          });
-          onClickStorage();
+          // dispatch<OnChangeActivatedBucketAction>({
+          //   type: 'storageHomePage/onChangeActivatedBucket',
+          //   payload: value,
+          // });
+          router.push(LinkTo.storageSpace({
+            bucketName: value,
+          }));
         }}
         options={(storageHomePage.bucketList || []).map((b) => ({
           text: b.bucketName,
