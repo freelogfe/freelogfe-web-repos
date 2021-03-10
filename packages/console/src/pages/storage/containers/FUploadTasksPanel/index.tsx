@@ -3,13 +3,13 @@ import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
 import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
-import {Space} from 'antd';
+import {Modal, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
 import {
   ChangeAction,
-  CreateObjectAction, FetchBucketsAction,
+  CreateObjectAction, DeleteBucketByNameAction, FetchBucketsAction,
   FetchObjectsAction,
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
@@ -17,6 +17,7 @@ import * as ahooks from 'ahooks';
 import FModal from '@/components/FModal';
 import {FTipText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
+import {FWarning} from "@/components/FIcons";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -25,7 +26,7 @@ export interface FUploadTasksPanelProps {
 
 function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
 
-  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  // const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
   const {run} = ahooks.useDebounceFn(
     () => {
@@ -87,7 +88,19 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         <FTextButton onClick={() => {
           const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storage.uploadTaskQueue.find((i) => i.state !== 1);
           if (exits) {
-            setModalVisible(true);
+            // setModalVisible(true);
+            Modal.confirm({
+              // title: <div></div>,
+              // icon: <FWarning style={{display: 'inline-block'}}/>,
+              icon: null,
+              content: (<Space size={10}>
+                <FWarning style={{display: 'inline-block'}}/>
+                <span>{i18nMessage('cancel_all_uploading_task')}</span>
+              </Space>),
+              onOk() {
+                closeAll();
+              },
+            });
             return;
           }
           closeAll();
@@ -146,24 +159,24 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
       }
     </div>
 
-    <FModal
-      visible={modalVisible}
-      title={'提示'}
-      onOk={() => {
-        closeAll();
-        setModalVisible(false);
-      }}
-      onCancel={() => {
-        setModalVisible(false);
-      }}
-      cancelText={i18nMessage('countinue_upload')}
-      okText={i18nMessage('cancel_upload')}
-    >
-      <div className={styles.modalContent}>
-        {/*<FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>*/}
-        <FTipText text={i18nMessage('cancel_all_uploading_task')}/>
-      </div>
-    </FModal>
+    {/*<FModal*/}
+    {/*  visible={modalVisible}*/}
+    {/*  title={'提示'}*/}
+    {/*  onOk={() => {*/}
+    {/*    closeAll();*/}
+    {/*    setModalVisible(false);*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    setModalVisible(false);*/}
+    {/*  }}*/}
+    {/*  cancelText={i18nMessage('countinue_upload')}*/}
+    {/*  okText={i18nMessage('cancel_upload')}*/}
+    {/*>*/}
+    {/*  <div className={styles.modalContent}>*/}
+    {/*    /!*<FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>*!/*/}
+    {/*    <FTipText text={i18nMessage('cancel_all_uploading_task')}/>*/}
+    {/*  </div>*/}
+    {/*</FModal>*/}
   </div>);
 }
 
