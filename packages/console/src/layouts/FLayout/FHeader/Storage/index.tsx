@@ -17,8 +17,6 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import LinkTo, {storageSpace} from "@/utils/path-assembler";
-import {RouteComponentProps} from "react-router";
-import {withRouter} from 'umi';
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 interface StorageProps {
