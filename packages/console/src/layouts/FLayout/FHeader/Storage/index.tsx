@@ -31,7 +31,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   const isCurrent: boolean = cRoute.pathname.startsWith('/storage');
 
   React.useEffect(() => {
-    console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
+    // console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
     if (storageHomePage.bucketList) {
       return;
     }
