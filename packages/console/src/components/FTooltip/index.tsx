@@ -6,12 +6,15 @@ import {TooltipProps, TooltipPropsWithOverlay, TooltipPropsWithTitle} from 'antd
 
 interface FTooltipProps extends TooltipPropsWithTitle {
   children: React.ReactNode;
+
 }
 
-function FTooltip({children, title, ...props}: FTooltipProps) {
+function FTooltip({children, title, placement = 'bottomLeft', arrowPointAtCenter = true, ...props}: FTooltipProps) {
   return (<Tooltip
     title={<span className={styles.title}>{title}</span>}
     color={'#fff'}
+    arrowPointAtCenter={arrowPointAtCenter}
+    placement={placement}
     {...props}
   >{children}</Tooltip>);
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import {Space, Popconfirm} from 'antd';
+import {Space, Popconfirm, Modal} from 'antd';
 import FTable from '@/components/FTable';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
@@ -11,11 +11,11 @@ import {downloadObject} from '@/services/storages';
 import {
   DeleteObjectAction,
   UploadFilesAction,
-  ChangeAction as HomePageChangeAction, FetchObjectsAction
+  ChangeAction as HomePageChangeAction, FetchObjectsAction, DeleteBucketByNameAction
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
-import {FDelete, FEdit} from "@/components/FIcons";
+import {FDelete, FEdit, FWarning} from "@/components/FIcons";
 import FNoDataTip from "@/components/FNoDataTip";
 import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
 import FUpload from "@/components/FUpload";
@@ -27,6 +27,7 @@ import FDownload from "@/components/FIcons/FDownload";
 import LinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
+import FTooltip from "@/components/FTooltip";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -50,7 +51,7 @@ function Content({storage, dispatch}: ContentProps) {
             title={'复制对象名称'}
           />
         </Space>);
-      }
+      },
     },
     {
       title: '',
@@ -66,7 +67,20 @@ function Content({storage, dispatch}: ContentProps) {
             showEdit={!isUserDataBucket}
             // onClickEdit={() => onClickEdit(record)}
             onClickDownload={() => downloadObject({objectIdOrName: record.id})}
-            onClickDelete={() => onClickDelete(record)}
+            onClickDelete={() => {
+              Modal.confirm({
+                // title: <div></div>,
+                // icon: <FWarning style={{display: 'inline-block'}}/>,
+                icon: null,
+                content: (<Space size={10}>
+                  <FWarning style={{display: 'inline-block'}}/>
+                  <span>存储空间对象一旦删除则无法恢复，确认删除吗？</span>
+                </Space>),
+                onOk() {
+                  onClickDelete(record);
+                },
+              });
+            }}
           />
         </div>);
       },
@@ -213,32 +227,46 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
-      showEdit && (<Link to={LinkTo.objectDetails({
-        bucketName,
-        objectID: objectID,
-      })}><FEdit/></Link>)
+      showEdit && (<FTooltip title={'编辑'}>
+        <Link to={LinkTo.objectDetails({
+          bucketName,
+          objectID: objectID,
+        })}><FEdit/></Link>
+      </FTooltip>)
     }
     {
-      showDownload && (<FTextButton
-        onClick={() => onClickDownload && onClickDownload()}
-        theme={'primary'}
-      ><FDownload/></FTextButton>)
+      showDownload && (<FTooltip title={'下载'}>
+        <FTextButton
+          onClick={() => onClickDownload && onClickDownload()}
+          theme={'primary'}
+        ><FDownload/></FTextButton>
+      </FTooltip>)
     }
     {
       showDelete && (
-        <Popconfirm
-          title={'确定删除吗？'}
-          trigger="hover"
-          // okText="Yes"
-          // cancelText="No"
-          onConfirm={() => onClickDelete && onClickDelete()}
-        >
+        <FTooltip title={'删除'}>
           <FTextButton
+            onClick={() => onClickDelete && onClickDelete()}
             className={styles.Delete}
           ><FDelete/></FTextButton>
-        </Popconfirm>
+        </FTooltip>
       )
     }
+    {/*{*/}
+    {/*  showDelete && (*/}
+    {/*    <Popconfirm*/}
+    {/*      title={'确定删除吗？'}*/}
+    {/*      trigger="hover"*/}
+    {/*      // okText="Yes"*/}
+    {/*      // cancelText="No"*/}
+    {/*      onConfirm={() => onClickDelete && onClickDelete()}*/}
+    {/*    >*/}
+    {/*      <FTextButton*/}
+    {/*        className={styles.Delete}*/}
+    {/*      ><FDelete/></FTextButton>*/}
+    {/*    </Popconfirm>*/}
+    {/*  )*/}
+    {/*}*/}
 
   </Space>)
 }

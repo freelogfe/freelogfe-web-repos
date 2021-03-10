@@ -96,41 +96,37 @@ function Sider({storage, dispatch}: SiderProps) {
                       trigger={'hover'}
                       title={'删除'}
                       placement={'bottomLeft'}
-                      arrowPointAtCenter={true}
+                      // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
-                      <a>
-                        <FDelete
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            // console.log('@#@#$dsiofud890saufoisdajfl;sd');
-                            if (b.totalFileQuantity === 0) {
-                              Modal.confirm({
-                                // title: <div></div>,
-                                // icon: <FWarning style={{display: 'inline-block'}}/>,
-                                icon: null,
-                                content: (<Space size={10}>
-                                  <FWarning style={{display: 'inline-block'}}/>
-                                  <span>存储空间一旦删除则无法恢复，确认删除吗？</span>
-                                </Space>),
-                                okText: '确认',
-                                cancelText: '取消',
-                                onOk() {
-                                  dispatch<DeleteBucketByNameAction>({
-                                    type: 'storageHomePage/deleteBucketByName',
-                                    payload: b.bucketName,
-                                  });
-                                },
-                              });
+                      <FDelete
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          // console.log('@#@#$dsiofud890saufoisdajfl;sd');
+                          if (b.totalFileQuantity === 0) {
+                            Modal.confirm({
+                              // title: <div></div>,
+                              // icon: <FWarning style={{display: 'inline-block'}}/>,
+                              icon: null,
+                              content: (<Space size={10}>
+                                <FWarning style={{display: 'inline-block'}}/>
+                                <span>存储空间一旦删除则无法恢复，确认删除吗？</span>
+                              </Space>),
+                              onOk() {
+                                dispatch<DeleteBucketByNameAction>({
+                                  type: 'storageHomePage/deleteBucketByName',
+                                  payload: b.bucketName,
+                                });
+                              },
+                            });
 
-                            } else {
-                              fMessage('该存储空间内还有未删除模拟资源', 'warning');
-                            }
-                          }}
-                          className={styles.bucketDeleteBtn}
-                        />
-                      </a>
+                          } else {
+                            fMessage('该存储空间内还有未删除模拟资源', 'warning');
+                          }
+                        }}
+                        className={styles.bucketDeleteBtn}
+                      />
                     </FTooltip>
                   </Link>);
                 })
