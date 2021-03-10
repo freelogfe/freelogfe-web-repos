@@ -182,7 +182,7 @@ const Model: StorageObjectEditorModelType = {
   },
   effects: {
     * fetchInfo({payload}: FetchInfoAction, {call, put}: EffectsCommandMap) {
-      console.log(payload, 'duixiangID09w3ujlkasdfasdfasdf');
+      // console.log(payload, 'duixiangID09w3ujlkasdfasdfasdf');
       if (!payload) {
         return;
       }

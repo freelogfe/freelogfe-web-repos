@@ -4,6 +4,7 @@ import {List} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import {FContentText} from '@/components/FText';
 import StatusLabel from "@/components/StatusLabel";
+import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 
 export interface FResourceListProps {
   loading: boolean;
@@ -56,8 +57,9 @@ function FResourceList({
                 text={i.title}
               />
             </div>
-            {i.status === 0 && <label
-              className={i.latestVersion ? styles.offline : styles.noVersion}>{i.latestVersion ? '未上线' : '未发行'}</label>}
+            {/*{i.status === 0 && <label*/}
+            {/*  className={i.latestVersion ? styles.offline : styles.noVersion}>{i.latestVersion ? '未上线' : '未发行'}</label>}*/}
+            {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased': 'offline'}/>}
           </div>
           <div style={{height: 2}}/>
           <FContentText
