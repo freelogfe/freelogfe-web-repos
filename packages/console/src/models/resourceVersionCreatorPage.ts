@@ -578,7 +578,7 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {
       yield put<ChangeAction>({
-        type: 'resourceVersionCreatorPage/change',
+        type: 'change',
         payload: {
           dataIsDirty: true,
         },
