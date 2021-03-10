@@ -88,10 +88,7 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         <FTextButton onClick={() => {
           const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storage.uploadTaskQueue.find((i) => i.state !== 1);
           if (exits) {
-            // setModalVisible(true);
             Modal.confirm({
-              // title: <div></div>,
-              // icon: <FWarning style={{display: 'inline-block'}}/>,
               icon: null,
               content: (<Space size={10}>
                 <FWarning style={{display: 'inline-block'}}/>
@@ -158,25 +155,6 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         />))
       }
     </div>
-
-    {/*<FModal*/}
-    {/*  visible={modalVisible}*/}
-    {/*  title={'提示'}*/}
-    {/*  onOk={() => {*/}
-    {/*    closeAll();*/}
-    {/*    setModalVisible(false);*/}
-    {/*  }}*/}
-    {/*  onCancel={() => {*/}
-    {/*    setModalVisible(false);*/}
-    {/*  }}*/}
-    {/*  cancelText={i18nMessage('countinue_upload')}*/}
-    {/*  okText={i18nMessage('cancel_upload')}*/}
-    {/*>*/}
-    {/*  <div className={styles.modalContent}>*/}
-    {/*    /!*<FTipText text={'关闭任务列表会使未上传的数据丢失，是否关闭？'}/>*!/*/}
-    {/*    <FTipText text={i18nMessage('cancel_all_uploading_task')}/>*/}
-    {/*  </div>*/}
-    {/*</FModal>*/}
   </div>);
 }
 
