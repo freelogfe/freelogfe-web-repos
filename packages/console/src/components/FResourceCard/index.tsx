@@ -6,6 +6,7 @@ import {FContentText} from '@/components/FText';
 
 import styles from './index.less';
 import {i18nMessage} from "@/utils/i18n";
+import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 
 type EventFunc = () => void
 
@@ -72,10 +73,15 @@ export default function ({
                 }
               </div>
             </nav>
-            <Status
-              normal={resource.status === 1}
-              className={styles.Status}
-            />
+            {/*<Status*/}
+            {/*  normal={resource.status === 1}*/}
+            {/*  className={styles.Status}*/}
+            {/*/>*/}
+            <div className={styles.Status}>
+              <FResourceStatusBadge
+                status={resource.status === 1 ? 'online' : !resource.version ? 'unreleased' : 'offline'}
+              />
+            </div>
           </>)
         }
 

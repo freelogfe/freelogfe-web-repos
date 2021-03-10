@@ -7,7 +7,7 @@ interface FResourceStatusBadgeProps {
 
 const statusTextObj = {
   online: '已上线',
-  offline: '已下线',
+  offline: '未上线',
   unreleased: '未发行',
 };
 

@@ -2,12 +2,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState, ResourceListPageModelState} from '@/models/connect';
-import {
-  collectionResources,
-  CollectionResourcesParamsType,
-  deleteCollectResource,
-  DeleteCollectResourceParamsType
-} from '@/services/collections';
+import {ApiServer} from "@/services";
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
@@ -109,7 +104,7 @@ const Model: ResourceCollectModelType = {
         dataSource = resourceCollectPage.dataSource;
       }
 
-      const params: CollectionResourcesParamsType = {
+      const params: Parameters<typeof ApiServer.Collection.collectionResources>[0] = {
         skip: dataSource.length,
         limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
@@ -117,21 +112,29 @@ const Model: ResourceCollectModelType = {
         resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
       };
 
-      const {data} = yield call(collectionResources, params);
+      const {data} = yield call(ApiServer.Collection.collectionResources, params);
       // console.log(data, 'data3290joisdf');
+
+      const params1: Parameters<typeof ApiServer.Resource.batchInfo>[0] = {
+        resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
+      };
+
+      const {data: data1} = yield call(ApiServer.Resource.batchInfo, params1);
+      // console.log(data1, 'data1w09ejflk23');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           dataSource: [
             ...dataSource,
-            ...(data.dataList as any[]).map<ResourceCollectPageModelState['dataSource'][number]>((d: any) => ({
-              id: d.resourceId,
-              cover: d.coverImages[0],
-              title: d.resourceName,
-              version: d.latestVersion,
-              status: d.resourceStatus,
-              policy: ['TODO策略无法展示'],
-              type: d.resourceType,
+            ...(data1 as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => ({
+              id: i.resourceId,
+              cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+              title: i.resourceName,
+              version: i.latestVersion,
+              policy: i.policies.map((l: any) => l.policyName),
+              type: i.resourceType,
+              status: i.status,
             })),
           ],
           totalNum: data.totalItem,
@@ -139,10 +142,10 @@ const Model: ResourceCollectModelType = {
       });
     },
     * boomJuice({payload}: BoomJuiceAction, {call, put, select}: EffectsCommandMap) {
-      const params: DeleteCollectResourceParamsType = {
+      const params: Parameters<typeof ApiServer.Collection.deleteCollectResource>[0] = {
         resourceId: payload,
       };
-      yield call(deleteCollectResource, params);
+      yield call(ApiServer.Collection.deleteCollectResource, params);
       const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
         resourceCollectPage,
       }));
