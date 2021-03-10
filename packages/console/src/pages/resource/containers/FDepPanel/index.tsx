@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import {FContentText, FTipText} from '@/components/FText';
-import {FCircleButton, FNormalButton} from '@/components/FButton';
-import {CopyOutlined} from '@ant-design/icons';
+import {FTipText} from '@/components/FText';
+import {FNormalButton} from '@/components/FButton';
 import {Space, Drawer} from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
@@ -72,7 +71,8 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
             {
               resource && resource.status !== 1 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
-                {resource.status === 0 && <FTipText text={i18nMessage('authorization_issue_offline_resource')} type="secondary"/>}
+                {resource.status === 0 &&
+                <FTipText text={i18nMessage('authorization_issue_offline_resource')} type="secondary"/>}
                 {/*{resource.status === 2 && <FTipText text={i18nMessage('authorization_issue_circular_reply')} type="secondary"/>}*/}
                 {resource.status === 2 && <FTipText
                   text={i18nMessage('authorization_issue_circular_reply')}

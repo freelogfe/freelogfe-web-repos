@@ -6,7 +6,6 @@ import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Modal, Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
-// import FCustomProperties from '@/components/FCustomProperties';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {
