@@ -84,6 +84,7 @@ function Sider({storage, dispatch}: SiderProps) {
               customBuckets
                 .map((b) => {
                   return (<Link
+                    key={b.bucketName}
                     className={storage.activatedBucket === b.bucketName
                       ? styles.activated
                       : ''}
