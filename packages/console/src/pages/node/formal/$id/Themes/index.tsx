@@ -136,7 +136,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                     <div className={styles.bottom}>
                       <div className={styles.polices}>
                         {
-                          i.policies.map((p) => (<label>{p}</label>))
+                          i.policies.map((p) => (<label key={p}>{p}</label>))
                         }
                       </div>
                       <a onClick={() => null}>{i18nMessage('more_details')}>></a>
