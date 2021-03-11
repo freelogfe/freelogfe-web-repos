@@ -152,8 +152,8 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                   resourceID: match.params.id,
                 })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
           }
-          {console.log(match.params.version, 'match.params.version9023jrlkfsd')}
-          {console.log(match.path, 'match.path.version9023jrlkfsd')}
+          {/*{console.log(match.params.version, 'match.params.version9023jrlkfsd')}*/}
+          {/*{console.log(match.path, 'match.path.version9023jrlkfsd')}*/}
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
               <FLink
