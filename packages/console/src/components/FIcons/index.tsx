@@ -37,6 +37,7 @@ import FExit from './FExit';
 import FExport from './FExport';
 import FImport from './FImport';
 import FCode from './FCode';
+import FNodes from './FNodes';
 
 export {
   FAdd,
@@ -76,4 +77,5 @@ export {
   FExport,
   FImport,
   FCode,
+  FNodes,
 };

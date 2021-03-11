@@ -22,11 +22,6 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
   const showRInfo = marketResourcePage.signResources.find((sr) => sr.id === visibleR);
 
   return (<>
-    <FTitleText
-      text={'确认签约策略'}
-      type="h3"
-    />
-    <div style={{height: 20}}/>
     <div className={styles.smallTitle}>当前资源</div>
     <div style={{height: 10}}/>
     {

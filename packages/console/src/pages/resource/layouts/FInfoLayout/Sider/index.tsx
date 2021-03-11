@@ -13,7 +13,6 @@ import {FPlus} from '@/components/FIcons';
 import {FComponent} from "@/components";
 import FLinkTo from "@/utils/path-assembler";
 
-
 interface SilderProps {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
