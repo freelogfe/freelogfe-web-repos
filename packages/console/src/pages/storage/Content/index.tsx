@@ -24,7 +24,7 @@ import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
 // import {linkToObjectDetails, objectDetails} from "@/utils/path-assembler";
-import LinkTo from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
@@ -228,7 +228,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     size={25}>
     {
       showEdit && (<FTooltip title={'编辑'}>
-        <Link to={LinkTo.objectDetails({
+        <Link to={FLinkTo.objectDetails({
           bucketName,
           objectID: objectID,
         })}><FEdit/></Link>

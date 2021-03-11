@@ -6,7 +6,7 @@ import * as Resource from './resources';
 import * as User from './user';
 import * as InformalNode from './informalNodes';
 
-export const ApiServer = {
+export const FApiServer = {
   Node,
   Exhibit,
   Storage,

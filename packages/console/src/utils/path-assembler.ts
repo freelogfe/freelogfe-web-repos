@@ -148,7 +148,7 @@ export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): 
   return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
 }
 
-const LinkTo = {
+const FLinkTo = {
   market,
   resourceDetails,
   resourceCreator,
@@ -167,4 +167,4 @@ const LinkTo = {
   objectDetails,
 };
 
-export default LinkTo;
+export default FLinkTo;

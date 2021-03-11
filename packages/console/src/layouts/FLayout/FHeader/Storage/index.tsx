@@ -16,7 +16,7 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
-import LinkTo, {storageSpace} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 
 interface StorageProps {
@@ -42,7 +42,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
 
   function onClickStorage() {
     if (!isCurrent) {
-      return router.push(LinkTo.storageSpace({
+      return router.push(FLinkTo.storageSpace({
         bucketName: (storageHomePage.bucketList
           && storageHomePage.bucketList[0]
           && storageHomePage.bucketList[0].bucketName)
@@ -78,7 +78,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           //   type: 'storageHomePage/onChangeActivatedBucket',
           //   payload: value,
           // });
-          router.push(LinkTo.storageSpace({
+          router.push(FLinkTo.storageSpace({
             bucketName: value,
           }));
         }}
@@ -108,7 +108,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
     <FNavLink
       active={isCurrent}
       text={i18nMessage('storage')}
-      to={storageSpace({
+      to={FLinkTo.storageSpace({
         bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
           ? storageHomePage.bucketList[0].bucketName
           : '',

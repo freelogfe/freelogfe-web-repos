@@ -15,12 +15,6 @@ export default function ({width, height, src, status, children}: FResourceCoverP
   return (<div className={styles.Cover}>
     {src && (<img src={src} alt=""/>)}
     {children}
-    {/*{status*/}
-    {/*  ? (<Status*/}
-    {/*    normal={status === 'online'}*/}
-    {/*    className={styles.Status}*/}
-    {/*  />)*/}
-    {/*  : ''}*/}
     <div className={styles.Status}>
       <FResourceStatusBadge status={status}/>
     </div>

@@ -2,7 +2,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState, ResourceListPageModelState} from '@/models/connect';
-import {ApiServer} from "@/services";
+import {FApiServer} from "@/services";
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
@@ -104,7 +104,7 @@ const Model: ResourceCollectModelType = {
         dataSource = resourceCollectPage.dataSource;
       }
 
-      const params: Parameters<typeof ApiServer.Collection.collectionResources>[0] = {
+      const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
         skip: dataSource.length,
         limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
@@ -112,14 +112,14 @@ const Model: ResourceCollectModelType = {
         resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
       };
 
-      const {data} = yield call(ApiServer.Collection.collectionResources, params);
+      const {data} = yield call(FApiServer.Collection.collectionResources, params);
       // console.log(data, 'data3290joisdf');
 
-      const params1: Parameters<typeof ApiServer.Resource.batchInfo>[0] = {
+      const params1: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
         resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
       };
 
-      const {data: data1} = yield call(ApiServer.Resource.batchInfo, params1);
+      const {data: data1} = yield call(FApiServer.Resource.batchInfo, params1);
       // console.log(data1, 'data1w09ejflk23');
 
       yield put<ChangeAction>({
@@ -142,10 +142,10 @@ const Model: ResourceCollectModelType = {
       });
     },
     * boomJuice({payload}: BoomJuiceAction, {call, put, select}: EffectsCommandMap) {
-      const params: Parameters<typeof ApiServer.Collection.deleteCollectResource>[0] = {
+      const params: Parameters<typeof FApiServer.Collection.deleteCollectResource>[0] = {
         resourceId: payload,
       };
-      yield call(ApiServer.Collection.deleteCollectResource, params);
+      yield call(FApiServer.Collection.deleteCollectResource, params);
       const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
         resourceCollectPage,
       }));

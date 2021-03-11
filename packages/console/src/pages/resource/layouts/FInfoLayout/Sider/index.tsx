@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import {FContentText} from '@/components/FText';
 import {Space, Popconfirm} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
@@ -11,8 +10,9 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
-import LinkTo, {resourceCreateVersion} from "@/utils/path-assembler";
-import FLink from "@/components/FLink";
+import {FComponent} from "@/components";
+import FLinkTo from "@/utils/path-assembler";
+
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -70,7 +70,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
 
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/version/creator`);
-    router.push(LinkTo.resourceCreateVersion({
+    router.push(FLinkTo.resourceCreateVersion({
       resourceID: match.params.id,
     }));
   }
@@ -87,33 +87,32 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         status={resourceInfo.info?.status === 1 ? 'online' : !!resourceInfo.info?.latestVersion ? 'offline' : 'unreleased'}
       />
       <div style={{height: 15}}/>
-      <FLink
-        to={LinkTo.resourceDetails({
+      <FComponent.FLink
+        to={FLinkTo.resourceDetails({
           resourceID: resourceInfo.info?.resourceId || '',
         })}
         className={styles.resourceName}
-      >{resourceInfo.info?.resourceName}</FLink>
+      >{resourceInfo.info?.resourceName}</FComponent.FLink>
       <div style={{height: 10}}/>
       <label className={styles.label}>{resourceInfo.info.resourceType}</label>
     </div>
     <div style={{height: 35}}/>
     <div className={styles.radios}>
-      <FLink
+      <FComponent.FLink
         className={[match.path === '/resource/:id/info' ? styles.activatedRadio : '', styles.radio].join(' ')}
-        to={LinkTo.resourceInfo({
+        to={FLinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
-      >{i18nMessage('resource_information')}</FLink>
-      <FLink
+      >{i18nMessage('resource_information')}</FComponent.FLink>
+      <FComponent.FLink
         className={[match.path === '/resource/:id/auth' ? styles.activatedRadio : '', styles.radio].join(' ')}
-        to={LinkTo.resourceAuth({
+        to={FLinkTo.resourceAuth({
           resourceID: match.params.id,
         })}
       >
         <span>{i18nMessage('authorization_infomation')}</span>
         {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot}/>)}
-      </FLink>
-
+      </FComponent.FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
           <div style={{cursor: 'default'}}>{i18nMessage('verions')}</div>
@@ -140,30 +139,28 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         <div className={styles.versions}>
           {
             match.path === '/resource/:id/version/creator'
-              ? (<FLink
-                to={LinkTo.resourceCreateVersion({
+              ? (<FComponent.FLink
+                to={FLinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
-                className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FLink>)
+                className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FComponent.FLink>)
               : (resourceInfo.draftData
-              && (<FLink
+              && (<FComponent.FLink
                 className={[styles.version].join(' ')}
-                to={LinkTo.resourceCreateVersion({
+                to={FLinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
+                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FComponent.FLink>))
           }
-          {/*{console.log(match.params.version, 'match.params.version9023jrlkfsd')}*/}
-          {/*{console.log(match.path, 'match.path.version9023jrlkfsd')}*/}
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
-              <FLink
+              <FComponent.FLink
                 key={i.versionId}
-                to={LinkTo.resourceVersion({
+                to={FLinkTo.resourceVersion({
                   resourceID: match.params.id,
                   version: i.version,
                 })}
                 className={[styles.version, (match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedVersion : ''].join(' ')}
-              >{i.version}</FLink>))
+              >{i.version}</FComponent.FLink>))
           }
         </div>
       </div>
