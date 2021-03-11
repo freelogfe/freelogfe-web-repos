@@ -1,53 +1,80 @@
 .Sider {
-  padding: 0 39px 0 40px;
-}
+  //padding: 0 39px 0 40px;
 
-.label {
-  font-size: 12px;
-  line-height: 20px;
-  background-color: #E4E7EB;
-  border-radius: 4px;
-  padding: 0 5px;
-  color: #666;
-  display: inline-block;
-}
+  .header {
+    padding: 0 40px;
 
-.radios {
-  border-top: 1px solid #E4E7EB;
-}
+    .resourceName {
+      overflow-wrap: break-word;
+      //color: #222;
+    }
+  }
 
-.activatedRadio {
-  background-color: #EEF6FF;
-  color: #2784FF !important;
-}
-
-.versions {
-  padding-left: 20px;
-}
-
-.smallVersion {
-  font-size: 13px;
-}
-
-.radio {
-  height: 30px;
-  //width: 100px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-
-  & > a {
-    padding: 7px 20px;
-    color: #222;
-    border-radius: 17px;
+  .label {
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #E4E7EB;
+    border-radius: 4px;
+    padding: 0 5px;
+    color: #666;
     display: inline-block;
+  }
+
+  .radios {
+    .radio {
+      height: 50px;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      //color: #222;
+
+      .redDot {
+        background-color: red;
+        border-radius: 50%;
+        width: 4px;
+        height: 4px;
+      }
+
+      &.activatedRadio {
+        background: rgba(0, 0, 0, 0.02);
+        color: #2784FF !important;
+      }
+    }
+  }
+
+  .versionControl {
+    .versionControlTitle {
+      padding: 0 40px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .versions {
+
+      .version {
+        height: 50px;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 40px 0 60px;
+        //color: #222;
+
+        &.activatedVersion {
+          background: rgba(0, 0, 0, 0.02);
+          color: #2784FF;
+        }
+      }
+    }
   }
 }
 
-.Space {
-  width: 100%;
-}
 
-.breakWord {
-  overflow-wrap: break-word;
-}
+
+
+
+
+
+
