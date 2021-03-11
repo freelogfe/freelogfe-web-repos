@@ -2,17 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import FCenterLayout from '@/layouts/FCenterLayout';
-import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
-import {Space, Tooltip, Drawer} from 'antd';
+import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
-import FLeft from '@/components/FIcons/FLeft';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
-// import FixedFooter from './FixedFooter';
 import {router} from 'umi';
-import FTooltip from '@/components/FTooltip';
 import {ChangeAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/layouts/FFormLayout";
@@ -55,7 +50,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           },
         });
       }}>
-        <FLeft/>
+        <FIcon.FLeft/>
         <>返回上一步</>
       </FTextButton>
       <div style={{width: 30}}/>
