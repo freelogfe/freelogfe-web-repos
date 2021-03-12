@@ -4,8 +4,8 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
 // import {nodeManagement} from "@/utils/path-assembler";
-import {ApiServer} from "@/services";
-import LinkTo from "@/utils/path-assembler";
+import {FApiServer} from "@/services";
+import FLinkTo from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -92,10 +92,10 @@ const Model: NodesModelType = {
       });
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
-      const params: Parameters<typeof ApiServer.Node.nodes>[0] = {
+      const params: Parameters<typeof FApiServer.Node.nodes>[0] = {
         limit: 100,
       };
-      const {data} = yield call(ApiServer.Node.nodes, params);
+      const {data} = yield call(FApiServer.Node.nodes, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -118,18 +118,18 @@ const Model: NodesModelType = {
         return;
       }
 
-      const params: Parameters<typeof ApiServer.Node.create>[0] = {
+      const params: Parameters<typeof FApiServer.Node.create>[0] = {
         nodeDomain: nodes.nodeDomain,
         nodeName: nodes.nodeName,
       };
 
-      const {data} = yield call(ApiServer.Node.create, params);
+      const {data} = yield call(FApiServer.Node.create, params);
 
       yield put<FetchNodesAction>({
         type: 'fetchNodes',
       });
       // router.push('/node/' + data.nodeId + '/formal');
-      router.push(LinkTo.nodeManagement({nodeID: data.nodeId}));
+      router.push(FLinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
 
@@ -154,10 +154,10 @@ const Model: NodesModelType = {
       }
 
       if (!nameError) {
-        const params2: Parameters<typeof ApiServer.Node.details>[0] = {
+        const params2: Parameters<typeof FApiServer.Node.details>[0] = {
           nodeName: nodes.nodeName,
         };
-        const {data: data2} = yield call(ApiServer.Node.details, params2);
+        const {data: data2} = yield call(FApiServer.Node.details, params2);
         if (data2) {
           nameError = '该节点名称已经存在或已经被其它用户使用';
         }
@@ -194,10 +194,10 @@ const Model: NodesModelType = {
       }
 
       if (!domainError) {
-        const params1: Parameters<typeof ApiServer.Node.details>[0] = {
+        const params1: Parameters<typeof FApiServer.Node.details>[0] = {
           nodeDomain: nodes.nodeDomain,
         };
-        const {data: data1} = yield call(ApiServer.Node.details, params1);
+        const {data: data1} = yield call(FApiServer.Node.details, params1);
         if (data1) {
           domainError = '该节点地址已经存在或已经被其它用户使用';
         }

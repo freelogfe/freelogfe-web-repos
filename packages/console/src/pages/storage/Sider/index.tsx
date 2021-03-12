@@ -18,7 +18,7 @@ import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
 import {Link} from 'umi';
-import LinkTo from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
 
 // import {storageSpace} from "@/utils/path-assembler";
@@ -88,7 +88,7 @@ function Sider({storage, dispatch}: SiderProps) {
                     className={storage.activatedBucket === b.bucketName
                       ? styles.activated
                       : ''}
-                    to={LinkTo.storageSpace({
+                    to={FLinkTo.storageSpace({
                       bucketName: b.bucketName,
                     })}
                   >

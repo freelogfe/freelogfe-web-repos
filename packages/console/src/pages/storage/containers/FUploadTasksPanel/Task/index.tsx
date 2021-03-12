@@ -9,7 +9,7 @@ import UploadFailed from '../UploadFailed';
 import {humanizeSize} from '@/utils/format';
 import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
-import {ApiServer} from "@/services";
+import {FApiServer} from "@/services";
 import {Modal, Space} from "antd";
 import {FWarning} from "@/components/FIcons";
 import {i18nMessage} from "@/utils/i18n";
@@ -55,11 +55,11 @@ function Task({
   }, []);
 
   async function verifySameName() {
-    const params1: Parameters<typeof ApiServer.Storage.batchObjectList>[0] = {
+    const params1: Parameters<typeof FApiServer.Storage.batchObjectList>[0] = {
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
-    const {data: data1} = await ApiServer.Storage.batchObjectList(params1);
+    const {data: data1} = await FApiServer.Storage.batchObjectList(params1);
     // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       startUploadFile();
@@ -96,10 +96,10 @@ function Task({
       }
 
     } else {
-      const params: Parameters<typeof ApiServer.Storage.uploadFile>[0] = {
+      const params: Parameters<typeof FApiServer.Storage.uploadFile>[0] = {
         file: file.file
       };
-      const [promise, cancel]: any = ApiServer.Storage.uploadFile(params, {
+      const [promise, cancel]: any = FApiServer.Storage.uploadFile(params, {
         onUploadProgress(progressEvent) {
           setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
         },
@@ -204,20 +204,20 @@ interface VerifyTypeCompatibleParamsType {
 }
 
 async function verifyTypeCompatible({objectName, sha1}: VerifyTypeCompatibleParamsType): Promise<boolean> {
-  const params: Parameters<typeof ApiServer.Storage.objectDetails>[0] = {
+  const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
     objectIdOrName: objectName,
   };
 
-  const {data} = await ApiServer.Storage.objectDetails(params);
+  const {data} = await FApiServer.Storage.objectDetails(params);
   if (!data.resourceType) {
     return true;
   }
 
-  const params1: Parameters<typeof ApiServer.Storage.fileProperty>[0] = {
+  const params1: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
     sha1: sha1,
     resourceType: data.resourceType,
   };
 
-  const {data: data1} = await ApiServer.Storage.fileProperty(params1);
+  const {data: data1} = await FApiServer.Storage.fileProperty(params1);
   return !!data1;
 }

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FEditorCard from '@/components/FEditorCard';
 import {FContentText, FTitleText} from '@/components/FText';
 import {Space} from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
@@ -108,9 +107,9 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
         <FFormLayout.FBlock title={i18nMessage('resource_name')}>
           <FContentText text={resourceInfo.info?.resourceName}/>
         </FFormLayout.FBlock>
-        <FEditorCard title={i18nMessage('resource_type')}>
+        <FFormLayout.FBlock title={i18nMessage('resource_type')}>
           <FContentText text={resourceInfo.info.resourceType}/>
-        </FEditorCard>
+        </FFormLayout.FBlock>
         <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
 
           {

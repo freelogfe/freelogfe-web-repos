@@ -12,7 +12,7 @@ import {completeUrlByDomain} from "@/utils/format";
 //   PresentablesParamsType,
 // } from "@/services/presentables";
 import fMessage from "@/components/fMessage";
-import {ApiServer} from "@/services";
+import {FApiServer} from "@/services";
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;
@@ -158,11 +158,11 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.Node.details>[0] = {
+      const params: Parameters<typeof FApiServer.Node.details>[0] = {
         nodeId: nodeManagerPage.nodeId,
       };
 
-      const {data} = yield call(ApiServer.Node.details, params);
+      const {data} = yield call(FApiServer.Node.details, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -178,7 +178,7 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.Exhibit.presentables>[0] = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: 100,
         // page: nodeManagerPage.pageCurrent,
@@ -189,18 +189,18 @@ const Model: NodeManagerModelType = {
         omitResourceType: 'theme',
       };
 
-      const {data} = yield call(ApiServer.Exhibit.presentables, params);
+      const {data} = yield call(FApiServer.Exhibit.presentables, params);
 
       let batchAuthPs: any[] = [];
       if (data.dataList.length > 0) {
-        const params1: Parameters<typeof ApiServer.Exhibit.batchAuth>[0] = {
+        const params1: Parameters<typeof FApiServer.Exhibit.batchAuth>[0] = {
           nodeId: nodeManagerPage.nodeId,
           authType: 3,
           presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
             return dl.presentableId;
           }).join(','),
         };
-        const {data: data1} = yield call(ApiServer.Exhibit.batchAuth, params1);
+        const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
         batchAuthPs = data1;
       }
       // console.log(batchAuthPs, 'batchAuthPs290uopasdf');
@@ -258,7 +258,7 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.Exhibit.presentables>[0] = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: 100,
         keywords: nodeManagerPage.themeInputFilter || undefined,
@@ -266,18 +266,18 @@ const Model: NodeManagerModelType = {
         resourceType: 'theme',
       };
 
-      const {data} = yield call(ApiServer.Exhibit.presentables, params);
+      const {data} = yield call(FApiServer.Exhibit.presentables, params);
 
       let batchAuthTs: any[] = [];
       if (data.dataList.length > 0) {
-        const params1: Parameters<typeof ApiServer.Exhibit.batchAuth>[0] = {
+        const params1: Parameters<typeof FApiServer.Exhibit.batchAuth>[0] = {
           nodeId: nodeManagerPage.nodeId,
           authType: 3,
           presentableIds: (data.dataList as any[]).map<string>((dl: any) => {
             return dl.presentableId;
           }).join(','),
         };
-        const {data: data1} = yield call(ApiServer.Exhibit.batchAuth, params1);
+        const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
         batchAuthTs = data1;
       }
 
@@ -308,12 +308,12 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.Exhibit.presentablesOnlineStatus>[0] = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: payload.id,
         onlineStatus: payload.onlineStatus,
       };
 
-      const {data} = yield call(ApiServer.Exhibit.presentablesOnlineStatus, params);
+      const {data} = yield call(FApiServer.Exhibit.presentablesOnlineStatus, params);
 
       if (!data) {
         fMessage('上线失败', 'error');
@@ -346,11 +346,11 @@ const Model: NodeManagerModelType = {
         nodeManagerPage,
       }));
 
-      const params: Parameters<typeof ApiServer.Exhibit.presentablesOnlineStatus>[0] = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: payload.id,
         onlineStatus: 1,
       };
-      const {data} = yield call(ApiServer.Exhibit.presentablesOnlineStatus, params);
+      const {data} = yield call(FApiServer.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
         fMessage('激活失败', 'error');
         return;

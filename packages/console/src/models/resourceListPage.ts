@@ -4,7 +4,7 @@ import {DvaReducer} from './shared';
 import {list, ListParamsType} from "@/services/resources";
 import {debounce} from 'redux-saga/effects'
 import {ConnectState} from "@/models/connect";
-import {ApiServer} from "@/services";
+import {FApiServer} from "@/services";
 
 export interface ResourceListPageModelState {
   resourceType: string;
@@ -96,7 +96,7 @@ const Model: ResourceListPageModelType = {
         dataSource = resourceListPage.dataSource;
       }
 
-      const params: Parameters<typeof ApiServer.Resource.list>[0] = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: dataSource.length,
         limit: resourceListPage.pageSize,
         keywords: resourceListPage.inputText,
@@ -104,7 +104,7 @@ const Model: ResourceListPageModelType = {
         status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         isSelf: 1,
       };
-      const {data} = yield call(ApiServer.Resource.list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       // console.log(data, 'data')
 
       yield put<ChangeAction>({

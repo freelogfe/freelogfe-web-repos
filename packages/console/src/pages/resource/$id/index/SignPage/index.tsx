@@ -2,19 +2,16 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import FCenterLayout from '@/layouts/FCenterLayout';
-import {FInfo, FSwap} from '@/components/FIcons';
 import FInput from '@/components/FInput';
-import {Space, Tooltip, Drawer} from 'antd';
+import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
-import FLeft from '@/components/FIcons/FLeft';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
-import FixedFooter from './FixedFooter';
 import {router} from 'umi';
-import FTooltip from '@/components/FTooltip';
-import {ChangeAction} from '@/models/marketResourcePage';
+import {ChangeAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
+import FFormLayout from "@/layouts/FFormLayout";
+import {FIcon} from "@/components";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -31,47 +28,62 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
   }
 
   return (<FContentLayout header={<div className={styles.header}>
-    <FTitleText text={'确认签约'}/>
-    <div style={{width: 50}}/>
-    <div className={styles.headerResource}>
-      <img
-        alt={''}
-        src={marketResourcePage.resourceInfo?.cover || undefined}
-      />
-      <div style={{width: 8}}/>
-      <FContentText text={marketResourcePage.resourceInfo?.name}/>
+    <Space size={20}>
+      <FTitleText type="h1" text={'确认签约'}/>
+
+      <div className={styles.headerResource}>
+        <img
+          alt={''}
+          src={marketResourcePage.resourceInfo?.cover || undefined}
+        />
+        <div style={{width: 8}}/>
+        <FContentText text={marketResourcePage.resourceInfo?.name}/>
+      </div>
+    </Space>
+
+    <div className={styles.action}>
+      <FTextButton onClick={() => {
+        dispatch<ChangeAction>({
+          type: 'marketResourcePage/change',
+          payload: {
+            isSignPage: false,
+          },
+        });
+      }}>
+        <FIcon.FLeft/>
+        <>返回上一步</>
+      </FTextButton>
+      <div style={{width: 30}}/>
+      <FNormalButton
+        onClick={() => dispatch<SignContractAction>({
+          type: 'marketResourcePage/signContract',
+        })}
+        // disabled={!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)}
+      >确认签约</FNormalButton>
     </div>
   </div>}>
-    
+
     <div className={styles.content}>
-      <div>
-        <FTitleText
-          type="h3"
-          text={'确认签约节点'}
-        />
-        <div style={{height: 20}}/>
-        <div className={styles.nodeName}>
-          <FTitleText
-            type="h5"
-            text={selectedNode?.nodeName}
-          />
-          {/*<div style={{width: 20}}/>*/}
-          {/*<FSwap/>*/}
-        </div>
-        <div style={{height: 50}}/>
-        <div className={styles.nameTitle}>
-          <FTitleText
-            text={'输入展品名称'}
-            type="h3"
-          />
-          <div style={{width: 10}}/>
-          <FContentText
+      <FFormLayout>
+        <FFormLayout.FBlock title={'确认签约节点'}>
+          <Space size={5}>
+            <FIcon.FNodes className={styles.yellow}/>
+            <FTitleText
+              type="h5"
+              text={selectedNode?.nodeName}
+            />
+          </Space>
+
+        </FFormLayout.FBlock>
+
+        <FFormLayout.FBlock
+          title={'输入展品名称'}
+          subtitle={<FContentText
             type="additional2"
+            className={styles.yellow}
             text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
-          />
-        </div>
-        <div style={{height: 20}}/>
-        <div className={styles.exhibitName}>
+          />}
+        >
           <FInput
             value={marketResourcePage.signExhibitName}
             className={styles.exhibitNameInput}
@@ -85,20 +97,14 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           />
           <div style={{height: 5}}/>
           <div className={styles.signExhibitNameErrorTip}>{marketResourcePage.signExhibitNameErrorTip}</div>
-          {/*<FTooltip*/}
-          {/*  placement="bottomLeft"*/}
-          {/*  title={'展品名称在当前节点内部唯一，后期不可修改，仅供编码用'}*/}
-          {/*><FInfo/></FTooltip>*/}
-        </div>
-        <div style={{height: 50}}/>
+        </FFormLayout.FBlock>
 
-        <ResourcesAndPolicies/>
-      </div>
+        <FFormLayout.FBlock title={'确认签约策略'}>
+          <ResourcesAndPolicies/>
+        </FFormLayout.FBlock>
+      </FFormLayout>
+
     </div>
-
-    <div style={{height: 50}}/>
-
-    <FixedFooter/>
 
   </FContentLayout>);
 }

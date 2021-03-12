@@ -22,6 +22,14 @@ export function resourceDetails({resourceID}: ResourceDetailsParamsType): TRetur
   return `/resource/${resourceID}`;
 }
 
+// 资源创建
+interface ResourceCreatorParamsType {
+}
+
+export function resourceCreator({}: ResourceCreatorParamsType = {}): TReturnType {
+  return `/resource/creator`;
+}
+
 // 我的资源
 interface MyResourcesParamsType {
 }
@@ -56,7 +64,7 @@ export function resourceAuth({resourceID}: ResourceAuthParamsType): TReturnType 
   return `/resource/${resourceID}/auth`;
 }
 
-// 资源创建
+// 资源创建版本
 interface ResourceCreateVersionParamsType {
   resourceID: string;
 }
@@ -128,13 +136,6 @@ interface StorageSpaceParamsType {
 // | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
 export function storageSpace({bucketName}: StorageSpaceParamsType): TReturnType {
   return `/storage?bucketName=${bucketName}`;
-  // return {
-  //   pathname: '/storage',
-  //   // @ts-ignore
-  //   query: {
-  //     bucketName,
-  //   },
-  // };
 }
 
 // 对象详情
@@ -145,19 +146,12 @@ interface ObjectDetailsParamsType {
 
 export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): TReturnType {
   return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
-  // return {
-  //   pathname: '/storage',
-  //   // @ts-ignore
-  //   query: {
-  //     bucketName,
-  //     objectID,
-  //   },
-  // };
 }
 
-const LinkTo = {
+const FLinkTo = {
   market,
   resourceDetails,
+  resourceCreator,
   myResources,
   myCollects,
   resourceInfo,
@@ -173,4 +167,4 @@ const LinkTo = {
   objectDetails,
 };
 
-export default LinkTo;
+export default FLinkTo;

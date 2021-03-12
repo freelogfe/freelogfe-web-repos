@@ -85,7 +85,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         version: match.params.version,
       },
     });
-    console.log('8******88888*)OIIIIII');
+    // console.log('8******88888*)OIIIIII');
     await dispatch<FetchDataSourceAction>({
       type: 'resourceVersionEditorPage/fetchDataSource',
     });

@@ -6,6 +6,7 @@ import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {router} from 'umi';
 import {ChangeAction} from "@/models/marketResourcePage";
 import {exhibitManagement} from "@/utils/path-assembler";
+import {FComponent} from "@/components";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -33,14 +34,12 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
                 isSignPage: true,
               }
             });
-            // router.push(`/resource/${marketResourcePage.resourceId}/sign`);
           }}
         >签约</FNormalButton>)
-        : (<span>该资源已签约，可进入<a
-          onClick={() => {
-            // router.push(`/node/exhibit/${marketResourcePage.signedResourceExhibitId}`)
-            router.push(exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId}));
-          }}>展品管理</a>进行授权管理</span>)
+        : (<span>该资源已签约，可进入<FComponent.FLink
+          to={exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId})}
+          className={styles.gotoExhibitLink}
+        >展品管理</FComponent.FLink>进行授权管理</span>)
     }
 
   </div>);
@@ -49,3 +48,4 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
 export default connect(({marketResourcePage}: ConnectState) => ({
   marketResourcePage,
 }))(Bottom);
+
