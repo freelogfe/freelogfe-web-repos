@@ -8,6 +8,7 @@ import {ChangeAction} from "@/models/marketResourcePage";
 import {exhibitManagement} from "@/utils/path-assembler";
 import {FComponent} from "@/components";
 import {FApiServer} from "@/services";
+import FLink from "@/components/FLink";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -41,10 +42,10 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             });
           }}
         >签约</FNormalButton>)
-        : (<span>该资源已签约，可进入<FComponent.FLink
+        : (<span>该资源已签约，可进入<FLink
           to={exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId})}
           className={styles.gotoExhibitLink}
-        >展品管理</FComponent.FLink>进行授权管理</span>)
+        >展品管理</FLink>进行授权管理</span>)
     }
 
   </div>);

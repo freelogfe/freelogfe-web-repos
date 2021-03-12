@@ -16,7 +16,7 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import FLinkTo, {exhibitManagement, nodeCreator} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 
