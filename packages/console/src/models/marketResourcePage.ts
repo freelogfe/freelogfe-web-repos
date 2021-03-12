@@ -1,34 +1,13 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {
-  batchInfo,
-  BatchInfoParamsType,
-  info,
-  InfoParamsType,
-  resourceVersionInfo,
-  ResourceVersionInfoParamsType1
-} from "@/services/resources";
 import {ConnectState} from "@/models/connect";
-import {
-  collectedCount,
-  CollectedCountParamsType,
-  collectResource,
-  CollectResourceParamsType, deleteCollectResource, DeleteCollectResourceParamsType,
-  isCollected
-} from "@/services/collections";
 import {formatDateTime} from "@/utils/format";
-import {
-  createPresentable,
-  CreatePresentableParamsType, presentableDetails, PresentableDetailsParamsType2,
-  presentableList,
-  PresentableListParamsType
-} from "@/services/presentables";
-import {Simulate} from "react-dom/test-utils";
-import {batchContracts, BatchContractsParamsType} from "@/services/contracts";
 import {router} from "umi";
 import {EXHIBIT_NAME} from "@/utils/regexp";
-import {exhibitManagement} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
+import {FApiServer} from "@/services";
+import {i18nMessage} from "@/utils/i18n";
 
 interface Contract {
   id: string;
@@ -59,6 +38,7 @@ export interface MarketResourcePageModelState {
   popularity: number;
   hasCollect: boolean;
 
+  // 所有可签约的节点 ID
   signedNodeIDs: number[];
   selectedNodeID: number;
 
@@ -152,6 +132,11 @@ export interface SignContractAction extends AnyAction {
   type: 'marketResourcePage/signContract';
 }
 
+export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
+  type: 'marketResourcePage/onChangeAndVerifySignExhibitName';
+  payload: string;
+}
+
 interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
@@ -165,6 +150,7 @@ interface MarketResourcePageModelType {
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
+    onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
@@ -240,11 +226,11 @@ const Model: MarketResourcePageModelType = {
         user,
       }));
       // 获取资源信息详情
-      const params: InfoParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: marketResourcePage.resourceId,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(info, params);
+      const {data} = yield call(FApiServer.Resource.info, params);
       // console.log(data, ' data2309');
 
       let rawSignResources = [data];
@@ -252,11 +238,11 @@ const Model: MarketResourcePageModelType = {
       // 获取上抛资源信息
       if (data.baseUpcastResources.length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
-        const params1: BatchInfoParamsType = {
+        const params1: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
           resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
           isLoadPolicyInfo: 1,
         };
-        const {data: data1} = yield call(batchInfo, params1);
+        const {data: data1} = yield call(FApiServer.Resource.batchInfo, params1);
         // console.log(data1, 'data12390jsdfo');
         rawSignResources = [
           ...rawSignResources,
@@ -267,13 +253,13 @@ const Model: MarketResourcePageModelType = {
       // console.log(rawSignResources, 'rawSignResources2309ef');
 
       // 获取当前用户与当前资源签过约的所有节点
-      const params3: PresentableListParamsType = {
+      const params3: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
         userId: user.info?.userId,
         resourceIds: marketResourcePage.resourceId,
         // projection: 'nodeId',
       };
 
-      const {data: data3} = yield call(presentableList, params3);
+      const {data: data3} = yield call(FApiServer.Exhibit.presentableList, params3);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -319,17 +305,17 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
       }));
 
-      const params1 = {
+      const params1: Parameters<typeof FApiServer.Collection.isCollected>[0] = {
         resourceIds: marketResourcePage.resourceId,
       };
 
-      const {data: data1} = yield call(isCollected, params1);
+      const {data: data1} = yield call(FApiServer.Collection.isCollected, params1);
 
-      const params2: CollectedCountParamsType = {
+      const params2: Parameters<typeof FApiServer.Collection.collectedCount>[0] = {
         resourceId: marketResourcePage.resourceId,
       };
 
-      const {data: data2} = yield call(collectedCount, params2);
+      const {data: data2} = yield call(FApiServer.Collection.collectedCount, params2);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -345,15 +331,15 @@ const Model: MarketResourcePageModelType = {
       }));
 
       if (!marketResourcePage.hasCollect) {
-        const params: CollectResourceParamsType = {
+        const params: Parameters<typeof FApiServer.Collection.collectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
         };
-        yield call(collectResource, params)
+        yield call(FApiServer.Collection.collectResource, params)
       } else {
-        const params: DeleteCollectResourceParamsType = {
+        const params: Parameters<typeof FApiServer.Collection.deleteCollectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
         };
-        yield call(deleteCollectResource, params);
+        yield call(FApiServer.Collection.deleteCollectResource, params);
       }
 
       yield put<FetchCollectionInfoAction>({
@@ -386,22 +372,22 @@ const Model: MarketResourcePageModelType = {
         });
       }
 
-      const params: PresentableDetailsParamsType2 = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data} = yield call(presentableDetails, params);
+      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
       // console.log(data, 'datadata0923jsdfsd');
       const allContracts = data.resolveResources;
       // console.log(allContracts, 'datadata0923jsdfsd');
 
       const allContractIds: string[] = allContracts?.map((c: any) => c.contracts.map((cs: any) => cs.contractId)).flat();
       // console.log(allContractIds, 'allContractIds3290dsj');
-      const params1: BatchContractsParamsType = {
+      const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
         contractIds: allContractIds.join(','),
         isLoadPolicyInfo: 1,
       };
-      const {data: data1} = yield call(batchContracts, params1);
+      const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
       // console.log(data1, 'data19023jr');
 
       const signedResources = marketResourcePage.signResources
@@ -450,11 +436,11 @@ const Model: MarketResourcePageModelType = {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
         marketResourcePage
       }));
-      const params: ResourceVersionInfoParamsType1 = {
+      const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data} = yield call(resourceVersionInfo, params);
+      const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
       // console.log(data, '98sdalkf');
       yield put<ChangeAction>({
         type: 'change',
@@ -508,20 +494,11 @@ const Model: MarketResourcePageModelType = {
         nodes,
       }));
 
-      if (!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            signExhibitNameErrorTip: `展品名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? " < > |`,
-          },
-        });
-        return;
-      }
-      const params1: PresentableDetailsParamsType2 = {
+      const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         presentableName: marketResourcePage.signExhibitName,
       };
-      const {data: data1} = yield call(presentableDetails, params1);
+      const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
       // console.log(data1, '2093uoi23r');
       if (data1) {
         yield put<ChangeAction>({
@@ -533,7 +510,7 @@ const Model: MarketResourcePageModelType = {
         return;
       }
 
-      const params: CreatePresentableParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.createPresentable>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
@@ -546,11 +523,49 @@ const Model: MarketResourcePageModelType = {
             }))
         })),
       };
-      const {data} = yield call(createPresentable, params);
-      // console.log(data, 'data0923ure2p3oi');
-      // router.push(`/node/exhibit/${data.presentableId}`);
-      router.push(exhibitManagement({exhibitID: data.presentableId}));
+      const {data} = yield call(FApiServer.Exhibit.createPresentable, params);
+      router.push(FLinkTo.exhibitManagement({exhibitID: data.presentableId}));
     },
+    * onChangeAndVerifySignExhibitName({payload}: OnChangeAndVerifySignExhibitNameAction, {put, select, call}: EffectsCommandMap) {
+      if (!EXHIBIT_NAME.test(payload)) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            signExhibitName: payload,
+            signExhibitNameErrorTip: i18nMessage('naming_convention_exhibits_name'),
+          },
+        });
+        return;
+      }
+      const {marketResourcePage}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
+        marketResourcePage,
+        nodes,
+      }));
+
+      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+        nodeId: marketResourcePage.selectedNodeID,
+        presentableName: payload,
+      };
+      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      if (data) {
+        yield put<ChangeAction>({
+          type: 'marketResourcePage/change',
+          payload: {
+            signExhibitName: payload,
+            signExhibitNameErrorTip: i18nMessage('exhibits_name_exist'),
+          },
+        });
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'marketResourcePage/change',
+        payload: {
+          signExhibitName: payload,
+          signExhibitNameErrorTip: '',
+        },
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {

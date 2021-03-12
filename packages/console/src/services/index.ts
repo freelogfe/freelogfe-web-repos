@@ -5,6 +5,7 @@ import * as Collection from './collections';
 import * as Resource from './resources';
 import * as User from './user';
 import * as InformalNode from './informalNodes';
+import * as Contract from './contracts';
 
 export const FApiServer = {
   Node,
@@ -14,4 +15,5 @@ export const FApiServer = {
   Resource,
   User,
   InformalNode,
+  Contract,
 };
