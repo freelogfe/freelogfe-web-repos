@@ -50,7 +50,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         active: r.themeName,
       };
     }
-    console.log(r, 'wjofldskafj;lasdkf');
+    // console.log(r, 'wjofldskafj;lasdkf');
     return {
       add: r.operation === 'add' ? {
         exhibit: r.exhibitName,

@@ -5,7 +5,7 @@ import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import {FTextButton} from "@/components/FButton";
 import {
-  ChangeAction,
+  ChangeAction, FetchExhibitListAction,
   FetchThemeListAction,
   InformalNodeManagerPageModelState,
   SaveDataRulesAction
@@ -22,6 +22,7 @@ import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
 import {informExhibitManagement} from "@/utils/path-assembler";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
+import {generateRandomCode} from "@/utils/tools";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -218,16 +219,19 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           addThemeDrawerVisible: false,
         });
       }}
-      onConfirm={(value) => {
+      onConfirm={async (value) => {
         // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-        dispatch<SaveDataRulesAction>({
+        await onChange({
+          addThemeDrawerVisible: false,
+        });
+        await dispatch<SaveDataRulesAction>({
           type: 'informalNodeManagerPage/saveDataRules',
           payload: {
             type: 'append',
             data: value.names.map((n) => {
               return {
                 operation: 'add',
-                exhibitName: n.replace('/', '_'),
+                exhibitName: n.split('/')[1] + `_${generateRandomCode()}`,
                 candidate: {
                   name: n,
                   versionRange: 'latest',
@@ -237,8 +241,11 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             }),
           },
         });
-        onChange({
-          addExhibitDrawerVisible: false,
+        await dispatch<FetchThemeListAction>({
+          type: 'informalNodeManagerPage/fetchThemeList',
+          payload: {
+            isRematch: false,
+          },
         });
       }}
       disabledResourceNames={['Freelog/blog-theme']}

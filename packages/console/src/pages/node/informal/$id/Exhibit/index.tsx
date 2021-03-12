@@ -28,6 +28,7 @@ import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
 import {resourceTypes} from "@/utils/globals";
+import {generateRandomCode} from "@/utils/tools";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -202,7 +203,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             data: value.names.map((n) => {
               return {
                 operation: 'add',
-                exhibitName: n.replace('/', '_'),
+                exhibitName: n.split('/')[1] + `_${generateRandomCode()}`,
                 candidate: {
                   name: n,
                   versionRange: 'latest',
