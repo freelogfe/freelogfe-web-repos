@@ -25,6 +25,7 @@ import {FCheck, FLoading} from '@/components/FIcons';
 import FFormLayout from "@/layouts/FFormLayout";
 import * as H from "history";
 import Prompt from "umi/prompt";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -90,10 +91,8 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
             promptLeavePath: location.pathname,
           }
         });
-        Modal.confirm({
-          title: '还没有创建资源，现在离开会导致信息丢失',
-          // icon: </>,
-          // content: 'Some descriptions',
+        fConfirmModal({
+          message: '还没有创建资源，现在离开会导致信息丢失',
           onOk() {
             // console.log('OK');
             router.push(location.pathname);

@@ -40,6 +40,7 @@ import Prompt from 'umi/prompt';
 import * as H from "history";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -169,10 +170,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
               promptLeavePath: location.pathname,
             }
           });
-          Modal.confirm({
-            title: '还没有保存草稿或发行，现在离开会导致信息丢失',
-            // icon: </>,
-            // content: 'Some descriptions',
+          fConfirmModal({
+            message: '还没有保存草稿或发行，现在离开会导致信息丢失',
             onOk() {
               // console.log('OK');
               router.push(location.pathname);

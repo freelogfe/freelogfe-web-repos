@@ -20,6 +20,7 @@ import {i18nMessage} from "@/utils/i18n";
 import {Link} from 'umi';
 import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
+import fConfirmModal from "@/components/fConfirmModal";
 
 // import {storageSpace} from "@/utils/path-assembler";
 
@@ -106,14 +107,8 @@ function Sider({storage, dispatch}: SiderProps) {
                           e.preventDefault();
                           // console.log('@#@#$dsiofud890saufoisdajfl;sd');
                           if (b.totalFileQuantity === 0) {
-                            Modal.confirm({
-                              // title: <div></div>,
-                              // icon: <FWarning style={{display: 'inline-block'}}/>,
-                              icon: null,
-                              content: (<Space size={10}>
-                                <FWarning style={{display: 'inline-block'}}/>
-                                <span>存储空间一旦删除则无法恢复，确认删除吗？</span>
-                              </Space>),
+                            fConfirmModal({
+                              message: '存储空间一旦删除则无法恢复，确认删除吗？',
                               onOk() {
                                 dispatch<DeleteBucketByNameAction>({
                                   type: 'storageHomePage/deleteBucketByName',
@@ -121,7 +116,6 @@ function Sider({storage, dispatch}: SiderProps) {
                                 });
                               },
                             });
-
                           } else {
                             fMessage('该存储空间内还有未删除模拟资源', 'warning');
                           }

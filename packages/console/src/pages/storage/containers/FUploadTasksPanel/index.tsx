@@ -18,6 +18,7 @@ import FModal from '@/components/FModal';
 import {FTipText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
 import {FWarning} from "@/components/FIcons";
+import fConfirmModal from "@/components/fConfirmModal";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -88,12 +89,8 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         <FTextButton onClick={() => {
           const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storage.uploadTaskQueue.find((i) => i.state !== 1);
           if (exits) {
-            Modal.confirm({
-              icon: null,
-              content: (<Space size={10}>
-                <FWarning style={{display: 'inline-block'}}/>
-                <span>{i18nMessage('cancel_all_uploading_task')}</span>
-              </Space>),
+            fConfirmModal({
+              message: i18nMessage('cancel_all_uploading_task'),
               onOk() {
                 closeAll();
               },

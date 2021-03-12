@@ -27,6 +27,7 @@ import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -66,14 +67,8 @@ function Content({storage, dispatch}: ContentProps) {
             showEdit={!isUserDataBucket}
             onClickDownload={() => downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => {
-              Modal.confirm({
-                // title: <div></div>,
-                // icon: <FWarning style={{display: 'inline-block'}}/>,
-                icon: null,
-                content: (<Space size={10}>
-                  <FWarning style={{display: 'inline-block'}}/>
-                  <span>存储空间对象一旦删除则无法恢复，确认删除吗？</span>
-                </Space>),
+              fConfirmModal({
+                message: '存储空间对象一旦删除则无法恢复，确认删除吗？',
                 onOk() {
                   onClickDelete(record);
                 },

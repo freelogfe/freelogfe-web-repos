@@ -13,6 +13,7 @@ import {FApiServer} from "@/services";
 import {Modal, Space} from "antd";
 import {FWarning} from "@/components/FIcons";
 import {i18nMessage} from "@/utils/i18n";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -78,12 +79,8 @@ function Task({
           setStatus('success');
           onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
         } else {
-          Modal.confirm({
-            icon: null,
-            content: (<Space size={10}>
-              <FWarning style={{display: 'inline-block'}}/>
-              <span>文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？</span>
-            </Space>),
+          fConfirmModal({
+            message: '文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？',
             onOk() {
               setStatus('success');
               onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
@@ -119,12 +116,8 @@ function Task({
             setStatus('success');
             onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
           } else {
-            Modal.confirm({
-              icon: null,
-              content: (<Space size={10}>
-                <FWarning style={{display: 'inline-block'}}/>
-                <span>文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？</span>
-              </Space>),
+            fConfirmModal({
+              message: '文件格式与对象的资源类型冲突，更新操作将会清空对象的各项设置，包括资源类型、依赖、自定义属性、自定义选项等，是否继续？',
               onOk() {
                 setStatus('success');
                 onSucceed && onSucceed({uid: file.uid, objectName: file.name, sha1: file.sha1});
