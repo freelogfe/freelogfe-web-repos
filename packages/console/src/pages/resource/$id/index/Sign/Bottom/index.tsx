@@ -7,6 +7,7 @@ import {router} from 'umi';
 import {ChangeAction} from "@/models/marketResourcePage";
 import {exhibitManagement} from "@/utils/path-assembler";
 import {FComponent} from "@/components";
+import {FApiServer} from "@/services";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -25,11 +26,15 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             || marketResourcePage.version === ''
             || marketResourcePage.signResources.map((sr) => sr.policies.filter((srp) => srp.checked).length).includes(0)
           }
-          onClick={() => {
-            dispatch<ChangeAction>({
+          onClick={async () => {
+            const signExhibitName: string = await getAvailableExhibitName({
+              nodeID: marketResourcePage.selectedNodeID,
+              exhibitName: marketResourcePage.resourceInfo?.name.split('/')[1] || '',
+            });
+            await dispatch<ChangeAction>({
               type: 'marketResourcePage/change',
               payload: {
-                signExhibitName: marketResourcePage.resourceInfo?.name?.split('/')[1] || '',
+                signExhibitName: signExhibitName,
                 signExhibitNameErrorTip: '',
                 isSignPage: true,
               }
@@ -49,3 +54,26 @@ export default connect(({marketResourcePage}: ConnectState) => ({
   marketResourcePage,
 }))(Bottom);
 
+interface GetAvailableExhibitNameParamType {
+  nodeID: number;
+  exhibitName: string;
+  suffixNum?: number;
+}
+
+async function getAvailableExhibitName({nodeID, exhibitName, suffixNum = 0}: GetAvailableExhibitNameParamType): Promise<string> {
+  const name: string = exhibitName + (suffixNum ? `_${suffixNum}` : '');
+  const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+    nodeId: nodeID,
+    presentableName: name,
+  };
+  const {data} = await FApiServer.Exhibit.presentableDetails(params);
+  if (data) {
+    return await getAvailableExhibitName({
+      nodeID,
+      exhibitName,
+      suffixNum: suffixNum + 1,
+    });
+  }
+
+  return name;
+}

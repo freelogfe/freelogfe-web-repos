@@ -8,10 +8,11 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import {router} from 'umi';
-import {ChangeAction, SignContractAction} from '@/models/marketResourcePage';
+import {ChangeAction, OnChangeAndVerifySignExhibitNameAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/layouts/FFormLayout";
 import {FIcon} from "@/components";
+import * as imgSrc from "@/assets/default-resource-cover.jpg";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -34,7 +35,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       <div className={styles.headerResource}>
         <img
           alt={''}
-          src={marketResourcePage.resourceInfo?.cover || undefined}
+          src={marketResourcePage.resourceInfo?.cover || imgSrc}
         />
         <div style={{width: 8}}/>
         <FContentText text={marketResourcePage.resourceInfo?.name}/>
@@ -58,7 +59,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
         onClick={() => dispatch<SignContractAction>({
           type: 'marketResourcePage/signContract',
         })}
-        // disabled={!EXHIBIT_NAME.test(marketResourcePage.signExhibitName)}
+        disabled={!!marketResourcePage.signExhibitNameErrorTip}
       >确认签约</FNormalButton>
     </div>
   </div>}>
@@ -73,7 +74,6 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
               text={selectedNode?.nodeName}
             />
           </Space>
-
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock
@@ -87,16 +87,21 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           <FInput
             value={marketResourcePage.signExhibitName}
             className={styles.exhibitNameInput}
-            onChange={(e) => dispatch<ChangeAction>({
-              type: 'marketResourcePage/change',
-              payload: {
-                signExhibitName: e.target.value,
-                signExhibitNameErrorTip: '',
-              },
-            })}
+            debounce={300}
+            onDebounceChange={(value) => {
+              dispatch<OnChangeAndVerifySignExhibitNameAction>({
+                type: 'marketResourcePage/onChangeAndVerifySignExhibitName',
+                payload: value,
+              });
+            }}
           />
-          <div style={{height: 5}}/>
-          <div className={styles.signExhibitNameErrorTip}>{marketResourcePage.signExhibitNameErrorTip}</div>
+          {
+            marketResourcePage.signExhibitNameErrorTip && (<>
+              <div style={{height: 5}}/>
+              <div className={styles.signExhibitNameErrorTip}>{marketResourcePage.signExhibitNameErrorTip}</div>
+            </>)
+          }
+
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'确认签约策略'}>
