@@ -1,31 +1,22 @@
-import { Controller, Get, Provide, Inject } from '@midwayjs/decorator';
-import { Context } from 'egg';
+import { App, Controller, Get, Provide, Inject } from '@midwayjs/decorator';
+import { Context, Application  } from 'egg';
 const mime = require('mime')
 import fse = require('fs-extra');
 import path = require('path');
-var JSZip = require("jszip");
-var fs = require("fs");
-const StreamZip = require('node-stream-zip');
-const zip = new StreamZip({ file: 'archive.zip' });
+var fs = require('fs'), 
+    AdmZip = require('adm-zip'); 
 
 @Provide()
 @Controller('/')
 export class HomeController {
   @Inject()
   ctx: Context;
-
+  @App()
+  app: Application;
   @Get('/')
   async home() {
-
     const ctx = this.ctx
     // console.log(ctx.url,ctx.query)
-    fs.readFile(path.join(ctx.app.baseDir, "/dist.zip"), function (err, data) {
-      if (err) throw err;
-      JSZip.loadAsync(data).then(function (zip) {
-        // console.log(zip)
-        saveZipFiles(path.join(ctx.app.baseDir, "../view"), zip)
-      });
-    });
     let data
     try {
       data = fse.readFileSync(path.join(ctx.app.baseDir, '../view/markdown/index.html')).toString();
@@ -33,7 +24,6 @@ export class HomeController {
     } catch (e) {
       console.log('读取文件发生错误');
     }
-
     ctx.body = data
     // return 'Hello Midwayjs!';
   }
