@@ -1,25 +1,12 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {
-  batchAuth,
-  BatchAuthParamsType,
-  presentableDetails,
-  PresentableDetailsParamsType1,
-  PresentablesOnlineParamsType,
-  presentablesOnlineStatus,
-  presentablesVersion,
-  PresentablesVersionParamsType,
-  updatePresentable,
-  UpdatePresentableParamsType,
-  updateRewriteProperty,
-  UpdateRewritePropertyParamsType
-} from '@/services/presentables';
 import {ConnectState} from '@/models/connect';
 import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
 import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
+import {FApiServer} from "@/services";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -27,6 +14,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
 
   nodeId: number;
   nodeName: string;
+  nodeThemeId: string;
   pName: string;
   isOnline: boolean;
   isAuth: boolean;
@@ -187,6 +175,7 @@ const Model: ExhibitInfoPageModelType = {
 
     nodeId: -1,
     nodeName: '',
+    nodeThemeId: '',
     pName: '',
     isOnline: false,
     isAuth: true,
@@ -229,23 +218,28 @@ const Model: ExhibitInfoPageModelType = {
         nodes,
       }));
 
-      const params: PresentableDetailsParamsType1 = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(presentableDetails, params);
+      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
 
-      const parmas: InfoParamsType = {
+      const params3: Parameters<typeof FApiServer.Node.details>[0] = {
+        nodeId: data.nodeId,
+      };
+
+      const {data: data3} = yield call(FApiServer.Node.details, params3);
+      // console.log(data3, 'data90j23rlkfjasdfa');
+
+      const params2: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
 
-      const {data: data2} = yield call(info, parmas);
+      const {data: data2} = yield call(FApiServer.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
-
-      const nodeName: string = nodes.list.find((n) => n.nodeId === data.nodeId)?.nodeName || '';
 
       const disabledRewriteKeys = [
         ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
@@ -253,19 +247,20 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(data, 'data2341234');
 
-      const params1: BatchAuthParamsType = {
+      const params1: Parameters<typeof FApiServer.Exhibit.batchAuth>[0] = {
         nodeId: data.nodeId,
         authType: 3,
         presentableIds: data.presentableId,
       };
-      const {data: data1} = yield call(batchAuth, params1);
+      const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
       // presentableId
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeId: data.nodeId,
-          nodeName: nodeName,
+          nodeName: data3.nodeName,
+          nodeThemeId: data3.nodeThemeId,
           pName: data.presentableName,
           isOnline: data.onlineStatus === 1,
           isAuth: data1[0].isAuth,
@@ -354,7 +349,7 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: UpdatePresentableParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         addPolicies: [{
           policyName: payload.title,
@@ -362,7 +357,7 @@ const Model: ExhibitInfoPageModelType = {
           status: 1,
         }],
       };
-      yield call(updatePresentable, params);
+      yield call(FApiServer.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -371,14 +366,14 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: UpdatePresentableParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         updatePolicies: [{
           policyId: payload.id,
           status: payload.status,
         }],
       };
-      yield call(updatePresentable, params);
+      yield call(FApiServer.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -387,13 +382,13 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: UpdatePresentableParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         presentableTitle: payload.pTitle,
         tags: payload.pTags,
         coverImages: payload.pCover ? [payload.pCover] : undefined,
       };
-      yield call(updatePresentable, params);
+      yield call(FApiServer.Exhibit.updatePresentable, params);
       yield put<ChangeAction>({
         type: 'change',
         payload,
@@ -403,20 +398,23 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: PresentablesOnlineParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         onlineStatus: payload,
       };
-      const {data} = yield call(presentablesOnlineStatus, params);
+      const {data} = yield call(FApiServer.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
         fMessage(exhibitInfoPage.resourceType === 'theme' ? '激活失败' : '上线失败', 'error');
         return;
       }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          isOnline: payload === 1,
-        },
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     isOnline: payload === 1,
+      //   },
+      // });
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
       });
     },
     * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
@@ -425,7 +423,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
       const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#');
-      const params: UpdatePresentableParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         resolveResources: [
           {
@@ -437,7 +435,7 @@ const Model: ExhibitInfoPageModelType = {
           }
         ]
       };
-      yield call(updatePresentable, params);
+      yield call(FApiServer.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -455,7 +453,7 @@ const Model: ExhibitInfoPageModelType = {
           };
         });
 
-      const params: UpdateRewritePropertyParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.updateRewriteProperty>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         rewriteProperty: pCustomAttrs
           .filter((pc) => pc.value !== pc.defaultValue)
@@ -465,7 +463,7 @@ const Model: ExhibitInfoPageModelType = {
             remark: pc.remark,
           })),
       };
-      yield call(updateRewriteProperty, params);
+      yield call(FApiServer.Exhibit.updateRewriteProperty, params);
 
       // 同步数据
       yield put<ChangeAction>({
@@ -479,11 +477,11 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: PresentablesVersionParamsType = {
+      const params: Parameters<typeof FApiServer.Exhibit.presentablesVersion>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         version: payload,
       };
-      yield call(presentablesVersion, params);
+      yield call(FApiServer.Exhibit.presentablesVersion, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });

@@ -24,7 +24,8 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import {exhibitManagement} from "@/utils/path-assembler";
+import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
+import FLink from "@/components/FLink";
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -112,22 +113,18 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       // width: 100,
       className: styles.tableEdit,
       render(_, record): any {
-        return (<Space size={25}>
-          <FTextButton
-            onClick={() => {
-              // router.push('/node/exhibit/formal/' + record.id)
-              router.push(exhibitManagement({exhibitID: record.id}));
-            }}
-            theme="primary"
-          >
-            <FEdit/>
-          </FTextButton>
-          <FTextButton
-            onClick={() => router.push('/resource/' + record.resourceId)}
-            theme="primary"
-          >
-            <FFileSearch/>
-          </FTextButton>
+        return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
+          <FTooltip title={'编辑'}>
+            <FLink to={FLinkTo.exhibitManagement({
+              exhibitID: record.id
+            })}><FEdit/></FLink>
+          </FTooltip>
+
+          <FTooltip title={'资源详情'}>
+            <FLink to={FLinkTo.resourceDetails({
+              resourceID: record.resourceId
+            })}><FFileSearch/></FLink>
+          </FTooltip>
         </Space>)
       }
     },
@@ -250,6 +247,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
             />)
             : (<div className={styles.body}>
               <FTable
+                rowClassName={styles.rowClassName}
                 columns={columns}
                 dataSource={dataSource as any}
                 pagination={false}

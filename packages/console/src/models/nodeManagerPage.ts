@@ -3,14 +3,6 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {completeUrlByDomain} from "@/utils/format";
-// import {
-//   batchAuth,
-//   BatchAuthParamsType,
-//   presentables,
-//   PresentablesOnlineParamsType,
-//   presentablesOnlineStatus,
-//   PresentablesParamsType,
-// } from "@/services/presentables";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
 
@@ -20,6 +12,7 @@ export type NodeManagerModelState = WholeReadonly<{
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
+  nodeThemeId: string;
   showTheme: boolean;
 
   selectedType: string;
@@ -63,11 +56,11 @@ export interface ChangeAction extends AnyAction {
 }
 
 export interface FetchNodeInfoAction extends AnyAction {
-  type: 'nodeManagerPage/fetchNodeInfo';
+  type: 'nodeManagerPage/fetchNodeInfo' | 'fetchNodeInfo';
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'nodeManagerPage/fetchInfo' | 'fetchInfo';
+export interface FetchExhibitsAction extends AnyAction {
+  type: 'nodeManagerPage/fetchExhibits' | 'fetchExhibits';
 }
 
 export interface OnChangeExhibitAction extends AnyAction {
@@ -83,7 +76,6 @@ export interface OnChangeExhibitAction extends AnyAction {
 
 export interface FetchThemesAction extends AnyAction {
   type: 'nodeManagerPage/fetchThemes' | 'fetchThemes';
-  // payload: 'nodeManagerPage/fetchThemes';
 }
 
 export interface OnChangeThemeAction extends AnyAction {
@@ -105,7 +97,6 @@ export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
     id: string;
-    // onlineStatus: 0 | 1;
   },
 }
 
@@ -114,7 +105,7 @@ export interface NodeManagerModelType {
   state: NodeManagerModelState;
   effects: {
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchExhibits: (action: FetchExhibitsAction, effects: EffectsCommandMap) => void;
     onChangeExhibit: (action: OnChangeExhibitAction, effects: EffectsCommandMap) => void;
     onOnlineOrOffline: (action: OnOnlineOrOfflineAction, effects: EffectsCommandMap) => void;
     onActive: (action: OnActiveAction, effects: EffectsCommandMap) => void;
@@ -137,6 +128,7 @@ const Model: NodeManagerModelType = {
     nodeName: '',
     nodeUrl: '',
     testNodeUrl: '',
+    nodeThemeId: '',
     showTheme: false,
 
     selectedType: '-1',
@@ -154,6 +146,9 @@ const Model: NodeManagerModelType = {
   },
   effects: {
     * fetchNodeInfo({}: FetchNodeInfoAction, {put, select, call}: EffectsCommandMap) {
+
+      // console.log('节点拉取节点信息');
+
       const {nodes, nodeManagerPage}: ConnectState = yield select(({nodes, nodeManagerPage}: ConnectState) => ({
         nodeManagerPage,
       }));
@@ -170,10 +165,11 @@ const Model: NodeManagerModelType = {
           nodeName: data?.nodeName,
           nodeUrl: completeUrlByDomain(data?.nodeDomain || ''),
           testNodeUrl: completeUrlByDomain('t.' + (data?.nodeDomain || '')),
+          nodeThemeId: data.nodeThemeId,
         },
       });
     },
-    * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
+    * fetchExhibits({}: FetchExhibitsAction, {call, select, put}: EffectsCommandMap) {
       const {nodeManagerPage}: ConnectState = yield select(({nodeManagerPage}: ConnectState) => ({
         nodeManagerPage,
       }));
@@ -248,8 +244,8 @@ const Model: NodeManagerModelType = {
           },
         });
       }
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      yield put<FetchExhibitsAction>({
+        type: 'fetchExhibits',
       });
     },
     * fetchThemes({}: FetchThemesAction, {call, put, select}: EffectsCommandMap) {
@@ -358,27 +354,9 @@ const Model: NodeManagerModelType = {
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
       });
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     exhibitList: nodeManagerPage.th
-      //       .map((el) => {
-      //         if (payload.id !== el.id) {
-      //           return el;
-      //         }
-      //         return {
-      //           ...el,
-      //           isOnline: payload.onlineStatus === 1,
-      //         }
-      //       })
-      //       .filter((el) => {
-      //         if (nodeManagerPage.selectedStatus === '2') {
-      //           return true;
-      //         }
-      //         return el.isOnline === (nodeManagerPage.selectedStatus === '1')
-      //       }),
-      //   },
-      // });
+      yield put<FetchNodeInfoAction>({
+        type: 'fetchNodeInfo',
+      });
     },
     * onChangeTheme({payload}: OnChangeThemeAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

@@ -10,15 +10,14 @@ import Side from './Side';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
 import {ChangeAction, FetchInfoAction, UpdateStatusAction} from '@/models/exhibitInfoPage';
-import RouterTypes from 'umi/routerTypes';
-// import {details} from '@/services/nodes';
-import {FTextButton} from '@/components/FButton';
-import {router} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
-import {informExhibitManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
+import FLinkTo from "@/utils/path-assembler";
+import fConfirmModal from "@/components/fConfirmModal";
+import {i18nMessage} from "@/utils/i18n";
+import {OnActiveAction} from "@/models/nodeManagerPage";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -44,10 +43,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
-          {/*<FTextButton onClick={() => {*/}
-          {/*  router.push(nodeManagement({nodeID: exhibitInfoPage.nodeId}));*/}
-          {/*}}><FContentText type="negative" text={exhibitInfoPage.nodeName}/></FTextButton>*/}
-          <FLink to={nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
+          <FLink to={FLinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
             <FContentText type="negative" text={exhibitInfoPage.nodeName}/>
           </FLink>
           <div style={{width: 2}}/>
@@ -65,10 +61,28 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           <FSwitch
             disabled={!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
             checked={exhibitInfoPage.isOnline}
-            onChange={(value) => dispatch<UpdateStatusAction>({
-              type: 'exhibitInfoPage/updateStatus',
-              payload: value ? 1 : 0,
-            })}
+            onChange={(value) => {
+              if (exhibitInfoPage.resourceType !== 'theme' || !exhibitInfoPage.nodeThemeId || !value) {
+                dispatch<UpdateStatusAction>({
+                  type: 'exhibitInfoPage/updateStatus',
+                  payload: value ? 1 : 0,
+                });
+                return;
+              }
+
+              fConfirmModal({
+                message: i18nMessage('msg_change_theme_confirm'),
+                okText: i18nMessage('active_new_theme'),
+                cancelText: i18nMessage('keep_current_theme'),
+                onOk() {
+                  dispatch<UpdateStatusAction>({
+                    type: 'exhibitInfoPage/updateStatus',
+                    payload: value ? 1 : 0,
+                  });
+                },
+              });
+
+            }}
           />
           {
             !exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0 ? (

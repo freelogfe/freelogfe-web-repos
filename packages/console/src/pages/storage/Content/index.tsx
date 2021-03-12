@@ -14,7 +14,6 @@ import {
   ChangeAction as HomePageChangeAction, FetchObjectsAction, DeleteBucketByNameAction
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
-import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
 import {FDelete, FEdit, FWarning} from "@/components/FIcons";
 import FNoDataTip from "@/components/FNoDataTip";
 import FUploadTasksPanel from "@/pages/storage/containers/FUploadTasksPanel";
@@ -23,11 +22,11 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
-// import {linkToObjectDetails, objectDetails} from "@/utils/path-assembler";
 import FLinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
+import FLink from "@/components/FLink";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -65,7 +64,6 @@ function Content({storage, dispatch}: ContentProps) {
             objectID={record.id}
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
-            // onClickEdit={() => onClickEdit(record)}
             onClickDownload={() => downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => {
               Modal.confirm({
@@ -224,14 +222,15 @@ interface ToolsBarProps {
 
 function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, showDelete = true, onClickDownload, onClickDelete}: ToolsBarProps) {
   return (<Space
+    className={styles.toolBar}
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
       showEdit && (<FTooltip title={'编辑'}>
-        <Link to={FLinkTo.objectDetails({
+        <FLink to={FLinkTo.objectDetails({
           bucketName,
           objectID: objectID,
-        })}><FEdit/></Link>
+        })}><FEdit/></FLink>
       </FTooltip>)
     }
     {

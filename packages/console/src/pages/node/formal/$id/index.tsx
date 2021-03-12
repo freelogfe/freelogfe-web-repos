@@ -3,11 +3,10 @@ import styles from './index.less';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
 import {withRouter} from 'umi';
-import RouterTypes from 'umi/routerTypes';
 import {Dispatch, connect} from 'dva';
 import {
   ChangeAction,
-  FetchInfoAction,
+  FetchExhibitsAction,
   FetchNodeInfoAction,
   FetchThemesAction,
   NodeManagerModelState
@@ -34,8 +33,8 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
       type: 'nodeManagerPage/fetchNodeInfo',
     });
 
-    dispatch<FetchInfoAction>({
-      type: 'nodeManagerPage/fetchInfo',
+    dispatch<FetchExhibitsAction>({
+      type: 'nodeManagerPage/fetchExhibits',
     });
 
     dispatch<FetchThemesAction>({

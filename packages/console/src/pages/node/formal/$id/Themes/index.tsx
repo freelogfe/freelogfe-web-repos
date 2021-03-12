@@ -16,7 +16,9 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import {exhibitManagement, nodeCreator} from "@/utils/path-assembler";
+import FLinkTo, {exhibitManagement, nodeCreator} from "@/utils/path-assembler";
+import FLink from "@/components/FLink";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -65,7 +67,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                 resourceType: 'theme',
               }
             });
-            router.push('/market');
+            router.push(FLinkTo.market());
           }}
         />)
         : (<>
@@ -100,25 +102,48 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                         </FTooltip> : ''}
                       </Space>
 
-                      <img alt="" src={i.cover || imgSrc}/>
+                      <img
+                        alt=""
+                        src={i.cover || imgSrc}
+                      />
+
                       <div
                         className={styles.action}
                         style={{justifyContent: i.isOnline || !i.isAuth || i.policies.length === 0 ? 'center' : 'space-between'}}
                       >
                         <span onClick={() => {
                           // router.push('/node/exhibit/formal/' + i.id)
-                          router.push(exhibitManagement({exhibitID: i.id}));
+                          router.push(FLinkTo.exhibitManagement({exhibitID: i.id}));
                         }}>编辑</span>
                         {
                           !i.isOnline && i.isAuth && i.policies.length > 0 && (<>
                             <span>|</span>
                             <span onClick={() => {
-                              dispatch<OnActiveAction>({
-                                type: 'nodeManagerPage/onActive',
-                                payload: {
-                                  id: i.id,
-                                }
+
+                              if (!nodeManagerPage.nodeThemeId) {
+                                dispatch<OnActiveAction>({
+                                  type: 'nodeManagerPage/onActive',
+                                  payload: {
+                                    id: i.id,
+                                  }
+                                });
+                                return;
+                              }
+
+                              fConfirmModal({
+                                message: i18nMessage('msg_change_theme_confirm'),
+                                okText: i18nMessage('active_new_theme'),
+                                cancelText: i18nMessage('keep_current_theme'),
+                                onOk() {
+                                  dispatch<OnActiveAction>({
+                                    type: 'nodeManagerPage/onActive',
+                                    payload: {
+                                      id: i.id,
+                                    }
+                                  });
+                                },
                               });
+
                             }}>激活</span>
                           </>)
                         }

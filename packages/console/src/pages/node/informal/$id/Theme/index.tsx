@@ -127,7 +127,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                               <span>|</span>
                               <span onClick={() => {
                                 const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                                console.log(rules, 'rules1234234');
+                                // console.log(rules, 'rules1234234');
                                 const rule = rules.find((r) => r.themeName);
 
                                 let data;

@@ -8,7 +8,8 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
 import {router, withRouter} from "umi";
-import {informNodeManagement, nodeManagement} from "@/utils/path-assembler";
+import FLinkTo, {informNodeManagement, nodeManagement} from "@/utils/path-assembler";
+import FLink from "@/components/FLink";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -27,42 +28,56 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
   // }, []);
 
   return (<div className={styles.styles}>
-    <div>
-      <FTitleText type="h3" text={nodeManagerPage.nodeName}/>
-      <div style={{height: 15}}/>
-      <span className={styles.url}>{nodeManagerPage.nodeUrl}</span>
-      <FCopyToClipboard text={nodeManagerPage.nodeUrl} title={'复制节点地址'}/>
-      <div style={{height: 25}}/>
-
-      <div className={styles.selector}>
+      <div className={styles.header}>
         <div style={{height: 30}}/>
-        <a
-          className={!nodeManagerPage.showTheme ? styles.active : ''}
-          onClick={() => dispatch<ChangeAction>({
-            type: 'nodeManagerPage/change',
-            payload: {
-              showTheme: false,
-            }
-          })}
-        >展品管理</a>
-        <div style={{height: 16}}/>
-        <a
-          className={nodeManagerPage.showTheme ? styles.active : ''}
-          onClick={() => dispatch<ChangeAction>({
-            type: 'nodeManagerPage/change',
-            payload: {
-              showTheme: true,
-            }
-          })}
-        >主题管理</a>
-      </div>
-    </div>
 
-    <Button onClick={() => {
-      // router.push(`/node/${match.params.id}/informal`);
-      router.push(informNodeManagement({nodeID: Number(match.params.id)}));
-    }}>进入测试节点</Button>
-  </div>);
+        <div className={styles.title}>
+          <FTitleText type="h3" text={nodeManagerPage.nodeName}/>
+          <div style={{height: 15}}/>
+          <a
+            className={styles.url}
+            href={nodeManagerPage.nodeUrl}
+          >{nodeManagerPage.nodeUrl}</a>
+          <FCopyToClipboard
+            text={nodeManagerPage.nodeUrl}
+            title={'复制节点地址'}
+          />
+        </div>
+
+        <div style={{height: 35}}/>
+
+        <div className={styles.navs}>
+          <a
+            className={!nodeManagerPage.showTheme ? styles.activated : ''}
+            onClick={() => dispatch<ChangeAction>({
+              type: 'nodeManagerPage/change',
+              payload: {
+                showTheme: false,
+              }
+            })}
+          >展品管理</a>
+          <a
+            className={nodeManagerPage.showTheme ? styles.activated : ''}
+            onClick={() => dispatch<ChangeAction>({
+              type: 'nodeManagerPage/change',
+              payload: {
+                showTheme: true,
+              }
+            })}
+          >主题管理</a>
+        </div>
+      </div>
+
+      <div className={styles.gotoTest}>
+        <span>这里是正式节点管理页面，如想要对资源进行测试，可以 </span>
+        <FLink
+          to={FLinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
+        > 前往测试节点</FLink>
+        <div style={{height: 40}}/>
+      </div>
+
+    </div>
+  );
 }
 
 export default withRouter(connect(({nodeManagerPage}: ConnectState) => ({
