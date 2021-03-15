@@ -244,7 +244,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             </>)
           }
 
-          <div style={{height: 25}}/>
+          {/*<div style={{height: 25}}/>*/}
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FAutoComplete
