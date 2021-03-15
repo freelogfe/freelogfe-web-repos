@@ -46,7 +46,7 @@ export interface MarketModelType {
   };
   subscriptions: {
     setup: Subscription;
-    fetchData: Subscription;
+    // fetchData: Subscription;
   };
 }
 
@@ -148,15 +148,15 @@ const Model: MarketModelType = {
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
     },
-    fetchData({dispatch, history}: SubscriptionAPI) {
-      history.listen((listener) => {
-        if (listener.pathname === '/market') {
-          dispatch<FetchDataSourceAction>({
-            type: 'fetchDataSource',
-          });
-        }
-      });
-    },
+    // fetchData({dispatch, history}: SubscriptionAPI) {
+    //   history.listen((listener) => {
+    //     if (listener.pathname === '/market') {
+    //       dispatch<FetchDataSourceAction>({
+    //         type: 'fetchDataSource',
+    //       });
+    //     }
+    //   });
+    // },
   },
 
 };
