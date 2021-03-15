@@ -1,32 +1,28 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCenterLayout from '@/layouts/FCenterLayout';
 import {Dispatch, connect} from 'dva';
-import {ChangeAction} from '@/models/global';
 import Sign from './Sign';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FSwap} from '@/components/FIcons';
+import {FFavorite, FSwap} from '@/components/FIcons';
 import Description from './Description';
 import Property from './Property';
 import Option from './Option';
 import Viewport from '@/pages/resource/$id/index/Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
-import FDropdown from '@/components/FDropdown';
-import {ClearDataDataAction, FetchInfoAction, InitDataAction, OnChangeVersionAction} from '@/models/marketResourcePage';
-import RouterTypes from 'umi/routerTypes';
+import {
+  ClearDataDataAction,
+  InitDataAction,
+  OnChangeVersionAction,
+  OnClickCollectionAction
+} from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import {Alert} from 'antd';
+import {Alert, Space} from 'antd';
 import SignPage from './SignPage';
 import {RouteComponentProps} from "react-router";
 
-interface ResourceDetailsProps extends RouteComponentProps<{ id: string }>{
+interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState,
-  // match: {
-  //   params: {
-  //     id: string;
-  //   };
-  // };
 }
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
@@ -51,14 +47,41 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
   return (<div className={styles.style}>
 
     <div className={styles.wrap}>
-      <div style={{height: 20}}/>
+
       {
         !!marketResourcePage.signResources.find((sr) => {
           return sr.status === 0;
-        }) && (<Alert message={'当前主资源或上抛有未上线资源，不可用！'} type="error"/>)
+        }) && (<>
+          <div style={{height: 20}}/>
+          <Alert message={'当前主资源或上抛有未上线资源，不可用！'} type="error"/>
+          <div style={{height: 20}}/>
+        </>)
       }
 
-      <div style={{height: 20}}/>
+      <div style={{height: 35}}/>
+
+      <div className={styles.header}>
+        <Space size={10}>
+          <label className={styles.resourceType}>{marketResourcePage.resourceInfo?.type || ''}</label>
+          <FTitleText text={marketResourcePage.resourceInfo?.name || ''}/>
+        </Space>
+        <a
+          className={styles.favoriteBtn}
+          onClick={() => dispatch<OnClickCollectionAction>({
+            type: 'marketResourcePage/onClickCollection',
+          })}
+        >
+          <FFavorite
+            filled={marketResourcePage.hasCollect}
+          />
+          <div style={{width: 2}}/>
+          <span>{marketResourcePage.hasCollect ? '已收藏' : '收藏'}</span>
+          <div style={{width: 5}}/>
+          <span>({marketResourcePage.popularity}人气)</span>
+        </a>
+      </div>
+
+      <div style={{height: 35}}/>
 
       <Sign/>
 

@@ -52,7 +52,8 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       </div>
       <div>
         <div style={{height: 20}}/>
-        <a className={styles.favoriteBtn} onClick={() => dispatch<OnClickCollectionAction>({
+        <a className={styles.favoriteBtn}
+           onClick={() => dispatch<OnClickCollectionAction>({
           type: 'marketResourcePage/onClickCollection',
         })}>
           <FFavorite
