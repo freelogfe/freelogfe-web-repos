@@ -20,9 +20,11 @@ import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
-import {informExhibitManagement} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 import {generateRandomCode} from "@/utils/tools";
+import FDivider from "@/components/FDivider";
+import FLink from "@/components/FLink";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -96,6 +98,8 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             <div className={styles.list}>
               {
                 informalNodeManagerPage.themeList.map((t, index, arr) => {
+
+
                   return (<div
                     key={t.id}
                     className={styles.item}
@@ -114,71 +118,70 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                         }
                       </div>
                       <div className={styles.coverFooter}>
-                        {
-                          t.isOnline
-                            ? (<span onClick={() => {
-                              router.push(informExhibitManagement({exhibitID: t.id}));
-                            }}>编辑</span>)
-                            : (<div>
-                              <div style={{width: 1}}/>
-                              <span onClick={() => {
-                                router.push(informExhibitManagement({exhibitID: t.id}));
-                              }}>编辑</span>
-                              <span>|</span>
-                              <span onClick={() => {
-                                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                                // console.log(rules, 'rules1234234');
-                                const rule = rules.find((r) => r.themeName);
+                        <div>
+                          <div style={{width: 1}}/>
+                          <FLink to={FLinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
+                          {
+                            t.originInfo.type === 'resource' && (<>
+                              <FDivider/>
+                              <FLink
+                                to={FLinkTo.resourceDetails({resourceID: t.originInfo.id})}>资源详情</FLink>
+                            </>)
+                          }
+                          <FDivider/>
+                          <a onClick={() => {
+                            const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                            // console.log(rules, 'rules1234234');
+                            const rule = rules.find((r) => r.themeName);
 
-                                let data;
+                            let data;
 
-                                if (rule) {
-                                  data = rules.map((r) => {
-                                    if (!r.themeName) {
-                                      return r;
-                                    }
-                                    return {
-                                      ...r,
-                                      themeName: t.name,
-                                    };
-                                  });
-                                } else {
-                                  data = [
-                                    ...rules,
-                                    {
-                                      operation: 'activate_theme',
-                                      themeName: t.name,
-                                    },
-                                  ];
+                            if (rule) {
+                              data = rules.map((r) => {
+                                if (!r.themeName) {
+                                  return r;
                                 }
-                                // console.log(rule, 'rule21930usdf');
+                                return {
+                                  ...r,
+                                  themeName: t.name,
+                                };
+                              });
+                            } else {
+                              data = [
+                                ...rules,
+                                {
+                                  operation: 'activate_theme',
+                                  themeName: t.name,
+                                },
+                              ];
+                            }
+                            // console.log(rule, 'rule21930usdf');
 
-                                dispatch<SaveDataRulesAction>({
-                                  type: 'informalNodeManagerPage/saveDataRules',
-                                  payload: {
-                                    type: 'replace',
-                                    data: data,
-                                  },
-                                });
-                                onChange({
-                                  themeList: arr.map((ttt) => {
-                                    if (ttt.id !== t.id) {
-                                      return {
-                                        ...ttt,
-                                        isOnline: false,
-                                      };
-                                    }
-                                    return {
-                                      ...ttt,
-                                      isOnline: true,
-                                    };
-                                  }),
-                                  // mappingRule
-                                })
-                              }}>激活</span>
-                              <div style={{width: 1}}/>
-                            </div>)
-                        }
+                            dispatch<SaveDataRulesAction>({
+                              type: 'informalNodeManagerPage/saveDataRules',
+                              payload: {
+                                type: 'replace',
+                                data: data,
+                              },
+                            });
+                            onChange({
+                              themeList: arr.map((ttt) => {
+                                if (ttt.id !== t.id) {
+                                  return {
+                                    ...ttt,
+                                    isOnline: false,
+                                  };
+                                }
+                                return {
+                                  ...ttt,
+                                  isOnline: true,
+                                };
+                              }),
+                              // mappingRule
+                            })
+                          }}>激活</a>
+                          <div style={{width: 1}}/>
+                        </div>
                       </div>
                     </div>
                     <div style={{height: 12}}/>

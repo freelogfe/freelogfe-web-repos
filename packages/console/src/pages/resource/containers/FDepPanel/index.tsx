@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';

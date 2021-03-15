@@ -155,6 +155,11 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     isOnline: boolean;
     isAuth: boolean;
     authErrorText: string;
+    originInfo: {
+      id: string;
+      name: string;
+      type: 'resource' | 'object';
+    };
   }[];
 };
 
@@ -505,6 +510,7 @@ const Model: InformalNodeManagerPageModelType = {
               isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
               isAuth: true,
               authErrorText: '',
+              originInfo: dl.originInfo,
             };
           }),
         },
