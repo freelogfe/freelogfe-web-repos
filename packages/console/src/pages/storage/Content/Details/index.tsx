@@ -31,7 +31,6 @@ import {router} from "umi";
 import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
-import FPopover from "@/components/FPopover";
 import FTooltip from "@/components/FTooltip";
 
 interface DetailsProps {
@@ -43,12 +42,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
   const hasError: boolean = !!storageObjectEditor.typeError;
-  // || !!storageObjectEditor.properties.find((ep) => {
-  //   return ep.key === '' || !!ep.keyError
-  //     // || ep.value === '' || !!ep.valueError
-  //     || !!ep.descriptionError
-  //     || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
-  // });
 
   function onChangeType(value: string) {
     if (value === storageObjectEditor.type) {
@@ -69,14 +62,11 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
   return (<FDrawer
     title={'编辑对象信息'}
-    // visible={storageObjectEditor.visible}
-    // visible={true}
     visible={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
       <FTextButton onClick={() => {
         onChange({
-          // visible: false,
           customOptionsDataVisible: false,
         });
         router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
@@ -95,12 +85,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             },
           });
           router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
-          // dispatch<ChangeAction>({
-          //   type: 'storageObjectEditor/change',
-          //   payload: {
-          //     visible: false,
-          //   }
-          // });
         }}
       >保存</FNormalButton>
     </Space>}
@@ -300,12 +284,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
         </FFormLayout.FBlock>
       </FFormLayout>
-
-      {/*<div style={{height: 120}}/>*/}
-      {/*<div className={styles.footer}>*/}
-      {/*  */}
-      {/*</div>*/}
-
+      
       <FDrawer
         title="添加依赖"
         width={640}
