@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
-import {Space} from 'antd';
+import {Divider, Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
@@ -11,7 +11,6 @@ import {humanizeSize} from '@/utils/format';
 import {i18nMessage} from '@/utils/i18n';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
-import {downloadObject} from '@/services/storages';
 import {
   ChangeAction,
   OnChangeTypeAction,
@@ -29,7 +28,11 @@ import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer"
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FDownload from "@/components/FIcons/FDownload";
 import {router} from "umi";
-import {storageSpace} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
+import {FApiServer} from "@/services";
+import FDivider from "@/components/FDivider";
+import FPopover from "@/components/FPopover";
+import FTooltip from "@/components/FTooltip";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -76,7 +79,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           // visible: false,
           customOptionsDataVisible: false,
         });
-        router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
+        router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
       }}>取消</FTextButton>
       <FNormalButton
         disabled={storageObjectEditor.typeVerify === 1 || hasError}
@@ -91,7 +94,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               type: storageObjectEditor.type,
             },
           });
-          router.push(storageSpace({bucketName: storageObjectEditor.bucketName}));
+          router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
           // dispatch<ChangeAction>({
           //   type: 'storageObjectEditor/change',
           //   payload: {
@@ -105,131 +108,144 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       onChange({
         customOptionsDataVisible: false,
       });
-      router.push(storageSpace({
+      router.push(FLinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
     }}>
     <div className={styles.divContainer}>
-      <div style={{height: 10}}/>
-      <Space size={15}>
-        <FTitleText
-          text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
-          type="h3"
-        />
-        <FCopyToClipboard
-          text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
-          title={'复制对象名称'}
-        />
-        <FTextButton
-          theme="primary"
-          onClick={() => {
-            downloadObject({
-              objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
-            });
-          }}
-        ><FDownload/></FTextButton>
-      </Space>
-      <div style={{height: 17}}/>
-      <div className={styles.size}>{humanizeSize(storageObjectEditor.size)}</div>
-      <div style={{height: 10}}/>
-      <FBaseProperties
-        basics={storageObjectEditor.rawProperties}
-        additions={storageObjectEditor.baseProperties}
-        onChangeAdditions={(value) => {
-          onChange({baseProperties: value});
-        }}
-        rightTop={<Space size={20}>
-          <FTextButton
-            theme="primary"
-            onClick={() => {
-              onChange({
-                basePropertiesEditorVisible: true,
-                basePropertiesEditorData: storageObjectEditor.baseProperties.map((bp) => {
-                  return {
-                    ...bp,
-                    keyError: '',
-                    valueError: '',
-                    descriptionError: '',
-                  };
-                }),
-              });
+
+      <FFormLayout>
+        <FFormLayout.FBlock title={'对象'}>
+          <div className={styles.Header}>
+            <Space size={10}>
+              <FContentText
+                text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
+                type="highlight"
+                className={styles.objectName}
+                singleRow
+              />
+              <FDivider/>
+              <FContentText
+                text={humanizeSize(storageObjectEditor.size)}
+                type="highlight"
+              />
+            </Space>
+            <Space size={15}>
+              <FCopyToClipboard
+                text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
+                title={'复制对象名称'}
+              />
+              <FTooltip title={'下载'}>
+                <FTextButton
+                  theme="primary"
+                  onClick={() => {
+                    FApiServer.Storage.downloadObject({
+                      objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
+                    });
+                  }}
+                ><FDownload/></FTextButton>
+              </FTooltip>
+            </Space>
+          </div>
+          <div style={{height: 5}}/>
+          <FBaseProperties
+            basics={storageObjectEditor.rawProperties}
+            additions={storageObjectEditor.baseProperties}
+            onChangeAdditions={(value) => {
+              onChange({baseProperties: value});
             }}
-          >补充属性</FTextButton>
-        </Space>}
-      />
-
-      <div style={{height: 20}}/>
-
-      <Space>
-        <a onClick={() => {
-          onChange({
-            customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
-          });
-        }}>
-          <span>自定义选项（高级）</span>
-          {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
-        </a>
-        <FInfo/>
-      </Space>
-
-      {
-        storageObjectEditor.customOptionsDataVisible && (<>
+            rightTop={<Space size={20}>
+              <FTextButton
+                theme="primary"
+                onClick={() => {
+                  onChange({
+                    basePropertiesEditorVisible: true,
+                    basePropertiesEditorData: storageObjectEditor.baseProperties.map((bp) => {
+                      return {
+                        ...bp,
+                        keyError: '',
+                        valueError: '',
+                        descriptionError: '',
+                      };
+                    }),
+                  });
+                }}
+              >补充属性</FTextButton>
+            </Space>}
+          />
 
           <div style={{height: 20}}/>
 
-          <Space size={40}>
+          <Space>
             <a onClick={() => {
-              dispatch<ChangeAction>({
-                type: 'storageObjectEditor/change',
-                payload: {
-                  customOptionsEditorVisible: true,
-                  customOptionsEditorDataSource: storageObjectEditor.customOptionsData.map<StorageObjectEditorModelState['customOptionsEditorDataSource'][number]>((coeds) => {
-                    return {
-                      ...coeds,
-                      customOptionError: '',
-                      defaultValueError: '',
-                      keyError: '',
-                      descriptionError: '',
-                    };
-                  }),
-                },
+              onChange({
+                customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
               });
-            }}>添加选项</a>
-
+            }}>
+              <span>自定义选项（高级）</span>
+              {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
+            </a>
+            <FInfo/>
           </Space>
 
-          <div style={{height: 20}}/>
           {
-            storageObjectEditor.customOptionsData.length > 0 ? (
-                <FCustomOptionsCard
-                  dataSource={storageObjectEditor.customOptionsData.map((cod) => {
-                    return {
-                      key: cod.key,
-                      type: cod.custom === 'input' ? '输入框' : '选择框',
-                      description: cod.description,
-                      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
-                    };
-                  })}
-                  onDeleteKey={(value) => {
-                    dispatch<ChangeAction>({
-                      type: 'storageObjectEditor/change',
-                      payload: {
-                        customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
-                          return cod.key !== value;
-                        }),
-                      },
-                    })
-                  }}
-                />
-              )
-              : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+            storageObjectEditor.customOptionsDataVisible && (<>
+
+              <div style={{height: 20}}/>
+
+              <Space size={40}>
+                <a onClick={() => {
+                  dispatch<ChangeAction>({
+                    type: 'storageObjectEditor/change',
+                    payload: {
+                      customOptionsEditorVisible: true,
+                      customOptionsEditorDataSource: storageObjectEditor.customOptionsData.map<StorageObjectEditorModelState['customOptionsEditorDataSource'][number]>((coeds) => {
+                        return {
+                          ...coeds,
+                          customOptionError: '',
+                          defaultValueError: '',
+                          keyError: '',
+                          descriptionError: '',
+                        };
+                      }),
+                    },
+                  });
+                }}>添加选项</a>
+
+              </Space>
+
+              <div style={{height: 20}}/>
+              {
+                storageObjectEditor.customOptionsData.length > 0 ? (
+                    <FCustomOptionsCard
+                      dataSource={storageObjectEditor.customOptionsData.map((cod) => {
+                        return {
+                          key: cod.key,
+                          type: cod.custom === 'input' ? '输入框' : '选择框',
+                          description: cod.description,
+                          value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
+                        };
+                      })}
+                      onDeleteKey={(value) => {
+                        dispatch<ChangeAction>({
+                          type: 'storageObjectEditor/change',
+                          payload: {
+                            customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
+                              return cod.key !== value;
+                            }),
+                          },
+                        })
+                      }}
+                    />
+                  )
+                  : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
+              }
+
+            </>)
           }
 
-        </>)
-      }
-
-      <div style={{height: 25}}/>
-      <FFormLayout>
+          <div style={{height: 25}}/>
+        </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FAutoComplete
             errorText={storageObjectEditor.typeError}

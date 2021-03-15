@@ -6,7 +6,6 @@ import {TooltipProps, TooltipPropsWithOverlay, TooltipPropsWithTitle} from 'antd
 
 interface FTooltipProps extends TooltipPropsWithTitle {
   children: React.ReactNode;
-
 }
 
 function FTooltip({children, title, placement = 'bottomLeft', arrowPointAtCenter = true, ...props}: FTooltipProps) {
