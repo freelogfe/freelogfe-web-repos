@@ -1,11 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-// import {DownloadOutlined} from '@ant-design/icons';
 import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
-// import FEditorCard from '@/components/FEditorCard';
-// import FCustomProperties from '@/components/FCustomProperties';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
@@ -17,19 +14,16 @@ import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {downloadObject} from '@/services/storages';
 import {
   ChangeAction,
-  // DeleteObjectDepAction,
   OnChangeTypeAction,
   UpdateObjectInfoAction
 } from '@/models/storageObjectEditor';
-import {FetchObjectsAction, UpdateAObjectAction} from '@/models/storageHomePage';
+import {UpdateAObjectAction} from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
-// import {ImportLastVersionDataAction} from "@/models/resourceVersionCreatorPage";
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FUp from "@/components/FIcons/FUp";
 import {FDown, FInfo} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
-// import FBlock from "@/layouts/FFormLayout/FBlock";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
@@ -255,7 +249,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               onClick={() => setDepInfoVisible(true)}
               theme="weaken"
             />
-            <FContentText text={'添加'}/>
+            <FContentText text={'添加依赖'}/>
           </Space>
           {
             storageObjectEditor.depRs.length > 0 && (<DepsCards

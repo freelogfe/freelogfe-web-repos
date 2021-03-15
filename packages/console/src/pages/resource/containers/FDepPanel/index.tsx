@@ -29,10 +29,14 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
   // console.log(resource, 'resource23qeasdj98io');
   return (<>
     <Space size={15}>
+      {/*<FNormalButton*/}
+      {/*  onClick={() => setModalVisible(true)}*/}
+      {/*  theme="grey"*/}
+      {/*>{i18nMessage('add_rely_resource')}</FNormalButton>*/}
       <FNormalButton
         onClick={() => setModalVisible(true)}
         theme="grey"
-      >{i18nMessage('add_rely_resource')}</FNormalButton>
+      >添加依赖</FNormalButton>
       {
         creator.preVersionDeps.relationships.length > 0 &&
         <FNormalButton
@@ -100,7 +104,8 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
     }
 
     <FDrawer
-      title={i18nMessage('add_rely_resource')}
+      // title={i18nMessage('add_rely_resource')}
+      title={'添加依赖'}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
       width={820}
