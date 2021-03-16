@@ -5,7 +5,7 @@ import {Input, Form} from 'antd';
 import {i18nMessage} from "@/utils/i18n";
 
 interface FLabelEditor {
-  values?: readonly string[];
+  values?: string[];
   onChange?: (values: string[]) => void;
 }
 
@@ -51,12 +51,6 @@ export default function ({values = [], onChange}: FLabelEditor) {
 
   return (<div className={styles.styles}>
     {
-      values.map((i: string, j: number) => (<label key={i} className={styles.label}>
-        <span>{i}</span>
-        <a onClick={() => onRemove(j)}><CloseOutlined/></a>
-      </label>))
-    }
-    {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <Input
           size="small"
@@ -72,6 +66,23 @@ export default function ({values = [], onChange}: FLabelEditor) {
           {errorText && <label>{errorText}</label>}
         </div>
       </div>)
+    }
+
+    {
+      values && values.length > 0 && (<>
+        {
+          values.length < 20 && (<div style={{height: 20}}/>)
+        }
+
+        <div className={styles.labels}>
+          {
+            values.map((i: string, j: number) => (<label key={i} className={styles.label}>
+              <span>{i}</span>
+              <a onClick={() => onRemove(j)}><CloseOutlined/></a>
+            </label>))
+          }
+        </div>
+      </>)
     }
 
   </div>);

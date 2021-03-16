@@ -1,52 +1,52 @@
 @import '../../../../config.less';
 
 .styles {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: -15px;
-}
 
-.label {
-  border-radius: 4px;
-  border: 1px solid #DDDDDD;
-  background-color: #fff;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  .InputWrap {
+    .Input {
+      width: 200px;
+      display: inline-block;
+    }
 
-  & > span {
-    padding: 0 5px 0 10px;
+    .InputError {
+      &, &:hover, &:active, &:focus {
+        border-color: @f-error-color1 !important;
+      }
+    }
+
+    label {
+      color: red;
+    }
   }
 
-  & > a {
-    padding: 4px 10px;
-    color: #BCBCBC;
+  .labels {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: -15px;
+
+    .label {
+      border-radius: 4px;
+      border: 1px solid #DDDDDD;
+      background-color: #fff;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+      margin-bottom: 15px;
+
+      & > span {
+        padding: 0 5px 0 10px;
+      }
+
+      & > a {
+        padding: 4px 10px;
+        color: #BCBCBC;
+      }
+    }
   }
 }
 
-.InputWrap {
-  //position: relative;
 
-  label {
-    //position: absolute;
-    color: red;
-    //top: 30px;
-    //left: 10px;
-    //bottom: 0;
-  }
-}
 
-.Input {
-  width: 200px;
-  display: inline-block;
-  //height: 30px;
-  //margin-bottom: 15px;
-}
 
-.InputError {
-  &, &:hover, &:active, &:focus {
-    border-color: @f-error-color1 !important;
-  }
-}
+
