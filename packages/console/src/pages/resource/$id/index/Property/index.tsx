@@ -20,7 +20,7 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText text={'基础属性'} type="h3"/>
+      <FTitleText text={'基础属性'} type="h4"/>
       <div style={{height: 20}}/>
       <div className={styles.content}>
         <div>

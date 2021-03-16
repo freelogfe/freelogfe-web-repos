@@ -46,18 +46,10 @@ function Description({dispatch, marketResourcePage}: DescriptionProps) {
   // }, [marketResourcePage.description]);
 
   return (<>
-    <div
-      // ref={(el) => devE = el}
-      // onClick={() => dispatch<ChangeAction>({
-      //   type: 'marketResourcePage/change',
-      //   payload: {
-      //     showAllDescription: true
-      //   }
-      // })}
-      style={{height: 30}}/>
+    <div style={{height: 30}}/>
     <div className={styles.styles}>
-      <FTitleText text={'版本描述'} type={'h3'}/>
-      <div style={{height: 20}}/>
+      {/*<FTitleText text={'版本描述'} type={'h3'}/>*/}
+      {/*<div style={{height: 20}}/>*/}
       <FExpandable>
         {marketResourcePage.description && (<div
           // ref={refContainer}

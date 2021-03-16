@@ -86,29 +86,33 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       <Sign/>
 
       <div style={{height: 50}}/>
+      <div style={{borderTop: '1px solid #E5E7EB'}}/>
+      <div style={{height: 10}}/>
 
       {
         marketResourcePage.version && (<div className={styles.versionWrap}>
           <div className={styles.versionTitle}>
-            <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
-            <div style={{width: 15}}/>
+            <Space size={10}>
+              <FTitleText text={'当前版本 ' + marketResourcePage.version}/>
+              <FDropdownMenu
+                options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
+                onChange={(value) => {
+                  // console.log(value, '3209jsd');
+                  dispatch<OnChangeVersionAction>({
+                    type: 'marketResourcePage/onChangeVersion',
+                    payload: value,
+                  });
+                }}
+              >
+                <FSwap style={{cursor: 'pointer'}}/>
+              </FDropdownMenu>
+            </Space>
+
             <FContentText
               text={'发布时间 ' + marketResourcePage.releaseTime}
-              type="additional1"
+              type="negative"
             />
-            <div style={{width: 20}}/>
-            <FDropdownMenu
-              options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
-              onChange={(value) => {
-                // console.log(value, '3209jsd');
-                dispatch<OnChangeVersionAction>({
-                  type: 'marketResourcePage/onChangeVersion',
-                  payload: value,
-                });
-              }}
-            >
-              <a><FSwap/></a>
-            </FDropdownMenu>
+
           </div>
 
           <Description/>
