@@ -10,7 +10,6 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
-import {FComponent} from "@/components";
 import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 

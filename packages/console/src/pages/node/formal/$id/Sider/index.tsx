@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
-import {Button} from 'antd';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
