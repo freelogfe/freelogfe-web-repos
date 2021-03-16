@@ -30,7 +30,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
               <FContentText text={i.key}/>
               <FTooltip
                 title={i.description}
-                color={'#fff'}><FInfo/></FTooltip>
+                color={'#fff'}><FInfo style={{cursor: 'pointer'}}/></FTooltip>
             </Space>
           </div>))
         }

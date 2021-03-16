@@ -96,7 +96,7 @@ function Item({tTey, value, description}: ItemProps) {
       <Space size={5}>
         <FContentText text={tTey} type="negative"/>
         {description && (
-          <FTooltip title={description}><FInfo/></FTooltip>)}
+          <FTooltip title={description}><FInfo style={{cursor: 'pointer'}}/></FTooltip>)}
       </Space>
     </td>
     <td><FContentText text={value}/></td>
