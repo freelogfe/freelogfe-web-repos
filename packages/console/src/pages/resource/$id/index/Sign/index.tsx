@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FFavorite} from '@/components/FIcons';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import Contracts from './Contracts';
@@ -11,7 +9,6 @@ import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
 import * as cover from '@/assets/default-resource-cover.jpg';
-import {OnClickCollectionAction} from '@/models/marketResourcePage';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -45,19 +42,26 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
     </div>
     <div className={styles.cell}/>
     <div className={styles.infoRight}>
-      <NodeSelector/>
-      <div style={{height: 15}}/>
-      <div className={styles.sign}>
-        <div className={styles.signLeft}>
-          <Resources/>
-        </div>
-        <div className={styles.signRight}>
-          <Contracts/>
-          <Policies/>
+      <div className={styles.top}>
+        <NodeSelector/>
+      </div>
+      <div className={styles.mid}>
+        <div className={styles.sign}>
+          <div className={styles.signLeft}>
+            <Resources/>
+          </div>
+          <div className={styles.signRight}>
+            <div style={{height: 15}}/>
+            <Contracts/>
+            <Policies/>
+            <div style={{height: 15}}/>
+          </div>
         </div>
       </div>
-      <div style={{height: 15}}/>
-      <Bottom/>
+      <div className={styles.bot}>
+        <Bottom/>
+      </div>
+
     </div>
   </div>);
 }

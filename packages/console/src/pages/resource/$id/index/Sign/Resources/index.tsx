@@ -43,6 +43,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
   }
 
   return (<>
+    <div style={{height: 7}}/>
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
       showResource
