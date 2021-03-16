@@ -6,6 +6,7 @@ import {ExclamationCircleFilled} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {i18nMessage} from "@/utils/i18n";
+import {FInfo} from "@/components/FIcons";
 
 interface UpthrowListProps {
   // dispatch: Dispatch;
@@ -23,8 +24,14 @@ function UpthrowList({creator: {dependencies}}: UpthrowListProps) {
   return (<>
     <div style={{height: 30}}/>
     <div className={styles.depUpthrow}>
-      <FTitleText text={i18nMessage('basic_upcast')} type="form"/>
-      <ExclamationCircleFilled style={{color: '#C7C7C7', marginLeft: 5}}/>
+      <div className={styles.tip}>
+        <FTitleText
+          text={i18nMessage('basic_upcast')}
+          type="form"
+        />
+        <div style={{width: 5}}/>
+        <FInfo style={{color: '#C7C7C7'}}/>
+      </div>
       <div className={styles.depUpthrowLabel}>
         {
           labels.map((j) => <label key={j}>{j}</label>)
