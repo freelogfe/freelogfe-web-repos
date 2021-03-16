@@ -20,6 +20,9 @@ interface SignProps {
 }
 
 function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
+
+  const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
+
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
@@ -28,37 +31,16 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           src={marketResourcePage.resourceInfo?.cover || cover}
           alt={''}
         />
-        <div style={{height: 10}}/>
-        <div className={styles.title}>
-        <span
-          className={styles.titleText}>{marketResourcePage.resourceInfo?.name || ''}
-        </span>
-          &nbsp;
-          <FCopyToClipboard
-            text={marketResourcePage.resourceInfo?.name || ''}
-            title={'复制资源名称'}
-          />
-        </div>
-        <div style={{height: 10}}/>
+        <div style={{height: 20}}/>
         <div className={styles.babels}>
-          <label>{marketResourcePage.resourceInfo?.type || ''}</label>
           {
-            (marketResourcePage.resourceInfo?.tags || []).map((t) => (<label key={t}>{t}</label>))
+            (marketResourcePage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
+              <label key={t}>{t}</label>))
           }
         </div>
-        <div style={{height: 10}}/>
-        <FContentText
-          text={marketResourcePage.resourceInfo?.about || ''}/>
-      </div>
-      <div>
         <div style={{height: 20}}/>
-        <a className={styles.favoriteBtn}
-           onClick={() => dispatch<OnClickCollectionAction>({
-          type: 'marketResourcePage/onClickCollection',
-        })}>
-          <FFavorite
-            filled={marketResourcePage.hasCollect}/> {marketResourcePage.hasCollect ? '已收藏' : '收藏'} ({marketResourcePage.popularity}人气)
-        </a>
+        <FContentText
+          text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')}/>
       </div>
     </div>
     <div className={styles.cell}/>
