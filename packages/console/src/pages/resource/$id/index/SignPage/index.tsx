@@ -11,8 +11,8 @@ import {router} from 'umi';
 import {ChangeAction, OnChangeAndVerifySignExhibitNameAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FIcon} from "@/components";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
+import {FLeft, FNodes} from "@/components/FIcons";
 
 interface SignProps {
   dispatch: Dispatch;
@@ -51,7 +51,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           },
         });
       }}>
-        <FIcon.FLeft/>
+        <FLeft/>
         <>返回上一步</>
       </FTextButton>
       <div style={{width: 30}}/>
@@ -68,7 +68,7 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
       <FFormLayout>
         <FFormLayout.FBlock title={'确认签约节点'}>
           <Space size={5}>
-            <FIcon.FNodes className={styles.yellow}/>
+            <FNodes className={styles.yellow}/>
             <FTitleText
               type="h5"
               text={selectedNode?.nodeName}

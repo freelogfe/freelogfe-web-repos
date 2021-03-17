@@ -8,19 +8,20 @@ import {EXHIBIT_NAME} from "@/utils/regexp";
 import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
+import FUtil from "@/utils";
 
-interface Contract {
-  id: string;
-  name: string;
-  text: string;
-  createTime: string;
-}
-
-interface Policy {
-  id: string;
-  name: string;
-  text: string;
-}
+// interface Contract {
+//   id: string;
+//   name: string;
+//   text: string;
+//   createTime: string;
+// }
+//
+// interface Policy {
+//   id: string;
+//   name: string;
+//   text: string;
+// }
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -42,12 +43,31 @@ export interface MarketResourcePageModelState {
   signedNodeIDs: number[];
   selectedNodeID: number;
 
+  allRawResources: {
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    status: 0 | 1;
+    policies: {
+      policyId: string;
+      policyName: string;
+      policyText: string;
+      status: 0 | 1;
+    }[],
+  }[];
   signResources: {
     selected: boolean;
     id: string;
     name: string;
     type: string;
     status: 0 | 1;
+    contracts: {
+      checked: boolean;
+      id: string;
+      name: string;
+      text: string;
+      createTime: string;
+    }[];
     policies: {
       checked: boolean;
       id: string;
@@ -56,15 +76,15 @@ export interface MarketResourcePageModelState {
       text: string;
     }[];
   }[];
-  signedResources: null | {
-    selected: boolean;
-    id: string;
-    name: string;
-    type: string;
-    contracts: Contract[];
-    policies: Policy[];
-  }[];
-  signedResourceExhibitId: string;
+  // signedResources: null | {
+  //   selected: boolean;
+  //   id: string;
+  //   name: string;
+  //   type: string;
+  //
+  //   policies: Policy[];
+  // }[];
+  // signedResourceExhibitId: string;
 
   allVersions: string[];
   version: string;
@@ -116,7 +136,7 @@ export interface OnClickCollectionAction extends AnyAction {
 
 export interface OnChangeNodeSelectorAction extends AnyAction {
   type: 'marketResourcePage/onChangeNodeSelector';
-  payload: number;
+  payload: -1 | number;
 }
 
 export interface FetchVersionInfoAction extends AnyAction {
@@ -177,9 +197,10 @@ const initStates: MarketResourcePageModelState = {
   signedNodeIDs: [],
   selectedNodeID: -1,
 
+  allRawResources: [],
   signResources: [],
-  signedResources: null,
-  signedResourceExhibitId: '',
+  // signedResources: null,
+  // signedResourceExhibitId: '',
 
   allVersions: [],
   version: '',
@@ -275,20 +296,26 @@ const Model: MarketResourcePageModelType = {
           version: data.latestVersion,
           //
           signedNodeIDs: data3.map((p: any) => p.nodeId),
-          signResources: rawSignResources.map((rs: any, i: number) => ({
-            selected: i === 0,
-            id: rs.resourceId,
-            name: rs.resourceName,
-            type: rs.resourceType,
-            status: rs.status,
-            policies: rs.policies.map((rsp: any) => ({
-              checked: false,
-              id: rsp.policyId,
-              name: rsp.policyName,
-              text: rsp.policyText,
-              status: rsp.status,
-            })),
-          }))
+          allRawResources: rawSignResources,
+
+          signResources: rawSignResources
+            .map<MarketResourcePageModelState['signResources'][number]>((rs, i: number) => {
+              return {
+                selected: i === 0,
+                id: rs.resourceId,
+                name: rs.resourceName,
+                type: rs.resourceType,
+                status: rs.status,
+                contracts: [],
+                policies: rs.policies.map((rsp: any) => ({
+                  checked: false,
+                  id: rsp.policyId,
+                  name: rsp.policyName,
+                  text: rsp.policyText,
+                  status: rsp.status,
+                })),
+              };
+            }),
         },
       });
 
@@ -361,76 +388,126 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage
       }));
 
-      const signed: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+      // if (payload === -1) {
 
-      if (!signed) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            signedResources: null,
-          },
-        });
-      }
+      // } else {
+      //
+      // }
 
-      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
-        nodeId: marketResourcePage.selectedNodeID,
-        resourceId: marketResourcePage.resourceId,
+      const params: GetAllContractsParamsType = {
+        nodeID: payload,
+        resourceIDs: marketResourcePage.allRawResources.map((r) => r.resourceId),
       };
-      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      // console.log(data, 'datadata0923jsdfsd');
-      const allContracts = data.resolveResources;
-      // console.log(allContracts, 'datadata0923jsdfsd');
 
-      const allContractIds: string[] = allContracts?.map((c: any) => c.contracts.map((cs: any) => cs.contractId)).flat();
-      // console.log(allContractIds, 'allContractIds3290dsj');
-      const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
-        contractIds: allContractIds.join(','),
-        isLoadPolicyInfo: 1,
-      };
-      const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
-      // console.log(data1, 'data19023jr');
-
-      const signedResources = marketResourcePage.signResources
-        .map((sr, i: number) => {
-          const contracts: Contract[] = [];
-          const policies: Policy[] = [];
-
-          for (const p of sr.policies) {
-            const contract = data1.find((c: any) => c.policyId === p.id && sr.id === c.subjectId);
-            if (contract) {
-              contracts.push(({
-                id: contract.contractId,
-                name: contract.contractName,
-                text: contract.policyInfo.policyText,
-                createTime: formatDateTime(contract.createDate),
-              }));
-            } else {
-              policies.push({
-                id: p.id,
-                name: p.name,
-                text: p.text,
-              });
-            }
-          }
-
-          return {
-            selected: i === 0,
-            id: sr.id,
-            name: sr.name,
-            type: sr.type,
-            contracts: contracts,
-            policies: policies,
-          };
-        });
-      // console.log(signedResources, 'signedResources0239jsd');
+      const result: GetAllContractsReturnType = yield call(getAllContracts, params);
+      console.log(result, 'result2390jdafslkaadfs');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signedResources: signedResources,
-          signedResourceExhibitId: data.presentableId,
+          signResources: marketResourcePage.allRawResources
+            .map<MarketResourcePageModelState['signResources'][number]>((value, index: number) => {
+
+              const contracts: MarketResourcePageModelState['signResources'][number]['contracts'] = result[index].map((c) => {
+                return {
+                  checked: true,
+                  id: c.contractId,
+                  name: c.contractName,
+                  text: c.policyInfo.policyText,
+                  createTime: FUtil.Format.formatDateTime(c.createDate),
+                };
+              });
+
+
+              return {
+                selected: index === 0,
+                id: value.resourceId,
+                name: value.resourceName,
+                type: value.resourceType,
+                status: value.status,
+                contracts: contracts,
+                policies: value.policies.map((rsp: any) => ({
+                  checked: false,
+                  id: rsp.policyId,
+                  name: rsp.policyName,
+                  text: rsp.policyText,
+                  status: rsp.status,
+                })),
+              };
+            }),
         },
       });
+
+      // const signed: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+
+      // if (!signed) {
+      //   return yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       signedResources: null,
+      //     },
+      //   });
+      // }
+
+      // const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+      //   nodeId: marketResourcePage.selectedNodeID,
+      //   resourceId: marketResourcePage.resourceId,
+      // };
+      // const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      // // console.log(data, 'datadata0923jsdfsd');
+      // const allContracts = data.resolveResources;
+      // // console.log(allContracts, 'datadata0923jsdfsd');
+      //
+      // const allContractIds: string[] = allContracts?.map((c: any) => c.contracts.map((cs: any) => cs.contractId)).flat();
+      // // console.log(allContractIds, 'allContractIds3290dsj');
+      // const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      //   contractIds: allContractIds.join(','),
+      //   isLoadPolicyInfo: 1,
+      // };
+      // const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
+      // // console.log(data1, 'data19023jr');
+      //
+      // const signedResources = marketResourcePage.signResources
+      //   .map((sr, i: number) => {
+      //     const contracts: Contract[] = [];
+      //     const policies: Policy[] = [];
+      //
+      //     for (const p of sr.policies) {
+      //       const contract = data1.find((c: any) => c.policyId === p.id && sr.id === c.subjectId);
+      //       if (contract) {
+      //         contracts.push(({
+      //           id: contract.contractId,
+      //           name: contract.contractName,
+      //           text: contract.policyInfo.policyText,
+      //           createTime: formatDateTime(contract.createDate),
+      //         }));
+      //       } else {
+      //         policies.push({
+      //           id: p.id,
+      //           name: p.name,
+      //           text: p.text,
+      //         });
+      //       }
+      //     }
+      //
+      //     return {
+      //       selected: i === 0,
+      //       id: sr.id,
+      //       name: sr.name,
+      //       type: sr.type,
+      //       contracts: contracts,
+      //       policies: policies,
+      //     };
+      //   });
+      // // console.log(signedResources, 'signedResources0239jsd');
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     signedResources: signedResources,
+      //     signedResourceExhibitId: data.presentableId,
+      //   },
+      // });
     },
     * fetchVersionInfo({}: FetchVersionInfoAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
@@ -465,7 +542,7 @@ const Model: MarketResourcePageModelType = {
           ],
           options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
             .map((p: any) => {
-              console.log(p, '@@@@@@#$#@$@#$@#');
+              // console.log(p, '@@@@@@#$#@$@#$@#');
               return {
                 key: p.key,
                 value: p.defaultValue,
@@ -493,22 +570,6 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
         nodes,
       }));
-
-      const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
-        nodeId: marketResourcePage.selectedNodeID,
-        presentableName: marketResourcePage.signExhibitName,
-      };
-      const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
-      // console.log(data1, '2093uoi23r');
-      if (data1) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            signExhibitNameErrorTip: `该展品名称在当前节点已使用，请重新输入。`,
-          },
-        });
-        return;
-      }
 
       const params: Parameters<typeof FApiServer.Exhibit.createPresentable>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
@@ -585,3 +646,37 @@ const Model: MarketResourcePageModelType = {
 };
 
 export default Model;
+
+interface GetAllContractsParamsType {
+  nodeID: number;
+  resourceIDs: string[];
+}
+
+type GetAllContractsReturnType = {
+  contractId: string;
+  contractName: string;
+  createDate: string;
+  updateDate: string;
+  policyId: string;
+  policyInfo: {
+    policyId: string;
+    policyText: string;
+  };
+}[][];
+
+async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+  const allPromises = resourceIDs.map(async (id) => {
+    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      subjectIds: id,
+      subjectType: 1,
+      licenseeIdentityType: 2,
+      licensorId: id,
+      licenseeId: nodeID,
+      isLoadPolicyInfo: 1,
+    };
+    const {data} = await FApiServer.Contract.batchContracts(params);
+    return data;
+  });
+
+  return await Promise.all(allPromises);
+}

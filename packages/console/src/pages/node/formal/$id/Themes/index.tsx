@@ -16,9 +16,10 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import FLinkTo, {exhibitManagement, nodeCreator} from "@/utils/path-assembler";
+import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
+import FDivider from "@/components/FDivider";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -90,83 +91,86 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
               ? (<FNoDataTip height={'calc(100vh - 170px)'} tipText={'无搜索结果'}/>)
               : (<div className={styles.body}>
                 {
-                  nodeManagerPage.themeList.map((i) => (<div
-                    className={styles.theme}
-                    key={i.id}
-                  >
-                    <div className={styles.cover}>
-                      <Space size={10}>
-                        <Label active={i.isOnline}/>
-                        {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
-                          <FWarning/>
-                        </FTooltip> : ''}
-                      </Space>
+                  nodeManagerPage.themeList.map((i) => {
+                    const hasActiveBtn: boolean = !i.isOnline && i.isAuth && i.policies.length > 0;
+                    return (<div
+                      className={styles.theme}
+                      key={i.id}
+                    >
+                      <div className={styles.cover}>
+                        <Space size={10}>
+                          <Label active={i.isOnline}/>
+                          {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
+                            <FWarning/>
+                          </FTooltip> : ''}
+                        </Space>
 
-                      <img
-                        alt=""
-                        src={i.cover || imgSrc}
-                      />
+                        <img
+                          alt=""
+                          src={i.cover || imgSrc}
+                        />
 
-                      <div
-                        className={styles.action}
-                        style={{justifyContent: i.isOnline || !i.isAuth || i.policies.length === 0 ? 'center' : 'space-between'}}
-                      >
-                        <span onClick={() => {
-                          // router.push('/node/exhibit/formal/' + i.id)
-                          router.push(FLinkTo.exhibitManagement({exhibitID: i.id}));
-                        }}>编辑</span>
-                        {
-                          !i.isOnline && i.isAuth && i.policies.length > 0 && (<>
-                            <span>|</span>
-                            <span onClick={() => {
+                        <div
+                          className={styles.action}
+                          // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
+                        >
+                          <div style={{width: 1}}/>
+                          <FLink to={FLinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
+                          <FDivider/>
+                          <FLink to={FLinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
+                          {
+                            hasActiveBtn && (<>
+                              <FDivider/>
+                              <a onClick={() => {
 
-                              if (!nodeManagerPage.nodeThemeId) {
-                                dispatch<OnActiveAction>({
-                                  type: 'nodeManagerPage/onActive',
-                                  payload: {
-                                    id: i.id,
-                                  }
-                                });
-                                return;
-                              }
-
-                              fConfirmModal({
-                                message: i18nMessage('msg_change_theme_confirm'),
-                                okText: i18nMessage('active_new_theme'),
-                                cancelText: i18nMessage('keep_current_theme'),
-                                onOk() {
+                                if (!nodeManagerPage.nodeThemeId) {
                                   dispatch<OnActiveAction>({
                                     type: 'nodeManagerPage/onActive',
                                     payload: {
                                       id: i.id,
                                     }
                                   });
-                                },
-                              });
+                                  return;
+                                }
 
-                            }}>激活</span>
-                          </>)
-                        }
+                                fConfirmModal({
+                                  message: i18nMessage('msg_change_theme_confirm'),
+                                  okText: i18nMessage('active_new_theme'),
+                                  cancelText: i18nMessage('keep_current_theme'),
+                                  onOk() {
+                                    dispatch<OnActiveAction>({
+                                      type: 'nodeManagerPage/onActive',
+                                      payload: {
+                                        id: i.id,
+                                      }
+                                    });
+                                  },
+                                });
 
+                              }}>激活</a>
+                            </>)
+                          }
+                          <div style={{width: 1}}/>
+                        </div>
                       </div>
-                    </div>
-                    <div style={{height: 12}}/>
-                    <FContentText
-                      text={i.title}
-                      singleRow
-                    />
-                    <div style={{height: 6}}/>
-                    <FContentText type="additional1" text={i.version}/>
-                    <div style={{height: 15}}/>
-                    <div className={styles.bottom}>
-                      <div className={styles.polices}>
-                        {
-                          i.policies.map((p) => (<label key={p}>{p}</label>))
-                        }
+                      <div style={{height: 12}}/>
+                      <FContentText
+                        text={i.title}
+                        singleRow
+                      />
+                      <div style={{height: 6}}/>
+                      <FContentText type="additional1" text={i.version}/>
+                      <div style={{height: 15}}/>
+                      <div className={styles.bottom}>
+                        <div className={styles.polices}>
+                          {
+                            i.policies.map((p) => (<label key={p}>{p}</label>))
+                          }
+                        </div>
+                        <a onClick={() => null}>{i18nMessage('more_details')}>></a>
                       </div>
-                      <a onClick={() => null}>{i18nMessage('more_details')}>></a>
-                    </div>
-                  </div>))
+                    </div>);
+                  })
                 }
                 <div style={{width: 290}}/>
                 <div style={{width: 290}}/>

@@ -46,6 +46,7 @@ export type NodeManagerModelState = WholeReadonly<{
     isOnline: boolean;
     isAuth: boolean;
     authErrorText: string;
+    resourceId: string;
   }[];
   themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
 }>;
@@ -291,6 +292,7 @@ const Model: NodeManagerModelType = {
               policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
               isAuth: authInfo.isAuth,
               authErrorText: authInfo.error,
+              resourceId: i.resourceInfo.resourceId,
             };
           }),
           themeDataState: data.totalItem !== 0 ? ''

@@ -4,30 +4,35 @@
 }
 
 .resource {
-  height: 64px;
+  //height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #FAFBFC;
-  padding: 0 15px;
+  padding: 10px 15px;
   border-radius: 10px;
 
   &:hover {
     background-color: #EDF6FF;
   }
-}
 
-.resourcePolicies {
-  color: #2784FF;
+  .resourcePolicies {
+    color: #2784FF;
+    margin-bottom: -5px;
 
-  & > label {
-    background-color: #E9F2FF;
-    border-radius: 2px;
-    border: 1px solid #AED0FF;
-    padding: 3px 6px;
-    margin-left: 10px;
+    & > label {
+      background-color: #E9F2FF;
+      border-radius: 2px;
+      border: 1px solid #AED0FF;
+      padding: 3px 6px;
+      margin-left: 10px;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
   }
 }
+
+
 
 .policy {
   padding: 15px 20px;

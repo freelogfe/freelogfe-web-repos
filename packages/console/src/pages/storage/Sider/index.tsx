@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleButton, FNormalButton} from '@/components/FButton';
-import {Popconfirm, Progress, Space, Modal} from 'antd';
+import {FCircleButton} from '@/components/FButton';
+import {Progress, Space, Modal} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import {connect, Dispatch} from 'dva';
@@ -11,7 +11,6 @@ import {
   ChangeAction,
   CreateBucketAction,
   DeleteBucketByNameAction,
-  OnChangeActivatedBucketAction
 } from '@/models/storageHomePage';
 import {humanizeSize} from '@/utils/format';
 import {FDelete, FWarning} from "@/components/FIcons";
@@ -21,22 +20,18 @@ import {Link} from 'umi';
 import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
-
-// import {storageSpace} from "@/utils/path-assembler";
+import FLink from "@/components/FLink";
 
 interface SiderProps {
   dispatch: Dispatch;
   storage: StorageHomePageModelState;
 }
 
-
 function Sider({storage, dispatch}: SiderProps) {
 
   const siderRef = React.useRef<any>(null);
   const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
   const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
-
-  const [deletingBucket, setDeletingBucket] = React.useState<string>('');
 
   return (<>
     <div
@@ -84,7 +79,7 @@ function Sider({storage, dispatch}: SiderProps) {
             {
               customBuckets
                 .map((b) => {
-                  return (<Link
+                  return (<FLink
                     key={b.bucketName}
                     className={storage.activatedBucket === b.bucketName
                       ? styles.activated
@@ -123,7 +118,7 @@ function Sider({storage, dispatch}: SiderProps) {
                         className={styles.bucketDeleteBtn}
                       />
                     </FTooltip>
-                  </Link>);
+                  </FLink>);
                 })
             }
           </div>) : (<FContentText

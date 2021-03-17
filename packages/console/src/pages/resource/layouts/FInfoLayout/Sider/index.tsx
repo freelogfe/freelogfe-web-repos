@@ -10,8 +10,8 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
-import {FComponent} from "@/components";
 import FLinkTo from "@/utils/path-assembler";
+import FLink from "@/components/FLink";
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -86,24 +86,24 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         status={resourceInfo.info?.status === 1 ? 'online' : !!resourceInfo.info?.latestVersion ? 'offline' : 'unreleased'}
       />
       <div style={{height: 15}}/>
-      <FComponent.FLink
+      <FLink
         to={FLinkTo.resourceDetails({
           resourceID: resourceInfo.info?.resourceId || '',
         })}
         className={styles.resourceName}
-      >{resourceInfo.info?.resourceName}</FComponent.FLink>
+      >{resourceInfo.info?.resourceName}</FLink>
       <div style={{height: 10}}/>
       <label className={styles.label}>{resourceInfo.info.resourceType}</label>
     </div>
     <div style={{height: 35}}/>
     <div className={styles.radios}>
-      <FComponent.FLink
+      <FLink
         className={[match.path === '/resource/:id/info' ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FLinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
-      >{i18nMessage('resource_information')}</FComponent.FLink>
-      <FComponent.FLink
+      >{i18nMessage('resource_information')}</FLink>
+      <FLink
         className={[match.path === '/resource/:id/auth' ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FLinkTo.resourceAuth({
           resourceID: match.params.id,
@@ -111,7 +111,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       >
         <span>{i18nMessage('authorization_infomation')}</span>
         {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot}/>)}
-      </FComponent.FLink>
+      </FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
           <div style={{cursor: 'default'}}>{i18nMessage('verions')}</div>
@@ -138,28 +138,28 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         <div className={styles.versions}>
           {
             match.path === '/resource/:id/version/creator'
-              ? (<FComponent.FLink
+              ? (<FLink
                 to={FLinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
-                className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FComponent.FLink>)
+                className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FLink>)
               : (resourceInfo.draftData
-              && (<FComponent.FLink
+              && (<FLink
                 className={[styles.version].join(' ')}
                 to={FLinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FComponent.FLink>))
+                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
           }
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
-              <FComponent.FLink
+              <FLink
                 key={i.versionId}
                 to={FLinkTo.resourceVersion({
                   resourceID: match.params.id,
                   version: i.version,
                 })}
                 className={[styles.version, (match.path === '/resource/:id/version/:version' && match.params.version === i.version) ? styles.activatedVersion : ''].join(' ')}
-              >{i.version}</FComponent.FLink>))
+              >{i.version}</FLink>))
           }
         </div>
       </div>

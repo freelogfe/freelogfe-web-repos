@@ -1,14 +1,12 @@
 import React from 'react';
 import styles from './index.less';
-import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
-import {router, withRouter} from 'umi';
+import {withRouter} from 'umi';
 import Resources from "./Resources";
 import Examples from "@/pages/market/Examples";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from "dva";
-import {ChangeAction as GlobalChangeAction} from "@/models/global";
-import {ChangeAction} from "@/models/marketPage";
+import {FetchDataSourceAction} from "@/models/marketPage";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 import FFooter from '@/layouts/FFooter';
 import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
@@ -34,29 +32,37 @@ interface MarketProps extends RouteComponentProps {
 
 function Market({dispatch, match, history, location, route, marketPage, ...props}: MarketProps) {
 
-  // 路由更新路由匹配信息
   React.useEffect(() => {
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
+    // console.log('@#WERF09ujiojlFetchDataSourceAction');
+    dispatch<FetchDataSourceAction>({
+      type: 'marketPage/fetchDataSource',
+      payload: true,
     });
-  }, [route]);
+  }, []);
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'marketPage/change',
-      payload: {
-        tabValue: match.path === '/market' ? '1' : '2',
-      },
-    })
-  }, [match.path]);
+  // 路由更新路由匹配信息
+  // React.useEffect(() => {
+  //   dispatch<GlobalChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
+
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'marketPage/change',
+  //     payload: {
+  //       tabValue: match.path === '/market' ? '1' : '2',
+  //     },
+  //   })
+  // }, [match.path]);
 
   function onChangeTab(value: '1' | '2') {
-    if (value === '1' && marketPage.tabValue !== '1') {
-      return router.push('/market');
-    }
+    // if (value === '1' && marketPage.tabValue !== '1') {
+    //   return router.push('/market');
+    // }
 
     if (value === '2' && marketPage.tabValue !== '2') {
       // return router.push('/market/example');
@@ -79,7 +85,6 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
     <FFooter/>
   </>);
 }
-
 
 export default withRouter(connect(({marketPage}: ConnectState) => ({
   marketPage,

@@ -7,7 +7,7 @@ function Viewport() {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText text={'相关视图'} type={'h3'}/>
+      <FTitleText text={'相关视图'} type={'h4'}/>
       <div style={{height: 20}}/>
       <div className={styles.content}>
         <FAntvG6 data={{

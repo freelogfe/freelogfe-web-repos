@@ -21,7 +21,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText text={'自定义选项'} type="h3"/>
+      <FTitleText text={'自定义选项'} type="h4"/>
       <div style={{height: 20}}/>
       <div className={styles.content}>
         {
@@ -30,7 +30,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
               <FContentText text={i.key}/>
               <FTooltip
                 title={i.description}
-                color={'#fff'}><FInfo/></FTooltip>
+                color={'#fff'}><FInfo style={{cursor: 'pointer'}}/></FTooltip>
             </Space>
           </div>))
         }

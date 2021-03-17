@@ -33,22 +33,20 @@
 .babels {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: -2px;
+  margin-bottom: -5px;
   margin-right: -5px;
   font-size: 12px;
   color: #575E6A;
+  max-height: 45px;
+  overflow: hidden;
 
   & > label {
-    padding: 2px 5px;
-    margin-bottom: 2px;
+    padding: 0 5px;
+    margin-bottom: 5px;
     margin-right: 5px;
     border-radius: 2px;
     background-color: #EBECF0;
-
-    &:first-child {
-      color: #666;
-      background-color: transparent;
-    }
+    line-height: 20px;
   }
 }
 
@@ -63,46 +61,73 @@
 }
 
 .cell {
-  width: 45px;
+  width: 20px;
   flex-shrink: 0;
 }
 
 .infoRight {
-  width: 100%;
-  flex-shrink: 1;
-  //height: 100px;
-}
+  width: 640px;
+  height: 480px;
+  box-sizing: border-box;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
 
-.sign {
-  display: flex;
-  height: 390px;
-  align-items: stretch;
-}
-
-.signLeft {
-  width: 250px;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-}
-
-.signRight {
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  width: 380px;
-  background-color: #FAFBFC;
-  border-radius: 0 10px 10px 0;
-  padding: 20px 25px;
-
-  & > div {
-    margin-bottom: -20px;
+  .top {
+    height: 48px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E5E7EB;
+    overflow: hidden;
   }
+
+  .mid {
+    height: 364px;
+    overflow: hidden;
+
+    .sign {
+      display: flex;
+      height: 100%;
+      align-items: stretch;
+
+      .signLeft {
+        width: 256px;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+      }
+
+      .signRight {
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        width: 384px;
+        background-color: #FAFBFC;
+        border-radius: 0 10px 10px 0;
+        padding: 0 15px;
+
+        .noNode {
+          font-size: 16px;
+          color: #666;
+          height: 350px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+      }
+    }
+  }
+
+  .bot {
+    height: 68px;
+    box-sizing: border-box;
+    border-top: 1px solid #E5E7EB;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 }
 
-//.PolicyName {
-//  display: flex;
-//  align-items: center;
-//}
-
-
-
-
+.TooltipOverlay {
+  //background: rgba(0, 0, 0, 0.5);
+  max-width: 300px;
+}

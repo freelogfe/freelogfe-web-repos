@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FFavorite} from '@/components/FIcons';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from '@/models/connect';
 import Contracts from './Contracts';
@@ -11,7 +9,7 @@ import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
 import * as cover from '@/assets/default-resource-cover.jpg';
-import {OnClickCollectionAction} from '@/models/marketResourcePage';
+import {Tooltip} from 'antd';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -20,6 +18,9 @@ interface SignProps {
 }
 
 function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
+
+  const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
+
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
@@ -28,53 +29,61 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           src={marketResourcePage.resourceInfo?.cover || cover}
           alt={''}
         />
-        <div style={{height: 10}}/>
-        <div className={styles.title}>
-        <span
-          className={styles.titleText}>{marketResourcePage.resourceInfo?.name || ''}
-        </span>
-          &nbsp;
-          <FCopyToClipboard
-            text={marketResourcePage.resourceInfo?.name || ''}
-            title={'复制资源名称'}
-          />
-        </div>
-        <div style={{height: 10}}/>
+        <div style={{height: 20}}/>
         <div className={styles.babels}>
-          <label>{marketResourcePage.resourceInfo?.type || ''}</label>
           {
-            (marketResourcePage.resourceInfo?.tags || []).map((t) => (<label key={t}>{t}</label>))
+            (marketResourcePage.resourceInfo?.tags || []).filter((t, i) => i < 5).map((t) => (
+              <label key={t}>{t}</label>))
           }
         </div>
-        <div style={{height: 10}}/>
-        <FContentText
-          text={marketResourcePage.resourceInfo?.about || ''}/>
-      </div>
-      <div>
         <div style={{height: 20}}/>
-        <a className={styles.favoriteBtn} onClick={() => dispatch<OnClickCollectionAction>({
-          type: 'marketResourcePage/onClickCollection',
-        })}>
-          <FFavorite
-            filled={marketResourcePage.hasCollect}/> {marketResourcePage.hasCollect ? '已收藏' : '收藏'} ({marketResourcePage.popularity}人气)
-        </a>
+
+        <Tooltip
+          title={marketResourcePage.resourceInfo?.about}
+          mouseEnterDelay={3}
+          overlayClassName={styles.TooltipOverlay}
+          color={'rgba(0, 0, 0, 0.5)'}
+          // visible={true}
+          placement="right"
+        >
+          <div>
+            <FContentText
+              text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')}/>
+          </div>
+        </Tooltip>
       </div>
     </div>
     <div className={styles.cell}/>
     <div className={styles.infoRight}>
-      <NodeSelector/>
-      <div style={{height: 15}}/>
-      <div className={styles.sign}>
-        <div className={styles.signLeft}>
-          <Resources/>
-        </div>
-        <div className={styles.signRight}>
-          <Contracts/>
-          <Policies/>
+      <div className={styles.top}>
+        <NodeSelector/>
+      </div>
+      <div className={styles.mid}>
+        <div className={styles.sign}>
+          <div className={styles.signLeft}>
+            <Resources/>
+          </div>
+          <div className={styles.signRight}>
+            {
+              marketResourcePage.selectedNodeID === -1
+                ? (<div className={styles.noNode}>
+                  请先选择签约的节点…
+                </div>)
+                : (<>
+                  <div style={{height: 15}}/>
+                  <Contracts/>
+                  <Policies/>
+                  <div style={{height: 15}}/>
+                </>)
+            }
+
+          </div>
         </div>
       </div>
-      <div style={{height: 15}}/>
-      <Bottom/>
+      <div className={styles.bot}>
+        <Bottom/>
+      </div>
+
     </div>
   </div>);
 }

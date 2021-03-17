@@ -10,8 +10,9 @@ interface FInfoProps {
   onClick?(): void;
 }
 
-function FInfo({...props}: FInfoProps) {
-  return (<InfoCircleOutlined {...props}/>);
+function FInfo({className,...props}: FInfoProps) {
+  return (<i className={['freelog', 'fl-icon-tishixinxi', className].join(' ')} {...props} />);
+
 }
 
 export default FInfo;

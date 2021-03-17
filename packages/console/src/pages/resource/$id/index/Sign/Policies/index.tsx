@@ -15,52 +15,52 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
 
   const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
 
-  if (!policies || marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
+  if (!policies || policies.length === 0 || !marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
     return null;
   }
 
   return (<div>
     {
-      marketResourcePage.selectedNodeID === -1
-        ? (<div className={styles.noNode}>
-          请先选择签约的节点…
-        </div>)
-        : policies.map((p) => (<div
+      policies.filter((p) => p.status === 0).map((p) => {
+        return (<div
           className={styles.singPolicy}
           key={p.id}
         >
-          <Space size={5}>
+          <div className={styles.singPolicyTitle}>
+            <div>{p.name}</div>
+
             <Checkbox
               checked={p.checked}
               disabled={p.status === 0}
-              onChange={(e) => dispatch<ChangeAction>({
-                type: 'marketResourcePage/change',
-                payload: {
-                  signResources: marketResourcePage.signResources.map((sr) => {
-                    if (!sr.selected) {
-                      return sr;
-                    }
-                    return {
-                      ...sr,
-                      policies: sr.policies.map((srp) => {
-                        if (srp.id !== p.id) {
-                          return srp;
-                        }
-                        return {
-                          ...srp,
-                          checked: e.target.checked,
-                        }
-                      })
-                    }
-                  })
-                }
-              })}
+              onChange={(e) => {
+                dispatch<ChangeAction>({
+                  type: 'marketResourcePage/change',
+                  payload: {
+                    signResources: marketResourcePage.signResources.map((sr) => {
+                      if (!sr.selected) {
+                        return sr;
+                      }
+                      return {
+                        ...sr,
+                        policies: sr.policies.map((srp) => {
+                          if (srp.id !== p.id) {
+                            return srp;
+                          }
+                          return {
+                            ...srp,
+                            checked: e.target.checked,
+                          }
+                        }),
+                      };
+                    }),
+                  }
+                });
+              }}
             />
-            <Space size={10}>{p.name}{p.status === 0 && (<FContentText type="additional2">(已下线)</FContentText>)}</Space>
-          </Space>
-          <div style={{height: 15}}/>
+          </div>
           <pre>{p.text}</pre>
-        </div>))
+        </div>);
+      })
     }
   </div>);
 }
