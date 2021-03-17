@@ -494,22 +494,6 @@ const Model: MarketResourcePageModelType = {
         nodes,
       }));
 
-      const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
-        nodeId: marketResourcePage.selectedNodeID,
-        presentableName: marketResourcePage.signExhibitName,
-      };
-      const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
-      // console.log(data1, '2093uoi23r');
-      if (data1) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            signExhibitNameErrorTip: `该展品名称在当前节点已使用，请重新输入。`,
-          },
-        });
-        return;
-      }
-
       const params: Parameters<typeof FApiServer.Exhibit.createPresentable>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,

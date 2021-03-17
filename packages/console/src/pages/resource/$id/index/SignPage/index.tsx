@@ -11,7 +11,6 @@ import {router} from 'umi';
 import {ChangeAction, OnChangeAndVerifySignExhibitNameAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FIcon} from "@/components";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FLeft, FNodes} from "@/components/FIcons";
 

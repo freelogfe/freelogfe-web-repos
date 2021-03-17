@@ -32,15 +32,20 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           <div style={{height: 10}}/>
         </div>
         <div className={styles.footer}>
-          <div>
-            <div>合约ID</div>
+          <Space size={0}>
+            <div>合约ID：</div>
             <div>{c.id}</div>
-          </div>
-          <div>
-            <div>签约时间</div>
+          </Space>
+          <div style={{height: 5}}/>
+          <Space size={0}>
+            <div>签约时间：</div>
             <div>{c.createTime}</div>
-          </div>
+          </Space>
         </div>
+        {/*<div style={{margin: '0 15px', borderTop: '1px solid #E5E7EB'}}/>*/}
+        {/*<div>*/}
+
+        {/*</div>*/}
       </div>))
     }
 
