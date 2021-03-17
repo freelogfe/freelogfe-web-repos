@@ -4,6 +4,8 @@ import {FContentText, FTitleText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
+import FLink from "@/components/FLink";
+import FLinkTo from "@/utils/path-assembler";
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -13,8 +15,6 @@ interface ResourcesProps {
 function Resources({dispatch, marketResourcePage}: ResourcesProps) {
 
   const showResource: any = marketResourcePage.signedResources || marketResourcePage.signResources;
-
-  // console.log(showResource, 'showResource3209');
 
   function onChangeSelected(id: string) {
     // console.log(id, 'id3209udsf');
@@ -48,7 +48,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
     {
       showResource
         .filter((r: any, i: number) => i === 0)
-        .map((r: any) => (<a
+        .map((r: any) => (<div
           key={r.id}
           className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
           onClick={() => onChangeSelected(r.id)}
@@ -73,7 +73,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
               r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
             }
           </div>
-        </a>))
+        </div>))
     }
 
     {
@@ -84,16 +84,23 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
       showResource
         .filter((r: any, i: number) => i !== 0)
         .map((r: any) => (
-          <a
+          <div
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
             key={r.id}
             onClick={() => onChangeSelected(r.id)}
           >
-            <FTitleText
-              type="h5"
-              text={r.name}
-              singleRow
-            />
+            <FLink
+              to={FLinkTo.resourceDetails({resourceID: r.id})}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <FTitleText
+                type="h5"
+                text={r.name}
+                singleRow
+              />
+            </FLink>
             <div style={{height: 5}}/>
             <FContentText
               type="additional2"
@@ -109,7 +116,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
                 r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
               }
             </div>
-          </a>))
+          </div>))
     }
   </>);
 }
