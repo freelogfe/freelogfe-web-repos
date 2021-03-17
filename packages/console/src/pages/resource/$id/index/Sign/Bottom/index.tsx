@@ -3,10 +3,8 @@ import styles from './index.less';
 import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
-import {router} from 'umi';
 import {ChangeAction} from "@/models/marketResourcePage";
 import {exhibitManagement} from "@/utils/path-assembler";
-import {FComponent} from "@/components";
 import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
 
@@ -41,7 +39,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
               }
             });
           }}
-        >签约</FNormalButton>)
+        >立即签约</FNormalButton>)
         : (<span>该资源已签约，可进入<FLink
           to={exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId})}
           className={styles.gotoExhibitLink}

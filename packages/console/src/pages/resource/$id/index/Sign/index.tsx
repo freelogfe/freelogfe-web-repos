@@ -9,6 +9,7 @@ import Resources from './Resources';
 import NodeSelector from './NodeSelector';
 import Bottom from './Bottom';
 import * as cover from '@/assets/default-resource-cover.jpg';
+import {Tooltip} from 'antd';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -36,8 +37,20 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
           }
         </div>
         <div style={{height: 20}}/>
-        <FContentText
-          text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')}/>
+
+        <Tooltip
+          title={marketResourcePage.resourceInfo?.about}
+          mouseEnterDelay={3}
+          overlayClassName={styles.TooltipOverlay}
+          color={'rgba(0, 0, 0, 0.5)'}
+          // visible={true}
+          placement="right"
+        >
+          <div>
+            <FContentText
+              text={resourceInfoLength < 205 ? (marketResourcePage.resourceInfo?.about || '') : (marketResourcePage.resourceInfo?.about.substr(0, 205) + '...')}/>
+          </div>
+        </Tooltip>
       </div>
     </div>
     <div className={styles.cell}/>
@@ -51,10 +64,19 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
             <Resources/>
           </div>
           <div className={styles.signRight}>
-            <div style={{height: 15}}/>
-            <Contracts/>
-            <Policies/>
-            <div style={{height: 15}}/>
+            {
+              marketResourcePage.selectedNodeID === -1
+                ? (<div className={styles.noNode}>
+                  请先选择签约的节点…
+                </div>)
+                : (<>
+                  <div style={{height: 15}}/>
+                  <Contracts/>
+                  <Policies/>
+                  <div style={{height: 15}}/>
+                </>)
+            }
+
           </div>
         </div>
       </div>

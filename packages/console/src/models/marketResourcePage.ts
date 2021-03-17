@@ -465,7 +465,7 @@ const Model: MarketResourcePageModelType = {
           ],
           options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
             .map((p: any) => {
-              console.log(p, '@@@@@@#$#@$@#$@#');
+              // console.log(p, '@@@@@@#$#@$@#$@#');
               return {
                 key: p.key,
                 value: p.defaultValue,
