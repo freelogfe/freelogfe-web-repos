@@ -3,8 +3,9 @@ import { Context, Application  } from 'egg';
 const mime = require('mime')
 import fse = require('fs-extra');
 import path = require('path');
-var fs = require('fs'), 
-    AdmZip = require('adm-zip'); 
+var fs = require("fs");
+var JSZip = require("jszip");
+//     AdmZip = require('adm-zip'); 
 
 @Provide()
 @Controller('/')
@@ -19,7 +20,15 @@ export class HomeController {
     // console.log(ctx.url,ctx.query)
     let data
     try {
-      data = fse.readFileSync(path.join(ctx.app.baseDir, '../view/markdown/index.html')).toString();
+      data = fse.readFileSync(path.join(ctx.app.baseDir, '../view/dist/index.html')).toString();
+      fs.readFile(path.join(ctx.app.baseDir, '../view/dist.zip'), function(err, data) {
+        if (err) throw err;
+        JSZip.loadAsync(data).then(function (zip) {
+          // console.log(zip)
+          saveZipFiles(path.join(ctx.app.baseDir, '../view/new'), zip.files);
+            // ...
+        });
+    });
       // 等待操作结果返回，然后打印结果
     } catch (e) {
       console.log('读取文件发生错误');
@@ -33,7 +42,7 @@ export class HomeController {
     // console.log(ctx.url, ctx)
     let data, type
     try {
-      let pa = path.join(ctx.app.baseDir, '../view/markdown' + ctx.request.url)
+      let pa = path.join(ctx.app.baseDir, '../view/dist' + ctx.request.url)
       type = mime.getType(pa)
       data = fse.readFileSync(pa);
       // 等待操作结果返回，然后打印结果
@@ -59,13 +68,16 @@ function saveZipFiles(savePath, files) {
       if (!files[filename]) return
       const dest = savePath + '\\' + filename;
       // 如果该文件为目录需先创建文件夹  && !isDirSync(dest)
-      if (files[filename] && files[filename].dir && !fs.existsSync(dest)) {
-        fs.mkdirSync(dest, {
-          recursive: true
-        });
+      console.log(dest, files[filename].dir)
+      if (files[filename] && files[filename].dir) {
+        if(!fs.existsSync(dest)){
+          fs.mkdirSync(dest, {
+            recursive: true
+          });   
+        }
       } else {
         // 把每个文件buffer写到硬盘中 
-        files[filename]._data && console.log(files[filename]._data.compressedContent, savePath, dest)
+        files[filename]._data && console.log(filename, files[filename]._data.compressedContent, savePath, dest)
         files[filename]._data && fs.writeFileSync(dest,files[filename]._data.compressedContent);
       }
     }

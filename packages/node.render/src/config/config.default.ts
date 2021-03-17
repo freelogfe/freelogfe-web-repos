@@ -7,7 +7,10 @@ export default (appInfo: EggAppInfo) => {
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1612158870164_9011';
-
+  config.cors = {
+    origin: '*', // 表示允许的源
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH' // 表示允许的http请求方式
+  };
   // add your config here
   config.middleware = [];
   
