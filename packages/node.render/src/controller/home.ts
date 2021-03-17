@@ -16,6 +16,7 @@ export class HomeController {
   app: Application;
   @Get('/')
   async home() {
+    console.log('home')
     const ctx = this.ctx
     // console.log(ctx.url,ctx.query)
     let data
@@ -38,6 +39,7 @@ export class HomeController {
   }
   @Get('/*')
   async static() {
+    console.log(234234234)
     const ctx = this.ctx
     // console.log(ctx.url, ctx)
     let data, type
@@ -68,8 +70,7 @@ function saveZipFiles(savePath, files) {
       if (!files[filename]) return
       const dest = savePath + '\\' + filename;
       // 如果该文件为目录需先创建文件夹  && !isDirSync(dest)
-      console.log(dest, files[filename].dir)
-      if (files[filename] && files[filename].dir) {
+       if (files[filename] && files[filename].dir) {
         if(!fs.existsSync(dest)){
           fs.mkdirSync(dest, {
             recursive: true
@@ -77,8 +78,8 @@ function saveZipFiles(savePath, files) {
         }
       } else {
         // 把每个文件buffer写到硬盘中 
-        files[filename]._data && console.log(filename, files[filename]._data.compressedContent, savePath, dest)
-        files[filename]._data && fs.writeFileSync(dest,files[filename]._data.compressedContent);
+        files[filename].async('nodebuffer')
+          .then(content => fs.writeFileSync(dest, content));
       }
     }
   } catch (error) {
