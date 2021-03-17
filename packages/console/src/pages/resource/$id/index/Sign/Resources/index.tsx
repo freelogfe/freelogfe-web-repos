@@ -14,23 +14,23 @@ interface ResourcesProps {
 
 function Resources({dispatch, marketResourcePage}: ResourcesProps) {
 
-  const showResource: any = marketResourcePage.signedResources || marketResourcePage.signResources;
+  // const showResource: any = marketResourcePage.signedResources || marketResourcePage.signResources;
 
   function onChangeSelected(id: string) {
     // console.log(id, 'id3209udsf');
     // console.log(marketResourcePage.signedResources, 'id3209udsf');
-    if (marketResourcePage.signedResources) {
-      dispatch<ChangeAction>({
-        type: 'marketResourcePage/change',
-        payload: {
-          signedResources: marketResourcePage.signedResources.map((sr) => ({
-            ...sr,
-            selected: id === sr.id,
-          })),
-        },
-      });
-      return;
-    }
+    // if (marketResourcePage.signedResources) {
+    //   dispatch<ChangeAction>({
+    //     type: 'marketResourcePage/change',
+    //     payload: {
+    //       signedResources: marketResourcePage.signedResources.map((sr) => ({
+    //         ...sr,
+    //         selected: id === sr.id,
+    //       })),
+    //     },
+    //   });
+    //   return;
+    // }
     dispatch<ChangeAction>({
       type: 'marketResourcePage/change',
       payload: {
@@ -46,7 +46,7 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
     <div style={{height: 7}}/>
     <div className={styles.signLeftNav}>选择主资源授权策略</div>
     {
-      showResource
+      marketResourcePage.signResources
         .filter((r: any, i: number) => i === 0)
         .map((r: any) => (<div
           key={r.id}
@@ -77,13 +77,13 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
     }
 
     {
-      showResource.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
+      marketResourcePage.signResources.length > 1 && (<div className={styles.signLeftNav}>选择基础上抛授权策略</div>)
     }
 
     {
-      showResource
-        .filter((r: any, i: number) => i !== 0)
-        .map((r: any) => (
+      marketResourcePage.signResources
+        .filter((r, i: number) => i !== 0)
+        .map((r) => (
           <div
             className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
             key={r.id}
@@ -109,11 +109,22 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
             <div style={{height: 5}}/>
             <div className={styles.policeTags}>
               {
-                r.policies?.filter((p: any) => p.checked)
-                  .map((p: any) => (<label key={p.id}>{p.name}</label>))
+                r.contracts
+                  .filter((c) => {
+                    return c.checked;
+                  })
+                  .map((c) => {
+                    return (<label key={c.id}>{c.name}</label>);
+                  })
               }
               {
-                r.contracts?.map((c: any) => (<label key={c.id}>{c.name}</label>))
+                r.policies
+                  .filter((p: any) => {
+                    return p.checked;
+                  })
+                  .map((p: any) => {
+                    return (<label key={p.id}>{p.name}</label>);
+                  })
               }
             </div>
           </div>))

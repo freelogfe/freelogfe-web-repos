@@ -15,18 +15,19 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
 
   const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
 
-  if (!policies || marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
+  if (!policies || policies.length === 0 || !marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
     return null;
   }
 
   return (<div>
     {
-      policies.map((p) => (<div
+      policies.filter((p) => p.status === 0).map((p) => {
+        return (<div
           className={styles.singPolicy}
           key={p.id}
         >
           <div className={styles.singPolicyTitle}>
-            <Space size={10}>{p.name}{p.status === 0 && (<FContentText type="additional2">(已下线)</FContentText>)}</Space>
+            <div>{p.name}</div>
 
             <Checkbox
               checked={p.checked}
@@ -58,7 +59,8 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
             />
           </div>
           <pre>{p.text}</pre>
-        </div>))
+        </div>);
+      })
     }
   </div>);
 }

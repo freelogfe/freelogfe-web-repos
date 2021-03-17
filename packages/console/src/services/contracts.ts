@@ -32,7 +32,7 @@ export interface BatchContractsParamsType {
   subjectType?: 1 | 2 | 3;
   licenseeIdentityType?: 1 | 2 | 3;
   licensorId?: string;
-  licenseeId?: string;
+  licenseeId?: string | number;
   isLoadPolicyInfo?: 0 | 1;
   projection?: string;
 }
