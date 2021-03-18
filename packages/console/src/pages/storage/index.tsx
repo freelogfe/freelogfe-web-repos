@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FSiderLayout from '@/layouts/FSiderLayout';
 import Sider from './Sider';
 import Content from './Content';
 import NoBucket from './NoBucket';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-// import FContentLayout from '@/layouts/FContentLayout';
 import Header from './Header';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
