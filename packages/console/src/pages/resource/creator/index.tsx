@@ -133,10 +133,6 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
                   payload: value,
                 });
               }}
-              // onChange={(e) => onChange({
-              //   name: e.target.value,
-              //   nameErrorText: '',
-              // })}
               className={styles.FInput}
               placeholder={i18nMessage('hint_enter_resource_name')}
               lengthLimit={60}

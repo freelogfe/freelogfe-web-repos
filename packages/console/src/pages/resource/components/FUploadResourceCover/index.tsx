@@ -24,7 +24,6 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
         }}
       >
         <a className={styles.FUploadImageChildren}>
-          {/*<i className={'freelog fl-icon-shangchuanfengmian'}/>*/}
           <FCloudUpload/>
           <span>{i18nMessage('upload_image')}</span>
         </a>
