@@ -601,8 +601,8 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             depRelationship: [
-              ...relationships,
               ...resourceVersionCreatorPage.depRelationship,
+              ...relationships,
             ],
           },
         });
@@ -697,8 +697,8 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           depRelationship: [
-            ...relationships,
             ...resourceVersionCreatorPage.depRelationship,
+            ...relationships,
           ],
           dependencies: [
             ...resourceVersionCreatorPage.dependencies,
