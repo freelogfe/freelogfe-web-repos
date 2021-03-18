@@ -99,7 +99,7 @@ export interface ChangeAction extends AnyAction {
 
 export interface FetchInfoAction extends AnyAction {
   type: 'storageObjectEditor/fetchInfo';
-  payload: string;
+  // payload: string;
 }
 
 export interface UpdateObjectInfoAction extends AnyAction {
@@ -152,42 +152,47 @@ export interface StorageObjectEditorModelType {
   };
 }
 
+export const storageObjectEditorInitData: StorageObjectEditorModelState = {
+  // visible: false,
+  objectId: '',
+  bucketName: '',
+  objectName: '',
+  sha1: '',
+  type: '',
+  typeVerify: 2,
+  typeError: '',
+  size: 0,
+
+  rawProperties: [],
+
+  baseProperties: [],
+  basePropertiesEditorVisible: false,
+  basePropertiesEditorData: [],
+
+  customOptionsDataVisible: false,
+  customOptionsData: [],
+  customOptionsEditorVisible: false,
+  customOptionsEditorDataSource: [],
+
+  depRs: [],
+  depOs: [],
+};
+
 const Model: StorageObjectEditorModelType = {
   namespace: 'storageObjectEditor',
-  state: {
-    // visible: false,
-    objectId: '',
-    bucketName: '',
-    objectName: '',
-    sha1: '',
-    type: '',
-    typeVerify: 2,
-    typeError: '',
-    size: 0,
-
-    rawProperties: [],
-
-    baseProperties: [],
-    basePropertiesEditorVisible: false,
-    basePropertiesEditorData: [],
-
-    customOptionsDataVisible: false,
-    customOptionsData: [],
-    customOptionsEditorVisible: false,
-    customOptionsEditorDataSource: [],
-
-    depRs: [],
-    depOs: [],
-  },
+  state: storageObjectEditorInitData,
   effects: {
-    * fetchInfo({payload}: FetchInfoAction, {call, put}: EffectsCommandMap) {
+    * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
       // console.log(payload, 'duixiangID09w3ujlkasdfasdfasdf');
-      if (!payload) {
+      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+        storageObjectEditor,
+      }));
+
+      if (!storageObjectEditor.objectId) {
         return;
       }
-      console.log(payload, '@#####8iopijl;k');
       const params: ObjectDetailsParamsType2 = {
-        objectIdOrName: payload,
+        objectIdOrName: storageObjectEditor.objectId,
       };
       const {data} = yield call(objectDetails, params);
       // console.log(data, 'data@#Rwe90ifjsdlkfa');

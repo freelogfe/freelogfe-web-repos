@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
+import {FContentText} from '@/components/FText';
 import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
-import {Divider, Space} from 'antd';
+import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
@@ -12,8 +12,8 @@ import {i18nMessage} from '@/utils/i18n';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
-  ChangeAction,
-  OnChangeTypeAction,
+  ChangeAction, FetchInfoAction,
+  OnChangeTypeAction, storageObjectEditorInitData,
   UpdateObjectInfoAction
 } from '@/models/storageObjectEditor';
 import {UpdateAObjectAction} from '@/models/storageHomePage';
@@ -95,7 +95,25 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       router.push(FLinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
-    }}>
+    }}
+    afterVisibleChange={async (visible) => {
+
+      if (visible) {
+        await dispatch<FetchInfoAction>({
+          type: 'storageObjectEditor/fetchInfo',
+          // payload: (history.location as any).query.objectID,
+        });
+      } else {
+        dispatch<ChangeAction>({
+          type: 'storageObjectEditor/change',
+          payload: {
+            ...storageObjectEditorInitData,
+          }
+        });
+      }
+
+    }}
+  >
     <div className={styles.divContainer}>
 
       <FFormLayout>
@@ -290,6 +308,9 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         width={640}
         visible={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
+        afterVisibleChange={(visible) => {
+
+        }}
       >
         <SelectDeps/>
       </FDrawer>

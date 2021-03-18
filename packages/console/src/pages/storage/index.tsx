@@ -35,24 +35,11 @@ function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
   }, [(history.location as any).query.bucketName]);
 
   React.useEffect(() => {
-    // console.log((history.location as any).query, 'history.location.query.bucketName');
-    // if (!(history.location as any).query.objectID) {
-    //   return;
-    // }
-    fetchObjectInfo();
-  }, [(history.location as any).query.objectID]);
-
-  async function fetchObjectInfo() {
-    await dispatch<ChangeAction>({
+    dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
       payload: {objectId: (history.location as any).query.objectID || ''},
     });
-
-    await dispatch<FetchInfoAction>({
-      type: 'storageObjectEditor/fetchInfo',
-      payload: (history.location as any).query.objectID,
-    });
-  }
+  }, [(history.location as any).query.objectID]);
 
   if (!storageHomePage.bucketList) {
     return null;
