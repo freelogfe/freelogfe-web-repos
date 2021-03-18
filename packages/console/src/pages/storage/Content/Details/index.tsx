@@ -96,23 +96,10 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         bucketName: storageObjectEditor.bucketName,
       }));
     }}
-    afterVisibleChange={async (visible) => {
-
-      if (visible) {
-        await dispatch<FetchInfoAction>({
-          type: 'storageObjectEditor/fetchInfo',
-          // payload: (history.location as any).query.objectID,
-        });
-      } else {
-        dispatch<ChangeAction>({
-          type: 'storageObjectEditor/change',
-          payload: {
-            ...storageObjectEditorInitData,
-          }
-        });
-      }
-
-    }}
+    // afterVisibleChange={async (visible) => {
+    //   console.log(visible, 'visible@#$WEREREWr');
+    //
+    // }}
   >
     <div className={styles.divContainer}>
 

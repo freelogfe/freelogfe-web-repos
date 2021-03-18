@@ -12,7 +12,7 @@ import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {OnChangeActivatedBucketAction} from "@/models/storageHomePage";
 import {withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
-import {ChangeAction, FetchInfoAction} from "@/models/storageObjectEditor";
+import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -35,11 +35,27 @@ function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
   }, [(history.location as any).query.bucketName]);
 
   React.useEffect(() => {
-    dispatch<ChangeAction>({
+    initObjectDetails();
+
+    return () => {
+      dispatch<ChangeAction>({
+        type: 'storageObjectEditor/change',
+        payload: {
+          ...storageObjectEditorInitData,
+        }
+      });
+    };
+  }, [(history.location as any).query.objectID]);
+
+  async function initObjectDetails() {
+    await dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
       payload: {objectId: (history.location as any).query.objectID || ''},
     });
-  }, [(history.location as any).query.objectID]);
+    await dispatch<FetchInfoAction>({
+      type: 'storageObjectEditor/fetchInfo',
+    });
+  }
 
   if (!storageHomePage.bucketList) {
     return null;

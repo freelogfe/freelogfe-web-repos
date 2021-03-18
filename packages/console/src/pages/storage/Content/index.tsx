@@ -246,21 +246,5 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
         </FTooltip>
       )
     }
-    {/*{*/}
-    {/*  showDelete && (*/}
-    {/*    <Popconfirm*/}
-    {/*      title={'确定删除吗？'}*/}
-    {/*      trigger="hover"*/}
-    {/*      // okText="Yes"*/}
-    {/*      // cancelText="No"*/}
-    {/*      onConfirm={() => onClickDelete && onClickDelete()}*/}
-    {/*    >*/}
-    {/*      <FTextButton*/}
-    {/*        className={styles.Delete}*/}
-    {/*      ><FDelete/></FTextButton>*/}
-    {/*    </Popconfirm>*/}
-    {/*  )*/}
-    {/*}*/}
-
   </Space>)
 }
