@@ -15,6 +15,8 @@ import {ConnectState} from "@/models/connect";
 import {batchInfo, BatchInfoParamsType, CreateVersionParamsType, info, InfoParamsType} from "@/services/resources";
 import {RESOURCE_TYPE} from "@/utils/regexp";
 import FLinkTo from "@/utils/path-assembler";
+import {FApiServer} from "@/services";
+import fMessage from "@/components/fMessage";
 
 interface DepR {
   id: string;
@@ -329,14 +331,29 @@ const Model: StorageObjectEditorModelType = {
       });
     },
     * addObjectDepR({payload}: AddObjectDepRAction, {call, put, select}: EffectsCommandMap) {
+      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+        storageObjectEditor,
+      }));
+
       const params: InfoParamsType = {
         resourceIdOrName: payload,
         isLoadLatestVersionInfo: 1,
       };
       const {data} = yield call(info, params);
-      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
-        storageObjectEditor,
-      }));
+
+      const params1: Parameters<typeof FApiServer.Storage.cycleDependencyCheck>[0] = {
+        objectIdOrName: storageObjectEditor.objectId,
+        dependencies: [{
+          name: data.resourceName,
+          type: 'resource',
+        }],
+      };
+
+      const {data: data1} = yield call(FApiServer.Storage.cycleDependencyCheck, params1);
+
+      if (!data1) {
+        return fMessage('循环依赖，不能添加', 'error');
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -374,13 +391,30 @@ const Model: StorageObjectEditorModelType = {
       });
     },
     * addObjectDepO({payload}: AddObjectDepOAction, {call, put, select}: EffectsCommandMap) {
-      const params: ObjectDetailsParamsType2 = {
-        objectIdOrName: payload,
-      };
-      const {data} = yield call(objectDetails, params);
+
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
       }));
+
+      const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
+        objectIdOrName: payload,
+      };
+      const {data} = yield call(FApiServer.Storage.objectDetails, params);
+
+      const params1: Parameters<typeof FApiServer.Storage.cycleDependencyCheck>[0] = {
+        objectIdOrName: storageObjectEditor.objectId,
+        dependencies: [{
+          name: `${data.bucketName}/${data.objectName}`,
+          type: 'object',
+        }],
+      };
+
+      const {data: data1} = yield call(FApiServer.Storage.cycleDependencyCheck, params1);
+
+      if (!data1) {
+        return fMessage('循环依赖，不能添加', 'error');
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {

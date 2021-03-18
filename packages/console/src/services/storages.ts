@@ -222,3 +222,17 @@ export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
     params,
   });
 }
+
+// 对象依赖循环性检查
+export interface CycleDependencyCheckParamsType {
+  objectIdOrName: string;
+  dependencies: {
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+}
+
+export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
+  return request.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
+}
