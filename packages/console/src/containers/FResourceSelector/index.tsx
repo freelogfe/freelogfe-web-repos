@@ -36,11 +36,12 @@ function FResourceSelector({
                              dispatch, selector
                            }: FResourceSelectorProps) {
   React.useEffect(() => {
-    if (selector.rTotal === -1) {
-      dispatch<FetchResourcesAction>({
-        type: 'storageObjectDepSelector/fetchResources',
-      });
-    }
+    // if (selector.rTotal === -1) {
+    dispatch<FetchResourcesAction>({
+      type: 'storageObjectDepSelector/fetchResources',
+      payload: true,
+    });
+    // }
   }, []);
 
   return (<>

@@ -308,9 +308,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         width={640}
         visible={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
-        afterVisibleChange={(visible) => {
-
-        }}
+        destroyOnClose
       >
         <SelectDeps/>
       </FDrawer>

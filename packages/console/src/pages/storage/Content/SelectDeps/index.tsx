@@ -7,8 +7,8 @@ import FResourceSelector from '@/containers/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';
 import {
   AddObjectDepOAction, AddObjectDepRAction, DeleteObjectDepOAction, DeleteObjectDepRAction,
-  // DeleteObjectDepAction
 } from '@/models/storageObjectEditor';
+import {ChangeAction, storageObjectDepSelectorInitData} from "@/models/storageObjectDepSelector";
 
 interface SelectDepsProps {
   dispatch: Dispatch;
@@ -17,6 +17,19 @@ interface SelectDepsProps {
 }
 
 function SelectDeps({selector, storageObjectEditor, dispatch}: SelectDepsProps) {
+
+  React.useEffect(() => {
+    // console.log('cra@#!$!@#$');
+    return () => {
+      // console.log('des#@#R#$@#$');
+      // dispatch<ChangeAction>({
+      //   type: 'storageObjectDepSelector/change',
+      //   payload: {
+      //     ...storageObjectDepSelectorInitData,
+      //   },
+      // })
+    };
+  }, []);
 
   return (<div>
     <Tabs>

@@ -9,9 +9,10 @@ import {DownOutlined} from '@ant-design/icons';
 import {
   ChangeAction,
   FetchObjectsAction,
-  OnChangeOConditionsAction,
+  OnChangeOConditionsAction, storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from "@/components/FDropdownMenu";
+import {storageObjectEditorInitData} from "@/models/storageObjectEditor";
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -38,11 +39,6 @@ function FObjectSelector({
                          }: FObjectSelectorProps) {
 
   React.useEffect(() => {
-    // if (selector.oTotal === -1) {
-    //   dispatch<FetchObjectsAction>({
-    //     type: 'storageObjectDepSelector/fetchObjects',
-    //   });
-    // }
     init();
   }, []);
 
@@ -57,22 +53,6 @@ function FObjectSelector({
       type: 'storageObjectDepSelector/fetchObjects',
     });
   }
-
-  // React.useEffect(() => {
-  //   if (selector.oTotal === -1) {
-  //     return;
-  //   }
-  //   dispatch<ChangeAction>({
-  //     type: 'storageObjectDepSelector/change',
-  //     payload: {
-  //       // visibleOResourceType: visibleResourceType,
-  //       // isLoadingTypelessO: isLoadingTypeless,
-  //     },
-  //   });
-  //   dispatch<FetchObjectsAction>({
-  //     type: 'storageObjectDepSelector/fetchObjects',
-  //   });
-  // }, [isLoadingTypeless, visibleResourceType]);
 
   const selectOptions = [
     ...defaultSelectOptions,

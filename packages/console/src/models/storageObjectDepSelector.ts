@@ -8,8 +8,6 @@ import {ConnectState} from "@/models/connect";
 import {collectionResources, CollectionResourcesParamsType} from "@/services/collections";
 
 export interface StorageObjectDepSelectorModelState {
-  // tabKey: '1' | '2';
-
   resourceList: {
     resourceId: string;
     resourceName: string;
@@ -18,14 +16,12 @@ export interface StorageObjectDepSelectorModelState {
     status: 0 | 1;
     latestVersion: string;
   }[];
-  // rPageCurrent: number;
   rPageSize: number;
   rTotal: number;
   rSelect: '1' | '2' | '3';
   rInput: string;
 
   visibleOResourceType: string;
-  // isLoadingTypelessO: 0 | 1;
   objectList: {
     objectId: string;
     bucketName: string;
@@ -33,7 +29,6 @@ export interface StorageObjectDepSelectorModelState {
     resourceType: string;
     updateDate: string;
   }[];
-  // oPageCurrent: number;
   oPageSize: number;
   oTotal: number;
   oSelect: '_all' | string;
@@ -82,26 +77,24 @@ export interface StorageObjectDepSelectorModelType {
   };
 }
 
+export const storageObjectDepSelectorInitData: StorageObjectDepSelectorModelState = {
+  resourceList: [],
+  rTotal: -1,
+  rPageSize: 20,
+  rSelect: '1',
+  rInput: '',
+  visibleOResourceType: '',
+  objectList: [],
+  oTotal: -1,
+  oPageSize: 20,
+  oSelect: '_all',
+  oInput: '',
+};
+
 const Model: StorageObjectDepSelectorModelType = {
   namespace: 'storageObjectDepSelector',
   state: {
-    // tabKey: '1',
-
-    resourceList: [],
-    rTotal: -1,
-    rPageSize: 20,
-    // rPageCurrent: 1,
-    rSelect: '1',
-    rInput: '',
-
-    visibleOResourceType: '',
-    // isLoadingTypelessO: 1,
-    objectList: [],
-    oTotal: -1,
-    oPageSize: 20,
-    // oPageCurrent: 1,
-    oSelect: '_all',
-    oInput: '',
+    ...storageObjectDepSelectorInitData,
   },
   effects: {
     * fetchResources({payload = false}: FetchResourcesAction, {call, put, select}: EffectsCommandMap) {
