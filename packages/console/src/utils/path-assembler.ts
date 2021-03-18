@@ -1,5 +1,5 @@
 import * as H from "history";
-
+import * as querystring from 'querystring';
 
 // type TReturnType = H.LocationDescriptor<H.LocationState>;
 type TReturnType = string;
