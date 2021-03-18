@@ -4,7 +4,7 @@ import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
-import {exhibitManagement} from "@/utils/path-assembler";
+import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
 
@@ -23,7 +23,9 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
           disabled={
             marketResourcePage.selectedNodeID === -1
             || marketResourcePage.version === ''
-            || marketResourcePage.signResources.map((sr) => sr.policies.filter((srp) => srp.checked).length).includes(0)
+            || marketResourcePage.signResources.map((sr) => {
+              return sr.policies.filter((srp) => srp.checked).length + sr.contracts.filter((srp) => srp.checked).length;
+            }).includes(0)
           }
           onClick={async () => {
             const signExhibitName: string = await getAvailableExhibitName({
@@ -41,7 +43,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
           }}
         >立即签约</FNormalButton>)
         : (<span>该资源已签约，可进入<FLink
-          to={exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitId})}
+          to={FLinkTo.exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitID})}
           className={styles.gotoExhibitLink}
         >展品管理</FLink>进行授权管理</span>)
     }

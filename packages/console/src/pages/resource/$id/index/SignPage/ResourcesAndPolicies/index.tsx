@@ -16,9 +16,6 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
 
   const [visibleR, setVisibleR] = React.useState<string>('');
 
-  // function showR(id: string) {
-  //   setVisibleR()
-  // }
   const showRInfo = marketResourcePage.signResources.find((sr) => sr.id === visibleR);
 
   return (<>
@@ -45,7 +42,6 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
               r.policies.filter((p: any) => p.checked)
                 .map((p: any) => (<label key={p.id}>{p.name}</label>))
             }
-            {/*<label>策略1</label>*/}
           </div>
         </a>))
     }
@@ -78,25 +74,16 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
                 </div>
                 <div className={styles.resourcePolicies}>
                   {
-                    r.policies.filter((p: any) => p.checked)
-                      .map((p: any) => (<label key={p.id}>{p.name}</label>))
+                    r.contracts.filter((c) => c.checked)
+                      .map((c) => (<label key={c.id}>{c.name}</label>))
                   }
-                  {/*<label>策略1</label>*/}
+                  {
+                    r.policies.filter((p) => p.checked)
+                      .map((p) => (<label key={p.id}>{p.name}</label>))
+                  }
                 </div>
               </a>))
           }
-          {/*<a className={styles.resource}>*/}
-          {/*  <div>*/}
-          {/*    <FTitleText type={'h4'} text={'stefan/Smells like teen spirit'}/>*/}
-          {/*    <div style={{height: 5}}/>*/}
-          {/*    <FContentText type="additional2" text={'audio'}/>*/}
-          {/*  </div>*/}
-          {/*  <div className={styles.resourcePolicies}>*/}
-          {/*    <label>策略1</label>*/}
-          {/*    <label>策略1</label>*/}
-          {/*    <label>策略1</label>*/}
-          {/*  </div>*/}
-          {/*</a>*/}
         </Space>
       </>
     }
@@ -129,6 +116,21 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
         size={20}
         style={{width: '100%'}}
       >
+        {
+          showRInfo?.contracts
+            .filter((rp) => rp.checked)
+            .map((rp) => (<div
+              className={styles.policy}
+              key={rp.id}
+            >
+              <FTitleText
+                text={rp.name}
+                type="h4"
+              />
+              <div style={{height: 15}}/>
+              <pre>{rp.text}</pre>
+            </div>))
+        }
         {
           showRInfo?.policies
             .filter((rp) => rp.checked)

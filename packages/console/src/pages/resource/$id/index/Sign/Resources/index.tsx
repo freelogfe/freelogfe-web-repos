@@ -89,18 +89,18 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
             key={r.id}
             onClick={() => onChangeSelected(r.id)}
           >
-            <FLink
-              to={FLinkTo.resourceDetails({resourceID: r.id})}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
+            {/*<FLink*/}
+            {/*  to={FLinkTo.resourceDetails({resourceID: r.id})}*/}
+            {/*  onClick={(e) => {*/}
+            {/*    e.stopPropagation();*/}
+            {/*  }}*/}
+            {/*>*/}
               <FTitleText
                 type="h5"
                 text={r.name}
                 singleRow
               />
-            </FLink>
+            {/*</FLink>*/}
             <div style={{height: 5}}/>
             <FContentText
               type="additional2"

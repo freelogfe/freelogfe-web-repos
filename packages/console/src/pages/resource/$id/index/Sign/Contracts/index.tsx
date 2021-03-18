@@ -19,25 +19,57 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
   const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
 
 
-  if (!contracts || contracts.length === 0 || !marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
+  if (!contracts || contracts.length === 0) {
     return null;
   }
 
+  const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
+
+
   return (<div>
-    <div className={styles.smallTitle}>当前合约</div>
+    <div className={styles.smallTitle}>{isSignedNode ? '当前合约' : '可复用的合约'}</div>
     <div style={{height: 5}}/>
     {
       contracts.map((c) => {
         return (<div key={c.id} className={styles.Contracts}>
-          <div className={styles.content}>
+          <div className={styles.contractTitle}>
             <Space size={5}>
               <span>{c.name}</span>
               <label className={styles.executing}>执行中</label>
             </Space>
-            <div style={{height: 10}}/>
-            <pre>{c.text}</pre>
-            <div style={{height: 10}}/>
+            {
+              !isSignedNode && (<Checkbox
+                checked={c.checked}
+                onChange={(e) => {
+                  dispatch<ChangeAction>({
+                    type: 'marketResourcePage/change',
+                    payload: {
+                      signResources: marketResourcePage.signResources.map((sr) => {
+                        if (!sr.selected) {
+                          return sr;
+                        }
+                        return {
+                          ...sr,
+                          contracts: sr.contracts.map((srp) => {
+                            if (srp.id !== c.id) {
+                              return srp;
+                            }
+                            return {
+                              ...srp,
+                              checked: e.target.checked,
+                            }
+                          }),
+                        };
+                      }),
+                    }
+                  });
+                }}
+              />)
+            }
           </div>
+          <div style={{height: 10}}/>
+          <pre>{c.text}</pre>
+          <div style={{height: 10}}/>
           <div className={styles.footer}>
             <Space size={0}>
               <div>合约ID：</div>
@@ -56,24 +88,6 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
         </div>);
       })
     }
-
-    {/*{*/}
-    {/*  (resource?.policies.length || 0) > 0 && (<>*/}
-    {/*    <div className={styles.smallTitle}>未签约策略</div>*/}
-    {/*    <div style={{height: 5}}/>*/}
-    {/*    {*/}
-    {/*      resource?.policies.map((p) => (<div*/}
-    {/*        className={styles.singPolicy}*/}
-    {/*        key={p.id}*/}
-    {/*      >*/}
-    {/*        <span>{p.name}</span>*/}
-    {/*        <div style={{height: 15}}/>*/}
-    {/*        <pre>{p.text}</pre>*/}
-    {/*      </div>))*/}
-    {/*    }*/}
-    {/*  </>)*/}
-    {/*}*/}
-
   </div>);
 }
 
