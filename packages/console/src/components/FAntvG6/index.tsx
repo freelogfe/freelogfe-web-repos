@@ -3,15 +3,19 @@ import styles from './index.less';
 import G6 from '@antv/g6';
 // import ReactDOM from 'react-dom';
 
-const g6ResourceTextXML = (cfg: any) => `<rect style={{
-    width: 150,
-    height: 64,
-    fill: '#fff',
-    stroke: '#EFEFEF',
-    radius: 10
-  }}>
-  <text>${cfg.name}</text>
-</rect>`;
+const g6ResourceTextXML = (cfg: any) => `
+<group>
+  <rect style={{
+      width: 'fit-content',
+      height: 64,
+      fill: '#fff',
+      stroke: '#EFEFEF',
+      radius: 10,
+    }}>
+    <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.name}&nbsp;</text>
+    <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
+  </rect>
+</group>`;
 
 G6.registerNode('g6-resource', {
   jsx: g6ResourceTextXML,
@@ -25,22 +29,32 @@ const nodes = [
   {
     id: 'node1', // String，该节点存在则必须，节点的唯一标识\
     name: 'node1',
+    resourceType: 'markdown',
+    version: '1.1.1',
   },
   {
     id: 'node2',
     name: 'node2',
+    resourceType: 'json',
+    version: '1.0.0',
   },
   {
     id: 'node3',
     name: 'node3',
+    resourceType: 'image',
+    version: '0.1.0',
   },
   {
     id: 'node4',
     name: 'node4',
+    resourceType: 'theme',
+    version: '1.0.1',
   },
   {
     id: 'node5',
     name: 'node5',
+    resourceType: 'txt',
+    version: '3.0.0',
   },
 ];
 
@@ -74,6 +88,12 @@ function FAntvG6({}: FAntvG6Props) {
         container: ref.current || '',
         width: 920,
         height: 500,
+        modes: {
+          default: [
+            'drag-canvas',
+            // 'zoom-canvas',
+          ],
+        },
         layout: {
           // type: 'mindmap',
           // type: 'compactBox',
@@ -105,10 +125,10 @@ function FAntvG6({}: FAntvG6Props) {
           type: 'g6-resource',
           // width: 150,
           // height: 64,
-          anchorPoints: [
-            [0, 0.5],
-            [1, 0.5],
-          ],
+          // anchorPoints: [
+          //   [0, 0.5],
+          //   [1, 0.5],
+          // ],
           // labelCfg: {
           //   style: {
           //     // fill: '#000000A6',
@@ -124,6 +144,7 @@ function FAntvG6({}: FAntvG6Props) {
         defaultEdge: {
           type: 'cubic-horizontal',
         },
+        // renderer: 'svg',
       });
     }
     graph.data({
