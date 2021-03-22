@@ -79,6 +79,8 @@ function FAntvG6({}: FAntvG6Props) {
           // type: 'compactBox',
           type: 'dagre',
           rankdir: 'LR', // 可选，默认为图的中心
+          // nodesep: 20,
+          // ranksep: 100,
           // align: 'DL', // 可选
           preventOverlap: true,
           controlPoints: true,
@@ -120,7 +122,7 @@ function FAntvG6({}: FAntvG6Props) {
           },
         },
         defaultEdge: {
-          // type: 'cubic-horizontal',
+          type: 'cubic-horizontal',
         },
       });
     }
