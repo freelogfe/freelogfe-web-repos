@@ -13,7 +13,7 @@ const g6ResourceTextXML = (cfg: any) => `
       stroke: '#EFEFEF',
       radius: 10,
     }}>
-    <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.name}&nbsp;</text>
+    <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
     <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
   </rect>
 </group>`;
@@ -24,8 +24,9 @@ G6.registerNode('g6-resource', {
 
 interface FAntvG6DependencyGraphProps extends GraphData {
   nodes: {
-    id: string; // String，该节点存在则必须，节点的唯一标识\
-    name: string;
+    id: string;
+    resourceId: string;
+    resourceName: string;
     resourceType: string;
     version: string;
   }[];
@@ -35,82 +36,9 @@ interface FAntvG6DependencyGraphProps extends GraphData {
   }[];
 }
 
-// const nodes = [
-//   {
-//     id: 'node1', // String，该节点存在则必须，节点的唯一标识\
-//     name: 'node1',
-//     resourceType: 'markdown',
-//     version: '1.1.1',
-//   },
-//   {
-//     id: 'node2',
-//     name: 'node2',
-//     resourceType: 'json',
-//     version: '1.0.0',
-//   },
-//   {
-//     id: 'node3',
-//     name: 'node3',
-//     resourceType: 'image',
-//     version: '0.1.0',
-//   },
-//   {
-//     id: 'node4',
-//     name: 'node4',
-//     resourceType: 'theme',
-//     version: '1.0.1',
-//   },
-//   {
-//     id: 'node5',
-//     name: 'node5',
-//     resourceType: 'txt',
-//     version: '3.0.0',
-//   },
-//   {
-//     id: 'node6',
-//     name: 'node6',
-//     resourceType: 'txt',
-//     version: '3.0.0',
-//   },
-//   {
-//     id: 'node7',
-//     name: 'node7',
-//     resourceType: 'txt',
-//     version: '3.0.0',
-//   },
-// ];
-
-// 边集
-// const edges = [
-//   {
-//     source: 'node1', // String，必须，起始点 id
-//     target: 'node2', // String，必须，目标点 id
-//   },
-//   {
-//     source: 'node1', // String，必须，起始点 id
-//     target: 'node3', // String，必须，目标点 id
-//   },
-//   {
-//     source: 'node3', // String，必须，起始点 id
-//     target: 'node4', // String，必须，目标点 id
-//   },
-//   {
-//     source: 'node3', // String，必须，起始点 id
-//     target: 'node5', // String，必须，目标点 id
-//   },
-//   {
-//     source: 'node5', // String，必须，起始点 id
-//     target: 'node6', // String，必须，目标点 id
-//   },
-//   {
-//     source: 'node6', // String，必须，起始点 id
-//     target: 'node7', // String，必须，目标点 id
-//   },
-// ];
-
 let graph: any = null;
 
-function FAntvG6DependencyGraph(data: FAntvG6DependencyGraphProps) {
+function FAntvG6DependencyGraph({nodes, edges}: FAntvG6DependencyGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -136,13 +64,16 @@ function FAntvG6DependencyGraph(data: FAntvG6DependencyGraphProps) {
           // align: 'DL', // 可选
           preventOverlap: true,
           controlPoints: true,
+          workerEnabled: true,
+          nodesep: 20,
+          ranksep: 100,
           // direction: 'H',
-          // getHeight: () => {
-          //   return 200;
-          // },
-          // getWidth: () => {
-          //   return 64;
-          // },
+          getHeight: () => {
+            return 64;
+          },
+          getWidth: () => {
+            return 200;
+          },
           // getVGap: () => {
           //   return 10;
           // },
@@ -178,15 +109,22 @@ function FAntvG6DependencyGraph(data: FAntvG6DependencyGraphProps) {
           style: {
             stroke: '#979797',
           },
-          sourceAnchor: 1,
-          targetAnchor: 0,
+          // sourceAnchor: 1,
+          // targetAnchor: 0,
         },
         // renderer: 'svg',
       });
     }
-    graph.data(data);
+    graph.data({nodes, edges});
     graph.render();
-  }, []);
+
+    return () => {
+      graph.destroy();
+      graph = null;
+    };
+
+  }, [nodes, edges]);
+
   return (<div ref={ref}/>);
 }
 

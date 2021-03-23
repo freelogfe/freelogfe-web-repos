@@ -10,19 +10,6 @@ import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
 import FUtil from "@/utils";
 
-// interface Contract {
-//   id: string;
-//   name: string;
-//   text: string;
-//   createTime: string;
-// }
-//
-// interface Policy {
-//   id: string;
-//   name: string;
-//   text: string;
-// }
-
 export interface MarketResourcePageModelState {
   resourceId: string;
 
@@ -107,6 +94,18 @@ export interface MarketResourcePageModelState {
 
   signExhibitName: string;
   signExhibitNameErrorTip: string;
+
+  dependencyGraphNodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  dependencyGraphEdges: {
+    source: string;
+    target: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -158,6 +157,10 @@ export interface OnChangeAndVerifySignExhibitNameAction extends AnyAction {
   payload: string;
 }
 
+export interface FetchDependencyGraphData extends AnyAction {
+  type: 'marketResourcePage/fetchDependencyGraphData' | 'fetchDependencyGraphData';
+}
+
 interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
@@ -172,6 +175,7 @@ interface MarketResourcePageModelType {
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
+    fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<MarketResourcePageModelState, ChangeAction>;
@@ -214,6 +218,9 @@ const initStates: MarketResourcePageModelState = {
 
   signExhibitName: '',
   signExhibitNameErrorTip: '',
+
+  dependencyGraphNodes: [],
+  dependencyGraphEdges: [],
 };
 
 const Model: MarketResourcePageModelType = {
@@ -235,6 +242,7 @@ const Model: MarketResourcePageModelType = {
       yield put<FetchCollectionInfoAction>({
         type: 'fetchCollectionInfo',
       });
+
     },
     * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -327,6 +335,7 @@ const Model: MarketResourcePageModelType = {
       yield put<FetchVersionInfoAction>({
         type: 'fetchVersionInfo',
       });
+
     },
     * fetchCollectionInfo({}: FetchCollectionInfoAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
@@ -403,8 +412,6 @@ const Model: MarketResourcePageModelType = {
       };
       const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
 
-      // console.log(data1, 'DDDDDF@#AWEF"ASdopjp');
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -457,6 +464,18 @@ const Model: MarketResourcePageModelType = {
       };
       const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
       // console.log(data, '98sdalkf');
+
+      const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
+        resourceId: marketResourcePage.resourceId,
+        version: marketResourcePage.version,
+        // version: '0.0.1',
+        isContainRootNode: true,
+      };
+
+      const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
+      console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
+      const {nodes, edges} = handleDependencyGraphData(data2[0]);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -487,6 +506,8 @@ const Model: MarketResourcePageModelType = {
                 description: p.remark,
               };
             }),
+          dependencyGraphNodes: nodes,
+          dependencyGraphEdges: edges,
         },
       });
     },
@@ -574,7 +595,10 @@ const Model: MarketResourcePageModelType = {
           signExhibitNameErrorTip: '',
         },
       });
-    }
+    },
+    * fetchDependencyGraphData({}: FetchDependencyGraphData, {select, call}: EffectsCommandMap) {
+
+    },
   },
   reducers: {
     change(state, {payload}) {
@@ -627,4 +651,57 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
   });
 
   return await Promise.all(allPromises);
+}
+
+interface DependencyTree {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  dependencies: DependencyTree[];
+}
+
+interface DependencyGraphData {
+  nodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+function handleDependencyGraphData(data: DependencyTree): DependencyGraphData {
+
+  const nodes: DependencyGraphData['nodes'] = [];
+  const edges: DependencyGraphData['edges'] = [];
+  traversal(data);
+
+  return {
+    nodes, edges
+  };
+
+  function traversal(data: DependencyTree, parentID: string = ''): any {
+    const {dependencies, ...resource} = data;
+    const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
+    nodes.push({
+      id,
+      ...resource,
+    });
+    if (parentID) {
+      edges.push({
+        source: parentID,
+        target: id,
+      });
+    }
+
+    for (const dep of dependencies) {
+      traversal(dep, id);
+    }
+  }
+
 }

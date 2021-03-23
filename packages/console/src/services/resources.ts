@@ -85,6 +85,21 @@ export function batchInfo(params: BatchInfoParamsType) {
   });
 }
 
+// 查看资源的依赖树
+export interface DependencyTreeParamsType {
+  resourceId: string;
+  version?: string;
+  maxDeep?: string;
+  omitFields?: string;
+  isContainRootNode?: boolean;
+}
+
+export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType) {
+  return request.get(`/v2/resources/${resourceId}/dependencyTree`, {
+    params: params,
+  });
+}
+
 // 创建资源版本
 export interface CreateVersionParamsType {
   resourceId: string;
