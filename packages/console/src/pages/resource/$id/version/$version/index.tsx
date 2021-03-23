@@ -31,7 +31,7 @@ import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
-import {FAntvG6DependencyGraph} from "@/components/FAntvG6";
+import {FAntvG6DependencyGraph, FViewportTabs} from "@/components/FAntvG6";
 
 
 interface VersionEditorProps {
@@ -199,42 +199,25 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resou
           }
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={i18nMessage('version_maps')}>
-          <div className={styles.Viewport}>
-            <div className={styles.ViewportNavs}>
-              <a
-                className={resourceVersionEditorPage.viewportGraphShow === 'relationship' ? styles.active : ''}
-                onClick={() => {
-                  onChange({
-                    viewportGraphShow: 'relationship',
-                  });
-                }}
-              >关系树</a>
-              <div style={{width: 20}}/>
-              <a
-                className={resourceVersionEditorPage.viewportGraphShow === 'authorization' ? styles.active : ''}
-                onClick={() => {
-                  onChange({
-                    viewportGraphShow: 'authorization',
-                  });
-                }}
-              >授权链</a>
-              <div style={{width: 20}}/>
-              <a
-                className={resourceVersionEditorPage.viewportGraphShow === 'dependency' ? styles.active : ''}
-                onClick={() => {
-                  onChange({
-                    viewportGraphShow: 'dependency',
-                  });
-                }}
-              >依赖树</a>
-            </div>
+          <FViewportTabs
+            options={[
+              {label: '关系树', value: 'relationship'},
+              {label: '授权链', value: 'authorization'},
+              {label: '依赖树', value: 'dependency'},
+            ]}
+            value={resourceVersionEditorPage.viewportGraphShow}
+            onChange={(value) => {
+              onChange({
+                viewportGraphShow: value as 'relationship',
+              });
+            }}
+          >
             {/*<FAntvG6DependencyGraph*/}
             {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
             {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
             {/*/>*/}
             <div className={styles.diagram}/>
-          </div>
-
+          </FViewportTabs>
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>

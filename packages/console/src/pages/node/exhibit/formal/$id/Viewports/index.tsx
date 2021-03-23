@@ -4,6 +4,7 @@ import {FTitleText} from "@/components/FText";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/exhibitInfoPage";
+import {FViewportTabs} from "@/components/FAntvG6";
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -23,33 +24,23 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
   return (<div>
     <FTitleText text={'相关视图'} type="h3"/>
     <div style={{height: 20}}/>
-    <div className={styles.Viewport}>
-      <div className={styles.ViewportNavs}>
-        <a
-          className={exhibitInfoPage.viewportGraphShow === 'relationship' ? styles.active : ''}
-          onClick={() => {
-            onChange({
-              viewportGraphShow: 'relationship',
-            });
-          }}
-        >展品关系树</a>
-        <div style={{width: 20}}/>
-        <a
-          className={exhibitInfoPage.viewportGraphShow === 'authorization' ? styles.active : ''}
-          onClick={() => {
-            onChange({
-              viewportGraphShow: 'authorization',
-            });
-          }}
-        >授权链视图</a>
-        <div style={{width: 20}}/>
-      </div>
+    <FViewportTabs
+      options={[
+        {value: 'relationship', label: '展品关系树'},
+        {value: 'authorization', label: '授权链视图'},
+      ]}
+      value={exhibitInfoPage.viewportGraphShow}
+      onChange={(value) => {
+        onChange({viewportGraphShow: value as 'relationship'});
+      }}
+    >
       {/*<FAntvG6DependencyGraph*/}
       {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
       {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
       {/*/>*/}
       <div className={styles.diagram}/>
-    </div>
+    </FViewportTabs>
+
   </div>);
 }
 

@@ -34,11 +34,13 @@ interface FAntvG6DependencyGraphProps extends GraphData {
     source: string;
     target: string;
   }[];
+  width?: number;
+  height?: number;
 }
 
 let graph: any = null;
 
-function FAntvG6DependencyGraph({nodes, edges}: FAntvG6DependencyGraphProps) {
+function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntvG6DependencyGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -46,8 +48,8 @@ function FAntvG6DependencyGraph({nodes, edges}: FAntvG6DependencyGraphProps) {
     if (!graph) {
       graph = new G6.Graph({
         container: ref.current || '',
-        width: 920,
-        height: 500,
+        width: width,
+        height: height,
         modes: {
           default: [
             'drag-canvas',
