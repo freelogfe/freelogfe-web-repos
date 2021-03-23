@@ -31,11 +31,12 @@ import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
+import {FAntvG6DependencyGraph} from "@/components/FAntvG6";
 
 
 interface VersionEditorProps {
   dispatch: Dispatch;
-  version: ResourceVersionEditorPageModelState;
+  // version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceInfo: ResourceInfoModelState;
   match: {
@@ -46,10 +47,10 @@ interface VersionEditorProps {
   }
 }
 
-function VersionEditor({dispatch, route, version, resourceVersionEditorPage, match, resourceInfo}: VersionEditorProps & RouterTypes) {
+function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resourceInfo}: VersionEditorProps & RouterTypes) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
-  const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(version.description));
+  const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
 
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
@@ -78,12 +79,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   }, [match.params.id, match.params.version]);
 
   async function init() {
-    await dispatch<ChangeAction>({
-      type: 'resourceVersionEditorPage/change',
-      payload: {
-        resourceID: match.params.id,
-        version: match.params.version,
-      },
+    await onChange({
+      resourceID: match.params.id,
+      version: match.params.version,
     });
     // console.log('8******88888*)OIIIIII');
     await dispatch<FetchDataSourceAction>({
@@ -92,8 +90,8 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   }
 
   React.useEffect(() => {
-    setEditor(BraftEditor.createEditorState(version.description));
-  }, [version.description]);
+    setEditor(BraftEditor.createEditorState(resourceVersionEditorPage.description));
+  }, [resourceVersionEditorPage.description]);
 
   // React.useEffect(() => {
   //   setProperties(version.properties);
@@ -125,32 +123,33 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
   }
 
   function onCloseCustomOptionDrawer() {
-    dispatch<ChangeAction>({
+    onChange({
+      customOptionEditorVisible: false,
+      customOptionKey: '',
+      customOptionDescription: '',
+      customOptionDescriptionError: '',
+      customOptionCustom: 'input',
+      customOptionDefaultValue: '',
+      customOptionDefaultValueError: '',
+      customOptionCustomOption: '',
+      customOptionCustomOptionError: '',
+    });
+  }
+
+  async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
+    await dispatch<ChangeAction>({
       type: 'resourceVersionEditorPage/change',
-      payload: {
-        customOptionEditorVisible: false,
-        customOptionKey: '',
-        customOptionDescription: '',
-        customOptionDescriptionError: '',
-        customOptionCustom: 'input',
-        customOptionDefaultValue: '',
-        customOptionDefaultValueError: '',
-        customOptionCustomOption: '',
-        customOptionCustomOptionError: '',
-      },
+      payload,
     });
   }
 
   function onCloseBaseAttrDrawer() {
-    dispatch<ChangeAction>({
-      type: 'resourceVersionEditorPage/change',
-      payload: {
-        basePEditorVisible: false,
-        basePKeyInput: '',
-        basePValueInput: '',
-        basePDescriptionInput: '',
-        basePDescriptionInputError: '',
-      }
+    onChange({
+      basePEditorVisible: false,
+      basePKeyInput: '',
+      basePValueInput: '',
+      basePDescriptionInput: '',
+      basePDescriptionInputError: '',
     });
   }
 
@@ -158,16 +157,16 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
     <FLeftSiderLayout
       sider={<Sider/>}
       header={<Header
-        version={version.version}
-        signingDate={version.signingDate}
-        resourceID={version.resourceID}
+        version={resourceVersionEditorPage.version}
+        signingDate={resourceVersionEditorPage.signingDate}
+        resourceID={resourceVersionEditorPage.resourceID}
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
         onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
       <FFormLayout>
         <FFormLayout.FBlock title={i18nMessage('version_description')}>
 
-          {!version.description && !isEditing && (<Space size={10}>
+          {!resourceVersionEditorPage.description && !isEditing && (<Space size={10}>
             <FCircleButton
               onClick={() => setIsEditing(true)}
               theme="weaken"
@@ -186,21 +185,56 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                 onChange={(value) => setEditor(value)}
               />
             </FHorn>)
-            : (version.description && (<FHorn extra={<FTextButton
+            : (resourceVersionEditorPage.description && (<FHorn extra={<FTextButton
               onClick={() => setIsEditing(true)}
               theme="primary"
             >编辑</FTextButton>}>
               <div className={styles.description}>
                 <div
                   className={styles.container}
-                  dangerouslySetInnerHTML={{__html: version.description}}
+                  dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
                 />
               </div>
             </FHorn>))
           }
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={i18nMessage('version_maps')}>
-          <div className={styles.diagram}/>
+          <div className={styles.Viewport}>
+            <div className={styles.ViewportNavs}>
+              <a
+                className={resourceVersionEditorPage.viewportGraphShow === 'relationship' ? styles.active : ''}
+                onClick={() => {
+                  onChange({
+                    viewportGraphShow: 'relationship',
+                  });
+                }}
+              >关系树</a>
+              <div style={{width: 20}}/>
+              <a
+                className={resourceVersionEditorPage.viewportGraphShow === 'authorization' ? styles.active : ''}
+                onClick={() => {
+                  onChange({
+                    viewportGraphShow: 'authorization',
+                  });
+                }}
+              >授权链</a>
+              <div style={{width: 20}}/>
+              <a
+                className={resourceVersionEditorPage.viewportGraphShow === 'dependency' ? styles.active : ''}
+                onClick={() => {
+                  onChange({
+                    viewportGraphShow: 'dependency',
+                  });
+                }}
+              >依赖树</a>
+            </div>
+            {/*<FAntvG6DependencyGraph*/}
+            {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
+            {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
+            {/*/>*/}
+            <div className={styles.diagram}/>
+          </div>
+
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>
@@ -232,15 +266,12 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                         <FContentText singleRow text={bp.value}/>
                       </div>
                       <FTextButton onClick={() => {
-                        dispatch<ChangeAction>({
-                          type: 'resourceVersionEditorPage/change',
-                          payload: {
-                            basePEditorVisible: true,
-                            basePKeyInput: bp.key,
-                            basePValueInput: bp.value,
-                            basePDescriptionInput: bp.description,
-                            basePDescriptionInputError: '',
-                          },
+                        onChange({
+                          basePEditorVisible: true,
+                          basePKeyInput: bp.key,
+                          basePValueInput: bp.value,
+                          basePDescriptionInput: bp.description,
+                          basePDescriptionInputError: '',
                         });
                       }}>
                         <FEdit/>
@@ -332,19 +363,16 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
 
                     <div>
                       <FTextButton onClick={() => {
-                        dispatch<ChangeAction>({
-                          type: 'resourceVersionEditorPage/change',
-                          payload: {
-                            customOptionEditorVisible: true,
-                            customOptionKey: ppp.key,
-                            customOptionDescription: ppp.description,
-                            customOptionDescriptionError: '',
-                            customOptionCustom: ppp.custom,
-                            customOptionDefaultValue: ppp.defaultValue,
-                            customOptionDefaultValueError: '',
-                            customOptionCustomOption: ppp.customOption,
-                            customOptionCustomOptionError: '',
-                          },
+                        onChange({
+                          customOptionEditorVisible: true,
+                          customOptionKey: ppp.key,
+                          customOptionDescription: ppp.description,
+                          customOptionDescriptionError: '',
+                          customOptionCustom: ppp.custom,
+                          customOptionDefaultValue: ppp.defaultValue,
+                          customOptionDefaultValueError: '',
+                          customOptionCustomOption: ppp.customOption,
+                          customOptionCustomOptionError: '',
                         });
                       }}><FEdit/></FTextButton>
                     </div>
@@ -374,25 +402,22 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         <FNormalButton
           disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
           onClick={async () => {
-            await dispatch<ChangeAction>({
-              type: 'resourceVersionEditorPage/change',
-              payload: {
-                baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                  if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                    return bp;
-                  }
-                  return {
-                    ...bp,
-                    value: resourceVersionEditorPage.basePValueInput,
-                    description: resourceVersionEditorPage.basePDescriptionInput,
-                  };
-                }),
-                basePEditorVisible: false,
-                basePKeyInput: '',
-                basePValueInput: '',
-                basePDescriptionInput: '',
-                basePDescriptionInputError: '',
-              }
+            await onChange({
+              baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
+                if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
+                  return bp;
+                }
+                return {
+                  ...bp,
+                  value: resourceVersionEditorPage.basePValueInput,
+                  description: resourceVersionEditorPage.basePDescriptionInput,
+                };
+              }),
+              basePEditorVisible: false,
+              basePKeyInput: '',
+              basePValueInput: '',
+              basePDescriptionInput: '',
+              basePDescriptionInputError: '',
             });
             await dispatch<SyncAllPropertiesAction>({
               type: 'resourceVersionEditorPage/syncAllProperties',
@@ -437,12 +462,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
               } else if (value.length > 30) {
                 valueError = '不超过30个字符';
               }
-              dispatch<ChangeAction>({
-                type: 'resourceVersionEditorPage/change',
-                payload: {
-                  basePValueInput: value,
-                  basePValueInputError: valueError,
-                }
+              onChange({
+                basePValueInput: value,
+                basePValueInputError: valueError,
               });
             }}
             placeholder={'输入value'}
@@ -468,12 +490,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
               if (value.length > 50) {
                 descriptionError = '不超过50个字符';
               }
-              dispatch<ChangeAction>({
-                type: 'resourceVersionEditorPage/change',
-                payload: {
-                  basePDescriptionInput: value,
-                  basePDescriptionInputError: descriptionError,
-                },
+              onChange({
+                basePDescriptionInput: value,
+                basePDescriptionInputError: descriptionError,
               });
             }}
             placeholder={'输入属性说明'}
@@ -504,31 +523,28 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
         <FNormalButton
           disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}
           onClick={async () => {
-            await dispatch<ChangeAction>({
-              type: 'resourceVersionEditorPage/change',
-              payload: {
-                customOptions: resourceVersionEditorPage.customOptions
-                  .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
-                    if (bp.key !== resourceVersionEditorPage.customOptionKey) {
-                      return bp;
-                    }
-                    return {
-                      ...bp,
-                      description: resourceVersionEditorPage.customOptionDescription,
-                      defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
-                      customOption: resourceVersionEditorPage.customOptionCustomOption,
-                    };
-                  }),
-                customOptionEditorVisible: false,
-                customOptionKey: '',
-                customOptionDescription: '',
-                customOptionDescriptionError: '',
-                customOptionCustom: 'input',
-                customOptionDefaultValue: '',
-                customOptionDefaultValueError: '',
-                customOptionCustomOption: '',
-                customOptionCustomOptionError: '',
-              }
+            await onChange({
+              customOptions: resourceVersionEditorPage.customOptions
+                .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
+                  if (bp.key !== resourceVersionEditorPage.customOptionKey) {
+                    return bp;
+                  }
+                  return {
+                    ...bp,
+                    description: resourceVersionEditorPage.customOptionDescription,
+                    defaultValue: resourceVersionEditorPage.customOptionDefaultValue,
+                    customOption: resourceVersionEditorPage.customOptionCustomOption,
+                  };
+                }),
+              customOptionEditorVisible: false,
+              customOptionKey: '',
+              customOptionDescription: '',
+              customOptionDescriptionError: '',
+              customOptionCustom: 'input',
+              customOptionDefaultValue: '',
+              customOptionDefaultValueError: '',
+              customOptionCustomOption: '',
+              customOptionCustomOptionError: '',
             });
             await dispatch<SyncAllPropertiesAction>({
               type: 'resourceVersionEditorPage/syncAllProperties',
@@ -564,12 +580,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                     if (value.length > 50) {
                       descriptionError = '不超过50个字符';
                     }
-                    dispatch<ChangeAction>({
-                      type: 'resourceVersionEditorPage/change',
-                      payload: {
-                        customOptionDescription: value,
-                        customOptionDescriptionError: descriptionError,
-                      },
+                    onChange({
+                      customOptionDescription: value,
+                      customOptionDescriptionError: descriptionError,
                     });
                   }}
                 />
@@ -625,14 +638,10 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                           }
                         }
 
-                        dispatch<ChangeAction>({
-                          type: 'resourceVersionEditorPage/change',
-                          payload: {
-                            customOptionCustomOption: value,
-                            customOptionCustomOptionError: customOptionError,
-                          },
+                        onChange({
+                          customOptionCustomOption: value,
+                          customOptionCustomOptionError: customOptionError,
                         });
-
                       }}
                     />
                     {resourceVersionEditorPage.customOptionCustomOptionError && (<>
@@ -656,13 +665,9 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
                         } else if (value.length > 30) {
                           valueError = '不超过30个字符';
                         }
-
-                        dispatch<ChangeAction>({
-                          type: 'resourceVersionEditorPage/change',
-                          payload: {
-                            customOptionDefaultValue: value,
-                            customOptionDefaultValueError: valueError,
-                          },
+                        onChange({
+                          customOptionDefaultValue: value,
+                          customOptionDefaultValueError: valueError,
                         });
                       }}
                     />
@@ -688,7 +693,7 @@ function VersionEditor({dispatch, route, version, resourceVersionEditorPage, mat
 }
 
 export default withRouter(connect(({resourceVersionEditorPage, resourceInfo}: ConnectState) => ({
-  version: resourceVersionEditorPage,
+  // version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
   resourceInfo: resourceInfo,
 }))(VersionEditor));

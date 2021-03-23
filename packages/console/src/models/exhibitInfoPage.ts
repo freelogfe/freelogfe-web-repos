@@ -48,6 +48,8 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     }[];
   }[];
 
+  viewportGraphShow: 'relationship' | 'authorization';
+
   pCover: string;
   pTitle: string;
   pInputTitle: string | null;
@@ -184,6 +186,8 @@ const Model: ExhibitInfoPageModelType = {
     policies: [],
     addPolicyDrawerVisible: false,
     associated: [],
+
+    viewportGraphShow: 'relationship',
 
     pCover: '',
     pTitle: '',

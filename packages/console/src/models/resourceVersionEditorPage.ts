@@ -18,6 +18,8 @@ export interface ResourceVersionEditorPageModelState {
   signingDate: string;
   description: string;
 
+  viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
+
   rawProperties: {
     key: string;
     value: string;
@@ -102,6 +104,8 @@ const Model: ResourceVersionEditorModelType = {
     version: '',
     signingDate: '',
     description: '',
+
+    viewportGraphShow: 'relationship',
 
     rawProperties: [],
     baseProperties: [],

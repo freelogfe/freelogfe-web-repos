@@ -19,31 +19,31 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
     <div>
       <FTitleText text={'相关视图'} type={'h4'}/>
       <div style={{height: 20}}/>
-      <div className={styles.content}>
-        <div className={styles.navs}>
+      <div className={styles.Viewport}>
+        <div className={styles.ViewportNavs}>
           <a
-            className={marketResourcePage.dependencyGraphShow === 'dependency' ? styles.active : ''}
+            className={marketResourcePage.viewportGraphShow === 'dependency' ? styles.active : ''}
             onClick={() => {
               dispatch<ChangeAction>({
                 type: 'marketResourcePage/change',
                 payload: {
-                  dependencyGraphShow: 'dependency',
+                  viewportGraphShow: 'dependency',
                 },
               });
             }}
           >依赖树</a>
           <div style={{width: 20}}/>
           <a
-            className={marketResourcePage.dependencyGraphShow === 'authorization' ? styles.active : ''}
+            className={marketResourcePage.viewportGraphShow === 'authorization' ? styles.active : ''}
             onClick={() => {
               dispatch<ChangeAction>({
                 type: 'marketResourcePage/change',
                 payload: {
-                  dependencyGraphShow: 'authorization',
+                  viewportGraphShow: 'authorization',
                 },
               });
             }}
-          >授权链视图</a>
+          >授权链</a>
         </div>
         <FAntvG6DependencyGraph
           nodes={marketResourcePage.dependencyGraphNodes}
