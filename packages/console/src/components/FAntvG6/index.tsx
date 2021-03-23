@@ -56,6 +56,18 @@ const nodes = [
     resourceType: 'txt',
     version: '3.0.0',
   },
+  {
+    id: 'node6',
+    name: 'node6',
+    resourceType: 'txt',
+    version: '3.0.0',
+  },
+  {
+    id: 'node7',
+    name: 'node7',
+    resourceType: 'txt',
+    version: '3.0.0',
+  },
 ];
 
 // 边集
@@ -76,6 +88,14 @@ const edges = [
     source: 'node3', // String，必须，起始点 id
     target: 'node5', // String，必须，目标点 id
   },
+  {
+    source: 'node5', // String，必须，起始点 id
+    target: 'node6', // String，必须，目标点 id
+  },
+  {
+    source: 'node6', // String，必须，起始点 id
+    target: 'node7', // String，必须，目标点 id
+  },
 ];
 
 function FAntvG6({}: FAntvG6Props) {
@@ -91,7 +111,7 @@ function FAntvG6({}: FAntvG6Props) {
         modes: {
           default: [
             'drag-canvas',
-            // 'zoom-canvas',
+            'zoom-canvas',
           ],
         },
         layout: {
@@ -125,10 +145,10 @@ function FAntvG6({}: FAntvG6Props) {
           type: 'g6-resource',
           // width: 150,
           // height: 64,
-          // anchorPoints: [
-          //   [0, 0.5],
-          //   [1, 0.5],
-          // ],
+          anchorPoints: [
+            [0, 0.5],
+            [1, 0.5],
+          ],
           // labelCfg: {
           //   style: {
           //     // fill: '#000000A6',
@@ -143,6 +163,11 @@ function FAntvG6({}: FAntvG6Props) {
         },
         defaultEdge: {
           type: 'cubic-horizontal',
+          style: {
+            stroke: '#979797',
+          },
+          sourceAnchor: 1,
+          targetAnchor: 0,
         },
         // renderer: 'svg',
       });
