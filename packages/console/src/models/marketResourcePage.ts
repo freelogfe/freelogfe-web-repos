@@ -95,6 +95,7 @@ export interface MarketResourcePageModelState {
   signExhibitName: string;
   signExhibitNameErrorTip: string;
 
+  dependencyGraphShow: 'dependency' | 'authorization';
   dependencyGraphNodes: {
     id: string;
     resourceId: string;
@@ -219,6 +220,7 @@ const initStates: MarketResourcePageModelState = {
   signExhibitName: '',
   signExhibitNameErrorTip: '',
 
+  dependencyGraphShow: 'dependency',
   dependencyGraphNodes: [],
   dependencyGraphEdges: [],
 };
