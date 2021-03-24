@@ -212,11 +212,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resou
               });
             }}
           >
-            {/*<FAntvG6DependencyGraph*/}
-            {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
-            {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
-            {/*/>*/}
-            <div className={styles.diagram}/>
+            <FAntvG6DependencyGraph
+              nodes={resourceVersionEditorPage.dependencyGraphNodes}
+              edges={resourceVersionEditorPage.dependencyGraphEdges}
+              width={860}
+            />
+            {/*<div className={styles.diagram}/>*/}
           </FViewportTabs>
         </FFormLayout.FBlock>
 

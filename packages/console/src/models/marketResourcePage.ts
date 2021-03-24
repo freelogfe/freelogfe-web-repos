@@ -476,7 +476,7 @@ const Model: MarketResourcePageModelType = {
       };
 
       const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
-      console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
+      // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
       const {nodes, edges} = handleDependencyGraphData(data2[0]);
 
       yield put<ChangeAction>({

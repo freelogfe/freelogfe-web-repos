@@ -11,6 +11,8 @@ import {
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
 import {pathToRegexp} from '@/utils/pathToRegexp';
+import {FApiServer} from "@/services";
+import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -19,6 +21,17 @@ export interface ResourceVersionEditorPageModelState {
   description: string;
 
   viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
+  dependencyGraphNodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  dependencyGraphEdges: {
+    source: string;
+    target: string;
+  }[];
 
   rawProperties: {
     key: string;
@@ -106,6 +119,8 @@ const Model: ResourceVersionEditorModelType = {
     description: '',
 
     viewportGraphShow: 'relationship',
+    dependencyGraphNodes: [],
+    dependencyGraphEdges: [],
 
     rawProperties: [],
     baseProperties: [],
@@ -141,6 +156,17 @@ const Model: ResourceVersionEditorModelType = {
       };
       const {data} = yield call(resourceVersionInfo, params);
 
+      const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+        version: resourceVersionEditorPage.version,
+        // version: '0.0.1',
+        isContainRootNode: true,
+      };
+
+      const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
+      // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
+      const {nodes, edges} = handleDependencyGraphData(data2[0]);
+
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
 
@@ -175,6 +201,8 @@ const Model: ResourceVersionEditorModelType = {
             defaultValue: i.defaultValue,
             customOption: i.candidateItems.join(','),
           })),
+          dependencyGraphNodes: nodes,
+          dependencyGraphEdges: edges,
         },
       });
     },
