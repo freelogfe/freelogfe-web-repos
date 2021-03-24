@@ -1,7 +1,7 @@
 import * as React from "react";
 import {FTitleText} from "@/components/FText";
 import styles from "./index.less";
-import {FAntvG6DependencyGraph, FViewportTabs} from "@/components/FAntvG6";
+import {FAntvG6AuthorizationGraph, FAntvG6DependencyGraph, FViewportTabs} from "@/components/FAntvG6";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {Space} from "antd";
@@ -34,9 +34,29 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
           });
         }}
       >
-        <FAntvG6DependencyGraph
-          nodes={marketResourcePage.dependencyGraphNodes}
-          edges={marketResourcePage.dependencyGraphEdges}
+        {/*<FAntvG6DependencyGraph*/}
+        {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
+        {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
+        {/*/>*/}
+        <FAntvG6AuthorizationGraph
+          nodes={[{
+            id: '000',
+            resourceId: '000',
+            resourceName: 'stefan/freelog白皮书',
+            resourceType: 'image',
+            version: '0.0.1',
+          }, {
+            id: '001',
+            contractId: '001',
+            contractName: '分时段使用',
+            status: 0,
+          }]}
+          edges={[
+            {
+              source: '000',
+              target: '001',
+            },
+          ]}
         />
       </FViewportTabs>
     </div>

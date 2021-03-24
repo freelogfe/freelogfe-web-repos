@@ -1,25 +1,23 @@
 import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
-import {GraphData} from "@antv/g6/lib/types";
-// import ReactDOM from 'react-dom';
+import {GraphData, ModelConfig} from "@antv/g6/lib/types";
 
-const g6ResourceTextXML = (cfg: any) => `
-<group>
-  <rect style={{
-      width: 'fit-content',
-      height: 64,
-      fill: '#fff',
-      stroke: '#EFEFEF',
-      radius: 10,
-    }}>
-    <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
-    <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
-  </rect>
-</group>`;
-
-G6.registerNode('g6-resource', {
-  jsx: g6ResourceTextXML,
+G6.registerNode('dependency-resource', {
+  jsx: (cfg) => `
+  <group>
+    <rect style={{
+        width: 'fit-content',
+        height: 64,
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+      }}>
+      <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
+      <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
+    </rect>
+  </group>
+`,
 });
 
 interface FAntvG6DependencyGraphProps extends GraphData {
@@ -87,7 +85,7 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
           // },
         },
         defaultNode: {
-          type: 'g6-resource',
+          type: 'dependency-resource',
           // width: 150,
           // height: 64,
           anchorPoints: [

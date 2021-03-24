@@ -4,8 +4,10 @@ import G6 from '@antv/g6';
 
 import FViewportTabs from './FViewportTabs';
 import FAntvG6DependencyGraph from './FAntvG6DependencyGraph';
+import FAntvG6AuthorizationGraph from './FAntvG6AuthorizationGraph';
 
 export {
   FViewportTabs,
   FAntvG6DependencyGraph,
-}
+  FAntvG6AuthorizationGraph,
+};
