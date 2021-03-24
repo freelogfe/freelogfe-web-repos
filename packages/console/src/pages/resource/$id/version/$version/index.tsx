@@ -31,7 +31,7 @@ import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
-import {FAntvG6DependencyGraph, FViewportTabs} from "@/components/FAntvG6";
+import {FAntvG6DependencyGraph, FAntvG6RelationshipGraph, FViewportTabs} from "@/components/FAntvG6";
 
 
 interface VersionEditorProps {
@@ -212,11 +212,32 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resou
               });
             }}
           >
-            <FAntvG6DependencyGraph
-              nodes={resourceVersionEditorPage.dependencyGraphNodes}
-              edges={resourceVersionEditorPage.dependencyGraphEdges}
+            <FAntvG6RelationshipGraph
+              nodes={[{
+                id: 'string',
+                resourceId: 'string',
+                resourceName: 'freelog白皮书',
+                resourceType: 'markdown',
+                version: '0.0.1',
+              }, {
+                id: 'string1',
+                resourceId: 'string1',
+                resourceName: '我们为什么要开发Freelog',
+                resourceType: 'markdown',
+                version: '0.0.1',
+              }]}
+              edges={[{
+                source: 'string',
+                target: 'string1',
+              }]}
               width={860}
             />
+
+            {/*<FAntvG6DependencyGraph*/}
+            {/*  nodes={resourceVersionEditorPage.dependencyGraphNodes}*/}
+            {/*  edges={resourceVersionEditorPage.dependencyGraphEdges}*/}
+            {/*  width={860}*/}
+            {/*/>*/}
             {/*<div className={styles.diagram}/>*/}
           </FViewportTabs>
         </FFormLayout.FBlock>
