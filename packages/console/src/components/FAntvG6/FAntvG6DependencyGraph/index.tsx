@@ -111,8 +111,8 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
           style: {
             stroke: '#979797',
           },
-          // sourceAnchor: 1,
-          // targetAnchor: 0,
+          sourceAnchor: 1,
+          targetAnchor: 0,
         },
         // renderer: 'svg',
       });
@@ -131,3 +131,55 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
 }
 
 export default FAntvG6DependencyGraph;
+
+interface DependencyTree {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  dependencies: DependencyTree[];
+}
+
+interface DependencyGraphData {
+  nodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+export function handleDependencyGraphData(data: DependencyTree): DependencyGraphData {
+
+  const nodes: DependencyGraphData['nodes'] = [];
+  const edges: DependencyGraphData['edges'] = [];
+  traversal(data);
+
+  return {
+    nodes, edges
+  };
+
+  function traversal(data: DependencyTree, parentID: string = ''): any {
+    const {dependencies, ...resource} = data;
+    const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
+    nodes.push({
+      id,
+      ...resource,
+    });
+    if (parentID) {
+      edges.push({
+        source: parentID,
+        target: id,
+      });
+    }
+
+    for (const dep of dependencies) {
+      traversal(dep, id);
+    }
+  }
+}

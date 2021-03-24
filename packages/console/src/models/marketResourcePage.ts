@@ -9,6 +9,7 @@ import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
 import FUtil from "@/utils";
+import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -655,55 +656,54 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
   return await Promise.all(allPromises);
 }
 
-interface DependencyTree {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  version: string;
-  dependencies: DependencyTree[];
-}
-
-interface DependencyGraphData {
-  nodes: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  }[];
-  edges: {
-    source: string;
-    target: string;
-  }[];
-}
-
-function handleDependencyGraphData(data: DependencyTree): DependencyGraphData {
-
-  const nodes: DependencyGraphData['nodes'] = [];
-  const edges: DependencyGraphData['edges'] = [];
-  traversal(data);
-
-  return {
-    nodes, edges
-  };
-
-  function traversal(data: DependencyTree, parentID: string = ''): any {
-    const {dependencies, ...resource} = data;
-    const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
-    nodes.push({
-      id,
-      ...resource,
-    });
-    if (parentID) {
-      edges.push({
-        source: parentID,
-        target: id,
-      });
-    }
-
-    for (const dep of dependencies) {
-      traversal(dep, id);
-    }
-  }
-
-}
+// interface DependencyTree {
+//   resourceId: string;
+//   resourceName: string;
+//   resourceType: string;
+//   version: string;
+//   dependencies: DependencyTree[];
+// }
+//
+// interface DependencyGraphData {
+//   nodes: {
+//     id: string;
+//     resourceId: string;
+//     resourceName: string;
+//     resourceType: string;
+//     version: string;
+//   }[];
+//   edges: {
+//     source: string;
+//     target: string;
+//   }[];
+// }
+//
+// function handleDependencyGraphData(data: DependencyTree): DependencyGraphData {
+//
+//   const nodes: DependencyGraphData['nodes'] = [];
+//   const edges: DependencyGraphData['edges'] = [];
+//   traversal(data);
+//
+//   return {
+//     nodes, edges
+//   };
+//
+//   function traversal(data: DependencyTree, parentID: string = ''): any {
+//     const {dependencies, ...resource} = data;
+//     const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
+//     nodes.push({
+//       id,
+//       ...resource,
+//     });
+//     if (parentID) {
+//       edges.push({
+//         source: parentID,
+//         target: id,
+//       });
+//     }
+//
+//     for (const dep of dependencies) {
+//       traversal(dep, id);
+//     }
+//   }
+// }
