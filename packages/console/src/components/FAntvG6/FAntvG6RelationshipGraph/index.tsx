@@ -39,6 +39,7 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
 let graph: any = null;
 
 function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAntvG6RelationshipGraphProps) {
+
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -109,8 +110,8 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
           style: {
             stroke: '#979797',
           },
-          // sourceAnchor: 1,
-          // targetAnchor: 0,
+          sourceAnchor: 1,
+          targetAnchor: 0,
         },
         // renderer: 'svg',
       });
