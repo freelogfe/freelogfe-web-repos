@@ -34,30 +34,36 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
           });
         }}
       >
-        {/*<FAntvG6DependencyGraph*/}
-        {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
-        {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
-        {/*/>*/}
-        <FAntvG6AuthorizationGraph
-          nodes={[{
-            id: '000',
-            resourceId: '000',
-            resourceName: 'stefan/freelog白皮书',
-            resourceType: 'image',
-            version: '0.0.1',
-          }, {
-            id: '001',
-            contractId: '001',
-            contractName: '分时段使用',
-            status: 0,
-          }]}
-          edges={[
-            {
-              source: '000',
-              target: '001',
-            },
-          ]}
-        />
+        {
+          marketResourcePage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
+            nodes={marketResourcePage.dependencyGraphNodes}
+            edges={marketResourcePage.dependencyGraphEdges}
+          />)
+        }
+
+        {
+          marketResourcePage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+            nodes={[{
+              id: '000',
+              resourceId: '000',
+              resourceName: 'stefan/freelog白皮书',
+              resourceType: 'image',
+              version: '0.0.1',
+            }, {
+              id: '001',
+              contractId: '001',
+              contractName: '分时段使用',
+              status: 0,
+            }]}
+            edges={[
+              {
+                source: '000',
+                target: '001',
+              },
+            ]}
+          />)
+        }
+
       </FViewportTabs>
     </div>
     <div style={{height: 20}}/>

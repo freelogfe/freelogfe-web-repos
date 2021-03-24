@@ -125,7 +125,13 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
 
   }, [nodes, edges]);
 
-  return (<div ref={ref}/>);
+  return (<div
+    style={{
+    width: width,
+    height: height
+    }}
+    ref={ref}
+  />);
 }
 
 export default FAntvG6DependencyGraph;
