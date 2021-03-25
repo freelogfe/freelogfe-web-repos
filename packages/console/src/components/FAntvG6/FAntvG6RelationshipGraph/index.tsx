@@ -115,9 +115,11 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
         },
         // renderer: 'svg',
       });
+
+      graph.read({nodes, edges});
+    } else {
+      graph.changeData({nodes, edges});
     }
-    graph.data({nodes, edges});
-    graph.render();
 
     return () => {
       graph.destroy();

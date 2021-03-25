@@ -114,9 +114,12 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
         },
         // renderer: 'svg',
       });
+
+      graph.read({nodes, edges});
+    } else {
+      graph.changeData({nodes, edges});
     }
-    graph.data({nodes, edges});
-    graph.render();
+
 
     return () => {
       graph.destroy();
@@ -127,8 +130,8 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
 
   return (<div
     style={{
-    width: width,
-    height: height
+      width: width,
+      height: height
     }}
     ref={ref}
   />);

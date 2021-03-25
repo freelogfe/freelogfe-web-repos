@@ -137,17 +137,28 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
         },
         // renderer: 'svg',
       });
+
+      graph.read({
+        nodes: nodes.map((n) => {
+          return {
+            ...n,
+            type: (n as any).contractId ? 'authorization-contract' : 'authorization-resource',
+          };
+        }),
+        edges,
+      });
+    } else {
+      graph.changeData({
+        nodes: nodes.map((n) => {
+          return {
+            ...n,
+            type: (n as any).contractId ? 'authorization-contract' : 'authorization-resource',
+          };
+        }),
+        edges,
+      });
     }
-    graph.data({
-      nodes: nodes.map((n) => {
-        return {
-          ...n,
-          type: (n as any).contractId ? 'authorization-contract' : 'authorization-resource',
-        };
-      }),
-      edges,
-    });
-    graph.render();
+
 
     return () => {
       graph.destroy();
