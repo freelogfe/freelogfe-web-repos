@@ -1,30 +1,20 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
-import {
-  batchInfo,
-  BatchInfoParamsType, batchSetContracts, BatchSetContractsParamsType,
-  resolveResources,
-  ResolveResourcesParamsType,
-  update,
-  UpdateParamsType
-} from "@/services/resources";
 import {FetchDataSourceAction} from "@/models/resourceInfo";
-import {policiesList, PoliciesListParamsType} from "@/services/policies";
-import {contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
 import {ConnectState} from "@/models/connect";
+import {FApiServer} from "@/services";
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
 
   policies: {
-    id: string;
-    title: string;
-    status: 'executing' | 'stopped';
-    code: string;
-  }[] | null;
+    policyId: string;
+    policyName: string;
+    status: 0 | 1;
+    policyText: string;
+  }[];
   policyPreviewVisible: boolean;
   policyPreviewText: string;
   // newPolicyTitle: string;
@@ -32,7 +22,34 @@ export interface ResourceAuthPageModelState {
   policyEditorVisible: boolean;
   // policyTemplateVisible: boolean;
 
-  contractsAuthorized: FAuthPanelProps['dataSource'];
+  baseUpcastResources: {
+    resourceId: string;
+    resourceName: string;
+  }[];
+  contractsAuthorized: {
+    id: string | number;
+    activated: boolean;
+    title: string;
+    resourceType: string;
+    version: string;
+    contracts: {
+      checked: boolean;
+      title: string;
+      status: string;
+      code: string;
+      id: string;
+      date: string;
+      policyId: string;
+      versions: { version: string; checked: boolean; disabled: boolean }[];
+    }[];
+    policies: {
+      id: string;
+      title: string;
+      code: string;
+      allEnabledVersions: string[];
+    }[];
+  }[];
+
   contractsAuthorize: {
     key: string,
     contractName: string,
@@ -57,14 +74,13 @@ export interface UpdatePoliciesAction {
   };
 }
 
+export interface FetchResourceInfoAction extends AnyAction {
+  type: 'resourceAuthPage/fetchResourceInfo' | 'fetchResourceInfo',
+}
+
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceAuthPage/change',
   payload: Partial<ResourceAuthPageModelState>;
-}
-
-export interface FetchPoliciesAction extends AnyAction {
-  type: 'resourceAuthPage/fetchPolicies',
-  payload: { policyId: string, policyName: string, status: 0 | 1, policyText: string; }[];
 }
 
 export interface FetchAuthorizedAction extends AnyAction {
@@ -92,8 +108,9 @@ export interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
-    fetchPolicies: (action: FetchPoliciesAction, effects: EffectsCommandMap) => void;
+    // fetchPolicies: (action: FetchPoliciesAction, effects: EffectsCommandMap) => void;
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
+    fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;
     fetchAuthorize: (action: FetchAuthorizeAction, effects: EffectsCommandMap) => void;
     updateAuthorized: (action: UpdateAuthorizedAction, effects: EffectsCommandMap) => void;
@@ -119,36 +136,44 @@ const Model: ResourceAuthPageModelType = {
     policyEditorVisible: false,
     // policyTemplateVisible: false,
 
+    baseUpcastResources: [],
     contractsAuthorized: [],
     contractsAuthorize: [],
   },
   effects: {
-    * fetchPolicies({payload}: FetchPoliciesAction, {call, put}: EffectsCommandMap) {
-      const policies: ResourceAuthPageModelState['policies'] = payload.map((i) => ({
-        id: i.policyId,
-        title: i.policyName,
-        status: i.status === 1 ? 'executing' : 'stopped',
-        code: i.policyText,
+    * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
+      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+        resourceAuthPage,
       }));
+
+      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+        resourceIdOrName: resourceAuthPage.resourceID,
+        isLoadPolicyInfo: 1,
+      };
+
+      const {data} = yield call(FApiServer.Resource.info, params);
+      console.log(data, '@#$RFDSASDFSDFASDF');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          policies: policies,
+          policies: data.policies,
+          baseUpcastResources: data.baseUpcastResources,
         }
-      });
+      })
     },
     * updatePolicies({payload}: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({
-        resourceInfo,
+      const {resourceAuthPage}: ConnectState = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
+        resourceAuthPage,
       }));
-      const params: UpdateParamsType = {
-        resourceId: resourceInfo.info?.resourceId || '',
+      const params: Parameters<typeof FApiServer.Resource.update>[0] = {
+        resourceId: resourceAuthPage.resourceID,
         ...payload,
       };
-      yield call(update, params);
+      yield call(FApiServer.Resource.update, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
-        payload: resourceInfo.info?.resourceId || '',
+        payload: resourceAuthPage.resourceID,
       });
     },
     * fetchAuthorized({payload: {activatedResourceId}}: FetchAuthorizedAction, {call, put, select}: EffectsCommandMap) {
@@ -156,14 +181,10 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
-      // console.log(resourceInfo, 'resourceInfo0932qojf');
-      // if (!resourceInfo.info?.resourceId) {
-      //   return;
-      // }
-      const params: ResolveResourcesParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.resolveResources>[0] = {
         resourceId: resourceAuthPage.resourceID,
       };
-      const {data} = yield call(resolveResources, params);
+      const {data} = yield call(FApiServer.Resource.resolveResources, params);
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
         return yield put<ChangeAction>({
@@ -174,21 +195,21 @@ const Model: ResourceAuthPageModelType = {
         });
       }
 
-      const resourceParams: BatchInfoParamsType = {
+      const resourceParams: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
         resourceIds: data.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
-      const {data: resourcesInfoData} = yield call(batchInfo, resourceParams);
+      const {data: resourcesInfoData} = yield call(FApiServer.Resource.batchInfo, resourceParams);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
-      const contractsParams: ContractsParamsType = {
+      const contractsParams: Parameters<typeof FApiServer.Contract.contracts>[0] = {
         identityType: 2,
         licenseeId: resourceAuthPage.resourceID,
         isLoadPolicyInfo: 1,
       };
 
-      const {data: {dataList: contractsData}} = yield call(contracts, contractsParams);
+      const {data: {dataList: contractsData}} = yield call(FApiServer.Contract.contracts, contractsParams);
 
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
@@ -255,12 +276,12 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
-      const params: ContractsParamsType = {
+      const params: Parameters<typeof FApiServer.Contract.contracts>[0] = {
         identityType: 1,
         licensorId: resourceAuthPage.resourceID,
       };
       // console.log('@#RWEQFRSDF');
-      const {data} = yield call(contracts, params);
+      const {data} = yield call(FApiServer.Contract.contracts, params);
       // console.log(data, '1234213134');
       yield put<ChangeAction>({
         type: 'change',
@@ -284,14 +305,14 @@ const Model: ResourceAuthPageModelType = {
       const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
         resourceAuthPage,
       }));
-      const params: BatchSetContractsParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.batchSetContracts>[0] = {
         resourceId: resourceAuthPage.resourceID,
         subjects: [{
           subjectId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
           versions: payload,
         }],
       };
-      const {data} = yield call(batchSetContracts, params);
+      const {data} = yield call(FApiServer.Resource.batchSetContracts, params);
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
@@ -299,7 +320,7 @@ const Model: ResourceAuthPageModelType = {
           activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
         },
       });
-    }
+    },
   },
   reducers: {
     change(state, {payload}) {

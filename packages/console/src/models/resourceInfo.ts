@@ -2,9 +2,6 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {info, lookDraft, LookDraftParamsType} from "@/services/resources";
-import {FetchAuthorizeAction, FetchAuthorizedAction, FetchPoliciesAction} from "@/models/resourceAuthPage";
-import BraftEditor from "braft-editor";
-// import {ChangeAction as VersionCreatorChangeAction} from "@/models/resourceVersionCreatorPage";
 import {ConnectState} from "@/models/connect";
 
 export interface ResourceInfoModelState {

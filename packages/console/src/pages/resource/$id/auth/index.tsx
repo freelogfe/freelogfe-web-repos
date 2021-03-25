@@ -15,7 +15,7 @@ import {
 import {
   ChangeAction,
   FetchAuthorizeAction,
-  FetchAuthorizedAction,
+  FetchAuthorizedAction, FetchResourceInfoAction,
 } from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, RouterTypes, withRouter} from 'umi';
@@ -24,6 +24,7 @@ import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
+import {FInfo} from "@/components/FIcons";
 
 const columns: any[] = [
   {
@@ -56,7 +57,7 @@ const columns: any[] = [
 
 interface AuthProps {
   dispatch: Dispatch;
-  auth: ResourceAuthPageModelState;
+  resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState,
   match: {
     params: {
@@ -65,20 +66,7 @@ interface AuthProps {
   }
 }
 
-function Auth({dispatch, route, auth, match, resourceInfo}: AuthProps & RouterTypes) {
-
-  // if (!resourceInfo.hasPermission) {
-  //   return (<div>
-  //     <FNoDataTip
-  //       height={}
-  //       tipText={'403,没权限访问'}
-  //       btnText={'将前往首页'}
-  //       onClick={() => {
-  //         router.replace('/');
-  //       }}
-  //     />
-  //   </div>);
-  // }
+function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
 
   React.useEffect(() => {
     // console.log(route, match, 'RM');
@@ -96,6 +84,11 @@ function Auth({dispatch, route, auth, match, resourceInfo}: AuthProps & RouterTy
       payload: {
         resourceID: match.params.id,
       }
+    });
+
+    dispatch<FetchResourceInfoAction>({
+      type: 'resourceAuthPage/fetchResourceInfo',
+      // payload: data.resourceId,
     });
 
     dispatch<FetchAuthorizeAction>({
@@ -120,35 +113,61 @@ function Auth({dispatch, route, auth, match, resourceInfo}: AuthProps & RouterTy
         <FPolicies/>
       </FFormLayout.FBlock>
       {
-        auth.contractsAuthorized?.length > 0 && (<FFormLayout.FBlock title={i18nMessage('licencee_contract')}>
-          <FAuthPanel
-            dataSource={auth.contractsAuthorized}
-            onChangeActivatedResource={(value) => dispatch<ChangeAction>({
-              type: 'resourceAuthPage/change',
-              payload: {
-                contractsAuthorized: value,
-              },
-            })}
-          />
-        </FFormLayout.FBlock>)
+        (resourceAuthPage.contractsAuthorized.length > 0 || resourceAuthPage.baseUpcastResources.length > 0) && (
+          <FFormLayout.FBlock title={i18nMessage('licencee_contract')}>
+
+            {
+              resourceAuthPage.baseUpcastResources.length > 0 && (<div className={styles.depUpthrow}>
+                  <div className={styles.tip}>
+                    <FTitleText
+                      text={i18nMessage('basic_upcast')}
+                      type="form"
+                    />
+                    <div style={{width: 5}}/>
+                    <FInfo style={{color: '#C7C7C7'}}/>
+                  </div>
+                  <div className={styles.depUpthrowLabel}>
+                    {
+                      resourceAuthPage.baseUpcastResources.map((j) => <label key={j.resourceId}>{j.resourceName}</label>)
+                    }
+                  </div>
+                </div>)
+            }
+
+            {resourceAuthPage.baseUpcastResources.length > 0 && resourceAuthPage.contractsAuthorized.length > 0 && (<div style={{height: 20}}/>)}
+
+            {
+              resourceAuthPage.contractsAuthorized.length > 0 && (<FAuthPanel
+                dataSource={resourceAuthPage.contractsAuthorized}
+                onChangeActivatedResource={(value) => dispatch<ChangeAction>({
+                  type: 'resourceAuthPage/change',
+                  payload: {
+                    contractsAuthorized: value,
+                  },
+                })}
+              />)
+            }
+
+          </FFormLayout.FBlock>)
       }
 
       {
-        auth.contractsAuthorize?.length > 0 && (<FFormLayout.FBlock title={i18nMessage('authorizing_contracts')}>
-          <Table
-            columns={columns}
-            dataSource={auth.contractsAuthorize}
-            bordered
-            // title={() => 'Header'}
-            // footer={() => 'Footer'}
-          />
-        </FFormLayout.FBlock>)
+        resourceAuthPage.contractsAuthorize?.length > 0 && (
+          <FFormLayout.FBlock title={i18nMessage('authorizing_contracts')}>
+            <Table
+              columns={columns}
+              dataSource={resourceAuthPage.contractsAuthorize}
+              bordered
+              // title={() => 'Header'}
+              // footer={() => 'Footer'}
+            />
+          </FFormLayout.FBlock>)
       }
     </FFormLayout>
   </FLeftSiderLayout>);
 }
 
 export default withRouter(connect(({resourceAuthPage, resourceInfo}: ConnectState) => ({
-  auth: resourceAuthPage,
+  resourceAuthPage: resourceAuthPage,
   resourceInfo: resourceInfo,
 }))(Auth));

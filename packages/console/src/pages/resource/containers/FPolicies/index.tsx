@@ -21,11 +21,11 @@ interface Policy {
 
 interface FPoliciesProps {
   dispatch: Dispatch;
-  auth: ResourceAuthPageModelState;
+  resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState;
 }
 
-function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
+function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
 
   function onPolicyStatusChange(id: string, status: Policy['status'], title: string) {
     dispatch<UpdatePoliciesAction>({
@@ -58,62 +58,64 @@ function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
   }
 
   return (<div className={styles.FPoliciesStyles}>
-    {info?.policies?.length === 0
-      ? (<div className={styles.empty}>
-        <FTipText
-          type="secondary"
-          text={i18nMessage('hint_add_authorization_plan')}
-        />
-        <div style={{height: 20}}/>
-        <FNormalButton onClick={openNewVisible}>{i18nMessage('add_authorization_plan')}</FNormalButton>
-      </div>)
-      : (<div className={styles.policies}>
-        {
-          info?.policies?.map((i) => (<PolicyCard
-            key={i.policyId}
-            title={i.policyName}
-            status={i.status ? 'executing' : 'stopped'}
-            code={i.policyText}
-            onPreview={() => dispatch<ChangeAction>({
-              type: 'resourceAuthPage/change',
-              payload: {
-                policyPreviewVisible: true,
-                policyPreviewText: i.policyText,
-              }
-            })}
-            onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
-          />))
-        }
-        <div>
-          <FNormalButton
-            onClick={openNewVisible}
-            theme="weaken"
-            shape="circle"
-            icon={<PlusOutlined/>}
+    {
+      resourceAuthPage.policies?.length === 0
+        ? (<div className={styles.empty}>
+          <FTipText
+            type="secondary"
+            text={i18nMessage('hint_add_authorization_plan')}
           />
-        </div>
-      </div>)}
+          <div style={{height: 20}}/>
+          <FNormalButton onClick={openNewVisible}>{i18nMessage('add_authorization_plan')}</FNormalButton>
+        </div>)
+        : (<div className={styles.policies}>
+          {
+            resourceAuthPage.policies.map((i) => (<PolicyCard
+              key={i.policyId}
+              title={i.policyName}
+              status={i.status ? 'executing' : 'stopped'}
+              code={i.policyText}
+              onPreview={() => dispatch<ChangeAction>({
+                type: 'resourceAuthPage/change',
+                payload: {
+                  policyPreviewVisible: true,
+                  policyPreviewText: i.policyText,
+                }
+              })}
+              onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
+            />))
+          }
+          <div>
+            <FNormalButton
+              onClick={openNewVisible}
+              theme="weaken"
+              shape="circle"
+              icon={<PlusOutlined/>}
+            />
+          </div>
+        </div>)
+    }
 
     <FModal
       title="查看策略"
-      visible={auth.policyPreviewVisible}
+      visible={resourceAuthPage.policyPreviewVisible}
       onCancel={() => dispatch<ChangeAction>({
         type: 'resourceAuthPage/change',
         payload: {
           policyPreviewVisible: false,
           policyPreviewText: '',
-        }
+        },
       })}
       footer={null}
     >
       <SyntaxHighlighter
         showLineNumbers={true}
-      >{auth.policyPreviewText}</SyntaxHighlighter>
+      >{resourceAuthPage.policyPreviewText}</SyntaxHighlighter>
     </FModal>
 
     <FPolicyBuilderDrawer
-      visible={auth.policyEditorVisible}
-      alreadyHas={info?.policies?.map((ip) => ({
+      visible={resourceAuthPage.policyEditorVisible}
+      alreadyHas={resourceAuthPage.policies.map((ip) => ({
         title: ip.policyName,
         text: ip.policyText,
       }))}
@@ -141,6 +143,6 @@ function FPolicies({dispatch, auth, resourceInfo: {info}}: FPoliciesProps) {
 }
 
 export default connect(({resourceAuthPage, resourceInfo}: ConnectState) => ({
-  auth: resourceAuthPage,
+  resourceAuthPage: resourceAuthPage,
   resourceInfo: resourceInfo,
 }))(FPolicies);
