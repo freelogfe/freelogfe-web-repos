@@ -100,6 +100,18 @@ export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType
   });
 }
 
+// 查看资源的授权树
+export interface AuthTreeParamsType {
+  resourceId: string;
+  version?: string;
+}
+
+export function authTree({resourceId, ...params}: AuthTreeParamsType) {
+  return request.get(`/v2/resources/${resourceId}/authTree`, {
+    params: params,
+  });
+}
+
 // 创建资源版本
 export interface CreateVersionParamsType {
   resourceId: string;

@@ -18,6 +18,7 @@ function FViewportTabs({options, value, onChange, children}: FViewportTabsProps)
       {
         options.map((o) => {
           return (<a
+            key={o.value}
             className={o.value === value ? styles.active : ''}
             onClick={() => {
               onChange && onChange(o.value);
