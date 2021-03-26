@@ -23,7 +23,6 @@ import {i18nMessage} from '@/utils/i18n';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import FNoDataTip from "@/components/FNoDataTip";
 import {FInfo} from "@/components/FIcons";
 
 const columns: any[] = [
