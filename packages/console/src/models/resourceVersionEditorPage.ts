@@ -173,16 +173,16 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
-      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      console.log(data3, 'data3@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
       // 关系树
-      const params4: Parameters<typeof FApiServer.Resource.authTree>[0] = {
+      const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
 
-      const {data: data4} = yield call(FApiServer.Resource.authTree, params3);
-      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      const {data: data4} = yield call(FApiServer.Resource.relationTreeAuth, params3);
+      console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
