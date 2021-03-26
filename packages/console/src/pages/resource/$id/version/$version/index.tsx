@@ -3,7 +3,6 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import {FCircleButton, FTextButton, FNormalButton} from '@/components/FButton';
 import {Col, Row, Space} from 'antd';
-import {DownloadOutlined} from '@ant-design/icons';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState} from '@/models/connect';
@@ -33,12 +32,10 @@ import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
 import {FAntvG6DependencyGraph, FAntvG6RelationshipGraph, FViewportTabs} from "@/components/FAntvG6";
 
-
 interface VersionEditorProps {
   dispatch: Dispatch;
   // version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
-  resourceInfo: ResourceInfoModelState;
   match: {
     params: {
       id: string;
@@ -47,7 +44,7 @@ interface VersionEditorProps {
   }
 }
 
-function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resourceInfo}: VersionEditorProps & RouterTypes) {
+function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: VersionEditorProps & RouterTypes) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
@@ -709,7 +706,6 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match, resou
 export default withRouter(connect(({resourceVersionEditorPage, resourceInfo}: ConnectState) => ({
   // version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
-  resourceInfo: resourceInfo,
 }))(VersionEditor));
 
 interface HeaderProps {

@@ -1,7 +1,6 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {FCustomPropertiesProps} from "@/components/FCustomProperties";
 import {
   resourceVersionInfo,
   ResourceVersionInfoParamsType1,
@@ -10,7 +9,6 @@ import {
 } from "@/services/resources";
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
-import {pathToRegexp} from '@/utils/pathToRegexp';
 import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 
@@ -156,6 +154,7 @@ const Model: ResourceVersionEditorModelType = {
       };
       const {data} = yield call(resourceVersionInfo, params);
 
+      // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
@@ -166,6 +165,24 @@ const Model: ResourceVersionEditorModelType = {
       const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
       // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
       const {nodes, edges} = handleDependencyGraphData(data2[0]);
+
+      // 授权树
+      const params3: Parameters<typeof FApiServer.Resource.authTree>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+        version: resourceVersionEditorPage.version,
+      };
+
+      const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
+      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+
+      // 关系树
+      const params4: Parameters<typeof FApiServer.Resource.authTree>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+        version: resourceVersionEditorPage.version,
+      };
+
+      const {data: data4} = yield call(FApiServer.Resource.authTree, params3);
+      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');

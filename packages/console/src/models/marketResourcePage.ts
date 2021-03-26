@@ -486,7 +486,7 @@ const Model: MarketResourcePageModelType = {
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
 
-      // console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
       yield put<ChangeAction>({
         type: 'change',

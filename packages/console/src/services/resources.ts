@@ -313,3 +313,16 @@ export interface CycleDependencyCheckParamsType {
 export function cycleDependencyCheck({resourceId, ...pramas}: CycleDependencyCheckParamsType) {
   return request.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, pramas);
 }
+
+// 查看含授权的资源关系树
+export interface RelationTreeAuthParamsType {
+  resourceId: string;
+  version?: string;
+  versionRange?: string;
+}
+
+export function relationTreeAuth({resourceId, ...pramas}: RelationTreeAuthParamsType) {
+  return request.post(`/v2/auths/resource/${resourceId}/relationTreeAuth`, {
+    pramas,
+  });
+}
