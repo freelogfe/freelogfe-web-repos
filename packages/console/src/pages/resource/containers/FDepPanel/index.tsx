@@ -82,6 +82,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
                   type="secondary"
                 />}
                 {resource.status === 3 && <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>}
+                {resource.status === 4 && <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="secondary"/>}
               </div>)
             }
 

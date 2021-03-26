@@ -16,7 +16,6 @@ import {
   InfoParamsType,
   lookDraft,
   LookDraftParamsType,
-  resolveResources,
   resourceVersionInfo,
   ResourceVersionInfoParamsType1,
   saveVersionsDraft,
@@ -38,7 +37,7 @@ export type DepResources = WholeReadonly<{
   id: string;
   title: string;
   resourceType: string;
-  status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/;
+  status: 0 /*该资源已下线，无法获取授权。*/ | 1 | 2 /*循环依赖不支持授权。*/ | 3 /*该依赖是存储空间对象，无法获取授权。*/ | 4 /*上抛资源，无法获取授权*/;
   versionRange: string;
   versions: string[];
   upthrow: boolean;
@@ -73,6 +72,11 @@ export type Relationships = WholeReadonly<{
 export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   resourceId: string;
   latestVersion: string;
+  resourceType: string;
+  baseUpcastResources: {
+    resourceId: string;
+    resourceName: string;
+  }[];
 
   version: string;
   versionVerify: 0 | 2;
@@ -254,6 +258,8 @@ export interface ResourceVersionCreatorModelType {
 const initStates: ResourceVersionCreatorPageModelState = {
   resourceId: '',
   latestVersion: '',
+  resourceType: '',
+  baseUpcastResources: [],
 
   version: '',
   versionVerify: 0,
@@ -302,17 +308,16 @@ const Model: ResourceVersionCreatorModelType = {
 
   effects: {
     * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage, resourceInfo}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
           resourceVersionCreatorPage,
-          resourceInfo,
         };
       });
       const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
         .filter((dep) => dep.upthrow)
         .map((dep) => dep.id);
       const resolveResources = resourceVersionCreatorPage.dependencies
-        .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
+        .filter((dep) => !baseUpcastResourceIds.includes(dep.id) && dep.status === 1)
         .map((dep) => ({
           resourceId: dep.id,
           contracts: [
@@ -482,6 +487,8 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          resourceType: data.resourceType,
+          baseUpcastResources: data.baseUpcastResources,
           latestVersion: data.latestVersion,
           version: resourceVersionCreatorPage.version ? resourceVersionCreatorPage.version : (semver.inc(data.latestVersion, 'patch') || '0.1.0'),
           preVersionBaseProperties,
@@ -643,11 +650,14 @@ const Model: ResourceVersionCreatorModelType = {
 
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         const theVersion = versions?.find((v) => v.id === dr.resourceId);
+
+        const isUpthrow: boolean = !!resourceVersionCreatorPage.baseUpcastResources.find((b) => dr.resourceId === b.resourceId);
+
         return {
           id: dr.resourceId,
           title: dr.resourceName,
           resourceType: dr.resourceType,
-          status: dr.status,
+          status: isUpthrow ? 4 : dr.status,
           versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
           versions: dr.resourceVersions.map((version: any) => version.version),
           upthrow: false,

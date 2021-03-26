@@ -4,7 +4,7 @@ import {FContentText, FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import {Modal, Space} from 'antd';
+import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
@@ -19,10 +19,14 @@ import {
   CreateVersionAction,
   FetchDraftAction,
   FetchRawPropsAction,
-  FetchResourceInfoAction, GoToResourceDetailsBySha1,
+  FetchResourceInfoAction,
+  GoToResourceDetailsBySha1,
   HandleObjectInfoAction,
-  ImportLastVersionDataAction, InitModelStatesAction, LeaveAndClearDataAction,
-  SaveDraftAction, VerifyVersionInputAction,
+  ImportLastVersionDataAction,
+  InitModelStatesAction,
+  LeaveAndClearDataAction,
+  SaveDraftAction,
+  VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
@@ -45,7 +49,7 @@ import fConfirmModal from "@/components/fConfirmModal";
 interface VersionCreatorProps {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState,
-  resourceInfo: ResourceInfoModelState,
+  // resourceInfo: ResourceInfoModelState,
   match: {
     params: {
       id: string;
@@ -53,7 +57,7 @@ interface VersionCreatorProps {
   };
 }
 
-function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, resourceInfo}: VersionCreatorProps & RouterTypes) {
+function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: VersionCreatorProps & RouterTypes) {
 
   React.useEffect(() => {
     // const func = () => 1234;
@@ -127,7 +131,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
   async function onClickCreate() {
     await dispatch<CreateVersionAction>({
       type: 'resourceVersionCreatorPage/createVersion',
-      payload: match.params.id,
+      // payload: match.params.id,
     });
     await dispatch<FetchDraftDataAction>({
       type: 'resourceInfo/fetchDraftData',
@@ -148,7 +152,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
     || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectError.text
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
-      return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
+      return dd.status !== 4 && !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
     });
   // 自定义属性
   // || !!resourceVersionCreatorPage.properties.find((ep) => {
@@ -235,7 +239,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match, res
                   },
                 });
               }}
-              resourceType={resourceInfo.info?.resourceType || ''}
+              resourceType={resourceVersionCreatorPage.resourceType}
               resourceObject={resourceVersionCreatorPage.resourceObject}
               onChange={async (value) => {
                 // console.log(value, '#@ERWADFSASDFSADF');
