@@ -152,7 +152,7 @@ const Model: ResourceAuthPageModelType = {
       };
 
       const {data} = yield call(FApiServer.Resource.info, params);
-      console.log(data, '@#$RFDSASDFSDFASDF');
+      // console.log(data, '@#$RFDSASDFSDFASDF');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -174,6 +174,9 @@ const Model: ResourceAuthPageModelType = {
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: resourceAuthPage.resourceID,
+      });
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
       });
     },
     * fetchAuthorized({payload: {activatedResourceId}}: FetchAuthorizedAction, {call, put, select}: EffectsCommandMap) {

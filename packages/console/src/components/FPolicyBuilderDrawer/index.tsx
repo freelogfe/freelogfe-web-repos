@@ -65,6 +65,14 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
         disabled={title === '' || text === '' || !!titleError || !!textError}
       >确定</FNormalButton>
     </Space>}
+    afterVisibleChange={(visible  )=> {
+      if (!visible) {
+        setTitle('');
+        setTitleError('');
+        setText('');
+        setTextError('');
+      }
+    }}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
     <FInput
