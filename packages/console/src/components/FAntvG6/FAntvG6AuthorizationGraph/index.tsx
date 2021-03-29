@@ -23,20 +23,25 @@ G6.registerNode('authorization-resource', {
 
 
 G6.registerNode('authorization-contract', {
-  jsx: (cfg) => `
-  <group>
+  jsx: (cfg) => {
+    const contract = (cfg as any).contracts[0];
+
+    return `
+  <group style={{position: 'relative'}}>
     <rect style={{
         width: 'fit-content',
         height: 64,
-        fill: ${cfg.status === 1 ? '#E5F6EF' : '#FBF5EA'},
-        stroke: ${cfg.status === 1 ? '#8FD6B8' : '#E5C78A'},
+        fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
+        stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
         radius: 10,
       }}>
-      <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${cfg.contractName}&nbsp;</text>
-      <text style={{fontSize: 12, fill: ${cfg.status === 1 ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>执行中&nbsp;</text>
+      <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
+      <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
     </rect>
+
   </group>
-`,
+`;
+  },
 });
 
 interface FAntvG6AuthorizationGraphProps extends GraphData {
@@ -48,9 +53,12 @@ interface FAntvG6AuthorizationGraphProps extends GraphData {
     version: string;
   } | {
     id: string;
-    contractId: string;
-    contractName: string;
-    status: 0 | 1, //
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
   }>;
   edges: {
     source: string;
@@ -136,14 +144,14 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
           sourceAnchor: 1,
           targetAnchor: 0,
         },
-        // renderer: 'svg',
+        renderer: 'svg',
       });
 
       graph.read({
         nodes: nodes.map((n) => {
           return {
             ...n,
-            type: (n as any).contractId ? 'authorization-contract' : 'authorization-resource',
+            type: (n as any).resourceId ? 'authorization-resource' : 'authorization-contract',
           };
         }),
         edges,
@@ -153,7 +161,7 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
         nodes: nodes.map((n) => {
           return {
             ...n,
-            type: (n as any).contractId ? 'authorization-contract' : 'authorization-resource',
+            type: (n as any).resourceId ? 'authorization-resource' : 'authorization-contract',
           };
         }),
         edges,
