@@ -11,6 +11,7 @@ import moment from 'moment';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
+import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -27,6 +28,25 @@ export interface ResourceVersionEditorPageModelState {
     version: string;
   }[];
   dependencyGraphEdges: {
+    source: string;
+    target: string;
+  }[];
+  authorizationGraphNodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  } | {
+    id: string;
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
+  }>;
+  authorizationGraphEdges: {
     source: string;
     target: string;
   }[];
@@ -119,6 +139,8 @@ const Model: ResourceVersionEditorModelType = {
     viewportGraphShow: 'relationship',
     dependencyGraphNodes: [],
     dependencyGraphEdges: [],
+    authorizationGraphNodes: [],
+    authorizationGraphEdges: [],
 
     rawProperties: [],
     baseProperties: [],
@@ -175,8 +197,8 @@ const Model: ResourceVersionEditorModelType = {
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
       console.log(data3, 'data3@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
-      // const {nodes: node3, edges: edges3} =
-      handleAuthorizationGraphData(data3, data);
+      const {nodes: nodes3, edges: edges3} = yield call(handleAuthorizationGraphData, data3, data);
+      // console.log(nodes3, edges3, 'node3,edges3,!@#$@#$!');
 
       // 关系树
       const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {
@@ -223,6 +245,8 @@ const Model: ResourceVersionEditorModelType = {
           })),
           dependencyGraphNodes: nodes,
           dependencyGraphEdges: edges,
+          authorizationGraphNodes: nodes3,
+          authorizationGraphEdges: edges3,
         },
       });
     },
@@ -314,109 +338,6 @@ const Model: ResourceVersionEditorModelType = {
 };
 
 export default Model;
-
-type AuthorizationTree = {
-  contracts: {
-    contractId: string;
-  }[];
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  version: string;
-  versionId: string;
-  children: AuthorizationTree;
-}[][];
-
-interface ResourceNode {
-  id: string;
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  version: string;
-}
-
-interface ContractNode {
-  id: string;
-  contracts: {
-    contractId: string;
-    contractName: string;
-    isAuth: boolean;
-    updateDate: string;
-  }[];
-}
-
-interface AuthorizationGraphData {
-  nodes: Array<ResourceNode | ContractNode>;
-  edges: {
-    source: string;
-    target: string;
-  }[];
-}
-
-async function handleAuthorizationGraphData(data: AuthorizationTree, root: {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string
-  version: string;
-  versionId: string;
-}): Promise<AuthorizationGraphData> {
-
-  const contractNodes: {
-    id: string;
-    contractIds: string[];
-  }[] = [];
-
-  const resourceNodes: ResourceNode[] = [];
-
-  const edges: AuthorizationGraphData['edges'] = [];
-  traversal(data);
-
-  const {data: data3} = await FApiServer.Contract.batchContracts({
-    contractIds: contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(','),
-  });
-
-  const nodes: AuthorizationGraphData['nodes'] = [
-    ...resourceNodes,
-    ...contractNodes.map<ContractNode>((cn, index, array) => {
-      return {
-        id: cn.id,
-        contracts: cn.contractIds.map((id) => {
-          return data3.find((a: any) => a.contractId === id);
-        }),
-      };
-    }),
-  ];
-
-  console.log(nodes, 'nodes@W#RQWEFADSFSDFASDF');
-
-  return {
-    nodes,
-    edges,
-  };
-
-  function traversal(d: AuthorizationTree, parentID: string = '') {
-
-    for (const auths of d) {
-      const id1: string = parentID + '_' + auths[0].resourceId;
-      const contracts = auths[0].contracts;
-      contractNodes.push({
-        id: id1,
-        contractIds: contracts.map<string>((c) => c.contractId),
-      });
-      for (const auth of auths) {
-        const id2: string = id1 + '_' + auth.versionId;
-        resourceNodes.push({
-          id: id2,
-          resourceId: auth.resourceId,
-          resourceName: auth.resourceName,
-          resourceType: auth.resourceType,
-          version: auth.version,
-        });
-        traversal(auth.children, id2);
-      }
-    }
-  }
-}
 
 function handleRelationGraphData() {
 

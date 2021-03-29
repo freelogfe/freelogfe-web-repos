@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib/types";
+import {FApiServer} from "@/services";
 
 G6.registerNode('authorization-resource', {
   jsx: (cfg) => `
@@ -171,3 +172,118 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
 }
 
 export default FAntvG6AuthorizationGraph;
+
+type AuthorizationTree = {
+  contracts: {
+    contractId: string;
+  }[];
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  versionId: string;
+  children: AuthorizationTree;
+}[][];
+
+interface ResourceNode {
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+}
+
+interface ContractNode {
+  id: string;
+  contracts: {
+    contractId: string;
+    contractName: string;
+    isAuth: boolean;
+    updateDate: string;
+  }[];
+}
+
+interface AuthorizationGraphData {
+  nodes: Array<ResourceNode | ContractNode>;
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+export async function handleAuthorizationGraphData(data: AuthorizationTree, root: {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string
+  version: string;
+  versionId: string;
+}): Promise<AuthorizationGraphData> {
+
+  const contractNodes: {
+    id: string;
+    contractIds: string[];
+  }[] = [];
+
+  const resourceNodes: ResourceNode[] = [{
+    id: root.versionId,
+    resourceId: root.resourceId,
+    resourceName: root.resourceName,
+    resourceType: root.resourceType,
+    version: root.version,
+  }];
+
+  const edges: AuthorizationGraphData['edges'] = [];
+  traversal(data, root.versionId);
+
+  const {data: data3} = await FApiServer.Contract.batchContracts({
+    contractIds: contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(','),
+  });
+
+  const nodes: AuthorizationGraphData['nodes'] = [
+    ...resourceNodes,
+    ...contractNodes.map<ContractNode>((cn, index, array) => {
+      return {
+        id: cn.id,
+        contracts: cn.contractIds.map((id) => {
+          return data3.find((a: any) => a.contractId === id);
+        }),
+      };
+    }),
+  ];
+
+  return {
+    nodes,
+    edges,
+  };
+
+  function traversal(authorizationTree: AuthorizationTree, parentID: string = '') {
+
+    for (const auths of authorizationTree) {
+      const id1: string = `${parentID}_${auths[0].resourceId}`;
+      const contracts = auths[0].contracts;
+      contractNodes.push({
+        id: id1,
+        contractIds: contracts.map<string>((c) => c.contractId),
+      });
+      edges.push({
+        source: parentID,
+        target: id1,
+      });
+      for (const auth of auths) {
+        const id2: string = `${id1}_${auth.versionId}`;
+        resourceNodes.push({
+          id: id2,
+          resourceId: auth.resourceId,
+          resourceName: auth.resourceName,
+          resourceType: auth.resourceType,
+          version: auth.version,
+        });
+        edges.push({
+          source: id1,
+          target: id2,
+        });
+        traversal(auth.children, id2);
+      }
+    }
+  }
+}
