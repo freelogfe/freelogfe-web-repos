@@ -153,7 +153,7 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
       };
       const {data} = yield call(resourceVersionInfo, params);
-
+      console.log(data, 'datadataio23u09jfiojadsf');
       // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -175,6 +175,9 @@ const Model: ResourceVersionEditorModelType = {
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
       console.log(data3, 'data3@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
+      // const {nodes: node3, edges: edges3} =
+      handleAuthorizationGraphData(data3, data);
+
       // 关系树
       const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -182,7 +185,7 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data4} = yield call(FApiServer.Resource.relationTreeAuth, params3);
-      console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
@@ -311,3 +314,110 @@ const Model: ResourceVersionEditorModelType = {
 };
 
 export default Model;
+
+type AuthorizationTree = {
+  contracts: {
+    contractId: string;
+  }[];
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  versionId: string;
+  children: AuthorizationTree;
+}[][];
+
+interface ResourceNode {
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+}
+
+interface ContractNode {
+  id: string;
+  contracts: {
+    contractId: string;
+    contractName: string;
+    isAuth: boolean;
+    updateDate: string;
+  }[];
+}
+
+interface AuthorizationGraphData {
+  nodes: Array<ResourceNode | ContractNode>;
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+async function handleAuthorizationGraphData(data: AuthorizationTree, root: {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string
+  version: string;
+  versionId: string;
+}): Promise<AuthorizationGraphData> {
+
+  const contractNodes: {
+    id: string;
+    contractIds: string[];
+  }[] = [];
+
+  const resourceNodes: ResourceNode[] = [];
+
+  const edges: AuthorizationGraphData['edges'] = [];
+  traversal(data);
+
+  const {data: data3} = await FApiServer.Contract.batchContracts({
+    contractIds: contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(','),
+  });
+
+  const nodes: AuthorizationGraphData['nodes'] = [
+    ...resourceNodes,
+    ...contractNodes.map<ContractNode>((cn, index, array) => {
+      return {
+        id: cn.id,
+        contracts: cn.contractIds.map((id) => {
+          return data3.find((a: any) => a.contractId === id);
+        }),
+      };
+    }),
+  ];
+
+  console.log(nodes, 'nodes@W#RQWEFADSFSDFASDF');
+
+  return {
+    nodes,
+    edges,
+  };
+
+  function traversal(d: AuthorizationTree, parentID: string = '') {
+
+    for (const auths of d) {
+      const id1: string = parentID + '_' + auths[0].resourceId;
+      const contracts = auths[0].contracts;
+      contractNodes.push({
+        id: id1,
+        contractIds: contracts.map<string>((c) => c.contractId),
+      });
+      for (const auth of auths) {
+        const id2: string = id1 + '_' + auth.versionId;
+        resourceNodes.push({
+          id: id2,
+          resourceId: auth.resourceId,
+          resourceName: auth.resourceName,
+          resourceType: auth.resourceType,
+          version: auth.version,
+        });
+        traversal(auth.children, id2);
+      }
+    }
+  }
+}
+
+function handleRelationGraphData() {
+
+}

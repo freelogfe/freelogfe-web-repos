@@ -297,8 +297,8 @@ export interface BatchSetContractsParamsType {
   }[];
 }
 
-export function batchSetContracts({resourceId, subjects}: BatchSetContractsParamsType) {
-  return request.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, {subjects});
+export function batchSetContracts({resourceId, ...params}: BatchSetContractsParamsType) {
+  return request.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, params);
 }
 
 // 资源依赖循环性检查
@@ -310,8 +310,21 @@ export interface CycleDependencyCheckParamsType {
   }[];
 }
 
-export function cycleDependencyCheck({resourceId, ...pramas}: CycleDependencyCheckParamsType) {
-  return request.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, pramas);
+export function cycleDependencyCheck({resourceId, ...params}: CycleDependencyCheckParamsType) {
+  return request.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, params);
+}
+
+// 查看资源关系树
+export interface RelationTreeParamsType {
+  resourceId: string;
+  version?: string;
+  versionRange?: string;
+}
+
+export function relationTree({resourceId, ...params}: RelationTreeParamsType) {
+  return request.get(`/v2/resources/${resourceId}/relationTree`, {
+    params,
+  });
 }
 
 // 查看含授权的资源关系树
@@ -321,8 +334,8 @@ export interface RelationTreeAuthParamsType {
   versionRange?: string;
 }
 
-export function relationTreeAuth({resourceId, ...pramas}: RelationTreeAuthParamsType) {
-  return request.post(`/v2/auths/resource/${resourceId}/relationTreeAuth`, {
-    pramas,
+export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParamsType) {
+  return request.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
+    params,
   });
 }

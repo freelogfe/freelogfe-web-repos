@@ -30,7 +30,12 @@ import FFormLayout from "@/layouts/FFormLayout";
 import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
-import {FAntvG6DependencyGraph, FAntvG6RelationshipGraph, FViewportTabs} from "@/components/FAntvG6";
+import {
+  FAntvG6AuthorizationGraph,
+  FAntvG6DependencyGraph,
+  FAntvG6RelationshipGraph,
+  FViewportTabs
+} from "@/components/FAntvG6";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -235,7 +240,26 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             }
 
             {
-              resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<div className={styles.diagram}/>)
+              resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+                nodes={[{
+                  id: '000',
+                  resourceId: '000',
+                  resourceName: 'stefan/freelog白皮书',
+                  resourceType: 'image',
+                  version: '0.0.1',
+                }, {
+                  id: '001',
+                  contractId: '001',
+                  contractName: '分时段使用',
+                  status: 0,
+                }]}
+                edges={[
+                  {
+                    source: '000',
+                    target: '001',
+                  },
+                ]}
+              />)
             }
 
             {
