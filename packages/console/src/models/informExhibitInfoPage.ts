@@ -2,23 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
-import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
-import {
-  createRules,
-  CreateRulesParamsType,
-  rulesRematch,
-  RulesRematchParamsType, testNodeRules, TestNodeRulesParamsType,
-  testResourceDetails,
-  TestResourceDetailsParamsType, updateTestResourceContracts, UpdateTestResourceContractsParamsType
-} from "@/services/informalNodes";
 import {formatDateTime} from "@/utils/format";
-import {
-  createPresentable,
-  CreatePresentableParamsType,
-  updatePresentable,
-  UpdatePresentableParamsType
-} from "@/services/presentables";
+import {FApiServer} from "@/services";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -200,10 +185,10 @@ const Model: ExhibitInfoPageModelType = {
         nodes,
       }));
 
-      const params: TestResourceDetailsParamsType = {
+      const params: Parameters<typeof FApiServer.InformalNode.testResourceDetails>[0] = {
         testResourceId: informExhibitInfoPage.informExhibitID,
       };
-      const {data} = yield call(testResourceDetails, params);
+      const {data} = yield call(FApiServer.InformalNode.testResourceDetails, params);
 
       // console.log(data, '#######32409jkldfsmdslkdsf');
 
@@ -211,11 +196,11 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(result, 'resultQ#$GFADSJf098uj5234');
 
-      const params1: InfoParamsType = {
+      const params1: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: data.originInfo.id,
       };
 
-      const {data: data1} = yield call(info, params1);
+      const {data: data1} = yield call(FApiServer.Resource.info, params1);
 
       // console.log(data1, 'data1data1data1@#ASDFASDFASDF');
 
@@ -286,7 +271,7 @@ const Model: ExhibitInfoPageModelType = {
         return ro.themeName === data.testResourceName;
       });
 
-      // console.log(currentRule, 'currentRule9283hdsfjkhdslkf');
+      // const params3:
 
       const eRule = currentRule ? {
         add: currentRule.operation === 'add' ? {
@@ -400,11 +385,11 @@ const Model: ExhibitInfoPageModelType = {
       const text = decompile(newRulesObj);
       // console.log(text, 'newRulesObj90ij32.dsfsdf');
 
-      const params: CreateRulesParamsType = {
+      const params: Parameters<typeof FApiServer.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.nodeID,
         testRuleText: text,
       };
-      const {data} = yield call(createRules, params);
+      const {data} = yield call(FApiServer.InformalNode.createRules, params);
     },
     * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
@@ -413,7 +398,7 @@ const Model: ExhibitInfoPageModelType = {
       const resource = informExhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#+++++++++++');
       // if (resource?.contracts && resource?.contracts.length > 0) {
-      const params: UpdateTestResourceContractsParamsType = {
+      const params: Parameters<typeof FApiServer.InformalNode.updateTestResourceContracts>[0] = {
         // presentableId: informExhibitInfoPage?.presentableId || '',
         testResourceId: informExhibitInfoPage.informExhibitID,
         resolveResources: [
@@ -426,7 +411,7 @@ const Model: ExhibitInfoPageModelType = {
           },
         ],
       };
-      yield call(updateTestResourceContracts, params);
+      yield call(FApiServer.InformalNode.updateTestResourceContracts, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -487,19 +472,19 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   }
   const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
 
-  const params0: BatchInfoParamsType = {
+  const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const params1: BatchContractsParamsType = {
+  const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
     contractIds: contractIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const {data: data0}: any = await batchInfo(params0);
+  const {data: data0}: any = await FApiServer.Resource.batchInfo(params0);
   // console.log(data0, 'data0, data123rfsdadata0');
-  const {data: data1}: any = params1.contractIds ? (await batchContracts(params1)) : {data: []};
+  const {data: data1}: any = params1.contractIds ? (await FApiServer.Contract.batchContracts(params1)) : {data: []};
   // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
 
   const result = params.map((r) => {
@@ -546,16 +531,16 @@ interface RuleMatchStatusParams {
 }
 
 async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParams): Promise<any> {
-  const params: RulesRematchParamsType = {
+  const params: Parameters<typeof FApiServer.InformalNode.rulesRematch>[0] = {
     nodeId: nodeID,
   };
 
   if (isRematch) {
-    await rulesRematch({nodeId: nodeID});
+    await FApiServer.InformalNode.rulesRematch(params);
   }
 
   while (true) {
-    const response = await testNodeRules({nodeId: nodeID});
+    const response = await FApiServer.InformalNode.testNodeRules({nodeId: nodeID});
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
       await sleep();
