@@ -223,6 +223,14 @@ interface ResourceNode {
   version: string;
 }
 
+interface ExhibitNode {
+  id: string;
+  nodeId: number;
+  nodeName: string;
+  exhibitId: string;
+  exhibitName: string;
+}
+
 interface ContractNode {
   id: string;
   contracts: {
@@ -234,7 +242,7 @@ interface ContractNode {
 }
 
 interface AuthorizationGraphData {
-  nodes: Array<ResourceNode | ContractNode>;
+  nodes: Array<ResourceNode | ExhibitNode | ContractNode>;
   edges: {
     source: string;
     target: string;
