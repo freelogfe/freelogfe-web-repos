@@ -160,12 +160,12 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
           nodesep: 20,
           ranksep: 100,
           // direction: 'H',
-          getHeight: () => {
-            return 64;
-          },
-          getWidth: () => {
-            return 200;
-          },
+          // getHeight: () => {
+          //   return 64;
+          // },
+          // getWidth: () => {
+          //   return 200;
+          // },
           // getVGap: () => {
           //   return 10;
           // },
