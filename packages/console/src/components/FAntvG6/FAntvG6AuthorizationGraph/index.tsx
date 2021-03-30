@@ -198,7 +198,13 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
 
   }, [nodes, edges]);
 
-  return (<div ref={ref}/>);
+  return (<div
+    style={{
+      width: width,
+      height: height
+    }}
+    ref={ref}
+  />);
 }
 
 export default FAntvG6AuthorizationGraph;
@@ -273,9 +279,15 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
   const edges: AuthorizationGraphData['edges'] = [];
   traversal(data, root.versionId);
 
-  const {data: data3} = await FApiServer.Contract.batchContracts({
-    contractIds: contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(','),
-  });
+  const contractIds = contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(',');
+
+  let data3: any[] = [];
+  if (contractIds) {
+    const {data} = await FApiServer.Contract.batchContracts({
+      contractIds: contractIds,
+    });
+    data3 = data;
+  }
 
   const nodes: AuthorizationGraphData['nodes'] = [
     ...resourceNodes,

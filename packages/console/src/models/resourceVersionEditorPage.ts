@@ -175,7 +175,7 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
       };
       const {data} = yield call(resourceVersionInfo, params);
-      console.log(data, 'datadataio23u09jfiojadsf');
+
       // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -185,8 +185,7 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
-      // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
-      const {nodes, edges} = handleDependencyGraphData(data2[0]);
+      const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
 
       // 授权树
       const params3: Parameters<typeof FApiServer.Resource.authTree>[0] = {
@@ -195,10 +194,8 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
-      console.log(data3, 'data3@!#awef98adjs;klfjalskdfjlkjalsdkfja');
 
-      const {nodes: nodes3, edges: edges3} = yield call(handleAuthorizationGraphData, data3, data);
-      // console.log(nodes3, edges3, 'node3,edges3,!@#$@#$!');
+      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, data);
 
       // 关系树
       const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {
@@ -243,10 +240,10 @@ const Model: ResourceVersionEditorModelType = {
             defaultValue: i.defaultValue,
             customOption: i.candidateItems.join(','),
           })),
-          dependencyGraphNodes: nodes,
-          dependencyGraphEdges: edges,
-          authorizationGraphNodes: nodes3,
-          authorizationGraphEdges: edges3,
+          dependencyGraphNodes: dependencyGraphNodes,
+          dependencyGraphEdges: dependencyGraphEdges,
+          authorizationGraphNodes: authorizationGraphNodes,
+          authorizationGraphEdges: authorizationGraphEdges,
         },
       });
     },

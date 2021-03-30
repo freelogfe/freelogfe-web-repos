@@ -10,6 +10,7 @@ import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
 import FUtil from "@/utils";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
+import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 
 export interface MarketResourcePageModelState {
   resourceId: string;
@@ -105,6 +106,25 @@ export interface MarketResourcePageModelState {
     version: string;
   }[];
   dependencyGraphEdges: {
+    source: string;
+    target: string;
+  }[];
+  authorizationGraphNodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  } | {
+    id: string;
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
+  }>;
+  authorizationGraphEdges: {
     source: string;
     target: string;
   }[];
@@ -224,6 +244,9 @@ const initStates: MarketResourcePageModelState = {
   viewportGraphShow: 'dependency',
   dependencyGraphNodes: [],
   dependencyGraphEdges: [],
+  authorizationGraphNodes: [],
+  authorizationGraphEdges: [],
+
 };
 
 const Model: MarketResourcePageModelType = {
@@ -477,7 +500,7 @@ const Model: MarketResourcePageModelType = {
 
       const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
       // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
-      const {nodes, edges} = handleDependencyGraphData(data2[0]);
+      const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
 
       const params3: Parameters<typeof FApiServer.Resource.authTree>[0] = {
         resourceId: marketResourcePage.resourceId,
@@ -486,7 +509,8 @@ const Model: MarketResourcePageModelType = {
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
 
-      console.log(data3, '@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      // 授权树
+      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, data);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -518,8 +542,10 @@ const Model: MarketResourcePageModelType = {
                 description: p.remark,
               };
             }),
-          dependencyGraphNodes: nodes,
-          dependencyGraphEdges: edges,
+          dependencyGraphNodes: dependencyGraphNodes,
+          dependencyGraphEdges: dependencyGraphEdges,
+          authorizationGraphNodes: authorizationGraphNodes,
+          authorizationGraphEdges: authorizationGraphEdges,
         },
       });
     },
