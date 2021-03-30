@@ -216,25 +216,8 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           >
             {
               resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
-                nodes={[{
-                  id: 'string',
-                  resourceId: 'string',
-                  resourceName: 'freelog白皮书',
-                  resourceType: 'markdown',
-                  version: '0.0.1',
-                }, {
-                  id: 'string1',
-                  resourceId: 'string1',
-                  resourceName: '我们为什么要开发Freelog',
-                  resourceType: 'markdown',
-                  version: '0.0.1',
-                }]}
-                edges={[{
-                  source: 'string',
-                  target: 'string1',
-                }]}
-                // nodes={resourceVersionEditorPage.dependencyGraphNodes}
-                // edges={resourceVersionEditorPage.dependencyGraphEdges}
+                nodes={resourceVersionEditorPage.relationGraphNodes}
+                edges={resourceVersionEditorPage.relationGraphEdges}
                 width={860}
               />)
             }

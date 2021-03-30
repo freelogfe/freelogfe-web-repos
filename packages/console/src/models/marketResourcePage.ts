@@ -643,15 +643,13 @@ const Model: MarketResourcePageModelType = {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
-
-  }
-  ,
+  },
   subscriptions: {
     setup({}) {
 
-    }
+    },
   }
 };
 

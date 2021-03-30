@@ -14,7 +14,7 @@ G6.registerNode('relationship-resource', {
         radius: 10,
       }}>
       <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
-      <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}｜${cfg.version}&nbsp;</text>
+      <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
     </rect>
   </group>
 `,
@@ -138,3 +138,61 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
 }
 
 export default FAntvG6RelationshipGraph;
+
+interface RelationTree {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  versions: string[];
+  authFailedResources: [];
+  children: RelationTree[];
+}
+
+interface RelationGraphData {
+  nodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+export function handleRelationGraphData(data: RelationTree): RelationGraphData {
+  // console.log(data, 'data293jqlwekfwef');
+
+  const nodes: RelationGraphData['nodes'] = [];
+  const edges: RelationGraphData['edges'] = [];
+  traversal(data);
+
+  return {
+    nodes: nodes,
+    edges: edges,
+  };
+
+  function traversal(tree: RelationTree, parentID: string = ''): any {
+    const id: string = parentID ? `${parentID}-${tree.resourceId}` : tree.resourceId;
+    nodes.push({
+      id,
+      resourceId: tree.resourceId,
+      resourceName: tree.resourceName,
+      resourceType: tree.resourceType || '',
+      version: id.split('-').length === 3 ? '' : tree.versions[0],
+    });
+    if (parentID) {
+      edges.push({
+        source: parentID,
+        target: id,
+      });
+    }
+
+    for (const dep of (tree.children || [])) {
+      traversal(dep, id);
+    }
+  }
+
+}

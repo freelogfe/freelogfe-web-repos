@@ -12,6 +12,7 @@ import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
+import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -47,6 +48,17 @@ export interface ResourceVersionEditorPageModelState {
     }[];
   }>;
   authorizationGraphEdges: {
+    source: string;
+    target: string;
+  }[];
+  relationGraphNodes: {
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  }[];
+  relationGraphEdges: {
     source: string;
     target: string;
   }[];
@@ -102,10 +114,10 @@ export interface UpdateDataSourceAction extends AnyAction {
   payload: Partial<UpdateResourceVersionInfoParamsType>;
 }
 
-export interface ChangeDataSourceAction extends AnyAction {
-  type: 'resourceVersionEditorPage/changeDataSource' | 'changeDataSource';
-  payload: Partial<ResourceVersionEditorPageModelState>;
-}
+// export interface ChangeDataSourceAction extends AnyAction {
+//   type: 'resourceVersionEditorPage/changeDataSource' | 'changeDataSource';
+//   payload: Partial<ResourceVersionEditorPageModelState>;
+// }
 
 export interface SyncAllPropertiesAction extends AnyAction {
   type: 'syncAllProperties' | 'resourceVersionEditorPage/syncAllProperties';
@@ -120,7 +132,7 @@ export interface ResourceVersionEditorModelType {
     syncAllProperties: (action: SyncAllPropertiesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    changeDataSource: DvaReducer<ResourceVersionEditorPageModelState, ChangeDataSourceAction>;
+    // changeDataSource: DvaReducer<ResourceVersionEditorPageModelState, ChangeDataSourceAction>;
     change: DvaReducer<ResourceVersionEditorPageModelState, ChangeAction>;
   };
   subscriptions: { setup: Subscription };
@@ -141,6 +153,8 @@ const Model: ResourceVersionEditorModelType = {
     dependencyGraphEdges: [],
     authorizationGraphNodes: [],
     authorizationGraphEdges: [],
+    relationGraphNodes: [],
+    relationGraphEdges: [],
 
     rawProperties: [],
     baseProperties: [],
@@ -205,12 +219,14 @@ const Model: ResourceVersionEditorModelType = {
 
       const {data: data4} = yield call(FApiServer.Resource.relationTreeAuth, params3);
       // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
+      // console.log(relationGraphNodes, relationGraphEdges, 'relationGraphEdges@Q@#$!@#$!@$@#$@!#$');
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
 
-      yield put<ChangeDataSourceAction>({
-        type: 'changeDataSource',
+      yield put<ChangeAction>({
+        type: 'change',
         payload: {
           signingDate: moment(data.createDate).format('YYYY-MM-DD'),
           description: data.description,
@@ -244,6 +260,8 @@ const Model: ResourceVersionEditorModelType = {
           dependencyGraphEdges: dependencyGraphEdges,
           authorizationGraphNodes: authorizationGraphNodes,
           authorizationGraphEdges: authorizationGraphEdges,
+          relationGraphNodes: relationGraphNodes,
+          relationGraphEdges: relationGraphEdges,
         },
       });
     },
@@ -298,9 +316,9 @@ const Model: ResourceVersionEditorModelType = {
   },
 
   reducers: {
-    changeDataSource(state: ResourceVersionEditorPageModelState, action: ChangeDataSourceAction): ResourceVersionEditorPageModelState {
-      return {...state, ...action.payload};
-    },
+    // changeDataSource(state: ResourceVersionEditorPageModelState, action: ChangeDataSourceAction): ResourceVersionEditorPageModelState {
+    //   return {...state, ...action.payload};
+    // },
     change(state, {payload}) {
       return {
         ...state,
@@ -335,7 +353,3 @@ const Model: ResourceVersionEditorModelType = {
 };
 
 export default Model;
-
-function handleRelationGraphData() {
-
-}
