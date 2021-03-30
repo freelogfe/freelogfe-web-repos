@@ -24,10 +24,22 @@ G6.registerNode('authorization-resource', {
 
 G6.registerNode('authorization-contract', {
   jsx: (cfg) => {
-    const contract = (cfg as any).contracts[0];
+
+    const contracts = [...(cfg as any).contracts].sort((a, b) => new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime()).sort((a, b) => {
+      if (a.isAuth && !b.isAuth) {
+        return -1;
+      }
+      if (!a.isAuth && b.isAuth) {
+        return 1;
+      }
+      return 0;
+    });
+
+    const contract = contracts[0];
 
     return `
   <group>
+  ${(cfg as any).contracts.length > 1 ? `
   <rect style={{
       width: 200,
       height: 64,
@@ -36,6 +48,8 @@ G6.registerNode('authorization-contract', {
       radius: 10,
       marginLeft: 10,
     }}/>
+  ` : ''}
+
     <rect style={{
       width: 200,
       height: 64,
