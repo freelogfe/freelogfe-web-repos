@@ -128,6 +128,19 @@ export function presentableList(params: PresentableListParamsType) {
 }
 
 // 切换展品版本
+export interface AuthTreeParamsType {
+  presentableId: string;
+  maxDeep?: number;
+  nid?: string;
+  isContainRootNode?: boolean;
+  version?: string;
+}
+
+export function authTree({presentableId, ...params}: AuthTreeParamsType) {
+  return request.get(`/v2/presentables/${presentableId}/authTree`, {params});
+}
+
+// 切换展品版本
 export interface PresentablesVersionParamsType {
   presentableId: string;
   version: string;

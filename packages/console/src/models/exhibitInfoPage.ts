@@ -2,8 +2,6 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-// import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
-// import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
@@ -257,8 +255,16 @@ const Model: ExhibitInfoPageModelType = {
         presentableIds: data.presentableId,
       };
       const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
+
       // console.log(data1, 'data1123434');
       // presentableId
+      const params4: Parameters<typeof FApiServer.Exhibit.authTree>[0] = {
+        presentableId: exhibitInfoPage.presentableId,
+      };
+
+      const {data: data4} = yield call(FApiServer.Exhibit.authTree, params4);
+      console.log(data4, '@@@@@#4234234324234');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
