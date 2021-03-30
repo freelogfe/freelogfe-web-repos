@@ -2,8 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
-import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
+// import {batchContracts, BatchContractsParamsType} from '@/services/contracts';
+// import {batchInfo, BatchInfoParamsType, info, InfoParamsType} from '@/services/resources';
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
@@ -544,17 +544,17 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
   const contractPolicyIds: string[] = params.map((c) => c.contracts.map((cs) => cs.policyId)).flat();
 
-  const params0: BatchInfoParamsType = {
+  const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const params1: BatchContractsParamsType = {
+  const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
     contractIds: contractIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const [{data: data0}, {data: data1}]: any = await Promise.all([batchInfo(params0), batchContracts(params1)]);
+  const [{data: data0}, {data: data1}]: any = await Promise.all([FApiServer.Resource.batchInfo(params0), FApiServer.Contract.batchContracts(params1)]);
   // console.log(data0, data1, 'data0, data123rfsda');
 
   const result = params.map((r) => {
