@@ -27,18 +27,26 @@ G6.registerNode('authorization-contract', {
     const contract = (cfg as any).contracts[0];
 
     return `
-  <group style={{position: 'relative'}}>
+  <group>
+  <rect style={{
+      width: 200,
+      height: 64,
+      fill: '#F1F1F1',
+      stroke: '#D1D1D1',
+      radius: 10,
+      marginLeft: 10,
+    }}/>
     <rect style={{
-        width: 'fit-content',
-        height: 64,
-        fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
-        stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
-        radius: 10,
-      }}>
+      width: 200,
+      height: 64,
+      fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
+      stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
+      radius: 10,
+      marginTop: 10,
+    }}>
       <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
       <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
     </rect>
-
   </group>
 `;
   },
@@ -144,7 +152,7 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
           sourceAnchor: 1,
           targetAnchor: 0,
         },
-        renderer: 'svg',
+        // renderer: 'svg',
       });
 
       graph.read({
