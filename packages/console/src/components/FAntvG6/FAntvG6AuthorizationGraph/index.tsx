@@ -21,7 +21,6 @@ G6.registerNode('authorization-resource', {
 `,
 });
 
-
 G6.registerNode('authorization-contract', {
   jsx: (cfg) => {
 
@@ -65,6 +64,45 @@ G6.registerNode('authorization-contract', {
 `;
   },
 });
+
+// G6.registerNode('authorization-contract', {
+//   jsx: (cfg) => {
+//
+//     const contracts = [...(cfg as any).contracts].sort((a, b) => new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime()).sort((a, b) => {
+//       if (a.isAuth && !b.isAuth) {
+//         return -1;
+//       }
+//       if (!a.isAuth && b.isAuth) {
+//         return 1;
+//       }
+//       return 0;
+//     });
+//
+//     // const contract = contracts[0];
+//
+//     return `
+//   <group style={{backgroundColor: 'red'}}>
+//
+//   ${contracts.map((contract) => {
+//       return `
+//     <rect style={{
+//       width: 200,
+//       height: 64,
+//       fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
+//       stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
+//       radius: 10,
+//       marginTop: 10,
+//     }}>
+//       <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
+//       <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
+//     </rect>
+//     `
+//     })}
+//
+//   </group>
+// `;
+//   },
+// });
 
 interface FAntvG6AuthorizationGraphProps extends GraphData {
   nodes: Array<{
