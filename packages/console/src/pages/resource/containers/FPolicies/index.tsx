@@ -126,7 +126,7 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
           payload: {
             addPolicies: [{
               policyName: title,
-              policyText: text,
+              policyText: window.encodeURIComponent(text),
             }],
           },
         });
