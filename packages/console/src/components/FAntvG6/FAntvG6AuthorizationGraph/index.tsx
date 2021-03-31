@@ -140,6 +140,8 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
         container: ref.current || '',
         width: width,
         height: height,
+        fitView: true,
+        // fitViewPadding: [20, 40, 50, 20],
         modes: {
           default: [
             'drag-canvas',

@@ -48,6 +48,8 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
         container: ref.current || '',
         width: width,
         height: height,
+        fitView: true,
+        // fitViewPadding: [20, 40, 50, 20],
         modes: {
           default: [
             'drag-canvas',
