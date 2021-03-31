@@ -4,20 +4,25 @@ import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib/types";
 
 G6.registerNode('relationship-resource', {
-  jsx: (cfg: any) => `
+  jsx: (cfg: any) => {
+    const isRoot: boolean = cfg.id.split('-').length === 1;
+    const authFailedLength: number = cfg.authFailedResources.length;
+    return `
   <group>
     <rect style={{
         width: 'fit-content',
-        height: 64,
+        height: 84,
         fill: '#fff',
         stroke: '#EFEFEF',
         radius: 10,
       }}>
-      <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
-      <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
+        <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
+        ${isRoot ? '' : `<text style={{fontSize: 14, fill: ${authFailedLength === 0 ? '#42C28C' : '#E9A923'}, marginTop: 24, marginLeft: 10,}}>${authFailedLength === 0 ? '已授权' : '待执行'}&nbsp;</text>`}
     </rect>
   </group>
-`,
+`
+  },
 });
 
 interface FAntvG6RelationshipGraphProps extends GraphData {
@@ -69,12 +74,12 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
           nodesep: 20,
           ranksep: 100,
           // direction: 'H',
-          getHeight: () => {
-            return 64;
-          },
-          getWidth: () => {
-            return 200;
-          },
+          // getHeight: () => {
+          //   return 84;
+          // },
+          // getWidth: () => {
+          //   return 200;
+          // },
           // getVGap: () => {
           //   return 10;
           // },
@@ -155,6 +160,7 @@ interface RelationGraphData {
     resourceName: string;
     resourceType: string;
     version: string;
+    authFailedResources: any[];
   }[];
   edges: {
     source: string;
@@ -182,6 +188,7 @@ export function handleRelationGraphData(data: RelationTree): RelationGraphData {
       resourceName: tree.resourceName,
       resourceType: tree.resourceType || '',
       version: id.split('-').length === 3 ? '' : tree.versions[0],
+      authFailedResources: tree.authFailedResources || [],
     });
     if (parentID) {
       edges.push({
