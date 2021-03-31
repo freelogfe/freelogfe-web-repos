@@ -8,6 +8,27 @@ G6.registerNode('relationship-resource', {
     const isRoot: boolean = cfg.id.split('-').length === 1;
     const authFailedLength: number = cfg.authFailedResources.length;
     return `
+    <group>
+      <rect style={{
+          width: 'fit-content',
+          height: 84,
+          fill: '#fff',
+          stroke: '#EFEFEF',
+          radius: 10,
+        }}>
+          <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
+          <text style={{fontSize: 12, fontWeight: 400, fill: '#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
+          ${isRoot ? '' : `<text style={{fontSize: 14, fill: ${authFailedLength === 0 ? '#42C28C' : '#E9A923'}, marginTop: 24, marginLeft: 10}}>${authFailedLength === 0 ? '已授权' : '待执行'}&nbsp;</text>`}
+      </rect>
+    </group>
+`;
+  },
+});
+
+G6.registerNode('relationship-exhibit', {
+  jsx: (cfg: any) => {
+
+    return `
   <group>
     <rect style={{
         width: 'fit-content',
@@ -16,9 +37,11 @@ G6.registerNode('relationship-resource', {
         stroke: '#EFEFEF',
         radius: 10,
       }}>
-        <text style={{fontSize: 14, fontWeight: 600, fill:'#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
-        <text style={{fontSize: 12, fontWeight: 400, fill:'#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
-        ${isRoot ? '' : `<text style={{fontSize: 14, fill: ${authFailedLength === 0 ? '#42C28C' : '#E9A923'}, marginTop: 24, marginLeft: 10,}}>${authFailedLength === 0 ? '已授权' : '待执行'}&nbsp;</text>`}
+        <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>freelog白皮书运营节点&nbsp;</text>
+
+        <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>白皮书&nbsp;</text>
     </rect>
   </group>
 `
@@ -26,13 +49,16 @@ G6.registerNode('relationship-resource', {
 });
 
 interface FAntvG6RelationshipGraphProps extends GraphData {
-  nodes: {
+  nodes: Array<{
     id: string;
     resourceId: string;
     resourceName: string;
     resourceType: string;
     version: string;
-  }[];
+  } | {
+    id: string;
+
+  }>;
   edges: {
     source: string;
     target: string;
@@ -92,6 +118,7 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
         },
         defaultNode: {
           type: 'relationship-resource',
+          // type: 'relationship-resource',
           // width: 150,
           // height: 64,
           anchorPoints: [
@@ -121,9 +148,25 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
         // renderer: 'svg',
       });
 
-      graph.read({nodes, edges});
+      graph.read({
+        nodes: nodes.map((n, index) => {
+          return {
+            ...n,
+            type: (n as any).resourceId ? 'relationship-resource' : 'relationship-exhibit',
+          };
+        }),
+        edges,
+      });
     } else {
-      graph.changeData({nodes, edges});
+      graph.changeData({
+        nodes: nodes.map((n, index) => {
+          return {
+            ...n,
+            type: (n as any).resourceId ? 'relationship-resource' : 'relationship-exhibit',
+          };
+        }),
+        edges,
+      });
     }
 
     return () => {
