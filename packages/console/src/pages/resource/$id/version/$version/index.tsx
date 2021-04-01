@@ -715,6 +715,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         });
       }}
     >
+
       <FViewportTabs
         options={[
           {label: '关系树', value: 'relationship'},
@@ -728,6 +729,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           });
         }}
       >
+        
         {
           resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
             nodes={resourceVersionEditorPage.relationGraphNodes}

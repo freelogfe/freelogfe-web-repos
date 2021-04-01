@@ -1,7 +1,12 @@
 import * as React from "react";
 import {FTitleText} from "@/components/FText";
 import styles from "./index.less";
-import {FAntvG6AuthorizationGraph, FAntvG6DependencyGraph, FViewportTabs} from "@/components/FAntvG6";
+import {
+  FAntvG6AuthorizationGraph,
+  FAntvG6DependencyGraph,
+  FAntvG6RelationshipGraph,
+  FViewportTabs
+} from "@/components/FAntvG6";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
@@ -92,10 +97,13 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
           });
         }}
       >
+
         {
           marketResourcePage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
             nodes={marketResourcePage.dependencyGraphNodes}
             edges={marketResourcePage.dependencyGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
           />)
         }
 
@@ -103,6 +111,8 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
           marketResourcePage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
             nodes={marketResourcePage.authorizationGraphNodes}
             edges={marketResourcePage.authorizationGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
           />)
         }
 
