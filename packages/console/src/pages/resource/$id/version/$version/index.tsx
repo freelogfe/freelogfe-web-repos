@@ -55,7 +55,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
-  
+
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
   //     <FNoDataTip
@@ -522,11 +522,6 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         </div>
 
       </Space>
-
-      {/*<div style={{height: 20}}/>*/}
-      {/*<div className={styles.save}>*/}
-      {/*  */}
-      {/*</div>*/}
     </FDrawer>
 
     <FDrawer
