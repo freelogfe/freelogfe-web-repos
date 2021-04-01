@@ -702,9 +702,6 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       </Space>
 
       <div style={{height: 20}}/>
-      {/*<div className={styles.save}>*/}
-      {/*  */}
-      {/*</div>*/}
     </FDrawer>
 
     <FDrawer
@@ -759,6 +756,20 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         }
       </FViewportTabs>
     </FDrawer>
+
+    {/*<FDrawer*/}
+    {/*  visible={resourceVersionEditorPage.graphFullScreen}*/}
+    {/*  title={'合约'}*/}
+    {/*  destroyOnClose*/}
+    {/*  mask={false}*/}
+    {/*  onClose={() => {*/}
+    {/*    onChange({*/}
+    {/*      graphFullScreen: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*>*/}
+    {/*  1234*/}
+    {/*</FDrawer>*/}
   </>);
 }
 

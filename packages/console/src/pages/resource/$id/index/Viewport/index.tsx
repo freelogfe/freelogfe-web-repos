@@ -87,7 +87,9 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
         ]}
         value={marketResourcePage.viewportGraphShow}
         onChange={(value) => {
-          onChange({viewportGraphShow: value as 'dependency'});
+          onChange({
+            viewportGraphShow: value as 'dependency',
+          });
         }}
       >
         {
