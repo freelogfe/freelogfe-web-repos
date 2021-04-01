@@ -128,13 +128,12 @@ interface FAntvG6AuthorizationGraphProps extends GraphData {
   height?: number;
 }
 
-let graph: any = null;
 
 function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FAntvG6AuthorizationGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
-
+    let graph: any = null;
     if (!graph) {
       graph = new G6.Graph({
         container: ref.current || '',

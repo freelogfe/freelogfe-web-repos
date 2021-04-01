@@ -67,13 +67,14 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
   height?: number;
 }
 
-let graph: any = null;
+
 
 function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAntvG6RelationshipGraphProps) {
 
   const ref = React.useRef(null);
 
   React.useEffect(() => {
+    let graph: any = null;
 
     if (!graph) {
       graph = new G6.Graph({

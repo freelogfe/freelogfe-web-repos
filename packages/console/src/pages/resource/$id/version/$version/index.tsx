@@ -36,6 +36,8 @@ import {
   FAntvG6RelationshipGraph,
   FViewportTabs
 } from "@/components/FAntvG6";
+import FFullScreen from "@/components/FFullScreen";
+import Bottom from "@/pages/resource/$id/index/Sign/Bottom";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -53,7 +55,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
-
+  
   // if (!resourceInfo.hasPermission) {
   //   return (<div>
   //     <FNoDataTip
@@ -200,7 +202,16 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             </FHorn>))
           }
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={i18nMessage('version_maps')}>
+        <FFormLayout.FBlock
+          title={'相关视图'}
+          extra={<FTextButton
+            onClick={() => {
+              onChange({
+                graphFullScreen: true,
+              });
+            }}
+          >全屏查看</FTextButton>}
+        >
           <FViewportTabs
             options={[
               {label: '关系树', value: 'relationship'},
@@ -215,29 +226,37 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             }}
           >
             {
-              resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
-                nodes={resourceVersionEditorPage.relationGraphNodes}
-                edges={resourceVersionEditorPage.relationGraphEdges}
-                width={860}
-              />)
+              resourceVersionEditorPage.graphFullScreen
+                ? (<div style={{height: 500}}/>)
+                : (<>
+                  {
+                    resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
+                      nodes={resourceVersionEditorPage.relationGraphNodes}
+                      edges={resourceVersionEditorPage.relationGraphEdges}
+                      width={860}
+                    />)
+                  }
+
+                  {
+                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+                      nodes={resourceVersionEditorPage.authorizationGraphNodes}
+                      edges={resourceVersionEditorPage.authorizationGraphEdges}
+                      width={860}
+                    />)
+                  }
+
+                  {
+                    resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
+                      nodes={resourceVersionEditorPage.dependencyGraphNodes}
+                      edges={resourceVersionEditorPage.dependencyGraphEdges}
+                      width={860}
+                    />)
+                  }
+                </>)
             }
 
-            {
-              resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
-                nodes={resourceVersionEditorPage.authorizationGraphNodes}
-                edges={resourceVersionEditorPage.authorizationGraphEdges}
-                width={860}
-              />)
-            }
-
-            {
-              resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
-                nodes={resourceVersionEditorPage.dependencyGraphNodes}
-                edges={resourceVersionEditorPage.dependencyGraphEdges}
-                width={860}
-              />)
-            }
           </FViewportTabs>
+
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>
@@ -691,6 +710,59 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       {/*<div className={styles.save}>*/}
       {/*  */}
       {/*</div>*/}
+    </FDrawer>
+
+    <FDrawer
+      visible={resourceVersionEditorPage.graphFullScreen}
+      title={'相关视图'}
+      destroyOnClose
+      width={'100%'}
+      onClose={() => {
+        onChange({
+          graphFullScreen: false,
+        });
+      }}
+    >
+      <FViewportTabs
+        options={[
+          {label: '关系树', value: 'relationship'},
+          {label: '授权链', value: 'authorization'},
+          {label: '依赖树', value: 'dependency'},
+        ]}
+        value={resourceVersionEditorPage.viewportGraphShow}
+        onChange={(value) => {
+          onChange({
+            viewportGraphShow: value as 'relationship',
+          });
+        }}
+      >
+        {
+          resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
+            nodes={resourceVersionEditorPage.relationGraphNodes}
+            edges={resourceVersionEditorPage.relationGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
+          />)
+        }
+
+        {
+          resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+            nodes={resourceVersionEditorPage.authorizationGraphNodes}
+            edges={resourceVersionEditorPage.authorizationGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
+          />)
+        }
+
+        {
+          resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph
+            nodes={resourceVersionEditorPage.dependencyGraphNodes}
+            edges={resourceVersionEditorPage.dependencyGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
+          />)
+        }
+      </FViewportTabs>
     </FDrawer>
   </>);
 }

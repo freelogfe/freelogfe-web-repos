@@ -20,6 +20,7 @@ export interface ResourceVersionEditorPageModelState {
   signingDate: string;
   description: string;
 
+  graphFullScreen: boolean;
   viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
   dependencyGraphNodes: {
     id: string;
@@ -149,6 +150,7 @@ const Model: ResourceVersionEditorModelType = {
     signingDate: '',
     description: '',
 
+    graphFullScreen: false,
     viewportGraphShow: 'relationship',
     dependencyGraphNodes: [],
     dependencyGraphEdges: [],

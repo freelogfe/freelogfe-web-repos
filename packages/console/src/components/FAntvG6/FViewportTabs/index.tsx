@@ -1,5 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
+import FFullScreen from "@/components/FFullScreen";
+import {Button} from 'antd';
 
 interface FViewportTabsProps {
   options: {
@@ -13,19 +15,22 @@ interface FViewportTabsProps {
 }
 
 function FViewportTabs({options, value, onChange, children}: FViewportTabsProps) {
+
   return (<div className={styles.Viewport}>
     <div className={styles.ViewportNavs}>
-      {
-        options.map((o) => {
-          return (<a
-            key={o.value}
-            className={o.value === value ? styles.active : ''}
-            onClick={() => {
-              onChange && onChange(o.value);
-            }}
-          >{o.label}</a>)
-        })
-      }
+      <div className={styles.options}>
+        {
+          options.map((o) => {
+            return (<a
+              key={o.value}
+              className={o.value === value ? styles.active : ''}
+              onClick={() => {
+                onChange && onChange(o.value);
+              }}
+            >{o.label}</a>)
+          })
+        }
+      </div>
     </div>
     <div>
       {children}

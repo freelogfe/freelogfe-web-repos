@@ -36,13 +36,13 @@ interface FAntvG6DependencyGraphProps extends GraphData {
   height?: number;
 }
 
-let graph: any = null;
+
 
 function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntvG6DependencyGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
-
+    let graph: any = null;
     if (!graph) {
       graph = new G6.Graph({
         container: ref.current || '',
