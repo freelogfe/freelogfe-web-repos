@@ -47,6 +47,25 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   }[];
 
   viewportGraphShow: 'relationship' | 'authorization';
+  authorizationGraphNodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  } | {
+    id: string;
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
+  }>;
+  authorizationGraphEdges: {
+    source: string;
+    target: string;
+  }[];
 
   pCover: string;
   pTitle: string;
@@ -186,6 +205,8 @@ const Model: ExhibitInfoPageModelType = {
     associated: [],
 
     viewportGraphShow: 'relationship',
+    authorizationGraphNodes: [],
+    authorizationGraphEdges: [],
 
     pCover: '',
     pTitle: '',

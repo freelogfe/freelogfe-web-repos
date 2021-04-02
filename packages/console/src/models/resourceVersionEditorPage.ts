@@ -192,6 +192,7 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
       };
       const {data} = yield call(resourceVersionInfo, params);
+      console.log(data, 'data902q3jrlkasdfasdf');
 
       // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
@@ -227,13 +228,14 @@ const Model: ResourceVersionEditorModelType = {
 
       const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
       const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
-
+      // console.log('@#$@#$@#$@#$$#@$@#$1111111111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           signingDate: moment(data.createDate).format('YYYY-MM-DD'),
           description: data.description,
           rawProperties: Object.entries(data.systemProperty).map((sp) => {
+            // console.log(sp, 'SSSSSSppppPPPPP90j');
             return {
               key: sp[0],
               value: sp[1] as string,
@@ -259,12 +261,12 @@ const Model: ResourceVersionEditorModelType = {
             defaultValue: i.defaultValue,
             customOption: i.candidateItems.join(','),
           })),
-          dependencyGraphNodes: dependencyGraphNodes,
-          dependencyGraphEdges: dependencyGraphEdges,
-          authorizationGraphNodes: authorizationGraphNodes,
-          authorizationGraphEdges: authorizationGraphEdges,
-          relationGraphNodes: relationGraphNodes,
-          relationGraphEdges: relationGraphEdges,
+          // dependencyGraphNodes: dependencyGraphNodes,
+          // dependencyGraphEdges: dependencyGraphEdges,
+          // authorizationGraphNodes: authorizationGraphNodes,
+          // authorizationGraphEdges: authorizationGraphEdges,
+          // relationGraphNodes: relationGraphNodes,
+          // relationGraphEdges: relationGraphEdges,
         },
       });
     },
