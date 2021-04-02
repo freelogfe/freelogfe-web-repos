@@ -187,7 +187,7 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
       };
       const {data} = yield call(resourceVersionInfo, params);
-      console.log(data, 'data902q3jrlkasdfasdf');
+      // console.log(data, 'data902q3jrlkasdfasdf');
 
       // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
@@ -256,12 +256,12 @@ const Model: ResourceVersionEditorModelType = {
             defaultValue: i.defaultValue,
             customOption: i.candidateItems.join(','),
           })),
-          // dependencyGraphNodes: dependencyGraphNodes,
-          // dependencyGraphEdges: dependencyGraphEdges,
-          // authorizationGraphNodes: authorizationGraphNodes,
-          // authorizationGraphEdges: authorizationGraphEdges,
-          // relationGraphNodes: relationGraphNodes,
-          // relationGraphEdges: relationGraphEdges,
+          dependencyGraphNodes: dependencyGraphNodes,
+          dependencyGraphEdges: dependencyGraphEdges,
+          authorizationGraphNodes: authorizationGraphNodes,
+          authorizationGraphEdges: authorizationGraphEdges,
+          relationGraphNodes: relationGraphNodes,
+          relationGraphEdges: relationGraphEdges,
         },
       });
     },

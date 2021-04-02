@@ -276,8 +276,8 @@ const Model: ExhibitInfoPageModelType = {
         presentableIds: data.presentableId,
       };
       const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
-
       // console.log(data1, 'data1123434');
+
       // presentableId
       const params4: Parameters<typeof FApiServer.Exhibit.authTree>[0] = {
         presentableId: exhibitInfoPage.presentableId,
