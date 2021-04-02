@@ -207,8 +207,15 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
-
-      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, data);
+      console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
+      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
+        id: data.version,
+        resourceId: data.resourceId,
+        resourceName: data.resourceName,
+        resourceType: data.resourceType,
+        version: data.version,
+        versionId: data.versionId,
+      });
 
       // 关系树
       const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {

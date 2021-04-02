@@ -512,7 +512,14 @@ const Model: MarketResourcePageModelType = {
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
 
       // 授权树
-      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, data);
+      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
+        id: data.version,
+        resourceId: data.resourceId,
+        resourceName: data.resourceName,
+        resourceType: data.resourceType,
+        version: data.version,
+        versionId: data.versionId,
+      });
 
       yield put<ChangeAction>({
         type: 'change',

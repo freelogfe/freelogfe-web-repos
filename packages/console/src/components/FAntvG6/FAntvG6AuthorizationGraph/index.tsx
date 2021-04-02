@@ -5,6 +5,40 @@ import {GraphData} from "@antv/g6/lib/types";
 import {FApiServer} from "@/services";
 import {FTipText} from "@/components/FText";
 
+interface ResourceNode {
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+}
+
+interface ExhibitNode {
+  id: string;
+  nodeId: number;
+  nodeName: string;
+  exhibitId: string;
+  exhibitName: string;
+}
+
+interface ContractNode {
+  id: string;
+  contracts: {
+    contractId: string;
+    contractName: string;
+    isAuth: boolean;
+    updateDate: string;
+  }[];
+}
+
+interface AuthorizationGraphData {
+  nodes: Array<ResourceNode | ExhibitNode | ContractNode>;
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
 G6.registerNode('authorization-resource', {
   jsx: (cfg) => `
   <group>
@@ -20,6 +54,29 @@ G6.registerNode('authorization-resource', {
     </rect>
   </group>
 `,
+});
+
+G6.registerNode('authorization-exhibit', {
+
+  jsx: (cfg: any) => {
+    return `
+  <group>
+    <rect style={{
+        width: 'fit-content',
+        height: 84,
+        fill: '#fff',
+        stroke: '#EFEFEF',
+        radius: 10,
+      }}>
+        <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>freelog白皮书运营节点&nbsp;</text>
+
+        <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>白皮书&nbsp;</text>
+    </rect>
+  </group>
+`
+  },
 });
 
 G6.registerNode('authorization-contract', {
@@ -66,45 +123,6 @@ G6.registerNode('authorization-contract', {
   },
 });
 
-// G6.registerNode('authorization-contract', {
-//   jsx: (cfg) => {
-//
-//     const contracts = [...(cfg as any).contracts].sort((a, b) => new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime()).sort((a, b) => {
-//       if (a.isAuth && !b.isAuth) {
-//         return -1;
-//       }
-//       if (!a.isAuth && b.isAuth) {
-//         return 1;
-//       }
-//       return 0;
-//     });
-//
-//     // const contract = contracts[0];
-//
-//     return `
-//   <group style={{backgroundColor: 'red'}}>
-//
-//   ${contracts.map((contract) => {
-//       return `
-//     <rect style={{
-//       width: 200,
-//       height: 64,
-//       fill: ${contract.isAuth ? '#E5F6EF' : '#FBF5EA'},
-//       stroke: ${contract.isAuth ? '#8FD6B8' : '#E5C78A'},
-//       radius: 10,
-//       marginTop: 10,
-//     }}>
-//       <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
-//       <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
-//     </rect>
-//     `
-//     })}
-//
-//   </group>
-// `;
-//   },
-// });
-
 interface FAntvG6AuthorizationGraphProps extends GraphData {
   nodes: Array<{
     id: string;
@@ -112,6 +130,12 @@ interface FAntvG6AuthorizationGraphProps extends GraphData {
     resourceName: string;
     resourceType: string;
     version: string;
+  } | {
+    id: string;
+    nodeId: number;
+    nodeName: string;
+    exhibitId: string;
+    exhibitName: string;
   } | {
     id: string;
     contracts: {
@@ -219,7 +243,11 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
         nodes: nodes.map((n) => {
           return {
             ...n,
-            type: (n as any).resourceId ? 'authorization-resource' : 'authorization-contract',
+            type: (n as any).resourceId
+              ? 'authorization-resource'
+              : (n as any).exhibitId
+                ? 'authorization-exhibit'
+                : 'authorization-contract',
           };
         }),
         edges,
@@ -229,7 +257,11 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
         nodes: nodes.map((n) => {
           return {
             ...n,
-            type: (n as any).resourceId ? 'authorization-resource' : 'authorization-contract',
+            type: (n as any).resourceId
+              ? 'authorization-resource'
+              : (n as any).exhibitId
+                ? 'authorization-exhibit'
+                : 'authorization-contract',
           };
         }),
         edges,
@@ -282,63 +314,21 @@ type AuthorizationTree = {
   children: AuthorizationTree;
 }[][];
 
-interface ResourceNode {
-  id: string;
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  version: string;
-}
-
-interface ExhibitNode {
-  id: string;
-  nodeId: number;
-  nodeName: string;
-  exhibitId: string;
-  exhibitName: string;
-}
-
-interface ContractNode {
-  id: string;
-  contracts: {
-    contractId: string;
-    contractName: string;
-    isAuth: boolean;
-    updateDate: string;
-  }[];
-}
-
-interface AuthorizationGraphData {
-  nodes: Array<ResourceNode | ExhibitNode | ContractNode>;
-  edges: {
-    source: string;
-    target: string;
-  }[];
-}
-
-export async function handleAuthorizationGraphData(data: AuthorizationTree, root: {
-  resourceId: string;
-  resourceName: string;
-  resourceType: string
-  version: string;
-  versionId: string;
-}): Promise<AuthorizationGraphData> {
+export async function handleAuthorizationGraphData(data: AuthorizationTree, root: ResourceNode | ExhibitNode): Promise<AuthorizationGraphData> {
 
   const contractNodes: {
     id: string;
     contractIds: string[];
   }[] = [];
 
-  const resourceNodes: ResourceNode[] = [{
-    id: root.versionId,
-    resourceId: root.resourceId,
-    resourceName: root.resourceName,
-    resourceType: root.resourceType,
-    version: root.version,
+  const resourceNodes: Array<ResourceNode | ExhibitNode> = [{
+    id: (root as any).versionId || (root as any).exhibitId,
+    ...root,
   }];
 
   const edges: AuthorizationGraphData['edges'] = [];
-  traversal(data, root.versionId);
+  console.log(data, 'datadatadatadata12324');
+  traversal(data, resourceNodes[0].id);
 
   const contractIds = contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(',');
 

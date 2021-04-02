@@ -4,7 +4,14 @@ import {FTitleText} from "@/components/FText";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/exhibitInfoPage";
-import {FViewportTabs} from "@/components/FAntvG6";
+import {
+  FAntvG6AuthorizationGraph,
+  FAntvG6DependencyGraph,
+  FAntvG6RelationshipGraph,
+  FViewportTabs
+} from "@/components/FAntvG6";
+import FDrawer from "@/components/FDrawer";
+import {FTextButton} from "@/components/FButton";
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -22,7 +29,16 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
   }
 
   return (<div>
-    <FTitleText text={'相关视图'} type="h3"/>
+    <div className={styles.title}>
+      <FTitleText text={'相关视图'} type="h3"/>
+      <FTextButton
+        onClick={() => {
+          onChange({
+            graphFullScreen: true,
+          });
+        }}
+      >全屏查看</FTextButton>
+    </div>
     <div style={{height: 20}}/>
     <FViewportTabs
       options={[
@@ -34,12 +50,83 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
         onChange({viewportGraphShow: value as 'relationship'});
       }}
     >
-      {/*<FAntvG6DependencyGraph*/}
-      {/*  nodes={marketResourcePage.dependencyGraphNodes}*/}
-      {/*  edges={marketResourcePage.dependencyGraphEdges}*/}
-      {/*/>*/}
-      <div className={styles.diagram}/>
+      {
+        exhibitInfoPage.graphFullScreen || exhibitInfoPage.viewportGraphShow === 'relationship'
+          ? (<div style={{height: 500}}/>)
+          : (<>
+            {/*{*/}
+            {/*  exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
+            {/*    nodes={exhibitInfoPage.relationGraphNodes}*/}
+            {/*    edges={exhibitInfoPage.relationGraphEdges}*/}
+            {/*    width={860}*/}
+            {/*  />)*/}
+            {/*}*/}
+
+            {
+              exhibitInfoPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+                nodes={exhibitInfoPage.authorizationGraphNodes}
+                edges={exhibitInfoPage.authorizationGraphEdges}
+                width={860}
+              />)
+            }
+
+          </>)
+      }
     </FViewportTabs>
+
+    <FDrawer
+      visible={exhibitInfoPage.graphFullScreen}
+      title={'相关视图'}
+      destroyOnClose
+      width={'100%'}
+      onClose={() => {
+        onChange({
+          graphFullScreen: false,
+        });
+      }}
+    >
+
+      <FViewportTabs
+        options={[
+          {label: '关系树', value: 'relationship'},
+          {label: '授权链', value: 'authorization'},
+        ]}
+        value={exhibitInfoPage.viewportGraphShow}
+        onChange={(value) => {
+          onChange({
+            viewportGraphShow: value as 'relationship',
+          });
+        }}
+      >
+        {/*{*/}
+        {/*  exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
+        {/*    nodes={exhibitInfoPage.relationGraphNodes}*/}
+        {/*    edges={exhibitInfoPage.relationGraphEdges}*/}
+        {/*    width={window.innerWidth - 60}*/}
+        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
+        {/*  />)*/}
+        {/*}*/}
+
+        {
+          exhibitInfoPage.viewportGraphShow === 'relationship' && (<div
+            style={{
+              width: window.innerWidth - 60,
+              height: window.innerHeight - 60 - 70 - 50
+            }}
+          />)
+        }
+
+        {
+          exhibitInfoPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
+            nodes={exhibitInfoPage.authorizationGraphNodes}
+            edges={exhibitInfoPage.authorizationGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
+          />)
+        }
+
+      </FViewportTabs>
+    </FDrawer>
 
   </div>);
 }

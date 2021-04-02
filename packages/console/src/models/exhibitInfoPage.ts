@@ -5,6 +5,7 @@ import {ConnectState} from '@/models/connect';
 import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
+import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -46,26 +47,9 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     }[];
   }[];
 
+  graphFullScreen: boolean;
   viewportGraphShow: 'relationship' | 'authorization';
-  authorizationGraphNodes: Array<{
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    resourceType: string;
-    version: string;
-  } | {
-    id: string;
-    contracts: {
-      contractId: string;
-      contractName: string;
-      isAuth: boolean;
-      updateDate: string;
-    }[];
-  }>;
-  authorizationGraphEdges: {
-    source: string;
-    target: string;
-  }[];
+
 
   pCover: string;
   pTitle: string;
@@ -107,7 +91,33 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   resourceName: string;
   resourceType: string;
   resourceCover: string;
-}>;
+}> & {
+  authorizationGraphNodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+  } | {
+    id: string;
+    nodeId: number;
+    nodeName: string;
+    exhibitId: string;
+    exhibitName: string;
+  } | {
+    id: string;
+    contracts: {
+      contractId: string;
+      contractName: string;
+      isAuth: boolean;
+      updateDate: string;
+    }[];
+  }>;
+  authorizationGraphEdges: {
+    source: string;
+    target: string;
+  }[];
+};
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'exhibitInfoPage/change';
@@ -204,6 +214,7 @@ const Model: ExhibitInfoPageModelType = {
     addPolicyDrawerVisible: false,
     associated: [],
 
+    graphFullScreen: false,
     viewportGraphShow: 'relationship',
     authorizationGraphNodes: [],
     authorizationGraphEdges: [],
@@ -247,6 +258,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      console.log(data, 'data@#Rasfdjou890ujewfra');
 
       const params3: Parameters<typeof FApiServer.Node.details>[0] = {
         nodeId: data.nodeId,
@@ -284,7 +296,14 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const {data: data4} = yield call(FApiServer.Exhibit.authTree, params4);
-      console.log(data4, '@@@@@#4234234324234');
+      // console.log(data4, '@@@@@#4234234324234');
+      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data4, {
+        id: data.presentableId,
+        nodeId: data.nodeId,
+        nodeName: data.nodeId,
+        exhibitId: data.presentableId,
+        exhibitName: data.presentableName,
+      });
 
       yield put<ChangeAction>({
         type: 'change',
@@ -373,6 +392,9 @@ const Model: ExhibitInfoPageModelType = {
           resourceName: data2.resourceName,
           resourceType: data2.resourceType,
           resourceCover: data2.coverImages[0] || '',
+
+          authorizationGraphNodes: authorizationGraphNodes,
+          authorizationGraphEdges: authorizationGraphEdges,
         },
       });
     },
