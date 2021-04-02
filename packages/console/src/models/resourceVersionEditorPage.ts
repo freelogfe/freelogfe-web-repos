@@ -116,11 +116,6 @@ export interface UpdateDataSourceAction extends AnyAction {
   payload: Partial<UpdateResourceVersionInfoParamsType>;
 }
 
-// export interface ChangeDataSourceAction extends AnyAction {
-//   type: 'resourceVersionEditorPage/changeDataSource' | 'changeDataSource';
-//   payload: Partial<ResourceVersionEditorPageModelState>;
-// }
-
 export interface SyncAllPropertiesAction extends AnyAction {
   type: 'syncAllProperties' | 'resourceVersionEditorPage/syncAllProperties';
 }
