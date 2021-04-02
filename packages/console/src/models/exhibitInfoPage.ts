@@ -300,7 +300,7 @@ const Model: ExhibitInfoPageModelType = {
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data4, {
         id: data.presentableId,
         nodeId: data.nodeId,
-        nodeName: data.nodeId,
+        nodeName: data3.nodeName,
         exhibitId: data.presentableId,
         exhibitName: data.presentableName,
       });

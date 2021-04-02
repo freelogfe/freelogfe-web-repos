@@ -36,8 +36,6 @@ import {
   FAntvG6RelationshipGraph,
   FViewportTabs
 } from "@/components/FAntvG6";
-import FFullScreen from "@/components/FFullScreen";
-import Bottom from "@/pages/resource/$id/index/Sign/Bottom";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -729,7 +727,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           });
         }}
       >
-        
+
         {
           resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
             nodes={resourceVersionEditorPage.relationGraphNodes}

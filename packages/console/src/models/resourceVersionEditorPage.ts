@@ -207,7 +207,7 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
-      console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
+      // console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
         id: data.version,
         resourceId: data.resourceId,

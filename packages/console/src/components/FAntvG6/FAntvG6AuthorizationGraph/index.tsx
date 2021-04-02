@@ -69,10 +69,10 @@ G6.registerNode('authorization-exhibit', {
         radius: 10,
       }}>
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>freelog白皮书运营节点&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${cfg.nodeName}&nbsp;</text>
 
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>白皮书&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.exhibitName}&nbsp;</text>
     </rect>
   </group>
 `
@@ -268,7 +268,6 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
       });
     }
 
-
     return () => {
       graph.destroy();
       graph = null;
@@ -327,7 +326,7 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
   }];
 
   const edges: AuthorizationGraphData['edges'] = [];
-  console.log(data, 'datadatadatadata12324');
+  // console.log(data, 'datadatadatadata12324');
   traversal(data, resourceNodes[0].id);
 
   const contractIds = contractNodes.map<string[]>((c) => c.contractIds).flat(1).join(',');

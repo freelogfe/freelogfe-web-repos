@@ -215,6 +215,7 @@ interface RelationTree {
   resourceName: string;
   resourceType: string;
   versions: string[];
+  versionRanges: string[],
   authFailedResources: [];
   children: RelationTree[];
 }
@@ -248,12 +249,13 @@ export function handleRelationGraphData(data: RelationTree): RelationGraphData {
 
   function traversal(tree: RelationTree, parentID: string = ''): any {
     const id: string = parentID ? `${parentID}-${tree.resourceId}` : tree.resourceId;
+    const idLength: number = id.split('-').length;
     nodes.push({
       id,
       resourceId: tree.resourceId,
       resourceName: tree.resourceName,
       resourceType: tree.resourceType || '',
-      version: id.split('-').length === 3 ? '' : tree.versions[0],
+      version: idLength === 3 ? '' : idLength === 2 ? tree.versionRanges[0] : tree.versions[0],
       authFailedResources: tree.authFailedResources || [],
     });
     if (parentID) {
