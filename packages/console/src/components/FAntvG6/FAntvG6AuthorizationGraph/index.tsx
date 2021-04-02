@@ -3,6 +3,7 @@ import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib/types";
 import {FApiServer} from "@/services";
+import {FTipText} from "@/components/FText";
 
 G6.registerNode('authorization-resource', {
   jsx: (cfg) => `
@@ -133,7 +134,13 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
   const ref = React.useRef(null);
 
   React.useEffect(() => {
+
+    if (edges.length === 0) {
+      return;
+    }
+
     let graph: any = null;
+
     if (!graph) {
       graph = new G6.Graph({
         container: ref.current || '',
@@ -237,6 +244,21 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
 
   }, [nodes, edges]);
 
+  if (edges.length === 0) {
+    return (<div
+      className={styles.noEdges}
+      style={{
+        width: width,
+        height: height
+      }}
+    >
+      <FTipText
+        type="primary"
+        text={'无依授权'}
+      />
+    </div>);
+  }
+
   return (<div
     style={{
       width: width,
@@ -322,10 +344,10 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
 
   let data3: any[] = [];
   if (contractIds) {
-    const {data} = await FApiServer.Contract.batchContracts({
+    const {data: data2} = await FApiServer.Contract.batchContracts({
       contractIds: contractIds,
     });
-    data3 = data;
+    data3 = data2;
   }
 
   const nodes: AuthorizationGraphData['nodes'] = [

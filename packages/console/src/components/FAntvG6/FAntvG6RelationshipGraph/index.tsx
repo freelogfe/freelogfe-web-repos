@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib/types";
+import {FTipText} from "@/components/FText";
 
 G6.registerNode('relationship-resource', {
   jsx: (cfg: any) => {
@@ -68,12 +69,16 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
 }
 
 
-
 function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAntvG6RelationshipGraphProps) {
 
   const ref = React.useRef(null);
 
   React.useEffect(() => {
+
+    if (edges.length === 0) {
+      return;
+    }
+
     let graph: any = null;
 
     if (!graph) {
@@ -178,6 +183,21 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
     };
 
   }, [nodes, edges]);
+
+  if (edges.length === 0) {
+    return (<div
+      className={styles.noEdges}
+      style={{
+        width: width,
+        height: height
+      }}
+    >
+      <FTipText
+        type="primary"
+        text={'无关系树'}
+      />
+    </div>);
+  }
 
   return (<div
     style={{

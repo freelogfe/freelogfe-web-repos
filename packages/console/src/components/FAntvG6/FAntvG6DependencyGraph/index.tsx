@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData, ModelConfig} from "@antv/g6/lib/types";
+import {FTipText} from "@/components/FText";
 
 G6.registerNode('dependency-resource', {
   jsx: (cfg) => `
@@ -36,12 +37,15 @@ interface FAntvG6DependencyGraphProps extends GraphData {
   height?: number;
 }
 
-
-
 function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntvG6DependencyGraphProps) {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
+
+    if (edges.length === 0) {
+      return;
+    }
+
     let graph: any = null;
     if (!graph) {
       graph = new G6.Graph({
@@ -122,13 +126,27 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
       graph.changeData({nodes, edges});
     }
 
-
     return () => {
       graph.destroy();
       graph = null;
     };
 
   }, [nodes, edges]);
+
+  if (edges.length === 0) {
+    return (<div
+      className={styles.noEdges}
+      style={{
+        width: width,
+        height: height
+      }}
+    >
+      <FTipText
+        type="primary"
+        text={'无依赖树'}
+      />
+    </div>);
+  }
 
   return (<div
     style={{
