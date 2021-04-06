@@ -8,7 +8,7 @@ import {
   ChangeAction,
   FetchExhibitsAction,
   FetchNodeInfoAction,
-  FetchThemesAction,
+  FetchThemesAction, nodeManagerInitData,
   NodeManagerModelState
 } from '@/models/nodeManagerPage';
 import {ConnectState} from '@/models/connect';
@@ -42,6 +42,15 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
     });
 
   }, [(match.params as any).id]);
+
+  React.useEffect(() => {
+    return () => {
+      dispatch<ChangeAction>({
+        type: 'nodeManagerPage/change',
+        payload: nodeManagerInitData,
+      });
+    };
+  }, []);
 
   return (<>
     {

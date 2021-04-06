@@ -2,9 +2,9 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {completeUrlByDomain} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export type NodeManagerModelState = WholeReadonly<{
   nodeId: number;
@@ -121,30 +121,32 @@ export interface NodeManagerModelType {
   };
 }
 
+export const nodeManagerInitData: NodeManagerModelState = {
+  nodeId: -1,
+
+  nodeName: '',
+  nodeUrl: '',
+  testNodeUrl: '',
+  nodeThemeId: '',
+  showTheme: false,
+
+  selectedType: '-1',
+  selectedStatus: '2',
+  exhibitInputFilter: '',
+  pageCurrent: 1,
+  pageSize: 10,
+  exhibitList: [],
+  totalNum: -1,
+  exhibitDataState: 'loading',
+
+  themeInputFilter: '',
+  themeList: [],
+  themeDataState: 'loading',
+};
+
 const Model: NodeManagerModelType = {
   namespace: 'nodeManagerPage',
-  state: {
-    nodeId: -1,
-
-    nodeName: '',
-    nodeUrl: '',
-    testNodeUrl: '',
-    nodeThemeId: '',
-    showTheme: false,
-
-    selectedType: '-1',
-    selectedStatus: '2',
-    exhibitInputFilter: '',
-    pageCurrent: 1,
-    pageSize: 10,
-    exhibitList: [],
-    totalNum: -1,
-    exhibitDataState: 'loading',
-
-    themeInputFilter: '',
-    themeList: [],
-    themeDataState: 'loading',
-  },
+  state: nodeManagerInitData,
   effects: {
     * fetchNodeInfo({}: FetchNodeInfoAction, {put, select, call}: EffectsCommandMap) {
 
@@ -164,8 +166,8 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           nodeName: data?.nodeName,
-          nodeUrl: completeUrlByDomain(data?.nodeDomain || ''),
-          testNodeUrl: completeUrlByDomain('t.' + (data?.nodeDomain || '')),
+          nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
+          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + (data?.nodeDomain || '')),
           nodeThemeId: data.nodeThemeId,
         },
       });
