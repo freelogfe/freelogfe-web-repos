@@ -17,12 +17,11 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
 
   // console.log(policies, 'policies@#$rsafd980judsafsad');
 
-  if (!policies || policies.length === 0) {
+  if (!policies || policies.filter((p) => p.status !== 0).length === 0) {
     return null;
   }
 
   const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
-
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>

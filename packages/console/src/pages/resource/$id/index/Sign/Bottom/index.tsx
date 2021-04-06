@@ -26,6 +26,9 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             || marketResourcePage.signResources.map((sr) => {
               return sr.policies.filter((srp) => srp.checked).length + sr.contracts.filter((srp) => srp.checked).length;
             }).includes(0)
+            || !!marketResourcePage.signResources.find((sr) => {
+              return sr.status === 0;
+            })
           }
           onClick={async () => {
             const signExhibitName: string = await getAvailableExhibitName({

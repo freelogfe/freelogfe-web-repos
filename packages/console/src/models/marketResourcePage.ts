@@ -2,9 +2,8 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {formatDateTime} from "@/utils/format";
 import {router} from "umi";
-import {EXHIBIT_NAME} from "@/utils/regexp";
+// import {EXHIBIT_NAME} from "@/utils/regexp";
 import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
@@ -524,7 +523,7 @@ const Model: MarketResourcePageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          releaseTime: formatDateTime(data.createDate),
+          releaseTime: FUtil.Format.formatDateTime(data.createDate),
           description: data.description,
           properties: [
             ...Object.entries(data.systemProperty as object)
@@ -604,7 +603,7 @@ const Model: MarketResourcePageModelType = {
       router.push(FLinkTo.exhibitManagement({exhibitID: data.presentableId}));
     },
     * onChangeAndVerifySignExhibitName({payload}: OnChangeAndVerifySignExhibitNameAction, {put, select, call}: EffectsCommandMap) {
-      if (!EXHIBIT_NAME.test(payload)) {
+      if (!FUtil.Regexp.EXHIBIT_NAME.test(payload)) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
