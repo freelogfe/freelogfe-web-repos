@@ -101,55 +101,60 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
     </div>
+    <div className={styles.successCount}>有{storage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功</div>
     <div className={styles.body} style={{display: storage.uploadPanelOpen ? 'block' : 'none'}}>
       {
-        storage.uploadTaskQueue.map((f) => (<Task
-          key={f.uid}
-          file={f}
-          bucketName={storage.activatedBucket}
-          onSucceed={async ({objectName, sha1, uid}) => {
-            // console.log('!!!!!!######09jop23efwl;k');
-            dispatch<ChangeAction>({
-              type: 'storageHomePage/change',
-              payload: {
-                uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
-                  if (f.file.uid !== uid) {
-                    return utq;
-                  }
-                  return {
-                    ...utq,
-                    state: 1,
-                  };
-                }),
-              }
-            });
-            await dispatch<CreateObjectAction>({
-              type: 'storageHomePage/createObject',
-              payload: {
-                objectName,
-                sha1,
-              },
-            });
-            // console.log('######!!!!!!asdfdsafasdf');
-            run();
-          }}
-          onFail={({objectName, uid}) => {
-            dispatch<ChangeAction>({
-              type: 'storageHomePage/change',
-              payload: {
-                uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
-                  if (f.file.uid !== uid) {
-                    return utq;
-                  }
-                  return {
-                    ...utq,
-                    state: -1,
-                  };
-                }),
-              }
-            });
-          }}
-        />))
+        storage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
+          // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
+          return (<Task
+            key={f.uid}
+            file={f}
+            bucketName={storage.activatedBucket}
+            onSucceed={async ({objectName, sha1, uid}) => {
+              console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
+              await dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  uploadTaskQueue: uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                    // console.log(utq.uid, uid, 'f.file.uid !== uid');
+                    if (utq.uid !== uid) {
+                      return utq;
+                    }
+                    return {
+                      ...utq,
+                      state: 1,
+                    };
+                  }),
+                }
+              });
+              await dispatch<CreateObjectAction>({
+                type: 'storageHomePage/createObject',
+                payload: {
+                  objectName,
+                  sha1,
+                },
+              });
+
+              run();
+            }}
+            onFail={({objectName, uid}) => {
+              dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                    if (f.file.uid !== uid) {
+                      return utq;
+                    }
+                    return {
+                      ...utq,
+                      state: -1,
+                    };
+                  }),
+                }
+              });
+            }}
+          />);
+        })
       }
     </div>
   </div>);
