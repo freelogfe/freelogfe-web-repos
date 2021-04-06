@@ -979,7 +979,8 @@ const Model: ResourceVersionCreatorModelType = {
       };
       const {data} = yield call(getResourceBySha1, params);
       // console.log(data, '2134sdfa90j');
-      router.push(`/resource/${data[0].resourceId}`)
+      // router.push(`/resource/${data[0].resourceId}`);
+      window.open(`/resource/${data[0].resourceId}`);
     },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({

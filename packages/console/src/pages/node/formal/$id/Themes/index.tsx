@@ -134,9 +134,12 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                 }
 
                                 fConfirmModal({
-                                  message: i18nMessage('msg_change_theme_confirm'),
-                                  okText: i18nMessage('active_new_theme'),
-                                  cancelText: i18nMessage('keep_current_theme'),
+                                  // message: i18nMessage('msg_change_theme_confirm'),
+                                  message: '激活该主题，将下线其它主题',
+                                  // okText: i18nMessage('active_new_theme'),
+                                  okText: '激活',
+                                  // cancelText: i18nMessage('keep_current_theme'),
+                                  cancelText: '保持当前主题',
                                   onOk() {
                                     dispatch<OnActiveAction>({
                                       type: 'nodeManagerPage/onActive',
