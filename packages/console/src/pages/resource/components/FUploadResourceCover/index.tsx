@@ -2,8 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FUploadImage from '@/components/FUploadImage';
 import {FContentText} from '@/components/FText';
-import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
-import {uploadImage} from "@/services/storages";
 import {i18nMessage} from "@/utils/i18n";
 import {FCloudUpload} from "@/components/FIcons";
 import fMessage from "@/components/fMessage";

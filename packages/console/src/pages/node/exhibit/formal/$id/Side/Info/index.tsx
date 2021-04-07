@@ -11,6 +11,7 @@ import {FNormalButton, FTextButton} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
 import {ConnectState} from "@/models/connect";
+import fMessage from "@/components/fMessage";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -36,12 +37,18 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
     <div style={{height: 20}}/>
 
     <FUploadImage
-      onUploadSuccess={(url: string) => dispatch<UpdateBaseInfoAction>({
-        type: 'exhibitInfoPage/updateBaseInfo',
-        payload: {
-          pCover: url,
-        },
-      })}>
+      onError={(err) => {
+        fMessage(err, 'error');
+      }}
+      onUploadSuccess={(url: string) => {
+        console.log(url, 'url@#$!@#$@#@#$@#');
+        dispatch<UpdateBaseInfoAction>({
+          type: 'exhibitInfoPage/updateBaseInfo',
+          payload: {
+            pCover: url,
+          },
+        })
+      }}>
       <div className={styles.cover}>
         <img
           alt=""
@@ -99,7 +106,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
     <FTitleText text={'展品标签'} type="form"/>
     <div style={{height: 15}}/>
     <FLabelEditor
-      values={exhibitInfoPage.pTags}
+      values={exhibitInfoPage.pTags as string[]}
       onChange={(value) => {
         dispatch<UpdateBaseInfoAction>({
           type: 'exhibitInfoPage/updateBaseInfo',

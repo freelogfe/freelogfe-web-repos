@@ -16,8 +16,6 @@ import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
 import FLinkTo from "@/utils/path-assembler";
 import fConfirmModal from "@/components/fConfirmModal";
-import {i18nMessage} from "@/utils/i18n";
-import {OnActiveAction} from "@/models/nodeManagerPage";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;

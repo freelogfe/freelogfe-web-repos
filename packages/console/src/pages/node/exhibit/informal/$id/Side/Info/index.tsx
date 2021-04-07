@@ -11,6 +11,7 @@ import {FNormalButton, FTextButton} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
+import fMessage from "@/components/fMessage";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -43,6 +44,9 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       <div style={{height: 20}}/>
 
       <FUploadImage
+        onError={(err) => {
+          fMessage(err, 'error');
+        }}
         onUploadSuccess={async (url: string) => {
           await onChange({pCover: url});
           await dispatch<SyncRulesAction>({
