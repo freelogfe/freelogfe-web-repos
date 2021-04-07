@@ -35,7 +35,10 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
           <div style={{height: 15}}/>
           <a
             className={styles.url}
-            href={nodeManagerPage.nodeUrl}
+            // href={nodeManagerPage.nodeUrl}
+            onClick={() => {
+              window.open(nodeManagerPage.nodeUrl);
+            }}
           >{nodeManagerPage.nodeUrl}</a>
           <FCopyToClipboard
             text={nodeManagerPage.nodeUrl}
