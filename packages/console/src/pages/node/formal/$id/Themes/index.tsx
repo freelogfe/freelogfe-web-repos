@@ -16,10 +16,11 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FDivider from "@/components/FDivider";
+import FUtil from "@/utils";
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -68,7 +69,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                 resourceType: 'theme',
               }
             });
-            router.push(FLinkTo.market());
+            router.push(FUtil.LinkTo.market());
           }}
         />)
         : (<>
@@ -115,9 +116,9 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                           // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
                         >
                           <div style={{width: 1}}/>
-                          <FLink to={FLinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
+                          <FLink to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
                           <FDivider/>
-                          <FLink to={FLinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
+                          <FLink to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
                           {
                             hasActiveBtn && (<>
                               <FDivider/>

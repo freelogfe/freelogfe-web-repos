@@ -17,10 +17,11 @@ import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import {i18nMessage} from "@/utils/i18n";
 import {Link} from 'umi';
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -84,7 +85,7 @@ function Sider({storage, dispatch}: SiderProps) {
                     className={storage.activatedBucket === b.bucketName
                       ? styles.activated
                       : ''}
-                    to={FLinkTo.storageSpace({
+                    to={FUtil.LinkTo.storageSpace({
                       bucketName: b.bucketName,
                     })}
                   >

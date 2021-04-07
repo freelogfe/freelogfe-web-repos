@@ -24,8 +24,9 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
+// import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -115,13 +116,13 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
           <FTooltip title={'编辑'}>
-            <FLink to={FLinkTo.exhibitManagement({
+            <FLink to={FUtil.LinkTo.exhibitManagement({
               exhibitID: record.id
             })}><FEdit/></FLink>
           </FTooltip>
 
           <FTooltip title={'资源详情'}>
-            <FLink to={FLinkTo.resourceDetails({
+            <FLink to={FUtil.LinkTo.resourceDetails({
               resourceID: record.resourceId
             })}><FFileSearch/></FLink>
           </FTooltip>

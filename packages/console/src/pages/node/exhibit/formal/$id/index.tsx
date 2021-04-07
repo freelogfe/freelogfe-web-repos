@@ -14,8 +14,9 @@ import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -41,7 +42,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
-          <FLink to={FLinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
+          <FLink to={FUtil.LinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
             <FContentText type="negative" text={exhibitInfoPage.nodeName}/>
           </FLink>
           <div style={{width: 2}}/>

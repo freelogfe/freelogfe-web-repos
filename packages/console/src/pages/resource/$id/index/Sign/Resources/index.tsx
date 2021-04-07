@@ -4,8 +4,8 @@ import {FContentText, FTitleText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
-import FLink from "@/components/FLink";
-import FLinkTo from "@/utils/path-assembler";
+// import FLink from "@/components/FLink";
+// import FLinkTo from "@/utils/path-assembler";
 
 interface ResourcesProps {
   dispatch: Dispatch;

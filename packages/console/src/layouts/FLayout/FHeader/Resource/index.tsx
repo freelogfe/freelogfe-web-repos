@@ -6,8 +6,9 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {router} from "umi";
-import {myResources} from "@/utils/path-assembler";
+// import {myResources} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
+import FUtil from "@/utils";
 
 const resourcesOptions = [
   {
@@ -45,7 +46,7 @@ function Resource({global}: ResourceProps) {
       options={resourcesOptions}
     />}>
     <FNavLink
-      to={myResources()}
+      to={FUtil.LinkTo.myResources()}
       active={isCurrent}
       text={i18nMessage('resource_manage')}
     />

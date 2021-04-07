@@ -4,9 +4,10 @@ import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
-import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
+// import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -46,7 +47,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
           }}
         >立即签约</FNormalButton>)
         : (<span>该资源已签约，可进入<FLink
-          to={FLinkTo.exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitID})}
+          to={FUtil.LinkTo.exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitID})}
           className={styles.gotoExhibitLink}
         >展品管理</FLink>进行授权管理</span>)
     }

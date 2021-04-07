@@ -22,12 +22,13 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -222,7 +223,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     size={25}>
     {
       showEdit && (<FTooltip title={'编辑'}>
-        <FLink to={FLinkTo.objectDetails({
+        <FLink to={FUtil.LinkTo.objectDetails({
           bucketName,
           objectID: objectID,
         })}><FEdit/></FLink>

@@ -9,8 +9,9 @@ import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
-import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
+// import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
+import FUtil from "@/utils";
 
 interface NodeProps {
   dispatch: Dispatch;
@@ -28,7 +29,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
 
   function onClickNodes(value: string) {
     // return router.push('/node/' + value + '/formal');
-    return router.push(nodeManagement({nodeID: Number(value)}));
+    return router.push(FUtil.LinkTo.nodeManagement({nodeID: Number(value)}));
   }
 
   return (<FDropdown
@@ -44,7 +45,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
         }))}
       />
       <a
-        href={nodeCreator()}
+        href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}>
         <FPlus/>
       </a>
@@ -55,13 +56,13 @@ function Node({dispatch, nodes, global}: NodeProps) {
         size="small"
         onClick={() => {
           // router.push('/node/creator');
-          router.push(nodeCreator());
+          router.push(FUtil.LinkTo.nodeCreator());
         }}
       >创建节点</FNormalButton>
     </div>)}>
     <FNavLink
       text={i18nMessage('node_manage')}
-      to={nodes.list.length == 0 ? nodeCreator() : nodeManagement({nodeID: nodes.list[0].nodeId})}
+      to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({nodeID: nodes.list[0].nodeId})}
       active={isCurrent}
     />
   </FDropdown>);

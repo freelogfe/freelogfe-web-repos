@@ -10,8 +10,9 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -69,7 +70,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
 
   function gotoCreator() {
     // router.push(`/resource/${match.params.id}/version/creator`);
-    router.push(FLinkTo.resourceCreateVersion({
+    router.push(FUtil.LinkTo.resourceCreateVersion({
       resourceID: match.params.id,
     }));
   }
@@ -87,7 +88,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       />
       <div style={{height: 15}}/>
       <FLink
-        to={FLinkTo.resourceDetails({
+        to={FUtil.LinkTo.resourceDetails({
           resourceID: resourceInfo.info?.resourceId || '',
         })}
         className={styles.resourceName}
@@ -99,13 +100,13 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
     <div className={styles.radios}>
       <FLink
         className={[match.path === '/resource/:id/info' ? styles.activatedRadio : '', styles.radio].join(' ')}
-        to={FLinkTo.resourceInfo({
+        to={FUtil.LinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
       >{i18nMessage('resource_information')}</FLink>
       <FLink
         className={[match.path === '/resource/:id/auth' ? styles.activatedRadio : '', styles.radio].join(' ')}
-        to={FLinkTo.resourceAuth({
+        to={FUtil.LinkTo.resourceAuth({
           resourceID: match.params.id,
         })}
       >
@@ -139,14 +140,14 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
           {
             match.path === '/resource/:id/version/creator'
               ? (<FLink
-                to={FLinkTo.resourceCreateVersion({
+                to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
                 className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FLink>)
               : (resourceInfo.draftData
               && (<FLink
                 className={[styles.version].join(' ')}
-                to={FLinkTo.resourceCreateVersion({
+                to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
           }
@@ -154,7 +155,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
               <FLink
                 key={i.versionId}
-                to={FLinkTo.resourceVersion({
+                to={FUtil.LinkTo.resourceVersion({
                   resourceID: match.params.id,
                   version: i.version,
                 })}

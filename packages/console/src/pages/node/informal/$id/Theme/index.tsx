@@ -20,11 +20,12 @@ import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 import {generateRandomCode} from "@/utils/tools";
 import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -120,12 +121,12 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                       <div className={styles.coverFooter}>
                         <div>
                           <div style={{width: 1}}/>
-                          <FLink to={FLinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
+                          <FLink to={FUtil.LinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
                           {
                             t.originInfo.type === 'resource' && (<>
                               <FDivider/>
                               <FLink
-                                to={FLinkTo.resourceDetails({resourceID: t.originInfo.id})}>资源详情</FLink>
+                                to={FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})}>资源详情</FLink>
                             </>)
                           }
                           <FDivider/>

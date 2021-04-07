@@ -20,9 +20,10 @@ import {
 } from '@/models/informExhibitInfoPage';
 import {FTextButton} from '@/components/FButton';
 import {router} from 'umi';
-import {informExhibitManagement, informNodeManagement, nodeManagement} from "@/utils/path-assembler";
+// import {informExhibitManagement, informNodeManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
+import FUtil from "@/utils";
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -69,7 +70,7 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
           <div style={{width: 5}}/>
           <FTextButton onClick={() => {
             // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
-            router.push(informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
+            router.push(FUtil.LinkTo.informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
           }}><FContentText
             type="negative"
             text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}

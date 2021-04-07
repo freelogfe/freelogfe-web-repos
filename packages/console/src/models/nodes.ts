@@ -5,7 +5,8 @@ import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
 // import {nodeManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
-import FLinkTo from "@/utils/path-assembler";
+import FUtil from "@/utils";
+// import FLinkTo from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -129,7 +130,7 @@ const Model: NodesModelType = {
         type: 'fetchNodes',
       });
       // router.push('/node/' + data.nodeId + '/formal');
-      router.push(FLinkTo.nodeManagement({nodeID: data.nodeId}));
+      router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
 

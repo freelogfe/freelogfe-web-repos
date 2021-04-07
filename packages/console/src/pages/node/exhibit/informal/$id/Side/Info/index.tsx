@@ -135,7 +135,7 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       <div style={{height: 15}}/>
 
       <FLabelEditor
-        values={informExhibitInfoPage.pTags}
+        values={informExhibitInfoPage.pTags as string[]}
         onChange={async (value) => {
           await onChange({
             pTags: value,

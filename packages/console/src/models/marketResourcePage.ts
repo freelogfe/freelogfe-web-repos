@@ -4,7 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
 // import {EXHIBIT_NAME} from "@/utils/regexp";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import {i18nMessage} from "@/utils/i18n";
 import FUtil from "@/utils";
@@ -600,7 +600,7 @@ const Model: MarketResourcePageModelType = {
         })),
       };
       const {data} = yield call(FApiServer.Exhibit.createPresentable, params);
-      router.push(FLinkTo.exhibitManagement({exhibitID: data.presentableId}));
+      router.push(FUtil.LinkTo.exhibitManagement({exhibitID: data.presentableId}));
     },
     * onChangeAndVerifySignExhibitName({payload}: OnChangeAndVerifySignExhibitNameAction, {put, select, call}: EffectsCommandMap) {
       if (!FUtil.Regexp.EXHIBIT_NAME.test(payload)) {

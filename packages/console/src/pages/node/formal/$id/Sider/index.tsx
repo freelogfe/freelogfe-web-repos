@@ -6,8 +6,9 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
 import {withRouter} from "umi";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -69,7 +70,7 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
       <div className={styles.gotoTest}>
         <span>这里是正式节点管理页面，如想要对资源进行测试，可以 </span>
         <FLink
-          to={FLinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
+          to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
         > 前往测试节点</FLink>
         <div style={{height: 40}}/>
       </div>

@@ -7,7 +7,7 @@ import {ColumnsType} from "antd/lib/table/interface";
 import {FContentText, FTitleText} from "@/components/FText";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {router} from "umi";
-import {informExhibitManagement, resourceDetails, resourceInfo} from "@/utils/path-assembler";
+// import {informExhibitManagement, resourceDetails, resourceInfo} from "@/utils/path-assembler";
 import {Popconfirm, Space} from "antd";
 import FSwitch from "@/components/FSwitch";
 import FTooltip from "@/components/FTooltip";
@@ -16,6 +16,7 @@ import {FTextButton} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
+import FUtil from "@/utils";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -101,12 +102,12 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
           className={styles.hoverVisible}
         >
           <Actions
-            onEdit={() => router.push(informExhibitManagement({exhibitID: record.id}))}
+            onEdit={() => router.push(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}))}
             onSearch={record.originInfo.type === 'resource' ? () => {
               if (record.identity === 'resource') {
                 console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
                 if (record.originInfo.type === 'resource') {
-                  router.push(resourceDetails({resourceID: record.originInfo.id}));
+                  router.push(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
                 }
 
               }

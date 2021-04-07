@@ -7,8 +7,9 @@ import FDropdown from "@/components/FDropdown";
 import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
-import {market} from "@/utils/path-assembler";
+// import {market} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
+import FUtil from "@/utils";
 
 const discoverOptions = [
   {
@@ -34,7 +35,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
     if (value === '1' && cRoute.pathname !== '/market') {
-      return router.push(market());
+      return router.push(FUtil.LinkTo.market());
     } else if (value === '2') {
       // return router.push('/market/example');
       return window.open('https://f-presentations.freelog.com');
@@ -51,7 +52,7 @@ function Discover({global, marketPage}: DiscoverProps) {
     <FNavLink
       // onClick={() => onDiscoverClick('1')}
       text={i18nMessage('explorer')}
-      to={market()}
+      to={FUtil.LinkTo.market()}
       active={isCurrent}
     />
   </FDropdown>);

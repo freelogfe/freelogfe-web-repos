@@ -8,7 +8,8 @@ import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/mod
 import {ChangeAction, OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
 import {FTextButton} from '@/components/FButton';
 import {router} from "umi";
-import {nodeCreator} from "@/utils/path-assembler";
+import FUtil from "@/utils";
+// import {nodeCreator} from "@/utils/path-assembler";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;
@@ -51,7 +52,7 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
                 theme="primary"
                 onClick={() => {
                   // router.push('/node/creator')
-                  router.push(nodeCreator());
+                  router.push(FUtil.LinkTo.nodeCreator());
                 }}>创建节点</FTextButton>
             </>)
             : (<>

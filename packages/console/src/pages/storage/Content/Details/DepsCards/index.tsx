@@ -7,8 +7,8 @@ import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FEdit} from "@/components/FIcons";
-import {resourceInfo} from "@/utils/path-assembler";
-import {Link} from 'umi';
+// import {resourceInfo} from "@/utils/path-assembler";
+// import {Link} from 'umi';
 
 interface DepsCardsProps {
   title: string;

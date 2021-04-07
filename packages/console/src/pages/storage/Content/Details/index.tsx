@@ -28,10 +28,11 @@ import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer"
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FDownload from "@/components/FIcons/FDownload";
 import {router} from "umi";
-import FLinkTo from "@/utils/path-assembler";
+// import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
 import FTooltip from "@/components/FTooltip";
+import FUtil from "@/utils";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -69,7 +70,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         onChange({
           customOptionsDataVisible: false,
         });
-        router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+        router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
       }}>取消</FTextButton>
       <FNormalButton
         disabled={storageObjectEditor.typeVerify === 1 || hasError}
@@ -84,7 +85,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               type: storageObjectEditor.type,
             },
           });
-          router.push(FLinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+          router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
         }}
       >保存</FNormalButton>
     </Space>}
@@ -92,7 +93,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       onChange({
         customOptionsDataVisible: false,
       });
-      router.push(FLinkTo.storageSpace({
+      router.push(FUtil.LinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
     }}
