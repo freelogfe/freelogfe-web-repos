@@ -2,8 +2,8 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceInfo";
-import {update} from "@/services/resources";
 import {MarketPageModelState} from "@/models/marketPage";
+import {FApiServer} from "@/services";
 
 // import {InitModelStatesAction} from "@/models/nodes";
 
@@ -75,11 +75,11 @@ const Model: ResourceInfoPageModelType = {
     * onChangeInfo(action: OnChangeInfoAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
 
-      const params = {
+      const params: Parameters<typeof FApiServer.Resource.update>[0] = {
         ...action.payload,
         resourceId: action.id,
       };
-      yield call(update, params);
+      yield call(FApiServer.Resource.update, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: action.id,

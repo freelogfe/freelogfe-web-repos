@@ -2,25 +2,12 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {
-  batchObjectList, BatchObjectListParamsType,
-  bucketList,
-  BucketListParamsType,
-  createBucket,
-  CreateBucketParamsType,
-  createObject,
-  CreateObjectParamsType,
-  deleteBuckets,
-  DeleteBucketsParamsType, deleteObjects, DeleteObjectsParamsType, fileIsExist, FileIsExistParamsType,
-  objectList,
-  ObjectListParamsType,
-  spaceStatistics,
-} from '@/services/storages';
 import moment from 'moment';
 import {RcFile} from 'antd/lib/upload/interface';
 import {formatDateTime, humanizeSize} from '@/utils/format';
 import fMessage from '@/components/fMessage';
 import {getSHA1Hash} from '@/utils/tools';
+import {FApiServer} from "@/services";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -161,11 +148,11 @@ const Model: StorageHomePageModelType = {
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
-      const params: BucketListParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.bucketList>[0] = {
         // bucketType: 0,
         bucketType: 1,
       };
-      const {data} = yield call(bucketList, params);
+      const {data} = yield call(FApiServer.Storage.bucketList, params);
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
       yield put<ChangeAction>({
         type: 'change',
@@ -203,10 +190,10 @@ const Model: StorageHomePageModelType = {
         });
         return;
       }
-      const params: CreateBucketParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.createBucket>[0] = {
         bucketName: storageHomePage.newBucketName,
       };
-      yield call(createBucket, params);
+      yield call(FApiServer.Storage.createBucket, params);
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -235,7 +222,7 @@ const Model: StorageHomePageModelType = {
       });
     },
     * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
-      const {data} = yield call(spaceStatistics);
+      const {data} = yield call(FApiServer.Storage.spaceStatistics);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -245,10 +232,10 @@ const Model: StorageHomePageModelType = {
       });
     },
     * deleteBucketByName({payload}: DeleteBucketByNameAction, {call, put}: EffectsCommandMap) {
-      const params: DeleteBucketsParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.deleteBuckets>[0] = {
         bucketName: payload,
       };
-      yield call(deleteBuckets, params);
+      yield call(FApiServer.Storage.deleteBuckets, params);
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -257,12 +244,12 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: CreateObjectParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.createObject>[0] = {
         bucketName: storageHomePage.activatedBucket,
         objectName: payload.objectName,
         sha1: payload.sha1,
       };
-      yield call(createObject, params);
+      yield call(FApiServer.Storage.createObject, params);
     },
     * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
@@ -281,7 +268,7 @@ const Model: StorageHomePageModelType = {
         ];
         limit = new Set(allNames).size;
       }
-      const params: ObjectListParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
         bucketName: storageHomePage.activatedBucket,
         limit,
         skip,
@@ -292,7 +279,7 @@ const Model: StorageHomePageModelType = {
           isLoading: true,
         },
       });
-      const {data} = yield call(objectList, params);
+      const {data} = yield call(FApiServer.Storage.objectList, params);
       let objectListData: StorageHomePageModelState['objectList'] = [];
 
       if (payload === 'restart') {
@@ -319,11 +306,11 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: DeleteObjectsParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.deleteObjects>[0] = {
         bucketName: storageHomePage.activatedBucket,
         objectIds: payload,
       };
-      yield call(deleteObjects, params);
+      yield call(FApiServer.Storage.deleteObjects, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -349,18 +336,18 @@ const Model: StorageHomePageModelType = {
       }
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
 
-      const params: FileIsExistParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.fileIsExist>[0] = {
         sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
       };
-      const {data} = yield call(fileIsExist, params);
+      const {data} = yield call(FApiServer.Storage.fileIsExist, params);
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
 
-      const params1: BatchObjectListParamsType = {
+      const params1: Parameters<typeof FApiServer.Storage.batchObjectList>[0] = {
         fullObjectNames: payload.map((p) => storageHomePage.activatedBucket + '/' + p.name).join(','),
         projection: 'objectId,objectName',
       };
 
-      const {data: data1} = yield call(batchObjectList, params1);
+      const {data: data1} = yield call(FApiServer.Storage.batchObjectList, params1);
       const allExistObjectNames: string[] = data1.map((d: any) => d.objectName);
       // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({

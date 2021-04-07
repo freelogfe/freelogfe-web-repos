@@ -7,7 +7,6 @@ import FTable from '@/components/FTable';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState, StorageHomePageModelState} from '@/models/connect';
-import {downloadObject} from '@/services/storages';
 import {
   DeleteObjectAction,
   UploadFilesAction,
@@ -29,6 +28,7 @@ import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
+import {FApiServer} from "@/services";
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -66,7 +66,7 @@ function Content({storage, dispatch}: ContentProps) {
             objectID={record.id}
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
-            onClickDownload={() => downloadObject({objectIdOrName: record.id})}
+            onClickDownload={() => FApiServer.Storage.downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => {
               fConfirmModal({
                 message: '存储空间对象一旦删除则无法恢复，确认删除吗？',

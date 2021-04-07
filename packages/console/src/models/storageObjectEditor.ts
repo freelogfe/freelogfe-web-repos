@@ -1,18 +1,7 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {
-  batchObjectList,
-  BatchObjectListParamsType,
-  fileProperty,
-  FilePropertyParamsType,
-  updateObject,
-  UpdateObjectParamsType,
-  objectDetails,
-  ObjectDetailsParamsType2,
-} from "@/services/storages";
 import {ConnectState} from "@/models/connect";
-import {batchInfo, BatchInfoParamsType, CreateVersionParamsType, info, InfoParamsType} from "@/services/resources";
 import {RESOURCE_TYPE} from "@/utils/regexp";
 // import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
@@ -194,10 +183,10 @@ const Model: StorageObjectEditorModelType = {
       if (!storageObjectEditor.objectId) {
         return;
       }
-      const params: ObjectDetailsParamsType2 = {
+      const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
         objectIdOrName: storageObjectEditor.objectId,
       };
-      const {data} = yield call(objectDetails, params);
+      const {data} = yield call(FApiServer.Storage.objectDetails, params);
       // console.log(data, 'data@#Rwe90ifjsdlkfa');
       const resources: any[] = data.dependencies
         .filter((ro: any) => ro.type === 'resource');
@@ -208,10 +197,10 @@ const Model: StorageObjectEditorModelType = {
       let depOs: StorageObjectEditorModelState['depOs'] = [];
 
       if (resources.length > 0) {
-        const params: BatchInfoParamsType = {
+        const params: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
           resourceNames: resources.map((r: any) => r.name).join(','),
         };
-        const {data} = yield call(batchInfo, params);
+        const {data} = yield call(FApiServer.Resource.batchInfo, params);
         // console.log(data, 'data1234234');
         depRs = (data as any[]).map<StorageObjectEditorModelState['depRs'][number]>((r: any) => {
           return {
@@ -231,10 +220,10 @@ const Model: StorageObjectEditorModelType = {
       }
 
       if (objects.length > 0) {
-        const params: BatchObjectListParamsType = {
+        const params: Parameters<typeof FApiServer.Storage.batchObjectList>[0] = {
           fullObjectNames: objects.map((r: any) => r.name).join(','),
         };
-        const {data} = yield call(batchObjectList, params);
+        const {data} = yield call(FApiServer.Storage.batchObjectList, params);
 
         depOs = (data as any[]).map<StorageObjectEditorModelState['depOs'][number]>((o: any) => ({
           id: o.objectId,
@@ -311,12 +300,12 @@ const Model: StorageObjectEditorModelType = {
         const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
           storageObjectEditor,
         }));
-        const params: FilePropertyParamsType = {
+        const params: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
           sha1: storageObjectEditor.sha1,
           resourceType: payload,
         };
 
-        const {data} = yield call(fileProperty, params);
+        const {data} = yield call(FApiServer.Storage.fileProperty, params);
         if (!data) {
           resourceTypeErrorText = '不能设置为' + payload + '类型';
         }
@@ -336,11 +325,11 @@ const Model: StorageObjectEditorModelType = {
         storageObjectEditor,
       }));
 
-      const params: InfoParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadLatestVersionInfo: 1,
       };
-      const {data} = yield call(info, params);
+      const {data} = yield call(FApiServer.Resource.info, params);
 
       const params1: Parameters<typeof FApiServer.Storage.cycleDependencyCheck>[0] = {
         objectIdOrName: storageObjectEditor.objectId,
@@ -452,7 +441,7 @@ const Model: StorageObjectEditorModelType = {
       const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
         storageObjectEditor,
       }));
-      const params: UpdateObjectParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
         resourceType: storageObjectEditor.type,
         dependencies: [
@@ -467,7 +456,7 @@ const Model: StorageObjectEditorModelType = {
           })),
         ],
         customPropertyDescriptors: [
-          ...storageObjectEditor.baseProperties.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+          ...storageObjectEditor.baseProperties.map<NonNullable<Parameters<typeof FApiServer.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
             return {
               type: 'readonlyText',
               key: i.key,
@@ -475,7 +464,7 @@ const Model: StorageObjectEditorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...storageObjectEditor.customOptionsData.map<NonNullable<CreateVersionParamsType['customPropertyDescriptors']>[number]>((i) => {
+          ...storageObjectEditor.customOptionsData.map<NonNullable<Parameters<typeof FApiServer.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
             const isInput: boolean = i.custom === 'input';
             const options: string[] = i.customOption.split(',');
             return {
@@ -488,7 +477,7 @@ const Model: StorageObjectEditorModelType = {
           }),
         ],
       };
-      yield call(updateObject, params);
+      yield call(FApiServer.Storage.updateObject, params);
     },
   },
   reducers: {

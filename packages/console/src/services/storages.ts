@@ -58,7 +58,7 @@ export interface ObjectListParamsType {
   skip?: number;
 }
 
-export function objectList({bucketName, ...params}: DeleteBucketsParamsType) {
+export function objectList({bucketName, ...params}: ObjectListParamsType) {
   return request.get(`/v1/storages/buckets/${bucketName}/objects`, {
     params,
   });

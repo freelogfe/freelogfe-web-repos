@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styles from "./index.less";
-import FDropdown from "@/components/FDropdown";
+// import FDropdown from "@/components/FDropdown";
 import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
-import {bucketList} from "@/services/storages";
 import {FMenuProps} from "@/components/FMenu";
 import moment from 'moment'
 import FDropdownMenu from "@/components/FDropdownMenu";
+import {FApiServer} from "@/services";
 
 export interface ResourceObject {
   readonly id: string;
@@ -59,7 +59,7 @@ export default function ({onSelect}: StorageProps) {
   }, []);
 
   async function handleBucketOptions() {
-    const {data} = await bucketList({bucketType: 1});
+    const {data} = await FApiServer.Storage.bucketList({bucketType: 1});
     setBucketOptions([
       {text: '全部Bucket', value: '-1'},
       ...data.map((i: any) => ({value: i.bucketName}))

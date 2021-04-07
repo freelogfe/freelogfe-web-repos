@@ -2,10 +2,7 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {list, ListParamsType} from "@/services/resources";
 import {formatDateTime} from "@/utils/format";
-import {collectionResources, CollectionResourcesParamsType} from "@/services/collections";
-import {objectList, ObjectListParamsType} from "@/services/storages";
 import {
   // FetchAddExhibitListAction,
   // FetchCollectionAction,
@@ -13,11 +10,7 @@ import {
   // FetchMyResourcesAction,
   // FetchObjectAction,
 } from "@/models/addInformExhibitDrawer";
-import {
-  dependencyTree,
-  DependencyTreeParamsType, searchTestResourcesByDependency,
-  SearchTestResourcesByDependencyParamsType
-} from "@/services/informalNodes";
+import {FApiServer} from "@/services";
 
 export interface TreeNode {
   title: string;
@@ -192,12 +185,12 @@ const Model: ReplaceInformExhibitModelType = {
       const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
         replaceInformExhibit,
       }));
-      const params: ListParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: 0,
         limit: 10,
         keywords: replaceInformExhibit.replacerKeywords,
       };
-      const {data} = yield call(list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       // console.log(data, 'data134@@@#@#@##@@@@@53');
       yield put<ChangeAction>({
         type: 'change',
@@ -226,7 +219,7 @@ const Model: ReplaceInformExhibitModelType = {
       const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
         replaceInformExhibit,
       }));
-      const params: ListParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
         limit: 10,
@@ -235,7 +228,7 @@ const Model: ReplaceInformExhibitModelType = {
         keywords: replaceInformExhibit.replacerKeywords,
       };
       // console.log(params, 'paramsparams1234');
-      const {data} = yield call(list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       // console.log(data, 'data13453');
       yield put<ChangeAction>({
         type: 'change',
@@ -265,13 +258,13 @@ const Model: ReplaceInformExhibitModelType = {
         replaceInformExhibit,
       }));
 
-      const params: CollectionResourcesParamsType = {
+      const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
         skip: 0,
         limit: 10,
         keywords: replaceInformExhibit.replacerKeywords,
       };
 
-      const {data} = yield call(collectionResources, params);
+      const {data} = yield call(FApiServer.Collection.collectionResources, params);
       // console.log(data, '@@@@@@ASEDFSADF');
 
       yield put<ChangeAction>({
@@ -299,14 +292,14 @@ const Model: ReplaceInformExhibitModelType = {
         replaceInformExhibit,
       }));
 
-      const params: ObjectListParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
         skip: 0,
         limit: 10,
         bucketName: replaceInformExhibit.replacerOrigin,
         keywords: replaceInformExhibit.replacerKeywords,
       };
 
-      const {data} = yield call(objectList, params);
+      const {data} = yield call(FApiServer.Storage.objectList, params);
       console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
@@ -336,12 +329,12 @@ const Model: ReplaceInformExhibitModelType = {
         replaceInformExhibit,
       }));
 
-      const params: DependencyTreeParamsType = {
+      const params: Parameters<typeof FApiServer.InformalNode.dependencyTree>[0] = {
         nodeId: replaceInformExhibit.nodeID,
         keywords: replaceInformExhibit.replacedKeywords,
       };
 
-      const {data} = yield call(dependencyTree, params);
+      const {data} = yield call(FApiServer.InformalNode.dependencyTree, params);
       // console.log(data, '##@ADSFASDFSDCX');
 
       let replacedSelectDependency = data.find((d: any) => d.name === replaceInformExhibit.replacedKeywords);
@@ -369,11 +362,11 @@ const Model: ReplaceInformExhibitModelType = {
         return;
       }
 
-      const params: SearchTestResourcesByDependencyParamsType = {
+      const params: Parameters<typeof FApiServer.InformalNode.searchTestResourcesByDependency>[0] = {
         nodeId: replaceInformExhibit.nodeID,
         dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
       };
-      const {data} = yield call(searchTestResourcesByDependency, params);
+      const {data} = yield call(FApiServer.InformalNode.searchTestResourcesByDependency, params);
       // console.log(data, 'data!@EWFASDfasdfsad');
       yield put<ChangeAction>({
         type: 'change',

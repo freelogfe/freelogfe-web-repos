@@ -1,8 +1,8 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
-import {info, lookDraft, LookDraftParamsType} from "@/services/resources";
 import {ConnectState} from "@/models/connect";
+import {FApiServer} from "@/services";
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -95,11 +95,11 @@ const Model: ResourceInfoModelType = {
       const {user}: ConnectState = yield select(({user}: ConnectState) => ({
         user,
       }));
-      const params = {
+      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(info, params);
+      const {data} = yield call(FApiServer.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
       yield put<ChangeAction>({
         type: 'change',
@@ -124,10 +124,10 @@ const Model: ResourceInfoModelType = {
         return;
       }
 
-      const params: LookDraftParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.lookDraft>[0] = {
         resourceId: resourceInfo.resourceID,
       };
-      const {data} = yield call(lookDraft, params);
+      const {data} = yield call(FApiServer.Resource.lookDraft, params);
       if (!data) {
         return yield put<ChangeAction>({
           type: 'change',

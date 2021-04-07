@@ -1,10 +1,10 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {create, CreateParamsType, info, InfoParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
 import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
+import {FApiServer} from "@/services";
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -99,7 +99,7 @@ const Model: ResourceCreatorPageModelType = {
       if (resourceCreatorPage.nameErrorText || resourceCreatorPage.resourceTypeErrorText) {
         return;
       }
-      const params: CreateParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.create>[0] = {
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
         policies: [],
@@ -107,7 +107,7 @@ const Model: ResourceCreatorPageModelType = {
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       };
-      const {data} = yield call(create, params);
+      const {data} = yield call(FApiServer.Resource.create, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -143,10 +143,10 @@ const Model: ResourceCreatorPageModelType = {
         const {user} = yield select(({user}: ConnectState) => ({
           user,
         }));
-        const params1: InfoParamsType = {
+        const params1: Parameters<typeof FApiServer.Resource.info>[0] = {
           resourceIdOrName: encodeURIComponent(`${user.info.username}/${payload}`),
         };
-        const {data: data1} = yield call(info, params1);
+        const {data: data1} = yield call(FApiServer.Resource.info, params1);
         if (data1) {
           nameErrorText = '资源名已存在';
         }

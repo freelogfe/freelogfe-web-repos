@@ -2,38 +2,15 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {FSelectObject} from '@/pages/resource/components/FSelectObject';
-// import {
-//   batchGetCoverageVersions,
-//   BatchGetCoverageVersionsParamsType,
-//   batchInfo,
-//   BatchInfoParamsType,
-//   createVersion,
-//   CreateVersionParamsType,
-//   cycleDependencyCheck, CycleDependencyCheckParamsType, getResourceBySha1, GetResourceBySha1ParamsType,
-//   getResourceVersionBySha1,
-//   GetResourceVersionBySha1ParamsType,
-//   info,
-//   InfoParamsType,
-//   lookDraft,
-//   LookDraftParamsType,
-//   resourceVersionInfo,
-//   ResourceVersionInfoParamsType1,
-//   saveVersionsDraft,
-//   SaveVersionsDraftParamsType
-// } from '@/services/resources';
 import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {router} from 'umi';
 import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
-// import {batchContracts, BatchContractsParamsType, contracts, ContractsParamsType} from "@/services/contracts";
 import moment from "moment";
-// import {fileProperty, FilePropertyParamsType, objectDetails, ObjectDetailsParamsType2} from "@/services/storages";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
-// import any = jasmine.any;
-// import {i18nMessage} from "@/utils/i18n";
 
 export type DepResources = WholeReadonly<{
   id: string;

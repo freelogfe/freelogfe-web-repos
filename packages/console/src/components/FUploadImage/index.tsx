@@ -5,8 +5,6 @@ import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 import styles from './index.less';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
-// import {uploadImage} from "@/services/storages";
-// import {i18nMessage} from "@/utils/i18n";
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
 

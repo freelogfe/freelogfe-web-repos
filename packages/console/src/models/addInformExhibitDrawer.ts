@@ -2,10 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {list, ListParamsType} from "@/services/resources";
 import {formatDateTime} from "@/utils/format";
-import {collectionResources, CollectionResourcesParamsType} from "@/services/collections";
-import {objectList, ObjectListParamsType} from "@/services/storages";
+import {FApiServer} from "@/services";
 
 export type AddInformExhibitDrawerModelState = WholeReadonly<{
   isTheme: boolean;
@@ -138,7 +136,7 @@ const Model: AddInformExhibitType = {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
-      const params: ListParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
         limit: 10,
@@ -147,7 +145,7 @@ const Model: AddInformExhibitType = {
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
-      const {data} = yield call(list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       // console.log(data, 'data98jhksjkdaf13453');
       yield put<ChangeAction>({
         type: 'change',
@@ -171,7 +169,7 @@ const Model: AddInformExhibitType = {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
-      const params: ListParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
         limit: 10,
@@ -181,7 +179,7 @@ const Model: AddInformExhibitType = {
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
-      const {data} = yield call(list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       // console.log(data, 'data13453');
       yield put<ChangeAction>({
         type: 'change',
@@ -207,7 +205,7 @@ const Model: AddInformExhibitType = {
         addInformExhibitDrawer,
       }));
 
-      const params: CollectionResourcesParamsType = {
+      const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
         skip: 0,
         limit: 10,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
@@ -215,7 +213,7 @@ const Model: AddInformExhibitType = {
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
       };
 
-      const {data} = yield call(collectionResources, params);
+      const {data} = yield call(FApiServer.Collection.collectionResources, params);
       // console.log(data, '@@@@@@ASEDFSADF');
 
       yield put<ChangeAction>({
@@ -241,14 +239,14 @@ const Model: AddInformExhibitType = {
         addInformExhibitDrawer,
       }));
 
-      const params: ObjectListParamsType = {
+      const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
         skip: 0,
         limit: 10,
         bucketName: addInformExhibitDrawer.addExhibitSelectValue,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
 
-      const {data} = yield call(objectList, params);
+      const {data} = yield call(FApiServer.Storage.objectList, params);
       // console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',

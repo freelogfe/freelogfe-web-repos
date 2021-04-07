@@ -2,9 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState} from "@/models/connect";
-import {collectionResources, CollectionResourcesParamsType} from "@/services/collections";
 import {formatDateTime} from "@/utils/format";
-import {list, ListParamsType} from "@/services/resources";
+import {FApiServer} from "@/services";
 
 export type ResourceDepSelectorModelState = WholeReadonly<{
   selected: '1' | '2' | '3';
@@ -69,12 +68,12 @@ const Model: ResourceDepSelectorModelType = {
       // let dataSource: any;
       let totalItem: number = -1;
       if (resourceDepSelector.selected === '3') {
-        const params: CollectionResourcesParamsType = {
+        const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
           skip: resourceList.length,
           limit: resourceDepSelector.limit,
           keywords: resourceDepSelector.input,
         };
-        const {data} = yield call(collectionResources, params);
+        const {data} = yield call(FApiServer.Collection.collectionResources, params);
         // console.log(data, '##########5210823423');
         // dataSource = data;
         totalItem = data.totalItem;
@@ -94,7 +93,7 @@ const Model: ResourceDepSelectorModelType = {
           }),
         ];
       } else {
-        const params: ListParamsType = {
+        const params: Parameters<typeof FApiServer.Resource.list>[0] = {
           startResourceId: resourceList[0]?.resourceId,
           skip: resourceList.length,
           limit: resourceDepSelector.limit,
@@ -102,7 +101,7 @@ const Model: ResourceDepSelectorModelType = {
           status: resourceDepSelector.selected === '2' ? undefined : 1,
           isSelf: resourceDepSelector.selected === '2' ? 1 : undefined,
         };
-        const {data} = yield call(list, params);
+        const {data} = yield call(FApiServer.Resource.list, params);
         // dataSource = data;
         // console.log(data, '@@@@@@@@@@@@123412341234');
         totalItem = data.totalItem;

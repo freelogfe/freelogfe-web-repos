@@ -1,12 +1,6 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
-import {
-  resourceVersionInfo,
-  ResourceVersionInfoParamsType1,
-  updateResourceVersionInfo,
-  UpdateResourceVersionInfoParamsType
-} from "@/services/resources";
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
@@ -113,7 +107,7 @@ export interface FetchDataSourceAction extends AnyAction {
 
 export interface UpdateDataSourceAction extends AnyAction {
   type: 'resourceVersionEditorPage/updateDataSource';
-  payload: Partial<UpdateResourceVersionInfoParamsType>;
+  payload: Partial<Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0]>;
 }
 
 export interface SyncAllPropertiesAction extends AnyAction {
@@ -182,11 +176,11 @@ const Model: ResourceVersionEditorModelType = {
       const {resourceVersionEditorPage}: ConnectState = yield select(({resourceVersionEditorPage}: ConnectState) => ({
         resourceVersionEditorPage,
       }));
-      const params: ResourceVersionInfoParamsType1 = {
+      const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
-      const {data} = yield call(resourceVersionInfo, params);
+      const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
 
       // 依赖树
@@ -277,11 +271,11 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
       }));
-      const params: UpdateResourceVersionInfoParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0] = {
         ...baseInfo,
         ...action.payload,
       };
-      yield call(updateResourceVersionInfo, params);
+      yield call(FApiServer.Resource.updateResourceVersionInfo, params);
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: baseInfo,
@@ -292,7 +286,7 @@ const Model: ResourceVersionEditorModelType = {
         resourceVersionEditorPage,
       }));
 
-      const customPropertyDescriptors: UpdateResourceVersionInfoParamsType['customPropertyDescriptors'] = [
+      const customPropertyDescriptors: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0]['customPropertyDescriptors'] = [
         ...resourceVersionEditorPage.baseProperties.map((bp) => {
           return {
             key: bp.key,
@@ -313,12 +307,12 @@ const Model: ResourceVersionEditorModelType = {
           };
         }),
       ];
-      const params: UpdateResourceVersionInfoParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0] = {
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
         customPropertyDescriptors: customPropertyDescriptors,
       };
-      yield call(updateResourceVersionInfo, params);
+      yield call(FApiServer.Resource.updateResourceVersionInfo, params);
     },
   },
 

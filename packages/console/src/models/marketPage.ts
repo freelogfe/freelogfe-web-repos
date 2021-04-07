@@ -1,8 +1,8 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
-import {list, ListParamsType} from '@/services/resources';
 import {ConnectState} from "@/models/connect";
+import {FApiServer} from "@/services";
 
 export type  MarketPageModelState = WholeReadonly<{
   tabValue: '1' | '2',
@@ -106,7 +106,7 @@ const Model: MarketModelType = {
         dataSource = marketPage.dataSource;
       }
 
-      const params: ListParamsType = {
+      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: dataSource.length,
         limit: 100,
         startResourceId: dataSource[0]?.id,
@@ -115,7 +115,7 @@ const Model: MarketModelType = {
         status: 1,
       };
 
-      const {data} = yield call(list, params);
+      const {data} = yield call(FApiServer.Resource.list, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {

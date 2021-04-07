@@ -5,17 +5,12 @@ import {Space, Drawer, Modal} from "antd";
 import FObjectCard from "./ObjectCard";
 import {LoadingOutlined} from '@ant-design/icons';
 import FUpload from "@/components/FUpload";
-import * as CryptoJS from 'crypto-js';
-
-// import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
-import {fileIsExist, objectDetails, ObjectDetailsParamsType2, uploadFile} from "@/services/storages";
-// import {i18nMessage} from "@/utils/i18n";
 import FObjectSelector from "@/containers/FObjectSelector";
 import {getSHA1Hash} from "@/utils/tools";
-import {resourceIsUsedByOther, ResourceIsUsedByOtherParamsType} from "@/services/resources";
 import FDrawer from "@/components/FDrawer";
 import FUtil from "@/utils";
+import {FApiServer} from "@/services";
 
 const errorTexts = {
   duplicated: FUtil.I18n.message('resource_exist'),
@@ -60,16 +55,16 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
   // 选择对象
   async function onSelectObject(obj: { id: string; name: string; }) {
     setModalVisible(false);
-    const params: ObjectDetailsParamsType2 = {
+    const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
       objectIdOrName: obj.id,
     };
-    const {data} = await objectDetails(params);
+    const {data} = await FApiServer.Storage.objectDetails(params);
 
-    const params3: ResourceIsUsedByOtherParamsType = {
+    const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
       fileSha1: data.sha1,
     };
 
-    const {data: data3} = await resourceIsUsedByOther(params3);
+    const {data: data3} = await FApiServer.Resource.resourceIsUsedByOther(params3);
     if (!data3) {
       return onError && onError({
         sha1: data.sha1,
@@ -102,11 +97,11 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
 
     const sha1: string = await getSHA1Hash(file);
 
-    const params3: ResourceIsUsedByOtherParamsType = {
+    const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
       fileSha1: sha1,
     };
 
-    const {data: data3} = await resourceIsUsedByOther(params3);
+    const {data: data3} = await FApiServer.Resource.resourceIsUsedByOther(params3);
     if (!data3) {
       setIsChecking(false);
       return onError && onError({
@@ -115,7 +110,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
       });
     }
 
-    const {data: isExists} = await fileIsExist({sha1});
+    const {data: isExists} = await FApiServer.Storage.fileIsExist({sha1});
     // console.log(isExist[0], 'datadata23089ujsd');
     setIsChecking(false);
 
@@ -140,7 +135,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
       time: '',
     });
 
-    const [promise, cancel] = await uploadFile({
+    const [promise, cancel] = await FApiServer.Storage.uploadFile({
       file: file,
       resourceType: resourceType,
     }, {

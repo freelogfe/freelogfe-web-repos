@@ -18,7 +18,6 @@ import BraftEditor, {EditorState} from 'braft-editor';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
 import {router, withRouter} from 'umi';
-import {resourcesDownload} from "@/services/resources";
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
 import FTooltip from "@/components/FTooltip";
@@ -37,6 +36,7 @@ import {
   FViewportTabs
 } from "@/components/FAntvG6";
 import FUtil from "@/utils";
+import {FApiServer} from "@/services";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -164,7 +164,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
-        onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
+        onClickDownload={() => FApiServer.Resource.resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
       <FFormLayout>
         <FFormLayout.FBlock title={FUtil.I18n.message('version_description')}>

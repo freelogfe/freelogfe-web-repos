@@ -1,7 +1,7 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {currentUserInfo} from "@/services/user";
+import {FApiServer} from "@/services";
 
 export interface UserModelState {
   info: null | {
@@ -48,7 +48,7 @@ const Model: MarketModelType = {
   },
   effects: {
     * fetchInfo({}, {call, put}) {
-      const {data} = yield call(currentUserInfo);
+      const {data} = yield call(FApiServer.User.currentUserInfo);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
