@@ -10,8 +10,9 @@ import {
   DeleteDependencyByIDAction,
   DepResources,
 } from '@/models/resourceVersionCreatorPage';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
+import FUtil from "@/utils";
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -101,7 +102,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                         ? <span style={{paddingRight: 5}}>暂无版本</span>
                         : <>
                     <span
-                      style={{paddingRight: 5}}>{i18nMessage('version_range')}：{rrr.versionRange}</span>
+                      style={{paddingRight: 5}}>{FUtil.I18n.message('version_range')}：{rrr.versionRange}</span>
                           <FVersionHandlerPopover
                             value={rrr.versionRange}
                             versionOptions={rrr.versions}
@@ -172,7 +173,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
       <FContentText
         type="additional2"
         // text={'此资源存在以下基础上抛'}
-        text={i18nMessage('upcast')}
+        text={FUtil.I18n.message('upcast')}
       />
     </div>
     {
@@ -201,7 +202,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                     className={styles.labelInfo}
                   >{j.title}</label>))
               }
-              {/*{i18nMessage('info_upcast')}*/}
+              {/*{FUtil.I18n.message('info_upcast')}*/}
               {
                 i.upthrow && (<label
                   className={styles.labelError}

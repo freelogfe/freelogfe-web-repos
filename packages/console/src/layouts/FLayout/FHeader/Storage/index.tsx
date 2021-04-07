@@ -11,7 +11,7 @@ import {
 } from "@/models/storageHomePage";
 import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
@@ -107,7 +107,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   }>
     <FNavLink
       active={isCurrent}
-      text={i18nMessage('storage')}
+      text={FUtil.I18n.message('storage')}
       to={FUtil.LinkTo.storageSpace({
         bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
           ? storageHomePage.bucketList[0].bucketName

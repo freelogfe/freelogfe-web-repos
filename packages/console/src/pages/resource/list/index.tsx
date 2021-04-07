@@ -5,19 +5,20 @@ import {router, RouterTypes, withRouter} from 'umi';
 import Resources from "./Resources";
 import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
 import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
+import FUtil from "@/utils";
 
 const navs = [
   {
     value: '1',
-    text: i18nMessage('my_resources'),
+    text: FUtil.I18n.message('my_resources'),
   },
   {
     value: '2',
-    text: i18nMessage('my_collections'),
+    text: FUtil.I18n.message('my_collections'),
   },
 ];
 

@@ -18,7 +18,7 @@ import {
 } from '@/models/resourceCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import {router, RouterTypes} from 'umi';
 import {resourceTypes} from '@/utils/globals';
 import {FCheck, FLoading} from '@/components/FIcons';
@@ -26,6 +26,7 @@ import FFormLayout from "@/layouts/FFormLayout";
 import * as H from "history";
 import Prompt from "umi/prompt";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -117,7 +118,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
     />}>
       <FFormLayout>
         <FFormLayout.FBlock
-          title={i18nMessage('resource_name')}
+          title={FUtil.I18n.message('resource_name')}
           dot={true}
         >
           <div className={styles.resourceName}>
@@ -134,7 +135,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
                 });
               }}
               className={styles.FInput}
-              placeholder={i18nMessage('hint_enter_resource_name')}
+              placeholder={FUtil.I18n.message('hint_enter_resource_name')}
               lengthLimit={60}
             />
             <div style={{width: 10}}/>
@@ -143,7 +144,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           </div>
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={i18nMessage('resource_type')} dot={true}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')} dot={true}>
           <FAutoComplete
             errorText={resourceCreatorPage.resourceTypeErrorText}
             value={resourceCreatorPage.resourceType}
@@ -152,23 +153,23 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
               payload: value,
             })}
             className={styles.FSelect}
-            placeholder={i18nMessage('hint_choose_resource_type')}
+            placeholder={FUtil.I18n.message('hint_choose_resource_type')}
             options={resourceTypes.map((i: string) => ({value: i}))}
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_short_description')}>
           <FIntroductionEditor
             value={resourceCreatorPage.introduction}
             onChange={(e) => onChange({
               introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
               introduction: e.target.value
             })}
-            placeholder={i18nMessage('hint_enter_resource_short_description')}
+            placeholder={FUtil.I18n.message('hint_enter_resource_short_description')}
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={i18nMessage('resource_image')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
           <FUploadResourceCover
             value={resourceCreatorPage.cover}
             onChange={(value) => onChange({
@@ -177,7 +178,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_tag')}>
           <FLabelEditor
             values={resourceCreatorPage.labels}
             onChange={(value) => onChange({
@@ -198,7 +199,7 @@ interface HeaderProps {
 function Header({onClickCreate, disabled = false}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText
-      text={i18nMessage('create_resource')}
+      text={FUtil.I18n.message('create_resource')}
       type="h1"
     />
 
@@ -208,7 +209,7 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
         onClick={onClickCreate}
         style={{width: 108}}
         disabled={disabled}
-      >{i18nMessage('create')}</FNormalButton>
+      >{FUtil.I18n.message('create')}</FNormalButton>
     </Space>
   </div>);
 }

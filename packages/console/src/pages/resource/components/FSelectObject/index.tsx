@@ -10,16 +10,17 @@ import * as CryptoJS from 'crypto-js';
 // import Storage, {ResourceObject} from './Storage';
 import {RcFile} from "antd/lib/upload/interface";
 import {fileIsExist, objectDetails, ObjectDetailsParamsType2, uploadFile} from "@/services/storages";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FObjectSelector from "@/containers/FObjectSelector";
 import {getSHA1Hash} from "@/utils/tools";
 import {resourceIsUsedByOther, ResourceIsUsedByOtherParamsType} from "@/services/resources";
 import FDrawer from "@/components/FDrawer";
+import FUtil from "@/utils";
 
 const errorTexts = {
-  duplicated: i18nMessage('resource_exist'),
-  size: i18nMessage('limit_on_file_size'),
-  resourceType: i18nMessage('error_wrongfileformat'),
+  duplicated: FUtil.I18n.message('resource_exist'),
+  size: FUtil.I18n.message('limit_on_file_size'),
+  resourceType: FUtil.I18n.message('error_wrongfileformat'),
 };
 
 export interface ResourceObject {
@@ -177,7 +178,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
         ? (<Space size={50}>
           {isChecking
             ? (<Space size={50} className={styles.checking}>
-              <span>{i18nMessage('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
+              <span>{FUtil.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
               <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
             </Space>)
             : <Space size={15}>
@@ -188,12 +189,12 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
               >
                 <FNormalButton
                   theme="grey"
-                >{i18nMessage('upload_from_local')}</FNormalButton>
+                >{FUtil.I18n.message('upload_from_local')}</FNormalButton>
               </FUpload>
               <FNormalButton
                 theme="grey"
                 onClick={() => setModalVisible(true)}
-              >{i18nMessage('choose_from_storage')}</FNormalButton>
+              >{FUtil.I18n.message('choose_from_storage')}</FNormalButton>
             </Space>}
 
           {errorText &&

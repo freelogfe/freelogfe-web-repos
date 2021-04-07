@@ -15,8 +15,8 @@ import {
 import {humanizeSize} from '@/utils/format';
 import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
-import {i18nMessage} from "@/utils/i18n";
-import {Link} from 'umi';
+// import {i18nMessage} from "@/utils/i18n";
+// import {Link} from 'umi';
 // import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
@@ -65,7 +65,7 @@ function Sider({storage, dispatch}: SiderProps) {
                   },
                 })}
               />)
-              : (<FTooltip title={i18nMessage('msg_bucket_quantity_exceed ')}>
+              : (<FTooltip title={FUtil.I18n.message('msg_bucket_quantity_exceed ')}>
                 <div><FCircleButton
                   theme="text"
                   size="small"

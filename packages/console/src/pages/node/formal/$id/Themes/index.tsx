@@ -9,7 +9,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {OnActiveAction, OnChangeThemeAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {router} from "umi";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from "@/components/FNoDataTip";
 import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
 import FLoadingTip from "@/components/FLoadingTip";
@@ -135,11 +135,11 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                 }
 
                                 fConfirmModal({
-                                  // message: i18nMessage('msg_change_theme_confirm'),
+                                  // message: FUtil.I18n.message('msg_change_theme_confirm'),
                                   message: '激活该主题，将下线其它主题',
-                                  // okText: i18nMessage('active_new_theme'),
+                                  // okText: FUtil.I18n.message('active_new_theme'),
                                   okText: '激活',
-                                  // cancelText: i18nMessage('keep_current_theme'),
+                                  // cancelText: FUtil.I18n.message('keep_current_theme'),
                                   cancelText: '保持当前主题',
                                   onOk() {
                                     dispatch<OnActiveAction>({
@@ -171,7 +171,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                             i.policies.map((p) => (<label key={p}>{p}</label>))
                           }
                         </div>
-                        <a onClick={() => null}>{i18nMessage('more_details')}>></a>
+                        <a onClick={() => null}>{FUtil.I18n.message('more_details')}>></a>
                       </div>
                     </div>);
                   })

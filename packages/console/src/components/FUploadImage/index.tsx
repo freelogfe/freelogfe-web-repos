@@ -5,9 +5,10 @@ import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 import styles from './index.less';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
-import {uploadImage} from "@/services/storages";
-import {i18nMessage} from "@/utils/i18n";
+// import {uploadImage} from "@/services/storages";
+// import {i18nMessage} from "@/utils/i18n";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 //extends UploadProps
 interface FUploadImageProps {
@@ -37,12 +38,12 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         beforeCrop={(file) => {
           console.log(file, '#FSDFSDFSDF');
           if (!file.type.startsWith('image/')) {
-            onError && onError(i18nMessage('limit_resource_image_format'));
+            onError && onError(FUtil.I18n.message('limit_resource_image_format'));
             return false;
           }
 
           if (file.size > 5 * 1024 * 1024) {
-            onError && onError(i18nMessage('limit_resource_image_size'));
+            onError && onError(FUtil.I18n.message('limit_resource_image_size'));
             return false;
           }
 

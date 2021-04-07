@@ -14,7 +14,7 @@ import {
   SyncAllPropertiesAction
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, {EditorState} from 'braft-editor';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
 import {router, withRouter} from 'umi';
@@ -36,6 +36,7 @@ import {
   FAntvG6RelationshipGraph,
   FViewportTabs
 } from "@/components/FAntvG6";
+import FUtil from "@/utils";
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -166,7 +167,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         onClickDownload={() => resourcesDownload({resourceId: match.params.id, version: match.params.version})}
       />}>
       <FFormLayout>
-        <FFormLayout.FBlock title={i18nMessage('version_description')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('version_description')}>
 
           {!resourceVersionEditorPage.description && !isEditing && (<Space size={10}>
             <FCircleButton
@@ -178,8 +179,8 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
           {isEditing
             ? (<FHorn extra={<Space size={10}>
-              <FTextButton onClick={() => setIsEditing(false)}>{i18nMessage('cancel')}</FTextButton>
-              <FTextButton onClick={onUpdateEditorText} theme="primary">{i18nMessage('save')}</FTextButton>
+              <FTextButton onClick={() => setIsEditing(false)}>{FUtil.I18n.message('cancel')}</FTextButton>
+              <FTextButton onClick={onUpdateEditorText} theme="primary">{FUtil.I18n.message('save')}</FTextButton>
             </Space>}>
               <FBraftEditor
                 value={editor}
@@ -318,14 +319,14 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                     <div className={styles.Content}>
                       <div style={{height: 10}}/>
                       <Space size={20} className={styles.row}>
-                        <Field title={i18nMessage('key')} dot={true}>
+                        <Field title={FUtil.I18n.message('key')} dot={true}>
                           <FInput
                             disabled
                             wrapClassName={styles.FInputWrap}
                             value={ppp.key}
                           />
                         </Field>
-                        <Field title={i18nMessage('property_remark')}>
+                        <Field title={FUtil.I18n.message('property_remark')}>
                           <FInput
                             wrapClassName={styles.FInputWrap}
                             value={ppp.description}
@@ -338,15 +339,15 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                       <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
                         <Field
                           className={styles.FSelect}
-                          title={i18nMessage('value_input_mode')}
+                          title={FUtil.I18n.message('value_input_mode')}
                         >
                           <FSelect
                             disabled
                             value={ppp.custom}
                             className={styles.FSelect}
                             dataSource={[
-                              {value: 'input', title: i18nMessage('textfield')},
-                              {value: 'select', title: i18nMessage('dropdownlist')},
+                              {value: 'input', title: FUtil.I18n.message('textfield')},
+                              {value: 'select', title: FUtil.I18n.message('dropdownlist')},
                             ]}
                           />
                         </Field>
@@ -365,7 +366,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                               />
                             </Field>)
                             : (<Field
-                              // title={i18nMessage('value')}
+                              // title={FUtil.I18n.message('value')}
                               title={'自定义选项(填写一个默认值)'}
                               dot={true}
                             >
@@ -577,14 +578,14 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           <div className={styles.Content}>
             <div style={{height: 10}}/>
             <Space size={20} className={styles.row}>
-              <Field title={i18nMessage('key')} dot={true}>
+              <Field title={FUtil.I18n.message('key')} dot={true}>
                 <FInput
                   disabled
                   wrapClassName={styles.FInputWrap}
                   value={resourceVersionEditorPage.customOptionKey}
                 />
               </Field>
-              <Field title={i18nMessage('property_remark')}>
+              <Field title={FUtil.I18n.message('property_remark')}>
                 <FInput
                   wrapClassName={styles.FInputWrap}
                   // errorText={resourceVersionEditorPage.customOptionDescriptionError}
@@ -612,15 +613,15 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
               <Field
                 className={styles.FSelect}
-                title={i18nMessage('value_input_mode')}
+                title={FUtil.I18n.message('value_input_mode')}
               >
                 <FSelect
                   disabled
                   value={resourceVersionEditorPage.customOptionCustom}
                   className={styles.FSelect}
                   dataSource={[
-                    {value: 'input', title: i18nMessage('textfield')},
-                    {value: 'select', title: i18nMessage('dropdownlist')},
+                    {value: 'input', title: FUtil.I18n.message('textfield')},
+                    {value: 'select', title: FUtil.I18n.message('dropdownlist')},
                   ]}
                 />
               </Field>
@@ -665,7 +666,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                     </>)}
                   </Field>)
                   : (<Field
-                    // title={i18nMessage('value')}
+                    // title={FUtil.I18n.message('value')}
                     title={'自定义选项(填写一个默认值)'}
                     dot={true}
                   >
@@ -793,9 +794,9 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
       <FTitleText text={version} type="h1"/>
       <div style={{height: 10}}/>
       <Space size={0}>
-        <FContentText type="additional2" text={i18nMessage('release_date') + '：' + signingDate}/>
+        <FContentText type="additional2" text={FUtil.I18n.message('release_date') + '：' + signingDate}/>
         <div style={{width: 40}}/>
-        <FContentText type="additional2" text={i18nMessage('object_id') + '：' + resourceID}/>
+        <FContentText type="additional2" text={FUtil.I18n.message('object_id') + '：' + resourceID}/>
         <div style={{width: 20}}/>
         <FTextButton theme="primary">
           <FDownload

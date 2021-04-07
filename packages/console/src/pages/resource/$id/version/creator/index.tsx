@@ -30,7 +30,7 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
 import {FDown, FInfo} from "@/components/FIcons";
 import FBaseProperties from "@/components/FBaseProperties";
@@ -45,6 +45,7 @@ import * as H from "history";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -204,7 +205,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
         <FFormLayout>
           <FFormLayout.FBlock
             dot={true}
-            title={i18nMessage('version_number')}
+            title={FUtil.I18n.message('version_number')}
           >
             <FInput
               value={resourceVersionCreatorPage.version}
@@ -228,7 +229,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={true} title={i18nMessage('release_object')}>
+          <FFormLayout.FBlock dot={true} title={FUtil.I18n.message('release_object')}>
             <FSelectObject
               onError={(value) => {
                 dispatch<ChangeAction>({
@@ -415,11 +416,11 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
 
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={i18nMessage('rely')}>
+          <FFormLayout.FBlock dot={false} title={FUtil.I18n.message('rely')}>
             <FDepPanel/>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={i18nMessage('version_description')}>
+          <FFormLayout.FBlock dot={false} title={FUtil.I18n.message('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
               onChange={(value) => {
@@ -520,15 +521,15 @@ interface HeaderProps {
 
 function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={i18nMessage('create_new_version')} type="h1"/>
+    <FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>
 
     <Space size={30}>
-      <FTextButton onClick={onClickCache}>{i18nMessage('save_as_draft')}</FTextButton>
+      <FTextButton onClick={onClickCache}>{FUtil.I18n.message('save_as_draft')}</FTextButton>
       <FNormalButton
         style={{width: 108}}
         onClick={onClickCreate}
         disabled={disabledCreate}
-      >{i18nMessage('release_to_market')}</FNormalButton>
+      >{FUtil.I18n.message('release_to_market')}</FNormalButton>
     </Space>
   </div>);
 }

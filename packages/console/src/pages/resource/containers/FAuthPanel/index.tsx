@@ -4,8 +4,9 @@ import {FContentText} from '@/components/FText';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
-import {i18nMessage} from "@/utils/i18n";
-import {CloseCircleFilled} from '@ant-design/icons';
+import FUtil from "@/utils";
+// import {i18nMessage} from "@/utils/i18n";
+// import {CloseCircleFilled} from '@ant-design/icons';
 
 export interface FAuthPanelProps {
   dataSource: {
@@ -62,7 +63,7 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
 
         {
           activeResource && activeResource?.contracts.length > 0 && (<>
-            <FContentText type="additional2" text={i18nMessage('used_contract')}/>
+            <FContentText type="additional2" text={FUtil.I18n.message('used_contract')}/>
             <div style={{height: 5}}/>
             <Contracts dataSource={activeResource.contracts}/>
           </>)
@@ -71,7 +72,7 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
         {
           activeResource && activeResource?.policies?.length > 0 && (<>
             <div style={{height: 20}}/>
-            <FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>
+            <FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>
             <div style={{height: 5}}/>
             <Policies dataSource={activeResource.policies}/>
           </>)

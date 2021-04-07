@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FMenu from "@/components/FMenu";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
@@ -48,7 +48,7 @@ function Resource({global}: ResourceProps) {
     <FNavLink
       to={FUtil.LinkTo.myResources()}
       active={isCurrent}
-      text={i18nMessage('resource_manage')}
+      text={FUtil.I18n.message('resource_manage')}
     />
   </FDropdown>);
 }

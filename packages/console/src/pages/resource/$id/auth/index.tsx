@@ -19,15 +19,16 @@ import {
 } from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, RouterTypes, withRouter} from 'umi';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import {FInfo} from "@/components/FIcons";
+import FUtil from "@/utils";
 
 const columns: any[] = [
   {
-    title: i18nMessage('contract_name') + '｜' + i18nMessage('contract_id'),
+    title: FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id'),
     dataIndex: 'name',
     render: (_: any, record: any) => (<>
       <FContentText text={record.contractName}/>
@@ -36,19 +37,19 @@ const columns: any[] = [
     </>),
   },
   {
-    title: i18nMessage('licensee'),
+    title: FUtil.I18n.message('licensee'),
     // className: 'column-money',
     dataIndex: 'authorizedParties',
     // align: 'right',
     render: (_: any, record: any) => (<FContentText text={record.authorizedParty}/>)
   },
   {
-    title: i18nMessage('contract_signed_time'),
+    title: FUtil.I18n.message('contract_signed_time'),
     dataIndex: 'createTime',
     render: (_: any, record: any) => (<FContentText text={record.createDate}/>)
   },
   {
-    title: i18nMessage('contract_state'),
+    title: FUtil.I18n.message('contract_state'),
     dataIndex: 'contractStatus',
     render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
   },
@@ -104,22 +105,22 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
   return (<FLeftSiderLayout
     sider={<Sider/>}
     header={<FTitleText
-      text={i18nMessage('authorization_infomation')}
+      text={FUtil.I18n.message('authorization_infomation')}
       type="h1"
     />}>
     <FFormLayout>
-      <FFormLayout.FBlock title={i18nMessage('authorization_plan')}>
+      <FFormLayout.FBlock title={FUtil.I18n.message('authorization_plan')}>
         <FPolicies/>
       </FFormLayout.FBlock>
       {
         (resourceAuthPage.contractsAuthorized.length > 0 || resourceAuthPage.baseUpcastResources.length > 0) && (
-          <FFormLayout.FBlock title={i18nMessage('licencee_contract')}>
+          <FFormLayout.FBlock title={FUtil.I18n.message('licencee_contract')}>
 
             {
               resourceAuthPage.baseUpcastResources.length > 0 && (<div className={styles.depUpthrow}>
                   <div className={styles.tip}>
                     <FTitleText
-                      text={i18nMessage('basic_upcast')}
+                      text={FUtil.I18n.message('basic_upcast')}
                       type="form"
                     />
                     <div style={{width: 5}}/>
@@ -152,7 +153,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
 
       {
         resourceAuthPage.contractsAuthorize?.length > 0 && (
-          <FFormLayout.FBlock title={i18nMessage('authorizing_contracts')}>
+          <FFormLayout.FBlock title={FUtil.I18n.message('authorizing_contracts')}>
             <Table
               columns={columns}
               dataSource={resourceAuthPage.contractsAuthorize}

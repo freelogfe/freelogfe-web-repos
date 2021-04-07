@@ -8,7 +8,8 @@ import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhi
 import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {i18nMessage} from "@/utils/i18n";
+import FUtil from "@/utils";
+// import {i18nMessage} from "@/utils/i18n";
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -42,7 +43,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
         ? (<div className={styles.empty}>
           <FTipText
             type="secondary"
-            // text={i18nMessage('hint_add_authorization_plan')}
+            // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={'无策略'}
           />
           <div style={{height: 20}}/>
@@ -51,7 +52,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
             payload: {
               addPolicyDrawerVisible: true,
             }
-          })}>{i18nMessage('add_authorization_plan')}</FNormalButton>
+          })}>{FUtil.I18n.message('add_authorization_plan')}</FNormalButton>
         </div>)
         : (<div className={styles.policies}>
           {

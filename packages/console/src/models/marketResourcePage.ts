@@ -6,7 +6,7 @@ import {router} from "umi";
 // import {EXHIBIT_NAME} from "@/utils/regexp";
 // import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FUtil from "@/utils";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
@@ -608,7 +608,7 @@ const Model: MarketResourcePageModelType = {
           type: 'change',
           payload: {
             signExhibitName: payload,
-            signExhibitNameErrorTip: i18nMessage('naming_convention_exhibits_name'),
+            signExhibitNameErrorTip: FUtil.I18n.message('naming_convention_exhibits_name'),
           },
         });
         return;
@@ -628,7 +628,7 @@ const Model: MarketResourcePageModelType = {
           type: 'marketResourcePage/change',
           payload: {
             signExhibitName: payload,
-            signExhibitNameErrorTip: i18nMessage('exhibits_name_exist'),
+            signExhibitNameErrorTip: FUtil.I18n.message('exhibits_name_exist'),
           },
         });
         return;

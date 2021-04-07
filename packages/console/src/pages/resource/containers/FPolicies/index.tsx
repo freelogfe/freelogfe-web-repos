@@ -5,12 +5,13 @@ import FModal from '@/components/FModal';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {PlusOutlined} from '@ant-design/icons';
 import styles from './index.less';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState, ResourceInfoModelState} from '@/models/connect';
 import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
 import PolicyCard from './PolicyCard';
 import FPolicyBuilderDrawer from "@/components/FPolicyBuilderDrawer";
+import FUtil from "@/utils";
 
 interface Policy {
   id: string;
@@ -63,10 +64,10 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
         ? (<div className={styles.empty}>
           <FTipText
             type="secondary"
-            text={i18nMessage('hint_add_authorization_plan')}
+            text={FUtil.I18n.message('hint_add_authorization_plan')}
           />
           <div style={{height: 20}}/>
-          <FNormalButton onClick={openNewVisible}>{i18nMessage('add_authorization_plan')}</FNormalButton>
+          <FNormalButton onClick={openNewVisible}>{FUtil.I18n.message('add_authorization_plan')}</FNormalButton>
         </div>)
         : (<div className={styles.policies}>
           {

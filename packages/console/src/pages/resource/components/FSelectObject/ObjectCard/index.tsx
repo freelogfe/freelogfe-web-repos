@@ -3,8 +3,9 @@ import styles from './index.less';
 import img from '@/assets/file-object.svg';
 import {FTitleText, FContentText} from '@/components/FText';
 import {Progress} from 'antd';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import {humanizeSize} from '@/utils/format';
+import FUtil from "@/utils";
 
 interface ObjectCardProps {
   readonly resourceObject: {
@@ -52,7 +53,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
     </div>
     {/*<div style={{width: 10}}/>*/}
     <a onClick={() => onClickDelete && onClickDelete()}
-       className={styles.delete}>{progress !== null ? i18nMessage('cancel_uploading') : i18nMessage('remove')}</a>
+       className={styles.delete}>{progress !== null ? FUtil.I18n.message('cancel_uploading') : FUtil.I18n.message('remove')}</a>
   </div>)
 }
 

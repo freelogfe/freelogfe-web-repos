@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from "@/components/FText";
-import FDropdown from "@/components/FDropdown";
+// import FDropdown from "@/components/FDropdown";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {FTextButton} from "@/components/FButton";
 import FDropdownMenu from "@/components/FDropdownMenu";
+import FUtil from "@/utils";
 
 interface PolicyCardProps {
   title: string;
@@ -27,9 +28,9 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
         }}
         text={<StatusLabel status={status}/>}
         options={[
-          // {value: 'executing', text: i18nMessage('enabled')},
-          {value: 'executing', text: i18nMessage('enabled')},
-          {value: 'stopped', text: i18nMessage('disabled')},
+          // {value: 'executing', text: FUtil.I18n.message('enabled')},
+          {value: 'executing', text: FUtil.I18n.message('enabled')},
+          {value: 'stopped', text: FUtil.I18n.message('disabled')},
         ]}
       />
     </div>

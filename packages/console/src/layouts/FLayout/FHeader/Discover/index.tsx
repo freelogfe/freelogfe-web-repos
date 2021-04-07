@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 // import sharedStyles from '../index.less';
 import FMenu from "@/components/FMenu";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
@@ -51,7 +51,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   >
     <FNavLink
       // onClick={() => onDiscoverClick('1')}
-      text={i18nMessage('explorer')}
+      text={FUtil.I18n.message('explorer')}
       to={FUtil.LinkTo.market()}
       active={isCurrent}
     />

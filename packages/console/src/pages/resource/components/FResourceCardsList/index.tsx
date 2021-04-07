@@ -9,8 +9,9 @@ import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
 import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from '@/components/FNoDataTip';
+import FUtil from "@/utils";
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -91,7 +92,7 @@ function FResourceCardsList({
     <div className={styles.filter}>
       <div className={styles.filterLeft}>
         <div>
-          <span>{i18nMessage('resource_type')}：</span>
+          <span>{FUtil.I18n.message('resource_type')}：</span>
           <Dropdown overlay={<FMenu
             options={resourceTypeOptions}
             onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
@@ -101,7 +102,7 @@ function FResourceCardsList({
           </Dropdown>
         </div>
         <div style={{marginLeft: 60}}>
-          <span>{i18nMessage('resource_state')}：</span>
+          <span>{FUtil.I18n.message('resource_state')}：</span>
           <Dropdown overlay={<FMenu
             options={resourceStatusOptions}
             onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')}
@@ -120,12 +121,12 @@ function FResourceCardsList({
           onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
           theme="dark"
           className={styles.FInput}
-          placeholder={i18nMessage('search_resource')}
+          placeholder={FUtil.I18n.message('search_resource')}
         />
         {showGotoCreateBtn && <FNormalButton
           onClick={() => router.push('/resource/creator')}
           type="primary"
-        >{i18nMessage('create_resource')}</FNormalButton>}
+        >{FUtil.I18n.message('create_resource')}</FNormalButton>}
       </div>
     </div>
 

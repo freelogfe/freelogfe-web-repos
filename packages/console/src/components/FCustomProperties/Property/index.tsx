@@ -1,13 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-import FHorn from '@/pages/resource/components/FHorn';
-import {i18nMessage} from '@/utils/i18n';
+// import FHorn from '@/pages/resource/components/FHorn';
+// import {i18nMessage} from '@/utils/i18n';
 import {Col, Row, Space, Switch} from 'antd';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import {Data} from '../index';
 import Field from '../Field';
 import {CUSTOM_KEY} from "@/utils/regexp";
+import FUtil from "@/utils";
 
 interface PropertyProps {
   data: Data;
@@ -27,7 +28,7 @@ function Property({data, onChange}: PropertyProps) {
     <div className={styles.Content}>
     <div style={{height: 10}}/>
   <Space size={20} className={styles.row}>
-    <Field title={i18nMessage('key')} dot={true}>
+    <Field title={FUtil.I18n.message('key')} dot={true}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.key}
@@ -50,7 +51,7 @@ function Property({data, onChange}: PropertyProps) {
       />
       {data.keyError && <div className={styles.error}>{data.keyError}</div>}
     </Field>
-    <Field title={i18nMessage('property_remark')}>
+    <Field title={FUtil.I18n.message('property_remark')}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.description}
@@ -75,15 +76,15 @@ function Property({data, onChange}: PropertyProps) {
     <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
       <Field
         className={styles.FSelect}
-        title={i18nMessage('value_input_mode')}
+        title={FUtil.I18n.message('value_input_mode')}
       >
         <FSelect
           value={data.custom}
           onChange={(value) => onChangeData({custom: value})}
           className={styles.FSelect}
           dataSource={[
-            {value: 'input', title: i18nMessage('textfield')},
-            {value: 'select', title: i18nMessage('dropdownlist')},
+            {value: 'input', title: FUtil.I18n.message('textfield')},
+            {value: 'select', title: FUtil.I18n.message('dropdownlist')},
           ]}
           placeholder={'请选择'}
         />
@@ -93,7 +94,7 @@ function Property({data, onChange}: PropertyProps) {
         data.custom === 'select' && (<div>
           <Field
             dot={true}
-            // title={i18nMessage('value_options')}
+            // title={FUtil.I18n.message('value_options')}
             title={'自定义选项(首个选项为默认值)'}
             className={styles.customOptions}
           >
@@ -131,7 +132,7 @@ function Property({data, onChange}: PropertyProps) {
 
       {
         data.custom === 'input' && (<Field
-          // title={i18nMessage('value')}
+          // title={FUtil.I18n.message('value')}
           title={'自定义选项(填写一个默认值)'}
           dot={true}
           className={styles.customOptions}

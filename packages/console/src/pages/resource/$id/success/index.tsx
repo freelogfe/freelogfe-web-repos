@@ -5,9 +5,10 @@ import {FTipText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction} from "@/models/global";
 import {Dispatch,connect} from "dva";
+import FUtil from "@/utils";
 
 interface SuccessProps {
   dispatch: Dispatch;
@@ -39,11 +40,11 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type={'secondary'} text={i18nMessage('resource_created_successfully')}/>
+      <FTipText type={'secondary'} text={FUtil.I18n.message('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type={'modal'} text={i18nMessage('hint_create_1st_version')}/>
+      <FTipText type={'modal'} text={FUtil.I18n.message('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
-      <FNormalButton onClick={goto}>{i18nMessage('create_first_version')}</FNormalButton>
+      <FNormalButton onClick={goto}>{FUtil.I18n.message('create_first_version')}</FNormalButton>
     </div>
   </FCenterLayout>)
 }

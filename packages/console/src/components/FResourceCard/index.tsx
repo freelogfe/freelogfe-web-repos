@@ -5,8 +5,9 @@ import Policy from './Policy';
 import {FContentText} from '@/components/FText';
 
 import styles from './index.less';
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import FUtil from "@/utils";
 
 type EventFunc = () => void
 
@@ -55,19 +56,19 @@ export default function ({
                 {
                   type === 'favorite'
                     ? (<div className={styles.favorite}>
-                      <a onClick={() => onClickDetails && onClickDetails()}>{i18nMessage('resource_details')}</a>
+                      <a onClick={() => onClickDetails && onClickDetails()}>{FUtil.I18n.message('resource_details')}</a>
                       <span>|</span>
-                      <a onClick={() => onBoomJuice && onBoomJuice()}>{i18nMessage('remove_from_collection')}</a>
+                      <a onClick={() => onBoomJuice && onBoomJuice()}>{FUtil.I18n.message('remove_from_collection')}</a>
                     </div>)
                     : (
                       <div className={styles.resources}>
                         <a
-                          onClick={() => onClickDetails && onClickDetails()}>{i18nMessage('resource_details')}</a>
+                          onClick={() => onClickDetails && onClickDetails()}>{FUtil.I18n.message('resource_details')}</a>
                         <span>|</span>
-                        <a onClick={() => onClickEditing && onClickEditing()}>{i18nMessage('edit_resource')}</a>
+                        <a onClick={() => onClickEditing && onClickEditing()}>{FUtil.I18n.message('edit_resource')}</a>
                         <span>|</span>
                         <a
-                          onClick={() => onClickRevision && onClickRevision()}>{i18nMessage('update_resource')}</a>
+                          onClick={() => onClickRevision && onClickRevision()}>{FUtil.I18n.message('update_resource')}</a>
                       </div>
                     )
                 }
@@ -101,7 +102,7 @@ export default function ({
           />
           <FContentText
             type="additional1"
-            text={resource.version ? (i18nMessage('latest_version') + ' ' + resource.version) : '暂无版本'}
+            text={resource.version ? (FUtil.I18n.message('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
         </div>
         <div style={{height: '15px'}}/>
@@ -111,7 +112,7 @@ export default function ({
               resource.policy.map((i: string) => <Policy key={i} text={i}/>)
             }
           </div>
-          {/*<a onClick={() => onClickMore && onClickMore()}>{i18nMessage('more_details')}>></a>*/}
+          {/*<a onClick={() => onClickMore && onClickMore()}>{FUtil.I18n.message('more_details')}>></a>*/}
         </div>
       </div>
     </div>

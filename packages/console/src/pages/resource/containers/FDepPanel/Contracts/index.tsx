@@ -8,7 +8,8 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
-import {i18nMessage} from '@/utils/i18n';
+import FUtil from "@/utils";
+// import {i18nMessage} from '@/utils/i18n';
 
 interface ContractsProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enableReuseContracts'];
@@ -62,7 +63,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
 
   return <>
     <div style={{height: 20}}/>
-    <FContentText type="additional2" text={i18nMessage('reusable_contract')}/>
+    <FContentText type="additional2" text={FUtil.I18n.message('reusable_contract')}/>
     <div style={{height: 5}}/>
     <div className={styles.styles}>
       {resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
@@ -83,13 +84,13 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         </div>
         <div className={styles.PolicyInfo}>
           <Space size={40}>
-            <FContentText type="additional2" text={i18nMessage('contract_id') + '：' + k.id}/>
-            <FContentText type="additional2" text={i18nMessage('contract_signed_time') + '：' + k.date}/>
+            <FContentText type="additional2" text={FUtil.I18n.message('contract_id') + '：' + k.id}/>
+            <FContentText type="additional2" text={FUtil.I18n.message('contract_signed_time') + '：' + k.date}/>
           </Space>
           <div style={{height: 9}}/>
           <div>
             <FContentText type="additional2">
-              {i18nMessage('use_for_version')}：
+              {FUtil.I18n.message('use_for_version')}：
               <Space size={15}>
                 {k.versions.map((i) => <span key={i}>{i}</span>)}
               </Space>

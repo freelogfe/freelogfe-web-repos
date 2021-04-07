@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FNormalButton} from '@/components/FButton';
-import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
+// import {FNormalButton} from '@/components/FButton';
+// import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
 import {Checkbox} from 'antd';
 import {
   ChangeAction,
@@ -10,7 +10,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {FContentText, FTipText} from '@/components/FText';
 import {CloseCircleFilled} from '@ant-design/icons';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 
 interface PoliciesProps {
   // dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];
@@ -62,7 +62,7 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
 
   return (<>
     <div style={{height: 20}}/>
-    {/*<FContentText type="additional2" text={i18nMessage('other_authorization_plan')}/>*/}
+    {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
     <FContentText type="additional2" text={'可签约的合约'}/>
     <div style={{height: 5}}/>
     <div className={styles.styles}>

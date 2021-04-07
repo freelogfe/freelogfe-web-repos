@@ -14,8 +14,9 @@ import {
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
 import * as ahooks from 'ahooks';
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -117,7 +118,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
           const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
           if (exits) {
             fConfirmModal({
-              message: i18nMessage('cancel_all_uploading_task'),
+              message: FUtil.I18n.message('cancel_all_uploading_task'),
               onOk() {
                 closeAll();
               },

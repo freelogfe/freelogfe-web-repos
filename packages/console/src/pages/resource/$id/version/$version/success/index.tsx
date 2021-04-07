@@ -5,11 +5,12 @@ import {FTipText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {useInterval} from 'ahooks';
 import {ChangeAction} from "@/models/global";
 import {connect, Dispatch} from 'dva';
 import RouterTypes from "umi/routerTypes";
+import FUtil from "@/utils";
 
 interface SuccessProps {
   match: {
@@ -78,15 +79,15 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
       <div style={{height: 20}}/>
       {/*<FTipText type={'secondary'} text={`版本 ${match.params.version} 创建成功`}/>*/}
       <FTipText type={'secondary'}
-                text={i18nMessage('version_created_successfully', {VersionNumber: match.params.version})}/>
+                text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}/>
       <div style={{height: 40}}/>
       <div className={styles.goto}>
-        <FTipText type={'modal'} text={i18nMessage('jump_to_version_edit', {timer: count})}/>
+        <FTipText type={'modal'} text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
         <div style={{width: 10}}/>
         <FTextButton
           theme={'primary'}
           onClick={goto}
-        >{i18nMessage('jump_now')}</FTextButton>
+        >{FUtil.I18n.message('jump_now')}</FTextButton>
       </div>
     </div>
   </FCenterLayout>)

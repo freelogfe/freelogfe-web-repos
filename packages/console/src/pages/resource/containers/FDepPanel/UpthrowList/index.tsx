@@ -5,8 +5,9 @@ import {FTitleText} from '@/components/FText';
 import {ExclamationCircleFilled} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {FInfo} from "@/components/FIcons";
+import FUtil from "@/utils";
 
 interface UpthrowListProps {
   // dispatch: Dispatch;
@@ -26,7 +27,7 @@ function UpthrowList({creator: {dependencies}}: UpthrowListProps) {
     <div className={styles.depUpthrow}>
       <div className={styles.tip}>
         <FTitleText
-          text={i18nMessage('basic_upcast')}
+          text={FUtil.I18n.message('basic_upcast')}
           type="form"
         />
         <div style={{width: 5}}/>

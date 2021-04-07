@@ -10,12 +10,13 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState} from '@/models/connect';
 import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
+import FUtil from "@/utils";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -98,19 +99,19 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
     <FLeftSiderLayout
       sider={<Sider/>}
       header={<FTitleText
-        text={i18nMessage('resource_information')}
+        text={FUtil.I18n.message('resource_information')}
         type="h1"
       />}
     >
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
-        <FFormLayout.FBlock title={i18nMessage('resource_name')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_name')}>
           <FContentText text={resourceInfo.info?.resourceName}/>
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={i18nMessage('resource_type')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')}>
           <FContentText text={resourceInfo.info.resourceType}/>
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={i18nMessage('resource_short_description')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_short_description')}>
 
           {
             !resourceInfo.info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
@@ -118,7 +119,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
                 onClick={() => onChangeIsEditing(true)}
                 theme="weaken"
               />
-              <FContentText text={i18nMessage('resource_short_description')}/>
+              <FContentText text={FUtil.I18n.message('resource_short_description')}/>
             </Space>)}
 
           <FHorn className={styles.about} extra={<>
@@ -127,7 +128,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
                 ? (<Space size={10}>
                   <FTextButton
                     onClick={() => onChangeIsEditing(false)}
-                  >{i18nMessage('cancel')}</FTextButton>
+                  >{FUtil.I18n.message('cancel')}</FTextButton>
                   <FTextButton
                     theme="primary"
                     disabled={!!resourceInfoPage.introductionErrorText}
@@ -140,13 +141,13 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
                         id: resourceInfo.info?.resourceId || '',
                       });
                     }}
-                  >{i18nMessage('save')}</FTextButton>
+                  >{FUtil.I18n.message('save')}</FTextButton>
                 </Space>)
                 : resourceInfo.info?.intro
                 ? <FTextButton
                   theme="primary"
                   onClick={() => onChangeIsEditing(true)}
-                >{i18nMessage('edit')}</FTextButton>
+                >{FUtil.I18n.message('edit')}</FTextButton>
                 : null}
           </>}>
 
@@ -169,7 +170,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
           </FHorn>
 
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={i18nMessage('resource_image')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
           <FUploadResourceCover
             value={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
             // onChange={(value) => dispatch<OnChangeCoverAction>({
@@ -183,7 +184,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
             })}
           />
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={i18nMessage('resource_tag')}>
+        <FFormLayout.FBlock title={FUtil.I18n.message('resource_tag')}>
           <FLabelEditor
             values={resourceInfo.info?.tags}
             onChange={(value) => dispatch<OnChangeInfoAction>({

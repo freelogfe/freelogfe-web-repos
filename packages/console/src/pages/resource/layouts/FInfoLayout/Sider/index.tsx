@@ -8,7 +8,7 @@ import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelSta
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
 // import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
@@ -103,24 +103,24 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         to={FUtil.LinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
-      >{i18nMessage('resource_information')}</FLink>
+      >{FUtil.I18n.message('resource_information')}</FLink>
       <FLink
         className={[match.path === '/resource/:id/auth' ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FUtil.LinkTo.resourceAuth({
           resourceID: match.params.id,
         })}
       >
-        <span>{i18nMessage('authorization_infomation')}</span>
+        <span>{FUtil.I18n.message('authorization_infomation')}</span>
         {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot}/>)}
       </FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
-          <div style={{cursor: 'default'}}>{i18nMessage('verions')}</div>
+          <div style={{cursor: 'default'}}>{FUtil.I18n.message('verions')}</div>
           {
             match.path !== '/resource/:id/version/creator' && <>
               {
                 resourceInfo.draftData ? <Popconfirm
-                  title={i18nMessage('error_unreleasedverionexisted')}
+                  title={FUtil.I18n.message('error_unreleasedverionexisted')}
                   onConfirm={gotoCreator}
                   // onCancel={cancel}
                   okText="查看"

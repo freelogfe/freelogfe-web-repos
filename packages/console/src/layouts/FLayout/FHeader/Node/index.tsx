@@ -5,7 +5,7 @@ import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
 import {FContentText} from "@/components/FText";
 import {FNormalButton} from "@/components/FButton";
-import {i18nMessage} from "@/utils/i18n";
+// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
@@ -61,7 +61,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
       >创建节点</FNormalButton>
     </div>)}>
     <FNavLink
-      text={i18nMessage('node_manage')}
+      text={FUtil.I18n.message('node_manage')}
       to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({nodeID: nodes.list[0].nodeId})}
       active={isCurrent}
     />

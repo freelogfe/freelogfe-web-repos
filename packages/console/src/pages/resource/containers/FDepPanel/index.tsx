@@ -11,10 +11,11 @@ import UpthrowList from './UpthrowList';
 import Market from './Market';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-import {i18nMessage} from '@/utils/i18n';
+// import {i18nMessage} from '@/utils/i18n';
 import {CloseCircleFilled} from '@ant-design/icons';
 import {ChangeAction, DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
 import FDrawer from "@/components/FDrawer";
+import FUtil from "@/utils";
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -31,7 +32,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
       {/*<FNormalButton*/}
       {/*  onClick={() => setModalVisible(true)}*/}
       {/*  theme="grey"*/}
-      {/*>{i18nMessage('add_rely_resource')}</FNormalButton>*/}
+      {/*>{FUtil.I18n.message('add_rely_resource')}</FNormalButton>*/}
       <FNormalButton
         onClick={() => setModalVisible(true)}
         theme="grey"
@@ -52,7 +53,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
               },
             });
           }}
-        >{i18nMessage('import_from_previous_version')}</FNormalButton>
+        >{FUtil.I18n.message('import_from_previous_version')}</FNormalButton>
       }
 
     </Space>
@@ -75,10 +76,10 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
               resource && resource.status !== 1 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
                 {resource.status === 0 &&
-                <FTipText text={i18nMessage('authorization_issue_offline_resource')} type="secondary"/>}
-                {/*{resource.status === 2 && <FTipText text={i18nMessage('authorization_issue_circular_reply')} type="secondary"/>}*/}
+                <FTipText text={FUtil.I18n.message('authorization_issue_offline_resource')} type="secondary"/>}
+                {/*{resource.status === 2 && <FTipText text={FUtil.I18n.message('authorization_issue_circular_reply')} type="secondary"/>}*/}
                 {resource.status === 2 && <FTipText
-                  text={i18nMessage('authorization_issue_circular_reply')}
+                  text={FUtil.I18n.message('authorization_issue_circular_reply')}
                   type="secondary"
                 />}
                 {resource.status === 3 && <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>}
@@ -104,7 +105,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
     }
 
     <FDrawer
-      // title={i18nMessage('add_rely_resource')}
+      // title={FUtil.I18n.message('add_rely_resource')}
       title={'添加依赖'}
       onClose={() => setModalVisible(false)}
       visible={modalVisible}
