@@ -55,19 +55,20 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         >
           <div className={styles.resourceLeft}>
             <div className={styles.resourceTitle}>
-              {/*<a href={d.identity === 'resource' ? resourceDetails({*/}
-              {/*  resourceID: d.id,*/}
-              {/*}) : objectDetails({*/}
-              {/*  objectID: d.id,*/}
-              {/*})}>*/}
-              <Link to={d.linkTo}>
+              {/*<Link to={d.linkTo}>*/}
+              {/*  <FContentText*/}
+              {/*    singleRow={true}*/}
+              {/*    text={d.name}*/}
+              {/*    className={styles.resourceName}*/}
+              {/*  />*/}
+              {/*</Link>*/}
+              <a onClick={() => window.open(d.linkTo)}>
                 <FContentText
-                  singleRow={true}
-                  text={d.name}
-                  className={styles.resourceName}
+                    singleRow={true}
+                    text={d.name}
+                    className={styles.resourceName}
                 />
-              </Link>
-              {/*</a>*/}
+              </a>
               {d.status === 0 && <span className={styles.notOnline}>未上线</span>}
             </div>
             <div style={{height: 9}}/>
