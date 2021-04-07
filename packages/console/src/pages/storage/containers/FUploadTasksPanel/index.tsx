@@ -9,28 +9,42 @@ import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
 import {
   ChangeAction,
-  CreateObjectAction, DeleteBucketByNameAction, FetchBucketsAction,
+  CreateObjectAction, FetchBucketsAction,
   FetchObjectsAction,
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
 import * as ahooks from 'ahooks';
-import FModal from '@/components/FModal';
-import {FTipText} from '@/components/FText';
 import {i18nMessage} from "@/utils/i18n";
-import {FWarning} from "@/components/FIcons";
 import fConfirmModal from "@/components/fConfirmModal";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
-  storage: StorageHomePageModelState;
+  storageHomePage: StorageHomePageModelState;
 }
 
-function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
+let successUids: string[] = [];
 
-  // const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) {
 
   const {run} = ahooks.useDebounceFn(
     () => {
+      // console.log(successUids, 'successUids!Q@#$@#$@!#$@#$#$');
+      dispatch<ChangeAction>({
+        type: 'storageHomePage/change',
+        payload: {
+          uploadTaskQueue: storageHomePage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+            // console.log(utq.uid, uid, 'f.file.uid !== uid');
+            if (!successUids.includes(utq.uid)) {
+              return utq;
+            }
+            return {
+              ...utq,
+              state: 1,
+            };
+          }),
+        }
+      });
+      successUids = [];
       dispatch<FetchObjectsAction>({
         type: 'storageHomePage/fetchObjects',
         payload: 'insert',
@@ -65,7 +79,7 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
     });
   }
 
-  if (!storage.uploadPanelVisible) {
+  if (!storageHomePage.uploadPanelVisible) {
     return null;
   }
 
@@ -80,14 +94,14 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
             payload: {
-              uploadPanelOpen: !storage.uploadPanelOpen,
+              uploadPanelOpen: !storageHomePage.uploadPanelOpen,
             }
           });
         }}>
-          {storage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
+          {storageHomePage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> : <UpOutlined style={{fontSize: 12}}/>}
         </FTextButton>
         <FTextButton onClick={() => {
-          const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storage.uploadTaskQueue.find((i) => i.state !== 1);
+          const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
           if (exits) {
             fConfirmModal({
               message: i18nMessage('cancel_all_uploading_task'),
@@ -101,32 +115,21 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
         }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
       </Space>
     </div>
-    <div className={styles.successCount}>有{storage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功</div>
-    <div className={styles.body} style={{display: storage.uploadPanelOpen ? 'block' : 'none'}}>
+    <div className={styles.successCount}>有{storageHomePage.uploadTaskQueue.filter((utq) => utq.state === 1).length}个文件上传成功</div>
+    <div className={styles.body} style={{display: storageHomePage.uploadPanelOpen ? 'block' : 'none'}}>
       {
-        storage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
+        storageHomePage.uploadTaskQueue.map((f, index, uploadTaskQueue) => {
           // console.log(f, 'fffffFFFFFFF2390ueoifjasdf');
           return (<Task
             key={f.uid}
             file={f}
-            bucketName={storage.activatedBucket}
+            bucketName={storageHomePage.activatedBucket}
             onSucceed={async ({objectName, sha1, uid}) => {
-              console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
-              await dispatch<ChangeAction>({
-                type: 'storageHomePage/change',
-                payload: {
-                  uploadTaskQueue: uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
-                    // console.log(utq.uid, uid, 'f.file.uid !== uid');
-                    if (utq.uid !== uid) {
-                      return utq;
-                    }
-                    return {
-                      ...utq,
-                      state: 1,
-                    };
-                  }),
-                }
-              });
+              // console.log(objectName, '2309jasdf;lkfjasd;lfkjsadf');
+              successUids = [
+                ...successUids,
+                uid,
+              ];
               await dispatch<CreateObjectAction>({
                 type: 'storageHomePage/createObject',
                 payload: {
@@ -141,7 +144,7 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
               dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
-                  uploadTaskQueue: storage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
+                  uploadTaskQueue: storageHomePage.uploadTaskQueue.map<StorageHomePageModelState['uploadTaskQueue'][number]>((utq) => {
                     if (f.file.uid !== uid) {
                       return utq;
                     }
@@ -161,5 +164,5 @@ function FUploadTasksPanel({dispatch, storage}: FUploadTasksPanelProps) {
 }
 
 export default connect(({storageHomePage}: ConnectState) => ({
-  storage: storageHomePage,
+  storageHomePage: storageHomePage,
 }))(FUploadTasksPanel);
