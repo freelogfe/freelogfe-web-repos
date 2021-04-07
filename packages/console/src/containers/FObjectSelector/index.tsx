@@ -51,6 +51,7 @@ function FObjectSelector({
     });
     await dispatch<FetchObjectsAction>({
       type: 'storageObjectDepSelector/fetchObjects',
+      payload: true,
     });
   }
 
