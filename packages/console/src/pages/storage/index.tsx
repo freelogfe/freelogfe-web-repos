@@ -12,6 +12,7 @@ import {withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
 import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
 import Details from "@/pages/storage/Content/Details";
+import useUrlState from '@ahooksjs/use-url-state';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -21,18 +22,20 @@ interface StorageProps extends RouteComponentProps<{}> {
 
 function Storage({match, history, storageHomePage, storageObjectEditor, dispatch}: StorageProps) {
 
+  const [state] = useUrlState<{ bucketName: string; objectID: string }>();
+  // console.log(state, 'state12342343423');
   // console.log(history, 'match@#$RQSfjk908u09ujadsfasd');
   React.useEffect(() => {
     // console.log((history.location as any).query.bucketName, 'history.location.query.bucketName');
     // console.log()
-    if (!(history.location as any).query.bucketName) {
+    if (!state.bucketName) {
       return;
     }
     dispatch<OnChangeActivatedBucketAction>({
       type: 'storageHomePage/onChangeActivatedBucket',
       payload: (history.location as any).query.bucketName,
     });
-  }, [(history.location as any).query.bucketName]);
+  }, [state.bucketName]);
 
   React.useEffect(() => {
     handleObject();
@@ -45,13 +48,13 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
         }
       });
     };
-  }, [(history.location as any).query.objectID]);
+  }, [state.objectID]);
 
   async function handleObject() {
     await dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
       payload: {
-        objectId: (history.location as any).query.objectID || ''
+        objectId: state.objectID || ''
       },
     });
 

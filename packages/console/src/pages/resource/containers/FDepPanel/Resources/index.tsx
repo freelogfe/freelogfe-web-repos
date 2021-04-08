@@ -15,7 +15,6 @@ import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
-import {Space} from "antd";
 
 export interface ResourcesProps {
   dispatch: Dispatch;
