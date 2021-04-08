@@ -139,6 +139,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         </div>
 
         <div className={styles.versions}>
+
           {
             match.path === '/resource/:id/version/creator'
               ? (<FLink
@@ -153,6 +154,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                   resourceID: match.params.id,
                 })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
           }
+
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
               <FLink
