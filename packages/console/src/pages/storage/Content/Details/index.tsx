@@ -28,7 +28,6 @@ import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer"
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FDownload from "@/components/FIcons/FDownload";
 import {router} from "umi";
-// import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
 import FTooltip from "@/components/FTooltip";
@@ -43,6 +42,10 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
   const hasError: boolean = !!storageObjectEditor.typeError;
+
+  // React.useEffect(() => {
+  //
+  // }, []);
 
   function onChangeType(value: string) {
     if (value === storageObjectEditor.type) {

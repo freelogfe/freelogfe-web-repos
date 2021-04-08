@@ -748,6 +748,7 @@ const Model: ResourceVersionCreatorModelType = {
       // console.log(depObjects, '9023jlkdfsj');
       if (depObjects.length > 0) {
         const allDepObjects: ResourceVersionCreatorPageModelState['dependencies'] = depObjects.map((dpo: any) => {
+          // console.log(dpo, 'dpo!@#$@#$!$@#$!@#$');
           return {
             id: dpo.name,
             title: dpo.name,

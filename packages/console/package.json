@@ -8,6 +8,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@ahooksjs/use-url-state": "^2.5.6",
     "@ant-design/icons": "^4.2.1",
     "@antv/g6": "^4.0.3",
     "@freelog/nmr_translator": "^5.0.10",

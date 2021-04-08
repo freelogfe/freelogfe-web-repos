@@ -13,6 +13,7 @@ import {
 // import {i18nMessage} from '@/utils/i18n';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil from "@/utils";
+import {FApiServer} from "@/services";
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -82,9 +83,13 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                 <FTextButton onClick={(e) => {
                   e.stopPropagation();
                   if (rrr.status === 3) {
-                    return window.open('/storage')
+                    // return window.open('/storage')
+                    return goToObject(rrr.id);
+                    // return console.log(rrr, 'RRR@#$!@#$213412341234123');
                   }
-                  return window.open(`/resource/${rrr.id}`);
+                  return window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: rrr.id,
+                  }));
                 }}>
                   <div className={styles.title}>
                     <FContentText text={rrr.title}/>
@@ -185,8 +190,24 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
             onClick && onClick(i.id);
           }}
           className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}>
-
-          <FContentText text={i.title}/>
+          <FTextButton onClick={(e) => {
+            e.stopPropagation();
+            if (i.status === 3) {
+              return goToObject(i.id);
+              // return console.log(i, '##3333333333333234234234');
+              // return window.open(FUtil.LinkTo.objectDetails({
+              //   bucketName: string;
+              //   objectID: string;
+              // }));
+              // return window.open(FUtil.LinkTo.storageSpace())
+            }
+            // `/resource/${i.id}`
+            return window.open(FUtil.LinkTo.resourceDetails({
+              resourceID: i.id,
+            }));
+          }}>
+            <FContentText text={i.title}/>
+          </FTextButton>
           <div style={{height: 5}}/>
           <FContentText type="additional2">
             <div>{i.resourceType || '暂无类型'}</div>
@@ -219,3 +240,14 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(Resources);
+
+async function goToObject(id: string) {
+  const {data} = await FApiServer.Storage.objectDetails({
+    objectIdOrName: id,
+  });
+  // console.log(data, 'data!Q@#$@#$!@#$@#$@!#$!@#$');
+  window.open(FUtil.LinkTo.objectDetails({
+    objectID: data.objectId,
+    bucketName: data.bucketName,
+  }));
+}

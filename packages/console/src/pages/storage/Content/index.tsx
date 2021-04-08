@@ -191,8 +191,6 @@ function Content({storage, dispatch}: ContentProps) {
       </InfiniteScroll>)
     }
 
-    <Details/>
-
     <FUploadTasksPanel/>
   </div>);
 }

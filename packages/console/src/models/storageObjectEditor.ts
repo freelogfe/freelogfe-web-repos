@@ -180,6 +180,8 @@ const Model: StorageObjectEditorModelType = {
         storageObjectEditor,
       }));
 
+      // console.log(storageObjectEditor, 'storageObjectEditor0q923u4oj4l234');
+
       if (!storageObjectEditor.objectId) {
         return;
       }

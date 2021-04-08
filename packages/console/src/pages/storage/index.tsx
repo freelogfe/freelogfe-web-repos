@@ -6,18 +6,20 @@ import NoBucket from './NoBucket';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {ConnectState, StorageHomePageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {OnChangeActivatedBucketAction} from "@/models/storageHomePage";
 import {withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
 import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
+import Details from "@/pages/storage/Content/Details";
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
   storageHomePage: StorageHomePageModelState;
+  storageObjectEditor: StorageObjectEditorModelState;
 }
 
-function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
+function Storage({match, history, storageHomePage, storageObjectEditor, dispatch}: StorageProps) {
 
   // console.log(history, 'match@#$RQSfjk908u09ujadsfasd');
   React.useEffect(() => {
@@ -33,7 +35,7 @@ function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
   }, [(history.location as any).query.bucketName]);
 
   React.useEffect(() => {
-    initObjectDetails();
+    handleObject();
 
     return () => {
       dispatch<ChangeAction>({
@@ -45,15 +47,28 @@ function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
     };
   }, [(history.location as any).query.objectID]);
 
-  async function initObjectDetails() {
+  async function handleObject() {
     await dispatch<ChangeAction>({
       type: 'storageObjectEditor/change',
-      payload: {objectId: (history.location as any).query.objectID || ''},
+      payload: {
+        objectId: (history.location as any).query.objectID || ''
+      },
     });
+
     await dispatch<FetchInfoAction>({
       type: 'storageObjectEditor/fetchInfo',
     });
   }
+
+  // async function initObjectDetails() {
+  //   // await dispatch<ChangeAction>({
+  //   //   type: 'storageObjectEditor/change',
+  //   //   payload: {objectId: (history.location as any).query.objectID || ''},
+  //   // });
+  //   await dispatch<FetchInfoAction>({
+  //     type: 'storageObjectEditor/fetchInfo',
+  //   });
+  // }
 
   if (!storageHomePage.bucketList) {
     return null;
@@ -63,19 +78,25 @@ function Storage({match, history, storageHomePage, dispatch}: StorageProps) {
     return (<NoBucket/>);
   }
 
-  return (<FLeftSiderLayout
-    // contentClassName={storageHomePage.objectList.length === 0 ? styles.backgroundTransparent : ''}
-    header={<Header/>}
-    sider={<Sider/>}
-    type="table"
-    contentStyles={{
-      backgroundColor: storageHomePage.objectList.length === 0 ? 'transparent' : undefined,
-      boxShadow: storageHomePage.objectList.length === 0 ? 'none' : undefined,
-    }}
-    hasBottom={storageHomePage.objectList.length !== 0}
-  ><Content/></FLeftSiderLayout>);
+  return (<>
+    <FLeftSiderLayout
+      // contentClassName={storageHomePage.objectList.length === 0 ? styles.backgroundTransparent : ''}
+      header={<Header/>}
+      sider={<Sider/>}
+      type="table"
+      contentStyles={{
+        backgroundColor: storageHomePage.objectList.length === 0 ? 'transparent' : undefined,
+        boxShadow: storageHomePage.objectList.length === 0 ? 'none' : undefined,
+      }}
+      hasBottom={storageHomePage.objectList.length !== 0}
+    >
+      <Content/>
+    </FLeftSiderLayout>
+    <Details/>
+  </>);
 }
 
-export default withRouter(connect(({storageHomePage}: ConnectState) => ({
+export default withRouter(connect(({storageHomePage, storageObjectEditor}: ConnectState) => ({
   storageHomePage,
+  storageObjectEditor,
 }))(Storage));
