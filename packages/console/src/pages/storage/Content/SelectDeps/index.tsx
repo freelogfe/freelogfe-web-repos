@@ -8,7 +8,6 @@ import FObjectSelector from '@/containers/FObjectSelector';
 import {
   AddObjectDepOAction, AddObjectDepRAction, DeleteObjectDepOAction, DeleteObjectDepRAction,
 } from '@/models/storageObjectEditor';
-import {ChangeAction, storageObjectDepSelectorInitData} from "@/models/storageObjectDepSelector";
 
 interface SelectDepsProps {
   dispatch: Dispatch;

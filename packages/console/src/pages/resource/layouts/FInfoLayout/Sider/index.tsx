@@ -4,15 +4,14 @@ import FResourceCover from '@/components/FResourceCover';
 import {Space, Popconfirm} from 'antd';
 import {FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
+import {ConnectState, ResourceInfoModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
-// import {i18nMessage} from "@/utils/i18n";
 import {FPlus} from '@/components/FIcons';
-// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
+import * as AHooks from 'ahooks';
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -28,6 +27,9 @@ interface SilderProps {
 
 function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps) {
 
+  AHooks.useMount(() => {
+
+  });
   // React.useEffect(() => {
   //   if (match.params.id === resourceInfo.info?.resourceId) {
   //     return;
@@ -57,7 +59,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       type: 'resourceInfo/change',
       payload: {
         resourceID: match.params.id,
-      }
+      },
     });
     // dispatch<FetchDraftDataAction>({
     //   type: 'resourceInfo/fetchDraftData',

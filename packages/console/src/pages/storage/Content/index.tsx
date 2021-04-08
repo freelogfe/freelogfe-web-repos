@@ -2,11 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
-import {Space, Popconfirm, Modal} from 'antd';
+import {Space} from 'antd';
 import FTable from '@/components/FTable';
 import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, NodeManagerModelState, StorageHomePageModelState} from '@/models/connect';
+import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
   DeleteObjectAction,
   UploadFilesAction,

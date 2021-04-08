@@ -10,7 +10,6 @@ import {FCircleButton, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState} from '@/models/connect';
 import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
-// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
