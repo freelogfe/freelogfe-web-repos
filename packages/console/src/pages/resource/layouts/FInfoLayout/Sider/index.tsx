@@ -145,7 +145,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}
-                className={[styles.activatedVersion, styles.version].join(' ')}>正在创建版本</FLink>)
+                className={[styles.activatedVersion, styles.version].join(' ')}>未命名版本</FLink>)
               : (resourceInfo.draftData
               && (<FLink
                 className={[styles.version].join(' ')}

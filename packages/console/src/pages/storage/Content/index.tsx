@@ -4,13 +4,13 @@ import {FContentText} from '@/components/FText';
 import {FNormalButton, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import FTable from '@/components/FTable';
-import Details from '@/pages/storage/Content/Details';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
   DeleteObjectAction,
   UploadFilesAction,
-  ChangeAction as HomePageChangeAction, FetchObjectsAction, DeleteBucketByNameAction
+  ChangeAction as HomePageChangeAction,
+  FetchObjectsAction,
 } from '@/models/storageHomePage';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {FDelete, FEdit, FWarning} from "@/components/FIcons";

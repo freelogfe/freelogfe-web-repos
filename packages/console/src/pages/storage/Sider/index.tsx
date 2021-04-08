@@ -15,9 +15,6 @@ import {
 import {humanizeSize} from '@/utils/format';
 import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
-// import {i18nMessage} from "@/utils/i18n";
-// import {Link} from 'umi';
-// import FLinkTo from "@/utils/path-assembler";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
