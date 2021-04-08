@@ -14,6 +14,8 @@ import {
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import {Space} from "antd";
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -78,24 +80,33 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
               onClick={() => {
                 onChangeActiveID(rrr.id);
               }}
-              className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}>
+              className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}
+            >
               <div>
-                <FTextButton onClick={(e) => {
-                  e.stopPropagation();
-                  if (rrr.status === 3) {
-                    // return window.open('/storage')
-                    return goToObject(rrr.id);
-                    // return console.log(rrr, 'RRR@#$!@#$213412341234123');
-                  }
-                  return window.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: rrr.id,
-                  }));
-                }}>
-                  <div className={styles.title}>
-                    <FContentText text={rrr.title}/>
-                    {rrr.status !== 1 && <CloseCircleFilled className={styles.titleErrorIcon}/>}
-                  </div>
-                </FTextButton>
+                <div className={styles.title}>
+                  <FTextButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (rrr.status === 3) {
+                        // return window.open('/storage')
+                        return goToObject(rrr.id);
+                        // return console.log(rrr, 'RRR@#$!@#$213412341234123');
+                      }
+                      return window.open(FUtil.LinkTo.resourceDetails({
+                        resourceID: rrr.id,
+                      }));
+                    }}
+                  >
+                    <FContentText
+                      className={styles.titleText}
+                      text={rrr.title}
+                      singleRow
+                    />
+                  </FTextButton>
+                  <div style={{width: 5}}/>
+                  {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
+                  {rrr.status !== 1 && rrr.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
+                </div>
                 <div style={{height: 9}}/>
                 <FContentText type="additional2">
                   <div>
@@ -182,56 +193,63 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
       />
     </div>
     {
-      dataSource.map((i) => (
-        <div
-          key={i.id}
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick && onClick(i.id);
-          }}
-          className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}>
-          <FTextButton onClick={(e) => {
-            e.stopPropagation();
-            if (i.status === 3) {
-              return goToObject(i.id);
-              // return console.log(i, '##3333333333333234234234');
-              // return window.open(FUtil.LinkTo.objectDetails({
-              //   bucketName: string;
-              //   objectID: string;
-              // }));
-              // return window.open(FUtil.LinkTo.storageSpace())
-            }
-            // `/resource/${i.id}`
-            return window.open(FUtil.LinkTo.resourceDetails({
-              resourceID: i.id,
-            }));
-          }}>
-            <FContentText text={i.title}/>
-          </FTextButton>
-          <div style={{height: 5}}/>
-          <FContentText type="additional2">
-            <div>{i.resourceType || '暂无类型'}</div>
-          </FContentText>
-          <>
-            <div style={{height: 5}}/>
-            <div className={styles.DepPanelLabels}>
-              {
-                !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
-                  .filter((k) => k.checked)
-                  .map((j) => (<label
-                    key={j.id}
-                    className={styles.labelInfo}
-                  >{j.title}</label>))
-              }
-              {/*{FUtil.I18n.message('info_upcast')}*/}
-              {
-                i.upthrow && (<label
-                  className={styles.labelError}
-                >上抛</label>)
-              }
+      dataSource.map((i) => {
+        return (
+          <div
+            key={i.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick && onClick(i.id);
+            }}
+            className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
+          >
+            <div className={styles.title}>
+              <FTextButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (i.status === 3) {
+                    return goToObject(i.id);
+                  }
+                  return window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: i.id,
+                  }));
+                }}
+              >
+                <FContentText
+                  className={styles.titleText}
+                  text={i.title}
+                  singleRow
+                />
+              </FTextButton>
+              <div style={{width: 5}}/>
+              {i.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
+              {i.status !== 1 && i.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
             </div>
-          </>
-        </div>))
+            <div style={{height: 5}}/>
+            <FContentText type="additional2">
+              <div>{i.resourceType || '暂无类型'}</div>
+            </FContentText>
+            <>
+              <div style={{height: 5}}/>
+              <div className={styles.DepPanelLabels}>
+                {
+                  !i.upthrow && [...i.enableReuseContracts, ...i.enabledPolicies]
+                    .filter((k) => k.checked)
+                    .map((j) => (<label
+                      key={j.id}
+                      className={styles.labelInfo}
+                    >{j.title}</label>))
+                }
+                {/*{FUtil.I18n.message('info_upcast')}*/}
+                {
+                  i.upthrow && (<label
+                    className={styles.labelError}
+                  >上抛</label>)
+                }
+              </div>
+            </>
+          </div>);
+      })
     }
 
   </div>);

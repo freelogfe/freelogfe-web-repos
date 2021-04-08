@@ -15,17 +15,12 @@
     padding-right: 20px;
     overflow: hidden;
   }
+
 }
 
-.title {
-  display: flex;
-  align-items: center;
-  //color: #222;
-}
-
-.titleErrorIcon {
-  color: @f-error-color1;
-  margin-left: 10px;
+.childrenDepPanelNav {
+  padding: 10px 30px 10px 50px;
+  cursor: pointer;
 }
 
 .DepPanelNavActive {
@@ -33,10 +28,25 @@
   border-right-color: white;
 }
 
+.title {
+  display: flex;
+  align-items: center;
+
+  .titleText {
+    max-width: 210px;
+  }
+
+  .titleErrorIcon {
+    color: @f-error-color1;
+    //margin-left: 10px;
+  }
+}
+
 .DepPanelLabels {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: -5px;
+
 
   & > label {
     line-height: 23px;
@@ -45,26 +55,17 @@
     border-radius: 2px;
     margin-right: 5px;
     margin-bottom: 5px;
+
+    &.labelInfo {
+      color: #2784FF;
+      background-color: #E9F2FF;
+      border: 1px solid #AED0FF;
+    }
+
+    &.labelError {
+      color: #EE4040;
+      background-color: #FDEBEC;
+      border: 1px solid #F2C9CC;
+    }
   }
-}
-
-.labelInfo {
-  color: #2784FF;
-  background-color: #E9F2FF;
-  border: 1px solid #AED0FF;
-}
-
-.labelError {
-  color: #EE4040;
-  background-color: #FDEBEC;
-  border: 1px solid #F2C9CC;
-}
-
-.children {
-  //padding: 0 30px 0 20px;
-}
-
-.childrenDepPanelNav {
-  padding: 10px 30px 10px 50px;
-  cursor: pointer;
 }
