@@ -81,10 +81,6 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
               <div>{c.createTime}</div>
             </Space>
           </div>
-          {/*<div style={{margin: '0 15px', borderTop: '1px solid #E5E7EB'}}/>*/}
-          {/*<div>*/}
-
-          {/*</div>*/}
         </div>);
       })
     }

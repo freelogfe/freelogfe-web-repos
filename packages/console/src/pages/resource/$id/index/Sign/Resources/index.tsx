@@ -4,6 +4,7 @@ import {FContentText, FTitleText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
+import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 // import FLink from "@/components/FLink";
 // import FLinkTo from "@/utils/path-assembler";
 
@@ -53,11 +54,23 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
           className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
           onClick={() => onChangeSelected(r.id)}
         >
-          <FTitleText
-            type="h5"
-            text={r.name}
-            singleRow
-          />
+          <div className={styles.title}>
+            <FTitleText
+              type="h5"
+              text={r.name}
+              singleRow
+              className={styles.titleText}
+              style={{maxWidth: r.status === 0 ? 170 : '100%'}}
+            />
+
+            {
+              r.status === 0 && (<>
+                <FResourceStatusBadge status={'offline'}/>
+                <div style={{width: 5}}/>
+              </>)
+            }
+
+          </div>
           <div style={{height: 5}}/>
           <FContentText
             type="additional2"
@@ -89,18 +102,22 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
             key={r.id}
             onClick={() => onChangeSelected(r.id)}
           >
-            {/*<FLink*/}
-            {/*  to={FLinkTo.resourceDetails({resourceID: r.id})}*/}
-            {/*  onClick={(e) => {*/}
-            {/*    e.stopPropagation();*/}
-            {/*  }}*/}
-            {/*>*/}
+            <div className={styles.title}>
               <FTitleText
                 type="h5"
                 text={r.name}
                 singleRow
+                className={styles.titleText}
+                style={{maxWidth: r.status === 0 ? 170 : '100%'}}
               />
-            {/*</FLink>*/}
+              {
+                r.status === 0 && (<>
+                  <FResourceStatusBadge status={'offline'}/>
+                  <div style={{width: 5}}/>
+                </>)
+              }
+
+            </div>
             <div style={{height: 5}}/>
             <FContentText
               type="additional2"

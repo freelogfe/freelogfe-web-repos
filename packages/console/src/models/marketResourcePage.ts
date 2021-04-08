@@ -290,7 +290,7 @@ const Model: MarketResourcePageModelType = {
       const {data} = yield call(FApiServer.Resource.info, params);
       // console.log(data, ' data2309');
 
-      let rawSignResources = [data];
+      let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
 
       // 获取上抛资源信息
       if (data.baseUpcastResources.length > 0) {
@@ -343,13 +343,15 @@ const Model: MarketResourcePageModelType = {
                 type: rs.resourceType,
                 status: rs.status,
                 contracts: [],
-                policies: rs.policies.map((rsp: any) => ({
-                  checked: false,
-                  id: rsp.policyId,
-                  name: rsp.policyName,
-                  text: rsp.policyText,
-                  status: rsp.status,
-                })),
+                policies: rs.policies
+                  .filter((srp) => srp.status === 1)
+                  .map((rsp) => ({
+                    checked: false,
+                    id: rsp.policyId,
+                    name: rsp.policyName,
+                    text: rsp.policyText,
+                    status: rsp.status,
+                  })),
               };
             }),
         },
@@ -459,7 +461,7 @@ const Model: MarketResourcePageModelType = {
 
               const allContractUsedPolicyIDs: string[] = contracts.map<string>((cp) => cp.policyID);
               const policies: MarketResourcePageModelState['signResources'][number]['policies'] = value.policies
-                .filter((rsp) => !allContractUsedPolicyIDs.includes(rsp.policyId))
+                .filter((rsp) => rsp.status === 1 && !allContractUsedPolicyIDs.includes(rsp.policyId))
                 .map((rsp) => ({
                   checked: false,
                   id: rsp.policyId,

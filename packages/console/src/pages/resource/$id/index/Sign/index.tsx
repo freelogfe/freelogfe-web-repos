@@ -21,6 +21,10 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
 
   const resourceInfoLength: number = marketResourcePage.resourceInfo?.about.length || 0;
 
+  const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
+  const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
+
+
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
@@ -68,6 +72,10 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
               marketResourcePage.selectedNodeID === -1
                 ? (<div className={styles.noNode}>
                   请先选择签约的节点…
+                </div>)
+                : policies?.length === 0 && contracts?.length === 0
+                ? (<div className={styles.noNode}>
+                  无策略可用…
                 </div>)
                 : (<>
                   <div style={{height: 15}}/>
