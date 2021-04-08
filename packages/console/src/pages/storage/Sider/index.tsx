@@ -22,14 +22,14 @@ import FUtil from "@/utils";
 
 interface SiderProps {
   dispatch: Dispatch;
-  storage: StorageHomePageModelState;
+  storageHomePage: StorageHomePageModelState;
 }
 
-function Sider({storage, dispatch}: SiderProps) {
+function Sider({storageHomePage, dispatch}: SiderProps) {
 
   const siderRef = React.useRef<any>(null);
-  const customBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 1);
-  const systemBuckets = (storage.bucketList || []).filter((b) => b.bucketType === 2);
+  const customBuckets = (storageHomePage.bucketList || []).filter((b) => b.bucketType === 1);
+  const systemBuckets = (storageHomePage.bucketList || []).filter((b) => b.bucketType === 2);
 
   return (<>
     <div
@@ -45,31 +45,28 @@ function Sider({storage, dispatch}: SiderProps) {
               type="form"
             />
             <FTitleText
-              text={`${(storage.bucketList || []).length}/5`}
+              text={`${(storageHomePage.bucketList || []).length}/5`}
               type="form"
             />
           </Space>
-          {
-            (storage.bucketList || []).length < 5
-              ? (<FCircleButton
-                theme="text"
-                onClick={() => dispatch<ChangeAction>({
+
+          <FCircleButton
+            theme="text"
+            onClick={() => {
+              if ((storageHomePage.bucketList || []).length < 5) {
+                dispatch<ChangeAction>({
                   type: 'storageHomePage/change',
                   payload: {
                     newBucketName: '',
                     newBucketNameError: false,
                     newBucketModalVisible: true,
                   },
-                })}
-              />)
-              : (<FTooltip title={FUtil.I18n.message('msg_bucket_quantity_exceed ')}>
-                <div><FCircleButton
-                  theme="text"
-                  size="small"
-                  // disabled
-                /></div>
-              </FTooltip>)
-          }
+                });
+              } else {
+                fMessage(FUtil.I18n.message('msg_bucket_quantity_exceed '), 'warning');
+              }
+            }}
+          />
         </div>
         <div style={{height: 30}}/>
         {
@@ -79,7 +76,7 @@ function Sider({storage, dispatch}: SiderProps) {
                 .map((b) => {
                   return (<FLink
                     key={b.bucketName}
-                    className={storage.activatedBucket === b.bucketName
+                    className={storageHomePage.activatedBucket === b.bucketName
                       ? styles.activated
                       : ''}
                     to={FUtil.LinkTo.storageSpace({
@@ -128,11 +125,11 @@ function Sider({storage, dispatch}: SiderProps) {
       <div className={styles.statistics}>
         <Progress
           strokeWidth={6}
-          percent={storage.usedStorage / storage.totalStorage}
+          percent={storageHomePage.usedStorage / storageHomePage.totalStorage}
           showInfo={false}
           className={styles.progressBack}
         />
-        <div className={styles.ratio}>{humanizeSize(storage.usedStorage)} / {humanizeSize(storage.totalStorage)}</div>
+        <div className={styles.ratio}>{humanizeSize(storageHomePage.usedStorage)} / {humanizeSize(storageHomePage.totalStorage)}</div>
 
         {systemBuckets.length > 0 && (<>
           <div style={{height: 60}}/>
@@ -158,7 +155,7 @@ function Sider({storage, dispatch}: SiderProps) {
 
     <FModal
       title="创建Bucket"
-      visible={storage.newBucketModalVisible}
+      visible={storageHomePage.newBucketModalVisible}
       width={640}
       onOk={() => {
         dispatch<CreateBucketAction>({
@@ -181,7 +178,7 @@ function Sider({storage, dispatch}: SiderProps) {
         </ul>
         <div style={{height: 10}}/>
         <FInput
-          value={storage.newBucketName}
+          value={storageHomePage.newBucketName}
           onChange={(e) => {
             dispatch<ChangeAction>({
               type: 'storageHomePage/change',
@@ -193,7 +190,7 @@ function Sider({storage, dispatch}: SiderProps) {
           }}
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
-          errorText={storage.newBucketNameError ? (<div>
+          errorText={storageHomePage.newBucketNameError ? (<div>
             <div>只能包括小写字母、数字和短横线（-）；</div>
             <div>必须以小写字母或者数字开头和结尾 ；</div>
             <div>长度必须在 1–63 字符之间。</div>
@@ -207,5 +204,5 @@ function Sider({storage, dispatch}: SiderProps) {
 }
 
 export default connect(({storageHomePage}: ConnectState) => ({
-  storage: storageHomePage,
+  storageHomePage: storageHomePage,
 }))(Sider);
