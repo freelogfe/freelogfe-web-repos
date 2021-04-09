@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText, FTipText} from '@/components/FText';
 import FInput from '@/components/FInput';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FNormalButton, FRectBtn, FTextButton} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
@@ -20,7 +20,7 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {router, RouterTypes} from 'umi';
 import {resourceTypes} from '@/utils/globals';
-import {FCheck, FLoading} from '@/components/FIcons';
+import {FCheck, FInfo, FLoading} from '@/components/FIcons';
 import FFormLayout from "@/layouts/FFormLayout";
 import * as H from "history";
 import Prompt from "umi/prompt";
@@ -202,11 +202,15 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
 
     <Space size={30}>
       {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}
-      <FNormalButton
-        onClick={onClickCreate}
-        style={{width: 108}}
-        disabled={disabled}
-      >{FUtil.I18n.message('create')}</FNormalButton>
+      {/*<FNormalButton*/}
+      {/*  onClick={onClickCreate}*/}
+      {/*  style={{width: 108}}*/}
+      {/*  disabled={disabled}*/}
+      {/*>{FUtil.I18n.message('create')}</FNormalButton>*/}
+      <FRectBtn disabled>
+        {FUtil.I18n.message('create')}
+      </FRectBtn>
+
     </Space>
   </div>);
 }
