@@ -18,7 +18,6 @@ import {
 } from '@/models/resourceCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
-// import {i18nMessage} from '@/utils/i18n';
 import {router, RouterTypes} from 'umi';
 import {resourceTypes} from '@/utils/globals';
 import {FCheck, FLoading} from '@/components/FIcons';
@@ -33,8 +32,6 @@ interface ResourceCreatorProps {
   resourceCreatorPage: ResourceCreatorPageModelState;
   user: UserModelState;
 }
-
-// const resourceTypes = ['json', 'widget', 'image', 'audio', 'markdown', 'page_build', 'reveal_slide', 'license', 'video', 'catalog'].map((i: string) => ({value: i}));
 
 function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceCreatorProps & RouterTypes) {
 
