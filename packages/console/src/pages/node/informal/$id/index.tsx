@@ -3,7 +3,6 @@ import styles from './index.less';
 import {router, withRouter} from "umi";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
-// import {nodeManagement} from "@/utils/path-assembler";
 import {connect, Dispatch} from "dva";
 import {
   InformalNodeManagerPageModelState,

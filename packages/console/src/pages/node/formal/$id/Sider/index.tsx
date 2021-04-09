@@ -9,6 +9,7 @@ import {withRouter} from "umi";
 // import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
+import {Space} from "antd";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -33,17 +34,26 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
         <div className={styles.title}>
           <FTitleText type="h3" text={nodeManagerPage.nodeName}/>
           <div style={{height: 15}}/>
-          <a
-            className={styles.url}
-            // href={nodeManagerPage.nodeUrl}
-            onClick={() => {
+          <Space size={5} className={styles.url}>
+            <a onClick={() => {
               window.open(nodeManagerPage.nodeUrl);
-            }}
-          >{nodeManagerPage.nodeUrl}</a>
-          <FCopyToClipboard
-            text={nodeManagerPage.nodeUrl}
-            title={'复制节点地址'}
-          />
+            }}>{nodeManagerPage.nodeUrl}</a>
+            <FCopyToClipboard
+              text={nodeManagerPage.nodeUrl}
+              title={'复制节点地址'}
+            />
+          </Space>
+          {/*<a*/}
+          {/*  className={styles.url}*/}
+          {/*  // href={nodeManagerPage.nodeUrl}*/}
+          {/*  onClick={() => {*/}
+          {/*    window.open(nodeManagerPage.nodeUrl);*/}
+          {/*  }}*/}
+          {/*>{nodeManagerPage.nodeUrl}</a>*/}
+          {/*<FCopyToClipboard*/}
+          {/*  text={nodeManagerPage.nodeUrl}*/}
+          {/*  title={'复制节点地址'}*/}
+          {/*/>*/}
         </div>
 
         <div style={{height: 35}}/>

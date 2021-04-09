@@ -4,7 +4,6 @@ import {FNormalButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
-// import FLinkTo, {exhibitManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";

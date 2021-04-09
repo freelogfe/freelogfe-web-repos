@@ -13,14 +13,26 @@
   .header {
 
     .title {
+      //.url {
+      //  font-size: 14px;
+      //  display: inline-block;
+      //  padding-right: 10px;
+      //  color: #222;
+      //
+      //  &:hover {
+      //    color: @f-primary-color;
+      //  }
+      //}
       .url {
-        font-size: 14px;
-        display: inline-block;
-        padding-right: 10px;
-        color: #222;
+        //padding: 0 40px;
 
-        &:hover {
-          color: @f-primary-color;
+        a {
+          text-decoration: underline;
+          display: block;
+          max-width: 200px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
 
