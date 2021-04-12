@@ -11,6 +11,7 @@ import {getSHA1Hash} from "@/utils/tools";
 import FDrawer from "@/components/FDrawer";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import {FRectBtn} from '@/components/FButton';
 
 const errorTexts = {
   duplicated: FUtil.I18n.message('resource_exist'),
@@ -39,8 +40,6 @@ export interface FSelectObject {
   errorText?: string;
 
   onClickDuplicatedLook?: () => void;
-
-  // onChangeErrorText?(text: string): void;
 }
 
 let uploadCancelHandler: any = null;
@@ -140,7 +139,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
       resourceType: resourceType,
     }, {
       onUploadProgress(progressEvent: any) {
-        console.log(progressEvent, 'PPPPPPPPPEEEEEEEEE');
+        // console.log(progressEvent, 'PPPPPPPPPEEEEEEEEE');
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
       },
     }, true);
@@ -182,14 +181,14 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
                 beforeUpload={beforeUpload}
                 showUploadList={false}
               >
-                <FNormalButton
-                  theme="grey"
-                >{FUtil.I18n.message('upload_from_local')}</FNormalButton>
+                <FRectBtn
+                  type="default"
+                >{FUtil.I18n.message('upload_from_local')}</FRectBtn>
               </FUpload>
-              <FNormalButton
-                theme="grey"
+              <FRectBtn
+                type="default"
                 onClick={() => setModalVisible(true)}
-              >{FUtil.I18n.message('choose_from_storage')}</FNormalButton>
+              >{FUtil.I18n.message('choose_from_storage')}</FRectBtn>
             </Space>}
 
           {errorText &&

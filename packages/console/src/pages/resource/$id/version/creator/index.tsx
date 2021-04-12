@@ -3,7 +3,7 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FNormalButton, FRectBtn, FTextButton} from '@/components/FButton';
 import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -525,11 +525,11 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
 
     <Space size={30}>
       <FTextButton onClick={onClickCache}>{FUtil.I18n.message('save_as_draft')}</FTextButton>
-      <FNormalButton
+      <FRectBtn
         style={{width: 108}}
         onClick={onClickCreate}
         disabled={disabledCreate}
-      >{FUtil.I18n.message('release_to_market')}</FNormalButton>
+      >{FUtil.I18n.message('release_to_market')}</FRectBtn>
     </Space>
   </div>);
 }

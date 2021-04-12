@@ -5,15 +5,15 @@ import {CSSProperties} from "react";
 interface FRectBtnProps {
   children: React.ReactNode;
   size?: 'large' | 'middle' | 'small';
-  theme?: 'primary' | 'transparent';
+  type?: 'primary' | 'transparent' | 'default';
   className?: string;
   style?: CSSProperties;
   disabled?: boolean;
   onClick?: (event: MouseEvent) => void;
 }
 
-function FRectBtn({children, size = 'middle', className, style = {}, theme = 'primary', disabled, onClick}: FRectBtnProps) {
-  if (theme === 'primary') {
+function FRectBtn({children, size = 'middle', className, style = {}, type = 'primary', disabled, onClick}: FRectBtnProps) {
+  if (type === 'primary') {
     return (<button
       className={[styles.Primary, className].join(' ')}
       style={{
@@ -27,9 +27,23 @@ function FRectBtn({children, size = 'middle', className, style = {}, theme = 'pr
     >{children}</button>);
   }
 
-  if (theme === 'transparent') {
+  if (type === 'transparent') {
     return (<button
       className={[styles.Transparent, className].join(' ')}
+      style={{
+        height: size === 'middle' ? 38 : size === 'large' ? 50 : 32,
+        ...style,
+      }}
+      disabled={disabled}
+      onClick={(event: any) => {
+        onClick && onClick(event);
+      }}
+    >{children}</button>);
+  }
+
+  if (type === 'default') {
+    return (<button
+      className={[styles.Default, className].join(' ')}
       style={{
         height: size === 'middle' ? 38 : size === 'large' ? 50 : 32,
         ...style,

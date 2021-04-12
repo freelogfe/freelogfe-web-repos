@@ -18,13 +18,13 @@ import {
   FetchAuthorizedAction, FetchResourceInfoAction,
 } from '@/models/resourceAuthPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
-import {router, RouterTypes, withRouter} from 'umi';
-// import {i18nMessage} from '@/utils/i18n';
+import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FInfo} from "@/components/FIcons";
+import {FAdd, FInfo} from "@/components/FIcons";
 import FUtil from "@/utils";
+import {FCircleBtn, FNormalButton, FRectBtn} from "@/components/FButton";
 
 const columns: any[] = [
   {
@@ -109,7 +109,33 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       type="h1"
     />}>
     <FFormLayout>
-      <FFormLayout.FBlock title={FUtil.I18n.message('authorization_plan')}>
+      <FFormLayout.FBlock
+        title={FUtil.I18n.message('authorization_plan')}
+        // extra={<FNormalButton
+        //   onClick={() => {
+        //     dispatch<ChangeAction>({
+        //       type: 'resourceAuthPage/change',
+        //       payload: {
+        //         policyEditorVisible: true,
+        //       }
+        //     });
+        //   }}
+        //   theme="weaken"
+        //   shape="circle"
+        //   icon={<FAdd/>}
+        // />}
+        extra={resourceAuthPage.policies?.length !== 0 && (<FCircleBtn
+          size="small"
+          onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'resourceAuthPage/change',
+              payload: {
+                policyEditorVisible: true,
+              }
+            });
+          }}
+        />)}
+      >
         <FPolicies/>
       </FFormLayout.FBlock>
       {
@@ -118,23 +144,26 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
 
             {
               resourceAuthPage.baseUpcastResources.length > 0 && (<div className={styles.depUpthrow}>
-                  <div className={styles.tip}>
-                    <FTitleText
-                      text={FUtil.I18n.message('basic_upcast')}
-                      type="form"
-                    />
-                    <div style={{width: 5}}/>
-                    <FInfo style={{color: '#C7C7C7'}}/>
-                  </div>
-                  <div className={styles.depUpthrowLabel}>
-                    {
-                      resourceAuthPage.baseUpcastResources.map((j) => <label key={j.resourceId}>{j.resourceName}</label>)
-                    }
-                  </div>
-                </div>)
+                <div className={styles.tip}>
+                  <FTitleText
+                    text={FUtil.I18n.message('basic_upcast')}
+                    type="form"
+                  />
+                  <div style={{width: 5}}/>
+                  <FInfo style={{color: '#C7C7C7'}}/>
+                </div>
+                <div className={styles.depUpthrowLabel}>
+                  {
+                    resourceAuthPage.baseUpcastResources.map((j) => <label key={j.resourceId}>{j.resourceName}</label>)
+                  }
+                </div>
+              </div>)
             }
 
-            {resourceAuthPage.baseUpcastResources.length > 0 && resourceAuthPage.contractsAuthorized.length > 0 && (<div style={{height: 20}}/>)}
+            {
+              resourceAuthPage.baseUpcastResources.length > 0 && resourceAuthPage.contractsAuthorized.length > 0 && (
+                <div style={{height: 20}}/>)
+            }
 
             {
               resourceAuthPage.contractsAuthorized.length > 0 && (<FAuthPanel

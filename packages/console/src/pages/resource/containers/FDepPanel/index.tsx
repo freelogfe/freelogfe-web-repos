@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FNormalButton, FRectBtn} from '@/components/FButton';
 import {Space, Drawer} from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
@@ -33,14 +33,14 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
       {/*  onClick={() => setModalVisible(true)}*/}
       {/*  theme="grey"*/}
       {/*>{FUtil.I18n.message('add_rely_resource')}</FNormalButton>*/}
-      <FNormalButton
+      <FRectBtn
         onClick={() => setModalVisible(true)}
-        theme="grey"
-      >添加依赖</FNormalButton>
+        type="default"
+      >添加依赖</FRectBtn>
       {
         creator.preVersionDeps.relationships.length > 0 &&
-        <FNormalButton
-          theme="grey"
+        <FRectBtn
+          type="default"
           onClick={() => {
             dispatch<ImportLastVersionDataAction>({
               type: 'resourceVersionCreatorPage/importLastVersionData',
@@ -53,7 +53,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
               },
             });
           }}
-        >{FUtil.I18n.message('import_from_previous_version')}</FNormalButton>
+        >{FUtil.I18n.message('import_from_previous_version')}</FRectBtn>
       }
 
     </Space>

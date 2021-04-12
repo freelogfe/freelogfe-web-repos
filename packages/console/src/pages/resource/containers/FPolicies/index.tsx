@@ -5,13 +5,13 @@ import FModal from '@/components/FModal';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {PlusOutlined} from '@ant-design/icons';
 import styles from './index.less';
-// import {i18nMessage} from '@/utils/i18n';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState, ResourceInfoModelState} from '@/models/connect';
 import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
 import PolicyCard from './PolicyCard';
 import FPolicyBuilderDrawer from "@/components/FPolicyBuilderDrawer";
 import FUtil from "@/utils";
+import {FRectBtn} from '@/components/FButton';
 
 interface Policy {
   id: string;
@@ -67,7 +67,8 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
             text={FUtil.I18n.message('hint_add_authorization_plan')}
           />
           <div style={{height: 20}}/>
-          <FNormalButton onClick={openNewVisible}>{FUtil.I18n.message('add_authorization_plan')}</FNormalButton>
+          <FRectBtn
+            onClick={openNewVisible}>{'添加授权策略'}</FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {
@@ -86,14 +87,9 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
               onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
             />))
           }
-          <div>
-            <FNormalButton
-              onClick={openNewVisible}
-              theme="weaken"
-              shape="circle"
-              icon={<PlusOutlined/>}
-            />
-          </div>
+          {/*<div>*/}
+          {/*  */}
+          {/*</div>*/}
         </div>)
     }
 

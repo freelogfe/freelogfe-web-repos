@@ -1,14 +1,14 @@
 @import '../../../config.less';
 
 .Primary {
-
   border: none;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  //padding: 0 20px;
   justify-content: center;
-  height: 38px;
-  border-radius: 4px;
+  //height: 32px;
+  //width: 32px;
+  border-radius: 50%;
   font-weight: 600;
   color: #FFFFFF;
   font-size: 14px;
@@ -37,9 +37,9 @@
   border: none;
   display: flex;
   align-items: center;
-  padding: 0 20px;
   justify-content: center;
-  height: 38px;
+  height: 26px;
+  width: 26px;
   border-radius: 4px;
   font-weight: 600;
   color: #666;
@@ -60,41 +60,6 @@
     &, &:hover, &:active, &:focus {
       opacity: 0.4;
       background-color: transparent;
-      cursor: not-allowed;
-    }
-  }
-}
-
-.Default {
-  border: 1px solid #D4D4D4;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  justify-content: center;
-  height: 38px;
-  border-radius: 4px;
-  font-weight: 600;
-  color: #222;
-  font-size: 14px;
-  background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F4F6 100%);
-  cursor: pointer;
-  outline: none;
-
-  &:hover {
-    background-image: linear-gradient(180deg, #529DFF 0%, #529DFF 100%);
-    color: white;
-  }
-
-  &:active {
-    background-image: linear-gradient(180deg, #2376E5 0%, #2376E5 100%);
-    color: white;
-  }
-
-  &[disabled] {
-    &, &:hover, &:active, &:focus {
-      opacity: 0.4;
-      color: #222;
-      background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F4F6 100%);
       cursor: not-allowed;
     }
   }

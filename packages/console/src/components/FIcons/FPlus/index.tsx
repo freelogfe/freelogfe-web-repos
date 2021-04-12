@@ -3,15 +3,15 @@ import styles from './index.less';
 import {PlusOutlined} from '@ant-design/icons';
 import {CSSProperties, ReactElement, ReactEventHandler, ReactPropTypes} from "react";
 
-interface FLeftProps {
+interface FPlusProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FLeft({...props}: FLeftProps) {
+function FPlus({...props}: FPlusProps) {
   return (<PlusOutlined {...props} />);
 }
 
-export default FLeft;
+export default FPlus;
