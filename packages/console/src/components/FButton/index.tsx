@@ -3,6 +3,7 @@ import FCircleButton from './FCircleButton';
 import FTextButton from './FTextButton';
 import FRectBtn from './FRectBtn';
 import FCircleBtn from './FCircleBtn';
+import FTextBtn from './FTextBtn';
 
 export {
   FNormalButton,
@@ -10,4 +11,5 @@ export {
   FTextButton,
   FRectBtn,
   FCircleBtn,
+  FTextBtn,
 }

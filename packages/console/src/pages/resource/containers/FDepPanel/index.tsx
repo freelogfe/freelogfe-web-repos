@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FNormalButton, FRectBtn} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {Space, Drawer} from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
@@ -11,7 +11,6 @@ import UpthrowList from './UpthrowList';
 import Market from './Market';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-// import {i18nMessage} from '@/utils/i18n';
 import {CloseCircleFilled} from '@ant-design/icons';
 import {ChangeAction, DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
 import FDrawer from "@/components/FDrawer";

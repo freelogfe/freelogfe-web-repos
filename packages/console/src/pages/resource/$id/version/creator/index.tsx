@@ -10,7 +10,6 @@ import FDepPanel from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from "dva";
 import {
   ConnectState,
-  ResourceInfoModelState,
   ResourceVersionCreatorPageModelState,
   StorageObjectEditorModelState
 } from '@/models/connect';
@@ -30,7 +29,6 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
-// import {i18nMessage} from '@/utils/i18n';
 import RouterTypes from 'umi/routerTypes';
 import {FDown, FInfo} from "@/components/FIcons";
 import FBaseProperties from "@/components/FBaseProperties";
@@ -46,6 +44,7 @@ import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
+import {FTextBtn} from '@/components/FButton';
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -295,8 +294,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                     });
                   }}
                   rightTop={<Space size={20}>
-                    <FTextButton
-                      theme="primary"
+                    <FTextBtn
+                      type="primary"
                       onClick={() => {
                         onChange({
                           basePropertiesEditorVisible: true,
@@ -310,11 +309,11 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                           }),
                         });
                       }}
-                    >补充属性</FTextButton>
+                    >补充属性</FTextBtn>
                     {
                       resourceVersionCreatorPage.preVersionBaseProperties.length > 0
-                        ? (<FTextButton
-                          theme="primary"
+                        ? (<FTextBtn
+                          type="primary"
                           onClick={() => {
                             dispatch<ImportLastVersionDataAction>({
                               type: 'resourceVersionCreatorPage/importLastVersionData',
@@ -322,7 +321,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                             });
                             onChange({dataIsDirty: true})
                           }}
-                        >从上个版本导入</FTextButton>)
+                        >从上个版本导入</FTextBtn>)
                         : undefined
                     }
                   </Space>}
@@ -331,14 +330,17 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                 <div style={{height: 20}}/>
 
                 <Space>
-                  <a onClick={() => {
-                    onChange({
-                      customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
-                    });
-                  }}>
+                  <FTextBtn
+                    type="default"
+                    onClick={() => {
+                      onChange({
+                        customOptionsDataVisible: !resourceVersionCreatorPage.customOptionsDataVisible,
+                      });
+                    }}
+                  >
                     <span>自定义选项（高级）</span>
                     {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
-                  </a>
+                  </FTextBtn>
                   <FInfo/>
                 </Space>
 
@@ -348,7 +350,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                     <div style={{height: 20}}/>
 
                     <Space size={40}>
-                      <a
+                      <FTextBtn
                         onClick={() => {
                           onChange({
                             customOptionsEditorDataSource: resourceVersionCreatorPage.customOptionsData.map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cod) => {
@@ -367,15 +369,16 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                             customOptionsEditorVisible: true,
                           });
                         }}
-                      >添加选项</a>
+                      >添加选项</FTextBtn>
                       {
-                        resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<a onClick={() => {
-                          dispatch<ImportLastVersionDataAction>({
-                            type: 'resourceVersionCreatorPage/importLastVersionData',
-                            payload: 'optionProps',
-                          });
-                          onChange({dataIsDirty: true,});
-                        }}>从上个版本导入</a>)
+                        resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FTextBtn
+                          onClick={() => {
+                            dispatch<ImportLastVersionDataAction>({
+                              type: 'resourceVersionCreatorPage/importLastVersionData',
+                              payload: 'optionProps',
+                            });
+                            onChange({dataIsDirty: true,});
+                          }}>从上个版本导入</FTextBtn>)
                       }
 
                     </Space>

@@ -12,6 +12,8 @@ export interface ResourceVersionEditorPageModelState {
   resourceID: string;
   version: string;
   signingDate: string;
+
+  descriptionFullScreen: boolean;
   description: string;
 
   graphFullScreen: boolean;
@@ -137,6 +139,8 @@ const Model: ResourceVersionEditorModelType = {
     resourceID: '',
     version: '',
     signingDate: '',
+
+    descriptionFullScreen: false,
     description: '',
 
     graphFullScreen: false,

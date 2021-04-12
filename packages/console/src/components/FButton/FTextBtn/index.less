@@ -1,0 +1,64 @@
+@import '../../../config.less';
+
+.Primary {
+
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  justify-content: center;
+  //height: 38px;
+  //border-radius: 4px;
+  //font-weight: 600;
+  color: @f-primary-color;
+  background-color: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #2376E5;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      cursor: not-allowed;
+      color: @f-primary-color;
+    }
+  }
+}
+
+.Default {
+
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  justify-content: center;
+  color: #666;
+  background-color: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    color: #529DFF;
+  }
+
+  &:active {
+    color: #2376E5;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      cursor: not-allowed;
+      color: #666;
+    }
+  }
+}

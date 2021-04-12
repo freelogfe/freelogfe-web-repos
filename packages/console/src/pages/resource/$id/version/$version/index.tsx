@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FCircleButton, FTextButton, FNormalButton} from '@/components/FButton';
+import {FCircleButton, FTextButton, FNormalButton, FTextBtn, FRectBtn} from '@/components/FButton';
 import {Col, Row, Space} from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState} from '@/models/connect';
+import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
 import FHorn from '@/pages/resource/components/FHorn';
 import {
   UpdateDataSourceAction,
@@ -14,19 +14,16 @@ import {
   SyncAllPropertiesAction
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, {EditorState} from 'braft-editor';
-// import {i18nMessage} from '@/utils/i18n';
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
-import {router, withRouter} from 'umi';
+import {withRouter} from 'umi';
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
 import FTooltip from "@/components/FTooltip";
 import {FEdit, FInfo} from "@/components/FIcons";
-import {CUSTOM_KEY} from "@/utils/regexp";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import FNoDataTip from "@/components/FNoDataTip";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
 import {
@@ -37,6 +34,8 @@ import {
 } from "@/components/FAntvG6";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import FDivider from "@/components/FDivider";
+import {FTipText} from '@/components/FText';
 
 interface VersionEditorProps {
   dispatch: Dispatch;
@@ -164,41 +163,69 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
-        onClickDownload={() => FApiServer.Resource.resourcesDownload({resourceId: match.params.id, version: match.params.version})}
+        onClickDownload={() => FApiServer.Resource.resourcesDownload({
+          resourceId: match.params.id,
+          version: match.params.version
+        })}
       />}>
       <FFormLayout>
-        <FFormLayout.FBlock title={FUtil.I18n.message('version_description')}>
+        <FFormLayout.FBlock
+          title={FUtil.I18n.message('version_description')}
+          extra={!!resourceVersionEditorPage.description
+            ? (<Space size={10}>
+              {
+                isEditing
+                  ? (<>
+                    <FTextBtn type="default">全屏编辑</FTextBtn>
+                    <FDivider/>
+                    <FTextBtn
+                      type="default"
+                      onClick={() => setIsEditing(false)}
+                    >{FUtil.I18n.message('cancel')}</FTextBtn>
+                    <FTextBtn
+                      type="primary"
+                      onClick={onUpdateEditorText}
+                    >{FUtil.I18n.message('save')}</FTextBtn>
+                  </>)
+                  : (<>
+                    <FTextBtn type="default">全屏查看</FTextBtn>
+                    <FDivider/>
+                    <FTextBtn
+                      type="primary"
+                      onClick={() => setIsEditing(true)}
+                    >编辑</FTextBtn>
+                  </>)
+              }
+            </Space>)
+            : undefined}
+        >
 
-          {!resourceVersionEditorPage.description && !isEditing && (<Space size={10}>
-            <FCircleButton
-              onClick={() => setIsEditing(true)}
-              theme="weaken"
-            />
-            <FContentText text={'添加'}/>
-          </Space>)}
+          {
+            !resourceVersionEditorPage.description && !isEditing
+            && (<div className={styles.noDescription}>
+              <FTipText
+                text={'动动手，让你的资源看起来更丰富多彩吧～'}
+                type="secondary"
+              />
+              <div style={{height: 20}}/>
+              <FRectBtn>添加版本描述</FRectBtn>
+            </div>)
+          }
 
-          {isEditing
-            ? (<FHorn extra={<Space size={10}>
-              <FTextButton onClick={() => setIsEditing(false)}>{FUtil.I18n.message('cancel')}</FTextButton>
-              <FTextButton onClick={onUpdateEditorText} theme="primary">{FUtil.I18n.message('save')}</FTextButton>
-            </Space>}>
-              <FBraftEditor
+          {
+            isEditing
+              ? (<FBraftEditor
                 value={editor}
                 // defaultValue={editorText}
                 onChange={(value) => setEditor(value)}
-              />
-            </FHorn>)
-            : (resourceVersionEditorPage.description && (<FHorn extra={<FTextButton
-              onClick={() => setIsEditing(true)}
-              theme="primary"
-            >编辑</FTextButton>}>
-              <div className={styles.description}>
-                <div
-                  className={styles.container}
-                  dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
-                />
-              </div>
-            </FHorn>))
+              />)
+              : (resourceVersionEditorPage.description && (
+                <div className={styles.description}>
+                  <div
+                    className={styles.container}
+                    dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
+                  />
+                </div>))
           }
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
@@ -578,7 +605,10 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           <div className={styles.Content}>
             <div style={{height: 10}}/>
             <Space size={20} className={styles.row}>
-              <Field title={FUtil.I18n.message('key')} dot={true}>
+              <Field
+                title={FUtil.I18n.message('key')}
+                dot={true}
+              >
                 <FInput
                   disabled
                   wrapClassName={styles.FInputWrap}
@@ -758,19 +788,39 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       </FViewportTabs>
     </FDrawer>
 
-    {/*<FDrawer*/}
-    {/*  visible={resourceVersionEditorPage.graphFullScreen}*/}
-    {/*  title={'合约'}*/}
-    {/*  destroyOnClose*/}
-    {/*  mask={false}*/}
-    {/*  onClose={() => {*/}
-    {/*    onChange({*/}
-    {/*      graphFullScreen: false,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*>*/}
-    {/*  1234*/}
-    {/*</FDrawer>*/}
+    <FDrawer
+      visible={resourceVersionEditorPage.descriptionFullScreen}
+      title={'版本描述'}
+      destroyOnClose
+      mask={false}
+      onClose={() => {
+        onChange({
+          graphFullScreen: false,
+        });
+      }}
+      width={'100%'}
+    >
+      <div className={styles.fullScreenContent}>
+        {
+          isEditing
+            ? (<FBraftEditor
+              value={editor}
+              // defaultValue={editorText}
+              onChange={(value) => setEditor(value)}
+            />)
+            : (resourceVersionEditorPage.description && (
+              <div
+                className={styles.description}
+                style={{height: 'calc(100vh - 130px)'}}
+              >
+                <div
+                  className={styles.container}
+                  dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
+                />
+              </div>))
+        }
+      </div>
+    </FDrawer>
   </>);
 }
 
@@ -798,12 +848,12 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
         <div style={{width: 40}}/>
         <FContentText type="additional2" text={FUtil.I18n.message('object_id') + '：' + resourceID}/>
         <div style={{width: 20}}/>
-        <FTextButton theme="primary">
+        <FTextBtn type="primary">
           <FDownload
             onClick={() => onClickDownload && onClickDownload()}
             style={{fontSize: 16, fontWeight: 600}}
           />
-        </FTextButton>
+        </FTextBtn>
       </Space>
     </div>
   );
