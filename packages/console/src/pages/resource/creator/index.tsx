@@ -64,7 +64,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
   }, [resourceCreatorPage.name, resourceCreatorPage.resourceType, resourceCreatorPage.introduction, resourceCreatorPage.cover, resourceCreatorPage.labels]);
 
   function onClickCreate() {
-    // console.log('onClickCreate', '0932jdlfsf');
+    console.log('onClickCreate', '0932jdlfsf');
     dispatch<OnCreateAction>({
       type: 'resourceCreatorPage/create',
     });
@@ -196,7 +196,8 @@ interface HeaderProps {
 function Header({onClickCreate, disabled = false}: HeaderProps) {
   return (<div className={styles.Header}>
     <FTitleText
-      text={FUtil.I18n.message('create_resource')}
+      // text={FUtil.I18n.message('create_resource')}
+      text={'创建资源'}
       type="h1"
     />
 
@@ -207,7 +208,12 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
       {/*  style={{width: 108}}*/}
       {/*  disabled={disabled}*/}
       {/*>{FUtil.I18n.message('create')}</FNormalButton>*/}
-      <FRectBtn disabled>
+      <FRectBtn
+        disabled={disabled}
+        style={{width: 108}}
+        onClick={onClickCreate}
+        // theme="transparent"
+      >
         {FUtil.I18n.message('create')}
       </FRectBtn>
 

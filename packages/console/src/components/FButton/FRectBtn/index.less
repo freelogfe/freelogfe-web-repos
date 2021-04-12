@@ -32,3 +32,35 @@
     }
   }
 }
+
+.Transparent {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: center;
+  height: 38px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    background-color: #EDEDED;
+  }
+
+  &:active {
+    background-color: #E6E6E6;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      background-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+}
