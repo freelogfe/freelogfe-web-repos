@@ -12,7 +12,6 @@ import {
   CreateBucketAction,
   DeleteBucketByNameAction,
 } from '@/models/storageHomePage';
-import {humanizeSize} from '@/utils/format';
 import {FDelete, FWarning} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import fMessage from "@/components/fMessage";
@@ -129,7 +128,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           showInfo={false}
           className={styles.progressBack}
         />
-        <div className={styles.ratio}>{humanizeSize(storageHomePage.usedStorage)} / {humanizeSize(storageHomePage.totalStorage)}</div>
+        <div className={styles.ratio}>{FUtil.Format.humanizeSize(storageHomePage.usedStorage)} / {FUtil.Format.humanizeSize(storageHomePage.totalStorage)}</div>
 
         {systemBuckets.length > 0 && (<>
           <div style={{height: 60}}/>

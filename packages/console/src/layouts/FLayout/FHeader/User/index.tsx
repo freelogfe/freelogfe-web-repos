@@ -5,7 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
-import {completeUrlByDomain} from "@/utils/format";
+import FUtil from "@/utils";
 
 interface UserProps {
   dispatch: Dispatch;
@@ -24,10 +24,10 @@ function User({dispatch, user}: UserProps) {
     </div>
     <div className={styles.userPanelMenu}>
       <a onClick={() => {
-        window.location.href = `${completeUrlByDomain('www')}/user/profile`;
+        window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;
       }}>个人中心</a>
       <a onClick={() => {
-        window.location.href = `${completeUrlByDomain('www')}/login`;
+        window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
       }}>登出</a>
     </div>
   </div>}>

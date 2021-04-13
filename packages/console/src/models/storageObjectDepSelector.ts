@@ -1,9 +1,9 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {formatDateTime} from "@/utils/format";
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface StorageObjectDepSelectorModelState {
   resourceList: {
@@ -121,7 +121,7 @@ const Model: StorageObjectDepSelectorModelType = {
             resourceId: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
-            updateDate: formatDateTime(r.resourceUpdateDate, true),
+            updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
             status: r.status,
             latestVersion: r.latestVersion,
           })),
@@ -145,7 +145,7 @@ const Model: StorageObjectDepSelectorModelType = {
             resourceId: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
-            updateDate: formatDateTime(r.updateDate, true),
+            updateDate: FUtil.Format.formatDateTime(r.updateDate, true),
             status: r.status,
             latestVersion: r.latestVersion,
           })),
@@ -192,7 +192,7 @@ const Model: StorageObjectDepSelectorModelType = {
               bucketName: o.bucketName,
               objectName: o.objectName,
               resourceType: o.resourceType,
-              updateDate: formatDateTime(o.updateDate, true),
+              updateDate: FUtil.Format.formatDateTime(o.updateDate, true),
             })),
           ],
         },

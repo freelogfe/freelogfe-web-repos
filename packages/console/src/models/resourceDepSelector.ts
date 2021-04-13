@@ -2,8 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState} from "@/models/connect";
-import {formatDateTime} from "@/utils/format";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export type ResourceDepSelectorModelState = WholeReadonly<{
   selected: '1' | '2' | '3';
@@ -85,7 +85,7 @@ const Model: ResourceDepSelectorModelType = {
               resourceId: r.resourceId,
               resourceName: r.resourceName,
               resourceType: r.resourceType,
-              updateDate: formatDateTime(r.resourceUpdateDate, true),
+              updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
               status: r.resourceStatus,
               latestVersion: r.latestVersion,
               baseUpcastResources: r.baseUpcastResources,
@@ -111,7 +111,7 @@ const Model: ResourceDepSelectorModelType = {
             resourceId: r.resourceId,
             resourceName: r.resourceName,
             resourceType: r.resourceType,
-            updateDate: formatDateTime(r.updateDate, true),
+            updateDate: FUtil.Format.formatDateTime(r.updateDate, true),
             status: r.status,
             latestVersion: r.latestVersion,
             baseUpcastResources: r.baseUpcastResources,

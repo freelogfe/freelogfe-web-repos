@@ -4,10 +4,10 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import moment from 'moment';
 import {RcFile} from 'antd/lib/upload/interface';
-import {formatDateTime, humanizeSize} from '@/utils/format';
 import fMessage from '@/components/fMessage';
 import {getSHA1Hash} from '@/utils/tools';
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -424,7 +424,7 @@ function transformTableData(i: any) {
     name: i.objectName,
     bucketName: i.bucketName,
     type: i.resourceType,
-    size: humanizeSize(i.systemProperty.fileSize),
-    updateTime: formatDateTime(i.updateDate, true),
+    size: FUtil.Format.humanizeSize(i.systemProperty.fileSize),
+    updateTime: FUtil.Format.formatDateTime(i.updateDate, true),
   };
 }

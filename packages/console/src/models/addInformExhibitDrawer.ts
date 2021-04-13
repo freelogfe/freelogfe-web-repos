@@ -2,8 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {formatDateTime} from "@/utils/format";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export type AddInformExhibitDrawerModelState = WholeReadonly<{
   isTheme: boolean;
@@ -158,7 +158,7 @@ const Model: AddInformExhibitType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
@@ -192,7 +192,7 @@ const Model: AddInformExhibitType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
@@ -227,7 +227,7 @@ const Model: AddInformExhibitType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
             };
           }),
@@ -261,7 +261,7 @@ const Model: AddInformExhibitType = {
               identity: 'object',
               name: objectName,
               type: ob.resourceType,
-              updateTime: formatDateTime(ob.updateDate),
+              updateTime: FUtil.Format.formatDateTime(ob.updateDate),
               status: '',
             };
           }),

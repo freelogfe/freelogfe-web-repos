@@ -2,7 +2,6 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {formatDateTime} from "@/utils/format";
 import {
   // FetchAddExhibitListAction,
   // FetchCollectionAction,
@@ -11,6 +10,7 @@ import {
   // FetchObjectAction,
 } from "@/models/addInformExhibitDrawer";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface TreeNode {
   title: string;
@@ -204,7 +204,7 @@ const Model: ReplaceInformExhibitModelType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
@@ -241,7 +241,7 @@ const Model: ReplaceInformExhibitModelType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
@@ -278,7 +278,7 @@ const Model: ReplaceInformExhibitModelType = {
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
-              updateTime: formatDateTime(rs.updateDate),
+              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
               versions: ['1.1.1'],
               version: '1.1.1',
@@ -314,7 +314,7 @@ const Model: ReplaceInformExhibitModelType = {
               identity: 'object',
               name: objectName,
               type: ob.resourceType,
-              updateTime: formatDateTime(ob.updateDate),
+              updateTime: FUtil.Format.formatDateTime(ob.updateDate),
               status: '',
               versions: ['1.1.1'],
               version: '',

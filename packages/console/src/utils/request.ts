@@ -3,7 +3,7 @@ import {notification} from 'antd';
 import NProgress from '@/components/fNprogress';
 import FileSaver from 'file-saver';
 import {router} from "umi";
-import {completeUrlByDomain} from "@/utils/format";
+import FUtil from "@/utils/index";
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -88,7 +88,7 @@ axios.interceptors.response.use(function (response) {
   // console.log(data, 'data2390jasdflkf');
 
   if (data.errCode === 30 || data.errcode === 30) {
-    return window.location.replace(`${completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
+    return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
   }
 
   if ((data.errcode === undefined

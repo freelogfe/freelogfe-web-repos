@@ -2,10 +2,10 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {formatDateTime} from "@/utils/format";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
+import FUtil from "@/utils";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -331,7 +331,7 @@ const Model: ExhibitInfoPageModelType = {
               status: c.status,
               id: c.contractId,
               text: c.policyText,
-              createTime: formatDateTime(c.createDate),
+              createTime: FUtil.Format.formatDateTime(c.createDate),
               policyId: c.policyId,
             })),
             policies: r.policies.map((p) => ({

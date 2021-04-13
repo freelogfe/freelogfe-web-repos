@@ -7,8 +7,6 @@ import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {resourceTypes} from '@/utils/globals';
-import {humanizeSize} from '@/utils/format';
-// import {i18nMessage} from '@/utils/i18n';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
@@ -119,7 +117,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               />
               <FDivider/>
               <FContentText
-                text={humanizeSize(storageObjectEditor.size)}
+                text={FUtil.Format.humanizeSize(storageObjectEditor.size)}
                 type="highlight"
               />
             </Space>

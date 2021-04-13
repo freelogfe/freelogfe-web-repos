@@ -3,8 +3,6 @@ import styles from './index.less';
 import img from '@/assets/file-object.svg';
 import {FTitleText, FContentText} from '@/components/FText';
 import {Progress} from 'antd';
-// import {i18nMessage} from '@/utils/i18n';
-import {humanizeSize} from '@/utils/format';
 import FUtil from "@/utils";
 
 interface ObjectCardProps {
@@ -27,7 +25,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
         <div style={{height: 18}}/>
         <div className={styles.info}>
           {/*<FContentText type="additional1" text={'10 M'}/>*/}
-          <div style={{display: "flex", flexShrink: 0}}>{humanizeSize(resourceObject.size)}</div>
+          <div style={{display: "flex", flexShrink: 0}}>{FUtil.Format.humanizeSize(resourceObject.size)}</div>
           <div style={{display: "flex", flexShrink: 0, width: 30}}/>
           {
             progress === null

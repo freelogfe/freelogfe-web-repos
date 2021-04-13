@@ -6,14 +6,14 @@ import UploadSuccess from '../UploadSuccess';
 import UploadCancel from '../UploadCancel';
 import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
-import {humanizeSize} from '@/utils/format';
 import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
 import {FApiServer} from "@/services";
-import {Modal, Space} from "antd";
-import {FWarning} from "@/components/FIcons";
-import {i18nMessage} from "@/utils/i18n";
+// import {Modal, Space} from "antd";
+// import {FWarning} from "@/components/FIcons";
+// import {i18nMessage} from "@/utils/i18n";
 import fConfirmModal from "@/components/fConfirmModal";
+import FUtil from "@/utils";
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -152,7 +152,7 @@ function Task({
       />
       <div style={{height: 2}}/>
       <FContentText
-        text={humanizeSize(file.file.size)}
+        text={FUtil.Format.humanizeSize(file.file.size)}
       />
     </div>
     {

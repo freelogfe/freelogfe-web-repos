@@ -2,8 +2,8 @@ import {DvaReducer, WholeMutable, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {completeUrlByDomain} from "@/utils/format";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -301,8 +301,8 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           nodeName: currentNode?.nodeName,
-          nodeUrl: completeUrlByDomain(currentNode?.nodeDomain || ''),
-          testNodeUrl: completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
+          nodeUrl: FUtil.Format.completeUrlByDomain(currentNode?.nodeDomain || ''),
+          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
         },
       });
 

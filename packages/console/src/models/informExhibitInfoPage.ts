@@ -2,8 +2,8 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {formatDateTime} from "@/utils/format";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -240,7 +240,7 @@ const Model: ExhibitInfoPageModelType = {
                 status: c.status,
                 id: c.contractId,
                 text: c.policyText,
-                createTime: formatDateTime(c.createDate),
+                createTime: FUtil.Format.formatDateTime(c.createDate),
                 policyId: c.policyId,
               })),
               policies: r.policies.map((p) => ({
