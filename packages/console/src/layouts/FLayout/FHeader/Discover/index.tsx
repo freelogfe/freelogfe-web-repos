@@ -1,13 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-// import sharedStyles from '../index.less';
 import FMenu from "@/components/FMenu";
-// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
-// import {market} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 import FUtil from "@/utils";
 
@@ -43,6 +40,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   }
 
   return (<FDropdown
+    // visible={true}
     overlay={<FMenu
       value={isCurrent ? marketPage.tabValue : ''}
       onClick={onDiscoverClick}

@@ -10,6 +10,7 @@ import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUtil from "@/utils";
+import FDropdown from "@/components/FDropdown";
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
@@ -91,22 +92,22 @@ function FResourceCardsList({
       <div className={styles.filterLeft}>
         <div>
           <span>{FUtil.I18n.message('resource_type')}：</span>
-          <Dropdown overlay={<FMenu
+          <FDropdown overlay={<FMenu
             options={resourceTypeOptions}
             onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
           />}>
               <span style={{cursor: 'pointer'}}>{typeText}<DownOutlined
                 style={{marginLeft: 8}}/></span>
-          </Dropdown>
+          </FDropdown>
         </div>
         <div style={{marginLeft: 60}}>
           <span>{FUtil.I18n.message('resource_state')}：</span>
-          <Dropdown overlay={<FMenu
+          <FDropdown overlay={<FMenu
             options={resourceStatusOptions}
             onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')}
           />}>
             <span style={{cursor: 'pointer'}}>{statusText}<DownOutlined style={{marginLeft: 10}}/></span>
-          </Dropdown>
+          </FDropdown>
         </div>
 
       </div>
