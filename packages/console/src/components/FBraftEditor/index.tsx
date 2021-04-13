@@ -5,11 +5,13 @@ import 'braft-editor/dist/index.css';
 import {connect} from "dva";
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import {CSSProperties} from "react";
 
 interface FBraftEditorProps extends BraftEditorProps {
   global: GlobalModelState;
-
   value: EditorState;
+
+  style?: CSSProperties;
 
   onChange?(value: EditorState): void;
 }
@@ -29,7 +31,9 @@ function FBraftEditor({global, value, onChange, ...props}: FBraftEditorProps) {
       }}
       language={global.locale === 'en-US' ? 'en' : 'zh'}
       className={styles.styles}
-      controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link', 'fullscreen']}
+      controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link',
+        // 'fullscreen',
+      ]}
       media={{
         async uploadFn(fileParams) {
           const params: Parameters<typeof FApiServer.Storage.uploadImage>[0] = {

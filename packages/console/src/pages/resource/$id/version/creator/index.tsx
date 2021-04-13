@@ -433,6 +433,9 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                   dataIsDirty: true,
                 });
               }}
+              style={{
+                height: 500,
+              }}
             />
           </FFormLayout.FBlock>
         </FFormLayout>

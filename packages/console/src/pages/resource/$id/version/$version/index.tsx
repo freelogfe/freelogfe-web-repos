@@ -176,7 +176,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
               {
                 isEditing
                   ? (<>
-                    <FTextBtn type="default">全屏编辑</FTextBtn>
+                    <FTextBtn
+                      type="default"
+                      onClick={() => {
+                        onChange({descriptionFullScreen: true});
+                      }}
+                    >全屏编辑</FTextBtn>
                     <FDivider/>
                     <FTextBtn
                       type="default"
@@ -188,7 +193,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                     >{FUtil.I18n.message('save')}</FTextBtn>
                   </>)
                   : (<>
-                    <FTextBtn type="default">全屏查看</FTextBtn>
+                    <FTextBtn
+                      type="default"
+                      onClick={() => {
+                        onChange({descriptionFullScreen: true});
+                      }}
+                    >全屏查看</FTextBtn>
                     <FDivider/>
                     <FTextBtn
                       type="primary"
@@ -794,17 +804,49 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       destroyOnClose
       mask={false}
       onClose={() => {
-        onChange({
-          graphFullScreen: false,
-        });
+        onChange({descriptionFullScreen: false});
       }}
       width={'100%'}
+      topRight={<Space size={25}>
+        {isEditing
+          ? (<>
+            <FTextBtn
+              type="default"
+              onClick={() => {
+                onChange({descriptionFullScreen: false});
+              }}
+            >取消全屏</FTextBtn>
+            <FDivider/>
+            <FTextBtn
+              type="default"
+              onClick={() => setIsEditing(false)}
+            >{FUtil.I18n.message('cancel')}</FTextBtn>
+            <FTextBtn
+              type="primary"
+              onClick={onUpdateEditorText}
+            >{FUtil.I18n.message('save')}</FTextBtn>
+          </>)
+          : (<>
+            <FTextBtn
+              type="default"
+              onClick={() => {
+                onChange({descriptionFullScreen: false});
+              }}
+            >取消全屏</FTextBtn>
+            <FDivider/>
+            <FTextBtn
+              type="primary"
+              onClick={() => setIsEditing(true)}
+            >编辑</FTextBtn>
+          </>)}
+      </Space>}
     >
       <div className={styles.fullScreenContent}>
         {
           isEditing
             ? (<FBraftEditor
               value={editor}
+              style={{height: 'calc(100vh - 130px)'}}
               // defaultValue={editorText}
               onChange={(value) => setEditor(value)}
             />)
