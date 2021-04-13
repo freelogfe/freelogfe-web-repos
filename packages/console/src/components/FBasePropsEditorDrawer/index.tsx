@@ -3,9 +3,8 @@ import styles from './index.less';
 import {Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
-import {FCircleButton, FNormalButton, FTextButton} from "@/components/FButton";
+import {FCircleButton, FRectBtn, FTextBtn} from "@/components/FButton";
 import {CUSTOM_KEY} from "@/utils/regexp";
-// import {Data} from "@/components/FCustomProperties";
 import FDrawer from "@/components/FDrawer";
 
 interface FBasePropsEditorDrawerProps {
@@ -79,12 +78,13 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextButton
+      <FTextBtn
+        type="default"
         onClick={() => {
-          onCancel && onCancel()
+          onCancel && onCancel();
         }}
-      >取消</FTextButton>
-      <FNormalButton
+      >取消</FTextBtn>
+      <FRectBtn
         disabled={!!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || !eds.value || !!eds.valueError
@@ -93,7 +93,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
         onClick={() => {
           onConfirm && onConfirm();
         }}
-      >确定</FNormalButton>
+      >确定</FRectBtn>
     </Space>}
   >
     <Space

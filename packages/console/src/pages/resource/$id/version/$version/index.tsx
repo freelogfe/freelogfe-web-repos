@@ -100,13 +100,20 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
   // }, [version.properties]);
 
   function onUpdateEditorText() {
+    const html: string = editor.toHTML();
+    const description: string = html === '<p></p>' ? '' : html;
     dispatch<UpdateDataSourceAction>({
       type: 'resourceVersionEditorPage/updateDataSource',
       payload: {
-        description: editor.toHTML(),
-      }
+        description: description,
+      },
     });
     setIsEditing(false);
+    if (!description) {
+      onChange({
+        descriptionFullScreen: false,
+      });
+    }
   }
 
   function onUpdateProperties(data: any[]) {
@@ -171,43 +178,43 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       <FFormLayout>
         <FFormLayout.FBlock
           title={FUtil.I18n.message('version_description')}
-          extra={!!resourceVersionEditorPage.description
-            ? (<Space size={10}>
-              {
-                isEditing
-                  ? (<>
-                    <FTextBtn
-                      type="default"
-                      onClick={() => {
-                        onChange({descriptionFullScreen: true});
-                      }}
-                    >全屏编辑</FTextBtn>
-                    <FDivider/>
-                    <FTextBtn
-                      type="default"
-                      onClick={() => setIsEditing(false)}
-                    >{FUtil.I18n.message('cancel')}</FTextBtn>
-                    <FTextBtn
-                      type="primary"
-                      onClick={onUpdateEditorText}
-                    >{FUtil.I18n.message('save')}</FTextBtn>
-                  </>)
-                  : (<>
-                    <FTextBtn
-                      type="default"
-                      onClick={() => {
-                        onChange({descriptionFullScreen: true});
-                      }}
-                    >全屏查看</FTextBtn>
-                    <FDivider/>
-                    <FTextBtn
-                      type="primary"
-                      onClick={() => setIsEditing(true)}
-                    >编辑</FTextBtn>
-                  </>)
-              }
-            </Space>)
-            : undefined}
+          extra={<Space size={10}>
+            {
+              isEditing
+                ? (<>
+                  <FTextBtn
+                    type="default"
+                    onClick={() => {
+                      onChange({descriptionFullScreen: true});
+                    }}
+                  >全屏编辑</FTextBtn>
+                  <FDivider/>
+                  <FTextBtn
+                    type="default"
+                    onClick={() => setIsEditing(false)}
+                  >{FUtil.I18n.message('cancel')}</FTextBtn>
+                  <FTextBtn
+                    type="primary"
+                    onClick={onUpdateEditorText}
+                  >{FUtil.I18n.message('save')}</FTextBtn>
+                </>)
+                : !!resourceVersionEditorPage.description
+                ? (<>
+                  <FTextBtn
+                    type="default"
+                    onClick={() => {
+                      onChange({descriptionFullScreen: true});
+                    }}
+                  >全屏查看</FTextBtn>
+                  <FDivider/>
+                  <FTextBtn
+                    type="primary"
+                    onClick={() => setIsEditing(true)}
+                  >编辑</FTextBtn>
+                </>)
+                : undefined
+            }
+          </Space>}
         >
 
           {
@@ -218,7 +225,9 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                 type="secondary"
               />
               <div style={{height: 20}}/>
-              <FRectBtn>添加版本描述</FRectBtn>
+              <FRectBtn onClick={() => {
+                setIsEditing(true);
+              }}>添加版本描述</FRectBtn>
             </div>)
           }
 
@@ -228,6 +237,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                 value={editor}
                 // defaultValue={editorText}
                 onChange={(value) => setEditor(value)}
+                style={{height: 500}}
               />)
               : (resourceVersionEditorPage.description && (
                 <div className={styles.description}>
@@ -819,7 +829,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             <FDivider/>
             <FTextBtn
               type="default"
-              onClick={() => setIsEditing(false)}
+              onClick={() => {
+                setIsEditing(false);
+                if (!resourceVersionEditorPage.description) {
+                  onChange({descriptionFullScreen: false});
+                }
+              }}
             >{FUtil.I18n.message('cancel')}</FTextBtn>
             <FTextBtn
               type="primary"
@@ -846,14 +861,19 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           isEditing
             ? (<FBraftEditor
               value={editor}
-              style={{height: 'calc(100vh - 130px)'}}
+              style={{
+                height: 'calc(100vh - 130px)',
+                width: 950,
+              }}
               // defaultValue={editorText}
               onChange={(value) => setEditor(value)}
             />)
             : (resourceVersionEditorPage.description && (
               <div
                 className={styles.description}
-                style={{height: 'calc(100vh - 130px)'}}
+                style={{
+                  height: 'calc(100vh - 130px)',
+                }}
               >
                 <div
                   className={styles.container}

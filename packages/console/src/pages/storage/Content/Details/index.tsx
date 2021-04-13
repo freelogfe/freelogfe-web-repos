@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FTextButton, FCircleButton, FNormalButton} from '@/components/FButton';
+import {FTextBtn, FCircleButton, FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
@@ -67,12 +67,15 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
     visible={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
-      <FTextButton onClick={() => {
-        onChange({
-          customOptionsDataVisible: false,
-        });
-        router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
-      }}>取消</FTextButton>
+      <FTextBtn
+        onClick={() => {
+          onChange({
+            customOptionsDataVisible: false,
+          });
+          router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
+        }}
+        type="default"
+      >取消</FTextBtn>
       <FNormalButton
         disabled={storageObjectEditor.typeVerify === 1 || hasError}
         onClick={async () => {
@@ -127,14 +130,14 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                 title={'复制对象名称'}
               />
               <FTooltip title={'下载'}>
-                <FTextButton
-                  theme="primary"
+                <FTextBtn
+                  type="primary"
                   onClick={() => {
                     FApiServer.Storage.downloadObject({
                       objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
                     });
                   }}
-                ><FDownload/></FTextButton>
+                ><FDownload/></FTextBtn>
               </FTooltip>
             </Space>
           </div>
@@ -146,8 +149,8 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               onChange({baseProperties: value});
             }}
             rightTop={<Space size={20}>
-              <FTextButton
-                theme="primary"
+              <FTextBtn
+                type="primary"
                 onClick={() => {
                   onChange({
                     basePropertiesEditorVisible: true,
@@ -161,7 +164,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                     }),
                   });
                 }}
-              >补充属性</FTextButton>
+              >补充属性</FTextBtn>
             </Space>}
           />
 
@@ -231,11 +234,9 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                   )
                   : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
               }
-
             </>)
           }
 
-          {/*<div style={{height: 25}}/>*/}
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FAutoComplete
