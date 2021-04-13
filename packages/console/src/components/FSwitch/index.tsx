@@ -10,7 +10,7 @@ interface FSwitchProps extends SwitchProps {
 function FSwitch({...props}: FSwitchProps) {
   return (<Switch
     size="small"
-    className={styles.styles1}
+    className={styles.styles}
     {...props}
   />);
 }

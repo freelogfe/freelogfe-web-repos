@@ -8,6 +8,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FNoDataTip from "@/components/FNoDataTip";
 import FLoadingTip from "@/components/FLoadingTip";
+import FUtil from "@/utils";
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -48,7 +49,6 @@ function Resources({dispatch, resource}: ResourceProps) {
     })
   }
 
-
   return (<FResourceCardsList
     resourceType={resource.resourceType}
     resourceStatus={resource.resourceStatus}
@@ -74,10 +74,16 @@ function Resources({dispatch, resource}: ResourceProps) {
       changeStatus({inputText: value});
     }}
     showGotoCreateBtn={true}
-    onClickDetails={(id) => router.push(`/resource/${id}`)}
-    onClickEditing={(id) => router.push(`/resource/${id}/info`)}
-    onClickRevision={(id, record) => router.push(`/resource/${id}/version/creator`)}
-    onClickMore={(id) => router.push(`/resource/${id}`)}
+    onClickDetails={(id) => router.push(FUtil.LinkTo.resourceDetails({
+      resourceID: String(id),
+    }))}
+    onClickEditing={(id) => router.push(FUtil.LinkTo.resourceInfo({
+      resourceID: String(id),
+    }))}
+    onClickRevision={(id, record) => router.push(FUtil.LinkTo.resourceCreateVersion({
+      resourceID: String(id),
+    }))}
+    // onClickMore={(id) => router.push(`/resource/${id}`)}
     onloadMore={() => {
       dispatch<FetchDataSourceAction>({
         type: 'resourceListPage/fetchDataSource',

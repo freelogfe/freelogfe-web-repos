@@ -1,11 +1,9 @@
 import * as React from 'react';
-import FCenterLayout from '@/layouts/FCenterLayout';
 import FAffixTabs from '@/components/FAffixTabs';
 import {router, RouterTypes, withRouter} from 'umi';
 import Resources from "./Resources";
 import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
-// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
 import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
@@ -44,10 +42,10 @@ function List({match, dispatch, route}: ListProps & RouterTypes) {
 
   function onChangeTab(value: '1' | '2') {
     if (value === '1') {
-      return router.push('/resource/list');
+      return router.push(FUtil.LinkTo.myResources());
     }
     if (value === '2') {
-      return router.push('/resource/collect');
+      return router.push(FUtil.LinkTo.myCollects());
     }
   }
 

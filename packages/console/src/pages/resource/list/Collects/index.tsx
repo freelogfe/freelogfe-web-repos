@@ -11,6 +11,7 @@ import {
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from "@/components/FLoadingTip";
+import FUtil from "@/utils";
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -43,7 +44,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       height={'calc(100vh - 140px)'}
       tipText={'未收藏任何资源'}
       btnText={'前往资源市场'}
-      onClick={() => router.push('/market')}
+      onClick={() => router.push(FUtil.LinkTo.market())}
     />);
   }
 
@@ -85,7 +86,9 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
         payload: id.toString(),
       })
     }}
-    onClickDetails={(id) => router.push(`/resource/${id}`)}
+    onClickDetails={(id) => router.push(FUtil.LinkTo.resourceDetails({
+      resourceID: String(id),
+    }))}
     onClickMore={() => {
       dispatch<FetchDataSourceAction>({
         type: 'resourceCollectPage/fetchDataSource',

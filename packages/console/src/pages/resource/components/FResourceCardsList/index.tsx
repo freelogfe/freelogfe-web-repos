@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Button, Dropdown} from 'antd';
+import {Button, Dropdown, Space} from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {router} from 'umi';
 import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
-import FPagination from '@/components/FPagination';
 import {resourceTypes} from '@/utils/globals';
 import {DownOutlined} from '@ant-design/icons';
-// import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from '@/components/FNoDataTip';
 import FUtil from "@/utils";
 
@@ -81,11 +79,11 @@ function FResourceCardsList({
     setStatusText(selectedStatus?.text || selectedStatus?.value);
   }, [resourceStatus]);
 
-  function onChangeTab(value: '1' | '2') {
-    if (value === '2') {
-      return router.push('/resource/collect');
-    }
-  }
+  // function onChangeTab(value: '1' | '2') {
+  //   if (value === '2') {
+  //     return router.push('/resource/collect');
+  //   }
+  // }
 
   return (<>
     <div style={{height: 40}}/>
@@ -112,7 +110,7 @@ function FResourceCardsList({
         </div>
 
       </div>
-      <div className={styles.filterRight}>
+      <Space size={20}>
         <FInput
           value={inputText}
           debounce={300}
@@ -123,11 +121,11 @@ function FResourceCardsList({
           className={styles.FInput}
           placeholder={FUtil.I18n.message('search_resource')}
         />
-        {showGotoCreateBtn && <FNormalButton
-          onClick={() => router.push('/resource/creator')}
+        {showGotoCreateBtn && <FRectBtn
+          onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
           type="primary"
-        >{FUtil.I18n.message('create_resource')}</FNormalButton>}
-      </div>
+        >{FUtil.I18n.message('create_resource')}</FRectBtn>}
+      </Space>
     </div>
 
     {
@@ -174,17 +172,6 @@ function FResourceCardsList({
       </>)
     }
     <div style={{height: 100}}/>
-    {/*{totalNum > 10 && <>*/}
-    {/*  <div style={{height: 10}}/>*/}
-    {/*  <FPagination*/}
-    {/*    current={pageCurrent}*/}
-    {/*    pageSize={pageSize}*/}
-    {/*    total={totalNum}*/}
-    {/*    onChangeCurrent={(value) => onChangePageCurrent && onChangePageCurrent(value)}*/}
-    {/*    onChangePageSize={(value) => onChangePageSize && onChangePageSize(value)}*/}
-    {/*    className={styles.FPagination}*/}
-    {/*  />*/}
-    {/*</>}*/}
   </>);
 }
 
