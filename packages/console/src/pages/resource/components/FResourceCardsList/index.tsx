@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Button, Dropdown, Space} from 'antd';
+import {Button, Space} from 'antd';
 import FMenu from '@/components/FMenu';
 import FInput from '@/components/FInput';
 import {FRectBtn} from '@/components/FButton';
