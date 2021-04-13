@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FNormalButton, FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ChangeAction, CreateBucketAction, StorageHomePageModelState} from "@/models/storageHomePage";
 import FInput from "@/components/FInput";
@@ -20,10 +20,14 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
     <div className={styles.styles} style={{height: 'calc(100vh - 70px)'}}>
       <FTipText text={'自由创作从Freelog开始'} type="primary"/>
       <div style={{height: 60}}/>
-      <FTipText text={'在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。'} type="secondary"/>
+      <FTipText
+        text={'在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。'}
+        type="secondary"
+      />
       <div style={{height: 60}}/>
-      <FNormalButton
-        theme="big"
+      <FRectBtn
+        type="primary"
+        size="large"
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
@@ -34,7 +38,7 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
             },
           });
         }}
-      >创建Bucket</FNormalButton>
+      >创建Bucket</FRectBtn>
       <div style={{height: 200}}/>
     </div>
     <FModal

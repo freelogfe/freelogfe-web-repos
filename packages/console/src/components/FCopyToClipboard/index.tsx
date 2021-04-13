@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn, FTextButton} from '@/components/FButton';
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {SnippetsOutlined} from '@ant-design/icons';
@@ -16,15 +16,21 @@ interface FCopyToClipboardProps {
 function FCopyToClipboard({text, title, success}: FCopyToClipboardProps) {
 
   const [tip, setTip] = React.useState<string>(title);
+  const [visibleTooltip, setVisibleTooltip] = React.useState<boolean>(false);
   // const [timeout, setTimeout] = React.useState<any>(null);
 
   return (<Tooltip
+    // visible={visibleTooltip}
+    trigger="hover"
     title={<span className={styles.color}>{tip}</span>}
     color={'#fff'}
     placement="bottomLeft"
     mouseLeaveDelay={0}
-    // mouseEnterDelay={0}
+    mouseEnterDelay={0}
   >
+    <span onMouseOut={() => {
+      setTimeout(() => setTip(title), 100);
+    }}>
     <CopyToClipboard
       text={text}
       onCopy={(text: string, result: boolean) => {
@@ -32,22 +38,11 @@ function FCopyToClipboard({text, title, success}: FCopyToClipboardProps) {
         if (result) {
           setTip(success || '复制成功');
         }
-      }
-      }>
-      <FTextButton
-        onMouseOut={() => {
-          // console.log(title, 'T^TTTTTT');
-          setTimeout(() => setTip(title), 100);
-          // setTip(title);
-        }}
-        onMouseEnter={() => {
-          // clearTimeout(timeout);
-        }}
-        theme={'primary'}
-      >
-        <FCopy/>
-      </FTextButton>
+      }}
+    >
+      <FTextBtn><FCopy/></FTextBtn>
     </CopyToClipboard>
+      </span>
   </Tooltip>);
 }
 

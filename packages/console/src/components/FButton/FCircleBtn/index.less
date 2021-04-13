@@ -40,20 +40,22 @@
   justify-content: center;
   height: 26px;
   width: 26px;
-  border-radius: 4px;
   font-weight: 600;
   color: #666;
   font-size: 14px;
   background-color: transparent;
   cursor: pointer;
   outline: none;
+  border-radius: 50%;
 
   &:hover {
-    background-color: #EDEDED;
+    background-color: @f-hover-color;
+    color: white;
   }
 
   &:active {
-    background-color: #E6E6E6;
+    background-color: @f-active-color;
+    color: white;
   }
 
   &[disabled] {

@@ -9,6 +9,8 @@ interface FTextBtnProps {
   style?: CSSProperties;
   disabled?: boolean;
   onClick?: (event: MouseEvent) => void;
+  // onMouseOut?: (event: MouseEvent) => void;
+  // onMouseEnter?: (event: MouseEvent) => void;
 }
 
 function FTextBtn({children, type = 'primary', className, style, disabled, onClick}: FTextBtnProps) {
@@ -23,6 +25,13 @@ function FTextBtn({children, type = 'primary', className, style, disabled, onCli
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
+      // onMouseOut={(event: any) => {
+      //   onMouseOut && onMouseOut(event);
+      // }}
+      // onMouseEnter={(event: any) => {
+      //   console.log(event, 'EEEEEEEEEeeeee1241234');
+      //   onMouseEnter && onMouseEnter(event);
+      // }}
     >{children}</button>);
   }
 

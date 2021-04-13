@@ -31,9 +31,12 @@ function FLeftSiderLayout({children, header, sider, type, contentStyles, hasBott
         type === 'empty'
           ? (children)
           : (<>
-            <div className={[styles.header, type === 'table' ? styles.tableWidth : ''].join(' ')}>
-              {header}
-            </div>
+            {
+              header && (<div className={[styles.header, type === 'table' ? styles.tableWidth : ''].join(' ')}>
+                {header}
+              </div>)
+            }
+
             <div style={contentStyles} className={[styles.content, type === 'table' ? styles.tableWidth : ''].join(' ')}>
               {children}
             </div>

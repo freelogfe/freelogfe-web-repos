@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleButton} from '@/components/FButton';
+import {FCircleBtn, FCircleButton} from '@/components/FButton';
 import {Progress, Space, Modal} from 'antd';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
@@ -49,8 +49,8 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
             />
           </Space>
 
-          <FCircleButton
-            theme="text"
+          <FCircleBtn
+            type="transparent"
             onClick={() => {
               if ((storageHomePage.bucketList || []).length < 5) {
                 dispatch<ChangeAction>({
@@ -115,8 +115,12 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                   </FLink>);
                 })
             }
-          </div>) : (<FContentText
-            type="additional2" text={'单击“ + ”创建您的第一个项目。'}/>)
+          </div>) : (<div style={{padding: '0 40px'}}>
+            <FContentText
+              type="additional2"
+              text={'单击“ + ”创建您的第一个项目。'}
+            />
+          </div>)
         }
 
       </div>
@@ -128,7 +132,8 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           showInfo={false}
           className={styles.progressBack}
         />
-        <div className={styles.ratio}>{FUtil.Format.humanizeSize(storageHomePage.usedStorage)} / {FUtil.Format.humanizeSize(storageHomePage.totalStorage)}</div>
+        <div
+          className={styles.ratio}>{FUtil.Format.humanizeSize(storageHomePage.usedStorage)} / {FUtil.Format.humanizeSize(storageHomePage.totalStorage)}</div>
 
         {systemBuckets.length > 0 && (<>
           <div style={{height: 60}}/>

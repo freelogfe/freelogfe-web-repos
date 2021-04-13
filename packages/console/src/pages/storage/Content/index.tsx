@@ -21,7 +21,6 @@ import {RcFile} from "antd/lib/upload/interface";
 import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
-// import FLinkTo from "@/utils/path-assembler";
 import {ColumnsType} from "antd/lib/table/interface";
 import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
@@ -29,15 +28,16 @@ import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import NoBucket from "@/pages/storage/NoBucket";
 
 interface ContentProps {
   dispatch: Dispatch;
-  storage: StorageHomePageModelState;
+  storageHomePage: StorageHomePageModelState;
 }
 
-function Content({storage, dispatch}: ContentProps) {
+function Content({storageHomePage, dispatch}: ContentProps) {
 
-  const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
+  const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['objectList']>[number]> = [
     {
@@ -48,7 +48,7 @@ function Content({storage, dispatch}: ContentProps) {
         return (<Space size={10}>
           <FContentText text={text}/>
           <FCopyToClipboard
-            text={`${storage.activatedBucket}/${text}`}
+            text={`${storageHomePage.activatedBucket}/${text}`}
             title={'复制对象名称'}
           />
         </Space>);
@@ -129,14 +129,18 @@ function Content({storage, dispatch}: ContentProps) {
     });
   }
 
+  if (storageHomePage.bucketList?.length === 0) {
+    return (<NoBucket/>);
+  }
+
   return (<div>
 
     {
-      storage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'}/>)
+      storageHomePage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'}/>)
     }
 
     {
-      storage.total === 0 && (<>
+      storageHomePage.total === 0 && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
           tipText={'当前Bucket还没有上传任何对象'}
@@ -159,11 +163,11 @@ function Content({storage, dispatch}: ContentProps) {
     }
 
     {
-      storage.total > 0 && (<InfiniteScroll
+      storageHomePage.total > 0 && (<InfiniteScroll
         pageStart={0}
         initialLoad={false}
         loadMore={() => {
-          if (storage.isLoading || storage.total === -1) {
+          if (storageHomePage.isLoading || storageHomePage.total === -1) {
             return;
           }
           dispatch<HomePageChangeAction>({
@@ -177,17 +181,17 @@ function Content({storage, dispatch}: ContentProps) {
             payload: 'append',
           });
         }}
-        hasMore={!storage.isLoading && storage.total !== -1 && storage.objectList.length < storage.total}
+        hasMore={!storageHomePage.isLoading && storageHomePage.total !== -1 && storageHomePage.objectList.length < storageHomePage.total}
       >
         <div className={styles.body}>
           <FTable
             rowClassName={styles.rowClassName}
             columns={columns}
-            dataSource={storage.objectList}
+            dataSource={storageHomePage.objectList}
             pagination={false}
           />
         </div>
-        {storage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>}
+        {storageHomePage.isLoading && <div className={styles.loader} key={0}>Loading ...</div>}
       </InfiniteScroll>)
     }
 
@@ -197,7 +201,7 @@ function Content({storage, dispatch}: ContentProps) {
 
 
 export default connect(({storageHomePage}: ConnectState) => ({
-  storage: storageHomePage,
+  storageHomePage: storageHomePage,
 }))(Content);
 
 interface ToolsBarProps {

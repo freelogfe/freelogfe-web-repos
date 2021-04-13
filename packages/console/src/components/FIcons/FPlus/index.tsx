@@ -10,8 +10,9 @@ interface FPlusProps {
   onClick?(): void;
 }
 
-function FPlus({...props}: FPlusProps) {
-  return (<PlusOutlined {...props} />);
+function FPlus({className, ...props}: FPlusProps) {
+  // return (<PlusOutlined {...props} />);
+  return (<i className={['freelog', 'fl-icon-tianjia', className].join(' ')} {...props}/>);
 }
 
 export default FPlus;

@@ -77,14 +77,11 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
     return null;
   }
 
-  if (storageHomePage.bucketList.length === 0) {
-    return (<NoBucket/>);
-  }
-
   return (<>
     <FLeftSiderLayout
       // contentClassName={storageHomePage.objectList.length === 0 ? styles.backgroundTransparent : ''}
-      header={<Header/>}
+      // header={<Header/>}
+      header={storageHomePage.bucketList?.length === 0 ? null : <Header/>}
       sider={<Sider/>}
       type="table"
       contentStyles={{
