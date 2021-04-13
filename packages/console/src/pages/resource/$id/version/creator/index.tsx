@@ -530,7 +530,10 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
     <FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>
 
     <Space size={30}>
-      <FTextButton onClick={onClickCache}>{FUtil.I18n.message('save_as_draft')}</FTextButton>
+      <FTextBtn
+        type="default"
+        onClick={onClickCache}
+      >{FUtil.I18n.message('save_as_draft')}</FTextBtn>
       <FRectBtn
         style={{width: 108}}
         onClick={onClickCreate}
