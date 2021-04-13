@@ -6,7 +6,7 @@ import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FHorn from '@/pages/resource/components/FHorn';
-import {FCircleButton, FTextButton} from '@/components/FButton';
+import {FCircleButton, FRectBtn, FTextBtn, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState} from '@/models/connect';
 import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
@@ -16,18 +16,13 @@ import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FUtil from "@/utils";
+import {RouteComponentProps} from "react-router";
 
-interface InfoProps {
+interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState,
   resourceInfoPage: ResourceInfoPageModelState,
   user: UserModelState;
-
-  match: {
-    params: {
-      id: string;
-    };
-  };
 }
 
 function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: InfoProps & RouterTypes) {
@@ -110,63 +105,91 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
         <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')}>
           <FContentText text={resourceInfo.info.resourceType}/>
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_short_description')}>
+        <FFormLayout.FBlock
+          title={FUtil.I18n.message('resource_short_description')}
+          extra={<Space size={10}>
+            {
+              resourceInfo.info?.intro && !resourceInfoPage.isEditing
+              && (<FTextBtn onClick={() => {
+                onChangeIsEditing(true)
+              }}>{FUtil.I18n.message('edit')}</FTextBtn>)
+            }
+            {
+              resourceInfoPage.isEditing && (<>
+                <FTextBtn
+                  type="default"
+                  onClick={() => {
+                    onChangeIsEditing(false);
+                  }}
+                >{FUtil.I18n.message('cancel')}</FTextBtn>
+                <FTextBtn
+                  onClick={() => {
+                    onChangeIsEditing(false);
+                    dispatch<OnChangeInfoAction>({
+                      type: 'resourceInfoPage/onChangeInfo',
+                      // payload: {intro: resourceInfoPage.editor},
+                      payload: {intro: resourceInfoPage.editorText},
+                      id: resourceInfo.info?.resourceId || '',
+                    });
+                  }}
+                >{FUtil.I18n.message('save')}</FTextBtn>
+              </>)
+            }
+          </Space>}
+        >
+
+          {/*<FHorn className={styles.about} extra={<>*/}
+          {/*  {*/}
+          {/*    resourceInfoPage.isEditing*/}
+          {/*      ? (<Space size={10}>*/}
+          {/*        <FTextButton*/}
+          {/*          onClick={() => onChangeIsEditing(false)}*/}
+          {/*        >{FUtil.I18n.message('cancel')}</FTextButton>*/}
+          {/*        <FTextButton*/}
+          {/*          theme="primary"*/}
+          {/*          disabled={!!resourceInfoPage.introductionErrorText}*/}
+          {/*          onClick={() => {*/}
+          {/*            onChangeIsEditing(false);*/}
+          {/*            dispatch<OnChangeInfoAction>({*/}
+          {/*              type: 'resourceInfoPage/onChangeInfo',*/}
+          {/*              // payload: {intro: resourceInfoPage.editor},*/}
+          {/*              payload: {intro: resourceInfoPage.editorText},*/}
+          {/*              id: resourceInfo.info?.resourceId || '',*/}
+          {/*            });*/}
+          {/*          }}*/}
+          {/*        >{FUtil.I18n.message('save')}</FTextButton>*/}
+          {/*      </Space>)*/}
+          {/*      : resourceInfo.info?.intro*/}
+          {/*      ? <FTextButton*/}
+          {/*        theme="primary"*/}
+          {/*        onClick={() => onChangeIsEditing(true)}*/}
+          {/*      >{FUtil.I18n.message('edit')}</FTextButton>*/}
+          {/*      : null}*/}
+          {/*</>}>*/}
+          {/*</FHorn>*/}
 
           {
-            !resourceInfo.info?.intro && !resourceInfoPage.isEditing && (<Space size={10}>
-              <FCircleButton
+            resourceInfoPage.isEditing
+              ? (<FIntroductionEditor
+                value={resourceInfoPage.editorText}
+                errorText={resourceInfoPage.introductionErrorText}
+                onChange={(e) => dispatch<ChangeAction>({
+                  type: 'resourceInfoPage/change',
+                  payload: {
+                    editorText: e.target.value,
+                    introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
+                  },
+                })}
+              />)
+              : resourceInfo.info?.intro
+              ? (<div className={styles.aboutPanel}>
+                <FContentText text={resourceInfo.info?.intro}/>
+              </div>)
+              : (<FRectBtn
+                type="default"
                 onClick={() => onChangeIsEditing(true)}
-                theme="weaken"
-              />
-              <FContentText text={FUtil.I18n.message('resource_short_description')}/>
-            </Space>)}
-
-          <FHorn className={styles.about} extra={<>
-            {
-              resourceInfoPage.isEditing
-                ? (<Space size={10}>
-                  <FTextButton
-                    onClick={() => onChangeIsEditing(false)}
-                  >{FUtil.I18n.message('cancel')}</FTextButton>
-                  <FTextButton
-                    theme="primary"
-                    disabled={!!resourceInfoPage.introductionErrorText}
-                    onClick={() => {
-                      onChangeIsEditing(false);
-                      dispatch<OnChangeInfoAction>({
-                        type: 'resourceInfoPage/onChangeInfo',
-                        // payload: {intro: resourceInfoPage.editor},
-                        payload: {intro: resourceInfoPage.editorText},
-                        id: resourceInfo.info?.resourceId || '',
-                      });
-                    }}
-                  >{FUtil.I18n.message('save')}</FTextButton>
-                </Space>)
-                : resourceInfo.info?.intro
-                ? <FTextButton
-                  theme="primary"
-                  onClick={() => onChangeIsEditing(true)}
-                >{FUtil.I18n.message('edit')}</FTextButton>
-                : null}
-          </>}>
-
-            {
-              resourceInfoPage.isEditing
-                ? (<FIntroductionEditor
-                  value={resourceInfoPage.editorText}
-                  errorText={resourceInfoPage.introductionErrorText}
-                  onChange={(e) => dispatch<ChangeAction>({
-                    type: 'resourceInfoPage/change',
-                    payload: {
-                      editorText: e.target.value,
-                      introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
-                    },
-                  })}
-                />)
-                : resourceInfo.info?.intro ? (<div className={styles.aboutPanel}>
-                  <FContentText text={resourceInfo.info?.intro}/>
-                </div>) : null}
-          </FHorn>
+              >{FUtil.I18n.message('resource_short_description')}</FRectBtn>)
+          }
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
