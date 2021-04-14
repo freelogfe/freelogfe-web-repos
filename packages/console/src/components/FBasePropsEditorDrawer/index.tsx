@@ -3,7 +3,7 @@ import styles from './index.less';
 import {Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
-import {FCircleButton, FRectBtn, FTextBtn} from "@/components/FButton";
+import {FCircleBtn, FCircleButton, FRectBtn, FTextBtn} from "@/components/FButton";
 import {CUSTOM_KEY} from "@/utils/regexp";
 import FDrawer from "@/components/FDrawer";
 
@@ -184,8 +184,8 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             <div>
               <div style={{height: 22}}/>
               <div className={styles.delete}>
-                <FCircleButton
-                  theme="delete"
+                <FCircleBtn
+                  type="danger"
                   onClick={() => {
                     onChange && onChange(dataSource.filter((eds, edsIndex) => {
                       return edsIndex !== index;
@@ -204,7 +204,8 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     }
 
     <Space size={10}>
-      <FCircleButton
+      <FCircleBtn
+        size="small"
         onClick={() => {
           onChange && onChange([
             ...dataSource,

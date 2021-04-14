@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
-import {FAdd, FPlus} from "@/components/FIcons";
+import {FAdd, FDelete, FLine, FPlus} from "@/components/FIcons";
 
 interface FCircleBtnProps {
   children?: React.ReactNode;
@@ -26,7 +26,11 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FPlus style={{fontSize: 16}}/>}</button>);
+    >{children || <FPlus
+      style={{
+        fontSize: size === 'middle' ? 16 : 12,
+      }}
+    />}</button>);
   }
 
   if (type === 'transparent') {
@@ -41,21 +45,23 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
       onClick={(event: any) => {
         onClick && onClick(event);
       }}
-    >{children || <FPlus style={{fontSize: 16}}/>}</button>);
+    >{children || <FPlus style={{
+      fontSize: 14,
+    }}/>}</button>);
   }
 
   return (<button
-    className={[styles.add1, className].join(' ')}
-    style={{
-      height: size === 'middle' ? 32 : 22,
-      width: size === 'middle' ? 32 : 22,
-      ...style,
-    }}
+    className={[styles.Danger, className].join(' ')}
+    // style={{
+    //   height: size === 'middle' ? 32 : 22,
+    //   width: size === 'middle' ? 32 : 22,
+    //   ...style,
+    // }}
     disabled={disabled}
     onClick={(event: any) => {
       onClick && onClick(event);
     }}
-  >{children || <FPlus style={{fontSize: 16}}/>}</button>);
+  >{children || <FLine style={{fontSize: 12}}/>}</button>);
 
 }
 

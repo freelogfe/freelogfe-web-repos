@@ -49,10 +49,6 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
   }, [route]);
 
   // React.useEffect(() => {
-  //
-  // }, []);
-
-  // React.useEffect(() => {
   //   // setEditorText(info?.intro || '');
   //   dispatch<ChangeAction>({
   //     type: 'resourceInfoPage/change',
@@ -193,5 +189,3 @@ export default connect(({resourceInfo, resourceInfoPage, user}: ConnectState) =>
   resourceInfoPage: resourceInfoPage,
   user: user,
 }))(Info);
-
-//has permission
