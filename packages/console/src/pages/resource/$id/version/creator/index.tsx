@@ -3,7 +3,7 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
-import {FNormalButton, FRectBtn, FTextButton} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
 import FDepPanel from '@/pages/resource/containers/FDepPanel';
@@ -44,7 +44,6 @@ import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
-import {FTextBtn} from '@/components/FButton';
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -527,7 +526,8 @@ interface HeaderProps {
 
 function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderProps) {
   return (<div className={styles.Header}>
-    <FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>
+    {/*<FTitleText text={FUtil.I18n.message('create_new_version')} type="h1"/>*/}
+    <FTitleText text={'创建版本'} type="h1"/>
 
     <Space size={30}>
       <FTextBtn

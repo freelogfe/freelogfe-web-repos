@@ -8,7 +8,10 @@ interface FLinkProps extends LinkProps {
 }
 
 function FLink({className = '', ...props}: FLinkProps) {
-  return (<Link className={[className, styles.Link].join(' ')} {...props}/>);
+  return (<Link
+    className={[className, styles.Link].join(' ')}
+    {...props}
+  />);
 }
 
 export default FLink;

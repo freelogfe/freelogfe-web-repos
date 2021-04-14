@@ -5,8 +5,7 @@ import {Space} from 'antd';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
-import FHorn from '@/pages/resource/components/FHorn';
-import {FCircleButton, FRectBtn, FTextBtn, FTextButton} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState, ResourceInfoPageModelState, UserModelState} from '@/models/connect';
 import {OnChangeInfoAction, ChangeAction, InitModelStatesAction} from "@/models/resourceInfoPage";
@@ -100,10 +99,10 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
         <FFormLayout.FBlock title={FUtil.I18n.message('resource_name')}>
-          <FContentText text={resourceInfo.info?.resourceName}/>
+          <FContentText type="highlight" text={resourceInfo.info?.resourceName}/>
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')}>
-          <FContentText text={resourceInfo.info.resourceType}/>
+          <FContentText type="highlight" text={resourceInfo.info.resourceType}/>
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
           title={FUtil.I18n.message('resource_short_description')}
@@ -138,36 +137,6 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
           </Space>}
         >
 
-          {/*<FHorn className={styles.about} extra={<>*/}
-          {/*  {*/}
-          {/*    resourceInfoPage.isEditing*/}
-          {/*      ? (<Space size={10}>*/}
-          {/*        <FTextButton*/}
-          {/*          onClick={() => onChangeIsEditing(false)}*/}
-          {/*        >{FUtil.I18n.message('cancel')}</FTextButton>*/}
-          {/*        <FTextButton*/}
-          {/*          theme="primary"*/}
-          {/*          disabled={!!resourceInfoPage.introductionErrorText}*/}
-          {/*          onClick={() => {*/}
-          {/*            onChangeIsEditing(false);*/}
-          {/*            dispatch<OnChangeInfoAction>({*/}
-          {/*              type: 'resourceInfoPage/onChangeInfo',*/}
-          {/*              // payload: {intro: resourceInfoPage.editor},*/}
-          {/*              payload: {intro: resourceInfoPage.editorText},*/}
-          {/*              id: resourceInfo.info?.resourceId || '',*/}
-          {/*            });*/}
-          {/*          }}*/}
-          {/*        >{FUtil.I18n.message('save')}</FTextButton>*/}
-          {/*      </Space>)*/}
-          {/*      : resourceInfo.info?.intro*/}
-          {/*      ? <FTextButton*/}
-          {/*        theme="primary"*/}
-          {/*        onClick={() => onChangeIsEditing(true)}*/}
-          {/*      >{FUtil.I18n.message('edit')}</FTextButton>*/}
-          {/*      : null}*/}
-          {/*</>}>*/}
-          {/*</FHorn>*/}
-
           {
             resourceInfoPage.isEditing
               ? (<FIntroductionEditor
@@ -188,17 +157,16 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
               : (<FRectBtn
                 type="default"
                 onClick={() => onChangeIsEditing(true)}
-              >{FUtil.I18n.message('resource_short_description')}</FRectBtn>)
+              >
+                {/*{FUtil.I18n.message('resource_short_description')}*/}
+                添加简介
+              </FRectBtn>)
           }
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
           <FUploadResourceCover
             value={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
-            // onChange={(value) => dispatch<OnChangeCoverAction>({
-            //   type: 'resourceInfoPage/onChangeCover',
-            //   payload: value,
-            // })}
             onChange={(value) => dispatch<OnChangeInfoAction>({
               type: 'resourceInfoPage/onChangeInfo',
               payload: {coverImages: [value]},

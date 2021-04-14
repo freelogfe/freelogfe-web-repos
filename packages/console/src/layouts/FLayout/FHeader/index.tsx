@@ -7,13 +7,10 @@ import Node from "@/layouts/FLayout/FHeader/Node";
 import Search from "@/layouts/FLayout/FHeader/Search";
 import Create from "@/layouts/FLayout/FHeader/Create";
 import User from "@/layouts/FLayout/FHeader/User";
-import {} from "antd";
 import {router, NavLink} from "umi";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import FUtil from "@/utils";
-// import {market} from "@/utils/path-assembler";
-
 
 interface FHeaderProps {
   global: GlobalModelState;

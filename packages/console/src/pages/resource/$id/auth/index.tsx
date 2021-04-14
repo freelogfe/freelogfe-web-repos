@@ -180,18 +180,22 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
           </FFormLayout.FBlock>)
       }
 
-      {
-        resourceAuthPage.contractsAuthorize?.length > 0 && (
-          <FFormLayout.FBlock title={FUtil.I18n.message('authorizing_contracts')}>
-            <Table
+      <FFormLayout.FBlock title={FUtil.I18n.message('authorizing_contracts')}>
+
+        {
+          resourceAuthPage.contractsAuthorize?.length > 0
+            ? (<Table
               columns={columns}
               dataSource={resourceAuthPage.contractsAuthorize}
               bordered
+              pagination={false}
               // title={() => 'Header'}
               // footer={() => 'Footer'}
-            />
-          </FFormLayout.FBlock>)
-      }
+            />)
+            : (<FContentText type="additional1" text={'暂无合约'}/>)
+        }
+
+      </FFormLayout.FBlock>
     </FFormLayout>
   </FLeftSiderLayout>);
 }
