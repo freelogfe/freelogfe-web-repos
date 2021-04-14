@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Drawer, Space} from "antd";
-import {FContentText, FTitleText} from "@/components/FText";
-import {FCircleButton, FNormalButton, FTextButton} from "@/components/FButton";
+import {FContentText} from "@/components/FText";
+import {FCircleBtn, FRectBtn, FTextBtn} from "@/components/FButton";
 import FCustomOptions, {Data} from './FCustomOptions';
 import FDrawer from "@/components/FDrawer";
 
@@ -68,14 +68,16 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
       onCancel && onCancel();
     }}
     visible={visible}
+    // visible={true}
     width={720}
     topRight={<Space size={30}>
-      <FTextButton
+      <FTextBtn
+        type="default"
         onClick={() => {
           onCancel && onCancel()
         }}
-      >取消</FTextButton>
-      <FNormalButton
+      >取消</FTextBtn>
+      <FRectBtn
         disabled={!!dataSource.find((eds) => {
           return !eds.key || !!eds.keyError
             || (eds.custom === 'select' ? (eds.customOption === '' || !!eds.customOptionError) : (eds.defaultValue === '' || !!eds.defaultValueError))
@@ -84,7 +86,7 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
         onClick={() => {
           onConfirm && onConfirm();
         }}
-      >确定</FNormalButton>
+      >确定</FRectBtn>
     </Space>}
     // className={styles}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
@@ -101,7 +103,8 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
     }
 
     <Space size={10}>
-      <FCircleButton
+      <FCircleBtn
+        size="small"
         onClick={() => {
           onChange && onChange([
             ...dataSource,

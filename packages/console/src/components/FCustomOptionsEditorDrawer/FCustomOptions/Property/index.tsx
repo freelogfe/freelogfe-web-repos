@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FHorn from '@/pages/resource/components/FHorn';
-// import {i18nMessage} from '@/utils/i18n';
 import {Col, Row, Space, Switch} from 'antd';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
@@ -138,6 +136,7 @@ function Property({data, onChange}: PropertyProps) {
           className={styles.customOptions}
         >
           <FInput
+            // style={{width: 330}}
             wrapClassName={styles.FInputWrap}
             value={data.defaultValue}
             onChange={(e) => {

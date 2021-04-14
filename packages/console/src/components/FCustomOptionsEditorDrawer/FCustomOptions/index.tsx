@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {Space} from 'antd';
 import Property from './Property';
+import {FCircleBtn} from "@/components/FButton";
 
 export interface Data {
   key: string;
@@ -72,20 +73,25 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
         direction="vertical"
       >
         {
-          [
-            ...dataSource.map((i, j) => (<div key={j}>
+          dataSource.map((i, j) => (<div
+            className={styles.item}
+            key={j}
+          >
+            <div>
               <Property
                 data={i}
                 onChange={(value) => onChangeProperty(value, j)}
               />
-              <div className={styles.delete}>
-                <span onClick={() => {
-                  const data: Data[] = dataSource.filter((ds, index) => index !== j);
-                  onChange && onChange(verifyDuplication(data));
-                }}>删除</span>
-              </div>
-            </div>))
-          ]
+            </div>
+            <div style={{width: 30, flexShrink: 0}}/>
+            <FCircleBtn type="danger"/>
+            {/*<div className={styles.delete}>*/}
+            {/*  <span onClick={() => {*/}
+            {/*    const data: Data[] = dataSource.filter((ds, index) => index !== j);*/}
+            {/*    onChange && onChange(verifyDuplication(data));*/}
+            {/*  }}>删除</span>*/}
+            {/*</div>*/}
+          </div>))
         }
       </Space>}
   </>);
