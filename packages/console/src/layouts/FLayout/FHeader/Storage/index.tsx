@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import sharedStyles from '../../index.less';
 import {FContentText} from "@/components/FText";
-import {FNormalButton} from "@/components/FButton";
+import {FRectBtn} from "@/components/FButton";
 import FMenu from "@/components/FMenu";
 import {
   ChangeAction,
@@ -11,11 +11,9 @@ import {
 } from "@/models/storageHomePage";
 import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
-// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
-// import FLinkTo from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 import FUtil from "@/utils";
 
@@ -55,7 +53,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
     ? (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>
       <div style={{height: 30}}/>
-      <FNormalButton
+      <FRectBtn
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
@@ -65,10 +63,10 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
               newBucketModalVisible: true,
             },
           });
-          router.push('/storage');
+          router.push(FUtil.LinkTo.storageSpace({}));
         }}
         size="small"
-      >创建Bucket</FNormalButton>
+      >创建Bucket</FRectBtn>
     </div>)
     : (<div>
       <FMenu
@@ -78,6 +76,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           //   type: 'storageHomePage/onChangeActivatedBucket',
           //   payload: value,
           // });
+          // console.log(value, 'value!@#$!@#$!@#$!@#$@!#$1111111');
           router.push(FUtil.LinkTo.storageSpace({
             bucketName: value,
           }));

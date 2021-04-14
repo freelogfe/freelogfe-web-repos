@@ -130,12 +130,14 @@ export function informExhibitManagement({exhibitID}: InformExhibitManagementPara
 
 // 存储空间
 interface StorageSpaceParamsType {
-  bucketName: string;
+  bucketName?: string;
 }
 
 // | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
-export function storageSpace({bucketName}: StorageSpaceParamsType): TReturnType {
-  return `/storage?bucketName=${bucketName}`;
+export function storageSpace({...params}: StorageSpaceParamsType = {}): TReturnType {
+  // console.log(params, 'bucketName1paramsparamsparams==++++++');
+  // console.log(handleQuery(params), 'handleQuery(params)q1234123412341234');
+  return `/storage${handleQuery(params)}`;
 }
 
 // 对象详情
@@ -144,8 +146,8 @@ interface ObjectDetailsParamsType {
   objectID: string;
 }
 
-export function objectDetails({bucketName, objectID}: ObjectDetailsParamsType): TReturnType {
-  return `/storage?bucketName=${bucketName}&objectID=${objectID}`;
+export function objectDetails({...params}: ObjectDetailsParamsType): TReturnType {
+  return `/storage${handleQuery(params)}`;
 }
 
 const FLinkTo = {
@@ -168,3 +170,14 @@ const FLinkTo = {
 };
 
 export default FLinkTo;
+
+function handleQuery(query: object): string {
+  const obj: any = {};
+  for (const [key, value] of Object.entries(query)) {
+    if (key && value) {
+      obj[key] = value;
+    }
+  }
+  const result: string = querystring.stringify(obj);
+  return result ? ('?' + result) : '';
+}

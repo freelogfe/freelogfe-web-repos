@@ -8,6 +8,7 @@ import fMessage from '@/components/fMessage';
 import {getSHA1Hash} from '@/utils/tools';
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
+import {router} from "umi";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
@@ -148,24 +149,34 @@ const Model: StorageHomePageModelType = {
   },
   effects: {
     * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+
       const params: Parameters<typeof FApiServer.Storage.bucketList>[0] = {
         // bucketType: 0,
         bucketType: 1,
       };
       const {data} = yield call(FApiServer.Storage.bucketList, params);
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+      const bucketList: NonNullable<StorageHomePageModelState['bucketList']> = data
+        .map((i: any) => ({
+          bucketName: i.bucketName,
+          bucketType: i.bucketType,
+          createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
+          totalFileQuantity: i.totalFileQuantity,
+        }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bucketList: data
-            .map((i: any) => ({
-              bucketName: i.bucketName,
-              bucketType: i.bucketType,
-              createDate: moment(i.createDate).format('YYYY.MM.DD HH:mm'),
-              totalFileQuantity: i.totalFileQuantity,
-            })),
+          bucketList: bucketList,
         },
       });
+
+      if (bucketList.length === 0) {
+        router.push(FUtil.LinkTo.storageSpace({}));
+      } else {
+        if (!bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
+          router.push(FUtil.LinkTo.storageSpace({bucketName: bucketList[0].bucketName}));
+        }
+      }
       // yield put<OnChangeActivatedBucketAction>({
       //   type: 'onChangeActivatedBucket',
       //   payload: data?.length > 0
@@ -194,6 +205,7 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.newBucketName,
       };
       yield call(FApiServer.Storage.createBucket, params);
+      router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -231,7 +243,10 @@ const Model: StorageHomePageModelType = {
         },
       });
     },
-    * deleteBucketByName({payload}: DeleteBucketByNameAction, {call, put}: EffectsCommandMap) {
+    * deleteBucketByName({payload}: DeleteBucketByNameAction, {call, put, select}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+        storageHomePage,
+      }));
       const params: Parameters<typeof FApiServer.Storage.deleteBuckets>[0] = {
         bucketName: payload,
       };

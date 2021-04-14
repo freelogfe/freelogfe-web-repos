@@ -46,7 +46,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
   );
 
   const {run: run1} = ahooks.useDebounceFn(async () => {
-    console.log(successUids, failedUids, 'successUids!Q@#$@#$@!#$@#$#$');
+    // console.log(successUids, failedUids, 'successUids!Q@#$@#$@!#$@#$#$');
     await dispatch<ChangeAction>({
       type: 'storageHomePage/change',
       payload: {
