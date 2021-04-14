@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FTable from '@/components/FTable';
 import {connect, Dispatch} from 'dva';
@@ -47,10 +47,12 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       render(text: any, record: any) {
         return (<Space size={10}>
           <FContentText text={text}/>
-          <FCopyToClipboard
-            text={`${storageHomePage.activatedBucket}/${text}`}
-            title={'复制对象名称'}
-          />
+          <div className={styles.hoverVisible}>
+            <FCopyToClipboard
+              text={`${storageHomePage.activatedBucket}/${text}`}
+              title={'复制对象名称'}
+            />
+          </div>
         </Space>);
       },
     },
@@ -157,7 +159,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
                 });
               }
               return false;
-            }}><FNormalButton>上传对象</FNormalButton></FUpload>}
+            }}><FRectBtn>上传对象</FRectBtn></FUpload>}
         />
       </>)
     }
@@ -233,19 +235,19 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     }
     {
       showDownload && (<FTooltip title={'下载'}>
-        <FTextButton
+        <FTextBtn
           onClick={() => onClickDownload && onClickDownload()}
-          theme={'primary'}
-        ><FDownload/></FTextButton>
+          type="primary"
+        ><FDownload/></FTextBtn>
       </FTooltip>)
     }
     {
       showDelete && (
         <FTooltip title={'删除'}>
-          <FTextButton
+          <FTextBtn
             onClick={() => onClickDelete && onClickDelete()}
             className={styles.Delete}
-          ><FDelete/></FTextButton>
+          ><FDelete/></FTextBtn>
         </FTooltip>
       )
     }

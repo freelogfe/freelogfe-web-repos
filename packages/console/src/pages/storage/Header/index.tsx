@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from '@/components/FText';
 import {Space} from 'antd';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
 import {ChangeAction, StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
@@ -13,20 +13,20 @@ import fMessage from "@/components/fMessage";
 
 interface HeaderProps {
   dispatch: Dispatch;
-  storage: StorageHomePageModelState;
+  storageHomePage: StorageHomePageModelState;
 }
 
 interface HeaderStates {
   // fileObjects: FUploadTasksPanelProps['fileObjects'];
 }
 
-function Header({dispatch, storage}: HeaderProps) {
+function Header({dispatch, storageHomePage}: HeaderProps) {
 
-  const bucket = storage.bucketList.find((b) => b.bucketName === storage.activatedBucket);
+  const bucket = storageHomePage.bucketList?.find((b) => b.bucketName === storageHomePage.activatedBucket);
   if (!bucket) {
     return null;
   }
-  const isUserDataBucket = storage.activatedBucket === '.UserNodeData';
+  const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   // const [fileObjects, setFileObjects] = React.useState<HeaderStates['fileObjects']>([]);
 
@@ -55,7 +55,7 @@ function Header({dispatch, storage}: HeaderProps) {
             return false;
           }}
         >
-          <FNormalButton>上传对象</FNormalButton>
+          <FRectBtn>上传对象</FRectBtn>
         </FUpload>
       )
     }
@@ -65,5 +65,5 @@ function Header({dispatch, storage}: HeaderProps) {
 
 
 export default connect(({storageHomePage}: ConnectState) => ({
-  storage: storageHomePage,
+  storageHomePage: storageHomePage,
 }))(Header);

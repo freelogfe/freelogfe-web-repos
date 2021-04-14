@@ -198,6 +198,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
             <div>只能包括小写字母、数字和短横线（-）；</div>
             <div>必须以小写字母或者数字开头和结尾 ；</div>
             <div>长度必须在 1–63 字符之间。</div>
+            <div>名称不能重复</div>
           </div>) : ''}
         />
         <div style={{height: 100}}/>

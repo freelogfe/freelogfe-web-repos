@@ -192,7 +192,7 @@ const Model: StorageHomePageModelType = {
     * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
 
-      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(storageHomePage.newBucketName)) {
+      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(storageHomePage.newBucketName) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(storageHomePage.newBucketName)) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
