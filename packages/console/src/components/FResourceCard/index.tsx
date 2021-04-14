@@ -107,12 +107,9 @@ export default function ({
         </div>
         <div style={{height: '15px'}}/>
         <div className={styles.MetaFooter}>
-          <div>
             {
               resource.policy.map((i: string) => <Policy key={i} text={i}/>)
             }
-          </div>
-          {/*<a onClick={() => onClickMore && onClickMore()}>{FUtil.I18n.message('more_details')}>></a>*/}
         </div>
       </div>
     </div>
