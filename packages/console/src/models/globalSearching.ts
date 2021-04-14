@@ -1,6 +1,6 @@
 import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer, WholeReadonly} from './shared';
+import {DvaReducer} from './shared';
 
 export interface GlobalSearchingModelState {
   input: string;

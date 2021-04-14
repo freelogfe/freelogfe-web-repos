@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FMenu from "@/components/FMenu";
-import {FCircleButton} from "@/components/FButton";
+import {FCircleBtn, FCircleButton} from "@/components/FButton";
 import FDropdown from "@/components/FDropdown";
 import {router} from "umi";
 import FUtil from "@/utils";
@@ -36,12 +36,13 @@ function Create({}: CreateProps) {
     onClick={onCreateClick}
     options={creatorOptions}
   />}>
-    <a
-      className={styles.create}
-      // onClick={() => onCreateClick('1')}
-    >
-      <FCircleButton/>
-    </a>
+    {/*<a*/}
+    {/*  className={styles.create}*/}
+    {/*  // onClick={() => onCreateClick('1')}*/}
+    {/*>*/}
+    {/*  <FCircleButton/>*/}
+    {/*</a>*/}
+    <FCircleBtn/>
   </FDropdown>);
 }
 
