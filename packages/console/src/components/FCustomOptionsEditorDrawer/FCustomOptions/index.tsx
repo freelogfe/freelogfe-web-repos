@@ -84,11 +84,16 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
               />
             </div>
             <div style={{width: 30, flexShrink: 0}}/>
-            <FCircleBtn type="danger"/>
+            <FCircleBtn
+              type="danger"
+              onClick={() => {
+                const data: Data[] = dataSource.filter((ds, index) => index !== j);
+                onChange && onChange(verifyDuplication(data));
+              }}
+            />
             {/*<div className={styles.delete}>*/}
             {/*  <span onClick={() => {*/}
-            {/*    const data: Data[] = dataSource.filter((ds, index) => index !== j);*/}
-            {/*    onChange && onChange(verifyDuplication(data));*/}
+
             {/*  }}>删除</span>*/}
             {/*</div>*/}
           </div>))

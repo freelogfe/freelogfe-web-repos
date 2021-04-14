@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FTextBtn, FCircleButton, FNormalButton} from '@/components/FButton';
+import {FTextBtn, FCircleButton, FNormalButton, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
@@ -253,11 +253,15 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>
           <Space size={10}>
-            <FCircleButton
+            {/*<FCircleButton*/}
+            {/*  onClick={() => setDepInfoVisible(true)}*/}
+            {/*  theme="weaken"*/}
+            {/*/>*/}
+            {/*<FContentText text={''}/>*/}
+            <FRectBtn
+              type="default"
               onClick={() => setDepInfoVisible(true)}
-              theme="weaken"
-            />
-            <FContentText text={'添加依赖'}/>
+            >添加依赖</FRectBtn>
           </Space>
           {
             storageObjectEditor.depRs.length > 0 && (<DepsCards
