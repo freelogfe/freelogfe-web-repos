@@ -60,7 +60,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       title: '',
       dataIndex: 'tool',
       key: 'tool',
-      width: 180,
+      width: 150,
       render(text: any, record) {
         return (<div className={styles.hoverVisible}>
           <ToolsBar
@@ -86,7 +86,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
-      width: 150,
+      width: 140,
       render(text: any, record: any) {
         if (!text) {
           return (<FContentText type="negative" text={'未设置类型'}/>);
@@ -99,7 +99,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       title: '大小',
       dataIndex: 'size',
       key: 'size',
-      width: 100,
+      width: 120,
       className: styles.columns,
     },
     {
