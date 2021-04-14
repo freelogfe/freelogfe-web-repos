@@ -61,6 +61,7 @@ function FInput({
           className]
           .join(' ')}
         {...props}
+        allowClear={true}
       />
       {
         errorText && (<div className={styles.errorText}>{errorText}</div>)
