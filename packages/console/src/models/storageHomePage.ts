@@ -173,7 +173,8 @@ const Model: StorageHomePageModelType = {
       if (bucketList.length === 0) {
         router.push(FUtil.LinkTo.storageSpace({}));
       } else {
-        if (!bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
+
+        if (window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
           router.push(FUtil.LinkTo.storageSpace({bucketName: bucketList[0].bucketName}));
         }
       }

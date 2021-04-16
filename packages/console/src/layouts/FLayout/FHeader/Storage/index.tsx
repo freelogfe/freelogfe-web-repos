@@ -39,7 +39,9 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   }, []);
 
   function onClickStorage() {
+
     if (!isCurrent) {
+      console.log('@$!@#$@!#$!@#$onClickStorage');
       return router.push(FUtil.LinkTo.storageSpace({
         bucketName: (storageHomePage.bucketList
           && storageHomePage.bucketList[0]
@@ -63,6 +65,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
               newBucketModalVisible: true,
             },
           });
+          console.log('2222222@@#$@#$T09djsg');
           router.push(FUtil.LinkTo.storageSpace({}));
         }}
         size="small"
@@ -76,7 +79,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           //   type: 'storageHomePage/onChangeActivatedBucket',
           //   payload: value,
           // });
-          // console.log(value, 'value!@#$!@#$!@#$!@#$@!#$1111111');
+          console.log(value, 'value!@#$!@#$!@#$!@#$@!#$1113333331111');
           router.push(FUtil.LinkTo.storageSpace({
             bucketName: value,
           }));
