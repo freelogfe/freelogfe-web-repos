@@ -82,7 +82,6 @@ function FResourceCardsList({
 
   // function onChangeTab(value: '1' | '2') {
   //   if (value === '2') {
-  //     return router.push('/resource/collect');
   //   }
   // }
 

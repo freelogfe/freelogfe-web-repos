@@ -51,7 +51,6 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
               <FTextButton
                 theme="primary"
                 onClick={() => {
-                  // router.push('/node/creator')
                   router.push(FUtil.LinkTo.nodeCreator());
                 }}>创建节点</FTextButton>
             </>)

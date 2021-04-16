@@ -61,11 +61,9 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
 
   function onChangeTab(value: '1' | '2') {
     // if (value === '1' && marketPage.tabValue !== '1') {
-    //   return router.push('/market');
     // }
 
     if (value === '2' && marketPage.tabValue !== '2') {
-      // return router.push('/market/example');
       return window.open('https://f-presentations.freelog.com');
     }
   }

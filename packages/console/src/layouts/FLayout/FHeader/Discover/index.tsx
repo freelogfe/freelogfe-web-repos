@@ -34,7 +34,6 @@ function Discover({global, marketPage}: DiscoverProps) {
     if (value === '1' && cRoute.pathname !== '/market') {
       return router.push(FUtil.LinkTo.market());
     } else if (value === '2') {
-      // return router.push('/market/example');
       return window.open('https://f-presentations.freelog.com');
     }
   }

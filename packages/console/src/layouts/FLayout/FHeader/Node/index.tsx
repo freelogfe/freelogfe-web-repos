@@ -28,7 +28,6 @@ function Node({dispatch, nodes, global}: NodeProps) {
   const nodeId: string | null = (cRoute.pathname.match(/\/node\/(\d*)\/formal/) || cRoute.pathname.match(/\/node\/(\d*)\/informal/) || [null, null])[1];
 
   function onClickNodes(value: string) {
-    // return router.push('/node/' + value + '/formal');
     return router.push(FUtil.LinkTo.nodeManagement({nodeID: Number(value)}));
   }
 
@@ -55,7 +54,6 @@ function Node({dispatch, nodes, global}: NodeProps) {
       <FNormalButton
         size="small"
         onClick={() => {
-          // router.push('/node/creator');
           router.push(FUtil.LinkTo.nodeCreator());
         }}
       >创建节点</FNormalButton>

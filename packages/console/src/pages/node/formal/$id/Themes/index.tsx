@@ -45,7 +45,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
   //           resourceType: 'theme',
   //         }
   //       });
-  //       router.push('/market');
   //     }}
   //   />);
   // }

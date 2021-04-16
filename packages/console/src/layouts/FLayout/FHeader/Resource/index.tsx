@@ -32,10 +32,10 @@ function Resource({global}: ResourceProps) {
 
   function onClickResource(value: string) {
     if (value === '1' && !cRoute.pathname.startsWith('/resource/list')) {
-      return router.push('/resource/list');
+      return router.push(FUtil.LinkTo.myResources());
     }
     if (value === '2' && !cRoute.pathname.startsWith('/resource/collect')) {
-      return router.push('/resource/collect');
+      return router.push(FUtil.LinkTo.myCollects());
     }
   }
 

@@ -25,7 +25,7 @@ function Create({}: CreateProps) {
   function onCreateClick(value: string) {
     // console.log(params, 'params');
     if (value === '1') {
-      return router.push('/resource/creator');
+      return router.push(FUtil.LinkTo.resourceCreator());
     }
     if (value === '2') {
       return router.push(FUtil.LinkTo.nodeCreator());

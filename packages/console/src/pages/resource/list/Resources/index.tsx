@@ -38,7 +38,7 @@ function Resources({dispatch, resource}: ResourceProps) {
       height={'calc(100vh - 140px)'}
       tipText={'未创建任何资源'}
       btnText={'创建资源'}
-      onClick={() => router.push('/resource/creator')}
+      onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
     />);
   }
 

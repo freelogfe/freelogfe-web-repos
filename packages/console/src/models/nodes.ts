@@ -129,7 +129,6 @@ const Model: NodesModelType = {
       yield put<FetchNodesAction>({
         type: 'fetchNodes',
       });
-      // router.push('/node/' + data.nodeId + '/formal');
       router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {

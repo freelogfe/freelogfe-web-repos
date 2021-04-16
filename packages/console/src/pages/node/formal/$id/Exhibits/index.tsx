@@ -63,7 +63,6 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   //           resourceType: '-1',
   //         }
   //       });
-  //       router.push('/market');
   //     }}
   //   />);
   // }
@@ -233,7 +232,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               resourceType: '-1',
             }
           });
-          router.push('/market');
+          router.push(FUtil.LinkTo.market());
         }}
       />) : (<>
         {
