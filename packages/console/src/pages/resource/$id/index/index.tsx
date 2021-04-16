@@ -10,15 +10,16 @@ import Option from './Option';
 import Viewport from '@/pages/resource/$id/index/Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {
-  ClearDataDataAction,
-  InitDataAction,
+  ClearDataDataAction, FetchCollectionInfoAction, FetchInfoAction,
   OnChangeVersionAction,
-  OnClickCollectionAction
+  OnClickCollectionAction,
+  ChangeAction,
 } from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert, Space} from 'antd';
 import SignPage from './SignPage';
 import {RouteComponentProps} from "react-router";
+import * as AHooks from 'ahooks';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -27,18 +28,47 @@ interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
-  React.useEffect(() => {
-    dispatch<InitDataAction>({
-      type: 'marketResourcePage/initData',
-      payload: match.params.id,
+  AHooks.useMount(async () => {
+    await onChange({resourceId: match.params.id});
+
+    await dispatch<FetchCollectionInfoAction>({
+      type: 'marketResourcePage/fetchCollectionInfo',
     });
 
-    return () => {
-      dispatch<ClearDataDataAction>({
-        type: 'marketResourcePage/clearData',
-      });
-    };
-  }, [match.params.id]);
+    await dispatch<FetchInfoAction>({
+      type: 'marketResourcePage/fetchInfo',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<ClearDataDataAction>({
+      type: 'marketResourcePage/clearData',
+    });
+  });
+
+  // React.useEffect(() => {
+  //   console.log(match, 'ResourceDetails, 1234234@#$@#$@#$@#$@#$');
+  //   handleData();
+  //
+  //   // return () => {
+  //   //   console.log('LeaveClearDataDataAction9087uoihjkl23hr45lkdsf98ayh');
+  //   //   dispatch<ClearDataDataAction>({
+  //   //     type: 'marketResourcePage/clearData',
+  //   //   });
+  //   // };
+  // }, [match.params.id]);
+
+  // async function handleData() {
+  //   console.log(match.params.id, ' match.params.id12#$@#$!@#$@#$oplllllll');
+  //
+  // }
+
+  async function onChange(payload: Partial<MarketResourcePageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'marketResourcePage/change',
+      payload: payload,
+    });
+  }
 
   if (marketResourcePage.isSignPage) {
     return (<SignPage/>);

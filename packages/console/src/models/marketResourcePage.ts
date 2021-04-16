@@ -135,10 +135,10 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<MarketResourcePageModelState>;
 }
 
-export interface InitDataAction extends AnyAction {
-  type: 'marketResourcePage/initData';
-  payload: string;
-}
+// export interface InitDataAction extends AnyAction {
+//   type: 'marketResourcePage/initData';
+//   payload: string;
+// }
 
 export interface ClearDataDataAction extends AnyAction {
   type: 'marketResourcePage/clearData';
@@ -149,7 +149,7 @@ export interface FetchInfoAction extends AnyAction {
 }
 
 export interface FetchCollectionInfoAction extends AnyAction {
-  type: 'fetchCollectionInfo';
+  type: 'fetchCollectionInfo' | 'marketResourcePage/fetchCollectionInfo';
 }
 
 export interface OnClickCollectionAction extends AnyAction {
@@ -187,7 +187,7 @@ interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
   effects: {
-    initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
+    // initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     clearData: (action: ClearDataDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
@@ -254,23 +254,16 @@ const Model: MarketResourcePageModelType = {
   namespace: 'marketResourcePage',
   state: initStates,
   effects: {
-    * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          resourceId: payload,
-        }
-      });
-
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
-      });
-
-      yield put<FetchCollectionInfoAction>({
-        type: 'fetchCollectionInfo',
-      });
-
-    },
+    // * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       resourceId: payload,
+    //     }
+    //   });
+    //
+    //
+    // },
     * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -282,6 +275,9 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
         user,
       }));
+
+      // console.log(marketResourcePage, 'marketResourcePageFetchInfoAction@#@##');
+
       // 获取资源信息详情
       const params: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: marketResourcePage.resourceId,
@@ -292,8 +288,9 @@ const Model: MarketResourcePageModelType = {
 
       let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
 
+      // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
       // 获取上抛资源信息
-      if (data.baseUpcastResources.length > 0) {
+      if ((data.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
         const params1: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
           resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
@@ -367,6 +364,7 @@ const Model: MarketResourcePageModelType = {
 
     },
     * fetchCollectionInfo({}: FetchCollectionInfoAction, {call, select, put}: EffectsCommandMap) {
+      // console.log('进入获取收藏', 'FGHSDGf09uj4k2t;ldfs');
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
         marketResourcePage,
       }));
@@ -382,6 +380,7 @@ const Model: MarketResourcePageModelType = {
       };
 
       const {data: data2} = yield call(FApiServer.Collection.collectedCount, params2);
+      // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -487,6 +486,7 @@ const Model: MarketResourcePageModelType = {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
         marketResourcePage
       }));
+      // console.log(marketResourcePage, 'marketResourcePage112342342');
       const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
@@ -521,6 +521,8 @@ const Model: MarketResourcePageModelType = {
         version: data.version,
         versionId: data.versionId,
       });
+
+      // console.log('授权树', 'marketResourcePage112342342');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -698,55 +700,3 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
 
   return await Promise.all(allPromises);
 }
-
-// interface DependencyTree {
-//   resourceId: string;
-//   resourceName: string;
-//   resourceType: string;
-//   version: string;
-//   dependencies: DependencyTree[];
-// }
-//
-// interface DependencyGraphData {
-//   nodes: {
-//     id: string;
-//     resourceId: string;
-//     resourceName: string;
-//     resourceType: string;
-//     version: string;
-//   }[];
-//   edges: {
-//     source: string;
-//     target: string;
-//   }[];
-// }
-//
-// function handleDependencyGraphData(data: DependencyTree): DependencyGraphData {
-//
-//   const nodes: DependencyGraphData['nodes'] = [];
-//   const edges: DependencyGraphData['edges'] = [];
-//   traversal(data);
-//
-//   return {
-//     nodes, edges
-//   };
-//
-//   function traversal(data: DependencyTree, parentID: string = ''): any {
-//     const {dependencies, ...resource} = data;
-//     const id: string = parentID ? `${parentID}-${data.resourceId}` : data.resourceId;
-//     nodes.push({
-//       id,
-//       ...resource,
-//     });
-//     if (parentID) {
-//       edges.push({
-//         source: parentID,
-//         target: id,
-//       });
-//     }
-//
-//     for (const dep of dependencies) {
-//       traversal(dep, id);
-//     }
-//   }
-// }
