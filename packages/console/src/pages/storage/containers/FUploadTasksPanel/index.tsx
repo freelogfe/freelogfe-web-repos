@@ -13,7 +13,7 @@ import {
   FetchObjectsAction,
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
-import * as ahooks from 'ahooks';
+import * as AHooks from 'ahooks';
 // import {i18nMessage} from "@/utils/i18n";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
@@ -28,7 +28,7 @@ let failedUids: string[] = [];
 
 function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) {
 
-  const {run} = ahooks.useDebounceFn(() => {
+  const {run} = AHooks.useDebounceFn(() => {
 
       dispatch<FetchObjectsAction>({
         type: 'storageHomePage/fetchObjects',
@@ -45,7 +45,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     },
   );
 
-  const {run: run1} = ahooks.useDebounceFn(async () => {
+  const {run: run1} = AHooks.useDebounceFn(async () => {
     // console.log(successUids, failedUids, 'successUids!Q@#$@#$@!#$@#$#$');
     await dispatch<ChangeAction>({
       type: 'storageHomePage/change',

@@ -3,7 +3,7 @@ import {Input} from 'antd';
 import {InputProps} from 'antd/lib/input';
 import styles from './index.less';
 import {ChangeEvent} from 'react';
-import {useDebounceFn} from 'ahooks';
+import * as AHooks from 'ahooks';
 
 interface FInputProps extends InputProps {
   theme?: 'dark' | 'light';
@@ -30,7 +30,7 @@ function FInput({
                 }: FInputProps) {
 
   const [inputText, setInputText] = React.useState<string>(value || '');
-  const {run} = useDebounceFn(
+  const {run} = AHooks.useDebounceFn(
     () => {
       onDebounceChange && onDebounceChange(inputText);
     },

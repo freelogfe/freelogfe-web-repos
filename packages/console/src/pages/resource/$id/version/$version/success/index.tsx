@@ -5,8 +5,7 @@ import {FTipText} from '@/components/FText';
 import {FTextButton} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
-// import {i18nMessage} from "@/utils/i18n";
-import {useInterval} from 'ahooks';
+import * as AHooks from 'ahooks';
 import {ChangeAction} from "@/models/global";
 import {connect, Dispatch} from 'dva';
 import RouterTypes from "umi/routerTypes";
@@ -30,7 +29,7 @@ interface SuccessProps {
 function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
 
   const [count, setCount] = React.useState<number>(3);
-  useInterval(() => {
+  AHooks.useInterval(() => {
     const c = count - 1;
     setCount(c);
     if (c === 0) {

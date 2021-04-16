@@ -3,7 +3,7 @@ import styles from './index.less';
 import {Button, Checkbox, Popover} from 'antd';
 import {FNormalButton} from '@/components/FButton';
 import FAutoComplete from "@/components/FAutoComplete";
-import {useDebounceFn} from 'ahooks';
+import * as AHooks from 'ahooks';
 import * as semver from 'semver';
 import {WholeReadonly} from "@/models/shared";
 
@@ -28,7 +28,7 @@ function FVersionHandlerPopover({value, versionOptions, onChange, children}: FVe
     }
   }, [value]);
 
-  const {run} = useDebounceFn<(value: string, bool?: boolean) => void>(
+  const {run} = AHooks.useDebounceFn<(value: string, bool?: boolean) => void>(
     (value, bool) => {
       if (bool) {
         if (input.startsWith('^')) {

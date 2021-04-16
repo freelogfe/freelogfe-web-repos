@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {AutoComplete} from 'antd';
 import {AutoCompleteProps} from 'antd/lib/auto-complete';
-import {useDebounceFn} from 'ahooks';
+import * as AHooks from 'ahooks';
 
 interface FAutoCompleteProps extends AutoCompleteProps {
   errorText?: string;
@@ -18,7 +18,7 @@ function FAutoComplete({value, autoRef, errorText, debounce, onDebounceChange, o
 
   const [inputText, setInputText] = React.useState<string>(value || '');
 
-  const {run} = useDebounceFn(
+  const {run} = AHooks.useDebounceFn(
     () => {
       onDebounceChange && onDebounceChange(inputText);
     },
