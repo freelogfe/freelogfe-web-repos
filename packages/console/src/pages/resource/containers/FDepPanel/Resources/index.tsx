@@ -15,6 +15,7 @@ import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import {FEdit} from "@/components/FIcons";
 
 export interface ResourcesProps {
   dispatch: Dispatch;
@@ -120,7 +121,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                             value={rrr.versionRange}
                             versionOptions={rrr.versions}
                             onChange={(version) => onChangeVersion(version, i.id)}
-                          ><EditOutlined/></FVersionHandlerPopover>
+                          ><FEdit style={{fontSize: 14}}/></FVersionHandlerPopover>
                         </>
                     }
                   </div>
@@ -182,7 +183,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
   }
 
   return (<div className={styles.children}>
-    <div style={{padding: '5px 0 5px 20px'}}>
+    <div style={{padding: '5px 0 5px 15px'}}>
       <FContentText
         type="additional2"
         // text={'此资源存在以下基础上抛'}
@@ -237,7 +238,6 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                       className={styles.labelInfo}
                     >{j.title}</label>))
                 }
-                {/*{FUtil.I18n.message('info_upcast')}*/}
                 {
                   i.upthrow && (<label
                     className={styles.labelError}

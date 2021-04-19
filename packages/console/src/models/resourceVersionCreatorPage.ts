@@ -654,7 +654,7 @@ const Model: ResourceVersionCreatorModelType = {
           upthrowDisabled: !!resourceVersionCreatorPage.latestVersion,
           enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
             return {
-              checked: false,
+              checked: true,
               id: c.contractId,
               policyId: c.policyId,
               title: c.contractName,

@@ -7,18 +7,15 @@
   align-items: stretch;
   border: 1px solid #E5E7EB;
   border-radius: 6px;
+  background-color: #FAFBFC;
 }
 
 .DepPanelNavs {
-  width: 380px;
+  width: 344px;
   flex-shrink: 0;
-  background-color: #F7F8F9;
+  background-color: white;
   overflow-y: scroll;
   overscroll-behavior-y: contain;
-
-  @media (min-width: 1600px) {
-    width: 446px;
-  }
 
   & > div {
     position: relative;
@@ -41,10 +38,14 @@
   flex-shrink: 1;
   width: 100%;
   //overflow: hidden;
-  padding: 20px 35px;
+  //padding: 20px 35px;
 
   overflow-y: auto;
   overscroll-behavior-y: contain;
+
+  & > div {
+    padding: 15px 20px;
+  }
 }
 
 .errorBox {

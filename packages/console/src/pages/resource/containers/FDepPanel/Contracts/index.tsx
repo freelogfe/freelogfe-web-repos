@@ -9,6 +9,7 @@ import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
 import FUtil from "@/utils";
+
 // import {i18nMessage} from '@/utils/i18n';
 
 interface ContractsProps {
@@ -61,12 +62,10 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
     return null;
   }
 
-  return <>
-    <div style={{height: 20}}/>
+  return <Space size={15} style={{width: '100%'}} direction="vertical">
     <FContentText type="additional2" text={FUtil.I18n.message('reusable_contract')}/>
-    <div style={{height: 5}}/>
-    <div className={styles.styles}>
-      {resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
+    {
+      resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
         <div className={styles.PolicyGrammar}>
           <div className={styles.PolicyGrammarName}>
             <Checkbox
@@ -97,9 +96,9 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
             </FContentText>
           </div>
         </div>
-      </div>))}
-    </div>
-  </>
+      </div>))
+    }
+  </Space>
 }
 
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
