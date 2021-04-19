@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
 import {FRectBtn} from '@/components/FButton';
-import {Space, Drawer} from 'antd';
+import {Space} from 'antd';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';

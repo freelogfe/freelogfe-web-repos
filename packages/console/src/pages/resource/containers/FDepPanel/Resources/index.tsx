@@ -87,9 +87,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (rrr.status === 3) {
-                        // return window.open('/storage')
                         return goToObject(rrr.id);
-                        // return console.log(rrr, 'RRR@#$!@#$213412341234123');
                       }
                       return window.open(FUtil.LinkTo.resourceDetails({
                         resourceID: rrr.id,
