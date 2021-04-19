@@ -469,7 +469,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                 description: bped.description,
               };
             }),
-          })
+          });
         }}
       />
 

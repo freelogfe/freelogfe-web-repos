@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FCircleButton, FTextButton} from '@/components/FButton';
+import {FCircleBtn, FCircleButton, FTextButton} from '@/components/FButton';
 import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -146,12 +146,12 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                   </div>
                 </>
               </div>
-              <FCircleButton
+              <FCircleBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   return onDeleteResource(i.id)
                 }}
-                theme='delete'
+                type="danger"
               />
             </div>
 

@@ -600,6 +600,7 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadLatestVersionInfo: 1,
       };
 
+      // 本次要添加的一些列资源信息
       const {data} = yield call(FApiServer.Resource.batchInfo, params);
       // console.log(data, 'DDD!@#$@!#$@');
 
@@ -611,7 +612,7 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
-      // console.log(data1, 'data1 109234ui2o34');
+      console.log(data1, 'data1 109234ui2o34');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
@@ -624,8 +625,18 @@ const Model: ResourceVersionCreatorModelType = {
         coverageVersions = data2;
       }
 
+      // const param3: GetAllContractsParamsType = {
+      //   resourceID: resourceVersionCreatorPage.resourceId,
+      //   resourceIDs: (data as any[]).map<string>((r) => r.resourceId),
+      // };
+      // // console.log(param3, 'param3@@@@@22lk3j1qlk234jlk23');
+      // const result: GetAllContractsReturnType = yield call(getAllContracts, param3);
+      // console.log(result, 'result!@#$!@#$!@#$!@#$213412342134123');
+
+      // 组织添加的依赖数据
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
         const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
+
 
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         const theVersion = versions?.find((v) => v.id === dr.resourceId);
@@ -1030,4 +1041,40 @@ async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleD
     }
   }
   return resourceIDs;
+}
+
+interface GetAllContractsParamsType {
+  resourceID: string;
+  resourceIDs: string[];
+}
+
+type GetAllContractsReturnType = {
+  contractId: string;
+  contractName: string;
+  createDate: string;
+  updateDate: string;
+  policyId: string;
+  policyInfo: {
+    policyId: string;
+    policyText: string;
+  };
+}[];
+
+async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+  // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
+  const allPromises = resourceIDs.map(async (id) => {
+    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      subjectIds: id,
+      subjectType: 1,
+      licenseeIdentityType: 1,
+      licensorId: id,
+      licenseeId: resourceID,
+      isLoadPolicyInfo: 1,
+    };
+    const {data} = await FApiServer.Contract.batchContracts(params);
+    // console.log(data, 'data!!!1111100000000))))))');
+    return data;
+  });
+
+  return (await Promise.all(allPromises)).flat();
 }

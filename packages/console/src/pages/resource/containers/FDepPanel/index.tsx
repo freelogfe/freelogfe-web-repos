@@ -18,13 +18,13 @@ import FUtil from "@/utils";
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
-  creator: ResourceVersionCreatorPageModelState;
+  resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
-function FDepPanel({dispatch, creator}: FDepPanelProps) {
+function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-  const resource = creator.dependencies.find((i) => i.id === creator.depActivatedID) as DepResources[number];
+  const resource = resourceVersionCreatorPage.dependencies.find((i) => i.id === resourceVersionCreatorPage.depActivatedID) as DepResources[number];
   // console.log(resource, 'resource23qeasdj98io');
   return (<>
     <Space size={15}>
@@ -37,7 +37,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
         type="default"
       >添加依赖</FRectBtn>
       {
-        creator.preVersionDeps.relationships.length > 0 &&
+        resourceVersionCreatorPage.preVersionDeps.relationships.length > 0 &&
         <FRectBtn
           type="default"
           onClick={() => {
@@ -58,7 +58,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
     </Space>
 
     {
-      creator.depRelationship.length > 0 && (<>
+      resourceVersionCreatorPage.depRelationship.length > 0 && (<>
         <UpthrowList/>
 
         <div style={{height: 20}}/>
@@ -71,23 +71,39 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
           </div>
 
           <div className={styles.DepPanelContent}>
+
             {
-              resource && resource.status !== 1 && (<div className={styles.errorBox}>
+              resource.status === 0 && resource.enableReuseContracts.length === 0 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
-                {resource.status === 0 &&
-                <FTipText text={FUtil.I18n.message('authorization_issue_offline_resource')} type="secondary"/>}
-                {/*{resource.status === 2 && <FTipText text={FUtil.I18n.message('authorization_issue_circular_reply')} type="secondary"/>}*/}
-                {resource.status === 2 && <FTipText
+                <FTipText text={FUtil.I18n.message('authorization_issue_offline_resource')} type="secondary"/>
+              </div>)
+            }
+            {/*{resource.status === 2 && <FTipText text={FUtil.I18n.message('authorization_issue_circular_reply')} type="secondary"/>}*/}
+            {
+              resource.status === 2 && (<div className={styles.errorBox}>
+                <CloseCircleFilled className={styles.errorIcon}/>
+                <FTipText
                   text={FUtil.I18n.message('authorization_issue_circular_reply')}
                   type="secondary"
-                />}
-                {resource.status === 3 && <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>}
-                {resource.status === 4 && <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="secondary"/>}
+                />
+              </div>)
+            }
+            {
+              resource.status === 3 && (<div className={styles.errorBox}>
+                <CloseCircleFilled className={styles.errorIcon}/>
+                <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>
+              </div>)
+            }
+            {
+              resource.status === 4 && (<div className={styles.errorBox}>
+                <CloseCircleFilled className={styles.errorIcon}/>
+                <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="secondary"/>
               </div>)
             }
 
             {
-              resource && resource.status === 1 && (<div>
+              (resource.status === 1 || resource.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)
+              && (<div>
 
                 <IsUpthrow/>
 
@@ -97,6 +113,7 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
 
               </div>)
             }
+
 
           </div>
         </div>
@@ -116,5 +133,5 @@ function FDepPanel({dispatch, creator}: FDepPanelProps) {
 }
 
 export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
-  creator: resourceVersionCreatorPage,
+  resourceVersionCreatorPage: resourceVersionCreatorPage,
 }))(FDepPanel);
