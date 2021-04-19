@@ -8,7 +8,6 @@ import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
 
-//extends UploadProps
 interface FUploadImageProps {
   children: React.ReactNode;
 
@@ -34,7 +33,7 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         grid
         aspect={4 / 3}
         beforeCrop={(file) => {
-          console.log(file, '#FSDFSDFSDF');
+          // console.log(file, '#FSDFSDFSDF');
           if (!file.type.startsWith('image/')) {
             onError && onError(FUtil.I18n.message('limit_resource_image_format'));
             return false;
@@ -51,7 +50,7 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         <Upload
           accept={'image/*'}
           beforeUpload={(file: RcFile, FileList: RcFile[]) => {
-            console.log(file, 'file20934u23');
+            // console.log(file, 'file20934u23');
             upload(file);
             return false;
           }}

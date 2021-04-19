@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FUploadImage from '@/components/FUploadImage';
 import {FContentText} from '@/components/FText';
-// import {i18nMessage} from "@/utils/i18n";
 import {FCloudUpload} from "@/components/FIcons";
 import fMessage from "@/components/fMessage";
 import FUtil from "@/utils";
