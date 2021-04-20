@@ -296,7 +296,7 @@ const Model: ResourceVersionCreatorModelType = {
         .filter((dep) => dep.upthrow)
         .map((dep) => dep.id);
       const resolveResources = resourceVersionCreatorPage.dependencies
-        .filter((dep) => !baseUpcastResourceIds.includes(dep.id) && dep.status === 1)
+        .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
         .map((dep) => ({
           resourceId: dep.id,
           contracts: [
@@ -666,7 +666,7 @@ const Model: ResourceVersionCreatorModelType = {
             };
           }),
           enabledPolicies: dr.policies
-            .filter((policy: any) => !allDepCIDs.includes(policy.policyId))
+            .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
             .map((policy: any) => {
               // console.log(policy, 'PPPPafwe98iokl');
               return {

@@ -12,7 +12,7 @@ const statusTextObj = {
 };
 
 function FResourceStatusBadge({status = 'online'}: FResourceStatusBadgeProps) {
-  return (<label className={styles[status]}>{statusTextObj[status]}</label>);
+  return (<label className={[styles.style, styles[status]].join(' ')}>{statusTextObj[status]}</label>);
 }
 
 export default FResourceStatusBadge;

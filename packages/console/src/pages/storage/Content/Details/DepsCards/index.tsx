@@ -7,6 +7,7 @@ import {ArrowUpOutlined} from '@ant-design/icons';
 import {FCircleButton, FTextButton} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FEdit} from "@/components/FIcons";
+import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 // import {resourceInfo} from "@/utils/path-assembler";
 // import {Link} from 'umi';
 
@@ -54,23 +55,16 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
           className={styles.resource}
         >
           <div className={styles.resourceLeft}>
-            <div className={styles.resourceTitle}>
-              {/*<Link to={d.linkTo}>*/}
-              {/*  <FContentText*/}
-              {/*    singleRow={true}*/}
-              {/*    text={d.name}*/}
-              {/*    className={styles.resourceName}*/}
-              {/*  />*/}
-              {/*</Link>*/}
+            <Space size={8}>
               <a onClick={() => window.open(d.linkTo)}>
                 <FContentText
-                    singleRow={true}
-                    text={d.name}
-                    className={styles.resourceName}
+                  singleRow={true}
+                  text={d.name}
+                  className={styles.resourceName}
                 />
               </a>
-              {d.status === 0 && <span className={styles.notOnline}>未上线</span>}
-            </div>
+              {d.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
+            </Space>
             <div style={{height: 9}}/>
             <div className={styles.resourceInfo}>
               <FContentText type="additional2">{d.type || '未设置类型'}</FContentText>

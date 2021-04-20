@@ -253,11 +253,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>
           <Space size={10}>
-            {/*<FCircleButton*/}
-            {/*  onClick={() => setDepInfoVisible(true)}*/}
-            {/*  theme="weaken"*/}
-            {/*/>*/}
-            {/*<FContentText text={''}/>*/}
             <FRectBtn
               type="default"
               onClick={() => setDepInfoVisible(true)}
