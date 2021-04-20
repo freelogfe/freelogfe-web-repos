@@ -131,10 +131,11 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
               ? (<FCircleBtn
                 type="transparent"
                 onClick={() => {
-                  fConfirmModal({
-                    message: FUtil.I18n.message('error_unreleasedverionexisted'),
-                    onOk: gotoCreator,
-                  });
+                  // fConfirmModal({
+                  //   message: FUtil.I18n.message('error_unreleasedverionexisted'),
+                  //   onOk: gotoCreator,
+                  // });
+                  fMessage(FUtil.I18n.message('error_unreleasedverionexisted'), 'warning');
                 }}
               />)
               : (<FCircleBtn onClick={gotoCreator} type="transparent"/>)
@@ -155,10 +156,9 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                 className={[styles.version, match.path === '/resource/:id/version/creator' ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}>未命名版本</FLink>)
+                })}>{FUtil.I18n.message('unnamed_version')}</FLink>)
               : null
           }
-
 
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
