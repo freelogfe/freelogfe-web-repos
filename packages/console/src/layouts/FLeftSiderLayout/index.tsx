@@ -22,7 +22,7 @@ function FLeftSiderLayout({children, header, sider, type, contentStyles, hasBott
     style={{minHeight: 'calc(100vh - 70px)'}}
   >
     <div className={styles.Slider}>
-      <div style={{height: 'calc(100vh - 70px)'}}>
+      <div>
         {sider}
       </div>
     </div>
