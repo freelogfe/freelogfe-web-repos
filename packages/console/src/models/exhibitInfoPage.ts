@@ -258,7 +258,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      console.log(data, 'data@#Rasfdjou890ujewfra');
+      // console.log(data, 'data@#Rasfdjou890ujewfra');
 
       const params3: Parameters<typeof FApiServer.Node.details>[0] = {
         nodeId: data.nodeId,
