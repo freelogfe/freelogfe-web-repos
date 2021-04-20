@@ -4,6 +4,8 @@ import {FContentText, FTitleText} from "@/components/FText";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {connect, Dispatch} from "dva";
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
+import FLink from "@/components/FLink";
+import FUtil from "@/utils";
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -22,7 +24,9 @@ function Relation({exhibitInfoPage}: RelationProps) {
     </div>
 
     <div style={{height: 12}}/>
-    <FContentText singleRow text={exhibitInfoPage.resourceName}/>
+    <FLink to={FUtil.LinkTo.resourceDetails({resourceID: exhibitInfoPage.resourceId})}>
+      <FContentText singleRow text={exhibitInfoPage.resourceName}/>
+    </FLink>
     <div style={{height: 10}}/>
     <div style={{fontSize: 12, color: '#666'}}>{exhibitInfoPage.resourceType}</div>
   </div>);
