@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
 import {Space, Popconfirm} from 'antd';
-import {FTextButton} from '@/components/FButton';
+import {FCircleBtn, FTextButton} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';
@@ -12,6 +12,8 @@ import {FPlus} from '@/components/FIcons';
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
 import * as AHooks from 'ahooks';
+import fMessage from "@/components/fMessage";
+import fConfirmModal from "@/components/fConfirmModal";
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -119,22 +121,23 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         <div className={styles.versionControlTitle}>
           <div style={{cursor: 'default'}}>{FUtil.I18n.message('verions')}</div>
           {
-            match.path !== '/resource/:id/version/creator' && <>
-              {
-                resourceInfo.draftData ? <Popconfirm
-                  title={FUtil.I18n.message('error_unreleasedverionexisted')}
-                  onConfirm={gotoCreator}
-                  // onCancel={cancel}
-                  okText="查看"
-                  // cancelText="No"
-                >
-                  <FTextButton><FPlus/></FTextButton>
-                </Popconfirm> : (<FTextButton
-                  onClick={gotoCreator}>
-                  <FPlus/>
-                </FTextButton>)
-              }
-            </>
+            match.path === '/resource/:id/version/creator'
+              ? (<FCircleBtn
+                type="transparent"
+                onClick={() => {
+                  fMessage('正在创建版本', 'warning');
+                }}/>)
+              : resourceInfo.draftData
+              ? (<FCircleBtn
+                type="transparent"
+                onClick={() => {
+                  fConfirmModal({
+                    message: FUtil.I18n.message('error_unreleasedverionexisted'),
+                    onOk: gotoCreator,
+                  });
+                }}
+              />)
+              : (<FCircleBtn onClick={gotoCreator} type="transparent"/>)
           }
         </div>
 
