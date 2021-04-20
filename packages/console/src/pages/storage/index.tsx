@@ -23,11 +23,7 @@ interface StorageProps extends RouteComponentProps<{}> {
 function Storage({match, history, storageHomePage, storageObjectEditor, dispatch}: StorageProps) {
 
   const [state] = useUrlState<{ bucketName: string; objectID: string }>();
-  // console.log(state, 'state12342343423');
-  // console.log(history, 'match@#$RQSfjk908u09ujadsfasd');
   React.useEffect(() => {
-    // console.log((history.location as any).query.bucketName, 'history.location.query.bucketName');
-    // console.log()
     if (!state.bucketName) {
       return;
     }

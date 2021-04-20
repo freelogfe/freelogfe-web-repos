@@ -235,19 +235,23 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     }
     {
       showDownload && (<FTooltip title={'下载'}>
-        <FTextBtn
-          onClick={() => onClickDownload && onClickDownload()}
-          type="primary"
-        ><FDownload/></FTextBtn>
+        <span>
+          <FTextBtn
+            onClick={() => onClickDownload && onClickDownload()}
+            type="primary"
+          ><FDownload/></FTextBtn>
+        </span>
       </FTooltip>)
     }
     {
       showDelete && (
         <FTooltip title={'删除'}>
-          <FTextBtn
-            onClick={() => onClickDelete && onClickDelete()}
-            className={styles.Delete}
-          ><FDelete/></FTextBtn>
+          <span>
+            <FTextBtn
+              onClick={() => onClickDelete && onClickDelete()}
+              className={styles.Delete}
+            ><FDelete/></FTextBtn>
+          </span>
         </FTooltip>
       )
     }
