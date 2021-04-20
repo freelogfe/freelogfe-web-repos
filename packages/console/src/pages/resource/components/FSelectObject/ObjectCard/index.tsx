@@ -24,9 +24,8 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
         <FTitleText type="h4" text={resourceObject.name}/>
         <div style={{height: 18}}/>
         <div className={styles.info}>
-          {/*<FContentText type="additional1" text={'10 M'}/>*/}
-          <div style={{display: "flex", flexShrink: 0}}>{FUtil.Format.humanizeSize(resourceObject.size)}</div>
-          <div style={{display: "flex", flexShrink: 0, width: 30}}/>
+          {/*<div style={{display: "flex", flexShrink: 0}}>{FUtil.Format.humanizeSize(resourceObject.size)}</div>*/}
+          {/*<div style={{display: "flex", flexShrink: 0, width: 30}}/>*/}
           {
             progress === null
               ? <FContentText

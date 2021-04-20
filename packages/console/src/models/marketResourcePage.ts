@@ -530,7 +530,7 @@ const Model: MarketResourcePageModelType = {
             ...Object.entries(data.systemProperty as object)
               .map((s) => ({
                 key: s[0],
-                value: s[1],
+                value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
               })),
             ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
               .map((p: any) => {

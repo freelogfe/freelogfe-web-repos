@@ -350,7 +350,7 @@ const Model: ExhibitInfoPageModelType = {
           pBaseAttrs: [
             ...Object.entries(data.resourceSystemProperty).map((s: any) => ({
               key: s[0],
-              value: s[1],
+              value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
             })),
             ...data.resourceCustomPropertyDescriptors
               .filter((rd: any) => rd.type === 'readonlyText')

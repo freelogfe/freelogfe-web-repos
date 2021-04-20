@@ -413,7 +413,7 @@ const Model: ResourceVersionCreatorModelType = {
           .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd: any) => {
             return {
               key: cpd.key,
-              value: cpd.defaultValue,
+              value: cpd.key === 'fileSize' ? FUtil.Format.humanizeSize(cpd.defaultValue) : cpd.defaultValue,
               description: cpd.remark,
             };
           });
@@ -556,7 +556,7 @@ const Model: ResourceVersionCreatorModelType = {
           rawProperties: Object.entries(data as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
             return {
               key: rp[0],
-              value: rp[1],
+              value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
             };
           }),
         },

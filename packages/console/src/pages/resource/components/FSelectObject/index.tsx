@@ -48,7 +48,7 @@ function FSelectObject({resourceObject, onChange, resourceType, errorText, onErr
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
-  const [errorT, setErrorT] = React.useState<string>('');
+  // const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
   // 选择对象

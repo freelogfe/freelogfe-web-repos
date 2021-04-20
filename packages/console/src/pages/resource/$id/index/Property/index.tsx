@@ -12,8 +12,8 @@ interface PropertyProps {
   marketResourcePage: MarketResourcePageModelState,
 }
 
-function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
-  if (properties.length === 0) {
+function Property({dispatch, marketResourcePage}: PropertyProps) {
+  if (marketResourcePage.properties.length === 0) {
     return null;
   }
 
@@ -27,7 +27,7 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
           <table>
             <tbody>
             {
-              properties.filter((p, i) => i % 3 === 0)
+              marketResourcePage.properties.filter((p, i) => i % 3 === 0)
                 .map((p, index) => {
                   return (<Item
                     key={index}
@@ -45,7 +45,7 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
           <table>
             <tbody>
             {
-              properties.filter((p, i) => i % 3 === 1)
+              marketResourcePage.properties.filter((p, i) => i % 3 === 1)
                 .map((p, index) => {
                   return (<Item
                     key={index}
@@ -63,7 +63,7 @@ function Property({dispatch, marketResourcePage: {properties}}: PropertyProps) {
           <table>
             <tbody>
             {
-              properties.filter((p, i) => i % 3 === 2)
+              marketResourcePage.properties.filter((p, i) => i % 3 === 2)
                 .map((p, index) => {
                   return (<Item
                     key={index}

@@ -10,8 +10,8 @@ import {resourceTypes} from '@/utils/globals';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
-  ChangeAction, FetchInfoAction,
-  OnChangeTypeAction, storageObjectEditorInitData,
+  ChangeAction,
+  OnChangeTypeAction,
   UpdateObjectInfoAction
 } from '@/models/storageObjectEditor';
 import {UpdateAObjectAction} from '@/models/storageHomePage';
@@ -40,10 +40,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
 
   const hasError: boolean = !!storageObjectEditor.typeError;
-
-  // React.useEffect(() => {
-  //
-  // }, []);
 
   function onChangeType(value: string) {
     if (value === storageObjectEditor.type) {
@@ -118,11 +114,11 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                 className={styles.objectName}
                 singleRow
               />
-              <FDivider/>
-              <FContentText
-                text={FUtil.Format.humanizeSize(storageObjectEditor.size)}
-                type="highlight"
-              />
+              {/*<FDivider/>*/}
+              {/*<FContentText*/}
+              {/*  text={FUtil.Format.humanizeSize(storageObjectEditor.size)}*/}
+              {/*  type="highlight"*/}
+              {/*/>*/}
             </Space>
             <Space size={15}>
               <FCopyToClipboard
