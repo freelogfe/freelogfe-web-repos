@@ -141,19 +141,21 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         <div className={styles.versions}>
 
           {
-            match.path === '/resource/:id/version/creator'
+            resourceInfo.draftData
               ? (<FLink
+                className={[styles.version, match.path === '/resource/:id/version/creator' ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}
-                className={[styles.activatedVersion, styles.version].join(' ')}>未命名版本</FLink>)
-              : (resourceInfo.draftData
-              && (<FLink
-                className={[styles.version].join(' ')}
+                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>)
+              : match.path === '/resource/:id/version/creator'
+              ? (<FLink
+                className={[styles.version, match.path === '/resource/:id/version/creator' ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>))
+                })}>未命名版本</FLink>)
+              : null
           }
+
 
           {
             [...resourceInfo.info?.resourceVersions].reverse().map((i) => (
