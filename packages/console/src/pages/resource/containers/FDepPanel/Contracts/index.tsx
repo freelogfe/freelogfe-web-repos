@@ -2,19 +2,15 @@ import * as React from 'react';
 import styles from './index.less';
 import {Checkbox, Space} from 'antd';
 import {FContentText} from '@/components/FText';
-// import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
 import FUtil from "@/utils";
-
-// import {i18nMessage} from '@/utils/i18n';
+import FDivider from "@/components/FDivider";
 
 interface ContractsProps {
-  // dataSource: FDepPanelProps['dataSource'][0]['enableReuseContracts'];
-  // onChange?: (dataRourece: ContractsProps['dataSource']) => void;
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
@@ -66,35 +62,43 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
     <FContentText type="additional2" text={FUtil.I18n.message('reusable_contract')}/>
     {
       resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
-        <div className={styles.PolicyGrammar}>
-          <div className={styles.PolicyGrammarName}>
-            <Checkbox
-              checked={k.checked}
-              disabled={k.status !== 0}
-              onChange={(e) => onChangeChecked(e.target.checked, k)}
-            />
-            <div style={{width: 5}}/>
+
+        <div style={{height: 15}}/>
+        <div className={styles.PolicyGrammarName}>
+          <Space size={10}>
             <span>{k.title}</span>
-            <div style={{width: 10}}/>
-            <label className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>
-          </div>
-          <div style={{height: 15}}/>
+            <label
+              className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>
+          </Space>
+          <Checkbox
+            checked={k.checked}
+            disabled={k.status !== 0}
+            onChange={(e) => onChangeChecked(e.target.checked, k)}
+          />
+        </div>
+        <div style={{height: 10}}/>
+        <Space style={{padding: '0 20px'}} size={2}>
+          <FContentText
+            type="additional2"
+            text={FUtil.I18n.message('contract_id') + '：' + k.id}
+          />
+          <FDivider style={{fontSize: 14}}/>
+          <FContentText
+            type="additional2"
+            text={FUtil.I18n.message('contract_signed_time') + '：' + k.date}
+          />
+        </Space>
+        <div style={{height: 15}}/>
+        <div className={styles.PolicyGrammar}>
           <pre className={styles.highlight}>{k.code}</pre>
         </div>
         <div className={styles.PolicyInfo}>
-          <Space size={40}>
-            <FContentText type="additional2" text={FUtil.I18n.message('contract_id') + '：' + k.id}/>
-            <FContentText type="additional2" text={FUtil.I18n.message('contract_signed_time') + '：' + k.date}/>
+          <FContentText type="additional2" text={'当前合约在此资源上被多个版本应用：'}/>
+          <div style={{height: 8}}/>
+          {/*{FUtil.I18n.message('use_for_version')}：*/}
+          <Space size={15} style={{flexWrap: 'wrap'}}>
+            {k.versions.map((i) => <span key={i}>{i}</span>)}
           </Space>
-          <div style={{height: 9}}/>
-          <div>
-            <FContentText type="additional2">
-              {FUtil.I18n.message('use_for_version')}：
-              <Space size={15}>
-                {k.versions.map((i) => <span key={i}>{i}</span>)}
-              </Space>
-            </FContentText>
-          </div>
         </div>
       </div>))
     }

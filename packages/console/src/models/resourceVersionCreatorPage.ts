@@ -612,7 +612,7 @@ const Model: ResourceVersionCreatorModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
-      console.log(data1, 'data1 109234ui2o34');
+      // console.log(data1, 'data1 109234ui2o34');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
