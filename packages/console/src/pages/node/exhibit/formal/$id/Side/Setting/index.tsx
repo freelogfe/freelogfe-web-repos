@@ -16,6 +16,7 @@ import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FModal from "@/components/FModal";
+import FTooltip from "@/components/FTooltip";
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -96,50 +97,62 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                 <FContentText text={pc.key}/>
                 {
                   pc.defaultValue
-                    ? (<FTextBtn
-                      // theme="primary"
-                      onClick={() => {
-                        onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
-                      }}
-                    ><FRedo/></FTextBtn>)
+                    ? (<FTooltip title={'编辑'}>
+                      <div>
+                        <FTextBtn
+                          // theme="primary"
+                          onClick={() => {
+                            onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
+                          }}
+                        ><FRedo/></FTextBtn>
+                      </div>
+                    </FTooltip>)
                     : (<Space size={10}>
-                      <FTextBtn
-                        // theme="primary"
-                        onClick={() => {
-                          const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                          if (!editing) {
-                            return;
-                          }
-                          dispatch<ChangeAction>({
-                            type: 'exhibitInfoPage/change',
-                            payload: {
-                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                                ...pCustomAttr,
-                                isEditing: pCustomAttr.key === pc.key,
-                              })),
-                              pAddCustomKey: editing.key,
-                              pAddCustomValue: editing.value,
-                              pAddCustomDescription: editing.remark,
-                            },
-                          });
-                        }}
-                      ><FEdit/></FTextBtn>
-                      <FDelete
-                        style={{color: '#EE4040', cursor: 'pointer'}}
-                        onClick={() => {
-                          dispatch<ChangeAction>({
-                            type: 'exhibitInfoPage/change',
-                            payload: {
-                              pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
-                                return pc.key !== pCustomAttr.key;
-                              }),
-                            },
-                          });
-                          dispatch<UpdateRewriteAction>({
-                            type: 'exhibitInfoPage/updateRewrite',
-                          });
-                        }}
-                      />
+                      <FTooltip title={'编辑'}>
+                        <div>
+                          <FTextBtn
+                            // theme="primary"
+                            onClick={() => {
+                              const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                              if (!editing) {
+                                return;
+                              }
+                              dispatch<ChangeAction>({
+                                type: 'exhibitInfoPage/change',
+                                payload: {
+                                  pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                                    ...pCustomAttr,
+                                    isEditing: pCustomAttr.key === pc.key,
+                                  })),
+                                  pAddCustomKey: editing.key,
+                                  pAddCustomValue: editing.value,
+                                  pAddCustomDescription: editing.remark,
+                                },
+                              });
+                            }}
+                          ><FEdit/></FTextBtn>
+                        </div>
+                      </FTooltip>
+                      <FTooltip title={'删除'}>
+                        <div>
+                          <FDelete
+                            style={{color: '#EE4040', cursor: 'pointer'}}
+                            onClick={() => {
+                              dispatch<ChangeAction>({
+                                type: 'exhibitInfoPage/change',
+                                payload: {
+                                  pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                                    return pc.key !== pCustomAttr.key;
+                                  }),
+                                },
+                              });
+                              dispatch<UpdateRewriteAction>({
+                                type: 'exhibitInfoPage/updateRewrite',
+                              });
+                            }}
+                          />
+                        </div>
+                      </FTooltip>
                     </Space>)
                 }
               </div>

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FNormalButton, FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
+import FUtil from "@/utils";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -49,11 +50,20 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
           className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}
           onClick={() => onChangeSelect(mainResource.id)}
         >
-          <FTitleText
-            type="h5"
-            text={mainResource.name}
-            singleRow
-          />
+          <FTextBtn
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(FUtil.LinkTo.resourceDetails({
+                resourceID: mainResource.id,
+              }));
+            }}
+          >
+            <FTitleText
+              type="h5"
+              text={mainResource.name}
+              singleRow
+            />
+          </FTextBtn>
           <div style={{height: 5}}/>
           <FContentText
             type="additional2"
@@ -77,11 +87,20 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
             onClick={() => onChangeSelect(r.id)}
             key={r.id}
           >
-            <FTitleText
-              type="h5"
-              text={r.name}
-              singleRow
-            />
+            <FTextBtn
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(FUtil.LinkTo.resourceDetails({
+                  resourceID: r.id,
+                }));
+              }}
+            >
+              <FTitleText
+                type="h5"
+                text={r.name}
+                singleRow
+              />
+            </FTextBtn>
             <div style={{height: 5}}/>
             <FContentText
               type="additional2"

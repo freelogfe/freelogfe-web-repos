@@ -14,7 +14,6 @@ import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
-// import FLinkTo from "@/utils/path-assembler";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 
@@ -83,7 +82,6 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
                   });
                 },
               });
-
             }}
           />
           {
@@ -92,7 +90,6 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
                 <FWarning/>
               </FTooltip>) : ''
           }
-
         </Space>
       </div>
       <div className={styles.body}>

@@ -7,11 +7,12 @@ import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
 import {ConnectState} from "@/models/connect";
 import fMessage from "@/components/fMessage";
+import FTooltip from "@/components/FTooltip";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -55,6 +56,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
           src={exhibitInfoPage.pCover || imgSrc}
         />
         <div>
+
           <FEdit style={{fontSize: 32}}/>
           <div style={{height: 10}}/>
           <div>修改封面</div>
@@ -70,7 +72,11 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
       exhibitInfoPage.pInputTitle === null
         ? (<Space size={10}>
           <FContentText text={exhibitInfoPage.pTitle}/>
-          <a onClick={() => onChangePInputTitle(exhibitInfoPage.pTitle)}><FEdit/></a>
+          <FTooltip title={'编辑'}>
+            <div>
+              <FTextBtn onClick={() => onChangePInputTitle(exhibitInfoPage.pTitle)}><FEdit/></FTextBtn>
+            </div>
+          </FTooltip>
         </Space>)
         : (<>
           <FInput
@@ -80,12 +86,13 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
           />
           <div style={{height: 10}}/>
           <div className={styles.btn}>
-            <FTextButton
-              size="small"
+            <FTextBtn
+              type="default"
+              // size="small"
               onClick={() => onChangePInputTitle(null)}
-            >取消</FTextButton>
+            >取消</FTextBtn>
             <div style={{width: 15}}/>
-            <FNormalButton
+            <FRectBtn
               size="small"
               onClick={() => {
                 dispatch<UpdateBaseInfoAction>({
@@ -96,7 +103,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
                 });
                 onChangePInputTitle(null);
               }}
-            >确定</FNormalButton>
+            >确定</FRectBtn>
           </div>
 
         </>)

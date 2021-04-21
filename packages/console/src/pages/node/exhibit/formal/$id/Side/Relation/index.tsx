@@ -6,6 +6,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
+import {FTextBtn} from "@/components/FButton";
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -16,17 +17,30 @@ function Relation({exhibitInfoPage}: RelationProps) {
   return (<div className={styles.info}>
     <FTitleText text={'关联资源'} type="h4"/>
     <div style={{height: 20}}/>
-    <div className={styles.cover} style={{cursor: 'default'}}>
+    <div className={styles.cover}>
       <img
         alt=""
         src={exhibitInfoPage.resourceCover || imgSrc}
+        onClick={() => {
+          window.open(FUtil.LinkTo.resourceDetails({
+            resourceID: exhibitInfoPage.resourceId,
+          }));
+        }}
       />
     </div>
 
     <div style={{height: 12}}/>
-    <FLink to={FUtil.LinkTo.resourceDetails({resourceID: exhibitInfoPage.resourceId})}>
-      <FContentText singleRow text={exhibitInfoPage.resourceName}/>
-    </FLink>
+    <FTextBtn
+      type="default"
+      onClick={() => {
+        window.open(FUtil.LinkTo.resourceDetails({resourceID: exhibitInfoPage.resourceId}));
+      }}
+    >
+      <FContentText
+        singleRow
+        text={exhibitInfoPage.resourceName}
+      />
+    </FTextBtn>
     <div style={{height: 10}}/>
     <div style={{fontSize: 12, color: '#666'}}>{exhibitInfoPage.resourceType}</div>
   </div>);
