@@ -111,19 +111,6 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
     <FFormLayout>
       <FFormLayout.FBlock
         title={FUtil.I18n.message('authorization_plan')}
-        // extra={<FNormalButton
-        //   onClick={() => {
-        //     dispatch<ChangeAction>({
-        //       type: 'resourceAuthPage/change',
-        //       payload: {
-        //         policyEditorVisible: true,
-        //       }
-        //     });
-        //   }}
-        //   theme="weaken"
-        //   shape="circle"
-        //   icon={<FAdd/>}
-        // />}
         extra={resourceAuthPage.policies?.length !== 0 && (<FCircleBtn
           size="small"
           onClick={() => {

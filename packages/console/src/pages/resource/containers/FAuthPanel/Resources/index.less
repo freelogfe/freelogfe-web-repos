@@ -1,42 +1,52 @@
-.DepPanelNav {
-  display: flex;
-  align-items: center;
-  height: fit-content;
-  justify-content: space-between;
-  padding: 12px 30px 12px 20px;
-  //border-bottom: 1px solid #E5E7EB;
-  border-right: 1px solid transparent;
-  cursor: pointer;
+.styles {
+  //background-color: white;
 
-  & > div:first-child {
-    flex-shrink: 1;
-    padding-right: 20px;
-    overflow: hidden;
+  .DepPanelNav {
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    justify-content: space-between;
+    padding: 12px 30px 12px 20px;
+    //border-bottom: 1px solid #E5E7EB;
+    border-right: 1px solid transparent;
+    cursor: pointer;
+
+    & > div:first-child {
+      flex-shrink: 1;
+      padding-right: 20px;
+      overflow: hidden;
+    }
+
+    .DepPanelLabels {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: -5px;
+
+      & > label {
+        line-height: 23px;
+        padding: 0 6px;
+        font-size: 12px;
+        border-radius: 2px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+
+      .labelInfo {
+        color: #2784FF;
+        background-color: #E9F2FF;
+        border: 1px solid #AED0FF;
+      }
+    }
+  }
+
+  .DepPanelNavActive {
+    background-color: #FAFBFC;
+    //border-right-color: white;
   }
 }
 
-.DepPanelNavActive {
-  background-color: white;
-  border-right-color: white;
-}
 
-.DepPanelLabels {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: -5px;
 
-  & > label {
-    line-height: 23px;
-    padding: 0 6px;
-    font-size: 12px;
-    border-radius: 2px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-}
 
-.labelInfo {
-  color: #2784FF;
-  background-color: #E9F2FF;
-  border: 1px solid #AED0FF;
-}
+
+

@@ -7,53 +7,49 @@
   align-items: stretch;
   border: 1px solid #E5E7EB;
   border-radius: 6px;
-}
+  background-color: #FAFBFC;
 
-.DepPanelNavs {
-  width: 380px;
-  flex-shrink: 0;
-  background-color: #F7F8F9;
-  overflow-y: scroll;
-  overscroll-behavior-y: contain;
+  .DepPanelNavs {
+    width: 344px;
+    flex-shrink: 0;
+    background-color: #F7F8F9;
+    overflow-y: scroll;
+    overscroll-behavior-y: contain;
 
-  @media (min-width: 1600px) {
-    width: 446px;
+    & > div {
+      position: relative;
+      min-height: 100%;
+      background-color: white;
+
+      &:before {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-right: 1px solid #E5E7EB;
+        content: '';
+        height: 100%;
+        z-index: -1;
+      }
+    }
   }
 
-  & > div {
-    position: relative;
-    min-height: 100%;
+  .DepPanelContent {
+    flex-shrink: 1;
+    width: 100%;
+    //overflow: hidden;
 
-    &:before {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      border-right: 1px solid #E5E7EB;
-      content: '';
-      height: 100%;
-      z-index: -1;
+
+    //& > div {
+    //height: 100%;
+    overflow-y: auto;
+    //}
+    overscroll-behavior-y: contain;
+
+    .contentBox {
+      position: relative;
+      padding: 20px 15px;
+      width: 100%;
     }
   }
 }
-
-.DepPanelContent {
-  flex-shrink: 1;
-  width: 100%;
-  //overflow: hidden;
-  padding: 20px 35px;
-
-  //& > div {
-  //height: 100%;
-  overflow-y: auto;
-  //}
-  overscroll-behavior-y: contain;
-}
-
-.contentBox {
-  position: relative;
-}
-
-//.errorColor {
-//  color: @f-error-color;
-//}

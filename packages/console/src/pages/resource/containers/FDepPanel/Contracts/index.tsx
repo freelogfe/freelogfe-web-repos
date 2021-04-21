@@ -96,9 +96,9 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
           <FContentText type="additional2" text={'当前合约在此资源上被多个版本应用：'}/>
           <div style={{height: 8}}/>
           {/*{FUtil.I18n.message('use_for_version')}：*/}
-          <Space size={15} style={{flexWrap: 'wrap'}}>
-            {k.versions.map((i) => <span key={i}>{i}</span>)}
-          </Space>
+          <div className={styles.allVersions}>
+            {k.versions.map((i) => <div key={i}>{i}</div>)}
+          </div>
         </div>
       </div>))
     }

@@ -5,8 +5,7 @@ import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import FUtil from "@/utils";
-// import {i18nMessage} from "@/utils/i18n";
-// import {CloseCircleFilled} from '@ant-design/icons';
+import {Space} from "antd";
 
 export interface FAuthPanelProps {
   dataSource: {
@@ -45,12 +44,12 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
     setActiveResource(resource || null);
   }, [dataSource]);
 
-  function onChangeActivated(id: number | string) {
-    onChangeActivatedResource && onChangeActivatedResource(dataSource.map((i) => ({
-      ...i,
-      activated: i.id === id,
-    })));
-  }
+  // function onChangeActivated(id: number | string) {
+  //   onChangeActivatedResource && onChangeActivatedResource(dataSource.map((i) => ({
+  //     ...i,
+  //     activated: i.id === id,
+  //   })));
+  // }
 
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>
@@ -59,25 +58,31 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
       </div>
     </div>
     <div className={styles.DepPanelContent}>
-      <div className={styles.contentBox} id={'DepPanelContent'}>
+      <Space
+        size={25}
+        direction="vertical"
+        className={styles.contentBox}
+        // id={'DepPanelContent'}
+      >
 
         {
-          activeResource && activeResource?.contracts.length > 0 && (<>
-            <FContentText type="additional2" text={FUtil.I18n.message('used_contract')}/>
-            <div style={{height: 5}}/>
-            <Contracts dataSource={activeResource.contracts}/>
-          </>)
+          activeResource && activeResource?.contracts.length > 0 && (
+            <Space direction="vertical" size={15} style={{width: '100%'}}>
+              {/*<FContentText type="additional2" text={FUtil.I18n.message('used_contract')}/>*/}
+              <FContentText type="additional2" text={'当前合约'}/>
+              <Contracts dataSource={activeResource.contracts}/>
+            </Space>)
         }
 
         {
-          activeResource && activeResource?.policies?.length > 0 && (<>
-            <div style={{height: 20}}/>
-            <FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>
-            <div style={{height: 5}}/>
-            <Policies dataSource={activeResource.policies}/>
-          </>)
+          activeResource && activeResource?.policies?.length > 0 && (
+            <Space direction="vertical" size={15} style={{width: '100%'}}>
+              {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
+              <FContentText type="additional2" text={'可签约的合约'}/>
+              <Policies dataSource={activeResource.policies}/>
+            </Space>)
         }
-      </div>
+      </Space>
     </div>
   </div>);
 }
