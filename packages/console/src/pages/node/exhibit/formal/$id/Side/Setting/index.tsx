@@ -3,9 +3,8 @@ import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import {Space} from "antd";
-import {FDelete, FEdit, FSwap} from "@/components/FIcons";
-import {FCircleButton, FTextButton} from "@/components/FButton";
-import FRedo from "@/components/FIcons/FRedo";
+import {FDelete, FEdit, FSwap, FRedo, FDoubleDown, FDoubleUp} from "@/components/FIcons";
+import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
   ChangeAction,
   ChangeVersionAction,
@@ -17,7 +16,6 @@ import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FModal from "@/components/FModal";
-import {FDoubleDown, FDoubleUp} from "@/components/FIcons";
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -98,15 +96,15 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                 <FContentText text={pc.key}/>
                 {
                   pc.defaultValue
-                    ? (<FTextButton
-                      theme="primary"
+                    ? (<FTextBtn
+                      // theme="primary"
                       onClick={() => {
                         onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
                       }}
-                    ><FRedo/></FTextButton>)
+                    ><FRedo/></FTextBtn>)
                     : (<Space size={10}>
-                      <FTextButton
-                        theme="primary"
+                      <FTextBtn
+                        // theme="primary"
                         onClick={() => {
                           const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
                           if (!editing) {
@@ -125,7 +123,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                             },
                           });
                         }}
-                      ><FEdit/></FTextButton>
+                      ><FEdit/></FTextBtn>
                       <FDelete
                         style={{color: '#EE4040', cursor: 'pointer'}}
                         onClick={() => {
@@ -174,8 +172,9 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         </div>
         <div style={{height: 20}}/>
         <Space className={styles.addCustomTitle}>
-          <FCircleButton
-            theme="text"
+          <FCircleBtn
+            // theme="text"
+            size="small"
             onClick={() => dispatch<ChangeAction>({
               type: 'exhibitInfoPage/change',
               payload: {
@@ -196,14 +195,17 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
 
     <div style={{height: 30}}/>
     <div style={{display: 'flex', justifyContent: 'center'}}>
-      <FTextButton onClick={() => {
-        dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            settingUnfold: !exhibitInfoPage.settingUnfold,
-          },
-        });
-      }}>{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextButton>
+      <FTextBtn
+        type="default"
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'exhibitInfoPage/change',
+            payload: {
+              settingUnfold: !exhibitInfoPage.settingUnfold,
+            },
+          });
+        }}
+      >{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextBtn>
     </div>
 
     <FModal
