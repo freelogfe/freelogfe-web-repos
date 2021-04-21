@@ -910,8 +910,8 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
         <div style={{width: 40}}/>
         <FContentText type="additional2" text={FUtil.I18n.message('object_id') + '：' + resourceID}/>
         <div style={{width: 20}}/>
-        <FTooltip title={'删除'}>
-          <span>
+        <FTooltip title={'下载'}>
+          <div>
             <FTextBtn
               type="primary"
               onClick={() => onClickDownload && onClickDownload()}
@@ -920,7 +920,7 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
                 style={{fontSize: 16, fontWeight: 600}}
               />
             </FTextBtn>
-          </span>
+          </div>
         </FTooltip>
       </Space>
     </div>

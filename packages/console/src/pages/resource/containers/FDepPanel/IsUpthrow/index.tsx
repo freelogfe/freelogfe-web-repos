@@ -1,10 +1,14 @@
 import * as React from 'react';
 import styles from "./index.less";
-import {Radio} from "antd";
+import {Radio, Space} from "antd";
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
 import {DepResources, ChangeAction} from "@/models/resourceVersionCreatorPage";
 import {InfoCircleFilled} from '@ant-design/icons';
+import {FInfo} from "@/components/FIcons";
+import FTooltip from "@/components/FTooltip";
+import FUtil from "@/utils";
+
 // import {i18nMessage} from "@/utils/i18n";
 
 interface IsUpthrowProps {
@@ -51,34 +55,39 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
 
   return (<div className={styles.radios}>
     {/*{(!resource.upthrowDisabled || resource.upthrow) && (*/}
-    <div>
-      <Radio
-        style={{lineHeight: '16px', color: 'red'}}
-        checked={resource.upthrow}
-        disabled={resource.upthrowDisabled && !resource.upthrow}
-        onClick={() => onChangeIsUpthrow(true)}
-      />
-      {/*<span style={{color: '#666'}}>{FUtil.I18n.message('info_upcast')}</span>*/}
-      <span style={{color: '#666'}}>上抛</span>
-      <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
-    </div>
+    <Space size={20}>
+      <Space size={2}>
+        <Radio
+          style={{lineHeight: '16px', color: 'red'}}
+          checked={resource.upthrow}
+          disabled={resource.upthrowDisabled && !resource.upthrow}
+          onClick={() => onChangeIsUpthrow(true)}
+        />
+        <span style={{color: '#666'}}>上抛</span>
+      </Space>
 
-    <div style={{height: 18}}/>
+      <FTooltip title={FUtil.I18n.message('info_upcast')}>
+        <div><FInfo/></div>
+      </FTooltip>
+    </Space>
+
+    <div style={{height: 15}}/>
     {/*{(!resource.upthrowDisabled || !resource.upthrow) && (*/}
-    <div>
-      <Radio
-        style={{lineHeight: '16px'}}
-        checked={!resource.upthrow}
-        // disabled={resource.upthrowDisabled && resource.upthrow}
-        disabled={resource.upthrowDisabled}
-        onClick={() => onChangeIsUpthrow(false)}
-      />
-      {/*<span style={{color: '#666'}}>{FUtil.I18n.message('info_sign_contract')}</span>*/}
-      <span style={{color: '#666'}}>签约</span>
-      <InfoCircleFilled style={{color: '#C7C7C7', fontSize: 16, marginLeft: 20}}/>
-    </div>
-    {/*)}*/}
+    <Space size={20}>
+      <Space size={2}>
+        <Radio
+          style={{lineHeight: '16px'}}
+          checked={!resource.upthrow}
+          disabled={resource.upthrowDisabled}
+          onClick={() => onChangeIsUpthrow(false)}
+        />
+        <span style={{color: '#666'}}>{FUtil.I18n.message('sign_contract')}</span>
+      </Space>
+      <FTooltip title={FUtil.I18n.message('info_sign_contract')}>
+        <div><FInfo/></div>
+      </FTooltip>
 
+    </Space>
   </div>);
 }
 

@@ -44,6 +44,7 @@ import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
+import FTooltip from "@/components/FTooltip";
 
 interface VersionCreatorProps {
   dispatch: Dispatch;
@@ -328,7 +329,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
 
                 <div style={{height: 20}}/>
 
-                <Space>
+                <Space size={5}>
                   <FTextBtn
                     type="default"
                     onClick={() => {
@@ -340,7 +341,9 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                     <span>自定义选项（高级）</span>
                     {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
                   </FTextBtn>
-                  <FInfo/>
+                  <FTooltip title={FUtil.I18n.message('info_versionoptions')}>
+                    <div><FInfo/></div>
+                  </FTooltip>
                 </Space>
 
                 {

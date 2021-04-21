@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FTextBtn, FCircleButton, FNormalButton, FRectBtn} from '@/components/FButton';
+import {FTextBtn, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
@@ -18,13 +18,11 @@ import {UpdateAObjectAction} from '@/models/storageHomePage';
 import DepsCards from './DepsCards';
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
-import FUp from "@/components/FIcons/FUp";
-import {FDown, FInfo} from "@/components/FIcons";
+import {FDown, FInfo, FUp, FDownload} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FCustomOptionsCard from "@/components/FCustomOptionsCard";
-import FDownload from "@/components/FIcons/FDownload";
 import {router} from "umi";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
@@ -72,7 +70,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         }}
         type="default"
       >取消</FTextBtn>
-      <FNormalButton
+      <FRectBtn
         disabled={storageObjectEditor.typeVerify === 1 || hasError}
         onClick={async () => {
           await dispatch<UpdateObjectInfoAction>({
@@ -87,7 +85,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           });
           router.push(FUtil.LinkTo.storageSpace({bucketName: storageObjectEditor.bucketName}));
         }}
-      >保存</FNormalButton>
+      >保存</FRectBtn>
     </Space>}
     onClose={() => {
       onChange({
@@ -126,14 +124,16 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                 title={'复制对象名称'}
               />
               <FTooltip title={'下载'}>
-                <FTextBtn
-                  type="primary"
-                  onClick={() => {
-                    FApiServer.Storage.downloadObject({
-                      objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
-                    });
-                  }}
-                ><FDownload/></FTextBtn>
+                <div>
+                  <FTextBtn
+                    type="primary"
+                    onClick={() => {
+                      FApiServer.Storage.downloadObject({
+                        objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
+                      });
+                    }}
+                  ><FDownload/></FTextBtn>
+                </div>
               </FTooltip>
             </Space>
           </div>
@@ -175,7 +175,11 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               <span>自定义选项（高级）</span>
               {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
             </a>
-            <FInfo/>
+            <FTooltip title={'自定义选项'}>
+              <div>
+                <FInfo/>
+              </div>
+            </FTooltip>
           </Space>
 
           {

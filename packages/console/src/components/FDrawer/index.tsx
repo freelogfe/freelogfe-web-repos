@@ -3,7 +3,7 @@ import styles from './index.less';
 import {Drawer} from 'antd';
 import {DrawerProps} from "antd/lib/drawer";
 import {FTitleText} from '@/components/FText';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {FClose} from '@/components/FIcons';
 
 interface FDrawerProps extends DrawerProps {
@@ -25,7 +25,7 @@ function FDrawer({children, topRight, width = 720, title, onClose, ...props}: FD
     <div className={styles.header} style={{width: width}}>
       <FTitleText type="h2" text={title}/>
       {
-        topRight || (<FTextButton onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextButton>)
+        topRight || (<FTextBtn type="default" onClick={(e: any) => onClose && onClose(e)}><FClose/></FTextBtn>)
       }
     </div>
     <div style={{height: 70}}/>

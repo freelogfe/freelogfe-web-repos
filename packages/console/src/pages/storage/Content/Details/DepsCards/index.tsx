@@ -1,15 +1,13 @@
 import * as React from 'react';
 import {Divider, Popover, Space} from 'antd';
-import {StorageObjectEditorModelState} from '@/models/storageObjectEditor';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {ArrowUpOutlined} from '@ant-design/icons';
-import {FCircleButton, FTextButton} from '@/components/FButton';
+import {FCircleBtn, FTextBtn} from '@/components/FButton';
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FEdit} from "@/components/FIcons";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
-// import {resourceInfo} from "@/utils/path-assembler";
-// import {Link} from 'umi';
+import FDivider from "@/components/FDivider";
 
 interface DepsCardsProps {
   title: string;
@@ -56,21 +54,24 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
         >
           <div className={styles.resourceLeft}>
             <Space size={8}>
-              <a onClick={() => window.open(d.linkTo)}>
+              <FTextBtn
+                onClick={() => window.open(d.linkTo)}
+                type="default"
+              >
                 <FContentText
                   singleRow={true}
                   text={d.name}
                   className={styles.resourceName}
                 />
-              </a>
+              </FTextBtn>
               {d.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
             </Space>
             <div style={{height: 9}}/>
-            <div className={styles.resourceInfo}>
+            <Space size={5} className={styles.resourceInfo}>
               <FContentText type="additional2">{d.type || '未设置类型'}</FContentText>
               {
                 d.version && (<>
-                  <Divider type="vertical"/>
+                  <FDivider style={{fontSize: 14}}/>
                   <Space size={5}>
                     <FContentText type="additional2">版本范围：{d.version}</FContentText>
                     <FVersionHandlerPopover
@@ -87,7 +88,7 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                           }
                         }));
                       }}
-                    ><FTextButton><FEdit style={{fontSize: 12}}/></FTextButton></FVersionHandlerPopover>
+                    ><FTextBtn><FEdit style={{fontSize: 12}}/></FTextBtn></FVersionHandlerPopover>
                   </Space>
                 </>)
               }
@@ -107,11 +108,11 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
                 </>)
               }
 
-            </div>
+            </Space>
           </div>
           <div className={styles.resourceRight}>
-            <FCircleButton
-              theme="delete"
+            <FCircleBtn
+              type="danger"
               onClick={() => {
                 changeData(dataSource.filter((ds, index) => index !== i))
               }}

@@ -38,6 +38,7 @@ import FExport from './FExport';
 import FImport from './FImport';
 import FCode from './FCode';
 import FNodes from './FNodes';
+import FUp from './FUp';
 
 export {
   FAdd,
@@ -78,4 +79,5 @@ export {
   FImport,
   FCode,
   FNodes,
+  FUp,
 };
