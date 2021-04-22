@@ -36,11 +36,6 @@ function FBraftEditor({global, value, onChange, ...props}: FBraftEditorProps) {
       ]}
       media={{
         async uploadFn(fileParams) {
-          // console.log(fileParams, 'fileParams1!@#$!@#$@!#$');
-          // if (fileParams.file.type !== 'image/gif' && fileParams.file.type !== 'image/png' && fileParams.file.type !== 'image/jpeg') {
-          //   fMessage(FUtil.I18n.message('limit_resource_image_format'), 'error');
-          //   return false;
-          // }
           const params: Parameters<typeof FApiServer.Storage.uploadImage>[0] = {
             file: fileParams.file,
           };
