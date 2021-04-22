@@ -2,12 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import FInput from '@/components/FInput';
-import {FNormalButton, FRectBtn} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import FLabelEditor from '@/pages/resource/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FContentLayout from '@/layouts/FContentLayout';
-import {Space, Modal} from 'antd';
+import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceCreatorPageModelState, UserModelState} from '@/models/connect';
 import {

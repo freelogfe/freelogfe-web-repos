@@ -73,7 +73,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
           <div className={styles.DepPanelContent}>
 
             {
-              resource.status === 0 && (
+              resource.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
                   <CloseCircleFilled className={styles.errorIcon}/>
                   <FTipText text={FUtil.I18n.message('authorization_issue_offline_resource')} type="secondary"/>
@@ -103,7 +103,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
             }
 
             {
-              (resource.status === 1 && (resource.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0))
+              (resource.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)
               && (<Space style={{width: '100%'}} size={25} direction="vertical">
 
                 <IsUpthrow/>

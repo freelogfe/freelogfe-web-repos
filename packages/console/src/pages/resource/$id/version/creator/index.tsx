@@ -11,7 +11,7 @@ import {connect, Dispatch} from "dva";
 import {
   ConnectState,
   ResourceVersionCreatorPageModelState,
-  StorageObjectEditorModelState
+  StorageObjectEditorModelState,
 } from '@/models/connect';
 import {
   ChangeAction,
@@ -152,7 +152,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectError.text
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
-      return dd.status !== 1 || (!dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked));
+      return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
     });
   // 自定义属性
   // || !!resourceVersionCreatorPage.properties.find((ep) => {
