@@ -188,6 +188,7 @@ const Model: ResourceAuthPageModelType = {
         resourceId: resourceAuthPage.resourceID,
       };
       const {data} = yield call(FApiServer.Resource.resolveResources, params);
+
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
         return yield put<ChangeAction>({
@@ -198,34 +199,47 @@ const Model: ResourceAuthPageModelType = {
         });
       }
 
-      const resourceParams: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+      const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
         resourceIds: data.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
-      const {data: resourcesInfoData} = yield call(FApiServer.Resource.batchInfo, resourceParams);
+      const {data: data2} = yield call(FApiServer.Resource.batchInfo, params2);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
-      const contractsParams: Parameters<typeof FApiServer.Contract.contracts>[0] = {
-        identityType: 2,
+      const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+        subjectIds: data.map((i: any) => i.resourceId).join(','),
         licenseeId: resourceAuthPage.resourceID,
+        subjectType: 1,
+        licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
+      const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
+      // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
-      const {data: {dataList: contractsData}} = yield call(FApiServer.Contract.contracts, contractsParams);
+      // const contractsParams: Parameters<typeof FApiServer.Contract.contracts>[0] = {
+      //   identityType: 2,
+      //   licenseeId: resourceAuthPage.resourceID,
+      //   isLoadPolicyInfo: 1,
+      // };
+      //
+      // const {data: {dataList: contractsData}} = yield call(FApiServer.Contract.contracts, contractsParams);
 
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
-        const currentResource = resourcesInfoData.find((resource: any) => resource.resourceId === i.resourceId);
+        const currentResource = data2.find((resource: any) => resource.resourceId === i.resourceId);
         // console.log(currentResource, 'currentResource');
         const allEnabledVersions: string[] = i.versions.map((version: any) => version.version);
-        const allContracts = contractsData
+        const allContracts = data1
           .filter((c: any) => c.licensorId === i.resourceId);
         // console.info(allContracts, 'allContracts');
 
         const allUsedPoliciesId = allContracts.map((c: any) => c.policyId);
         // console.info(allUsedPoliciesId, 'allUsedPoliciesId');
-        const allEnabledPolicies = resourcesInfoData.find((resource: any) => resource.resourceId === i.resourceId)?.policies?.filter((resource: any) => !allUsedPoliciesId.includes(resource.policyId));
+        const allEnabledPolicies = data2.find((resource: any) => resource.resourceId === i.resourceId)?.policies?.filter((p: any) => {
+          // console.log(p, '!@#$!@#$@#$@#!$');
+          return !allUsedPoliciesId.includes(p.policyId) && p.status === 1;
+        });
         // console.log(allEnabledPolicies, 'allEnabledPolicies');
         return {
           id: currentResource.resourceId,

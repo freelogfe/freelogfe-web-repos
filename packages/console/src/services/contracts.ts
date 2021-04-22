@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 // 查询合同分页列表
-export interface ContractsParamsType {
+interface ContractsParamsType {
   page?: number;
   pageSize?: number;
   identityType: 1 | 2;
@@ -25,7 +25,7 @@ export function contracts(params: ContractsParamsType) {
 }
 
 // 批量查询合同列表
-export interface BatchContractsParamsType {
+interface BatchContractsParamsType {
   contractIds?: string;
   subjectIds?: string;
   identityType?: 1 | 2;
