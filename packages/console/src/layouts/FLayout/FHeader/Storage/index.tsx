@@ -35,6 +35,9 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
     }
     dispatch<FetchBucketsAction>({
       type: 'storageHomePage/fetchBuckets',
+      payload: {
+        from: 'header',
+      },
     });
   }, []);
 
@@ -65,7 +68,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
               newBucketModalVisible: true,
             },
           });
-          console.log('2222222@@#$@#$T09djsg');
+          // console.log('2222222@@#$@#$T09djsg');
           router.push(FUtil.LinkTo.storageSpace({}));
         }}
         size="small"

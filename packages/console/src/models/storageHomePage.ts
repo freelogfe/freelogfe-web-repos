@@ -58,6 +58,9 @@ export interface ChangeAction extends AnyAction {
 
 export interface FetchBucketsAction extends AnyAction {
   type: 'storageHomePage/fetchBuckets' | 'fetchBuckets';
+  payload?: {
+    from: 'header' | 'other';
+  },
 }
 
 export interface CreateBucketAction extends AnyAction {
@@ -148,7 +151,7 @@ const Model: StorageHomePageModelType = {
     uploadPanelOpen: false,
   },
   effects: {
-    * fetchBuckets({}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
+    * fetchBuckets({payload}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
 
       const params: Parameters<typeof FApiServer.Storage.bucketList>[0] = {
@@ -174,8 +177,8 @@ const Model: StorageHomePageModelType = {
         router.push(FUtil.LinkTo.storageSpace({}));
       } else {
 
-        if (window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
-          console.log('!!!!!!!!!!!!0923480238402384032840923049');
+        if (payload?.from !== 'header' && window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
+          // console.log('!!!!!!!!!!!!0923480238402384032840923049');
           router.push(FUtil.LinkTo.storageSpace({bucketName: bucketList[0].bucketName}));
         }
       }
