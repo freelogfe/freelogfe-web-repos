@@ -4,6 +4,8 @@ import {FContentText} from '@/components/FText';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/resourceAuthPage";
+import {FTextBtn} from "@/components/FButton";
+import FUtil from "@/utils";
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -39,7 +41,17 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
         onClick={() => onChangeActivated(i.id)}
         className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
         <div>
-          <FContentText text={i.title}/>
+          <FTextBtn
+            type="default"
+            onClick={(event) => {
+              event.stopPropagation();
+              window.open(FUtil.LinkTo.resourceDetails({
+                resourceID: i.id,
+              }))
+            }}
+          >
+            <FContentText text={i.title}/>
+          </FTextBtn>
           <div style={{height: 9}}/>
           <FContentText type="additional2">
             <span>{i.resourceType}</span>

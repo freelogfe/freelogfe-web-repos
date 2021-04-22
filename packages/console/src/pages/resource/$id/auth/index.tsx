@@ -153,15 +153,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
             }
 
             {
-              resourceAuthPage.contractsAuthorized.length > 0 && (<FAuthPanel
-                dataSource={resourceAuthPage.contractsAuthorized}
-                onChangeActivatedResource={(value) => dispatch<ChangeAction>({
-                  type: 'resourceAuthPage/change',
-                  payload: {
-                    contractsAuthorized: value,
-                  },
-                })}
-              />)
+              resourceAuthPage.contractsAuthorized.length > 0 && (<FAuthPanel/>)
             }
 
           </FFormLayout.FBlock>)

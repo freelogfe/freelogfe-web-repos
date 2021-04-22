@@ -4,10 +4,16 @@ import PolicyCard from './PolicyCard';
 import {Dispatch, connect} from "dva";
 import {UpdateAuthorizedAction} from "@/models/resourceAuthPage";
 import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
+import {Space} from "antd";
 
 interface PoliciesProps {
   dispatch: Dispatch;
-  dataSource: FAuthPanelProps['dataSource'][number]['policies'];
+  dataSource: {
+    id: string;
+    title: string;
+    code: string;
+    allEnabledVersions: string[];
+  }[];
   // onLicense?: (id: string, record: PoliciesProps['dataSource'][0]) => void;
 }
 
@@ -23,7 +29,11 @@ function Policies({dataSource, dispatch}: PoliciesProps) {
     });
   }
 
-  return (<div className={styles.styles}>
+  return (<Space
+    size={15}
+    style={{width: '100%'}}
+    direction="vertical"
+  >
     {dataSource.map((i) => (
       <PolicyCard
         key={i.id}
@@ -33,7 +43,7 @@ function Policies({dataSource, dispatch}: PoliciesProps) {
         onClickLicense={(versions: string[]) => onLicense(versions, i.id)}
       />
     ))}
-  </div>)
+  </Space>)
 }
 
 export default connect()(Policies);

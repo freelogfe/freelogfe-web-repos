@@ -35,7 +35,11 @@ function Contracts({dataSource, dispatch}: ContractsProps) {
     });
   }
 
-  return <div className={styles.styles}>
+  return <Space
+    size={15}
+    style={{width: '100%'}}
+    direction="vertical"
+  >
     {dataSource.map((k) => (<div key={k.id} className={styles.Policy}>
       <div style={{height: 15}}/>
 
@@ -86,7 +90,7 @@ function Contracts({dataSource, dispatch}: ContractsProps) {
         </div>
       </div>
     </div>))}
-  </div>
+  </Space>
 }
 
 export default connect()(Contracts);

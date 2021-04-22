@@ -6,43 +6,46 @@ import Contracts from './Contracts';
 import Policies from './Policies';
 import FUtil from "@/utils";
 import {Space} from "antd";
+import {connect} from "dva";
+import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
 
 export interface FAuthPanelProps {
-  dataSource: {
-    id: string | number;
-    activated: boolean;
-    title: string;
-    resourceType: string;
-    version: string;
-    contracts: {
-      checked: boolean;
-      title: string;
-      status: string;
-      code: string;
-      id: string;
-      date: string;
-      policyId: string;
-      versions: { version: string; checked: boolean; disabled: boolean }[];
-    }[];
-    policies: {
-      id: string;
-      title: string;
-      code: string;
-      allEnabledVersions: string[];
-    }[];
-  }[];
+  resourceAuthPage: ResourceAuthPageModelState
+  // dataSource: {
+  //   id: string | number;
+  //   activated: boolean;
+  //   title: string;
+  //   resourceType: string;
+  //   version: string;
+  //   contracts: {
+  //     checked: boolean;
+  //     title: string;
+  //     status: string;
+  //     code: string;
+  //     id: string;
+  //     date: string;
+  //     policyId: string;
+  //     versions: { version: string; checked: boolean; disabled: boolean }[];
+  //   }[];
+  //   policies: {
+  //     id: string;
+  //     title: string;
+  //     code: string;
+  //     allEnabledVersions: string[];
+  //   }[];
+  // }[];
 
-  onChangeActivatedResource?(dataSource: FAuthPanelProps['dataSource']): void;
+  // onChangeActivatedResource?(dataSource: FAuthPanelProps['dataSource']): void;
 }
 
-function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
+function FAuthPanel({ resourceAuthPage}: FAuthPanelProps) {
 
-  const [activeResource, setActiveResource] = React.useState<FAuthPanelProps['dataSource'][0] | null>(null);
+  // const [activeResource, setActiveResource] = React.useState<any | null>(null);
+  const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
-  React.useEffect(() => {
-    const resource = dataSource.find((i) => i.activated);
-    setActiveResource(resource || null);
-  }, [dataSource]);
+  // React.useEffect(() => {
+  //   setActiveResource(resource || null);
+  // }, [resourceAuthPage.contractsAuthorize]);
 
   // function onChangeActivated(id: number | string) {
   //   onChangeActivatedResource && onChangeActivatedResource(dataSource.map((i) => ({
@@ -87,4 +90,6 @@ function FAuthPanel({dataSource, onChangeActivatedResource}: FAuthPanelProps) {
   </div>);
 }
 
-export default FAuthPanel;
+export default connect(({resourceAuthPage}: ConnectState) => ({
+  resourceAuthPage,
+}))(FAuthPanel);

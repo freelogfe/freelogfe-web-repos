@@ -27,7 +27,7 @@ export interface ResourceAuthPageModelState {
     resourceName: string;
   }[];
   contractsAuthorized: {
-    id: string | number;
+    id: string;
     activated: boolean;
     title: string;
     resourceType: string;
@@ -104,7 +104,7 @@ export interface UpdateAuthorizedAction extends AnyAction {
   }[];
 }
 
-export interface ResourceAuthPageModelType {
+interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
