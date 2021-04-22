@@ -175,6 +175,7 @@ const Model: StorageHomePageModelType = {
       } else {
 
         if (window.location.pathname.startsWith('/storage') && !bucketList.map((b) => b.bucketName).includes(storageHomePage.activatedBucket)) {
+          console.log('!!!!!!!!!!!!0923480238402384032840923049');
           router.push(FUtil.LinkTo.storageSpace({bucketName: bucketList[0].bucketName}));
         }
       }

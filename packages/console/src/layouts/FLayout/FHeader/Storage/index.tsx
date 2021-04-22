@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import sharedStyles from '../../index.less';
 import {FContentText} from "@/components/FText";
-import {FRectBtn} from "@/components/FButton";
+import {FCircleBtn, FRectBtn} from "@/components/FButton";
 import FMenu from "@/components/FMenu";
 import {
   ChangeAction,
@@ -41,7 +41,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   function onClickStorage() {
 
     if (!isCurrent) {
-      console.log('@$!@#$@!#$!@#$onClickStorage');
+      // console.log('@$!@#$@!#$!@#$onClickStorage');
       return router.push(FUtil.LinkTo.storageSpace({
         bucketName: (storageHomePage.bucketList
           && storageHomePage.bucketList[0]
@@ -90,7 +90,22 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           value: b.bucketName,
         }))}
       />
-      <a
+      {/*<a*/}
+      {/*  onClick={() => {*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'storageHomePage/change',*/}
+      {/*      payload: {*/}
+      {/*        newBucketName: '',*/}
+      {/*        newBucketNameError: false,*/}
+      {/*        newBucketModalVisible: true,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    onClickStorage();*/}
+      {/*  }}*/}
+      {/*  className={sharedStyles.newButton}>*/}
+      {/*  <FPlus/>*/}
+      {/*</a>*/}
+      <FCircleBtn
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
@@ -102,9 +117,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           });
           onClickStorage();
         }}
-        className={sharedStyles.newButton}>
-        <FPlus/>
-      </a>
+      />
     </div>)
   }>
     <FNavLink
