@@ -11,7 +11,7 @@ export function createBucket(params: CreateBucketParamsType) {
 }
 
 // 查看用户的bucket列表
-export interface BucketListParamsType {
+interface BucketListParamsType {
   bucketType: 0 | 1 | 2;
 }
 
@@ -22,7 +22,7 @@ export function bucketList(params: BucketListParamsType) {
 }
 
 // 查询bucket使用情况
-export interface SpaceStatisticsParamsType {
+interface SpaceStatisticsParamsType {
 }
 
 export function spaceStatistics(params?: SpaceStatisticsParamsType) {
@@ -30,7 +30,7 @@ export function spaceStatistics(params?: SpaceStatisticsParamsType) {
 }
 
 // 删除bucket
-export interface DeleteBucketParamsType {
+interface DeleteBucketParamsType {
   bucketName: string;
 }
 
@@ -39,7 +39,7 @@ export function deleteBucket(params: DeleteBucketParamsType) {
 }
 
 // 删除bucket
-export interface DeleteBucketsParamsType {
+interface DeleteBucketsParamsType {
   bucketName: string;
 }
 
@@ -48,7 +48,7 @@ export function deleteBuckets(params: DeleteBucketsParamsType) {
 }
 
 // 分页查看存储对象列表
-export interface ObjectListParamsType {
+interface ObjectListParamsType {
   bucketName: string;
   resourceType?: string;
   isLoadingTypeless?: 0 | 1;
@@ -65,7 +65,7 @@ export function objectList({bucketName, ...params}: ObjectListParamsType) {
 }
 
 // 创建存储对象
-export interface CreateObjectParamsType {
+interface CreateObjectParamsType {
   bucketName: string;
   objectName: string;
   sha1: string;
@@ -77,12 +77,12 @@ export function createObject({bucketName, ...params}: CreateObjectParamsType) {
 }
 
 // 查看存储对象详情
-export interface ObjectDetailsParamsType1 {
+interface ObjectDetailsParamsType1 {
   bucketName: string;
   objectId: string;
 }
 
-export interface ObjectDetailsParamsType2 {
+interface ObjectDetailsParamsType2 {
   objectIdOrName: string;
 }
 
@@ -94,7 +94,7 @@ export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsPa
 }
 
 // 删除存储对象
-export interface DeleteObjectsParamsType {
+interface DeleteObjectsParamsType {
   bucketName: string;
   objectIds: string;
 }
@@ -104,7 +104,7 @@ export function deleteObjects(params: DeleteObjectsParamsType) {
 }
 
 // 下载存储对象文件
-export interface DownloadObjectParamsType {
+interface DownloadObjectParamsType {
   objectIdOrName: string;
 }
 
@@ -119,7 +119,7 @@ export function downloadObject(params: DownloadObjectParamsType) {
 }
 
 // 根据sha1查询文件是否存在
-export interface FileIsExistParamsType {
+interface FileIsExistParamsType {
   sha1: string;
 }
 
@@ -162,7 +162,7 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
 }
 
 // 上传图片文件
-export interface UploadImageParamsType {
+interface UploadImageParamsType {
   file: File;
 }
 
@@ -177,7 +177,7 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
 }
 
 // 更新存储对象属性
-export interface UpdateObjectParamsType {
+interface UpdateObjectParamsType {
   objectIdOrName: string;
   customPropertyDescriptors?: {
     key: string;
@@ -199,7 +199,7 @@ export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType
 }
 
 // 批量查询存储对象列表
-export interface BatchObjectListParamsType {
+interface BatchObjectListParamsType {
   fullObjectNames?: string;
   objectIds?: string;
   projection?: string;
@@ -212,7 +212,7 @@ export function batchObjectList(params: BatchObjectListParamsType) {
 }
 
 // 根据sha1和类型获取文件属性
-export interface FilePropertyParamsType {
+interface FilePropertyParamsType {
   sha1: string;
   resourceType: string;
 }
@@ -224,7 +224,7 @@ export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
 }
 
 // 对象依赖循环性检查
-export interface CycleDependencyCheckParamsType {
+interface CycleDependencyCheckParamsType {
   objectIdOrName: string;
   dependencies: {
     name: string;

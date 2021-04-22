@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 // 收藏资源
-export interface CollectResourceParamsType {
+interface CollectResourceParamsType {
   resourceId: string;
 }
 
@@ -10,7 +10,7 @@ export function collectResource(params: CollectResourceParamsType) {
 }
 
 // 查看收藏的资源列表
-export interface CollectionResourcesParamsType {
+interface CollectionResourcesParamsType {
   skip?: number;
   limit?: number;
   keywords?: string;
@@ -25,7 +25,7 @@ export function collectionResources(params: CollectionResourcesParamsType) {
 }
 
 // 删除收藏的资源
-export interface DeleteCollectResourceParamsType {
+interface DeleteCollectResourceParamsType {
   resourceId: string;
 }
 
@@ -34,7 +34,7 @@ export function deleteCollectResource({resourceId}: DeleteCollectResourceParamsT
 }
 
 // 批量查询资源是否收藏
-export interface IsCollectedParamsType {
+interface IsCollectedParamsType {
   resourceIds: string;
 }
 
@@ -45,7 +45,7 @@ export function isCollected(params: IsCollectedParamsType) {
 }
 
 // 查询资源总收藏数量
-export interface CollectedCountParamsType {
+interface CollectedCountParamsType {
   resourceId: string;
 }
 

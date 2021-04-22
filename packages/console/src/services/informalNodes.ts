@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 // 分页获取测试资源列表
-export interface TestResourcesParamsType {
+interface TestResourcesParamsType {
   nodeId: number;
   skip?: number;
   limit?: number;
@@ -19,7 +19,7 @@ export function testResources({nodeId, ...params}: TestResourcesParamsType) {
 }
 
 // 创建节点测试规则
-export interface CreateRulesParamsType {
+interface CreateRulesParamsType {
   nodeId: number;
   testRuleText: string;
 }
@@ -29,7 +29,7 @@ export function createRules({nodeId, testRuleText}: CreateRulesParamsType) {
 }
 
 // 搜索测试资源依赖树
-export interface DependencyTreeParamsType {
+interface DependencyTreeParamsType {
   nodeId: number;
   keywords: string;
 }
@@ -43,7 +43,7 @@ export function dependencyTree({nodeId, keywords}: DependencyTreeParamsType) {
 }
 
 // 追加节点的测试规则 (在现有测试规则尾部追加新的测试规则)
-export interface PutRulesParamsType {
+interface PutRulesParamsType {
   nodeId: number;
   additionalTestRule: string;
 }
@@ -55,7 +55,7 @@ export function putRules({nodeId, additionalTestRule}: PutRulesParamsType) {
 }
 
 // 查看节点当前测试规则
-export interface TestNodeRulesParamsType {
+interface TestNodeRulesParamsType {
   nodeId: number;
 }
 
@@ -64,7 +64,7 @@ export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
 }
 
 // 更新测试资源的授权合约
-export interface UpdateTestResourceContractsParamsType {
+interface UpdateTestResourceContractsParamsType {
   testResourceId: string;
   resolveResources: {
     resourceId: string;
@@ -79,7 +79,7 @@ export function updateTestResourceContracts({testResourceId, ...params}: UpdateT
 }
 
 // 获取并过滤资源依赖树
-export interface DependencyTreeFilterParamsType {
+interface DependencyTreeFilterParamsType {
   testResourceId: string;
   dependentEntityId: string;
   dependentEntityVersionRange?: string;
@@ -92,7 +92,7 @@ export function dependencyTreeFilter({testResourceId, ...params}: DependencyTree
 }
 
 // 查看测试资源详情
-export interface TestResourceDetailsParamsType {
+interface TestResourceDetailsParamsType {
   testResourceId: string;
 }
 
@@ -101,7 +101,7 @@ export function testResourceDetails({testResourceId}: TestResourceDetailsParamsT
 }
 
 // 查询包含指定依赖的测试资源
-export interface SearchTestResourcesByDependencyParamsType {
+interface SearchTestResourcesByDependencyParamsType {
   nodeId: number;
   dependentEntityId: string;
   dependentEntityVersionRange?: string;
@@ -114,7 +114,7 @@ export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestR
 }
 
 // 重新匹配节点测试规则
-export interface RulesRematchParamsType {
+interface RulesRematchParamsType {
   nodeId: number;
 }
 

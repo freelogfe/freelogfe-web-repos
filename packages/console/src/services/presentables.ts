@@ -20,7 +20,7 @@ export function createPresentable(params: CreatePresentableParamsType) {
 }
 
 // 更新展品
-export interface UpdatePresentableParamsType {
+interface UpdatePresentableParamsType {
   presentableId: string;
   presentableTitle?: string;
   tags?: string[];
@@ -47,7 +47,7 @@ export function updatePresentable({presentableId, ...params}: UpdatePresentableP
 }
 
 // 上下线presentable
-export interface PresentablesOnlineParamsType {
+interface PresentablesOnlineParamsType {
   presentableId: string;
   onlineStatus: 0 | 1;
 }
@@ -57,7 +57,7 @@ export function presentablesOnlineStatus({presentableId, ...params}: Presentable
 }
 
 // 查看展品详情
-export interface PresentableDetailsParamsType1 {
+interface PresentableDetailsParamsType1 {
   presentableId: string;
   projection?: string;
   isLoadVersionProperty?: 0 | 1;
@@ -65,7 +65,7 @@ export interface PresentableDetailsParamsType1 {
   isLoadCustomPropertyDescriptors?: 0 | 1;
 }
 
-export interface PresentableDetailsParamsType2 {
+interface PresentableDetailsParamsType2 {
   nodeId: number;
   resourceId?: string;
   resourceName?: string;
@@ -89,7 +89,7 @@ export function presentableDetails(params: PresentableDetailsParamsType1 | Prese
 }
 
 // 查询展品分页列表
-export interface PresentablesParamsType {
+interface PresentablesParamsType {
   nodeId: number;
   skip?: number;
   limit?: number;
@@ -110,7 +110,7 @@ export function presentables(params: PresentablesParamsType) {
 }
 
 // 批量查询展品列表
-export interface PresentableListParamsType {
+interface PresentableListParamsType {
   nodeId?: number;
   userId?: number;
   presentableIds?: string;
@@ -128,7 +128,7 @@ export function presentableList(params: PresentableListParamsType) {
 }
 
 // 切换展品版本
-export interface AuthTreeParamsType {
+interface AuthTreeParamsType {
   presentableId: string;
   maxDeep?: number;
   nid?: string;
@@ -141,7 +141,7 @@ export function authTree({presentableId, ...params}: AuthTreeParamsType) {
 }
 
 // 切换展品版本
-export interface PresentablesVersionParamsType {
+interface PresentablesVersionParamsType {
   presentableId: string;
   version: string;
 }
@@ -152,7 +152,7 @@ export function presentablesVersion({presentableId, ...params}: PresentablesVers
 
 
 // 设置展品自定义属性
-export interface UpdateRewritePropertyParamsType {
+interface UpdateRewritePropertyParamsType {
   presentableId: string;
   rewriteProperty: {
     key: string;
@@ -166,7 +166,7 @@ export function updateRewriteProperty({presentableId, ...params}: UpdateRewriteP
 }
 
 // 批量获取展品授权结果
-export interface BatchAuthParamsType {
+interface BatchAuthParamsType {
   nodeId: number;
   authType: 1 | 2 | 3; // 1:节点侧授权 2:资源侧授权 3:节点+资源侧授权
   presentableIds: string;

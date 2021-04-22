@@ -11,11 +11,11 @@ export function create(params: CreateParamsType) {
 }
 
 // 查看节点详情
-export interface NodeDetailParamsType1 {
+interface NodeDetailParamsType1 {
   nodeId: number;
 }
 
-export interface NodeDetailParamsType2 {
+interface NodeDetailParamsType2 {
   nodeName?: string;
   nodeDomain?: string;
 }
@@ -30,7 +30,7 @@ export function details(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
 }
 
 // 查看节点列表
-export interface NodesParamsType {
+interface NodesParamsType {
   skip?: number;
   limit?: number;
   status?: 0 | 1 | 2; // 0:正常 1:未审核 2:冻结

@@ -15,7 +15,7 @@ export function create(params: CreateParamsType) {
 }
 
 // 更新资源信息
-export interface UpdateParamsType {
+interface UpdateParamsType {
   resourceId: string;
   intro?: string;
   tags?: string[];
@@ -36,7 +36,7 @@ export function update(params: UpdateParamsType) {
 }
 
 // 查看资源分页列表
-export interface ListParamsType {
+interface ListParamsType {
   skip?: number;
   limit?: number;
   keywords?: string;
@@ -57,7 +57,7 @@ export function list(params: ListParamsType) {
 }
 
 // 查看单个资源详情
-export interface InfoParamsType {
+interface InfoParamsType {
   resourceIdOrName: string;
   isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
@@ -71,7 +71,7 @@ export function info({resourceIdOrName, ...params}: InfoParamsType) {
 }
 
 // 批量查询资源列表
-export interface BatchInfoParamsType {
+interface BatchInfoParamsType {
   resourceIds?: string;
   resourceNames?: string;
   isLoadPolicyInfo?: 0 | 1;
@@ -86,7 +86,7 @@ export function batchInfo(params: BatchInfoParamsType) {
 }
 
 // 查看资源的依赖树
-export interface DependencyTreeParamsType {
+interface DependencyTreeParamsType {
   resourceId: string;
   version?: string;
   maxDeep?: string;
@@ -101,7 +101,7 @@ export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType
 }
 
 // 查看资源的授权树
-export interface AuthTreeParamsType {
+interface AuthTreeParamsType {
   resourceId: string;
   version?: string;
 }
@@ -113,7 +113,7 @@ export function authTree({resourceId, ...params}: AuthTreeParamsType) {
 }
 
 // 创建资源版本
-export interface CreateVersionParamsType {
+interface CreateVersionParamsType {
   resourceId: string;
   version: string;
   fileSha1: string;
@@ -146,13 +146,13 @@ export function createVersion({resourceId, ...params}: CreateVersionParamsType) 
 }
 
 // 查看资源版本信息
-export interface ResourceVersionInfoParamsType1 {
+interface ResourceVersionInfoParamsType1 {
   resourceId: string;
   version: string;
   projection?: string;
 }
 
-export interface ResourceVersionInfoParamsType2 {
+interface ResourceVersionInfoParamsType2 {
   versionId: string;
   projection?: string;
 }
@@ -173,7 +173,7 @@ export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | Res
 }
 
 // 根据sha1查询版本列表 (查询文件对象所挂载的资源及版本)
-export interface GetResourceVersionBySha1ParamsType {
+interface GetResourceVersionBySha1ParamsType {
   fileSha1: string;
   projection?: string;
 }
@@ -185,7 +185,7 @@ export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersi
 }
 
 // 根据sha1查询资源列表 (查询文件对象所挂载的资源)
-export interface GetResourceBySha1ParamsType {
+interface GetResourceBySha1ParamsType {
   fileSha1: string;
   projection?: string;
 }
@@ -197,7 +197,7 @@ export function getResourceBySha1({fileSha1, ...params}: GetResourceBySha1Params
 }
 
 // 更新资源版本信息
-export interface UpdateResourceVersionInfoParamsType {
+interface UpdateResourceVersionInfoParamsType {
   version: string;
   resourceId: string;
   description?: string;
@@ -221,7 +221,7 @@ export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParam
 }
 
 // 保存或者更新资源版本草稿
-export interface SaveVersionsDraftParamsType {
+interface SaveVersionsDraftParamsType {
   resourceId: string;
   draftData: any;
 }
@@ -231,7 +231,7 @@ export function saveVersionsDraft(params: SaveVersionsDraftParamsType) {
 }
 
 // 查看资源版本草稿
-export interface LookDraftParamsType {
+interface LookDraftParamsType {
   resourceId: string;
 }
 
@@ -240,7 +240,7 @@ export function lookDraft(params: LookDraftParamsType) {
 }
 
 // 校验文件是否被引入资源
-export interface ResourceIsUsedByOtherParamsType {
+interface ResourceIsUsedByOtherParamsType {
   fileSha1: string;
 }
 
@@ -251,7 +251,7 @@ export function resourceIsUsedByOther(params: ResourceIsUsedByOtherParamsType) {
 }
 
 // 下载资源文件
-export interface ResourcesDownloadParamsType {
+interface ResourcesDownloadParamsType {
   resourceId: string;
   version: string;
 }
@@ -264,7 +264,7 @@ export function resourcesDownload(params: ResourcesDownloadParamsType) {
 }
 
 // 批量查看合同覆盖的版本集
-export interface BatchGetCoverageVersionsParamsType {
+interface BatchGetCoverageVersionsParamsType {
   resourceId: string;
   contractIds: string;
 }
@@ -276,7 +276,7 @@ export function batchGetCoverageVersions({resourceId, ...params}: BatchGetCovera
 }
 
 // 查询资源所解决的依赖集
-export interface ResolveResourcesParamsType {
+interface ResolveResourcesParamsType {
   resourceId: string;
 }
 
@@ -285,7 +285,7 @@ export function resolveResources(params: LookDraftParamsType) {
 }
 
 // 批量设置策略应用的版本
-export interface BatchSetContractsParamsType {
+interface BatchSetContractsParamsType {
   resourceId: string;
   subjects: {
     subjectId: string;
@@ -302,7 +302,7 @@ export function batchSetContracts({resourceId, ...params}: BatchSetContractsPara
 }
 
 // 资源依赖循环性检查
-export interface CycleDependencyCheckParamsType {
+interface CycleDependencyCheckParamsType {
   resourceId: string;
   dependencies: {
     resourceId: string;
@@ -315,7 +315,7 @@ export function cycleDependencyCheck({resourceId, ...params}: CycleDependencyChe
 }
 
 // 查看资源关系树
-export interface RelationTreeParamsType {
+interface RelationTreeParamsType {
   resourceId: string;
   version?: string;
   versionRange?: string;
@@ -328,7 +328,7 @@ export function relationTree({resourceId, ...params}: RelationTreeParamsType) {
 }
 
 // 查看含授权的资源关系树
-export interface RelationTreeAuthParamsType {
+interface RelationTreeAuthParamsType {
   resourceId: string;
   version?: string;
   versionRange?: string;
