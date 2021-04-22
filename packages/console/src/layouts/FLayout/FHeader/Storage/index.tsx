@@ -93,22 +93,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           value: b.bucketName,
         }))}
       />
-      {/*<a*/}
-      {/*  onClick={() => {*/}
-      {/*    dispatch<ChangeAction>({*/}
-      {/*      type: 'storageHomePage/change',*/}
-      {/*      payload: {*/}
-      {/*        newBucketName: '',*/}
-      {/*        newBucketNameError: false,*/}
-      {/*        newBucketModalVisible: true,*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*    onClickStorage();*/}
-      {/*  }}*/}
-      {/*  className={sharedStyles.newButton}>*/}
-      {/*  <FPlus/>*/}
-      {/*</a>*/}
-      <FCircleBtn
+      <a
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'storageHomePage/change',
@@ -120,7 +105,25 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           });
           onClickStorage();
         }}
-      />
+        className={sharedStyles.newButton}>
+        <FPlus/>
+      </a>
+      {/*<div className={styles.footer}>*/}
+      {/*  <FCircleBtn*/}
+      {/*    type="transparent"*/}
+      {/*    onClick={() => {*/}
+      {/*      dispatch<ChangeAction>({*/}
+      {/*        type: 'storageHomePage/change',*/}
+      {/*        payload: {*/}
+      {/*          newBucketName: '',*/}
+      {/*          newBucketNameError: false,*/}
+      {/*          newBucketModalVisible: true,*/}
+      {/*        },*/}
+      {/*      });*/}
+      {/*      onClickStorage();*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*</div>*/}
     </div>)
   }>
     <FNavLink
