@@ -65,7 +65,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
   }, [resourceCreatorPage.name, resourceCreatorPage.resourceType, resourceCreatorPage.introduction, resourceCreatorPage.cover, resourceCreatorPage.labels]);
 
   function onClickCreate() {
-    console.log('onClickCreate', '0932jdlfsf');
+    // console.log('onClickCreate', '0932jdlfsf');
     dispatch<OnCreateAction>({
       type: 'resourceCreatorPage/create',
     });

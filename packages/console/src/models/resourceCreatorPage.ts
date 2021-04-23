@@ -5,6 +5,7 @@ import {ConnectState} from "@/models/connect";
 import {router} from "umi";
 import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -121,7 +122,9 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
 
-      router.replace(`/resource/${data.resourceId}/success`);
+      router.replace(FUtil.LinkTo.resourceCreateSuccess({
+        resourceID: data.resourceId,
+      }));
     },
     * onChangeName({payload}: OnChangeNameAction, {put, call, select}: EffectsCommandMap) {
       yield put<ChangeAction>({

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FLayout from '@/layouts/FLayout';
 import {FTipText} from '@/components/FText';
-import {FTextBtn} from '@/components/FButton';
+import {FTextButton} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
@@ -15,7 +15,7 @@ import {RouteComponentProps} from 'react-router';
 interface SuccessProps extends RouteComponentProps<{
   id: string;
   version: string;
-}> {
+}>{
   // match: {
   //   params: {
   //
@@ -70,7 +70,6 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
   // }, [goto, time]);
 
   function goto() {
-
     // return router.replace(match.url.replace('/success', ''));
     return router.replace(FUtil.LinkTo.resourceVersion({
       resourceID: match.params.id,
@@ -90,10 +89,10 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
       <div className={styles.goto}>
         <FTipText type={'modal'} text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
         <div style={{width: 10}}/>
-        <FTextBtn
-          // theme={'primary'}
+        <FTextButton
+          theme={'primary'}
           onClick={goto}
-        >{FUtil.I18n.message('jump_now')}</FTextBtn>
+        >{FUtil.I18n.message('jump_now')}</FTextButton>
       </div>
     </div>
   </FCenterLayout>)

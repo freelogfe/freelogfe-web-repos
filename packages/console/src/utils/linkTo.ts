@@ -150,26 +150,56 @@ export function objectDetails({...params}: ObjectDetailsParamsType): TReturnType
   return `/storage${handleQuery(params)}`;
 }
 
-const FLinkTo = {
-  market,
-  resourceDetails,
-  resourceCreator,
-  myResources,
-  myCollects,
-  resourceInfo,
-  resourceAuth,
-  resourceCreateVersion,
-  resourceVersion,
-  nodeCreator,
-  nodeManagement,
-  exhibitManagement,
-  informNodeManagement,
-  informExhibitManagement,
-  storageSpace,
-  objectDetails,
-};
+// 资源创建成功
+interface resourceCreateSuccessParamsType {
+  resourceID: string;
+}
 
-export default FLinkTo;
+export function resourceCreateSuccess({resourceID, ...params}: resourceCreateSuccessParamsType) {
+  // return `/result/resource/create/success${handleQuery(params)}`;
+  return `/resource/${resourceID}/success`;
+}
+
+// 资源创建成功
+interface resourceVersionCreateSuccessParamsType {
+  resourceID: string;
+  version: string;
+}
+
+export function resourceVersionCreateSuccess({resourceID, version, ...params}: resourceVersionCreateSuccessParamsType) {
+  // return `/result/resource/version/create/success${handleQuery(params)}`;
+  return `/resource/${resourceID}/version/${version}/success`;
+}
+
+interface Exception403ParamsType {
+
+}
+
+export function exception403({}: Exception403ParamsType = {}) {
+  return `/exception/403`;
+}
+
+// const FLinkTo = {
+//   market,
+//   resourceDetails,
+//   resourceCreator,
+//   myResources,
+//   myCollects,
+//   resourceInfo,
+//   resourceAuth,
+//   resourceCreateVersion,
+//   resourceVersion,
+//   nodeCreator,
+//   nodeManagement,
+//   exhibitManagement,
+//   informNodeManagement,
+//   informExhibitManagement,
+//   storageSpace,
+//   objectDetails,
+//   exception403,
+// };
+//
+// export default FLinkTo;
 
 function handleQuery(query: object): string {
   const obj: any = {};

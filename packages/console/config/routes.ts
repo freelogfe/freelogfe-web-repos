@@ -13,7 +13,7 @@ export default [
           {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
           // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
           {exact: true, path: 'example', component: '../pages/market/index', title: '示例节点'},
-          {component: './404'},
+          // {redirect: '/exception/404'},
         ],
       },
       {exact: true, path: 'storage', component: '../pages/storage', title: '存储空间'},
@@ -26,7 +26,7 @@ export default [
             routes: [
               {path: 'formal/:id', exact: true, component: '../pages/node/exhibit/formal/$id', title: '展品管理'},
               {path: 'informal/:id', exact: true, component: '../pages/node/exhibit/informal/$id', title: '测试展品管理'},
-              {component: './404'},
+              // {redirect: '/exception/404'},
             ]
           },
           {
@@ -34,10 +34,10 @@ export default [
             routes: [
               {path: 'formal', exact: true, component: '../pages/node/formal/$id', title: '节点管理'},
               {path: 'informal', exact: true, component: '../pages/node/informal/$id', title: '测试节点管理'},
-              {component: './404'},
+              // {redirect: '/exception/404'},
             ],
           },
-          {component: './404'},
+          // {redirect: '/exception/404'},
         ]
       },
       {
@@ -69,21 +69,58 @@ export default [
                         component: '../pages/resource/$id/version/$version/success',
                         title: '版本创建成功',
                       },
-                      {component: './404'},
+                      // {redirect: '/exception/404'},
                     ],
                   },
-                  {component: './404'},
+                  // {redirect: '/exception/404'},
                 ],
               },
-              {component: './404'},
+              // {redirect: '/exception/404'},
             ],
           },
-          {component: './404'},
+          // {redirect: '/exception/404'},
         ]
       },
-      // {component: './403'},
-      {component: './404'},
+      {
+        path: 'result',
+        routes: [
+          {
+            path: 'resource',
+            routes: [
+              {
+                path: 'create',
+                routes: [
+                  {exact: true, path: 'success', component: '../pages/result/resource/create/success', title: '资源创建成功'},
+                ]
+              },
+              {
+                path: 'version',
+                routes: [
+                  {
+                    path: 'create',
+                    routes: [
+                      {
+                        exact: true,
+                        path: 'success',
+                        component: '../pages/result/resource/version/create/success',
+                        title: '版本创建成功'
+                      },
+                    ]
+                  },
+                ]
+              },
+            ],
+          }
+        ]
+      },
+      {
+        path: 'exception',
+        routes: [
+          {exact: true, path: '403', component: '../pages/exception/403', title: '暂无权限'},
+        ]
+      },
+      // {redirect: '/exception/404'},
     ],
   },
-  {component: './404'},
+  // {redirect: '/exception/404'},
 ];

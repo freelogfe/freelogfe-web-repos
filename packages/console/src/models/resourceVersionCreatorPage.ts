@@ -358,7 +358,11 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: initStates,
       });
-      router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
+      // router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
+      router.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
+        resourceID: data.resourceId,
+        version: data.version,
+      }));
     },
     * fetchDraft({}: FetchDraftAction, {call, put, select}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction} from "@/models/global";
@@ -27,7 +27,10 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
 
   function goto() {
     // /resource/:id/version/creator
-    router.replace(`/resource/${match.params.id}/version/creator`)
+    // router.replace(`/resource/${match.params.id}/version/creator`)
+    router.replace(FUtil.LinkTo.resourceCreateVersion({
+      resourceID: match.params.id,
+    }));
   }
 
   return (<FCenterLayout>
@@ -39,7 +42,7 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
       <div style={{height: 40}}/>
       <FTipText type={'modal'} text={FUtil.I18n.message('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
-      <FNormalButton onClick={goto}>{FUtil.I18n.message('create_first_version')}</FNormalButton>
+      <FRectBtn onClick={goto}>{FUtil.I18n.message('create_first_version')}</FRectBtn>
     </div>
   </FCenterLayout>)
 }
