@@ -8,11 +8,13 @@ import Header from './Header';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {OnChangeActivatedBucketAction} from "@/models/storageHomePage";
-import {withRouter} from 'umi';
+import {router, withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
 import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
 import Details from "@/pages/storage/Content/Details";
 import useUrlState from '@ahooksjs/use-url-state';
+import {Redirect} from 'react-router';
+import FUtil from "@/utils";
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -23,7 +25,14 @@ interface StorageProps extends RouteComponentProps<{}> {
 function Storage({match, history, storageHomePage, storageObjectEditor, dispatch}: StorageProps) {
 
   const [state] = useUrlState<{ bucketName: string; objectID: string }>();
+
   React.useEffect(() => {
+    console.log(state, '!@#$!@#$!@#$!@#$!dstate');
+    if ((storageHomePage.bucketList || []).length > 0 && !(storageHomePage.bucketList || []).find((b) => b.bucketName === state.bucketName)) {
+      router.replace(FUtil.LinkTo.exception403());
+      return
+    }
+
     if (!state.bucketName) {
       return;
     }
@@ -72,6 +81,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
   if (!storageHomePage.bucketList) {
     return null;
   }
+
 
   return (<>
     <FLeftSiderLayout

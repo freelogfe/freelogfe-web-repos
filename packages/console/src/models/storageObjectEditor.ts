@@ -3,10 +3,10 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {RESOURCE_TYPE} from "@/utils/regexp";
-// import FLinkTo from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import fMessage from "@/components/fMessage";
 import FUtil from "@/utils";
+import {router} from "umi";
 
 interface DepR {
   id: string;
@@ -176,8 +176,9 @@ const Model: StorageObjectEditorModelType = {
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
       // console.log(payload, 'duixiangID09w3ujlkasdfasdfasdf');
-      const {storageObjectEditor}: ConnectState = yield select(({storageObjectEditor}: ConnectState) => ({
+      const {storageObjectEditor, user}: ConnectState = yield select(({storageObjectEditor, user}: ConnectState) => ({
         storageObjectEditor,
+        user,
       }));
 
       // console.log(storageObjectEditor, 'storageObjectEditor0q923u4oj4l234');
@@ -189,7 +190,10 @@ const Model: StorageObjectEditorModelType = {
         objectIdOrName: storageObjectEditor.objectId,
       };
       const {data} = yield call(FApiServer.Storage.objectDetails, params);
-      // console.log(data, 'data@#Rwe90ifjsdlkfa');
+      console.log(data, 'data@#Rwe90ifjsdlkfa');
+      if (data.userId !== user.info?.userId) {
+        return router.replace(FUtil.LinkTo.exception403());
+      }
       const resources: any[] = data.dependencies
         .filter((ro: any) => ro.type === 'resource');
       const objects: any[] = data.dependencies

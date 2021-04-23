@@ -300,24 +300,30 @@ const Model: StorageHomePageModelType = {
         },
       });
       const {data} = yield call(FApiServer.Storage.objectList, params);
+      // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
+
+      if (!data) {
+        return router.replace(FUtil.LinkTo.exception403());
+      }
+
       let objectListData: StorageHomePageModelState['objectList'] = [];
 
       if (payload === 'restart') {
-        objectListData = data.dataList.map(transformTableData);
+        objectListData = (data?.dataList || []).map(transformTableData);
       } else if (payload === 'append') {
         objectListData = [
           ...storageHomePage.objectList,
-          ...data.dataList.map(transformTableData),
+          ...(data?.dataList || []).map(transformTableData),
         ];
       } else if (payload === 'insert') {
-        objectListData = data.dataList.map(transformTableData);
+        objectListData = (data?.dataList || []).map(transformTableData);
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           objectList: objectListData,
-          total: data.totalItem,
+          total: data?.totalItem,
           isLoading: false,
         },
       });

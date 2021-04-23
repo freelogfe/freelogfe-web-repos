@@ -3,6 +3,8 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import {router} from 'umi';
+import FUtil from "@/utils";
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -113,6 +115,8 @@ const Model: ResourceInfoModelType = {
         yield put<FetchDraftDataAction>({
           type: 'fetchDraftData',
         });
+      } else {
+        router.replace(FUtil.LinkTo.exception403());
       }
     },
     * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {
