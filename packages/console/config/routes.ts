@@ -7,13 +7,13 @@ export default [
     routes: [
       {exact: true, path: '.', redirect: '/market'},
       {
-        exact: false,
+        // exact: false,
         path: 'market',
         routes: [
           {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
           // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
           {exact: true, path: 'example', component: '../pages/market/index', title: '示例节点'},
-          // {redirect: '/exception/404'},
+          {component: '../pages/exception/404'},
         ],
       },
       {exact: true, path: 'storage', component: '../pages/storage', title: '存储空间'},
@@ -26,7 +26,7 @@ export default [
             routes: [
               {path: 'formal/:id', exact: true, component: '../pages/node/exhibit/formal/$id', title: '展品管理'},
               {path: 'informal/:id', exact: true, component: '../pages/node/exhibit/informal/$id', title: '测试展品管理'},
-              // {redirect: '/exception/404'},
+              {component: '../pages/exception/404'},
             ]
           },
           {
@@ -34,10 +34,10 @@ export default [
             routes: [
               {path: 'formal', exact: true, component: '../pages/node/formal/$id', title: '节点管理'},
               {path: 'informal', exact: true, component: '../pages/node/informal/$id', title: '测试节点管理'},
-              // {redirect: '/exception/404'},
+              {component: '../pages/exception/404'},
             ],
           },
-          // {redirect: '/exception/404'},
+          {component: '../pages/exception/404'},
         ]
       },
       {
@@ -69,16 +69,16 @@ export default [
                         component: '../pages/resource/$id/version/$version/success',
                         title: '版本创建成功',
                       },
-                      // {redirect: '/exception/404'},
+                      {component: '../pages/exception/404'},
                     ],
                   },
-                  // {redirect: '/exception/404'},
+                  {component: '../pages/exception/404'},
                 ],
               },
-              // {redirect: '/exception/404'},
+              {component: '../pages/exception/404'},
             ],
           },
-          // {redirect: '/exception/404'},
+          {component: '../pages/exception/404'},
         ]
       },
       {
@@ -117,10 +117,12 @@ export default [
         path: 'exception',
         routes: [
           {exact: true, path: '403', component: '../pages/exception/403', title: '暂无权限'},
+          {exact: true, path: '404', component: '../pages/exception/404', title: '暂无权限'},
         ]
       },
-      // {redirect: '/exception/404'},
+      {component: '../pages/exception/404'},
     ],
   },
-  // {redirect: '/exception/404'},
+  {component: '../pages/exception/404'},
+
 ];
