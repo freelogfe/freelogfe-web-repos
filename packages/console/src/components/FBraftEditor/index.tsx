@@ -58,7 +58,7 @@ function FBraftEditor({global, value, onChange, ...props}: FBraftEditorProps) {
           return true;
         },
         accepts: {
-          image: 'image/gif,image/jpg,image/png',
+          image: 'image/gif,image/jpg,image/png,.jpg',
           video: false,
           audio: false,
         },

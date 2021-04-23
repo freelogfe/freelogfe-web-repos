@@ -5,18 +5,13 @@ import {FTipText} from '@/components/FText';
 import {FNormalButton} from '@/components/FButton';
 import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
-// import {i18nMessage} from "@/utils/i18n";
 import {ChangeAction} from "@/models/global";
-import {Dispatch,connect} from "dva";
+import {Dispatch, connect} from "dva";
 import FUtil from "@/utils";
+import {RouteComponentProps} from "react-router";
 
-interface SuccessProps {
+interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
-  match: {
-    params: {
-      id: string;
-    };
-  };
 }
 
 function Success({match, route, dispatch}: RouterTypes & SuccessProps) {

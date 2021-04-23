@@ -48,7 +48,7 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         }}
       >
         <Upload
-          accept={'image/gif,image/jpg,image/png'}
+          accept={'image/gif,image/jpg,image/png,.jpg'}
           beforeUpload={(file: RcFile, FileList: RcFile[]) => {
             // console.log(file, 'file20934u23');
             upload(file);
