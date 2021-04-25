@@ -7,14 +7,16 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import {OnChangeActivatedBucketAction} from "@/models/storageHomePage";
+import {CreateBucketAction, OnChangeActivatedBucketAction} from "@/models/storageHomePage";
 import {router, withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
 import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
 import Details from "@/pages/storage/Content/Details";
 import useUrlState from '@ahooksjs/use-url-state';
-import {Redirect} from 'react-router';
 import FUtil from "@/utils";
+import FInput from "@/components/FInput";
+import FModal from "@/components/FModal";
+import {ChangeAction as StorageHomePageChangeAction} from '@/models/storageHomePage';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -27,7 +29,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
   const [state] = useUrlState<{ bucketName: string; objectID: string }>();
 
   React.useEffect(() => {
-    console.log(state, '!@#$!@#$!@#$!@#$!dstate');
+    // console.log(state, '!@#$!@#$!@#$!@#$!dstate');
     if ((storageHomePage.bucketList || []).length > 0 && !(storageHomePage.bucketList || []).find((b) => b.bucketName === state.bucketName)) {
       router.replace(FUtil.LinkTo.exception403());
       return
@@ -68,25 +70,12 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
     });
   }
 
-  // async function initObjectDetails() {
-  //   // await dispatch<ChangeAction>({
-  //   //   type: 'storageObjectEditor/change',
-  //   //   payload: {objectId: (history.location as any).query.objectID || ''},
-  //   // });
-  //   await dispatch<FetchInfoAction>({
-  //     type: 'storageObjectEditor/fetchInfo',
-  //   });
-  // }
-
   if (!storageHomePage.bucketList) {
     return null;
   }
 
-
   return (<>
     <FLeftSiderLayout
-      // contentClassName={storageHomePage.objectList.length === 0 ? styles.backgroundTransparent : ''}
-      // header={<Header/>}
       header={storageHomePage.bucketList?.length === 0 ? null : <Header/>}
       sider={<Sider/>}
       type="table"
@@ -99,10 +88,63 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
       <Content/>
     </FLeftSiderLayout>
     <Details/>
+
+    <FModal
+      title="创建Bucket"
+      visible={storageHomePage.newBucketModalVisible}
+      width={640}
+      onOk={() => {
+        dispatch<CreateBucketAction>({
+          type: 'storageHomePage/createBucket',
+        });
+        // setModalVisible(false);
+      }}
+      onCancel={() => {
+        dispatch<StorageHomePageChangeAction>({
+          type: 'storageHomePage/change',
+          payload: {
+            newBucketModalVisible: false,
+          },
+        });
+      }}
+    >
+      <div className={styles.FModalBody}>
+        <div style={{height: 50}}/>
+        <ul className={styles.tip}>
+          <li>请注意存储空间的名称一但创建则不可修改</li>
+          <li>Freelog为每个用户提供2GB的免费存储空间</li>
+        </ul>
+        <div style={{height: 10}}/>
+        <FInput
+          value={storageHomePage.newBucketName}
+          onChange={(e) => {
+            dispatch<StorageHomePageChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                newBucketName: e.target.value,
+                newBucketNameError: false,
+              },
+            });
+          }}
+          wrapClassName={styles.wrapClassName}
+          className={styles.FInput}
+          errorText={storageHomePage.newBucketNameError ? (<div>
+            <div>只能包括小写字母、数字和短横线（-）；</div>
+            <div>必须以小写字母或者数字开头和结尾 ；</div>
+            <div>长度必须在 1–63 字符之间。</div>
+            <div>名称不能重复</div>
+          </div>) : ''}
+        />
+        <div style={{height: 100}}/>
+      </div>
+    </FModal>
   </>);
 }
 
-export default withRouter(connect(({storageHomePage, storageObjectEditor}: ConnectState) => ({
+export default withRouter(connect(({
+                                     storageHomePage,
+                                     storageObjectEditor,
+                                   }: ConnectState) => ({
   storageHomePage,
   storageObjectEditor,
 }))(Storage));

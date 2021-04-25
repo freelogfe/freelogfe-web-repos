@@ -22,7 +22,6 @@ import FLoadingTip from "@/components/FLoadingTip";
 import InfiniteScroll from 'react-infinite-scroller';
 import FDownload from "@/components/FIcons/FDownload";
 import {ColumnsType} from "antd/lib/table/interface";
-import {Link} from 'umi';
 import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
@@ -111,19 +110,6 @@ function Content({storageHomePage, dispatch}: ContentProps) {
     },
   ];
 
-  // function onClickEdit(record) {
-  //   dispatch<FetchInfoAction>({
-  //     type: 'storageObjectEditor/fetchInfo',
-  //     payload: record.id,
-  //   });
-  //   dispatch<ChangeAction>({
-  //     type: 'storageObjectEditor/change',
-  //     payload: {
-  //       visible: true,
-  //     },
-  //   });
-  // }
-
   function onClickDelete(record: any) {
     dispatch<DeleteObjectAction>({
       type: 'storageHomePage/deleteObject',
@@ -136,7 +122,6 @@ function Content({storageHomePage, dispatch}: ContentProps) {
   }
 
   return (<div>
-
     {
       storageHomePage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'}/>)
     }
@@ -150,9 +135,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
             showUploadList={false}
             multiple={true}
             beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-              // console.log(file, FileList, 'beforeUpload 24ew890sio;');
               if (file === fileList[fileList.length - 1]) {
-                // console.log('0923uiojfdaslk');
                 dispatch<UploadFilesAction>({
                   type: 'storageHomePage/uploadFiles',
                   payload: fileList,
@@ -212,8 +195,6 @@ interface ToolsBarProps {
   showEdit?: boolean;
   showDownload?: boolean;
   showDelete?: boolean;
-
-  // onClickEdit?(): void;
 
   onClickDownload?(): void;
 

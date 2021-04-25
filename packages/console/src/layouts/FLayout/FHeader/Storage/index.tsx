@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import sharedStyles from '../../index.less';
 import {FContentText} from "@/components/FText";
-import {FCircleBtn, FRectBtn} from "@/components/FButton";
+import {FRectBtn} from "@/components/FButton";
 import FMenu from "@/components/FMenu";
 import {
   ChangeAction,
@@ -78,11 +78,6 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
       <FMenu
         value={isCurrent ? storageHomePage.activatedBucket : ''}
         onClick={(value) => {
-          // dispatch<OnChangeActivatedBucketAction>({
-          //   type: 'storageHomePage/onChangeActivatedBucket',
-          //   payload: value,
-          // });
-          console.log(value, 'value!@#$!@#$!@#$!@#$@!#$1113333331111');
           router.push(FUtil.LinkTo.storageSpace({
             bucketName: value,
           }));
@@ -108,22 +103,6 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
         className={sharedStyles.newButton}>
         <FPlus/>
       </a>
-      {/*<div className={styles.footer}>*/}
-      {/*  <FCircleBtn*/}
-      {/*    type="transparent"*/}
-      {/*    onClick={() => {*/}
-      {/*      dispatch<ChangeAction>({*/}
-      {/*        type: 'storageHomePage/change',*/}
-      {/*        payload: {*/}
-      {/*          newBucketName: '',*/}
-      {/*          newBucketNameError: false,*/}
-      {/*          newBucketModalVisible: true,*/}
-      {/*        },*/}
-      {/*      });*/}
-      {/*      onClickStorage();*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*</div>*/}
     </div>)
   }>
     <FNavLink
