@@ -288,7 +288,7 @@ const Model: StorageHomePageModelType = {
       const params: Parameters<typeof FApiServer.Storage.deleteBucket>[0] = {
         bucketName: payload,
       };
-      console.log(payload, 'DDDDDDDDelete');
+      // console.log(payload, 'DDDDDDDDelete');
       yield call(FApiServer.Storage.deleteBucket, params);
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
