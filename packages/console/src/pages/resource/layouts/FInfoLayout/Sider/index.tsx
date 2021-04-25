@@ -11,37 +11,46 @@ import FLink from "@/components/FLink";
 import FUtil from "@/utils";
 import * as AHooks from 'ahooks';
 import fMessage from "@/components/fMessage";
+import {RouteComponentProps} from 'react-router';
 
-interface SilderProps {
+interface SilderProps extends RouteComponentProps<{
+  id: string;
+  version: string;
+}> {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
   // resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
-  match: {
-    params: {
-      id: string;
-      version: string;
-    };
-  };
 }
 
 function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps) {
 
-  AHooks.useMount(() => {
-
-  });
-  // React.useEffect(() => {
-  //   if (match.params.id === resourceInfo.info?.resourceId) {
-  //     return;
-  //   }
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceInfo/fetchDataSource',
-  //     payload: match.params.id,
-  //   });
-  //   // dispatch<FetchDraftAction>({
-  //   //   type: 'resourceVersionCreatorPage/fetchDraft',
-  //   //   payload: match.params.id,
-  //   // });
-  // }, [resourceInfo.info, match.params.id]);
+  React.useEffect(() => {
+    if (match.path === '/resource/info/:id') {
+      onChange({
+        showPage: {
+          info: true,
+        },
+      });
+    } else if (match.path === '/resource/auth/:id') {
+      onChange({
+        showPage: {
+          auth: true,
+        },
+      });
+    } else if (match.path === '/resource/version/creator/:id') {
+      onChange({
+        showPage: {
+          creator: true,
+        },
+      });
+    } else if (match.path === '/resource/version/info/:id/:version') {
+      onChange({
+        showPage: {
+          version: match.params.version,
+        },
+      });
+    }
+  }, [match]);
 
   React.useEffect(() => {
     onChangeMatchParamsId();
@@ -52,6 +61,13 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       });
     };
   }, [match.params.id]);
+
+  async function onChange(payload: Partial<ResourceInfoModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'resourceInfo/change',
+      payload,
+    });
+  }
 
   async function onChangeMatchParamsId() {
     await dispatch<ChangeAction>({
@@ -100,13 +116,13 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
     <div style={{height: 35}}/>
     <div className={styles.radios}>
       <FLink
-        className={[match.path === '/resource/:id/info' ? styles.activatedRadio : '', styles.radio].join(' ')}
+        className={[resourceInfo.showPage.info ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FUtil.LinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
       >{FUtil.I18n.message('resource_information')}</FLink>
       <FLink
-        className={[match.path === '/resource/:id/auth' ? styles.activatedRadio : '', styles.radio].join(' ')}
+        className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FUtil.LinkTo.resourceAuth({
           resourceID: match.params.id,
         })}
@@ -118,7 +134,8 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         <div className={styles.versionControlTitle}>
           <div style={{cursor: 'default'}}>{FUtil.I18n.message('verions')}</div>
           {
-            match.path === '/resource/:id/$version/creator'
+            // match.path === '/resource/:id/$version/creator'
+            resourceInfo.showPage.creator
               ? (<FCircleBtn
                 type="transparent"
                 onClick={() => {
@@ -144,13 +161,13 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
           {
             resourceInfo.draftData
               ? (<FLink
-                className={[styles.version, match.path === '/resource/:id/$version/creator' ? styles.activatedVersion : ''].join(' ')}
+                className={[styles.version, resourceInfo.showPage.creator ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}>{resourceInfo.draftData?.version || '未输入版本号'}（草稿）</FLink>)
-              : match.path === '/resource/:id/$version/creator'
+              : resourceInfo.showPage.creator
               ? (<FLink
-                className={[styles.version, match.path === '/resource/:id/$version/creator' ? styles.activatedVersion : ''].join(' ')}
+                className={[styles.version, resourceInfo.showPage.creator ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
                 })}>{FUtil.I18n.message('unnamed_version')}</FLink>)
@@ -165,7 +182,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                   resourceID: match.params.id,
                   version: i.version,
                 })}
-                className={[styles.version, (match.path === '/resource/:id/$version/:$version' && match.params.version === i.version) ? styles.activatedVersion : ''].join(' ')}
+                className={[styles.version, (resourceInfo.showPage.version && match.params.version === i.version) ? styles.activatedVersion : ''].join(' ')}
               >{i.version}</FLink>))
           }
         </div>

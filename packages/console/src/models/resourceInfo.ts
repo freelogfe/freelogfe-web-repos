@@ -8,6 +8,12 @@ import FUtil from "@/utils";
 
 export interface ResourceInfoModelState {
   resourceID: string;
+  showPage: {
+    info?: boolean;
+    auth?: boolean;
+    creator?: boolean;
+    version?: string;
+  };
 
   hasPermission: boolean;
 
@@ -82,6 +88,7 @@ export interface ResourceInfoModelType {
 
 const initStates: ResourceInfoModelState = {
   resourceID: '',
+  showPage: {},
   info: null,
   draftData: null,
   hasPermission: true,
