@@ -3,15 +3,12 @@ export default [
   {
     path: '/',
     component: '../layouts/FLayout',
-    // meta: {structure: 'left-right'},
     routes: [
       {exact: true, path: '.', redirect: '/market'},
       {
-        // exact: false,
         path: 'market',
         routes: [
           {exact: true, path: '.', component: '../pages/market/index', title: '市场资源'},
-          // {exact: true, path: 'example', component: '../pages/market/examples', title: '示例节点'},
           {exact: true, path: 'example', component: '../pages/market/index', title: '示例节点'},
           {component: '../pages/exception/404'},
         ],
@@ -112,7 +109,7 @@ export default [
         path: 'exception',
         routes: [
           {exact: true, path: '403', component: '../pages/exception/403', title: '暂无权限'},
-          {exact: true, path: '404', component: '../pages/exception/404', title: '暂无权限'},
+          {exact: true, path: '404', component: '../pages/exception/404', title: '未找到页面'},
         ],
       },
       {component: '../pages/exception/404'},
