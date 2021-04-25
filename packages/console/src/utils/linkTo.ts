@@ -1,7 +1,6 @@
 import * as H from "history";
 import * as querystring from 'querystring';
 
-// type TReturnType = H.LocationDescriptor<H.LocationState>;
 type TReturnType = string;
 
 // 市场
@@ -134,10 +133,7 @@ interface StorageSpaceParamsType {
   bucketName?: string;
 }
 
-// | ((location: H.Location<H.LocationState>) => H.LocationDescriptor<H.LocationState>)
 export function storageSpace({...params}: StorageSpaceParamsType = {}): TReturnType {
-  // console.log(params, 'bucketName1paramsparamsparams==++++++');
-  // console.log(handleQuery(params), 'handleQuery(params)q1234123412341234');
   return `/storage${handleQuery(params)}`;
 }
 
@@ -158,7 +154,6 @@ interface resourceCreateSuccessParamsType {
 
 export function resourceCreateSuccess({resourceID, ...params}: resourceCreateSuccessParamsType) {
   return `/result/resource/create/success/${resourceID}`;
-  // return `/resource/${resourceID}/success`;
 }
 
 // 资源创建成功
@@ -169,7 +164,6 @@ interface resourceVersionCreateSuccessParamsType {
 
 export function resourceVersionCreateSuccess({resourceID, version, ...params}: resourceVersionCreateSuccessParamsType) {
   return `/result/resource/version/create/success/${resourceID}/${version}`;
-  // return `/resource/${resourceID}/$version/${$version}/success`;
 }
 
 interface Exception403ParamsType {
@@ -179,28 +173,6 @@ interface Exception403ParamsType {
 export function exception403({}: Exception403ParamsType = {}) {
   return `/exception/403`;
 }
-
-// const FLinkTo = {
-//   market,
-//   resourceDetails,
-//   resourceCreator,
-//   myResources,
-//   myCollects,
-//   resourceInfo,
-//   resourceAuth,
-//   resourceCreateVersion,
-//   resourceVersion,
-//   nodeCreator,
-//   nodeManagement,
-//   exhibitManagement,
-//   informNodeManagement,
-//   informExhibitManagement,
-//   storageSpace,
-//   objectDetails,
-//   exception403,
-// };
-//
-// export default FLinkTo;
 
 function handleQuery(query: object): string {
   const obj: any = {};
