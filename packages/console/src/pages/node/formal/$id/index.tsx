@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
-import {withRouter} from 'umi';
+import {withRouter, router} from 'umi';
 import {Dispatch, connect} from 'dva';
 import {
   ChangeAction,
@@ -11,17 +11,25 @@ import {
   FetchThemesAction, nodeManagerInitData,
   NodeManagerModelState
 } from '@/models/nodeManagerPage';
-import {ConnectState} from '@/models/connect';
+import {ConnectState, NodesModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
+import FUtil from "@/utils";
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
+  nodes: NodesModelState;
 }
 
-function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
+function NodeManager({dispatch, nodeManagerPage, nodes, match}: NodeManagerProps) {
 
   React.useEffect(() => {
+
+    if (!nodes.list.some((n) => n.nodeId === Number(match.params.id))) {
+      router.replace(FUtil.LinkTo.exception403());
+      return;
+    }
+
     dispatch<ChangeAction>({
       type: 'nodeManagerPage/change',
       payload: {
@@ -41,7 +49,7 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
       type: 'nodeManagerPage/fetchThemes',
     });
 
-  }, [(match.params as any).id]);
+  }, [match.params.id]);
 
   React.useEffect(() => {
     return () => {
@@ -60,6 +68,7 @@ function NodeManager({dispatch, nodeManagerPage, match}: NodeManagerProps) {
 }
 
 
-export default connect(({nodeManagerPage}: ConnectState) => ({
+export default connect(({nodeManagerPage, nodes}: ConnectState) => ({
   nodeManagerPage,
+  nodes,
 }))(withRouter(NodeManager));
