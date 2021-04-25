@@ -13,7 +13,7 @@ import FInput from '@/components/FInput';
 import {router} from "umi";
 import {ColumnsType} from "antd/lib/table/interface";
 import {resourceTypes} from "@/utils/globals";
-import {OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
+import {FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
 import FNoDataTip from "@/components/FNoDataTip";
 import FDropdownMenu from "@/components/FDropdownMenu";
@@ -23,6 +23,7 @@ import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -241,15 +242,31 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               height={'calc(100vh - 170px)'}
               tipText={'无搜索结果'}
             />)
-            : (<div className={styles.body}>
-              <FTable
-                rowClassName={styles.rowClassName}
-                columns={columns}
-                dataSource={dataSource as any}
-                pagination={false}
-              />
-            </div>)
+            : (<InfiniteScroll
+              pageStart={0}
+              initialLoad={false}
+              loadMore={() => {
+                // console.log('@@@@8888QQQQQQ');
+                dispatch<FetchExhibitsAction>({
+                  type: 'nodeManagerPage/fetchExhibits',
+                  payload: false,
+                });
+              }}
+              hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}
+              // hasMore={true}
+            >
+              <div className={styles.body}>
+                <FTable
+                  rowClassName={styles.rowClassName}
+                  columns={columns}
+                  dataSource={dataSource as any}
+                  pagination={false}
+                />
+              </div>
+            </InfiniteScroll>)
         }
+        {nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum && <div className={styles.loader} key={0}>Loading ...</div>}
+
       </>)
     }
 

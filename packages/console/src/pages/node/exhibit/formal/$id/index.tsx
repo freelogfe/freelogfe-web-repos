@@ -28,7 +28,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
       payload: {
-        presentableId: (match.params as any).id,
+        presentableId: match.params.id,
       },
     });
 
