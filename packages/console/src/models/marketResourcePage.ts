@@ -494,7 +494,7 @@ const Model: MarketResourcePageModelType = {
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
-        // version: '0.0.1',
+        // $version: '0.0.1',
         isContainRootNode: true,
       };
 

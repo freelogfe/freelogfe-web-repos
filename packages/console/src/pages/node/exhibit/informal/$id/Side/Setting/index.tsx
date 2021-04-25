@@ -64,7 +64,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     {/*    });*/}
     {/*  }}*/}
     {/*>*/}
-    {/*  <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.version}/><FSwap/></Space>*/}
+    {/*  <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.$version}/><FSwap/></Space>*/}
     {/*</FDropdownMenu>*/}
 
     {/*{*/}

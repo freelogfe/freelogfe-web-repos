@@ -7,11 +7,11 @@
 // // import {ResourcesProps} from "..";
 //
 // interface VersionPopoverProps {
-//   // defaultVersion: ResourcesProps['dataSource'][0]['version']
+//   // defaultVersion: ResourcesProps['dataSource'][0]['$version']
 //   // versions: ResourcesProps['dataSource'][0]['versions'];
 //   defaultVersion: DepResources[0]['versionRange']
 //   versions: DepResources[0]['versions'];
-//   onChange?: (version: VersionPopoverProps['defaultVersion']) => void;
+//   onChange?: ($version: VersionPopoverProps['defaultVersion']) => void;
 //   children: any;
 // }
 //
@@ -19,16 +19,16 @@
 //
 //   const [visible, setVisible] = React.useState<boolean>(false);
 //
-//   const [version, setVersion] = React.useState<VersionPopoverProps['defaultVersion']>(defaultVersion);
+//   const [$version, setVersion] = React.useState<VersionPopoverProps['defaultVersion']>(defaultVersion);
 //
 //   function onConfirm() {
 //     setVisible(false);
-//     return onChange && onChange(version);
+//     return onChange && onChange($version);
 //   }
 //
 //   function onChangeVersion(obj: any) {
 //     setVersion({
-//       ...version,
+//       ...$version,
 //       ...obj,
 //     })
 //   }
@@ -45,17 +45,17 @@
 //     content={<div onClick={(e) => e.stopPropagation()}>
 //       <div className={styles.select}>
 //         <Radio
-//           checked={!version.isCustom}
+//           checked={!$version.isCustom}
 //           onClick={() => onChangeVersion({isCustom: false})}
 //         />
 //         <span>选定版本</span>
 //         <div style={{width: 10}}/>
 //         <Select
-//           value={version.select}
+//           value={$version.select}
 //           onChange={(value) => onChangeVersion({select: value})}
 //           size="small"
 //           className={styles.Select}
-//           disabled={version.isCustom}
+//           disabled={$version.isCustom}
 //         >
 //           {
 //             versions.map((i) => <Select.Option key={i} value={i}>{i}</Select.Option>)
@@ -63,9 +63,9 @@
 //         </Select>
 //         <div style={{width: 20}}/>
 //         <Checkbox
-//           checked={version.allowUpdate}
+//           checked={$version.allowUpdate}
 //           onChange={(e) => onChangeVersion({allowUpdate: e.target.checked})}
-//           disabled={version.isCustom}
+//           disabled={$version.isCustom}
 //         />
 //         <div style={{width: 10}}/>
 //         <div>允许使用当前版本的最新变动</div>
@@ -73,18 +73,18 @@
 //       <div style={{height: 10}}/>
 //       <div className={styles.input}>
 //         <Radio
-//           checked={version.isCustom}
+//           checked={$version.isCustom}
 //           onClick={() => onChangeVersion({isCustom: true})}
 //         />
 //         <span>自定义</span>
 //         <div style={{width: 10}}/>
 //         <FInput
-//           value={version.input}
+//           value={$version.input}
 //           onChange={(e) => onChangeVersion({input: e.target.value})}
 //           className={styles.FInput}
 //           placeholder="输入semver版本范围"
 //           size="small"
-//           disabled={!version.isCustom}
+//           disabled={!$version.isCustom}
 //         />
 //       </div>
 //       <div style={{height: 10}}/>

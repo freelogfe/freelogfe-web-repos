@@ -39,7 +39,7 @@ import {FTipText} from '@/components/FText';
 
 interface VersionEditorProps {
   dispatch: Dispatch;
-  // version: ResourceVersionEditorPageModelState;
+  // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   match: {
     params: {
@@ -96,8 +96,8 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
   }, [resourceVersionEditorPage.description]);
 
   // React.useEffect(() => {
-  //   setProperties(version.properties);
-  // }, [version.properties]);
+  //   setProperties($version.properties);
+  // }, [$version.properties]);
 
   function onUpdateEditorText() {
     const html: string = editor.toHTML();
@@ -169,7 +169,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         version={resourceVersionEditorPage.version}
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
-        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`}
+        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.$version}/download`}
         onClickDownload={() => FApiServer.Resource.resourcesDownload({
           resourceId: match.params.id,
           version: match.params.version
@@ -887,7 +887,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 }
 
 export default withRouter(connect(({resourceVersionEditorPage, resourceInfo}: ConnectState) => ({
-  // version: resourceVersionEditorPage,
+  // $version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
 }))(VersionEditor));
 

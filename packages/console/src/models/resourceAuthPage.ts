@@ -259,7 +259,7 @@ const Model: ResourceAuthPageModelType = {
                 status: c.status === 0 ? 'stopping' : 'executing',
                 code: c.policyInfo.policyText,
                 date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
-                // versions: [{version: '10.5.2', checked: true}, {version: '10.5.3', checked: false}]
+                // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]
                 versions: allEnabledVersions.map((v: string) => {
                   // console.log(i, currentResource, c, v, 'aw39osidc');
                   const versionContracts = i.versions?.find((version: any) => version.version === v)?.contracts;

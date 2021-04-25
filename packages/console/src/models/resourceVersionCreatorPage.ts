@@ -358,7 +358,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: initStates,
       });
-      // router.replace(`/resource/${data.resourceId}/version/${data.version}/success`)
+      // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
       router.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
         resourceID: data.resourceId,
         version: data.version,
@@ -520,7 +520,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // version: resourceVersionCreatorPage.version,
+          // $version: resourceVersionCreatorPage.$version,
           versionVerify: 2,
           versionErrorText: versionErrorText,
         }

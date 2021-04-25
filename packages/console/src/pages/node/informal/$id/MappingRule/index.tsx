@@ -57,11 +57,11 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         source: {
           type: r.candidate.type,
           name: r.candidate.name,
-          // version: r.candidate.versionRange,
+          // $version: r.candidate.versionRange,
         },
       } : undefined,
       alter: r.operation === 'alter' ? r.exhibitName : undefined,
-      // version: r.candidate.versionRange,
+      // $version: r.candidate.versionRange,
       cover: r.cover,
       title: r.title,
       online: r.online === true,

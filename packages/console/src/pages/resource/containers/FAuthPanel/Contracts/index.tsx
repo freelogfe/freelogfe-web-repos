@@ -24,7 +24,7 @@ interface ContractsProps extends DispatchProp {
 function Contracts({dataSource, dispatch}: ContractsProps) {
 
   function onLicenseChange(version: string, policyId: string, checked: boolean) {
-    // console.log(version, policyId, checked, '#@WDSfaDSAFD0[IJOA');
+    // console.log($version, policyId, checked, '#@WDSfaDSAFD0[IJOA');
     dispatch<UpdateAuthorizedAction>({
       type: 'resourceAuthPage/updateAuthorized',
       payload: [{

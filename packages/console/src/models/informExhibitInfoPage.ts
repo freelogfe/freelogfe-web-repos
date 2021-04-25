@@ -279,7 +279,7 @@ const Model: ExhibitInfoPageModelType = {
           source: {
             type: currentRule.candidate.type,
             name: currentRule.candidate.name,
-            // version: currentRule.candidate.
+            // $version: currentRule.candidate.
           },
         } : undefined,
         alter: currentRule.operation === 'alter' ? currentRule.exhibitName : undefined,

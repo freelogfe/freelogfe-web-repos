@@ -16,7 +16,7 @@ export interface FAuthPanelProps {
   //   activated: boolean;
   //   title: string;
   //   resourceType: string;
-  //   version: string;
+  //   $version: string;
   //   contracts: {
   //     checked: boolean;
   //     title: string;
@@ -25,7 +25,7 @@ export interface FAuthPanelProps {
   //     id: string;
   //     date: string;
   //     policyId: string;
-  //     versions: { version: string; checked: boolean; disabled: boolean }[];
+  //     versions: { $version: string; checked: boolean; disabled: boolean }[];
   //   }[];
   //   policies: {
   //     id: string;

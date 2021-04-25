@@ -47,33 +47,23 @@ export default [
           {exact: true, path: 'list', component: '../pages/resource/list', title: '我的资源'},
           {exact: true, path: 'collect', component: '../pages/resource/list', title: '我的收藏'},
           {exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源'},
+          {exact: true, path: 'details/:id', component: '../pages/resource/details/$id', title: '市场资源'},
+          {exact: true, path: 'info/:id', component: '../pages/resource/info/$id', title: '资源信息'},
+          {exact: true, path: 'auth/:id', component: '../pages/resource/auth/$id', title: '授权信息'},
           {
-            path: ':id',
+            path: 'version',
             routes: [
-              {exact: true, path: '.', component: '../pages/resource/$id/index', title: '市场资源'},
-              // {exact: true, path: 'sign', component: '../pages/resource/$id/sign', title: '市场资源'},
-              {exact: true, path: 'success', component: '../pages/resource/$id/success', title: '资源创建成功',},
-              {exact: true, path: 'info', component: '../pages/resource/$id/info', title: '资源信息'},
-              {exact: true, path: 'auth', component: '../pages/resource/$id/auth', title: '授权信息'},
               {
-                path: 'version',
-                routes: [
-                  {exact: true, path: 'creator', component: '../pages/resource/$id/version/creator', title: '版本创建'},
-                  {
-                    path: ':version',
-                    routes: [
-                      {exact: true, path: '.', component: '../pages/resource/$id/version/$version', title: '版本信息'},
-                      {
-                        exact: true,
-                        path: 'success',
-                        component: '../pages/resource/$id/version/$version/success',
-                        title: '版本创建成功',
-                      },
-                      {component: '../pages/exception/404'},
-                    ],
-                  },
-                  {component: '../pages/exception/404'},
-                ],
+                exact: true,
+                path: 'creator/:id',
+                component: '../pages/resource/version/creator/$id',
+                title: '版本创建',
+              },
+              {
+                exact: true,
+                path: 'info/:id/:version',
+                component: '../pages/resource/version/info/$id/$version',
+                title: '版本信息',
               },
               {component: '../pages/exception/404'},
             ],
@@ -90,7 +80,12 @@ export default [
               {
                 path: 'create',
                 routes: [
-                  {exact: true, path: 'success', component: '../pages/result/resource/create/success', title: '资源创建成功'},
+                  {
+                    exact: true,
+                    path: 'success/:id',
+                    component: '../pages/result/resource/create/success/$id',
+                    title: '资源创建成功'
+                  },
                 ]
               },
               {
@@ -101,8 +96,8 @@ export default [
                     routes: [
                       {
                         exact: true,
-                        path: 'success',
-                        component: '../pages/result/resource/version/create/success',
+                        path: 'success/:id/:version',
+                        component: '../pages/result/resource/version/create/success/$id/$version',
                         title: '版本创建成功'
                       },
                     ]
@@ -118,7 +113,7 @@ export default [
         routes: [
           {exact: true, path: '403', component: '../pages/exception/403', title: '暂无权限'},
           {exact: true, path: '404', component: '../pages/exception/404', title: '暂无权限'},
-        ]
+        ],
       },
       {component: '../pages/exception/404'},
     ],

@@ -1,0 +1,56 @@
+@import '../../../../../config.less';
+
+.header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerResource {
+
+    display: flex;
+    align-items: center;
+
+    & > img {
+      //background: url(../../../../../assets/default-resource-cover.jpg);
+      background-size: 100%;
+      width: 36px;
+      height: 27px;
+      border-radius: 4px;
+      border: none;
+    }
+  }
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+
+.content {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .yellow {
+    color: @f-warning-color1;
+  }
+}
+
+.exhibitNameInput {
+  width: 400px;
+}
+
+.signExhibitNameErrorTip {
+  font-size: 12px;
+  color: @f-error-color1;
+}
+
+.nameTitle {
+  display: flex;
+  align-items: baseline;
+}

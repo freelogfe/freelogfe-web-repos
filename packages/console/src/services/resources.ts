@@ -258,7 +258,7 @@ interface ResourcesDownloadParamsType {
 
 export function resourcesDownload(params: ResourcesDownloadParamsType) {
   return window.location.href = apiHost + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
-  // return request.get(`/v2/resources/${params.resourceId}/versions/${params.version}/download`, {
+  // return request.get(`/v2/resources/${params.resourceId}/versions/${params.$version}/download`, {
   //   responseType: 'arraybuffer',
   // });
 }

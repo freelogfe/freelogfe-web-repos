@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FLayout from '@/layouts/FLayout';
 import {FTipText} from '@/components/FText';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
@@ -15,7 +15,7 @@ import {RouteComponentProps} from 'react-router';
 interface SuccessProps extends RouteComponentProps<{
   id: string;
   version: string;
-}>{
+}> {
   // match: {
   //   params: {
   //
@@ -70,6 +70,7 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
   // }, [goto, time]);
 
   function goto() {
+
     // return router.replace(match.url.replace('/success', ''));
     return router.replace(FUtil.LinkTo.resourceVersion({
       resourceID: match.params.id,
@@ -82,17 +83,17 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      {/*<FTipText type={'secondary'} text={`版本 ${match.params.version} 创建成功`}/>*/}
+      {/*<FTipText type={'secondary'} text={`版本 ${match.params.$version} 创建成功`}/>*/}
       <FTipText type={'secondary'}
                 text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}/>
       <div style={{height: 40}}/>
       <div className={styles.goto}>
         <FTipText type={'modal'} text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
         <div style={{width: 10}}/>
-        <FTextButton
-          theme={'primary'}
+        <FTextBtn
+          // theme={'primary'}
           onClick={goto}
-        >{FUtil.I18n.message('jump_now')}</FTextButton>
+        >{FUtil.I18n.message('jump_now')}</FTextBtn>
       </div>
     </div>
   </FCenterLayout>)

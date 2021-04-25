@@ -19,7 +19,8 @@ interface ResourceDetailsParamsType {
 }
 
 export function resourceDetails({resourceID}: ResourceDetailsParamsType): TReturnType {
-  return `/resource/${resourceID}`;
+  // return `/resource/${resourceID}`;
+  return `/resource/details/${resourceID}`;
 }
 
 // 资源创建
@@ -52,7 +53,7 @@ interface ResourceInfoParamsType {
 }
 
 export function resourceInfo({resourceID}: ResourceInfoParamsType): TReturnType {
-  return `/resource/${resourceID}/info`;
+  return `/resource/info/${resourceID}`;
 }
 
 // 资源授权
@@ -61,7 +62,7 @@ interface ResourceAuthParamsType {
 }
 
 export function resourceAuth({resourceID}: ResourceAuthParamsType): TReturnType {
-  return `/resource/${resourceID}/auth`;
+  return `/resource/auth/${resourceID}`;
 }
 
 // 资源创建版本
@@ -70,7 +71,7 @@ interface ResourceCreateVersionParamsType {
 }
 
 export function resourceCreateVersion({resourceID}: ResourceCreateVersionParamsType): TReturnType {
-  return `/resource/${resourceID}/version/creator`;
+  return `/resource/version/creator/${resourceID}`;
 }
 
 // 资源版本信息
@@ -80,7 +81,7 @@ interface ResourceVersionParamsType {
 }
 
 export function resourceVersion({resourceID, version}: ResourceVersionParamsType): TReturnType {
-  return `/resource/${resourceID}/version/${version}`;
+  return `/resource/version/info/${resourceID}/${version}`;
 }
 
 // 节点创建
@@ -156,8 +157,8 @@ interface resourceCreateSuccessParamsType {
 }
 
 export function resourceCreateSuccess({resourceID, ...params}: resourceCreateSuccessParamsType) {
-  // return `/result/resource/create/success${handleQuery(params)}`;
-  return `/resource/${resourceID}/success`;
+  return `/result/resource/create/success/${resourceID}`;
+  // return `/resource/${resourceID}/success`;
 }
 
 // 资源创建成功
@@ -167,8 +168,8 @@ interface resourceVersionCreateSuccessParamsType {
 }
 
 export function resourceVersionCreateSuccess({resourceID, version, ...params}: resourceVersionCreateSuccessParamsType) {
-  // return `/result/resource/version/create/success${handleQuery(params)}`;
-  return `/resource/${resourceID}/version/${version}/success`;
+  return `/result/resource/version/create/success/${resourceID}/${version}`;
+  // return `/resource/${resourceID}/$version/${$version}/success`;
 }
 
 interface Exception403ParamsType {

@@ -83,7 +83,7 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      {/*<FTipText type={'secondary'} text={`版本 ${match.params.version} 创建成功`}/>*/}
+      {/*<FTipText type={'secondary'} text={`版本 ${match.params.$version} 创建成功`}/>*/}
       <FTipText type={'secondary'}
                 text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}/>
       <div style={{height: 40}}/>

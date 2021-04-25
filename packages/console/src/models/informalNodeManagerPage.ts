@@ -82,7 +82,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   //   };
   //   alter?: string;
   //   active?: string;
-  //   version?: string;
+  //   $version?: string;
   //   cover?: string;
   //   title?: string;
   //   online?: boolean;

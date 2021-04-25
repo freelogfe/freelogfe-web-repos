@@ -9,6 +9,7 @@ import {Button} from 'antd';
 import {resourceTypes} from '@/utils/globals';
 import {router} from "umi";
 import FNoDataTip from "@/components/FNoDataTip";
+import FUtil from "@/utils";
 
 const filters = [{
   value: '-1',
@@ -60,7 +61,10 @@ function Resources({dispatch, market}: ResourcesProps) {
                   className={styles.FResourceCard}
                   onClick={() => {
                     // console.log(resource, 'resourceq098upioq');
-                    return router.push(`/resource/${resource.id}`);
+                    // return router.push(`/resource/${resource.id}`);
+                    return router.push(FUtil.LinkTo.resourceDetails({
+                      resourceID: resource.id,
+                    }));
                   }}
                 />))
             }

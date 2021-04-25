@@ -191,7 +191,7 @@ const Model: ResourceVersionEditorModelType = {
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
-        // version: '0.0.1',
+        // $version: '0.0.1',
         isContainRootNode: true,
       };
 
@@ -336,7 +336,7 @@ const Model: ResourceVersionEditorModelType = {
     setup({dispatch, history}: SubscriptionAPI) {
 
       // history.listen((listener) => {
-      //   const regexp = pathToRegexp('/resource/:id/version/:version');
+      //   const regexp = pathToRegexp('/resource/:id/$version/:$version');
       //   const result = regexp.exec(listener.pathname);
       //   if (result) {
       //     if (result[2] === 'creator') {
@@ -346,7 +346,7 @@ const Model: ResourceVersionEditorModelType = {
       //       type: 'fetchDataSource',
       //       payload: {
       //         resourceId: result[1],
-      //         version: result[2],
+      //         $version: result[2],
       //       }
       //     });
       //   }
