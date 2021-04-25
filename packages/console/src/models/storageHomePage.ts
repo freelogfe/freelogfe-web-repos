@@ -12,6 +12,7 @@ import {router} from "umi";
 
 export interface StorageHomePageModelState {
   newBucketName: string;
+  newBucketNameIsDirty: boolean;
   newBucketNameError: boolean;
   newBucketModalVisible: boolean;
 
@@ -63,6 +64,11 @@ export interface FetchBucketsAction extends AnyAction {
   },
 }
 
+export interface OnChangeNewBucketAction extends AnyAction {
+  type: 'storageHomePage/onChangeNewBucket';
+  payload: string;
+}
+
 export interface CreateBucketAction extends AnyAction {
   type: 'storageHomePage/createBucket';
 }
@@ -111,6 +117,7 @@ interface StorageHomePageModelType {
   state: StorageHomePageModelState;
   effects: {
     fetchBuckets: (action: FetchBucketsAction, effects: EffectsCommandMap) => void;
+    onChangeNewBucket: (action: OnChangeNewBucketAction, effects: EffectsCommandMap) => void;
     createBucket: (action: CreateBucketAction, effects: EffectsCommandMap) => void;
     onChangeActivatedBucket: (action: OnChangeActivatedBucketAction, effects: EffectsCommandMap) => void;
     fetchSpaceStatistic: (action: FetchSpaceStatisticAction, effects: EffectsCommandMap) => void;
@@ -133,6 +140,7 @@ const Model: StorageHomePageModelType = {
   namespace: 'storageHomePage',
   state: {
     newBucketName: '',
+    newBucketNameIsDirty: false,
     newBucketNameError: false,
     newBucketModalVisible: false,
 
@@ -194,23 +202,47 @@ const Model: StorageHomePageModelType = {
         type: 'fetchSpaceStatistic',
       });
     },
-    * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
+    * onChangeNewBucket({payload}: OnChangeNewBucketAction, {put, select, call}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
 
-      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(storageHomePage.newBucketName) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(storageHomePage.newBucketName)) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          newBucketName: payload,
+          newBucketNameIsDirty: true,
+        },
+      });
+
+      if (!/^(?!-)[a-z0-9-]{1,63}(?<!-)$/.test(payload) || storageHomePage.bucketList?.map((b) => b.bucketName).includes(payload)) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             newBucketNameError: true,
           },
         });
-        return;
+      } else {
+        const params: Parameters<typeof FApiServer.Storage.bucketIsExist>[0] = {
+          bucketName: payload,
+        };
+        const {data} = yield call(FApiServer.Storage.bucketIsExist, params);
+        // console.log(data, '@@@@@Dddddddddddd====');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            newBucketNameError: data,
+          },
+        });
       }
+
+    },
+    * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
+      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+
       const params: Parameters<typeof FApiServer.Storage.createBucket>[0] = {
         bucketName: storageHomePage.newBucketName,
       };
       yield call(FApiServer.Storage.createBucket, params);
-      router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
+
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -220,6 +252,7 @@ const Model: StorageHomePageModelType = {
           newBucketModalVisible: false,
         },
       });
+      // router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
     },
     * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
@@ -252,10 +285,11 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: Parameters<typeof FApiServer.Storage.deleteBuckets>[0] = {
+      const params: Parameters<typeof FApiServer.Storage.deleteBucket>[0] = {
         bucketName: payload,
       };
-      yield call(FApiServer.Storage.deleteBuckets, params);
+      console.log(payload, 'DDDDDDDDelete');
+      yield call(FApiServer.Storage.deleteBucket, params);
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });

@@ -7,7 +7,7 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import {CreateBucketAction, OnChangeActivatedBucketAction} from "@/models/storageHomePage";
+import {CreateBucketAction, OnChangeActivatedBucketAction, OnChangeNewBucketAction} from "@/models/storageHomePage";
 import {router, withRouter} from 'umi';
 import {RouteComponentProps} from "react-router";
 import {ChangeAction, FetchInfoAction, storageObjectEditorInitData} from "@/models/storageObjectEditor";
@@ -93,6 +93,10 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
       title="创建Bucket"
       visible={storageHomePage.newBucketModalVisible}
       width={640}
+      okButtonProps={{
+        disabled: !storageHomePage.newBucketName || storageHomePage.newBucketNameError,
+        // disabled: true,
+      }}
       onOk={() => {
         dispatch<CreateBucketAction>({
           type: 'storageHomePage/createBucket',
@@ -117,22 +121,24 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
         <div style={{height: 10}}/>
         <FInput
           value={storageHomePage.newBucketName}
-          onChange={(e) => {
-            dispatch<StorageHomePageChangeAction>({
-              type: 'storageHomePage/change',
-              payload: {
-                newBucketName: e.target.value,
-                newBucketNameError: false,
-              },
+          // onChange={(e) => {
+          //
+          // }}
+          debounce={300}
+          onDebounceChange={(value) => {
+            dispatch<OnChangeNewBucketAction>({
+              type: 'storageHomePage/onChangeNewBucket',
+              payload: value,
             });
           }}
           wrapClassName={styles.wrapClassName}
           className={styles.FInput}
           errorText={storageHomePage.newBucketNameError ? (<div>
+            <div>名称全局唯一；</div>
             <div>只能包括小写字母、数字和短横线（-）；</div>
             <div>必须以小写字母或者数字开头和结尾 ；</div>
             <div>长度必须在 1–63 字符之间。</div>
-            <div>名称不能重复</div>
+            {/*<div>名称不能重复</div>*/}
           </div>) : ''}
         />
         <div style={{height: 100}}/>

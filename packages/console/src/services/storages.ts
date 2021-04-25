@@ -35,17 +35,17 @@ interface DeleteBucketParamsType {
 }
 
 export function deleteBucket(params: DeleteBucketParamsType) {
-  return request.get(`/v1/storages/buckets/${params.bucketName}`);
+  return request.delete(`/v1/storages/buckets/${params.bucketName}`);
 }
 
 // 删除bucket
-interface DeleteBucketsParamsType {
-  bucketName: string;
-}
-
-export function deleteBuckets(params: DeleteBucketsParamsType) {
-  return request.delete(`/v1/storages/buckets/${params.bucketName}`);
-}
+// interface DeleteBucketsParamsType {
+//   bucketName: string;
+// }
+//
+// export function deleteBuckets(params: DeleteBucketsParamsType) {
+//   return request.delete(`/v1/storages/buckets/${params.bucketName}`);
+// }
 
 // 分页查看存储对象列表
 interface ObjectListParamsType {
@@ -101,6 +101,15 @@ interface DeleteObjectsParamsType {
 
 export function deleteObjects(params: DeleteObjectsParamsType) {
   return request.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
+}
+
+// 查询bucket是否存在
+interface BucketIsExistParamsType {
+  bucketName: string;
+}
+
+export function bucketIsExist({bucketName, ...params}: BucketIsExistParamsType) {
+  return request.get(`/v1/storages/buckets/${bucketName}/isExist`);
 }
 
 // 下载存储对象文件

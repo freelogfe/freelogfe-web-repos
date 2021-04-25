@@ -84,9 +84,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                   >
                     <span>{b.bucketName}</span>
                     <FTooltip
-                      trigger={'hover'}
                       title={'删除'}
-                      placement={'bottomLeft'}
                       // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
