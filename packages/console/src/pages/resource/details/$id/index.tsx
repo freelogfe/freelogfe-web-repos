@@ -11,15 +11,18 @@ import Viewport from './Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {
   ClearDataDataAction, FetchCollectionInfoAction, FetchInfoAction,
-  OnChangeVersionAction,
+  // OnChangeVersionAction,
   OnClickCollectionAction,
-  ChangeAction,
+  ChangeAction, FetchVersionInfoAction,
 } from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert, Space} from 'antd';
 import SignPage from './SignPage';
 import {RouteComponentProps} from "react-router";
 import * as AHooks from 'ahooks';
+import useUrlState from '@ahooksjs/use-url-state';
+import {router} from "umi";
+import FUtil from "@/utils";
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -28,8 +31,12 @@ interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
 
 function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsProps) {
 
+  const [state] = useUrlState<{ version: string }>();
+
   AHooks.useMount(async () => {
-    await onChange({resourceId: match.params.id});
+    await onChange({
+      resourceId: match.params.id,
+    });
 
     await dispatch<FetchCollectionInfoAction>({
       type: 'marketResourcePage/fetchCollectionInfo',
@@ -39,6 +46,24 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       type: 'marketResourcePage/fetchInfo',
     });
   });
+
+  React.useEffect(() => {
+    // console.log(state.version, 'state.version2334234234');
+    if (state.version) {
+      fetchVersionInfo();
+    }
+  }, [state]);
+
+  async function fetchVersionInfo() {
+    await onChange({
+      version: state.version,
+    });
+
+    await dispatch<FetchVersionInfoAction>({
+      type: 'marketResourcePage/fetchVersionInfo',
+    });
+
+  }
 
   AHooks.useUnmount(() => {
     dispatch<ClearDataDataAction>({
@@ -128,10 +153,14 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
                 options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
                 onChange={(value) => {
                   // console.log(value, '3209jsd');
-                  dispatch<OnChangeVersionAction>({
-                    type: 'marketResourcePage/onChangeVersion',
-                    payload: value,
-                  });
+                  // dispatch<OnChangeVersionAction>({
+                  //   type: 'marketResourcePage/onChangeVersion',
+                  //   payload: value,
+                  // });
+                  router.push(FUtil.LinkTo.resourceDetails({
+                    resourceID: marketResourcePage.resourceId,
+                    version: value,
+                  }));
                 }}
               >
                 <FSwap style={{cursor: 'pointer'}}/>

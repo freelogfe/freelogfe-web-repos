@@ -15,11 +15,12 @@ export function market({}: MarketParamsType = {}): TReturnType {
 // 资源详情
 interface ResourceDetailsParamsType {
   resourceID: string;
+  version?: string;
 }
 
-export function resourceDetails({resourceID}: ResourceDetailsParamsType): TReturnType {
+export function resourceDetails({resourceID,...params}: ResourceDetailsParamsType): TReturnType {
   // return `/resource/${resourceID}`;
-  return `/resource/details/${resourceID}`;
+  return `/resource/details/${resourceID}${handleQuery(params)}`;
 }
 
 // 资源创建

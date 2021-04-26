@@ -10,6 +10,7 @@ import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6Authoriz
 
 export interface MarketResourcePageModelState {
   resourceId: string;
+  version: string;
 
   isSignPage: boolean;
 
@@ -73,7 +74,7 @@ export interface MarketResourcePageModelState {
   signedResourceExhibitID: string;
 
   allVersions: string[];
-  version: string;
+
   releaseTime: string;
 
   description: string;
@@ -159,13 +160,13 @@ export interface OnChangeNodeSelectorAction extends AnyAction {
 }
 
 export interface FetchVersionInfoAction extends AnyAction {
-  type: 'fetchVersionInfo';
+  type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
 
-export interface OnChangeVersionAction extends AnyAction {
-  type: 'marketResourcePage/onChangeVersion';
-  payload: string;
-}
+// export interface OnChangeVersionAction extends AnyAction {
+//   type: 'marketResourcePage/onChangeVersion';
+//   payload: string;
+// }
 
 export interface SignContractAction extends AnyAction {
   type: 'marketResourcePage/signContract';
@@ -191,7 +192,7 @@ interface MarketResourcePageModelType {
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
-    onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
+    // onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
     fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
@@ -273,8 +274,6 @@ const Model: MarketResourcePageModelType = {
         user,
       }));
 
-      // console.log(marketResourcePage, 'marketResourcePageFetchInfoAction@#@##');
-
       // 获取资源信息详情
       const params: Parameters<typeof FApiServer.Resource.info>[0] = {
         resourceIdOrName: marketResourcePage.resourceId,
@@ -323,7 +322,7 @@ const Model: MarketResourcePageModelType = {
             about: data.intro,
           },
           allVersions: data.resourceVersions.map((v: any) => v.version),
-          version: data.latestVersion,
+          version: marketResourcePage.version || data.latestVersion,
           //
           signedNodeIDs: data3.map((p: any) => p.nodeId),
           allRawResources: rawSignResources,
@@ -350,8 +349,9 @@ const Model: MarketResourcePageModelType = {
             }),
         },
       });
+      // console.log(marketResourcePage.version, data.latestVersion, 'marketResourcePage.version || data.latestVersio');
 
-      if (!data.latestVersion) {
+      if (!data.latestVersion || !!marketResourcePage.version) {
         return;
       }
 
@@ -483,7 +483,9 @@ const Model: MarketResourcePageModelType = {
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
         marketResourcePage
       }));
-      // console.log(marketResourcePage, 'marketResourcePage112342342');
+
+      // console.log('######89987239847982347982349823748723');
+
       const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
@@ -558,19 +560,19 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
-      // console.log(payload, 'payload234sd09');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          version: payload,
-        },
-      });
-
-      yield  put<FetchVersionInfoAction>({
-        type: 'fetchVersionInfo',
-      });
-    },
+    // * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
+    //   // console.log(payload, 'payload234sd09');
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       version: payload,
+    //     },
+    //   });
+    //
+    //   yield  put<FetchVersionInfoAction>({
+    //     type: 'fetchVersionInfo',
+    //   });
+    // },
     * signContract({}: SignContractAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage, nodes}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
         marketResourcePage,
