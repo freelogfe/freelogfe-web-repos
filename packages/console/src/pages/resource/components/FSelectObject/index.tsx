@@ -13,7 +13,7 @@ import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import {FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from "dva";
-import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
+import {ConnectState, ResourceVersionCreatorPageModelState, UserModelState} from "@/models/connect";
 import {
   ChangeAction,
   FetchRawPropsAction,
@@ -52,11 +52,12 @@ export interface FSelectObject {
 
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
+  user: UserModelState;
 }
 
 let uploadCancelHandler: any = null;
 
-function FSelectObject({dispatch, resourceVersionCreatorPage}: FSelectObject) {
+function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
   const [isChecking, setIsChecking] = React.useState<boolean>(false);
@@ -125,16 +126,22 @@ function FSelectObject({dispatch, resourceVersionCreatorPage}: FSelectObject) {
       return onChange({
         selectedFileStatus: 3,
         selectedFileUsedResource: data3.map((d: any) => {
+          const isSelf: boolean = d.userId === user.info?.userId;
           return d.resourceVersions.map((v: any) => {
             return {
               resourceId: d.resourceId,
               resourceName: d.resourceName,
               resourceType: d.resourceType,
               resourceVersion: v.version,
-              url: FUtil.LinkTo.resourceDetails({
-                resourceID: d.resourceId,
-                version: v.version,
-              }),
+              url: isSelf
+                ? FUtil.LinkTo.resourceVersion({
+                  resourceID: d.resourceId,
+                  version: v.version,
+                })
+                : FUtil.LinkTo.resourceDetails({
+                  resourceID: d.resourceId,
+                  version: v.version,
+                }),
             }
           });
         }).flat(),
@@ -354,8 +361,9 @@ function FSelectObject({dispatch, resourceVersionCreatorPage}: FSelectObject) {
   </div>);
 }
 
-export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
+export default connect(({resourceVersionCreatorPage, user}: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
+  user: user,
 }))(FSelectObject);
 
 
