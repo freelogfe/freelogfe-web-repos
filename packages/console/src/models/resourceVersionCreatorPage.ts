@@ -1,7 +1,7 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
-import {FSelectObject} from '@/pages/resource/components/FSelectObject';
+// import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {router} from 'umi';
 import BraftEditor, {EditorState} from 'braft-editor';
@@ -11,6 +11,8 @@ import * as semver from 'semver';
 import moment from "moment";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import {RcFile} from "antd/lib/upload/interface";
+import {getSHA1Hash} from "@/utils/tools";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -61,11 +63,22 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   versionVerify: 0 | 2;
   versionErrorText: string;
 
-  resourceObject: FSelectObject['resourceObject'];
-  resourceObjectError: {
-    sha1: string;
-    text: string;
-  };
+  // resourceObject: FSelectObject['resourceObject'];
+  // resourceObjectError: {
+  //   sha1: string;
+  //   text: string;
+  // };
+  selectedFileName: string;
+  selectedFileSha1: string;
+  selectedFileOrigin: string;
+  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */;
+  selectedFileUsedResource: {
+    resourceID: string;
+    resourceName: string;
+    resourceType: string;
+    resourceVersion: string;
+    url: string;
+  }[];
 
   depRelationship: Relationships;
   dependencies: DepResources;
@@ -168,6 +181,20 @@ export interface VerifyVersionInputAction extends AnyAction {
   // payload: string;
 }
 
+export interface SelectLocalFile extends AnyAction {
+  type: 'resourceVersionCreatorPage/selectLocalFile';
+  payload: {
+    file: RcFile;
+  };
+}
+
+export interface SelectObjectFile extends AnyAction {
+  type: 'resourceVersionCreatorPage/selectObjectFile';
+  payload: {
+    objectID: string;
+  };
+}
+
 export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
 }
@@ -204,9 +231,9 @@ export interface LeaveAndClearDataAction extends AnyAction {
   type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
 }
 
-export interface GoToResourceDetailsBySha1 extends AnyAction {
-  type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1';
-}
+// export interface GoToResourceDetailsBySha1 extends AnyAction {
+//   type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1';
+// }
 
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
@@ -218,13 +245,15 @@ export interface ResourceVersionCreatorModelType {
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
+    selectLocalFile: (action: SelectLocalFile, effects: EffectsCommandMap) => void;
+    selectObjectFile: (action: SelectObjectFile, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
     dddDepsByMainIDs: (action: AddDepsByMainIDsAction, effects: EffectsCommandMap) => void;
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
-    goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
+    // goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
     leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
@@ -244,11 +273,16 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionVerify: 0,
   versionErrorText: '',
 
-  resourceObject: null,
-  resourceObjectError: {
-    sha1: '',
-    text: '',
-  },
+  // resourceObject: null,
+  // resourceObjectError: {
+  //   sha1: '',
+  //   text: '',
+  // },
+  selectedFileName: '',
+  selectedFileSha1: '',
+  selectedFileOrigin: '',
+  selectedFileStatus: 0,
+  selectedFileUsedResource: [],
 
   rawProperties: [],
 
@@ -313,8 +347,8 @@ const Model: ResourceVersionCreatorModelType = {
       const params: Parameters<typeof FApiServer.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
-        fileSha1: resourceVersionCreatorPage.resourceObject?.sha1 || '',
-        filename: resourceVersionCreatorPage.resourceObject?.name || '',
+        fileSha1: resourceVersionCreatorPage.selectedFileSha1,
+        filename: resourceVersionCreatorPage.selectedFileName,
         baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
         dependencies: resourceVersionCreatorPage.dependencies
           .filter((dep) => directlyDependentIds.includes(dep.id))
@@ -526,16 +560,61 @@ const Model: ResourceVersionCreatorModelType = {
         }
       });
     },
+    * selectLocalFile({payload: {file}}: SelectLocalFile, {call}: EffectsCommandMap) {
+      if (file.size > 50 * 1024 * 1024) {
+        // setIsChecking(false);
+        // return onError({
+        //   sha1: '',
+        //   text: errorTexts.size
+        // });
+        return;
+      }
+
+      const sha1: string = yield call(getSHA1Hash, file);
+
+      const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
+        fileSha1: sha1,
+      };
+
+      const {data: data3} = yield call(FApiServer.Resource.resourceIsUsedByOther, params3);
+
+      if (!data3) {
+        // setIsChecking(false);
+        // return onError && onError({
+        //   sha1: sha1,
+        //   text: errorTexts.duplicated
+        // });
+        return;
+      }
+
+      const {data: isExists} = call(FApiServer.Storage.fileIsExist, {sha1});
+
+      if (isExists[0].isExisting) {
+
+        // return onChange1({
+        //   sha1: sha1,
+        //   name: file.name,
+        //   size: file.size,
+        //   path: '',
+        //   type: resourceVersionCreatorPage.resourceType,
+        //   time: '',
+        // });
+        return;
+      }
+    },
+    * selectObjectFile({}: SelectObjectFile, {}: EffectsCommandMap) {
+
+    },
     * fetchRawProps({}: FetchRawPropsAction, {select, put, call}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      if (!resourceVersionCreatorPage.resourceObject || resourceVersionCreatorPage.resourceObject.sha1 === '') {
+      if (!resourceVersionCreatorPage.selectedFileSha1) {
         return;
       }
       const params: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
-        sha1: resourceVersionCreatorPage.resourceObject.sha1,
-        resourceType: resourceVersionCreatorPage.resourceObject.type,
+        sha1: resourceVersionCreatorPage.selectedFileSha1,
+        resourceType: resourceVersionCreatorPage.resourceType,
       };
 
       const {data} = yield call(FApiServer.Storage.fileProperty, params);
@@ -545,11 +624,11 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             rawProperties: [],
-            resourceObject: null,
-            resourceObjectError: {
-              sha1: resourceVersionCreatorPage.resourceObject.sha1,
-              text: FUtil.I18n.message('error_wrongfileformat'),
-            },
+            // resourceObject: null,
+            // resourceObjectError: {
+            //   sha1: resourceVersionCreatorPage.resourceObject.sha1,
+            //   text: FUtil.I18n.message('error_wrongfileformat'),
+            // },
           },
         });
       }
@@ -964,19 +1043,19 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    * goToResourceDetailsBySha1({}: GoToResourceDetailsBySha1, {put, call, select}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      const params: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
-        fileSha1: resourceVersionCreatorPage.resourceObjectError.sha1,
-      };
-      const {data} = yield call(FApiServer.Resource.getResourceBySha1, params);
-      // console.log(data, '2134sdfa90j');
-      // router.push(`/resource/${data[0].resourceId}`);
-      window.open(`/resource/${data[0].resourceId}`);
-    },
+    // * goToResourceDetailsBySha1({}: GoToResourceDetailsBySha1, {put, call, select}: EffectsCommandMap) {
+    //   const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //
+    //   const params: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
+    //     fileSha1: resourceVersionCreatorPage.resourceObjectError.sha1,
+    //   };
+    //   const {data} = yield call(FApiServer.Resource.getResourceBySha1, params);
+    //   // console.log(data, '2134sdfa90j');
+    //   // router.push(`/resource/${data[0].resourceId}`);
+    //   window.open(`/resource/${data[0].resourceId}`);
+    // },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',

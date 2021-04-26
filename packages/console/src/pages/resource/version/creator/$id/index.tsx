@@ -17,10 +17,10 @@ import {
   ChangeAction,
   CreateVersionAction,
   FetchDraftAction,
-  FetchRawPropsAction,
+  // FetchRawPropsAction,
   FetchResourceInfoAction,
-  GoToResourceDetailsBySha1,
-  HandleObjectInfoAction,
+  // GoToResourceDetailsBySha1,
+  // HandleObjectInfoAction,
   ImportLastVersionDataAction,
   InitModelStatesAction,
   LeaveAndClearDataAction,
@@ -45,16 +45,11 @@ import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer"
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 import FTooltip from "@/components/FTooltip";
+import {RouteComponentProps} from 'react-router';
 
-interface VersionCreatorProps {
+interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState,
-  // resourceInfo: ResourceInfoModelState,
-  match: {
-    params: {
-      id: string;
-    };
-  };
 }
 
 function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: VersionCreatorProps & RouterTypes) {
@@ -68,20 +63,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     }
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
-
-
-  // if (!resourceInfo.hasPermission) {
-  //   return (<div>
-  //     <FNoDataTip
-  //       height={}
-  //       tipText={'403,没权限访问'}
-  //       btnText={'将前往首页'}
-  //       onClick={() => {
-  //         router.replace('/');
-  //       }}
-  //     />
-  //   </div>);
-  // }
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -148,8 +129,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
   const hasError: boolean =
     // 版本
     !resourceVersionCreatorPage.version || !!resourceVersionCreatorPage.versionErrorText
-    // 对象
-    || !resourceVersionCreatorPage.resourceObject || !!resourceVersionCreatorPage.resourceObjectError.text
+    // 选择的文件对象
+    || resourceVersionCreatorPage.selectedFileStatus !== -3
     // 依赖
     || !!resourceVersionCreatorPage.dependencies.find((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
@@ -230,59 +211,59 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
 
           <FFormLayout.FBlock dot={true} title={FUtil.I18n.message('release_object')}>
             <FSelectObject
-              onError={(value) => {
-                dispatch<ChangeAction>({
-                  type: 'resourceVersionCreatorPage/change',
-                  payload: {
-                    resourceObjectError: value,
-                    resourceObject: null,
-                  },
-                });
-              }}
-              resourceType={resourceVersionCreatorPage.resourceType}
-              resourceObject={resourceVersionCreatorPage.resourceObject}
-              onChange={async (value) => {
-                // console.log(value, '#@ERWADFSASDFSADF');
-                if (!value) {
-                  return onChange({
-                    resourceObject: null,
-                    resourceObjectError: {
-                      sha1: '',
-                      text: '',
-                    },
-                    rawProperties: [],
-                    baseProperties: [],
-                    customOptionsData: [],
-                    dataIsDirty: true,
-                  });
-                }
-                await onChange({
-                  resourceObject: value,
-                  resourceObjectError: {sha1: '', text: ''},
-                  dataIsDirty: true,
-                });
-                await dispatch<FetchRawPropsAction>({
-                  type: 'resourceVersionCreatorPage/fetchRawProps',
-                });
-
-                if (value.objectId) {
-                  dispatch<HandleObjectInfoAction>({
-                    type: 'resourceVersionCreatorPage/handleObjectInfo',
-                    payload: value.objectId,
-                  });
-                }
-              }}
-              errorText={resourceVersionCreatorPage.resourceObjectError.text}
+              // onError={(value) => {
+              //   dispatch<ChangeAction>({
+              //     type: 'resourceVersionCreatorPage/change',
+              //     payload: {
+              //       resourceObjectError: value,
+              //       resourceObject: null,
+              //     },
+              //   });
+              // }}
+              // resourceType={resourceVersionCreatorPage.resourceType}
+              // resourceObject={resourceVersionCreatorPage.resourceObject}
+              // onChange={async (value) => {
+              //   // console.log(value, '#@ERWADFSASDFSADF');
+              //   if (!value) {
+              //     return onChange({
+              //       resourceObject: null,
+              //       resourceObjectError: {
+              //         sha1: '',
+              //         text: '',
+              //       },
+              //       rawProperties: [],
+              //       baseProperties: [],
+              //       customOptionsData: [],
+              //       dataIsDirty: true,
+              //     });
+              //   }
+              //   await onChange({
+              //     resourceObject: value,
+              //     resourceObjectError: {sha1: '', text: ''},
+              //     dataIsDirty: true,
+              //   });
+              //   await dispatch<FetchRawPropsAction>({
+              //     type: 'resourceVersionCreatorPage/fetchRawProps',
+              //   });
+              //
+              //   if (value.objectId) {
+              //     dispatch<HandleObjectInfoAction>({
+              //       type: 'resourceVersionCreatorPage/handleObjectInfo',
+              //       payload: value.objectId,
+              //     });
+              //   }
+              // }}
+              // errorText={resourceVersionCreatorPage.resourceObjectError.text}
               // onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
-              onClickDuplicatedLook={() => {
-                dispatch<GoToResourceDetailsBySha1>({
-                  type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1'
-                });
-              }}
+              // onClickDuplicatedLook={() => {
+              //   dispatch<GoToResourceDetailsBySha1>({
+              //     type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1'
+              //   });
+              // }}
             />
 
             {
-              resourceVersionCreatorPage.resourceObject && (<>
+              resourceVersionCreatorPage.selectedFileStatus === -3 && (<>
                 <div style={{height: 5}}/>
                 <FBaseProperties
                   basics={resourceVersionCreatorPage.rawProperties}
@@ -546,7 +527,6 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
   </div>);
 }
 
-export default withRouter(connect(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+export default withRouter(connect(({resourceVersionCreatorPage}: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
-  resourceInfo: resourceInfo,
 }))(VersionCreator));
