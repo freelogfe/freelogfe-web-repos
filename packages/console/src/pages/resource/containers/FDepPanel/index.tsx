@@ -50,6 +50,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
               payload: {
                 dataIsDirty: true,
               },
+              caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
         >{FUtil.I18n.message('import_from_previous_version')}</FRectBtn>

@@ -84,6 +84,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     init();
 
     return () => {
+      console.log(match.params.id, 'match.params.id');
       dispatch<LeaveAndClearDataAction>({
         type: 'resourceVersionCreatorPage/leaveAndClearData',
       });
@@ -123,6 +124,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
+      caller: '2345324343452===-0-9--34324534%#$%#$%#$%#$#$',
     });
   }
 
@@ -153,7 +155,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             type: 'resourceVersionCreatorPage/change',
             payload: {
               promptLeavePath: location.pathname,
-            }
+            },
+            caller: '2345$#%%#$%#$%#$532434345234324534%#$%#$%#$%#$#$',
           });
           fConfirmModal({
             message: '还没有保存草稿或发行，现在离开会导致信息丢失',
@@ -167,7 +170,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                 type: 'resourceVersionCreatorPage/change',
                 payload: {
                   promptLeavePath: '',
-                }
+                },
+                caller: '234532434()))(*())(()345234324534%#$%#$%#$%#$#$',
               });
             },
           });
@@ -196,6 +200,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                     version: e.target.value,
                     dataIsDirty: true,
                   },
+                  caller: '23$^%%%%^&^&&4532434345234324534%#$%#$%#$%#$#$',
                 });
               }}
               onBlur={() => {
@@ -387,6 +392,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
                                     return cod.key !== value;
                                   }),
                                 },
+                                caller: '23453243434523432453___(*)(*)(*4%#$%#$%#$%#$#$',
                               })
                             }}
                           />
@@ -466,6 +472,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
               customOptionsEditorVisible: false,
               customOptionsEditorDataSource: [],
             },
+            caller: '234532&*^*(&^*(&^*(&434345234324534%#$%#$%#$%#$#$',
           });
         }}
         dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
@@ -477,6 +484,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
           dispatch<ChangeAction>({
             type: 'resourceVersionCreatorPage/change',
             payload: {customOptionsEditorDataSource: value},
+            caller: '23453243434523432hjkjsdhfkjhajsdf4534%#$%#$%#$%#$#$',
           });
         }}
         onConfirm={() => {
@@ -494,7 +502,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
               }),
               customOptionsEditorDataSource: [],
               customOptionsEditorVisible: false,
-            }
+            },
+            caller: '23453[]p[pop[iooiiop2434345234324534%#$%#$%#$%#$#$',
           })
         }}
       />

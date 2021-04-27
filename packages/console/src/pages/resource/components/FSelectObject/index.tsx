@@ -60,77 +60,42 @@ let uploadCancelHandler: any = null;
 
 function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObject) {
 
-  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-  // const [isChecking, setIsChecking] = React.useState<boolean>(false);
-  // const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload,
+      caller: '234532434345234324534%#$%#$%#$%#$#$',
     });
   }
 
-  // 选择对象
+  /**
+   * 选择对象调用函数
+   * @param obj
+   */
   async function onSelectObject(obj: { id: string; name: string; }) {
-    setModalVisible(false);
+    // setModalVisible(false);
     const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
       objectIdOrName: obj.id,
     };
     const {data} = await FApiServer.Storage.objectDetails(params);
 
-    const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
-      fileSha1: data.sha1,
-    };
-
-    const {data: data3} = await FApiServer.Resource.resourceIsUsedByOther(params3);
-    if (!data3) {
-      return onError({
-        sha1: data.sha1,
-        text: errorTexts.duplicated
-      });
-    }
-
-    onChange1 && onChange1({
-      sha1: data.sha1,
-      name: data.objectName,
-      size: data.systemProperty.fileSize,
-      path: data.bucketName,
-      type: resourceVersionCreatorPage.resourceType,
-      time: '',
-      objectId: obj.id,
+    await onChange({
+      selectedFileName: data.objectName,
+      selectedFileSha1: data.sha1,
+      selectedFileOrigin: data.bucketName,
     });
-  }
-
-  async function beforeUpload(file: RcFile) {
-    // setIsChecking(true);
-    // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
-    if (file.size > 50 * 1024 * 1024) {
-      // setIsChecking(false);
-      return onChange({
-        selectedFileStatus: 1,
-      });
-    }
-
-    onChange({
-      selectedFileStatus: -1,
-    });
-
-    const sha1: string = await getSHA1Hash(file);
 
     const params3: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
-      fileSha1: sha1,
+      fileSha1: data.sha1,
     };
 
     const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
     // console.log(data3, 'data3data3data3data3data3@#########');
     if (data3.length > 0) {
       // console.log(data3, 'data3@@#$@#$#$@#');
-      return onChange({
-        selectedFileName: file.name,
-        selectedFileSha1: sha1,
-        selectedFileOrigin: '本地上传',
+      await onChange({
         selectedFileStatus: data3[0].userId === user.info?.userId ? 3 : 4,
         selectedFileUsedResource: data3.map((d: any) => {
           const isSelf: boolean = d.userId === user.info?.userId;
@@ -153,49 +118,109 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
           });
         }).flat(),
       });
-    }
+    } else {
 
-    const {data: isExists}: any = await FApiServer.Storage.fileIsExist({sha1});
-
-    if (isExists[0].isExisting) {
-      onChange({
-        selectedFileName: file.name,
-        selectedFileSha1: sha1,
-        selectedFileOrigin: '本地上传',
+      await onChange({
         selectedFileStatus: -3,
       });
 
-      onChange({
-        dataIsDirty: true,
-      });
-      dispatch<FetchRawPropsAction>({
+      await dispatch<FetchRawPropsAction>({
         type: 'resourceVersionCreatorPage/fetchRawProps',
       });
-      return;
+
+      await dispatch<HandleObjectInfoAction>({
+        type: 'resourceVersionCreatorPage/handleObjectInfo',
+        payload: data.objectId,
+      });
     }
 
     onChange({
-      selectedFileStatus: -2,
+      selectedFileObjectDrawerVisible: false,
+      dataIsDirty: true,
     });
-    const [promise, cancel] = await FApiServer.Storage.uploadFile({
-      file: file,
-      resourceType: resourceVersionCreatorPage.resourceType,
-    }, {
-      onUploadProgress(progressEvent: any) {
-        setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-      },
-    }, true);
-    uploadCancelHandler = cancel;
-    // console.log(returns, 'returnsreturns1234');
-    const {data} = await promise;
-    uploadCancelHandler = null;
-    // console.log(data, 'data1241234');
-    if (!data) {
-      // onError({
-      //   sha1: sha1,
-      //   text: errorTexts.resourceType,
-      // });
+  }
 
+  /**
+   * 本地上传文件处理函数
+   * @param file
+   */
+  async function beforeUpload(file: RcFile) {
+    // setIsChecking(true);
+    // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
+    if (file.size > 50 * 1024 * 1024) {
+      // setIsChecking(false);
+      return onChange({
+        selectedFileStatus: 1,
+      });
+    }
+
+    onChange({
+      selectedFileStatus: -1,
+    });
+
+    const sha1: string = await getSHA1Hash(file);
+
+    const {data: isExists}: any = await FApiServer.Storage.fileIsExist({sha1});
+    if (isExists[0].isExisting) {
+
+      const params3: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
+        fileSha1: sha1,
+      };
+
+      const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
+      // console.log(data3, 'data3data3data3data3data3@#########');
+      if (data3.length > 0) {
+        // console.log(data3, 'data3@@#$@#$#$@#');
+        return onChange({
+          selectedFileName: file.name,
+          selectedFileSha1: sha1,
+          selectedFileOrigin: '本地上传',
+          selectedFileStatus: data3[0].userId === user.info?.userId ? 3 : 4,
+          selectedFileUsedResource: data3.map((d: any) => {
+            const isSelf: boolean = d.userId === user.info?.userId;
+            return d.resourceVersions.map((v: any) => {
+              return {
+                resourceId: d.resourceId,
+                resourceName: d.resourceName,
+                resourceType: d.resourceType,
+                resourceVersion: v.version,
+                url: isSelf
+                  ? FUtil.LinkTo.resourceVersion({
+                    resourceID: d.resourceId,
+                    version: v.version,
+                  })
+                  : FUtil.LinkTo.resourceDetails({
+                    resourceID: d.resourceId,
+                    version: v.version,
+                  }),
+              }
+            });
+          }).flat(),
+        });
+      }
+
+    } else {
+      onChange({
+        selectedFileStatus: -2,
+      });
+      const [promise, cancel] = await FApiServer.Storage.uploadFile({
+        file: file,
+        resourceType: resourceVersionCreatorPage.resourceType,
+      }, {
+        onUploadProgress(progressEvent: any) {
+          setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+        },
+      }, true);
+      uploadCancelHandler = cancel;
+      // console.log(returns, 'returnsreturns1234');
+      const {data} = await promise;
+      uploadCancelHandler = null;
+      // console.log(data, 'data1241234');
+      // if (!data) {
+      //
+      // }
+
+      setProgress(null);
     }
 
     onChange({
@@ -205,48 +230,16 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       selectedFileStatus: -3,
       dataIsDirty: true,
     });
-    setProgress(null);
 
-    onChange({
-      dataIsDirty: true,
-    });
     dispatch<FetchRawPropsAction>({
       type: 'resourceVersionCreatorPage/fetchRawProps',
     });
+
   }
 
   async function onChange1(value: any) {
     // console.log(value, '#@ERWADFSASDFSADF');
-    if (!value) {
-      return onChange({
-        // resourceObject: null,
-        // resourceObjectError: {
-        //   sha1: '',
-        //   text: '',
-        // },
-        selectedFileName: '',
 
-        rawProperties: [],
-        baseProperties: [],
-        customOptionsData: [],
-        dataIsDirty: true,
-      });
-    }
-    await onChange({
-      // resourceObject: value,
-      // resourceObjectError: {sha1: '', text: ''},
-      dataIsDirty: true,
-    });
-    await dispatch<FetchRawPropsAction>({
-      type: 'resourceVersionCreatorPage/fetchRawProps',
-    });
-
-    if (value.objectId) {
-      dispatch<HandleObjectInfoAction>({
-        type: 'resourceVersionCreatorPage/handleObjectInfo',
-        payload: value.objectId,
-      });
-    }
   }
 
   function onError(value: any) {
@@ -256,6 +249,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
         // resourceObjectError: value,
         // resourceObject: null,
       },
+      caller: '234532434345234324534%#$%#$%#--=--09-090-%#$#$',
     });
   }
 
@@ -286,7 +280,12 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                   </FUpload>
                   <FRectBtn
                     type="default"
-                    onClick={() => setModalVisible(true)}
+                    onClick={() => {
+                      // setModalVisible(true)
+                      onChange({
+                        selectedFileObjectDrawerVisible: true,
+                      });
+                    }}
                   >{FUtil.I18n.message('choose_from_storage')}</FRectBtn>
                 </Space>}
 
@@ -412,8 +411,13 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
     <FDrawer
       title={'选择对象'}
-      onClose={() => setModalVisible(false)}
-      visible={modalVisible}
+      onClose={() => {
+        // setModalVisible(false)
+        onChange({
+          selectedFileObjectDrawerVisible: false,
+        })
+      }}
+      visible={resourceVersionCreatorPage.selectedFileObjectDrawerVisible}
       width={820}
     >
       <FObjectSelector

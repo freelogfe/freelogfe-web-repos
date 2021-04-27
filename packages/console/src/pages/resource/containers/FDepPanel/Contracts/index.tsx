@@ -51,6 +51,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         dependencies: dependencies,
         dataIsDirty: true,
       },
+      caller: '234532434345234324534%#$%#89127893784789123478%#$%#$#$',
     });
   }
 

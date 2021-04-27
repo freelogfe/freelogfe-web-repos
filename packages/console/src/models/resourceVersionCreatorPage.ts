@@ -79,6 +79,7 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
     resourceVersion: string;
     url: string;
   }[];
+  selectedFileObjectDrawerVisible: boolean;
 
   depRelationship: Relationships;
   dependencies: DepResources;
@@ -283,6 +284,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   selectedFileOrigin: '',
   selectedFileStatus: 0,
   selectedFileUsedResource: [],
+  selectedFileObjectDrawerVisible: false,
 
   rawProperties: [],
 
@@ -391,6 +393,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+        caller: '97293874823yu4oi234io23hjkfdsasdf',
       });
       // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
       router.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
@@ -418,6 +421,7 @@ const Model: ResourceVersionCreatorModelType = {
           description: BraftEditor.createEditorState(data.draftData.description),
           dataIsDirty: false,
         },
+        caller: '9729380900(*)(*)*)74823yu4oi234io23hjkfdsasdf',
       });
     },
     * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
@@ -513,6 +517,7 @@ const Model: ResourceVersionCreatorModelType = {
           preVersionDeps,
           description,
         },
+        caller: '97293879uoijlkll4823yu4oi234io23hjkfdsasdf',
       });
     },
     * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
@@ -535,6 +540,7 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           dataIsDirty: false,
         },
+        caller: '9734890uoreiwu==293874823yu4oi234io23hjkfdsasdf',
       });
 
     },
@@ -557,7 +563,8 @@ const Model: ResourceVersionCreatorModelType = {
           // $version: resourceVersionCreatorPage.$version,
           versionVerify: 2,
           versionErrorText: versionErrorText,
-        }
+        },
+        caller: '97293874823yu4oi234io23hjkfdsasdf++++++=',
       });
     },
     * selectLocalFile({payload: {file}}: SelectLocalFile, {call}: EffectsCommandMap) {
@@ -630,6 +637,7 @@ const Model: ResourceVersionCreatorModelType = {
             //   text: FUtil.I18n.message('error_wrongfileformat'),
             // },
           },
+          caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
         });
       }
 
@@ -643,19 +651,26 @@ const Model: ResourceVersionCreatorModelType = {
             };
           }),
         },
+        caller: '972&&&&*&&*93874823yu4oi234io23hjkfdsasdf',
       });
     },
     * addDeps({payload: {relationships, versions}}: AddDepsAction, {select, put, call}: EffectsCommandMap) {
+
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      console.log(relationships, versions, ')))))))))))()*)(*)()*)(');
+      console.log(resourceVersionCreatorPage.resourceId, ')))))))))))()*)(*)()*)(');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           dataIsDirty: true,
         },
+        caller: '97()(((((()(293874823yu4oi234io23hjkfdsasdf',
       });
 
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
 
       const existIDs: string[] = resourceVersionCreatorPage.dependencies.map<string>((dd) => dd.id);
 
@@ -674,6 +689,7 @@ const Model: ResourceVersionCreatorModelType = {
               ...relationships,
             ],
           },
+          caller: '$97&*&&293874823yu4oi234io23hjkfdsasdf',
         });
       }
 
@@ -697,6 +713,8 @@ const Model: ResourceVersionCreatorModelType = {
       const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
+      console.log(resourceVersionCreatorPage.resourceId, 'resourceVersionCreatorPage.resourceId@!!!');
+
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
       if (data1.length > 0) {
@@ -707,14 +725,6 @@ const Model: ResourceVersionCreatorModelType = {
         const {data: data2} = yield call(FApiServer.Resource.batchGetCoverageVersions, params2);
         coverageVersions = data2;
       }
-
-      // const param3: GetAllContractsParamsType = {
-      //   resourceID: resourceVersionCreatorPage.resourceId,
-      //   resourceIDs: (data as any[]).map<string>((r) => r.resourceId),
-      // };
-      // // console.log(param3, 'param3@@@@@22lk3j1qlk234jlk23');
-      // const result: GetAllContractsReturnType = yield call(getAllContracts, param3);
-      // console.log(result, 'result!@#$!@#$!@#$!@#$213412342134123');
 
       // 组织添加的依赖数据
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
@@ -762,6 +772,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
         }
       });
+      console.log('66666^^^^^^^^^^**', resourceVersionCreatorPage.resourceId, dependencies, '!@!@#$!@#$@!#$@!#$!@#$$$$$$$$$');
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -797,6 +808,7 @@ const Model: ResourceVersionCreatorModelType = {
           ],
           depActivatedID: resourceVersionCreatorPage.depActivatedID ? resourceVersionCreatorPage.depActivatedID : relationships[0].id,
         },
+        caller: '9##$#$%$7293874823yu4oi234io23hjkfdsasdf',
       });
     },
     * dddDepsByMainIDs({payload}: AddDepsByMainIDsAction, {call, put}: EffectsCommandMap) {
@@ -836,6 +848,7 @@ const Model: ResourceVersionCreatorModelType = {
           depRelationship: [],
           dependencies: [],
         },
+        caller: '972^&YUGJHGHJ93874823yu4oi234io23hjkfdsasdf',
       });
 
       const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
@@ -892,7 +905,8 @@ const Model: ResourceVersionCreatorModelType = {
               }),
             dependencies: allDepObjects,
             depRelationship: allRelationship,
-          }
+          },
+          caller: '97293^%^$^%$$874823yu4oi234io23hjkfdsasdf',
         });
       }
 
@@ -902,6 +916,8 @@ const Model: ResourceVersionCreatorModelType = {
       if (depResources.length === 0) {
         return;
       }
+
+      console.log(depResources, '###############!!!!###$@#$#@$@#');
 
       const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
         resourceNames: depResources.map<string>((dr) => dr.name).join(','),
@@ -957,6 +973,7 @@ const Model: ResourceVersionCreatorModelType = {
           dependencies,
           depActivatedID,
         },
+        caller: '972%$^%^%^%^93874823yu4oi234io23hjkfdsasdf',
       });
     },
     * importLastVersionData({payload}: ImportLastVersionDataAction, {call, select, put}: EffectsCommandMap) {
@@ -990,7 +1007,8 @@ const Model: ResourceVersionCreatorModelType = {
                   descriptionError: '',
                 };
               }),
-          }
+          },
+          caller: '972938(**&^(*&^*(^74823yu4oi234io23hjkfdsasdf',
         });
       }
 
@@ -1021,7 +1039,8 @@ const Model: ResourceVersionCreatorModelType = {
                 };
               }),
             customOptionsEditorVisible: true,
-          }
+          },
+          caller: '97293874823yu4oi234io23hjkfdsasd98890698678&*^&^&f',
         });
       }
 
@@ -1032,6 +1051,7 @@ const Model: ResourceVersionCreatorModelType = {
             depRelationship: [],
             dependencies: [],
           },
+          caller: '9729$%*(&*(&()**(W#$#$3874823yu4oi234io23hjkfdsasdf',
         });
 
         yield put<AddDepsAction>({
@@ -1060,18 +1080,21 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+        caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
       });
     },
     * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+        caller: '97%^%^%^^^293874823yu4oi234io23hjkfdsasdf',
       });
     },
   },
 
   reducers: {
-    change(state, {payload}) {
+    change(state, {payload, caller}) {
+      console.log(caller, payload, 'payloadpayloadpayload@#########');
       return {
         ...state,
         ...payload,
