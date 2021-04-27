@@ -17,7 +17,8 @@
 	},
 	"nodeNameRules": {
 		"noEmpty": "Node description cannot be empty",
-		"length": "The node description length should be 4-20 characters, which is not case sensitive."
+		"length": "The node description length should be 4-20 characters, which is not case sensitive.",
+		"prefix": "sdfgsdfg"
 	},
 	"createSuccess": "successfully created",
 	"confirmMessages": {
