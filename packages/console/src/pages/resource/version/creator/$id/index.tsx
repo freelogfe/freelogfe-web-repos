@@ -89,7 +89,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
         type: 'resourceVersionCreatorPage/leaveAndClearData',
       });
     }
-  }, [match.params.id]);
+  }, []);
 
   async function init() {
     await onChange({resourceId: match.params.id});

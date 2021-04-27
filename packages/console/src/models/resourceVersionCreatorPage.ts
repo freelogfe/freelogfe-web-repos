@@ -660,8 +660,8 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      console.log(relationships, versions, ')))))))))))()*)(*)()*)(');
-      console.log(resourceVersionCreatorPage.resourceId, ')))))))))))()*)(*)()*)(');
+      // console.log(relationships, versions, ')))))))))))()*)(*)()*)(');
+      // console.log(resourceVersionCreatorPage.resourceId, ')))))))))))()*)(*)()*)(');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -713,7 +713,7 @@ const Model: ResourceVersionCreatorModelType = {
       const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
-      console.log(resourceVersionCreatorPage.resourceId, 'resourceVersionCreatorPage.resourceId@!!!');
+      // console.log(resourceVersionCreatorPage.resourceId, 'resourceVersionCreatorPage.resourceId@!!!');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
@@ -772,7 +772,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
         }
       });
-      console.log('66666^^^^^^^^^^**', resourceVersionCreatorPage.resourceId, dependencies, '!@!@#$!@#$@!#$@!#$!@#$$$$$$$$$');
+      // console.log('66666^^^^^^^^^^**', resourceVersionCreatorPage.resourceId, dependencies, '!@!@#$!@#$@!#$@!#$!@#$$$$$$$$$');
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -917,7 +917,7 @@ const Model: ResourceVersionCreatorModelType = {
         return;
       }
 
-      console.log(depResources, '###############!!!!###$@#$#@$@#');
+      // console.log(depResources, '###############!!!!###$@#$#@$@#');
 
       const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
         resourceNames: depResources.map<string>((dr) => dr.name).join(','),
@@ -1094,7 +1094,10 @@ const Model: ResourceVersionCreatorModelType = {
 
   reducers: {
     change(state, {payload, caller}) {
-      console.log(caller, payload, 'payloadpayloadpayload@#########');
+      if (payload.resourceId === '') {
+        console.log(caller, payload, 'callercallercallercallercaller');
+      }
+
       return {
         ...state,
         ...payload,
