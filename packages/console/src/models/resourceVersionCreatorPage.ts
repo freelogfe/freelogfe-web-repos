@@ -1094,9 +1094,9 @@ const Model: ResourceVersionCreatorModelType = {
 
   reducers: {
     change(state, {payload, caller}) {
-      if (payload.resourceId === '') {
-        console.log(caller, payload, 'callercallercallercallercaller');
-      }
+      // if (payload.resourceId === '') {
+      //   console.log(caller, payload, 'callercallercallercallercaller');
+      // }
 
       return {
         ...state,

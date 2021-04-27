@@ -46,6 +46,8 @@ import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 import FTooltip from "@/components/FTooltip";
 import {RouteComponentProps} from 'react-router';
+import * as AHooks from "ahooks";
+import {ClearDataDataAction} from "@/models/marketResourcePage";
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -63,6 +65,10 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     }
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
+
+  AHooks.useUnmount(() => {
+    window.onbeforeunload = null;
+  });
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -149,12 +155,12 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
       <Prompt
         when={resourceVersionCreatorPage.promptLeavePath === '' && resourceVersionCreatorPage.dataIsDirty}
         message={(location: H.Location, action: H.Action) => {
-          // console.log(location, action, 'LAAAAL');
+          console.log(location, action, 'LAAAAL');
           // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
           dispatch<ChangeAction>({
             type: 'resourceVersionCreatorPage/change',
             payload: {
-              promptLeavePath: location.pathname,
+              promptLeavePath: location.pathname + location.search,
             },
             caller: '2345$#%%#$%#$%#$532434345234324534%#$%#$%#$%#$#$',
           });
@@ -162,7 +168,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             message: '还没有保存草稿或发行，现在离开会导致信息丢失',
             onOk() {
               // console.log('OK');
-              router.push(location.pathname);
+              router.push(location.pathname + location.search,);
             },
             onCancel() {
               // console.log('Cancel');
