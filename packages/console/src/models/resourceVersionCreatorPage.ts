@@ -182,19 +182,19 @@ export interface VerifyVersionInputAction extends AnyAction {
   // payload: string;
 }
 
-export interface SelectLocalFile extends AnyAction {
-  type: 'resourceVersionCreatorPage/selectLocalFile';
-  payload: {
-    file: RcFile;
-  };
-}
+// export interface SelectLocalFile extends AnyAction {
+//   type: 'resourceVersionCreatorPage/selectLocalFile';
+//   payload: {
+//     file: RcFile;
+//   };
+// }
 
-export interface SelectObjectFile extends AnyAction {
-  type: 'resourceVersionCreatorPage/selectObjectFile';
-  payload: {
-    objectID: string;
-  };
-}
+// export interface SelectObjectFile extends AnyAction {
+//   type: 'resourceVersionCreatorPage/selectObjectFile';
+//   payload: {
+//     objectID: string;
+//   };
+// }
 
 export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
@@ -246,8 +246,8 @@ export interface ResourceVersionCreatorModelType {
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
-    selectLocalFile: (action: SelectLocalFile, effects: EffectsCommandMap) => void;
-    selectObjectFile: (action: SelectObjectFile, effects: EffectsCommandMap) => void;
+    // selectLocalFile: (action: SelectLocalFile, effects: EffectsCommandMap) => void;
+    // selectObjectFile: (action: SelectObjectFile, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
@@ -567,51 +567,51 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '97293874823yu4oi234io23hjkfdsasdf++++++=',
       });
     },
-    * selectLocalFile({payload: {file}}: SelectLocalFile, {call}: EffectsCommandMap) {
-      if (file.size > 50 * 1024 * 1024) {
-        // setIsChecking(false);
-        // return onError({
-        //   sha1: '',
-        //   text: errorTexts.size
-        // });
-        return;
-      }
-
-      const sha1: string = yield call(getSHA1Hash, file);
-
-      const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
-        fileSha1: sha1,
-      };
-
-      const {data: data3} = yield call(FApiServer.Resource.resourceIsUsedByOther, params3);
-
-      if (!data3) {
-        // setIsChecking(false);
-        // return onError && onError({
-        //   sha1: sha1,
-        //   text: errorTexts.duplicated
-        // });
-        return;
-      }
-
-      const {data: isExists} = call(FApiServer.Storage.fileIsExist, {sha1});
-
-      if (isExists[0].isExisting) {
-
-        // return onChange1({
-        //   sha1: sha1,
-        //   name: file.name,
-        //   size: file.size,
-        //   path: '',
-        //   type: resourceVersionCreatorPage.resourceType,
-        //   time: '',
-        // });
-        return;
-      }
-    },
-    * selectObjectFile({}: SelectObjectFile, {}: EffectsCommandMap) {
-
-    },
+    // * selectLocalFile({payload: {file}}: SelectLocalFile, {call}: EffectsCommandMap) {
+    //   if (file.size > 50 * 1024 * 1024) {
+    //     // setIsChecking(false);
+    //     // return onError({
+    //     //   sha1: '',
+    //     //   text: errorTexts.size
+    //     // });
+    //     return;
+    //   }
+    //
+    //   const sha1: string = yield call(getSHA1Hash, file);
+    //
+    //   const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
+    //     fileSha1: sha1,
+    //   };
+    //
+    //   const {data: data3} = yield call(FApiServer.Resource.resourceIsUsedByOther, params3);
+    //
+    //   if (!data3) {
+    //     // setIsChecking(false);
+    //     // return onError && onError({
+    //     //   sha1: sha1,
+    //     //   text: errorTexts.duplicated
+    //     // });
+    //     return;
+    //   }
+    //
+    //   const {data: isExists} = call(FApiServer.Storage.fileIsExist, {sha1});
+    //
+    //   if (isExists[0].isExisting) {
+    //
+    //     // return onChange1({
+    //     //   sha1: sha1,
+    //     //   name: file.name,
+    //     //   size: file.size,
+    //     //   path: '',
+    //     //   type: resourceVersionCreatorPage.resourceType,
+    //     //   time: '',
+    //     // });
+    //     return;
+    //   }
+    // },
+    // * selectObjectFile({}: SelectObjectFile, {}: EffectsCommandMap) {
+    //
+    // },
     * fetchRawProps({}: FetchRawPropsAction, {select, put, call}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
