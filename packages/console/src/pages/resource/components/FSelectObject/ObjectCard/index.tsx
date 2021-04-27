@@ -6,13 +6,13 @@ import {Progress} from 'antd';
 import FUtil from "@/utils";
 
 interface ObjectCardProps {
-  readonly resourceObject: {
-    readonly name: string;
+  resourceObject: {
+    name: string;
     // readonly size: number;
-    readonly path: string;
+    path: string;
   };
-  readonly progress: number | null;
-  readonly onClickDelete?: () => void;
+  progress: number | null;
+  onClickDelete?: () => void;
 }
 
 export default function ({resourceObject, progress = null, onClickDelete}: ObjectCardProps) {
@@ -31,7 +31,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
               ? <FContentText
                 className={styles.infoSize}
                 type="additional1"
-                text={resourceObject.path ? `存储空间/${resourceObject.path}` : '本地上传'}
+                text={resourceObject.path}
               />
               : (<>
                 <span style={{paddingRight: 10}}>{progress}%</span>

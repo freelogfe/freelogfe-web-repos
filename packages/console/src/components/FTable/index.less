@@ -1,3 +1,22 @@
+@import '../../config.less';
+
 .styles {
 
+  :global(.ant-table) {
+    background-color: transparent;
+  }
+
+  :global(.ant-table-thead) {
+    & > tr {
+      & > th {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.rowClassName {
+  & > td {
+    min-height: 70px;
+  }
 }

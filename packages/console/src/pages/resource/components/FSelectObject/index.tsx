@@ -11,7 +11,7 @@ import {getSHA1Hash} from "@/utils/tools";
 import FDrawer from "@/components/FDrawer";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
-import {FRectBtn} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState, UserModelState} from "@/models/connect";
 import {
@@ -21,6 +21,7 @@ import {
   SelectLocalFile
 } from "@/models/resourceVersionCreatorPage";
 import FTable from "@/components/FTable";
+import {FContentText} from '@/components/FText';
 
 const errorTexts = {
   duplicated: FUtil.I18n.message('resource_exist'),
@@ -60,7 +61,7 @@ let uploadCancelHandler: any = null;
 function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObject) {
 
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
-  const [isChecking, setIsChecking] = React.useState<boolean>(false);
+  // const [isChecking, setIsChecking] = React.useState<boolean>(false);
   // const [errorT, setErrorT] = React.useState<string>('');
   const [progress, setProgress] = React.useState<number | null>(null);
 
@@ -103,14 +104,18 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
   }
 
   async function beforeUpload(file: RcFile) {
-    setIsChecking(true);
+    // setIsChecking(true);
     // console.log(file.size, 50 * 1024 * 1024 * 1024, '########');
     if (file.size > 50 * 1024 * 1024) {
-      setIsChecking(false);
+      // setIsChecking(false);
       return onChange({
         selectedFileStatus: 1,
       });
     }
+
+    onChange({
+      selectedFileStatus: -1,
+    });
 
     const sha1: string = await getSHA1Hash(file);
 
@@ -119,12 +124,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     };
 
     const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
-    console.log(data3, 'data3data3data3data3data3@#########');
+    // console.log(data3, 'data3data3data3data3data3@#########');
     if (data3.length > 0) {
-      setIsChecking(false);
-      console.log(data3, 'data3@@#$@#$#$@#');
+      // console.log(data3, 'data3@@#$@#$#$@#');
       return onChange({
-        selectedFileStatus: 3,
+        selectedFileName: file.name,
+        selectedFileSha1: sha1,
+        selectedFileOrigin: '本地上传',
+        selectedFileStatus: data3[0].userId === user.info?.userId ? 3 : 4,
         selectedFileUsedResource: data3.map((d: any) => {
           const isSelf: boolean = d.userId === user.info?.userId;
           return d.resourceVersions.map((v: any) => {
@@ -149,41 +156,32 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     }
 
     const {data: isExists}: any = await FApiServer.Storage.fileIsExist({sha1});
-    // console.log(isExist[0], 'datadata23089ujsd');
 
     if (isExists[0].isExisting) {
-      setIsChecking(false);
-      // return onChange1({
-      //   sha1: sha1,
-      //   name: file.name,
-      //   size: file.size,
-      //   path: '',
-      //   type: resourceVersionCreatorPage.resourceType,
-      //   time: '',
-      // });
-      return onChange({
+      onChange({
         selectedFileName: file.name,
         selectedFileSha1: sha1,
         selectedFileOrigin: '本地上传',
-        selectedFileStatus: -2,
+        selectedFileStatus: -3,
       });
+
+      onChange({
+        dataIsDirty: true,
+      });
+      dispatch<FetchRawPropsAction>({
+        type: 'resourceVersionCreatorPage/fetchRawProps',
+      });
+      return;
     }
 
-    // onChange1({
-    //   sha1: '',
-    //   name: file.name,
-    //   size: file.size,
-    //   path: '',
-    //   type: resourceVersionCreatorPage.resourceType,
-    //   time: '',
-    // });
-
+    onChange({
+      selectedFileStatus: -2,
+    });
     const [promise, cancel] = await FApiServer.Storage.uploadFile({
       file: file,
       resourceType: resourceVersionCreatorPage.resourceType,
     }, {
       onUploadProgress(progressEvent: any) {
-        // console.log(progressEvent, 'PPPPPPPPPEEEEEEEEE');
         setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
       },
     }, true);
@@ -200,21 +198,21 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
     }
 
-    // onChange1({
-    //   sha1: sha1,
-    //   name: file.name,
-    //   size: file.size,
-    //   path: '',
-    //   type: resourceVersionCreatorPage.resourceType,
-    //   time: '',
-    // });
     onChange({
       selectedFileName: file.name,
       selectedFileSha1: sha1,
       selectedFileOrigin: '本地上传',
-      selectedFileStatus: -2,
+      selectedFileStatus: -3,
+      dataIsDirty: true,
     });
     setProgress(null);
+
+    onChange({
+      dataIsDirty: true,
+    });
+    dispatch<FetchRawPropsAction>({
+      type: 'resourceVersionCreatorPage/fetchRawProps',
+    });
   }
 
   async function onChange1(value: any) {
@@ -261,13 +259,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     });
   }
 
+
   return (<div>
     {
-      !resourceVersionCreatorPage.selectedFileName
+      resourceVersionCreatorPage.selectedFileStatus !== -3 && resourceVersionCreatorPage.selectedFileStatus !== -2
         ? (<div>
-          <Space size={50}>
+          <Space size={50} style={{height: 38}}>
             {
-              isChecking
+              resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
                   <span>{FUtil.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
                   <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
@@ -275,7 +274,10 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                 : <Space size={15}>
                   <FUpload
                     // accept={resourceType === 'image' ? 'image/*' : '*'}
-                    beforeUpload={beforeUpload}
+                    beforeUpload={(file, FileList) => {
+                      beforeUpload(file);
+                      return false;
+                    }}
                     showUploadList={false}
                   >
                     <FRectBtn
@@ -290,38 +292,101 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
             {
               resourceVersionCreatorPage.selectedFileStatus === 1 &&
-              <div className={styles.objectErrorInfo}>
-                <span>{errorTexts.size}</span>
-              </div>
+              <Space>
+                <span className={styles.objectErrorInfo}>{errorTexts.size}</span>
+              </Space>
+            }
+
+            {
+              resourceVersionCreatorPage.selectedFileStatus === 2 &&
+              <Space>
+                <span className={styles.objectErrorInfo}>{errorTexts.resourceType}</span>
+              </Space>
+            }
+
+            {
+              resourceVersionCreatorPage.selectedFileStatus === 3 &&
+              <Space size={10}>
+                <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
+                <FTextBtn onClick={() => {
+                  onChange({
+                    // resourceObject: value,
+                    // resourceObjectError: {sha1: '', text: ''},
+                    selectedFileStatus: -3,
+                    dataIsDirty: true,
+                  });
+                  dispatch<FetchRawPropsAction>({
+                    type: 'resourceVersionCreatorPage/fetchRawProps',
+                  });
+                }}>继续上传/导入</FTextBtn>
+              </Space>
+            }
+
+            {
+              resourceVersionCreatorPage.selectedFileStatus === 4 &&
+              <Space>
+                <span className={styles.objectErrorInfo}>{errorTexts.duplicated}</span>
+              </Space>
             }
           </Space>
-          <div>
-            <FTable
-              columns={[
-                {
-                  title: '资源',
-                  dataIndex: 'resource',
-                  width: 400,
-                },
-                {
-                  title: '类型',
-                  dataIndex: 'type',
-                  width: 100,
-                },
-                {
-                  title: '版本',
-                  dataIndex: 'version',
-                },
-                {
-                  title: '操作',
-                  dataIndex: 'operation',
-                },
-              ]}
-              dataSource={[
-                {}
-              ]}
-            />
-          </div>
+          {
+            (resourceVersionCreatorPage.selectedFileStatus === 3 || resourceVersionCreatorPage.selectedFileStatus === 4) && (<>
+              <div style={{height: 20}}/>
+              <div className={styles.tableWrap}>
+                <FTable
+                  rowClassName={styles.tableRowClassName}
+                  scroll={{y: 350}}
+                  columns={[
+                    {
+                      title: '资源',
+                      dataIndex: 'resourceName',
+                      width: 400,
+                      render(value: any, record: any, index: number) {
+                        return (<FContentText
+                          text={record.resourceName}
+                          style={{maxWidth: 370}}
+                        />);
+                      }
+                    },
+                    {
+                      title: '类型',
+                      dataIndex: 'resourceType',
+                      width: 100,
+                      render(value: any, record: any, index: number) {
+                        return (<FContentText
+                          text={record.resourceType}
+                        />);
+                      },
+                    },
+                    {
+                      title: '版本',
+                      dataIndex: 'resourceVersion',
+                      render(value: any, record: any, index: number) {
+                        return (<FContentText
+                          text={record.resourceVersion}
+                        />);
+                      },
+                    },
+                    {
+                      title: '操作',
+                      dataIndex: 'operation',
+                      render(value: any, record: any, index: number) {
+                        return (<FTextBtn onClick={() => {
+                          window.open(record.url)
+                        }}>查看</FTextBtn>)
+                      },
+                    },
+                  ]}
+                  dataSource={resourceVersionCreatorPage.selectedFileUsedResource.map((sfur) => {
+                    return {
+                      key: sfur.url,
+                      ...sfur,
+                    };
+                  })}
+                />
+              </div>
+            </>)
+          }
 
         </div>)
         : (<FObjectCard
