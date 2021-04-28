@@ -50,18 +50,20 @@ export interface MarketModelType {
   };
 }
 
+export const marketInitData: MarketPageModelState = {
+  tabValue: '1',
+  // pageCurrent: 1,
+  resourceType: '-1',
+  inputText: '',
+  dataSource: [],
+  totalItem: -1,
+};
+
 const Model: MarketModelType = {
 
   namespace: 'marketPage',
 
-  state: {
-    tabValue: '1',
-    // pageCurrent: 1,
-    resourceType: '-1',
-    inputText: '',
-    dataSource: [],
-    totalItem: -1,
-  },
+  state: marketInitData,
 
   effects: {
     * changeStates({payload}: ChangeStatesAction, {put, select}: EffectsCommandMap) {

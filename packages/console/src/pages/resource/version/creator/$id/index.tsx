@@ -249,8 +249,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
           </FFormLayout.FBlock>
         </FFormLayout>
       </FLeftSiderLayout>
-
-
     </>
   );
 }

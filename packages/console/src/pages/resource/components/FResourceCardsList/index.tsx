@@ -80,11 +80,6 @@ function FResourceCardsList({
     setStatusText(selectedStatus?.text || selectedStatus?.value);
   }, [resourceStatus]);
 
-  // function onChangeTab(value: '1' | '2') {
-  //   if (value === '2') {
-  //   }
-  // }
-
   return (<>
     <div style={{height: 40}}/>
     <div className={styles.filter}>

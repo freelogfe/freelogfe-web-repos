@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from '@/models/connect';
 import styles from '@/pages/market/index/index.less';
-import {ChangeStatesAction, FetchDataSourceAction} from '@/models/marketPage';
+import {ChangeAction, ChangeStatesAction, FetchDataSourceAction, marketInitData} from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
@@ -10,6 +10,8 @@ import {resourceTypes} from '@/utils/globals';
 import {router} from "umi";
 import FNoDataTip from "@/components/FNoDataTip";
 import FUtil from "@/utils";
+import FLoadingTip from "@/components/FLoadingTip";
+import * as AHooks from 'ahooks';
 
 const filters = [{
   value: '-1',
@@ -18,24 +20,31 @@ const filters = [{
 
 interface ResourcesProps {
   dispatch: Dispatch;
-  market: MarketPageModelState,
+  marketPage: MarketPageModelState,
 }
 
-function Resources({dispatch, market}: ResourcesProps) {
+function Resources({dispatch, marketPage}: ResourcesProps) {
+
+  AHooks.useUnmount(() => {
+    dispatch<ChangeAction>({
+      type: 'marketPage/change',
+      payload: marketInitData,
+    });
+  });
 
   return (<>
     <div style={{height: 30}}/>
     <div className={styles.filter}>
       <Labels
         options={filters}
-        value={market.resourceType}
+        value={marketPage.resourceType}
         onChange={(value) => dispatch<ChangeStatesAction>({
           type: 'marketPage/changeStates',
           payload: {resourceType: value as string},
         })}
       />
       <FInput
-        value={market.inputText}
+        value={marketPage.inputText}
         debounce={300}
         onDebounceChange={(value) => dispatch<ChangeStatesAction>({
           type: 'marketPage/changeStates',
@@ -49,12 +58,16 @@ function Resources({dispatch, market}: ResourcesProps) {
     </div>
 
     {
-      market.dataSource.length > 0
+      marketPage.totalItem === -1 && (<FLoadingTip height={'calc(100vh - 140px - 50px)'}/>)
+    }
+
+    {
+      marketPage.dataSource.length > 0
         ? (<>
           <div style={{height: 30}}/>
           <div className={styles.Content}>
             {
-              market.dataSource.map((resource: any) => (
+              marketPage.dataSource.map((resource: any) => (
                 <FResourceCard
                   key={resource.id}
                   resource={resource}
@@ -75,7 +88,7 @@ function Resources({dispatch, market}: ResourcesProps) {
           </div>
 
           {
-            market.totalItem > market.dataSource.length && (<>
+            marketPage.totalItem > marketPage.dataSource.length && (<>
               <div style={{height: 100}}/>
               <div className={styles.bottom}>
                 <Button
@@ -90,17 +103,19 @@ function Resources({dispatch, market}: ResourcesProps) {
           }
           <div style={{height: 200}}/>
         </>)
-        : (<FNoDataTip
+        : marketPage.totalItem === 0
+        ? (<FNoDataTip
           height={'calc(100vh - 275px)'}
           tipText={'没有符合条件的资源'}
         />)
+        : null
     }
 
   </>);
 }
 
 export default connect(({marketPage}: ConnectState) => ({
-  market: marketPage,
+  marketPage: marketPage,
 }))(Resources);
 
 interface Labels {
