@@ -11,6 +11,7 @@ import * as semver from 'semver';
 import moment from "moment";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
+import fConfirmModal from "@/components/fConfirmModal";
 // import {RcFile} from "antd/lib/upload/interface";
 // import {getSHA1Hash} from "@/utils/tools";
 
@@ -1103,4 +1104,30 @@ async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsT
   });
 
   return (await Promise.all(allPromises)).flat();
+}
+
+function promiseConfirm(keyList: string[]) {
+  return new Promise((resolve) => {
+    fConfirmModal({
+      message: `正在从上一个版本中导入信息，包含{KeyNumber}个同名键（key）：${keyList.join()}`,
+      okText: FUtil.I18n.message('replace_key_value'),
+      cancelText: FUtil.I18n.message('skip'),
+      onOk() {
+        resolve(true);
+      },
+      onCancel() {
+        resolve(false);
+      },
+    });
+  });
+}
+
+function repeatedKeys(str1: string[], str2: string[]): string[] {
+  const keys: string[] = [];
+  for (const str of str1) {
+    if (str2.includes(str)) {
+      keys.push(str);
+    }
+  }
+  return keys;
 }
