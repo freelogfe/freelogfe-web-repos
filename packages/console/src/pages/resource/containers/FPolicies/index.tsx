@@ -87,9 +87,6 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
               onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
             />))
           }
-          {/*<div>*/}
-          {/*  */}
-          {/*</div>*/}
         </div>)
     }
 

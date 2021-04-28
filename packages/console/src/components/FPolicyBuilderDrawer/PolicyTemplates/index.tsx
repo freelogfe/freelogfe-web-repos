@@ -12,25 +12,10 @@ interface PolicyTemplatesProps {
 const text1: string = `for public initial[active]:
   terminate`;
 
-const text2: string =
-  `for public:
-  escrow account acct
-  custom event acceptor.customEvent
-
+const text2: string = `for public
   initial:
-    recontractable
-    proceed to auth on acct exceed 1 feather
-  auth:
-    presentable
-    recontractable
-    active
-    proceed to refund on acct.confiscated
-  refund:
-    recontractable
-    proceed to finish on acct.refunded
-  finish:
-    recontractable
-    terminate`;
+    ~freelog.TransactionEvent("100","self.account") => finish finish[active]:
+      terminate`;
 
 const policiesText: string[] = [];
 
