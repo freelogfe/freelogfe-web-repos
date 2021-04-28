@@ -14,7 +14,7 @@ import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {FWarning} from '@/components/FIcons';
-import {router} from "umi";
+// import {router} from "umi";
 import {Dispatch, connect} from 'dva';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";

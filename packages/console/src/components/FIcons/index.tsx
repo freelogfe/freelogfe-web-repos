@@ -39,6 +39,7 @@ import FImport from './FImport';
 import FCode from './FCode';
 import FNodes from './FNodes';
 import FUp from './FUp';
+import FUser from './FUser';
 
 export {
   FAdd,
@@ -80,4 +81,5 @@ export {
   FCode,
   FNodes,
   FUp,
+  FUser,
 };
