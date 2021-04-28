@@ -73,103 +73,105 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
 
   return <div className={styles.styles}>
     {
-      resourceVersionCreatorPage.depRelationship.map((i) => {
-          const rrr: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies
-            .find((dds) => dds.id === i.id) as ResourceVersionCreatorPageModelState['dependencies'][number];
-          // console.log(rrr.status, '######');
-          return (<div key={rrr.id}>
-            <div
-              onClick={() => {
-                onChangeActiveID(rrr.id);
-              }}
-              className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}
-            >
-              <div>
-                <div className={styles.title}>
-                  <FTextButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (rrr.status === 3) {
-                        return goToObject(rrr.id);
-                      }
-                      return window.open(FUtil.LinkTo.resourceDetails({
-                        resourceID: rrr.id,
-                      }));
-                    }}
-                  >
-                    <FContentText
-                      className={styles.titleText}
-                      text={rrr.title}
-                      singleRow
-                    />
-                  </FTextButton>
-                  <div style={{width: 5}}/>
-                  {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
-                  {rrr.status !== 1 && rrr.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
-                </div>
-                <div style={{height: 9}}/>
-                <FContentText type="additional2">
-                  <div>
-                    {/*{rrr.resourceType || '暂无类型'}*/}
-                    {rrr.resourceType}
-                    {rrr.resourceType ? ' | ' : ''}
-                    {
-                      rrr.versions?.length === 0
-                        ? <span style={{paddingRight: 5}}>暂无版本</span>
-                        : <>
+      [...resourceVersionCreatorPage.depRelationship]
+        .reverse()
+        .map((i) => {
+            const rrr: ResourceVersionCreatorPageModelState['dependencies'][number] = resourceVersionCreatorPage.dependencies
+              .find((dds) => dds.id === i.id) as ResourceVersionCreatorPageModelState['dependencies'][number];
+            // console.log(rrr.status, '######');
+            return (<div key={rrr.id}>
+              <div
+                onClick={() => {
+                  onChangeActiveID(rrr.id);
+                }}
+                className={styles.DepPanelNav + ' ' + (rrr.id === resourceVersionCreatorPage.depActivatedID ? styles.DepPanelNavActive : '')}
+              >
+                <div>
+                  <div className={styles.title}>
+                    <FTextButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (rrr.status === 3) {
+                          return goToObject(rrr.id);
+                        }
+                        return window.open(FUtil.LinkTo.resourceDetails({
+                          resourceID: rrr.id,
+                        }));
+                      }}
+                    >
+                      <FContentText
+                        className={styles.titleText}
+                        text={rrr.title}
+                        singleRow
+                      />
+                    </FTextButton>
+                    <div style={{width: 5}}/>
+                    {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
+                    {rrr.status !== 1 && rrr.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
+                  </div>
+                  <div style={{height: 9}}/>
+                  <FContentText type="additional2">
+                    <div>
+                      {/*{rrr.resourceType || '暂无类型'}*/}
+                      {rrr.resourceType}
+                      {rrr.resourceType ? ' | ' : ''}
+                      {
+                        rrr.versions?.length === 0
+                          ? <span style={{paddingRight: 5}}>暂无版本</span>
+                          : <>
                     <span
                       style={{paddingRight: 5}}>{FUtil.I18n.message('version_range')}：{rrr.versionRange}</span>
-                          <FVersionHandlerPopover
-                            value={rrr.versionRange}
-                            versionOptions={rrr.versions}
-                            onChange={(version) => onChangeVersion(version, i.id)}
-                          ><FEdit style={{fontSize: 14}}/></FVersionHandlerPopover>
-                        </>
-                    }
-                  </div>
-                </FContentText>
-                <>
-                  <div style={{height: 5}}/>
-                  <div className={styles.DepPanelLabels}>
-                    {
-                      !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
-                        .filter((k) => k.checked)
-                        .map((j) => (<label
-                          key={j.id}
-                          className={styles.labelInfo}
-                        >{j.title}</label>))
-                    }
-                    {
-                      rrr.upthrow && (<label
-                        className={styles.labelError}
-                      >上抛</label>)
-                    }
-                  </div>
-                </>
+                            <FVersionHandlerPopover
+                              value={rrr.versionRange}
+                              versionOptions={rrr.versions}
+                              onChange={(version) => onChangeVersion(version, i.id)}
+                            ><FEdit style={{fontSize: 14}}/></FVersionHandlerPopover>
+                          </>
+                      }
+                    </div>
+                  </FContentText>
+                  <>
+                    <div style={{height: 5}}/>
+                    <div className={styles.DepPanelLabels}>
+                      {
+                        !rrr.upthrow && [...rrr.enableReuseContracts, ...rrr.enabledPolicies]
+                          .filter((k) => k.checked)
+                          .map((j) => (<label
+                            key={j.id}
+                            className={styles.labelInfo}
+                          >{j.title}</label>))
+                      }
+                      {
+                        rrr.upthrow && (<label
+                          className={styles.labelError}
+                        >上抛</label>)
+                      }
+                    </div>
+                  </>
+                </div>
+                <FCircleBtn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    return onDeleteResource(i.id)
+                  }}
+                  type="danger"
+                />
               </div>
-              <FCircleBtn
-                onClick={(e) => {
-                  e.stopPropagation();
-                  return onDeleteResource(i.id)
+
+              <SmallNav
+                // dataSource={i.unresolved || []}
+                dataSource={i.children.map((k) => {
+                  return resourceVersionCreatorPage.dependencies.find((l) => k.id === l.id) as DepResources[number];
+                })}
+                activatedID={resourceVersionCreatorPage.depActivatedID}
+                onClick={(resourceID) => {
+                  onChangeActiveID(resourceID);
                 }}
-                type="danger"
               />
-            </div>
 
-            <SmallNav
-              // dataSource={i.unresolved || []}
-              dataSource={i.children.map((k) => {
-                return resourceVersionCreatorPage.dependencies.find((l) => k.id === l.id) as DepResources[number];
-              })}
-              activatedID={resourceVersionCreatorPage.depActivatedID}
-              onClick={(resourceID) => {
-                onChangeActiveID(resourceID);
-              }}
-            />
-
-          </div>);
-        }
-      )}
+            </div>);
+          }
+        )}
   </div>
 }
 

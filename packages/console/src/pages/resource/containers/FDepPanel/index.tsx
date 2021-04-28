@@ -29,10 +29,6 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
 
   return (<>
     <Space size={15}>
-      {/*<FNormalButton*/}
-      {/*  onClick={() => setModalVisible(true)}*/}
-      {/*  theme="grey"*/}
-      {/*>{FUtil.I18n.message('add_rely_resource')}</FNormalButton>*/}
       <FRectBtn
         onClick={() => setModalVisible(true)}
         type="default"
@@ -103,7 +99,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
               </div>)
             }
             {
-              (resource?.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)
+              (resource?.status === 1 || (resource?.status === 0 && (resource?.enableReuseContracts.length !== 0 || resource.enabledPolicies.length !== 0)))
               && (<Space
                 style={{width: '100%'}}
                 size={25}

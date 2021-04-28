@@ -11,8 +11,8 @@ import * as semver from 'semver';
 import moment from "moment";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
-import {RcFile} from "antd/lib/upload/interface";
-import {getSHA1Hash} from "@/utils/tools";
+// import {RcFile} from "antd/lib/upload/interface";
+// import {getSHA1Hash} from "@/utils/tools";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -182,20 +182,6 @@ export interface VerifyVersionInputAction extends AnyAction {
   // payload: string;
 }
 
-// export interface SelectLocalFile extends AnyAction {
-//   type: 'resourceVersionCreatorPage/selectLocalFile';
-//   payload: {
-//     file: RcFile;
-//   };
-// }
-
-// export interface SelectObjectFile extends AnyAction {
-//   type: 'resourceVersionCreatorPage/selectObjectFile';
-//   payload: {
-//     objectID: string;
-//   };
-// }
-
 export interface FetchRawPropsAction extends AnyAction {
   type: 'resourceVersionCreatorPage/fetchRawProps';
 }
@@ -232,10 +218,6 @@ export interface LeaveAndClearDataAction extends AnyAction {
   type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
 }
 
-// export interface GoToResourceDetailsBySha1 extends AnyAction {
-//   type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1';
-// }
-
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
@@ -246,8 +228,6 @@ export interface ResourceVersionCreatorModelType {
     saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
-    // selectLocalFile: (action: SelectLocalFile, effects: EffectsCommandMap) => void;
-    // selectObjectFile: (action: SelectObjectFile, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
     handleObjectInfo: (action: HandleObjectInfoAction, effects: EffectsCommandMap) => void;
     addDeps: (action: AddDepsAction, effects: EffectsCommandMap) => void;
@@ -274,11 +254,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   versionVerify: 0,
   versionErrorText: '',
 
-  // resourceObject: null,
-  // resourceObjectError: {
-  //   sha1: '',
-  //   text: '',
-  // },
   selectedFileName: '',
   selectedFileSha1: '',
   selectedFileOrigin: '',
@@ -567,51 +542,6 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '97293874823yu4oi234io23hjkfdsasdf++++++=',
       });
     },
-    // * selectLocalFile({payload: {file}}: SelectLocalFile, {call}: EffectsCommandMap) {
-    //   if (file.size > 50 * 1024 * 1024) {
-    //     // setIsChecking(false);
-    //     // return onError({
-    //     //   sha1: '',
-    //     //   text: errorTexts.size
-    //     // });
-    //     return;
-    //   }
-    //
-    //   const sha1: string = yield call(getSHA1Hash, file);
-    //
-    //   const params3: Parameters<typeof FApiServer.Resource.resourceIsUsedByOther>[0] = {
-    //     fileSha1: sha1,
-    //   };
-    //
-    //   const {data: data3} = yield call(FApiServer.Resource.resourceIsUsedByOther, params3);
-    //
-    //   if (!data3) {
-    //     // setIsChecking(false);
-    //     // return onError && onError({
-    //     //   sha1: sha1,
-    //     //   text: errorTexts.duplicated
-    //     // });
-    //     return;
-    //   }
-    //
-    //   const {data: isExists} = call(FApiServer.Storage.fileIsExist, {sha1});
-    //
-    //   if (isExists[0].isExisting) {
-    //
-    //     // return onChange1({
-    //     //   sha1: sha1,
-    //     //   name: file.name,
-    //     //   size: file.size,
-    //     //   path: '',
-    //     //   type: resourceVersionCreatorPage.resourceType,
-    //     //   time: '',
-    //     // });
-    //     return;
-    //   }
-    // },
-    // * selectObjectFile({}: SelectObjectFile, {}: EffectsCommandMap) {
-    //
-    // },
     * fetchRawProps({}: FetchRawPropsAction, {select, put, call}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
@@ -631,11 +561,6 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             rawProperties: [],
-            // resourceObject: null,
-            // resourceObjectError: {
-            //   sha1: resourceVersionCreatorPage.resourceObject.sha1,
-            //   text: FUtil.I18n.message('error_wrongfileformat'),
-            // },
           },
           caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
         });
@@ -661,7 +586,6 @@ const Model: ResourceVersionCreatorModelType = {
       }));
 
       // console.log(relationships, versions, ')))))))))))()*)(*)()*)(');
-      // console.log(resourceVersionCreatorPage.resourceId, ')))))))))))()*)(*)()*)(');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -670,7 +594,6 @@ const Model: ResourceVersionCreatorModelType = {
         },
         caller: '97()(((((()(293874823yu4oi234io23hjkfdsasdf',
       });
-
 
       const existIDs: string[] = resourceVersionCreatorPage.dependencies.map<string>((dd) => dd.id);
 
@@ -685,8 +608,8 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             depRelationship: [
-              ...resourceVersionCreatorPage.depRelationship,
               ...relationships,
+              ...resourceVersionCreatorPage.depRelationship,
             ],
           },
           caller: '$97&*&&293874823yu4oi234io23hjkfdsasdf',
@@ -712,8 +635,6 @@ const Model: ResourceVersionCreatorModelType = {
       };
       const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
-
-      // console.log(resourceVersionCreatorPage.resourceId, 'resourceVersionCreatorPage.resourceId@!!!');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
@@ -772,7 +693,6 @@ const Model: ResourceVersionCreatorModelType = {
             }),
         }
       });
-      // console.log('66666^^^^^^^^^^**', resourceVersionCreatorPage.resourceId, dependencies, '!@!@#$!@#$@!#$@!#$!@#$$$$$$$$$');
 
       // 处理循环依赖的资源
       const params2: BatchCycleDependencyCheckParams = {
@@ -791,8 +711,8 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           depRelationship: [
-            ...resourceVersionCreatorPage.depRelationship,
             ...relationships,
+            ...resourceVersionCreatorPage.depRelationship,
           ],
           dependencies: [
             ...resourceVersionCreatorPage.dependencies,
@@ -850,6 +770,44 @@ const Model: ResourceVersionCreatorModelType = {
         },
         caller: '972^&YUGJHGHJ93874823yu4oi234io23hjkfdsasdf',
       });
+
+      const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
+      // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
+
+      if (depResources.length > 0) {
+
+        const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+          resourceNames: depResources.map<string>((dr) => dr.name).join(','),
+        };
+        const {data: data2} = yield call(FApiServer.Resource.batchInfo, params2);
+        // console.log(data2, '#ASGDFASDF');
+        const relations = data2.map((dd: any) => {
+          return {
+            id: dd.resourceId,
+            children: dd.baseUpcastResources.map((bur: any) => {
+              return {
+                id: bur.resourceId,
+              }
+            }),
+          };
+        });
+
+        const versions = depResources.map((dr) => {
+          const resource = data2.find((d2: any) => d2.resourceName);
+          return {
+            id: resource.resourceId,
+            versionRange: dr.versionRange,
+          };
+        });
+
+        yield put<AddDepsAction>({
+          type: 'addDeps',
+          payload: {
+            relationships: relations,
+            versions: versions,
+          },
+        });
+      }
 
       const depObjects: any[] = data.dependencies.filter((dd: any) => dd.type === 'object');
       // console.log(depObjects, '9023jlkdfsj');
@@ -909,47 +867,6 @@ const Model: ResourceVersionCreatorModelType = {
           caller: '97293^%^$^%$$874823yu4oi234io23hjkfdsasdf',
         });
       }
-
-      const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => dd.type === 'resource');
-      // const depResources: { name: string; versionRange: string; }[] = data.dependencies.filter((dd: any) => true);
-
-      if (depResources.length === 0) {
-        return;
-      }
-
-      // console.log(depResources, '###############!!!!###$@#$#@$@#');
-
-      const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
-        resourceNames: depResources.map<string>((dr) => dr.name).join(','),
-      };
-      const {data: data2} = yield call(FApiServer.Resource.batchInfo, params2);
-      // console.log(data2, '#ASGDFASDF');
-      const relations = data2.map((dd: any) => {
-        return {
-          id: dd.resourceId,
-          children: dd.baseUpcastResources.map((bur: any) => {
-            return {
-              id: bur.resourceId,
-            }
-          }),
-        };
-      });
-
-      const versions = depResources.map((dr) => {
-        const resource = data2.find((d2: any) => d2.resourceName);
-        return {
-          id: resource.resourceId,
-          versionRange: dr.versionRange,
-        };
-      });
-
-      yield put<AddDepsAction>({
-        type: 'addDeps',
-        payload: {
-          relationships: relations,
-          versions: versions,
-        },
-      });
     },
     * deleteDependencyByID({payload}: DeleteDependencyByIDAction, {select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({

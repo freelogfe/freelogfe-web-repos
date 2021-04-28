@@ -18,7 +18,7 @@ import {
   ChangeAction,
   FetchRawPropsAction,
   HandleObjectInfoAction,
-  SelectLocalFile
+  // SelectLocalFile
 } from "@/models/resourceVersionCreatorPage";
 import FTable from "@/components/FTable";
 import {FContentText} from '@/components/FText';
@@ -265,7 +265,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                   <span>{FUtil.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
                   <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
-                : <Space size={15}>
+                : (<Space size={15}>
                   <FUpload
                     // accept={resourceType === 'image' ? 'image/*' : '*'}
                     beforeUpload={(file, FileList) => {
@@ -287,25 +287,26 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                       });
                     }}
                   >{FUtil.I18n.message('choose_from_storage')}</FRectBtn>
-                </Space>}
+                </Space>)
+            }
 
             {
               resourceVersionCreatorPage.selectedFileStatus === 1 &&
-              <Space>
+              (<Space>
                 <span className={styles.objectErrorInfo}>{errorTexts.size}</span>
-              </Space>
+              </Space>)
             }
 
             {
               resourceVersionCreatorPage.selectedFileStatus === 2 &&
-              <Space>
+              (<Space>
                 <span className={styles.objectErrorInfo}>{errorTexts.resourceType}</span>
-              </Space>
+              </Space>)
             }
 
             {
               resourceVersionCreatorPage.selectedFileStatus === 3 &&
-              <Space size={10}>
+              (<Space size={10}>
                 <span className={styles.objectErrorInfo}>该文件/对象已经发行过。</span>
                 <FTextBtn onClick={() => {
                   onChange({
@@ -318,14 +319,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                     type: 'resourceVersionCreatorPage/fetchRawProps',
                   });
                 }}>继续上传/导入</FTextBtn>
-              </Space>
+              </Space>)
             }
 
             {
               resourceVersionCreatorPage.selectedFileStatus === 4 &&
-              <Space>
+              (<Space>
                 <span className={styles.objectErrorInfo}>{errorTexts.duplicated}</span>
-              </Space>
+              </Space>)
             }
           </Space>
           {

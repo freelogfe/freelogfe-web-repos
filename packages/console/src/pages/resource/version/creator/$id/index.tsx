@@ -140,8 +140,8 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     // 选择的文件对象
     || resourceVersionCreatorPage.selectedFileStatus !== -3
     // 依赖
-    || !!resourceVersionCreatorPage.dependencies.find((dd) => {
-      return !dd.upthrow && !dd.enableReuseContracts.find((erc) => erc.checked) && !dd.enabledPolicies.find((ep) => ep.checked);
+    || resourceVersionCreatorPage.dependencies.some((dd) => {
+      return !dd.upthrow && !dd.enableReuseContracts.some((erc) => erc.checked) && !dd.enabledPolicies.some((ep) => ep.checked);
     });
   // 自定义属性
   // || !!resourceVersionCreatorPage.properties.find((ep) => {
@@ -221,57 +221,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={true} title={FUtil.I18n.message('release_object')}>
-            <FSelectObject
-              // onError={(value) => {
-              //   dispatch<ChangeAction>({
-              //     type: 'resourceVersionCreatorPage/change',
-              //     payload: {
-              //       resourceObjectError: value,
-              //       resourceObject: null,
-              //     },
-              //   });
-              // }}
-              // resourceType={resourceVersionCreatorPage.resourceType}
-              // resourceObject={resourceVersionCreatorPage.resourceObject}
-              // onChange={async (value) => {
-              //   // console.log(value, '#@ERWADFSASDFSADF');
-              //   if (!value) {
-              //     return onChange({
-              //       resourceObject: null,
-              //       resourceObjectError: {
-              //         sha1: '',
-              //         text: '',
-              //       },
-              //       rawProperties: [],
-              //       baseProperties: [],
-              //       customOptionsData: [],
-              //       dataIsDirty: true,
-              //     });
-              //   }
-              //   await onChange({
-              //     resourceObject: value,
-              //     resourceObjectError: {sha1: '', text: ''},
-              //     dataIsDirty: true,
-              //   });
-              //   await dispatch<FetchRawPropsAction>({
-              //     type: 'resourceVersionCreatorPage/fetchRawProps',
-              //   });
-              //
-              //   if (value.objectId) {
-              //     dispatch<HandleObjectInfoAction>({
-              //       type: 'resourceVersionCreatorPage/handleObjectInfo',
-              //       payload: value.objectId,
-              //     });
-              //   }
-              // }}
-              // errorText={resourceVersionCreatorPage.resourceObjectError.text}
-              // onChangeErrorText={(text) => onChange({resourceObjectErrorText: text})}
-              // onClickDuplicatedLook={() => {
-              //   dispatch<GoToResourceDetailsBySha1>({
-              //     type: 'resourceVersionCreatorPage/goToResourceDetailsBySha1'
-              //   });
-              // }}
-            />
+            <FSelectObject/>
 
             {
               resourceVersionCreatorPage.selectedFileStatus === -3 && (<>
