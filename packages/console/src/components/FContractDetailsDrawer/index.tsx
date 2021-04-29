@@ -15,9 +15,10 @@ interface FContractDetailsDrawerProps {
   contractID: string;
 }
 
-function FContractDetailsDrawer({}: FContractDetailsDrawerProps) {
+function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
+  // console.log(contractID, 'contractID!!!!2341234');
   return (<FDrawer
-    visible={true}
+    visible={!!contractID}
     title={'合约详情'}
   >
     <FFormLayout>

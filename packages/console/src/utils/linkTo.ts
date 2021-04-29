@@ -18,7 +18,7 @@ interface ResourceDetailsParamsType {
   version?: string;
 }
 
-export function resourceDetails({resourceID,...params}: ResourceDetailsParamsType): TReturnType {
+export function resourceDetails({resourceID, ...params}: ResourceDetailsParamsType): TReturnType {
   // return `/resource/${resourceID}`;
   return `/resource/details/${resourceID}${handleQuery(params)}`;
 }
@@ -168,11 +168,16 @@ export function resourceVersionCreateSuccess({resourceID, version, ...params}: r
 }
 
 interface Exception403ParamsType {
-
+  from?: string;
 }
 
-export function exception403({}: Exception403ParamsType = {}) {
-  return `/exception/403`;
+export function exception403({...params}: Exception403ParamsType = {}) {
+  let from: string = params.from || '';
+  if (!from) {
+    const {href, origin} = window.location;
+    from = href.replace(origin, '');
+  }
+  return `/exception/403${handleQuery({from})}`;
 }
 
 function handleQuery(query: object): string {
