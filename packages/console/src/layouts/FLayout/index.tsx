@@ -7,6 +7,8 @@ import {ConnectState, GlobalModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
 import FFooter from "@/layouts/FFooter";
 import FHeader from "@/layouts/FLayout/FHeader";
+import * as AHooks from 'ahooks';
+import {ChangeAction} from "@/models/user";
 
 interface FLayoutProps extends RouteComponentProps {
   children: React.ReactNode | React.ReactNodeArray;
@@ -14,7 +16,19 @@ interface FLayoutProps extends RouteComponentProps {
   global: GlobalModelState;
 }
 
-function FLayout({children, global}: FLayoutProps) {
+function FLayout({dispatch, children, global}: FLayoutProps) {
+
+  const [cookiesUserID] = AHooks.useCookieState('uid');
+
+  React.useEffect(() => {
+    // console.log(cookiesUserID, '!~!!!!!!!!###3333333');
+    dispatch<ChangeAction>({
+      type: 'user/change',
+      payload: {
+        cookiesUserID: Number(cookiesUserID),
+      },
+    });
+  }, []);
 
   return (
     <Layout
@@ -36,6 +50,6 @@ function FLayout({children, global}: FLayoutProps) {
   );
 }
 
-export default withRouter(connect(({global,}: ConnectState) => ({
+export default withRouter(connect(({global}: ConnectState) => ({
   global: global,
 }))(FLayout));

@@ -48,16 +48,6 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
     };
   }, [route]);
 
-  // React.useEffect(() => {
-  //   // setEditorText(info?.intro || '');
-  //   dispatch<ChangeAction>({
-  //     type: 'resourceInfoPage/change',
-  //     payload: {
-  //       editorText: info?.intro || '',
-  //     },
-  //   })
-  // }, [info]);
-
   function onChangeIsEditing(bool: boolean) {
     // console.log(bool, '0293jdsfl;kjf;lasd');
     // console.log(info?.intro, 'info?.intro');
@@ -70,19 +60,6 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
       },
     });
   }
-
-  // if (!resourceInfo.hasPermission) {
-  //   return (<div>
-  //     <FNoDataTip
-  //       height={}
-  //       tipText={'403,没权限访问'}
-  //       btnText={'将前往首页'}
-  //       onClick={() => {
-  //         router.replace('/');
-  //       }}
-  //     />
-  //   </div>);
-  // }
 
   return (
     <FLeftSiderLayout

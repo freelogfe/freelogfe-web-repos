@@ -117,13 +117,13 @@ const Model: ResourceInfoModelType = {
           hasPermission: data.userId === user.info?.userId,
         },
       });
-
-      if (data.userId === user.info?.userId) {
+      console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
+      if (data.userId === user.cookiesUserID) {
         yield put<FetchDraftDataAction>({
           type: 'fetchDraftData',
         });
       } else {
-        router.replace(FUtil.LinkTo.exception403());
+        router.replace(FUtil.LinkTo.exception403({}, '9023uopsadfuioasdiofjl;iasdjfll'));
       }
     },
     * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {

@@ -171,13 +171,18 @@ interface Exception403ParamsType {
   from?: string;
 }
 
-export function exception403({...params}: Exception403ParamsType = {}) {
-  let from: string = params.from || '';
-  if (!from) {
+export function exception403({...params}: Exception403ParamsType = {}, from?: string) {
+  console.log(from, 'exception403!!!!!!!!');
+
+  let fromUrl: string = params.from || '';
+  if (!fromUrl) {
     const {href, origin} = window.location;
-    from = href.replace(origin, '');
+    fromUrl = href.replace(origin, '');
   }
-  return `/exception/403${handleQuery({from})}`;
+  console.log(fromUrl, 'fromUrl!!!!!!!!');
+  return `/exception/403${handleQuery({
+    from: fromUrl
+  })}`;
 }
 
 function handleQuery(query: object): string {

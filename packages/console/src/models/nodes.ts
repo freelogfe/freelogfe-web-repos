@@ -6,6 +6,7 @@ import {router} from 'umi';
 // import {nodeManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
+import {list} from "@/services/resources";
 // import FLinkTo from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
@@ -124,11 +125,41 @@ const Model: NodesModelType = {
         nodeName: nodes.nodeName,
       };
 
+      // auditStatus: 0
+      // createDate: "2021-04-29T09:12:13.631Z"
+      // nodeDomain: "1111"
+      // nodeId: 80000032
+      // nodeName: "1111"
+      // nodeThemeId: ""
+      // ownerUserId: 50028
+      // ownerUserName: "12345676789"
+      // pageBuildId: ""
+      // status: 0
+      // updateDate: "2021-04-29T09:12:13.631Z"
+
       const {data} = yield call(FApiServer.Node.create, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          list: [
+            ...nodes.list,
+            {
+              nodeDomain: data.nodeDomain,
+              nodeId: data.nodeId,
+              nodeName: data.nodeName,
+            },
+          ],
+        },
+      });
+
+
+      // console.log(data, 'data210934uoifa');
 
       yield put<FetchNodesAction>({
         type: 'fetchNodes',
       });
+
       router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {

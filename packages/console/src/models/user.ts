@@ -16,10 +16,11 @@ export interface UserModelState {
     updateDate: string;
     headImage: string;
   };
+  cookiesUserID: number;
 }
 
-interface ChangeAction extends AnyAction {
-  type: 'change';
+export interface ChangeAction extends AnyAction {
+  type: 'change' | 'user/change';
   payload: Partial<UserModelState>;
 }
 
@@ -45,6 +46,7 @@ const Model: MarketModelType = {
   namespace: 'user',
   state: {
     info: null,
+    cookiesUserID: -1,
   },
   effects: {
     * fetchInfo({}, {call, put}) {
@@ -70,7 +72,8 @@ const Model: MarketModelType = {
       dispatch<FetchInfoAction>({
         type: 'fetchInfo',
       });
-    }
+    },
+    // getCookiesUser
   }
 };
 

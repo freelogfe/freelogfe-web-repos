@@ -26,7 +26,7 @@ function NodeManager({dispatch, nodeManagerPage, nodes, match}: NodeManagerProps
   React.useEffect(() => {
 
     if (!nodes.list.some((n) => n.nodeId === Number(match.params.id))) {
-      router.replace(FUtil.LinkTo.exception403());
+      router.replace(FUtil.LinkTo.exception403({}, '90ujo3ijrlkajdsflkjal;dskf'));
       return;
     }
 

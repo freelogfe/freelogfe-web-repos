@@ -329,7 +329,7 @@ const Model: StorageHomePageModelType = {
       // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
 
       if (!data) {
-        return router.replace(FUtil.LinkTo.exception403());
+        return router.replace(FUtil.LinkTo.exception403({}, '8998yuhfew3werfewr'));
       }
 
       let objectListData: StorageHomePageModelState['objectList'] = [];

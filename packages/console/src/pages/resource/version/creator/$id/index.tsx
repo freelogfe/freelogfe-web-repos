@@ -91,7 +91,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     init();
 
     return () => {
-      console.log(match.params.id, 'match.params.id');
+      // console.log(match.params.id, 'match.param90823u947890234890s.id');
       dispatch<LeaveAndClearDataAction>({
         type: 'resourceVersionCreatorPage/leaveAndClearData',
       });
