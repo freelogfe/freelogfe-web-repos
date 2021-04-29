@@ -197,5 +197,6 @@
 	"alarm_exhibits_show_authorization": "",
 	"test1101": "1",
 	"msg_customdropdownlist": "",
-	"msg_bucket_quantity_exceed": ""
+	"msg_bucket_quantity_exceed": "",
+	"naming_convention_node_name": ""
 }
