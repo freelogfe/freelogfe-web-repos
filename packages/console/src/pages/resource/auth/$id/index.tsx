@@ -5,7 +5,7 @@ import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
-import {Space, Table} from 'antd';
+import {Table} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
@@ -22,14 +22,10 @@ import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FInfo, FNodes, FUser} from "@/components/FIcons";
+import {FInfo} from "@/components/FIcons";
 import FUtil from "@/utils";
 import {FCircleBtn} from "@/components/FButton";
-import FDrawer from "@/components/FDrawer";
-import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
-import FDivider from "@/components/FDivider";
-// import {FContentText} from '@/components/FText';
+import FContractDetailsDrawer from "@/components/FContractDetailsDrawer";
 
 const columns: any[] = [
   {
@@ -179,69 +175,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
             : (<FContentText type="additional1" text={'暂无合约'}/>)
         }
 
-        <FDrawer
-          visible={true}
-          title={'合约详情'}
-        >
-          <FFormLayout>
-            <FFormLayout.FBlock title={'标的物'}>
-              <Space size={10}>
-                <img className={styles.targetCover} src={imgSrc}/>
-                <div>
-                  <FContentText type="highlight" text={'喜马拉雅山照片'}/>
-                  <div style={{height: 5}}/>
-                  <FIdentityTypeBadge status={'exhibit'}/>
-                </div>
-              </Space>
-            </FFormLayout.FBlock>
-
-            <FFormLayout.FBlock title={'缔约方'}>
-              <Space size={10}>
-                <div style={{width: 80}}>
-                  <FContentText type="negative" text={'授权方'}/>
-                </div>
-                <Space size={10}>
-                  <FNodes style={{color: '#E9A923'}}/>
-                  <FContentText type="highlight" text={'喜马拉雅山照片'}/>
-                </Space>
-              </Space>
-              <div style={{height: 15}}/>
-              <Space size={10}>
-                <div style={{width: 80}}>
-                  <FContentText type="negative" text={'照片节点'}/>
-                </div>
-                <Space size={10}>
-                  <FUser style={{color: '#BD10E0'}}/>
-                  <FContentText type="highlight" text={'James'}/>
-                </Space>
-              </Space>
-            </FFormLayout.FBlock>
-
-            <FFormLayout.FBlock title={'所签授权策略'}>
-              <Space size={10}>
-                <FContentText text={'免费授权策略'} type="highlight"/>
-                <label className={styles.executing}>执行中</label>
-              </Space>
-
-              <div style={{height: 10}}/>
-              <Space size={2}>
-                <FContentText
-                  type="additional2"
-                  text={'签约时间：2020/09/09 12:00'}
-                />
-                <FDivider style={{fontSize: 14}}/>
-                <FContentText
-                  type="additional2"
-                  text={'合约ID：asakfhadghsifdhdidhfsfoh'}
-                />
-              </Space>
-            </FFormLayout.FBlock>
-
-            <FFormLayout.FBlock title={'关联合约'}>
-
-            </FFormLayout.FBlock>
-          </FFormLayout>
-        </FDrawer>
+        <FContractDetailsDrawer contractID={''}/>
 
       </FFormLayout.FBlock>
     </FFormLayout>

@@ -1,0 +1,43 @@
+@import '../../config.less';
+
+.targetCover {
+  width: 60px;
+  height: 45px;
+  border-radius: 4px;
+}
+
+.navs {
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.policyText {
+  margin: 0;
+  padding: 20px 15px;
+  background-color: #FAFBFC;
+}
+
+.associateContracts {
+  width: 100%;
+
+  .associateContract {
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    background: #FAFBFC;
+    width: 100%;
+
+    .associateContractHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+    }
+
+    .contractText {
+      border-top: 1px solid #E5E7EB;
+
+      & > pre {
+        padding: 10px 15px;
+      }
+    }
+  }
+}
