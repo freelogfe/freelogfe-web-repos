@@ -110,19 +110,21 @@ const Model: ResourceInfoModelType = {
       };
       const {data} = yield call(FApiServer.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
+
+      // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
+
+      if (!data || data.userId !== user.cookiesUserID) {
+        router.replace(FUtil.LinkTo.exception403({}, '9023uopsadfuioasdiofjl;iasdjfll'));
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           info: data,
-          hasPermission: data.userId === user.info?.userId,
+          // hasPermission: data.userId === user.info?.userId,
         },
       });
-      // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
-
-      if (!data || data.userId === user.cookiesUserID) {
-        router.replace(FUtil.LinkTo.exception403({}, '9023uopsadfuioasdiofjl;iasdjfll'));
-        return;
-      }
 
       yield put<FetchDraftDataAction>({
         type: 'fetchDraftData',
