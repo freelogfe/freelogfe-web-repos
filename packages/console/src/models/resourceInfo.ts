@@ -117,14 +117,16 @@ const Model: ResourceInfoModelType = {
           hasPermission: data.userId === user.info?.userId,
         },
       });
-      console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
-      if (data.userId === user.cookiesUserID) {
-        yield put<FetchDraftDataAction>({
-          type: 'fetchDraftData',
-        });
-      } else {
+      // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
+
+      if (!data || data.userId === user.cookiesUserID) {
         router.replace(FUtil.LinkTo.exception403({}, '9023uopsadfuioasdiofjl;iasdjfll'));
+        return;
       }
+
+      yield put<FetchDraftDataAction>({
+        type: 'fetchDraftData',
+      });
     },
     * fetchDraftData({}: FetchDraftDataAction, {select, put, call}: EffectsCommandMap) {
       const {resourceInfo}: ConnectState = yield select(({resourceInfo}: ConnectState) => ({

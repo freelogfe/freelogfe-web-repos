@@ -246,13 +246,26 @@ const Model: StorageHomePageModelType = {
       });
       // router.push(FUtil.LinkTo.storageSpace({bucketName: storageHomePage.newBucketName}));
     },
-    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
+    * onChangeActivatedBucket({payload}: OnChangeActivatedBucketAction, {put, select, call}: EffectsCommandMap) {
+      const {storageHomePage, user}: ConnectState = yield select(({storageHomePage, user}: ConnectState) => ({
         storageHomePage,
+        user,
       }));
       if (payload === storageHomePage.activatedBucket) {
         return;
       }
+
+      const params: Parameters<typeof FApiServer.Storage.bucketDetails>[0] = {
+        bucketName: payload,
+      };
+      const {data} = yield call(FApiServer.Storage.bucketDetails, params);
+      // console.log(data, '@!#@$!@#$@#$DDDDDDD');
+
+      if (!data || data.userId !== user.cookiesUserID) {
+        router.replace(FUtil.LinkTo.exception403({}, '86767g-=09-090hjh12321jkh'));
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -298,7 +311,10 @@ const Model: StorageHomePageModelType = {
       yield call(FApiServer.Storage.createObject, params);
     },
     * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
-      const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
+      const {storageHomePage, user}: ConnectState = yield select(({storageHomePage, user}: ConnectState) => ({
+        storageHomePage,
+        user,
+      }));
       let skip: number = 0;
       let limit: number = storageHomePage.pageSize;
 
@@ -327,10 +343,6 @@ const Model: StorageHomePageModelType = {
       });
       const {data} = yield call(FApiServer.Storage.objectList, params);
       // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
-
-      if (!data) {
-        return router.replace(FUtil.LinkTo.exception403({}, '8998yuhfew3werfewr'));
-      }
 
       let objectListData: StorageHomePageModelState['objectList'] = [];
 

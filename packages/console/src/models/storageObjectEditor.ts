@@ -190,8 +190,8 @@ const Model: StorageObjectEditorModelType = {
         objectIdOrName: storageObjectEditor.objectId,
       };
       const {data} = yield call(FApiServer.Storage.objectDetails, params);
-      console.log(data, 'data@#Rwe90ifjsdlkfa');
-      if (data.userId !== user.cookiesUserID) {
+      // console.log(data, 'data@#Rwe90ifjsdlkfa');
+      if (!data || data.userId !== user.cookiesUserID) {
         return router.replace(FUtil.LinkTo.exception403({}, '2390ujoidsf;kl8p9oi'));
       }
       const resources: any[] = data.dependencies

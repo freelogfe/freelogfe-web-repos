@@ -29,11 +29,6 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
   const [state] = useUrlState<{ bucketName: string; objectID: string }>();
 
   React.useEffect(() => {
-    // console.log(state, '!@#$!@#$!@#$!@#$!dstate');
-    if ((storageHomePage.bucketList || []).length > 0 && !(storageHomePage.bucketList || []).find((b) => b.bucketName === state.bucketName)) {
-      router.replace(FUtil.LinkTo.exception403({}, '86767g-=09-090hjh12321jkh'));
-      return;
-    }
 
     if (!state.bucketName) {
       return;

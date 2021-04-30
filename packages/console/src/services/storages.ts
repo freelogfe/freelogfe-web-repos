@@ -38,14 +38,14 @@ export function deleteBucket(params: DeleteBucketParamsType) {
   return request.delete(`/v1/storages/buckets/${params.bucketName}`);
 }
 
-// 删除bucket
-// interface DeleteBucketsParamsType {
-//   bucketName: string;
-// }
-//
-// export function deleteBuckets(params: DeleteBucketsParamsType) {
-//   return request.delete(`/v1/storages/buckets/${params.bucketName}`);
-// }
+// 查询bucket详情
+interface BucketDetailsParamsType {
+  bucketName: string;
+}
+
+export function bucketDetails({bucketName}: BucketDetailsParamsType) {
+  return request.get(`/v1/storages/buckets/${bucketName}`);
+}
 
 // 分页查看存储对象列表
 interface ObjectListParamsType {

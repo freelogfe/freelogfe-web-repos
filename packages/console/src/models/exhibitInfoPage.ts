@@ -6,6 +6,7 @@ import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import FUtil from "@/utils";
+import {router} from "umi";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -247,9 +248,9 @@ const Model: ExhibitInfoPageModelType = {
   },
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage, nodes}: ConnectState = yield select(({exhibitInfoPage, nodes}: ConnectState) => ({
+      const {exhibitInfoPage, user}: ConnectState = yield select(({exhibitInfoPage, user}: ConnectState) => ({
         exhibitInfoPage,
-        nodes,
+        user,
       }));
 
       const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
@@ -258,7 +259,11 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      // console.log(data, 'data@#Rasfdjou890ujewfra');
+      console.log(data, 'data@#Rasfdjou890ujewfra');
+      if (!data || data.userId !== user.cookiesUserID) {
+        router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-=0=-jo3ijrlkajdsflkjal;dskf'));
+        return;
+      }
 
       const params3: Parameters<typeof FApiServer.Node.details>[0] = {
         nodeId: data.nodeId,
