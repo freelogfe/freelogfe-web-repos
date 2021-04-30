@@ -7,7 +7,7 @@ import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import {Data} from '../index';
 import Field from '../Field';
-import {CUSTOM_KEY} from "@/utils/regexp";
+// import {CUSTOM_KEY} from "@/utils/regexp";
 import FUtil from "@/utils";
 
 interface PropertyProps {
@@ -39,8 +39,8 @@ function Property({data, onChange}: PropertyProps) {
             keyError = '请输入';
           } else if (value.length > 15) {
             keyError = '不超过15个字符';
-          } else if (!CUSTOM_KEY.test(value)) {
-            keyError = `不符合${CUSTOM_KEY}`;
+          } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+            keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
           }
           // console.log(value, 'value0932ur32');
           onChangeData({

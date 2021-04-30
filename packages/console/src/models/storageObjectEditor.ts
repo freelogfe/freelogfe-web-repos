@@ -2,7 +2,7 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {RESOURCE_TYPE} from "@/utils/regexp";
+// import {RESOURCE_TYPE} from "@/utils/regexp";
 import {FApiServer} from "@/services";
 import fMessage from "@/components/fMessage";
 import FUtil from "@/utils";
@@ -292,7 +292,7 @@ const Model: StorageObjectEditorModelType = {
         resourceTypeErrorText = '不少于3个字符';
       } else if (payload.length > 20) {
         resourceTypeErrorText = '不多于20个字符';
-      } else if (payload !== '' && !RESOURCE_TYPE.test(payload)) {
+      } else if (payload !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(payload)) {
         resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
       }
 

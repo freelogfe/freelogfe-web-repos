@@ -3,7 +3,7 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
-import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
+// import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
 
@@ -140,7 +140,7 @@ const Model: ResourceCreatorPageModelType = {
         nameErrorText = '请输入资源名称';
       } else if (payload.length > 60) {
         nameErrorText = '不多于60个字符';
-      } else if (!RESOURCE_NAME.test(payload)) {
+      } else if (!FUtil.Regexp.RESOURCE_NAME.test(payload)) {
         nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
       } else {
         const {user} = yield select(({user}: ConnectState) => ({
@@ -172,7 +172,7 @@ const Model: ResourceCreatorPageModelType = {
         resourceTypeErrorText = '不少于3个字符';
       } else if (payload.length > 20) {
         resourceTypeErrorText = '不多于20个字符';
-      } else if (!RESOURCE_TYPE.test(payload)) {
+      } else if (!FUtil.Regexp.RESOURCE_TYPE.test(payload)) {
         resourceTypeErrorText = `不符合正则 /^(?!_)[a-z0-9_]{3,20}(?<!_)$/`;
       }
 

@@ -4,8 +4,9 @@ import {Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
 import {FCircleBtn, FCircleButton, FRectBtn, FTextBtn} from "@/components/FButton";
-import {CUSTOM_KEY} from "@/utils/regexp";
+// import {CUSTOM_KEY} from "@/utils/regexp";
 import FDrawer from "@/components/FDrawer";
+import FUtil from "@/utils";
 
 interface FBasePropsEditorDrawerProps {
   visible: boolean;
@@ -121,8 +122,8 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
                     keyError = '请输入';
                   } else if (value.length > 15) {
                     keyError = '不超过15个字符';
-                  } else if (!CUSTOM_KEY.test(value)) {
-                    keyError = `不符合${CUSTOM_KEY}`;
+                  } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+                    keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
                   }
                   onChangeData({
                     key: value,

@@ -7,6 +7,7 @@ import {router} from 'umi';
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
 import {list} from "@/services/resources";
+// import {NODE_DOMAIN, NODE_NAME} from "@/utils/regexp";
 // import FLinkTo from "@/utils/path-assembler";
 
 export type NodesModelState = WholeReadonly<{
@@ -121,21 +122,9 @@ const Model: NodesModelType = {
       }
 
       const params: Parameters<typeof FApiServer.Node.create>[0] = {
-        nodeDomain: nodes.nodeDomain,
-        nodeName: nodes.nodeName,
+        nodeDomain: nodes.nodeDomain.trim(),
+        nodeName: nodes.nodeName.trim(),
       };
-
-      // auditStatus: 0
-      // createDate: "2021-04-29T09:12:13.631Z"
-      // nodeDomain: "1111"
-      // nodeId: 80000032
-      // nodeName: "1111"
-      // nodeThemeId: ""
-      // ownerUserId: 50028
-      // ownerUserName: "12345676789"
-      // pageBuildId: ""
-      // status: 0
-      // updateDate: "2021-04-29T09:12:13.631Z"
 
       const {data} = yield call(FApiServer.Node.create, params);
 
@@ -163,7 +152,6 @@ const Model: NodesModelType = {
       router.push(FUtil.LinkTo.nodeManagement({nodeID: data.nodeId}));
     },
     * onChangeName({payload}: OnChangeNameAction, {select, call, put}: EffectsCommandMap) {
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -178,15 +166,16 @@ const Model: NodesModelType = {
 
       let nameError: string = '';
 
-      if (!/^[\u4E00-\u9FA5|a-zA-Z0-9]{4,20}$/.test(nodes.nodeName)) {
-        nameError = '长度必须在 1-100 字符之间。\n' +
-          '不能以正斜线（/）或者反斜线（\\）开头。\n' +
-          '开头和结尾的空格会自动删除。';
+      if (!FUtil.Regexp.NODE_NAME.test(payload.trim())) {
+        // nameError = '长度必须在 1-100 字符之间。\n' +
+        //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
+        //   '开头和结尾的空格会自动删除。';
+        nameError = FUtil.I18n.message('naming_convention_node_name');
       }
 
       if (!nameError) {
         const params2: Parameters<typeof FApiServer.Node.details>[0] = {
-          nodeName: nodes.nodeName,
+          nodeName: payload.trim(),
         };
         const {data: data2} = yield call(FApiServer.Node.details, params2);
         if (data2) {
@@ -218,7 +207,7 @@ const Model: NodesModelType = {
 
       let domainError: string = '';
 
-      if (!/^(?!-)[a-z0-9-]{4,24}(?<!-)$/.test(nodes.nodeDomain)) {
+      if (!FUtil.Regexp.NODE_DOMAIN.test(payload.trim())) {
         domainError = '只能包括小写字母、数字和短横线（-）。\n' +
           '必须以小写字母或者数字开头和结尾。\n' +
           '长度必须在 4-24 字符之间。';
@@ -226,7 +215,7 @@ const Model: NodesModelType = {
 
       if (!domainError) {
         const params1: Parameters<typeof FApiServer.Node.details>[0] = {
-          nodeDomain: nodes.nodeDomain,
+          nodeDomain: payload.trim(),
         };
         const {data: data1} = yield call(FApiServer.Node.details, params1);
         if (data1) {
