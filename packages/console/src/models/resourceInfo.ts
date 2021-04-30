@@ -15,7 +15,7 @@ export interface ResourceInfoModelState {
     version?: string;
   };
 
-  hasPermission: boolean;
+  // hasPermission: boolean;
 
   info: null | {
     resourceId: string;
@@ -91,7 +91,7 @@ const initStates: ResourceInfoModelState = {
   showPage: {},
   info: null,
   draftData: null,
-  hasPermission: true,
+  // hasPermission: true,
 };
 
 const Model: ResourceInfoModelType = {
@@ -135,9 +135,9 @@ const Model: ResourceInfoModelType = {
         resourceInfo,
       }));
 
-      if (!resourceInfo.hasPermission) {
-        return;
-      }
+      // if (!resourceInfo.hasPermission) {
+      //   return;
+      // }
 
       const params: Parameters<typeof FApiServer.Resource.lookDraft>[0] = {
         resourceId: resourceInfo.resourceID,
@@ -148,7 +148,7 @@ const Model: ResourceInfoModelType = {
           type: 'change',
           payload: {
             draftData: null,
-          }
+          },
         });
       }
       yield put<ChangeAction>({
