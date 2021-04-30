@@ -6,7 +6,7 @@ import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
-import {resourceTypes} from '@/utils/globals';
+// import {resourceTypes} from '@/utils/predefined';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
@@ -248,7 +248,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             }}
             className={styles.FAutoComplete}
             placeholder={FUtil.I18n.message('hint_choose_resource_type')}
-            options={resourceTypes.map((i: string) => ({value: i}))}
+            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
           />
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'依赖'}>

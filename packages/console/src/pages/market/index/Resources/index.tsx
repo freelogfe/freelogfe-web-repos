@@ -6,7 +6,7 @@ import {ChangeAction, ChangeStatesAction, FetchDataSourceAction, marketInitData}
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
-import {resourceTypes} from '@/utils/globals';
+// import {resourceTypes} from '@/utils/predefined';
 import {router} from "umi";
 import FNoDataTip from "@/components/FNoDataTip";
 import FUtil from "@/utils";
@@ -16,7 +16,7 @@ import * as AHooks from 'ahooks';
 const filters = [{
   value: '-1',
   text: '全部类型'
-}, ...resourceTypes.map((i) => ({value: i}))];
+}, ...FUtil.Predefined.resourceTypes.map((i) => ({value: i}))];
 
 interface ResourcesProps {
   dispatch: Dispatch;

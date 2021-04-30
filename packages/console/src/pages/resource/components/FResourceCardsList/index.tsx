@@ -6,7 +6,7 @@ import FInput from '@/components/FInput';
 import {FRectBtn} from '@/components/FButton';
 import {router} from 'umi';
 import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
-import {resourceTypes} from '@/utils/globals';
+// import {resourceTypes} from '@/utils/predefined';
 import {DownOutlined} from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
 import FUtil from "@/utils";
@@ -14,7 +14,7 @@ import FDropdown from "@/components/FDropdown";
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
-  ...resourceTypes.map((i) => ({value: i}))
+  ...FUtil.Predefined.resourceTypes.map((i) => ({value: i}))
 ];
 
 const resourceStatusOptions = [

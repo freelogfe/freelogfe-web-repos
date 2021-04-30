@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {SwapOutlined} from '@ant-design/icons';
-import {CSSProperties, ReactElement, ReactEventHandler, ReactPropTypes} from "react";
+import {CSSProperties} from "react";
 
 interface FNodesProps {
   className?: string;
@@ -12,7 +11,7 @@ interface FNodesProps {
 
 function FNodes({className, ...props}: FNodesProps) {
   // return (<SwapOutlined {...props}/>);
-  return (<i className={['freelog', 'fl-icon-jiedian', className].join(' ')} {...props}/>);
+  return (<i className={['freelog', 'fl-icon-jiedian', className, styles.style].join(' ')} {...props}/>);
 }
 
 export default FNodes;

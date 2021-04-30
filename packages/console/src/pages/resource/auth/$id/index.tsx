@@ -175,7 +175,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
             : (<FContentText type="additional1" text={'暂无合约'}/>)
         }
 
-        <FContractDetailsDrawer contractID={''}/>
+        <FContractDetailsDrawer contractID={'60891c839e15fb002ece0755'}/>
 
       </FFormLayout.FBlock>
     </FFormLayout>

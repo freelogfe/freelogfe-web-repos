@@ -12,7 +12,7 @@ import {ConnectState, NodeManagerModelState} from '@/models/connect';
 import FInput from '@/components/FInput';
 import {router} from "umi";
 import {ColumnsType} from "antd/lib/table/interface";
-import {resourceTypes} from "@/utils/globals";
+// import {resourceTypes} from "@/utils/predefined";
 import {FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
 import FNoDataTip from "@/components/FNoDataTip";
@@ -32,7 +32,7 @@ interface ExhibitsProps {
 
 const resourceTypeOptions = [
   {text: '全部', value: '-1'},
-  ...resourceTypes.map((i) => ({value: i, text: i}))
+  ...FUtil.Predefined.resourceTypes.map((i) => ({value: i, text: i}))
 ];
 
 const resourceStatusOptions = [

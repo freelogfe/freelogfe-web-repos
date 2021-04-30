@@ -1,5 +1,17 @@
 import request from '@/utils/request';
 
+interface ContractDetailsParamsType {
+  contractId: string;
+  isLoadPolicyInfo?: 0 | 1;
+  projection?: string;
+}
+
+export function contractDetails({contractId, ...params}: ContractDetailsParamsType) {
+  return request.get(`/v2/contracts/${contractId}`, {
+    params,
+  });
+}
+
 // 查询合同分页列表
 interface ContractsParamsType {
   page?: number;

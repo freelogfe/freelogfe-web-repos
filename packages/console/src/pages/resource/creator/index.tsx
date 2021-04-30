@@ -20,7 +20,7 @@ import {
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {router, RouterTypes} from 'umi';
-import {resourceTypes} from '@/utils/globals';
+// import {resourceTypes} from '@/utils/predefined';
 import {FCheck, FInfo, FLoading} from '@/components/FIcons';
 import FFormLayout from "@/layouts/FFormLayout";
 import * as H from "history";
@@ -152,7 +152,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
             })}
             className={styles.FSelect}
             placeholder={FUtil.I18n.message('hint_choose_resource_type')}
-            options={resourceTypes.map((i: string) => ({value: i}))}
+            options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
           />
         </FFormLayout.FBlock>
 
