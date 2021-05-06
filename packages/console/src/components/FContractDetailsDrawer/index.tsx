@@ -14,6 +14,7 @@ import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import FLoadingTip from "@/components/FLoadingTip";
 import FResource from "@/components/FIcons/FResource";
+import {EnumContractStatus} from "@/utils/predefined";
 
 interface BaseInfo {
   subjectId: string;
@@ -36,20 +37,34 @@ interface BaseInfo {
   contractText: string;
 }
 
+type AssociateContracts = {
+  expansion: boolean;
+  contractId: string;
+  contractName: string;
+  contractCreateDate: string;
+  contractStatus: 0 | 1 | 2;
+  contractText: string;
+}[];
+
 interface FContractDetailsDrawerProps {
-  contractID: string;
+  contractID?: string;
+  onClose?: () => void;
 }
 
-function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
+function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDrawerProps) {
   // console.log(contractID, 'contractID!!!!2341234');
 
   const [baseInfo, setBaseInfo] = React.useState<BaseInfo | null>(null);
+  const [associateContracts, setAssociateContracts] = React.useState<AssociateContracts | null>(null);
 
   React.useEffect(() => {
     fetchHandleData();
   }, [contractID]);
 
   async function fetchHandleData() {
+    if (!contractID) {
+      return;
+    }
     const params: Parameters<typeof FApiServer.Contract.contractDetails>[0] = {
       contractId: contractID,
       isLoadPolicyInfo: 1,
@@ -73,7 +88,7 @@ function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
       contractId: data.contractId,
       contractName: data.contractName,
       contractCreateDate: FUtil.Format.formatDateTime(data.createDate, true),
-      contractStatus: data.status,
+      contractStatus: data.status === 1 ? 2 : ((data.authStatus & 1) === 1) ? 1 : 0,
       contractText: data.policyInfo.policyText,
     };
 
@@ -83,19 +98,45 @@ function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
       };
 
       const {data: data1} = await FApiServer.Resource.info(params1);
-      console.log(data1, '!@#$!@#$!@#$');
+      // console.log(data1, '!@#$!@#$!@#$');
       if (data1.coverImages.length > 0) {
-        baseInfoData.subjectCover = data.coverImages[0];
+        baseInfoData.subjectCover = data1.coverImages[0];
       }
     }
 
     // console.log(data, '@!#$!@#$@#!$@');
     setBaseInfo(baseInfoData);
+
+    const params2: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      subjectIds: data.subjectId,
+      subjectType: data.subjectType,
+      licenseeIdentityType: data.licenseeIdentityType,
+      licensorId: data.licensorId,
+      licenseeId: data.licenseeId,
+      isLoadPolicyInfo: 1,
+    };
+    const {data: data2} = await FApiServer.Contract.batchContracts(params2);
+    // console.log(data2, '#$##$@$##$');
+
+    setAssociateContracts(data2
+      .filter((d: any) => d.contractId !== data.contractId)
+      .map((d: any) => {
+        return {
+          expansion: false,
+          contractId: d.contractId,
+          contractName: d.contractName,
+          contractCreateDate: FUtil.Format.formatDateTime(d.createDate, true),
+          // contractStatus: d.status,
+          contractStatus: d.status === 1 ? 2 : ((d.authStatus & 1) === 1) ? 1 : 0,
+          contractText: d.policyInfo.policyText,
+        };
+      }));
   }
 
   return (<FDrawer
     visible={!!contractID}
     title={'合约详情'}
+    onClose={() => onClose && onClose()}
   >
     {
       !baseInfo
@@ -172,7 +213,8 @@ function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
                 type="highlight"
               />
               <FContractStatusBadge
-                status={baseInfo?.contractStatus === 0 ? 'authorized' : 'stopped'}
+                // status={baseInfo?.contractStatus === 0 ? 'authorized' : 'stopped'}
+                status={EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
               />
             </Space>
 
@@ -200,79 +242,84 @@ function FContractDetailsDrawer({contractID}: FContractDetailsDrawerProps) {
                 {baseInfo?.contractText}
               </pre>
           </FFormLayout.FBlock>
+          {/*{console.log(associateContracts, 'associateContractsassociateContractsassociateContractsassociateContracts')}*/}
+          {
+            associateContracts && associateContracts.length > 0 && (<FFormLayout.FBlock title={'关联合约'}>
+              <Space size={10} direction="vertical" className={styles.associateContracts}>
+                {
+                  associateContracts?.map((ac) => {
+                    return (<div
+                      key={ac.contractId}
+                      className={styles.associateContract}
+                    >
+                      <div
+                        className={styles.associateContractHeader}
+                        onClick={() => {
+                          setAssociateContracts(associateContracts?.map((acm) => {
+                            if (acm.contractId !== ac.contractId) {
+                              return acm;
+                            }
+                            return {
+                              ...acm,
+                              expansion: !acm.expansion,
+                            }
+                          }));
+                        }}
+                      >
+                        <div>
+                          <Space size={10}>
+                            <FContentText
+                              text={ac.contractName}
+                              type="highlight"
+                            />
+                            <FContractStatusBadge
+                              // status={ac.contractStatus === 1 ? 'authorized' : 'stopped'}
+                              status={EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
+                            />
+                          </Space>
+                          <div style={{height: 10}}/>
+                          <Space size={40}>
+                            <Space size={10}>
+                              <FContentText
+                                text={'签约时间'}
+                                type="additional2"
+                              />
+                              <FContentText
+                                text={ac.contractCreateDate}
+                              />
+                            </Space>
+                            <Space size={10}>
+                              <FContentText
+                                text={'合约ID'}
+                                type="additional2"
+                              />
+                              <FContentText
+                                text={ac.contractId}
+                              />
+                            </Space>
+                          </Space>
+                        </div>
+                        {
+                          ac.expansion ? (<FUp/>) : (<FDown/>)
+                        }
 
-          <FFormLayout.FBlock title={'关联合约'}>
-            <Space size={10} direction="vertical" className={styles.associateContracts}>
-              <div className={styles.associateContract}>
-                <div className={styles.associateContractHeader}>
-                  <div>
-                    <Space size={10}>
-                      <FContentText text={'免费授权策略'} type="highlight"/>
-                      <FContractStatusBadge status="pending"/>
-                    </Space>
-                    <div style={{height: 10}}/>
-                    <Space size={40}>
-                      <Space size={10}>
-                        <FContentText text={'签约时间'} type="additional2"/>
-                        <FContentText text={'2020/09/09 12:00'}/>
-                      </Space>
-                      <Space size={10}>
-                        <FContentText text={'合约ID'} type="additional2"/>
-                        <FContentText text={'asakfhadghsifdhdidhfsfoh'}/>
-                      </Space>
-                    </Space>
-                  </div>
-                  <FUp/>
-                </div>
-                <div className={styles.contractText}>
-              <pre>{`for public:
-    escrow account acct
-    custom event acceptor.customEvent
-      initial:
-         recontractable
-         proceed to
-               auth:
-         presentable
-         recontractable
-         active
-         proceed to refund on acct.confiscated
-      refund:
-         recontractable
-         proceed to finish on acct.refunded
-      finish:
-         recontractable
-         terminate`}</pre>
-                </div>
-              </div>
+                      </div>
+                      {
+                        ac.expansion && (<div className={styles.contractText}>
+                          <pre>{ac.contractText}</pre>
+                        </div>)
+                      }
 
-              <div className={styles.associateContract}>
-                <div className={styles.associateContractHeader}>
-                  <div>
-                    <Space size={10}>
-                      <FContentText text={'免费授权策略'} type="highlight"/>
-                      <FContractStatusBadge status="stopped"/>
-                    </Space>
-                    <div style={{height: 10}}/>
-                    <Space size={40}>
-                      <Space size={10}>
-                        <FContentText text={'签约时间'} type="additional2"/>
-                        <FContentText text={'2020/09/09 12:00'}/>
-                      </Space>
-                      <Space size={10}>
-                        <FContentText text={'合约ID'} type="additional2"/>
-                        <FContentText text={'asakfhadghsifdhdidhfsfoh'}/>
-                      </Space>
-                    </Space>
-                  </div>
-                  <FDown/>
-                </div>
-              </div>
+                    </div>);
+                  })
+                }
 
-            </Space>
-          </FFormLayout.FBlock>
+              </Space>
+            </FFormLayout.FBlock>)
+          }
+
         </FFormLayout>)
     }
-
   </FDrawer>);
 }
 

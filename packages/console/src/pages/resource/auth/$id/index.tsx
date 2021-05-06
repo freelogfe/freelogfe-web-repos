@@ -5,7 +5,7 @@ import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
 import StatusLabel from '@/pages/resource/components/StatusLabel';
-import {Table} from 'antd';
+import {Space, Table} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
@@ -22,39 +22,16 @@ import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FInfo} from "@/components/FIcons";
+import {FInfo, FNodes, FUser} from "@/components/FIcons";
 import FUtil from "@/utils";
-import {FCircleBtn} from "@/components/FButton";
+import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import FContractDetailsDrawer from "@/components/FContractDetailsDrawer";
-
-const columns: any[] = [
-  {
-    title: FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id'),
-    dataIndex: 'name',
-    render: (_: any, record: any) => (<>
-      <FContentText text={record.contractName}/>
-      <div style={{height: 2}}/>
-      <FContentText type="additional2" text={record.contractID}/>
-    </>),
-  },
-  {
-    title: FUtil.I18n.message('licensee'),
-    // className: 'column-money',
-    dataIndex: 'authorizedParties',
-    // align: 'right',
-    render: (_: any, record: any) => (<FContentText text={record.authorizedParty}/>)
-  },
-  {
-    title: FUtil.I18n.message('contract_signed_time'),
-    dataIndex: 'createTime',
-    render: (_: any, record: any) => (<FContentText text={record.createDate}/>)
-  },
-  {
-    title: FUtil.I18n.message('contract_state'),
-    dataIndex: 'contractStatus',
-    render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
-  },
-];
+import FTable from "@/components/FTable";
+import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
+import FResource from "@/components/FIcons/FResource";
+import {ColumnsType} from "antd/lib/table/interface";
+import FContractStatusBadge from "@/components/FContractStatusBadge";
+import {EnumContractStatus} from "@/utils/predefined";
 
 interface AuthProps {
   dispatch: Dispatch;
@@ -69,15 +46,15 @@ interface AuthProps {
 
 function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
 
-  React.useEffect(() => {
-    // console.log(route, match, 'RM');
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-  }, [route]);
+  // React.useEffect(() => {
+  //   // console.log(route, match, 'RM');
+  //   dispatch<GlobalChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -102,6 +79,104 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       payload: {},
     });
   }, []);
+
+  const columns: ColumnsType<{
+    key: string,
+    contractName: string,
+    contractID: string,
+    authorizedParty: string,
+    licenseeIdentityType: 1 | 2 | 3;
+    createDate: string,
+    status: 0 | 1 | 2;
+  }> = [
+    {
+      title: (<FTitleText
+        // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
+        text={'被授权方'}
+        type="form"
+      />),
+      dataIndex: 'authorized',
+      width: 300,
+      render: (_: any, record) => {
+        return (<Space size={5}>
+          {/*<FContentText text={record.contractName}/>*/}
+          {/*<FContentText type="additional2" text={record.contractID}/>*/}
+          {
+            record.licenseeIdentityType === 1 && (<FResource/>)
+          }
+          {
+            record.licenseeIdentityType === 2 && (<FNodes/>)
+          }
+          {
+            record.licenseeIdentityType === 3 && (<FUser/>)
+          }
+          <FContentText
+            type="highlight"
+            text={record.authorizedParty}
+          />
+        </Space>);
+      },
+    },
+    {
+      // title: FUtil.I18n.message('licensee'),
+      title: (<FTitleText
+        // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
+        text={'所签授权策略｜合约状态'}
+        type="form"
+      />),
+      // className: 'column-money',
+      dataIndex: 'contract',
+      width: 240,
+      // align: 'right',
+      render: (_: any, record) => {
+        //  (<FContentText text={record.authorizedParty}/>)
+        return (<div>
+          <Space size={5}>
+            <FContentText
+              type="highlight"
+              text={record.contractName}
+            />
+            <FContractStatusBadge
+              status={EnumContractStatus[record?.status || 0] as 'authorized'}
+            />
+          </Space>
+          <div style={{height: 5}}/>
+          <FContentText type="additional2" text={'创建时间：' + record.createDate}/>
+          <FContentText type="additional2" text={'合约ID：' + record.contractID}/>
+        </div>);
+      }
+    },
+    {
+      // title: FUtil.I18n.message('contract_signed_time'),
+      title: (<FTitleText
+        // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
+        text={'操作'}
+        type="form"
+      />),
+      dataIndex: 'operation',
+      width: 80,
+      render: (_: any, record) => {
+        return (<FTextBtn onClick={() => {
+          onChange({
+            detailContractID: record.contractID,
+          });
+
+        }}>查看合约</FTextBtn>);
+      },
+    },
+    // {
+    //   title: FUtil.I18n.message('contract_state'),
+    //   dataIndex: 'contractStatus',
+    //   render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
+    // },
+  ];
+
+  function onChange(payload: Partial<ResourceAuthPageModelState>) {
+    dispatch<ChangeAction>({
+      type: 'resourceAuthPage/change',
+      payload: payload,
+    });
+  }
 
   return (<FLeftSiderLayout
     sider={<Sider/>}
@@ -164,10 +239,10 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
 
         {
           resourceAuthPage.contractsAuthorize?.length > 0
-            ? (<Table
+            ? (<FTable
               columns={columns}
               dataSource={resourceAuthPage.contractsAuthorize}
-              bordered
+              // bordered
               pagination={false}
               // title={() => 'Header'}
               // footer={() => 'Footer'}
@@ -175,7 +250,14 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
             : (<FContentText type="additional1" text={'暂无合约'}/>)
         }
 
-        <FContractDetailsDrawer contractID={'60891c839e15fb002ece0755'}/>
+        <FContractDetailsDrawer
+          contractID={resourceAuthPage.detailContractID}
+          onClose={() => {
+            onChange({
+              detailContractID: '',
+            });
+          }}
+        />
 
       </FFormLayout.FBlock>
     </FFormLayout>

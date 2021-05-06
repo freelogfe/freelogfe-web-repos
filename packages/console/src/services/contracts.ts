@@ -40,7 +40,6 @@ export function contracts(params: ContractsParamsType) {
 interface BatchContractsParamsType {
   contractIds?: string;
   subjectIds?: string;
-  identityType?: 1 | 2;
   subjectType?: 1 | 2 | 3;
   licenseeIdentityType?: 1 | 2 | 3;
   licensorId?: string;

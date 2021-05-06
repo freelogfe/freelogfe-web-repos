@@ -55,9 +55,12 @@ export interface ResourceAuthPageModelState {
     contractName: string,
     contractID: string,
     authorizedParty: string,
+    licenseeIdentityType: 1 | 2 | 3;
     createDate: string,
-    status: 'executing' | 'stopped';
+    status: 0 | 1 | 3;
   }[];
+
+  detailContractID: string;
 }
 
 export interface UpdatePoliciesAction {
@@ -139,6 +142,8 @@ const Model: ResourceAuthPageModelType = {
     baseUpcastResources: [],
     contractsAuthorized: [],
     contractsAuthorize: [],
+
+    detailContractID: '',
   },
   effects: {
     * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
@@ -299,7 +304,7 @@ const Model: ResourceAuthPageModelType = {
       };
       // console.log('@#RWEQFRSDF');
       const {data} = yield call(FApiServer.Contract.contracts, params);
-      // console.log(data, '1234213134');
+      // console.log(data, '12342139(((((()))()())(134');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -308,8 +313,10 @@ const Model: ResourceAuthPageModelType = {
             contractName: i.contractName,
             contractID: i.contractId,
             authorizedParty: i.licenseeName,
+            licenseeIdentityType: i.licenseeIdentityType,
             createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
-            status: i.isAuth ? 'executing' : 'stopped',
+            // status: i.isAuth ? 'executing' : 'stopped',
+            status: i.status === 1 ? 2 : ((i.authStatus & 1) === 1) ? 1 : 0,
           })),
         }
       });
