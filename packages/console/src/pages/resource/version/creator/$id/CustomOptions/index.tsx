@@ -13,7 +13,6 @@ import FUp from "@/components/FIcons/FUp";
 import {FDown, FInfo} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import FUtil from "@/utils";
-import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import {FContentText} from "@/components/FText";
 import {ConnectState, StorageObjectEditorModelState} from "@/models/connect";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
@@ -142,20 +141,6 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             </Space>
 
             <div style={{height: 20}}/>
-
-            {/*<FCustomOptionsCard*/}
-            {/*  dataSource={resourceVersionCreatorPage.customOptionsData.map((cod) => {*/}
-            {/*    return {*/}
-            {/*      key: cod.key,*/}
-            {/*      type: cod.custom === 'input' ? '输入框' : '选择框',*/}
-            {/*      description: cod.description,*/}
-            {/*      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,*/}
-            {/*    };*/}
-            {/*  })}*/}
-            {/*  onDeleteKey={(value) => {*/}
-
-            {/*  }}*/}
-            {/*/>*/}
 
             {
               resourceVersionCreatorPage.customOptionsData.length > 0

@@ -91,11 +91,6 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
                 onChange && onChange(verifyDuplication(data));
               }}
             />
-            {/*<div className={styles.delete}>*/}
-            {/*  <span onClick={() => {*/}
-
-            {/*  }}>删除</span>*/}
-            {/*</div>*/}
           </div>))
         }
       </Space>}

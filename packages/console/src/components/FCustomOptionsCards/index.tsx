@@ -3,9 +3,9 @@ import styles from './index.less';
 import {Space} from "antd";
 import {FContentText} from "@/components/FText";
 import FTooltip from "@/components/FTooltip";
-import {FEdit, FInfo} from "@/components/FIcons";
+import {FInfo} from "@/components/FIcons";
 import FDivider from "@/components/FDivider";
-import {FCircleBtn, FTextBtn} from "@/components/FButton";
+import {FCircleBtn} from "@/components/FButton";
 
 interface FCustomOptionsCardsProps {
   dataSource: {
@@ -40,7 +40,10 @@ function FCustomOptionsCards({dataSource, onEdit, onDelete}: FCustomOptionsCards
             <Space size={5}>
               <FContentText text={ds.type === 'select' ? '下拉框' : '输入框'}/>
               <FDivider/>
-              <FContentText text={ds.value}/>
+              <FContentText
+                text={ds.value}
+                style={{maxWidth: 500}}
+                singleRow/>
             </Space>
           </div>
           <div style={{width: 10}}/>
@@ -82,3 +85,7 @@ function FCustomOptionsCards({dataSource, onEdit, onDelete}: FCustomOptionsCards
 }
 
 export default FCustomOptionsCards;
+
+function fn(num: number) {
+  return Array(num).fill(null).map((n, i) => '' + n + i);
+}

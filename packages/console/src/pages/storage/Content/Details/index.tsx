@@ -28,6 +28,8 @@ import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
 import FTooltip from "@/components/FTooltip";
 import FUtil from "@/utils";
+import FBasePropertiesCards from "@/components/FBasePropertiesCards";
+import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -208,30 +210,50 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
               </Space>
 
+              {/*<FCustomOptionsCard*/}
+              {/*  dataSource={storageObjectEditor.customOptionsData.map((cod) => {*/}
+              {/*    return {*/}
+              {/*      key: cod.key,*/}
+              {/*      type: cod.custom === 'input' ? '输入框' : '选择框',*/}
+              {/*      description: cod.description,*/}
+              {/*      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,*/}
+              {/*    };*/}
+              {/*  })}*/}
+              {/*  onDeleteKey={(value) => {*/}
+              {/*    dispatch<ChangeAction>({*/}
+              {/*      type: 'storageObjectEditor/change',*/}
+              {/*      payload: {*/}
+              {/*        customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {*/}
+              {/*          return cod.key !== value;*/}
+              {/*        }),*/}
+              {/*      },*/}
+              {/*    })*/}
+              {/*  }}*/}
+              {/*/>*/}
+
+
               <div style={{height: 20}}/>
               {
-                storageObjectEditor.customOptionsData.length > 0 ? (
-                    <FCustomOptionsCard
-                      dataSource={storageObjectEditor.customOptionsData.map((cod) => {
-                        return {
-                          key: cod.key,
-                          type: cod.custom === 'input' ? '输入框' : '选择框',
-                          description: cod.description,
-                          value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
-                        };
-                      })}
-                      onDeleteKey={(value) => {
-                        dispatch<ChangeAction>({
-                          type: 'storageObjectEditor/change',
-                          payload: {
-                            customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
-                              return cod.key !== value;
-                            }),
-                          },
-                        })
-                      }}
-                    />
-                  )
+                storageObjectEditor.customOptionsData.length > 0 ? (<FCustomOptionsCards
+                    dataSource={storageObjectEditor.customOptionsData.map((cod) => {
+                      return {
+                        theKey: cod.key,
+                        description: cod.description,
+                        type: cod.custom,
+                        value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,
+                      }
+                    })}
+                    onDelete={(theKey) => {
+                      dispatch<ChangeAction>({
+                        type: 'storageObjectEditor/change',
+                        payload: {
+                          customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
+                            return cod.key !== theKey;
+                          }),
+                        },
+                      })
+                    }}
+                  />)
                   : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
               }
             </>)

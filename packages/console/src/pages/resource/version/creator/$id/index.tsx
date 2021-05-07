@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
+import {FTitleText} from '@/components/FText';
 import FInput from '@/components/FInput';
 import FBraftEditor from '@/components/FBraftEditor';
 import {FRectBtn, FTextBtn} from '@/components/FButton';
@@ -11,17 +11,12 @@ import {connect, Dispatch} from "dva";
 import {
   ConnectState,
   ResourceVersionCreatorPageModelState,
-  StorageObjectEditorModelState,
 } from '@/models/connect';
 import {
   ChangeAction,
   CreateVersionAction,
   FetchDraftAction,
-  // FetchRawPropsAction,
   FetchResourceInfoAction,
-  // GoToResourceDetailsBySha1,
-  // HandleObjectInfoAction,
-  ImportLastVersionDataAction,
   InitModelStatesAction,
   LeaveAndClearDataAction,
   SaveDraftAction,
