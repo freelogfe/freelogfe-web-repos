@@ -36,7 +36,7 @@
 	"limit_on_file_size": "File can not exceed 50MB",
 	"resource_name_exist": "The resource name already exists.",
 	"naming_convention_resource_name": "Make sure resource name is including 1-100 characters, and not include space and any following characetrs:  \\ / : * ? \" < > |",
-	"limit_resource_image_format": "We only support PNG, GIF, or JPG pictures.",
+	"limit_resource_image_format": "We only support PNG, GIF, or JEPG pictures.",
 	"limit_resource_image_size": "File can not exceed 5MB",
 	"freelog_versioning": "Version number sould follow the Semantic Versioning Specification.",
 	"authorization_issue_offline_resource": "The resource is offline and not available for authorization.",

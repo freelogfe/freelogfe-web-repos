@@ -36,7 +36,7 @@
 	"limit_on_file_size": "文件大小不能超过50MB",
 	"resource_name_exist": "该资源名称已存在。",
 	"naming_convention_resource_name": "资源名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? \" < > |",
-	"limit_resource_image_format": "图片格式仅支持jpg、png、gif。",
+	"limit_resource_image_format": "图片格式仅支持jepg、png、gif。",
 	"limit_resource_image_size": "图片不能超过5M",
 	"freelog_versioning": "版本号必须采用 X.Y.Z 的格式，其中 X、Y 和 Z 为非负的整数，且禁止在数字前方补零。标识符必须由 ASCII 字母数字和连接号 [0-9A-Za-z-] 组成，且禁止留白。同一个资源的版本号必须唯一，且必须按升序增加。",
 	"authorization_issue_offline_resource": "该资源已下线，无法签约。",
