@@ -1,24 +1,46 @@
 @import '../../config.less';
 
-.rawProperties{
+.styles {
+  display: flex;
+  align-items: center;
+  margin-bottom: -10px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  & > div {
+    margin-bottom: 10px;
+    padding-right: 10px;
+    width: 25%;
+
+    //& > div {
+    //  //padding: 5px 10px 5px 5px;
+    //
+    //}
+  }
+}
+
+.rawProperties {
   padding: 5px 10px 5px 5px;
 }
 
 .baseProperty {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 4px;
-  padding: 5px 10px 5px 5px;
-  background-color: #F1F1F1;
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    padding: 5px 10px 5px 5px;
+    background-color: #F1F1F1;
 
-  &:hover {
+    &:hover {
+      .Operation {
+        visibility: visible;
+      }
+    }
+
     .Operation {
-      visibility: visible;
+      visibility: hidden;
     }
   }
 
-  .Operation {
-    visibility: hidden;
-  }
 }

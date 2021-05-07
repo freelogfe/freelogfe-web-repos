@@ -70,6 +70,7 @@ function FBaseProperties({basics, additions, rightTop, onChangeAdditions}: FBase
           }));
         }}
       />
+      <div style={{height: 10}}/>
 
       {/*<div className={styles.attributesBody}>*/}
       {/*  <Row gutter={[20, 20]}>*/}
