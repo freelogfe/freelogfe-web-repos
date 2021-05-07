@@ -18,6 +18,7 @@ import {FContentText} from "@/components/FText";
 import {ConnectState, StorageObjectEditorModelState} from "@/models/connect";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
+import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -142,30 +143,39 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
 
             <div style={{height: 20}}/>
 
+            {/*<FCustomOptionsCard*/}
+            {/*  dataSource={resourceVersionCreatorPage.customOptionsData.map((cod) => {*/}
+            {/*    return {*/}
+            {/*      key: cod.key,*/}
+            {/*      type: cod.custom === 'input' ? '输入框' : '选择框',*/}
+            {/*      description: cod.description,*/}
+            {/*      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,*/}
+            {/*    };*/}
+            {/*  })}*/}
+            {/*  onDeleteKey={(value) => {*/}
+
+            {/*  }}*/}
+            {/*/>*/}
+
             {
-              resourceVersionCreatorPage.customOptionsData.length > 0 ? (
-                  <FCustomOptionsCard
-                    dataSource={resourceVersionCreatorPage.customOptionsData.map((cod) => {
-                      return {
-                        key: cod.key,
-                        type: cod.custom === 'input' ? '输入框' : '选择框',
-                        description: cod.description,
-                        value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,
-                      };
-                    })}
-                    onDeleteKey={(value) => {
-                      dispatch<ChangeAction>({
-                        type: 'resourceVersionCreatorPage/change',
-                        payload: {
-                          customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
-                            return cod.key !== value;
-                          }),
-                        },
-                        caller: '23453243434523432453___(*)(*)(*4%#$%#$%#$%#$#$',
-                      })
-                    }}
-                  />
-                )
+              resourceVersionCreatorPage.customOptionsData.length > 0
+                ? (<FCustomOptionsCards
+                  dataSource={resourceVersionCreatorPage.customOptionsData.map((cod) => {
+                    return {
+                      theKey: cod.key,
+                      description: cod.description,
+                      type: cod.custom,
+                      value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,
+                    };
+                  })}
+                  onDelete={(theKey) => {
+                    onChange({
+                      customOptionsData: resourceVersionCreatorPage.customOptionsData.filter((cod) => {
+                        return cod.key !== theKey;
+                      }),
+                    });
+                  }}
+                />)
                 : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
             }
 
@@ -211,13 +221,9 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
     <FCustomOptionsEditorDrawer
       visible={resourceVersionCreatorPage.customOptionsEditorVisible}
       onCancel={() => {
-        dispatch<ChangeAction>({
-          type: 'resourceVersionCreatorPage/change',
-          payload: {
-            customOptionsEditorVisible: false,
-            customOptionsEditorDataSource: [],
-          },
-          caller: '234532&*^*(&^*(&^*(&434345234324534%#$%#$%#$%#$#$',
+        onChange({
+          customOptionsEditorVisible: false,
+          customOptionsEditorDataSource: [],
         });
       }}
       dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
@@ -226,30 +232,22 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
       ]}
       onChange={(value) => {
-        dispatch<ChangeAction>({
-          type: 'resourceVersionCreatorPage/change',
-          payload: {customOptionsEditorDataSource: value},
-          caller: '23453243434523432hjkjsdhfkjhajsdf4534%#$%#$%#$%#$#$',
-        });
+        onChange({customOptionsEditorDataSource: value});
       }}
       onConfirm={() => {
-        dispatch<ChangeAction>({
-          type: 'resourceVersionCreatorPage/change',
-          payload: {
-            customOptionsData: resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-              return {
-                key: coeds.key,
-                defaultValue: coeds.defaultValue,
-                description: coeds.description,
-                custom: coeds.custom,
-                customOption: coeds.customOption,
-              };
-            }),
-            customOptionsEditorDataSource: [],
-            customOptionsEditorVisible: false,
-          },
-          caller: '23453[]p[pop[iooiiop2434345234324534%#$%#$%#$%#$#$',
-        })
+        onChange({
+          customOptionsData: resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+            return {
+              key: coeds.key,
+              defaultValue: coeds.defaultValue,
+              description: coeds.description,
+              custom: coeds.custom,
+              customOption: coeds.customOption,
+            };
+          }),
+          customOptionsEditorDataSource: [],
+          customOptionsEditorVisible: false,
+        });
       }}
     />
   </>);
