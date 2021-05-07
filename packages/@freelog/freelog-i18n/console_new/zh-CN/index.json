@@ -205,5 +205,6 @@
 	"filed_value": "值",
 	"filed_remark": "备注",
 	"btn_add": "添加",
-	"btn_cancel": "取消"
+	"btn_cancel": "取消",
+	"edit_custom_option": ""
 }

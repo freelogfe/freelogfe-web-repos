@@ -9,5 +9,6 @@
 	"remove": "Remove",
 	"saved_successfully": "Saved successfully",
 	"cancel": "Cancel",
-	"relationship_status_pending": "Pending"
+	"relationship_status_pending": "Pending",
+	"btn_save": ""
 }

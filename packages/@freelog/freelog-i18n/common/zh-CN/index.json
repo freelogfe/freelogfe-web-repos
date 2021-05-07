@@ -9,5 +9,6 @@
 	"remove": "删除",
 	"saved_successfully": "保存成功",
 	"cancel": "取消",
-	"relationship_status_pending": "待执行"
+	"relationship_status_pending": "待执行",
+	"btn_save": "保存"
 }
