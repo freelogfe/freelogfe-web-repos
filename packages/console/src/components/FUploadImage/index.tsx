@@ -33,7 +33,7 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         grid
         aspect={4 / 3}
         beforeCrop={(file) => {
-          // console.log(file, '#FSDFSDFSDF');
+          console.log(file, '#FSDFSDFSDF');
           if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
             onError && onError(FUtil.I18n.message('limit_resource_image_format'));
             return false;
@@ -48,7 +48,8 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         }}
       >
         <Upload
-          accept={'image/gif,image/jpg,image/png,.jpg'}
+          // accept={'image/gif,image/png,.jpg'}
+          accept={'.gif,.png,.jpg,.jpeg,.jpe'}
           beforeUpload={(file: RcFile, FileList: RcFile[]) => {
             // console.log(file, 'file20934u23');
             upload(file);
