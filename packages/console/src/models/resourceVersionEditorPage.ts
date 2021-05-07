@@ -7,6 +7,7 @@ import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
+import FUtil from "@/utils";
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -238,7 +239,7 @@ const Model: ResourceVersionEditorModelType = {
             // console.log(sp, 'SSSSSSppppPPPPP90j');
             return {
               key: sp[0],
-              value: sp[1] as string,
+              value: sp[0] === 'fileSize' ? FUtil.Format.humanizeSize(Number(sp[1])) : sp[1] as string,
             };
           }),
           baseProperties: base.map((b: any) => {

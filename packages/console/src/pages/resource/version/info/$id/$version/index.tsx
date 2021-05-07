@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FCircleButton, FTextButton, FNormalButton, FTextBtn, FRectBtn} from '@/components/FButton';
+import {FCircleButton, FTextButton, FNormalButton, FTextBtn, FRectBtn, FCircleBtn} from '@/components/FButton';
 import {Col, Row, Space} from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
@@ -38,6 +38,7 @@ import FDivider from "@/components/FDivider";
 import {FTipText} from '@/components/FText';
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 import {RouteComponentProps} from 'react-router';
+import FBasePropertiesCards from "@/components/FBasePropertiesCards";
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -288,53 +289,37 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>
-          <div className={styles.attributesBody}>
-            <Row gutter={[20, 20]}>
-              {
-                resourceVersionEditorPage.rawProperties.map((rp) => {
-                  return (<Col key={rp.key} span={6}>
-                    <FContentText text={rp.key} type="additional2"/>
-                    <div style={{height: 10}}/>
-                    <FContentText singleRow text={rp.value}/>
-                  </Col>)
-                })
+          <FBasePropertiesCards
+            rawProperties={resourceVersionEditorPage.rawProperties.map((rp) => {
+              return {
+                theKey: rp.key,
+                value: rp.value,
+              };
+            })}
+            baseProperties={resourceVersionEditorPage.baseProperties.map((bp) => {
+              return {
+                theKey: bp.key,
+                description: bp.description,
+                value: bp.value,
+              };
+            })}
+            onEdit={(theKey) => {
+              const baseP = resourceVersionEditorPage.baseProperties.find((bp) => {
+                return bp.key === theKey;
+              });
+              if (!baseP) {
+                return;
               }
+              onChange({
+                basePEditorVisible: true,
+                basePKeyInput: baseP.key,
+                basePValueInput: baseP.value,
+                basePDescriptionInput: baseP.description,
+                basePDescriptionInputError: '',
+              });
+            }}
+          />
 
-              {
-                resourceVersionEditorPage.baseProperties.map((bp) => {
-                  return (<Col
-                    key={bp.key}
-                    span={6}
-                  >
-                    <div className={styles.baseProperty} style={{backgroundColor: '#F7F8F9'}}>
-                      <div>
-                        <Space size={5}>
-                          <FContentText text={bp.key} type="additional2"/>
-                          {bp.description && (<FTooltip title={bp.description}><FInfo/></FTooltip>)}
-                        </Space>
-                        <div style={{height: 10}}/>
-                        <FContentText singleRow text={bp.value}/>
-                      </div>
-                      <FTextBtn
-                        onClick={() => {
-                          onChange({
-                            basePEditorVisible: true,
-                            basePKeyInput: bp.key,
-                            basePValueInput: bp.value,
-                            basePDescriptionInput: bp.description,
-                            basePDescriptionInputError: '',
-                          });
-                        }}
-                      >
-                        <FEdit/>
-                      </FTextBtn>
-                    </div>
-                  </Col>)
-                })
-              }
-
-            </Row>
-          </div>
         </FFormLayout.FBlock>
 
         {
