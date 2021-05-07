@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {CSSProperties} from "react";
-import {FAdd, FDelete, FLine, FPlus} from "@/components/FIcons";
+import {FAdd, FDelete, FEdit, FLine, FPlus} from "@/components/FIcons";
 
 interface FCircleBtnProps {
   children?: React.ReactNode;
   size?: 'middle' | 'small';
-  type?: 'primary' | 'transparent' | 'danger';
+  type?: 'primary' | 'transparent' | 'danger' | 'minor';
   className?: string;
   style?: CSSProperties;
   disabled?: boolean;
@@ -37,8 +37,6 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
     return (<button
       className={[styles.Transparent, className].join(' ')}
       style={{
-        // height: size === 'middle' ? 32 : 22,
-        // width: size === 'middle' ? 32 : 22,
         ...style,
       }}
       disabled={disabled}
@@ -50,13 +48,24 @@ function FCircleBtn({children, size = 'middle', className, style, disabled, onCl
     }}/>}</button>);
   }
 
+  if (type === 'minor') {
+    return (<button
+      className={[styles.Minor, className].join(' ')}
+      style={{
+        ...style,
+      }}
+      disabled={disabled}
+      onClick={(event: any) => {
+        onClick && onClick(event);
+      }}
+    >{children || <FEdit style={{
+      fontSize: 14,
+    }}/>}</button>);
+  }
+  // <FEdit/>
+
   return (<button
     className={[styles.Danger, className].join(' ')}
-    // style={{
-    //   height: size === 'middle' ? 32 : 22,
-    //   width: size === 'middle' ? 32 : 22,
-    //   ...style,
-    // }}
     disabled={disabled}
     onClick={(event: any) => {
       onClick && onClick(event);

@@ -40,14 +40,14 @@ import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";
-import FCustomOptionsCard from "@/components/FCustomOptionsCard";
-import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
+// import FCustomOptionsCard from "@/components/FCustomOptionsCard";
+// import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
-import FTooltip from "@/components/FTooltip";
+// import FTooltip from "@/components/FTooltip";
 import {RouteComponentProps} from 'react-router';
 import * as AHooks from "ahooks";
-import {ClearDataDataAction} from "@/models/marketResourcePage";
+// import {ClearDataDataAction} from "@/models/marketResourcePage";
 import CustomOptions from "./CustomOptions";
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {

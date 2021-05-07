@@ -36,17 +36,16 @@ import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
 import {FTipText} from '@/components/FText';
+import FCustomOptionsCards from "@/components/FCustomOptionsCards";
+import {RouteComponentProps} from 'react-router';
 
-interface VersionEditorProps {
+interface VersionEditorProps extends RouteComponentProps<{
+  id: string;
+  version: string;
+}> {
   dispatch: Dispatch;
   // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
-  match: {
-    params: {
-      id: string;
-      version: string;
-    }
-  }
 }
 
 function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: VersionEditorProps & RouterTypes) {
@@ -54,27 +53,14 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
 
-  // if (!resourceInfo.hasPermission) {
-  //   return (<div>
-  //     <FNoDataTip
-  //       height={}
-  //       tipText={'403,没权限访问'}
-  //       btnText={'将前往首页'}
-  //       onClick={() => {
-  //         router.replace('/');
-  //       }}
-  //     />
-  //   </div>);
-  // }
-
-  React.useEffect(() => {
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-  }, [route]);
+  // React.useEffect(() => {
+  //   dispatch<GlobalChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
 
   React.useEffect(() => {
     init();
@@ -94,10 +80,6 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   }, [resourceVersionEditorPage.description]);
-
-  // React.useEffect(() => {
-  //   setProperties($version.properties);
-  // }, [$version.properties]);
 
   function onUpdateEditorText() {
     const html: string = editor.toHTML();
@@ -324,7 +306,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                     key={bp.key}
                     span={6}
                   >
-                    <div className={styles.baseProperty}>
+                    <div className={styles.baseProperty} style={{backgroundColor: '#F7F8F9'}}>
                       <div>
                         <Space size={5}>
                           <FContentText text={bp.key} type="additional2"/>
@@ -333,17 +315,19 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                         <div style={{height: 10}}/>
                         <FContentText singleRow text={bp.value}/>
                       </div>
-                      <FTextButton onClick={() => {
-                        onChange({
-                          basePEditorVisible: true,
-                          basePKeyInput: bp.key,
-                          basePValueInput: bp.value,
-                          basePDescriptionInput: bp.description,
-                          basePDescriptionInputError: '',
-                        });
-                      }}>
+                      <FTextBtn
+                        onClick={() => {
+                          onChange({
+                            basePEditorVisible: true,
+                            basePKeyInput: bp.key,
+                            basePValueInput: bp.value,
+                            basePDescriptionInput: bp.description,
+                            basePDescriptionInputError: '',
+                          });
+                        }}
+                      >
                         <FEdit/>
-                      </FTextButton>
+                      </FTextBtn>
                     </div>
                   </Col>)
                 })
@@ -354,103 +338,40 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.customOptions?.length > 0 && <FFormLayout.FBlock title={'自定义选项'}>
-            <Space
-              className={styles.properties}
-              size={15}
-              direction="vertical"
-            >
-              {
-                resourceVersionEditorPage.customOptions.map((ppp) => {
-                  return (<Space className={styles.customOption} key={ppp.key}>
-                    <div className={styles.Content}>
-                      <div style={{height: 10}}/>
-                      <Space size={20} className={styles.row}>
-                        <Field title={FUtil.I18n.message('key')} dot={true}>
-                          <FInput
-                            disabled
-                            wrapClassName={styles.FInputWrap}
-                            value={ppp.key}
-                          />
-                        </Field>
-                        <Field title={FUtil.I18n.message('property_remark')}>
-                          <FInput
-                            wrapClassName={styles.FInputWrap}
-                            value={ppp.description}
-                            disabled
-                          />
-                        </Field>
-                      </Space>
+          resourceVersionEditorPage.customOptions?.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
+            <FCustomOptionsCards
+              dataSource={resourceVersionEditorPage.customOptions.map((cos) => {
+                return {
+                  theKey: cos.key,
+                  description: cos.description,
+                  type: cos.custom,
+                  value: cos.custom === 'select' ? cos.customOption : cos.defaultValue,
+                };
+              })}
+              onEdit={(theKey) => {
+                const customOption = resourceVersionEditorPage.customOptions.find((cos) => {
+                  return cos.key === theKey;
+                });
+                if (!customOption) {
+                  return;
+                }
+                onChange({
+                  customOptionEditorVisible: true,
+                  customOptionKey: customOption.key,
+                  customOptionDescription: customOption.description,
+                  customOptionDescriptionError: '',
+                  customOptionCustom: customOption.custom,
+                  customOptionDefaultValue: customOption.defaultValue,
+                  customOptionDefaultValueError: '',
+                  customOptionCustomOption: customOption.customOption,
+                  customOptionCustomOptionError: '',
+                });
+              }}
+            />
+          </FFormLayout.FBlock>)
+        }
 
-                      <div style={{height: 15}}/>
-                      <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
-                        <Field
-                          className={styles.FSelect}
-                          title={FUtil.I18n.message('value_input_mode')}
-                        >
-                          <FSelect
-                            disabled
-                            value={ppp.custom}
-                            className={styles.FSelect}
-                            dataSource={[
-                              {value: 'input', title: FUtil.I18n.message('textfield')},
-                              {value: 'select', title: FUtil.I18n.message('dropdownlist')},
-                            ]}
-                          />
-                        </Field>
-
-                        {
-                          ppp.custom === 'select'
-                            ? (<Field
-                              dot={true}
-                              title={'自定义选项(首个选项为默认值)'}
-                              className={styles.customOptions}
-                            >
-                              <FInput
-                                disabled
-                                wrapClassName={styles.FInputWrap}
-                                value={ppp.customOption}
-                              />
-                            </Field>)
-                            : (<Field
-                              // title={FUtil.I18n.message('value')}
-                              title={'自定义选项(填写一个默认值)'}
-                              dot={true}
-                            >
-                              <FInput
-                                disabled
-                                wrapClassName={styles.FInputWrap}
-                                value={ppp.defaultValue}
-                              />
-                            </Field>)
-                        }
-
-                      </Space>
-                      <div style={{height: 15}}/>
-                    </div>
-
-                    <div>
-                      <FTextButton onClick={() => {
-                        onChange({
-                          customOptionEditorVisible: true,
-                          customOptionKey: ppp.key,
-                          customOptionDescription: ppp.description,
-                          customOptionDescriptionError: '',
-                          customOptionCustom: ppp.custom,
-                          customOptionDefaultValue: ppp.defaultValue,
-                          customOptionDefaultValueError: '',
-                          customOptionCustomOption: ppp.customOption,
-                          customOptionCustomOptionError: '',
-                        });
-                      }}><FEdit/></FTextButton>
-                    </div>
-                  </Space>)
-                })
-              }
-            </Space>
-          </FFormLayout.FBlock>}
       </FFormLayout>
-      {/*</FContentLayout>*/}
     </FLeftSiderLayout>
 
     <FDrawer
