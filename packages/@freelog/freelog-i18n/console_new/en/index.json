@@ -198,5 +198,12 @@
 	"test1101": "1",
 	"msg_customdropdownlist": "",
 	"msg_bucket_quantity_exceed": "",
-	"naming_convention_node_name": ""
+	"naming_convention_node_name": "Make sure node name is including 2-24 characters. It should includes alphanumeric characters and Chinese character only.",
+	"naming_convention_node_domain": "Make sure bucket name is including 4-24 characters. It should includes alphanumeric characters and hyphen only, meanwhile, begin and end with alphanumeric characters.",
+	"create_custom_options": "",
+	"filed_key": "",
+	"filed_value": "",
+	"filed_remark": "",
+	"btn_add": "",
+	"btn_cancel": ""
 }
