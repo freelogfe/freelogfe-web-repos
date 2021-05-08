@@ -209,5 +209,6 @@
 	"edit_custom_option": "",
 	"alert_naming_convention_key": "",
 	"alert_custom_option_dropdownlist": "",
-	"alert_custom_option_field": ""
+	"alert_custom_option_field": "",
+	"alert_key_remark_length": ""
 }
