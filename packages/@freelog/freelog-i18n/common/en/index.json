@@ -8,7 +8,7 @@
 	"wrong_username_password": "Incorrect account or password",
 	"remove": "Remove",
 	"saved_successfully": "Saved successfully",
-	"cancel": "Cancel",
+	"cancel": "CANCEL",
 	"relationship_status_pending": "Pending",
-	"btn_save": ""
+	"btn_save": "SAVE"
 }
