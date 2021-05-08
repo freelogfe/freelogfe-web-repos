@@ -210,5 +210,16 @@
 	"alert_naming_convention_key": "键的名称在当前版本范围内必须唯一，只能由英文字母、数字或下划线组成，首字符必须为字母，长度不能超过30个字符",
 	"alert_custom_option_dropdownlist": "选项个数不能超过30项，总长度不能超过500个字符",
 	"alert_custom_option_field": "输入值长度不能超过30个字符。",
-	"alert_key_remark_length": "不能超过50个字符。"
+	"alert_key_remark_length": "不能超过50个字符。",
+	"exhibit_info": "",
+	"btn_edit_cover": "",
+	"exhibit_title": "",
+	"exhibit_tag": "",
+	"msg_exhibit_tag": "---",
+	"hint_exhibit_tag": "",
+	"advanced_setting": "",
+	"exhibit_version": "",
+	"resource_property": "",
+	"custom_option": "",
+	"btn_show_less": ""
 }

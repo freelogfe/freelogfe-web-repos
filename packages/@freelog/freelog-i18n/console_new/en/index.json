@@ -210,5 +210,16 @@
 	"alert_naming_convention_key": "",
 	"alert_custom_option_dropdownlist": "",
 	"alert_custom_option_field": "",
-	"alert_key_remark_length": ""
+	"alert_key_remark_length": "",
+	"exhibit_info": "",
+	"btn_edit_cover": "",
+	"exhibit_title": "",
+	"exhibit_tag": "",
+	"msg_exhibit_tag": "----",
+	"hint_exhibit_tag": "",
+	"advanced_setting": "",
+	"exhibit_version": "",
+	"resource_property": "",
+	"custom_option": "",
+	"btn_show_less": ""
 }
