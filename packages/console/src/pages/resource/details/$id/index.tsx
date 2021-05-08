@@ -11,7 +11,6 @@ import Viewport from './Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {
   ClearDataDataAction, FetchCollectionInfoAction, FetchInfoAction,
-  // OnChangeVersionAction,
   OnClickCollectionAction,
   ChangeAction, FetchVersionInfoAction,
 } from '@/models/marketResourcePage';
@@ -139,11 +138,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
               <FDropdownMenu
                 options={[...marketResourcePage.allVersions].reverse().map((v) => ({value: v}))}
                 onChange={(value) => {
-                  // console.log(value, '3209jsd');
-                  // dispatch<OnChangeVersionAction>({
-                  //   type: 'marketResourcePage/onChangeVersion',
-                  //   payload: value,
-                  // });
                   router.push(FUtil.LinkTo.resourceDetails({
                     resourceID: marketResourcePage.resourceId,
                     version: value,
@@ -174,7 +168,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
     </div>
   </div>);
 }
-
 
 export default connect(({marketResourcePage}: ConnectState) => ({
   marketResourcePage,
