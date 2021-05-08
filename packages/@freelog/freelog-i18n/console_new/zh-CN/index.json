@@ -1,6 +1,6 @@
 {
 	"remove": "移除",
-	"create_my_first_release ": "",
+	"create_my_first_release ": "创建资源",
 	"create_release_popup_empty": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
 	"file_exist": "存在同名文件",
 	"replace_file": "替换",
@@ -197,7 +197,7 @@
 	"alarm_exhibits_show_authorization": "授权链异常，无法上线展品。",
 	"test1101": "1",
 	"msg_customdropdownlist": "选项请用英文逗号分割，选框默认值为第一个选项",
-	"msg_bucket_quantity_exceed": "同一Freelog账号创建的存储空间总数不能超过5个",
+	"msg_bucket_quantity_exceed": "目前一个账号最多只能创建5个存储空间",
 	"naming_convention_node_name": "节点名称智能包括中文、英文和数字，长度必须在 2-24 字符之间。",
 	"naming_convention_node_domain": "节点地址只能包括小写字母、数字和短横线（-）。\n必须以小写字母或者数字开头和结尾。\n长度必须在 4-24 字符之间。",
 	"create_custom_options": "添加自定义选项",
