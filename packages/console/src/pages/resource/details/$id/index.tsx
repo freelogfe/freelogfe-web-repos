@@ -71,23 +71,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
     });
   });
 
-  // React.useEffect(() => {
-  //   console.log(match, 'ResourceDetails, 1234234@#$@#$@#$@#$@#$');
-  //   handleData();
-  //
-  //   // return () => {
-  //   //   console.log('LeaveClearDataDataAction9087uoihjkl23hr45lkdsf98ayh');
-  //   //   dispatch<ClearDataDataAction>({
-  //   //     type: 'marketResourcePage/clearData',
-  //   //   });
-  //   // };
-  // }, [match.params.id]);
-
-  // async function handleData() {
-  //   console.log(match.params.id, ' match.params.id12#$@#$!@#$@#$oplllllll');
-  //
-  // }
-
   async function onChange(payload: Partial<MarketResourcePageModelState>) {
     await dispatch<ChangeAction>({
       type: 'marketResourcePage/change',
@@ -118,7 +101,11 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
       <div className={styles.header}>
         <Space size={10}>
           <label className={styles.resourceType}>{marketResourcePage.resourceInfo?.type || ''}</label>
-          <FTitleText text={marketResourcePage.resourceInfo?.name || ''}/>
+          <FTitleText
+            style={{width: 700}}
+            singleRow
+            text={marketResourcePage.resourceInfo?.name || ''}
+          />
         </Space>
         <a
           className={styles.favoriteBtn}
