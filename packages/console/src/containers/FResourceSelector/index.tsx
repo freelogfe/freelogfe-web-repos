@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FDropdown from '@/components/FDropdown';
 import FInput from '@/components/FInput';
 import FResourceList from '@/components/FResourceList';
 import {connect, Dispatch} from 'dva';
@@ -22,7 +21,7 @@ interface FResourceSelectorProps {
   onDelete?({id, name}: { id: string; name: string; }): void;
 
   dispatch: Dispatch;
-  selector: StorageObjectDepSelectorModelState;
+  storageObjectDepSelector: StorageObjectDepSelectorModelState;
 }
 
 const selectOptions: { text?: string, value: string }[] = [
@@ -33,7 +32,7 @@ const selectOptions: { text?: string, value: string }[] = [
 
 function FResourceSelector({
                              disabledIDsOrNames, showRemoveIDsOrNames, onSelect, onDelete,
-                             dispatch, selector
+                             dispatch, storageObjectDepSelector,
                            }: FResourceSelectorProps) {
   React.useEffect(() => {
     // if (selector.rTotal === -1) {
@@ -57,13 +56,13 @@ function FResourceSelector({
           });
         }}
       >
-        <a>{(selectOptions.find((op) => op.value === selector.rSelect) as any).text} <DownOutlined
+        <a>{(selectOptions.find((op) => op.value === storageObjectDepSelector.rSelect) as any).text} <DownOutlined
           style={{marginLeft: 8}}/></a>
       </FDropdownMenu>
       <FInput
         theme="dark"
         debounce={300}
-        value={selector.rInput}
+        value={storageObjectDepSelector.rInput}
         onDebounceChange={(value) => {
           dispatch<OnChangeRConditionsAction>({
             type: 'storageObjectDepSelector/onChangeRConditions',
@@ -74,10 +73,11 @@ function FResourceSelector({
         }}
       />
     </div>
+    {/*{console.log(storageObjectDepSelector.resourceList, 'selector.resourceList@!@#$@!#$@#$!234234')}*/}
     <FResourceList
       showRemoveIDsOrNames={showRemoveIDsOrNames}
       disabledIDsOrNames={disabledIDsOrNames}
-      resourceObjects={selector.resourceList.map((r) => ({
+      resourceObjects={storageObjectDepSelector.resourceList.map((r) => ({
         id: r.resourceId,
         title: r.resourceName,
         resourceType: r.resourceType,
@@ -85,8 +85,8 @@ function FResourceSelector({
         time: r.updateDate,
         latestVersion: r.latestVersion,
       }))}
-      loading={selector.rTotal === -1}
-      stillMore={selector.resourceList.length < selector.rTotal}
+      loading={storageObjectDepSelector.rTotal === -1}
+      stillMore={storageObjectDepSelector.resourceList.length < storageObjectDepSelector.rTotal}
       onSelect={(value) => {
         onSelect && onSelect({id: value.id, name: value.title});
       }}
@@ -104,5 +104,5 @@ function FResourceSelector({
 }
 
 export default connect(({storageObjectDepSelector}: ConnectState) => ({
-  selector: storageObjectDepSelector,
+  storageObjectDepSelector: storageObjectDepSelector,
 }))(FResourceSelector);

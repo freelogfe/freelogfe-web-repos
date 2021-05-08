@@ -210,28 +210,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
 
               </Space>
 
-              {/*<FCustomOptionsCard*/}
-              {/*  dataSource={storageObjectEditor.customOptionsData.map((cod) => {*/}
-              {/*    return {*/}
-              {/*      key: cod.key,*/}
-              {/*      type: cod.custom === 'input' ? '输入框' : '选择框',*/}
-              {/*      description: cod.description,*/}
-              {/*      value: cod.custom === 'input' ? cod.defaultValue : cod.customOption,*/}
-              {/*    };*/}
-              {/*  })}*/}
-              {/*  onDeleteKey={(value) => {*/}
-              {/*    dispatch<ChangeAction>({*/}
-              {/*      type: 'storageObjectEditor/change',*/}
-              {/*      payload: {*/}
-              {/*        customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {*/}
-              {/*          return cod.key !== value;*/}
-              {/*        }),*/}
-              {/*      },*/}
-              {/*    })*/}
-              {/*  }}*/}
-              {/*/>*/}
-
-
               <div style={{height: 20}}/>
               {
                 storageObjectEditor.customOptionsData.length > 0 ? (<FCustomOptionsCards

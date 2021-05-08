@@ -58,8 +58,6 @@ function FResourceList({
               />
             </div>
             <div style={{width: 5}}/>
-            {/*{i.status === 0 && <label*/}
-            {/*  className={i.latestVersion ? styles.offline : styles.noVersion}>{i.latestVersion ? '未上线' : '未发行'}</label>}*/}
             {i.status === 0 && <FResourceStatusBadge status={!i.latestVersion ? 'unreleased' : 'offline'}/>}
           </div>
           <div style={{height: 2}}/>

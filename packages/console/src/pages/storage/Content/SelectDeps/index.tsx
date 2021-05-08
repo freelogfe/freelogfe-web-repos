@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Dropdown, Tabs} from 'antd';
+import {Tabs} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageObjectDepSelectorModelState, StorageObjectEditorModelState} from '@/models/connect';
 import FResourceSelector from '@/containers/FResourceSelector';

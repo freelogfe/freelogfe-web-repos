@@ -122,7 +122,7 @@ const Model: StorageObjectDepSelectorModelType = {
             resourceName: r.resourceName,
             resourceType: r.resourceType,
             updateDate: FUtil.Format.formatDateTime(r.resourceUpdateDate, true),
-            status: r.status,
+            status: r.resourceStatus,
             latestVersion: r.latestVersion,
           })),
         ];
