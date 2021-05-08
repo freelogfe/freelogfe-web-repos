@@ -99,8 +99,6 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       width: 300,
       render: (_: any, record) => {
         return (<Space size={5}>
-          {/*<FContentText text={record.contractName}/>*/}
-          {/*<FContentText type="additional2" text={record.contractID}/>*/}
           {
             record.licenseeIdentityType === 1 && (<FResource/>)
           }
@@ -118,7 +116,6 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       },
     },
     {
-      // title: FUtil.I18n.message('licensee'),
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'所签授权策略｜合约状态'}
@@ -164,11 +161,6 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
         }}>查看合约</FTextBtn>);
       },
     },
-    // {
-    //   title: FUtil.I18n.message('contract_state'),
-    //   dataIndex: 'contractStatus',
-    //   render: (_: any, record: any) => (<StatusLabel status={record.status}/>)
-    // },
   ];
 
   function onChange(payload: Partial<ResourceAuthPageModelState>) {
@@ -242,10 +234,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
             ? (<FTable
               columns={columns}
               dataSource={resourceAuthPage.contractsAuthorize}
-              // bordered
               pagination={false}
-              // title={() => 'Header'}
-              // footer={() => 'Footer'}
             />)
             : (<FContentText type="additional1" text={'暂无合约'}/>)
         }
