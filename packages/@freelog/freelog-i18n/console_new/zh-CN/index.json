@@ -207,7 +207,7 @@
 	"btn_add": "添加",
 	"btn_cancel": "取消",
 	"edit_custom_option": "编辑自定义选项",
-	"alert_naming_convention_key": "键的名称在当前版本范围内必须唯一，只能由英文字母、数字或下划线组成，首字符必须为字母，长度不能超过30个字符",
+	"alert_naming_convention_key": "键的名称只能由英文字母、数字或下划线组成，首字符必须为字母，长度不能超过30个字符",
 	"alert_custom_option_dropdownlist": "选项个数不能超过30项，总长度不能超过500个字符",
 	"alert_custom_option_field": "长度不能超过30个字符。",
 	"alert_key_remark_length": "不能超过50个字符。",
@@ -221,5 +221,6 @@
 	"exhibit_version": "展出版本",
 	"resource_property": "属性",
 	"custom_option": "自定义选项",
-	"btn_show_less": "收起"
+	"btn_show_less": "收起",
+	"alert_key_exist": "存在同名键"
 }

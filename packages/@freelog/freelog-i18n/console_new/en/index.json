@@ -207,7 +207,7 @@
 	"btn_add": "ADD",
 	"btn_cancel": "CANCEL",
 	"edit_custom_option": "",
-	"alert_naming_convention_key": "",
+	"alert_naming_convention_key": "Make sure key name is 1-30 characters including alphanumeric characters and hyphen only, meanwhile, begin with alphabet.",
 	"alert_custom_option_dropdownlist": "Make sure it's no more than 50 options and 500 characters.",
 	"alert_custom_option_field": "Make sure it's no more than 30 characters.",
 	"alert_key_remark_length": "Make sure it's no more than 50 characters.",
@@ -221,5 +221,6 @@
 	"exhibit_version": "Exhibit Version",
 	"resource_property": "Property",
 	"custom_option": "Custom Options",
-	"btn_show_less": "SHOW LESS"
+	"btn_show_less": "SHOW LESS",
+	"alert_key_exist": "The key already exists."
 }
