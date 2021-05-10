@@ -12,7 +12,8 @@ function Error403({}: Error403Props) {
   return (<div>
     <FNoDataTip
       height={'calc(100vh - 70px)'}
-      tipText={'403,没有权限'}
+      // tipText={'403,没有权限'}
+      tipText={FUtil.I18n.message('msg_have_no_access')}
       btnText={'将前往首页'}
       onClick={() => {
         router.replace(FUtil.LinkTo.market());

@@ -14,7 +14,7 @@ export function humanizeSize(bytes: number): string {
   let index = 0;
   // var srcsize = parseFloat(value);
   index = Math.floor(Math.log(bytes) / Math.log(1024));
-  const size = (bytes / Math.pow(1024, index)).toFixed(2); //保留的小数位数
+  const size = Math.round((bytes / Math.pow(1024, index)) * 100) / 100; //保留的小数位数
   // size = size
   return size + ' ' + unitArr[index];
 }

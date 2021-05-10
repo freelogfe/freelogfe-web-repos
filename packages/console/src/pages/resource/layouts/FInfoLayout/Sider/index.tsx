@@ -12,6 +12,8 @@ import FUtil from "@/utils";
 import * as AHooks from 'ahooks';
 import fMessage from "@/components/fMessage";
 import {RouteComponentProps} from 'react-router';
+import {Popconfirm} from 'antd';
+import {FInfo} from "@/components/FIcons";
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
@@ -133,14 +135,25 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
           <div style={{cursor: 'default'}}>{FUtil.I18n.message('verions')}</div>
+
           {
             // match.path === '/resource/:id/$version/creator'
             resourceInfo.showPage.creator
-              ? (<FCircleBtn
-                type="transparent"
-                onClick={() => {
-                  fMessage('正在创建版本', 'warning');
-                }}/>)
+              ? (<Popconfirm
+                title="Are you sure to delete this task?"
+                // icon={<FInfo/>}
+                // onConfirm={confirm}
+                // onCancel={cancel}
+                // okText="Yes"
+                // cancelText="No"
+              >
+                <FCircleBtn
+                  type="transparent"
+                  // onClick={() => {
+                  //   fMessage('正在创建版本', 'warning');
+                  // }}
+                />
+              </Popconfirm>)
               : resourceInfo.draftData
               ? (<FCircleBtn
                 type="transparent"
