@@ -191,10 +191,10 @@
 	"uploaded_successfully": "Uploaded successfully",
 	"resume_uploading": "Resume uploading",
 	"cover_object_with_same_name": "Updating will replace the old file with the new one, but the settings of rely and property will be remained.",
-	"test_item_exist": "",
-	"version_range_incorrect": "",
-	"alarm_exhibits_show_plan": "",
-	"alarm_exhibits_show_authorization": "",
+	"test_item_exist": "Import failed, the test item already exist.",
+	"version_range_incorrect": "Make sure the format is conforming to Semantic Versioning.",
+	"alarm_exhibits_show_plan": "Add and activate at least one authorization plan to make the exhibit available in the node.",
+	"alarm_exhibits_show_authorization": "Authorization is abnormal, you can not make it available in the node.",
 	"test1101": "1",
 	"msg_customdropdownlist": "Enter a comma after each option, the first one is selected by default",
 	"msg_bucket_quantity_exceed": "You can only create no more than 5 buckets.",
@@ -226,5 +226,5 @@
 	"tip_change_version": "Change version",
 	"tip_reset_value": "Reset",
 	"tip_delete_custom_option": "Delete",
-	"tip_switch_version": ""
+	"tip_switch_version": "Switch version"
 }
