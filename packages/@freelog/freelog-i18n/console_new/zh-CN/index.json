@@ -49,7 +49,7 @@
 	"alarm_resource_not_available": "该资源已下线，无法获取授权。",
 	"alarm_resource_authorization_abnormal": "该资源授权链异常，请谨慎签约。",
 	"naming_convention_exhibits_name": "展品名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? \" < > |",
-	"naming_convention_group_name": "",
+	"naming_convention_group_name": "自定义选项主要用于存储一些开放给下游用户自定义的属性，例如，一个主题的背景颜色、一个播放器的播放顺序等",
 	"exhibits_name_exist": "该展品名称在当前节点已使用，请重新输入。",
 	"alarm_strategy_not_available": "该授权策略已停用，无法签约。",
 	"resource_manage": "资源管理",
@@ -226,5 +226,6 @@
 	"tip_change_version": "修改版本",
 	"tip_reset_value": "重置",
 	"tip_delete_custom_option": "删除",
-	"tip_switch_version": "切换版本"
+	"tip_switch_version": "切换版本",
+	"info_custom_options": ""
 }

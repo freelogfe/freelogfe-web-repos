@@ -226,5 +226,6 @@
 	"tip_change_version": "Change version",
 	"tip_reset_value": "Reset",
 	"tip_delete_custom_option": "Delete",
-	"tip_switch_version": "Switch version"
+	"tip_switch_version": "Switch version",
+	"info_custom_options": ""
 }
