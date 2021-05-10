@@ -227,5 +227,13 @@
 	"tip_reset_value": "Reset",
 	"tip_delete_custom_option": "Delete",
 	"tip_switch_version": "Switch version",
-	"info_custom_options": ""
+	"info_custom_options": "Custom options allow you to change some settings of the resource.",
+	"btn_add_to_my_collections": "SAVE",
+	"auth_to_node": "Authorize to ",
+	"select_authorization_plan": "Select authorization plan(s)",
+	"hint_dropdownlist_nodes": "Click here to select a node for authorization",
+	"btn_sign_now": "SIGN NOW",
+	"title_version": "Version",
+	"description_empty": "No description",
+	"released_date": "Release Date"
 }
