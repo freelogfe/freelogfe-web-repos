@@ -235,5 +235,10 @@
 	"btn_sign_now": "SIGN NOW",
 	"title_version": "Version",
 	"description_empty": "No description",
-	"released_date": "Release Date"
+	"released_date": "Release Date",
+	"btn_remove_from_my_collections": "Unsave",
+	"title_resource_maps": "Version Charts",
+	"rely_map": "Rely Map",
+	"auth_map": "Authorization Map",
+	"btn_full_screen": "FULL SCREEN"
 }
