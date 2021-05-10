@@ -222,5 +222,9 @@
 	"resource_property": "属性",
 	"custom_option": "自定义选项",
 	"btn_show_less": "收起",
-	"alert_key_exist": "存在同名键"
+	"alert_key_exist": "存在同名键",
+	"tip_change_version": "修改版本",
+	"tip_reset_value": "重置",
+	"tip_delete_custom_option": "删除",
+	"tip_switch_version": "切换版本"
 }

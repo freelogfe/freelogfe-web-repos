@@ -222,5 +222,9 @@
 	"resource_property": "Property",
 	"custom_option": "Custom Options",
 	"btn_show_less": "SHOW LESS",
-	"alert_key_exist": "The key already exists."
+	"alert_key_exist": "The key already exists.",
+	"tip_change_version": "Change version",
+	"tip_reset_value": "Reset",
+	"tip_delete_custom_option": "Delete",
+	"tip_switch_version": ""
 }
