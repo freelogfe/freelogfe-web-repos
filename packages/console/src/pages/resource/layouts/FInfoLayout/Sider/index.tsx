@@ -139,32 +139,26 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
           {
             // match.path === '/resource/:id/$version/creator'
             resourceInfo.showPage.creator
-              ? (<Popconfirm
-                title="Are you sure to delete this task?"
-                // icon={<FInfo/>}
-                // onConfirm={confirm}
-                // onCancel={cancel}
-                // okText="Yes"
-                // cancelText="No"
-              >
-                <FCircleBtn
-                  type="transparent"
-                  // onClick={() => {
-                  //   fMessage('正在创建版本', 'warning');
-                  // }}
-                />
-              </Popconfirm>)
-              : resourceInfo.draftData
               ? (<FCircleBtn
                 type="transparent"
                 onClick={() => {
-                  // fConfirmModal({
-                  //   message: FUtil.I18n.message('error_unreleasedverionexisted'),
-                  //   onOk: gotoCreator,
-                  // });
-                  fMessage(FUtil.I18n.message('error_unreleasedverionexisted'), 'warning');
+                  fMessage('正在创建版本', 'warning');
                 }}
               />)
+              : resourceInfo.draftData
+              ? (<Popconfirm
+                title={FUtil.I18n.message('error_unreleasedverionexisted')}
+                // icon={<FInfo/>}
+                onConfirm={() => {
+                  gotoCreator();
+                }}
+                cancelButtonProps={{
+                  style: {
+                    display: 'none',
+                  }
+                }}
+              ><FCircleBtn type="transparent"/>
+              </Popconfirm>)
               : (<FCircleBtn onClick={gotoCreator} type="transparent"/>)
           }
         </div>
