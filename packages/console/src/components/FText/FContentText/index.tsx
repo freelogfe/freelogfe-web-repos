@@ -16,9 +16,7 @@ function FContentText({className, style, children, text, type = 'normal', single
   const singleRowClassName = singleRow ? shared.singleRow : '';
   return (
     <div
-      style={{
-        ...style,
-      }}
+      style={style}
       className={[singleRowClassName, styles[type], className].join(' ')}>{children || text}</div>
   );
 }
