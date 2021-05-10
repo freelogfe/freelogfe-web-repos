@@ -9,7 +9,6 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
   ChangeAction,
-  CreateBucketAction,
   DeleteBucketByNameAction,
 } from '@/models/storageHomePage';
 import {FDelete, FWarning} from "@/components/FIcons";
@@ -49,23 +48,31 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
             />
           </Space>
 
-          <FCircleBtn
-            type="transparent"
-            onClick={() => {
-              if ((storageHomePage.bucketList || []).length < 5) {
-                dispatch<ChangeAction>({
-                  type: 'storageHomePage/change',
-                  payload: {
-                    newBucketName: '',
-                    newBucketNameError: false,
-                    newBucketModalVisible: true,
-                  },
-                });
-              } else {
-                fMessage(FUtil.I18n.message('msg_bucket_quantity_exceed '), 'warning');
-              }
-            }}
-          />
+          {
+            (storageHomePage.bucketList || []).length < 5
+              ? (<FCircleBtn
+                type="transparent"
+                onClick={() => {
+                  dispatch<ChangeAction>({
+                    type: 'storageHomePage/change',
+                    payload: {
+                      newBucketName: '',
+                      newBucketNameError: false,
+                      newBucketModalVisible: true,
+                    },
+                  });
+                }}
+              />)
+              : (<FTooltip
+                title={FUtil.I18n.message('msg_bucket_quantity_exceed ')}
+                trigger="click"
+                placement="topLeft"
+              >
+                <FCircleBtn type="transparent"/>
+              </FTooltip>)
+
+          }
+
         </div>
         <div style={{height: 30}}/>
         {
