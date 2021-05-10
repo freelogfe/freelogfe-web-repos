@@ -1,23 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
-import FDropdownMenu from "@/components/FDropdownMenu";
 import {Space} from "antd";
-import {FDelete, FEdit, FSwap} from "@/components/FIcons";
+import {FDelete, FEdit} from "@/components/FIcons";
 import {FCircleButton, FTextButton} from "@/components/FButton";
-import FRedo from "@/components/FIcons/FRedo";
 import {
   ChangeAction, SyncRulesAction,
-  // ChangeVersionAction,
-  // ExhibitInfoPageModelState,
-  // UpdateRewriteAction
 } from "@/models/informExhibitInfoPage";
-import FSelect from "@/components/FSelect";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 import FModal from "@/components/FModal";
-import {FDoubleDown, FDoubleUp} from "@/components/FIcons";
 
 interface SettingProps {
   dispatch: Dispatch;
