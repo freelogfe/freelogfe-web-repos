@@ -13,12 +13,13 @@ interface FContentProps {
 }
 
 function FContentText({className, style, children, text, type = 'normal', singleRow = false}: FContentProps) {
+  const singleRowClassName = singleRow ? shared.singleRow : '';
   return (
     <div
       style={{
         ...style,
       }}
-      className={[(singleRow && shared.singleRow), styles[type], className].join(' ')}>{children || text}</div>
+      className={[singleRowClassName, styles[type], className].join(' ')}>{children || text}</div>
   );
 }
 
