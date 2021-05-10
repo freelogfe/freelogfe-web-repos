@@ -30,8 +30,8 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
           onClick={() => setVisibleR(r.id)}
         >
           <div>
-            <FTitleText
-              type="h4"
+            <FContentText
+              type="highlight"
               text={r.name}
             />
             <div style={{height: 5}}/>
@@ -65,8 +65,8 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
                 onClick={() => setVisibleR(r.id)}
               >
                 <div>
-                  <FTitleText
-                    type="h4"
+                  <FContentText
+                    type="highlight"
                     text={r.name}
                   />
                   <div style={{height: 5}}/>
@@ -123,9 +123,9 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
               className={styles.policy}
               key={rp.id}
             >
-              <FTitleText
+              <FContentText
                 text={rp.name}
-                type="h4"
+                type="highlight"
               />
               <div style={{height: 15}}/>
               <pre>{rp.text}</pre>
@@ -138,9 +138,9 @@ function ResourcesAndPolicies({dispatch, marketResourcePage}: ResourcesAndPolici
               className={styles.policy}
               key={rp.id}
             >
-              <FTitleText
+              <FContentText
                 text={rp.name}
-                type="h4"
+                type="highlight"
               />
               <div style={{height: 15}}/>
               <pre>{rp.text}</pre>

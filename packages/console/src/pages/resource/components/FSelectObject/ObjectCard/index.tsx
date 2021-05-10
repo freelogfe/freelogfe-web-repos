@@ -21,7 +21,10 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
       <img src={img} className={styles.img} alt=""/>
       <div style={{width: 20}}/>
       <div className="">
-        <FTitleText type="h4" text={resourceObject.name}/>
+        <FContentText
+          type="highlight"
+          text={resourceObject.name}
+        />
         <div style={{height: 18}}/>
         <div className={styles.info}>
           {/*<div style={{display: "flex", flexShrink: 0}}>{FUtil.Format.humanizeSize(resourceObject.size)}</div>*/}

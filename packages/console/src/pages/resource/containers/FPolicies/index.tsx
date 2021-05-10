@@ -63,7 +63,7 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
       resourceAuthPage.policies?.length === 0
         ? (<div className={styles.empty}>
           <FTipText
-            type="secondary"
+            type="second"
             text={FUtil.I18n.message('hint_add_authorization_plan')}
           />
           <div style={{height: 20}}/>

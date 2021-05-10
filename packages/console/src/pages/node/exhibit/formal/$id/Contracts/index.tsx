@@ -58,8 +58,8 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               }));
             }}
           >
-            <FTitleText
-              type="h5"
+            <FContentText
+              type="highlight"
               text={mainResource.name}
               singleRow
             />
@@ -95,8 +95,8 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                 }));
               }}
             >
-              <FTitleText
-                type="h5"
+              <FContentText
+                type="highlight"
                 text={r.name}
                 singleRow
               />

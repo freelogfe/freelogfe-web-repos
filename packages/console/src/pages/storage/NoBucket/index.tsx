@@ -18,11 +18,14 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
 
   return (<>
     <div className={styles.styles} style={{height: 'calc(100vh - 70px)'}}>
-      <FTipText text={'自由创作从Freelog开始'} type="primary"/>
+      <FTipText
+        text={'自由创作从Freelog开始'}
+        type="first"
+      />
       <div style={{height: 60}}/>
       <FTipText
         text={'在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。'}
-        type="secondary"
+        type="second"
       />
       <div style={{height: 60}}/>
       <FRectBtn

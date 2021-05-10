@@ -13,7 +13,7 @@ function NoContent({}: NoContentProps) {
   return (<>
     <Header/>
     <div className={styles.styles}>
-      <FTipText text={'当前Bucket还没有上传任何对象'} type="primary"/>
+      <FTipText text={'当前Bucket还没有上传任何对象'} type="first"/>
       <div style={{height: 30}}/>
       <FNormalButton theme="big">上传对象</FNormalButton>
     </div>

@@ -50,10 +50,10 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
   }
 
   return (<>
-    <FTitleText text={'高级设置'} type="h4"/>
+    <FContentText text={'高级设置'} type="highlight"/>
     <div style={{height: 20}}/>
 
-    {/*<FTitleText text={'展示版本'} type="form"/>*/}
+    {/*<FTitleText text={'展示版本'} type="h4"/>*/}
     {/*<div style={{height: 15}}/>*/}
     {/*<FDropdownMenu*/}
     {/*  options={[...informExhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}*/}
@@ -71,7 +71,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     {/*  informExhibitInfoPage.settingUnfold && (<>*/}
     {/*<div style={{height: 30}}/>*/}
 
-    {/*<FTitleText text={'基础属性'} type="form"/>*/}
+    {/*<FTitleText text={'基础属性'} type="h4"/>*/}
     {/*<div style={{height: 15}}/>*/}
     {/*<div className={styles.attr}>*/}
     {/*  <table>*/}
@@ -89,7 +89,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
 
     <FTitleText
       text={'自定义选项'}
-      type="form"
+      type="h4"
     />
 
     <div style={{height: 15}}/>
@@ -286,7 +286,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="form">key</FTitleText>
+          <FTitleText type="h4">key</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -318,7 +318,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="form">value</FTitleText>
+          <FTitleText type="h4">value</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -338,7 +338,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         />
         <div style={{height: 20}}/>
         <div>
-          <FTitleText type="form">属性说明</FTitleText>
+          <FTitleText type="h4">属性说明</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput

@@ -34,7 +34,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
   }
 
   return (<>
-    <FTitleText text={'基础信息'} type="h4"/>
+    <FContentText text={'基础信息'} type="highlight"/>
     <div style={{height: 20}}/>
 
     <FUploadImage
@@ -66,7 +66,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
 
     <div style={{height: 20}}/>
 
-    <FTitleText text={'展品标题'} type="form"/>
+    <FTitleText text={'展品标题'} type="h4"/>
     <div style={{height: 15}}/>
     {
       exhibitInfoPage.pInputTitle === null
@@ -110,7 +110,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
     }
     <div style={{height: 30}}/>
 
-    <FTitleText text={'展品标签'} type="form"/>
+    <FTitleText text={'展品标签'} type="h4"/>
     <div style={{height: 15}}/>
     <FLabelEditor
       values={exhibitInfoPage.pTags as string[]}

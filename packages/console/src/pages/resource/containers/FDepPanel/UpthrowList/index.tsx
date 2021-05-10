@@ -28,7 +28,7 @@ function UpthrowList({creator: {dependencies}}: UpthrowListProps) {
       <div className={styles.tip}>
         <FTitleText
           text={FUtil.I18n.message('basic_upcast')}
-          type="form"
+          type="h4"
         />
         <div style={{width: 5}}/>
         <FInfo style={{color: '#C7C7C7'}}/>

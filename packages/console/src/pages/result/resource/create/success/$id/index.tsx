@@ -38,9 +38,9 @@ function Success({match, route, dispatch}: RouterTypes & SuccessProps) {
     <div className={styles.modal}>
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
-      <FTipText type={'secondary'} text={FUtil.I18n.message('resource_created_successfully')}/>
+      <FTipText type="second" text={FUtil.I18n.message('resource_created_successfully')}/>
       <div style={{height: 40}}/>
-      <FTipText type={'modal'} text={FUtil.I18n.message('hint_create_1st_version')}/>
+      <FTipText type="third" text={FUtil.I18n.message('hint_create_1st_version')}/>
       <div style={{height: 20}}/>
       <FRectBtn onClick={goto}>{FUtil.I18n.message('create_first_version')}</FRectBtn>
     </div>

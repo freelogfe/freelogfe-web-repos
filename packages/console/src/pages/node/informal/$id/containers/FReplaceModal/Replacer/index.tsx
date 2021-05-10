@@ -102,7 +102,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
               <div className={styles.replacerListItemContent}>
                 <div>
                   <div>
-                    <FTitleText text={rl.name} type="h5"/>
+                    <FContentText text={rl.name} type="highlight"/>
                   </div>
                   <div style={{height: 2}}/>
                   <div>

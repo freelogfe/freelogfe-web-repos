@@ -284,7 +284,7 @@ function FAntvG6AuthorizationGraph({nodes, edges, width = 920, height = 500}: FA
       }}
     >
       <FTipText
-        type="primary"
+        type="first"
         text={'无授权树'}
       />
     </div>);

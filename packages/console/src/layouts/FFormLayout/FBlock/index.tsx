@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 
 interface FBlockProps {
   children?: React.ReactNode | React.ReactNodeArray;
@@ -16,7 +16,7 @@ function FBlock({children, title, dot = false, subtitle, extra}: FBlockProps) {
       <div>
         <div className={styles.prefix}/>
         <div style={{width: 5}}/>
-        <FTitleText type={'h4'} text={title}/>
+        <FContentText type="highlight" text={title}/>
         {
           dot && (<>
             <div style={{width: 5}}/>

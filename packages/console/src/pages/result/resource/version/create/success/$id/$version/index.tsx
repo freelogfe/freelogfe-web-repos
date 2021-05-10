@@ -84,11 +84,13 @@ function Success({match, route, dispatch}: SuccessProps & RouterTypes) {
       <i className={'freelog fl-icon-shenqingchenggong'}/>
       <div style={{height: 20}}/>
       {/*<FTipText type={'secondary'} text={`版本 ${match.params.$version} 创建成功`}/>*/}
-      <FTipText type={'secondary'}
-                text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}/>
+      <FTipText
+        type="second"
+        text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}
+      />
       <div style={{height: 40}}/>
       <div className={styles.goto}>
-        <FTipText type={'modal'} text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
+        <FTipText type="third" text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
         <div style={{width: 10}}/>
         <FTextBtn
           // theme={'primary'}

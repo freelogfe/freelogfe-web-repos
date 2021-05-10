@@ -74,7 +74,10 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
               resource?.status === 0 && resource.enableReuseContracts.length === 0 && resource.enabledPolicies.length === 0 && (
                 <div className={styles.errorBox}>
                   <CloseCircleFilled className={styles.errorIcon}/>
-                  <FTipText text={FUtil.I18n.message('authorization_issue_offline_resource')} type="secondary"/>
+                  <FTipText
+                    text={FUtil.I18n.message('authorization_issue_offline_resource')}
+                    type="second"
+                  />
                 </div>)
             }
             {
@@ -82,20 +85,20 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
                 <CloseCircleFilled className={styles.errorIcon}/>
                 <FTipText
                   text={FUtil.I18n.message('authorization_issue_circular_reply')}
-                  type="secondary"
+                  type="second"
                 />
               </div>)
             }
             {
               resource?.status === 3 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
-                <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="secondary"/>
+                <FTipText text={'该依赖是存储空间对象，无法获取授权。'} type="second"/>
               </div>)
             }
             {
               resource?.status === 4 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
-                <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="secondary"/>
+                <FTipText text={'该依赖是基础上抛资源，无法获取授权'} type="second"/>
               </div>)
             }
             {

@@ -193,7 +193,7 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
       }}
     >
       <FTipText
-        type="primary"
+        type="first"
         text={'无关系树'}
       />
     </div>);

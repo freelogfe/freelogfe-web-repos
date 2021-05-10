@@ -71,7 +71,7 @@ export function VersionRule({version}: VersionRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleVersion/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'展示版本'}/></div>
-      <div><FTitleText type="h5" text={version}/></div>
+      <div><FContentText type="highlight" text={version}/></div>
     </div>
   </div>);
 }
@@ -85,7 +85,7 @@ export function LabelRule({labels}: LabelRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleLabel/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'设置标签'}/></div>
-      <div><FTitleText type="h5" text={labels.join(', ')}/></div>
+      <div><FContentText type="highlight" text={labels.join(', ')}/></div>
     </div>
   </div>);
 }
@@ -99,7 +99,7 @@ export function CoverRule({cover}: CoverRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleCover/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'设置封面'}/></div>
-      <div><FTitleText type="h5" text={cover}/></div>
+      <div><FContentText type="highlight" text={cover}/></div>
     </div>
   </div>);
 }
@@ -113,7 +113,7 @@ export function TitleRule({title}: TitleRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleTitle/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'设置标题'}/></div>
-      <div><FTitleText type="h5" text={title}/></div>
+      <div><FContentText type="highlight" text={title}/></div>
     </div>
   </div>);
 }
@@ -127,7 +127,7 @@ export function OnlineRule({online}: OnlineRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleOnline/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'展品状态'}/></div>
-      <div><FTitleText type="h5" text={'上线'}/></div>
+      <div><FContentText type="highlight" text={'上线'}/></div>
     </div>
   </div>);
 }
@@ -141,7 +141,7 @@ export function OfflineRule({offline}: OfflineRuleProps) {
     <div className={styles.ruleIcon}><FMappingRuleOffline/></div>
     <div className={styles.ruleContent}>
       <div><FContentText text={'展品状态'}/></div>
-      <div><FTitleText type="h5" text={'下线'}/></div>
+      <div><FContentText type="highlight" text={'下线'}/></div>
     </div>
   </div>);
 }
@@ -161,20 +161,22 @@ export function AttrRule({type, theKey, value, description}: AttrRuleProps) {
         ? (<div className={styles.ruleContent}>
           <div><FContentText text={'添加属性'}/></div>
           <div><FContentText text={'键'}/></div>
-          <div><FTitleText type="h5" text={theKey}/></div>
+          <div><FContentText type="highlight" text={theKey}/></div>
           <div><FContentText text={'值'}/></div>
-          <div><FTitleText type="h5" text={value}/></div>
+          <div><FContentText type="highlight" text={value}/></div>
           {
             description && (<>
               <div><FContentText text={'描述'}/></div>
-              <div><FTitleText type="h5" text={'description1'}/></div>
+              {/*<div><FTitleText type="h5" text={'description1'}/></div>*/}
+              <div><FContentText type="highlight" text={'description1'}/></div>
             </>)
           }
         </div>)
         : (<div className={styles.ruleContent}>
           <div><FContentText text={'删除属性'}/></div>
           <div><FContentText text={'键'}/></div>
-          <div><FTitleText type="h5" text={theKey}/></div>
+          {/*<div><FTitleText type="h5" text={theKey}/></div>*/}
+          <div><FContentText type="highlight" text={theKey}/></div>
         </div>)
     }
 

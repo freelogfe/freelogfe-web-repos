@@ -16,7 +16,7 @@ function Relation({informExhibitInfoPage}: RelationProps) {
   }
 
   return (<div className={styles.info}>
-    <FTitleText text={'关联资源'} type="h4"/>
+    <FContentText text={'关联资源'} type="highlight"/>
     <div style={{height: 20}}/>
     <div className={styles.cover} style={{cursor: 'default'}}>
       <img

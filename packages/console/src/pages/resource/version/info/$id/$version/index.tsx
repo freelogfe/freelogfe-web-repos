@@ -205,7 +205,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             && (<div className={styles.noDescription}>
               <FTipText
                 text={'动动手，让你的资源看起来更丰富多彩吧～'}
-                type="secondary"
+                type="second"
               />
               <div style={{height: 20}}/>
               <FRectBtn onClick={() => {
@@ -408,7 +408,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot}/>
-            <FTitleText type="form">key</FTitleText>
+            <FTitleText type="h4">key</FTitleText>
           </div>
           <div style={{height: 5}}/>
           <FInput
@@ -421,7 +421,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         <div className={styles.input}>
           <div className={styles.title}>
             <i className={styles.dot}/>
-            <FTitleText type="form">value</FTitleText>
+            <FTitleText type="h4">value</FTitleText>
           </div>
           <div style={{height: 5}}/>
           <FInput
@@ -451,7 +451,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
         <div className={styles.input}>
           <div className={styles.title}>
-            <FTitleText type="form">属性说明</FTitleText>
+            <FTitleText type="h4">属性说明</FTitleText>
           </div>
           <div style={{height: 5}}/>
           <FInput

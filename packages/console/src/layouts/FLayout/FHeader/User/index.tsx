@@ -18,7 +18,10 @@ function User({dispatch, user}: UserProps) {
     <div className={styles.userPanelHeader}>
       <img src={user.info?.headImage} alt="headImage"/>
       <div style={{height: 10}}/>
-      <FTitleText type="h4" text={user.info?.username}/>
+      <FContentText
+        type="highlight"
+        text={user.info?.username}
+      />
       <div style={{height: 8}}/>
       <FContentText text={user.info?.mobile || user.info?.email}/>
     </div>

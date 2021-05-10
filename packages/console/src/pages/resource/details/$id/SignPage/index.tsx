@@ -69,8 +69,8 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
         <FFormLayout.FBlock title={'确认签约节点'}>
           <Space size={5}>
             <FNodes className={styles.yellow}/>
-            <FTitleText
-              type="h5"
+            <FContentText
+              type="highlight"
               text={selectedNode?.nodeName}
             />
           </Space>

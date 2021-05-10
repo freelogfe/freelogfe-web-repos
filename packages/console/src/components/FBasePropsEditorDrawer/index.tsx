@@ -108,7 +108,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot}/>
-                <FTitleText type="form">key</FTitleText>
+                <FTitleText type="h4">key</FTitleText>
               </div>
               <div style={{height: 5}}/>
               <FInput
@@ -136,7 +136,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             <div className={styles.input}>
               <div className={styles.title}>
                 <i className={styles.dot}/>
-                <FTitleText type="form">value</FTitleText>
+                <FTitleText type="h4">value</FTitleText>
               </div>
               <div style={{height: 5}}/>
               <FInput
@@ -161,7 +161,7 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
             </div>
             <div className={styles.input}>
               <div className={styles.title}>
-                <FTitleText type="form">属性说明</FTitleText>
+                <FTitleText type="h4">属性说明</FTitleText>
               </div>
               <div style={{height: 5}}/>
               <FInput

@@ -20,7 +20,7 @@ function FNoDataTip({height, tipText, btnText, btn, onClick}: FNoDataTipProps) {
     <div/>
     <div>
       <FTipText
-        type="primary"
+        type="first"
         text={tipText}
       />
 

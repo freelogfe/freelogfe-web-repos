@@ -53,8 +53,8 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
             onClick={() => onChangeSelect(r.id)}
             key={r.id}
           >
-            <FTitleText
-              type="h5"
+            <FContentText
+              type="highlight"
               text={r.name}
               singleRow
             />

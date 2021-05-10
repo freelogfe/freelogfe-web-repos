@@ -42,7 +42,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
       exhibitInfoPage.policies.length === 0
         ? (<div className={styles.empty}>
           <FTipText
-            type="secondary"
+            type="second"
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
             text={'无策略'}
           />

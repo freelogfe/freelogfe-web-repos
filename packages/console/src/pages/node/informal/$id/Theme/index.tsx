@@ -189,8 +189,8 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                     <div className={styles.itemTitle}>
                       <FIdentityTypeBadge/>
                       <div style={{width: 5}}/>
-                      <FTitleText
-                        type="h5"
+                      <FContentText
+                        type="highlight"
                         text={t.name}
                         singleRow
                       />

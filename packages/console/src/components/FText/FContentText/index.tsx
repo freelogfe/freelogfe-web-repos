@@ -12,12 +12,14 @@ interface FContentProps {
   style?: CSSProperties;
 }
 
-export default function ({className, style, children, text, type = 'normal', singleRow = false}: FContentProps) {
+function FContentText({className, style, children, text, type = 'normal', singleRow = false}: FContentProps) {
   return (
     <div
       style={{
         ...style,
       }}
-      className={[(singleRow && shared.singleRow), styles.styles, styles[type], className].join(' ')}>{children || text}</div>
+      className={[(singleRow && shared.singleRow), styles[type], className].join(' ')}>{children || text}</div>
   );
 }
+
+export default FContentText;

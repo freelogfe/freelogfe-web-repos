@@ -142,7 +142,7 @@ function FAntvG6DependencyGraph({nodes, edges, width = 920, height = 500}: FAntv
       }}
     >
       <FTipText
-        type="primary"
+        type="first"
         text={'无依赖树'}
       />
     </div>);

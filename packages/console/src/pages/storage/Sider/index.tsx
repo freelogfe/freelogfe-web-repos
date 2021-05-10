@@ -40,11 +40,11 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <Space size={10}>
             <FTitleText
               text={`我的存储空间`}
-              type="form"
+              type="h4"
             />
             <FTitleText
               text={`${(storageHomePage.bucketList || []).length}/5`}
-              type="form"
+              type="h4"
             />
           </Space>
 
@@ -144,7 +144,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <div style={{height: 60}}/>
 
           <div className={styles.title}>
-            <FTitleText text={'系统存储空间'} type="form"/>
+            <FTitleText text={'系统存储空间'} type="h4"/>
           </div>
 
           {/*<div style={{height: 18}}/>*/}

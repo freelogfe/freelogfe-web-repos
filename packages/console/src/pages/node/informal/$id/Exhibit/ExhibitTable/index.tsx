@@ -53,10 +53,10 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       key: 'name',
       render(text, record, index) {
         return (<div className={styles.name}>
-          <FTitleText
+          <FContentText
             // text={'这里是展品名称这里是名称名称这里是展这里是展品名称这里这'}
             text={record.name}
-            type="h4"
+            type="highlight"
             singleRow
           />
           <div className={styles.type}>

@@ -21,7 +21,7 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FTitleText text={'自定义选项'} type="h4"/>
+      <FContentText text={'自定义选项'} type="highlight"/>
       <div style={{height: 20}}/>
       <div className={styles.content}>
         {

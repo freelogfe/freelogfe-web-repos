@@ -104,8 +104,8 @@ function MappingRule({
       })}
     </Space>}
     title={<div className={styles.popoverTitle}>
-      <FTitleText
-        type="h5"
+      <FContentText
+        type="highlight"
         text={'映射规则'}
       />
       <TypesCaption/>

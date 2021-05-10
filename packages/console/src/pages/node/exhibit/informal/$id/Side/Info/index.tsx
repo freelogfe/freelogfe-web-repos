@@ -40,7 +40,7 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
   }
 
   return (<>
-      <FTitleText text={'基础信息'} type="h4"/>
+      <FContentText text={'基础信息'} type="highlight"/>
       <div style={{height: 20}}/>
 
       <FUploadImage
@@ -73,7 +73,7 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
 
       <FTitleText
         text={'展品标题'}
-        type="form"
+        type="h4"
       />
       <div style={{height: 15}}/>
       {
@@ -129,7 +129,7 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
 
       <FTitleText
         text={'展品标签'}
-        type="form"
+        type="h4"
       />
 
       <div style={{height: 15}}/>

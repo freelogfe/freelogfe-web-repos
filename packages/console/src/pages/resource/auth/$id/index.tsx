@@ -93,7 +93,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'被授权方'}
-        type="form"
+        type="h4"
       />),
       dataIndex: 'authorized',
       width: 300,
@@ -119,7 +119,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'所签授权策略｜合约状态'}
-        type="form"
+        type="h4"
       />),
       // className: 'column-money',
       dataIndex: 'contract',
@@ -148,7 +148,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'操作'}
-        type="form"
+        type="h4"
       />),
       dataIndex: 'operation',
       width: 80,
@@ -202,7 +202,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
                 <div className={styles.tip}>
                   <FTitleText
                     text={FUtil.I18n.message('basic_upcast')}
-                    type="form"
+                    type="h4"
                   />
                   <div style={{width: 5}}/>
                   <FInfo style={{color: '#C7C7C7'}}/>

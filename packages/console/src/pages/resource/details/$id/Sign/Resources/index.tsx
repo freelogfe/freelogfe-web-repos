@@ -5,6 +5,8 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import {FTextBtn} from "@/components/FButton";
+import FUtil from "@/utils";
 // import FLink from "@/components/FLink";
 // import FLinkTo from "@/utils/path-assembler";
 
@@ -55,8 +57,8 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
           onClick={() => onChangeSelected(r.id)}
         >
           <div className={styles.title}>
-            <FTitleText
-              type="h5"
+            <FContentText
+              type="highlight"
               text={r.name}
               singleRow
               className={styles.titleText}
@@ -103,13 +105,21 @@ function Resources({dispatch, marketResourcePage}: ResourcesProps) {
             onClick={() => onChangeSelected(r.id)}
           >
             <div className={styles.title}>
-              <FTitleText
-                type="h5"
-                text={r.name}
-                singleRow
-                className={styles.titleText}
-                style={{maxWidth: r.status === 0 ? 170 : '100%'}}
-              />
+              <FTextBtn
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: r.id,
+                  }));
+                }}>
+                <FContentText
+                  type="highlight"
+                  text={r.name}
+                  singleRow
+                  className={styles.titleText}
+                  style={{maxWidth: r.status === 0 ? 170 : 225}}
+                />
+              </FTextBtn>
               {
                 r.status === 0 && (<>
                   <FResourceStatusBadge status={'offline'}/>
