@@ -10,12 +10,9 @@ export function humanizeSize(bytes: number): string {
   if (bytes <= 0) {
     return '0 B';
   }
-  let unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-  let index = 0;
-  // var srcsize = parseFloat(value);
-  index = Math.floor(Math.log(bytes) / Math.log(1024));
+  const unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const index = Math.floor(Math.log(bytes) / Math.log(1024));
   const size = Math.round((bytes / Math.pow(1024, index)) * 100) / 100; //保留的小数位数
-  // size = size
   return size + ' ' + unitArr[index];
 }
 
