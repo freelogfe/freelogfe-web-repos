@@ -62,6 +62,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               type="highlight"
               text={mainResource.name}
               singleRow
+              className={styles.FContentText}
             />
           </FTextBtn>
           <div style={{height: 5}}/>
@@ -99,6 +100,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                 type="highlight"
                 text={r.name}
                 singleRow
+                className={styles.FContentText}
               />
             </FTextBtn>
             <div style={{height: 5}}/>

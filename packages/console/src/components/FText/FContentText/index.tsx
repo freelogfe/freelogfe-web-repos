@@ -17,7 +17,7 @@ function FContentText({className, style, children, text, type = 'normal', single
   return (
     <div
       style={style}
-      className={[singleRowClassName, styles[type], className].join(' ')}>{children || text}</div>
+      className={[singleRowClassName, styles[type], styles.text, className].join(' ')}>{children || text}</div>
   );
 }
 

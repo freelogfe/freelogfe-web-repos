@@ -47,7 +47,13 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
-          <FTitleText text={exhibitInfoPage.pName}/>
+          <FTitleText
+            text={exhibitInfoPage.pName}
+            style={{
+              maxWidth: 800
+            }}
+            singleRow
+          />
         </div>
         <Space size={20}>
           {

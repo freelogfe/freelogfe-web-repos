@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState, InformExhibitInfoPageModelState} from "@/models/connect";
+import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateRelationAction} from "@/models/informExhibitInfoPage";
+import FUtil from "@/utils";
+import {FTextBtn} from "@/components/FButton";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -53,11 +54,21 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
             onClick={() => onChangeSelect(r.id)}
             key={r.id}
           >
+            <FTextBtn
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(FUtil.LinkTo.resourceDetails({
+                  resourceID: r.id,
+                }));
+              }}
+            >
             <FContentText
               type="highlight"
               text={r.name}
               singleRow
+              className={styles.FContentText}
             />
+            </FTextBtn>
             <div style={{height: 5}}/>
             <FContentText
               type="additional2"

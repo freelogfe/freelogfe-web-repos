@@ -56,9 +56,10 @@ function DepsCards({dataSource, title, onChange}: DepsCardsProps) {
             <Space size={8}>
               <FTextBtn
                 onClick={() => window.open(d.linkTo)}
-                type="default"
+                // type="default"
               >
                 <FContentText
+                  type="highlight"
                   singleRow={true}
                   text={d.name}
                   className={styles.resourceName}

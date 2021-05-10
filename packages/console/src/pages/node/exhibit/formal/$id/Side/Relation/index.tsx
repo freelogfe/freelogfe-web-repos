@@ -37,7 +37,6 @@ function Relation({exhibitInfoPage}: RelationProps) {
       }}
     >
       <FContentText
-        singleRow
         text={exhibitInfoPage.resourceName}
       />
     </FTextBtn>

@@ -40,19 +40,7 @@ export interface FAuthPanelProps {
 
 function FAuthPanel({ resourceAuthPage}: FAuthPanelProps) {
 
-  // const [activeResource, setActiveResource] = React.useState<any | null>(null);
   const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
-
-  // React.useEffect(() => {
-  //   setActiveResource(resource || null);
-  // }, [resourceAuthPage.contractsAuthorize]);
-
-  // function onChangeActivated(id: number | string) {
-  //   onChangeActivatedResource && onChangeActivatedResource(dataSource.map((i) => ({
-  //     ...i,
-  //     activated: i.id === id,
-  //   })));
-  // }
 
   return (<div className={styles.DepPanel}>
     <div className={styles.DepPanelNavs}>

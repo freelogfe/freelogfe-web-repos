@@ -26,7 +26,7 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
     });
   }
 
-  console.log(resourceAuthPage.contractsAuthorized, 'resourceAuthPage.contractsAuthorized!@#$!@#$234908uopiasdf');
+  // console.log(resourceAuthPage.contractsAuthorized, 'resourceAuthPage.contractsAuthorized!@#$!@#$234908uopiasdf');
 
   const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
     id: i.id,
@@ -38,55 +38,59 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
   }));
 
   return (<div className={styles.styles}>
-    {dataSource.map((i) => (
-      <div
-        key={i.id}
-        onClick={() => onChangeActivated(i.id)}
-        className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
-        <div>
-          <div className={styles.title}>
-            <FTextBtn
-              style={{
-                flexShrink: 1,
-              }}
-              type="default"
-              onClick={(event) => {
-                event.stopPropagation();
-                window.open(FUtil.LinkTo.resourceDetails({
-                  resourceID: i.id,
-                }))
-              }}
-            >
-              <FContentText
-                text={i.title}
-                singleRow
-                style={{maxWidth: 280}}
-              />
-            </FTextBtn>
+    {
+      dataSource.map((i) => (
+        <div
+          key={i.id}
+          onClick={() => onChangeActivated(i.id)}
+          className={styles.DepPanelNav + ' ' + (i.activated ? styles.DepPanelNavActive : '')}>
+          <div>
+            <div className={styles.title}>
+              <FTextBtn
+                style={{
+                  flexShrink: 1,
+                }}
+                type="default"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  window.open(FUtil.LinkTo.resourceDetails({
+                    resourceID: i.id,
+                  }))
+                }}
+              >
+                <FContentText
+                  text={i.title}
+                  singleRow
+                  style={{maxWidth: 280}}
+                  className={styles.FContentText}
+                  type="highlight"
+                />
+              </FTextBtn>
 
-            {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
-            {/*  <FResourceStatusBadge*/}
-            {/*    status="online"*/}
-            {/*  />*/}
-            {/*</div>*/}
-          </div>
-          <div style={{height: 9}}/>
-          <FContentText type="additional2">
-            <span>{i.resourceType}</span>
-          </FContentText>
-          <>
-            <div style={{height: 9}}/>
-            <div className={styles.DepPanelLabels}>
-              {
-                i.labels.map((j: string) => (<label
-                  key={j}
-                  className={styles.labelInfo}
-                >{j}</label>))
-              }
+              {/*<div style={{flexShrink: 0, paddingLeft: 10}}>*/}
+              {/*  <FResourceStatusBadge*/}
+              {/*    status="online"*/}
+              {/*  />*/}
+              {/*</div>*/}
             </div>
-          </>
-        </div>
-      </div>))}
+            <div style={{height: 9}}/>
+            <FContentText type="additional2">
+              <span>{i.resourceType}</span>
+            </FContentText>
+            <>
+              <div style={{height: 9}}/>
+              <div className={styles.DepPanelLabels}>
+                {
+                  i.labels.map((j: string) => (<label
+                    key={j}
+                    className={styles.labelInfo}
+                  >{j}</label>))
+                }
+              </div>
+            </>
+          </div>
+        </div>))
+    }
   </div>);
 }
 

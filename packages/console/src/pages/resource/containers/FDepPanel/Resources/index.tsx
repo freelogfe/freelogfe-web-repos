@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FCircleBtn, FCircleButton, FTextButton} from '@/components/FButton';
+import {FCircleBtn, FCircleButton, FTextBtn, FTextButton} from '@/components/FButton';
 import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
@@ -88,7 +88,7 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
               >
                 <div>
                   <div className={styles.title}>
-                    <FTextButton
+                    <FTextBtn
                       onClick={(e) => {
                         e.stopPropagation();
                         if (rrr.status === 3) {
@@ -98,13 +98,15 @@ function Resources({dispatch, resourceVersionCreatorPage}: ResourcesProps) {
                           resourceID: rrr.id,
                         }));
                       }}
+                      type="default"
                     >
                       <FContentText
                         className={styles.titleText}
                         text={rrr.title}
                         singleRow
+                        type="highlight"
                       />
-                    </FTextButton>
+                    </FTextBtn>
                     <div style={{width: 5}}/>
                     {rrr.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
                     {rrr.status !== 1 && rrr.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}
@@ -206,7 +208,7 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
             className={styles.childrenDepPanelNav + ' ' + (activatedID === i.id ? styles.DepPanelNavActive : '')}
           >
             <div className={styles.title}>
-              <FTextButton
+              <FTextBtn
                 onClick={(e) => {
                   e.stopPropagation();
                   if (i.status === 3) {
@@ -216,13 +218,15 @@ function SmallNav({dataSource, activatedID, onClick}: SmallNavProps) {
                     resourceID: i.id,
                   }));
                 }}
+                type="default"
               >
                 <FContentText
                   className={styles.titleText}
                   text={i.title}
                   singleRow
+                  type="highlight"
                 />
-              </FTextButton>
+              </FTextBtn>
               <div style={{width: 5}}/>
               {i.status === 0 && (<FResourceStatusBadge status={'offline'}/>)}
               {i.status !== 1 && i.status !== 0 && (<CloseCircleFilled className={styles.titleErrorIcon}/>)}

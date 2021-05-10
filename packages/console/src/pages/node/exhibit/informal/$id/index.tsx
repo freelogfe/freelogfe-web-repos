@@ -81,7 +81,11 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
             text={'>'}
           />
           <div style={{width: 2}}/>
-          <FTitleText text={informExhibitInfoPage.informExhibitName}/>
+          <FTitleText
+            style={{maxWidth: 600}}
+            singleRow
+            text={informExhibitInfoPage.informExhibitName}
+          />
           <div style={{width: 20}}/>
           {
             informExhibitInfoPage.mappingRule
