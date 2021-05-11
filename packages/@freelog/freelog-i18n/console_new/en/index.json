@@ -254,5 +254,6 @@
 	"confirm_auth_plan_for_upcast": "Upcasts",
 	"btn_back": "BACK",
 	"btn_submit_contract": "CONFIRM AND SIGN IT",
-	"title_sumbit_contract": "Confirm Contract Details"
+	"title_sumbit_contract": "Confirm Contract Details",
+	"selected_auth_plan_list": "You've selected"
 }

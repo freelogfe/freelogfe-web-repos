@@ -254,5 +254,6 @@
 	"confirm_auth_plan_for_upcast": "基础上抛",
 	"btn_back": "返回",
 	"btn_submit_contract": "确认签约",
-	"title_sumbit_contract": "确认签约"
+	"title_sumbit_contract": "确认签约",
+	"selected_auth_plan_list": "已选"
 }
