@@ -272,5 +272,11 @@
 	"btn_i_see": "知道了",
 	"auth_plan_available": "更多授权策略",
 	"btn_sign_contract": "签约",
-	"btn_create_custom_option": "自定义选项"
+	"btn_create_custom_option": "自定义选项",
+	"tab_manage_nodes": "",
+	"manage_theme": "",
+	"msg_navigate_to_test_node": "",
+	"btn_navigate_to_test_node": "",
+	"manage_exhibits_empty": "你签约的资源会变成展品出现在这里。逛逛资源市场，把想要运营的资源添加到你的节点中。",
+	"btn_go_to_resource_market": "逛逛资源市场"
 }
