@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Col, Row, Space} from "antd";
+import {Space} from "antd";
 import {FContentText} from "../FText";
 import FTooltip from "../FTooltip";
 import {FInfo} from "../FIcons";
@@ -43,11 +43,22 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
           <div>
             <div>
               <Space size={5}>
-                <FContentText text={bp.theKey} type="additional2"/>
+                <FContentText
+                  text={bp.theKey}
+                  type="additional2"
+                  singleRow
+                  style={{
+                    maxWidth: 80
+                  }}
+                />
                 {bp.description && (<FTooltip title={bp.description}><FInfo/></FTooltip>)}
               </Space>
               <div style={{height: 10}}/>
-              <FContentText singleRow text={bp.value}/>
+              <FContentText
+                singleRow
+                text={bp.value}
+                style={{maxWidth: 110}}
+              />
             </div>
             <Space size={10} className={styles.Operation}>
               {
