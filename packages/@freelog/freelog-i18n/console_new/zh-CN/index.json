@@ -112,7 +112,7 @@
 	"other_authorization_plan": "其它授权策略",
 	"sign_contract": "签约",
 	"contract_id": "合约号",
-	"use_for_version": "应用于版本",
+	"use_for_version": "应用于以下版本",
 	"support_customization": "支持展品自定义",
 	"property_remark": "属性说明",
 	"value": "属性值",
@@ -244,5 +244,6 @@
 	"msg_node_signed": "（已签约）",
 	"nodes_list_empty": "无可签约的节点，马上",
 	"btn_create_node": "创建节点",
-	"select_auth_plan_for_upcast": "上抛授权策略选择"
+	"select_auth_plan_for_upcast": "上抛授权策略选择",
+	"use_for_exhibit": "应用于以下{ExhibitQuanity}个授权链"
 }

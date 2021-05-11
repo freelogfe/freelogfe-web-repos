@@ -112,7 +112,7 @@
 	"other_authorization_plan": "其它授权策略",
 	"sign_contract": "Sign contract",
 	"contract_id": "Contact ID",
-	"use_for_version": "Use for version",
+	"use_for_version": "Use in the following version(s)",
 	"support_customization": "支持展品自定义",
 	"property_remark": "属性说明",
 	"value": "Value",
@@ -157,7 +157,7 @@
 	"release_date": "Released on",
 	"object_id": "Object ID",
 	"relationship_status_good": "Normal",
-	"version_authorization_map": "Authorization map",
+	"version_authorization_map": "Authorization Tree",
 	"version_relationship_map": "Version health",
 	"version_maps": "Version Status",
 	"reusable_contract": "Reusable contract",
@@ -239,10 +239,11 @@
 	"btn_remove_from_my_collections": "Unsave",
 	"title_resource_maps": "Version Charts",
 	"rely_map": "Rely Map",
-	"auth_map": "Authorization Map",
+	"auth_map": "Authorization Tree",
 	"btn_full_screen": "FULL SCREEN",
 	"msg_node_signed": "(Signed)",
 	"nodes_list_empty": "No available node,  ",
 	"btn_create_node": "CREATE A NODE",
-	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)"
+	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)",
+	"use_for_exhibit": "Use in the following {ExhibitQuanity}  authorization tree"
 }
