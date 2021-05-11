@@ -278,5 +278,11 @@
 	"msg_navigate_to_test_node": "如果想要测试资源或者对象，可以",
 	"btn_navigate_to_test_node": "进入测试节点",
 	"manage_exhibits_empty": "你签约的资源会变成展品出现在这里。逛逛资源市场，把想要运营的资源添加到你的节点中。",
-	"btn_go_to_resource_market": "逛逛资源市场"
+	"btn_go_to_resource_market": "逛逛资源市场",
+	"tip_copy_node_domain": "复制",
+	"tableheader_exhibit": "展品",
+	"tableheader_exhibit_version": "展出版本",
+	"tableheader_show_exhibit": "上线",
+	"tip_edit_exhibit": "编辑展品",
+	"tip_check_relevant_resource": "查看相关资源"
 }
