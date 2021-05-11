@@ -267,5 +267,8 @@
 	"title_exhibit_maps": "Relevant Charts",
 	"quick_decision_map": "Relationship Chart",
 	"btn_more_details": "MORE DETAILS",
-	"use_in_current_exhibit": "Use it in current exhibit"
+	"use_in_current_exhibit": "Use it in current exhibit",
+	"alert_shelve_contract_01": "There is only one valid contract, which can not be shelved.",
+	"btn_i_see": "OK",
+	"auth_plan_available": "More Authorization Plan"
 }

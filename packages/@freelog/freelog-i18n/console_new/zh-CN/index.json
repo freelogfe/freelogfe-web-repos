@@ -267,5 +267,8 @@
 	"title_exhibit_maps": "相关视图",
 	"quick_decision_map": "关系图",
 	"btn_more_details": "查看",
-	"use_in_current_exhibit": "应用于当前展品"
+	"use_in_current_exhibit": "应用于当前展品",
+	"alert_shelve_contract_01": "当前仅一个有效合约，无法取消应用。",
+	"btn_i_see": "知道了",
+	"auth_plan_available": "更多授权策略"
 }
