@@ -273,10 +273,10 @@
 	"auth_plan_available": "More Authorization Plan",
 	"btn_sign_contract": "SIGN",
 	"btn_create_custom_option": "NEW OPTION",
-	"tab_manage_nodes": "",
-	"manage_theme": "",
-	"msg_navigate_to_test_node": "",
-	"btn_navigate_to_test_node": "",
+	"tab_manage_nodes": "Manage Exhibits",
+	"manage_theme": "Manage Themes",
+	"msg_navigate_to_test_node": "If you want to test resource or object, you can ",
+	"btn_navigate_to_test_node": "go to test node",
 	"manage_exhibits_empty": "Reousces signed as exhibits will appear here. Explore our resource market to find some intersting resource for your node.",
 	"btn_go_to_resource_market": "EXPLORE RESOURCE MARKET"
 }

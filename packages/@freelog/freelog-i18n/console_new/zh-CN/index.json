@@ -273,10 +273,10 @@
 	"auth_plan_available": "更多授权策略",
 	"btn_sign_contract": "签约",
 	"btn_create_custom_option": "自定义选项",
-	"tab_manage_nodes": "",
-	"manage_theme": "",
-	"msg_navigate_to_test_node": "",
-	"btn_navigate_to_test_node": "",
+	"tab_manage_nodes": "展品管理",
+	"manage_theme": "主题管理",
+	"msg_navigate_to_test_node": "如果想要测试资源或者对象，可以",
+	"btn_navigate_to_test_node": "进入测试节点",
 	"manage_exhibits_empty": "你签约的资源会变成展品出现在这里。逛逛资源市场，把想要运营的资源添加到你的节点中。",
 	"btn_go_to_resource_market": "逛逛资源市场"
 }
