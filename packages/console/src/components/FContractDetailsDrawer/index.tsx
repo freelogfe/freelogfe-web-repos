@@ -214,7 +214,7 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
               />
               <FContractStatusBadge
                 // status={baseInfo?.contractStatus === 0 ? 'authorized' : 'stopped'}
-                status={EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
+                status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
               />
             </Space>
 
@@ -274,7 +274,7 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
                             />
                             <FContractStatusBadge
                               // status={ac.contractStatus === 1 ? 'authorized' : 'stopped'}
-                              status={EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
+                              status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
                             />
                           </Space>
                           <div style={{height: 10}}/>

@@ -4,7 +4,6 @@ import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
-import StatusLabel from '@/pages/resource/components/StatusLabel';
 import {Space, Table} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {
@@ -27,11 +26,9 @@ import FUtil from "@/utils";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import FContractDetailsDrawer from "@/components/FContractDetailsDrawer";
 import FTable from "@/components/FTable";
-import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import FResource from "@/components/FIcons/FResource";
 import {ColumnsType} from "antd/lib/table/interface";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
-import {EnumContractStatus} from "@/utils/predefined";
 
 interface AuthProps {
   dispatch: Dispatch;
@@ -134,7 +131,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
               text={record.contractName}
             />
             <FContractStatusBadge
-              status={EnumContractStatus[record?.status || 0] as 'authorized'}
+              status={FUtil.Predefined.EnumContractStatus[record?.status || 0] as 'authorized'}
             />
           </Space>
           <div style={{height: 5}}/>

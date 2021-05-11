@@ -22,6 +22,7 @@ import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import {router} from "umi";
 import FUtil from "@/utils";
+import {FTextBtn} from "@/components/FButton";
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -106,7 +107,8 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
             text={marketResourcePage.resourceInfo?.name || ''}
           />
         </Space>
-        <a
+        <FTextBtn
+          type="default"
           className={styles.favoriteBtn}
           onClick={() => dispatch<OnClickCollectionAction>({
             type: 'marketResourcePage/onClickCollection',
@@ -119,7 +121,7 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
           <span>{marketResourcePage.hasCollect ? '已收藏' : '收藏'}</span>
           <div style={{width: 5}}/>
           <span>({marketResourcePage.popularity}人气)</span>
-        </a>
+        </FTextBtn>
       </div>
 
       <div style={{height: 35}}/>

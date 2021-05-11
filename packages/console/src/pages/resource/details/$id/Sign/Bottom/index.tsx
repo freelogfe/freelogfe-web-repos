@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
@@ -18,7 +18,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
   return (<div className={styles.signBottom}>
     {
       !marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)
-        ? (<FNormalButton
+        ? (<FRectBtn
           className={styles.signButton}
           disabled={
             marketResourcePage.selectedNodeID === -1
@@ -26,9 +26,9 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
             || marketResourcePage.signResources.map((sr) => {
               return sr.policies.filter((srp) => srp.checked).length + sr.contracts.filter((srp) => srp.checked).length;
             }).includes(0)
-            || !!marketResourcePage.signResources.find((sr) => {
-              return sr.status === 0;
-            })
+            // || !!marketResourcePage.signResources.find((sr) => {
+            //   return sr.status === 0;
+            // })
           }
           onClick={async () => {
             const signExhibitName: string = await getAvailableExhibitName({
@@ -44,7 +44,7 @@ function Bottom({dispatch, marketResourcePage}: BottomProps) {
               }
             });
           }}
-        >立即签约</FNormalButton>)
+        >立即签约</FRectBtn>)
         : (<span>该资源已签约，可进入<FLink
           to={FUtil.LinkTo.exhibitManagement({exhibitID: marketResourcePage.signedResourceExhibitID})}
           className={styles.gotoExhibitLink}

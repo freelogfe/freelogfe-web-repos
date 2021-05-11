@@ -163,11 +163,6 @@ export interface FetchVersionInfoAction extends AnyAction {
   type: 'fetchVersionInfo' | 'marketResourcePage/fetchVersionInfo';
 }
 
-// export interface OnChangeVersionAction extends AnyAction {
-//   type: 'marketResourcePage/onChangeVersion';
-//   payload: string;
-// }
-
 export interface SignContractAction extends AnyAction {
   type: 'marketResourcePage/signContract';
 }
@@ -185,14 +180,12 @@ interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
   effects: {
-    // initData: (action: InitDataAction, effects: EffectsCommandMap) => void;
     clearData: (action: ClearDataDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
     onChangeNodeSelector: (action: OnChangeNodeSelectorAction, effects: EffectsCommandMap) => void;
     fetchVersionInfo: (action: FetchVersionInfoAction, effects: EffectsCommandMap) => void;
-    // onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     signContract: (action: SignContractAction, effects: EffectsCommandMap) => void;
     onChangeAndVerifySignExhibitName: (action: OnChangeAndVerifySignExhibitNameAction, effects: EffectsCommandMap) => void;
     fetchDependencyGraphData: (action: FetchDependencyGraphData, effects: EffectsCommandMap) => void;
@@ -408,9 +401,6 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchCollectionInfo',
       });
     },
-    // * fetchSignedResources({}: FetchSignedResourcesAction, {}: EffectsCommandMap) {
-    //
-    // },
     * onChangeNodeSelector({payload}: OnChangeNodeSelectorAction, {put, select, call}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -420,7 +410,7 @@ const Model: MarketResourcePageModelType = {
       });
 
       const {marketResourcePage}: ConnectState = yield select(({marketResourcePage}: ConnectState) => ({
-        marketResourcePage
+        marketResourcePage,
       }));
 
       const params: GetAllContractsParamsType = {
@@ -429,7 +419,6 @@ const Model: MarketResourcePageModelType = {
       };
 
       const result: GetAllContractsReturnType = yield call(getAllContracts, params);
-      // console.log(result, 'result2390jdafslkaadfs');
 
       const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         nodeId: payload,

@@ -259,7 +259,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      console.log(data, 'data@#Rasfdjou890ujewfra');
+      // console.log(data, 'data@#Rasfdjou890ujewfra');
       if (!data || data.userId !== user.cookiesUserID) {
         router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-=0=-jo3ijrlkajdsflkjal;dskf'));
         return;

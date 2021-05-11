@@ -5,11 +5,10 @@ import {FContentText} from "@/components/FText";
 import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/models/connect";
-import {ChangeAction, OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
+import {OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
 import {FTextButton} from '@/components/FButton';
 import {router} from "umi";
 import FUtil from "@/utils";
-// import {nodeCreator} from "@/utils/path-assembler";
 
 interface NodeSelectorProps {
   dispatch: Dispatch;

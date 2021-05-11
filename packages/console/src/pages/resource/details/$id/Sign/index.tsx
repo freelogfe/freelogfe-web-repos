@@ -24,7 +24,6 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
   const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
   const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
 
-
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>

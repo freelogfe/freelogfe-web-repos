@@ -4,6 +4,8 @@ import {Checkbox, Space} from "antd";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
+import FContractStatusBadge from "@/components/FContractStatusBadge";
+import {FTextBtn} from "@/components/FButton";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -35,7 +37,8 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           <div className={styles.contractTitle}>
             <Space size={5}>
               <span>{c.name}</span>
-              <label className={styles.executing}>执行中</label>
+              {/*<label className={styles.executing}>执行中</label>*/}
+              <FContractStatusBadge/>
             </Space>
             {
               !isSignedNode && (<Checkbox
@@ -57,7 +60,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
                             return {
                               ...srp,
                               checked: e.target.checked,
-                            }
+                            };
                           }),
                         };
                       }),
@@ -67,9 +70,9 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
               />)
             }
           </div>
-          <div style={{height: 10}}/>
+          {/*<div style={{height: 10}}/>*/}
           <pre>{c.text}</pre>
-          <div style={{height: 10}}/>
+          {/*<div style={{height: 10}}/>*/}
           <div className={styles.footer}>
             <Space size={0}>
               <div>合约ID：</div>
@@ -80,6 +83,32 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
               <div>签约时间：</div>
               <div>{c.createTime}</div>
             </Space>
+          </div>
+
+          <div className={styles.exhibit}>
+            <div style={{borderTop: '1px solid #E5E7EB'}}/>
+            <div style={{height: 10}}/>
+            <div>当前合约在此节点上存在 <span>2</span> 次复用：</div>
+            <div style={{height: 8}}/>
+            <Space size={5} direction="vertical" style={{width: '100%'}}>
+              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
+                <div>展品</div>
+                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
+                <div>的授权链；</div>
+              </Space>
+              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
+                <div>展品</div>
+                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
+                <div>的授权链；</div>
+              </Space>
+              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
+                <div>展品</div>
+                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
+                <div>的授权链；</div>
+              </Space>
+
+            </Space>
+            <div style={{height: 10}}/>
           </div>
         </div>);
       })
