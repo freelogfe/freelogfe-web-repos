@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 
 interface FContractStatusBadgeProps {
-  status?: 'authorized' | 'pending' | 'stopped';
+  status?: 'pending' | 'authorized' | 'stopped';
 }
 
 const statusTextObj = {

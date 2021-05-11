@@ -6,6 +6,7 @@ import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {FTextBtn} from "@/components/FButton";
+import FUtil from "@/utils";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -14,19 +15,13 @@ interface ContractsProps {
 
 function Contracts({dispatch, marketResourcePage}: ContractsProps) {
 
-  // if (!marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID)) {
-  //   return null;
-  // }
-
   const contracts = marketResourcePage.signResources.find((r) => r.selected)?.contracts;
-
 
   if (!contracts || contracts.length === 0) {
     return null;
   }
 
   const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
-
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '当前合约' : '可复用的合约'}</div>
@@ -38,7 +33,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
             <Space size={5}>
               <span>{c.name}</span>
               {/*<label className={styles.executing}>执行中</label>*/}
-              <FContractStatusBadge/>
+              <FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>
             </Space>
             {
               !isSignedNode && (<Checkbox
@@ -88,25 +83,25 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           <div className={styles.exhibit}>
             <div style={{borderTop: '1px solid #E5E7EB'}}/>
             <div style={{height: 10}}/>
-            <div>当前合约在此节点上存在 <span>2</span> 次复用：</div>
+            <div>当前合约在此节点上存在 <span style={{color: '#2784FF'}}>{c.exhibit.length}</span> 次复用：</div>
             <div style={{height: 8}}/>
             <Space size={5} direction="vertical" style={{width: '100%'}}>
-              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
-                <div>展品</div>
-                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
-                <div>的授权链；</div>
-              </Space>
-              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
-                <div>展品</div>
-                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
-                <div>的授权链；</div>
-              </Space>
-              <Space size={2} style={{display: 'flex', alignItems: 'center'}}>
-                <div>展品</div>
-                <FTextBtn style={{fontSize: 12}}>这里是展品名称</FTextBtn>
-                <div>的授权链；</div>
-              </Space>
-
+              {
+                c.exhibit.map((et) => {
+                  return (<Space key={et.exhibitID} size={2} style={{display: 'flex', alignItems: 'center'}}>
+                    <div>展品</div>
+                    <FTextBtn
+                      style={{fontSize: 12}}
+                      onClick={() => {
+                        window.open(FUtil.LinkTo.exhibitManagement({
+                          exhibitID: et.exhibitID,
+                        }));
+                      }}
+                    >{et.exhibitName}</FTextBtn>
+                    <div>的授权链；</div>
+                  </Space>);
+                })
+              }
             </Space>
             <div style={{height: 10}}/>
           </div>

@@ -54,6 +54,11 @@ export interface MarketResourcePageModelState {
       text: string;
       createTime: string;
       policyID: string;
+      status: 0 | 1 | 2;
+      exhibit: {
+        exhibitID: string;
+        exhibitName: string;
+      }[];
     }[];
     policies: {
       checked: boolean;
@@ -441,6 +446,14 @@ const Model: MarketResourcePageModelType = {
                   text: c.policyInfo.policyText,
                   createTime: FUtil.Format.formatDateTime(c.createDate),
                   policyID: c.policyInfo.policyId,
+                  status: c.status === 1 ? 2 : ((c.authStatus & 1) === 1) ? 1 : 0,
+                  exhibit: [{
+                    exhibitID: '609a34257287e9002fc0e189',
+                    exhibitName: '展品1',
+                  }, {
+                    exhibitID: '609a34257287e9002fc0e189',
+                    exhibitName: '展品2',
+                  }],
                 };
               });
 
@@ -670,6 +683,8 @@ type GetAllContractsReturnType = {
     policyId: string;
     policyText: string;
   };
+  status: number;
+  authStatus: number;
 }[][];
 
 async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
