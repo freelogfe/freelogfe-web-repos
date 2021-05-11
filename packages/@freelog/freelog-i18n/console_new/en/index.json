@@ -270,5 +270,7 @@
 	"use_in_current_exhibit": "Use it in current exhibit",
 	"alert_shelve_contract_01": "There is only one valid contract, which can not be shelved.",
 	"btn_i_see": "OK",
-	"auth_plan_available": "More Authorization Plan"
+	"auth_plan_available": "More Authorization Plan",
+	"btn_sign_contract": "SIGN",
+	"btn_create_custom_option": "NEW OPTION"
 }

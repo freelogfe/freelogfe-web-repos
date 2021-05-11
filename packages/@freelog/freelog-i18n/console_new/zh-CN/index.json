@@ -270,5 +270,7 @@
 	"use_in_current_exhibit": "应用于当前展品",
 	"alert_shelve_contract_01": "当前仅一个有效合约，无法取消应用。",
 	"btn_i_see": "知道了",
-	"auth_plan_available": "更多授权策略"
+	"auth_plan_available": "更多授权策略",
+	"btn_sign_contract": "签约",
+	"btn_create_custom_option": "自定义选项"
 }
