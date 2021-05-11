@@ -255,5 +255,16 @@
 	"btn_back": "返回",
 	"btn_submit_contract": "确认签约",
 	"title_sumbit_contract": "确认签约",
-	"selected_auth_plan_list": "已选"
+	"selected_auth_plan_list": "已选",
+	"title_auth_plan": "",
+	"title_relevant_contracts": "相关合约",
+	"btn_activate_auth_plan": "",
+	"exhibit_auth_plan_empty": "",
+	"btn_create_auth_plan": "",
+	"btn_show_exhibit": "",
+	"valid_contracts_list": "",
+	"relevant_resource": "",
+	"title_exhibit_maps": "",
+	"quick_decision_map": "",
+	"btn_more_details": ""
 }

@@ -238,7 +238,7 @@
 	"released_date": "Release Date",
 	"btn_remove_from_my_collections": "Unsave",
 	"title_resource_maps": "Version Charts",
-	"rely_map": "Rely Map",
+	"rely_map": "Rely Tree",
 	"auth_map": "Authorization Tree",
 	"btn_full_screen": "FULL SCREEN",
 	"msg_node_signed": "(Signed)",
@@ -255,5 +255,16 @@
 	"btn_back": "BACK",
 	"btn_submit_contract": "CONFIRM AND SIGN IT",
 	"title_sumbit_contract": "Confirm Contract Details",
-	"selected_auth_plan_list": "You've selected"
+	"selected_auth_plan_list": "You've selected",
+	"title_auth_plan": "",
+	"title_relevant_contracts": "Relevant Contracts",
+	"btn_activate_auth_plan": "",
+	"exhibit_auth_plan_empty": "",
+	"btn_create_auth_plan": "",
+	"btn_show_exhibit": "",
+	"valid_contracts_list": "",
+	"relevant_resource": "",
+	"title_exhibit_maps": "",
+	"quick_decision_map": "",
+	"btn_more_details": ""
 }
