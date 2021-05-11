@@ -230,7 +230,7 @@
 	"info_custom_options": "Custom options allow you to change some settings of the resource.",
 	"btn_add_to_my_collections": "SAVE",
 	"auth_to_node": "Authorize to ",
-	"select_authorization_plan": "Select authorization plan(s)",
+	"select_authorization_plan": "Select authorization plan(s) for the resource",
 	"hint_dropdownlist_nodes": "Click here to select a node for authorization",
 	"btn_sign_now": "SIGN NOW",
 	"title_version": "Version",
@@ -243,5 +243,6 @@
 	"btn_full_screen": "FULL SCREEN",
 	"msg_node_signed": "(Signed)",
 	"nodes_list_empty": "No available node,  ",
-	"btn_create_node": "CREATE A NODE"
+	"btn_create_node": "CREATE A NODE",
+	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)"
 }

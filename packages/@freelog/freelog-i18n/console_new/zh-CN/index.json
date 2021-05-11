@@ -230,7 +230,7 @@
 	"info_custom_options": "您可以通过自定义选项更改资源的部分设置",
 	"btn_add_to_my_collections": "收藏",
 	"auth_to_node": "授权节点",
-	"select_authorization_plan": "选择授权策略",
+	"select_authorization_plan": "主资源授权策略选择",
 	"hint_dropdownlist_nodes": "点击此处选择需要授权的节点",
 	"btn_sign_now": "立即签约",
 	"title_version": "版本",
@@ -243,5 +243,6 @@
 	"btn_full_screen": "全屏查看",
 	"msg_node_signed": "（已签约）",
 	"nodes_list_empty": "无可签约的节点，马上",
-	"btn_create_node": "创建节点"
+	"btn_create_node": "创建节点",
+	"select_auth_plan_for_upcast": "上抛授权策略选择"
 }
