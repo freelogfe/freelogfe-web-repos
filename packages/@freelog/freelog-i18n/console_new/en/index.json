@@ -240,5 +240,8 @@
 	"title_resource_maps": "Version Charts",
 	"rely_map": "Rely Map",
 	"auth_map": "Authorization Map",
-	"btn_full_screen": "FULL SCREEN"
+	"btn_full_screen": "FULL SCREEN",
+	"msg_node_signed": "(Signed)",
+	"nodes_list_empty": "No available node,  ",
+	"btn_create_node": "CREATE A NODE"
 }

@@ -240,5 +240,8 @@
 	"title_resource_maps": "版本视图",
 	"rely_map": "依赖树",
 	"auth_map": "授权链",
-	"btn_full_screen": "全屏查看"
+	"btn_full_screen": "全屏查看",
+	"msg_node_signed": "（已签约）",
+	"nodes_list_empty": "无可签约的节点，马上",
+	"btn_create_node": "创建节点"
 }
