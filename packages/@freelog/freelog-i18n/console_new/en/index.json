@@ -245,5 +245,14 @@
 	"nodes_list_empty": "No available node,  ",
 	"btn_create_node": "CREATE A NODE",
 	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)",
-	"use_for_exhibit": "Use in the following {ExhibitQuanity}  authorization tree"
+	"use_for_exhibit": "Use in the following {ExhibitQuanity}  authorization tree",
+	"title_auth_to_node": "Authorize to ",
+	"title_enter_exhibit_name": "Enter Exhibit Name",
+	"msg_enter_exhibit_name": "Exhibit name will be locked, once sumbit.",
+	"title_confirm_auth_plan": "Authorization Selected",
+	"confirm_auth_plan_for_resource": "Resource",
+	"confirm_auth_plan_for_upcast": "Upcasts",
+	"btn_back": "BACK",
+	"btn_submit_contract": "CONFIRM AND SIGN IT",
+	"title_sumbit_contract": "Confirm Contract Details"
 }

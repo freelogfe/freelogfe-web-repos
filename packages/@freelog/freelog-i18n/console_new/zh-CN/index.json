@@ -245,5 +245,14 @@
 	"nodes_list_empty": "无可签约的节点，马上",
 	"btn_create_node": "创建节点",
 	"select_auth_plan_for_upcast": "上抛授权策略选择",
-	"use_for_exhibit": "应用于以下{ExhibitQuanity}个授权链"
+	"use_for_exhibit": "应用于以下{ExhibitQuanity}个授权链",
+	"title_auth_to_node": "确认签约节点",
+	"title_enter_exhibit_name": "输入展品名称",
+	"msg_enter_exhibit_name": "展品名称一旦提交，则不可修改。",
+	"title_confirm_auth_plan": "授权策略选择",
+	"confirm_auth_plan_for_resource": "资源",
+	"confirm_auth_plan_for_upcast": "基础上抛",
+	"btn_back": "返回",
+	"btn_submit_contract": "确认签约",
+	"title_sumbit_contract": "确认签约"
 }
