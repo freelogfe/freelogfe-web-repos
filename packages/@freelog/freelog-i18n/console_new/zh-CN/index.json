@@ -284,5 +284,9 @@
 	"tableheader_exhibit_version": "展出版本",
 	"tableheader_show_exhibit": "上线",
 	"tip_edit_exhibit": "编辑展品",
-	"tip_check_relevant_resource": "查看相关资源"
+	"tip_check_relevant_resource": "查看相关资源",
+	"exhibit_filter": "筛选",
+	"filter_option_all": "全部",
+	"filter_resource_type": "资源类型",
+	"filte_exhibit_state": "状态"
 }

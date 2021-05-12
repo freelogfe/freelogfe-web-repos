@@ -284,5 +284,9 @@
 	"tableheader_exhibit_version": "Exhibit Version",
 	"tableheader_show_exhibit": "Show Exhibit",
 	"tip_edit_exhibit": "Edit exhibit",
-	"tip_check_relevant_resource": "Check the resource"
+	"tip_check_relevant_resource": "Check the resource",
+	"exhibit_filter": "Filters",
+	"filter_option_all": "All",
+	"filter_resource_type": "Resource Type",
+	"filte_exhibit_state": "State"
 }
