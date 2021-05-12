@@ -22,7 +22,7 @@ export interface ResourceAuthPageModelState {
   policyEditorVisible: boolean;
   // policyTemplateVisible: boolean;
 
-  baseUpcastResources: {
+  baseUastResources: {
     resourceId: string;
     resourceName: string;
   }[];
@@ -139,7 +139,7 @@ const Model: ResourceAuthPageModelType = {
     policyEditorVisible: false,
     // policyTemplateVisible: false,
 
-    baseUpcastResources: [],
+    baseUastResources: [],
     contractsAuthorized: [],
     contractsAuthorize: [],
 
@@ -163,7 +163,7 @@ const Model: ResourceAuthPageModelType = {
         type: 'change',
         payload: {
           policies: data.policies,
-          baseUpcastResources: data.baseUpcastResources,
+          baseUastResources: data.baseUpcastResources,
         }
       })
     },

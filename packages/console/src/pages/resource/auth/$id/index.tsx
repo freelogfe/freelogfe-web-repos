@@ -1,10 +1,9 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
 import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
-import {Space, Table} from 'antd';
+import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
@@ -20,7 +19,7 @@ import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
-import {FInfo, FNodes, FUser} from "@/components/FIcons";
+import {FNodes, FUser} from "@/components/FIcons";
 import FUtil from "@/utils";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import FContractDetailsDrawer from "@/components/FContractDetailsDrawer";
@@ -29,6 +28,7 @@ import FResource from "@/components/FIcons/FResource";
 import {ColumnsType} from "antd/lib/table/interface";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {RouteComponentProps} from "react-router";
+import FBasicUpcastCard from "@/components/FBasicUpcastCard";
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -37,17 +37,7 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
 }
 
 function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
-
-  // React.useEffect(() => {
-  //   // console.log(route, match, 'RM');
-  //   dispatch<GlobalChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  // }, [route]);
-
+  
   React.useEffect(() => {
     dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
@@ -185,39 +175,34 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       >
         <FPolicies/>
       </FFormLayout.FBlock>
-      {
-        (resourceAuthPage.contractsAuthorized.length > 0 || resourceAuthPage.baseUpcastResources.length > 0) && (
-          <FFormLayout.FBlock title={FUtil.I18n.message('licencee_contract')}>
 
-            {
-              resourceAuthPage.baseUpcastResources.length > 0 && (<div className={styles.depUpthrow}>
-                <div className={styles.tip}>
-                  <FTitleText
-                    text={FUtil.I18n.message('basic_upcast')}
-                    type="h4"
-                  />
-                  <div style={{width: 5}}/>
-                  <FInfo style={{color: '#C7C7C7'}}/>
-                </div>
-                <div className={styles.depUpthrowLabel}>
-                  {
-                    resourceAuthPage.baseUpcastResources.map((j) => <label key={j.resourceId}>{j.resourceName}</label>)
-                  }
-                </div>
-              </div>)
-            }
+      <FFormLayout.FBlock title={FUtil.I18n.message('licencee_contract')}>
 
-            {
-              resourceAuthPage.baseUpcastResources.length > 0 && resourceAuthPage.contractsAuthorized.length > 0 && (
-                <div style={{height: 20}}/>)
-            }
+        <Space style={{width: '100%'}} direction="vertical" size={20}>
+          {
+            resourceAuthPage.baseUastResources.length > 0 && (<FBasicUpcastCard
+              dataSource={resourceAuthPage.baseUastResources.map((bur) => {
+                return {
+                  resourceID: bur.resourceId,
+                  resourceName: bur.resourceName,
+                };
+              })}
+              onClick={(resourceID) => {
+                window.open(FUtil.LinkTo.resourceDetails({
+                  resourceID: resourceID,
+                }))
+              }}
+            />)
+          }
 
-            {
-              resourceAuthPage.contractsAuthorized.length > 0 && (<FAuthPanel/>)
-            }
+          {
+            resourceAuthPage.contractsAuthorized.length > 0
+              ? (<FAuthPanel/>)
+              : ((<FContentText type="negative" text={'暂无合约'}/>))
+          }
+        </Space>
 
-          </FFormLayout.FBlock>)
-      }
+      </FFormLayout.FBlock>
 
       <FFormLayout.FBlock title={FUtil.I18n.message('authorizing_contracts')}>
 
@@ -228,7 +213,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
               dataSource={resourceAuthPage.contractsAuthorize}
               pagination={false}
             />)
-            : (<FContentText type="additional1" text={'暂无合约'}/>)
+            : (<FContentText type="negative" text={'暂无合约'}/>)
         }
 
         <FContractDetailsDrawer
