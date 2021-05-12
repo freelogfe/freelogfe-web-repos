@@ -418,18 +418,30 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
       }));
 
+
+      const allRawResourceIDs = marketResourcePage.allRawResources.map((r) => r.resourceId);
+
       const params: GetAllContractsParamsType = {
         nodeID: payload,
-        resourceIDs: marketResourcePage.allRawResources.map((r) => r.resourceId),
+        resourceIDs: allRawResourceIDs,
       };
 
       const result: GetAllContractsReturnType = yield call(getAllContracts, params);
+      console.log(result, 'result1234234234234');
 
       const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         nodeId: payload,
         resourceId: marketResourcePage.resourceId,
       };
       const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
+
+      // const params2: Parameters<typeof getAllContractExhibits>[0] = {
+      //   resourceIDs: allRawResourceIDs,
+      //   nodeID: payload,
+      // };
+      //
+      // const allContractExhibits: GetAllContractsReturnType = yield call(getAllContractExhibits, params);
+      // console.log(allContractExhibits, 'allContractExhibits1234234234324');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -562,19 +574,6 @@ const Model: MarketResourcePageModelType = {
         },
       });
     },
-    // * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
-    //   // console.log(payload, 'payload234sd09');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       version: payload,
-    //     },
-    //   });
-    //
-    //   yield  put<FetchVersionInfoAction>({
-    //     type: 'fetchVersionInfo',
-    //   });
-    // },
     * signContract({}: SignContractAction, {call, select, put}: EffectsCommandMap) {
       const {marketResourcePage, nodes}: ConnectState = yield select(({marketResourcePage, nodes}: ConnectState) => ({
         marketResourcePage,
@@ -701,5 +700,23 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
     return data;
   });
 
+  return await Promise.all(allPromises);
+}
+
+interface GetAllContractExhibitsParamsType {
+  resourceIDs: string[];
+  nodeID: number;
+}
+
+async function getAllContractExhibits({resourceIDs, nodeID}: GetAllContractExhibitsParamsType) {
+  const allPromises = resourceIDs.map(async (rid) => {
+    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      licenseeIdentityType: 2,
+      licensorId: rid,
+      licenseeId: nodeID,
+    };
+    const {data} = await FApiServer.Contract.batchContracts(params);
+    return data;
+  });
   return await Promise.all(allPromises);
 }

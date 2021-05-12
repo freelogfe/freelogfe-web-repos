@@ -16,6 +16,7 @@ import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
+import {FTextBtn} from "@/components/FButton";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -41,9 +42,20 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
     <div>
       <div className={styles.header}>
         <div className={styles.nav}>
-          <FLink to={FUtil.LinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId})}>
-            <FContentText type="negative" text={exhibitInfoPage.nodeName}/>
-          </FLink>
+          {/*<FLink to={}>*/}
+          <FTextBtn
+            onClick={() => {
+              window.open(FUtil.LinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId}));
+            }}
+            type="default"
+          >
+            <FContentText
+              type="negative"
+              text={exhibitInfoPage.nodeName}
+              className={styles.nodeName}
+            />
+          </FTextBtn>
+          {/*</FLink>*/}
           <div style={{width: 2}}/>
           <FContentText type="negative" text={'>'}/>
           <div style={{width: 2}}/>
