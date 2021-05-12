@@ -16,7 +16,6 @@ import {
   FetchAuthorizeAction,
   FetchAuthorizedAction, FetchResourceInfoAction,
 } from '@/models/resourceAuthPage';
-import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";

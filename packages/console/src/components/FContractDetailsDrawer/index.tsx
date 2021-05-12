@@ -9,12 +9,10 @@ import {FDown, FNodes, FUp, FUser} from "@/components/FIcons";
 import FDivider from "@/components/FDivider";
 import FDrawer from "@/components/FDrawer";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
-import {FTextBtn} from "@/components/FButton";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import FLoadingTip from "@/components/FLoadingTip";
 import FResource from "@/components/FIcons/FResource";
-import {EnumContractStatus} from "@/utils/predefined";
 
 interface BaseInfo {
   subjectId: string;
