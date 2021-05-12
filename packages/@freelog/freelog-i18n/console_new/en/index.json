@@ -290,5 +290,7 @@
 	"filter_resource_type": "Resource Type",
 	"filte_exhibit_state": "State",
 	"result_quantity": "{ResultQuantity} relevant exhbits",
-	"btn_clear_filters": "CLEAR"
+	"btn_clear_filters": "CLEAR",
+	"manage_themes_empty": "Theme is the overall look and design of your node. By activating different themes, you get different layout, color schemes and other features in your node.",
+	"btn_add_theme": "ADD A THEME"
 }
