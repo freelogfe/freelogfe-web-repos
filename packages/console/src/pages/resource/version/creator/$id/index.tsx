@@ -25,24 +25,16 @@ import {
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
 import RouterTypes from 'umi/routerTypes';
-import {FDown, FInfo} from "@/components/FIcons";
-import FBaseProperties from "@/components/FBaseProperties";
-import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
-import FUp from "@/components/FIcons/FUp";
 import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";
-// import FCustomOptionsCard from "@/components/FCustomOptionsCard";
-// import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
-// import FTooltip from "@/components/FTooltip";
 import {RouteComponentProps} from 'react-router';
 import * as AHooks from "ahooks";
-// import {ClearDataDataAction} from "@/models/marketResourcePage";
 import CustomOptions from "./CustomOptions";
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
@@ -151,7 +143,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
       <Prompt
         when={resourceVersionCreatorPage.promptLeavePath === '' && resourceVersionCreatorPage.dataIsDirty}
         message={(location: H.Location, action: H.Action) => {
-          console.log(location, action, 'LAAAAL');
+          // console.log(location, action, 'LAAAAL');
           // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
           dispatch<ChangeAction>({
             type: 'resourceVersionCreatorPage/change',
@@ -220,7 +212,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             <FSelectObject/>
 
             <CustomOptions/>
-
           </FFormLayout.FBlock>
 
           <FFormLayout.FBlock dot={false} title={FUtil.I18n.message('rely')}>

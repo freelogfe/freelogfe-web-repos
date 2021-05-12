@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from "./index.less";
-// import {FNormalButton, FTextButton} from "@/components/FButton";
 import {Space} from "antd";
 import FObjectCard from "./ObjectCard";
 import {LoadingOutlined} from '@ant-design/icons';
@@ -29,34 +28,14 @@ const errorTexts = {
   resourceType: FUtil.I18n.message('error_wrongfileformat'),
 };
 
-// export interface ResourceObject {
-//   sha1: string;
-//   name: string;
-//   size: number;
-//   path: string;
-//   type: string;
-//   time: string;
-//   objectId?: string;
-// }
-
 export interface FSelectObject {
-  // resourceType: string;
-  // resourceObject?: ResourceObject | null;
-
-  // onChange?(file: FSelectObject['resourceObject']): void;
-
-  // onError?(value: { sha1: string, text: string }): void;
-
-  // errorText?: string;
-
-  // onClickDuplicatedLook?: () => void;
-
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   user: UserModelState;
 }
 
 let uploadCancelHandler: any = null;
+let handleDataUploadOrImportObject: any = null;
 
 function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObject) {
 
@@ -70,6 +49,25 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     });
   }
 
+  function handleDataUploadOrImportObjectFunc(obj?: { id: string; name: string; }) {
+    return function () {
+      if (obj) {
+        onChange({
+          selectedFileStatus: -3,
+        });
+
+        dispatch<HandleObjectInfoAction>({
+          type: 'resourceVersionCreatorPage/handleObjectInfo',
+          payload: obj.id,
+        });
+      } else {
+        dispatch<FetchRawPropsAction>({
+          type: 'resourceVersionCreatorPage/fetchRawProps',
+        });
+      }
+    }
+  }
+
   /**
    * 选择对象调用函数
    * @param obj
@@ -80,6 +78,20 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       objectIdOrName: obj.id,
     };
     const {data} = await FApiServer.Storage.objectDetails(params);
+
+    const params4: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+      sha1: data.sha1,
+      resourceType: resourceVersionCreatorPage.resourceType,
+    };
+
+    const {data: data4} = await FApiServer.Storage.fileProperty(params4);
+    // console.log(data4, 'data4data4data4data4');
+    if (!data4) {
+      return onChange({
+        selectedFileStatus: 2,
+        selectedFileObjectDrawerVisible: false,
+      });
+    }
 
     await onChange({
       selectedFileName: data.objectName,
@@ -93,8 +105,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
     const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
     // console.log(data3, 'data3data3data3data3data3@#########');
+
+    // 如果之前已经被使用过，展示使用列表
     if (data3.length > 0) {
       // console.log(data3, 'data3@@#$@#$#$@#');
+      handleDataUploadOrImportObject = handleDataUploadOrImportObjectFunc({
+        id: data.objectId,
+        name: data.objectName,
+      });
       await onChange({
         selectedFileStatus: data3[0].userId === user.info?.userId ? 3 : 4,
         selectedFileUsedResource: data3.map((d: any) => {
@@ -122,10 +140,6 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
       await onChange({
         selectedFileStatus: -3,
-      });
-
-      await dispatch<FetchRawPropsAction>({
-        type: 'resourceVersionCreatorPage/fetchRawProps',
       });
 
       await dispatch<HandleObjectInfoAction>({
@@ -169,8 +183,11 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
       const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
       // console.log(data3, 'data3data3data3data3data3@#########');
+
+      // 如果之前已经被使用过，展示使用列表
       if (data3.length > 0) {
         // console.log(data3, 'data3@@#$@#$#$@#');
+        handleDataUploadOrImportObject = handleDataUploadOrImportObjectFunc();
         return onChange({
           selectedFileName: file.name,
           selectedFileSha1: sha1,
@@ -253,7 +270,6 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     });
   }
 
-
   return (<div>
     {
       resourceVersionCreatorPage.selectedFileStatus !== -3 && resourceVersionCreatorPage.selectedFileStatus !== -2
@@ -315,9 +331,10 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                     selectedFileStatus: -3,
                     dataIsDirty: true,
                   });
-                  dispatch<FetchRawPropsAction>({
-                    type: 'resourceVersionCreatorPage/fetchRawProps',
-                  });
+                  // dispatch<FetchRawPropsAction>({
+                  //   type: 'resourceVersionCreatorPage/fetchRawProps',
+                  // });
+                  handleDataUploadOrImportObject();
                 }}>继续上传/导入</FTextBtn>
               </Space>)
             }
@@ -405,6 +422,9 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
               selectedFileName: '',
               selectedFileOrigin: '',
               selectedFileStatus: 0,
+              rawProperties: [],
+              baseProperties: [],
+              customOptionsData: [],
             });
           }}
         />)
@@ -423,9 +443,10 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
     >
       <FObjectSelector
         visibleResourceType={resourceVersionCreatorPage.resourceType}
-        showRemoveIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
+        // showRemoveIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
+        disabledIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
         onSelect={onSelectObject}
-        onDelete={() => onChange1(null)}
+        // onDelete={() => onChange1(null)}
       />
     </FDrawer>
   </div>);

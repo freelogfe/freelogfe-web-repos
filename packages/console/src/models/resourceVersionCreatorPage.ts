@@ -1,7 +1,6 @@
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
-// import {FSelectObject} from '@/pages/resource/components/FSelectObject';
 import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from '@/models/connect';
 import {router} from 'umi';
 import BraftEditor, {EditorState} from 'braft-editor';
@@ -12,8 +11,6 @@ import moment from "moment";
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";
 import fConfirmModal from "@/components/fConfirmModal";
-// import {RcFile} from "antd/lib/upload/interface";
-// import {getSHA1Hash} from "@/utils/tools";
 
 export type DepResources = WholeReadonly<{
   id: string;
@@ -64,11 +61,6 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   versionVerify: 0 | 2;
   versionErrorText: string;
 
-  // resourceObject: FSelectObject['resourceObject'];
-  // resourceObjectError: {
-  //   sha1: string;
-  //   text: string;
-  // };
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
@@ -562,6 +554,7 @@ const Model: ResourceVersionCreatorModelType = {
           type: 'change',
           payload: {
             rawProperties: [],
+            selectedFileStatus: 2,
           },
           caller: '97293874823yu4oi234io23hjkfdsasdf66755%%%%',
         });
