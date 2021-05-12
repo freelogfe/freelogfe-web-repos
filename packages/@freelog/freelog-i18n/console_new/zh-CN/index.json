@@ -288,5 +288,7 @@
 	"exhibit_filter": "筛选",
 	"filter_option_all": "全部",
 	"filter_resource_type": "资源类型",
-	"filte_exhibit_state": "状态"
+	"filte_exhibit_state": "状态",
+	"result_quantity": "共{ResultQuantity}个相关展品",
+	"btn_clear_filters": "清空"
 }

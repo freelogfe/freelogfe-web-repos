@@ -288,5 +288,7 @@
 	"exhibit_filter": "Filters",
 	"filter_option_all": "All",
 	"filter_resource_type": "Resource Type",
-	"filte_exhibit_state": "State"
+	"filte_exhibit_state": "State",
+	"result_quantity": "{ResultQuantity} relevant exhbits",
+	"btn_clear_filters": "CLEAR"
 }
