@@ -292,5 +292,10 @@
 	"result_quantity": "共{ResultQuantity}个相关展品",
 	"btn_clear_filters": "清空",
 	"manage_themes_empty": "主题决定节点的整体外观和设计，你可以通过激活不同的主题来更改节点的布局、配色方案等。",
-	"btn_add_theme": "添加主题"
+	"btn_add_theme": "添加主题",
+	"toggle_activate_theme": "激活",
+	"state_active": "已激活",
+	"btn_edit_exhibit": "编辑",
+	"btn_check_resource_details": "资源详情",
+	"btn_activate_theme": "激活"
 }
