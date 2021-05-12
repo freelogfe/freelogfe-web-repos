@@ -21,6 +21,7 @@ import {
 } from "@/models/resourceVersionCreatorPage";
 import FTable from "@/components/FTable";
 import {FContentText} from '@/components/FText';
+import * as AHooks from 'ahooks';
 
 const errorTexts = {
   duplicated: FUtil.I18n.message('resource_exist'),
@@ -48,6 +49,11 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       caller: '234532434345234324534%#$%#$%#$%#$#$',
     });
   }
+
+  AHooks.useUnmount(() => {
+    uploadCancelHandler = null;
+    handleDataUploadOrImportObject = null;
+  });
 
   function handleDataUploadOrImportObjectFunc(obj?: { id: string; name: string; }) {
     return function () {
