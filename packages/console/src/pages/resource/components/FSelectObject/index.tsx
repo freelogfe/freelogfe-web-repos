@@ -56,12 +56,12 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
   });
 
   function handleDataUploadOrImportObjectFunc(obj?: { id: string; name: string; }) {
-    return function () {
-      if (obj) {
-        onChange({
-          selectedFileStatus: -3,
-        });
 
+    return function () {
+      onChange({
+        selectedFileStatus: -3,
+      });
+      if (obj) {
         dispatch<HandleObjectInfoAction>({
           type: 'resourceVersionCreatorPage/handleObjectInfo',
           payload: obj.id,

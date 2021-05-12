@@ -644,8 +644,6 @@ const Model: ResourceVersionCreatorModelType = {
       // 组织添加的依赖数据
       const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
         const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
-
-
         const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
         const theVersion = versions?.find((v) => v.id === dr.resourceId);
 
@@ -749,12 +747,68 @@ const Model: ResourceVersionCreatorModelType = {
     },
     * handleObjectInfo({payload}: HandleObjectInfoAction, {select, put, call}: EffectsCommandMap) {
       // console.log(payload, '!!!@@@#$@#$#$');
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
 
       const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
         objectIdOrName: payload,
       };
       const {data} = yield call(FApiServer.Storage.objectDetails, params);
-      // console.log(data, 'OOOOasdfadsf');
+      console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
+
+      const params4: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+        sha1: data.sha1,
+        resourceType: resourceVersionCreatorPage.resourceType,
+      };
+
+      const {data: data4} = yield call(FApiServer.Storage.fileProperty, params4);
+      console.log(data4, '@#@#@#@#@#@##@$@#$data4');
+      if (!data4) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            selectedFileStatus: 2,
+          }
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            rawProperties: Object.entries(data4 as any[]).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp) => {
+              console.log(rp, 'rprprprprpyu2341234');
+              return {
+                key: rp[0],
+                value: rp[0] === 'fileSize' ? FUtil.Format.humanizeSize(rp[1]) : rp[1],
+              };
+            }),
+            baseProperties: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type === 'readonlyText')
+              .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  value: cpd.defaultValue,
+                  description: cpd.remark,
+                };
+              }),
+            customOptionsData: (data.customPropertyDescriptors as any[])
+              .filter((cpd: any) => cpd.type !== 'readonlyText')
+              .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  // keyError: '',
+                  description: cpd.remark,
+                  // descriptionError: '',
+                  custom: cpd.type === 'editableText' ? 'input' : 'select',
+                  defaultValue: cpd.defaultValue,
+                  // defaultValueError: '',
+                  customOption: cpd.candidateItems.join(','),
+                  // customOptionError: '',
+                };
+              }),
+          }
+        });
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -827,34 +881,11 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
-              key: s[0],
-              value: s[1],
-            })),
-            baseProperties: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type === 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  value: cpd.defaultValue,
-                  description: cpd.remark,
-                };
-              }),
-            customOptionsData: (data.customPropertyDescriptors as any[])
-              .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd: any) => {
-                return {
-                  key: cpd.key,
-                  // keyError: '',
-                  description: cpd.remark,
-                  // descriptionError: '',
-                  custom: cpd.type === 'editableText' ? 'input' : 'select',
-                  defaultValue: cpd.defaultValue,
-                  // defaultValueError: '',
-                  customOption: cpd.candidateItems.join(','),
-                  // customOptionError: '',
-                };
-              }),
+            // rawProperties: Object.entries(data.systemProperty).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((s: any) => ({
+            //   key: s[0],
+            //   value: s[1],
+            // })),
+
             dependencies: allDepObjects,
             depRelationship: allRelationship,
           },
