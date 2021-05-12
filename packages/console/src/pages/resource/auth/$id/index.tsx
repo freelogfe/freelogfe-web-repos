@@ -28,16 +28,12 @@ import FTable from "@/components/FTable";
 import FResource from "@/components/FIcons/FResource";
 import {ColumnsType} from "antd/lib/table/interface";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
+import {RouteComponentProps} from "react-router";
 
-interface AuthProps {
+interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
   resourceInfo: ResourceInfoModelState,
-  match: {
-    params: {
-      id: string,
-    }
-  }
 }
 
 function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
