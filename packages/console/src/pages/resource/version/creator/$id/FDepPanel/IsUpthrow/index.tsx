@@ -25,17 +25,6 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
 
   function onChangeIsUpthrow(bool: boolean) {
 
-    // const rrr: ResourceVersionCreatorPageModelState['dependencies'][number] = {
-    //   ...resource,
-    //   upthrow: bool,
-    //   // enableReuseContracts: resource.enableReuseContracts.map((erc) => {
-    //   //
-    //   //   return {
-    //   //
-    //   //   }
-    //   // });
-    // };
-
     dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
       payload: {

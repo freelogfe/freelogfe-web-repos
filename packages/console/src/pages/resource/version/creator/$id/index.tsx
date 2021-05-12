@@ -6,7 +6,7 @@ import FBraftEditor from '@/components/FBraftEditor';
 import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FSelectObject from '@/pages/resource/components/FSelectObject';
-import FDepPanel from '@/pages/resource/containers/FDepPanel';
+import FDepPanel from './FDepPanel';
 import {connect, Dispatch} from "dva";
 import {
   ConnectState,
