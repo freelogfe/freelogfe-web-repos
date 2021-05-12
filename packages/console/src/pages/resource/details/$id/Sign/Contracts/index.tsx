@@ -83,11 +83,11 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           <div className={styles.exhibit}>
             <div style={{borderTop: '1px solid #E5E7EB'}}/>
             <div style={{height: 10}}/>
-            <div>当前合约在此节点上存在 <span style={{color: '#2784FF'}}>{c.exhibit.length}</span> 次复用：</div>
+            <div>当前合约在此节点上存在 <span style={{color: '#2784FF'}}>{c.exhibits.length}</span> 次复用：</div>
             <div style={{height: 8}}/>
             <Space size={5} direction="vertical" style={{width: '100%'}}>
               {
-                c.exhibit.map((et) => {
+                c.exhibits.map((et) => {
                   return (<Space key={et.exhibitID} size={2} style={{display: 'flex', alignItems: 'center'}}>
                     <div>展品</div>
                     <FTextBtn

@@ -86,16 +86,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
 
     <div className={styles.wrap}>
 
-      {/*{*/}
-      {/*  !!marketResourcePage.signResources.find((sr) => {*/}
-      {/*    return sr.status === 0;*/}
-      {/*  }) && (<>*/}
-      {/*    <div style={{height: 20}}/>*/}
-      {/*    <Alert message={'当前主资源或上抛有未上线资源，不可用！'} type="error"/>*/}
-      {/*    <div style={{height: 20}}/>*/}
-      {/*  </>)*/}
-      {/*}*/}
-
       <div style={{height: 35}}/>
 
       <div className={styles.header}>

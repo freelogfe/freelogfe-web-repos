@@ -55,7 +55,7 @@ export interface MarketResourcePageModelState {
       createTime: string;
       policyID: string;
       status: 0 | 1 | 2;
-      exhibit: {
+      exhibits: {
         exhibitID: string;
         exhibitName: string;
       }[];
@@ -137,11 +137,6 @@ export interface ChangeAction extends AnyAction {
   type: 'change' | 'marketResourcePage/change';
   payload: Partial<MarketResourcePageModelState>;
 }
-
-// export interface InitDataAction extends AnyAction {
-//   type: 'marketResourcePage/initData';
-//   payload: string;
-// }
 
 export interface ClearDataDataAction extends AnyAction {
   type: 'marketResourcePage/clearData';
@@ -418,7 +413,6 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
       }));
 
-
       const allRawResourceIDs = marketResourcePage.allRawResources.map((r) => r.resourceId);
 
       const params: GetAllContractsParamsType = {
@@ -427,7 +421,7 @@ const Model: MarketResourcePageModelType = {
       };
 
       const result: GetAllContractsReturnType = yield call(getAllContracts, params);
-      console.log(result, 'result1234234234234');
+      // console.log(result, 'result1234234234234');
 
       const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         nodeId: payload,
@@ -435,13 +429,18 @@ const Model: MarketResourcePageModelType = {
       };
       const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
 
-      // const params2: Parameters<typeof getAllContractExhibits>[0] = {
-      //   resourceIDs: allRawResourceIDs,
-      //   nodeID: payload,
-      // };
-      //
-      // const allContractExhibits: GetAllContractsReturnType = yield call(getAllContractExhibits, params);
-      // console.log(allContractExhibits, 'allContractExhibits1234234234324');
+
+      let data2: any[] = [];
+      const contractIds = result.flat().map((cr) => cr.contractId).join(',');
+      if (contractIds) {
+        const params2: Parameters<typeof FApiServer.Exhibit.contractAppliedPresentable>[0] = {
+          nodeId: payload,
+          contractIds: result.flat().map((cr) => cr.contractId).join(','),
+        };
+
+        const {data} = yield call(FApiServer.Exhibit.contractAppliedPresentable, params2);
+        data2 = data;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -449,8 +448,14 @@ const Model: MarketResourcePageModelType = {
           signedResourceExhibitID: data1?.presentableId || '',
           signResources: marketResourcePage.allRawResources
             .map<MarketResourcePageModelState['signResources'][number]>((value, index: number) => {
-
               const contracts: MarketResourcePageModelState['signResources'][number]['contracts'] = result[index].map((c) => {
+                const exhibits = data2.find((d2: any) => d2.contractId === c.contractId)
+                  ?.presentables.map((pb: any) => {
+                    return {
+                      exhibitID: pb.presentableId,
+                      exhibitName: pb.presentableName,
+                    };
+                  });
                 return {
                   checked: true,
                   id: c.contractId,
@@ -459,13 +464,7 @@ const Model: MarketResourcePageModelType = {
                   createTime: FUtil.Format.formatDateTime(c.createDate),
                   policyID: c.policyInfo.policyId,
                   status: c.status === 1 ? 2 : ((c.authStatus & 1) === 1) ? 1 : 0,
-                  exhibit: [{
-                    exhibitID: '609a34257287e9002fc0e189',
-                    exhibitName: '展品1',
-                  }, {
-                    exhibitID: '609a34257287e9002fc0e189',
-                    exhibitName: '展品2',
-                  }],
+                  exhibits: exhibits || [],
                 };
               });
 

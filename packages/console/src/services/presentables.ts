@@ -177,3 +177,15 @@ export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
     params,
   });
 }
+
+interface ContractAppliedPresentableParamsType {
+  nodeId: number;
+  contractIds: string;
+}
+
+export function contractAppliedPresentable({nodeId, ...params}: ContractAppliedPresentableParamsType) {
+  return request.get(`/v2/presentables/${nodeId}/contractAppliedPresentable?=608932a3470d81721c865874`, {
+    params,
+  });
+}
+
