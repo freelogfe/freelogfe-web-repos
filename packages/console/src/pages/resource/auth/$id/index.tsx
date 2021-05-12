@@ -37,7 +37,7 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
 }
 
 function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
-  
+
   React.useEffect(() => {
     dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
@@ -75,7 +75,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'被授权方'}
-        type="h4"
+        type="table"
       />),
       dataIndex: 'authorized',
       width: 300,
@@ -101,7 +101,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'所签授权策略｜合约状态'}
-        type="h4"
+        type="table"
       />),
       // className: 'column-money',
       dataIndex: 'contract',
@@ -130,7 +130,7 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
       title: (<FTitleText
         // text={FUtil.I18n.message('contract_name') + '｜' + FUtil.I18n.message('contract_id')}
         text={'操作'}
-        type="h4"
+        type="table"
       />),
       dataIndex: 'operation',
       width: 80,
