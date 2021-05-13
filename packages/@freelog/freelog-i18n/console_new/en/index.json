@@ -180,8 +180,8 @@
 	"total_number": "Total {TotalNumber}",
 	"objects_list_empty": "You do not upload an object yet.",
 	"upload_object": "Upload objects",
-	"object_name": "Object",
-	"size": "Object size",
+	"object_name": "Object Name",
+	"size": "Size",
 	"last_updated_time": "Last updated",
 	"copy_object_name": "Copy object name",
 	"edit_object_information": "Object information",
@@ -297,5 +297,9 @@
 	"state_active": "Active",
 	"btn_edit_exhibit": "EDIT",
 	"btn_check_resource_details": "RESOURCE DETAILS",
-	"btn_activate_theme": "ACTIVATE"
+	"btn_activate_theme": "ACTIVATE",
+	"tip_edit_object": "Edit",
+	"tip_release_object": "Release",
+	"tip_download_object": "Download",
+	"tip_delete": "Delete"
 }

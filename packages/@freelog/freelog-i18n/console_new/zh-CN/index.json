@@ -180,8 +180,8 @@
 	"total_number": "共{TotalNumber}个",
 	"objects_list_empty": "您还没有上传过对象",
 	"upload_object": "上传对象",
-	"object_name": "对象",
-	"size": "对象大小",
+	"object_name": "对象名",
+	"size": "大小",
 	"last_updated_time": "最近更新",
 	"copy_object_name": "复制对象名",
 	"edit_object_information": "对象信息",
@@ -297,5 +297,9 @@
 	"state_active": "已激活",
 	"btn_edit_exhibit": "编辑",
 	"btn_check_resource_details": "资源详情",
-	"btn_activate_theme": "激活"
+	"btn_activate_theme": "激活",
+	"tip_edit_object": "编辑",
+	"tip_release_object": "发行",
+	"tip_download_object": "下载",
+	"tip_delete": "删除"
 }
