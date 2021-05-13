@@ -21,18 +21,32 @@ function Option({dispatch, marketResourcePage}: OptionProps) {
   return (<>
     <div style={{height: 30}}/>
     <div>
-      <FContentText text={'自定义选项'} type="highlight"/>
+      <FTitleText
+        text={'自定义选项'}
+        type="h3"
+      />
       <div style={{height: 20}}/>
       <div className={styles.content}>
         {
-          marketResourcePage.options.map((i) => (<div key={i.key}>
-            <Space size={10}>
-              <FContentText text={i.key}/>
-              <FTooltip
-                title={i.description}
-                color={'#fff'}><FInfo style={{cursor: 'pointer'}}/></FTooltip>
-            </Space>
-          </div>))
+          marketResourcePage.options.map((i) => {
+            return (<div key={i.key}>
+              <Space size={10}>
+                <FContentText
+                  text={i.key}
+                />
+                {
+                  i.description && (<FTooltip
+                    title={i.description}
+                    color={'#fff'}
+                  >
+                    <FInfo
+                      style={{cursor: 'pointer', fontSize: 14}}
+                    />
+                  </FTooltip>)
+                }
+              </Space>
+            </div>);
+          })
         }
       </div>
     </div>

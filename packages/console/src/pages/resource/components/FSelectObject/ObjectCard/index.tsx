@@ -8,7 +8,6 @@ import FUtil from "@/utils";
 interface ObjectCardProps {
   resourceObject: {
     name: string;
-    // readonly size: number;
     path: string;
   };
   progress: number | null;

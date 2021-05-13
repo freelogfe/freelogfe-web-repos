@@ -31,7 +31,7 @@ function FCustomOptionsCards({dataSource, onEdit, onDelete}: FCustomOptionsCards
               <FContentText text={ds.theKey} type="additional2"/>
               {
                 ds.description
-                  ? (<FTooltip title={ds.description}><FInfo/></FTooltip>)
+                  ? (<FTooltip title={ds.description}><FInfo style={{cursor: 'pointer', fontSize: 14}}/></FTooltip>)
                   : null
               }
 

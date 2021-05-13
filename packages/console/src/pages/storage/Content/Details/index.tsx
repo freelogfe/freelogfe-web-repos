@@ -22,7 +22,7 @@ import {FDown, FInfo, FUp, FDownload} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
-import FCustomOptionsCard from "@/components/FCustomOptionsCard";
+// import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import {router} from "umi";
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";

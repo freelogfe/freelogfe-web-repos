@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FContentText} from "@/components/FText";
+import {FContentText, FTitleText} from "@/components/FText";
 import styles from "./index.less";
 import {
   FAntvG6AuthorizationGraph,
@@ -32,7 +32,10 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
     <div style={{height: 30}}/>
     <div>
       <div className={styles.title}>
-        <FContentText text={'相关视图'} type="highlight"/>
+        <FTitleText
+          text={'相关视图'}
+          type="h3"
+        />
         <FTextButton
           onClick={() => {
             onChange({
