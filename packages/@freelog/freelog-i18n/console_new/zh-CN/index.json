@@ -2,7 +2,7 @@
 	"remove": "移除",
 	"create_my_first_release ": "创建资源",
 	"create_release_popup_empty": "资源可以作为一个全新发行的首个版本发行，也可以作为现有发行的更新版本发行。",
-	"file_exist": "存在同名文件",
+	"file_exist": "存在同名对象",
 	"replace_file": "替换",
 	"file_size_exceed": "数据文件不能超过512KB",
 	"check_release_details": "查看发行详情",

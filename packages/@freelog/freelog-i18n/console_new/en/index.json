@@ -2,7 +2,7 @@
 	"remove": "Remove",
 	"create_my_first_release ": "Create a new resource",
 	"create_release_popup_empty": "Release a resource as the first version of a complete new release, or a new version of a exist release.",
-	"file_exist": "The file of same name already exists.",
+	"file_exist": "The object of same name already exists.",
 	"replace_file": "Replace",
 	"file_size_exceed": "Data file can not exceed 512KB",
 	"check_release_details": "More details",
