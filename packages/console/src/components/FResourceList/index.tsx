@@ -43,7 +43,7 @@ function FResourceList({
         >加载更多</FNormalButton>
       </div>)
       : (resourceObjects.length > 0 && (
-        <div style={{textAlign: 'center', padding: '10px 0'}}>
+        <div style={{display: 'flex', justifyContent: 'center', padding: '10px 0'}}>
           <FContentText type="additional1" text={'没有更多了~'}/>
         </div>))}
     dataSource={resourceObjects}
