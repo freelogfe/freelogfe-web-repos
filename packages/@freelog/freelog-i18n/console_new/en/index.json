@@ -180,7 +180,7 @@
 	"total_number": "Total {TotalNumber}",
 	"objects_list_empty": "You do not upload an object yet.",
 	"upload_object": "Upload objects",
-	"object_name": "Name",
+	"object_name": "Object",
 	"size": "Object size",
 	"last_updated_time": "Last updated",
 	"copy_object_name": "Copy object name",
