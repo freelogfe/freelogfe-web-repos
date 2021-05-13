@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FNormalButton, FTextButton} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import FInput from '@/components/FInput';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
@@ -43,24 +43,28 @@ function Sign({dispatch, marketResourcePage, nodes}: SignProps) {
     </Space>
 
     <div className={styles.action}>
-      <FTextButton onClick={() => {
-        dispatch<ChangeAction>({
-          type: 'marketResourcePage/change',
-          payload: {
-            isSignPage: false,
-          },
-        });
-      }}>
+      <FTextBtn
+        onClick={() => {
+          dispatch<ChangeAction>({
+            type: 'marketResourcePage/change',
+            payload: {
+              isSignPage: false,
+            },
+          });
+        }}
+        type="default"
+      >
         <FLeft/>
         <>返回上一步</>
-      </FTextButton>
+      </FTextBtn>
       <div style={{width: 30}}/>
-      <FNormalButton
+      <FRectBtn
         onClick={() => dispatch<SignContractAction>({
           type: 'marketResourcePage/signContract',
         })}
         disabled={!!marketResourcePage.signExhibitNameErrorTip}
-      >确认签约</FNormalButton>
+        type="primary"
+      >确认签约</FRectBtn>
     </div>
   </div>}>
 

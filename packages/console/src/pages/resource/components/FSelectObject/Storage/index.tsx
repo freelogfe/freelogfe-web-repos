@@ -3,7 +3,7 @@ import styles from "./index.less";
 // import FDropdown from "@/components/FDropdown";
 import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
-import {FNormalButton} from "@/components/FButton";
+import {FRectBtn} from "@/components/FButton";
 import {FMenuProps} from "@/components/FMenu";
 import moment from 'moment'
 import FDropdownMenu from "@/components/FDropdownMenu";
@@ -100,10 +100,10 @@ export default function ({onSelect}: StorageProps) {
               <div style={{height: 2}}/>
               <FContentText type={'additional2'} text={`资源类型 ${i.type} | 更新时间 ${i.time}`}/>
             </div>
-            <FNormalButton
-              theme="weaken"
+            <FRectBtn
+              type="secondary"
               onClick={() => onSelect && onSelect(i)}
-            >选择</FNormalButton>
+            >选择</FRectBtn>
           </div>
         ))
       }

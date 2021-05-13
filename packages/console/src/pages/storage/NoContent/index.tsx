@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import Header from '../Header';
 
 interface NoContentProps {
@@ -15,7 +15,10 @@ function NoContent({}: NoContentProps) {
     <div className={styles.styles}>
       <FTipText text={'当前Bucket还没有上传任何对象'} type="first"/>
       <div style={{height: 30}}/>
-      <FNormalButton theme="big">上传对象</FNormalButton>
+      <FRectBtn
+        size="large"
+        type="primary"
+      >上传对象</FRectBtn>
     </div>
   </>);
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Button, Checkbox, Popover} from 'antd';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import FAutoComplete from "@/components/FAutoComplete";
 import * as AHooks from 'ahooks';
 import * as semver from 'semver';
@@ -112,11 +112,12 @@ function FVersionHandlerPopover({value, versionOptions, onChange, children}: FVe
           onClick={() => setVisible(false)}
         >取消</Button>
         <div style={{width: 10}}/>
-        <FNormalButton
+        <FRectBtn
           size="small"
           disabled={!!inputError}
           onClick={onConfirm}
-        >确定</FNormalButton>
+          type="primary"
+        >确定</FRectBtn>
       </div>
     </div>}
     title={null}

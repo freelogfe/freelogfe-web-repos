@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from "@/components/FText";
-import {Space, Upload} from "antd";
-import {FImport, FExport, FDelete, FCode, FWarning, FExit} from "@/components/FIcons";
+import {Space} from "antd";
+import {FImport, FExport, FCode, FExit} from "@/components/FIcons";
 import TypesCaption from "../components/TypesCaption";
 import {
   AttrRule,
@@ -17,7 +17,7 @@ import {
   AddRule, ActiveRule
 } from "../components/MappingRules";
 import FCodemirror from "@/components/FCodemirror";
-import {FNormalButton} from "@/components/FButton";
+import {FRectBtn} from "@/components/FButton";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
@@ -158,8 +158,8 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
             />
             <div style={{height: 15}}/>
-            <FNormalButton
-              loading={informalNodeManagerPage.codeIsChecking}
+            <FRectBtn
+              // loading={informalNodeManagerPage.codeIsChecking}
               disabled={!informalNodeManagerPage.codeIsDirty && !informalNodeManagerPage.codeIsChecking}
               onClick={() => {
                 onChange({
@@ -181,7 +181,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   type: 'informalNodeManagerPage/saveRules',
                 });
               }}
-            >{informalNodeManagerPage.codeIsChecking ? '校验中' : '校验并保存'}</FNormalButton>
+            >{informalNodeManagerPage.codeIsChecking ? '校验中' : '校验并保存'}</FRectBtn>
             {
               informalNodeManagerPage.codeCompileErrors && (<div className={styles.codeCompileErrors}>
                 <div style={{height: 20}}/>

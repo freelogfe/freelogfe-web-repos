@@ -7,7 +7,7 @@ import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextButton} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
@@ -106,7 +106,7 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
                 }}
               >取消</FTextButton>
               <div style={{width: 15}}/>
-              <FNormalButton
+              <FRectBtn
                 size="small"
                 onClick={async () => {
                   await onChange({
@@ -120,7 +120,8 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
                     },
                   });
                 }}
-              >确定</FNormalButton>
+                type="primary"
+              >确定</FRectBtn>
             </div>
 
           </>)

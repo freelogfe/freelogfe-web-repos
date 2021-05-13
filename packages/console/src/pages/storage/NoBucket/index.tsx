@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTipText} from '@/components/FText';
-import {FNormalButton, FRectBtn} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, CreateBucketAction, StorageHomePageModelState} from "@/models/storageHomePage";
-import FInput from "@/components/FInput";
-import FModal from "@/components/FModal";
+import {ChangeAction, StorageHomePageModelState} from "@/models/storageHomePage";
 import {ConnectState} from "@/models/connect";
 
 interface NoContentProps {

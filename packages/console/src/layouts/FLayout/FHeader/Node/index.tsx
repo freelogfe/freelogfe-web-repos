@@ -4,12 +4,10 @@ import FMenu from "@/components/FMenu";
 import {router} from "umi";
 import {FPlus} from "@/components/FIcons";
 import {FContentText} from "@/components/FText";
-import {FNormalButton} from "@/components/FButton";
-// import {i18nMessage} from "@/utils/i18n";
+import {FRectBtn} from "@/components/FButton";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
-// import {nodeCreator, nodeManagement} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
 import FUtil from "@/utils";
 
@@ -51,12 +49,13 @@ function Node({dispatch, nodes, global}: NodeProps) {
     </div>) : (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>
       <div style={{height: 30}}/>
-      <FNormalButton
+      <FRectBtn
         size="small"
         onClick={() => {
           router.push(FUtil.LinkTo.nodeCreator());
         }}
-      >创建节点</FNormalButton>
+        type="primary"
+      >创建节点</FRectBtn>
     </div>)}>
     <FNavLink
       text={FUtil.I18n.message('node_manage')}

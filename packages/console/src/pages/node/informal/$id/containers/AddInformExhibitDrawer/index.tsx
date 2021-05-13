@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Space} from "antd";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextButton} from "@/components/FButton";
 import styles from "@/pages/node/informal/$id/Exhibit/index.less";
 import FSelect from "@/components/FSelect";
 import {WholeMutable} from "@/models/shared";
@@ -83,9 +83,12 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
       <FTextButton onClick={() => {
         onCancel && onCancel();
       }}>取消</FTextButton>
-      <FNormalButton onClick={() => {
-        onClickConfirm();
-      }}>添加</FNormalButton>
+      <FRectBtn
+        onClick={() => {
+          onClickConfirm();
+        }}
+        type="primary"
+      >添加</FRectBtn>
     </Space>}
     onClose={() => {
       onCancel && onCancel();
@@ -169,9 +172,10 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     {
       false
         ? (<div className={styles.footer}>
-          <FNormalButton
+          <FRectBtn
             // onClick={() => onLoadMord && onLoadMord()}
-          >加载更多</FNormalButton>
+            size="small"
+          >加载更多</FRectBtn>
         </div>)
         : (['2'].length > 0 && (
           <div style={{textAlign: 'center', padding: '10px 0'}}>

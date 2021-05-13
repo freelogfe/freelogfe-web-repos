@@ -5,7 +5,7 @@ import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
 import FCodemirror from "@/components/FCodemirror";
 import {Drawer, Space} from "antd";
 import {FFileText} from "@/components/FIcons";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextButton} from "@/components/FButton";
 import PolicyTemplates from "./PolicyTemplates";
 import FDrawer from "@/components/FDrawer";
 
@@ -55,7 +55,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
     width={720}
     topRight={<Space size={30}>
       <FTextButton onClick={() => onCancel && onCancel()}>取消</FTextButton>
-      <FNormalButton
+      <FRectBtn
         onClick={() => {
           onConfirm && onConfirm({
             title,
@@ -63,7 +63,8 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
           });
         }}
         disabled={title === '' || text === '' || !!titleError || !!textError}
-      >确定</FNormalButton>
+        type="primary"
+      >确定</FRectBtn>
     </Space>}
     afterVisibleChange={(visible  )=> {
       if (!visible) {

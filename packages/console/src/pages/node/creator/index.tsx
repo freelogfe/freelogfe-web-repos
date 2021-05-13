@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FCenterLayout from "@/layouts/FCenterLayout";
 import {FTitleText, FContentText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {Input, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, NodesModelState} from '@/models/connect';
@@ -82,14 +82,15 @@ function NodeCreator({nodes, dispatch}: NodeCreatorProps) {
         </div>
       </Space>
       <pre className={styles.errorTip}>{nodes.nameError}</pre>
-      <FNormalButton
+      <FRectBtn
         className={styles.button}
         disabled={nodes.domainVerify !== 2 || !!nodes.domainError
         || nodes.nameVerify !== 2 || !!nodes.nameError}
         onClick={() => dispatch<CreateNodeAction>({
           type: 'nodes/createNode',
         })}
-      >创建节点</FNormalButton>
+        type="primary"
+      >创建节点</FRectBtn>
     </div>
   </FContentLayout>);
 }

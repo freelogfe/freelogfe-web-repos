@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText, FTipText} from '@/components/FText';
-import {FCircleButton, FNormalButton} from '@/components/FButton';
+import {FCircleButton, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FSwitch from '@/components/FSwitch';
 import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhibitInfoPage";
@@ -9,7 +9,6 @@ import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import FUtil from "@/utils";
-// import {i18nMessage} from "@/utils/i18n";
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -47,12 +46,15 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
             text={'无策略'}
           />
           <div style={{height: 20}}/>
-          <FNormalButton onClick={() => dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              addPolicyDrawerVisible: true,
-            }
-          })}>{FUtil.I18n.message('add_authorization_plan')}</FNormalButton>
+          <FRectBtn
+            onClick={() => dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                addPolicyDrawerVisible: true,
+              }
+            })}
+            type="primary"
+          >{FUtil.I18n.message('add_authorization_plan')}</FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {

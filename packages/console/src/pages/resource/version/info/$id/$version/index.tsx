@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FCircleButton, FTextButton, FNormalButton, FTextBtn, FRectBtn, FCircleBtn} from '@/components/FButton';
+import {FCircleButton, FTextButton, FTextBtn, FRectBtn, FCircleBtn} from '@/components/FButton';
 import {Col, Row, Space} from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
@@ -373,7 +373,8 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           }}
         >取消</FTextButton>
 
-        <FNormalButton
+        <FRectBtn
+          type="primary"
           disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
           onClick={async () => {
             await onChange({
@@ -397,7 +398,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
               type: 'resourceVersionEditorPage/syncAllProperties',
             });
           }}
-        >保存</FNormalButton>
+        >保存</FRectBtn>
       </Space>}
     >
       <Space
@@ -489,7 +490,8 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             onCloseCustomOptionDrawer();
           }}
         >取消</FTextButton>
-        <FNormalButton
+        <FRectBtn
+          type="primary"
           disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}
           onClick={async () => {
             await onChange({
@@ -519,7 +521,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
               type: 'resourceVersionEditorPage/syncAllProperties',
             });
           }}
-        >保存</FNormalButton>
+        >保存</FRectBtn>
       </Space>}
     >
       <Space

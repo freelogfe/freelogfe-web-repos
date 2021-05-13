@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import {List} from 'antd';
-import {FNormalButton} from '@/components/FButton';
+import {FRectBtn} from '@/components/FButton';
 import {FContentText} from '@/components/FText';
-import StatusLabel from "@/components/StatusLabel";
+// import StatusLabel from "@/components/StatusLabel";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 
 export interface FResourceListProps {
@@ -38,9 +38,9 @@ function FResourceList({
     itemLayout="horizontal"
     loadMore={stillMore
       ? (<div className={styles.footer}>
-        <FNormalButton
+        <FRectBtn
           onClick={() => onLoadMord && onLoadMord()}
-        >加载更多</FNormalButton>
+        >加载更多</FRectBtn>
       </div>)
       : (resourceObjects.length > 0 && (
         <div style={{display: 'flex', justifyContent: 'center', padding: '10px 0'}}>
@@ -68,16 +68,18 @@ function FResourceList({
         </div>
         {
           (!showRemoveIDsOrNames?.includes(i.title) && !showRemoveIDsOrNames?.includes(i.id))
-            ? (<FNormalButton
-              theme="weaken"
+            ? (<FRectBtn
+              type="secondary"
+              size="small"
               onClick={() => onSelect && onSelect(i)}
               disabled={!i.latestVersion || disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-            >选择</FNormalButton>)
-            : (<FNormalButton
-              theme="delete2"
+            >选择</FRectBtn>)
+            : (<FRectBtn
+              type="danger2"
+              size="small"
               onClick={() => onDelete && onDelete(i)}
               disabled={disabledIDsOrNames?.includes(i.title) || disabledIDsOrNames?.includes(i.id)}
-            >移除</FNormalButton>)
+            >移除</FRectBtn>)
         }
       </div>
     )}
