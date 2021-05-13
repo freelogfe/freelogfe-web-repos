@@ -96,7 +96,7 @@ const Model: NodesModelType = {
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
       const params: Parameters<typeof FApiServer.Node.nodes>[0] = {
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FApiServer.Node.nodes, params);
       yield put<ChangeAction>({

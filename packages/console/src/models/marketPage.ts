@@ -3,6 +3,7 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export type  MarketPageModelState = WholeReadonly<{
   tabValue: '1' | '2',
@@ -110,7 +111,7 @@ const Model: MarketModelType = {
 
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: dataSource.length,
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
         startResourceId: dataSource[0]?.id,
         keywords: marketPage.inputText,
         resourceType: marketPage.resourceType === '-1' ? undefined : marketPage.resourceType,

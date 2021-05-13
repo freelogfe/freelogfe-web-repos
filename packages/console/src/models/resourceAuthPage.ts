@@ -5,6 +5,7 @@ import {FetchDataSourceAction} from "@/models/resourceInfo";
 import moment from "moment";
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -301,6 +302,7 @@ const Model: ResourceAuthPageModelType = {
       const params: Parameters<typeof FApiServer.Contract.contracts>[0] = {
         identityType: 1,
         licensorId: resourceAuthPage.resourceID,
+        limit: FUtil.Predefined.pageSize,
       };
       // console.log('@#RWEQFRSDF');
       const {data} = yield call(FApiServer.Contract.contracts, params);

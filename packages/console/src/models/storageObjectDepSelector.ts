@@ -108,7 +108,8 @@ const Model: StorageObjectDepSelectorModelType = {
       if (storageObjectDepSelector.rSelect === '3') {
         const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
           skip: resourceList.length,
-          limit: storageObjectDepSelector.rPageSize,
+          // limit: storageObjectDepSelector.rPageSize,
+          limit: FUtil.Predefined.pageSize,
           keywords: storageObjectDepSelector.rInput,
         };
         const {data} = yield call(FApiServer.Collection.collectionResources, params);
@@ -130,7 +131,8 @@ const Model: StorageObjectDepSelectorModelType = {
         const params: Parameters<typeof FApiServer.Resource.list>[0] = {
           startResourceId: resourceList[0]?.resourceId,
           skip: resourceList.length,
-          limit: storageObjectDepSelector.rPageSize,
+          // limit: storageObjectDepSelector.rPageSize,
+          limit: FUtil.Predefined.pageSize,
           keywords: storageObjectDepSelector.rInput,
           status: storageObjectDepSelector.rSelect === '2' ? undefined : 1,
           isSelf: storageObjectDepSelector.rSelect === '2' ? 1 : undefined,
@@ -177,7 +179,8 @@ const Model: StorageObjectDepSelectorModelType = {
         isLoadingTypeless: 1,
         keywords: selector.oInput,
         skip: objectListData.length,
-        limit: selector.oPageSize,
+        // limit: selector.oPageSize,
+        limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FApiServer.Storage.objectList, params);
       // console.log(data, 'datadata322');

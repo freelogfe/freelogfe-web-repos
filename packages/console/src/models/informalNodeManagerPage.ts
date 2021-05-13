@@ -339,7 +339,7 @@ const Model: InformalNodeManagerPageModelType = {
         onlineStatus: Number(informalNodeManagerPage.selectedStatus) as 2,
         omitResourceType: 'theme',
         resourceType: informalNodeManagerPage.selectedType === '-1' ? undefined : informalNodeManagerPage.selectedType,
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
         keywords: informalNodeManagerPage.filterKeywords || undefined,
       };
 
@@ -436,7 +436,7 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.nodeID,
         onlineStatus: 2,
         resourceType: 'theme',
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FApiServer.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@');

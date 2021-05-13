@@ -187,7 +187,7 @@ const Model: ReplaceInformExhibitModelType = {
       }));
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         keywords: replaceInformExhibit.replacerKeywords,
       };
       const {data} = yield call(FApiServer.Resource.list, params);
@@ -222,7 +222,7 @@ const Model: ReplaceInformExhibitModelType = {
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         isSelf: 1,
         // resourceType: replaceInformExhibit.isTheme ? 'theme' : undefined,
         keywords: replaceInformExhibit.replacerKeywords,
@@ -260,7 +260,7 @@ const Model: ReplaceInformExhibitModelType = {
 
       const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         keywords: replaceInformExhibit.replacerKeywords,
       };
 
@@ -294,7 +294,7 @@ const Model: ReplaceInformExhibitModelType = {
 
       const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         bucketName: replaceInformExhibit.replacerOrigin,
         keywords: replaceInformExhibit.replacerKeywords,
       };

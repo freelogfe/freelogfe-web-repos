@@ -189,7 +189,7 @@ const Model: NodeManagerModelType = {
 
       const params: Parameters<typeof FApiServer.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
         skip: list.length,
         // page: nodeManagerPage.pageCurrent,
         // pageSize: nodeManagerPage.pageSize,
@@ -274,7 +274,7 @@ const Model: NodeManagerModelType = {
 
       const params: Parameters<typeof FApiServer.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
-        limit: 100,
+        limit: FUtil.Predefined.pageSize,
         keywords: nodeManagerPage.themeInputFilter || undefined,
         onlineStatus: 2,
         resourceType: 'theme',

@@ -3,6 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
+import FUtil from "@/utils";
 
 export interface ResourceListPageModelState {
   resourceType: string;
@@ -96,7 +97,8 @@ const Model: ResourceListPageModelType = {
 
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         skip: dataSource.length,
-        limit: resourceListPage.pageSize,
+        // limit: resourceListPage.pageSize,
+        limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
         resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
         status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,

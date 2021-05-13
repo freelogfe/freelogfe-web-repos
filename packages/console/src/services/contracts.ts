@@ -14,8 +14,8 @@ export function contractDetails({contractId, ...params}: ContractDetailsParamsTy
 
 // 查询合同分页列表
 interface ContractsParamsType {
-  page?: number;
-  pageSize?: number;
+  skip?: number;
+  limit?: number;
   identityType: 1 | 2;
   licensorId?: string;
   licenseeId?: string;

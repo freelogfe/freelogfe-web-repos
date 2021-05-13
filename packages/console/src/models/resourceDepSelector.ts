@@ -70,7 +70,8 @@ const Model: ResourceDepSelectorModelType = {
       if (resourceDepSelector.selected === '3') {
         const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
           skip: resourceList.length,
-          limit: resourceDepSelector.limit,
+          // limit: resourceDepSelector.limit,
+          limit: FUtil.Predefined.pageSize,
           keywords: resourceDepSelector.input,
         };
         const {data} = yield call(FApiServer.Collection.collectionResources, params);
@@ -96,7 +97,8 @@ const Model: ResourceDepSelectorModelType = {
         const params: Parameters<typeof FApiServer.Resource.list>[0] = {
           startResourceId: resourceList[0]?.resourceId,
           skip: resourceList.length,
-          limit: resourceDepSelector.limit,
+          // limit: resourceDepSelector.limit,
+          limit: FUtil.Predefined.pageSize,
           keywords: resourceDepSelector.input,
           status: resourceDepSelector.selected === '2' ? undefined : 1,
           isSelf: resourceDepSelector.selected === '2' ? 1 : undefined,

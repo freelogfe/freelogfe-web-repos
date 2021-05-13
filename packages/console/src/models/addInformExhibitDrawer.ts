@@ -139,7 +139,7 @@ const Model: AddInformExhibitType = {
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
         keywords: addInformExhibitDrawer.addExhibitInputValue,
@@ -172,7 +172,7 @@ const Model: AddInformExhibitType = {
       const params: Parameters<typeof FApiServer.Resource.list>[0] = {
         // resourceType:''
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         isSelf: 1,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
@@ -207,7 +207,7 @@ const Model: AddInformExhibitType = {
 
       const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
@@ -241,7 +241,7 @@ const Model: AddInformExhibitType = {
 
       const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
         skip: 0,
-        limit: 10,
+        limit: FUtil.Predefined.pageSize,
         bucketName: addInformExhibitDrawer.addExhibitSelectValue,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
