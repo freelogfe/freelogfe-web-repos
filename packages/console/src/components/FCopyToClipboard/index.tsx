@@ -6,14 +6,16 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {SnippetsOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 import {FCopy} from "@/components/FIcons";
+import {CSSProperties} from "react";
 
 interface FCopyToClipboardProps {
   text: string;
   title: string;
+  iconStyle?: CSSProperties;
   success?: string;
 }
 
-function FCopyToClipboard({text, title, success}: FCopyToClipboardProps) {
+function FCopyToClipboard({text, title, success,iconStyle}: FCopyToClipboardProps) {
 
   const [tip, setTip] = React.useState<string>(title);
   const [visibleTooltip, setVisibleTooltip] = React.useState<boolean>(false);
@@ -40,7 +42,7 @@ function FCopyToClipboard({text, title, success}: FCopyToClipboardProps) {
         }
       }}
     >
-      <FTextBtn><FCopy/></FTextBtn>
+      <FTextBtn><FCopy style={iconStyle}/></FTextBtn>
     </CopyToClipboard>
       </span>
   </Tooltip>);

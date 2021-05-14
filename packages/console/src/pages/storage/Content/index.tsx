@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
+import {FContentText, FTitleText} from '@/components/FText';
 import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FTable from '@/components/FTable';
@@ -40,16 +40,16 @@ function Content({storageHomePage, dispatch}: ContentProps) {
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['objectList']>[number]> = [
     {
-      title: '对象名称',
+      title: (<FTitleText type="table" text={FUtil.I18n.message('object_name')}/>),
       dataIndex: 'name',
       key: 'name',
       render(text: any, record: any) {
         return (<Space size={10}>
-          <FContentText text={text}/>
+          <FContentText type="normal" text={text}/>
           <div className={styles.hoverVisible}>
             <FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
-              title={'复制对象名称'}
+              title={FUtil.I18n.message('copy_object_name')}
             />
           </div>
         </Space>);
@@ -79,10 +79,10 @@ function Content({storageHomePage, dispatch}: ContentProps) {
           />
         </div>);
       },
-      className: styles.columns,
+      // className: styles.columns,
     },
     {
-      title: '类型',
+      title: (<FTitleText type="table" text={FUtil.I18n.message('resource_type')}/>),
       dataIndex: 'type',
       key: 'type',
       width: 140,
@@ -92,21 +92,27 @@ function Content({storageHomePage, dispatch}: ContentProps) {
         }
         return (<FContentText text={text}/>);
       },
-      className: styles.columns,
+      // className: styles.columns,
     },
     {
-      title: '大小',
+      title: (<FTitleText type="table" text={FUtil.I18n.message('size')}/>),
       dataIndex: 'size',
       key: 'size',
       width: 120,
-      className: styles.columns,
+      // className: styles.columns,
+      render(text: any, record: any): any {
+        return (<FContentText type="normal" text={text}/>);
+      }
     },
     {
-      title: '更新时间',
+      title: (<FTitleText type="table" text={FUtil.I18n.message('last_updated_time')}/>),
       dataIndex: 'updateTime',
       key: 'updateTime',
-      width: 140,
-      className: styles.columns,
+      width: 150,
+      // className: styles.columns,
+      render(text: any, record: any): any {
+        return (<FContentText type="normal" text={text}/>);
+      }
     },
   ];
 
@@ -130,7 +136,8 @@ function Content({storageHomePage, dispatch}: ContentProps) {
       storageHomePage.total === 0 && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
-          tipText={'当前Bucket还没有上传任何对象'}
+          // tipText={'当前Bucket还没有上传任何对象'}
+          tipText={FUtil.I18n.message('objects_list_empty')}
           btn={<FUpload
             showUploadList={false}
             multiple={true}
@@ -142,7 +149,13 @@ function Content({storageHomePage, dispatch}: ContentProps) {
                 });
               }
               return false;
-            }}><FRectBtn>上传对象</FRectBtn></FUpload>}
+            }}>
+            <FRectBtn
+              size="large"
+              type="primary"
+              style={{paddingLeft: 50, paddingRight: 50}}
+            >{FUtil.I18n.message('upload_object')}</FRectBtn>
+          </FUpload>}
         />
       </>)
     }
@@ -207,7 +220,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
-      showEdit && (<FTooltip title={'编辑'}>
+      showEdit && (<FTooltip title={FUtil.I18n.message('tip_edit_object')}>
         <FLink to={FUtil.LinkTo.objectDetails({
           bucketName,
           objectID: objectID,
@@ -215,7 +228,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
       </FTooltip>)
     }
     {
-      showDownload && (<FTooltip title={'下载'}>
+      showDownload && (<FTooltip title={FUtil.I18n.message('tip_download_object')}>
         <span>
           <FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
@@ -226,7 +239,7 @@ function ToolsBar({bucketName, objectID, showEdit = true, showDownload = true, s
     }
     {
       showDelete && (
-        <FTooltip title={'删除'}>
+        <FTooltip title={FUtil.I18n.message('tip_delete')}>
           <span>
             <FTextBtn
               onClick={() => onClickDelete && onClickDelete()}

@@ -110,18 +110,14 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                 className={styles.objectName}
                 singleRow
               />
-              {/*<FDivider/>*/}
-              {/*<FContentText*/}
-              {/*  text={FUtil.Format.humanizeSize(storageObjectEditor.size)}*/}
-              {/*  type="highlight"*/}
-              {/*/>*/}
             </Space>
             <Space size={15}>
               <FCopyToClipboard
+                iconStyle={{fontSize: 14}}
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
-                title={'复制对象名称'}
+                title={FUtil.I18n.message('copy_object_name')}
               />
-              <FTooltip title={'下载'}>
+              <FTooltip title={FUtil.I18n.message('tip_download_object')}>
                 <div>
                   <FTextBtn
                     type="primary"
@@ -130,7 +126,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
                       });
                     }}
-                  ><FDownload/></FTextBtn>
+                  ><FDownload style={{fontSize: 14}}/></FTextBtn>
                 </div>
               </FTooltip>
             </Space>
@@ -144,6 +140,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             }}
             rightTop={<Space size={20}>
               <FTextBtn
+                style={{fontSize: 12, fontWeight: 600}}
                 type="primary"
                 onClick={() => {
                   onChange({
@@ -165,14 +162,18 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           <div style={{height: 20}}/>
 
           <Space>
-            <a onClick={() => {
-              onChange({
-                customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
-              });
-            }}>
+            <FTextBtn
+              onClick={() => {
+                onChange({
+                  customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
+                });
+              }}
+              type="default"
+              style={{fontSize: 12, fontWeight: 600}}
+            >
               <span>自定义选项（高级）</span>
               {storageObjectEditor.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
-            </a>
+            </FTextBtn>
             <FTooltip title={'自定义选项'}>
               <div>
                 <FInfo/>
@@ -186,23 +187,27 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               <div style={{height: 20}}/>
 
               <Space size={40}>
-                <a onClick={() => {
-                  dispatch<ChangeAction>({
-                    type: 'storageObjectEditor/change',
-                    payload: {
-                      customOptionsEditorVisible: true,
-                      customOptionsEditorDataSource: storageObjectEditor.customOptionsData.map<StorageObjectEditorModelState['customOptionsEditorDataSource'][number]>((coeds) => {
-                        return {
-                          ...coeds,
-                          customOptionError: '',
-                          defaultValueError: '',
-                          keyError: '',
-                          descriptionError: '',
-                        };
-                      }),
-                    },
-                  });
-                }}>添加选项</a>
+                <FTextBtn
+                  onClick={() => {
+                    dispatch<ChangeAction>({
+                      type: 'storageObjectEditor/change',
+                      payload: {
+                        customOptionsEditorVisible: true,
+                        customOptionsEditorDataSource: storageObjectEditor.customOptionsData.map<StorageObjectEditorModelState['customOptionsEditorDataSource'][number]>((coeds) => {
+                          return {
+                            ...coeds,
+                            customOptionError: '',
+                            defaultValueError: '',
+                            keyError: '',
+                            descriptionError: '',
+                          };
+                        }),
+                      },
+                    });
+                  }}
+                  type="primary"
+                  style={{fontSize: 12, fontWeight: 600}}
+                >添加选项</FTextBtn>
 
               </Space>
 

@@ -10,6 +10,7 @@ import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
 import FUploadTasksPanel, {FUploadTasksPanelProps} from "@/pages/storage/containers/FUploadTasksPanel";
 import fMessage from "@/components/fMessage";
+import FUtil from "@/utils";
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -35,12 +36,12 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
       <FTitleText type="h1" text={bucket.bucketName}/>
       <div style={{height: 5}}/>
       <Space size={40}>
-        <div>创建时间 {bucket.createDate}</div>
-        <div>存储对象 {bucket.totalFileQuantity}</div>
+        <div>{FUtil.I18n.message('created_time')} {bucket.createDate}</div>
+        <div>{FUtil.I18n.message('object_quantity')} {bucket.totalFileQuantity}</div>
       </Space>
     </div>
     {
-      !isUserDataBucket && (<FUpload
+      !isUserDataBucket && storageHomePage.total !== 0 && (<FUpload
           showUploadList={false}
           multiple={true}
           beforeUpload={(file: RcFile, fileList: RcFile[]) => {
@@ -55,7 +56,9 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
             return false;
           }}
         >
-          <FRectBtn>上传对象</FRectBtn>
+          <FRectBtn
+            type="primary"
+          >{FUtil.I18n.message('upload_object')}</FRectBtn>
         </FUpload>
       )
     }

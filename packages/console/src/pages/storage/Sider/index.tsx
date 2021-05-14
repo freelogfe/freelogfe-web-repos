@@ -1,10 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
-import {FCircleBtn, FCircleButton} from '@/components/FButton';
+import {FCircleBtn} from '@/components/FButton';
 import {Progress, Space, Modal} from 'antd';
-import FModal from '@/components/FModal';
-import FInput from '@/components/FInput';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
@@ -39,7 +37,8 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
         <div className={styles.title}>
           <Space size={10}>
             <FTitleText
-              text={`我的存储空间`}
+              // text={`我的存储空间`}
+              text={FUtil.I18n.message('my_buckets')}
               type="h4"
             />
             <FTitleText
@@ -91,7 +90,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                   >
                     <span>{b.bucketName}</span>
                     <FTooltip
-                      title={'删除'}
+                      title={FUtil.I18n.message('tip_delete')}
                       // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
@@ -123,7 +122,8 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           </div>) : (<div style={{padding: '0 40px'}}>
             <FContentText
               type="additional2"
-              text={'单击“ + ”创建您的第一个项目。'}
+              // text={'单击“ + ”创建您的第一个项目。'}
+              text={FUtil.I18n.message('my_buckets_list_empty')}
             />
           </div>)
         }

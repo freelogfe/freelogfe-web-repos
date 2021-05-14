@@ -102,7 +102,7 @@ const config: IConfig | any = {
     'alert-warning-bg-color': '#FBF5EA',
     'alert-error-border-color': '#FFD2D2',
     'alert-error-bg-color': '#FDEBEC',
-
+    // 'table-border-color': 'red',
   },
   devServer: {
     headers: {},
