@@ -48,36 +48,39 @@ function FInput({
     debounce ? setInputText(e.target.value) : (onChange && onChange(e));
   }
 
-  if (theme === 'dark') {
-    return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
-      <Input
-        value={debounce ? inputText : value}
-        onChange={onInputChange}
-        // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
-        prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
-        className={[
-          styles.Input,
-          theme === 'dark' ? styles.dark : '',
-          className]
-          .join(' ')}
-        {...props}
-        allowClear={true}
-      />
-      {
-        errorText && (<div className={styles.errorText}>{errorText}</div>)
-      }
-    </div>);
-  }
+  const inputProps = {
+    value: debounce ? inputText : value,
+    onChange: onInputChange,
+    ...props,
+  };
+
+  const commentClass: string [] = [styles.Input, className, errorText ? styles.InputError : ''];
+
+  console.log(errorText, 'errorText!@#$!@#$@#$');
+
   return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
-    <Input
-      value={debounce ? inputText : value}
-      onChange={onInputChange}
-      className={[styles.Input, className, errorText ? styles.InputError : ''].join(' ')}
-      suffix={lengthLimit > 0 ?
-        <span
-          className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}>{lengthLimit - inputText.length}</span> : undefined}
-      {...props}
-    />
+    {
+      theme === 'dark'
+        ? (
+          <Input
+            // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
+            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
+            className={[...commentClass, styles.dark].join(' ')}
+            allowClear={true}
+            {...inputProps}
+          />
+        )
+        : (<Input
+          className={[...commentClass, styles.light].join(' ')}
+          suffix={lengthLimit > 0
+            ? (<span
+              className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
+            >{lengthLimit - inputText.length}</span>)
+            : undefined}
+          {...inputProps}
+        />)
+    }
+
     {
       errorText && (<div className={styles.errorText}>{errorText}</div>)
     }

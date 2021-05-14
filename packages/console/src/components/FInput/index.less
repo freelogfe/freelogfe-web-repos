@@ -8,8 +8,8 @@
 }
 
 .Input {
-  background: white;
-  border: 1px solid #E4E7EB;
+  border-width: 1px;
+  border-style: solid;
 
   &:hover {
     border-color: #CBCBCB;
@@ -18,10 +18,18 @@
   &:focus {
     border-color: @f-primary-color;
   }
+
+  &.InputError {
+    //&, &:hover, &:active, &:focus {
+    //  border-color: @f-error-color1;
+    //}
+  }
 }
 
-.InputError {
 
+.light {
+  background: white;
+  border-color: #E4E7EB;
 }
 
 .darkPrefix {
@@ -30,7 +38,8 @@
 }
 
 .dark {
-  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
   border-radius: 22px;
 }
 
@@ -52,3 +61,5 @@
 .beyond {
   color: @f-error-color1;
 }
+
+
