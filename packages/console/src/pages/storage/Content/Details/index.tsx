@@ -6,7 +6,6 @@ import {Space} from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState} from '@/models/connect';
-// import {resourceTypes} from '@/utils/predefined';
 import FAutoComplete from '@/components/FAutoComplete';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import {
@@ -22,13 +21,10 @@ import {FDown, FInfo, FUp, FDownload} from "@/components/FIcons";
 import FFormLayout from "@/layouts/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
-// import FCustomOptionsCard from "@/components/FCustomOptionsCard";
 import {router} from "umi";
 import {FApiServer} from "@/services";
-import FDivider from "@/components/FDivider";
 import FTooltip from "@/components/FTooltip";
 import FUtil from "@/utils";
-import FBasePropertiesCards from "@/components/FBasePropertiesCards";
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 
 interface DetailsProps {

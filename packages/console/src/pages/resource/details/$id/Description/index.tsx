@@ -3,6 +3,8 @@ import styles from './index.less';
 import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import FExpandable from "./FExpandable";
+import {FContentText} from "@/components/FText";
+import FUtil from "@/utils";
 
 interface DescriptionProps {
   dispatch: Dispatch;
@@ -11,22 +13,26 @@ interface DescriptionProps {
 
 function Description({dispatch, marketResourcePage}: DescriptionProps) {
 
-  if (!marketResourcePage.description || marketResourcePage.description === '<p></p>') {
-    return null;
-  }
-
   return (<>
     <div style={{height: 30}}/>
-    <div className={styles.styles}>
-      <FExpandable>
-        {marketResourcePage.description && (<div
-          // ref={refContainer}
-          // style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
-          dangerouslySetInnerHTML={{__html: marketResourcePage.description}}
-          className={styles.container}
-        />)}
-      </FExpandable>
-    </div>
+    {
+      !marketResourcePage.description || marketResourcePage.description === '<p></p>'
+        ? (<FContentText
+          text={FUtil.I18n.message('description_empty')}
+          type="negative"
+        />)
+        : (<div className={styles.styles}>
+          <FExpandable>
+            {marketResourcePage.description && (<div
+              // ref={refContainer}
+              // style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
+              dangerouslySetInnerHTML={{__html: marketResourcePage.description}}
+              className={styles.container}
+            />)}
+          </FExpandable>
+        </div>)
+    }
+
     <div style={{height: 20}}/>
   </>);
 }

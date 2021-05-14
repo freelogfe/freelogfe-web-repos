@@ -43,7 +43,8 @@ function FCustomOptionsCards({dataSource, onEdit, onDelete}: FCustomOptionsCards
               <FContentText
                 text={ds.value}
                 style={{maxWidth: 500}}
-                singleRow/>
+                singleRow
+              />
             </Space>
           </div>
           <div style={{width: 10}}/>
