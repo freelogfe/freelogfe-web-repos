@@ -99,7 +99,10 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                     >
                       <div className={styles.cover}>
                         <Space size={10}>
-                          <Label active={i.isOnline}/>
+                          {
+                            i.isOnline && (<Label active={i.isOnline}/>)
+                          }
+
                           {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
                             <FWarning/>
                           </FTooltip> : ''}
@@ -145,14 +148,16 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                       });
                                     },
                                   });
-                                }}>激活</a>
+                                }}>{FUtil.I18n.message('btn_activate_theme')}</a>
 
                               <FDivider/>
                             </>)
                           }
-                          <FLink to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
+                          <FLink
+                            to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>{FUtil.I18n.message('btn_edit_exhibit')}</FLink>
                           <FDivider/>
-                          <FLink to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
+                          <FLink
+                            to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>{FUtil.I18n.message('btn_check_resource_details')}</FLink>
                           <div style={{width: 1}}/>
                         </div>
                       </div>
@@ -199,5 +204,5 @@ interface LabelProps {
 
 function Label({active = true}: LabelProps) {
   return (<label
-    className={styles.label + ' ' + (active ? styles.labelActive : styles.labelInActive)}>{active ? '已激活' : '未激活'}</label>);
+    className={styles.label + ' ' + (active ? styles.labelActive : styles.labelInActive)}>{active ? FUtil.I18n.message('state_active') : '未激活'}</label>);
 }
