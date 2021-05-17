@@ -31,22 +31,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
     return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
   }
 
-  // if (nodeManagerPage.themeDataState === 'noData') {
-  //   return (<FNoDataTip
-  //     height={}
-  //     tipText={'当前节点没有添加主题展品'}
-  //     btnText={'添加主题展品'}
-  //     onClick={() => {
-  //       dispatch<MarketChangeAction>({
-  //         type: 'marketPage/change',
-  //         payload: {
-  //           resourceType: 'theme',
-  //         }
-  //       });
-  //     }}
-  //   />);
-  // }
-
   return (<FLeftSiderLayout
     // header={''}
     sider={<Sider/>}

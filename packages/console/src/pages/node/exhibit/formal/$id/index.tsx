@@ -47,6 +47,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
             onClick={() => {
               window.open(FUtil.LinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId}));
             }}
+            style={{fontWeight: 600}}
             type="default"
           >
             <FContentText
@@ -57,12 +58,15 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           </FTextBtn>
           {/*</FLink>*/}
           <div style={{width: 2}}/>
-          <FContentText type="negative" text={'>'}/>
+          <FContentText
+            type="negative"
+            text={'>'}
+          />
           <div style={{width: 2}}/>
           <FTitleText
             text={exhibitInfoPage.pName}
             style={{
-              maxWidth: 800
+              maxWidth: 800,
             }}
             singleRow
           />
@@ -71,7 +75,12 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           {
             exhibitInfoPage.resourceType === 'theme'
               ? (<span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
-              : (<span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '已上线' : '未上线'}</span>)
+              : (<span
+                style={{color: '#666'}}>{
+                exhibitInfoPage.isOnline
+                  ? FUtil.I18n.message('btn_show_exhibit')
+                  : '未上线'
+              }</span>)
           }
 
           <FSwitch

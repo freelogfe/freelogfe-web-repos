@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText, FTipText} from '@/components/FText';
-import {FCircleButton, FRectBtn} from '@/components/FButton';
+import {FCircleBtn, FCircleButton, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FSwitch from '@/components/FSwitch';
 import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhibitInfoPage";
@@ -22,11 +22,12 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
   return (<div>
     <Space size={15}>
       <FTitleText
-        text={'授权策略'}
+        text={FUtil.I18n.message('title_auth_plan')}
         type="h3"
       />
       {
-        exhibitInfoPage.policies.length !== 0 && (<FCircleButton
+        exhibitInfoPage.policies.length !== 0 && (<FCircleBtn
+          size="small"
           onClick={() => dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
             payload: {
@@ -43,7 +44,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
           <FTipText
             type="second"
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
-            text={'无策略'}
+            text={FUtil.I18n.message('exhibit_auth_plan_empty')}
           />
           <div style={{height: 20}}/>
           <FRectBtn
@@ -54,7 +55,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
               }
             })}
             type="primary"
-          >{FUtil.I18n.message('add_authorization_plan')}</FRectBtn>
+          >{FUtil.I18n.message('btn_create_auth_plan')}</FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {
@@ -69,8 +70,8 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
                 <Space size={8}>
                   {
                     p.status === 1
-                      ? (<label style={{color: '#42C28C'}}>已启用</label>)
-                      : (<label style={{color: '#B4B6BA'}}>已搁置</label>)
+                      ? (<label style={{color: '#42C28C'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>)
+                      : (<label style={{color: '#B4B6BA'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>)
                   }
                   <FSwitch
                     disabled={exhibitInfoPage.isOnline && onlyOnePolicy && p.status === 1}
@@ -82,8 +83,9 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
                   />
                 </Space>
               </div>
-              <div style={{height: 15}}/>
-              <pre>{p.text}</pre>
+              <div className={styles.pre}>
+                <pre>{p.text}</pre>
+              </div>
             </div>))
           }
         </div>)
