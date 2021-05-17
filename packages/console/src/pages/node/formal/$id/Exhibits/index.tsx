@@ -52,29 +52,15 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
   }
 
-  // if (nodeManagerPage.exhibitDataState === 'noData') {
-  //   return (<FNoDataTip
-  //     height={}
-  //     tipText={'当前节点没有添加展品'}
-  //     btnText={'进入资源市场'}
-  //     onClick={() => {
-  //       dispatch<MarketChangeAction>({
-  //         type: 'marketPage/change',
-  //         payload: {
-  //           resourceType: '-1',
-  //         }
-  //       });
-  //     }}
-  //   />);
-  // }
-
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
     {
-      title: <FContentText text={'展品名称｜类型｜展品标题｜策略'}/>,
-
+      title: (<FTitleText
+        text={'展品名称｜类型｜展品标题｜策略'}
+        type="table"
+      />),
       dataIndex: 'name',
       key: 'name',
-      className: styles.tableName,
+      // className: styles.tableName,
       // width: 100,
       render(_, record) {
         return (<div className={styles.info}>
@@ -126,7 +112,10 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       }
     },
     {
-      title: <FContentText text={'展示版本'}/>,
+      title: (<FTitleText
+        type="table"
+        text={'展示版本'}
+      />),
       dataIndex: 'version',
       key: 'version',
       // width: 125,
@@ -136,7 +125,10 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       },
     },
     {
-      title: <FContentText text={'上线'}/>,
+      title: (<FTitleText
+        type="table"
+        text={'上线'}
+      />),
       dataIndex: 'status',
       key: 'status',
       // width: 65,
@@ -265,7 +257,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               </div>
             </InfiniteScroll>)
         }
-        {nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum && <div className={styles.loader} key={0}>Loading ...</div>}
+        {nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum &&
+        <div className={styles.loader} key={0}>Loading ...</div>}
 
       </>)
     }

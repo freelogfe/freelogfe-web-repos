@@ -10,6 +10,7 @@ import {withRouter} from "umi";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
 import {Space} from "antd";
+import {FTextBtn} from "@/components/FButton";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -23,24 +24,26 @@ interface SiderProps {
 
 function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
 
-  // React.useEffect(() => {
-  //   console.log('Sider useEffect');
-  // }, []);
-
   return (<div className={styles.styles}>
       <div className={styles.header}>
         <div style={{height: 30}}/>
 
         <div className={styles.title}>
-          <FTitleText type="h3" text={nodeManagerPage.nodeName}/>
+          <FTitleText
+            type="h2"
+            text={nodeManagerPage.nodeName}
+          />
           <div style={{height: 15}}/>
           <Space size={5} className={styles.url}>
-            <a onClick={() => {
-              window.open(nodeManagerPage.nodeUrl);
-            }}>{nodeManagerPage.nodeUrl}</a>
+            <a
+              onClick={() => {
+                window.open(nodeManagerPage.nodeUrl);
+              }}
+            >{nodeManagerPage.nodeUrl.replace(/http(s)?:\/\//, '')}</a>
             <FCopyToClipboard
               text={nodeManagerPage.nodeUrl}
               title={'复制节点地址'}
+              iconStyle={{fontSize: 14}}
             />
           </Space>
           {/*<a*/}
