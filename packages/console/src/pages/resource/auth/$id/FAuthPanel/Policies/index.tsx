@@ -3,7 +3,7 @@ import styles from './index.less';
 import PolicyCard from './PolicyCard';
 import {Dispatch, connect} from "dva";
 import {UpdateAuthorizedAction} from "@/models/resourceAuthPage";
-import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
+// import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
 import {Space} from "antd";
 
 interface PoliciesProps {

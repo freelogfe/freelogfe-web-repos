@@ -1,12 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FNormalButton, FTextBtn} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
 import FUtil from "@/utils";
+import FContractStatusBadge from "@/components/FContractStatusBadge";
+import FDivider from "@/components/FDivider";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -44,7 +46,8 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
-        <div className={styles.signLeftNav}>主资源</div>
+        {/*<div className={styles.signLeftNav}>主资源</div>*/}
+        <FTitleText type="h4">主资源</FTitleText>
 
         <a
           className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}
@@ -79,7 +82,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
         </a>
 
         {
-          otherResource.length > 0 && (<div className={styles.signLeftNav}>基础上抛</div>)
+          otherResource.length > 0 && (<FTitleText type="h4">基础上抛</FTitleText>)
         }
 
         {
@@ -119,30 +122,40 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
       </div>
 
       <div className={styles.signRight}>
-        <div>
-          <div className={styles.smallTitle}>当前合约</div>
-          <div style={{height: 5}}/>
+        <Space style={{width: '100%'}} size={15} direction="vertical">
+          <FTitleText type="h4">当前合约</FTitleText>
           {
             selectedResource?.contracts.map((c) => (<div
               key={c.id}
               className={styles.Contracts}
             >
-              <div className={styles.content}>
-                <Space size={5}>
-                  <span>{c.name}</span>
-                  <label className={styles.executing}>执行中</label>
+              <div style={{height: 15}}/>
+              <div className={styles.title}>
+                <Space style={{padding: '0 20px'}} size={10}>
+                  <FContentText type="highlight" text={c.name}/>
+                  <FContractStatusBadge status="pending"/>
                 </Space>
                 <div style={{height: 10}}/>
-                <pre>{c.text}</pre>
-                <div style={{height: 10}}/>
+                <Space style={{padding: '0 20px'}} size={2}>
+                  <FContentText
+                    type="additional2"
+                    text={FUtil.I18n.message('contract_id') + '：' + c.id}
+                  />
+                  <FDivider style={{fontSize: 14}}/>
+                  <FContentText
+                    type="additional2"
+                    text={FUtil.I18n.message('contract_signed_time') + '：' + c.createTime}
+                  />
+                </Space>
+                <div style={{height: 15}}/>
               </div>
+              <div className={styles.content}>
+                <pre>{c.text}</pre>
+              </div>
+
               <div className={styles.footer}>
-                <div>
-                  合约ID {c.id}
-                </div>
-                <div>
-                  签约时间 {c.createTime}
-                </div>
+                <div style={{height: 42}}/>
+                <div style={{height: 40}}/>
               </div>
             </div>))
           }
@@ -150,8 +163,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
           {
             selectedResource?.policies && selectedResource?.policies.length > 0 &&
             (<>
-              <div className={styles.smallTitle}>未签约策略</div>
-              <div style={{height: 5}}/>
+              <FTitleText type="h4">未签约策略</FTitleText>
               {
                 selectedResource?.policies.map((p) => (<div
                   className={styles.singPolicy}
@@ -159,16 +171,16 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                 >
                   <div className={styles.singPolicyHeader}>
                     <span>{p.name}</span>
-                    <a
-                      className={styles.singPolicyHeaderBtn}
-                      onClick={() => dispatch<UpdateRelationAction>({
-                        type: 'exhibitInfoPage/updateRelation',
-                        payload: {
-                          resourceId: selectedResource.id,
-                          policyId: p.id,
-                        }
-                      })}
-                    >签约</a>
+                    {/*<a*/}
+                    {/*  className={styles.singPolicyHeaderBtn}*/}
+                    {/*  onClick={() => dispatch<UpdateRelationAction>({*/}
+                    {/*    type: 'exhibitInfoPage/updateRelation',*/}
+                    {/*    payload: {*/}
+                    {/*      resourceId: selectedResource.id,*/}
+                    {/*      policyId: p.id,*/}
+                    {/*    }*/}
+                    {/*  })}*/}
+                    {/*>签约</a>*/}
                   </div>
                   <div style={{height: 15}}/>
                   <pre>{p.text}</pre>
@@ -176,7 +188,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               }
             </>)
           }
-        </div>
+        </Space>
       </div>
     </div>
   </div>);

@@ -2,139 +2,97 @@
   display: flex;
   height: 500px;
   align-items: stretch;
-}
 
-.signLeft {
-  width: 330px;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-}
+  .signLeft {
+    width: 344px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
 
-.signRight {
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  width: 530px;
-  background-color: #FAFBFC;
-  border-radius: 0 20px 20px 0;
-  padding: 20px 35px;
+    .signResource {
+      padding: 20px 15px;
+      display: block;
+      border-radius: 20px 0 0 20px;
 
-  & > div {
-    margin-bottom: -20px;
+      .FContentText {
+        max-width: 270px;
+
+        &:hover {
+          color: inherit;
+        }
+      }
+
+      .policeTags {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -5px;
+        margin-bottom: -2px;
+
+        & > label {
+          padding: 2px 5px;
+          margin-right: 5px;
+          margin-bottom: 2px;
+          border: 1px solid #AED0FF;
+          background-color: #E9F2FF;
+          border-radius: 2px;
+          color: #2784FF;
+        }
+      }
+    }
+
+    .activatedSignResource {
+      background-color: #FAFBFC;
+    }
   }
-}
 
-.signLeftNav {
-  font-size: 12px;
-  color: #7A869A;
-  padding: 5px 0;
-}
+  .signRight {
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    width: 516px;
+    background-color: #FAFBFC;
+    border-radius: 0 6px 6px 0;
+    padding: 20px;
 
-.signResource {
-  padding: 20px 15px;
-  display: block;
-  border-radius: 20px 0 0 20px;
+    .Contracts {
+      background-color: white;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
 
-  .FContentText {
-    max-width: 270px;
+      .title {
 
-    &:hover {
-      color: inherit;
+      }
+
+      .content {
+        padding: 15px 20px 15px;
+        border-top: 1px solid #E5E7EB;
+        border-bottom: 1px solid #E5E7EB;
+
+        & > pre {
+          margin: 0;
+        }
+      }
+
+      .footer {
+        padding: 0 20px;
+      }
+    }
+
+    .singPolicy {
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+
+      & > pre {
+        margin: 0;
+        padding: 0;
+      }
+
+      .singPolicyHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
   }
 }
 
-.activatedSignResource {
-  background-color: #FAFBFC;
-}
-
-.policeTags {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -5px;
-  margin-bottom: -2px;
-
-  & > label {
-    padding: 2px 5px;
-    margin-right: 5px;
-    margin-bottom: 2px;
-    border: 1px solid #AED0FF;
-    background-color: #E9F2FF;
-    border-radius: 2px;
-    color: #2784FF;
-  }
-}
-
-.Contracts {
-  background-color: white;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.content {
-  padding: 15px 20px 15px;
-
-  & > pre {
-    margin: 0;
-    padding: 10px 15px;
-    background-color: #EEF6FF;
-    border: 1px solid #C2D8F6;
-    border-radius: 10px;
-  }
-}
-
-.smallTitle {
-  font-size: 12px;
-  color: #7A869A;
-}
-
-.singPolicy {
-  background-color: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-
-  & > pre {
-    margin: 0;
-    padding: 0;
-  }
-}
-
-.singPolicyHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.singPolicyHeaderBtn {
-  line-height: 26px;
-  background: #2784FF;
-  border-radius: 4px;
-  color: white;
-  display: inline-block;
-  padding: 0 15px;
-  font-size: 12px;
-
-  &:hover {
-    color: white;
-  }
-}
-
-.executing {
-  background-color: #42C28C;
-  color: #fff;
-  padding: 2px 10px;
-  border-radius: 10px;
-  font-size: 12px;
-}
-
-.footer {
-  font-size: 12px;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid #E4E7EB;
-  padding: 15px 20px;
-}

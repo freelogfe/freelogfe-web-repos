@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FPolicies from '@/pages/resource/containers/FPolicies';
 import {FTitleText, FContentText} from '@/components/FText';
-import FAuthPanel from '@/pages/resource/containers/FAuthPanel';
+import FAuthPanel from './FAuthPanel';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {
