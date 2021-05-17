@@ -3,6 +3,7 @@ import styles from './index.less';
 import {CloseOutlined} from '@ant-design/icons';
 import {Input, Form} from 'antd';
 import FUtil from "@/utils";
+
 // import {i18nMessage} from "@/utils/i18n";
 
 interface FLabelEditor {
@@ -10,10 +11,11 @@ interface FLabelEditor {
   onChange?: (values: string[]) => void;
 }
 
-let inputElement: any = null;
+// let inputElement: any = null;
 
 export default function ({values = [], onChange}: FLabelEditor) {
 
+  const inputElementRef = React.useRef<any>(null);
   const [input, onChangeInput] = React.useState<string>('');
   const [errorText, onChangeErrorText] = React.useState<string>('');
 
@@ -54,13 +56,18 @@ export default function ({values = [], onChange}: FLabelEditor) {
     {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <Input
-          size="small"
           className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
           placeholder={FUtil.I18n.message('hint_add_resource_tag')}
-          ref={(i) => inputElement = i}
+          ref={inputElementRef}
           value={input}
           onChange={onChangeInputText}
-          // onKeyDown={onKeyDown}
+          onKeyUp={(event) => {
+            if (event.key === 'Escape') {
+              onChangeInput('');
+              onChangeErrorText('');
+              inputElementRef.current.blur();
+            }
+          }}
           onPressEnter={onPressEnter}
         />
         <div>

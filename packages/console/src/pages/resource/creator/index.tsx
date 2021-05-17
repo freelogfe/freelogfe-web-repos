@@ -20,7 +20,6 @@ import {
 import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {router, RouterTypes} from 'umi';
-// import {resourceTypes} from '@/utils/predefined';
 import {FCheck, FInfo, FLoading} from '@/components/FIcons';
 import FFormLayout from "@/layouts/FFormLayout";
 import * as H from "history";
@@ -36,14 +35,14 @@ interface ResourceCreatorProps {
 
 function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceCreatorProps & RouterTypes) {
 
-  React.useEffect(() => {
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-  }, [route]);
+  // React.useEffect(() => {
+  //   dispatch<GlobalChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
+  // }, [route]);
 
   React.useEffect(() => {
     return () => {
@@ -211,7 +210,6 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
       {/*>{FUtil.I18n.message('create')}</FNormalButton>*/}
       <FRectBtn
         disabled={disabled}
-        style={{width: 108}}
         onClick={onClickCreate}
         // theme="transparent"
       >
