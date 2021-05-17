@@ -9,14 +9,12 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {OnActiveAction, OnChangeThemeAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {router} from "umi";
-// import {i18nMessage} from "@/utils/i18n";
 import FNoDataTip from "@/components/FNoDataTip";
 import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
 import FLoadingTip from "@/components/FLoadingTip";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
-// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FDivider from "@/components/FDivider";
@@ -54,7 +52,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
     sider={<Sider/>}
     type="empty"
   >
-
     {
       nodeManagerPage.themeDataState === 'noData'
         ? (<FNoDataTip
@@ -88,7 +85,10 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
           </div>
           {
             nodeManagerPage.themeDataState === 'noSearchData'
-              ? (<FNoDataTip height={'calc(100vh - 170px)'} tipText={'无搜索结果'}/>)
+              ? (<FNoDataTip
+                height={'calc(100vh - 170px)'}
+                tipText={'无搜索结果'}
+              />)
               : (<div className={styles.body}>
                 {
                   nodeManagerPage.themeList.map((i) => {
@@ -115,44 +115,44 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                           // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
                         >
                           <div style={{width: 1}}/>
-                          <FLink to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
-                          <FDivider/>
-                          <FLink to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
                           {
                             hasActiveBtn && (<>
-                              <FDivider/>
-                              <a onClick={() => {
-
-                                if (!nodeManagerPage.nodeThemeId) {
-                                  dispatch<OnActiveAction>({
-                                    type: 'nodeManagerPage/onActive',
-                                    payload: {
-                                      id: i.id,
-                                    }
-                                  });
-                                  return;
-                                }
-
-                                fConfirmModal({
-                                  // message: FUtil.I18n.message('msg_change_theme_confirm'),
-                                  message: '激活该主题，将下线其它主题',
-                                  // okText: FUtil.I18n.message('active_new_theme'),
-                                  okText: '激活',
-                                  // cancelText: FUtil.I18n.message('keep_current_theme'),
-                                  cancelText: '保持当前主题',
-                                  onOk() {
+                              <a
+                                onClick={() => {
+                                  if (!nodeManagerPage.nodeThemeId) {
                                     dispatch<OnActiveAction>({
                                       type: 'nodeManagerPage/onActive',
                                       payload: {
                                         id: i.id,
                                       }
                                     });
-                                  },
-                                });
+                                    return;
+                                  }
 
-                              }}>激活</a>
+                                  fConfirmModal({
+                                    // message: FUtil.I18n.message('msg_change_theme_confirm'),
+                                    message: '激活该主题，将下线其它主题',
+                                    // okText: FUtil.I18n.message('active_new_theme'),
+                                    okText: '激活',
+                                    // cancelText: FUtil.I18n.message('keep_current_theme'),
+                                    cancelText: '保持当前主题',
+                                    onOk() {
+                                      dispatch<OnActiveAction>({
+                                        type: 'nodeManagerPage/onActive',
+                                        payload: {
+                                          id: i.id,
+                                        }
+                                      });
+                                    },
+                                  });
+                                }}>激活</a>
+
+                              <FDivider/>
                             </>)
                           }
+                          <FLink to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>编辑</FLink>
+                          <FDivider/>
+                          <FLink to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>资源详情</FLink>
                           <div style={{width: 1}}/>
                         </div>
                       </div>
@@ -160,9 +160,13 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                       <FContentText
                         text={i.title}
                         singleRow
+                        type="highlight"
                       />
                       <div style={{height: 6}}/>
-                      <FContentText type="additional1" text={i.version}/>
+                      <FContentText
+                        type="additional1"
+                        text={'展示版本 ' + i.version}
+                      />
                       <div style={{height: 15}}/>
                       <div className={styles.bottom}>
                         <div className={styles.polices}>
@@ -170,13 +174,13 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                             i.policies.map((p) => (<label key={p}>{p}</label>))
                           }
                         </div>
-                        <a onClick={() => null}>{FUtil.I18n.message('more_details')}>></a>
                       </div>
                     </div>);
                   })
                 }
-                <div style={{width: 290}}/>
-                <div style={{width: 290}}/>
+                <div/>
+                <div/>
+                <div/>
               </div>)
           }
         </>)

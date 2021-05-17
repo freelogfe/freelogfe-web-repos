@@ -3,8 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  //width: 100%;
-  width: 920px;
+  width: 100%;
+  padding: 0 15px;
 }
 
 .input {
@@ -16,112 +16,116 @@
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: -15px;
-}
 
-.theme {
-  cursor: pointer;
-  padding: 15px;
-  width: 290px;
-  margin-bottom: 15px;
+  & > div {
+    width: calc(100% / 4);
 
-  &:hover {
-    background-color: white;
+    @media (max-width: 1600px) {
+      width: calc(100% / 3);
+    }
+  }
 
-    & > div:first-child {
-      & > div:last-child {
-        visibility: visible;
+  .theme {
+    cursor: pointer;
+    padding: 15px;
+    margin-bottom: 15px;
+
+    &:hover {
+      background-color: white;
+
+      & > div:first-child {
+        & > div:last-child {
+          visibility: visible;
+        }
+      }
+    }
+
+    .cover {
+      width: 100%;
+      position: relative;
+
+      & > div:first-child {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+
+      & > img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .action {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.4);
+        height: 40px;
+        visibility: hidden;
+        //padding: 0 50px;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+
+        & > a {
+          color: white;
+
+          &:hover {
+            color: white;
+          }
+        }
+      }
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div {
+        flex-shrink: 1;
+        height: 23px;
+        overflow: hidden;
+      }
+
+      .polices {
+        display: flex;
+        margin-right: -5px;
+        flex-wrap: wrap;
+        height: 24px;
+        overflow: hidden;
+
+        & > label {
+          color: #2784FF;
+          line-height: 18px;
+          padding: 2px 6px;
+          border: 1px solid #AED0FF;
+          border-radius: 2px;
+          background: #E9F2FF;
+          margin-right: 5px;
+        }
       }
     }
   }
 }
 
-.cover {
-  width: 260px;
-  height: 195px;
-  position: relative;
-
-  & > div:first-child {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-
-  & > img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.action {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.4);
-  height: 40px;
-  visibility: hidden;
-  //padding: 0 50px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-
-  & > a {
-    color: white;
-
-    &:hover {
-      color: white;
-    }
-  }
-}
-
-.polices {
-  display: flex;
-  margin-right: -5px;
-  height: 17px;
-
-  & > label {
-    color: #2784FF;
-    line-height: 23px;
-    padding: 0 6px;
-    border: 1px solid #AED0FF;
-    border-radius: 2px;
-    background: #E9F2FF;
-    margin-right: 5px;
-  }
-}
-
 .label {
-  border-radius: 4px;
-  line-height: 23px;
-  padding: 0 5px;
-  font-weight: 600;
+  border-radius: 12px;
+  line-height: 24px;
+  padding: 0 10px;
+  font-weight: 500;
   font-size: 12px;
+  color: white;
+  display: inline-block;
 }
 
 .labelActive {
-  color: #44C28C;
-  background-color: #E5F5EE;
+  background-color: #42C28C;
 }
 
 .labelInActive {
-  color: #DCA32D;
-  background-color: #FBF5EA;
+  background: rgba(0, 0, 0, 0.2);
 }
 
-.bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  & > div {
-    flex-shrink: 1;
-    height: 23px;
-    overflow: hidden;
-  }
-
-  & > a {
-    flex-shrink: 0;
-    color: #666666;
-    font-size: 12px;
-  }
-}

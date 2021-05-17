@@ -99,8 +99,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             <div className={styles.list}>
               {
                 informalNodeManagerPage.themeList.map((t, index, arr) => {
-
-
                   return (<div
                     key={t.id}
                     className={styles.item}

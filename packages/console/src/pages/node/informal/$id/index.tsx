@@ -4,8 +4,7 @@ import {router, withRouter} from "umi";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
-import {
-  InformalNodeManagerPageModelState,
+import {InformalNodeManagerPageModelState,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
