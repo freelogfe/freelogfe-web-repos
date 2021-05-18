@@ -10,7 +10,6 @@ import {router} from "umi";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
-  // info: null | {};
 
   nodeId: number;
   nodeName: string;
@@ -179,12 +178,20 @@ export interface UpdateRelationAction extends AnyAction {
 
 export interface UpdateRewriteAction extends AnyAction {
   type: 'exhibitInfoPage/updateRewrite';
-  // payload:
 }
 
 export interface ChangeVersionAction extends AnyAction {
   type: 'exhibitInfoPage/changeVersion';
   payload: string;
+}
+
+export interface UpdateContractUsedAction {
+  type: 'exhibitInfoPage/updateContractUsed';
+  payload: {
+    exhibitID: string;
+    resourceID: string;
+    policyID: string;
+  };
 }
 
 export interface ExhibitInfoPageModelType {
@@ -199,6 +206,7 @@ export interface ExhibitInfoPageModelType {
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
     updateRewrite: (action: UpdateRewriteAction, effects: EffectsCommandMap) => void;
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
+    updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -601,7 +609,10 @@ const Model: ExhibitInfoPageModelType = {
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
-    }
+    },
+    * updateContractUsed({payload}: UpdateContractUsedAction, {}: EffectsCommandMap) {
+
+    },
   },
   reducers: {
     change(state, {payload}) {
