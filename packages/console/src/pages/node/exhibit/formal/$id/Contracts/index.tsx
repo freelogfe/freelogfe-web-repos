@@ -10,7 +10,7 @@ import FUtil from "@/utils";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import FDivider from "@/components/FDivider";
 import FSwitch from "@/components/FSwitch";
-import {FDown} from "@/components/FIcons";
+import {FDown, FUp} from "@/components/FIcons";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -30,15 +30,19 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   // console.log(mainResource, 'mainResource9032jhf');
 
   function onChangeSelect(id: string) {
-    dispatch<ChangeAction>({
+    onChange({
+      associated: exhibitInfoPage.associated.map((a) => ({
+        ...a,
+        selected: a.id === id
+      })),
+    });
+  }
+
+  async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
+    await dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
-      payload: {
-        associated: exhibitInfoPage.associated.map((a) => ({
-          ...a,
-          selected: a.id === id
-        })),
-      }
-    })
+      payload: payload,
+    });
   }
 
   return (<div>
@@ -158,35 +162,66 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
 
               <div className={styles.footer}>
                 <div className={styles.action}>
-                  <FContentText text={'应用于当前展品'} type="highlight"/>
+                  <FContentText
+                    text={exhibitInfoPage.pName}
+                    type="highlight"
+                  />
                   <FSwitch checked={true}/>
                 </div>
-                <div style={{height: 10}}/>
 
                 {
-                  true && (<>
+                  selectedResource.exhibits.length > 0 && (<>
                     <div className={styles.otherTitle}>
-                      <FTitleText type="h4">
-                        <span>当前合约在此节点中被其他展品应用</span>
-                        <FDown/>
-                      </FTitleText>
-                    </div>
-                    <div style={{height: 12}}/>
+                      <div style={{height: 10}}/>
 
-                    <div className={styles.otherActions}>
-                      <div className={styles.otherAction}>
-                        <FContentText text={'应用于当前展品'} type="highlight"/>
-                        <FSwitch checked={true}/>
-                      </div>
-                      <div className={styles.otherAction}>
-                        <FContentText text={'应用于当前展品'} type="highlight"/>
-                        <FSwitch checked={true}/>
-                      </div>
-                      <div className={styles.otherAction}>
-                        <FContentText text={'应用于当前展品'} type="highlight"/>
-                        <FSwitch checked={true}/>
-                      </div>
+                      <FTextBtn onClick={() => {
+                        onChange({
+                          associated: exhibitInfoPage.associated.map((asso) => {
+                            if (asso.id !== selectedResource.id) {
+                              return asso;
+                            }
+                            return {
+                              ...asso,
+                              contracts: asso.contracts.map((assoct) => {
+                                if (assoct.id !== c.id) {
+                                  return assoct;
+                                }
+                                return {
+                                  ...assoct,
+                                  exhibitOpen: !assoct.exhibitOpen,
+                                };
+                              }),
+                            };
+                          }),
+                        });
+                      }}>
+                        <FTitleText type="h4">
+                          <span>当前合约在此节点中被其他展品应用</span>
+                          &nbsp;
+                          {
+                            c.exhibitOpen
+                              ? (<FUp/>)
+                              : (<FDown/>)
+                          }
+                        </FTitleText>
+                      </FTextBtn>
                     </div>
+
+                    {
+                      c.exhibitOpen
+                        ? (<div className={styles.otherActions}>
+                          {
+                            selectedResource.exhibits.map((ex) => {
+                              return (<div key={ex.id} className={styles.otherAction}>
+                                <FContentText text={ex.name} type="highlight"/>
+                                <FSwitch checked={true}/>
+                              </div>);
+                            })
+                          }
+                        </div>)
+                        : (<div style={{height: 12}}/>)
+                    }
+
                   </>)
                 }
 

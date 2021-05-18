@@ -15,6 +15,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   nodeId: number;
   nodeName: string;
   nodeThemeId: string;
+  pID: string;
   pName: string;
   isOnline: boolean;
   isAuth: boolean;
@@ -33,6 +34,11 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     id: string;
     name: string;
     type: string;
+    exhibits: {
+      id: string;
+      name: string;
+      status: 0 | 1;
+    }[];
     contracts: {
       name: string;
       status: 0 | 1 | 2;
@@ -40,6 +46,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
       text: string;
       createTime: string;
       policyId: string;
+      exhibitOpen: boolean;
     }[];
     policies: {
       id: string;
@@ -206,6 +213,7 @@ const Model: ExhibitInfoPageModelType = {
     nodeId: -1,
     nodeName: '',
     nodeThemeId: '',
+    pID: '',
     pName: '',
     isOnline: false,
     isAuth: true,
@@ -279,14 +287,17 @@ const Model: ExhibitInfoPageModelType = {
       const {data: data2} = yield call(FApiServer.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
+      // 组织授权信息数据
       const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
 
+      // 要禁用的键
       const disabledRewriteKeys = [
         ...data.resourceCustomPropertyDescriptors.map((i: any) => i.key),
       ];
 
       // console.log(data, 'data2341234');
 
+      // 获取展品授权结果
       const params1: Parameters<typeof FApiServer.Exhibit.batchAuth>[0] = {
         nodeId: data.nodeId,
         authType: 3,
@@ -295,12 +306,13 @@ const Model: ExhibitInfoPageModelType = {
       const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
 
-      // presentableId
+      // 授权树数据
       const params4: Parameters<typeof FApiServer.Exhibit.authTree>[0] = {
         presentableId: exhibitInfoPage.presentableId,
       };
 
       const {data: data4} = yield call(FApiServer.Exhibit.authTree, params4);
+
       // console.log(data4, '@@@@@#4234234324234');
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data4, {
         id: data.presentableId,
@@ -310,12 +322,25 @@ const Model: ExhibitInfoPageModelType = {
         exhibitName: data.presentableName,
       });
 
+      // 根据资源 id 批量查询所有合同
+      const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
+        nodeId: data.nodeId,
+        resolveResourceIds: result.map((rs) => {
+          return rs.resourceId;
+        }).join(','),
+      };
+
+      const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
+
+      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeId: data.nodeId,
           nodeName: data3.nodeName,
           nodeThemeId: data3.nodeThemeId,
+          pID: data.presentableId,
           pName: data.presentableName,
           isOnline: data.onlineStatus === 1,
           isAuth: data1[0].isAuth,
@@ -326,25 +351,40 @@ const Model: ExhibitInfoPageModelType = {
             text: p.policyText,
             status: p.status,
           })),
-          associated: result.map((r, index) => ({
-            selected: index === 0,
-            id: r.resourceId,
-            name: r.resourceName,
-            type: r.resourceType,
-            contracts: r.contracts.map((c) => ({
-              name: c.contractName,
-              status: c.status,
-              id: c.contractId,
-              text: c.policyText,
-              createTime: FUtil.Format.formatDateTime(c.createDate),
-              policyId: c.policyId,
-            })),
-            policies: r.policies.map((p) => ({
-              id: p.policyId,
-              name: p.policyName,
-              text: p.policyText,
-            }))
-          })),
+          associated: result.map((r, index) => {
+            const exhibits = data5.filter((d5: any) => {
+              return d5.resolveResources.some((rr: any) => {
+                return d5.presentableId !== data.presentableId && rr.resourceId === r.resourceId;
+              });
+            }).map((d5: any) => {
+              return {
+                id: d5.presentableId,
+                name: d5.presentableName,
+                status: d5.onlineStatus,
+              };
+            });
+            return {
+              selected: index === 0,
+              id: r.resourceId,
+              name: r.resourceName,
+              type: r.resourceType,
+              exhibits: exhibits,
+              contracts: r.contracts.map((c) => ({
+                name: c.contractName,
+                status: c.status,
+                id: c.contractId,
+                text: c.policyText,
+                createTime: FUtil.Format.formatDateTime(c.createDate),
+                policyId: c.policyId,
+                exhibitOpen: false,
+              })),
+              policies: r.policies.map((p) => ({
+                id: p.policyId,
+                name: p.policyName,
+                text: p.policyText,
+              })),
+            };
+          }),
           pCover: data.coverImages[0] || '',
           pTitle: data.presentableTitle,
           pTags: data.tags,
@@ -562,6 +602,10 @@ const Model: ExhibitInfoPageModelType = {
 
 export default Model;
 
+
+/**
+ * 组织授权信息数据
+ */
 type HandleRelationParams = {
   contracts: {
     contractId: string;

@@ -119,6 +119,7 @@ interface PresentableListParamsType {
   isLoadVersionProperty?: 0 | 1;
   isLoadPolicyInfo?: 0 | 1;
   projection?: string;
+  resolveResourceIds?: string;
 }
 
 export function presentableList(params: PresentableListParamsType) {
@@ -184,8 +185,7 @@ interface ContractAppliedPresentableParamsType {
 }
 
 export function contractAppliedPresentable({nodeId, ...params}: ContractAppliedPresentableParamsType) {
-  return request.get(`/v2/presentables/${nodeId}/contractAppliedPresentable?=608932a3470d81721c865874`, {
+  return request.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
     params,
   });
 }
-
