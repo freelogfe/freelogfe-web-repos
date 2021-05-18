@@ -245,7 +245,7 @@
 	"nodes_list_empty": "无可签约的节点，马上",
 	"btn_create_node": "创建节点",
 	"select_auth_plan_for_upcast": "上抛授权策略选择",
-	"use_for_exhibit": "应用于当前节点以下{ExhibitQuanity}个展品授权链",
+	"use_for_exhibit": "应用于该资源在以下展品的关联授权",
 	"title_auth_to_node": "确认签约节点",
 	"title_enter_exhibit_name": "输入展品名称",
 	"msg_enter_exhibit_name": "展品名称一旦提交，则不可修改。",
