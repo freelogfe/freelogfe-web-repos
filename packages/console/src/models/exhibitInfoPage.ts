@@ -35,7 +35,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     type: string;
     contracts: {
       name: string;
-      status: 0 | 1;
+      status: 0 | 1 | 2;
       id: string;
       text: string;
       createTime: string;
@@ -581,7 +581,7 @@ type HandleRelationResult = {
     contractName: string;
     createDate: string
     policyText: string
-    status: 0 | 1;
+    status: 0 | 1 | 2;
     policyId: string;
   }[];
   policies: {
@@ -611,7 +611,7 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   const [{data: data0}, {data: data1}]: any = await Promise.all([FApiServer.Resource.batchInfo(params0), FApiServer.Contract.batchContracts(params1)]);
   // console.log(data0, data1, 'data0, data123rfsda');
 
-  const result = params.map((r) => {
+  const result: HandleRelationResult = params.map((r) => {
     const resource = data0.find((dr: any) => dr.resourceId === r.resourceId);
     return {
       resourceId: resource.resourceId,
@@ -626,7 +626,8 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
           contractName: contract.contractName,
           createDate: contract.createDate,
           policyText: contract.policyInfo.policyText,
-          status: contract.status,
+          // status: contract.status,
+          status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
           policyId: contract.policyId,
         };
       }),

@@ -5,10 +5,12 @@ import {FTextBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction, UpdateRelationAction} from "@/models/exhibitInfoPage";
+import {ChangeAction} from "@/models/exhibitInfoPage";
 import FUtil from "@/utils";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import FDivider from "@/components/FDivider";
+import FSwitch from "@/components/FSwitch";
+import {FDown} from "@/components/FIcons";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -46,7 +48,6 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
-        {/*<div className={styles.signLeftNav}>主资源</div>*/}
         <FTitleText type="h4">主资源</FTitleText>
 
         <a
@@ -133,7 +134,9 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               <div className={styles.title}>
                 <Space style={{padding: '0 20px'}} size={10}>
                   <FContentText type="highlight" text={c.name}/>
-                  <FContractStatusBadge status="pending"/>
+                  <FContractStatusBadge
+                    status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}
+                  />
                 </Space>
                 <div style={{height: 10}}/>
                 <Space style={{padding: '0 20px'}} size={2}>
@@ -154,8 +157,39 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
               </div>
 
               <div className={styles.footer}>
-                <div style={{height: 42}}/>
-                <div style={{height: 40}}/>
+                <div className={styles.action}>
+                  <FContentText text={'应用于当前展品'} type="highlight"/>
+                  <FSwitch checked={true}/>
+                </div>
+                <div style={{height: 10}}/>
+
+                {
+                  true && (<>
+                    <div className={styles.otherTitle}>
+                      <FTitleText type="h4">
+                        <span>当前合约在此节点中被其他展品应用</span>
+                        <FDown/>
+                      </FTitleText>
+                    </div>
+                    <div style={{height: 12}}/>
+
+                    <div className={styles.otherActions}>
+                      <div className={styles.otherAction}>
+                        <FContentText text={'应用于当前展品'} type="highlight"/>
+                        <FSwitch checked={true}/>
+                      </div>
+                      <div className={styles.otherAction}>
+                        <FContentText text={'应用于当前展品'} type="highlight"/>
+                        <FSwitch checked={true}/>
+                      </div>
+                      <div className={styles.otherAction}>
+                        <FContentText text={'应用于当前展品'} type="highlight"/>
+                        <FSwitch checked={true}/>
+                      </div>
+                    </div>
+                  </>)
+                }
+
               </div>
             </div>))
           }

@@ -73,6 +73,33 @@
 
       .footer {
         padding: 0 20px;
+
+        .action {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 42px;
+          border-bottom: 1px solid #E5E7EB;
+        }
+
+        .otherTitle {
+          //height: 40px;
+          display: flex;
+          align-items: center;
+        }
+
+        .otherActions {
+          .otherAction {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 42px;
+
+            & + .otherAction {
+              border-top: 1px solid #E5E7EB;
+            }
+          }
+        }
       }
     }
 
