@@ -29,6 +29,10 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   }[];
   addPolicyDrawerVisible: boolean;
 
+  exhibitAllContractIDs: {
+    exhibitID: string;
+    contractIDs: string[];
+  }[];
   associated: {
     selected: boolean;
     id: string;
@@ -57,7 +61,6 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
 
   graphFullScreen: boolean;
   viewportGraphShow: 'relationship' | 'authorization';
-
 
   pCover: string;
   pTitle: string;
@@ -221,6 +224,7 @@ const Model: ExhibitInfoPageModelType = {
 
     policies: [],
     addPolicyDrawerVisible: false,
+    exhibitAllContractIDs: [],
     associated: [],
 
     graphFullScreen: false,
@@ -332,7 +336,20 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
 
-      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      const exhibitAllContractIDs: {
+        exhibitID: string;
+        contractIDs: string[];
+      }[] = data5.map((d5: any) => {
+        return {
+          exhibitID: d5.presentableId,
+          contractIDs: d5.resolveResources?.map((resvr: any) => {
+            return resvr.contracts.map((cccc: any) => {
+              return cccc.contractId;
+            });
+          }).flat(),
+        };
+      });
 
       yield put<ChangeAction>({
         type: 'change',
@@ -351,6 +368,7 @@ const Model: ExhibitInfoPageModelType = {
             text: p.policyText,
             status: p.status,
           })),
+          exhibitAllContractIDs,
           associated: result.map((r, index) => {
             const exhibits = data5.filter((d5: any) => {
               return d5.resolveResources.some((rr: any) => {

@@ -166,7 +166,9 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                     text={exhibitInfoPage.pName}
                     type="highlight"
                   />
-                  <FSwitch checked={true}/>
+                  <FSwitch checked={exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
+                    return eac.exhibitID === exhibitInfoPage.pID;
+                  })?.contractIDs.includes(c.id)}/>
                 </div>
 
                 {
@@ -212,9 +214,12 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
                         ? (<div className={styles.otherActions}>
                           {
                             selectedResource.exhibits.map((ex) => {
+                              const currenExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
+                                return eac.exhibitID === ex.id;
+                              });
                               return (<div key={ex.id} className={styles.otherAction}>
                                 <FContentText text={ex.name} type="highlight"/>
-                                <FSwitch checked={true}/>
+                                <FSwitch checked={currenExhibit?.contractIDs.includes(c.id)}/>
                               </div>);
                             })
                           }
