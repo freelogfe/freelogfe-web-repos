@@ -19,7 +19,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   if (exhibitInfoPage.associated.length === 0) {
     return null;
   }
-  
+
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',

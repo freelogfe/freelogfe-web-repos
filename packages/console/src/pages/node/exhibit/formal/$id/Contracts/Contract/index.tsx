@@ -33,7 +33,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
     {
       selectedResource?.contracts.map((c) => {
         const exhibitInfoExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
-          return eac.exhibitID === exhibitInfoPage.pID;
+          return eac.exhibitID === exhibitInfoPage.pID && eac.resourceID === selectedResource.id;
         });
         return (<div
           key={c.id}
@@ -132,7 +132,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
                       {
                         selectedResource.exhibits.map((ex) => {
                           const currentExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
-                            return eac.exhibitID === ex.id;
+                            return eac.exhibitID === ex.id && eac.resourceID === selectedResource.id;
                           });
                           const currentExhibitChecked = currentExhibit?.contractIDs.includes(c.id);
                           return (<div key={ex.id} className={styles.otherAction}>
@@ -175,3 +175,11 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
 export default connect(({exhibitInfoPage}: ConnectState) => ({
   exhibitInfoPage,
 }))(Contract);
+
+// interface UsedSwitchDisabledParams {
+//
+// }
+//
+// function usedSwitchDisabled() {
+//
+// }

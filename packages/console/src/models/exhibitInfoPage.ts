@@ -30,6 +30,7 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
 
   exhibitAllContractIDs: {
     exhibitID: string;
+    resourceID: string;
     contractIDs: string[];
   }[];
   associated: {
@@ -345,20 +346,22 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
 
-      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
         exhibitID: string;
+        resourceID: string;
         contractIDs: string[];
       }[] = data5.map((d5: any) => {
-        return {
-          exhibitID: d5.presentableId,
-          contractIDs: d5.resolveResources?.map((resvr: any) => {
-            return resvr.contracts.map((cccc: any) => {
+        return d5.resolveResources?.map((resvr: any) => {
+          return {
+            exhibitID: d5.presentableId,
+            resourceID: resvr.resourceId,
+            contractIDs: resvr.contracts.map((cccc: any) => {
               return cccc.contractId;
-            });
-          }).flat(),
-        };
-      });
+            }),
+          };
+        });
+      }).flat();
 
       yield put<ChangeAction>({
         type: 'change',
@@ -653,20 +656,21 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
 
-      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
         exhibitID: string;
+        resourceID: string;
         contractIDs: string[];
       }[] = data5.map((d5: any) => {
-        return {
-          exhibitID: d5.presentableId,
-          contractIDs: d5.resolveResources?.map((resvr: any) => {
-            return resvr.contracts.map((cccc: any) => {
+        return d5.resolveResources?.map((resvr: any) => {
+          return {
+            exhibitID: d5.presentableId,
+            resourceID: resvr.resourceId,
+            contractIDs: resvr.contracts.map((cccc: any) => {
               return cccc.contractId;
-            });
-          }).flat(),
-        };
-      });
+            }),
+          };
+        });
+      }).flat();
 
       yield put<ChangeAction>({
         type: 'change',
