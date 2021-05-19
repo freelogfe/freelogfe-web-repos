@@ -1,0 +1,53 @@
+@import '../../../../../../../config.less';
+
+.Contracts {
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+
+  .title {
+
+  }
+
+  .content {
+    padding: 15px 20px 15px;
+    border-top: 1px solid #E5E7EB;
+    border-bottom: 1px solid #E5E7EB;
+
+    & > pre {
+      margin: 0;
+    }
+  }
+
+  .footer {
+    padding: 0 20px;
+
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 42px;
+
+    }
+
+    .otherTitle {
+      //height: 40px;
+      border-top: 1px solid #E5E7EB;
+      //display: flex;
+      //align-items: center;
+    }
+
+    .otherActions {
+      .otherAction {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 42px;
+
+        & + .otherAction {
+          border-top: 1px solid #E5E7EB;
+        }
+      }
+    }
+  }
+}

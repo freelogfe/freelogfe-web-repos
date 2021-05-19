@@ -1,0 +1,177 @@
+import * as React from 'react';
+import styles from './index.less';
+import {connect, Dispatch} from "dva";
+import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
+import {FContentText, FTitleText} from "@/components/FText";
+import {Space} from "antd";
+import FContractStatusBadge from "@/components/FContractStatusBadge";
+import FUtil from "@/utils";
+import FDivider from "@/components/FDivider";
+import FSwitch from "@/components/FSwitch";
+import {ChangeAction, UpdateContractUsedAction} from "@/models/exhibitInfoPage";
+import {FTextBtn} from "@/components/FButton";
+import {FDown, FUp} from "@/components/FIcons";
+
+interface ContractProps {
+  dispatch: Dispatch;
+  exhibitInfoPage: ExhibitInfoPageModelState;
+}
+
+function Contract({dispatch, exhibitInfoPage}: ContractProps) {
+
+  const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
+
+  async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'exhibitInfoPage/change',
+      payload: payload,
+    });
+  }
+
+  return (<Space style={{width: '100%'}} size={15} direction="vertical">
+    <FTitleText type="h4">当前合约</FTitleText>
+    {
+      selectedResource?.contracts.map((c) => {
+        const exhibitInfoExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
+          return eac.exhibitID === exhibitInfoPage.pID;
+        });
+        return (<div
+          key={c.id}
+          className={styles.Contracts}
+        >
+          <div style={{height: 15}}/>
+          <div className={styles.title}>
+            <Space style={{padding: '0 20px'}} size={10}>
+              <FContentText type="highlight" text={c.name}/>
+              <FContractStatusBadge
+                status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}
+              />
+            </Space>
+            <div style={{height: 10}}/>
+            <Space style={{padding: '0 20px'}} size={2}>
+              <FContentText
+                type="additional2"
+                text={FUtil.I18n.message('contract_id') + '：' + c.id}
+              />
+              <FDivider style={{fontSize: 14}}/>
+              <FContentText
+                type="additional2"
+                text={FUtil.I18n.message('contract_signed_time') + '：' + c.createTime}
+              />
+            </Space>
+            <div style={{height: 15}}/>
+          </div>
+          <div className={styles.content}>
+            <pre>{c.text}</pre>
+          </div>
+
+          <div className={styles.footer}>
+            <div className={styles.action}>
+              <FContentText
+                text={exhibitInfoPage.pName}
+                type="highlight"
+              />
+              <FSwitch
+                checked={exhibitInfoExhibit?.contractIDs.includes(c.id)}
+                disabled={exhibitInfoExhibit && (exhibitInfoExhibit.contractIDs.length <= 1) && exhibitInfoExhibit?.contractIDs.includes(c.id)}
+                onChange={(value) => {
+                  dispatch<UpdateContractUsedAction>({
+                    type: 'exhibitInfoPage/updateContractUsed',
+                    payload: {
+                      exhibitID: exhibitInfoPage.pID,
+                      resourceID: selectedResource.id,
+                      policyID: c.policyId,
+                      isUsed: value,
+                    },
+                  })
+                }}
+              />
+            </div>
+
+            {
+              selectedResource.exhibits.length > 0 && (<>
+                <div className={styles.otherTitle}>
+                  <div style={{height: 10}}/>
+
+                  <FTextBtn onClick={() => {
+                    onChange({
+                      associated: exhibitInfoPage.associated.map((asso) => {
+                        if (asso.id !== selectedResource.id) {
+                          return asso;
+                        }
+                        return {
+                          ...asso,
+                          contracts: asso.contracts.map((assoct) => {
+                            if (assoct.id !== c.id) {
+                              return assoct;
+                            }
+                            return {
+                              ...assoct,
+                              exhibitOpen: !assoct.exhibitOpen,
+                            };
+                          }),
+                        };
+                      }),
+                    });
+                  }}>
+                    <FTitleText type="h4">
+                      <span>当前合约在此节点中被其他展品应用</span>
+                      &nbsp;
+                      {
+                        c.exhibitOpen
+                          ? (<FUp/>)
+                          : (<FDown/>)
+                      }
+                    </FTitleText>
+                  </FTextBtn>
+                </div>
+
+                {
+                  c.exhibitOpen
+                    ? (<div className={styles.otherActions}>
+                      {
+                        selectedResource.exhibits.map((ex) => {
+                          const currentExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
+                            return eac.exhibitID === ex.id;
+                          });
+                          const currentExhibitChecked = currentExhibit?.contractIDs.includes(c.id);
+                          return (<div key={ex.id} className={styles.otherAction}>
+                            <FContentText
+                              text={ex.name}
+                              type="highlight"
+                            />
+                            <FSwitch
+                              checked={currentExhibitChecked}
+                              disabled={currentExhibitChecked && currentExhibit && (currentExhibit.contractIDs.length <= 1)}
+                              onChange={(value) => {
+                                dispatch<UpdateContractUsedAction>({
+                                  type: 'exhibitInfoPage/updateContractUsed',
+                                  payload: {
+                                    exhibitID: ex.id,
+                                    resourceID: selectedResource.id,
+                                    policyID: c.policyId,
+                                    isUsed: value,
+                                  },
+                                })
+                              }}
+                            />
+                          </div>);
+                        })
+                      }
+                    </div>)
+                    : (<div style={{height: 12}}/>)
+                }
+
+              </>)
+            }
+
+          </div>
+        </div>)
+      })
+    }
+  </Space>);
+}
+
+export default connect(({exhibitInfoPage}: ConnectState) => ({
+  exhibitInfoPage,
+}))(Contract);
