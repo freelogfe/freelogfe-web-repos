@@ -23,21 +23,21 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
     });
   }
 
-  function onChangeSelect(id: string) {
-    onChange({
-      associated: exhibitInfoPage.associated.map((a) => ({
-        ...a,
-        selected: a.id === id
-      })),
-    });
-  }
+  // function onChangeSelect(id: string) {
+  //   onChange({
+  //     associated: exhibitInfoPage.associated.map((a) => ({
+  //       ...a,
+  //       selected: a.id === id
+  //     })),
+  //   });
+  // }
 
   return (<>
     <FTitleText type="h4">主资源</FTitleText>
 
     <a
-      className={styles.signResource + ' ' + (mainResource.selected ? styles.activatedSignResource : '')}
-      onClick={() => onChangeSelect(mainResource.id)}
+      className={styles.signResource + ' ' + (mainResource.id === exhibitInfoPage.selectedAssociatedID ? styles.activatedSignResource : '')}
+      onClick={() => onChange({selectedAssociatedID: mainResource.id})}
     >
       <FTextBtn
         onClick={(e) => {
@@ -73,8 +73,8 @@ function Resources({dispatch, exhibitInfoPage}: ResourcesProps) {
 
     {
       otherResource.map((r) => (<a
-        className={styles.signResource + ' ' + (r.selected ? styles.activatedSignResource : '')}
-        onClick={() => onChangeSelect(r.id)}
+        className={styles.signResource + ' ' + (exhibitInfoPage.selectedAssociatedID === r.id ? styles.activatedSignResource : '')}
+        onClick={() => onChange({selectedAssociatedID: r.id})}
         key={r.id}
       >
         <FTextBtn

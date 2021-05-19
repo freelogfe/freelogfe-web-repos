@@ -33,8 +33,10 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
     resourceID: string;
     contractIDs: string[];
   }[];
+
+  selectedAssociatedID: string;
   associated: {
-    selected: boolean;
+    // selected: boolean;
     id: string;
     name: string;
     type: string;
@@ -235,6 +237,7 @@ const Model: ExhibitInfoPageModelType = {
     policies: [],
     addPolicyDrawerVisible: false,
     exhibitAllContractIDs: [],
+    selectedAssociatedID: '',
     associated: [],
 
     graphFullScreen: false,
@@ -282,7 +285,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
 
-      console.log(data, 'data@#Rasfdjou890ujewfra');
+      // console.log(data, 'data@#Rasfdjou890ujewfra');
 
       if (!data || data.userId !== user.cookiesUserID) {
         router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-=0=-jo3ijrlkajdsflkjal;dskf'));
@@ -383,6 +386,9 @@ const Model: ExhibitInfoPageModelType = {
             status: p.status,
           })),
           exhibitAllContractIDs,
+          selectedAssociatedID: result.some((rr) => {
+            return rr.resourceId === exhibitInfoPage.selectedAssociatedID;
+          }) ? exhibitInfoPage.selectedAssociatedID : result[0].resourceId,
           associated: result.map((r, index) => {
             const exhibits = data5.filter((d5: any) => {
               return d5.resolveResources.some((rr: any) => {
@@ -397,7 +403,6 @@ const Model: ExhibitInfoPageModelType = {
               };
             });
             return {
-              selected: index === 0,
               id: r.resourceId,
               name: r.resourceName,
               type: r.resourceType,
@@ -411,11 +416,15 @@ const Model: ExhibitInfoPageModelType = {
                 policyId: c.policyId,
                 exhibitOpen: false,
               })),
-              policies: r.policies.map((p) => ({
-                id: p.policyId,
-                name: p.policyName,
-                text: p.policyText,
-              })),
+              policies: r.policies
+                .filter((p) => {
+                  return p.status === 1;
+                })
+                .map((p) => ({
+                  id: p.policyId,
+                  name: p.policyName,
+                  text: p.policyText,
+                })),
             };
           }),
           pCover: data.coverImages[0] || '',
@@ -556,15 +565,12 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(resource, '$#@$#$@#');
       const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
-        resolveResources: [
-          {
-            resourceId: resource?.id || '',
-            contracts: [
-              ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
-              {policyId: payload.policyId},
-            ]
-          }
-        ]
+        resolveResources: yield call(handleFinalResolveResource, {
+          exhibitID: exhibitInfoPage.pID,
+          resourceID: payload.resourceId,
+          policyID: payload.policyId,
+          isUsed: true,
+        })
       };
       yield call(FApiServer.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
@@ -622,48 +628,11 @@ const Model: ExhibitInfoPageModelType = {
         exhibitInfoPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
-        presentableId: payload.exhibitID,
-      };
-
-      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
       // console.log(data, 'data123412398yuoihjkl');
 
       const params2: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: payload.exhibitID,
-        resolveResources: data.resolveResources?.map((rrs: any) => {
-          if (payload.resourceID !== rrs.resourceId) {
-            return {
-              resourceId: rrs.resourceId,
-              contracts: rrs.contracts.map((cccttt: any) => {
-                return {
-                  policyId: cccttt.policyId,
-                };
-              }),
-            };
-          }
-          return {
-            resourceId: rrs.resourceId,
-            contracts: payload.isUsed
-              ? [
-                ...rrs.contracts.map((cccttt: any) => {
-                  return {
-                    policyId: cccttt.policyId,
-                  };
-                }),
-                {policyId: payload.policyID}
-              ]
-              : rrs.contracts
-                .filter((ccc: any) => {
-                  return ccc.policyId !== payload.policyID;
-                })
-                .map((cccttt: any) => {
-                  return {
-                    policyId: cccttt.policyId,
-                  };
-                }),
-          };
-        }),
+        resolveResources: yield call(handleFinalResolveResource, payload),
       };
       // console.log(params2, 'params2!@!@#$@!#$!@#$');
 
@@ -764,10 +733,14 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
     resourceIDs: resourceIds,
   });
 
-  // console.log(allContracts, 'allContracts!!!!!!@@@@@@@@@@@');
-
-  // const contractIds: string[] = allContracts.map((cs) => cs.contractId);
-  const contractPolicyIds: string[] = allContracts.map((cs) => cs.policyId);
+  // const contractResourcePolicyIds: {
+  //   resourceID: string;
+  //   policyID: string;
+  // }[] = allContracts.map((cs) => {
+  //   return {
+  //     resourceID: cs.
+  //   }
+  // });
 
   const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
@@ -801,7 +774,13 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
           };
         }),
       policies: resource.policies
-        .filter((p: any) => !contractPolicyIds.includes(p.policyId))
+        .filter((p: any) => {
+          return !allContracts
+            .some((act: any) => {
+              // console.log(p, act, '!@#$!@#$!@#$!@#$!@#$!@#$!@#$');
+              return act.licensorId === resource.resourceId && act.policyId === p.policyId;
+            });
+        })
         .map((p: any) => {
           return {
             policyId: p.policyId,
@@ -850,4 +829,53 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
   });
 
   return (await Promise.all(allPromises)).flat();
+}
+
+interface HandleFinalResolveResourceParams {
+  exhibitID: string;
+  resourceID: string;
+  policyID: string;
+  isUsed: boolean;
+}
+
+async function handleFinalResolveResource({exhibitID, resourceID, policyID, isUsed}: HandleFinalResolveResourceParams) {
+  const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+    presentableId: exhibitID,
+  };
+
+  const {data} = await FApiServer.Exhibit.presentableDetails(params);
+
+  return data.resolveResources?.map((rrs: any) => {
+    if (resourceID !== rrs.resourceId) {
+      return {
+        resourceId: rrs.resourceId,
+        contracts: rrs.contracts.map((cccttt: any) => {
+          return {
+            policyId: cccttt.policyId,
+          };
+        }),
+      };
+    }
+    return {
+      resourceId: rrs.resourceId,
+      contracts: isUsed
+        ? [
+          ...rrs.contracts.map((cccttt: any) => {
+            return {
+              policyId: cccttt.policyId,
+            };
+          }),
+          {policyId: policyID}
+        ]
+        : rrs.contracts
+          .filter((ccc: any) => {
+            return ccc.policyId !== policyID;
+          })
+          .map((cccttt: any) => {
+            return {
+              policyId: cccttt.policyId,
+            };
+          }),
+    };
+  });
 }

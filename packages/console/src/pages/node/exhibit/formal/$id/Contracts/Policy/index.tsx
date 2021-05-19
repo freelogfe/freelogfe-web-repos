@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
+import {FTitleText, FContentText} from "@/components/FText";
 import {connect, Dispatch} from "dva";
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {Space} from "antd";
+import {FRectBtn} from "@/components/FButton";
+import {UpdateRelationAction} from "@/models/exhibitInfoPage";
 
 interface PolicyProps {
   dispatch: Dispatch;
@@ -12,7 +14,7 @@ interface PolicyProps {
 
 function Policy({dispatch, exhibitInfoPage}: PolicyProps) {
 
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
+  const selectedResource = exhibitInfoPage.associated.find((a) => a.id === exhibitInfoPage.selectedAssociatedID);
 
   if (!selectedResource?.policies || selectedResource?.policies.length === 0) {
     return null;
@@ -26,17 +28,19 @@ function Policy({dispatch, exhibitInfoPage}: PolicyProps) {
         key={p.id}
       >
         <div className={styles.singPolicyHeader}>
-          <span>{p.name}</span>
-          {/*<a*/}
-          {/*  className={styles.singPolicyHeaderBtn}*/}
-          {/*  onClick={() => dispatch<UpdateRelationAction>({*/}
-          {/*    type: 'exhibitInfoPage/updateRelation',*/}
-          {/*    payload: {*/}
-          {/*      resourceId: selectedResource.id,*/}
-          {/*      policyId: p.id,*/}
-          {/*    }*/}
-          {/*  })}*/}
-          {/*>签约</a>*/}
+          <FContentText type="highlight">{p.name}</FContentText>
+
+          <FRectBtn
+            style={{height: 26, padding: '0 15px'}}
+            size="small"
+            onClick={() => dispatch<UpdateRelationAction>({
+              type: 'exhibitInfoPage/updateRelation',
+              payload: {
+                resourceId: selectedResource.id,
+                policyId: p.id,
+              },
+            })}
+          >签约</FRectBtn>
         </div>
         <div style={{height: 15}}/>
         <pre>{p.text}</pre>

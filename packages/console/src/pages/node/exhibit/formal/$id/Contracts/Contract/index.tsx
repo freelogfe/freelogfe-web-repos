@@ -19,7 +19,7 @@ interface ContractProps {
 
 function Contract({dispatch, exhibitInfoPage}: ContractProps) {
 
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
+  const selectedResource = exhibitInfoPage.associated.find((a) => a.id === exhibitInfoPage.selectedAssociatedID);
 
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
