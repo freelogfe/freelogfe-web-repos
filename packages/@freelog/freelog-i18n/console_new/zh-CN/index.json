@@ -180,8 +180,8 @@
 	"total_number": "共{TotalNumber}个",
 	"objects_list_empty": "您还没有上传过对象",
 	"upload_object": "上传对象",
-	"object_name": "对象",
-	"size": "对象大小",
+	"object_name": "对象名",
+	"size": "大小",
 	"last_updated_time": "最近更新",
 	"copy_object_name": "复制对象名",
 	"edit_object_information": "对象信息",
@@ -245,7 +245,7 @@
 	"nodes_list_empty": "无可签约的节点，马上",
 	"btn_create_node": "创建节点",
 	"select_auth_plan_for_upcast": "上抛授权策略选择",
-	"use_for_exhibit": "应用于以下{ExhibitQuanity}个授权链",
+	"use_for_exhibit": "应用于当前节点以下{ExhibitQuanity}个展品授权链",
 	"title_auth_to_node": "确认签约节点",
 	"title_enter_exhibit_name": "输入展品名称",
 	"msg_enter_exhibit_name": "展品名称一旦提交，则不可修改。",
@@ -297,5 +297,9 @@
 	"state_active": "已激活",
 	"btn_edit_exhibit": "编辑",
 	"btn_check_resource_details": "资源详情",
-	"btn_activate_theme": "激活"
+	"btn_activate_theme": "激活",
+	"tip_edit_object": "编辑",
+	"tip_release_object": "发行",
+	"tip_download_object": "下载",
+	"tip_delete": "删除"
 }

@@ -180,8 +180,8 @@
 	"total_number": "Total {TotalNumber}",
 	"objects_list_empty": "You do not upload an object yet.",
 	"upload_object": "Upload objects",
-	"object_name": "Object",
-	"size": "Object size",
+	"object_name": "Object Name",
+	"size": "Size",
 	"last_updated_time": "Last updated",
 	"copy_object_name": "Copy object name",
 	"edit_object_information": "Object information",
@@ -245,7 +245,7 @@
 	"nodes_list_empty": "No available node,  ",
 	"btn_create_node": "CREATE A NODE",
 	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)",
-	"use_for_exhibit": "Use in the following {ExhibitQuanity}  authorization tree",
+	"use_for_exhibit": "Use in the following {ExhibitQuanity}  exhibit authorization trees",
 	"title_auth_to_node": "Authorize to ",
 	"title_enter_exhibit_name": "Enter Exhibit Name",
 	"msg_enter_exhibit_name": "Exhibit name will be locked, once sumbit.",
@@ -297,5 +297,9 @@
 	"state_active": "Active",
 	"btn_edit_exhibit": "EDIT",
 	"btn_check_resource_details": "RESOURCE DETAILS",
-	"btn_activate_theme": "ACTIVATE"
+	"btn_activate_theme": "ACTIVATE",
+	"tip_edit_object": "Edit",
+	"tip_release_object": "Release",
+	"tip_download_object": "Download",
+	"tip_delete": "Delete"
 }
