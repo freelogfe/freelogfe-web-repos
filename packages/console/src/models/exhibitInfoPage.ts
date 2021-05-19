@@ -668,6 +668,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(params2, 'params2!@!@#$@!#$!@#$');
 
       const {data: data2} = yield call(FApiServer.Exhibit.updatePresentable, params2);
+
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
         nodeId: exhibitInfoPage.nodeId,
@@ -765,7 +766,7 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
 
   // console.log(allContracts, 'allContracts!!!!!!@@@@@@@@@@@');
 
-  const contractIds: string[] = allContracts.map((cs) => cs.contractId);
+  // const contractIds: string[] = allContracts.map((cs) => cs.contractId);
   const contractPolicyIds: string[] = allContracts.map((cs) => cs.policyId);
 
   const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
