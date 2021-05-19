@@ -630,16 +630,29 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: payload.exhibitID,
         resolveResources: data.resolveResources?.map((rrs: any) => {
           if (payload.resourceID !== rrs.resourceId) {
-            return rrs;
+            return {
+              resourceId: rrs.resourceId,
+              contracts: rrs.contracts.map((cccttt: any) => {
+                return {
+                  policyId: cccttt.policyId,
+                };
+              }),
+            };
           }
           return {
-            ...rrs,
+            resourceId: rrs.resourceId,
             contracts: payload.isUsed
               ? [...rrs.contracts, {policyId: payload.policyID}]
-              : rrs.contracts.filter((ccc: any) => {
-                return ccc.policyId !== payload.policyID;
-              }),
-          }
+              : rrs.contracts
+                .filter((ccc: any) => {
+                  return ccc.policyId !== payload.policyID;
+                })
+                .map((cccttt: any) => {
+                  return {
+                    policyId: cccttt.policyId,
+                  };
+                }),
+          };
         }),
       };
       console.log(params2, 'params2!@!@#$@!#$!@#$');
