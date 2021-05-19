@@ -1,16 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
-import {FTextBtn} from '@/components/FButton';
+import {FTitleText} from '@/components/FText';
 import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction, UpdateContractUsedAction} from "@/models/exhibitInfoPage";
-import FUtil from "@/utils";
-import FContractStatusBadge from "@/components/FContractStatusBadge";
-import FDivider from "@/components/FDivider";
-import FSwitch from "@/components/FSwitch";
-import {FDown, FUp} from "@/components/FIcons";
+import {ChangeAction} from "@/models/exhibitInfoPage";
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';
@@ -25,13 +19,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   if (exhibitInfoPage.associated.length === 0) {
     return null;
   }
-
-
-  const selectedResource = exhibitInfoPage.associated.find((a) => a.selected);
-
-  // console.log(mainResource, 'mainResource9032jhf');
-
-
+  
   async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'exhibitInfoPage/change',
