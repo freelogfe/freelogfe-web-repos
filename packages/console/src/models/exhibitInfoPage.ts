@@ -191,6 +191,7 @@ export interface UpdateContractUsedAction {
     exhibitID: string;
     resourceID: string;
     policyID: string;
+    isUsed: boolean;
   };
 }
 
@@ -344,7 +345,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
 
-      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
         exhibitID: string;
         contractIDs: string[];
@@ -386,6 +387,7 @@ const Model: ExhibitInfoPageModelType = {
               return {
                 id: d5.presentableId,
                 name: d5.presentableName,
+                // policyId: d5.
                 status: d5.onlineStatus,
               };
             });
@@ -610,8 +612,68 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateContractUsed({payload}: UpdateContractUsedAction, {}: EffectsCommandMap) {
+    * updateContractUsed({payload}: UpdateContractUsedAction, {select, call, put}: EffectsCommandMap) {
+      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+        exhibitInfoPage,
+      }));
 
+      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+        presentableId: payload.exhibitID,
+      };
+      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      console.log(data, 'data123412398yuoihjkl');
+
+      const params2: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+        presentableId: payload.exhibitID,
+        resolveResources: data.resolveResources?.map((rrs: any) => {
+          if (payload.resourceID !== rrs.resourceId) {
+            return rrs;
+          }
+          return {
+            ...rrs,
+            contracts: payload.isUsed
+              ? [...rrs.contracts, {policyId: payload.policyID}]
+              : rrs.contracts.filter((ccc: any) => {
+                return ccc.policyId !== payload.policyID;
+              }),
+          }
+        }),
+      };
+      console.log(params2, 'params2!@!@#$@!#$!@#$');
+
+      const {data: data2} = yield call(FApiServer.Exhibit.updatePresentable, params2);
+      return;
+      // 根据资源 id 批量查询所有合同
+      const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
+        nodeId: exhibitInfoPage.nodeId,
+        resolveResourceIds: exhibitInfoPage.associated.map((rs) => {
+          return rs.id;
+        }).join(','),
+      };
+
+      const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
+
+      // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
+      const exhibitAllContractIDs: {
+        exhibitID: string;
+        contractIDs: string[];
+      }[] = data5.map((d5: any) => {
+        return {
+          exhibitID: d5.presentableId,
+          contractIDs: d5.resolveResources?.map((resvr: any) => {
+            return resvr.contracts.map((cccc: any) => {
+              return cccc.contractId;
+            });
+          }).flat(),
+        };
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibitAllContractIDs,
+        },
+      });
     },
   },
   reducers: {
