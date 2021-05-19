@@ -33,10 +33,9 @@ import FBasicUpcastCard from "@/components/FBasicUpcastCard";
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
-  resourceInfo: ResourceInfoModelState,
 }
 
-function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProps & RouterTypes) {
+function Auth({dispatch,  resourceAuthPage, match}: AuthProps & RouterTypes) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -232,5 +231,4 @@ function Auth({dispatch, route, resourceAuthPage, match, resourceInfo}: AuthProp
 
 export default withRouter(connect(({resourceAuthPage, resourceInfo}: ConnectState) => ({
   resourceAuthPage: resourceAuthPage,
-  resourceInfo: resourceInfo,
 }))(Auth));

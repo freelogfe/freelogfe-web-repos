@@ -5,10 +5,11 @@ import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';
 import {Space} from "antd";
-import {connect} from "dva";
+import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
 
 export interface FAuthPanelProps {
+  dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
 }
 
@@ -24,28 +25,13 @@ function FAuthPanel({resourceAuthPage}: FAuthPanelProps) {
     </div>
     <div className={styles.DepPanelContent}>
       <Space
-        size={25}
+        size={15}
         direction="vertical"
         className={styles.contentBox}
       >
+        <Contracts/>
 
-        {
-          activeResource && activeResource?.contracts.length > 0 && (
-            <Space direction="vertical" size={15} style={{width: '100%'}}>
-              {/*<FContentText type="additional2" text={FUtil.I18n.message('used_contract')}/>*/}
-              <FContentText type="additional2" text={'当前合约'}/>
-              <Contracts dataSource={activeResource.contracts}/>
-            </Space>)
-        }
-
-        {
-          activeResource && activeResource?.policies?.length > 0 && (
-            <Space direction="vertical" size={15} style={{width: '100%'}}>
-              {/*<FContentText type="additional2" text={FUtil.I18n.message('other_authorization_plan')}/>*/}
-              <FContentText type="additional2" text={'可签约的合约'}/>
-              <Policies dataSource={activeResource.policies}/>
-            </Space>)
-        }
+        <Policies/>
       </Space>
     </div>
   </div>);

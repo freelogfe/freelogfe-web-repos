@@ -2,22 +2,20 @@ import * as React from 'react';
 import styles from './index.less';
 import PolicyCard from './PolicyCard';
 import {Dispatch, connect} from "dva";
-import {UpdateAuthorizedAction} from "@/models/resourceAuthPage";
-// import {FAuthPanelProps} from "@/pages/resource/containers/FAuthPanel";
+import {ResourceAuthPageModelState, UpdateAuthorizedAction} from "@/models/resourceAuthPage";
 import {Space} from "antd";
+import {ConnectState} from "@/models/connect";
+import {FContentText} from "@/components/FText";
 
 interface PoliciesProps {
   dispatch: Dispatch;
-  dataSource: {
-    id: string;
-    title: string;
-    code: string;
-    allEnabledVersions: string[];
-  }[];
-  // onLicense?: (id: string, record: PoliciesProps['dataSource'][0]) => void;
+  resourceAuthPage: ResourceAuthPageModelState;
 }
 
-function Policies({dataSource, dispatch}: PoliciesProps) {
+function Policies({dispatch, resourceAuthPage}: PoliciesProps) {
+
+  const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
+
   function onLicense(versions: string[], policyId: string) {
     dispatch<UpdateAuthorizedAction>({
       type: 'resourceAuthPage/updateAuthorized',
@@ -29,12 +27,18 @@ function Policies({dataSource, dispatch}: PoliciesProps) {
     });
   }
 
+  if (!activeResource || activeResource?.policies?.length === 0) {
+    return null;
+  }
+
   return (<Space
     size={15}
     style={{width: '100%'}}
     direction="vertical"
   >
-    {dataSource.map((i) => (
+    <FContentText type="additional2" text={'可签约的合约'}/>
+
+    {activeResource?.policies.map((i) => (
       <PolicyCard
         key={i.id}
         title={i.title}
@@ -46,4 +50,6 @@ function Policies({dataSource, dispatch}: PoliciesProps) {
   </Space>)
 }
 
-export default connect()(Policies);
+export default connect(({resourceAuthPage}: ConnectState) => ({
+  resourceAuthPage,
+}))(Policies);

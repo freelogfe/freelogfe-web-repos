@@ -263,7 +263,6 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       </>)
     }
 
-
   </FLeftSiderLayout>);
 }
 

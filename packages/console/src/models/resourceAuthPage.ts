@@ -36,7 +36,7 @@ export interface ResourceAuthPageModelState {
     contracts: {
       checked: boolean;
       title: string;
-      status: string;
+      status: 0 | 1 | 2;
       code: string;
       id: string;
       date: string;
@@ -254,7 +254,7 @@ const Model: ResourceAuthPageModelType = {
           resourceType: currentResource.resourceType,
           version: '',
           contracts: allContracts
-            .map((c: any /* 当前合约 */) => {
+            .map((c: any) => {
               // console.log(c, '当前合约');
               // console.log(i, '关系');
               return {
@@ -262,7 +262,8 @@ const Model: ResourceAuthPageModelType = {
                 id: c.contractId,
                 policyId: c.policyId,
                 title: c.contractName,
-                status: c.status === 0 ? 'stopping' : 'executing',
+                // status: c.status === 0 ? 'stopping' : 'executing',
+                status: c.status === 1 ? 2 : ((c.authStatus & 1) === 1) ? 1 : 0,
                 code: c.policyInfo.policyText,
                 date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
                 // versions: [{$version: '10.5.2', checked: true}, {$version: '10.5.3', checked: false}]

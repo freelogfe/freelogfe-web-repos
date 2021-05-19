@@ -6,7 +6,6 @@ import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/resourceAuthPage";
 import {FTextBtn} from "@/components/FButton";
 import FUtil from "@/utils";
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -14,6 +13,7 @@ interface ResourcesProps {
 }
 
 function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
+
   function onChangeActivated(id: number | string) {
     dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
@@ -25,8 +25,6 @@ function Resources({resourceAuthPage, dispatch}: ResourcesProps) {
       },
     });
   }
-
-  // console.log(resourceAuthPage.contractsAuthorized, 'resourceAuthPage.contractsAuthorized!@#$!@#$234908uopiasdf');
 
   const dataSource = resourceAuthPage.contractsAuthorized.map((i) => ({
     id: i.id,
