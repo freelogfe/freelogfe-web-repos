@@ -281,7 +281,9 @@ const Model: ExhibitInfoPageModelType = {
         isLoadPolicyInfo: 1,
       };
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      // console.log(data, 'data@#Rasfdjou890ujewfra');
+
+      console.log(data, 'data@#Rasfdjou890ujewfra');
+
       if (!data || data.userId !== user.cookiesUserID) {
         router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-=0=-jo3ijrlkajdsflkjal;dskf'));
         return;
@@ -302,7 +304,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
-      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
+      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources, data.nodeId);
 
       // 要禁用的键
       const disabledRewriteKeys = [
@@ -623,8 +625,9 @@ const Model: ExhibitInfoPageModelType = {
       const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
         presentableId: payload.exhibitID,
       };
+
       const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
-      console.log(data, 'data123412398yuoihjkl');
+      // console.log(data, 'data123412398yuoihjkl');
 
       const params2: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
         presentableId: payload.exhibitID,
@@ -642,7 +645,14 @@ const Model: ExhibitInfoPageModelType = {
           return {
             resourceId: rrs.resourceId,
             contracts: payload.isUsed
-              ? [...rrs.contracts, {policyId: payload.policyID}]
+              ? [
+                ...rrs.contracts.map((cccttt: any) => {
+                  return {
+                    policyId: cccttt.policyId,
+                  };
+                }),
+                {policyId: payload.policyID}
+              ]
               : rrs.contracts
                 .filter((ccc: any) => {
                   return ccc.policyId !== payload.policyID;
@@ -655,10 +665,9 @@ const Model: ExhibitInfoPageModelType = {
           };
         }),
       };
-      console.log(params2, 'params2!@!@#$@!#$!@#$');
+      // console.log(params2, 'params2!@!@#$@!#$!@#$');
 
       const {data: data2} = yield call(FApiServer.Exhibit.updatePresentable, params2);
-      return;
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
         nodeId: exhibitInfoPage.nodeId,
@@ -710,7 +719,6 @@ const Model: ExhibitInfoPageModelType = {
 
 export default Model;
 
-
 /**
  * 组织授权信息数据
  */
@@ -744,23 +752,28 @@ type HandleRelationResult = {
   }[];
 }[];
 
-async function handleRelation(params: HandleRelationParams): Promise<HandleRelationResult> {
+async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
+
+  console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
   // console.log(params, 'params0923jafdsl');
   const resourceIds: string[] = params.map((r) => r.resourceId);
-  const contractIds: string[] = params.map((c) => c.contracts.map((cs) => cs.contractId)).flat();
-  const contractPolicyIds: string[] = params.map((c) => c.contracts.map((cs) => cs.policyId)).flat();
+
+  const allContracts = await getAllContracts({
+    nodeID,
+    resourceIDs: resourceIds,
+  });
+
+  // console.log(allContracts, 'allContracts!!!!!!@@@@@@@@@@@');
+
+  const contractIds: string[] = allContracts.map((cs) => cs.contractId);
+  const contractPolicyIds: string[] = allContracts.map((cs) => cs.policyId);
 
   const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
-    contractIds: contractIds.join(','),
-    isLoadPolicyInfo: 1,
-  };
-
-  const [{data: data0}, {data: data1}]: any = await Promise.all([FApiServer.Resource.batchInfo(params0), FApiServer.Contract.batchContracts(params1)]);
+  const {data: data0}: any = await FApiServer.Resource.batchInfo(params0);
   // console.log(data0, data1, 'data0, data123rfsda');
 
   const result: HandleRelationResult = params.map((r) => {
@@ -770,19 +783,22 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
       resourceName: resource.resourceName,
       resourceType: resource.resourceType,
       status: resource.status,
-      contracts: r.contracts.map((c) => {
-        const contract = data1.find((dc: any) => dc.contractId === c.contractId);
-        // console.log(contract, 'contract0923');
-        return {
-          contractId: contract.contractId,
-          contractName: contract.contractName,
-          createDate: contract.createDate,
-          policyText: contract.policyInfo.policyText,
-          // status: contract.status,
-          status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
-          policyId: contract.policyId,
-        };
-      }),
+      contracts: allContracts
+        .filter((acts: any) => {
+          return acts.licensorId === resource.resourceId;
+        })
+        .map((contract: any) => {
+          // console.log(contract, 'contract0923');
+          return {
+            contractId: contract.contractId,
+            contractName: contract.contractName,
+            createDate: contract.createDate,
+            policyText: contract.policyInfo.policyText,
+            // status: contract.status,
+            status: contract.status === 1 ? 2 : ((contract.authStatus & 1) === 1) ? 1 : 0,
+            policyId: contract.policyId,
+          };
+        }),
       policies: resource.policies
         .filter((p: any) => !contractPolicyIds.includes(p.policyId))
         .map((p: any) => {
@@ -797,4 +813,40 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
   });
   // console.log(result, 'result2309jd');
   return result;
+}
+
+interface GetAllContractsParamsType {
+  nodeID: number;
+  resourceIDs: string[];
+}
+
+type GetAllContractsReturnType = {
+  contractId: string;
+  contractName: string;
+  createDate: string;
+  updateDate: string;
+  policyId: string;
+  policyInfo: {
+    policyId: string;
+    policyText: string;
+  };
+}[];
+
+async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+  // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
+  const allPromises = resourceIDs.map(async (id) => {
+    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      licensorId: id,
+      licenseeId: nodeID,
+      licenseeIdentityType: 2,
+      isLoadPolicyInfo: 1,
+      subjectIds: id,
+      subjectType: 1,
+    };
+    const {data} = await FApiServer.Contract.batchContracts(params);
+    // console.log(data, 'data!!!1111100000000))))))');
+    return data;
+  });
+
+  return (await Promise.all(allPromises)).flat();
 }
