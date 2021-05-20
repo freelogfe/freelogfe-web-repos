@@ -8,8 +8,6 @@ import {connect, Dispatch} from 'dva';
 import {ChangeAction, StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
-import FUploadTasksPanel, {FUploadTasksPanelProps} from "@/pages/storage/containers/FUploadTasksPanel";
-import fMessage from "@/components/fMessage";
 import FUtil from "@/utils";
 
 interface HeaderProps {
@@ -28,8 +26,6 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
     return null;
   }
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
-
-  // const [fileObjects, setFileObjects] = React.useState<HeaderStates['fileObjects']>([]);
 
   return (<div className={styles.header}>
     <div className={styles.headerLeft}>
