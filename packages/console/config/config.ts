@@ -60,7 +60,7 @@ const config: IConfig | any = {
     // 'shadow-1-right': 'none',
     // 'shadow-2': 'none',
     // 'shadow-color': 'transparent',
-    'line-height-base': 10 / 7,
+    // 'line-height-base': 10 / 7,
 
     'layout-body-background': '#FAFBFC',
     'layout-header-background': '#FFF',

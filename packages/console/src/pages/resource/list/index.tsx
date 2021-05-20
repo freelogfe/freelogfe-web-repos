@@ -6,8 +6,9 @@ import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
-import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
+// import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
 import FUtil from "@/utils";
+import FCenterLayout from "@/layouts/FCenterLayout";
 
 const navs = [
   {
@@ -50,7 +51,7 @@ function List({match, dispatch, route}: ListProps & RouterTypes) {
   }
 
   return (
-    <FResourcesDisplayLayout>
+    <FCenterLayout>
       <FAffixTabs
         value={tabValue}
         options={navs}
@@ -60,7 +61,7 @@ function List({match, dispatch, route}: ListProps & RouterTypes) {
       {tabValue === '1' ? <Resources/> : null}
       {tabValue === '2' ? <Collects/> : null}
 
-    </FResourcesDisplayLayout>
+    </FCenterLayout>
   );
 }
 

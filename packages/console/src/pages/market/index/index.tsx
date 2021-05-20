@@ -9,7 +9,8 @@ import {connect, Dispatch} from "dva";
 import {FetchDataSourceAction} from "@/models/marketPage";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 import FFooter from '@/layouts/FFooter';
-import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
+import FCenterLayout from "@/layouts/FCenterLayout";
+// import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
 
 const navs = [
   {
@@ -69,7 +70,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
   }
 
   return (<>
-    <FResourcesDisplayLayout>
+    <FCenterLayout>
       <FAffixTabs
         options={navs}
         value={marketPage.tabValue}
@@ -78,7 +79,7 @@ function Market({dispatch, match, history, location, route, marketPage, ...props
       />
       {marketPage.tabValue === '1' && <Resources/>}
       {marketPage.tabValue === '2' && <Examples/>}
-    </FResourcesDisplayLayout>
+    </FCenterLayout>
     {/*<FLayoutFooter/>*/}
     <FFooter/>
   </>);
