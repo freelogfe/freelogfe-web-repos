@@ -1,10 +1,10 @@
-import FTextButton from './FTextButton';
+// import FTextButton from './FTextButton';
 import FRectBtn from './FRectBtn';
 import FCircleBtn from './FCircleBtn';
 import FTextBtn from './FTextBtn';
 
 export {
-  FTextButton,
+  // FTextButton,
   FRectBtn,
   FCircleBtn,
   FTextBtn,

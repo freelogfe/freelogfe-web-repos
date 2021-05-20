@@ -3,7 +3,7 @@ import styles from './index.less';
 import {FContentText} from '@/components/FText';
 import {FTextBtn} from '@/components/FButton';
 import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
-import {Modal, Space} from 'antd';
+import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import Task from '@/pages/storage/containers/FUploadTasksPanel/Task';
@@ -14,7 +14,6 @@ import {
   FetchSpaceStatisticAction
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
-// import {i18nMessage} from "@/utils/i18n";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 
