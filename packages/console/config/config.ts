@@ -96,12 +96,12 @@ const config: IConfig | any = {
     'select-item-selected-bg': 'inherit',
     'select-item-active-bg': '#2784FF',
 
-    'alert-success-border-color': '#BDECD8',
-    'alert-success-bg-color': '#E5F6EF',
-    'alert-warning-border-color': '#F6DCA6',
-    'alert-warning-bg-color': '#FBF5EA',
-    'alert-error-border-color': '#FFD2D2',
-    'alert-error-bg-color': '#FDEBEC',
+    // 'alert-success-border-color': '#BDECD8',
+    // 'alert-success-bg-color': '#E5F6EF',
+    // 'alert-warning-border-color': '#F6DCA6',
+    // 'alert-warning-bg-color': '#FBF5EA',
+    // 'alert-error-border-color': '#FFD2D2',
+    // 'alert-error-bg-color': '#FDEBEC',
     // 'table-border-color': 'red',
   },
   devServer: {
