@@ -11,7 +11,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 import FDrawer from "@/components/FDrawer";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 
 interface ViewportProps {
   dispatch: Dispatch;
@@ -36,13 +36,14 @@ function Viewport({dispatch, marketResourcePage}: ViewportProps) {
           text={'相关视图'}
           type="h3"
         />
-        <FTextButton
+        <FTextBtn
           onClick={() => {
             onChange({
               graphFullScreen: true,
             });
           }}
-        >全屏查看</FTextButton>
+          type="default"
+        >全屏查看</FTextBtn>
       </div>
       <div style={{height: 20}}/>
       <FViewportTabs

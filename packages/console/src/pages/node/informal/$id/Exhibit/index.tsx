@@ -2,10 +2,10 @@ import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
-import {Popconfirm, Space} from "antd";
+import {Space} from "antd";
 import FInput from "@/components/FInput";
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
-import {FNormalButton, FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import FAdd from "@/components/FIcons/FAdd";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
@@ -102,15 +102,23 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             <FTitleText text={'展品管理'}/>
             <Space size={30}>
               <Space size={5}>
-                <FTextButton onClick={() => {
-                  onChange({addExhibitDrawerVisible: true});
-                }}><FAdd/></FTextButton>
+                <FTextBtn
+                  type="default"
+                  onClick={() => {
+                    onChange({addExhibitDrawerVisible: true});
+                  }}>
+                  <FAdd/>
+                </FTextBtn>
                 <FContentText text={'新增测试展品'}/>
               </Space>
               <Space size={5}>
-                <FTextButton onClick={() => {
-                  onChange({replaceHandlerModalVisible: true});
-                }}><FMappingRuleReplace/></FTextButton>
+                <FTextBtn
+                  type="default"
+                  onClick={() => {
+                    onChange({replaceHandlerModalVisible: true});
+                  }}>
+                  <FMappingRuleReplace/>
+                </FTextBtn>
                 <FContentText text={'资源替换'}/>
               </Space>
               <div>

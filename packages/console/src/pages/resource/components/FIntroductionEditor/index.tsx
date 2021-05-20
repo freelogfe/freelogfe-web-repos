@@ -3,8 +3,6 @@ import styles from './index.less';
 import {Input} from 'antd';
 import {TextAreaProps} from 'antd/lib/input';
 
-// import {FTextButton} from '@/components/FButton';
-
 interface FIntroductionEditorProps extends TextAreaProps {
   errorText?: string;
 }

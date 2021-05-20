@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Drawer, Space} from "antd";
+import {Space} from "antd";
 import {FContentText} from "@/components/FText";
 import {FCircleBtn, FRectBtn, FTextBtn} from "@/components/FButton";
 import FCustomOptions, {Data} from './FCustomOptions';

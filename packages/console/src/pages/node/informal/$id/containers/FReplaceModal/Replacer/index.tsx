@@ -4,7 +4,7 @@ import FInput from "@/components/FInput";
 import {Radio, Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {
   AddInformExhibitDrawerModelState,
@@ -120,7 +120,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                           // })
                         }}
                       >
-                        <FTextButton style={{fontSize: 12}}>选择版本</FTextButton>
+                        <FTextBtn type="default" style={{fontSize: 12}}>选择版本</FTextBtn>
                       </FVersionHandlerPopover>)
                     }
 

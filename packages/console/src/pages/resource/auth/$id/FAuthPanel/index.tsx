@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
 import Resources from './Resources';
 import Contracts from './Contracts';
 import Policies from './Policies';

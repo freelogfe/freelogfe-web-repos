@@ -3,9 +3,9 @@ import styles from './index.less';
 import FNoDataTip from "@/components/FNoDataTip";
 import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import {
-  ChangeAction, FetchExhibitListAction,
+  ChangeAction,
   FetchThemeListAction,
   InformalNodeManagerPageModelState,
   SaveDataRulesAction
@@ -14,13 +14,11 @@ import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {FWarning} from '@/components/FIcons';
-// import {router} from "umi";
 import {Dispatch, connect} from 'dva';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
-// import FLinkTo from "@/utils/path-assembler";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 import {generateRandomCode} from "@/utils/tools";
 import FDivider from "@/components/FDivider";
@@ -81,12 +79,12 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             <FTitleText text={'展品管理'}/>
             <Space size={30}>
               <Space size={5}>
-                <FTextButton
+                <FTextBtn
                   onClick={() => {
                     onChange({
                       addThemeDrawerVisible: true,
                     });
-                  }}><FAdd/></FTextButton>
+                  }}><FAdd/></FTextBtn>
                 <FContentText
                   text={'新增测试展品'}
                 />

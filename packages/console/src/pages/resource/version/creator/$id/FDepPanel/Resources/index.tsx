@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FCircleBtn, FCircleButton, FTextBtn, FTextButton} from '@/components/FButton';
-import {EditOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {FCircleBtn, FTextBtn} from '@/components/FButton';
+import {CloseCircleFilled} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {
@@ -10,7 +10,6 @@ import {
   DeleteDependencyByIDAction,
   DepResources,
 } from '@/models/resourceVersionCreatorPage';
-// import {i18nMessage} from '@/utils/i18n';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil from "@/utils";
 import {FApiServer} from "@/services";

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Space} from "antd";
-import {FRectBtn, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import styles from "@/pages/node/informal/$id/Exhibit/index.less";
 import FSelect from "@/components/FSelect";
 import {WholeMutable} from "@/models/shared";
@@ -80,9 +80,9 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     // visible={informalNodeManagerPage.addExhibitDrawerVisible}
     visible={visible}
     topRight={<Space size={30}>
-      <FTextButton onClick={() => {
+      <FTextBtn type="default" onClick={() => {
         onCancel && onCancel();
-      }}>取消</FTextButton>
+      }}>取消</FTextBtn>
       <FRectBtn
         onClick={() => {
           onClickConfirm();

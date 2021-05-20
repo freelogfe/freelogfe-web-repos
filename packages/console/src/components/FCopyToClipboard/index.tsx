@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTextBtn, FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import {SnippetsOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 import {FCopy} from "@/components/FIcons";
 import {CSSProperties} from "react";

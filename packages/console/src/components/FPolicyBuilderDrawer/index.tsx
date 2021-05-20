@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import FInput from "@/components/FInput";
-import {ChangeAction, UpdatePoliciesAction} from "@/models/resourceAuthPage";
 import FCodemirror from "@/components/FCodemirror";
-import {Drawer, Space} from "antd";
+import {Space} from "antd";
 import {FFileText} from "@/components/FIcons";
-import {FRectBtn, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import PolicyTemplates from "./PolicyTemplates";
 import FDrawer from "@/components/FDrawer";
 
@@ -54,7 +53,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
     visible={visible}
     width={720}
     topRight={<Space size={30}>
-      <FTextButton onClick={() => onCancel && onCancel()}>取消</FTextButton>
+      <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
       <FRectBtn
         onClick={() => {
           onConfirm && onConfirm({

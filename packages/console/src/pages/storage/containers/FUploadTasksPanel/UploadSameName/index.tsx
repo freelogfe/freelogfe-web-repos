@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from '@/components/FText';
-import {RedoOutlined} from '@ant-design/icons';
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 
 interface UploadSameNameProps {
   onClick?(): void;
@@ -11,10 +9,10 @@ interface UploadSameNameProps {
 function UploadSameName({onClick}: UploadSameNameProps) {
   return (<div className={styles.UploadSameName}>
     <span>存在同名对象</span>
-    <FTextButton
-      theme="primary"
+    <FTextBtn
+      type="primary"
       onClick={() => onClick && onClick()}
-    >更新</FTextButton>
+    >更新</FTextBtn>
   </div>);
 }
 

@@ -11,7 +11,7 @@ import {
   FViewportTabs
 } from "@/components/FAntvG6";
 import FDrawer from "@/components/FDrawer";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -31,13 +31,14 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
   return (<div>
     <div className={styles.title}>
       <FTitleText text={'相关视图'} type="h3"/>
-      <FTextButton
+      <FTextBtn
+        type="default"
         onClick={() => {
           onChange({
             graphFullScreen: true,
           });
         }}
-      >全屏查看</FTextButton>
+      >全屏查看</FTextBtn>
     </div>
     <div style={{height: 20}}/>
     <FViewportTabs

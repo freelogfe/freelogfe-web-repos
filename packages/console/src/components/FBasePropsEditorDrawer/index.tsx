@@ -3,7 +3,7 @@ import styles from './index.less';
 import {Space} from "antd";
 import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
-import {FCircleBtn, FCircleButton, FRectBtn, FTextBtn} from "@/components/FButton";
+import {FCircleBtn, FRectBtn, FTextBtn} from "@/components/FButton";
 // import {CUSTOM_KEY} from "@/utils/regexp";
 import FDrawer from "@/components/FDrawer";
 import FUtil from "@/utils";

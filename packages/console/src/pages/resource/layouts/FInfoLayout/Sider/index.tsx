@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
-import {FCircleBtn, FTextButton} from '@/components/FButton';
+import {FCircleBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceInfoModelState} from '@/models/connect';
 import {withRouter, router} from 'umi';

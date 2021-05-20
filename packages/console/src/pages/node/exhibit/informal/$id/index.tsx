@@ -3,31 +3,26 @@ import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
 import {Space} from 'antd';
-import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
-  ExhibitInfoPageModelState,
-  InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState, NodesModelState
 } from '@/models/connect';
 import {
   ChangeAction,
   FetchInfoAction, SyncRulesAction,
 } from '@/models/informExhibitInfoPage';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';
-// import {informExhibitManagement, informNodeManagement, nodeManagement} from "@/utils/path-assembler";
 import {RouteComponentProps} from "react-router";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import FUtil from "@/utils";
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
-  // exhibitInfoPage: ExhibitInfoPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
   nodes: NodesModelState;
 }
@@ -68,13 +63,12 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
         <div className={styles.nav}>
           <label>test</label>
           <div style={{width: 5}}/>
-          <FTextButton onClick={() => {
-            // router.push(`/node/exhibit/formal/${exhibitInfoPage.nodeId}/informal`)
+          <FTextBtn onClick={() => {
             router.push(FUtil.LinkTo.informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
           }}><FContentText
             type="negative"
             text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
-          /></FTextButton>
+          /></FTextBtn>
           <div style={{width: 2}}/>
           <FContentText
             type="negative"

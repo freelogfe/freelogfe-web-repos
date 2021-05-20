@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from '@/components/FText';
-import {FCircleButton, FTextButton, FTextBtn, FRectBtn, FCircleBtn} from '@/components/FButton';
-import {Col, Row, Space} from 'antd';
+import {FTextBtn, FRectBtn} from '@/components/FButton';
+import {Space} from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
-import FHorn from '@/pages/resource/components/FHorn';
 import {
   UpdateDataSourceAction,
   ChangeAction,
@@ -233,13 +232,14 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
           title={'相关视图'}
-          extra={<FTextButton
+          extra={<FTextBtn
+            type="default"
             onClick={() => {
               onChange({
                 graphFullScreen: true,
               });
             }}
-          >全屏查看</FTextButton>}
+          >全屏查看</FTextBtn>}
         >
           <FViewportTabs
             options={[
@@ -367,11 +367,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       visible={resourceVersionEditorPage.basePEditorVisible}
       width={720}
       topRight={<Space size={30}>
-        <FTextButton
+        <FTextBtn
+          type="default"
           onClick={() => {
             onCloseBaseAttrDrawer();
           }}
-        >取消</FTextButton>
+        >取消</FTextBtn>
 
         <FRectBtn
           type="primary"
@@ -485,11 +486,12 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       visible={resourceVersionEditorPage.customOptionEditorVisible}
       width={720}
       topRight={<Space size={30}>
-        <FTextButton
+        <FTextBtn
+          type="default"
           onClick={() => {
             onCloseCustomOptionDrawer();
           }}
-        >取消</FTextButton>
+        >取消</FTextBtn>
         <FRectBtn
           type="primary"
           disabled={!!resourceVersionEditorPage.customOptionDescriptionError || (resourceVersionEditorPage.customOptionCustom === 'input' ? !!resourceVersionEditorPage.customOptionDefaultValueError : !!resourceVersionEditorPage.customOptionCustomOptionError)}

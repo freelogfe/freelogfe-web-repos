@@ -6,7 +6,7 @@ import {FDown} from "@/components/FIcons";
 import {connect, Dispatch} from "dva";
 import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/models/connect";
 import {OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {router} from "umi";
 import FUtil from "@/utils";
 
@@ -47,11 +47,11 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
           nodes.list.length === 0
             ? (<>
               <span className={styles.nodeSelectorLabel}>您还没有创建节点</span>
-              <FTextButton
-                theme="primary"
+              <FTextBtn
+                type="primary"
                 onClick={() => {
                   router.push(FUtil.LinkTo.nodeCreator());
-                }}>创建节点</FTextButton>
+                }}>创建节点</FTextBtn>
             </>)
             : (<>
               <span className={styles.nodeSelectorLabel}>签约节点</span>

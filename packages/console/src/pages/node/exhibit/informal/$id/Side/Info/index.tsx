@@ -7,7 +7,7 @@ import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
-import {FRectBtn, FTextButton} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import FLabelEditor from "@/pages/resource/components/FLabelEditor";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
@@ -99,12 +99,13 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
             />
             <div style={{height: 10}}/>
             <div className={styles.btn}>
-              <FTextButton
-                size="small"
+              <FTextBtn
+                // size="small"
+                type="default"
                 onClick={() => {
                   onChange({pInputTitle: null});
                 }}
-              >取消</FTextButton>
+              >取消</FTextBtn>
               <div style={{width: 15}}/>
               <FRectBtn
                 size="small"

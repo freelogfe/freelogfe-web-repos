@@ -1,15 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FDown} from "@/components/FIcons";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import FUp from "@/components/FIcons/FUp";
-import {ChangeAction} from "@/models/marketResourcePage";
 
 interface FExpandableProps {
   children: React.ReactNode;
 }
-
-// let refContent: null | HTMLDivElement = null;
 
 function FExpandable({children}: FExpandableProps) {
   const refContent = React.useRef<any>();
@@ -27,12 +24,12 @@ function FExpandable({children}: FExpandableProps) {
     {
       expandable !== null && (<div className={styles.button}>
         {
-          expandable === true && (<FTextButton
-            theme="primary"
+          expandable === true && (<FTextBtn
+            type="primary"
             onClick={() => {
               setExpandable(false);
             }}
-          ><span>收起全部 <FUp/></span></FTextButton>)
+          ><span>收起全部 <FUp/></span></FTextBtn>)
         }
       </div>)
     }
@@ -56,12 +53,12 @@ function FExpandable({children}: FExpandableProps) {
       // style={{}}
     >
       {
-        expandable === false && (<FTextButton
-          theme="primary"
+        expandable === false && (<FTextBtn
+          type="primary"
           onClick={() => {
             setExpandable(true);
           }}
-        ><span>展开查看全部 <FDown/></span></FTextButton>)
+        ><span>展开查看全部 <FDown/></span></FTextBtn>)
       }
     </div>)}
   </div>);

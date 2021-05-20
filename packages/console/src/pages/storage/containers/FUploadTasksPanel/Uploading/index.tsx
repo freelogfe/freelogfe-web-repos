@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {Progress, Space} from "antd";
 import {FContentText} from '@/components/FText';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {CloseOutlined} from '@ant-design/icons';
 import {Canceler} from "axios";
 
@@ -24,9 +24,9 @@ function Uploading({progress, cancel}: UploadingProps) {
       </div>
     </Space>
     <div className={styles.action}>
-      <FTextButton onClick={() => cancel && cancel()}>
+      <FTextBtn type="default" onClick={() => cancel && cancel()}>
         <CloseOutlined/>
-      </FTextButton>
+      </FTextBtn>
     </div>
   </div>);
 }

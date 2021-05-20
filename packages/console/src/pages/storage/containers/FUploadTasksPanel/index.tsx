@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from '@/components/FText';
-import {FTextButton} from '@/components/FButton';
+import {FTextBtn} from '@/components/FButton';
 import {DownOutlined, UpOutlined, CloseOutlined} from '@ant-design/icons';
 import {Modal, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
@@ -103,30 +103,36 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
     <div className={styles.title}>
       <FContentText text={'任务列表'}/>
       <Space size={20}>
-        <FTextButton onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'storageHomePage/change',
-            payload: {
-              uploadPanelOpen: !storageHomePage.uploadPanelOpen,
-            }
-          });
-        }}>
+        <FTextBtn
+          onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'storageHomePage/change',
+              payload: {
+                uploadPanelOpen: !storageHomePage.uploadPanelOpen,
+              }
+            });
+          }}
+          type="default"
+        >
           {storageHomePage.uploadPanelOpen ? <DownOutlined style={{fontSize: 12}}/> :
             <UpOutlined style={{fontSize: 12}}/>}
-        </FTextButton>
-        <FTextButton onClick={() => {
-          const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
-          if (exits) {
-            fConfirmModal({
-              message: FUtil.I18n.message('cancel_all_uploading_task'),
-              onOk() {
-                closeAll();
-              },
-            });
-            return;
-          }
-          closeAll();
-        }}><CloseOutlined style={{fontSize: 12}}/></FTextButton>
+        </FTextBtn>
+        <FTextBtn
+          onClick={() => {
+            const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
+            if (exits) {
+              fConfirmModal({
+                message: FUtil.I18n.message('cancel_all_uploading_task'),
+                onOk() {
+                  closeAll();
+                },
+              });
+              return;
+            }
+            closeAll();
+          }}
+          type="default"
+        ><CloseOutlined style={{fontSize: 12}}/></FTextBtn>
       </Space>
     </div>
     <div

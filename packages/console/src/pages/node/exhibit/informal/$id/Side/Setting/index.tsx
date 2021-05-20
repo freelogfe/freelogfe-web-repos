@@ -3,7 +3,7 @@ import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import {FDelete, FEdit} from "@/components/FIcons";
-import {FCircleButton, FTextButton} from "@/components/FButton";
+import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
   ChangeAction, SyncRulesAction,
 } from "@/models/informExhibitInfoPage";
@@ -94,8 +94,8 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
             <FContentText text={pc.key}/>
 
             <Space size={10}>
-              <FTextButton
-                theme="primary"
+              <FTextBtn
+                type="primary"
                 onClick={() => {
                   const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
                   if (!editing) {
@@ -114,7 +114,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                     },
                   });
                 }}
-              ><FEdit/></FTextButton>
+              ><FEdit/></FTextBtn>
               <FDelete
                 style={{color: '#EE4040', cursor: 'pointer'}}
                 onClick={() => {
@@ -162,8 +162,8 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     </div>
     <div style={{height: 20}}/>
     <Space className={styles.addCustomTitle}>
-      <FCircleButton
-        theme="text"
+      <FCircleBtn
+        type="transparent"
         onClick={() => dispatch<ChangeAction>({
           type: 'informExhibitInfoPage/change',
           payload: {

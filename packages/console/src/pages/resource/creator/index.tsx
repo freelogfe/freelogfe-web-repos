@@ -202,16 +202,9 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
     />
 
     <Space size={30}>
-      {/*<FTextButton onClick={onClickCache}>暂存草稿</FTextButton>*/}
-      {/*<FNormalButton*/}
-      {/*  onClick={onClickCreate}*/}
-      {/*  style={{width: 108}}*/}
-      {/*  disabled={disabled}*/}
-      {/*>{FUtil.I18n.message('create')}</FNormalButton>*/}
       <FRectBtn
         disabled={disabled}
         onClick={onClickCreate}
-        // theme="transparent"
       >
         {FUtil.I18n.message('create')}
       </FRectBtn>

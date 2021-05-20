@@ -88,10 +88,10 @@ const config: IConfig | any = {
     'btn-primary-shadow': 'none',
     'btn-text-shadow': 'none',
 
-    'pagination-font-weight-active': 400,
-    'pagination-item-size': '32px',
+    // 'pagination-font-weight-active': 400,
+    // 'pagination-item-size': '32px',
     // 'agination-item-size-sm': '32px',
-    'pagination-item-bg-active': '#2784FF',
+    // 'pagination-item-bg-active': '#2784FF',
     'select-item-selected-font-weight': 400,
     'select-item-selected-bg': 'inherit',
     'select-item-active-bg': '#2784FF',

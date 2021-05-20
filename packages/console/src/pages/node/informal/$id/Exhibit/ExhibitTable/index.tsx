@@ -10,7 +10,7 @@ import {router} from "umi";
 import {Popconfirm, Space} from "antd";
 import FSwitch from "@/components/FSwitch";
 import {FDelete, FEdit, FFileSearch, FWarning} from "@/components/FIcons";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
@@ -267,21 +267,21 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
   return (<div ref={(ref) => refDom = ref}>
     <Space size={25}>
       {
-        onEdit && (<FTextButton
-          theme="primary"
+        onEdit && (<FTextBtn
+          type="primary"
           onClick={() => onEdit()}
         >
           <FEdit/>
-        </FTextButton>)
+        </FTextBtn>)
       }
 
       {
-        onSearch && (<FTextButton
-          theme="primary"
+        onSearch && (<FTextBtn
+          type="primary"
           onClick={() => onSearch()}
         >
           <FFileSearch/>
-        </FTextButton>)
+        </FTextBtn>)
       }
 
       {
@@ -293,9 +293,9 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
           getPopupContainer={() => refDom}
           onConfirm={() => onDelete()}
         >
-          <FTextButton
+          <FTextBtn
             className={styles.Delete}
-          ><FDelete/></FTextButton>
+          ><FDelete/></FTextBtn>
         </Popconfirm>)
       }
 

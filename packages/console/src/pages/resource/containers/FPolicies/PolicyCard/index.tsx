@@ -1,10 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText} from "@/components/FText";
-// import FDropdown from "@/components/FDropdown";
 import StatusLabel from "@/pages/resource/components/StatusLabel";
-// import {i18nMessage} from "@/utils/i18n";
-import {FTextButton} from "@/components/FButton";
+import {FTextBtn} from "@/components/FButton";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FUtil from "@/utils";
 
@@ -40,7 +38,7 @@ function PolicyCard({title, status, code, onPreview, onChangeStatus}: PolicyCard
     </div>
     <div style={{height: 3}}/>
     <div className={styles.fullscreen}>
-      <FTextButton onClick={onPreview}>全屏查看</FTextButton>
+      <FTextBtn type="default" onClick={onPreview}>全屏查看</FTextBtn>
     </div>
   </div>);
 }

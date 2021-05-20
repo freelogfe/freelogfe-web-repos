@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText, FTipText} from '@/components/FText';
-import {FCircleButton, FRectBtn} from '@/components/FButton';
+import {FCircleBtn, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
 import FSwitch from '@/components/FSwitch';
 import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhibitInfoPage";
@@ -26,7 +26,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
         type="h3"
       />
       {
-        exhibitInfoPage.policies.length !== 0 && (<FCircleButton
+        exhibitInfoPage.policies.length !== 0 && (<FCircleBtn
           onClick={() => dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
             payload: {
