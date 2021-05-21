@@ -13,7 +13,6 @@ import {ChangeAction, FetchInfoAction, UpdateStatusAction} from '@/models/exhibi
 import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {RouteComponentProps} from "react-router";
-import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil from "@/utils";
 import {FTextBtn} from "@/components/FButton";
@@ -74,13 +73,10 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
         <Space size={20}>
           {
             exhibitInfoPage.resourceType === 'theme'
-              ? (<span style={{color: '#666'}}>{exhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
+              ? (<span
+                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil.I18n.message('toggle_activate_theme')}</span>)
               : (<span
-                style={{color: '#666'}}>{
-                exhibitInfoPage.isOnline
-                  ? FUtil.I18n.message('btn_show_exhibit')
-                  : '未上线'
-              }</span>)
+                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil.I18n.message('btn_show_exhibit')}</span>)
           }
 
           <FSwitch

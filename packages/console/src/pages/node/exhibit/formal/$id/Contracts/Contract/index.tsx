@@ -29,7 +29,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
   }
 
   return (<Space style={{width: '100%'}} size={15} direction="vertical">
-    <FTitleText type="h4">当前合约</FTitleText>
+    <FTitleText type="h4">{FUtil.I18n.message('valid_contracts_list')}</FTitleText>
     {
       selectedResource?.contracts.map((c) => {
         const exhibitInfoExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
@@ -68,7 +68,8 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
           <div className={styles.footer}>
             <div className={styles.action}>
               <FContentText
-                text={exhibitInfoPage.pName}
+                // text={exhibitInfoPage.pName}
+                text={FUtil.I18n.message('use_in_current_exhibit')}
                 type="highlight"
               />
               <FSwitch
@@ -115,7 +116,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
                     });
                   }}>
                     <FTitleText type="h4">
-                      <span>当前合约在此节点中被其他展品应用</span>
+                      <span>{FUtil.I18n.message('use_for_exhibit')}</span>
                       &nbsp;
                       {
                         c.exhibitOpen

@@ -40,8 +40,8 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
       nodeManagerPage.themeDataState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 70px)'}
-          tipText={'当前节点没有添加主题展品'}
-          btnText={'添加主题展品'}
+          tipText={FUtil.I18n.message('manage_themes_empty')}
+          btnText={FUtil.I18n.message('btn_add_theme')}
           onClick={() => {
             dispatch<MarketChangeAction>({
               type: 'marketPage/change',
@@ -84,7 +84,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                       <div className={styles.cover}>
                         <Space size={10}>
                           {
-                            i.isOnline && (<Label active={i.isOnline}/>)
+                            i.isOnline && (<label className={styles.label}>{FUtil.I18n.message('state_active')}</label>)
                           }
 
                           {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
@@ -182,11 +182,10 @@ export default connect(({nodeManagerPage}: ConnectState) => ({
   nodeManagerPage,
 }))(Themes);
 
-interface LabelProps {
-  active?: boolean
-}
-
-function Label({active = true}: LabelProps) {
-  return (<label
-    className={styles.label + ' ' + (active ? styles.labelActive : styles.labelInActive)}>{active ? FUtil.I18n.message('state_active') : '未激活'}</label>);
-}
+// interface LabelProps {
+//   active?: boolean
+// }
+//
+// function Label({active = true}: LabelProps) {
+//   return ();
+// }

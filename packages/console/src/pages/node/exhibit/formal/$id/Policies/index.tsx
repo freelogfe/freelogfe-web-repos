@@ -28,12 +28,14 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
       {
         exhibitInfoPage.policies.length !== 0 && (<FCircleBtn
           size="small"
-          onClick={() => dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              addPolicyDrawerVisible: true,
-            }
-          })}
+          onClick={() => {
+            dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                addPolicyDrawerVisible: true,
+              },
+            });
+          }}
         />)
       }
     </Space>
@@ -68,11 +70,8 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
                   text={p.name}
                 />
                 <Space size={8}>
-                  {
-                    p.status === 1
-                      ? (<label style={{color: '#42C28C'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>)
-                      : (<label style={{color: '#B4B6BA'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>)
-                  }
+                  <label
+                    style={{color: p.status === 1 ? '#42C28C' : '#B4B6BA'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>
                   <FSwitch
                     disabled={exhibitInfoPage.isOnline && onlyOnePolicy && p.status === 1}
                     checked={p.status === 1}

@@ -8,6 +8,7 @@ import {ChangeAction} from "@/models/exhibitInfoPage";
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';
+import FUtil from "@/utils";
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -28,7 +29,7 @@ function Contracts({dispatch, exhibitInfoPage}: ContractsProps) {
   }
 
   return (<div>
-    <FTitleText text={'关联合约'} type="h3"/>
+    <FTitleText text={FUtil.I18n.message('title_relevant_contracts')} type="h3"/>
 
     <div style={{height: 20}}/>
 

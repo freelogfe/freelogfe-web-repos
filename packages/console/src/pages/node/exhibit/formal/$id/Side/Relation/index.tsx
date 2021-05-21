@@ -15,7 +15,10 @@ interface RelationProps {
 
 function Relation({exhibitInfoPage}: RelationProps) {
   return (<div className={styles.info}>
-    <FContentText text={'关联资源'} type="highlight"/>
+    <FContentText
+      text={FUtil.I18n.message('relevant_resource')}
+      type="highlight"
+    />
     <div style={{height: 20}}/>
     <div className={styles.cover}>
       <img

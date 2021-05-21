@@ -17,6 +17,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FModal from "@/components/FModal";
 import FTooltip from "@/components/FTooltip";
+import FUtil from "@/utils";
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -86,7 +87,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         </div>
         <div style={{height: 30}}/>
 
-        <FTitleText text={'自定义选项'} type="h4"/>
+        <FTitleText
+          text={'自定义选项'}
+          type="h4"
+        />
 
         <div style={{height: 15}}/>
 
@@ -220,12 +224,13 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         }}
       >{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextBtn>
     </div>
-
+    
     <FModal
-      title={'添加自定义选项'}
+      title={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil.I18n.message('edit_custom_option') : FUtil.I18n.message('add_custom_options')}
       width={560}
       visible={exhibitInfoPage.pAddCustomModalVisible || !!exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
-      okText={'添加'}
+      okText={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil.I18n.message('btn_save') : FUtil.I18n.message('btn_add')}
+      cancelText={FUtil.I18n.message('btn_cancel')}
       okButtonProps={{
         disabled:
           !!exhibitInfoPage.pAddCustomKeyError || exhibitInfoPage.pAddCustomKey === ''
@@ -243,7 +248,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         },
       })}
       onOk={() => {
-        const editing = exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
+        const editing = exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing);
         if (editing) {
           dispatch<ChangeAction>({
             type: 'exhibitInfoPage/change',
@@ -295,7 +300,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="h4">key</FTitleText>
+          <FTitleText type="h4">{FUtil.I18n.message('filed_key')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -327,7 +332,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="h4">value</FTitleText>
+          <FTitleText type="h4">{FUtil.I18n.message('filed_value')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -347,7 +352,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         />
         <div style={{height: 20}}/>
         <div>
-          <FTitleText type="h4">属性说明</FTitleText>
+          <FTitleText type="h4">{FUtil.I18n.message('filed_remark')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput

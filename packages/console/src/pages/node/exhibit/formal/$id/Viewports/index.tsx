@@ -12,6 +12,7 @@ import {
 } from "@/components/FAntvG6";
 import FDrawer from "@/components/FDrawer";
 import {FTextBtn} from "@/components/FButton";
+import FUtil from "@/utils";
 
 interface ViewportsProps {
   dispatch: Dispatch;
@@ -30,7 +31,7 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FTitleText text={'相关视图'} type="h3"/>
+      <FTitleText text={FUtil.I18n.message('title_exhibit_maps')} type="h3"/>
       <FTextBtn
         type="default"
         onClick={() => {
@@ -43,7 +44,7 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
     <div style={{height: 20}}/>
     <FViewportTabs
       options={[
-        {value: 'relationship', label: '展品关系树'},
+        {value: 'relationship', label: FUtil.I18n.message('quick_decision_map')},
         {value: 'authorization', label: '授权链视图'},
       ]}
       value={exhibitInfoPage.viewportGraphShow}

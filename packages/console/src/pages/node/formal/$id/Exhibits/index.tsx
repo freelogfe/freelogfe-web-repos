@@ -55,7 +55,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
     {
       title: (<FTitleText
-        text={'展品名称｜类型｜展品标题｜策略'}
+        // text={'展品名称｜类型｜展品标题｜策略'}
+        text={FUtil.I18n.message('tableheader_exhibit')}
         type="table"
       />),
       dataIndex: 'name',
@@ -97,13 +98,13 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       className: styles.tableEdit,
       render(_, record): any {
         return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
-          <FTooltip title={'编辑'}>
+          <FTooltip title={FUtil.I18n.message('tip_edit_exhibit')}>
             <FLink to={FUtil.LinkTo.exhibitManagement({
               exhibitID: record.id
             })}><FEdit/></FLink>
           </FTooltip>
 
-          <FTooltip title={'资源详情'}>
+          <FTooltip title={FUtil.I18n.message('tip_check_relevant_resource')}>
             <FLink to={FUtil.LinkTo.resourceDetails({
               resourceID: record.resourceId
             })}><FFileSearch/></FLink>
@@ -114,7 +115,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       title: (<FTitleText
         type="table"
-        text={'展示版本'}
+        text={FUtil.I18n.message('tableheader_exhibit_version')}
       />),
       dataIndex: 'version',
       key: 'version',
@@ -127,7 +128,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       title: (<FTitleText
         type="table"
-        text={'上线'}
+        text={FUtil.I18n.message('tableheader_show_exhibit')}
       />),
       dataIndex: 'status',
       key: 'status',
@@ -216,8 +217,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       nodeManagerPage.exhibitDataState === 'noData' ? (<FNoDataTip
         height={'calc(100vh - 70px)'}
-        tipText={'当前节点没有添加展品'}
-        btnText={'进入资源市场'}
+        tipText={FUtil.I18n.message('manage_exhibits_empty')}
+        btnText={FUtil.I18n.message('btn_go_to_resource_market')}
         onClick={() => {
           dispatch<MarketChangeAction>({
             type: 'marketPage/change',

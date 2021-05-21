@@ -6,11 +6,9 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
 import {withRouter} from "umi";
-// import FLinkTo from "@/utils/path-assembler";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
 import {Space} from "antd";
-import {FTextBtn} from "@/components/FButton";
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -70,7 +68,7 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
                 showTheme: false,
               }
             })}
-          >展品管理</a>
+          >{FUtil.I18n.message('tab_manage_nodes')}</a>
           <a
             className={nodeManagerPage.showTheme ? styles.activated : ''}
             onClick={() => dispatch<ChangeAction>({
@@ -79,15 +77,15 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
                 showTheme: true,
               }
             })}
-          >主题管理</a>
+          >{FUtil.I18n.message('manage_theme')}</a>
         </div>
       </div>
 
       <div className={styles.gotoTest}>
-        <span>这里是正式节点管理页面，如想要对资源进行测试，可以 </span>
+        <span>{FUtil.I18n.message('msg_navigate_to_test_node')} </span>
         <FLink
           to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
-        > 前往测试节点</FLink>
+        > {FUtil.I18n.message('btn_navigate_to_test_node')}</FLink>
         <div style={{height: 40}}/>
       </div>
 

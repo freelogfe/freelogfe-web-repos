@@ -34,7 +34,12 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
   }
 
   return (<>
-    <FContentText text={'基础信息'} type="highlight"/>
+    
+    <FContentText
+      text={'基础信息'}
+      type="highlight"
+    />
+
     <div style={{height: 20}}/>
 
     <FUploadImage
