@@ -198,7 +198,7 @@
 	"test1101": "1",
 	"msg_customdropdownlist": "选项请用英文逗号分割，选框默认值为第一个选项",
 	"msg_bucket_quantity_exceed": "目前一个账号最多只能创建5个存储空间",
-	"naming_convention_node_name": "节点名称智能包括中文、英文和数字，长度必须在 2-24 字符之间。",
+	"naming_convention_node_name": "节点名称只能包括中文、英文和数字，长度必须在 2-24 字符之间。",
 	"naming_convention_node_domain": "节点地址只能包括小写字母、数字和短横线（-）。\n必须以小写字母或者数字开头和结尾。\n长度必须在 4-24 字符之间。",
 	"create_custom_options": "添加自定义选项",
 	"filed_key": "键",
