@@ -301,5 +301,6 @@
 	"tip_edit_object": "Edit",
 	"tip_release_object": "Release",
 	"tip_download_object": "Download",
-	"tip_delete": "Delete"
+	"tip_delete": "Delete",
+	"btn_check": "CHECK"
 }

@@ -301,5 +301,6 @@
 	"tip_edit_object": "编辑",
 	"tip_release_object": "发行",
 	"tip_download_object": "下载",
-	"tip_delete": "删除"
+	"tip_delete": "删除",
+	"btn_check": "查看"
 }
