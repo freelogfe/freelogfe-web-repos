@@ -302,5 +302,6 @@
 	"tip_release_object": "Release",
 	"tip_download_object": "Download",
 	"tip_delete": "Delete",
-	"btn_check": "CHECK"
+	"btn_check": "CHECK",
+	"msg_have_no_access": ""
 }
