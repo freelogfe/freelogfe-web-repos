@@ -49,7 +49,7 @@
 	"alarm_resource_not_available": "该资源已下线，无法获取授权。",
 	"alarm_resource_authorization_abnormal": "该资源授权链异常，请谨慎签约。",
 	"naming_convention_exhibits_name": "展品名称长度必须在 1–100 字符之间，不能包含空格和以下字符：\\ / : * ? \" < > |",
-	"naming_convention_group_name": "",
+	"naming_convention_group_name": "--",
 	"exhibits_name_exist": "该展品名称在当前节点已使用，请重新输入。",
 	"alarm_strategy_not_available": "该授权策略已停用，无法签约。",
 	"resource_manage": "资源管理",
@@ -303,5 +303,5 @@
 	"tip_download_object": "下载",
 	"tip_delete": "删除",
 	"btn_check": "查看",
-	"msg_have_no_access": "您没有当前页面的操作权限"
+	"msg_have_no_access": "抱歉，您没有当前页面的操作权限"
 }

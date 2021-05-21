@@ -49,7 +49,7 @@
 	"alarm_resource_not_available": "The resource is not available for authorization.",
 	"alarm_resource_authorization_abnormal": "The authorization of this resource is abnormal, please be caution in contracting.",
 	"naming_convention_exhibits_name": "Make sure exhibits name is including 1-100 characters, and not include space and any following characetrs:  \\ / : * ? \" < > |",
-	"naming_convention_group_name": "",
+	"naming_convention_group_name": "--",
 	"exhibits_name_exist": "The exhibits name already exists on this node.",
 	"alarm_strategy_not_available": "The strategy is not available for authorization.",
 	"resource_manage": "Resource Management",
@@ -303,5 +303,5 @@
 	"tip_download_object": "Download",
 	"tip_delete": "Delete",
 	"btn_check": "CHECK",
-	"msg_have_no_access": ""
+	"msg_have_no_access": "Sorry but you have no access to this page"
 }
