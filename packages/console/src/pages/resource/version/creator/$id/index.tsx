@@ -131,13 +131,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     || resourceVersionCreatorPage.dependencies.some((dd) => {
       return !dd.upthrow && !dd.enableReuseContracts.some((erc) => erc.checked) && !dd.enabledPolicies.some((ep) => ep.checked);
     });
-  // 自定义属性
-  // || !!resourceVersionCreatorPage.properties.find((ep) => {
-  //   return ep.key === '' || !!ep.keyError
-  //     // || ep.value === '' || !!ep.valueError
-  //     || !!ep.descriptionError
-  //     || (ep.custom === 'select' ? (ep.customOption === '' || !!ep.customOptionError) : (ep.defaultValue === '' || !!ep.defaultValueError))
-  // });
 
   return (<>
       <Prompt
