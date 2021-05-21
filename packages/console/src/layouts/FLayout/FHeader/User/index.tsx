@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
@@ -9,7 +9,6 @@ import FUtil from "@/utils";
 
 interface UserProps {
   dispatch: Dispatch;
-
   user: UserModelState;
 }
 

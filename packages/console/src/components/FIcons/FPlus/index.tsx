@@ -10,9 +10,10 @@ interface FPlusProps {
   onClick?(): void;
 }
 
-function FPlus({className, ...props}: FPlusProps) {
+function FPlus({className, style, ...props}: FPlusProps) {
   return (<i
     className={['freelog', 'fl-icon-tianjia', className].join(' ')}
+    style={style}
     {...props}
   />);
 }

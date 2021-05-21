@@ -44,7 +44,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
       <a
         href={FUtil.LinkTo.nodeCreator()}
         className={styles.newButton}>
-        <FPlus/>
+        <FPlus style={{fontSize: 14}}/>
       </a>
     </div>) : (<div className={styles.emptyDropdown}>
       <FContentText text={'自由创作从Freelog开始'}/>

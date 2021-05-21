@@ -101,7 +101,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
           onClickStorage();
         }}
         className={sharedStyles.newButton}>
-        <FPlus/>
+        <FPlus style={{fontSize: 14}}/>
       </a>
     </div>)
   }>
