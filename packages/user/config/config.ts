@@ -8,9 +8,18 @@ export default defineConfig({
   dva: {},
   dynamicImport: {},
   routes: [
+    {exact: true, path: '/', redirect: '/login'},
     {
-      path: '/',
-      component: '@/pages/index',
+      path: '/login',
+      component: '@/pages/login/index',
+    },
+    {
+      path: '/logon',
+      component: '@/pages/logon/index',
+    },
+    {
+      path: '/logged',
+      component: '@/pages/logged/index',
     },
   ],
   fastRefresh: {},
