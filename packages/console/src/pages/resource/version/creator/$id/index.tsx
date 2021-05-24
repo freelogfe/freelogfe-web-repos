@@ -27,7 +27,7 @@ import {router, withRouter} from 'umi';
 import RouterTypes from 'umi/routerTypes';
 import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";

@@ -21,7 +21,7 @@ import FSelect from "@/components/FSelect";
 import FTooltip from "@/components/FTooltip";
 import {FEdit, FInfo} from "@/components/FIcons";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/resource/layouts/FInfoLayout/Sider";
+import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/layouts/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";

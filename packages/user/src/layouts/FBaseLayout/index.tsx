@@ -6,13 +6,10 @@ import FDropdown from '@/components/FDropdown';
 import {FContentText} from '@/components/FText';
 
 interface FBaseLayoutProps {
-  headerLeft: React.ReactNode;
-  headerRight: React.ReactNode;
-
   children: React.ReactNode;
 }
 
-function FBaseLayout({children, headerLeft, headerRight}: FBaseLayoutProps) {
+function FBaseLayout({children}: FBaseLayoutProps) {
   return (<FLayout
     headerLeft={
       <NavLink
@@ -46,8 +43,7 @@ function FBaseLayout({children, headerLeft, headerRight}: FBaseLayoutProps) {
         <img src={'https://image.freelog.com/headImage/50028'} alt={'avatar'}/>
       </a>
     </FDropdown>}
-  >
-
+  >{children}
   </FLayout>)
 }
 
