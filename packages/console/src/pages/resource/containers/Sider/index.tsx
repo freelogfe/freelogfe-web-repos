@@ -157,6 +157,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                     display: 'none',
                   }
                 }}
+                okText={FUtil.I18n.message('btn_check')}
               ><FCircleBtn type="transparent"/>
               </Popconfirm>)
               : (<FCircleBtn onClick={gotoCreator} type="transparent"/>)
