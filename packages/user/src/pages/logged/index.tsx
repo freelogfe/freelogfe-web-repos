@@ -1,14 +1,17 @@
 import * as React from "react";
-import FLayout from "@/layouts/FLayout";
+import FBaseLayout from "@/layouts/FBaseLayout";
 
 interface LoggedProps {
 
 }
 
-function Logged({}: LoggedProps) {
-  return (<FLayout headerLeft={<div>logo</div>} headerRight={<div>userInfo</div>}>
+function FLogged({}: LoggedProps) {
+  return (<FBaseLayout
+    headerLeft={<div>logo</div>}
+    headerRight={<div>userInfo</div>}
+  >
     <div>content</div>
-  </FLayout>);
+  </FBaseLayout>);
 }
 
-export default Logged;
+export default FLogged;
