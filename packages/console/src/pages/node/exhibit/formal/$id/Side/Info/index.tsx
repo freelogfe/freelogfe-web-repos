@@ -13,6 +13,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState} from "@/models/connect";
 import fMessage from "@/components/fMessage";
 import FTooltip from "@/components/FTooltip";
+import FUtil from "@/utils";
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -34,9 +35,9 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
   }
 
   return (<>
-    
+
     <FContentText
-      text={'基础信息'}
+      text={FUtil.I18n.message('exhibit_info')}
       type="highlight"
     />
 
@@ -64,14 +65,14 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
 
           <FEdit style={{fontSize: 32}}/>
           <div style={{height: 10}}/>
-          <div>修改封面</div>
+          <div>{FUtil.I18n.message('btn_edit_cover')}</div>
         </div>
       </div>
     </FUploadImage>
 
     <div style={{height: 20}}/>
 
-    <FTitleText text={'展品标题'} type="h4"/>
+    <FTitleText text={FUtil.I18n.message('exhibit_title')} type="h4"/>
     <div style={{height: 15}}/>
     {
       exhibitInfoPage.pInputTitle === null
@@ -95,7 +96,7 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
               type="default"
               // size="small"
               onClick={() => onChangePInputTitle(null)}
-            >取消</FTextBtn>
+            >{FUtil.I18n.message('btn_cancel')}</FTextBtn>
             <div style={{width: 15}}/>
             <FRectBtn
               size="small"
@@ -108,14 +109,14 @@ function Info({dispatch, exhibitInfoPage}: InfoProps) {
                 });
                 onChangePInputTitle(null);
               }}
-            >确定</FRectBtn>
+            >{FUtil.I18n.message('btn_save')}</FRectBtn>
           </div>
 
         </>)
     }
     <div style={{height: 30}}/>
 
-    <FTitleText text={'展品标签'} type="h4"/>
+    <FTitleText text={FUtil.I18n.message('exhibit_tag')} type="h4"/>
     <div style={{height: 15}}/>
     <FLabelEditor
       values={exhibitInfoPage.pTags as string[]}

@@ -50,10 +50,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
   }
 
   return (<>
-    <FContentText text={'高级设置'} type="highlight"/>
+    <FContentText text={FUtil.I18n.message('advanced_setting')} type="highlight"/>
     <div style={{height: 20}}/>
 
-    <FTitleText text={'展示版本'} type="h4"/>
+    <FTitleText text={FUtil.I18n.message('exhibit_version')} type="h4"/>
     <div style={{height: 15}}/>
     <FDropdownMenu
       options={[...exhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}
@@ -71,7 +71,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
       exhibitInfoPage.settingUnfold && (<>
         <div style={{height: 30}}/>
 
-        <FTitleText text={'基础属性'} type="h4"/>
+        <FTitleText text={FUtil.I18n.message('resource_property')} type="h4"/>
         <div style={{height: 15}}/>
         <div className={styles.attr}>
           <table>
@@ -88,7 +88,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div style={{height: 30}}/>
 
         <FTitleText
-          text={'自定义选项'}
+          text={FUtil.I18n.message('custom_option')}
           type="h4"
         />
 
@@ -96,94 +96,96 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
 
         <div className={styles.options}>
           {
-            exhibitInfoPage.pCustomAttrs.map((pc) => (<div key={pc.key}>
-              <div className={styles.optionTitle}>
-                <FContentText text={pc.key}/>
-                {
-                  pc.defaultValue
-                    ? (<FTooltip title={'编辑'}>
-                      <div>
-                        <FTextBtn
-                          // theme="primary"
-                          onClick={() => {
-                            onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
-                          }}
-                        ><FRedo/></FTextBtn>
-                      </div>
-                    </FTooltip>)
-                    : (<Space size={10}>
-                      <FTooltip title={'编辑'}>
+            exhibitInfoPage.pCustomAttrs.map((pc) => {
+              return (<div key={pc.key}>
+                <div className={styles.optionTitle}>
+                  <FContentText text={pc.key}/>
+                  {
+                    pc.defaultValue
+                      ? (<FTooltip title={FUtil.I18n.message('tip_reset_value')}>
                         <div>
                           <FTextBtn
                             // theme="primary"
                             onClick={() => {
-                              const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                              if (!editing) {
-                                return;
-                              }
-                              dispatch<ChangeAction>({
-                                type: 'exhibitInfoPage/change',
-                                payload: {
-                                  pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                                    ...pCustomAttr,
-                                    isEditing: pCustomAttr.key === pc.key,
-                                  })),
-                                  pAddCustomKey: editing.key,
-                                  pAddCustomValue: editing.value,
-                                  pAddCustomDescription: editing.remark,
-                                },
-                              });
+                              onChangeCustomAttrs({key: pc.key, value: pc.defaultValue || ''}, true);
                             }}
-                          ><FEdit/></FTextBtn>
+                          ><FRedo/></FTextBtn>
                         </div>
-                      </FTooltip>
-                      <FTooltip title={'删除'}>
-                        <div>
-                          <FDelete
-                            style={{color: '#EE4040', cursor: 'pointer'}}
-                            onClick={() => {
-                              dispatch<ChangeAction>({
-                                type: 'exhibitInfoPage/change',
-                                payload: {
-                                  pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
-                                    return pc.key !== pCustomAttr.key;
-                                  }),
-                                },
-                              });
-                              dispatch<UpdateRewriteAction>({
-                                type: 'exhibitInfoPage/updateRewrite',
-                              });
-                            }}
-                          />
-                        </div>
-                      </FTooltip>
-                    </Space>)
+                      </FTooltip>)
+                      : (<Space size={10}>
+                        <FTooltip title={FUtil.I18n.message('tips_edit')}>
+                          <div>
+                            <FTextBtn
+                              // theme="primary"
+                              onClick={() => {
+                                const editing = exhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
+                                if (!editing) {
+                                  return;
+                                }
+                                dispatch<ChangeAction>({
+                                  type: 'exhibitInfoPage/change',
+                                  payload: {
+                                    pCustomAttrs: exhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
+                                      ...pCustomAttr,
+                                      isEditing: pCustomAttr.key === pc.key,
+                                    })),
+                                    pAddCustomKey: editing.key,
+                                    pAddCustomValue: editing.value,
+                                    pAddCustomDescription: editing.remark,
+                                  },
+                                });
+                              }}
+                            ><FEdit/></FTextBtn>
+                          </div>
+                        </FTooltip>
+                        <FTooltip title={FUtil.I18n.message('tip_delete_custom_option')}>
+                          <div>
+                            <FDelete
+                              style={{color: '#EE4040', cursor: 'pointer'}}
+                              onClick={() => {
+                                dispatch<ChangeAction>({
+                                  type: 'exhibitInfoPage/change',
+                                  payload: {
+                                    pCustomAttrs: exhibitInfoPage.pCustomAttrs.filter((pCustomAttr) => {
+                                      return pc.key !== pCustomAttr.key;
+                                    }),
+                                  },
+                                });
+                                dispatch<UpdateRewriteAction>({
+                                  type: 'exhibitInfoPage/updateRewrite',
+                                });
+                              }}
+                            />
+                          </div>
+                        </FTooltip>
+                      </Space>)
+                  }
+                </div>
+                <div style={{height: 5}}/>
+                {
+                  (pc.option && pc.option.length > 0)
+                    ? (<FSelect
+                      className={styles.FSelect}
+                      value={pc.value}
+                      dataSource={pc.option.map((d) => ({value: d, title: d}))}
+                      onChange={(value) => {
+                        onChangeCustomAttrs({key: pc.key, value: value}, true);
+                      }}
+                    />)
+                    : (<FInput
+                      className={styles.FInput}
+                      value={pc.newValue}
+                      errorText={pc.newValueError}
+                      onChange={(e) => {
+                        onChangeCustomAttrs({key: pc.key, value: e.target.value});
+                      }}
+                      onBlur={() => dispatch<UpdateRewriteAction>({
+                        type: 'exhibitInfoPage/updateRewrite',
+                      })}
+                    />)
                 }
-              </div>
-              <div style={{height: 5}}/>
-              {
-                (pc.option && pc.option.length > 0)
-                  ? (<FSelect
-                    className={styles.FSelect}
-                    value={pc.value}
-                    dataSource={pc.option.map((d) => ({value: d, title: d}))}
-                    onChange={(value) => {
-                      onChangeCustomAttrs({key: pc.key, value: value}, true);
-                    }}
-                  />)
-                  : (<FInput
-                    className={styles.FInput}
-                    value={pc.newValue}
-                    errorText={pc.newValueError}
-                    onChange={(e) => {
-                      onChangeCustomAttrs({key: pc.key, value: e.target.value});
-                    }}
-                    onBlur={() => dispatch<UpdateRewriteAction>({
-                      type: 'exhibitInfoPage/updateRewrite',
-                    })}
-                  />)
-              }
-            </div>))
+              </div>);
+            })
           }
 
         </div>
@@ -222,9 +224,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
             },
           });
         }}
-      >{exhibitInfoPage.settingUnfold ? <>收起 <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextBtn>
+      >{exhibitInfoPage.settingUnfold ? <>{FUtil.I18n.message('btn_show_less')}
+        <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextBtn>
     </div>
-    
+
     <FModal
       title={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil.I18n.message('edit_custom_option') : FUtil.I18n.message('add_custom_options')}
       width={560}
