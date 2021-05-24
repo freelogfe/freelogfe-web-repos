@@ -10,7 +10,7 @@ import ResourcesAndPolicies from './ResourcesAndPolicies';
 import {router} from 'umi';
 import {ChangeAction, OnChangeAndVerifySignExhibitNameAction, SignContractAction} from '@/models/marketResourcePage';
 import FContentLayout from "@/layouts/FContentLayout";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FLeft, FNodes} from "@/components/FIcons";
 

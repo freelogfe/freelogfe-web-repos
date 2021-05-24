@@ -13,7 +13,7 @@ import {ChangeAction as GlobalChangeAction} from "@/models/global";
 import {RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import FUtil from "@/utils";
 import {RouteComponentProps} from "react-router";
 

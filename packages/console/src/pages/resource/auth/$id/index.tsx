@@ -18,7 +18,7 @@ import {
 import {RouterTypes, withRouter} from 'umi';
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import {FNodes, FUser} from "@/components/FIcons";
 import FUtil from "@/utils";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";

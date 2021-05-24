@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import {Space} from "antd";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FContentText} from "@/components/FText";

@@ -22,7 +22,7 @@ import FTooltip from "@/components/FTooltip";
 import {FEdit, FInfo} from "@/components/FIcons";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FDownload from "@/components/FIcons/FDownload";
 import {

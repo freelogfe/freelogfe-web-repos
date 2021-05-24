@@ -28,7 +28,7 @@ import RouterTypes from 'umi/routerTypes';
 import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";
 import fConfirmModal from "@/components/fConfirmModal";

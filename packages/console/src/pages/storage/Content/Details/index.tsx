@@ -18,7 +18,7 @@ import DepsCards from './DepsCards';
 import FBaseProperties from "@/components/FBaseProperties";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import {FDown, FInfo, FUp, FDownload} from "@/components/FIcons";
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import {router} from "umi";

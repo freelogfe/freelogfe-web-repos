@@ -21,7 +21,7 @@ import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {router, RouterTypes} from 'umi';
 import {FCheck, FInfo, FLoading} from '@/components/FIcons';
-import FFormLayout from "@/layouts/FFormLayout";
+import FFormLayout from "@/components/FFormLayout";
 import * as H from "history";
 import Prompt from "umi/prompt";
 import fConfirmModal from "@/components/fConfirmModal";
