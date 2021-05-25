@@ -33,21 +33,6 @@ function UntrodList({creator: {dependencies}}: UpthrowListProps) {
         }));
       }}
     />
-    {/*<div className={styles.depUpthrow}>*/}
-    {/*  <div className={styles.tip}>*/}
-    {/*    <FTitleText*/}
-    {/*      text={FUtil.I18n.message('basic_upcast')}*/}
-    {/*      type="h4"*/}
-    {/*    />*/}
-    {/*    <div style={{width: 5}}/>*/}
-    {/*    <FInfo style={{color: '#C7C7C7'}}/>*/}
-    {/*  </div>*/}
-    {/*  <div className={styles.depUpthrowLabel}>*/}
-    {/*    {*/}
-    {/*      labels.map((j) => <label key={j}>{j}</label>)*/}
-    {/*    }*/}
-    {/*  </div>*/}
-    {/*</div>*/}
   </>)
 }
 
