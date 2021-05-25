@@ -9,11 +9,9 @@ import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import FLink from "@/components/FLink";
 import FUtil from "@/utils";
-import * as AHooks from 'ahooks';
 import fMessage from "@/components/fMessage";
 import {RouteComponentProps} from 'react-router';
 import {Popconfirm} from 'antd';
-import {FInfo} from "@/components/FIcons";
 
 interface SilderProps extends RouteComponentProps<{
   id: string;
@@ -21,7 +19,6 @@ interface SilderProps extends RouteComponentProps<{
 }> {
   dispatch: Dispatch;
   resourceInfo: ResourceInfoModelState;
-  // resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }
 
 function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps) {
@@ -78,9 +75,6 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         resourceID: match.params.id,
       },
     });
-    // dispatch<FetchDraftDataAction>({
-    //   type: 'resourceInfo/fetchDraftData',
-    // });
     dispatch<FetchDataSourceAction>({
       type: 'resourceInfo/fetchDataSource',
       payload: match.params.id,
