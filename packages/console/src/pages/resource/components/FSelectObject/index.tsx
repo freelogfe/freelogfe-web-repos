@@ -17,7 +17,6 @@ import {
   ChangeAction,
   FetchRawPropsAction,
   HandleObjectInfoAction,
-  // SelectLocalFile
 } from "@/models/resourceVersionCreatorPage";
 import FTable from "@/components/FTable";
 import {FContentText} from '@/components/FText';

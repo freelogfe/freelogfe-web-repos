@@ -15,7 +15,7 @@ interface ObjectCardProps {
   onClickDelete?: () => void;
 }
 
-export default function ({resourceObject, progress = null, onClickDelete}: ObjectCardProps) {
+function ObjectCard({resourceObject, progress = null, onClickDelete}: ObjectCardProps) {
   return (<div className={styles.styles}>
     <div className={styles.card}>
       <img src={img} className={styles.img} alt=""/>
@@ -27,8 +27,6 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
         />
         <div style={{height: 18}}/>
         <div className={styles.info}>
-          {/*<div style={{display: "flex", flexShrink: 0}}>{FUtil.Format.humanizeSize(resourceObject.size)}</div>*/}
-          {/*<div style={{display: "flex", flexShrink: 0, width: 30}}/>*/}
           {
             progress === null
               ? <FContentText
@@ -51,7 +49,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
         </div>
       </div>
     </div>
-    {/*<div style={{width: 10}}/>*/}
+
     <FTextBtn
       type="danger"
       onClick={() => onClickDelete && onClickDelete()}
@@ -59,3 +57,4 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
   </div>)
 }
 
+export default ObjectCard;

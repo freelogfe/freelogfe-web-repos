@@ -11,7 +11,7 @@ interface FUploadResourceCoverProps {
   onChange?: (value: string) => void;
 }
 
-export default function ({value, onChange}: FUploadResourceCoverProps) {
+function FUploadResourceCover({value, onChange}: FUploadResourceCoverProps) {
 
   return (<div className={styles.cover}>
     {!value
@@ -46,3 +46,5 @@ export default function ({value, onChange}: FUploadResourceCoverProps) {
     </div>
   </div>);
 }
+
+export default FUploadResourceCover;

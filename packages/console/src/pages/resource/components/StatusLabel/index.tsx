@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FUtil from "@/utils";
-// import {i18nMessage} from "@/utils/i18n";
 
 interface StatusLabelProps {
   status?: 'executing' | 'pending' | 'stopped';

@@ -1,21 +1,19 @@
 import * as React from 'react';
 import styles from "./index.less";
-// import FDropdown from "@/components/FDropdown";
 import FInput from "@/components/FInput";
 import {FContentText} from "@/components/FText";
 import {FRectBtn} from "@/components/FButton";
 import {FMenuProps} from "@/components/FMenu";
-import moment from 'moment'
 import FDropdownMenu from "@/components/FDropdownMenu";
 import {FApiServer} from "@/services";
 
 export interface ResourceObject {
-  readonly id: string;
-  readonly name: string;
-  readonly size: number;
-  readonly path: string;
-  readonly type: string;
-  readonly time: string;
+  id: string;
+  name: string;
+  size: number;
+  path: string;
+  type: string;
+  time: string;
 }
 
 interface StorageProps {
@@ -26,7 +24,7 @@ interface StorageStates {
   bucketOptions: {},
 }
 
-export default function ({onSelect}: StorageProps) {
+function Storage({onSelect}: StorageProps) {
 
   const [bucketOptions, setBucketOptions] = React.useState<FMenuProps['options']>([{text: '全部Bucket', value: '-1'},]);
   const [selected, setSelected] = React.useState<any>('-1');
@@ -110,3 +108,5 @@ export default function ({onSelect}: StorageProps) {
     </div>
   );
 }
+
+export default Storage;
