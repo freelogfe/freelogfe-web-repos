@@ -88,6 +88,18 @@ export interface StorageObjectEditorModelState {
     customOption: string;
     customOptionError: string;
   }[];
+  customOptionIndex: number;
+  customOptionEditorData: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  } | null;
 
   depRs: DepR[];
   depOs: DepO[];
@@ -176,6 +188,8 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   customOptionsData: [],
   customOptionsEditorVisible: false,
   customOptionsEditorDataSource: [],
+  customOptionIndex: -1,
+  customOptionEditorData: null,
 
   depRs: [],
   depOs: [],

@@ -20,48 +20,6 @@ interface FCustomOptionsEditorDrawerProps {
 
 function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange, onConfirm, onCancel}: FCustomOptionsEditorDrawerProps) {
 
-  // function onChangeData(value: Partial<FCustomOptionsEditorDrawerProps['dataSource'][number]>, index: number) {
-  //   const dd = dataSource.map((ds, i) => {
-  //     if (i !== index) {
-  //       return ds;
-  //     }
-  //     return {
-  //       ...ds,
-  //       ...value,
-  //     };
-  //   });
-  //   onChange && onChange(verifyDuplication(dd));
-  // }
-
-
-  // function verifyDuplication(data: FCustomOptionsEditorDrawerProps['dataSource']) {
-  //   const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
-  //     return [dk, 1];
-  //   }));
-  //   for (const item of data) {
-  //     if (item.key === '') {
-  //       continue;
-  //     }
-  //     if (map.has(item.key)) {
-  //       map.set(item.key, map.get(item.key) as number + 1)
-  //     } else {
-  //       map.set(item.key, 1);
-  //     }
-  //   }
-  //   const errorText: string = '键不能重复';
-  //
-  //   return data.map((d) => {
-  //     if (d.keyError && d.keyError !== errorText) {
-  //       return d;
-  //     }
-  //     // console.log(d.key, map.get(d.key), '9812347928137');
-  //     return {
-  //       ...d,
-  //       keyError: (map.has(d.key) && map.get(d.key) !== 1) ? errorText : '',
-  //     };
-  //   });
-  // }
-
   return (<FDrawer
     title={'添加自定义选项'}
     onClose={() => {

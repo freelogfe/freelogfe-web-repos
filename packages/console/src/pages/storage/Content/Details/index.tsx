@@ -27,6 +27,7 @@ import FTooltip from "@/components/FTooltip";
 import FUtil from "@/utils";
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
+import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -247,6 +248,26 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                         },
                       })
                     }}
+                    onEdit={(theKey) => {
+                      const index: number = storageObjectEditor.customOptionsData.findIndex((cod) => {
+                        return cod.key === theKey;
+                      });
+                      const customOption = storageObjectEditor.customOptionsData[index];
+                      onChange({
+                        customOptionIndex: index,
+                        customOptionEditorData: customOption ? {
+                          key: customOption.key,
+                          keyError: '',
+                          description: customOption.description,
+                          descriptionError: '',
+                          custom: customOption.custom,
+                          defaultValue: customOption.defaultValue,
+                          defaultValueError: '',
+                          customOption: customOption.customOption,
+                          customOptionError: '',
+                        } : null,
+                      });
+                    }}
                   />)
                   : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
               }
@@ -461,6 +482,78 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             customOptionsEditorVisible: false,
           }
         })
+      }}
+    />
+
+    <FCustomOptionEditorDrawer
+      visible={storageObjectEditor.customOptionIndex !== -1}
+      keyInput={storageObjectEditor.customOptionEditorData?.key || ''}
+      keyInputError={storageObjectEditor.customOptionEditorData?.keyError || ''}
+      descriptionInput={storageObjectEditor.customOptionEditorData?.description || ''}
+      descriptionInputError={storageObjectEditor.customOptionEditorData?.descriptionError || ''}
+      typeSelect={storageObjectEditor.customOptionEditorData?.custom || 'input'}
+      valueInput={storageObjectEditor.customOptionEditorData?.defaultValue || ''}
+      valueInputError={storageObjectEditor.customOptionEditorData?.defaultValueError || ''}
+      optionsInput={storageObjectEditor.customOptionEditorData?.customOption || ''}
+      optionsInputError={storageObjectEditor.customOptionEditorData?.customOptionError || ''}
+      usedKeys={[
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
+        ...storageObjectEditor.customOptionsData.filter((cod, ind) => {
+          return ind !== storageObjectEditor.customOptionIndex;
+        }).map((cod) => {
+          return cod.key;
+        }),
+      ]}
+      onCancel={() => {
+        onChange({
+          customOptionIndex: -1,
+          customOptionEditorData: null,
+        });
+      }}
+      onKeyInputChange={(value) => {
+        onChange({
+          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+            ...storageObjectEditor.customOptionEditorData,
+            key: value.value,
+            keyError: value.errorText,
+          } : null,
+        });
+      }}
+      onDescriptionInputChange={(value) => {
+        onChange({
+          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+            ...storageObjectEditor.customOptionEditorData,
+            description: value.value,
+            descriptionError: value.errorText,
+          } : null,
+        });
+      }}
+      onSelectChange={(value) => {
+        onChange({
+          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+            ...storageObjectEditor.customOptionEditorData,
+            custom: value.value,
+          } : null,
+        });
+      }}
+      onValueInputChange={(value) => {
+        onChange({
+          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+            ...storageObjectEditor.customOptionEditorData,
+            defaultValue: value.value,
+            defaultValueError: value.errorText,
+          } : null,
+        });
+      }}
+      onOptionsInputChange={(value) => {
+        onChange({
+          customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
+            ...storageObjectEditor.customOptionEditorData,
+            customOption: value.value,
+            customOptionError: value.errorText,
+          } : null,
+        });
       }}
     />
   </FDrawer>);
