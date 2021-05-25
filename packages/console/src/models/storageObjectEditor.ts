@@ -58,6 +58,15 @@ export interface StorageObjectEditorModelState {
     description: string;
     descriptionError: string;
   }[];
+  basePropertyEditorIndex: number;
+  basePropertyEditorData: {
+    key: string;
+    keyError: string;
+    value: string;
+    valueError: string;
+    description: string;
+    descriptionError: string;
+  } | null;
 
   customOptionsDataVisible: boolean;
   customOptionsData: {
@@ -160,6 +169,8 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   baseProperties: [],
   basePropertiesEditorVisible: false,
   basePropertiesEditorData: [],
+  basePropertyEditorIndex: -1,
+  basePropertyEditorData: null,
 
   customOptionsDataVisible: false,
   customOptionsData: [],

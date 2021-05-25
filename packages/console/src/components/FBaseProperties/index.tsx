@@ -16,9 +16,11 @@ interface FBasePropertiesProps {
   rightTop?: React.ReactNode;
 
   onChangeAdditions?(value: FBasePropertiesProps['additions']): void;
+
+  onClickEdit?(theKey: string): void;
 }
 
-function FBaseProperties({basics, additions, rightTop, onChangeAdditions}: FBasePropertiesProps) {
+function FBaseProperties({basics, additions, rightTop, onChangeAdditions, onClickEdit}: FBasePropertiesProps) {
 
   return (<div className={styles.attributes}>
       <div className={styles.attributesHeader}>
@@ -40,9 +42,9 @@ function FBaseProperties({basics, additions, rightTop, onChangeAdditions}: FBase
             value: a.value,
           };
         })}
-        // onEdit={(theKey) => {
-        //
-        // }}
+        onEdit={(theKey) => {
+          onClickEdit && onClickEdit(theKey);
+        }}
         onDelete={(theKey) => {
           onChangeAdditions && onChangeAdditions(additions.filter((a) => {
             return a.key !== theKey;

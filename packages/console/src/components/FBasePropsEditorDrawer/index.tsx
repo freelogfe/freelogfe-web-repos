@@ -42,7 +42,6 @@ function FBasePropsEditorDrawer({visible, dataSource, disabledKeys, onChange, on
     onChange && onChange(verifyDuplication(dd));
   }
 
-
   function verifyDuplication(data: FBasePropsEditorDrawerProps['dataSource']) {
     const map: Map<string, number> = new Map<string, number>(disabledKeys.map((dk) => {
       return [dk, 1];

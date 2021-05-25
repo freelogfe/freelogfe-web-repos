@@ -81,6 +81,7 @@ function Storage({match, history, storageHomePage, storageObjectEditor, dispatch
     >
       <Content/>
     </FLeftSiderLayout>
+
     <Details/>
 
     <FModal

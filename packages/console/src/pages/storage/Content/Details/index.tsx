@@ -26,6 +26,7 @@ import {FApiServer} from "@/services";
 import FTooltip from "@/components/FTooltip";
 import FUtil from "@/utils";
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
+import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -138,6 +139,20 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
             onChangeAdditions={(value) => {
               onChange({baseProperties: value});
             }}
+            onClickEdit={(theKey: string) => {
+              const index: number = storageObjectEditor.baseProperties.findIndex((bp) => {
+                return bp.key === theKey;
+              });
+              onChange({
+                basePropertyEditorIndex: index,
+                basePropertyEditorData: {
+                  ...storageObjectEditor.baseProperties[index],
+                  keyError: '',
+                  valueError: '',
+                  descriptionError: '',
+                },
+              });
+            }}
             rightTop={<Space size={20}>
               <FTextBtn
                 style={{fontSize: 12, fontWeight: 600}}
@@ -145,14 +160,14 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                 onClick={() => {
                   onChange({
                     basePropertiesEditorVisible: true,
-                    basePropertiesEditorData: storageObjectEditor.baseProperties.map((bp) => {
-                      return {
-                        ...bp,
-                        keyError: '',
-                        valueError: '',
-                        descriptionError: '',
-                      };
-                    }),
+                    basePropertiesEditorData: [{
+                      key: '',
+                      keyError: '',
+                      value: '',
+                      valueError: '',
+                      description: '',
+                      descriptionError: '',
+                    }],
                   });
                 }}
               >补充属性</FTextBtn>
@@ -309,6 +324,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
       dataSource={storageObjectEditor.basePropertiesEditorData}
       disabledKeys={[
         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
         ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
       ]}
       onChange={(value) => {
@@ -326,13 +342,82 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         onChange({
           basePropertiesEditorData: [],
           basePropertiesEditorVisible: false,
-          baseProperties: storageObjectEditor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+          baseProperties: [
+            ...storageObjectEditor.baseProperties,
+            ...storageObjectEditor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+              return {
+                key: bped.key,
+                value: bped.value,
+                description: bped.description,
+              };
+            }),
+          ],
+        });
+      }}
+    />
+
+    <FBasePropEditorDrawer
+      usedKeys={[
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.filter((bp, ind) => ind !== storageObjectEditor.basePropertyEditorIndex).map((bp) => {
+          return bp.key;
+        }),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+      ]}
+      visible={storageObjectEditor.basePropertyEditorIndex > -1}
+      keyInput={storageObjectEditor.basePropertyEditorData?.key || ''}
+      keyInputError={storageObjectEditor.basePropertyEditorData?.keyError || ''}
+      valueInput={storageObjectEditor.basePropertyEditorData?.value || ''}
+      valueInputError={storageObjectEditor.basePropertyEditorData?.valueError || ''}
+      descriptionInput={storageObjectEditor.basePropertyEditorData?.description || ''}
+      descriptionInputError={storageObjectEditor.basePropertyEditorData?.descriptionError || ''}
+      onCancel={() => {
+        onChange({
+          basePropertyEditorIndex: -1,
+          basePropertyEditorData: null,
+        });
+      }}
+      onConfirm={() => {
+        onChange({
+          baseProperties: storageObjectEditor.baseProperties.map((bp, ind) => {
+            if (ind !== storageObjectEditor.basePropertyEditorIndex) {
+              return bp;
+            }
             return {
-              key: bped.key,
-              value: bped.value,
-              description: bped.description,
+              key: storageObjectEditor.basePropertyEditorData?.key || '',
+              value: storageObjectEditor.basePropertyEditorData?.value || '',
+              description: storageObjectEditor.basePropertyEditorData?.description || '',
             };
           }),
+          basePropertyEditorIndex: -1,
+          basePropertyEditorData: null,
+        });
+      }}
+      onKeyInputChange={(value) => {
+        onChange({
+          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
+            ...storageObjectEditor.basePropertyEditorData,
+            key: value.value,
+            keyError: value.errorText,
+          } : null,
+        });
+      }}
+      onValueInputChange={(value) => {
+        onChange({
+          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
+            ...storageObjectEditor.basePropertyEditorData,
+            value: value.value,
+            valueError: value.errorText,
+          } : null,
+        });
+      }}
+      onDescriptionInputChange={(value) => {
+        onChange({
+          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
+            ...storageObjectEditor.basePropertyEditorData,
+            description: value.value,
+            descriptionError: value.errorText,
+          } : null,
         });
       }}
     />
