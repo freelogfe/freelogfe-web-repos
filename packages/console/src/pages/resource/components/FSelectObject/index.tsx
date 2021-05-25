@@ -259,11 +259,6 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
   }
 
-  async function onChange1(value: any) {
-    // console.log(value, '#@ERWADFSASDFSADF');
-
-  }
-
   function onError(value: any) {
     dispatch<ChangeAction>({
       type: 'resourceVersionCreatorPage/change',
@@ -451,7 +446,6 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
         // showRemoveIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
         disabledIDsOrNames={[`${resourceVersionCreatorPage.selectedFileOrigin}/${resourceVersionCreatorPage.selectedFileName}`]}
         onSelect={onSelectObject}
-        // onDelete={() => onChange1(null)}
       />
     </FDrawer>
   </div>);
