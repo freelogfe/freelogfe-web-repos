@@ -1,9 +1,7 @@
 import * as React from 'react';
 import {FTipText} from '@/components/FText';
-import {FNormalButton} from '@/components/FButton';
 import FModal from '@/components/FModal';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {PlusOutlined} from '@ant-design/icons';
 import styles from './index.less';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState, ResourceInfoModelState} from '@/models/connect';
