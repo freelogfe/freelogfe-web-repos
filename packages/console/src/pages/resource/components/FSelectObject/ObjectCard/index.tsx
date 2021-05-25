@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import img from '@/assets/file-object.svg';
-import {FTitleText, FContentText} from '@/components/FText';
+import {FContentText} from '@/components/FText';
 import {Progress} from 'antd';
 import FUtil from "@/utils";
+import {FTextBtn} from "@/components/FButton";
 
 interface ObjectCardProps {
   resourceObject: {
@@ -19,7 +20,7 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
     <div className={styles.card}>
       <img src={img} className={styles.img} alt=""/>
       <div style={{width: 20}}/>
-      <div className="">
+      <div>
         <FContentText
           type="highlight"
           text={resourceObject.name}
@@ -51,8 +52,10 @@ export default function ({resourceObject, progress = null, onClickDelete}: Objec
       </div>
     </div>
     {/*<div style={{width: 10}}/>*/}
-    <a onClick={() => onClickDelete && onClickDelete()}
-       className={styles.delete}>{progress !== null ? FUtil.I18n.message('cancel_uploading') : FUtil.I18n.message('remove')}</a>
+    <FTextBtn
+      type="danger"
+      onClick={() => onClickDelete && onClickDelete()}
+      className={styles.delete}>{progress !== null ? FUtil.I18n.message('cancel_uploading') : FUtil.I18n.message('remove')}</FTextBtn>
   </div>)
 }
 

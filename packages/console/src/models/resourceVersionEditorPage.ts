@@ -8,6 +8,7 @@ import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyG
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 import FUtil from "@/utils";
+import {router} from "umi";
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -187,6 +188,10 @@ const Model: ResourceVersionEditorModelType = {
       };
       const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
+      if (!data) {
+        router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-;dskf'));
+        return;
+      }
 
       // 依赖树
       const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {

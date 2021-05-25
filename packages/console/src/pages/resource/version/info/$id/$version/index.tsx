@@ -19,7 +19,6 @@ import {withRouter} from 'umi';
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
 import FTooltip from "@/components/FTooltip";
-import {FEdit, FInfo} from "@/components/FIcons";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/components/FFormLayout";
@@ -52,15 +51,6 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
-
-  // React.useEffect(() => {
-  //   dispatch<GlobalChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  // }, [route]);
 
   React.useEffect(() => {
     init();

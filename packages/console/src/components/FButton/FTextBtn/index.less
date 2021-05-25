@@ -1,20 +1,23 @@
 @import '../../../config.less';
 
-.Primary {
-
+.textBtn {
   border: none;
   display: flex;
   align-items: center;
   padding: 0;
   justify-content: center;
-  //height: 38px;
-  //border-radius: 4px;
-  //font-weight: 600;
-  color: @f-primary-color;
   background-color: transparent;
   font-size: 14px;
   cursor: pointer;
   outline: none;
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  color: @f-primary-color;
 
   &:hover {
     color: #529DFF;
@@ -27,23 +30,14 @@
   &[disabled] {
     &, &:hover, &:active, &:focus {
       opacity: 0.4;
-      cursor: not-allowed;
       color: @f-primary-color;
     }
   }
 }
 
-.Default {
-  border: none;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  justify-content: center;
+.default {
   color: #666;
-  background-color: transparent;
-  font-size: 14px;
-  cursor: pointer;
-  outline: none;
+
 
   &:hover {
     color: #529DFF;
@@ -56,8 +50,26 @@
   &[disabled] {
     &, &:hover, &:active, &:focus {
       opacity: 0.4;
-      cursor: not-allowed;
       color: #666;
+    }
+  }
+}
+
+.danger {
+  color: @f-error-color1;
+
+  &:hover {
+    color: #F86363;
+  }
+
+  &:active {
+    color: #EB3737;
+  }
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      opacity: 0.4;
+      color: @f-error-color1;
     }
   }
 }

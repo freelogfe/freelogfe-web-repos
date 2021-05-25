@@ -91,16 +91,16 @@ axios.interceptors.response.use(function (response) {
     return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
   }
 
-  if ((data.errcode === undefined
-    ? (data.errCode !== 0 && data.errCode !== 2)
-    : (data.errcode !== 0 && data.errcode !== 2))
-    || data.ret !== 0) {
-
-    notification.error({
-      message: data.msg,
-    });
-    throw new Error(JSON.stringify(data));
-  }
+  // if ((data.errcode === undefined
+  //   ? (data.errCode !== 0 && data.errCode !== 2)
+  //   : (data.errcode !== 0 && data.errcode !== 2))
+  //   || data.ret !== 0) {
+  //
+  //   // notification.error({
+  //   //   message: data.msg,
+  //   // });
+  //   throw new Error(JSON.stringify(data));
+  // }
   return data;
 }, function (error) {
   // Do something with response error
