@@ -95,10 +95,6 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         bucketName: storageObjectEditor.bucketName,
       }));
     }}
-    // afterVisibleChange={async (visible) => {
-    //   console.log(visible, 'visible@#$WEREREWr');
-    //
-    // }}
   >
     <div className={styles.divContainer}>
 

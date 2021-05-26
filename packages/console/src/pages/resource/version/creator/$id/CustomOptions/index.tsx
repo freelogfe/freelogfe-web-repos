@@ -110,19 +110,17 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
               <FTextBtn
                 onClick={() => {
                   onChange({
-                    customOptionsEditorDataSource: resourceVersionCreatorPage.customOptionsData.map<ResourceVersionCreatorPageModelState['customOptionsEditorDataSource'][number]>((cod) => {
-                      return {
-                        key: cod.key,
-                        keyError: '',
-                        description: cod.description,
-                        descriptionError: '',
-                        custom: cod.custom,
-                        customOption: cod.customOption,
-                        customOptionError: '',
-                        defaultValue: cod.defaultValue,
-                        defaultValueError: '',
-                      };
-                    }),
+                    customOptionsEditorDataSource: [{
+                      key: '',
+                      keyError: '',
+                      description: '',
+                      descriptionError: '',
+                      custom: 'input',
+                      customOption: '',
+                      customOptionError: '',
+                      defaultValue: '',
+                      defaultValueError: '',
+                    }],
                     customOptionsEditorVisible: true,
                   });
                 }}
@@ -215,21 +213,25 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
       disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
         ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
       ]}
       onChange={(value) => {
         onChange({customOptionsEditorDataSource: value});
       }}
       onConfirm={() => {
         onChange({
-          customOptionsData: resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-            return {
-              key: coeds.key,
-              defaultValue: coeds.defaultValue,
-              description: coeds.description,
-              custom: coeds.custom,
-              customOption: coeds.customOption,
-            };
-          }),
+          customOptionsData: [
+            ...resourceVersionCreatorPage.customOptionsData,
+            ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+              return {
+                key: coeds.key,
+                defaultValue: coeds.defaultValue,
+                description: coeds.description,
+                custom: coeds.custom,
+                customOption: coeds.customOption,
+              };
+            }),
+          ],
           customOptionsEditorDataSource: [],
           customOptionsEditorVisible: false,
         });

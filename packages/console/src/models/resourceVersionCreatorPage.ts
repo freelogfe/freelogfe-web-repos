@@ -930,6 +930,9 @@ const Model: ResourceVersionCreatorModelType = {
           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
             return rp.key;
           }),
+          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+            return pp.key;
+          }),
           ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
             return pp.key;
           }),
@@ -960,6 +963,9 @@ const Model: ResourceVersionCreatorModelType = {
             return rp.key;
           }),
           ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+            return pp.key;
+          }),
+          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
             return pp.key;
           }),
         ];

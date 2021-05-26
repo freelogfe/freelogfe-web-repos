@@ -469,7 +469,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
     </FDrawer>
 
     <FDrawer
-      title={'编辑自定义属性'}
+      title={'添加自定义选项'}
       onClose={() => {
         onCloseCustomOptionDrawer();
       }}
