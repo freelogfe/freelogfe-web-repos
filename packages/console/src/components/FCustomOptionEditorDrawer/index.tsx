@@ -9,6 +9,7 @@ import FSelect from "@/components/FSelect";
 import FUtil from "@/utils";
 
 interface FCustomOptionEditorDrawerProps {
+  isLocking?: boolean;
   visible?: boolean;
   keyInput: string;
   keyInputError: string;
@@ -38,7 +39,7 @@ interface FCustomOptionEditorDrawerProps {
 }
 
 function FCustomOptionEditorDrawer({
-                                     visible = false, onCancel, onConfirm, usedKeys,
+                                     isLocking = false, visible = false, onCancel, onConfirm, usedKeys,
                                      keyInput, keyInputError, descriptionInput, descriptionInputError, typeSelect, valueInput, valueInputError, optionsInput, optionsInputError,
                                      onKeyInputChange, onDescriptionInputChange, onSelectChange, onValueInputChange, onOptionsInputChange
                                    }: FCustomOptionEditorDrawerProps) {
@@ -78,6 +79,7 @@ function FCustomOptionEditorDrawer({
               wrapClassName={styles.input}
               placeholder={'输入key'}
               value={keyInput}
+              disabled={isLocking}
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
@@ -118,7 +120,7 @@ function FCustomOptionEditorDrawer({
                 const value: string = e.target.value;
                 let errorText: string = '';
                 if (value.length > 50) {
-                  errorText = '不超过15个字符';
+                  errorText = '不超过50个字符';
                 }
                 onDescriptionInputChange && onDescriptionInputChange({
                   value,
@@ -144,6 +146,7 @@ function FCustomOptionEditorDrawer({
             <div style={{height: 5}}/>
             <FSelect
               className={styles.input}
+              disabled={isLocking}
               dataSource={[
                 {
                   value: 'input',
@@ -212,7 +215,7 @@ function FCustomOptionEditorDrawer({
                     if (value === '') {
                       errorText = '请输入';
                     } else if (value.length > 50) {
-                      errorText = '不超过15个字符';
+                      errorText = '不超过50个字符';
                     } else if (value.split(',').length > 30) {
                       errorText = '不超过30个选项';
                     }
