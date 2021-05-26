@@ -99,6 +99,15 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
     description: string;
     descriptionError: string;
   }[];
+  basePropertyEditorIndex: number;
+  basePropertyEditorData: {
+    key: string;
+    keyError: string;
+    value: string;
+    valueError: string;
+    description: string;
+    descriptionError: string;
+  } | null;
 
   customOptionsDataVisible: boolean;
   customOptionsData: {
@@ -259,6 +268,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   baseProperties: [],
   basePropertiesEditorVisible: false,
   basePropertiesEditorData: [],
+  basePropertyEditorIndex: -1,
+  basePropertyEditorData: null,
 
   customOptionsDataVisible: false,
   customOptionsData: [],
