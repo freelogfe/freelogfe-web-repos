@@ -17,7 +17,11 @@ function FSelect({dataSource, className, ...props}: FSelectProps) {
   return (<Select className={className + ' ' + styles.Select} {...props}>
     {
       dataSource.map((i: Option) => (
-        <Select.Option key={i.value} value={i.value} disabled={i.disabled}>{i.title}</Select.Option>))
+        <Select.Option
+          key={i.value}
+          value={i.value}
+          disabled={i.disabled}
+        >{i.title}</Select.Option>))
     }
   </Select>);
 }
