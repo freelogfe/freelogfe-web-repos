@@ -331,7 +331,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
         </FFormLayout.FBlock>
       </FFormLayout>
 
-      < FDrawer
+      <FDrawer
         title="添加依赖"
         width={640}
         visible={depInfoVisible}

@@ -69,7 +69,7 @@ function FCustomOptions({dataSource, disabledKeys, onChange}: FCustomOptionsProp
     {
       dataSource.length > 0 && <Space
         className={styles.styles}
-        size={15}
+        size={30}
         direction="vertical"
       >
         {
