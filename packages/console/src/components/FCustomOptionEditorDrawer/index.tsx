@@ -6,6 +6,7 @@ import FDrawer from "../FDrawer";
 import {FTitleText} from '@/components/FText';
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
+import FUtil from "@/utils";
 
 interface FCustomOptionEditorDrawerProps {
   visible?: boolean;
@@ -57,7 +58,7 @@ function FCustomOptionEditorDrawer({
         >取消</FTextBtn>
         <FRectBtn
           type="primary"
-          // disabled={false}
+          disabled={!keyInput || !!keyInputError || !!descriptionInputError || (typeSelect === 'input' ? (!valueInput || !!valueInputError) : (!optionsInput || !!optionsInputError))}
           onClick={() => {
             onConfirm && onConfirm();
           }}
@@ -80,8 +81,12 @@ function FCustomOptionEditorDrawer({
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
-                if (value.length > 15) {
+                if (value === '') {
+                  errorText = '请输入';
+                } else if (value.length > 15) {
                   errorText = '不超过15个字符';
+                } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+                  errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
                 } else if (usedKeys?.includes(value)) {
                   errorText = '键不能重复';
                 }
@@ -172,8 +177,10 @@ function FCustomOptionEditorDrawer({
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let errorText: string = '';
-                    if (value.length > 50) {
-                      errorText = '不超过15个字符';
+                    if (value === '') {
+                      errorText = '请输入';
+                    } else if (value.length > 30) {
+                      errorText = '不超过30个字符';
                     }
                     onValueInputChange && onValueInputChange({
                       value,
@@ -184,7 +191,7 @@ function FCustomOptionEditorDrawer({
                 {
                   valueInputError && (<>
                     <div style={{height: 5}}/>
-                    <div className={styles.errorTip}>{optionsInputError}</div>
+                    <div className={styles.errorTip}>{valueInputError}</div>
                   </>)
                 }
               </Col>)
@@ -202,9 +209,22 @@ function FCustomOptionEditorDrawer({
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let errorText: string = '';
-                    if (value.length > 50) {
+                    if (value === '') {
+                      errorText = '请输入';
+                    } else if (value.length > 50) {
                       errorText = '不超过15个字符';
+                    } else if (value.split(',').length > 30) {
+                      errorText = '不超过30个选项';
                     }
+
+                    if (!errorText) {
+                      const allOptions = value.split(',');
+                      const setS = new Set(allOptions);
+                      if (setS.size !== allOptions.length) {
+                        errorText = '选项不能重复';
+                      }
+                    }
+
                     onOptionsInputChange && onOptionsInputChange({
                       value,
                       errorText,

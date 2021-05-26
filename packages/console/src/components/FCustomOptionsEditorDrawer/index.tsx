@@ -46,8 +46,6 @@ function FCustomOptionsEditorDrawer({visible, dataSource, disabledKeys, onChange
         }}
       >确定</FRectBtn>
     </Space>}
-    // className={styles}
-    // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
 
     <FCustomOptions

@@ -511,6 +511,24 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
           customOptionEditorData: null,
         });
       }}
+      onConfirm={() => {
+        onChange({
+          customOptionsData: storageObjectEditor.customOptionsData.map((cod, ind) => {
+            if (ind !== storageObjectEditor.customOptionIndex) {
+              return cod;
+            }
+            return {
+              key: storageObjectEditor.customOptionEditorData?.key || '',
+              description: storageObjectEditor.customOptionEditorData?.description || '',
+              custom: storageObjectEditor.customOptionEditorData?.custom || 'input',
+              defaultValue: storageObjectEditor.customOptionEditorData?.defaultValue || '',
+              customOption: storageObjectEditor.customOptionEditorData?.customOption || '',
+            };
+          }),
+          customOptionIndex: -1,
+          customOptionEditorData: null,
+        })
+      }}
       onKeyInputChange={(value) => {
         onChange({
           customOptionEditorData: storageObjectEditor.customOptionEditorData ? {
