@@ -1011,19 +1011,6 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    // * goToResourceDetailsBySha1({}: GoToResourceDetailsBySha1, {put, call, select}: EffectsCommandMap) {
-    //   const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
-    //     resourceVersionCreatorPage,
-    //   }));
-    //
-    //   const params: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
-    //     fileSha1: resourceVersionCreatorPage.resourceObjectError.sha1,
-    //   };
-    //   const {data} = yield call(FApiServer.Resource.getResourceBySha1, params);
-    //   // console.log(data, '2134sdfa90j');
-    //   // router.push(`/resource/${data[0].resourceId}`);
-    //   window.open(`/resource/${data[0].resourceId}`);
-    // },
     * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
