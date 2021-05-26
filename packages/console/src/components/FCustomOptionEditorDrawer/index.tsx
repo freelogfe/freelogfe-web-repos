@@ -65,9 +65,9 @@ function FCustomOptionEditorDrawer({
         >保存</FRectBtn>
       </Space>}
     >
-      <div>
+      <div className={styles.option}>
         <Row gutter={10}>
-          <Col className="gutter-row" span={12}>
+          <Col span={12}>
             <Space size={5}>
               <i className={styles.dot}/>
               <FTitleText type="h4" text={'key'}/>
@@ -104,7 +104,7 @@ function FCustomOptionEditorDrawer({
               </>)
             }
           </Col>
-          <Col className="gutter-row" span={12}>
+          <Col span={12}>
             <Space size={5}>
               <FTitleText type="h4" text={'属性说明'}/>
             </Space>
@@ -136,7 +136,7 @@ function FCustomOptionEditorDrawer({
         </Row>
         <div style={{height: 10}}/>
         <Row gutter={10}>
-          <Col className="gutter-row" span={6}>
+          <Col span={6}>
             <Space size={5}>
               <i className={styles.dot}/>
               <FTitleText type="h4" text={'属性值输入方式'}/>
@@ -163,7 +163,7 @@ function FCustomOptionEditorDrawer({
             />
           </Col>
           {
-            typeSelect === 'input' ? (<Col className="gutter-row" span={18}>
+            typeSelect === 'input' ? (<Col span={18}>
                 <Space size={5}>
                   <i className={styles.dot}/>
                   <FTitleText type="h4" text={'自定义选项(填写一个默认值)'}/>
@@ -195,7 +195,7 @@ function FCustomOptionEditorDrawer({
                   </>)
                 }
               </Col>)
-              : (<Col className="gutter-row" span={18}>
+              : (<Col span={18}>
                 <Space size={5}>
                   <i className={styles.dot}/>
                   <FTitleText type="h4" text={'自定义选项(首个选项为默认值)'}/>
