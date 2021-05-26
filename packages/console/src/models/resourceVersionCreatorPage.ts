@@ -129,6 +129,18 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
     customOption: string;
     customOptionError: string;
   }[];
+  customOptionIndex: number;
+  customOptionEditorData: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  } | null;
 
   description: EditorState;
 
@@ -275,6 +287,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   customOptionsData: [],
   customOptionsEditorVisible: false,
   customOptionsEditorDataSource: [],
+  customOptionIndex: -1,
+  customOptionEditorData: null,
 
   depRelationship: [],
   dependencies: [],

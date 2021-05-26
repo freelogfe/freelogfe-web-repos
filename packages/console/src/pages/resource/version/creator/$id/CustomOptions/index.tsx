@@ -19,6 +19,7 @@ import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
+import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -82,7 +83,6 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             }
           </Space>}
           onClickEdit={(theKey) => {
-            console.log(theKey, '!!@!@#$!@#$@#$@#$$@#$@#$#$');
             const ind = resourceVersionCreatorPage.baseProperties.findIndex((bp) => {
               return bp.key === theKey;
             });
@@ -180,7 +180,26 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
                     });
                   }}
                   onEdit={(theKey) => {
-
+                    const ind: number = resourceVersionCreatorPage.customOptionsData.findIndex((cod) => {
+                      return cod.key === theKey;
+                    });
+                    const cur = resourceVersionCreatorPage.customOptionsData[ind];
+                    onChange({
+                      customOptionIndex: ind,
+                      customOptionEditorData: ind === -1
+                        ? null
+                        : {
+                          key: cur.key,
+                          keyError: '',
+                          description: cur.description,
+                          descriptionError: '',
+                          custom: cur.custom,
+                          defaultValue: cur.defaultValue,
+                          defaultValueError: '',
+                          customOption: cur.customOption,
+                          customOptionError: '',
+                        },
+                    });
                   }}
                 />)
                 : (<FContentText text={'暂无自定义选项…'} type="negative"/>)
@@ -227,44 +246,6 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
           ],
         });
       }}
-    />
-
-    <FCustomOptionsEditorDrawer
-      visible={resourceVersionCreatorPage.customOptionsEditorVisible}
-      onCancel={() => {
-        onChange({
-          customOptionsEditorVisible: false,
-          customOptionsEditorDataSource: [],
-        });
-      }}
-      dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
-      disabledKeys={[
-        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
-      ]}
-      onChange={(value) => {
-        onChange({customOptionsEditorDataSource: value});
-      }}
-      onConfirm={() => {
-        onChange({
-          customOptionsData: [
-            ...resourceVersionCreatorPage.customOptionsData,
-            ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
-              return {
-                key: coeds.key,
-                defaultValue: coeds.defaultValue,
-                description: coeds.description,
-                custom: coeds.custom,
-                customOption: coeds.customOption,
-              };
-            }),
-          ],
-          customOptionsEditorDataSource: [],
-          customOptionsEditorVisible: false,
-        });
-      }}
-
     />
 
     <FBasePropEditorDrawer
@@ -328,6 +309,133 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             ...resourceVersionCreatorPage.basePropertyEditorData,
             description: value.value,
             descriptionError: value.errorText,
+          } : null,
+        });
+      }}
+    />
+
+    <FCustomOptionsEditorDrawer
+      visible={resourceVersionCreatorPage.customOptionsEditorVisible}
+      onCancel={() => {
+        onChange({
+          customOptionsEditorVisible: false,
+          customOptionsEditorDataSource: [],
+        });
+      }}
+      dataSource={resourceVersionCreatorPage.customOptionsEditorDataSource}
+      disabledKeys={[
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+      ]}
+      onChange={(value) => {
+        onChange({customOptionsEditorDataSource: value});
+      }}
+      onConfirm={() => {
+        onChange({
+          customOptionsData: [
+            ...resourceVersionCreatorPage.customOptionsData,
+            ...resourceVersionCreatorPage.customOptionsEditorDataSource.map<StorageObjectEditorModelState['customOptionsData'][number]>((coeds) => {
+              return {
+                key: coeds.key,
+                defaultValue: coeds.defaultValue,
+                description: coeds.description,
+                custom: coeds.custom,
+                customOption: coeds.customOption,
+              };
+            }),
+          ],
+          customOptionsEditorDataSource: [],
+          customOptionsEditorVisible: false,
+        });
+      }}
+    />
+
+    <FCustomOptionEditorDrawer
+      visible={resourceVersionCreatorPage.customOptionIndex !== -1}
+      keyInput={resourceVersionCreatorPage.customOptionEditorData?.key || ''}
+      keyInputError={resourceVersionCreatorPage.customOptionEditorData?.keyError || ''}
+      descriptionInput={resourceVersionCreatorPage.customOptionEditorData?.description || ''}
+      descriptionInputError={resourceVersionCreatorPage.customOptionEditorData?.descriptionError || ''}
+      typeSelect={resourceVersionCreatorPage.customOptionEditorData?.custom || 'input'}
+      valueInput={resourceVersionCreatorPage.customOptionEditorData?.defaultValue || ''}
+      valueInputError={resourceVersionCreatorPage.customOptionEditorData?.defaultValueError || ''}
+      optionsInput={resourceVersionCreatorPage.customOptionEditorData?.customOption || ''}
+      optionsInputError={resourceVersionCreatorPage.customOptionEditorData?.customOptionError || ''}
+      usedKeys={[
+        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customOptionsData.filter((cod, ind) => {
+          return ind !== resourceVersionCreatorPage.customOptionIndex;
+        }).map((cod) => {
+          return cod.key;
+        }),
+      ]}
+      onCancel={() => {
+        onChange({
+          customOptionIndex: -1,
+          customOptionEditorData: null,
+        });
+      }}
+      onConfirm={() => {
+        onChange({
+          customOptionsData: resourceVersionCreatorPage.customOptionsData.map((cod, ind) => {
+            if (ind !== resourceVersionCreatorPage.customOptionIndex) {
+              return cod;
+            }
+            return {
+              key: resourceVersionCreatorPage.customOptionEditorData?.key || '',
+              description: resourceVersionCreatorPage.customOptionEditorData?.description || '',
+              custom: resourceVersionCreatorPage.customOptionEditorData?.custom || 'input',
+              defaultValue: resourceVersionCreatorPage.customOptionEditorData?.defaultValue || '',
+              customOption: resourceVersionCreatorPage.customOptionEditorData?.customOption || '',
+            };
+          }),
+          customOptionIndex: -1,
+          customOptionEditorData: null,
+        })
+      }}
+      onKeyInputChange={(value) => {
+        onChange({
+          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+            ...resourceVersionCreatorPage.customOptionEditorData,
+            key: value.value,
+            keyError: value.errorText,
+          } : null,
+        });
+      }}
+      onDescriptionInputChange={(value) => {
+        onChange({
+          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+            ...resourceVersionCreatorPage.customOptionEditorData,
+            description: value.value,
+            descriptionError: value.errorText,
+          } : null,
+        });
+      }}
+      onSelectChange={(value) => {
+        onChange({
+          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+            ...resourceVersionCreatorPage.customOptionEditorData,
+            custom: value.value,
+          } : null,
+        });
+      }}
+      onValueInputChange={(value) => {
+        onChange({
+          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+            ...resourceVersionCreatorPage.customOptionEditorData,
+            defaultValue: value.value,
+            defaultValueError: value.errorText,
+          } : null,
+        });
+      }}
+      onOptionsInputChange={(value) => {
+        onChange({
+          customOptionEditorData: resourceVersionCreatorPage.customOptionEditorData ? {
+            ...resourceVersionCreatorPage.customOptionEditorData,
+            customOption: value.value,
+            customOptionError: value.errorText,
           } : null,
         });
       }}
