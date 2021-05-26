@@ -54,14 +54,14 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
               onClick={() => {
                 onChange({
                   basePropertiesEditorVisible: true,
-                  basePropertiesEditorData: resourceVersionCreatorPage.baseProperties.map((bp) => {
-                    return {
-                      ...bp,
-                      keyError: '',
-                      valueError: '',
-                      descriptionError: '',
-                    };
-                  }),
+                  basePropertiesEditorData: [{
+                    key: '',
+                    keyError: '',
+                    value: '',
+                    valueError: '',
+                    description: '',
+                    descriptionError: '',
+                  }],
                 });
               }}
             >补充属性</FTextBtn>
@@ -173,6 +173,7 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
       dataSource={resourceVersionCreatorPage.basePropertiesEditorData}
       disabledKeys={[
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
         ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
       ]}
       onChange={(value) => {
@@ -190,13 +191,16 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
         onChange({
           basePropertiesEditorData: [],
           basePropertiesEditorVisible: false,
-          baseProperties: resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
-            return {
-              key: bped.key,
-              value: bped.value,
-              description: bped.description,
-            };
-          }),
+          baseProperties: [
+            ...resourceVersionCreatorPage.baseProperties,
+            ...resourceVersionCreatorPage.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
+              return {
+                key: bped.key,
+                value: bped.value,
+                description: bped.description,
+              };
+            }),
+          ],
         });
       }}
     />
