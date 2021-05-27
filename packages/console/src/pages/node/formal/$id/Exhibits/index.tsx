@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FDown, FEdit, FExclamation, FFileSearch, FWarning} from '@/components/FIcons';
-import Header from '../Header';
 import FTable from '@/components/FTable';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import {FContentText, FTitleText} from '@/components/FText';

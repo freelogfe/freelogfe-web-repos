@@ -22,6 +22,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
+    "ahooks": "^2.10.4",
     "antd": "^4.15.6",
     "umi": "^3.4.21"
   },

@@ -1,0 +1,65 @@
+//@import '~antd/lib/style/themes/default.less';
+@import '../../config.less';
+
+.wrap {
+  display: inline-block;
+  width: fit-content;
+  position: relative;
+}
+
+.Input {
+  border-width: 1px;
+  border-style: solid;
+
+  &:hover {
+    border-color: #CBCBCB;
+  }
+
+  &:focus {
+    border-color: @f-primary-color;
+  }
+
+  &.InputError {
+    //&, &:hover, &:active, &:focus {
+    //  border-color: @f-error-color1;
+    //}
+  }
+}
+
+
+.light {
+  background-color: white;
+  border-color: #E4E7EB;
+}
+
+.darkPrefix {
+  color: #8E8E93;
+  font-size: 14px;
+}
+
+.dark {
+  border-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 22px;
+}
+
+.errorText {
+  color: @f-error-color1;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  //line-height: 20px;
+  padding-left: 10px;
+  padding-top: 5px;
+  white-space: nowrap;
+}
+
+.FInputWordCount {
+  color: #C4C4C4;
+}
+
+.beyond {
+  color: @f-error-color1;
+}
+
+

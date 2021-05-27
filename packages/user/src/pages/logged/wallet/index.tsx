@@ -1,10 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTipText, FTitleText} from '@/components/FText';
-import {FRectBtn} from '@/components/FButton';
+import {FRectBtn, FTextBtn} from '@/components/FButton';
 import FSafetyLock from "@/components/FIcons/FSafetyLock";
 import FTable from "@/components/FTable";
 import {ColumnsType} from "antd/lib/table";
+import {Modal, Space, Radio, message} from 'antd';
+import FInput from "@/components/FInput";
+import {FCheck} from "@/components/FIcons";
 
 interface WalletProps {
 
@@ -61,11 +64,28 @@ function Wallet({}: WalletProps) {
     <FTitleText type="h1" text={'羽币账户'}/>
     <div style={{height: 20}}/>
     {
-      false
+      true
         ? (<div className={styles.Inactive}>
           <FTipText text={'账户未激活，激活后可获得 100 枚羽币'} type="second"/>
           <div style={{width: 30}}/>
-          <FRectBtn type="primary">激活账户</FRectBtn>
+          <FRectBtn
+            type="primary"
+            onClick={() => {
+              message.success({
+                content: (<div className={styles.success}>
+                  <FCheck style={{fontSize: 76}}/>
+                  <div style={{height: 20}}/>
+                  <FTitleText type="popup" text={'支付密码修改成功!'}/>
+                </div>),
+                // className: 'custom-class',
+                style: {
+                  marginTop: '20vh',
+                },
+                icon: <div/>,
+                duration: 1000000,
+              });
+            }}
+          >激活账户</FRectBtn>
         </div>)
         : (<>
           <div className={styles.AccountInfo}>
@@ -90,6 +110,144 @@ function Wallet({}: WalletProps) {
         </>)
     }
     <div style={{height: 100}}/>
+
+    <Modal
+      title={<FTitleText text={'激活账户验证'} type="popup"/>}
+      visible={false}
+      // onOk={handleOk}
+      // onCancel={handleCancel}
+      footer={null}
+      width={500}
+    >
+      <div className={styles.ActivateAccountContent}>
+        <Space size={25} direction="vertical" style={{width: 320}}>
+          <Space size={15} direction="vertical">
+            <FTipText type="third" text={'验证方式'}/>
+            <Space size={2}>
+              <Radio/>
+              <FContentText text={'156******74'} type="normal"/>
+            </Space>
+            <Space size={2}>
+              <Radio/>
+              <FContentText text={'123***@freelog.com'} type="normal"/>
+            </Space>
+          </Space>
+
+          <div>
+            <FTipText type="third" text={'验证码'}/>
+            <div style={{height: 5}}/>
+            <Space size={10}>
+              <FInput
+                className={styles.verificationCodeInput}
+                wrapClassName={styles.verificationCodeInput}
+                size="middle"
+              />
+              <FRectBtn
+                style={{width: 110}}
+                type="primary"
+              >获取验证码</FRectBtn>
+            </Space>
+          </div>
+
+          <div>
+            <FTipText type="third" text={'支付密码'}/>
+            <div style={{height: 5}}/>
+            <FInput
+              className={styles.blockInput}
+              wrapClassName={styles.blockInput}
+              size="middle"
+            />
+          </div>
+
+          <div>
+            <FTipText type="third" text={'验证支付密码'}/>
+            <div style={{height: 5}}/>
+            <FInput
+              className={styles.blockInput}
+              wrapClassName={styles.blockInput}
+              size="middle"
+            />
+          </div>
+        </Space>
+        <div style={{height: 40}}/>
+        <FRectBtn type="primary">激活feth账户</FRectBtn>
+      </div>
+
+    </Modal>
+
+    <Modal
+      title={<FTitleText text={'修改支付密码'} type="popup"/>}
+      visible={false}
+      // onOk={handleOk}
+      // onCancel={handleCancel}
+      footer={null}
+      width={500}
+    >
+      <div className={styles.ActivateAccountContent}>
+        <Space size={25} direction="vertical" style={{width: 320}}>
+          <Space size={15} direction="vertical">
+            <FTipText type="third" text={'验证方式'}/>
+            <Space size={2}>
+              <Radio/>
+              <FContentText text={'156******74'} type="normal"/>
+            </Space>
+            <Space size={2}>
+              <Radio/>
+              <FContentText text={'123***@freelog.com'} type="normal"/>
+            </Space>
+          </Space>
+
+          <div>
+            <FTipText type="third" text={'验证码'}/>
+            <div style={{height: 5}}/>
+            <Space size={10}>
+              <FInput
+                className={styles.verificationCodeInput}
+                wrapClassName={styles.verificationCodeInput}
+                size="middle"
+              />
+              <FRectBtn
+                style={{width: 110}}
+                type="primary"
+              >获取验证码</FRectBtn>
+            </Space>
+          </div>
+
+          <div>
+            <FTipText type="third" text={'原支付密码'}/>
+            <div style={{height: 5}}/>
+            <FInput
+              className={styles.blockInput}
+              wrapClassName={styles.blockInput}
+              size="middle"
+            />
+          </div>
+
+          <div>
+            <FTipText type="third" text={'支付密码'}/>
+            <div style={{height: 5}}/>
+            <FInput
+              className={styles.blockInput}
+              wrapClassName={styles.blockInput}
+              size="middle"
+            />
+          </div>
+
+          <div>
+            <FTipText type="third" text={'验证支付密码'}/>
+            <div style={{height: 5}}/>
+            <FInput
+              className={styles.blockInput}
+              wrapClassName={styles.blockInput}
+              size="middle"
+            />
+          </div>
+        </Space>
+        <div style={{height: 40}}/>
+        <FRectBtn type="primary">激活feth账户</FRectBtn>
+      </div>
+
+    </Modal>
   </div>);
 }
 
