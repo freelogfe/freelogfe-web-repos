@@ -1,0 +1,58 @@
+@import '../../config.less';
+
+.styles {
+
+  :global(.ant-table-thead) {
+    & > tr {
+      & > th {
+        padding: 20px 5px 10px;
+        border-color: #E4E7EB;
+
+        &:first-child {
+          padding-left: 20px;
+        }
+
+        &:last-child {
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table-tbody) {
+    & > tr {
+      min-height: 70px;
+
+      & > td {
+        padding: 15px 5px;
+        border-color: #E4E7EB;
+
+        &:first-child {
+          padding-left: 20px;
+        }
+
+        &:last-child {
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table) {
+    background-color: transparent;
+  }
+
+  :global(.ant-table-thead) {
+    & > tr {
+      & > th {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.rowClassName {
+  & > td {
+    min-height: 70px;
+  }
+}

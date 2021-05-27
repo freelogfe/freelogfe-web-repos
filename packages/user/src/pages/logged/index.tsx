@@ -24,15 +24,15 @@ function FLogged({children}: LoggedProps) {
           <div style={{height: 10}}/>
           <FContentText type="highlight" text={'13145959706'}/>
           <div style={{height: 35}}/>
-          <FLink to={'/logged/wallet'} className={styles.FLink}>
+          <FLink to={'/logged/wallet'} className={[styles.FLink, styles.FLinkActive].join(' ')}>
             钱包
           </FLink>
-          <FLink to={'/logged/contract'} className={styles.FLink}>
-            合约管理
-          </FLink>
-          <FLink to={'/logged/setting'} className={[styles.FLink, styles.FLinkActive].join(' ')}>
-            设置
-          </FLink>
+          {/*<FLink to={'/logged/contract'} className={[styles.FLink].join(' ')}>*/}
+          {/*  合约管理*/}
+          {/*</FLink>*/}
+          {/*<FLink to={'/logged/setting'} className={[styles.FLink].join(' ')}>*/}
+          {/*  设置*/}
+          {/*</FLink>*/}
         </div>
       </div>
       <div className={styles.content}>
