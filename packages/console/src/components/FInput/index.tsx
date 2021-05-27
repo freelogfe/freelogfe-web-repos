@@ -12,6 +12,7 @@ interface FInputProps extends InputProps {
   errorText?: React.ReactNode;
   wrapClassName?: string;
   lengthLimit?: number;
+  size?: 'small' | 'middle';
 
   onDebounceChange?(value: string): void;
 }
@@ -26,6 +27,7 @@ function FInput({
                   errorText,
                   wrapClassName,
                   lengthLimit = 0,
+                  size = 'middle',
                   ...props
                 }: FInputProps) {
 
@@ -67,11 +69,13 @@ function FInput({
             prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
             className={[...commentClass, styles.dark].join(' ')}
             allowClear={true}
+            style={{height: size === 'middle' ? 38 : 32}}
             {...inputProps}
           />
         )
         : (<Input
           className={[...commentClass, styles.light].join(' ')}
+          style={{height: size === 'middle' ? 38 : 32}}
           suffix={lengthLimit > 0
             ? (<span
               className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
