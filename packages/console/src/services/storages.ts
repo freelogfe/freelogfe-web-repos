@@ -49,13 +49,14 @@ export function bucketDetails({bucketName}: BucketDetailsParamsType) {
 
 // 分页查看存储对象列表
 interface ObjectListParamsType {
+  limit?: number;
+  skip?: number;
   bucketName: string;
   resourceType?: string;
   isLoadingTypeless?: 0 | 1;
   keywords?: string;
   projection?: string;
-  limit?: number;
-  skip?: number;
+  sort?: string;
 }
 
 export function objectList({bucketName, ...params}: ObjectListParamsType) {

@@ -334,6 +334,7 @@ const Model: StorageHomePageModelType = {
         bucketName: storageHomePage.activatedBucket,
         limit,
         skip,
+        sort: 'updateDate:-1'
       };
       yield put<ChangeAction>({
         type: 'change',
