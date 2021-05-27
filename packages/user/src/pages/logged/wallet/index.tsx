@@ -40,7 +40,7 @@ function Wallet({}: WalletProps) {
       render() {
         return (<div>
           <FTitleText text={'+30.00'} type="h1"/>
-          <FContentText text={'12:00'}/>
+          <FContentText text={'余额 80.00'} type="additional1"/>
         </div>);
       }
     }, {
