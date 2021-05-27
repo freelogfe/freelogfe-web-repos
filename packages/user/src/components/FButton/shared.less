@@ -1,0 +1,27 @@
+.weaken {
+  border: none;
+
+  &, &:focus {
+    color: #2784FF;
+    background-color: #EEF6FF;
+  }
+
+  &:hover {
+    color: #529DFF;
+    background-color: #F1F8FF;
+  }
+
+  &:active {
+    color: #187AFC;
+    background-color: #E4F0FF;
+  }
+
+
+  &[disabled] {
+    &, &:hover, &:active, &:focus {
+      color: #A9CEFF;
+      background-color: #F1F8FF;
+    }
+  }
+}
+

@@ -17,7 +17,9 @@
         "src/.umi/*"
       ]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true
   },
   "include": [
     "mock/**/*",
