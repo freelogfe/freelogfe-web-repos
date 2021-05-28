@@ -22,10 +22,18 @@ export type WalletPageModelState = WholeReadonly<{
     afterBalance: string;
     status: 1 | 2 | 3 | 4; // 1:交易确认中 2:交易成功 3:交易取消 4:交易失败
   }[];
+
+  activatingAccount: boolean;
+  activatingAccountMobile: string;
+  activatingAccountEmail: string;
+  activatingAccountType: 'mobile' | 'email';
+
+
+  changingPassword: boolean;
 }>;
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'walletPage/change';
   payload: Partial<WalletPageModelState>;
 }
 
@@ -57,6 +65,13 @@ const initStates: WalletPageModelState = {
   accountId: '',
   accountBalance: 0,
   transactionRecord: [],
+
+  activatingAccount: false,
+  activatingAccountMobile: '',
+  activatingAccountEmail: '',
+  activatingAccountType: 'mobile',
+
+  changingPassword: false,
 };
 
 const Model: WalletPageModelType = {
@@ -72,7 +87,7 @@ const Model: WalletPageModelType = {
         userId: user.userInfo?.userId || -1,
       };
       const {data} = yield call(FApiServer.Transaction.individualAccounts, params);
-      console.log(data, 'data@@!@#$@#$@#$');
+      // console.log(data, 'data@@!@#$@#$@#$');
 
       if (data.status === 0) {
         return yield put<ChangeAction>({

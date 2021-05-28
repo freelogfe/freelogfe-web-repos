@@ -10,21 +10,29 @@ import FInput from "@/components/FInput";
 import {FCheck} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, WalletPageModelState} from "@/models/connect";
-import {FetchAccountInfoAction} from "@/models/walletPage";
+import {ConnectState, UserModelState, WalletPageModelState} from "@/models/connect";
+import {ChangeAction, FetchAccountInfoAction} from "@/models/walletPage";
 
 interface WalletProps {
   dispatch: Dispatch;
   walletPage: WalletPageModelState;
+  user: UserModelState;
 }
 
-function Wallet({dispatch, walletPage}: WalletProps) {
+function Wallet({dispatch, walletPage, user}: WalletProps) {
 
   AHooks.useMount(() => {
     dispatch<FetchAccountInfoAction>({
       type: 'walletPage/fetchAccountInfo',
     });
   });
+
+  async function onChange(payload: Partial<WalletPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'walletPage/change',
+      payload,
+    });
+  }
 
   const columns: ColumnsType<{
     serialNo: string;
@@ -111,19 +119,25 @@ function Wallet({dispatch, walletPage}: WalletProps) {
           <FRectBtn
             type="primary"
             onClick={() => {
-              message.success({
-                content: (<div className={styles.success}>
-                  <FCheck style={{fontSize: 76}}/>
-                  <div style={{height: 20}}/>
-                  <FTitleText type="popup" text={'支付密码修改成功!'}/>
-                </div>),
-                // className: 'custom-class',
-                style: {
-                  marginTop: '20vh',
-                },
-                icon: <div/>,
-                duration: 1000000,
+              onChange({
+                activatingAccount: true,
+                activatingAccountMobile: user.userInfo?.mobile || '',
+                activatingAccountEmail: user.userInfo?.email || '',
+                activatingAccountType: user.userInfo?.mobile ? 'mobile' : 'email',
               });
+              // message.success({
+              //   content: (<div className={styles.success}>
+              //     <FCheck style={{fontSize: 76}}/>
+              //     <div style={{height: 20}}/>
+              //     <FTitleText type="popup" text={'支付密码修改成功!'}/>
+              //   </div>),
+              //   // className: 'custom-class',
+              //   style: {
+              //     marginTop: '20vh',
+              //   },
+              //   icon: <div/>,
+              //   duration: 1000000,
+              // });
             }}
           >激活账户</FRectBtn>
         </div>)
@@ -158,7 +172,7 @@ function Wallet({dispatch, walletPage}: WalletProps) {
 
     <Modal
       title={<FTitleText text={'激活账户验证'} type="popup"/>}
-      visible={false}
+      visible={walletPage.activatingAccount}
       // onOk={handleOk}
       // onCancel={handleCancel}
       footer={null}
@@ -168,14 +182,34 @@ function Wallet({dispatch, walletPage}: WalletProps) {
         <Space size={25} direction="vertical" style={{width: 320}}>
           <Space size={15} direction="vertical">
             <FTipText type="third" text={'验证方式'}/>
-            <Space size={2}>
-              <Radio/>
-              <FContentText text={'156******74'} type="normal"/>
-            </Space>
-            <Space size={2}>
-              <Radio/>
-              <FContentText text={'123***@freelog.com'} type="normal"/>
-            </Space>
+            {
+              walletPage.activatingAccountMobile && (<Space size={2}>
+                <Radio
+                  checked={walletPage.activatingAccountType === 'mobile'}
+                  onChange={(e) => {
+                    onChange({
+                      activatingAccountType: 'mobile',
+                    });
+                  }}
+                />
+                <FContentText text={walletPage.activatingAccountMobile} type="normal"/>
+              </Space>)
+            }
+
+            {
+              walletPage.activatingAccountEmail && (<Space size={2}>
+                <Radio
+                  checked={walletPage.activatingAccountType === 'email'}
+                  onChange={(e) => {
+                    onChange({
+                      activatingAccountType: 'email',
+                    });
+                  }}
+                />
+                <FContentText text={walletPage.activatingAccountEmail} type="normal"/>
+              </Space>)
+            }
+
           </Space>
 
           <div>
@@ -296,6 +330,7 @@ function Wallet({dispatch, walletPage}: WalletProps) {
   </div>);
 }
 
-export default connect(({walletPage}: ConnectState) => ({
+export default connect(({walletPage, user}: ConnectState) => ({
   walletPage,
+  user,
 }))(Wallet);

@@ -15,3 +15,6 @@ export const NODE_NAME: RegExp = /^[\u4E00-\u9FA5|a-zA-Z0-9]{2,24}$/;
 
 // 节点地址
 export const NODE_DOMAIN = /^(?!-)[a-z0-9-]{4,24}(?<!-)$/;
+
+// 支付密码
+export const PAY_PASSWORD = /^\d{6}$/;
