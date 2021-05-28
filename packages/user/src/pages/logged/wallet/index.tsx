@@ -8,12 +8,17 @@ import {ColumnsType} from "antd/lib/table";
 import {Modal, Space, Radio, message} from 'antd';
 import FInput from "@/components/FInput";
 import {FCheck} from "@/components/FIcons";
+import * as AHooks from 'ahooks';
 
 interface WalletProps {
 
 }
 
 function Wallet({}: WalletProps) {
+
+  AHooks.useMount(() => {
+
+  });
 
   const columns: ColumnsType<any> = [
     {

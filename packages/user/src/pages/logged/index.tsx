@@ -3,12 +3,26 @@ import styles from './index.less';
 import FBaseLayout from "@/layouts/FBaseLayout";
 import {FContentText, FTitleText} from '@/components/FText';
 import FLink from "@/components/FLink";
+import * as AHooks from 'ahooks';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, LoggedSiderModelState} from "@/models/connect";
+import {FetchInfoAction} from '@/models/loggedSider';
 
 interface LoggedProps {
+  dispatch: Dispatch;
+  loggedSider: LoggedSiderModelState;
+
   children: React.ReactNode;
 }
 
-function FLogged({children}: LoggedProps) {
+function FLogged({dispatch, loggedSider, children}: LoggedProps) {
+
+  AHooks.useMount(() => {
+    dispatch<FetchInfoAction>({
+      type: 'loggedSider/fetchInfo',
+    });
+  });
+
   return (<FBaseLayout>
     <div className={styles.container}>
       <div className={styles.sider}>
@@ -16,13 +30,13 @@ function FLogged({children}: LoggedProps) {
         <div className={styles.userInfo}>
           <img
             alt=""
-            src={'https://image.freelog.com/headImage/50028'}
+            src={loggedSider.userInfo?.headImage || ''}
             className={styles.img}
           />
           <div style={{height: 20}}/>
-          <FTitleText type="h3" text={'YANGHONGTIAN'}/>
+          <FTitleText type="h3" text={loggedSider.userInfo?.username || ''}/>
           <div style={{height: 10}}/>
-          <FContentText type="highlight" text={'13145959706'}/>
+          <FContentText type="highlight" text={loggedSider.userInfo?.mobile || loggedSider.userInfo?.email || ''}/>
           <div style={{height: 35}}/>
           <FLink to={'/logged/wallet'} className={[styles.FLink, styles.FLinkActive].join(' ')}>
             钱包
@@ -42,4 +56,6 @@ function FLogged({children}: LoggedProps) {
   </FBaseLayout>);
 }
 
-export default FLogged;
+export default connect(({loggedSider}: ConnectState) => ({
+  loggedSider,
+}))(FLogged);
