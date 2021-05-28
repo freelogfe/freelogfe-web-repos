@@ -303,5 +303,7 @@
 	"tip_download_object": "Download",
 	"tip_delete": "Delete",
 	"btn_check": "CHECK",
-	"msg_have_no_access": "Sorry but you have no access to this page"
+	"msg_have_no_access": "Sorry but you have no access to this page",
+	"unnamed_version": "Unnamed Version",
+	"version_no_draft": "{VersionNo}（draft）"
 }
