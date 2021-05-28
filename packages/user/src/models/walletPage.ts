@@ -55,7 +55,7 @@ export interface InitModelStatesAction extends AnyAction {
 }
 
 export interface FetchAccountInfoAction extends AnyAction {
-  type: 'walletPage/fetchAccountInfo';
+  type: 'walletPage/fetchAccountInfo' | 'fetchAccountInfo';
 }
 
 export interface ActiveAccountAction extends AnyAction {
@@ -192,6 +192,10 @@ const Model: WalletPageModelType = {
         payload: {
           activatingAccount: false,
         },
+      });
+
+      yield put<FetchAccountInfoAction>({
+        type: 'fetchAccountInfo',
       });
     },
     * changePassword({}: ChangePasswordAction, {put, call, select}: EffectsCommandMap) {

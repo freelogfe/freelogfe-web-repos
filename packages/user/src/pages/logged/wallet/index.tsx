@@ -180,7 +180,11 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
       title={<FTitleText text={'激活账户验证'} type="popup"/>}
       visible={walletPage.activatingAccount}
       // onOk={handleOk}
-      // onCancel={handleCancel}
+      onCancel={() => {
+        onChange({
+          activatingAccount: false,
+        });
+      }}
       footer={null}
       width={500}
     >
@@ -294,7 +298,11 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
       title={<FTitleText text={'修改支付密码'} type="popup"/>}
       visible={walletPage.changingPassword}
       // onOk={handleOk}
-      // onCancel={handleCancel}
+      onCancel={() => {
+        onChange({
+          changingPassword: false,
+        });
+      }}
       footer={null}
       width={500}
     >

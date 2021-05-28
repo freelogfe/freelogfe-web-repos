@@ -7,12 +7,15 @@ import {FContentText} from '@/components/FText';
 import FUtil from "@/utils";
 import {Space} from "antd";
 import {FRectBtn} from "@/components/FButton";
+import {connect} from 'dva';
+import {ConnectState, UserModelState} from "@/models/connect";
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
+  user: UserModelState;
 }
 
-function FBaseLayout({children}: FBaseLayoutProps) {
+function FBaseLayout({children, user}: FBaseLayoutProps) {
   return (<FLayout
     headerLeft={
       <NavLink
@@ -29,7 +32,7 @@ function FBaseLayout({children}: FBaseLayoutProps) {
       >进入控制台</FRectBtn>
       <FDropdown overlay={<div className={styles.userPanel}>
         <div className={styles.userPanelHeader}>
-          <img src={'https://image.freelog.com/headImage/50028'} alt="headImage"/>
+          <img src={user.userInfo?.headImage} alt="headImage"/>
           <div style={{height: 10}}/>
           <FContentText
             type="highlight"
@@ -37,7 +40,7 @@ function FBaseLayout({children}: FBaseLayoutProps) {
           />
           <div style={{height: 8}}/>
           <FContentText
-            text={'1025887998@qq.com'}
+            text={user.userInfo?.mobile || user.userInfo?.email}
           />
         </div>
         <div className={styles.userPanelMenu}>
@@ -50,7 +53,7 @@ function FBaseLayout({children}: FBaseLayoutProps) {
         </div>
       </div>}>
         <a className={styles.avatar}>
-          <img src={'https://image.freelog.com/headImage/50028'} alt={'avatar'}/>
+          <img src={user.userInfo?.headImage} alt={'avatar'}/>
         </a>
       </FDropdown>
     </Space>}
@@ -58,4 +61,4 @@ function FBaseLayout({children}: FBaseLayoutProps) {
   </FLayout>)
 }
 
-export default FBaseLayout;
+export default connect(({user}: ConnectState) => ({user}))(FBaseLayout);
