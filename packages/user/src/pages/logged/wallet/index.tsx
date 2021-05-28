@@ -10,7 +10,7 @@ import FInput from "@/components/FInput";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, UserModelState, WalletPageModelState} from "@/models/connect";
-import {ActiveAccountAction, ChangeAction, FetchAccountInfoAction} from "@/models/walletPage";
+import {ActiveAccountAction, ChangeAction, ChangePasswordAction, FetchAccountInfoAction} from "@/models/walletPage";
 import {PAY_PASSWORD} from "@/utils/regexp";
 import {FCheck} from "@/components/FIcons";
 
@@ -126,18 +126,30 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
                 activatingAccountEmail: user.userInfo?.email || '',
                 activatingAccountType: user.userInfo?.mobile ? 'mobile' : 'email',
               });
-
             }}
           >激活账户</FRectBtn>
         </div>)
         : (<>
           <div className={styles.AccountInfo}>
             <div>
-              <FTitleText type="h4" text={'账户余额（枚）'}/>
+              <FTitleText
+                type="h4"
+                text={'账户余额（枚）'}
+              />
               <div style={{height: 15}}/>
               <div className={styles.Gold}>{walletPage.accountBalance}</div>
             </div>
-            <div className={styles.ChangePassword}>
+            <div
+              className={styles.ChangePassword}
+              onClick={() => {
+                onChange({
+                  changingPassword: true,
+                  changingPasswordMobile: user.userInfo?.mobile || '',
+                  changingPasswordEmail: user.userInfo?.email || '',
+                  changingPasswordType: user.userInfo?.mobile ? 'mobile' : 'email',
+                });
+              }}
+            >
               <FSafetyLock style={{fontSize: 32, color: '#DA6666'}}/>
               {/*<div style={{height: 10}}/>*/}
               <div style={{color: '#333', fontSize: 13}}>修改支付密码</div>
@@ -280,7 +292,7 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
 
     <Modal
       title={<FTitleText text={'修改支付密码'} type="popup"/>}
-      visible={false}
+      visible={walletPage.changingPassword}
       // onOk={handleOk}
       // onCancel={handleCancel}
       footer={null}
@@ -290,14 +302,40 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
         <Space size={25} direction="vertical" style={{width: 320}}>
           <Space size={15} direction="vertical">
             <FTipText type="third" text={'验证方式'}/>
-            <Space size={2}>
-              <Radio/>
-              <FContentText text={'156******74'} type="normal"/>
-            </Space>
-            <Space size={2}>
-              <Radio/>
-              <FContentText text={'123***@freelog.com'} type="normal"/>
-            </Space>
+            {
+              walletPage.changingPasswordMobile && (<Space size={2}>
+                <Radio
+                  checked={walletPage.changingPasswordType === 'mobile'}
+                  onChange={(e) => {
+                    onChange({
+                      changingPasswordType: 'mobile',
+                    });
+                  }}
+                />
+                <FContentText
+                  text={walletPage.changingPasswordMobile}
+                  type="normal"
+                />
+              </Space>)
+            }
+
+            {
+              walletPage.changingPasswordEmail && (<Space size={2}>
+                <Radio
+                  checked={walletPage.changingPasswordType === 'email'}
+                  onChange={(e) => {
+                    onChange({
+                      changingPasswordType: 'email',
+                    });
+                  }}
+                />
+                <FContentText
+                  text={walletPage.changingPasswordEmail}
+                  type="normal"
+                />
+              </Space>)
+            }
+
           </Space>
 
           <div>
@@ -323,6 +361,15 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size="middle"
+              value={walletPage.changingPasswordPasswordOld}
+              errorText={walletPage.changingPasswordPasswordOldError}
+              onChange={(e) => {
+                const value = e.target.value;
+                onChange({
+                  changingPasswordPasswordOld: value,
+                  changingPasswordPasswordOldError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                });
+              }}
             />
           </div>
 
@@ -333,6 +380,16 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size="middle"
+              value={walletPage.changingPasswordPasswordOne}
+              errorText={walletPage.changingPasswordPasswordOneError}
+              onChange={(e) => {
+                const value = e.target.value;
+                onChange({
+                  changingPasswordPasswordOne: value,
+                  changingPasswordPasswordOneError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                  changingPasswordPasswordTwoError: (walletPage.changingPasswordPasswordTwo && value !== walletPage.changingPasswordPasswordTwo) ? '两次密码必须一致' : '',
+                });
+              }}
             />
           </div>
 
@@ -343,15 +400,30 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size="middle"
+              value={walletPage.changingPasswordPasswordTwo}
+              errorText={walletPage.changingPasswordPasswordTwoError}
+              onChange={(e) => {
+                const value = e.target.value;
+                onChange({
+                  changingPasswordPasswordTwo: value,
+                  changingPasswordPasswordTwoError: value === walletPage.changingPasswordPasswordOne ? '' : '两次密码必须一致',
+                });
+              }}
             />
           </div>
         </Space>
         <div style={{height: 40}}/>
         <FRectBtn
           type="primary"
+          disabled={!walletPage.changingPasswordPasswordOne
+          || !walletPage.changingPasswordPasswordTwo
+          || !!walletPage.changingPasswordPasswordOneError
+          || !!walletPage.changingPasswordPasswordTwoError
+          || !!walletPage.changingPasswordPasswordOldError
+          }
           onClick={() => {
-            dispatch<ActiveAccountAction>({
-              type: 'walletPage/activeAccount',
+            dispatch<ChangePasswordAction>({
+              type: 'walletPage/changePassword',
             });
           }}
         >激活feth账户</FRectBtn>
@@ -378,6 +450,6 @@ export function successMessage() {
       marginTop: '20vh',
     },
     icon: <div/>,
-    duration: 1000000,
+    duration: 1,
   })
 }

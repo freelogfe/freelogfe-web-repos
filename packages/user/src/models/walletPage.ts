@@ -5,7 +5,6 @@ import {FApiServer} from "@/services";
 import {ConnectState} from "@/models/connect";
 import FUtil from "@/utils";
 import {successMessage} from '@/pages/logged/wallet';
-import Cookies from 'js-cookie'
 
 export type WalletPageModelState = WholeReadonly<{
   accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
@@ -35,6 +34,15 @@ export type WalletPageModelState = WholeReadonly<{
   activatingAccountPasswordTwoError: string;
 
   changingPassword: boolean;
+  changingPasswordMobile: string;
+  changingPasswordEmail: string;
+  changingPasswordType: 'mobile' | 'email';
+  changingPasswordPasswordOld: string;
+  changingPasswordPasswordOldError: string;
+  changingPasswordPasswordOne: string;
+  changingPasswordPasswordOneError: string;
+  changingPasswordPasswordTwo: string;
+  changingPasswordPasswordTwoError: string;
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -54,6 +62,10 @@ export interface ActiveAccountAction extends AnyAction {
   type: 'walletPage/activeAccount';
 }
 
+export interface ChangePasswordAction extends AnyAction {
+  type: 'walletPage/changePassword';
+}
+
 interface WalletPageModelType {
   namespace: 'walletPage';
   state: WalletPageModelState;
@@ -61,6 +73,7 @@ interface WalletPageModelType {
     fetchAccountInfo: (action: FetchAccountInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     activeAccount: (action: ActiveAccountAction, effects: EffectsCommandMap) => void;
+    changePassword: (action: ChangePasswordAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<WalletPageModelState, ChangeAction>;
@@ -86,6 +99,15 @@ const initStates: WalletPageModelState = {
   activatingAccountPasswordTwoError: '',
 
   changingPassword: false,
+  changingPasswordMobile: '',
+  changingPasswordEmail: '',
+  changingPasswordType: 'mobile',
+  changingPasswordPasswordOld: '',
+  changingPasswordPasswordOldError: '',
+  changingPasswordPasswordOne: '',
+  changingPasswordPasswordOneError: '',
+  changingPasswordPasswordTwo: '',
+  changingPasswordPasswordTwoError: '',
 };
 
 const Model: WalletPageModelType = {
@@ -103,7 +125,6 @@ const Model: WalletPageModelType = {
         userId: data1.userId,
       };
       const {data} = yield call(FApiServer.Transaction.individualAccounts, params);
-      // console.log(data, 'data@@!@#$@#$@#$');
 
       if (data.status === 0) {
         return yield put<ChangeAction>({
@@ -121,8 +142,6 @@ const Model: WalletPageModelType = {
       };
 
       const {data: data2} = yield call(FApiServer.Transaction.details, params2);
-
-      // console.log(data2, 'data212342134234234');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -164,9 +183,9 @@ const Model: WalletPageModelType = {
 
       const {data} = yield call(FApiServer.Transaction.activateIndividualAccounts, params);
 
-      if (data) {
-        successMessage();
-      }
+      // if (data) {
+      //   successMessage();
+      // }
 
       yield put<ChangeAction>({
         type: 'change',
@@ -175,6 +194,37 @@ const Model: WalletPageModelType = {
         },
       });
     },
+    * changePassword({}: ChangePasswordAction, {put, call, select}: EffectsCommandMap) {
+      const {walletPage}: ConnectState = yield select(({walletPage}: ConnectState) => ({
+        walletPage,
+      }));
+
+      const params: Parameters<typeof FApiServer.Transaction.changePassword>[0] = {
+        password: walletPage.changingPasswordPasswordOne,
+        oldPassword: walletPage.changingPasswordPasswordOld,
+      };
+
+      const {data} = yield call(FApiServer.Transaction.changePassword, params);
+
+      if (data) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changingPassword: false,
+          },
+        });
+
+        successMessage();
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changingPasswordPasswordOldError: '原始密码错误',
+        },
+      });
+    }
   },
   reducers: {
     change(state, {payload}) {

@@ -32,3 +32,13 @@ interface ActivateIndividualAccountsParamsType {
 export function activateIndividualAccounts({...params}: ActivateIndividualAccountsParamsType) {
   return request.put(`/v2/accounts/individualAccounts/activate`, params);
 }
+
+// 修改交易密码
+interface ChangePasswordParamsType {
+  password: string;
+  oldPassword: string;
+}
+
+export function changePassword({...params}: ChangePasswordParamsType) {
+  return request.put(`/v2/accounts/individualAccounts`, params);
+}
