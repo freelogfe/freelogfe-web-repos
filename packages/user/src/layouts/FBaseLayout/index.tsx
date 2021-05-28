@@ -36,7 +36,7 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
           <div style={{height: 10}}/>
           <FContentText
             type="highlight"
-            text={'myName'}
+            text={user.userInfo?.username}
           />
           <div style={{height: 8}}/>
           <FContentText
