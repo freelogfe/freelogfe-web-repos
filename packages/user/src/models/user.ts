@@ -3,7 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {FApiServer} from "@/services";
 
-export type LoggedSiderModelState = WholeReadonly<{
+export type UserModelState = WholeReadonly<{
   userInfo: null | {
     userId: number;
     headImage: string;
@@ -15,7 +15,7 @@ export type LoggedSiderModelState = WholeReadonly<{
 
 export interface ChangeAction extends AnyAction {
   type: 'change';
-  payload: Partial<LoggedSiderModelState>;
+  payload: Partial<UserModelState>;
 }
 
 export interface InitModelStatesAction extends AnyAction {
@@ -23,35 +23,35 @@ export interface InitModelStatesAction extends AnyAction {
 }
 
 export interface FetchInfoAction extends AnyAction {
-  type: 'loggedSider/fetchInfo';
+  type: 'user/fetchInfo';
 }
 
-interface LoggedSiderModelType {
-  namespace: 'loggedSider';
-  state: LoggedSiderModelState;
+interface UserModelType {
+  namespace: 'user';
+  state: UserModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
-    change: DvaReducer<LoggedSiderModelState, ChangeAction>;
+    change: DvaReducer<UserModelState, ChangeAction>;
   };
   subscriptions: {
     setup: Subscription;
   };
 }
 
-const initStates: LoggedSiderModelState = {
+const initStates: UserModelState = {
   userInfo: null,
 };
 
-const Model: LoggedSiderModelType = {
-  namespace: 'loggedSider',
+const Model: UserModelType = {
+  namespace: 'user',
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, put}: EffectsCommandMap) {
       const {data} = yield call(FApiServer.User.currentUserInfo);
-      console.log(data, '!@#$!@#$@#$@#$');
+      // console.log(data, '!@#$!@#$@#$@#$');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

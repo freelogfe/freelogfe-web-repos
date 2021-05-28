@@ -5,21 +5,21 @@ import {FContentText, FTitleText} from '@/components/FText';
 import FLink from "@/components/FLink";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
-import {ConnectState, LoggedSiderModelState} from "@/models/connect";
-import {FetchInfoAction} from '@/models/loggedSider';
+import {ConnectState, UserModelState} from "@/models/connect";
+import {FetchInfoAction} from '@/models/user';
 
 interface LoggedProps {
   dispatch: Dispatch;
-  loggedSider: LoggedSiderModelState;
+  user: UserModelState;
 
   children: React.ReactNode;
 }
 
-function FLogged({dispatch, loggedSider, children}: LoggedProps) {
+function FLogged({dispatch, user, children}: LoggedProps) {
 
   AHooks.useMount(() => {
     dispatch<FetchInfoAction>({
-      type: 'loggedSider/fetchInfo',
+      type: 'user/fetchInfo',
     });
   });
 
@@ -30,13 +30,13 @@ function FLogged({dispatch, loggedSider, children}: LoggedProps) {
         <div className={styles.userInfo}>
           <img
             alt=""
-            src={loggedSider.userInfo?.headImage || ''}
+            src={user.userInfo?.headImage || ''}
             className={styles.img}
           />
           <div style={{height: 20}}/>
-          <FTitleText type="h3" text={loggedSider.userInfo?.username || ''}/>
+          <FTitleText type="h3" text={user.userInfo?.username || ''}/>
           <div style={{height: 10}}/>
-          <FContentText type="highlight" text={loggedSider.userInfo?.mobile || loggedSider.userInfo?.email || ''}/>
+          <FContentText type="highlight" text={user.userInfo?.mobile || user.userInfo?.email || ''}/>
           <div style={{height: 35}}/>
           <FLink to={'/logged/wallet'} className={[styles.FLink, styles.FLinkActive].join(' ')}>
             钱包
@@ -56,6 +56,6 @@ function FLogged({dispatch, loggedSider, children}: LoggedProps) {
   </FBaseLayout>);
 }
 
-export default connect(({loggedSider}: ConnectState) => ({
-  loggedSider,
+export default connect(({user}: ConnectState) => ({
+  user,
 }))(FLogged);

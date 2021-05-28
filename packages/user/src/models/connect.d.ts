@@ -1,12 +1,12 @@
-import {LoggedSiderModelState} from './loggedSider';
+import {UserModelState} from './user';
 import {WalletPageModelState} from './walletPage';
 
 export {
-  LoggedSiderModelState,
+  UserModelState,
   WalletPageModelState,
 }
 
 export interface ConnectState {
-  loggedSider: LoggedSiderModelState;
+  user: UserModelState;
   walletPage: WalletPageModelState;
 }

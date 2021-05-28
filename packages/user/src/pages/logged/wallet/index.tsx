@@ -9,69 +9,104 @@ import {Modal, Space, Radio, message} from 'antd';
 import FInput from "@/components/FInput";
 import {FCheck} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
+import {connect, Dispatch} from 'dva';
+import {ConnectState, WalletPageModelState} from "@/models/connect";
+import {FetchAccountInfoAction} from "@/models/walletPage";
 
 interface WalletProps {
-
+  dispatch: Dispatch;
+  walletPage: WalletPageModelState;
 }
 
-function Wallet({}: WalletProps) {
+function Wallet({dispatch, walletPage}: WalletProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<FetchAccountInfoAction>({
+      type: 'walletPage/fetchAccountInfo',
+    });
   });
 
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<{
+    serialNo: string;
+    date: string;
+    time: string;
+    digest: string;
+    reciprocalAccountId: string;
+    reciprocalAccountName: string;
+    reciprocalAccountType: string;
+    transactionAmount: string;
+    afterBalance: string;
+    status: 1 | 2 | 3 | 4;
+  }> = [
     {
       title: (<FTitleText text={'时间'} type="table"/>),
       dataIndex: 'dataTime',
       key: 'dataTime',
-      render() {
+      render(_, record) {
         return (<div>
-          <FContentText text={'今天'} type="normal"/>
-          <FContentText text={'12:00'} type="normal"/>
+          {
+            record.date && (<FContentText text={record.date} type="normal"/>)
+          }
+          <FContentText text={record.time} type="normal"/>
         </div>);
       }
     }, {
       title: (<FTitleText text={'交易说明｜对方｜流水号'} type="table"/>),
       dataIndex: 'num',
       key: 'num',
-      render() {
+      render(_, record) {
         return (<div>
-          <FContentText text={'展品-无尽火域第一章-月收费'} type="highlight"/>
-          <FContentText text={'yang｜1297692374989902384'} type="additional1"/>
+          <FContentText
+            text={record.digest}
+            type="highlight"
+          />
+          <FContentText
+            text={`${record.reciprocalAccountName}｜${record.serialNo}`}
+            type="additional1"
+          />
         </div>);
       }
     }, {
       title: (<FTitleText text={'金额'} type="table"/>),
       dataIndex: 'amount',
       key: 'amount',
-      render() {
+      render(_, record) {
         return (<div>
-          <FTitleText text={'+30.00'} type="h1"/>
-          <FContentText text={'余额 80.00'} type="additional1"/>
+          <FTitleText
+            text={record.transactionAmount.startsWith('-') ? record.transactionAmount : ('+' + record.transactionAmount)}
+            type="h1"
+          />
+          <FContentText
+            text={`余额 ${record.afterBalance}`}
+            type="additional1"
+          />
         </div>);
       }
     }, {
       title: (<FTitleText text={'交易状态'} type="table"/>),
       dataIndex: 'status',
       key: 'status',
-      render() {
+      render(_, record) {
+        const allStatus = ['交易确认中', '交易成功', '交易取消', '交易失败'];
         if (true) {
-          return (<div className={styles.tipProcessing}>系统处理中</div>);
+          return (<div className={styles.tipProcessing}>{allStatus[record.status]}</div>);
         }
-        return (<div className={styles.tipCompleted}>交易完成</div>);
+        return (<div className={styles.tipCompleted}>{allStatus[record.status]}</div>);
       }
     },
   ];
 
   return (<div className={styles.styles}>
     <div style={{height: 40}}/>
-    <FTitleText type="h1" text={'羽币账户'}/>
+    <FTitleText
+      type="h1"
+      text={'羽币账户'}
+    />
     <div style={{height: 20}}/>
     {
-      true
+      walletPage.accountStatus === 0
         ? (<div className={styles.Inactive}>
-          <FTipText text={'账户未激活，激活后可获得 100 枚羽币'} type="second"/>
+          <FTipText text={'账户未激活，点击按钮激活'} type="second"/>
           <div style={{width: 30}}/>
           <FRectBtn
             type="primary"
@@ -97,7 +132,7 @@ function Wallet({}: WalletProps) {
             <div>
               <FTitleText type="h4" text={'账户余额（枚）'}/>
               <div style={{height: 15}}/>
-              <div className={styles.Gold}>110.00</div>
+              <div className={styles.Gold}>{walletPage.accountBalance}</div>
             </div>
             <div className={styles.ChangePassword}>
               <FSafetyLock style={{fontSize: 32, color: '#DA6666'}}/>
@@ -110,7 +145,12 @@ function Wallet({}: WalletProps) {
           <div style={{height: 20}}/>
           <FTable
             columns={columns}
-            dataSource={[{}, {}, {}]}
+            dataSource={walletPage.transactionRecord.map((tr) => {
+              return {
+                key: tr.serialNo,
+                ...tr,
+              };
+            })}
           />
         </>)
     }
@@ -256,4 +296,6 @@ function Wallet({}: WalletProps) {
   </div>);
 }
 
-export default Wallet;
+export default connect(({walletPage}: ConnectState) => ({
+  walletPage,
+}))(Wallet);

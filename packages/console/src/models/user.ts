@@ -73,7 +73,6 @@ const Model: MarketModelType = {
         type: 'fetchInfo',
       });
     },
-    // getCookiesUser
   }
 };
 
