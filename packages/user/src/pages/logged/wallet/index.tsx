@@ -7,11 +7,12 @@ import FTable from "@/components/FTable";
 import {ColumnsType} from "antd/lib/table";
 import {Modal, Space, Radio, message} from 'antd';
 import FInput from "@/components/FInput";
-import {FCheck} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, UserModelState, WalletPageModelState} from "@/models/connect";
-import {ChangeAction, FetchAccountInfoAction} from "@/models/walletPage";
+import {ActiveAccountAction, ChangeAction, FetchAccountInfoAction} from "@/models/walletPage";
+import {PAY_PASSWORD} from "@/utils/regexp";
+import {FCheck} from "@/components/FIcons";
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -125,19 +126,7 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
                 activatingAccountEmail: user.userInfo?.email || '',
                 activatingAccountType: user.userInfo?.mobile ? 'mobile' : 'email',
               });
-              // message.success({
-              //   content: (<div className={styles.success}>
-              //     <FCheck style={{fontSize: 76}}/>
-              //     <div style={{height: 20}}/>
-              //     <FTitleText type="popup" text={'支付密码修改成功!'}/>
-              //   </div>),
-              //   // className: 'custom-class',
-              //   style: {
-              //     marginTop: '20vh',
-              //   },
-              //   icon: <div/>,
-              //   duration: 1000000,
-              // });
+
             }}
           >激活账户</FRectBtn>
         </div>)
@@ -154,18 +143,23 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               <div style={{color: '#333', fontSize: 13}}>修改支付密码</div>
             </div>
           </div>
-          <div style={{height: 40}}/>
-          <FTitleText type="h1" text={'交易记录'}/>
-          <div style={{height: 20}}/>
-          <FTable
-            columns={columns}
-            dataSource={walletPage.transactionRecord.map((tr) => {
-              return {
-                key: tr.serialNo,
-                ...tr,
-              };
-            })}
-          />
+          {
+            walletPage.transactionRecord.length > 0 && (<>
+              <div style={{height: 40}}/>
+              <FTitleText type="h1" text={'交易记录'}/>
+              <div style={{height: 20}}/>
+              <FTable
+                columns={columns}
+                dataSource={walletPage.transactionRecord.map((tr) => {
+                  return {
+                    key: tr.serialNo,
+                    ...tr,
+                  };
+                })}
+              />
+            </>)
+          }
+
         </>)
     }
     <div style={{height: 100}}/>
@@ -235,6 +229,16 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size="middle"
+              value={walletPage.activatingAccountPasswordOne}
+              errorText={walletPage.activatingAccountPasswordOneError}
+              onChange={(e) => {
+                const value = e.target.value;
+                onChange({
+                  activatingAccountPasswordOne: value,
+                  activatingAccountPasswordOneError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                  activatingAccountPasswordTwoError: (walletPage.activatingAccountPasswordTwo && value !== walletPage.activatingAccountPasswordTwo) ? '两次密码必须一致' : '',
+                });
+              }}
             />
           </div>
 
@@ -245,11 +249,31 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size="middle"
+              value={walletPage.activatingAccountPasswordTwo}
+              errorText={walletPage.activatingAccountPasswordTwoError}
+              onChange={(e) => {
+                const value = e.target.value;
+                onChange({
+                  activatingAccountPasswordTwo: value,
+                  activatingAccountPasswordTwoError: value === walletPage.activatingAccountPasswordOne ? '' : '两次密码必须一致',
+                });
+              }}
             />
           </div>
         </Space>
         <div style={{height: 40}}/>
-        <FRectBtn type="primary">激活feth账户</FRectBtn>
+        <FRectBtn
+          type="primary"
+          disabled={!walletPage.activatingAccountPasswordOne
+          || !walletPage.activatingAccountPasswordTwo
+          || !!walletPage.activatingAccountPasswordOneError
+          || !!walletPage.activatingAccountPasswordTwoError}
+          onClick={() => {
+            dispatch<ActiveAccountAction>({
+              type: 'walletPage/activeAccount',
+            });
+          }}
+        >激活feth账户</FRectBtn>
       </div>
 
     </Modal>
@@ -323,7 +347,14 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
           </div>
         </Space>
         <div style={{height: 40}}/>
-        <FRectBtn type="primary">激活feth账户</FRectBtn>
+        <FRectBtn
+          type="primary"
+          onClick={() => {
+            dispatch<ActiveAccountAction>({
+              type: 'walletPage/activeAccount',
+            });
+          }}
+        >激活feth账户</FRectBtn>
       </div>
 
     </Modal>
@@ -334,3 +365,19 @@ export default connect(({walletPage, user}: ConnectState) => ({
   walletPage,
   user,
 }))(Wallet);
+
+export function successMessage() {
+  message.success({
+    content: (<div className={styles.success}>
+      <FCheck style={{fontSize: 76}}/>
+      <div style={{height: 20}}/>
+      <FTitleText type="popup" text={'支付密码修改成功!'}/>
+    </div>),
+    // className: 'custom-class',
+    style: {
+      marginTop: '20vh',
+    },
+    icon: <div/>,
+    duration: 1000000,
+  })
+}
