@@ -103,7 +103,7 @@
 	"resource_information": "Resource Information",
 	"authorization_infomation": "Authorization Information",
 	"verions": "Versions",
-	"unamed_version": "Unamed version",
+	"unamed_version": "Unnamed version",
 	"version_range": "Version range",
 	"upcast": "Upcast",
 	"info_upcast": "If you can not sign a contract with authorized party, you can upcast your rely. \n\n- Once a rely upcasted, you can not sign contract with it any more.\n- Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list.",
