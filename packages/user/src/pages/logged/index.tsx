@@ -7,6 +7,7 @@ import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, UserModelState} from "@/models/connect";
 import {FetchInfoAction} from '@/models/user';
+import UserSVG from '@/assets/user.svg';
 
 interface LoggedProps {
   dispatch: Dispatch;
@@ -30,7 +31,7 @@ function FLogged({dispatch, user, children}: LoggedProps) {
         <div className={styles.userInfo}>
           <img
             alt=""
-            src={user.userInfo?.headImage || ''}
+            src={(user.userInfo?.headImage || UserSVG) as string}
             className={styles.img}
           />
           <div style={{height: 20}}/>

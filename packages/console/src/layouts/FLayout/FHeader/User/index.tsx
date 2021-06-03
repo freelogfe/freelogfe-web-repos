@@ -6,6 +6,7 @@ import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
 import FUtil from "@/utils";
+import UserSVG from '@/assets/user.svg';
 
 interface UserProps {
   dispatch: Dispatch;
@@ -15,7 +16,7 @@ interface UserProps {
 function User({dispatch, user}: UserProps) {
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
-      <img src={user.info?.headImage} alt="headImage"/>
+      <img src={(user.info?.headImage || UserSVG) as string} alt="headImage"/>
       <div style={{height: 10}}/>
       <FContentText
         type="highlight"
@@ -34,7 +35,8 @@ function User({dispatch, user}: UserProps) {
     </div>
   </div>}>
     <a className={styles.avatar}>
-      <img src={user.info?.headImage} alt={'avatar'}/>
+      <img
+        src={(user.info?.headImage || UserSVG) as string} alt={'avatar'}/>
     </a>
   </FDropdown>);
 }

@@ -9,6 +9,7 @@ import {Space} from "antd";
 import {FRectBtn} from "@/components/FButton";
 import {connect} from 'dva';
 import {ConnectState, UserModelState} from "@/models/connect";
+import UserSVG from '@/assets/user.svg';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -32,7 +33,7 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
       >进入控制台</FRectBtn>
       <FDropdown overlay={<div className={styles.userPanel}>
         <div className={styles.userPanelHeader}>
-          <img src={user.userInfo?.headImage} alt="headImage"/>
+          <img src={(user.userInfo?.headImage || UserSVG) as string} alt="headImage"/>
           <div style={{height: 10}}/>
           <FContentText
             type="highlight"
@@ -53,7 +54,7 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
         </div>
       </div>}>
         <a className={styles.avatar}>
-          <img src={user.userInfo?.headImage} alt={'avatar'}/>
+          <img src={(user.userInfo?.headImage || UserSVG) as string} alt={'avatar'}/>
         </a>
       </FDropdown>
     </Space>}
