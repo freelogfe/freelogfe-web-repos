@@ -49,7 +49,8 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
           {/*  window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;*/}
           {/*}}>个人中心</a>*/}
           <a onClick={() => {
-            window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
+            // window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
+            return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
           }}>登出</a>
         </div>
       </div>}>

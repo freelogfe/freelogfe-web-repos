@@ -15,9 +15,15 @@ export default defineConfig({
   },
   antd: {},
   dva: {},
-  dynamicImport: {},
+  dynamicImport: {
+    loading: '@/components/FGlobalLoading'
+  },
   routes: [
-    {exact: true, path: '/', redirect: '/login'},
+    {
+      exact: true,
+      path: '/',
+      redirect: '/login',
+    },
     {
       exact: true,
       path: '/login',
@@ -51,6 +57,9 @@ export default defineConfig({
       ]
     },
   ],
+  // dynamicImport: {
+  //   loading: '@/components/Loading',
+  // },
   fastRefresh: {},
   devServer: {},
   proxy: {

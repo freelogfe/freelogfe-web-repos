@@ -36,7 +36,9 @@ function User({dispatch, user}: UserProps) {
   </div>}>
     <a className={styles.avatar}>
       <img
-        src={(user.info?.headImage || UserSVG) as string} alt={'avatar'}/>
+        src={(user.info?.headImage || UserSVG) as string}
+        alt={'avatar'}
+      />
     </a>
   </FDropdown>);
 }
