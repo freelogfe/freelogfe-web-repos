@@ -45,9 +45,9 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
           />
         </div>
         <div className={styles.userPanelMenu}>
-          <a onClick={() => {
-            window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;
-          }}>个人中心</a>
+          {/*<a onClick={() => {*/}
+          {/*  window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;*/}
+          {/*}}>个人中心</a>*/}
           <a onClick={() => {
             window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
           }}>登出</a>
