@@ -13,6 +13,7 @@ import {ConnectState, UserModelState, WalletPageModelState} from "@/models/conne
 import {ActiveAccountAction, ChangeAction, ChangePasswordAction, FetchAccountInfoAction} from "@/models/walletPage";
 import {PAY_PASSWORD} from "@/utils/regexp";
 import {FCheck} from "@/components/FIcons";
+import FLoadingTip from "@/components/FLoadingTip";
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -104,6 +105,10 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
       }
     },
   ];
+
+  if (walletPage.accountStatus === -1) {
+    return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
+  }
 
   return (<div className={styles.styles}>
     <div style={{height: 40}}/>
