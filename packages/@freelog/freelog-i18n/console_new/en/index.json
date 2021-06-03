@@ -49,7 +49,7 @@
 	"alarm_resource_not_available": "The resource is not available for authorization.",
 	"alarm_resource_authorization_abnormal": "The authorization of this resource is abnormal, please be caution in contracting.",
 	"naming_convention_exhibits_name": "Make sure exhibits name is including 1-100 characters, and not include space and any following characetrs:  \\ / : * ? \" < > |",
-	"naming_convention_group_name": "",
+	"naming_convention_group_name": "--",
 	"exhibits_name_exist": "The exhibits name already exists on this node.",
 	"alarm_strategy_not_available": "The strategy is not available for authorization.",
 	"resource_manage": "Resource Management",
@@ -103,7 +103,7 @@
 	"resource_information": "Resource Information",
 	"authorization_infomation": "Authorization Information",
 	"verions": "Versions",
-	"unamed_version": "Unamed version",
+	"unamed_version": "Unnamed version",
 	"version_range": "Version range",
 	"upcast": "Upcast",
 	"info_upcast": "If you can not sign a contract with authorized party, you can upcast your rely. \n\n- Once a rely upcasted, you can not sign contract with it any more.\n- Basic upcast(s) are  the rely(s) upcasted in the first version of the resource, and will affect the follow-up versions. The upcasted rely(s) of the follow-up version shoule be in the basic upcast list.",
@@ -245,7 +245,7 @@
 	"nodes_list_empty": "No available node,  ",
 	"btn_create_node": "CREATE A NODE",
 	"select_auth_plan_for_upcast": "Select authorization plan(s) for upcast(s)",
-	"use_for_exhibit": "Use in the following {ExhibitQuanity}  exhibit authorization trees",
+	"use_for_exhibit": "Use in the following exhibits relevant authorization of this resource",
 	"title_auth_to_node": "Authorize to ",
 	"title_enter_exhibit_name": "Enter Exhibit Name",
 	"msg_enter_exhibit_name": "Exhibit name will be locked, once sumbit.",
@@ -301,5 +301,9 @@
 	"tip_edit_object": "Edit",
 	"tip_release_object": "Release",
 	"tip_download_object": "Download",
-	"tip_delete": "Delete"
+	"tip_delete": "Delete",
+	"btn_check": "CHECK",
+	"msg_have_no_access": "Sorry but you have no access to this page",
+	"unnamed_version": "Unnamed Version",
+	"version_no_draft": "{VersionNo}（draft）"
 }
