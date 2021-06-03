@@ -27,7 +27,7 @@ function User({dispatch, user}: UserProps) {
     </div>
     <div className={styles.userPanelMenu}>
       <a onClick={() => {
-        window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;
+        window.open(`${FUtil.Format.completeUrlByDomain('user')}/logged/wallet`);
       }}>个人中心</a>
       <a onClick={() => {
         window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
