@@ -338,7 +338,8 @@ const Model: StorageObjectEditorModelType = {
 
         const {data} = yield call(FApiServer.Storage.fileProperty, params);
         if (!data) {
-          resourceTypeErrorText = '不能设置为' + payload + '类型';
+          // resourceTypeErrorText = '不能设置为' + payload + '类型';
+          resourceTypeErrorText = FUtil.I18n.message('file_format_incorrect');
         }
       }
 
