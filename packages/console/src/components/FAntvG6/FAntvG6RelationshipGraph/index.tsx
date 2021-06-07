@@ -7,7 +7,9 @@ import {FTipText} from "@/components/FText";
 G6.registerNode('relationship-resource', {
   jsx: (cfg: any) => {
     const isRoot: boolean = cfg.id.split('-').length === 1;
-    const authFailedLength: number = cfg.authFailedResources.length;
+    // const authFailedLength: number = cfg.authFailedResources.length;
+    // pending: boolean;
+    // exception: boolean;
     return `
     <group>
       <rect style={{
@@ -19,7 +21,7 @@ G6.registerNode('relationship-resource', {
         }}>
           <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
           <text style={{fontSize: 12, fontWeight: 400, fill: '#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
-          ${isRoot ? '' : `<text style={{fontSize: 14, fill: ${authFailedLength === 0 ? '#42C28C' : '#E9A923'}, marginTop: 24, marginLeft: 10}}>${authFailedLength === 0 ? '已授权' : '待执行'}&nbsp;</text>`}
+          <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '待执行' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
       </rect>
     </group>
 `;
@@ -56,9 +58,10 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
     resourceName: string;
     resourceType: string;
     version: string;
+    pending: boolean;
+    exception: boolean;
   } | {
     id: string;
-
   }>;
   edges: {
     source: string;
@@ -67,7 +70,6 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
   width?: number;
   height?: number;
 }
-
 
 function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAntvG6RelationshipGraphProps) {
 
@@ -216,7 +218,8 @@ interface RelationTree {
   resourceType: string;
   versions: string[];
   versionRanges: string[],
-  authFailedResources: [];
+  downstreamIsAuth: boolean;
+  selfAndUpstreamIsAuth: boolean;
   children: RelationTree[];
 }
 
@@ -227,7 +230,8 @@ interface RelationGraphData {
     resourceName: string;
     resourceType: string;
     version: string;
-    authFailedResources: any[];
+    pending: boolean;
+    exception: boolean;
   }[];
   edges: {
     source: string;
@@ -256,8 +260,12 @@ export function handleRelationGraphData(data: RelationTree): RelationGraphData {
       resourceName: tree.resourceName,
       resourceType: tree.resourceType || '',
       version: idLength === 3 ? '' : idLength === 2 ? tree.versionRanges[0] : tree.versions[0],
-      authFailedResources: tree.authFailedResources || [],
+      pending: tree.downstreamIsAuth === false,
+      exception: tree.selfAndUpstreamIsAuth === false,
+      // pending: false,
+      // exception: true,
     });
+
     if (parentID) {
       edges.push({
         source: parentID,
