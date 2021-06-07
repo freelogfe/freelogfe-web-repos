@@ -10,6 +10,7 @@ import PolicyCard from './PolicyCard';
 import FPolicyBuilderDrawer from "@/components/FPolicyBuilderDrawer";
 import FUtil from "@/utils";
 import {FRectBtn} from '@/components/FButton';
+import FPolicyList from "@/components/FPolicyList";
 
 interface Policy {
   id: string;
@@ -21,18 +22,17 @@ interface Policy {
 interface FPoliciesProps {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
-  resourceInfo: ResourceInfoModelState;
 }
 
-function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
+function FPolicies({dispatch, resourceAuthPage}: FPoliciesProps) {
 
-  function onPolicyStatusChange(id: string, status: Policy['status'], title: string) {
+  function onPolicyStatusChange(id: string, status: boolean) {
     dispatch<UpdatePoliciesAction>({
       type: 'resourceAuthPage/updatePolicies',
       payload: {
         updatePolicies: [{
           policyId: id,
-          status: status === 'executing' ? 1 : 0,
+          status: status ? 1 : 0,
         }],
       },
     });
@@ -68,42 +68,56 @@ function FPolicies({dispatch, resourceAuthPage, resourceInfo}: FPoliciesProps) {
           <FRectBtn
             onClick={openNewVisible}>{'添加授权策略'}</FRectBtn>
         </div>)
-        : (<div className={styles.policies}>
-          {
-            resourceAuthPage.policies.map((i) => (<PolicyCard
-              key={i.policyId}
-              title={i.policyName}
-              status={i.status ? 'executing' : 'stopped'}
-              code={i.policyText}
-              onPreview={() => dispatch<ChangeAction>({
-                type: 'resourceAuthPage/change',
-                payload: {
-                  policyPreviewVisible: true,
-                  policyPreviewText: i.policyText,
-                }
-              })}
-              onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}
-            />))
-          }
-        </div>)
+        : <FPolicyList
+          dataSource={resourceAuthPage.policies.map((p) => {
+            return {
+              id: p.policyId,
+              name: p.policyName,
+              using: p.status === 1,
+              text: p.policyText,
+            };
+          })}
+          onCheckChange={(data) => {
+            onPolicyStatusChange(data.id, data.using);
+          }}
+        />
     }
 
-    <FModal
-      title="查看策略"
-      visible={resourceAuthPage.policyPreviewVisible}
-      onCancel={() => dispatch<ChangeAction>({
-        type: 'resourceAuthPage/change',
-        payload: {
-          policyPreviewVisible: false,
-          policyPreviewText: '',
-        },
-      })}
-      footer={null}
-    >
-      <SyntaxHighlighter
-        showLineNumbers={true}
-      >{resourceAuthPage.policyPreviewText}</SyntaxHighlighter>
-    </FModal>
+    {/*  (<div className={styles.policies}>*/}
+    {/*  {*/}
+    {/*    resourceAuthPage.policies.map((i) => (<PolicyCard*/}
+    {/*      key={i.policyId}*/}
+    {/*      title={i.policyName}*/}
+    {/*      status={i.status ? 'executing' : 'stopped'}*/}
+    {/*      code={i.policyText}*/}
+    {/*      onPreview={() => dispatch<ChangeAction>({*/}
+    {/*        type: 'resourceAuthPage/change',*/}
+    {/*        payload: {*/}
+    {/*          policyPreviewVisible: true,*/}
+    {/*          policyPreviewText: i.policyText,*/}
+    {/*        }*/}
+    {/*      })}*/}
+    {/*      onChangeStatus={(value) => onPolicyStatusChange(i.policyId, value, i.policyName)}*/}
+    {/*    />))*/}
+    {/*  }*/}
+    {/*</div>)*/}
+
+    {/*<FModal*/}
+    {/*  title="查看策略"*/}
+    {/*  visible={resourceAuthPage.policyPreviewVisible}*/}
+    {/*  onCancel={() => dispatch<ChangeAction>({*/}
+    {/*    type: 'resourceAuthPage/change',*/}
+    {/*    payload: {*/}
+    {/*      policyPreviewVisible: false,*/}
+    {/*      policyPreviewText: '',*/}
+    {/*    },*/}
+    {/*  })}*/}
+    {/*  footer={null}*/}
+    {/*>*/}
+    {/*  <SyntaxHighlighter*/}
+    {/*    showLineNumbers={true}*/}
+    {/*  >{resourceAuthPage.policyPreviewText}</SyntaxHighlighter>*/}
+    {/*</FModal>*/}
 
     <FPolicyBuilderDrawer
       visible={resourceAuthPage.policyEditorVisible}

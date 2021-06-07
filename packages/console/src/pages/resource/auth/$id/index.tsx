@@ -29,13 +29,14 @@ import {ColumnsType} from "antd/lib/table/interface";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {RouteComponentProps} from "react-router";
 import FBasicUpcastCard from "@/components/FBasicUpcastCard";
+import FPolicyList from "@/components/FPolicyList";
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
 }
 
-function Auth({dispatch,  resourceAuthPage, match}: AuthProps & RouterTypes) {
+function Auth({dispatch, resourceAuthPage, match}: AuthProps & RouterTypes) {
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -173,6 +174,7 @@ function Auth({dispatch,  resourceAuthPage, match}: AuthProps & RouterTypes) {
         />)}
       >
         <FPolicies/>
+
       </FFormLayout.FBlock>
 
       <FFormLayout.FBlock title={FUtil.I18n.message('licencee_contract')}>

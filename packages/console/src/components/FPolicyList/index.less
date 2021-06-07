@@ -1,0 +1,66 @@
+@import '../../config.less';
+
+.styles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: -30px;
+
+  .policy {
+    background: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+    width: 270px;
+    margin-bottom: 30px;
+    position: relative;
+
+    .header {
+      height: 50px;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      label {
+        font-size: 13px;
+      }
+    }
+
+    .body {
+      height: 150px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      border-top: 1px solid #E5E7EB;
+
+      & > pre {
+        margin: 0;
+        min-height: 100%;
+        min-width: 100%;
+        padding: 10px 15px;
+      }
+
+      .fullScreenBtn {
+        padding: 0 6px;
+        font-weight: 600;
+        color: #FFFFFF;
+        font-size: 12px;
+        line-height: 24px;
+        position: absolute;
+        right: 15px;
+        bottom: 10px;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 4px;
+        display: none;
+      }
+
+      &:hover {
+        .fullScreenBtn {
+          display: block;
+        }
+      }
+    }
+  }
+}
