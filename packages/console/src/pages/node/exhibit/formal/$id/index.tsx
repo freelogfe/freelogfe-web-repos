@@ -80,7 +80,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           }
 
           <FSwitch
-            disabled={!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0}
+            disabled={(!exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0) && !exhibitInfoPage.isOnline}
             checked={exhibitInfoPage.isOnline}
             onChange={(value) => {
               if (exhibitInfoPage.resourceType !== 'theme' || !exhibitInfoPage.nodeThemeId || !value) {

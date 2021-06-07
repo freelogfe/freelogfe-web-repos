@@ -9,6 +9,7 @@ import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import FUtil from "@/utils";
+import FPolicyList from "@/components/FPolicyList";
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -59,35 +60,23 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
             type="primary"
           >{FUtil.I18n.message('btn_create_auth_plan')}</FRectBtn>
         </div>)
-        : (<div className={styles.policies}>
-          {
-            exhibitInfoPage.policies.map((p) => (<div
-              className={styles.policy}
-              key={p.id}
-            >
-              <div className={styles.title}>
-                <FContentText
-                  text={p.name}
-                />
-                <Space size={8}>
-                  <label
-                    style={{color: p.status === 1 ? '#42C28C' : '#B4B6BA'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>
-                  <FSwitch
-                    disabled={exhibitInfoPage.isOnline && onlyOnePolicy && p.status === 1}
-                    checked={p.status === 1}
-                    onChange={(value) => dispatch<UpdateAPolicyAction>({
-                      type: 'exhibitInfoPage/updateAPolicy',
-                      payload: {id: p.id, status: value ? 1 : 0}
-                    })}
-                  />
-                </Space>
-              </div>
-              <div className={styles.pre}>
-                <pre>{p.text}</pre>
-              </div>
-            </div>))
-          }
-        </div>)
+        : (<FPolicyList
+          atLeastOneUsing={exhibitInfoPage.isOnline}
+          dataSource={exhibitInfoPage.policies.map((p) => {
+            return {
+              id: p.id,
+              name: p.name,
+              using: p.status === 1,
+              text: p.text,
+            };
+          })}
+          onCheckChange={(data) => {
+            dispatch<UpdateAPolicyAction>({
+              type: 'exhibitInfoPage/updateAPolicy',
+              payload: {id: data.id, status: data.using ? 1 : 0},
+            });
+          }}
+        />)
     }
 
     <FPolicyBuilder
