@@ -97,8 +97,8 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
       dataIndex: 'status',
       key: 'status',
       render(_, record) {
-        const allStatus = ['交易确认中', '交易成功', '交易取消', '交易失败'];
-        if (true) {
+        const allStatus = ['', '交易确认中', '交易成功', '交易取消', '交易失败'];
+        if (record.status !== 2) {
           return (<div className={styles.tipProcessing}>{allStatus[record.status]}</div>);
         }
         return (<div className={styles.tipCompleted}>{allStatus[record.status]}</div>);
