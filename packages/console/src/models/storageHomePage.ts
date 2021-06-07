@@ -399,6 +399,13 @@ const Model: StorageHomePageModelType = {
         fMessage('超出储存', 'warning');
         return;
       }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          uploadPanelVisible: true,
+        }
+      });
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
 
       const params: Parameters<typeof FApiServer.Storage.fileIsExist>[0] = {

@@ -22,13 +22,13 @@ function NoContent({dispatch, storageHomePage}: NoContentProps) {
         text={FUtil.I18n.message('manage_buckets_empty_title')}
         type="first"
       />
-      <div style={{height: 60}}/>
+      <div style={{height: 30}}/>
       <FTipText
         // text={'在Freelog模拟资源池，您可以创建存储空间，上传模拟资源并进行测试。'}
         text={FUtil.I18n.message('manage_buckets_empty_msg')}
         type="second"
       />
-      <div style={{height: 60}}/>
+      <div style={{height: 30}}/>
       <FRectBtn
         type="primary"
         size="large"
