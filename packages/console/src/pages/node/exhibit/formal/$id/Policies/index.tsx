@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText, FTipText} from '@/components/FText';
+import {FTitleText, FTipText} from '@/components/FText';
 import {FCircleBtn, FRectBtn} from '@/components/FButton';
 import {Space} from 'antd';
-import FSwitch from '@/components/FSwitch';
 import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhibitInfoPage";
 import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
