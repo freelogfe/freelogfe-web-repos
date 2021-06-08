@@ -152,7 +152,7 @@ interface resourceCreateSuccessParamsType {
   resourceID: string;
 }
 
-export function resourceCreateSuccess({resourceID, ...params}: resourceCreateSuccessParamsType) {
+export function resourceCreateSuccess({resourceID}: resourceCreateSuccessParamsType) {
   return `/result/resource/create/success/${resourceID}`;
 }
 
@@ -162,7 +162,7 @@ interface resourceVersionCreateSuccessParamsType {
   version: string;
 }
 
-export function resourceVersionCreateSuccess({resourceID, version, ...params}: resourceVersionCreateSuccessParamsType) {
+export function resourceVersionCreateSuccess({resourceID, version}: resourceVersionCreateSuccessParamsType) {
   return `/result/resource/version/create/success/${resourceID}/${version}`;
 }
 

@@ -1,8 +1,10 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
+// import axios from 'axios';
 
 interface CurrentUserInfoParamsType {
 }
 
 export function currentUserInfo(params: CurrentUserInfoParamsType) {
-  return request.get(`/v1/userinfos/current`);
+  return FUtil.Axios.get(`/v1/userinfos/current`);
 }

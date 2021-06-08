@@ -5,7 +5,7 @@ import {ConnectState} from '@/models/connect';
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
-import FUtil from "@/utils";
+import {FUtil} from "@freelog/tools-lib";
 import {router} from "umi";
 import {handleExhibitRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 
