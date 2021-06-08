@@ -99,7 +99,7 @@ interface NodeManagementParamsType {
 }
 
 export function nodeManagement({nodeID}: NodeManagementParamsType): TReturnType {
-  return `/node/${nodeID}/formal`;
+  return `/node/formal/${nodeID}`;
 }
 
 // 展品管理
@@ -117,7 +117,7 @@ interface InformNodeManagementParamsType {
 }
 
 export function informNodeManagement({nodeID}: InformNodeManagementParamsType): TReturnType {
-  return `/node/${nodeID}/informal`;
+  return `/node/informal/${nodeID}`;
 }
 
 // 测试展品管理

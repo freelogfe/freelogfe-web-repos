@@ -19,20 +19,24 @@ export default [
         routes: [
           {exact: true, path: 'creator', component: '../pages/node/creator', title: '节点创建'},
           {
+            path: 'formal/:id',
+            exact: true,
+            component: '../pages/node/formal/$id',
+            title: '节点管理',
+          },
+          {
+            path: 'informal/:id',
+            exact: true,
+            component: '../pages/node/informal/$id',
+            title: '测试节点管理',
+          },
+          {
             path: 'exhibit',
             routes: [
               {path: 'formal/:id', exact: true, component: '../pages/node/exhibit/formal/$id', title: '展品管理'},
               {path: 'informal/:id', exact: true, component: '../pages/node/exhibit/informal/$id', title: '测试展品管理'},
               {component: '../pages/exception/404'},
             ]
-          },
-          {
-            path: ':id',
-            routes: [
-              {path: 'formal', exact: true, component: '../pages/node/formal/$id', title: '节点管理'},
-              {path: 'informal', exact: true, component: '../pages/node/informal/$id', title: '测试节点管理'},
-              {component: '../pages/exception/404'},
-            ],
           },
           {component: '../pages/exception/404'},
         ]

@@ -4,6 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {FApiServer} from "@/services";
 import FUtil from "@/utils";
+import {router} from "umi";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -72,34 +73,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   themeListIsLoading: boolean;
   addThemeDrawerVisible: boolean;
 
-  // mappingRule: {
-  //   add?: {
-  //     exhibit: string;
-  //     source: {
-  //       type: 'resource' | 'object';
-  //       name: string;
-  //     };
-  //   };
-  //   alter?: string;
-  //   active?: string;
-  //   $version?: string;
-  //   cover?: string;
-  //   title?: string;
-  //   online?: boolean;
-  //   offline?: boolean;
-  //   labels?: string[];
-  //   replaces?: {
-  //     replaced: ICandidate;
-  //     replacer: ICandidate;
-  //     scopes: ICandidate[][];
-  //   }[];
-  //   attrs?: {
-  //     type: 'add' | 'delete',
-  //     theKey: string;
-  //     value?: string;
-  //     description?: string;
-  //   }[];
-  // }[];
   mappingRule: IMappingRule[];
   checkedExhibitName: string[];
   checkedThemeName: string;
@@ -297,6 +270,11 @@ const Model: InformalNodeManagerPageModelType = {
 
       const currentNode = nodes.list.find((n) => n.nodeId === informalNodeManagerPage.nodeID);
 
+      if (!currentNode) {
+        router.replace(FUtil.LinkTo.exception403({}, '90u-=-;dskf'));
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -315,6 +293,15 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * fetchExhibitList({payload: {isRematch = true, isRestart}}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
 
+      const {informalNodeManagerPage, nodes}: ConnectState = yield select(({informalNodeManagerPage, nodes}: ConnectState) => ({
+        informalNodeManagerPage,
+        nodes,
+      }));
+
+      if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.nodeID)) {
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -322,9 +309,6 @@ const Model: InformalNodeManagerPageModelType = {
         }
       });
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
@@ -332,7 +316,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
-      // console.log(data1, 'bool1234');
+      // console.log(data1, '2434234234234234');
 
       const params: Parameters<typeof FApiServer.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
@@ -344,7 +328,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FApiServer.InformalNode.testResources, params);
-      // console.log(data, 'DDD@@@@890j23poijrl;adsf@');
+      console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
 
