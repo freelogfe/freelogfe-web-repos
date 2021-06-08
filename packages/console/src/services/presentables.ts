@@ -128,7 +128,30 @@ export function presentableList(params: PresentableListParamsType) {
   });
 }
 
-// 切换展品版本
+// 查看展品依赖树
+interface DependencyTreeParamsType {
+  presentableId: string;
+  maxDeep?: number;
+  nid?: string;
+  isContainRootNode?: boolean;
+  version?: string;
+}
+
+export function dependencyTree({presentableId, ...params}: DependencyTreeParamsType) {
+  return request.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
+}
+
+// 查看展品关系树
+interface RelationTreeParamsType {
+  presentableId: string;
+  version?: string;
+}
+
+export function relationTree({presentableId, ...params}: RelationTreeParamsType) {
+  return request.get(`/v2/presentables/${presentableId}/relationTree`, {params});
+}
+
+// 查看展品授权树
 interface AuthTreeParamsType {
   presentableId: string;
   maxDeep?: number;
@@ -150,7 +173,6 @@ interface PresentablesVersionParamsType {
 export function presentablesVersion({presentableId, ...params}: PresentablesVersionParamsType) {
   return request.put(`/v2/presentables/${presentableId}/version`, params);
 }
-
 
 // 设置展品自定义属性
 interface UpdateRewritePropertyParamsType {

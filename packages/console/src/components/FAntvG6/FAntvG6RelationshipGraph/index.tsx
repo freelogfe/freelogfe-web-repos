@@ -41,10 +41,10 @@ G6.registerNode('relationship-exhibit', {
         radius: 10,
       }}>
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 4, marginLeft: 10}}>节点：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>freelog白皮书运营节点&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 8, marginLeft: 10}}>${cfg.nodeName}&nbsp;</text>
 
         <text style={{fontSize: 12, fontWeight: 400, fill: '#7F8388', marginTop: 10, marginLeft: 10}}>展品：&nbsp;</text>
-        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>白皮书&nbsp;</text>
+        <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.exhibitName}&nbsp;</text>
     </rect>
   </group>
 `
@@ -62,6 +62,8 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
     exception: boolean;
   } | {
     id: string;
+    nodeName: string;
+    exhibitName: string;
   }>;
   edges: {
     source: string;
@@ -262,8 +264,6 @@ export function handleRelationGraphData(data: RelationTree): RelationGraphData {
       version: idLength === 3 ? '' : idLength === 2 ? tree.versionRanges[0] : tree.versions[0],
       pending: tree.downstreamIsAuth === false,
       exception: tree.selfAndUpstreamIsAuth === false,
-      // pending: false,
-      // exception: true,
     });
 
     if (parentID) {
@@ -278,4 +278,82 @@ export function handleRelationGraphData(data: RelationTree): RelationGraphData {
     }
   }
 
+}
+
+interface ExhibitNode {
+  id: string;
+  nodeId: number;
+  nodeName: string;
+  exhibitId: string;
+  exhibitName: string;
+}
+
+interface ResourceNode {
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  version: string;
+  pending: boolean;
+  exception: boolean;
+}
+
+type ExhibitRelationTree = {
+  resourceId: string;
+  resourceName: string;
+  resourceType: string;
+  downstreamIsAuth: boolean;
+  selfAndUpstreamIsAuth: boolean;
+  versions?: string[];
+  children: ExhibitRelationTree;
+}[];
+
+interface ExhibitRelationGraphData {
+  nodes: Array<ResourceNode | ExhibitNode>;
+  edges: {
+    source: string;
+    target: string;
+  }[];
+}
+
+export async function handleExhibitRelationGraphData(data: ExhibitRelationTree, root: {
+  nodeId: number;
+  nodeName: string;
+  exhibitId: string;
+  exhibitName: string;
+}): Promise<ExhibitRelationGraphData> {
+
+  const nodes: Array<ResourceNode | ExhibitNode> = [{
+    id: root.exhibitId,
+    ...root,
+  }];
+  const edges: ExhibitRelationGraphData['edges'] = [];
+
+  traversal(data, root.exhibitId);
+
+  return {
+    nodes,
+    edges,
+  };
+
+  function traversal(exhibitRelationTree: ExhibitRelationTree, parentID: string = '') {
+    for (const relation of exhibitRelationTree) {
+      const theID: string = `${parentID}_${relation.resourceId}`;
+      nodes.push({
+        id: theID,
+        resourceId: relation.resourceId,
+        resourceName: relation.resourceName,
+        resourceType: relation.resourceType,
+        version: relation.versions ? relation.versions[0] : '',
+        pending: relation.downstreamIsAuth === false,
+        exception: relation.downstreamIsAuth === false,
+      });
+      edges.push({
+        source: parentID,
+        target: theID,
+      });
+
+      traversal(relation.children, theID);
+    }
+  }
 }

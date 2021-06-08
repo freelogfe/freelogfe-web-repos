@@ -53,16 +53,16 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
       }}
     >
       {
-        exhibitInfoPage.graphFullScreen || exhibitInfoPage.viewportGraphShow === 'relationship'
+        exhibitInfoPage.graphFullScreen
           ? (<div style={{height: 500}}/>)
           : (<>
-            {/*{*/}
-            {/*  exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
-            {/*    nodes={exhibitInfoPage.relationGraphNodes}*/}
-            {/*    edges={exhibitInfoPage.relationGraphEdges}*/}
-            {/*    width={860}*/}
-            {/*  />)*/}
-            {/*}*/}
+            {
+              exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
+                nodes={exhibitInfoPage.relationGraphNodes}
+                edges={exhibitInfoPage.relationGraphEdges}
+                width={860}
+              />)
+            }
 
             {
               exhibitInfoPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph
@@ -100,21 +100,12 @@ function Viewports({dispatch, exhibitInfoPage}: ViewportsProps) {
           });
         }}
       >
-        {/*{*/}
-        {/*  exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
-        {/*    nodes={exhibitInfoPage.relationGraphNodes}*/}
-        {/*    edges={exhibitInfoPage.relationGraphEdges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
-
         {
-          exhibitInfoPage.viewportGraphShow === 'relationship' && (<div
-            style={{
-              width: window.innerWidth - 60,
-              height: window.innerHeight - 60 - 70 - 50
-            }}
+          exhibitInfoPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
+            nodes={exhibitInfoPage.relationGraphNodes}
+            edges={exhibitInfoPage.relationGraphEdges}
+            width={window.innerWidth - 60}
+            height={window.innerHeight - 60 - 70 - 50}
           />)
         }
 

@@ -7,6 +7,7 @@ import {FApiServer} from "@/services";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import FUtil from "@/utils";
 import {router} from "umi";
+import {handleExhibitRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
@@ -105,6 +106,24 @@ export type ExhibitInfoPageModelState = WholeReadonly<{
   resourceType: string;
   resourceCover: string;
 }> & {
+  relationGraphNodes: Array<{
+    id: string;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string;
+    version: string;
+    pending: boolean;
+    exception: boolean;
+  } | {
+    id: string;
+    nodeName: string;
+    exhibitName: string;
+  }>;
+  relationGraphEdges: {
+    source: string;
+    target: string;
+  }[];
+
   authorizationGraphNodes: Array<{
     id: string;
     resourceId: string;
@@ -242,6 +261,8 @@ const Model: ExhibitInfoPageModelType = {
 
     graphFullScreen: false,
     viewportGraphShow: 'relationship',
+    relationGraphNodes: [],
+    relationGraphEdges: [],
     authorizationGraphNodes: [],
     authorizationGraphEdges: [],
 
@@ -324,6 +345,24 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
+
+      // 关系树数据
+      const params6: Parameters<typeof FApiServer.Exhibit.relationTree>[0] = {
+        presentableId: data.presentableId,
+      };
+
+      const {data: data6} = yield call(FApiServer.Exhibit.relationTree, params6);
+      console.log(data, 'datadatadatadatadatadatadata');
+      console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
+
+      const {nodes: relationGraphNodes, edges: relationGraphEdges} = yield call(handleExhibitRelationGraphData, data6, {
+        nodeId: data.nodeId,
+        nodeName: data3.nodeName,
+        exhibitId: data.presentableId,
+        exhibitName: data.presentableName,
+      });
+
+      console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
 
       // 授权树数据
       const params4: Parameters<typeof FApiServer.Exhibit.authTree>[0] = {
@@ -480,6 +519,8 @@ const Model: ExhibitInfoPageModelType = {
           resourceType: data2.resourceType,
           resourceCover: data2.coverImages[0] || '',
 
+          relationGraphNodes: relationGraphNodes,
+          relationGraphEdges: relationGraphEdges,
           authorizationGraphNodes: authorizationGraphNodes,
           authorizationGraphEdges: authorizationGraphEdges,
         },
