@@ -5,7 +5,8 @@ import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {FContentText, FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
 import FSwitch from "@/components/FSwitch";
 import {ChangeAction, UpdateContractUsedAction} from "@/models/exhibitInfoPage";
@@ -29,7 +30,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
   }
 
   return (<Space style={{width: '100%'}} size={15} direction="vertical">
-    <FTitleText type="h4">{FUtil.I18n.message('valid_contracts_list')}</FTitleText>
+    <FTitleText type="h4">{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
     {
       selectedResource?.contracts.map((c) => {
         const exhibitInfoExhibit = exhibitInfoPage.exhibitAllContractIDs.find((eac) => {
@@ -51,12 +52,12 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
             <Space style={{padding: '0 20px'}} size={2}>
               <FContentText
                 type="additional2"
-                text={FUtil.I18n.message('contract_id') + '：' + c.id}
+                text={FUtil1.I18n.message('contract_id') + '：' + c.id}
               />
               <FDivider style={{fontSize: 14}}/>
               <FContentText
                 type="additional2"
-                text={FUtil.I18n.message('contract_signed_time') + '：' + c.createTime}
+                text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
               />
             </Space>
             <div style={{height: 15}}/>
@@ -69,7 +70,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
             <div className={styles.action}>
               <FContentText
                 // text={exhibitInfoPage.pName}
-                text={FUtil.I18n.message('use_in_current_exhibit')}
+                text={FUtil1.I18n.message('use_in_current_exhibit')}
                 type="highlight"
               />
               <FSwitch
@@ -116,7 +117,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
                     });
                   }}>
                     <FTitleText type="h4">
-                      <span>{FUtil.I18n.message('use_for_exhibit')}</span>
+                      <span>{FUtil1.I18n.message('use_for_exhibit')}</span>
                       &nbsp;
                       {
                         c.exhibitOpen

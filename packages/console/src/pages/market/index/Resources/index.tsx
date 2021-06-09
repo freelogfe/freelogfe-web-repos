@@ -6,10 +6,9 @@ import {ChangeAction, ChangeStatesAction, FetchDataSourceAction, marketInitData}
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
-// import {resourceTypes} from '@/utils/predefined';
 import {router} from "umi";
 import FNoDataTip from "@/components/FNoDataTip";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FLoadingTip from "@/components/FLoadingTip";
 import * as AHooks from 'ahooks';
 

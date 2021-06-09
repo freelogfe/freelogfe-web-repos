@@ -25,12 +25,12 @@ const codeMessage: any = {
   504: '网关超时。',
 };
 
-export let apiHost: string = '';
+// export let apiHost: string = '';
 if (window.location.hostname.includes('.com')) {
-  apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
+  // apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
   // apiHost = window.location.origin.replace('console', 'qi');
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = apiHost;
+  axios.defaults.baseURL = FUtil.Format.completeUrlByDomain('qi');
 }
 
 /**

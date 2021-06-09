@@ -4,8 +4,8 @@ import {Col, Row, Space, Switch} from 'antd';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import {Data} from '../index';
-import Field from '../Field';
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FTitleText} from "@/components/FText";
 
 interface PropertyProps {
@@ -27,7 +27,7 @@ function Property({data, onChange}: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           <i className={styles.dot}/>
-          <FTitleText type="h4" text={FUtil.I18n.message('key')}/>
+          <FTitleText type="h4" text={FUtil1.I18n.message('key')}/>
         </Space>
         <div style={{height: 5}}/>
         <FInput
@@ -70,7 +70,7 @@ function Property({data, onChange}: PropertyProps) {
       </Col>
       <Col span={12}>
         <Space size={5}>
-          <FTitleText type="h4" text={FUtil.I18n.message('property_remark')}/>
+          <FTitleText type="h4" text={FUtil1.I18n.message('property_remark')}/>
         </Space>
         <div style={{height: 5}}/>
         <FInput
@@ -107,7 +107,7 @@ function Property({data, onChange}: PropertyProps) {
       <Col span={6}>
         <Space size={5}>
           <i className={styles.dot}/>
-          <FTitleText type="h4" text={FUtil.I18n.message('value_input_mode')}/>
+          <FTitleText type="h4" text={FUtil1.I18n.message('value_input_mode')}/>
         </Space>
         <div style={{height: 5}}/>
         <FSelect

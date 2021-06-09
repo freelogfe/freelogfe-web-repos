@@ -3,7 +3,7 @@ import styles from './index.less';
 import {Modal} from "antd";
 import {router} from "umi";
 import FNoDataTip from "@/components/FNoDataTip";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface Error404Props {
 

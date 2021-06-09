@@ -3,7 +3,7 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export type  MarketPageModelState = WholeReadonly<{
   tabValue: '1' | '2',

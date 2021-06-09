@@ -4,7 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import fMessage from "@/components/fMessage";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {router} from "umi";
 
 export type NodeManagerModelState = WholeReadonly<{

@@ -11,7 +11,7 @@ import {
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from "@/components/FLoadingTip";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;

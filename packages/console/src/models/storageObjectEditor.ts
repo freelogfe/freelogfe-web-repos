@@ -2,10 +2,10 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-// import {RESOURCE_TYPE} from "@/utils/regexp";
 import {FApiServer} from "@/services";
 import fMessage from "@/components/fMessage";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {router} from "umi";
 
 interface DepR {
@@ -339,7 +339,7 @@ const Model: StorageObjectEditorModelType = {
         const {data} = yield call(FApiServer.Storage.fileProperty, params);
         if (!data) {
           // resourceTypeErrorText = '不能设置为' + payload + '类型';
-          resourceTypeErrorText = FUtil.I18n.message('file_format_incorrect');
+          resourceTypeErrorText = FUtil1.I18n.message('file_format_incorrect');
         }
       }
 

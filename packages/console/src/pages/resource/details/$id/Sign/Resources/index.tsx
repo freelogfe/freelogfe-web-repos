@@ -6,9 +6,7 @@ import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import {FTextBtn} from "@/components/FButton";
-import FUtil from "@/utils";
-// import FLink from "@/components/FLink";
-// import FLinkTo from "@/utils/path-assembler";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;

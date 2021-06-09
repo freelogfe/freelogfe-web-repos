@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
-// import {i18nMessage} from "@/utils/i18n";
 import {FWarning} from '@/components/FIcons';
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+// import {FUtil} from '@freelog/tools-lib';
 
 export default function ({className, normal}: any) {
   return (
     <div className={[styles.div, className].join(' ')}>
       <label
-        className={normal ? styles.normal : styles.warning}>{normal ? FUtil.I18n.message('online') : FUtil.I18n.message('offline')}</label>
+        className={normal ? styles.normal : styles.warning}>{normal ? FUtil1.I18n.message('online') : FUtil1.I18n.message('offline')}</label>
       {normal || <FWarning/>}
     </div>
   );

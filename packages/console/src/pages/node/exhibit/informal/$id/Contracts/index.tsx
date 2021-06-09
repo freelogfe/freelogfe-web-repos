@@ -5,7 +5,7 @@ import {Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 import {ChangeAction, UpdateRelationAction} from "@/models/informExhibitInfoPage";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FTextBtn} from "@/components/FButton";
 
 interface ContractsProps {

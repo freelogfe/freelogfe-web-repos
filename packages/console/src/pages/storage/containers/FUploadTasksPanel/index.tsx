@@ -15,7 +15,7 @@ import {
 } from '@/models/storageHomePage';
 import * as AHooks from 'ahooks';
 import fConfirmModal from "@/components/fConfirmModal";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 import FLoadingTip from "@/components/FLoadingTip";
 
 export interface FUploadTasksPanelProps {
@@ -124,7 +124,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             const exits: undefined | StorageHomePageModelState['uploadTaskQueue'][number] = storageHomePage.uploadTaskQueue.find((i) => i.state !== 1);
             if (exits) {
               fConfirmModal({
-                message: FUtil.I18n.message('cancel_all_uploading_task'),
+                message: FUtil1.I18n.message('cancel_all_uploading_task'),
                 onOk() {
                   closeAll();
                 },

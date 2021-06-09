@@ -30,7 +30,8 @@ import {
   FAntvG6RelationshipGraph,
   FViewportTabs
 } from "@/components/FAntvG6";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FApiServer} from "@/services";
 import FDivider from "@/components/FDivider";
 import {FTipText} from '@/components/FText';
@@ -150,7 +151,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
-          title={FUtil.I18n.message('version_description')}
+          title={FUtil1.I18n.message('version_description')}
           extra={<Space size={10}>
             {
               isEditing
@@ -165,11 +166,11 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                   <FTextBtn
                     type="default"
                     onClick={() => setIsEditing(false)}
-                  >{FUtil.I18n.message('cancel')}</FTextBtn>
+                  >{FUtil1.I18n.message('cancel')}</FTextBtn>
                   <FTextBtn
                     type="primary"
                     onClick={onUpdateEditorText}
-                  >{FUtil.I18n.message('save')}</FTextBtn>
+                  >{FUtil1.I18n.message('save')}</FTextBtn>
                 </>)
                 : !!resourceVersionEditorPage.description
                 ? (<>
@@ -808,11 +809,11 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                   onChange({descriptionFullScreen: false});
                 }
               }}
-            >{FUtil.I18n.message('cancel')}</FTextBtn>
+            >{FUtil1.I18n.message('cancel')}</FTextBtn>
             <FTextBtn
               type="primary"
               onClick={onUpdateEditorText}
-            >{FUtil.I18n.message('save')}</FTextBtn>
+            >{FUtil1.I18n.message('save')}</FTextBtn>
           </>)
           : (<>
             <FTextBtn
@@ -879,9 +880,9 @@ function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps
       <FTitleText text={version} type="h1"/>
       <div style={{height: 10}}/>
       <Space size={0}>
-        <FContentText type="additional2" text={FUtil.I18n.message('release_date') + '：' + signingDate}/>
+        <FContentText type="additional2" text={FUtil1.I18n.message('release_date') + '：' + signingDate}/>
         <div style={{width: 40}}/>
-        <FContentText type="additional2" text={FUtil.I18n.message('object_id') + '：' + resourceID}/>
+        <FContentText type="additional2" text={FUtil1.I18n.message('object_id') + '：' + resourceID}/>
         <div style={{width: 20}}/>
         <FTooltip title={'下载'}>
           <div>

@@ -14,7 +14,7 @@ import {FTextBtn} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 const {compile} = require('@freelog/nmr_translator');
 

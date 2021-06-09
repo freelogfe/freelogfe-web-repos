@@ -14,7 +14,8 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {CloseCircleFilled} from '@ant-design/icons';
 import {ChangeAction, DepResources, ImportLastVersionDataAction} from '@/models/resourceVersionCreatorPage';
 import FDrawer from "@/components/FDrawer";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface FDepPanelProps {
   dispatch: Dispatch;
@@ -50,7 +51,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
               caller: '23453243434(((()00005234324534%#$%#$%#$%#$#$',
             });
           }}
-        >{FUtil.I18n.message('import_from_previous_version')}</FRectBtn>
+        >{FUtil1.I18n.message('import_from_previous_version')}</FRectBtn>
       }
 
     </Space>
@@ -75,7 +76,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
                 <div className={styles.errorBox}>
                   <CloseCircleFilled className={styles.errorIcon}/>
                   <FTipText
-                    text={FUtil.I18n.message('authorization_issue_offline_resource')}
+                    text={FUtil1.I18n.message('authorization_issue_offline_resource')}
                     type="second"
                   />
                 </div>)
@@ -84,7 +85,7 @@ function FDepPanel({dispatch, resourceVersionCreatorPage}: FDepPanelProps) {
               resource?.status === 2 && (<div className={styles.errorBox}>
                 <CloseCircleFilled className={styles.errorIcon}/>
                 <FTipText
-                  text={FUtil.I18n.message('authorization_issue_circular_reply')}
+                  text={FUtil1.I18n.message('authorization_issue_circular_reply')}
                   type="second"
                 />
               </div>)

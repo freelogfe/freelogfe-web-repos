@@ -7,7 +7,7 @@ import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {router} from "umi";
 
 export interface ResourceVersionEditorPageModelState {

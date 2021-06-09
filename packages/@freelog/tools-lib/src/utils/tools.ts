@@ -1,4 +1,4 @@
-import * as CryptoJS from "crypto-js";
+import * as CryptoJS from 'crypto-js';
 
 /**
  * 根据 File 获取 SHA1 Hash 字符串
@@ -6,10 +6,10 @@ import * as CryptoJS from "crypto-js";
  * @return {Promise<string>}
  */
 export function getSHA1Hash(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      const wordArray = CryptoJS.lib.WordArray.create(reader.result);
+  return new Promise((resolve) => {
+    const reader: FileReader = new FileReader();
+    reader.onload = function () {
+      const wordArray = CryptoJS.lib.WordArray.create(reader.result as any);
       const hash = CryptoJS.SHA1(wordArray).toString();
       resolve(hash);
     };

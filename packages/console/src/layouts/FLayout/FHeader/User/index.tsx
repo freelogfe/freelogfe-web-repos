@@ -5,7 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import UserSVG from '@/assets/user.svg';
 
 interface UserProps {

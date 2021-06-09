@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {connect, Dispatch} from "dva";
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FTextBtn} from "@/components/FButton";
 
 interface RelationProps {
@@ -16,7 +16,7 @@ interface RelationProps {
 function Relation({exhibitInfoPage}: RelationProps) {
   return (<div className={styles.info}>
     <FContentText
-      text={FUtil.I18n.message('relevant_resource')}
+      text={FUtil1.I18n.message('relevant_resource')}
       type="highlight"
     />
     <div style={{height: 20}}/>

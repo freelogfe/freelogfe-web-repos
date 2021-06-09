@@ -3,13 +3,10 @@ import styles from "./index.less";
 import {Radio, Space} from "antd";
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState} from "@/models/connect";
-import {DepResources, ChangeAction} from "@/models/resourceVersionCreatorPage";
-import {InfoCircleFilled} from '@ant-design/icons';
+import {ChangeAction} from "@/models/resourceVersionCreatorPage";
 import {FInfo} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
-import FUtil from "@/utils";
-
-// import {i18nMessage} from "@/utils/i18n";
+import FUtil1 from "@/utils";
 
 interface IsUpthrowProps {
   dispatch: Dispatch;
@@ -56,7 +53,7 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
         <span style={{color: '#666'}}>上抛</span>
       </Space>
 
-      <FTooltip title={FUtil.I18n.message('info_upcast')}>
+      <FTooltip title={FUtil1.I18n.message('info_upcast')}>
         <div><FInfo/></div>
       </FTooltip>
     </Space>
@@ -71,9 +68,9 @@ function IsUpthrow({resourceVersionCreatorPage, dispatch}: IsUpthrowProps) {
           disabled={resource.upthrowDisabled}
           onClick={() => onChangeIsUpthrow(false)}
         />
-        <span style={{color: '#666'}}>{FUtil.I18n.message('sign_contract')}</span>
+        <span style={{color: '#666'}}>{FUtil1.I18n.message('sign_contract')}</span>
       </Space>
-      <FTooltip title={FUtil.I18n.message('info_sign_contract')}>
+      <FTooltip title={FUtil1.I18n.message('info_sign_contract')}>
         <div><FInfo/></div>
       </FTooltip>
 

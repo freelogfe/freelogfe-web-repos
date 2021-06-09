@@ -8,7 +8,7 @@ import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhi
 import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -54,7 +54,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
               }
             })}
             type="primary"
-          >{FUtil.I18n.message('add_authorization_plan')}</FRectBtn>
+          >{FUtil1.I18n.message('add_authorization_plan')}</FRectBtn>
         </div>)
         : (<div className={styles.policies}>
           {

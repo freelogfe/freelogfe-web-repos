@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {FTipText} from '@/components/FText';
-import FModal from '@/components/FModal';
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import styles from './index.less';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState, ResourceInfoModelState} from '@/models/connect';
 import {ChangeAction, UpdatePoliciesAction} from '@/models/resourceAuthPage';
-import PolicyCard from './PolicyCard';
 import FPolicyBuilderDrawer from "@/components/FPolicyBuilderDrawer";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 import {FRectBtn} from '@/components/FButton';
 import FPolicyList from "@/components/FPolicyList";
 
@@ -62,7 +59,7 @@ function FPolicies({dispatch, resourceAuthPage}: FPoliciesProps) {
         ? (<div className={styles.empty}>
           <FTipText
             type="second"
-            text={FUtil.I18n.message('hint_add_authorization_plan')}
+            text={FUtil1.I18n.message('hint_add_authorization_plan')}
           />
           <div style={{height: 20}}/>
           <FRectBtn

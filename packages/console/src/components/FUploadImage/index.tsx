@@ -6,7 +6,8 @@ import 'antd/es/slider/style';
 import styles from './index.less';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+// import {FUtil} from '@freelog/tools-lib';
 
 interface FUploadImageProps {
   children: React.ReactNode;
@@ -35,12 +36,12 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         beforeCrop={(file) => {
           console.log(file, '#FSDFSDFSDF');
           if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
-            onError && onError(FUtil.I18n.message('limit_resource_image_format'));
+            onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
             return false;
           }
 
           if (file.size > 5 * 1024 * 1024) {
-            onError && onError(FUtil.I18n.message('limit_resource_image_size'));
+            onError && onError(FUtil1.I18n.message('limit_resource_image_size'));
             return false;
           }
 

@@ -1,17 +1,18 @@
 import * as React from 'react';
 import styles from './index.less';
-import {router, withRouter} from "umi";
+import {withRouter} from "umi";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
-import {InformalNodeManagerPageModelState,
+import {
+  InformalNodeManagerPageModelState,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
 import MappingRule from "./MappingRule";
 import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;

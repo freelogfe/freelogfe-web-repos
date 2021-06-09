@@ -9,7 +9,8 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState, NodesModelState} from "@/models/connect";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface NodeProps {
   dispatch: Dispatch;
@@ -58,7 +59,7 @@ function Node({dispatch, nodes, global}: NodeProps) {
       >创建节点</FRectBtn>
     </div>)}>
     <FNavLink
-      text={FUtil.I18n.message('node_manage')}
+      text={FUtil1.I18n.message('node_manage')}
       to={nodes.list.length == 0 ? FUtil.LinkTo.nodeCreator() : FUtil.LinkTo.nodeManagement({nodeID: nodes.list[0].nodeId})}
       active={isCurrent}
     />

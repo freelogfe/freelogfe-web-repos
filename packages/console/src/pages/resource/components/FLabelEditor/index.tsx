@@ -2,16 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {CloseOutlined} from '@ant-design/icons';
 import {Input, Form} from 'antd';
-import FUtil from "@/utils";
-
-// import {i18nMessage} from "@/utils/i18n";
+import FUtil1 from "@/utils";
 
 interface FLabelEditor {
   values?: string[];
   onChange?: (values: string[]) => void;
 }
-
-// let inputElement: any = null;
 
 export default function ({values = [], onChange}: FLabelEditor) {
 
@@ -57,7 +53,7 @@ export default function ({values = [], onChange}: FLabelEditor) {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <Input
           className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
-          placeholder={FUtil.I18n.message('hint_add_resource_tag')}
+          placeholder={FUtil1.I18n.message('hint_add_resource_tag')}
           ref={inputElementRef}
           value={input}
           onChange={onChangeInputText}

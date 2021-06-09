@@ -5,10 +5,10 @@ import {Space} from 'antd';
 import {FRectBtn} from '@/components/FButton';
 import FUpload from '@/components/FUpload';
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
+import {StorageHomePageModelState, UploadFilesAction} from '@/models/storageHomePage';
 import {ConnectState} from '@/models/connect';
 import {RcFile} from "antd/lib/upload/interface";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -32,8 +32,8 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
       <FTitleText type="h1" text={bucket.bucketName}/>
       <div style={{height: 5}}/>
       <Space size={40}>
-        <div>{FUtil.I18n.message('created_time')} {bucket.createDate}</div>
-        <div>{FUtil.I18n.message('object_quantity')} {bucket.totalFileQuantity}</div>
+        <div>{FUtil1.I18n.message('created_time')} {bucket.createDate}</div>
+        <div>{FUtil1.I18n.message('object_quantity')} {bucket.totalFileQuantity}</div>
       </Space>
     </div>
     {
@@ -54,7 +54,7 @@ function Header({dispatch, storageHomePage}: HeaderProps) {
         >
           <FRectBtn
             type="primary"
-          >{FUtil.I18n.message('upload_object')}</FRectBtn>
+          >{FUtil1.I18n.message('upload_object')}</FRectBtn>
         </FUpload>
       )
     }

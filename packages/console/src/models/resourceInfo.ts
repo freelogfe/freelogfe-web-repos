@@ -4,7 +4,7 @@ import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
 import {router} from 'umi';
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface ResourceInfoModelState {
   resourceID: string;

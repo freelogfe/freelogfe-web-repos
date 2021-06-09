@@ -11,7 +11,6 @@ import {ConnectState, NodeManagerModelState} from '@/models/connect';
 import FInput from '@/components/FInput';
 import {router} from "umi";
 import {ColumnsType} from "antd/lib/table/interface";
-// import {resourceTypes} from "@/utils/predefined";
 import {FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
 import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
 import FNoDataTip from "@/components/FNoDataTip";
@@ -21,7 +20,8 @@ import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/node/formal/$id/Sider";
 import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import InfiniteScroll from 'react-infinite-scroller';
 
 interface ExhibitsProps {
@@ -55,7 +55,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       title: (<FTitleText
         // text={'展品名称｜类型｜展品标题｜策略'}
-        text={FUtil.I18n.message('tableheader_exhibit')}
+        text={FUtil1.I18n.message('tableheader_exhibit')}
         type="table"
       />),
       dataIndex: 'name',
@@ -97,13 +97,13 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       className: styles.tableEdit,
       render(_, record): any {
         return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
-          <FTooltip title={FUtil.I18n.message('tip_edit_exhibit')}>
+          <FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
             <FLink to={FUtil.LinkTo.exhibitManagement({
               exhibitID: record.id
             })}><FEdit/></FLink>
           </FTooltip>
 
-          <FTooltip title={FUtil.I18n.message('tip_check_relevant_resource')}>
+          <FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
             <FLink to={FUtil.LinkTo.resourceDetails({
               resourceID: record.resourceId
             })}><FFileSearch/></FLink>
@@ -114,7 +114,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       title: (<FTitleText
         type="table"
-        text={FUtil.I18n.message('tableheader_exhibit_version')}
+        text={FUtil1.I18n.message('tableheader_exhibit_version')}
       />),
       dataIndex: 'version',
       key: 'version',
@@ -127,7 +127,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       title: (<FTitleText
         type="table"
-        text={FUtil.I18n.message('tableheader_show_exhibit')}
+        text={FUtil1.I18n.message('tableheader_show_exhibit')}
       />),
       dataIndex: 'status',
       key: 'status',
@@ -216,8 +216,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
     {
       nodeManagerPage.exhibitDataState === 'noData' ? (<FNoDataTip
         height={'calc(100vh - 70px)'}
-        tipText={FUtil.I18n.message('manage_exhibits_empty')}
-        btnText={FUtil.I18n.message('btn_go_to_resource_market')}
+        tipText={FUtil1.I18n.message('manage_exhibits_empty')}
+        btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
         onClick={() => {
           dispatch<MarketChangeAction>({
             type: 'marketPage/change',

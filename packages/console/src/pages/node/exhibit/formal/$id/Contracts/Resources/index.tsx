@@ -4,7 +4,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
 import {FContentText, FTitleText} from "@/components/FText";
 import {FTextBtn} from "@/components/FButton";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {ChangeAction} from "@/models/exhibitInfoPage";
 
 interface ResourcesProps {

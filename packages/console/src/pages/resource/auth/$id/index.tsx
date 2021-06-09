@@ -8,7 +8,6 @@ import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
   ResourceAuthPageModelState,
-  ResourceInfoModelState,
 } from '@/models/connect';
 import {
   ChangeAction,
@@ -20,7 +19,8 @@ import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/components/FFormLayout";
 import {FNodes, FUser} from "@/components/FIcons";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import FContractDetailsDrawer from "@/components/FContractDetailsDrawer";
 import FTable from "@/components/FTable";
@@ -155,12 +155,12 @@ function Auth({dispatch, resourceAuthPage, match}: AuthProps & RouterTypes) {
   return (<FLeftSiderLayout
     sider={<Sider/>}
     header={<FTitleText
-      text={FUtil.I18n.message('authorization_infomation')}
+      text={FUtil1.I18n.message('authorization_infomation')}
       type="h1"
     />}>
     <FFormLayout>
       <FFormLayout.FBlock
-        title={FUtil.I18n.message('authorization_plan')}
+        title={FUtil1.I18n.message('authorization_plan')}
         extra={resourceAuthPage.policies?.length !== 0 && (<FCircleBtn
           size="small"
           onClick={() => {
@@ -177,7 +177,7 @@ function Auth({dispatch, resourceAuthPage, match}: AuthProps & RouterTypes) {
 
       </FFormLayout.FBlock>
 
-      <FFormLayout.FBlock title={FUtil.I18n.message('licencee_contract')}>
+      <FFormLayout.FBlock title={FUtil1.I18n.message('licencee_contract')}>
 
         <Space style={{width: '100%'}} direction="vertical" size={20}>
           {
@@ -205,7 +205,7 @@ function Auth({dispatch, resourceAuthPage, match}: AuthProps & RouterTypes) {
 
       </FFormLayout.FBlock>
 
-      <FFormLayout.FBlock title={FUtil.I18n.message('authorizing_contracts')}>
+      <FFormLayout.FBlock title={FUtil1.I18n.message('authorizing_contracts')}>
 
         {
           resourceAuthPage.contractsAuthorize?.length > 0

@@ -120,7 +120,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  // return window.location.href = apiHost + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v1/storages/objects/${params.objectIdOrName}/file`;
   // return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
   //   responseType: 'arraybuffer',
   //   // onDownloadProgress: (progressEvent: any) => {

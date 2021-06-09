@@ -20,10 +20,9 @@ import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
-import {generateRandomCode} from "@/utils/tools";
 import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -231,7 +230,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             data: value.names.map((n) => {
               return {
                 operation: 'add',
-                exhibitName: n.split('/')[1] + `_${generateRandomCode()}`,
+                exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
                 candidate: {
                   name: n,
                   versionRange: 'latest',

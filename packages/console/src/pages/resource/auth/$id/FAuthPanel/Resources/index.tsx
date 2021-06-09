@@ -5,7 +5,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceAuthPageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/resourceAuthPage";
 import {FTextBtn} from "@/components/FButton";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ResourcesProps {
   dispatch: Dispatch;

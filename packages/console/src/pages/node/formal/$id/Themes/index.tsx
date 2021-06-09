@@ -18,7 +18,8 @@ import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FDivider from "@/components/FDivider";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -40,8 +41,8 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
       nodeManagerPage.themeDataState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 70px)'}
-          tipText={FUtil.I18n.message('manage_themes_empty')}
-          btnText={FUtil.I18n.message('btn_add_theme')}
+          tipText={FUtil1.I18n.message('manage_themes_empty')}
+          btnText={FUtil1.I18n.message('btn_add_theme')}
           onClick={() => {
             dispatch<MarketChangeAction>({
               type: 'marketPage/change',
@@ -84,7 +85,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                       <div className={styles.cover}>
                         <Space size={10}>
                           {
-                            i.isOnline && (<label className={styles.label}>{FUtil.I18n.message('state_active')}</label>)
+                            i.isOnline && (<label className={styles.label}>{FUtil1.I18n.message('state_active')}</label>)
                           }
 
                           {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
@@ -132,16 +133,16 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                       });
                                     },
                                   });
-                                }}>{FUtil.I18n.message('btn_activate_theme')}</a>
+                                }}>{FUtil1.I18n.message('btn_activate_theme')}</a>
 
                               <FDivider/>
                             </>)
                           }
                           <FLink
-                            to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>{FUtil.I18n.message('btn_edit_exhibit')}</FLink>
+                            to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>{FUtil1.I18n.message('btn_edit_exhibit')}</FLink>
                           <FDivider/>
                           <FLink
-                            to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>{FUtil.I18n.message('btn_check_resource_details')}</FLink>
+                            to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>{FUtil1.I18n.message('btn_check_resource_details')}</FLink>
                           <div style={{width: 1}}/>
                         </div>
                       </div>

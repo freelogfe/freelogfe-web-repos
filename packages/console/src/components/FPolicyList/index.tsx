@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+// import {FUtil} from '@freelog/tools-lib';
 import FSwitch from "@/components/FSwitch";
-import {UpdateAPolicyAction} from "@/models/exhibitInfoPage";
 import {Space} from "antd";
 import {FContentText} from "@/components/FText";
-import {ChangeAction} from "@/models/resourceAuthPage";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
 import FModal from "@/components/FModal";
 
@@ -43,7 +42,7 @@ function FPolicyList({dataSource, atLeastOneUsing = false, onCheckChange}: FPoli
             />
             <Space size={8}>
               <label
-                style={{color: ds.using ? '#42C28C' : '#B4B6BA'}}>{FUtil.I18n.message('btn_activate_auth_plan')}</label>
+                style={{color: ds.using ? '#42C28C' : '#B4B6BA'}}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
               <FSwitch
                 disabled={disabledOnlyUsing && ds.using}
                 checked={ds.using}

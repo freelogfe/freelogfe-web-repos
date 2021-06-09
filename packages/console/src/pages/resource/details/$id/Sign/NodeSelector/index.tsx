@@ -8,7 +8,7 @@ import {ConnectState, MarketResourcePageModelState, NodesModelState} from "@/mod
 import {OnChangeNodeSelectorAction} from "@/models/marketResourcePage";
 import {FTextBtn} from '@/components/FButton';
 import {router} from "umi";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface NodeSelectorProps {
   dispatch: Dispatch;

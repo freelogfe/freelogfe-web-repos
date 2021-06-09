@@ -7,7 +7,8 @@ import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/conne
 import {
   ChangeAction,
 } from '@/models/resourceVersionCreatorPage';
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
 
 interface ContractsProps {
@@ -60,7 +61,7 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
   }
 
   return <Space size={15} style={{width: '100%'}} direction="vertical">
-    <FContentText type="additional2" text={FUtil.I18n.message('reusable_contract')}/>
+    <FContentText type="additional2" text={FUtil1.I18n.message('reusable_contract')}/>
     {
       resource.enableReuseContracts.map((k) => (<div key={k.id} className={styles.Policy}>
 
@@ -81,12 +82,12 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         <Space style={{padding: '0 20px'}} size={2}>
           <FContentText
             type="additional2"
-            text={FUtil.I18n.message('contract_id') + '：' + k.id}
+            text={FUtil1.I18n.message('contract_id') + '：' + k.id}
           />
           <FDivider style={{fontSize: 14}}/>
           <FContentText
             type="additional2"
-            text={FUtil.I18n.message('contract_signed_time') + '：' + k.date}
+            text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
           />
         </Space>
         <div style={{height: 15}}/>

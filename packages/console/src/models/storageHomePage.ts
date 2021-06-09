@@ -5,9 +5,8 @@ import {ConnectState} from '@/models/connect';
 import moment from 'moment';
 import {RcFile} from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
-import {getSHA1Hash} from '@/utils/tools';
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {router} from "umi";
 
 export interface StorageHomePageModelState {
@@ -479,7 +478,7 @@ export default Model;
 async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
   return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
     uid: fo.uid,
-    sha1: await getSHA1Hash(fo),
+    sha1: await FUtil.Tool.getSHA1Hash(fo),
     name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
     file: fo,
     state: 0,

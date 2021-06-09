@@ -6,7 +6,7 @@ import FDrawer from "../FDrawer";
 import {FTitleText} from '@/components/FText';
 import FInput from "@/components/FInput";
 import FSelect from "@/components/FSelect";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface FCustomOptionEditorDrawerProps {
   isLocking?: boolean;

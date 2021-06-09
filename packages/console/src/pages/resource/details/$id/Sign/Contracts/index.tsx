@@ -6,7 +6,7 @@ import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/marketResourcePage";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {FTextBtn} from "@/components/FButton";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ContractsProps {
   dispatch: Dispatch;

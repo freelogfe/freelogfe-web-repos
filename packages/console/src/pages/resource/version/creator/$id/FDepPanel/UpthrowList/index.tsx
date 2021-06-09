@@ -3,7 +3,7 @@ import styles from './index.less';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import FBasicUpcastCard from "@/components/FBasicUpcastCard";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface UpthrowListProps {
   creator: ResourceVersionCreatorPageModelState;

@@ -8,7 +8,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FNoDataTip from "@/components/FNoDataTip";
 import FLoadingTip from "@/components/FLoadingTip";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ResourceProps {
   dispatch: Dispatch;

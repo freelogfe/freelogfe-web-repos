@@ -2,19 +2,20 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText, FContentText} from '@/components/FText';
 import {FCircleBtn} from '@/components/FButton';
-import {Progress, Space, Modal} from 'antd';
+import {Progress, Space} from 'antd';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, StorageHomePageModelState} from '@/models/connect';
 import {
   ChangeAction,
   DeleteBucketByNameAction,
 } from '@/models/storageHomePage';
-import {FDelete, FWarning} from "@/components/FIcons";
+import {FDelete} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
 import fMessage from "@/components/fMessage";
 import fConfirmModal from "@/components/fConfirmModal";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -38,7 +39,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
           <Space size={10}>
             <FTitleText
               // text={`我的存储空间`}
-              text={FUtil.I18n.message('my_buckets')}
+              text={FUtil1.I18n.message('my_buckets')}
               type="h4"
             />
             <FTitleText
@@ -63,7 +64,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                 }}
               />)
               : (<FTooltip
-                title={FUtil.I18n.message('msg_bucket_quantity_exceed ')}
+                title={FUtil1.I18n.message('msg_bucket_quantity_exceed ')}
                 trigger="click"
                 placement="topLeft"
               >
@@ -90,7 +91,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
                   >
                     <span>{b.bucketName}</span>
                     <FTooltip
-                      title={FUtil.I18n.message('tip_delete')}
+                      title={FUtil1.I18n.message('tip_delete')}
                       // arrowPointAtCenter={true}
                       getPopupContainer={() => siderRef.current}
                     >
@@ -123,7 +124,7 @@ function Sider({storageHomePage, dispatch}: SiderProps) {
             <FContentText
               type="additional2"
               // text={'单击“ + ”创建您的第一个项目。'}
-              text={FUtil.I18n.message('my_buckets_list_empty')}
+              text={FUtil1.I18n.message('my_buckets_list_empty')}
             />
           </div>)
         }

@@ -1,14 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FHorn from '@/pages/resource/components/FHorn';
-// import {i18nMessage} from '@/utils/i18n';
-import {Col, Row, Space, Switch} from 'antd';
+import {Space} from 'antd';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 import {Data} from '../index';
 import Field from '../Field';
-// import {CUSTOM_KEY} from "@/utils/regexp";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface PropertyProps {
   data: Data;
@@ -28,7 +26,7 @@ function Property({data, onChange}: PropertyProps) {
     <div className={styles.Content}>
     <div style={{height: 10}}/>
   <Space size={20} className={styles.row}>
-    <Field title={FUtil.I18n.message('key')} dot={true}>
+    <Field title={FUtil1.I18n.message('key')} dot={true}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.key}
@@ -51,7 +49,7 @@ function Property({data, onChange}: PropertyProps) {
       />
       {data.keyError && <div className={styles.error}>{data.keyError}</div>}
     </Field>
-    <Field title={FUtil.I18n.message('property_remark')}>
+    <Field title={FUtil1.I18n.message('property_remark')}>
       <FInput
         wrapClassName={styles.FInputWrap}
         value={data.description}
@@ -76,15 +74,15 @@ function Property({data, onChange}: PropertyProps) {
     <Space style={{padding: '0 20px', alignItems: 'flex-start'}} size={20}>
       <Field
         className={styles.FSelect}
-        title={FUtil.I18n.message('value_input_mode')}
+        title={FUtil1.I18n.message('value_input_mode')}
       >
         <FSelect
           value={data.custom}
           onChange={(value) => onChangeData({custom: value})}
           className={styles.FSelect}
           dataSource={[
-            {value: 'input', title: FUtil.I18n.message('textfield')},
-            {value: 'select', title: FUtil.I18n.message('dropdownlist')},
+            {value: 'input', title: FUtil1.I18n.message('textfield')},
+            {value: 'select', title: FUtil1.I18n.message('dropdownlist')},
           ]}
           placeholder={'请选择'}
         />

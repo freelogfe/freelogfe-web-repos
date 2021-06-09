@@ -5,7 +5,7 @@ import {FetchDataSourceAction} from "@/models/resourceInfo";
 import moment from "moment";
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;

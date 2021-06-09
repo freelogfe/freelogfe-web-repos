@@ -14,7 +14,8 @@ import {RouterTypes} from "umi";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/components/FFormLayout";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {RouteComponentProps} from "react-router";
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
@@ -65,26 +66,26 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
     <FLeftSiderLayout
       sider={<Sider/>}
       header={<FTitleText
-        text={FUtil.I18n.message('resource_information')}
+        text={FUtil1.I18n.message('resource_information')}
         type="h1"
       />}
     >
       {resourceInfo.info && <FFormLayout>
         {/*<div className={styles.styles}>*/}
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_name')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_name')}>
           <FContentText type="highlight" text={resourceInfo.info?.resourceName}/>
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')}>
           <FContentText type="highlight" text={resourceInfo.info.resourceType}/>
         </FFormLayout.FBlock>
         <FFormLayout.FBlock
-          title={FUtil.I18n.message('resource_short_description')}
+          title={FUtil1.I18n.message('resource_short_description')}
           extra={<Space size={10}>
             {
               resourceInfo.info?.intro && !resourceInfoPage.isEditing
               && (<FTextBtn onClick={() => {
                 onChangeIsEditing(true)
-              }}>{FUtil.I18n.message('edit')}</FTextBtn>)
+              }}>{FUtil1.I18n.message('edit')}</FTextBtn>)
             }
             {
               resourceInfoPage.isEditing && (<>
@@ -93,7 +94,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
                   onClick={() => {
                     onChangeIsEditing(false);
                   }}
-                >{FUtil.I18n.message('cancel')}</FTextBtn>
+                >{FUtil1.I18n.message('cancel')}</FTextBtn>
                 <FTextBtn
                   onClick={() => {
                     onChangeIsEditing(false);
@@ -104,7 +105,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
                       id: resourceInfo.info?.resourceId || '',
                     });
                   }}
-                >{FUtil.I18n.message('save')}</FTextBtn>
+                >{FUtil1.I18n.message('save')}</FTextBtn>
               </>)
             }
           </Space>}
@@ -137,7 +138,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
           }
 
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_image')}>
           <FUploadResourceCover
             value={resourceInfo.info?.coverImages.length > 0 ? resourceInfo.info?.coverImages[0] : ''}
             onChange={(value) => dispatch<OnChangeInfoAction>({
@@ -147,7 +148,7 @@ function Info({dispatch, route, resourceInfoPage, resourceInfo, user, match}: In
             })}
           />
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_tag')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_tag')}>
           <FLabelEditor
             values={resourceInfo.info?.tags}
             onChange={(value) => dispatch<OnChangeInfoAction>({

@@ -19,7 +19,7 @@ import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';
 import {RouteComponentProps} from "react-router";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;

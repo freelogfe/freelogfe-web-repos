@@ -3,12 +3,12 @@ import styles from './index.less';
 import {Checkbox, Space} from 'antd';
 import {FContentText} from '@/components/FText';
 import {ResourceAuthPageModelState, UpdateAuthorizedAction} from '@/models/resourceAuthPage';
-import {connect, Dispatch, DispatchProp} from 'dva';
-import FUtil from "@/utils";
+import {connect, Dispatch} from 'dva';
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {ConnectState} from "@/models/connect";
-
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -58,12 +58,12 @@ function Contracts({resourceAuthPage, dispatch}: ContractsProps) {
         <Space style={{padding: '0 20px'}} size={2}>
           <FContentText
             type="additional2"
-            text={FUtil.I18n.message('contract_id') + '：' + k.id}
+            text={FUtil1.I18n.message('contract_id') + '：' + k.id}
           />
           <FDivider style={{fontSize: 14}}/>
           <FContentText
             type="additional2"
-            text={FUtil.I18n.message('contract_signed_time') + '：' + k.date}
+            text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
           />
         </Space>
 

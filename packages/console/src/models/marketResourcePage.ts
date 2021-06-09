@@ -4,7 +4,8 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import FUtil1 from '@/utils';
+import {FUtil} from '@freelog/tools-lib';
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 
@@ -611,7 +612,7 @@ const Model: MarketResourcePageModelType = {
           type: 'change',
           payload: {
             signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil.I18n.message('naming_convention_exhibits_name'),
+            signExhibitNameErrorTip: FUtil1.I18n.message('naming_convention_exhibits_name'),
           },
         });
         return;
@@ -631,7 +632,7 @@ const Model: MarketResourcePageModelType = {
           type: 'marketResourcePage/change',
           payload: {
             signExhibitName: payload,
-            signExhibitNameErrorTip: FUtil.I18n.message('exhibits_name_exist'),
+            signExhibitNameErrorTip: FUtil1.I18n.message('exhibits_name_exist'),
           },
         });
         return;

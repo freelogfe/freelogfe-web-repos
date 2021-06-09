@@ -3,12 +3,9 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
-// import {nodeManagement} from "@/utils/path-assembler";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
-import {list} from "@/services/resources";
-// import {NODE_DOMAIN, NODE_NAME} from "@/utils/regexp";
-// import FLinkTo from "@/utils/path-assembler";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -170,7 +167,7 @@ const Model: NodesModelType = {
         // nameError = '长度必须在 1-100 字符之间。\n' +
         //   '不能以正斜线（/）或者反斜线（\\）开头。\n' +
         //   '开头和结尾的空格会自动删除。';
-        nameError = FUtil.I18n.message('naming_convention_node_name');
+        nameError = FUtil1.I18n.message('naming_convention_node_name');
       }
 
       if (!nameError) {

@@ -14,7 +14,8 @@ import FTooltip from "@/components/FTooltip";
 import {FWarning} from "@/components/FIcons";
 import {RouteComponentProps} from "react-router";
 import fConfirmModal from "@/components/fConfirmModal";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FTextBtn} from "@/components/FButton";
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
@@ -74,9 +75,9 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           {
             exhibitInfoPage.resourceType === 'theme'
               ? (<span
-                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil.I18n.message('toggle_activate_theme')}</span>)
+                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil1.I18n.message('toggle_activate_theme')}</span>)
               : (<span
-                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil.I18n.message('btn_show_exhibit')}</span>)
+                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil1.I18n.message('btn_show_exhibit')}</span>)
           }
 
           <FSwitch

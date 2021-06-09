@@ -4,7 +4,7 @@ import FMenu from "@/components/FMenu";
 import {FCircleBtn} from "@/components/FButton";
 import FDropdown from "@/components/FDropdown";
 import {router} from "umi";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface CreateProps {
 

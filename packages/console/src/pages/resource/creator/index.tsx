@@ -17,7 +17,6 @@ import {
   OnChangeResourceTypeAction,
   ClearDataAction,
 } from '@/models/resourceCreatorPage';
-import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import FAutoComplete from '@/components/FAutoComplete';
 import {router, RouterTypes} from 'umi';
 import {FCheck, FInfo, FLoading} from '@/components/FIcons';
@@ -25,7 +24,8 @@ import FFormLayout from "@/components/FFormLayout";
 import * as H from "history";
 import Prompt from "umi/prompt";
 import fConfirmModal from "@/components/fConfirmModal";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -115,7 +115,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
     />}>
       <FFormLayout>
         <FFormLayout.FBlock
-          title={FUtil.I18n.message('resource_name')}
+          title={FUtil1.I18n.message('resource_name')}
           dot={true}
         >
           <div className={styles.resourceName}>
@@ -132,7 +132,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
                 });
               }}
               className={styles.FInput}
-              placeholder={FUtil.I18n.message('hint_enter_resource_name')}
+              placeholder={FUtil1.I18n.message('hint_enter_resource_name')}
               lengthLimit={60}
             />
             <div style={{width: 10}}/>
@@ -141,7 +141,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           </div>
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_type')} dot={true}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_type')} dot={true}>
           <FAutoComplete
             errorText={resourceCreatorPage.resourceTypeErrorText}
             value={resourceCreatorPage.resourceType}
@@ -150,23 +150,23 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
               payload: value,
             })}
             className={styles.FSelect}
-            placeholder={FUtil.I18n.message('hint_choose_resource_type')}
+            placeholder={FUtil1.I18n.message('hint_choose_resource_type')}
             options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_short_description')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_short_description')}>
           <FIntroductionEditor
             value={resourceCreatorPage.introduction}
             onChange={(e) => onChange({
               introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',
               introduction: e.target.value
             })}
-            placeholder={FUtil.I18n.message('hint_enter_resource_short_description')}
+            placeholder={FUtil1.I18n.message('hint_enter_resource_short_description')}
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_image')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_image')}>
           <FUploadResourceCover
             value={resourceCreatorPage.cover}
             onChange={(value) => onChange({
@@ -175,7 +175,7 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
           />
         </FFormLayout.FBlock>
 
-        <FFormLayout.FBlock title={FUtil.I18n.message('resource_tag')}>
+        <FFormLayout.FBlock title={FUtil1.I18n.message('resource_tag')}>
           <FLabelEditor
             values={resourceCreatorPage.labels}
             onChange={(value) => onChange({
@@ -206,7 +206,7 @@ function Header({onClickCreate, disabled = false}: HeaderProps) {
         disabled={disabled}
         onClick={onClickCreate}
       >
-        {FUtil.I18n.message('create')}
+        {FUtil1.I18n.message('create')}
       </FRectBtn>
 
     </Space>

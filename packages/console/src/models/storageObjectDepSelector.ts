@@ -3,7 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface StorageObjectDepSelectorModelState {
   resourceList: {

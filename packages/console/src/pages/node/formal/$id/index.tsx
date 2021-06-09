@@ -13,7 +13,6 @@ import {
 } from '@/models/nodeManagerPage';
 import {ConnectState, NodesModelState} from '@/models/connect';
 import {RouteComponentProps} from "react-router";
-import FUtil from "@/utils";
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;

@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
 import FMenu from "@/components/FMenu";
-// import {i18nMessage} from "@/utils/i18n";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import {router} from "umi";
-// import {myResources} from "@/utils/path-assembler";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 const resourcesOptions = [
   {
@@ -48,7 +47,7 @@ function Resource({global}: ResourceProps) {
     <FNavLink
       to={FUtil.LinkTo.myResources()}
       active={isCurrent}
-      text={FUtil.I18n.message('resource_manage')}
+      text={FUtil1.I18n.message('resource_manage')}
     />
   </FDropdown>);
 }

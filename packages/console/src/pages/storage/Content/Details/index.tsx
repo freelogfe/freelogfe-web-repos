@@ -24,7 +24,8 @@ import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer"
 import {router} from "umi";
 import {FApiServer} from "@/services";
 import FTooltip from "@/components/FTooltip";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
 import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
@@ -113,9 +114,9 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               <FCopyToClipboard
                 iconStyle={{fontSize: 14}}
                 text={`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`}
-                title={FUtil.I18n.message('copy_object_name')}
+                title={FUtil1.I18n.message('copy_object_name')}
               />
-              <FTooltip title={FUtil.I18n.message('tip_download_object')}>
+              <FTooltip title={FUtil1.I18n.message('tip_download_object')}>
                 <div>
                   <FTextBtn
                     type="primary"
@@ -282,7 +283,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
               onChangeType(value);
             }}
             className={styles.FAutoComplete}
-            placeholder={FUtil.I18n.message('hint_choose_resource_type')}
+            placeholder={FUtil1.I18n.message('hint_choose_resource_type')}
             options={FUtil.Predefined.resourceTypes.map((i: string) => ({value: i}))}
           />
         </FFormLayout.FBlock>

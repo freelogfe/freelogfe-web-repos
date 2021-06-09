@@ -4,7 +4,7 @@ import {Dispatch, connect} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import FExpandable from "./FExpandable";
 import {FContentText} from "@/components/FText";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 
 interface DescriptionProps {
   dispatch: Dispatch;
@@ -18,7 +18,7 @@ function Description({dispatch, marketResourcePage}: DescriptionProps) {
     {
       !marketResourcePage.description || marketResourcePage.description === '<p></p>'
         ? (<FContentText
-          text={FUtil.I18n.message('description_empty')}
+          text={FUtil1.I18n.message('description_empty')}
           type="negative"
         />)
         : (<div className={styles.styles}>

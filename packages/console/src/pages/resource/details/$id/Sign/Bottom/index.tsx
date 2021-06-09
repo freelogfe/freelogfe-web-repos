@@ -6,7 +6,7 @@ import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
 import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface BottomProps {
   dispatch: Dispatch;

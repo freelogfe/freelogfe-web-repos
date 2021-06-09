@@ -6,10 +6,10 @@ import FInput from '@/components/FInput';
 import {FRectBtn} from '@/components/FButton';
 import {router} from 'umi';
 import FResourceCard, {FResourceCardProps} from '@/components/FResourceCard';
-// import {resourceTypes} from '@/utils/predefined';
 import {DownOutlined} from '@ant-design/icons';
 import FNoDataTip from '@/components/FNoDataTip';
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FDropdown from "@/components/FDropdown";
 
 const resourceTypeOptions = [
@@ -85,7 +85,7 @@ function FResourceCardsList({
     <div className={styles.filter}>
       <div className={styles.filterLeft}>
         <div>
-          <span>{FUtil.I18n.message('resource_type')}：</span>
+          <span>{FUtil1.I18n.message('resource_type')}：</span>
           <FDropdown overlay={<FMenu
             options={resourceTypeOptions}
             onClick={(value) => onChangeResourceType && onChangeResourceType(value)}
@@ -95,7 +95,7 @@ function FResourceCardsList({
           </FDropdown>
         </div>
         <div style={{marginLeft: 60}}>
-          <span>{FUtil.I18n.message('resource_state')}：</span>
+          <span>{FUtil1.I18n.message('resource_state')}：</span>
           <FDropdown overlay={<FMenu
             options={resourceStatusOptions}
             onClick={(value) => onChangeResourceStatus && onChangeResourceStatus(value as '0' | '1' | '2')}
@@ -114,12 +114,12 @@ function FResourceCardsList({
           onDebounceChange={(value) => onChangeInputText && onChangeInputText(value)}
           theme="dark"
           className={styles.FInput}
-          placeholder={FUtil.I18n.message('search_resource')}
+          placeholder={FUtil1.I18n.message('search_resource')}
         />
         {showGotoCreateBtn && <FRectBtn
           onClick={() => router.push(FUtil.LinkTo.resourceCreator())}
           type="primary"
-        >{FUtil.I18n.message('create_resource')}</FRectBtn>}
+        >{FUtil1.I18n.message('create_resource')}</FRectBtn>}
       </Space>
     </div>
 

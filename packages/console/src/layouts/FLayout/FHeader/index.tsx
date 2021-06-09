@@ -8,9 +8,9 @@ import Search from "@/layouts/FLayout/FHeader/Search";
 import Create from "@/layouts/FLayout/FHeader/Create";
 import User from "@/layouts/FLayout/FHeader/User";
 import {router, NavLink} from "umi";
-import {connect, Dispatch} from 'dva';
+import {connect} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface FHeaderProps {
   global: GlobalModelState;

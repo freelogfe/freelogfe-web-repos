@@ -1,21 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-// import {FNormalButton} from '@/components/FButton';
-// import {FDepPanelProps} from '@/pages/resource/containers/FDepPanel';
 import {Checkbox, Space} from 'antd';
-import {
-  ChangeAction,
-} from '@/models/resourceVersionCreatorPage';
+import {ChangeAction} from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
-import {FContentText, FTipText} from '@/components/FText';
-import {CloseCircleFilled} from '@ant-design/icons';
-
-// import {i18nMessage} from '@/utils/i18n';
+import {FContentText} from '@/components/FText';
 
 interface PoliciesProps {
-  // dataSource: FDepPanelProps['dataSource'][0]['enabledPolicies'];
-  // onChange?: (dataSource: PoliciesProps['dataSource']) => void;
   dispatch: Dispatch;
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
 }

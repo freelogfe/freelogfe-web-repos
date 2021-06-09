@@ -6,18 +6,18 @@ import Collects from "./Collects";
 import {RouteComponentProps} from "react-router";
 import {ChangeAction} from "@/models/global";
 import {Dispatch, connect} from "dva";
-// import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import FCenterLayout from "@/layouts/FCenterLayout";
 
 const navs = [
   {
     value: '1',
-    text: FUtil.I18n.message('my_resources'),
+    text: FUtil1.I18n.message('my_resources'),
   },
   {
     value: '2',
-    text: FUtil.I18n.message('my_collections'),
+    text: FUtil1.I18n.message('my_collections'),
   },
 ];
 

@@ -6,7 +6,8 @@ import {router, Link} from "umi";
 import {connect, Dispatch, Router, RouterAPI} from 'dva';
 import {ConnectState, GlobalModelState, MarketPageModelState, MarketResourcePageModelState} from "@/models/connect";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 const discoverOptions = [
   {
@@ -48,7 +49,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   >
     <FNavLink
       // onClick={() => onDiscoverClick('1')}
-      text={FUtil.I18n.message('explorer')}
+      text={FUtil1.I18n.message('explorer')}
       to={FUtil.LinkTo.market()}
       active={isCurrent}
     />

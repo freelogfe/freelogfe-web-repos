@@ -3,9 +3,8 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
-// import {RESOURCE_NAME, RESOURCE_TYPE} from "@/utils/regexp";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface ResourceCreatorPageModelState {
   name: string;

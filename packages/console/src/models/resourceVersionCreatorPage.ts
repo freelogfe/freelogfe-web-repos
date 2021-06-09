@@ -8,7 +8,8 @@ import fMessage from '@/components/fMessage';
 import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import moment from "moment";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FApiServer} from "@/services";
 import fConfirmModal from "@/components/fConfirmModal";
 
@@ -1152,8 +1153,8 @@ function promiseConfirm(keyList: string[]) {
   return new Promise((resolve) => {
     fConfirmModal({
       message: `正在从上一个版本中导入信息，包含{KeyNumber}个同名键（key）：${keyList.join()}`,
-      okText: FUtil.I18n.message('replace_key_value'),
-      cancelText: FUtil.I18n.message('skip'),
+      okText: FUtil1.I18n.message('replace_key_value'),
+      cancelText: FUtil1.I18n.message('skip'),
       onOk() {
         resolve(true);
       },

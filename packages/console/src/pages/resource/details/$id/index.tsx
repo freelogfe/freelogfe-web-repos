@@ -21,7 +21,7 @@ import {RouteComponentProps} from "react-router";
 import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import {router} from "umi";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FTextBtn} from "@/components/FButton";
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {

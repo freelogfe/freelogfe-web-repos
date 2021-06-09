@@ -7,7 +7,7 @@ import {AddAPolicyAction, ChangeAction, UpdateAPolicyAction} from "@/models/exhi
 import FPolicyBuilder from "@/components/FPolicyBuilderDrawer";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ExhibitInfoPageModelState} from "@/models/connect";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 import FPolicyList from "@/components/FPolicyList";
 
 interface PoliciesProps {
@@ -22,7 +22,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
   return (<div>
     <Space size={15}>
       <FTitleText
-        text={FUtil.I18n.message('title_auth_plan')}
+        text={FUtil1.I18n.message('title_auth_plan')}
         type="h3"
       />
       {
@@ -46,7 +46,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
           <FTipText
             type="second"
             // text={FUtil.I18n.message('hint_add_authorization_plan')}
-            text={FUtil.I18n.message('exhibit_auth_plan_empty')}
+            text={FUtil1.I18n.message('exhibit_auth_plan_empty')}
           />
           <div style={{height: 20}}/>
           <FRectBtn
@@ -57,7 +57,7 @@ function Policies({dispatch, exhibitInfoPage}: PoliciesProps) {
               }
             })}
             type="primary"
-          >{FUtil.I18n.message('btn_create_auth_plan')}</FRectBtn>
+          >{FUtil1.I18n.message('btn_create_auth_plan')}</FRectBtn>
         </div>)
         : (<FPolicyList
           atLeastOneUsing={exhibitInfoPage.isOnline}

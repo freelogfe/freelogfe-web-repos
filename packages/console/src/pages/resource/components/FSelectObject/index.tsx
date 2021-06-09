@@ -6,9 +6,9 @@ import {LoadingOutlined} from '@ant-design/icons';
 import FUpload from "@/components/FUpload";
 import {RcFile} from "antd/lib/upload/interface";
 import FObjectSelector from "@/containers/FObjectSelector";
-import {getSHA1Hash} from "@/utils/tools";
 import FDrawer from "@/components/FDrawer";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FApiServer} from "@/services";
 import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {connect, Dispatch} from "dva";
@@ -23,9 +23,9 @@ import {FContentText} from '@/components/FText';
 import * as AHooks from 'ahooks';
 
 const errorTexts = {
-  duplicated: FUtil.I18n.message('resource_exist'),
-  size: FUtil.I18n.message('limit_on_file_size'),
-  resourceType: FUtil.I18n.message('error_wrongfileformat'),
+  duplicated: FUtil1.I18n.message('resource_exist'),
+  size: FUtil1.I18n.message('limit_on_file_size'),
+  resourceType: FUtil1.I18n.message('error_wrongfileformat'),
 };
 
 export interface FSelectObject {
@@ -177,7 +177,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       selectedFileStatus: -1,
     });
 
-    const sha1: string = await getSHA1Hash(file);
+    const sha1: string = await FUtil.Tool.getSHA1Hash(file);
 
     const {data: isExists}: any = await FApiServer.Storage.fileIsExist({sha1});
     if (isExists[0].isExisting) {
@@ -278,7 +278,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
-                  <span>{FUtil.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
+                  <span>{FUtil1.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
                   <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
                 : (<Space size={15}>
@@ -292,7 +292,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                   >
                     <FRectBtn
                       type="default"
-                    >{FUtil.I18n.message('upload_from_local')}</FRectBtn>
+                    >{FUtil1.I18n.message('upload_from_local')}</FRectBtn>
                   </FUpload>
                   <FRectBtn
                     type="default"
@@ -302,7 +302,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
                         selectedFileObjectDrawerVisible: true,
                       });
                     }}
-                  >{FUtil.I18n.message('choose_from_storage')}</FRectBtn>
+                  >{FUtil1.I18n.message('choose_from_storage')}</FRectBtn>
                 </Space>)
             }
 

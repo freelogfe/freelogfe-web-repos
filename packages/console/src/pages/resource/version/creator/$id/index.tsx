@@ -32,7 +32,8 @@ import FFormLayout from "@/components/FFormLayout";
 import Prompt from 'umi/prompt';
 import * as H from "history";
 import fConfirmModal from "@/components/fConfirmModal";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {RouteComponentProps} from 'react-router';
 import * as AHooks from "ahooks";
 import CustomOptions from "./CustomOptions";
@@ -176,7 +177,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
         <FFormLayout>
           <FFormLayout.FBlock
             dot={true}
-            title={FUtil.I18n.message('version_number')}
+            title={FUtil1.I18n.message('version_number')}
           >
             <FInput
               value={resourceVersionCreatorPage.version}
@@ -201,17 +202,17 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             />
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={true} title={FUtil.I18n.message('release_object')}>
+          <FFormLayout.FBlock dot={true} title={FUtil1.I18n.message('release_object')}>
             <FSelectObject/>
 
             <CustomOptions/>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FUtil.I18n.message('rely')}>
+          <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('rely')}>
             <FDepPanel/>
           </FFormLayout.FBlock>
 
-          <FFormLayout.FBlock dot={false} title={FUtil.I18n.message('version_description')}>
+          <FFormLayout.FBlock dot={false} title={FUtil1.I18n.message('version_description')}>
             <FBraftEditor
               value={resourceVersionCreatorPage.description}
               onChange={(value) => {
@@ -247,12 +248,12 @@ function Header({onClickCache, onClickCreate, disabledCreate = false}: HeaderPro
       <FTextBtn
         type="default"
         onClick={onClickCache}
-      >{FUtil.I18n.message('save_as_draft')}</FTextBtn>
+      >{FUtil1.I18n.message('save_as_draft')}</FTextBtn>
       <FRectBtn
         style={{width: 108}}
         onClick={onClickCreate}
         disabled={disabledCreate}
-      >{FUtil.I18n.message('release_to_market')}</FRectBtn>
+      >{FUtil1.I18n.message('release_to_market')}</FRectBtn>
     </Space>
   </div>);
 }

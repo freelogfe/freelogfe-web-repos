@@ -16,20 +16,12 @@ import {
   FetchExhibitListAction,
   SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
-// import FModal from "@/components/FModal";
-
-// import Replacer from "@/pages/node/informal/$id/containers/FReplaceModal/Replacer";
-// import Replaced from "@/pages/node/informal/$id/containers/FReplaceModal/Replaced";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
-// import {RouteComponentProps} from "react-router";
 import FLoadingTip from "@/components/FLoadingTip";
-// import {WholeMutable} from "@/models/shared";
 import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
-// import {resourceTypes} from "@/utils/predefined";
-import {generateRandomCode} from "@/utils/tools";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -212,7 +204,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             data: value.names.map((n) => {
               return {
                 operation: 'add',
-                exhibitName: n.split('/')[1] + `_${generateRandomCode()}`,
+                exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
                 candidate: {
                   name: n,
                   versionRange: 'latest',

@@ -17,7 +17,7 @@ import {connect, Dispatch} from "dva";
 import {ConnectState} from "@/models/connect";
 import FModal from "@/components/FModal";
 import FTooltip from "@/components/FTooltip";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -50,10 +50,10 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
   }
 
   return (<>
-    <FContentText text={FUtil.I18n.message('advanced_setting')} type="highlight"/>
+    <FContentText text={FUtil1.I18n.message('advanced_setting')} type="highlight"/>
     <div style={{height: 20}}/>
 
-    <FTitleText text={FUtil.I18n.message('exhibit_version')} type="h4"/>
+    <FTitleText text={FUtil1.I18n.message('exhibit_version')} type="h4"/>
     <div style={{height: 15}}/>
     <FDropdownMenu
       options={[...exhibitInfoPage.allVersions].reverse().map((av: string) => ({value: av, text: av}))}
@@ -71,7 +71,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
       exhibitInfoPage.settingUnfold && (<>
         <div style={{height: 30}}/>
 
-        <FTitleText text={FUtil.I18n.message('resource_property')} type="h4"/>
+        <FTitleText text={FUtil1.I18n.message('resource_property')} type="h4"/>
         <div style={{height: 15}}/>
         <div className={styles.attr}>
           <table>
@@ -88,7 +88,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div style={{height: 30}}/>
 
         <FTitleText
-          text={FUtil.I18n.message('custom_option')}
+          text={FUtil1.I18n.message('custom_option')}
           type="h4"
         />
 
@@ -102,7 +102,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                   <FContentText text={pc.key}/>
                   {
                     pc.defaultValue
-                      ? (<FTooltip title={FUtil.I18n.message('tip_reset_value')}>
+                      ? (<FTooltip title={FUtil1.I18n.message('tip_reset_value')}>
                         <div>
                           <FTextBtn
                             // theme="primary"
@@ -113,7 +113,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                         </div>
                       </FTooltip>)
                       : (<Space size={10}>
-                        <FTooltip title={FUtil.I18n.message('tips_edit')}>
+                        <FTooltip title={FUtil1.I18n.message('tips_edit')}>
                           <div>
                             <FTextBtn
                               // theme="primary"
@@ -138,7 +138,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                             ><FEdit/></FTextBtn>
                           </div>
                         </FTooltip>
-                        <FTooltip title={FUtil.I18n.message('tip_delete_custom_option')}>
+                        <FTooltip title={FUtil1.I18n.message('tip_delete_custom_option')}>
                           <div>
                             <FDelete
                               style={{color: '#EE4040', cursor: 'pointer'}}
@@ -224,16 +224,16 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
             },
           });
         }}
-      >{exhibitInfoPage.settingUnfold ? <>{FUtil.I18n.message('btn_show_less')}
+      >{exhibitInfoPage.settingUnfold ? <>{FUtil1.I18n.message('btn_show_less')}
         <FDoubleUp/></> : <>更多 <FDoubleDown/></>}</FTextBtn>
     </div>
 
     <FModal
-      title={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil.I18n.message('edit_custom_option') : FUtil.I18n.message('add_custom_options')}
+      title={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil1.I18n.message('edit_custom_option') : FUtil1.I18n.message('add_custom_options')}
       width={560}
       visible={exhibitInfoPage.pAddCustomModalVisible || !!exhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
-      okText={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil.I18n.message('btn_save') : FUtil.I18n.message('btn_add')}
-      cancelText={FUtil.I18n.message('btn_cancel')}
+      okText={exhibitInfoPage.pCustomAttrs.some((pca) => pca.isEditing) ? FUtil1.I18n.message('btn_save') : FUtil1.I18n.message('btn_add')}
+      cancelText={FUtil1.I18n.message('btn_cancel')}
       okButtonProps={{
         disabled:
           !!exhibitInfoPage.pAddCustomKeyError || exhibitInfoPage.pAddCustomKey === ''
@@ -303,7 +303,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="h4">{FUtil.I18n.message('filed_key')}</FTitleText>
+          <FTitleText type="h4">{FUtil1.I18n.message('filed_key')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -335,7 +335,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         <div className={styles.modalBodyTitle}>
           <i/>
           <div style={{width: 5}}/>
-          <FTitleText type="h4">{FUtil.I18n.message('filed_value')}</FTitleText>
+          <FTitleText type="h4">{FUtil1.I18n.message('filed_value')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput
@@ -355,7 +355,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
         />
         <div style={{height: 20}}/>
         <div>
-          <FTitleText type="h4">{FUtil.I18n.message('filed_remark')}</FTitleText>
+          <FTitleText type="h4">{FUtil1.I18n.message('filed_remark')}</FTitleText>
         </div>
         <div style={{height: 5}}/>
         <FInput

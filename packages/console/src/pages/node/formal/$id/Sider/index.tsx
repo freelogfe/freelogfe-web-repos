@@ -7,7 +7,8 @@ import {ConnectState, NodeManagerModelState} from "@/models/connect";
 import {ChangeAction} from "@/models/nodeManagerPage";
 import {withRouter} from "umi";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {Space} from "antd";
 
 interface SiderProps {
@@ -68,7 +69,7 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
                 showTheme: false,
               }
             })}
-          >{FUtil.I18n.message('tab_manage_nodes')}</a>
+          >{FUtil1.I18n.message('tab_manage_nodes')}</a>
           <a
             className={nodeManagerPage.showTheme ? styles.activated : ''}
             onClick={() => dispatch<ChangeAction>({
@@ -77,15 +78,15 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
                 showTheme: true,
               }
             })}
-          >{FUtil.I18n.message('manage_theme')}</a>
+          >{FUtil1.I18n.message('manage_theme')}</a>
         </div>
       </div>
 
       <div className={styles.gotoTest}>
-        <span>{FUtil.I18n.message('msg_navigate_to_test_node')} </span>
+        <span>{FUtil1.I18n.message('msg_navigate_to_test_node')} </span>
         <FLink
           to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
-        > {FUtil.I18n.message('btn_navigate_to_test_node')}</FLink>
+        > {FUtil1.I18n.message('btn_navigate_to_test_node')}</FLink>
         <div style={{height: 40}}/>
       </div>
 

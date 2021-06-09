@@ -15,7 +15,8 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, GlobalModelState} from "@/models/connect";
 import FNavLink from "@/layouts/FLayout/components/FNavLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 interface StorageProps {
   dispatch: Dispatch;
@@ -107,7 +108,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   }>
     <FNavLink
       active={isCurrent}
-      text={FUtil.I18n.message('storage')}
+      text={FUtil1.I18n.message('storage')}
       to={FUtil.LinkTo.storageSpace({
         bucketName: storageHomePage.bucketList && storageHomePage.bucketList.length > 0
           ? storageHomePage.bucketList[0].bucketName

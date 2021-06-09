@@ -12,7 +12,7 @@ import {
 import FUp from "@/components/FIcons/FUp";
 import {FDown, FInfo} from "@/components/FIcons";
 import FTooltip from "@/components/FTooltip";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
 import {FContentText} from "@/components/FText";
 import {ConnectState, StorageObjectEditorModelState} from "@/models/connect";
 import FBasePropsEditorDrawer from "@/components/FBasePropsEditorDrawer";
@@ -117,7 +117,7 @@ function CustomOptions({dispatch, resourceVersionCreatorPage}: CustomOptionsProp
             <span>自定义选项（高级）</span>
             {resourceVersionCreatorPage.customOptionsDataVisible ? (<FUp/>) : (<FDown/>)}
           </FTextBtn>
-          <FTooltip title={FUtil.I18n.message('info_versionoptions')}>
+          <FTooltip title={FUtil1.I18n.message('info_versionoptions')}>
             <div><FInfo/></div>
           </FTooltip>
         </Space>

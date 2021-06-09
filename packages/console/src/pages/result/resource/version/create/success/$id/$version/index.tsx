@@ -1,15 +1,13 @@
 import * as React from 'react';
 import styles from './index.less';
-import FLayout from '@/layouts/FLayout';
 import {FTipText} from '@/components/FText';
 import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {withRouter, router} from "umi";
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
-import {ChangeAction} from "@/models/global";
 import {connect, Dispatch} from 'dva';
-import RouterTypes from "umi/routerTypes";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {RouteComponentProps} from 'react-router';
 import {FApiServer} from "@/services";
 
@@ -71,7 +69,7 @@ function Success({match, dispatch}: SuccessProps) {
           <div style={{height: 20}}/>
           <FTipText
             type="second"
-            text={FUtil.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}
+            text={FUtil1.I18n.message('version_created_successfully', {VersionNumber: match.params.version})}
           />
         </>)
       }
@@ -98,12 +96,12 @@ function Success({match, dispatch}: SuccessProps) {
       }
       {
         gotoState === 2 && (<div className={styles.goto2}>
-          <FTipText type="third" text={FUtil.I18n.message('jump_to_version_edit', {timer: count})}/>
+          <FTipText type="third" text={FUtil1.I18n.message('jump_to_version_edit', {timer: count})}/>
           <div style={{width: 10}}/>
           <FTextBtn
             // theme={'primary'}
             onClick={gotoVersionInfo}
-          >{FUtil.I18n.message('jump_now')}</FTextBtn>
+          >{FUtil1.I18n.message('jump_now')}</FTextBtn>
         </div>)
       }
     </div>

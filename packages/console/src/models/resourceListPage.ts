@@ -3,7 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FApiServer} from "@/services";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
   resourceType: string;

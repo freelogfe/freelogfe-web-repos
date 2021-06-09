@@ -8,7 +8,8 @@ import {withRouter, router} from 'umi';
 import RouterTypes from "umi/routerTypes";
 import {ChangeAction, FetchDataSourceAction, InitModelStatesAction} from "@/models/resourceInfo";
 import FLink from "@/components/FLink";
-import FUtil from "@/utils";
+import FUtil1 from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import fMessage from "@/components/fMessage";
 import {RouteComponentProps} from 'react-router';
 import {Popconfirm} from 'antd';
@@ -116,19 +117,19 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
         to={FUtil.LinkTo.resourceInfo({
           resourceID: match.params.id,
         })}
-      >{FUtil.I18n.message('resource_information')}</FLink>
+      >{FUtil1.I18n.message('resource_information')}</FLink>
       <FLink
         className={[resourceInfo.showPage.auth ? styles.activatedRadio : '', styles.radio].join(' ')}
         to={FUtil.LinkTo.resourceAuth({
           resourceID: match.params.id,
         })}
       >
-        <span>{FUtil.I18n.message('authorization_infomation')}</span>
+        <span>{FUtil1.I18n.message('authorization_infomation')}</span>
         {resourceInfo.info?.policies.length === 0 && (<div className={styles.redDot}/>)}
       </FLink>
       <div className={styles.versionControl}>
         <div className={styles.versionControlTitle}>
-          <div style={{cursor: 'default'}}>{FUtil.I18n.message('verions')}</div>
+          <div style={{cursor: 'default'}}>{FUtil1.I18n.message('verions')}</div>
 
           {
             // match.path === '/resource/:id/$version/creator'
@@ -141,7 +142,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
               />)
               : resourceInfo.draftData
               ? (<Popconfirm
-                title={FUtil.I18n.message('error_unreleasedverionexisted')}
+                title={FUtil1.I18n.message('error_unreleasedverionexisted')}
                 // icon={<FInfo/>}
                 onConfirm={() => {
                   gotoCreator();
@@ -151,7 +152,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                     display: 'none',
                   }
                 }}
-                okText={FUtil.I18n.message('btn_check')}
+                okText={FUtil1.I18n.message('btn_check')}
               ><FCircleBtn type="transparent"/>
               </Popconfirm>)
               : (<FCircleBtn onClick={gotoCreator} type="transparent"/>)
@@ -172,7 +173,7 @@ function Sider({resourceInfo, match, dispatch, route}: RouterTypes & SilderProps
                 className={[styles.version, resourceInfo.showPage.creator ? styles.activatedVersion : ''].join(' ')}
                 to={FUtil.LinkTo.resourceCreateVersion({
                   resourceID: match.params.id,
-                })}>{FUtil.I18n.message('unnamed_version')}</FLink>)
+                })}>{FUtil1.I18n.message('unnamed_version')}</FLink>)
               : null
           }
 

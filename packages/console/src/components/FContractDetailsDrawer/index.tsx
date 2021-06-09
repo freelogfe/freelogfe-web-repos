@@ -9,7 +9,7 @@ import {FDown, FNodes, FUp, FUser} from "@/components/FIcons";
 import FDivider from "@/components/FDivider";
 import FDrawer from "@/components/FDrawer";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
-import FUtil from "@/utils";
+import {FUtil} from '@freelog/tools-lib';
 import {FApiServer} from "@/services";
 import FLoadingTip from "@/components/FLoadingTip";
 import FResource from "@/components/FIcons/FResource";
