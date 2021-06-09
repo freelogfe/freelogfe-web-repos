@@ -4,9 +4,8 @@ import {FRectBtn} from '@/components/FButton';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {ChangeAction} from "@/models/marketResourcePage";
-import {FApiServer} from "@/services";
 import FLink from "@/components/FLink";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 interface BottomProps {
   dispatch: Dispatch;
@@ -66,11 +65,11 @@ interface GetAvailableExhibitNameParamType {
 
 async function getAvailableExhibitName({nodeID, exhibitName, suffixNum = 0}: GetAvailableExhibitNameParamType): Promise<string> {
   const name: string = exhibitName + (suffixNum ? `_${suffixNum}` : '');
-  const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     nodeId: nodeID,
     presentableName: name,
   };
-  const {data} = await FApiServer.Exhibit.presentableDetails(params);
+  const {data} = await FServiceAPI.Exhibit.presentableDetails(params);
   if (data) {
     return await getAvailableExhibitName({
       nodeID,

@@ -31,8 +31,7 @@ import {
   FViewportTabs
 } from "@/components/FAntvG6";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FServiceAPI} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
 import {FTipText} from '@/components/FText';
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
@@ -144,7 +143,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.$version}/download`}
-        onClickDownload={() => FApiServer.Resource.resourcesDownload({
+        onClickDownload={() => FServiceAPI.Resource.resourcesDownload({
           resourceId: match.params.id,
           version: match.params.version
         })}

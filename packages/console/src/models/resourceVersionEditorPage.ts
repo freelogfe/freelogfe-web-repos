@@ -3,11 +3,10 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import moment from 'moment';
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 import {handleRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 
 export interface ResourceVersionEditorPageModelState {
@@ -112,7 +111,7 @@ export interface FetchDataSourceAction extends AnyAction {
 
 export interface UpdateDataSourceAction extends AnyAction {
   type: 'resourceVersionEditorPage/updateDataSource';
-  payload: Partial<Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0]>;
+  payload: Partial<Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0]>;
 }
 
 export interface SyncAllPropertiesAction extends AnyAction {
@@ -183,11 +182,11 @@ const Model: ResourceVersionEditorModelType = {
       const {resourceVersionEditorPage}: ConnectState = yield select(({resourceVersionEditorPage}: ConnectState) => ({
         resourceVersionEditorPage,
       }));
-      const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
-      const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
+      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
       // console.log(data, 'data902q3jrlkasdfasdf');
       if (!data) {
         router.replace(FUtil.LinkTo.exception403({}, '90u-=-===-0=0-;dskf'));
@@ -195,23 +194,23 @@ const Model: ResourceVersionEditorModelType = {
       }
 
       // 依赖树
-      const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
         // $version: '0.0.1',
         isContainRootNode: true,
       };
 
-      const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
+      const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
       const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
 
       // 授权树
-      const params3: Parameters<typeof FApiServer.Resource.authTree>[0] = {
+      const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
 
-      const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
+      const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
       // console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
         id: data.version,
@@ -223,12 +222,12 @@ const Model: ResourceVersionEditorModelType = {
       });
 
       // 关系树
-      const params4: Parameters<typeof FApiServer.Resource.relationTreeAuth>[0] = {
+      const params4: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
 
-      const {data: data4} = yield call(FApiServer.Resource.relationTreeAuth, params4);
+      const {data: data4} = yield call(FServiceAPI.Resource.relationTreeAuth, params4);
       console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
       const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
       // console.log(relationGraphNodes, relationGraphEdges, 'relationGraphEdges@Q@#$!@#$!@$@#$@!#$');
@@ -282,11 +281,11 @@ const Model: ResourceVersionEditorModelType = {
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
       }));
-      const params: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
         ...baseInfo,
         ...action.payload,
       };
-      yield call(FApiServer.Resource.updateResourceVersionInfo, params);
+      yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: baseInfo,
@@ -297,7 +296,7 @@ const Model: ResourceVersionEditorModelType = {
         resourceVersionEditorPage,
       }));
 
-      const customPropertyDescriptors: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0]['customPropertyDescriptors'] = [
+      const customPropertyDescriptors: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0]['customPropertyDescriptors'] = [
         ...resourceVersionEditorPage.baseProperties.map((bp) => {
           return {
             key: bp.key,
@@ -318,12 +317,12 @@ const Model: ResourceVersionEditorModelType = {
           };
         }),
       ];
-      const params: Parameters<typeof FApiServer.Resource.updateResourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
         customPropertyDescriptors: customPropertyDescriptors,
       };
-      yield call(FApiServer.Resource.updateResourceVersionInfo, params);
+      yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
     },
   },
 

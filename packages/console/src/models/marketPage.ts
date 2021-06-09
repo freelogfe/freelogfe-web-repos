@@ -2,8 +2,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export type  MarketPageModelState = WholeReadonly<{
   tabValue: '1' | '2',
@@ -109,7 +108,7 @@ const Model: MarketModelType = {
         dataSource = marketPage.dataSource;
       }
 
-      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         startResourceId: dataSource[0]?.id,
@@ -118,7 +117,7 @@ const Model: MarketModelType = {
         status: 1,
       };
 
-      const {data} = yield call(FApiServer.Resource.list, params);
+      const {data} = yield call(FServiceAPI.Resource.list, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {

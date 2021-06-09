@@ -25,15 +25,19 @@ export function formatDateTime(date: string, showTime: boolean = false) {
 
 /**
  * 根据传入的子域名拼合成完整的适合的url
+ * @param domain 要组合的三级域名
+ * @param strict 是否严格返回，如 localhost 就放回空字符
  */
-export function completeUrlByDomain(domain: string) {
-  // if (!window.location.origin.includes('.com')) {
-  //   return `http://${domain}.testfreelog.com`;
-  // }
-  // return `${window.location.protocol}//${domain}.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
-  let origin = `http://${domain}.testfreelog.com`;
+export function completeUrlByDomain(domain: string, strict: boolean = false): string {
+  let origin: string = '';
+
+  if (!strict) {
+    origin = `http://${domain}.testfreelog.com`;
+  }
+
   if (window.location.origin.includes('.freelog.com')) {
     origin = `https://${domain}.freelog.com`;
   }
+
   return origin;
 }

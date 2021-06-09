@@ -2,8 +2,7 @@ import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface StorageObjectDepSelectorModelState {
   resourceList: {
@@ -106,13 +105,13 @@ const Model: StorageObjectDepSelectorModelType = {
       // let dataSource: any;
       let totalItem: number = -1;
       if (storageObjectDepSelector.rSelect === '3') {
-        const params: Parameters<typeof FApiServer.Collection.collectionResources>[0] = {
+        const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
           skip: resourceList.length,
           // limit: storageObjectDepSelector.rPageSize,
           limit: FUtil.Predefined.pageSize,
           keywords: storageObjectDepSelector.rInput,
         };
-        const {data} = yield call(FApiServer.Collection.collectionResources, params);
+        const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
         // console.log(data, '##########5210823423');
         // dataSource = data;
         totalItem = data.totalItem;
@@ -128,7 +127,7 @@ const Model: StorageObjectDepSelectorModelType = {
           })),
         ];
       } else {
-        const params: Parameters<typeof FApiServer.Resource.list>[0] = {
+        const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
           startResourceId: resourceList[0]?.resourceId,
           skip: resourceList.length,
           // limit: storageObjectDepSelector.rPageSize,
@@ -137,7 +136,7 @@ const Model: StorageObjectDepSelectorModelType = {
           status: storageObjectDepSelector.rSelect === '2' ? undefined : 1,
           isSelf: storageObjectDepSelector.rSelect === '2' ? 1 : undefined,
         };
-        const {data} = yield call(FApiServer.Resource.list, params);
+        const {data} = yield call(FServiceAPI.Resource.list, params);
         // dataSource = data;
         // console.log(data, '@@@@@@@@@@@@123412341234');
         totalItem = data.totalItem;
@@ -173,7 +172,7 @@ const Model: StorageObjectDepSelectorModelType = {
         objectListData = selector.objectList;
       }
 
-      const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         bucketName: selector.oSelect,
         resourceType: selector.visibleOResourceType || undefined,
         isLoadingTypeless: 1,
@@ -182,7 +181,7 @@ const Model: StorageObjectDepSelectorModelType = {
         // limit: selector.oPageSize,
         limit: FUtil.Predefined.pageSize,
       };
-      const {data} = yield call(FApiServer.Storage.objectList, params);
+      const {data} = yield call(FServiceAPI.Storage.objectList, params);
       // console.log(data, 'datadata322');
       yield put<ChangeAction>({
         type: 'change',

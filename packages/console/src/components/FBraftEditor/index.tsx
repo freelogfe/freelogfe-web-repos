@@ -4,7 +4,7 @@ import BraftEditor, {BraftEditorProps, EditorState} from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import {connect} from "dva";
 import {ConnectState, GlobalModelState} from "@/models/connect";
-import {FApiServer} from "@/services";
+import {FServiceAPI} from "@freelog/tools-lib";
 import {CSSProperties} from "react";
 
 interface FBraftEditorProps extends BraftEditorProps {
@@ -36,10 +36,10 @@ function FBraftEditor({global, value, onChange, ...props}: FBraftEditorProps) {
       ]}
       media={{
         async uploadFn(fileParams) {
-          const params: Parameters<typeof FApiServer.Storage.uploadImage>[0] = {
+          const params: Parameters<typeof FServiceAPI.Storage.uploadImage>[0] = {
             file: fileParams.file,
           };
-          const {data} = await FApiServer.Storage.uploadImage(params);
+          const {data} = await FServiceAPI.Storage.uploadImage(params);
           // fileParams.progress();
           fileParams.success({
             url: data.url,

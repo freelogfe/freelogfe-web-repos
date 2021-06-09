@@ -9,7 +9,7 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
 import {ChangeAction, FetchDependencyTreeAction, TreeNode} from "@/models/replaceInformExhibitModal";
 import {WholeMutable} from "@/models/shared";
-import {FApiServer} from "@/services";
+import {FServiceAPI} from '@freelog/tools-lib';
 
 interface ReplacedProps {
   dispatch: Dispatch;
@@ -71,11 +71,11 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
           if (node.pos.split('-').length !== 2) {
             return;
           }
-          const params: Parameters<typeof FApiServer.InformalNode.dependencyTreeFilter>[0] = {
+          const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
             testResourceId: node.id,
             dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
           };
-          const {data} = await FApiServer.InformalNode.dependencyTreeFilter(params);
+          const {data} = await FServiceAPI.InformalNode.dependencyTreeFilter(params);
           // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
           const result = updateTreeData({
             list: replaceInformExhibit.treeData as TreeNode[],

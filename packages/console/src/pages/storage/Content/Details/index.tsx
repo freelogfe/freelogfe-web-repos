@@ -22,10 +22,9 @@ import FFormLayout from "@/components/FFormLayout";
 import FDrawer from "@/components/FDrawer";
 import FCustomOptionsEditorDrawer from "@/components/FCustomOptionsEditorDrawer";
 import {router} from "umi";
-import {FApiServer} from "@/services";
 import FTooltip from "@/components/FTooltip";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import FCustomOptionsCards from "@/components/FCustomOptionsCards";
 import FBasePropEditorDrawer from "@/components/FBasePropEditorDrawer";
 import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
@@ -121,7 +120,7 @@ function Details({storageObjectEditor, dispatch}: DetailsProps) {
                   <FTextBtn
                     type="primary"
                     onClick={() => {
-                      FApiServer.Storage.downloadObject({
+                      FServiceAPI.Storage.downloadObject({
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`)
                       });
                     }}

@@ -1,5 +1,4 @@
-// import request from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 
 // 创建节点
 export interface CreateParamsType {

@@ -3,9 +3,8 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import fMessage from "@/components/fMessage";
-import {FApiServer} from "@/services";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
-import {FUtil} from "@freelog/tools-lib";
+import {FUtil, FServiceAPI} from "@freelog/tools-lib";
 import {router} from "umi";
 import {handleExhibitRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
 
@@ -299,12 +298,12 @@ const Model: ExhibitInfoPageModelType = {
         user,
       }));
 
-      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      const {data} = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
@@ -313,18 +312,18 @@ const Model: ExhibitInfoPageModelType = {
         return;
       }
 
-      const params3: Parameters<typeof FApiServer.Node.details>[0] = {
+      const params3: Parameters<typeof FServiceAPI.Node.details>[0] = {
         nodeId: data.nodeId,
       };
 
-      const {data: data3} = yield call(FApiServer.Node.details, params3);
+      const {data: data3} = yield call(FServiceAPI.Node.details, params3);
       // console.log(data3, 'data90j23rlkfjasdfa');
 
-      const params2: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
 
-      const {data: data2} = yield call(FApiServer.Resource.info, params2);
+      const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
@@ -338,20 +337,20 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data, 'data2341234');
 
       // 获取展品授权结果
-      const params1: Parameters<typeof FApiServer.Exhibit.batchAuth>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Exhibit.batchAuth>[0] = {
         nodeId: data.nodeId,
         authType: 3,
         presentableIds: data.presentableId,
       };
-      const {data: data1} = yield call(FApiServer.Exhibit.batchAuth, params1);
+      const {data: data1} = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
 
       // 关系树数据
-      const params6: Parameters<typeof FApiServer.Exhibit.relationTree>[0] = {
+      const params6: Parameters<typeof FServiceAPI.Exhibit.relationTree>[0] = {
         presentableId: data.presentableId,
       };
 
-      const {data: data6} = yield call(FApiServer.Exhibit.relationTree, params6);
+      const {data: data6} = yield call(FServiceAPI.Exhibit.relationTree, params6);
       console.log(data, 'datadatadatadatadatadatadata');
       console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
 
@@ -365,11 +364,11 @@ const Model: ExhibitInfoPageModelType = {
       console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
 
       // 授权树数据
-      const params4: Parameters<typeof FApiServer.Exhibit.authTree>[0] = {
+      const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
         presentableId: exhibitInfoPage.presentableId,
       };
 
-      const {data: data4} = yield call(FApiServer.Exhibit.authTree, params4);
+      const {data: data4} = yield call(FServiceAPI.Exhibit.authTree, params4);
 
       // console.log(data4, '@@@@@#4234234324234');
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data4, {
@@ -381,14 +380,14 @@ const Model: ExhibitInfoPageModelType = {
       });
 
       // 根据资源 id 批量查询所有合同
-      const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
+      const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         nodeId: data.nodeId,
         resolveResourceIds: result.map((rs) => {
           return rs.resourceId;
         }).join(','),
       };
 
-      const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
+      const {data: data5} = yield call(FServiceAPI.Exhibit.presentableList, params5);
 
       // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
@@ -530,7 +529,7 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         addPolicies: [{
           policyName: payload.title,
@@ -538,7 +537,7 @@ const Model: ExhibitInfoPageModelType = {
           status: 1,
         }],
       };
-      yield call(FApiServer.Exhibit.updatePresentable, params);
+      yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -547,14 +546,14 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         updatePolicies: [{
           policyId: payload.id,
           status: payload.status,
         }],
       };
-      yield call(FApiServer.Exhibit.updatePresentable, params);
+      yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -563,13 +562,13 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         presentableTitle: payload.pTitle,
         tags: payload.pTags,
         coverImages: payload.pCover ? [payload.pCover] : undefined,
       };
-      yield call(FApiServer.Exhibit.updatePresentable, params);
+      yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<ChangeAction>({
         type: 'change',
         payload,
@@ -579,11 +578,11 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: Parameters<typeof FApiServer.Exhibit.presentablesOnlineStatus>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         onlineStatus: payload,
       };
-      const {data} = yield call(FApiServer.Exhibit.presentablesOnlineStatus, params);
+      const {data} = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
         fMessage(exhibitInfoPage.resourceType === 'theme' ? '激活失败' : '上线失败', 'error');
         return;
@@ -604,7 +603,7 @@ const Model: ExhibitInfoPageModelType = {
       }));
       const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
       // console.log(resource, '$#@$#$@#');
-      const params: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         resolveResources: yield call(handleFinalResolveResource, {
           exhibitID: exhibitInfoPage.pID,
@@ -613,7 +612,7 @@ const Model: ExhibitInfoPageModelType = {
           isUsed: true,
         })
       };
-      yield call(FApiServer.Exhibit.updatePresentable, params);
+      yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -631,7 +630,7 @@ const Model: ExhibitInfoPageModelType = {
           };
         });
 
-      const params: Parameters<typeof FApiServer.Exhibit.updateRewriteProperty>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.updateRewriteProperty>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         rewriteProperty: pCustomAttrs
           .filter((pc) => pc.value !== pc.defaultValue)
@@ -641,7 +640,7 @@ const Model: ExhibitInfoPageModelType = {
             remark: pc.remark,
           })),
       };
-      yield call(FApiServer.Exhibit.updateRewriteProperty, params);
+      yield call(FServiceAPI.Exhibit.updateRewriteProperty, params);
 
       // 同步数据
       yield put<ChangeAction>({
@@ -655,11 +654,11 @@ const Model: ExhibitInfoPageModelType = {
       const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const params: Parameters<typeof FApiServer.Exhibit.presentablesVersion>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesVersion>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         version: payload,
       };
-      yield call(FApiServer.Exhibit.presentablesVersion, params);
+      yield call(FServiceAPI.Exhibit.presentablesVersion, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
@@ -671,23 +670,23 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(data, 'data123412398yuoihjkl');
 
-      const params2: Parameters<typeof FApiServer.Exhibit.updatePresentable>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: payload.exhibitID,
         resolveResources: yield call(handleFinalResolveResource, payload),
       };
       // console.log(params2, 'params2!@!@#$@!#$!@#$');
 
-      const {data: data2} = yield call(FApiServer.Exhibit.updatePresentable, params2);
+      const {data: data2} = yield call(FServiceAPI.Exhibit.updatePresentable, params2);
 
       // 根据资源 id 批量查询所有合同
-      const params5: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
+      const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         nodeId: exhibitInfoPage.nodeId,
         resolveResourceIds: exhibitInfoPage.associated.map((rs) => {
           return rs.id;
         }).join(','),
       };
 
-      const {data: data5} = yield call(FApiServer.Exhibit.presentableList, params5);
+      const {data: data5} = yield call(FServiceAPI.Exhibit.presentableList, params5);
 
       const exhibitAllContractIDs: {
         exhibitID: string;
@@ -783,12 +782,12 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
   //   }
   // });
 
-  const params0: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+  const params0: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: resourceIds.join(','),
     isLoadPolicyInfo: 1,
   };
 
-  const {data: data0}: any = await FApiServer.Resource.batchInfo(params0);
+  const {data: data0}: any = await FServiceAPI.Resource.batchInfo(params0);
   // console.log(data0, data1, 'data0, data123rfsda');
 
   const result: HandleRelationResult = params.map((r) => {
@@ -856,7 +855,7 @@ type GetAllContractsReturnType = {
 async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
-    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       licensorId: id,
       licenseeId: nodeID,
       licenseeIdentityType: 2,
@@ -864,7 +863,7 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
       subjectIds: id,
       subjectType: 1,
     };
-    const {data} = await FApiServer.Contract.batchContracts(params);
+    const {data} = await FServiceAPI.Contract.batchContracts(params);
     // console.log(data, 'data!!!1111100000000))))))');
     return data;
   });
@@ -880,11 +879,11 @@ interface HandleFinalResolveResourceParams {
 }
 
 async function handleFinalResolveResource({exhibitID, resourceID, policyID, isUsed}: HandleFinalResolveResourceParams) {
-  const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+  const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     presentableId: exhibitID,
   };
 
-  const {data} = await FApiServer.Exhibit.presentableDetails(params);
+  const {data} = await FServiceAPI.Exhibit.presentableDetails(params);
 
   return data.resolveResources?.map((rrs: any) => {
     if (resourceID !== rrs.resourceId) {

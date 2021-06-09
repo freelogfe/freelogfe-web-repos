@@ -1,5 +1,4 @@
-// import request, {apiHost} from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 import {AxiosRequestConfig, Canceler} from 'axios';
 
 // 创建bucket(系统级的bucket不允许创建)
@@ -23,10 +22,10 @@ export function bucketList(params: BucketListParamsType) {
 }
 
 // 查询bucket使用情况
-interface SpaceStatisticsParamsType {
-}
+// interface SpaceStatisticsParamsType {
+// }
 
-export function spaceStatistics(params?: SpaceStatisticsParamsType) {
+export function spaceStatistics() {
   return FUtil.Axios.get(`/v1/storages/buckets/spaceStatistics`);
 }
 
@@ -110,7 +109,7 @@ interface BucketIsExistParamsType {
   bucketName: string;
 }
 
-export function bucketIsExist({bucketName, ...params}: BucketIsExistParamsType) {
+export function bucketIsExist({bucketName}: BucketIsExistParamsType) {
   return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/isExist`);
 }
 
@@ -120,7 +119,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi', true) + `/v1/storages/objects/${params.objectIdOrName}/file`;
   // return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
   //   responseType: 'arraybuffer',
   //   // onDownloadProgress: (progressEvent: any) => {
@@ -155,7 +154,7 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
   }
 
   if (!returnCancel) {
-    return FUtil.Axios.post('/v1/storages/files/upload', formData);
+    return FUtil.Axios.post('/v1/storages/files/upload', formData, config);
   }
 
   let cancel: any = null;
@@ -183,7 +182,7 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
       formData.append(key, value);
     }
   }
-  return FUtil.Axios.post('/v1/storages/files/uploadImage', formData);
+  return FUtil.Axios.post('/v1/storages/files/uploadImage', formData, config);
 }
 
 // 更新存储对象属性

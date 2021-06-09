@@ -1,9 +1,8 @@
-import {DvaReducer, WholeMutable, WholeReadonly} from '@/models/shared';
+import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
@@ -318,7 +317,7 @@ const Model: InformalNodeManagerPageModelType = {
       const {data: data1} = yield call(ruleMatchStatus, params2);
       // console.log(data1, '2434234234234234');
 
-      const params: Parameters<typeof FApiServer.InformalNode.testResources>[0] = {
+      const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
         onlineStatus: Number(informalNodeManagerPage.selectedStatus) as 2,
         omitResourceType: 'theme',
@@ -327,7 +326,7 @@ const Model: InformalNodeManagerPageModelType = {
         keywords: informalNodeManagerPage.filterKeywords || undefined,
       };
 
-      const {data} = yield call(FApiServer.InformalNode.testResources, params);
+      const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
       console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
@@ -416,13 +415,13 @@ const Model: InformalNodeManagerPageModelType = {
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
 
-      const params: Parameters<typeof FApiServer.InformalNode.testResources>[0] = {
+      const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
         onlineStatus: 2,
         resourceType: 'theme',
         limit: FUtil.Predefined.pageSize,
       };
-      const {data} = yield call(FApiServer.InformalNode.testResources, params);
+      const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
@@ -496,11 +495,11 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const params: Parameters<typeof FApiServer.InformalNode.testNodeRules>[0] = {
+      const params: Parameters<typeof FServiceAPI.InformalNode.testNodeRules>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
       };
 
-      const {data} = yield call(FApiServer.InformalNode.testNodeRules, params);
+      const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -524,11 +523,11 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
-      const params: Parameters<typeof FApiServer.InformalNode.createRules>[0] = {
+      const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
         testRuleText: informalNodeManagerPage.codeInput,
       };
-      const {data} = yield call(FApiServer.InformalNode.createRules, params);
+      const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
 
       const params1: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
@@ -571,19 +570,19 @@ const Model: InformalNodeManagerPageModelType = {
       // console.log(text, 'text1234fklsadj');
 
       if (payload.type === 'append') {
-        const params: Parameters<typeof FApiServer.InformalNode.putRules>[0] = {
+        const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
           nodeId: informalNodeManagerPage.nodeID,
           additionalTestRule: text,
         };
-        const {data} = yield call(FApiServer.InformalNode.putRules, params);
+        const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
       }
 
       if (payload.type === 'replace') {
-        const params: Parameters<typeof FApiServer.InformalNode.createRules>[0] = {
+        const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
           nodeId: informalNodeManagerPage.nodeID,
           testRuleText: text,
         };
-        const {data} = yield call(FApiServer.InformalNode.createRules, params);
+        const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
       }
 
       // if (informalNodeManagerPage.showPage === 'exhibit') {
@@ -632,11 +631,11 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
   // };
 
   if (isRematch) {
-    await FApiServer.InformalNode.rulesRematch({nodeId: nodeID});
+    await FServiceAPI.InformalNode.rulesRematch({nodeId: nodeID});
   }
 
   while (true) {
-    const response = await FApiServer.InformalNode.testNodeRules({nodeId: nodeID});
+    const response = await FServiceAPI.InformalNode.testNodeRules({nodeId: nodeID});
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
       await sleep();

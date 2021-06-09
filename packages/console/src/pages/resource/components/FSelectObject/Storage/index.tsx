@@ -5,7 +5,7 @@ import {FContentText} from "@/components/FText";
 import {FRectBtn} from "@/components/FButton";
 import {FMenuProps} from "@/components/FMenu";
 import FDropdownMenu from "@/components/FDropdownMenu";
-import {FApiServer} from "@/services";
+import {FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceObject {
   id: string;
@@ -57,7 +57,7 @@ function Storage({onSelect}: StorageProps) {
   }, []);
 
   async function handleBucketOptions() {
-    const {data} = await FApiServer.Storage.bucketList({bucketType: 1});
+    const {data} = await FServiceAPI.Storage.bucketList({bucketType: 1});
     setBucketOptions([
       {text: '全部Bucket', value: '-1'},
       ...data.map((i: any) => ({value: i.bucketName}))

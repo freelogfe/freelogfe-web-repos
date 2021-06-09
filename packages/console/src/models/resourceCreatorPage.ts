@@ -3,8 +3,7 @@ import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceCreatorPageModelState {
   name: string;
@@ -99,7 +98,7 @@ const Model: ResourceCreatorPageModelType = {
       if (resourceCreatorPage.nameErrorText || resourceCreatorPage.resourceTypeErrorText) {
         return;
       }
-      const params: Parameters<typeof FApiServer.Resource.create>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
         name: resourceCreatorPage.name,
         resourceType: resourceCreatorPage.resourceType,
         policies: [],
@@ -107,7 +106,7 @@ const Model: ResourceCreatorPageModelType = {
         intro: resourceCreatorPage.introduction,
         tags: resourceCreatorPage.labels,
       };
-      const {data} = yield call(FApiServer.Resource.create, params);
+      const {data} = yield call(FServiceAPI.Resource.create, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -145,10 +144,10 @@ const Model: ResourceCreatorPageModelType = {
         const {user} = yield select(({user}: ConnectState) => ({
           user,
         }));
-        const params1: Parameters<typeof FApiServer.Resource.info>[0] = {
+        const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
           resourceIdOrName: encodeURIComponent(`${user.info.username}/${payload}`),
         };
-        const {data: data1} = yield call(FApiServer.Resource.info, params1);
+        const {data: data1} = yield call(FServiceAPI.Resource.info, params1);
         if (data1) {
           nameErrorText = '资源名已存在';
         }

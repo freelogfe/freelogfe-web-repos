@@ -2,9 +2,8 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
 import {router} from 'umi';
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -104,11 +103,11 @@ const Model: ResourceInfoModelType = {
       const {user}: ConnectState = yield select(({user}: ConnectState) => ({
         user,
       }));
-      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FApiServer.Resource.info, params);
+      const {data} = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, 'DDDDDDDD');
 
       // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
@@ -139,10 +138,10 @@ const Model: ResourceInfoModelType = {
       //   return;
       // }
 
-      const params: Parameters<typeof FApiServer.Resource.lookDraft>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceInfo.resourceID,
       };
-      const {data} = yield call(FApiServer.Resource.lookDraft, params);
+      const {data} = yield call(FServiceAPI.Resource.lookDraft, params);
       if (!data) {
         return yield put<ChangeAction>({
           type: 'change',

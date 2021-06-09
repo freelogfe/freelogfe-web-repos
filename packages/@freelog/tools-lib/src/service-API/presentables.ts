@@ -1,5 +1,4 @@
-// import request from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 
 // 创建展品
 export interface CreatePresentableParamsType {

@@ -1,5 +1,4 @@
-// import request from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 
 // 分页获取测试资源列表
 interface TestResourcesParamsType {
@@ -119,6 +118,6 @@ interface RulesRematchParamsType {
   nodeId: number;
 }
 
-export function rulesRematch({nodeId, ...params}: TestResourcesParamsType) {
+export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {
   return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
 }

@@ -3,9 +3,7 @@ import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {FetchDataSourceAction, ResourceInfoModelState} from "@/models/resourceInfo";
 import {MarketPageModelState} from "@/models/marketPage";
-import {FApiServer} from "@/services";
-
-// import {InitModelStatesAction} from "@/models/nodes";
+import {FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceInfoPageModelState {
   resourceID: string;
@@ -75,11 +73,11 @@ const Model: ResourceInfoPageModelType = {
     * onChangeInfo(action: OnChangeInfoAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
 
-      const params: Parameters<typeof FApiServer.Resource.update>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
         ...action.payload,
         resourceId: action.id,
       };
-      yield call(FApiServer.Resource.update, params);
+      yield call(FServiceAPI.Resource.update, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: action.id,

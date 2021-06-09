@@ -3,9 +3,8 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {router} from "umi";
-import {FApiServer} from "@/services";
 import FUtil1 from '@/utils';
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {handleDependencyGraphData} from "@/components/FAntvG6/FAntvG6DependencyGraph";
 import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
 
@@ -269,11 +268,11 @@ const Model: MarketResourcePageModelType = {
       }));
 
       // 获取资源信息详情
-      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: marketResourcePage.resourceId,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FApiServer.Resource.info, params);
+      const {data} = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, ' data2309');
 
       let rawSignResources: MarketResourcePageModelState['allRawResources'] = [data];
@@ -282,11 +281,11 @@ const Model: MarketResourcePageModelType = {
       // 获取上抛资源信息
       if ((data.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
-        const params1: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+        const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
           resourceIds: data.baseUpcastResources.map((r: any) => r.resourceId).join(','),
           isLoadPolicyInfo: 1,
         };
-        const {data: data1} = yield call(FApiServer.Resource.batchInfo, params1);
+        const {data: data1} = yield call(FServiceAPI.Resource.batchInfo, params1);
         // console.log(data1, 'data12390jsdfo');
         rawSignResources = [
           ...rawSignResources,
@@ -297,13 +296,13 @@ const Model: MarketResourcePageModelType = {
       // console.log(rawSignResources, 'rawSignResources2309ef');
 
       // 获取当前用户与当前资源签过约的所有节点
-      const params3: Parameters<typeof FApiServer.Exhibit.presentableList>[0] = {
+      const params3: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
         userId: user.info?.userId,
         resourceIds: marketResourcePage.resourceId,
         // projection: 'nodeId',
       };
 
-      const {data: data3} = yield call(FApiServer.Exhibit.presentableList, params3);
+      const {data: data3} = yield call(FServiceAPI.Exhibit.presentableList, params3);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -360,17 +359,17 @@ const Model: MarketResourcePageModelType = {
         marketResourcePage,
       }));
 
-      const params1: Parameters<typeof FApiServer.Collection.isCollected>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Collection.isCollected>[0] = {
         resourceIds: marketResourcePage.resourceId,
       };
 
-      const {data: data1} = yield call(FApiServer.Collection.isCollected, params1);
+      const {data: data1} = yield call(FServiceAPI.Collection.isCollected, params1);
 
-      const params2: Parameters<typeof FApiServer.Collection.collectedCount>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Collection.collectedCount>[0] = {
         resourceId: marketResourcePage.resourceId,
       };
 
-      const {data: data2} = yield call(FApiServer.Collection.collectedCount, params2);
+      const {data: data2} = yield call(FServiceAPI.Collection.collectedCount, params2);
       // console.log('获取收藏', 'FGHSDGf09uj4k2t;ldfs');
 
       yield put<ChangeAction>({
@@ -387,15 +386,15 @@ const Model: MarketResourcePageModelType = {
       }));
 
       if (!marketResourcePage.hasCollect) {
-        const params: Parameters<typeof FApiServer.Collection.collectResource>[0] = {
+        const params: Parameters<typeof FServiceAPI.Collection.collectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
         };
-        yield call(FApiServer.Collection.collectResource, params)
+        yield call(FServiceAPI.Collection.collectResource, params)
       } else {
-        const params: Parameters<typeof FApiServer.Collection.deleteCollectResource>[0] = {
+        const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
           resourceId: marketResourcePage.resourceId,
         };
-        yield call(FApiServer.Collection.deleteCollectResource, params);
+        yield call(FServiceAPI.Collection.deleteCollectResource, params);
       }
 
       yield put<FetchCollectionInfoAction>({
@@ -424,22 +423,22 @@ const Model: MarketResourcePageModelType = {
       const result: GetAllContractsReturnType = yield call(getAllContracts, params);
       // console.log(result, 'result1234234234234');
 
-      const params1: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         nodeId: payload,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data: data1} = yield call(FApiServer.Exhibit.presentableDetails, params1);
+      const {data: data1} = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
 
 
       let data2: any[] = [];
       const contractIds = result.flat().map((cr) => cr.contractId).join(',');
       if (contractIds) {
-        const params2: Parameters<typeof FApiServer.Exhibit.contractAppliedPresentable>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Exhibit.contractAppliedPresentable>[0] = {
           nodeId: payload,
           contractIds: result.flat().map((cr) => cr.contractId).join(','),
         };
 
-        const {data} = yield call(FApiServer.Exhibit.contractAppliedPresentable, params2);
+        const {data} = yield call(FServiceAPI.Exhibit.contractAppliedPresentable, params2);
         data2 = data;
       }
 
@@ -500,30 +499,30 @@ const Model: MarketResourcePageModelType = {
 
       // console.log('######89987239847982347982349823748723');
 
-      const params: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
         version: marketResourcePage.version,
         resourceId: marketResourcePage.resourceId,
       };
-      const {data} = yield call(FApiServer.Resource.resourceVersionInfo, params);
+      const {data} = yield call(FServiceAPI.Resource.resourceVersionInfo, params);
       // console.log(data, '98sdalkf');
 
-      const params2: Parameters<typeof FApiServer.Resource.dependencyTree>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
         // $version: '0.0.1',
         isContainRootNode: true,
       };
 
-      const {data: data2} = yield call(FApiServer.Resource.dependencyTree, params2);
+      const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
       // console.log(data2, 'data2data2@#$RWEFASDFADSF90ukoj;ladskjfasdf');
       const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
 
-      const params3: Parameters<typeof FApiServer.Resource.authTree>[0] = {
+      const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
       };
 
-      const {data: data3} = yield call(FApiServer.Resource.authTree, params3);
+      const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
 
       // 授权树
       const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
@@ -580,7 +579,7 @@ const Model: MarketResourcePageModelType = {
         nodes,
       }));
 
-      const params: Parameters<typeof FApiServer.Exhibit.createPresentable>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         resourceId: marketResourcePage.resourceId,
         version: marketResourcePage.version,
@@ -603,7 +602,7 @@ const Model: MarketResourcePageModelType = {
           ]
         })),
       };
-      const {data} = yield call(FApiServer.Exhibit.createPresentable, params);
+      const {data} = yield call(FServiceAPI.Exhibit.createPresentable, params);
       router.push(FUtil.LinkTo.exhibitManagement({exhibitID: data.presentableId}));
     },
     * onChangeAndVerifySignExhibitName({payload}: OnChangeAndVerifySignExhibitNameAction, {put, select, call}: EffectsCommandMap) {
@@ -622,11 +621,11 @@ const Model: MarketResourcePageModelType = {
         nodes,
       }));
 
-      const params: Parameters<typeof FApiServer.Exhibit.presentableDetails>[0] = {
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         nodeId: marketResourcePage.selectedNodeID,
         presentableName: payload,
       };
-      const {data} = yield call(FApiServer.Exhibit.presentableDetails, params);
+      const {data} = yield call(FServiceAPI.Exhibit.presentableDetails, params);
       if (data) {
         yield put<ChangeAction>({
           type: 'marketResourcePage/change',
@@ -688,7 +687,7 @@ type GetAllContractsReturnType = {
 
 async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   const allPromises = resourceIDs.map(async (id) => {
-    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       subjectIds: id,
       subjectType: 1,
       licenseeIdentityType: 2,
@@ -696,7 +695,7 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
       licenseeId: nodeID,
       isLoadPolicyInfo: 1,
     };
-    const {data} = await FApiServer.Contract.batchContracts(params);
+    const {data} = await FServiceAPI.Contract.batchContracts(params);
     return data;
   });
 
@@ -710,12 +709,12 @@ interface GetAllContractExhibitsParamsType {
 
 async function getAllContractExhibits({resourceIDs, nodeID}: GetAllContractExhibitsParamsType) {
   const allPromises = resourceIDs.map(async (rid) => {
-    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       licenseeIdentityType: 2,
       licensorId: rid,
       licenseeId: nodeID,
     };
-    const {data} = await FApiServer.Contract.batchContracts(params);
+    const {data} = await FServiceAPI.Contract.batchContracts(params);
     return data;
   });
   return await Promise.all(allPromises);

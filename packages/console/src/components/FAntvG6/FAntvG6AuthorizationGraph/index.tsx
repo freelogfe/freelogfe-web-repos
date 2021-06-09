@@ -2,8 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib/types";
-import {FApiServer} from "@/services";
 import {FTipText} from "@/components/FText";
+import {FServiceAPI} from '@freelog/tools-lib';
 
 interface ResourceNode {
   id: string;
@@ -333,7 +333,7 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
 
   let data3: any[] = [];
   if (contractIds) {
-    const {data: data2} = await FApiServer.Contract.batchContracts({
+    const {data: data2} = await FServiceAPI.Contract.batchContracts({
       contractIds: contractIds,
     });
     data3 = data2;

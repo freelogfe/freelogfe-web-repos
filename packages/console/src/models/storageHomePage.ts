@@ -5,8 +5,7 @@ import {ConnectState} from '@/models/connect';
 import moment from 'moment';
 import {RcFile} from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 
 export interface StorageHomePageModelState {
@@ -161,11 +160,11 @@ const Model: StorageHomePageModelType = {
     * fetchBuckets({payload}: FetchBucketsAction, {call, put, select}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
 
-      const params: Parameters<typeof FApiServer.Storage.bucketList>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
         // bucketType: 0,
         bucketType: 1,
       };
-      const {data} = yield call(FApiServer.Storage.bucketList, params);
+      const {data} = yield call(FServiceAPI.Storage.bucketList, params);
       const bucketList: NonNullable<StorageHomePageModelState['bucketList']> = data
         .map((i: any) => ({
           bucketName: i.bucketName,
@@ -212,10 +211,10 @@ const Model: StorageHomePageModelType = {
           },
         });
       } else {
-        const params: Parameters<typeof FApiServer.Storage.bucketIsExist>[0] = {
+        const params: Parameters<typeof FServiceAPI.Storage.bucketIsExist>[0] = {
           bucketName: payload,
         };
-        const {data} = yield call(FApiServer.Storage.bucketIsExist, params);
+        const {data} = yield call(FServiceAPI.Storage.bucketIsExist, params);
         // console.log(data, '@@@@@Dddddddddddd====');
         yield put<ChangeAction>({
           type: 'change',
@@ -229,10 +228,10 @@ const Model: StorageHomePageModelType = {
     * createBucket({}: CreateBucketAction, {call, select, put}: EffectsCommandMap) {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({storageHomePage}));
 
-      const params: Parameters<typeof FApiServer.Storage.createBucket>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
         bucketName: storageHomePage.newBucketName,
       };
-      yield call(FApiServer.Storage.createBucket, params);
+      yield call(FServiceAPI.Storage.createBucket, params);
 
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
@@ -254,10 +253,10 @@ const Model: StorageHomePageModelType = {
         return;
       }
 
-      const params: Parameters<typeof FApiServer.Storage.bucketDetails>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.bucketDetails>[0] = {
         bucketName: payload,
       };
-      const {data} = yield call(FApiServer.Storage.bucketDetails, params);
+      const {data} = yield call(FServiceAPI.Storage.bucketDetails, params);
       // console.log(data, '@!#@$!@#$@#$DDDDDDD');
 
       if (!data || data.userId !== user.cookiesUserID) {
@@ -276,7 +275,7 @@ const Model: StorageHomePageModelType = {
       });
     },
     * fetchSpaceStatistic({}: FetchSpaceStatisticAction, {put, call}: EffectsCommandMap) {
-      const {data} = yield call(FApiServer.Storage.spaceStatistics);
+      const {data} = yield call(FServiceAPI.Storage.spaceStatistics);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -289,11 +288,11 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: Parameters<typeof FApiServer.Storage.deleteBucket>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.deleteBucket>[0] = {
         bucketName: payload,
       };
       // console.log(payload, 'DDDDDDDDelete');
-      yield call(FApiServer.Storage.deleteBucket, params);
+      yield call(FServiceAPI.Storage.deleteBucket, params);
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
@@ -302,12 +301,12 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: Parameters<typeof FApiServer.Storage.createObject>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
         bucketName: storageHomePage.activatedBucket,
         objectName: payload.objectName,
         sha1: payload.sha1,
       };
-      yield call(FApiServer.Storage.createObject, params);
+      yield call(FServiceAPI.Storage.createObject, params);
     },
     * fetchObjects({payload = 'restart'}: FetchObjectsAction, {select, call, put}: EffectsCommandMap) {
       const {storageHomePage, user}: ConnectState = yield select(({storageHomePage, user}: ConnectState) => ({
@@ -329,7 +328,7 @@ const Model: StorageHomePageModelType = {
         ];
         limit = new Set(allNames).size;
       }
-      const params: Parameters<typeof FApiServer.Storage.objectList>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         bucketName: storageHomePage.activatedBucket,
         limit,
         skip,
@@ -341,7 +340,7 @@ const Model: StorageHomePageModelType = {
           isLoading: true,
         },
       });
-      const {data} = yield call(FApiServer.Storage.objectList, params);
+      const {data} = yield call(FServiceAPI.Storage.objectList, params);
       // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
 
       let objectListData: StorageHomePageModelState['objectList'] = [];
@@ -370,11 +369,11 @@ const Model: StorageHomePageModelType = {
       const {storageHomePage}: ConnectState = yield select(({storageHomePage}: ConnectState) => ({
         storageHomePage,
       }));
-      const params: Parameters<typeof FApiServer.Storage.deleteObjects>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.deleteObjects>[0] = {
         bucketName: storageHomePage.activatedBucket,
         objectIds: payload,
       };
-      yield call(FApiServer.Storage.deleteObjects, params);
+      yield call(FServiceAPI.Storage.deleteObjects, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -407,18 +406,18 @@ const Model: StorageHomePageModelType = {
       });
       const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
 
-      const params: Parameters<typeof FApiServer.Storage.fileIsExist>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.fileIsExist>[0] = {
         sha1: uploadTaskQueue.map((utq) => utq.sha1).join(','),
       };
-      const {data} = yield call(FApiServer.Storage.fileIsExist, params);
+      const {data} = yield call(FServiceAPI.Storage.fileIsExist, params);
       const allExistSha1: string[] = data.filter((d: any) => d.isExisting).map((d: any) => d.sha1);
 
-      const params1: Parameters<typeof FApiServer.Storage.batchObjectList>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
         fullObjectNames: payload.map((p) => storageHomePage.activatedBucket + '/' + p.name).join(','),
         projection: 'objectId,objectName',
       };
 
-      const {data: data1} = yield call(FApiServer.Storage.batchObjectList, params1);
+      const {data: data1} = yield call(FServiceAPI.Storage.batchObjectList, params1);
       const allExistObjectNames: string[] = data1.map((d: any) => d.objectName);
       // console.log(allObjectNames, 'allObjectNames23sdfadf');
       yield put<ChangeAction>({

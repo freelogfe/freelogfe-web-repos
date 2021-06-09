@@ -3,9 +3,8 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {router} from 'umi';
-import {FApiServer} from "@/services";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export type NodesModelState = WholeReadonly<{
   list: {
@@ -92,10 +91,10 @@ const Model: NodesModelType = {
       });
     },
     * fetchNodes({}: FetchNodesAction, {call, put}: EffectsCommandMap) {
-      const params: Parameters<typeof FApiServer.Node.nodes>[0] = {
+      const params: Parameters<typeof FServiceAPI.Node.nodes>[0] = {
         limit: FUtil.Predefined.pageSize,
       };
-      const {data} = yield call(FApiServer.Node.nodes, params);
+      const {data} = yield call(FServiceAPI.Node.nodes, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -118,12 +117,12 @@ const Model: NodesModelType = {
         return;
       }
 
-      const params: Parameters<typeof FApiServer.Node.create>[0] = {
+      const params: Parameters<typeof FServiceAPI.Node.create>[0] = {
         nodeDomain: nodes.nodeDomain.trim(),
         nodeName: nodes.nodeName.trim(),
       };
 
-      const {data} = yield call(FApiServer.Node.create, params);
+      const {data} = yield call(FServiceAPI.Node.create, params);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -171,10 +170,10 @@ const Model: NodesModelType = {
       }
 
       if (!nameError) {
-        const params2: Parameters<typeof FApiServer.Node.details>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeName: payload.trim(),
         };
-        const {data: data2} = yield call(FApiServer.Node.details, params2);
+        const {data: data2} = yield call(FServiceAPI.Node.details, params2);
         if (data2) {
           nameError = '该节点名称已经存在或已经被其它用户使用';
         }
@@ -211,10 +210,10 @@ const Model: NodesModelType = {
       }
 
       if (!domainError) {
-        const params1: Parameters<typeof FApiServer.Node.details>[0] = {
+        const params1: Parameters<typeof FServiceAPI.Node.details>[0] = {
           nodeDomain: payload.trim(),
         };
-        const {data: data1} = yield call(FApiServer.Node.details, params1);
+        const {data: data1} = yield call(FServiceAPI.Node.details, params1);
         if (data1) {
           domainError = '该节点地址已经存在或已经被其它用户使用';
         }

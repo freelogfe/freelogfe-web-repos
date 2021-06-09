@@ -1,5 +1,4 @@
-// import request from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 
 // 批量获取授权策略列表
 interface PoliciesParamsType {

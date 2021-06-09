@@ -1,5 +1,4 @@
-// import request, {apiHost} from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
 
 // 创建资源
 export interface CreateParamsType {
@@ -258,7 +257,7 @@ interface ResourcesDownloadParamsType {
 }
 
 export function resourcesDownload(params: ResourcesDownloadParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi', true) + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
   // return request.get(`/v2/resources/${params.resourceId}/versions/${params.$version}/download`, {
   //   responseType: 'arraybuffer',
   // });
@@ -281,7 +280,7 @@ interface ResolveResourcesParamsType {
   resourceId: string;
 }
 
-export function resolveResources(params: LookDraftParamsType) {
+export function resolveResources(params: ResolveResourcesParamsType) {
   return FUtil.Axios.get(`/v2/resources/${params.resourceId}/resolveResources`);
 }
 

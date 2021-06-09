@@ -26,8 +26,7 @@ import FTooltip from "@/components/FTooltip";
 import FLink from "@/components/FLink";
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import NoBucket from "@/pages/storage/NoBucket";
 
 interface ContentProps {
@@ -68,7 +67,7 @@ function Content({storageHomePage, dispatch}: ContentProps) {
             objectID={record.id}
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
-            onClickDownload={() => FApiServer.Storage.downloadObject({objectIdOrName: record.id})}
+            onClickDownload={() => FServiceAPI.Storage.downloadObject({objectIdOrName: record.id})}
             onClickDelete={() => {
               fConfirmModal({
                 message: '存储空间对象一旦删除则无法恢复，确认删除吗？',

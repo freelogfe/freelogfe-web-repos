@@ -12,8 +12,7 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import {FEdit} from "@/components/FIcons";
 
@@ -265,7 +264,7 @@ export default connect(({resourceVersionCreatorPage}: ConnectState) => ({
 }))(Resources);
 
 async function goToObject(id: string) {
-  const {data} = await FApiServer.Storage.objectDetails({
+  const {data} = await FServiceAPI.Storage.objectDetails({
     objectIdOrName: id,
   });
   // console.log(data, 'data!Q@#$@#$!@#$@#$@!#$!@#$');

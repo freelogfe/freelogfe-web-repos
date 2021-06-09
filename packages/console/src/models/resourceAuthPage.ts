@@ -4,8 +4,7 @@ import {DvaReducer} from './shared';
 import {FetchDataSourceAction} from "@/models/resourceInfo";
 import moment from "moment";
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -152,12 +151,12 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceAuthPage.resourceID,
         isLoadPolicyInfo: 1,
       };
 
-      const {data} = yield call(FApiServer.Resource.info, params);
+      const {data} = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '@#$RFDSASDFSDFASDF');
 
       yield put<ChangeAction>({
@@ -172,11 +171,11 @@ const Model: ResourceAuthPageModelType = {
       const {resourceAuthPage}: ConnectState = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
         resourceAuthPage,
       }));
-      const params: Parameters<typeof FApiServer.Resource.update>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
         resourceId: resourceAuthPage.resourceID,
         ...payload,
       };
-      yield call(FApiServer.Resource.update, params);
+      yield call(FServiceAPI.Resource.update, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: resourceAuthPage.resourceID,
@@ -190,10 +189,10 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Resource.resolveResources>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
         resourceId: resourceAuthPage.resourceID,
       };
-      const {data} = yield call(FApiServer.Resource.resolveResources, params);
+      const {data} = yield call(FServiceAPI.Resource.resolveResources, params);
 
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
@@ -205,31 +204,31 @@ const Model: ResourceAuthPageModelType = {
         });
       }
 
-      const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
         resourceIds: data.map((i: any) => i.resourceId).join(','),
         isLoadPolicyInfo: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
-      const {data: data2} = yield call(FApiServer.Resource.batchInfo, params2);
+      const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
-      const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
         subjectIds: data.map((i: any) => i.resourceId).join(','),
         licenseeId: resourceAuthPage.resourceID,
         subjectType: 1,
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
+      const {data: data1} = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
-      // const contractsParams: Parameters<typeof FApiServer.Contract.contracts>[0] = {
+      // const contractsParams: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
       //   identityType: 2,
       //   licenseeId: resourceAuthPage.resourceID,
       //   isLoadPolicyInfo: 1,
       // };
       //
-      // const {data: {dataList: contractsData}} = yield call(FApiServer.Contract.contracts, contractsParams);
+      // const {data: {dataList: contractsData}} = yield call(FServiceAPI.Contract.contracts, contractsParams);
 
       const contractsAuthorized = data.map((i: any/* 关系资源id */, j: number) => {
         // 当前资源信息
@@ -300,13 +299,13 @@ const Model: ResourceAuthPageModelType = {
         resourceAuthPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Contract.contracts>[0] = {
+      const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         identityType: 1,
         licensorId: resourceAuthPage.resourceID,
         limit: FUtil.Predefined.pageSize,
       };
       // console.log('@#RWEQFRSDF');
-      const {data} = yield call(FApiServer.Contract.contracts, params);
+      const {data} = yield call(FServiceAPI.Contract.contracts, params);
       // console.log(data, '12342139(((((()))()())(134');
       yield put<ChangeAction>({
         type: 'change',
@@ -332,14 +331,14 @@ const Model: ResourceAuthPageModelType = {
       const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
         resourceAuthPage,
       }));
-      const params: Parameters<typeof FApiServer.Resource.batchSetContracts>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.batchSetContracts>[0] = {
         resourceId: resourceAuthPage.resourceID,
         subjects: [{
           subjectId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
           versions: payload,
         }],
       };
-      const {data} = yield call(FApiServer.Resource.batchSetContracts, params);
+      const {data} = yield call(FServiceAPI.Resource.batchSetContracts, params);
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {

@@ -2,8 +2,7 @@ import {AnyAction} from 'redux';
 import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
-import {FApiServer} from "@/services";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
   resourceType: string;
@@ -95,7 +94,7 @@ const Model: ResourceListPageModelType = {
         dataSource = resourceListPage.dataSource;
       }
 
-      const params: Parameters<typeof FApiServer.Resource.list>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
         // limit: resourceListPage.pageSize,
         limit: FUtil.Predefined.pageSize,
@@ -104,7 +103,7 @@ const Model: ResourceListPageModelType = {
         status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         isSelf: 1,
       };
-      const {data} = yield call(FApiServer.Resource.list, params);
+      const {data} = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data')
 
       yield put<ChangeAction>({

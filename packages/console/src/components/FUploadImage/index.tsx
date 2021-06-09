@@ -5,9 +5,8 @@ import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 import styles from './index.less';
 import {RcFile, UploadChangeParam} from "antd/lib/upload/interface";
-import {FApiServer} from "@/services";
 import FUtil1 from "@/utils";
-// import {FUtil} from '@freelog/tools-lib';
+import {FServiceAPI} from '@freelog/tools-lib';
 
 interface FUploadImageProps {
   children: React.ReactNode;
@@ -20,7 +19,7 @@ interface FUploadImageProps {
 export default function ({children, onUploadSuccess, onError}: FUploadImageProps) {
 
   async function upload(file: File) {
-    const res = await FApiServer.Storage.uploadImage({
+    const res = await FServiceAPI.Storage.uploadImage({
       file: file,
     });
     // console.log(res, 'RRRRRRRRR');

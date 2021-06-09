@@ -7,7 +7,7 @@ import * as User from './user';
 import * as InformalNode from './informalNodes';
 import * as Contract from './contracts';
 
-export const FApiServer = {
+const FServiceAPI = {
   Node,
   Exhibit,
   Storage,
@@ -17,3 +17,5 @@ export const FApiServer = {
   InformalNode,
   Contract,
 };
+
+export default FServiceAPI;

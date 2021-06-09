@@ -9,8 +9,7 @@ import {FDown, FNodes, FUp, FUser} from "@/components/FIcons";
 import FDivider from "@/components/FDivider";
 import FDrawer from "@/components/FDrawer";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import FLoadingTip from "@/components/FLoadingTip";
 import FResource from "@/components/FIcons/FResource";
 
@@ -63,12 +62,12 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
     if (!contractID) {
       return;
     }
-    const params: Parameters<typeof FApiServer.Contract.contractDetails>[0] = {
+    const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
       isLoadPolicyInfo: 1,
     };
 
-    const {data} = await FApiServer.Contract.contractDetails(params);
+    const {data} = await FServiceAPI.Contract.contractDetails(params);
     const baseInfoData: BaseInfo = {
       subjectId: data.subjectId,
       subjectName: data.subjectName,
@@ -91,11 +90,11 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
     };
 
     if (data.subjectType === 1) {
-      const params1: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: data.subjectId,
       };
 
-      const {data: data1} = await FApiServer.Resource.info(params1);
+      const {data: data1} = await FServiceAPI.Resource.info(params1);
       // console.log(data1, '!@#$!@#$!@#$');
       if (data1.coverImages.length > 0) {
         baseInfoData.subjectCover = data1.coverImages[0];
@@ -105,7 +104,7 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
     // console.log(data, '@!#$!@#$@#!$@');
     setBaseInfo(baseInfoData);
 
-    const params2: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+    const params2: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       subjectIds: data.subjectId,
       subjectType: data.subjectType,
       licenseeIdentityType: data.licenseeIdentityType,
@@ -113,7 +112,7 @@ function FContractDetailsDrawer({contractID = '', onClose}: FContractDetailsDraw
       licenseeId: data.licenseeId,
       isLoadPolicyInfo: 1,
     };
-    const {data: data2} = await FApiServer.Contract.batchContracts(params2);
+    const {data: data2} = await FServiceAPI.Contract.batchContracts(params2);
     // console.log(data2, '#$##$@$##$');
 
     setAssociateContracts(data2

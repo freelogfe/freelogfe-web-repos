@@ -7,9 +7,8 @@ import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {RouteComponentProps} from 'react-router';
-import {FApiServer} from "@/services";
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -33,11 +32,11 @@ function Success({match, dispatch}: SuccessProps) {
   }, gotoState === 2 ? 1000 : null);
 
   AHooks.useMount(async () => {
-    const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+    const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
       resourceIdOrName: match.params.id,
     };
 
-    const {data} = await FApiServer.Resource.info(params);
+    const {data} = await FServiceAPI.Resource.info(params);
     // console.log(data, 'DDDDTTTTAAAAA');
 
     if (data.resourceVersions.length === 1 && data.policies.length === 0) {

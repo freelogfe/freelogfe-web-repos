@@ -1,7 +1,7 @@
 import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {FApiServer} from "@/services";
+import {FServiceAPI} from "@freelog/tools-lib";
 
 export interface UserModelState {
   info: null | {
@@ -50,7 +50,7 @@ const Model: MarketModelType = {
   },
   effects: {
     * fetchInfo({}, {call, put}) {
-      const {data} = yield call(FApiServer.User.currentUserInfo);
+      const {data} = yield call(FServiceAPI.User.currentUserInfo);
       yield put<ChangeAction>({
         type: 'change',
         payload: {

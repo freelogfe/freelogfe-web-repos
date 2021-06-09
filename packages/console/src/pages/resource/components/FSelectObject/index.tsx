@@ -8,8 +8,7 @@ import {RcFile} from "antd/lib/upload/interface";
 import FObjectSelector from "@/containers/FObjectSelector";
 import FDrawer from "@/components/FDrawer";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {FRectBtn, FTextBtn} from '@/components/FButton';
 import {connect, Dispatch} from "dva";
 import {ConnectState, ResourceVersionCreatorPageModelState, UserModelState} from "@/models/connect";
@@ -79,17 +78,17 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
    */
   async function onSelectObject(obj: { id: string; name: string; }) {
     // setModalVisible(false);
-    const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
+    const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
       objectIdOrName: obj.id,
     };
-    const {data} = await FApiServer.Storage.objectDetails(params);
+    const {data} = await FServiceAPI.Storage.objectDetails(params);
 
-    const params4: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+    const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
       sha1: data.sha1,
       resourceType: resourceVersionCreatorPage.resourceType,
     };
 
-    const {data: data4} = await FApiServer.Storage.fileProperty(params4);
+    const {data: data4} = await FServiceAPI.Storage.fileProperty(params4);
     // console.log(data4, 'data4data4data4data4');
     if (!data4) {
       return onChange({
@@ -104,11 +103,11 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       selectedFileOrigin: data.bucketName,
     });
 
-    const params3: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
+    const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
       fileSha1: data.sha1,
     };
 
-    const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
+    const {data: data3} = await FServiceAPI.Resource.getResourceBySha1(params3);
     // console.log(data3, 'data3data3data3data3data3@#########');
 
     // 如果之前已经被使用过，展示使用列表
@@ -179,14 +178,14 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
 
     const sha1: string = await FUtil.Tool.getSHA1Hash(file);
 
-    const {data: isExists}: any = await FApiServer.Storage.fileIsExist({sha1});
+    const {data: isExists}: any = await FServiceAPI.Storage.fileIsExist({sha1});
     if (isExists[0].isExisting) {
 
-      const params3: Parameters<typeof FApiServer.Resource.getResourceBySha1>[0] = {
+      const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
         fileSha1: sha1,
       };
 
-      const {data: data3} = await FApiServer.Resource.getResourceBySha1(params3);
+      const {data: data3} = await FServiceAPI.Resource.getResourceBySha1(params3);
       // console.log(data3, 'data3data3data3data3data3@#########');
 
       // 如果之前已经被使用过，展示使用列表
@@ -225,7 +224,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
       onChange({
         selectedFileStatus: -2,
       });
-      const [promise, cancel] = await FApiServer.Storage.uploadFile({
+      const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
         file: file,
         resourceType: resourceVersionCreatorPage.resourceType,
       }, {

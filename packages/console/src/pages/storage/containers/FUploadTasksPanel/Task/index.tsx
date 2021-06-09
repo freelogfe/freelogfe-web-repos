@@ -8,9 +8,8 @@ import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
 import {Canceler} from "axios";
 import {StorageHomePageModelState} from "@/models/storageHomePage";
-import {FApiServer} from "@/services";
 import fConfirmModal from "@/components/fConfirmModal";
-import {FUtil} from '@freelog/tools-lib';
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 interface TaskProps {
   file: StorageHomePageModelState['uploadTaskQueue'][number];
@@ -53,11 +52,11 @@ function Task({
   }, []);
 
   async function verifySameName() {
-    const params1: Parameters<typeof FApiServer.Storage.batchObjectList>[0] = {
+    const params1: Parameters<typeof FServiceAPI.Storage.batchObjectList>[0] = {
       fullObjectNames: bucketName + '/' + file.name,
       projection: 'objectId,objectName',
     };
-    const {data: data1} = await FApiServer.Storage.batchObjectList(params1);
+    const {data: data1} = await FServiceAPI.Storage.batchObjectList(params1);
     // console.log(data1, 'dddd09283jadfslk');
     if (data1.length === 0) {
       startUploadFile();
@@ -90,10 +89,10 @@ function Task({
       }
 
     } else {
-      const params: Parameters<typeof FApiServer.Storage.uploadFile>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
         file: file.file
       };
-      const [promise, cancel]: any = FApiServer.Storage.uploadFile(params, {
+      const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(params, {
         onUploadProgress(progressEvent) {
           setProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
         },
@@ -194,20 +193,20 @@ interface VerifyTypeCompatibleParamsType {
 }
 
 async function verifyTypeCompatible({objectName, sha1}: VerifyTypeCompatibleParamsType): Promise<boolean> {
-  const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
+  const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
     objectIdOrName: objectName,
   };
 
-  const {data} = await FApiServer.Storage.objectDetails(params);
+  const {data} = await FServiceAPI.Storage.objectDetails(params);
   if (!data.resourceType) {
     return true;
   }
 
-  const params1: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+  const params1: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
     sha1: sha1,
     resourceType: data.resourceType,
   };
 
-  const {data: data1} = await FApiServer.Storage.fileProperty(params1);
+  const {data: data1} = await FServiceAPI.Storage.fileProperty(params1);
   return !!data1;
 }

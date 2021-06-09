@@ -1,5 +1,5 @@
-// import request from '@/utils/request';
-import {FUtil} from '@freelog/tools-lib';
+import FUtil from '../utils';
+
 // 收藏资源
 interface CollectResourceParamsType {
   resourceId: string;

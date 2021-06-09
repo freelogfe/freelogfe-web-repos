@@ -9,8 +9,7 @@ import {FetchDataSourceAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import moment from "moment";
 import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FApiServer} from "@/services";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import fConfirmModal from "@/components/fConfirmModal";
 
 export type DepResources = WholeReadonly<{
@@ -340,7 +339,7 @@ const Model: ResourceVersionCreatorModelType = {
         }));
 
       const directlyDependentIds: string[] = resourceVersionCreatorPage.depRelationship.map((drs) => drs.id);
-      const params: Parameters<typeof FApiServer.Resource.createVersion>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
         version: resourceVersionCreatorPage.version,
         fileSha1: resourceVersionCreatorPage.selectedFileSha1,
@@ -356,7 +355,7 @@ const Model: ResourceVersionCreatorModelType = {
           }),
         resolveResources: resolveResources,
         customPropertyDescriptors: [
-          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FApiServer.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
             return {
               type: 'readonlyText',
               key: i.key,
@@ -364,7 +363,7 @@ const Model: ResourceVersionCreatorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FApiServer.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
             const isInput: boolean = i.custom === 'input';
             const options: string[] = i.customOption.split(',');
             return {
@@ -379,7 +378,7 @@ const Model: ResourceVersionCreatorModelType = {
         description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
       };
 
-      const {data} = yield call(FApiServer.Resource.createVersion, params);
+      const {data} = yield call(FServiceAPI.Resource.createVersion, params);
       yield put<FetchDataSourceAction>({
         type: 'resourceInfo/fetchDataSource',
         payload: params.resourceId,
@@ -401,10 +400,10 @@ const Model: ResourceVersionCreatorModelType = {
           resourceVersionCreatorPage,
         };
       });
-      const params: Parameters<typeof FApiServer.Resource.lookDraft>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceVersionCreatorPage.resourceId,
       };
-      const {data} = yield call(FApiServer.Resource.lookDraft, params);
+      const {data} = yield call(FServiceAPI.Resource.lookDraft, params);
       if (!data) {
         return;
       }
@@ -422,11 +421,11 @@ const Model: ResourceVersionCreatorModelType = {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-      const params: Parameters<typeof FApiServer.Resource.info>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceVersionCreatorPage.resourceId,
         isLoadLatestVersionInfo: 1,
       };
-      const {data} = yield call(FApiServer.Resource.info, params);
+      const {data} = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '2093jdsl;kfasdf');
 
       let description: EditorState = BraftEditor.createEditorState('');
@@ -437,11 +436,11 @@ const Model: ResourceVersionCreatorModelType = {
         versions: [],
       };
       if (data.latestVersion) {
-        const params2: Parameters<typeof FApiServer.Resource.resourceVersionInfo>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo>[0] = {
           resourceId: resourceVersionCreatorPage.resourceId,
           version: data.latestVersion,
         };
-        const {data: data2} = yield call(FApiServer.Resource.resourceVersionInfo, params2);
+        const {data: data2} = yield call(FServiceAPI.Resource.resourceVersionInfo, params2);
         // console.log(data2, 'data2092384u0');
         description = BraftEditor.createEditorState(data2.description);
         preVersionBaseProperties = (data2.customPropertyDescriptors as any[])
@@ -469,10 +468,10 @@ const Model: ResourceVersionCreatorModelType = {
         const depResourceIds: string = (data2.dependencies as any[]).map<string>((dr) => dr.resourceId).join(',');
 
         if (depResourceIds.length > 0) {
-          const params3: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+          const params3: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
             resourceIds: depResourceIds,
           };
-          const {data: data3} = yield call(FApiServer.Resource.batchInfo, params3);
+          const {data: data3} = yield call(FServiceAPI.Resource.batchInfo, params3);
           // console.log(data2, '#ASGDFASDF');
           const relations: Relationships = data3.map((dd: any) => {
             return {
@@ -519,7 +518,7 @@ const Model: ResourceVersionCreatorModelType = {
         resourceInfo, resourceVersionCreatorPage
       }));
 
-      const params: Parameters<typeof FApiServer.Resource.saveVersionsDraft>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
         resourceId: resourceInfo.info?.resourceId || '',
         draftData: {
           ...resourceVersionCreatorPage,
@@ -527,7 +526,7 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       };
-      yield call(FApiServer.Resource.saveVersionsDraft, params);
+      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
       fMessage('暂存草稿成功');
       yield put<ChangeAction>({
         type: 'change',
@@ -568,12 +567,12 @@ const Model: ResourceVersionCreatorModelType = {
       if (!resourceVersionCreatorPage.selectedFileSha1) {
         return;
       }
-      const params: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
         sha1: resourceVersionCreatorPage.selectedFileSha1,
         resourceType: resourceVersionCreatorPage.resourceType,
       };
 
-      const {data} = yield call(FApiServer.Storage.fileProperty, params);
+      const {data} = yield call(FServiceAPI.Storage.fileProperty, params);
 
       if (!data) {
         return yield put<ChangeAction>({
@@ -636,34 +635,34 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
 
-      const params: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
         resourceIds: allIDs.join(','),
         isLoadPolicyInfo: 1,
         isLoadLatestVersionInfo: 1,
       };
 
       // 本次要添加的一些列资源信息
-      const {data} = yield call(FApiServer.Resource.batchInfo, params);
+      const {data} = yield call(FServiceAPI.Resource.batchInfo, params);
       // console.log(data, 'DDD!@#$@!#$@');
 
-      const params1: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+      const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
         subjectIds: allIDs.join(','),
         licenseeId: resourceVersionCreatorPage.resourceId,
         subjectType: 1,
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data: data1} = yield call(FApiServer.Contract.batchContracts, params1);
+      const {data: data1} = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data1 109234ui2o34');
 
       // 如果有合约，就获取合约应用的版本
       let coverageVersions: any[] = [];
       if (data1.length > 0) {
-        const params2: Parameters<typeof FApiServer.Resource.batchGetCoverageVersions>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Resource.batchGetCoverageVersions>[0] = {
           resourceId: resourceVersionCreatorPage.resourceId,
           contractIds: data1.map((ci: any) => ci.contractId).join(','),
         };
-        const {data: data2} = yield call(FApiServer.Resource.batchGetCoverageVersions, params2);
+        const {data: data2} = yield call(FServiceAPI.Resource.batchGetCoverageVersions, params2);
         coverageVersions = data2;
       }
 
@@ -750,10 +749,10 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
     * dddDepsByMainIDs({payload}: AddDepsByMainIDsAction, {call, put}: EffectsCommandMap) {
-      const params: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+      const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
         resourceIds: payload.join(','),
       };
-      const {data} = yield call(FApiServer.Resource.batchInfo, params);
+      const {data} = yield call(FServiceAPI.Resource.batchInfo, params);
       // console.log(data, 'data198023h');
       yield put<AddDepsAction>({
         type: 'addDeps',
@@ -777,18 +776,18 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Storage.objectDetails>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: payload,
       };
-      const {data} = yield call(FApiServer.Storage.objectDetails, params);
+      const {data} = yield call(FServiceAPI.Storage.objectDetails, params);
       console.log(data, 'OOOOasdfadsfOOOOasdfadsf');
 
-      const params4: Parameters<typeof FApiServer.Storage.fileProperty>[0] = {
+      const params4: Parameters<typeof FServiceAPI.Storage.fileProperty>[0] = {
         sha1: data.sha1,
         resourceType: resourceVersionCreatorPage.resourceType,
       };
 
-      const {data: data4} = yield call(FApiServer.Storage.fileProperty, params4);
+      const {data: data4} = yield call(FServiceAPI.Storage.fileProperty, params4);
       console.log(data4, '@#@#@#@#@#@##@$@#$data4');
       if (!data4) {
         yield put<ChangeAction>({
@@ -850,10 +849,10 @@ const Model: ResourceVersionCreatorModelType = {
 
       if (depResources.length > 0) {
 
-        const params2: Parameters<typeof FApiServer.Resource.batchInfo>[0] = {
+        const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
           resourceNames: depResources.map<string>((dr) => dr.name).join(','),
         };
-        const {data: data2} = yield call(FApiServer.Resource.batchInfo, params2);
+        const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
         // console.log(data2, '#ASGDFASDF');
         const relations = data2.map((dd: any) => {
           return {
@@ -1090,14 +1089,14 @@ interface BatchCycleDependencyCheckParams {
 async function batchCycleDependencyCheck({resourceId, dependencies}: BatchCycleDependencyCheckParams): Promise<string[]> {
   const promises: Promise<any>[] = [];
   for (const dependency of dependencies) {
-    const params: Parameters<typeof FApiServer.Resource.cycleDependencyCheck>[0] = {
+    const params: Parameters<typeof FServiceAPI.Resource.cycleDependencyCheck>[0] = {
       resourceId: resourceId,
       dependencies: [{
         resourceId: dependency.resourceId,
         versionRange: dependency.versionRange,
       }],
     };
-    promises.push(FApiServer.Resource.cycleDependencyCheck(params))
+    promises.push(FServiceAPI.Resource.cycleDependencyCheck(params))
   }
   const results = await Promise.all(promises);
 
@@ -1133,7 +1132,7 @@ type GetAllContractsReturnType = {
 async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
-    const params: Parameters<typeof FApiServer.Contract.batchContracts>[0] = {
+    const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
       subjectIds: id,
       subjectType: 1,
       licenseeIdentityType: 1,
@@ -1141,7 +1140,7 @@ async function getAllContracts({resourceID, resourceIDs}: GetAllContractsParamsT
       licenseeId: resourceID,
       isLoadPolicyInfo: 1,
     };
-    const {data} = await FApiServer.Contract.batchContracts(params);
+    const {data} = await FServiceAPI.Contract.batchContracts(params);
     // console.log(data, 'data!!!1111100000000))))))');
     return data;
   });
