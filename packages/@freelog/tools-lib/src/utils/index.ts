@@ -6,9 +6,9 @@ import Axios from './axios';
 import * as Tool from './tools';
 
 const FUtil = {
-  Format: Format,
+  Format,
   Regexp,
-  LinkTo: LinkTo,
+  LinkTo,
   Predefined,
   Axios,
   Tool,

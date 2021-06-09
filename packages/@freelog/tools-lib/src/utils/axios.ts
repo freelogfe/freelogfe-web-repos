@@ -5,7 +5,7 @@ import axios from 'axios';
 // import {router} from "umi";
 import NProgress from 'nprogress';
 import "nprogress/nprogress.css";
-import FUtil from "./index";
+import {completeUrlByDomain} from "./format";
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -30,7 +30,7 @@ if (window.location.hostname.includes('.com')) {
   // apiHost = `${window.location.protocol}//qi.${(window.location.host.match(/(?<=\.).*/) || [''])[0]}`;
   // apiHost = window.location.origin.replace('console', 'qi');
   axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = FUtil.Format.completeUrlByDomain('qi');
+  axios.defaults.baseURL = completeUrlByDomain('qi');
 }
 
 /**
@@ -91,7 +91,7 @@ axios.interceptors.response.use(function (response) {
   // console.log(data, 'data2390jasdflkf');
 
   if (data.errCode === 30 || data.errcode === 30) {
-    return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
+    return window.location.replace(`${completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
   }
 
   // if ((data.errcode === undefined

@@ -113,14 +113,23 @@ const Model: ResourceCollectModelType = {
       };
 
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
-      // console.log(data, 'data3290joisdf');
+      console.log(data, 'data3290joisdf');
 
-      const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-        resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
-      };
+      let data1: any[] = [];
 
-      const {data: data1} = yield call(FServiceAPI.Resource.batchInfo, params1);
-      // console.log(data1, 'data1w09ejflk23');
+      if (data.dataList.length > 0) {
+
+        const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+          resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
+        };
+
+        const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params1);
+
+        data1 = data2;
+      }
+
+
+      console.log(data1, 'data1w09ejflk23');
 
       yield put<ChangeAction>({
         type: 'change',
