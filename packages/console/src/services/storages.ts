@@ -1,4 +1,5 @@
-import request, {apiHost} from '@/utils/request';
+// import request, {apiHost} from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 import {AxiosRequestConfig, Canceler} from 'axios';
 
 // 创建bucket(系统级的bucket不允许创建)
@@ -7,7 +8,7 @@ export interface CreateBucketParamsType {
 }
 
 export function createBucket(params: CreateBucketParamsType) {
-  return request.post(`/v1/storages/buckets`, params);
+  return FUtil.Axios.post(`/v1/storages/buckets`, params);
 }
 
 // 查看用户的bucket列表
@@ -16,7 +17,7 @@ interface BucketListParamsType {
 }
 
 export function bucketList(params: BucketListParamsType) {
-  return request.get(`/v1/storages/buckets`, {
+  return FUtil.Axios.get(`/v1/storages/buckets`, {
     params: params,
   });
 }
@@ -26,7 +27,7 @@ interface SpaceStatisticsParamsType {
 }
 
 export function spaceStatistics(params?: SpaceStatisticsParamsType) {
-  return request.get(`/v1/storages/buckets/spaceStatistics`);
+  return FUtil.Axios.get(`/v1/storages/buckets/spaceStatistics`);
 }
 
 // 删除bucket
@@ -35,7 +36,7 @@ interface DeleteBucketParamsType {
 }
 
 export function deleteBucket(params: DeleteBucketParamsType) {
-  return request.delete(`/v1/storages/buckets/${params.bucketName}`);
+  return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}`);
 }
 
 // 查询bucket详情
@@ -44,7 +45,7 @@ interface BucketDetailsParamsType {
 }
 
 export function bucketDetails({bucketName}: BucketDetailsParamsType) {
-  return request.get(`/v1/storages/buckets/${bucketName}`);
+  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}`);
 }
 
 // 分页查看存储对象列表
@@ -60,7 +61,7 @@ interface ObjectListParamsType {
 }
 
 export function objectList({bucketName, ...params}: ObjectListParamsType) {
-  return request.get(`/v1/storages/buckets/${bucketName}/objects`, {
+  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/objects`, {
     params,
   });
 }
@@ -74,7 +75,7 @@ interface CreateObjectParamsType {
 }
 
 export function createObject({bucketName, ...params}: CreateObjectParamsType) {
-  return request.post(`/v1/storages/buckets/${bucketName}/objects`, params);
+  return FUtil.Axios.post(`/v1/storages/buckets/${bucketName}/objects`, params);
 }
 
 // 查看存储对象详情
@@ -89,9 +90,9 @@ interface ObjectDetailsParamsType2 {
 
 export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsParamsType2) {
   if ((params as ObjectDetailsParamsType2).objectIdOrName) {
-    return request.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
+    return FUtil.Axios.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
   }
-  return request.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
+  return FUtil.Axios.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
 }
 
 // 删除存储对象
@@ -101,7 +102,7 @@ interface DeleteObjectsParamsType {
 }
 
 export function deleteObjects(params: DeleteObjectsParamsType) {
-  return request.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
+  return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
 }
 
 // 查询bucket是否存在
@@ -110,7 +111,7 @@ interface BucketIsExistParamsType {
 }
 
 export function bucketIsExist({bucketName, ...params}: BucketIsExistParamsType) {
-  return request.get(`/v1/storages/buckets/${bucketName}/isExist`);
+  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/isExist`);
 }
 
 // 下载存储对象文件
@@ -119,7 +120,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return window.location.href = apiHost + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  // return window.location.href = apiHost + `/v1/storages/objects/${params.objectIdOrName}/file`;
   // return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
   //   responseType: 'arraybuffer',
   //   // onDownloadProgress: (progressEvent: any) => {
@@ -134,7 +135,7 @@ interface FileIsExistParamsType {
 }
 
 export function fileIsExist(params: FileIsExistParamsType) {
-  return request.get('/v1/storages/files/fileIsExist', {
+  return FUtil.Axios.get('/v1/storages/files/fileIsExist', {
     params: params,
   });
 }
@@ -154,13 +155,12 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
   }
 
   if (!returnCancel) {
-    return request.post('/v1/storages/files/upload', formData, config);
+    return FUtil.Axios.post('/v1/storages/files/upload', formData);
   }
 
   let cancel: any = null;
-  const promise = request.post('/v1/storages/files/upload', formData, {
-    ...config,
-    cancelToken: new request.CancelToken((c) => {
+  const promise = FUtil.Axios.post('/v1/storages/files/upload', formData, {
+    cancelToken: new FUtil.Axios.CancelToken((c) => {
       cancel = c;
     }),
   });
@@ -183,7 +183,7 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
       formData.append(key, value);
     }
   }
-  return request.post('/v1/storages/files/uploadImage', formData, config);
+  return FUtil.Axios.post('/v1/storages/files/uploadImage', formData);
 }
 
 // 更新存储对象属性
@@ -205,7 +205,7 @@ interface UpdateObjectParamsType {
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
-  return request.put(`/v1/storages/objects/${objectIdOrName}`, params);
+  return FUtil.Axios.put(`/v1/storages/objects/${objectIdOrName}`, params);
 }
 
 // 批量查询存储对象列表
@@ -216,7 +216,7 @@ interface BatchObjectListParamsType {
 }
 
 export function batchObjectList(params: BatchObjectListParamsType) {
-  return request.get(`/v1/storages/objects/list`, {
+  return FUtil.Axios.get(`/v1/storages/objects/list`, {
     params,
   });
 }
@@ -228,7 +228,7 @@ interface FilePropertyParamsType {
 }
 
 export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
-  return request.get(`/v1/storages/files/${sha1}/property`, {
+  return FUtil.Axios.get(`/v1/storages/files/${sha1}/property`, {
     params,
   });
 }
@@ -244,5 +244,5 @@ interface CycleDependencyCheckParamsType {
 }
 
 export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
-  return request.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
+  return FUtil.Axios.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
 }

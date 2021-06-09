@@ -1,12 +1,12 @@
-import request from '@/utils/request';
-
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 // 收藏资源
 interface CollectResourceParamsType {
   resourceId: string;
 }
 
 export function collectResource(params: CollectResourceParamsType) {
-  return request.post('/v2/collections/resources', params);
+  return FUtil.Axios.post('/v2/collections/resources', params);
 }
 
 // 查看收藏的资源列表
@@ -19,7 +19,7 @@ interface CollectionResourcesParamsType {
 }
 
 export function collectionResources(params: CollectionResourcesParamsType) {
-  return request.get('/v2/collections/resources', {
+  return FUtil.Axios.get('/v2/collections/resources', {
     params
   });
 }
@@ -30,7 +30,7 @@ interface DeleteCollectResourceParamsType {
 }
 
 export function deleteCollectResource({resourceId}: DeleteCollectResourceParamsType) {
-  return request.delete(`/v2/collections/resources/${resourceId}`);
+  return FUtil.Axios.delete(`/v2/collections/resources/${resourceId}`);
 }
 
 // 批量查询资源是否收藏
@@ -39,7 +39,7 @@ interface IsCollectedParamsType {
 }
 
 export function isCollected(params: IsCollectedParamsType) {
-  return request.get('/v2/collections/resources/isCollected', {
+  return FUtil.Axios.get('/v2/collections/resources/isCollected', {
     params
   });
 }
@@ -50,5 +50,5 @@ interface CollectedCountParamsType {
 }
 
 export function collectedCount({resourceId}: CollectedCountParamsType) {
-  return request.get(`/v2/collections/resources/${resourceId}/count`);
+  return FUtil.Axios.get(`/v2/collections/resources/${resourceId}/count`);
 }

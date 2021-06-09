@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 // 创建节点
 export interface CreateParamsType {
@@ -7,7 +8,7 @@ export interface CreateParamsType {
 }
 
 export function create(params: CreateParamsType) {
-  return request.post('/v2/nodes', params);
+  return FUtil.Axios.post('/v2/nodes', params);
 }
 
 // 查看节点详情
@@ -22,9 +23,9 @@ interface NodeDetailParamsType2 {
 
 export function details(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
   if ((params as NodeDetailParamsType1).nodeId) {
-    return request.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
+    return FUtil.Axios.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
   }
-  return request.get(`/v2/nodes/detail`, {
+  return FUtil.Axios.get(`/v2/nodes/detail`, {
     params,
   });
 }
@@ -38,7 +39,7 @@ interface NodesParamsType {
 }
 
 export function nodes(params: NodesParamsType) {
-  return request.get('/v2/nodes', {
+  return FUtil.Axios.get('/v2/nodes', {
     params
   });
 }

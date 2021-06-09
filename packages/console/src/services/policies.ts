@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 // 批量获取授权策略列表
 interface PoliciesParamsType {
@@ -9,7 +10,7 @@ interface PoliciesParamsType {
 }
 
 export function policies(params: PoliciesParamsType) {
-  return request.get('/v2/policies', {
+  return FUtil.Axios.get('/v2/policies', {
     params,
   });
 }
@@ -23,7 +24,7 @@ interface PoliciesListParamsType {
 }
 
 export function policiesList(params: PoliciesListParamsType) {
-  return request.get('/v2/policies/list', {
+  return FUtil.Axios.get('/v2/policies/list', {
     params,
   });
 }

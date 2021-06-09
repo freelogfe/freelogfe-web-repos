@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 interface ContractDetailsParamsType {
   contractId: string;
@@ -7,7 +8,7 @@ interface ContractDetailsParamsType {
 }
 
 export function contractDetails({contractId, ...params}: ContractDetailsParamsType) {
-  return request.get(`/v2/contracts/${contractId}`, {
+  return FUtil.Axios.get(`/v2/contracts/${contractId}`, {
     params,
   });
 }
@@ -31,7 +32,7 @@ interface ContractsParamsType {
 }
 
 export function contracts(params: ContractsParamsType) {
-  return request.get('/v2/contracts', {
+  return FUtil.Axios.get('/v2/contracts', {
     params,
   });
 }
@@ -49,7 +50,7 @@ interface BatchContractsParamsType {
 }
 
 export function batchContracts(params: BatchContractsParamsType) {
-  return request.get('/v2/contracts/list', {
+  return FUtil.Axios.get('/v2/contracts/list', {
     params,
   });
 }

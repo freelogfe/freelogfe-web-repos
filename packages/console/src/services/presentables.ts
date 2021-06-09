@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 // 创建展品
 export interface CreatePresentableParamsType {
@@ -16,7 +17,7 @@ export interface CreatePresentableParamsType {
 }
 
 export function createPresentable(params: CreatePresentableParamsType) {
-  return request.post(`/v2/presentables`, params);
+  return FUtil.Axios.post(`/v2/presentables`, params);
 }
 
 // 更新展品
@@ -43,7 +44,7 @@ interface UpdatePresentableParamsType {
 }
 
 export function updatePresentable({presentableId, ...params}: UpdatePresentableParamsType) {
-  return request.put(`/v2/presentables/${presentableId}`, params);
+  return FUtil.Axios.put(`/v2/presentables/${presentableId}`, params);
 }
 
 // 上下线presentable
@@ -53,7 +54,7 @@ interface PresentablesOnlineParamsType {
 }
 
 export function presentablesOnlineStatus({presentableId, ...params}: PresentablesOnlineParamsType) {
-  return request.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
+  return FUtil.Axios.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
 }
 
 // 查看展品详情
@@ -78,12 +79,12 @@ interface PresentableDetailsParamsType2 {
 
 export function presentableDetails(params: PresentableDetailsParamsType1 | PresentableDetailsParamsType2) {
   if ((params as PresentableDetailsParamsType2).nodeId) {
-    return request.get(`/v2/presentables/detail`, {
+    return FUtil.Axios.get(`/v2/presentables/detail`, {
       params,
     });
   }
   const {presentableId, ...p} = params as PresentableDetailsParamsType1;
-  return request.get(`/v2/presentables/${presentableId}`, {
+  return FUtil.Axios.get(`/v2/presentables/${presentableId}`, {
     params: p,
   });
 }
@@ -104,7 +105,7 @@ interface PresentablesParamsType {
 }
 
 export function presentables(params: PresentablesParamsType) {
-  return request.get(`/v2/presentables`, {
+  return FUtil.Axios.get(`/v2/presentables`, {
     params,
   });
 }
@@ -123,7 +124,7 @@ interface PresentableListParamsType {
 }
 
 export function presentableList(params: PresentableListParamsType) {
-  return request.get(`/v2/presentables/list`, {
+  return FUtil.Axios.get(`/v2/presentables/list`, {
     params,
   });
 }
@@ -138,7 +139,7 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({presentableId, ...params}: DependencyTreeParamsType) {
-  return request.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
+  return FUtil.Axios.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
 }
 
 // 查看展品关系树
@@ -148,7 +149,7 @@ interface RelationTreeParamsType {
 }
 
 export function relationTree({presentableId, ...params}: RelationTreeParamsType) {
-  return request.get(`/v2/presentables/${presentableId}/relationTree`, {params});
+  return FUtil.Axios.get(`/v2/presentables/${presentableId}/relationTree`, {params});
 }
 
 // 查看展品授权树
@@ -161,7 +162,7 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({presentableId, ...params}: AuthTreeParamsType) {
-  return request.get(`/v2/presentables/${presentableId}/authTree`, {params});
+  return FUtil.Axios.get(`/v2/presentables/${presentableId}/authTree`, {params});
 }
 
 // 切换展品版本
@@ -171,7 +172,7 @@ interface PresentablesVersionParamsType {
 }
 
 export function presentablesVersion({presentableId, ...params}: PresentablesVersionParamsType) {
-  return request.put(`/v2/presentables/${presentableId}/version`, params);
+  return FUtil.Axios.put(`/v2/presentables/${presentableId}/version`, params);
 }
 
 // 设置展品自定义属性
@@ -185,7 +186,7 @@ interface UpdateRewritePropertyParamsType {
 }
 
 export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
-  return request.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
+  return FUtil.Axios.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
 }
 
 // 批量获取展品授权结果
@@ -196,7 +197,7 @@ interface BatchAuthParamsType {
 }
 
 export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
-  return request.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
+  return FUtil.Axios.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
     params,
   });
 }
@@ -207,7 +208,7 @@ interface ContractAppliedPresentableParamsType {
 }
 
 export function contractAppliedPresentable({nodeId, ...params}: ContractAppliedPresentableParamsType) {
-  return request.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
+  return FUtil.Axios.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
     params,
   });
 }

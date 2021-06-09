@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 // 分页获取测试资源列表
 interface TestResourcesParamsType {
@@ -13,7 +14,7 @@ interface TestResourcesParamsType {
 }
 
 export function testResources({nodeId, ...params}: TestResourcesParamsType) {
-  return request.get(`/v2/testNodes/${nodeId}/testResources`, {
+  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources`, {
     params,
   });
 }
@@ -25,7 +26,7 @@ interface CreateRulesParamsType {
 }
 
 export function createRules({nodeId, testRuleText}: CreateRulesParamsType) {
-  return request.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
+  return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
 }
 
 // 搜索测试资源依赖树
@@ -35,7 +36,7 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({nodeId, keywords}: DependencyTreeParamsType) {
-  return request.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
+  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
     params: {
       keywords,
     },
@@ -49,7 +50,7 @@ interface PutRulesParamsType {
 }
 
 export function putRules({nodeId, additionalTestRule}: PutRulesParamsType) {
-  return request.put(`/v2/testNodes/${nodeId}/rules`, {
+  return FUtil.Axios.put(`/v2/testNodes/${nodeId}/rules`, {
     additionalTestRule,
   });
 }
@@ -60,7 +61,7 @@ interface TestNodeRulesParamsType {
 }
 
 export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
-  return request.get(`/v2/testNodes/${nodeId}/rules`, {});
+  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/rules`, {});
 }
 
 // 更新测试资源的授权合约
@@ -75,7 +76,7 @@ interface UpdateTestResourceContractsParamsType {
 }
 
 export function updateTestResourceContracts({testResourceId, ...params}: UpdateTestResourceContractsParamsType) {
-  return request.put(`/v2/testNodes/testResources/${testResourceId}`, params);
+  return FUtil.Axios.put(`/v2/testNodes/testResources/${testResourceId}`, params);
 }
 
 // 获取并过滤资源依赖树
@@ -86,7 +87,7 @@ interface DependencyTreeFilterParamsType {
 }
 
 export function dependencyTreeFilter({testResourceId, ...params}: DependencyTreeFilterParamsType) {
-  return request.get(`/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`, {
+  return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`, {
     params
   });
 }
@@ -97,7 +98,7 @@ interface TestResourceDetailsParamsType {
 }
 
 export function testResourceDetails({testResourceId}: TestResourceDetailsParamsType) {
-  return request.get(`/v2/testNodes/testResources/${testResourceId}`);
+  return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}`);
 }
 
 // 查询包含指定依赖的测试资源
@@ -108,7 +109,7 @@ interface SearchTestResourcesByDependencyParamsType {
 }
 
 export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestResourcesByDependencyParamsType) {
-  return request.get(`/v2/testNodes/${nodeId}/testResources/searchByDependency`, {
+  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/searchByDependency`, {
     params,
   });
 }
@@ -119,5 +120,5 @@ interface RulesRematchParamsType {
 }
 
 export function rulesRematch({nodeId, ...params}: TestResourcesParamsType) {
-  return request.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
+  return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
 }

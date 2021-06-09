@@ -1,4 +1,5 @@
-import request, {apiHost} from '@/utils/request';
+// import request, {apiHost} from '@/utils/request';
+import {FUtil} from '@freelog/tools-lib';
 
 // 创建资源
 export interface CreateParamsType {
@@ -11,7 +12,7 @@ export interface CreateParamsType {
 }
 
 export function create(params: CreateParamsType) {
-  return request.post('/v2/resources', params)
+  return FUtil.Axios.post('/v2/resources', params)
 }
 
 // 更新资源信息
@@ -32,7 +33,7 @@ interface UpdateParamsType {
 }
 
 export function update(params: UpdateParamsType) {
-  return request.put(`/v2/resources/${params.resourceId}`, params);
+  return FUtil.Axios.put(`/v2/resources/${params.resourceId}`, params);
 }
 
 // 查看资源分页列表
@@ -51,7 +52,7 @@ interface ListParamsType {
 }
 
 export function list(params: ListParamsType) {
-  return request.get('/v2/resources', {
+  return FUtil.Axios.get('/v2/resources', {
     params,
   });
 }
@@ -65,7 +66,7 @@ interface InfoParamsType {
 }
 
 export function info({resourceIdOrName, ...params}: InfoParamsType) {
-  return request.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
+  return FUtil.Axios.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
     params: params,
   });
 }
@@ -80,7 +81,7 @@ interface BatchInfoParamsType {
 }
 
 export function batchInfo(params: BatchInfoParamsType) {
-  return request.get(`/v2/resources/list`, {
+  return FUtil.Axios.get(`/v2/resources/list`, {
     params: params,
   });
 }
@@ -95,7 +96,7 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType) {
-  return request.get(`/v2/resources/${resourceId}/dependencyTree`, {
+  return FUtil.Axios.get(`/v2/resources/${resourceId}/dependencyTree`, {
     params: params,
   });
 }
@@ -107,7 +108,7 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({resourceId, ...params}: AuthTreeParamsType) {
-  return request.get(`/v2/resources/${resourceId}/authTree`, {
+  return FUtil.Axios.get(`/v2/resources/${resourceId}/authTree`, {
     params: params,
   });
 }
@@ -142,7 +143,7 @@ interface CreateVersionParamsType {
 }
 
 export function createVersion({resourceId, ...params}: CreateVersionParamsType) {
-  return request.post(`/v2/resources/${resourceId}/versions`, params);
+  return FUtil.Axios.post(`/v2/resources/${resourceId}/versions`, params);
 }
 
 // 查看资源版本信息
@@ -160,14 +161,14 @@ interface ResourceVersionInfoParamsType2 {
 export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
   // console.log('####!AAA');
   if ((params as ResourceVersionInfoParamsType1).version) {
-    return request.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
+    return FUtil.Axios.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
       params: {
         projection: params.projection,
       }
     });
   }
 
-  return request.get(`/v2/resources/versions/detail`, {
+  return FUtil.Axios.get(`/v2/resources/versions/detail`, {
     params,
   });
 }
@@ -179,7 +180,7 @@ interface GetResourceVersionBySha1ParamsType {
 }
 
 export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersionBySha1ParamsType) {
-  return request.get(`/v2/resources/files/${fileSha1}/versions`, {
+  return FUtil.Axios.get(`/v2/resources/files/${fileSha1}/versions`, {
     params,
   });
 }
@@ -191,7 +192,7 @@ interface GetResourceBySha1ParamsType {
 }
 
 export function getResourceBySha1({fileSha1, ...params}: GetResourceBySha1ParamsType) {
-  return request.get(`/v2/resources/files/${fileSha1}`, {
+  return FUtil.Axios.get(`/v2/resources/files/${fileSha1}`, {
     params,
   });
 }
@@ -217,7 +218,7 @@ interface UpdateResourceVersionInfoParamsType {
 }
 
 export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParamsType) {
-  return request.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
+  return FUtil.Axios.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
 }
 
 // 保存或者更新资源版本草稿
@@ -227,7 +228,7 @@ interface SaveVersionsDraftParamsType {
 }
 
 export function saveVersionsDraft(params: SaveVersionsDraftParamsType) {
-  return request.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
+  return FUtil.Axios.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
 }
 
 // 查看资源版本草稿
@@ -236,7 +237,7 @@ interface LookDraftParamsType {
 }
 
 export function lookDraft(params: LookDraftParamsType) {
-  return request.get(`/v2/resources/${params.resourceId}/versions/drafts`);
+  return FUtil.Axios.get(`/v2/resources/${params.resourceId}/versions/drafts`);
 }
 
 // 校验文件是否被引入资源
@@ -245,7 +246,7 @@ interface ResourceIsUsedByOtherParamsType {
 }
 
 export function resourceIsUsedByOther(params: ResourceIsUsedByOtherParamsType) {
-  return request.get(`/v2/resources/versions/isCanBeCreate`, {
+  return FUtil.Axios.get(`/v2/resources/versions/isCanBeCreate`, {
     params,
   });
 }
@@ -257,7 +258,7 @@ interface ResourcesDownloadParamsType {
 }
 
 export function resourcesDownload(params: ResourcesDownloadParamsType) {
-  return window.location.href = apiHost + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
+  // return window.location.href = apiHost + `/v2/resources/${params.resourceId}/versions/${params.version}/download`;
   // return request.get(`/v2/resources/${params.resourceId}/versions/${params.$version}/download`, {
   //   responseType: 'arraybuffer',
   // });
@@ -270,7 +271,7 @@ interface BatchGetCoverageVersionsParamsType {
 }
 
 export function batchGetCoverageVersions({resourceId, ...params}: BatchGetCoverageVersionsParamsType) {
-  return request.get(`/v2/resources/${resourceId}/contracts/coverageVersions`, {
+  return FUtil.Axios.get(`/v2/resources/${resourceId}/contracts/coverageVersions`, {
     params,
   });
 }
@@ -281,7 +282,7 @@ interface ResolveResourcesParamsType {
 }
 
 export function resolveResources(params: LookDraftParamsType) {
-  return request.get(`/v2/resources/${params.resourceId}/resolveResources`);
+  return FUtil.Axios.get(`/v2/resources/${params.resourceId}/resolveResources`);
 }
 
 // 批量设置策略应用的版本
@@ -298,7 +299,7 @@ interface BatchSetContractsParamsType {
 }
 
 export function batchSetContracts({resourceId, ...params}: BatchSetContractsParamsType) {
-  return request.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, params);
+  return FUtil.Axios.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, params);
 }
 
 // 资源依赖循环性检查
@@ -311,7 +312,7 @@ interface CycleDependencyCheckParamsType {
 }
 
 export function cycleDependencyCheck({resourceId, ...params}: CycleDependencyCheckParamsType) {
-  return request.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, params);
+  return FUtil.Axios.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, params);
 }
 
 // 查看资源关系树
@@ -322,7 +323,7 @@ interface RelationTreeParamsType {
 }
 
 export function relationTree({resourceId, ...params}: RelationTreeParamsType) {
-  return request.get(`/v2/resources/${resourceId}/relationTree`, {
+  return FUtil.Axios.get(`/v2/resources/${resourceId}/relationTree`, {
     params,
   });
 }
@@ -335,7 +336,7 @@ interface RelationTreeAuthParamsType {
 }
 
 export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParamsType) {
-  return request.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
+  return FUtil.Axios.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
     params,
   });
 }
