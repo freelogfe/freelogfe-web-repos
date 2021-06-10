@@ -70,7 +70,6 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             </div>
           </div>
           <div>
-            {/*{...record.rule}*/}
             <MappingRule
               add={record.rule.add}
               alter={record.rule.alter}
@@ -85,8 +84,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               attrs={record.rule.attrs}
             />
           </div>
-        </div>)
-          ;
+        </div>);
       }
     },
     {

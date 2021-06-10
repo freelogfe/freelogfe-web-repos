@@ -79,6 +79,7 @@ function MappingRule({
 
   return (<FPopover
     // visible={true}
+    placement="right"
     content={<Space
       className={styles.rules}
       direction="vertical"
