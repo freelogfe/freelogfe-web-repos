@@ -96,7 +96,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     associatedExhibitID: string;
     name: string;
     title: string;
-    identity: 'resource' | 'object';
+    identity: 'resource' | 'object' | 'exhibit';
     originInfo: {
       id: string;
       name: string;
@@ -308,7 +308,6 @@ const Model: InformalNodeManagerPageModelType = {
         }
       });
 
-
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
         isRematch: isRematch,
@@ -377,6 +376,7 @@ const Model: InformalNodeManagerPageModelType = {
               }) : undefined,
               replaces: rulesObjRule?.replaces,
             };
+            console.log(dl, 'dl,!@#$!@#$!@#$!@#');
             return {
               id: dl.testResourceId,
               key: dl.testResourceId,
@@ -384,7 +384,7 @@ const Model: InformalNodeManagerPageModelType = {
               cover: dl.stateInfo.coverInfo.coverImages[0] || '',
               name: dl.testResourceName,
               title: dl.stateInfo.titleInfo.title,
-              identity: dl.originInfo.type,
+              identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
               rule: rule,
               version: dl.originInfo.version,
               isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,

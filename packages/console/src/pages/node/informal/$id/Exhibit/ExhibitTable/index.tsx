@@ -40,7 +40,9 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
           />
 
           <div className={styles.Identity}>
-            <FIdentityTypeBadge status={record.identity}/>
+            <FIdentityTypeBadge
+              status={record.identity}
+            />
           </div>
           {/*<label className={styles.object}>对象</label>*/}
           {/*<label className={styles.exhibit}>展品</label>*/}
