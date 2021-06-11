@@ -89,6 +89,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           loadMore={() => {
             console.log('1234####0-p23[k,l;dsf#');
           }}
+          hasMore={true}
         >
           <div className={styles.header}>
             <FTitleText text={'展品管理'}/>

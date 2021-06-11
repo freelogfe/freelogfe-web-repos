@@ -169,19 +169,16 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     </div>
 
     <div style={{height: 20}}/>
-    {
-      false
-        ? (<div className={styles.footer}>
-          <FRectBtn
-            // onClick={() => onLoadMord && onLoadMord()}
-            size="small"
-          >加载更多</FRectBtn>
-        </div>)
-        : (['2'].length > 0 && (
-          <div style={{textAlign: 'center', padding: '10px 0'}}>
-            <FContentText type="additional1" text={'没有更多了~'}/>
-          </div>))
-    }
+    <div className={styles.footer}>
+      {
+        false
+          ? (<FRectBtn
+              // onClick={() => onLoadMord && onLoadMord()}
+              size="small"
+            >加载更多</FRectBtn>)
+          : (<FContentText type="additional1" text={'没有更多了~'}/>)
+      }
+    </div>
   </FDrawer>);
 }
 
