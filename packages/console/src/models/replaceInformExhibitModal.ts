@@ -37,9 +37,7 @@ export type ReplaceInformExhibitState = WholeReadonly<{
     type: 'resource' | 'object';
     versions: string[],
   }
-  // replacedVersions: string[];
   replacedVersion: string;
-  // replacedIdentity: 'object' | 'resource';
   treeData: TreeNode[];
   checkedKeys: string[];
 }>;
@@ -49,13 +47,9 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ReplaceInformExhibitState>;
 }
 
-export interface InitModelStatesAction extends AnyAction {
-  type: 'initModelStates';
+export interface ReplaceInformExhibitInitModelStatesAction extends AnyAction {
+  type: 'replaceInformExhibit/initModelStates';
 }
-
-// export interface FetchInfoAction extends AnyAction {
-//   type: 'fetchInfo';
-// }
 
 export interface FetchReplacerListAction extends AnyAction {
   type: 'replaceInformExhibit/fetchReplacerList'
@@ -82,10 +76,6 @@ export interface FetchObjectAction extends AnyAction {
   payload?: boolean; // 是否 restart
 }
 
-// export interface FetchExhibitDependencyAction extends AnyAction {
-//   type: 'replaceInformExhibit/fetchExhibitDependency';
-// }
-
 export interface FetchDependencyTreeAction extends AnyAction {
   type: 'replaceInformExhibit/fetchDependencyTree' | 'fetchDependencyTree';
 }
@@ -98,8 +88,7 @@ interface ReplaceInformExhibitModelType {
   namespace: 'replaceInformExhibit';
   state: ReplaceInformExhibitState;
   effects: {
-    // fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    initModelStates: (action: ReplaceInformExhibitInitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
     fetchMarket: (action: FetchMarketAction, effects: EffectsCommandMap) => void;
     fetchMyResources: (action: FetchMyResourcesAction, effects: EffectsCommandMap) => void;
@@ -116,7 +105,7 @@ interface ReplaceInformExhibitModelType {
   };
 }
 
-const initStates: ReplaceInformExhibitState = {
+export const replaceInformExhibitModalInitStates: ReplaceInformExhibitState = {
   nodeID: -1,
   replacerOriginOptions: [
     {value: '!market', title: '资源市场'},
@@ -125,16 +114,7 @@ const initStates: ReplaceInformExhibitState = {
   ],
   replacerOrigin: '!market',
   replacerKeywords: '',
-  replacerResourceList: [{
-    id: '1234',
-    name: '2341234',
-    identity: 'resource',
-    type: 'image',
-    updateTime: '2002-01-01',
-    status: '',
-    versions: [],
-    version: '',
-  }],
+  replacerResourceList: [],
   checkedResourceName: '',
 
   replacedKeywords: '',
@@ -147,7 +127,7 @@ const initStates: ReplaceInformExhibitState = {
 
 const Model: ReplaceInformExhibitModelType = {
   namespace: 'replaceInformExhibit',
-  state: initStates,
+  state: replaceInformExhibitModalInitStates,
   effects: {
     * fetchReplacerList({}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
       // console.log('!!!!!!------');
@@ -292,7 +272,7 @@ const Model: ReplaceInformExhibitModelType = {
       };
 
       const {data} = yield call(FServiceAPI.Storage.objectList, params);
-      console.log(data, 'data1q2349ojmdfsl');
+      // console.log(data, 'data1q2349ojmdfsl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -373,10 +353,16 @@ const Model: ReplaceInformExhibitModelType = {
         }
       })
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: ReplaceInformExhibitInitModelStatesAction, {put, select}: EffectsCommandMap) {
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
       yield put<ChangeAction>({
         type: 'change',
-        payload: initStates,
+        payload: {
+          ...replaceInformExhibitModalInitStates,
+          nodeID: replaceInformExhibit.nodeID,
+        },
       });
     },
   },

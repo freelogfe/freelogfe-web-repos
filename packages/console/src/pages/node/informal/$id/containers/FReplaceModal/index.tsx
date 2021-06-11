@@ -1,13 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
 import {SwapRightOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
-import {withRouter} from "umi";
 import {ConnectState} from "@/models/connect";
 
 interface ICandidate {
@@ -51,6 +50,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
     width={947}
     visible={visible}
     closable={false}
+    destroyOnClose
     onCancel={() => {
       onCancel && onCancel();
     }}

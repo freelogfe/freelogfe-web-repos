@@ -22,6 +22,10 @@ import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
 import {FUtil} from '@freelog/tools-lib';
+import {
+  ReplaceInformExhibitInitModelStatesAction,
+  replaceInformExhibitModalInitStates
+} from "@/models/replaceInformExhibitModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -230,7 +234,12 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
       nodeID={informalNodeManagerPage.nodeID}
       visible={informalNodeManagerPage.replaceHandlerModalVisible}
       onCancel={() => {
-        onChange({replaceHandlerModalVisible: false});
+        onChange({
+          replaceHandlerModalVisible: false
+        });
+        dispatch<ReplaceInformExhibitInitModelStatesAction>({
+          type: 'replaceInformExhibit/initModelStates',
+        });
       }}
       onConfirm={(value) => {
         // console.log(value, '@#ASDFASDfloj98p');
@@ -261,7 +270,12 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             data: rules,
           },
         });
-        onChange({replaceHandlerModalVisible: false});
+        onChange({
+          replaceHandlerModalVisible: false
+        });
+        dispatch<ReplaceInformExhibitInitModelStatesAction>({
+          type: 'replaceInformExhibit/initModelStates',
+        });
       }}
     />
   </>);
