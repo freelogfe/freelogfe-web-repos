@@ -46,7 +46,6 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
 
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
-
   addExhibitDrawerVisible: boolean;
 
   replaceHandlerModalVisible: boolean;
@@ -67,7 +66,9 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   selectedStatus: '0' | '1' | '2';
   filterKeywords: string;
 
+  exhibitsTotal: number;
   exhibitListIsLoading: boolean;
+  themesTotal: number;
 
   themeListIsLoading: boolean;
   addThemeDrawerVisible: boolean;
@@ -237,10 +238,13 @@ const initStates: InformalNodeManagerPageModelState = {
   selectedType: '-1',
   selectedStatus: '2',
   filterKeywords: '',
+
   exhibitList: [],
+  exhibitsTotal: -1,
   exhibitListIsLoading: false,
 
   themeList: [],
+  themesTotal: -1,
   themeListIsLoading: false,
   addThemeDrawerVisible: false,
 
@@ -261,15 +265,19 @@ const Model: InformalNodeManagerPageModelType = {
   namespace: 'informalNodeManagerPage',
   state: initStates,
   effects: {
-    * fetchInfo({}: FetchInfoAction, {select, put}: EffectsCommandMap) {
-      const {nodes, informalNodeManagerPage}: ConnectState = yield select(({nodes, informalNodeManagerPage}: ConnectState) => ({
-        nodes,
+    * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
+      const {informalNodeManagerPage, user}: ConnectState = yield select(({informalNodeManagerPage, user}: ConnectState) => ({
         informalNodeManagerPage,
+        user,
       }));
 
-      const currentNode = nodes.list.find((n) => n.nodeId === informalNodeManagerPage.nodeID);
+      const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
+        nodeId: informalNodeManagerPage.nodeID,
+      };
 
-      if (!currentNode) {
+      const {data} = yield call(FServiceAPI.Node.details, params);
+
+      if (user.cookiesUserID !== data.ownerUserId) {
         router.replace(FUtil.LinkTo.exception403({}, '90u-=-;dskf'));
         return;
       }
@@ -277,9 +285,9 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nodeName: currentNode?.nodeName,
-          nodeUrl: FUtil.Format.completeUrlByDomain(currentNode?.nodeDomain || ''),
-          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + currentNode?.nodeDomain || ''),
+          nodeName: data.nodeName,
+          nodeUrl: FUtil.Format.completeUrlByDomain(data.nodeDomain || ''),
+          testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + data.nodeDomain),
         },
       });
 
@@ -326,7 +334,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      console.log(data, 'DDD@@@@890j23poijrl;adsf@');
+      // console.log(data, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
 
@@ -335,6 +343,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           ruleText: data1.ruleText,
           exhibitListIsLoading: false,
+          exhibitsTotal: data.totalItem,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
             const operations: string[] = dl.rules[0]?.operations || [];
             // console.log(operations, 'operations12334');
@@ -345,11 +354,6 @@ const Model: InformalNodeManagerPageModelType = {
               return ro.exhibitName === dl.testResourceName;
             });
 
-            // console.log(stateInfo, 'stateInfo@!#$ASDFj09uo;i');
-            // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
-
-            // console.log(dl, '#W@ASDFASDFA');
-            // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
             const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
               add: operations.includes('add') ? {
                 exhibit: dl.testResourceName,
@@ -376,7 +380,7 @@ const Model: InformalNodeManagerPageModelType = {
               }) : undefined,
               replaces: rulesObjRule?.replaces,
             };
-            console.log(dl, 'dl,!@#$!@#$!@#$!@#');
+            // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
             return {
               id: dl.testResourceId,
               key: dl.testResourceId,
@@ -422,7 +426,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      // console.log(data, '890234ujndlskfl;asd@@@@');
+      // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
         return dd.stateInfo.themeInfo.ruleId !== 'default';
@@ -437,6 +441,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           ruleText: data1.ruleText,
           themeListIsLoading: false,
+          themesTotal: data.totalItem,
           themeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themeList'][number]>((dl) => {
             const operations: string[] = dl.rules[0]?.operations || [];
             // console.log(operations, 'operations12334');
@@ -446,8 +451,6 @@ const Model: InformalNodeManagerPageModelType = {
               // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
               return ro.exhibitName === dl.testResourceName;
             });
-
-            // console.log(rulesObjRule, 'rulesObjRuleoiejw89w3asdfasd');
 
             // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
             const rule: InformalNodeManagerPageModelState['themeList'][number]['rule'] = {

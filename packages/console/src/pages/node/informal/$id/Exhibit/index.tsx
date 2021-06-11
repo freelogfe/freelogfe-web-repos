@@ -58,7 +58,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     });
   }
 
-  if (informalNodeManagerPage.exhibitListIsLoading) {
+  if (informalNodeManagerPage.exhibitsTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 

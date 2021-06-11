@@ -43,7 +43,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
     });
   }, []);
 
-  if (informalNodeManagerPage.themeListIsLoading) {
+  if (informalNodeManagerPage.themesTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
