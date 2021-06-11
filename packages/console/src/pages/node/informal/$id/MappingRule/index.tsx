@@ -91,7 +91,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   return (<>
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <FTitleText text={'展品管理'}/>
+        <FTitleText text={'映射规则管理'}/>
         <div style={{width: 10}}/>
         <TypesCaption/>
         <div style={{width: 50}}/>

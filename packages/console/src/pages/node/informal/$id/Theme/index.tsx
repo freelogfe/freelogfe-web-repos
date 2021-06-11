@@ -75,7 +75,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText text={'展品管理'}/>
+            <FTitleText text={'主题管理'}/>
             <Space size={30}>
               <Space size={5}>
                 <FTextBtn
