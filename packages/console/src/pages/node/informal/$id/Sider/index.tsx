@@ -5,7 +5,7 @@ import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {withRouter} from "umi";
-import {ChangeAction, FetchExhibitListAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
 import {RouteComponentProps} from "react-router";
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
@@ -45,7 +45,7 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
     <Space size={5} className={styles.url}>
       <a onClick={() => {
         window.open(informalNodeManagerPage.testNodeUrl);
-      }}>{informalNodeManagerPage.testNodeUrl}</a>
+      }}>{informalNodeManagerPage.testNodeUrl.replace(/http(s)?:\/\//, '')}</a>
       <FCopyToClipboard
         text={informalNodeManagerPage.testNodeUrl}
         title={'复制测试节点地址'}
