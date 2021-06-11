@@ -182,7 +182,10 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                     </div>
                     <div style={{height: 12}}/>
                     <div className={styles.itemTitle}>
-                      <FIdentityTypeBadge/>
+                      {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
+                      <FIdentityTypeBadge
+                        status={t.identity}
+                      />
                       <div style={{width: 5}}/>
                       <FContentText
                         type="highlight"
@@ -192,10 +195,13 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                     </div>
                     <div style={{height: 6}}/>
                     <div className={styles.itemVersion}>
-                      <FContentText
-                        text={`展示版本 ${t.version}`}
-                        type="additional1"
-                      />
+                      {
+                        t.identity !== 'object' && (<FContentText
+                          text={`展示版本 ${t.version}`}
+                          type="additional1"
+                        />)
+                      }
+
                     </div>
                     <div style={{height: 10}}/>
                     <div className={styles.itemBar}>

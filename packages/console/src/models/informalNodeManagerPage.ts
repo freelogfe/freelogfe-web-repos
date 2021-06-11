@@ -113,6 +113,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   themeList: {
     id: string;
     name: string;
+    identity: 'resource' | 'object' | 'exhibit';
     cover: string;
     version: string;
     rule: IMappingRule;
@@ -426,7 +427,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      // console.log(data, '890234ujndlskfl;asd@@@@1111111');
+      console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
         return dd.stateInfo.themeInfo.ruleId !== 'default';
@@ -486,6 +487,7 @@ const Model: InformalNodeManagerPageModelType = {
               id: dl.testResourceId,
               cover: dl.stateInfo.coverInfo.coverImages[0] || '',
               name: dl.testResourceName,
+              identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
               rule: rule,
               version: dl.originInfo.version,
               isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
