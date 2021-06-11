@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import {
   FEdit, FLine,
   FMappingRuleAdd,

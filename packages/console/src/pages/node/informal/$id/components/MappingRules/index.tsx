@@ -8,7 +8,7 @@ import {
   FMappingRuleTitle,
   FMappingRuleVersion
 } from "@/components/FIcons";
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import FMappingRuleActive from "@/components/FIcons/FMappingRuleActive";
 
 interface AddRuleProps {
@@ -202,7 +202,8 @@ export function ReplaceRule({replacer, replaced, scopes}: ReplaceRuleProps) {
       <div><FContentText text={'替换'}/></div>
       {/*<div><label className={styles.resourceLabel}>{replaced}</label></div>*/}
       <div><label
-        className={replaced.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replaced.name}</label></div>
+        className={replaced.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replaced.name}</label>
+      </div>
       <div><FContentText text={'为'}/></div>
       <div><label
         className={replacer.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replacer.name}</label>
@@ -220,7 +221,8 @@ export function ReplaceRule({replacer, replaced, scopes}: ReplaceRuleProps) {
                       {i !== 0 && (<div><FContentText text={'-'}/></div>)}
                       {/*<div><label className={styles.resourceLabel}>{s}</label></div>*/}
                       <div><label
-                        className={s.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{s.name}</label></div>
+                        className={s.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{s.name}</label>
+                      </div>
                     </React.Fragment>);
                   })
                 }

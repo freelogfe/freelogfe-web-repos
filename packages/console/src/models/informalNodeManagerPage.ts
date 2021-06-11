@@ -67,10 +67,10 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   filterKeywords: string;
 
   exhibitsTotal: number;
-  exhibitListIsLoading: boolean;
+  // exhibitListIsLoading: boolean;
   themesTotal: number;
 
-  themeListIsLoading: boolean;
+  // themeListIsLoading: boolean;
   addThemeDrawerVisible: boolean;
 
   mappingRule: IMappingRule[];
@@ -241,11 +241,11 @@ const initStates: InformalNodeManagerPageModelState = {
 
   exhibitList: [],
   exhibitsTotal: -1,
-  exhibitListIsLoading: false,
+  // exhibitListIsLoading: false,
 
   themeList: [],
   themesTotal: -1,
-  themeListIsLoading: false,
+  // themeListIsLoading: false,
   addThemeDrawerVisible: false,
 
   isCodeEditing: false,
@@ -309,12 +309,12 @@ const Model: InformalNodeManagerPageModelType = {
         return;
       }
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          exhibitListIsLoading: true,
-        }
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     exhibitListIsLoading: true,
+      //   }
+      // });
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
@@ -342,7 +342,7 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           ruleText: data1.ruleText,
-          exhibitListIsLoading: false,
+          // exhibitListIsLoading: false,
           exhibitsTotal: data.totalItem,
           exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
             const operations: string[] = dl.rules[0]?.operations || [];
@@ -401,12 +401,12 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          themeListIsLoading: true,
-        }
-      });
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     themeListIsLoading: true,
+      //   }
+      // });
 
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
@@ -440,9 +440,12 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           ruleText: data1.ruleText,
-          themeListIsLoading: false,
+          // themeListIsLoading: false,
           themesTotal: data.totalItem,
           themeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themeList'][number]>((dl) => {
+
+            // console.log(dl, 'dl!@@#$#$');
+
             const operations: string[] = dl.rules[0]?.operations || [];
             // console.log(operations, 'operations12334');
             const stateInfo = dl.stateInfo;
@@ -457,8 +460,9 @@ const Model: InformalNodeManagerPageModelType = {
               add: operations.includes('add') ? {
                 exhibit: dl.testResourceName,
                 source: {
-                  type: stateInfo.type,
-                  name: stateInfo.name,
+                  type: dl.originInfo.type,
+                  name: dl.originInfo.name,
+                  version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
                 }
               } : undefined,
               alter: operations.includes('alter') ? dl.testResourceName : undefined,
