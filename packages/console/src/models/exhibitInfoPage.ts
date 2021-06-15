@@ -351,8 +351,8 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const {data: data6} = yield call(FServiceAPI.Exhibit.relationTree, params6);
-      console.log(data, 'datadatadatadatadatadatadata');
-      console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
+      // console.log(data, 'datadatadatadatadatadatadata');
+      // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
 
       const {nodes: relationGraphNodes, edges: relationGraphEdges} = yield call(handleExhibitRelationGraphData, data6, {
         nodeId: data.nodeId,
@@ -361,7 +361,7 @@ const Model: ExhibitInfoPageModelType = {
         exhibitName: data.presentableName,
       });
 
-      console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
+      // console.log(relationGraphNodes, relationGraphEdges, '@#$!@#$!@#$!2341234123421342134134');
 
       // 授权树数据
       const params4: Parameters<typeof FServiceAPI.Exhibit.authTree>[0] = {
@@ -764,7 +764,7 @@ type HandleRelationResult = {
 
 async function handleRelation(params: HandleRelationParams, nodeID: number): Promise<HandleRelationResult> {
 
-  console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
+  // console.log(nodeID, 'nodeID!@#$@#$@#$@#@#$');
   // console.log(params, 'params0923jafdsl');
   const resourceIds: string[] = params.map((r) => r.resourceId);
 
