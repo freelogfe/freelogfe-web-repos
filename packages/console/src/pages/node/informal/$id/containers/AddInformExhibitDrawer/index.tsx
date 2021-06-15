@@ -30,9 +30,9 @@ interface AddInformExhibitDrawerProps {
 
 function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResourceNames = [], disabledObjectNames = [], onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
 
-  React.useEffect(() => {
-    init();
-  }, []);
+  // React.useEffect(() => {
+  //   init();
+  // }, []);
 
   async function init() {
     await onChange({
@@ -41,7 +41,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
       disabledObjectNames,
     });
 
-    dispatch<FetchAddExhibitListAction>({
+    await dispatch<FetchAddExhibitListAction>({
       type: 'addInformExhibitDrawer/fetchAddExhibitList',
       payload: true,
     });
@@ -96,6 +96,19 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     onClose={() => {
       onCancel && onCancel();
       // onChange({addExhibitDrawerVisible: false});
+    }}
+    afterVisibleChange={(visible) => {
+      if (visible) {
+        init();
+      } else {
+        onChange({
+          addExhibitSelectValue: '!market',
+          addExhibitInputValue: '',
+          addExhibitCheckedList: [],
+          listLength: -1,
+        });
+      }
+
     }}
   >
     <div className={styles.filter}>

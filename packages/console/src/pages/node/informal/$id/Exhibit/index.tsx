@@ -191,6 +191,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
 
     <AddInformExhibitDrawer
       visible={informalNodeManagerPage.addExhibitDrawerVisible}
+      isTheme={false}
       onCancel={() => {
         onChange({
           addExhibitDrawerVisible: false,

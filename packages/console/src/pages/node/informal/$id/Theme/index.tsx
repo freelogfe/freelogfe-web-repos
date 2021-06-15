@@ -219,6 +219,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
     <AddInformExhibitDrawer
       visible={informalNodeManagerPage.addThemeDrawerVisible}
+      isTheme={true}
       onCancel={() => {
         onChange({
           addThemeDrawerVisible: false,

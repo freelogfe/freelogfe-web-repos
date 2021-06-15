@@ -150,12 +150,11 @@ const Model: AddInformExhibitType = {
       // console.log(inherentIDs, 'inherentIDs12342134');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-        // resourceType:''
-        skip: inherentList.length + 10,
+        skip: inherentList.length,
         // startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
-        limit: FUtil.Predefined.pageSize,
-        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
-        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        limit: FUtil.Predefined.pageSize + 10,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -204,11 +203,12 @@ const Model: AddInformExhibitType = {
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // resourceType:''
         // skip: 0,
-        startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
-        limit: FUtil.Predefined.pageSize,
+        skip: inherentList.length,
+        // startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
+        limit: FUtil.Predefined.pageSize + 10,
         isSelf: 1,
-        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
-        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
       // console.log(params, 'paramsparams1234');
@@ -256,10 +256,10 @@ const Model: AddInformExhibitType = {
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: inherentList.length,
-        limit: FUtil.Predefined.pageSize,
+        limit: FUtil.Predefined.pageSize + 10,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
-        // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
-        // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
       };
 
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
@@ -272,7 +272,7 @@ const Model: AddInformExhibitType = {
             ...inherentList,
             ...(data.dataList as any[])
               .filter((rs) => {
-                return !inherentList.includes(rs.resourceId);
+                return !inherentIDs.includes(rs.resourceId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
                 return {
@@ -306,7 +306,7 @@ const Model: AddInformExhibitType = {
 
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         skip: inherentList.length,
-        limit: FUtil.Predefined.pageSize,
+        limit: FUtil.Predefined.pageSize + 10,
         bucketName: addInformExhibitDrawer.addExhibitSelectValue,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
       };
@@ -320,7 +320,7 @@ const Model: AddInformExhibitType = {
             ...inherentList,
             ...(data.dataList as any[])
               .filter((ob) => {
-                return !inherentList.includes(ob.objectId);
+                return !inherentIDs.includes(ob.objectId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
                 const objectName: string = ob.bucketName + '/' + ob.objectName;
