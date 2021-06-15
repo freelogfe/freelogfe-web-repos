@@ -53,6 +53,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
       payload: value,
     });
     if (loadData) {
+      // console.log('!@#$!@#$!@#$11111111');
       await dispatch<FetchAddExhibitListAction>({
         type: 'addInformExhibitDrawer/fetchAddExhibitList',
         payload: true,
@@ -120,7 +121,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
           onChange({addExhibitInputValue: value}, true);
         }}
         onChange={(e) => {
-          onChange({addExhibitInputValue: e.target.value});
+          // onChange({addExhibitInputValue: e.target.value}, true);
         }}
         theme="dark"
       />
