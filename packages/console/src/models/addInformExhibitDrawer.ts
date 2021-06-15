@@ -4,7 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
-export type AddInformExhibitDrawerModelState = WholeReadonly<{
+export interface AddInformExhibitDrawerModelState {
   isTheme: boolean;
   disabledResourceNames: string[];
   disabledObjectNames: string[];
@@ -22,7 +22,8 @@ export type AddInformExhibitDrawerModelState = WholeReadonly<{
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
   }[];
-}>;
+  listLength: number;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'addInformExhibitDrawer/change';
@@ -91,6 +92,7 @@ const initStates: AddInformExhibitDrawerModelState = {
   addExhibitSelectValue: '!market',
   addExhibitInputValue: '',
   addExhibitCheckedList: [],
+  listLength: -1,
 };
 
 const Model: AddInformExhibitType = {
@@ -106,28 +108,30 @@ const Model: AddInformExhibitType = {
         payload: initStates,
       });
     },
-    * fetchAddExhibitList({}: FetchAddExhibitListAction, {select, call, put}: EffectsCommandMap) {
+    * fetchAddExhibitList({payload}: FetchAddExhibitListAction, {select, call, put}: EffectsCommandMap) {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
 
-      // console.log(addInformExhibitDrawer.addExhibitSelectValue, '#####');
-
       if (addInformExhibitDrawer.addExhibitSelectValue === '!market') {
         yield put<FetchMarketAction>({
           type: 'fetchMarket',
+          payload,
         });
       } else if (addInformExhibitDrawer.addExhibitSelectValue === '!resource') {
         yield put<FetchMyResourcesAction>({
           type: 'fetchMyResources',
+          payload,
         });
       } else if (addInformExhibitDrawer.addExhibitSelectValue === '!collection') {
         yield put<FetchCollectionAction>({
           type: 'fetchCollection',
+          payload,
         });
       } else {
         yield put<FetchObjectAction>({
           type: 'fetchObject',
+          payload,
         });
       }
     },
@@ -135,9 +139,19 @@ const Model: AddInformExhibitType = {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
+      // console.log(inherentList, 'inherentList!$!@#$@#42134');
+
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // resourceType:''
-        skip: 0,
+        // skip: inherentList.length,
+        startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
         limit: FUtil.Predefined.pageSize,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
@@ -149,18 +163,22 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-            return {
-              id: rs.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              checked: false,
-              identity: 'resource',
-              name: rs.resourceName,
-              type: rs.resourceType,
-              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-              status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-            };
-          }),
+          addExhibitCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+              return {
+                id: rs.resourceId,
+                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                checked: false,
+                identity: 'resource',
+                name: rs.resourceName,
+                type: rs.resourceType,
+                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+              };
+            }),
+          ],
+          listLength: data.totalItem,
         },
       });
     },
@@ -168,9 +186,17 @@ const Model: AddInformExhibitType = {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // resourceType:''
-        skip: 0,
+        // skip: 0,
+        startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
         limit: FUtil.Predefined.pageSize,
         isSelf: 1,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
@@ -183,29 +209,39 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-            return {
-              id: rs.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              checked: false,
-              identity: 'resource',
-              name: rs.resourceName,
-              type: rs.resourceType,
-              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-              status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-            };
-          }),
+          addExhibitCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+              return {
+                id: rs.resourceId,
+                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                checked: false,
+                identity: 'resource',
+                name: rs.resourceName,
+                type: rs.resourceType,
+                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+              };
+            }),
+          ],
+          listLength: data.totalItem,
         },
       });
     },
-    * fetchCollection({}: FetchCollectionAction, {select, call, put}: EffectsCommandMap) {
+    * fetchCollection({payload}: FetchCollectionAction, {select, call, put}: EffectsCommandMap) {
 
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
 
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-        skip: 0,
+        skip: inherentList.length,
         limit: FUtil.Predefined.pageSize,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
@@ -218,28 +254,38 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-            return {
-              id: rs.resourceId,
-              disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              checked: false,
-              identity: 'resource',
-              name: rs.resourceName,
-              type: rs.resourceType,
-              updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-              status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-            };
-          }),
+          addExhibitCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+              return {
+                id: rs.resourceId,
+                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                checked: false,
+                identity: 'resource',
+                name: rs.resourceName,
+                type: rs.resourceType,
+                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+              };
+            }),
+          ],
+          listLength: data.totalItem,
         },
       });
     },
-    * fetchObject({}: FetchObjectAction, {put, select, call}: EffectsCommandMap) {
+    * fetchObject({payload}: FetchObjectAction, {put, select, call}: EffectsCommandMap) {
       const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
         addInformExhibitDrawer,
       }));
 
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
-        skip: 0,
+        skip: inherentList.length,
         limit: FUtil.Predefined.pageSize,
         bucketName: addInformExhibitDrawer.addExhibitSelectValue,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
@@ -250,23 +296,26 @@ const Model: AddInformExhibitType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          addExhibitCheckedList: (data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
-            const objectName: string = ob.bucketName + '/' + ob.objectName;
-            // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
-            return {
-              id: ob.objectId,
-              disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
-              checked: false,
-              identity: 'object',
-              name: objectName,
-              type: ob.resourceType,
-              updateTime: FUtil.Format.formatDateTime(ob.updateDate),
-              status: '',
-            };
-          }),
+          addExhibitCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
+              const objectName: string = ob.bucketName + '/' + ob.objectName;
+              // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
+              return {
+                id: ob.objectId,
+                disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
+                checked: false,
+                identity: 'object',
+                name: objectName,
+                type: ob.resourceType,
+                updateTime: FUtil.Format.formatDateTime(ob.updateDate),
+                status: '',
+              };
+            }),
+          ],
+          listLength: data.totalItem,
         },
       });
-
     },
   },
   reducers: {

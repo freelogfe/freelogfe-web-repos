@@ -156,7 +156,7 @@ const Model: ResourceCreatorPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          name: payload,
+          // name: payload,
           nameErrorText,
           nameVerify: 2,
         },

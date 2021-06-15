@@ -124,8 +124,14 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
             <FInput
               errorText={resourceCreatorPage.nameErrorText}
               value={resourceCreatorPage.name}
+              onChange={(e) => {
+              }}
               debounce={300}
               onDebounceChange={(value) => {
+                onChange({
+                  name: value,
+                });
+                // console.log(value, value.length, '!@#$!@#$!!!!!!');
                 dispatch<OnChangeNameAction>({
                   type: 'resourceCreatorPage/onChangeName',
                   payload: value,

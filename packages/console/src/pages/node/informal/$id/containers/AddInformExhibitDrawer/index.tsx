@@ -42,7 +42,8 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     });
 
     dispatch<FetchAddExhibitListAction>({
-      type: 'addInformExhibitDrawer/fetchAddExhibitList'
+      type: 'addInformExhibitDrawer/fetchAddExhibitList',
+      payload: true,
     });
   }
 
@@ -53,7 +54,8 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     });
     if (loadData) {
       await dispatch<FetchAddExhibitListAction>({
-        type: 'addInformExhibitDrawer/fetchAddExhibitList'
+        type: 'addInformExhibitDrawer/fetchAddExhibitList',
+        payload: true,
       });
     }
   }
@@ -171,11 +173,16 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
     <div style={{height: 20}}/>
     <div className={styles.footer}>
       {
-        false
+        addInformExhibitDrawer.listLength > addInformExhibitDrawer.addExhibitCheckedList.length
           ? (<FRectBtn
-              // onClick={() => onLoadMord && onLoadMord()}
-              size="small"
-            >加载更多</FRectBtn>)
+            onClick={() => {
+              dispatch<FetchAddExhibitListAction>({
+                type: 'addInformExhibitDrawer/fetchAddExhibitList',
+                payload: false,
+              });
+            }}
+            size="small"
+          >加载更多</FRectBtn>)
           : (<FContentText type="additional1" text={'没有更多了~'}/>)
       }
     </div>

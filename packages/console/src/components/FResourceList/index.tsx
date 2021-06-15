@@ -3,7 +3,6 @@ import styles from './index.less';
 import {List} from 'antd';
 import {FRectBtn} from '@/components/FButton';
 import {FContentText} from '@/components/FText';
-// import StatusLabel from "@/components/StatusLabel";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 
 export interface FResourceListProps {
@@ -37,10 +36,13 @@ function FResourceList({
     loading={loading}
     itemLayout="horizontal"
     loadMore={stillMore
-      ? (<div className={styles.footer}>
-        <FRectBtn
-          onClick={() => onLoadMord && onLoadMord()}
-        >加载更多</FRectBtn>
+      ? (<div>
+        <div style={{height: 10}}/>
+        <div className={styles.footer}>
+          <FRectBtn
+            onClick={() => onLoadMord && onLoadMord()}
+          >加载更多</FRectBtn>
+        </div>
       </div>)
       : (resourceObjects.length > 0 && (
         <div style={{display: 'flex', justifyContent: 'center', padding: '10px 0'}}>

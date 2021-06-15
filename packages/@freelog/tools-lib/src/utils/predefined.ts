@@ -4,7 +4,7 @@
 export const resourceTypes: string[] = ['json', 'widget', 'image', 'audio', 'markdown', 'theme', 'reveal_slide', 'license', 'video', 'catalog'];
 
 // 全局列表加载条目数
-export const pageSize: number = 100;
+export const pageSize: number = 20;
 
 // 签约方用户的身份类型定义
 export enum EnumContractPartyIdentityType {

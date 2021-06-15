@@ -109,6 +109,7 @@ const config: IConfig | any = {
     proxy: {
       '/v2': {
         target: 'http://qi.testfreelog.com',
+        // target: 'http://api.testfreelog.com',
         secure: false,
         changeOrigin: true,
         headers: {
@@ -118,6 +119,7 @@ const config: IConfig | any = {
       },
       '/v1': {
         target: 'http://qi.testfreelog.com',
+        // target: 'http://api.testfreelog.com',
         secure: false,
         changeOrigin: true,
         headers: {

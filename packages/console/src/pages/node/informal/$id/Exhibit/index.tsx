@@ -24,7 +24,6 @@ import {FDown} from "@/components/FIcons";
 import {FUtil} from '@freelog/tools-lib';
 import {
   ReplaceInformExhibitInitModelStatesAction,
-  replaceInformExhibitModalInitStates
 } from "@/models/replaceInformExhibitModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');

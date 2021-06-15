@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import {
-  AddDepsAction, AddDepsByMainIDsAction, DeleteDependencyByIDAction
+  AddDepsByMainIDsAction, DeleteDependencyByIDAction
 } from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceDepSelectorModelState, ResourceVersionCreatorPageModelState} from '@/models/connect';
