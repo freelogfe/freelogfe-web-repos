@@ -427,7 +427,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: FUtil.Predefined.pageSize,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      console.log(data, '890234ujndlskfl;asd@@@@1111111');
+      // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
         return dd.stateInfo.themeInfo.ruleId !== 'default';
