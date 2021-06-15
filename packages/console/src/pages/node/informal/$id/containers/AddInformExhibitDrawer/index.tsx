@@ -12,6 +12,7 @@ import FDrawer from "@/components/FDrawer";
 import {connect, Dispatch} from 'dva';
 import {AddInformExhibitDrawerModelState, ConnectState, StorageHomePageModelState} from "@/models/connect";
 import {ChangeAction, FetchAddExhibitListAction} from "@/models/addInformExhibitDrawer";
+import FUtil1 from "@/utils";
 
 interface AddInformExhibitDrawerProps {
   visible?: boolean;
@@ -79,7 +80,7 @@ function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResou
   }
 
   return (<FDrawer
-    title={'添加测试展品'}
+    title={isTheme ? FUtil1.I18n.message('import_test_theme') :'添加测试展品'}
     // visible={informalNodeManagerPage.addExhibitDrawerVisible}
     visible={visible}
     topRight={<Space size={30}>

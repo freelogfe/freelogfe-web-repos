@@ -57,6 +57,7 @@ interface ObjectListParamsType {
   keywords?: string;
   projection?: string;
   sort?: string;
+  omitResourceType?: string;
 }
 
 export function objectList({bucketName, ...params}: ObjectListParamsType) {

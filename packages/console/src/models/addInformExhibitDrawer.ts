@@ -309,6 +309,8 @@ const Model: AddInformExhibitType = {
         limit: FUtil.Predefined.pageSize + 10,
         bucketName: addInformExhibitDrawer.addExhibitSelectValue,
         keywords: addInformExhibitDrawer.addExhibitInputValue,
+        isLoadingTypeless: 0,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
       };
 
       const {data} = yield call(FServiceAPI.Storage.objectList, params);
@@ -327,7 +329,7 @@ const Model: AddInformExhibitType = {
                 // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
                 return {
                   id: ob.objectId,
-                  disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
+                  disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName) || !ob.resourceType,
                   checked: false,
                   identity: 'object',
                   name: objectName,
