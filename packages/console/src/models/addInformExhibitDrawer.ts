@@ -146,12 +146,13 @@ const Model: AddInformExhibitType = {
         inherentList = addInformExhibitDrawer.addExhibitCheckedList;
       }
 
-      // console.log(inherentList, 'inherentList!$!@#$@#42134');
+      const inherentIDs = inherentList.map((il) => il.id);
+      // console.log(inherentIDs, 'inherentIDs12342134');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // resourceType:''
-        // skip: inherentList.length,
-        startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
+        skip: inherentList.length + 10,
+        // startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
         limit: FUtil.Predefined.pageSize,
         // resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
         // omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
@@ -165,18 +166,22 @@ const Model: AddInformExhibitType = {
         payload: {
           addExhibitCheckedList: [
             ...inherentList,
-            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-              return {
-                id: rs.resourceId,
-                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentIDs.includes(rs.resourceId);
+              })
+              .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+                return {
+                  id: rs.resourceId,
+                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
           ],
           listLength: data.totalItem,
         },
@@ -192,6 +197,9 @@ const Model: AddInformExhibitType = {
       if (!payload) {
         inherentList = addInformExhibitDrawer.addExhibitCheckedList;
       }
+
+      const inherentIDs = inherentList.map((il) => il.id);
+      // console.log(inherentIDs, 'inherentIDs12342134');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // resourceType:''
@@ -211,18 +219,22 @@ const Model: AddInformExhibitType = {
         payload: {
           addExhibitCheckedList: [
             ...inherentList,
-            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-              return {
-                id: rs.resourceId,
-                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentIDs.includes(rs.resourceId);
+              })
+              .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+                return {
+                  id: rs.resourceId,
+                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
           ],
           listLength: data.totalItem,
         },
@@ -240,6 +252,8 @@ const Model: AddInformExhibitType = {
         inherentList = addInformExhibitDrawer.addExhibitCheckedList;
       }
 
+      const inherentIDs = inherentList.map((il) => il.id);
+
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize,
@@ -256,18 +270,22 @@ const Model: AddInformExhibitType = {
         payload: {
           addExhibitCheckedList: [
             ...inherentList,
-            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
-              return {
-                id: rs.resourceId,
-                disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-                checked: false,
-                identity: 'resource',
-                name: rs.resourceName,
-                type: rs.resourceType,
-                updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-                status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              };
-            }),
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentList.includes(rs.resourceId);
+              })
+              .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+                return {
+                  id: rs.resourceId,
+                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
           ],
           listLength: data.totalItem,
         },
@@ -284,6 +302,8 @@ const Model: AddInformExhibitType = {
         inherentList = addInformExhibitDrawer.addExhibitCheckedList;
       }
 
+      const inherentIDs = inherentList.map((il) => il.id);
+
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize,
@@ -298,20 +318,24 @@ const Model: AddInformExhibitType = {
         payload: {
           addExhibitCheckedList: [
             ...inherentList,
-            ...(data.dataList as any[]).map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
-              const objectName: string = ob.bucketName + '/' + ob.objectName;
-              // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
-              return {
-                id: ob.objectId,
-                disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
-                checked: false,
-                identity: 'object',
-                name: objectName,
-                type: ob.resourceType,
-                updateTime: FUtil.Format.formatDateTime(ob.updateDate),
-                status: '',
-              };
-            }),
+            ...(data.dataList as any[])
+              .filter((ob) => {
+                return !inherentList.includes(ob.objectId);
+              })
+              .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
+                const objectName: string = ob.bucketName + '/' + ob.objectName;
+                // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
+                return {
+                  id: ob.objectId,
+                  disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
+                  checked: false,
+                  identity: 'object',
+                  name: objectName,
+                  type: ob.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(ob.updateDate),
+                  status: '',
+                };
+              }),
           ],
           listLength: data.totalItem,
         },
