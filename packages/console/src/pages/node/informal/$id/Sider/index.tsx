@@ -32,7 +32,6 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
     await dispatch<FetchInfoAction>({
       type: 'informalNodeManagerPage/fetchInfo',
     });
-
   }
 
   return (<>
@@ -105,9 +104,6 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
     </div>
   </>);
 }
-
-
-// export default connect(({informalNodeManagerPage}:ConnectState) => ({})(Sider);
 
 export default withRouter(connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,

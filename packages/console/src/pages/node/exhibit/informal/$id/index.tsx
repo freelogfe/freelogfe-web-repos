@@ -110,6 +110,7 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
             disabled={informExhibitInfoPage.isOnline && informExhibitInfoPage.resourceType === 'theme'}
             checked={informExhibitInfoPage.isOnline}
             onChange={(value) => {
+
               onChange({isOnline: value});
 
               if (informExhibitInfoPage.resourceType === 'theme') {
