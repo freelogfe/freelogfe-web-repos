@@ -89,7 +89,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   codeExecutionError: null | {
     msg: string;
   }[];
-  codeSaveSuccess: null | true;
+  codeSaveSuccess: boolean;
 }> & {
   exhibitList: {
     id: string;
@@ -255,7 +255,7 @@ const initStates: InformalNodeManagerPageModelState = {
   codeIsChecking: false,
   codeCompileErrors: null,
   codeExecutionError: null,
-  codeSaveSuccess: null,
+  codeSaveSuccess: false,
 
   mappingRule: [],
   checkedExhibitName: [],
@@ -526,9 +526,9 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           codeIsChecking: true,
-          codeCompileErrors: null,
-          codeExecutionError: null,
-          codeSaveSuccess: null,
+          // codeCompileErrors: null,
+          // codeExecutionError: null,
+          // codeSaveSuccess: null,
         },
       });
 
@@ -562,7 +562,7 @@ const Model: InformalNodeManagerPageModelType = {
           ruleText: data1.ruleText,
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
-          codeSaveSuccess: codeExecutionError.length === 0 ? true : null,
+          codeSaveSuccess: codeExecutionError.length === 0,
         },
       });
     },

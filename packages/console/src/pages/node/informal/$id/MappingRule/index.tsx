@@ -25,6 +25,7 @@ import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informal
 import FileSaver from 'file-saver';
 import FUpload from "@/components/FUpload";
 import FCheckbox from "@/components/FCheckbox";
+import FUtil1 from "@/utils";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -153,9 +154,11 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 onChange({
                   codeInput: value,
                   codeIsDirty: true,
+                  codeCompileErrors: null,
+                  codeExecutionError: null,
+                  codeSaveSuccess: false,
                 });
               }}
-
             />
             <div style={{height: 15}}/>
             <FRectBtn
@@ -181,7 +184,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   type: 'informalNodeManagerPage/saveRules',
                 });
               }}
-            >{informalNodeManagerPage.codeIsChecking ? '校验中' : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.codeIsChecking ? FUtil1.I18n.message('msg_verifying_code') : '校验并保存'}</FRectBtn>
             {
               informalNodeManagerPage.codeCompileErrors && (<div className={styles.codeCompileErrors}>
                 <div style={{height: 20}}/>
