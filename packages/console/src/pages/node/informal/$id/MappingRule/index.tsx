@@ -17,7 +17,7 @@ import {
   AddRule, ActiveRule
 } from "../components/MappingRules";
 import FCodemirror from "@/components/FCodemirror";
-import {FRectBtn} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
@@ -117,13 +117,16 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }}
             showUploadList={false}
           >
-            <a><FImport/> <span>导入</span></a>
+            <FTextBtn type="primary"><FImport/> <span>导入</span></FTextBtn>
           </FUpload>
-          <a onClick={() => {
-            const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-            const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
-            FileSaver.saveAs(blob, fileName);
-          }}><FExport/> <span>导出</span></a>
+          <FTextBtn
+            type="primary"
+            onClick={() => {
+              const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+              const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
+              FileSaver.saveAs(blob, fileName);
+            }}
+          ><FExport/> <span>导出</span></FTextBtn>
           {/*<a style={{}}><FDelete/> <span>删除</span></a>*/}
         </Space>
       </div>

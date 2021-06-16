@@ -103,7 +103,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             onEdit={() => router.push(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}))}
             onSearch={record.originInfo.type === 'resource' ? () => {
               if (record.identity === 'resource') {
-                console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
+                // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
                 if (record.originInfo.type === 'resource') {
                   router.push(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
                 }
