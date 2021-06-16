@@ -166,7 +166,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <div style={{height: 15}}/>
             <FRectBtn
               // loading={informalNodeManagerPage.codeIsChecking}
-              disabled={!informalNodeManagerPage.codeIsDirty && !informalNodeManagerPage.codeIsChecking}
+              disabled={!informalNodeManagerPage.codeIsDirty || informalNodeManagerPage.codeIsChecking}
               onClick={() => {
                 onChange({
                   codeIsDirty: false,
