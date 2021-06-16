@@ -113,10 +113,11 @@ export function exhibitManagement({exhibitID}: ExhibitManagementParamsType): TRe
 // 测试节点管理
 interface InformNodeManagementParamsType {
   nodeID: number;
+  showPage?: 'exhibit' | 'theme' | 'mappingRule';
 }
 
-export function informNodeManagement({nodeID}: InformNodeManagementParamsType): TReturnType {
-  return `/node/informal/${nodeID}`;
+export function informNodeManagement({nodeID, showPage = 'exhibit', ...params}: InformNodeManagementParamsType): TReturnType {
+  return `/node/informal/${nodeID}${handleQuery({showPage, ...params})}`;
 }
 
 // 测试展品管理

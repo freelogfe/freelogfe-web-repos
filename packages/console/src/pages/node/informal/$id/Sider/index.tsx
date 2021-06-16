@@ -4,9 +4,10 @@ import {Space} from "antd";
 import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {withRouter} from "umi";
+import {router, withRouter} from "umi";
 import {ChangeAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
 import {RouteComponentProps} from "react-router";
+import {FUtil} from "@freelog/tools-lib";
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -56,36 +57,48 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
         onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'informalNodeManagerPage/change',
-            payload: {
-              showPage: 'exhibit',
-            },
-          });
+          // dispatch<ChangeAction>({
+          //   type: 'informalNodeManagerPage/change',
+          //   payload: {
+          //     showPage: 'exhibit',
+          //   },
+          // });
+          router.push(FUtil.LinkTo.informNodeManagement({
+            nodeID: informalNodeManagerPage.nodeID,
+            showPage: 'exhibit',
+          }));
         }}
       >展品管理
       </div>
       <div
         className={informalNodeManagerPage.showPage === 'theme' ? styles.activated : ''}
         onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'informalNodeManagerPage/change',
-            payload: {
-              showPage: 'theme',
-            },
-          });
+          // dispatch<ChangeAction>({
+          //   type: 'informalNodeManagerPage/change',
+          //   payload: {
+          //     showPage: 'theme',
+          //   },
+          // });
+          router.push(FUtil.LinkTo.informNodeManagement({
+            nodeID: informalNodeManagerPage.nodeID,
+            showPage: 'theme',
+          }));
         }}
       >主题管理
       </div>
       <div
         className={informalNodeManagerPage.showPage === 'mappingRule' ? styles.activated : ''}
         onClick={() => {
-          dispatch<ChangeAction>({
-            type: 'informalNodeManagerPage/change',
-            payload: {
-              showPage: 'mappingRule',
-            },
-          });
+          // dispatch<ChangeAction>({
+          //   type: 'informalNodeManagerPage/change',
+          //   payload: {
+          //     showPage: 'mappingRule',
+          //   },
+          // });
+          router.push(FUtil.LinkTo.informNodeManagement({
+            nodeID: informalNodeManagerPage.nodeID,
+            showPage: 'mappingRule',
+          }));
         }}
       >映射规则管理
       </div>

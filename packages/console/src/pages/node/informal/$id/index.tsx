@@ -5,6 +5,7 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
 import {
+  ChangeAction,
   InformalNodeManagerPageModelState,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
@@ -13,6 +14,7 @@ import MappingRule from "./MappingRule";
 import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
+import useUrlState from '@ahooksjs/use-url-state';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -21,9 +23,16 @@ interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
 
 function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
 
+  const [{showPage}] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
+
   React.useEffect(() => {
-    // initData();
-  }, []);
+    dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload: {
+        showPage: showPage,
+      },
+    });
+  }, [showPage]);
 
   return (<div>
     <div className={styles.headerTip}>

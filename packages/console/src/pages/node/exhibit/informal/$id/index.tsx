@@ -64,7 +64,7 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
           <label>test</label>
           <div style={{width: 5}}/>
           <FTextBtn onClick={() => {
-            router.push(FUtil.LinkTo.informNodeManagement({nodeID: informExhibitInfoPage.nodeID}));
+            router.push(FUtil.LinkTo.informNodeManagement({nodeID: informExhibitInfoPage.nodeID, showPage: 'exhibit'}));
           }}><FContentText
             type="negative"
             text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}

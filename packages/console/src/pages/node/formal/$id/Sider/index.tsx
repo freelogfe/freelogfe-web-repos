@@ -85,7 +85,7 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
       <div className={styles.gotoTest}>
         <span>{FUtil1.I18n.message('msg_navigate_to_test_node')} </span>
         <FLink
-          to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id)})}
+          to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id), showPage: 'exhibit'})}
         > {FUtil1.I18n.message('btn_navigate_to_test_node')}</FLink>
         <div style={{height: 40}}/>
       </div>
