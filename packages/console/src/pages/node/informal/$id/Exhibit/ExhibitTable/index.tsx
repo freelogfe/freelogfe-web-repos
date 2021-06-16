@@ -14,7 +14,7 @@ import {FTextBtn} from "@/components/FButton";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
-import {FUtil} from '@freelog/tools-lib';
+import {FServiceAPI, FUtil} from '@freelog/tools-lib';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -101,15 +101,22 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
         >
           <Actions
             onEdit={() => router.push(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}))}
-            onSearch={record.originInfo.type === 'resource' ? () => {
-              if (record.identity === 'resource') {
-                // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
-                if (record.originInfo.type === 'resource') {
-                  router.push(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
-                }
-
+            onSearch={async () => {
+              console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
+              if (record.originInfo.type === 'resource') {
+                return router.push(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
               }
-            } : undefined}
+
+              const {data} = await FServiceAPI.Storage.objectDetails({
+                objectIdOrName: record.originInfo.id,
+              });
+
+              // console.log(data, '!@!#$!@#$@!#$@#$@#$@#');
+              router.push(FUtil.LinkTo.objectDetails({
+                bucketName: data.bucketName,
+                objectID: record.originInfo.id,
+              }));
+            }}
             onDelete={!!record.associatedExhibitID ? undefined : async () => {
               const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
               // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
