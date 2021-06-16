@@ -12,7 +12,7 @@ export interface TreeNode {
   children?: TreeNode[];
 }
 
-export type ReplaceInformExhibitState = WholeReadonly<{
+export interface ReplaceInformExhibitState {
   nodeID: number;
   replacerOriginOptions: { value: string; title: string }[];
   replacerOrigin: '!market' | '!resource' | '!collection' | string;
@@ -21,6 +21,7 @@ export type ReplaceInformExhibitState = WholeReadonly<{
     id: string;
     name: string;
     identity: 'resource' | 'object';
+    latestVersion: string;
     type: string;
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
@@ -40,7 +41,7 @@ export type ReplaceInformExhibitState = WholeReadonly<{
   replacedVersion: string;
   treeData: TreeNode[];
   checkedKeys: string[];
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'replaceInformExhibit/change' | 'change';
@@ -171,17 +172,16 @@ const Model: ReplaceInformExhibitModelType = {
             // console.log(rs, '######2341234');
             return {
               id: rs.resourceId,
-              // disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              // checked: false,
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
+              latestVersion: rs.latestVersion,
               updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
               }),
-              version: rs.latestVersion,
+              version: '',
             };
           }),
         },
@@ -208,17 +208,16 @@ const Model: ReplaceInformExhibitModelType = {
           replacerResourceList: (data.dataList as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((rs) => {
             return {
               id: rs.resourceId,
-              // disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              // checked: false,
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
+              latestVersion: rs.latestVersion,
               updateTime: FUtil.Format.formatDateTime(rs.updateDate),
               status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
               }),
-              version: rs.latestVersion,
+              version: '',
             };
           }),
         },
@@ -239,21 +238,36 @@ const Model: ReplaceInformExhibitModelType = {
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
       // console.log(data, '@@@@@@ASEDFSADF');
 
+      let data3 = [];
+
+      if (data.dataList.length > 0) {
+        const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+          resourceIds: data.dataList.map((dl: any) => {
+            return dl.resourceId;
+          }).join(),
+        };
+
+        const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
+
+        data3 = data2;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacerResourceList: (data.dataList as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((rs) => {
+          replacerResourceList: (data3 as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((rs) => {
             return {
               id: rs.resourceId,
-              // disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
-              // checked: false,
               identity: 'resource',
               name: rs.resourceName,
               type: rs.resourceType,
               updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+              latestVersion: rs.latestVersion,
               status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-              versions: ['1.1.1'],
-              version: '1.1.1',
+              versions: rs.resourceVersions.map((rv: any) => {
+                return rv.version;
+              }),
+              version: '',
             };
           }),
         },
@@ -281,14 +295,13 @@ const Model: ReplaceInformExhibitModelType = {
             // console.log(objectName, replaceInformExhibit.disabledObjectNames, '#####');
             return {
               id: ob.objectId,
-              // disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName),
-              // checked: false,
               identity: 'object',
               name: objectName,
               type: ob.resourceType,
+              latestVersion: '',
               updateTime: FUtil.Format.formatDateTime(ob.updateDate),
               status: '',
-              versions: ['1.1.1'],
+              versions: [],
               version: '',
             };
           }),

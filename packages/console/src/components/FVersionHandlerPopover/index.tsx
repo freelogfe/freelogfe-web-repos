@@ -5,19 +5,17 @@ import {FRectBtn} from '@/components/FButton';
 import FAutoComplete from "@/components/FAutoComplete";
 import * as AHooks from 'ahooks';
 import * as semver from 'semver';
-import {WholeReadonly} from "@/models/shared";
 
-type FVersionHandlerPopoverProps = WholeReadonly<{
+interface FVersionHandlerPopoverProps {
   value: string;
   versionOptions: string[];
   children?: React.ReactNode;
-}> & {
+  allowEmpty?: boolean;
+
   onChange?(version: FVersionHandlerPopoverProps['value']): void;
-};
+}
 
-let isSelect: boolean = false;
-
-function FVersionHandlerPopover({value, versionOptions, onChange, children}: FVersionHandlerPopoverProps) {
+function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onChange, children}: FVersionHandlerPopoverProps) {
   const [visible, setVisible] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>(value);
   const [inputError, setInputEror] = React.useState<string>('');
@@ -49,7 +47,7 @@ function FVersionHandlerPopover({value, versionOptions, onChange, children}: FVe
     // console.log(semver.validRange(value), 'VVVVVVV######');
     // console.log(semver.maxSatisfying(['0.2.2', '0.2.3', '1.1.1', '1.2.2', '1.3.2', '2.2.2'], '^2.2.2'), '0923u4io');
     let inputError: string = '';
-    if (!value) {
+    if (!allowEmpty && !value) {
       inputError = '请输入版本号';
     } else if (!semver.validRange(value)) {
       inputError = '请输入合法semver版本';

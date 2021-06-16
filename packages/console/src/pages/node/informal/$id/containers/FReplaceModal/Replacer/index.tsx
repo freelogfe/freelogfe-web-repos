@@ -2,21 +2,21 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from "@/components/FInput";
 import {Radio, Space} from "antd";
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {
   AddInformExhibitDrawerModelState,
   ConnectState,
-  InformalNodeManagerPageModelState,
-  ReplaceInformExhibitState, StorageHomePageModelState
+  ReplaceInformExhibitState,
+  StorageHomePageModelState,
 } from "@/models/connect";
 import {ChangeAction} from "@/models/replaceInformExhibitModal";
 import {FetchReplacerListAction} from "@/models/replaceInformExhibitModal";
 import {WholeMutable} from "@/models/shared";
 import FSelect from "@/components/FSelect";
-import {FetchAddExhibitListAction} from "@/models/addInformExhibitDrawer";
+import {FDown} from "@/components/FIcons";
 
 interface ReplacerProps {
   dispatch: Dispatch,
@@ -102,7 +102,12 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
               <div className={styles.replacerListItemContent}>
                 <div>
                   <div>
-                    <FContentText text={rl.name} type="highlight"/>
+                    <FContentText
+                      text={rl.name}
+                      type="highlight"
+                      style={{width: 270}}
+                      singleRow
+                    />
                   </div>
                   <div style={{height: 2}}/>
                   <div>
@@ -111,17 +116,36 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                       type="additional2"
                     />
                     {
-                      rl.version && (<FVersionHandlerPopover
-                        value={rl.version}
-                        versionOptions={rl.versions}
-                        onChange={() => {
-                          // dispatch<ChangeAction>({
-                          //   type: 'replaceInformExhibit/change'
-                          // })
-                        }}
-                      >
-                        <FTextBtn type="default" style={{fontSize: 12}}>选择版本</FTextBtn>
-                      </FVersionHandlerPopover>)
+                      rl.name === replaceInformExhibit.checkedResourceName && rl.versions.length > 0 && (
+                        <FVersionHandlerPopover
+                          value={rl.version}
+                          versionOptions={rl.versions}
+                          allowEmpty
+                          onChange={(version) => {
+                            // console.log(version, '!!!!@2222222222');
+                            onChange({
+                              replacerResourceList: replaceInformExhibit.replacerResourceList.map((rr) => {
+                                if (rr.id !== rl.id) {
+                                  return rr;
+                                }
+                                return {
+                                  ...rr,
+                                  version,
+                                };
+                              }),
+                            });
+                          }}
+                        >
+                          <FTextBtn
+                            type="default"
+                            style={{fontSize: 12}}
+                          >
+                            {rl.version ? rl.version : '选择版本'}
+                            &nbsp;
+                            <FDown/>
+                          </FTextBtn>
+
+                        </FVersionHandlerPopover>)
                     }
 
                   </div>

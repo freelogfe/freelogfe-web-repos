@@ -72,7 +72,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
         if (arr.length === 0) {
           continue;
         }
-        console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
+        // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
         resultObj[key].push(arr.map((o: string) => {
           if (o.startsWith('$')) {
             return {
@@ -124,10 +124,15 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
         </div>
       </div>
       <div className={styles.arrow}>
-        <SwapRightOutlined style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}/>
+        <SwapRightOutlined
+          style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}
+        />
       </div>
       <div className={styles.replaced}>
-        <FContentText type="highlight" text={'选择被替换资源'}/>
+        <FContentText
+          type="highlight"
+          text={'选择被替换资源'}
+        />
         <div style={{height: 5}}/>
         <div className={styles.content}>
           <Replaced/>
