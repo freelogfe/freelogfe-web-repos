@@ -108,7 +108,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 const exportText = evt.target.result;
                 // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
                 onChange({
-                  codeInput: exportText,
+                  codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
                   isCodeEditing: true,
                   codeIsDirty: true,
                 });
