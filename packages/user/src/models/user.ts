@@ -1,7 +1,7 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {FApiServer} from "@/services";
+import {FServiceAPI} from "@freelog/tools-lib";
 
 export type UserModelState = WholeReadonly<{
   userInfo: null | {
@@ -50,7 +50,7 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {call, put}: EffectsCommandMap) {
-      const {data} = yield call(FApiServer.User.currentUserInfo);
+      const {data} = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(data, '!@#$!@#$@#$@#$');
       yield put<ChangeAction>({
         type: 'change',

@@ -11,7 +11,7 @@ import * as AHooks from 'ahooks';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, UserModelState, WalletPageModelState} from "@/models/connect";
 import {ActiveAccountAction, ChangeAction, ChangePasswordAction, FetchAccountInfoAction} from "@/models/walletPage";
-import {PAY_PASSWORD} from "@/utils/regexp";
+import {FUtil} from "@freelog/tools-lib";
 import {FCheck} from "@/components/FIcons";
 import FLoadingTip from "@/components/FLoadingTip";
 
@@ -256,7 +256,7 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
                 const value = e.target.value;
                 onChange({
                   activatingAccountPasswordOne: value,
-                  activatingAccountPasswordOneError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                  activatingAccountPasswordOneError: FUtil.Regexp.PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
                   activatingAccountPasswordTwoError: (walletPage.activatingAccountPasswordTwo && value !== walletPage.activatingAccountPasswordTwo) ? '两次密码必须一致' : '',
                 });
               }}
@@ -380,7 +380,7 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
                 const value = e.target.value;
                 onChange({
                   changingPasswordPasswordOld: value,
-                  changingPasswordPasswordOldError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                  changingPasswordPasswordOldError: FUtil.Regexp.PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
                 });
               }}
             />
@@ -399,7 +399,7 @@ function Wallet({dispatch, walletPage, user}: WalletProps) {
                 const value = e.target.value;
                 onChange({
                   changingPasswordPasswordOne: value,
-                  changingPasswordPasswordOneError: PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
+                  changingPasswordPasswordOneError: FUtil.Regexp.PAY_PASSWORD.test(value) ? '' : '必须为6为数字',
                   changingPasswordPasswordTwoError: (walletPage.changingPasswordPasswordTwo && value !== walletPage.changingPasswordPasswordTwo) ? '两次密码必须一致' : '',
                 });
               }}
