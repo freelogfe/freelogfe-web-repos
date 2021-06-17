@@ -111,10 +111,18 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                   </div>
                   <div style={{height: 2}}/>
                   <div>
-                    <FContentText
-                      text={`${rl.type} | ${rl.version || '暂无版本'} | ${rl.updateTime}`}
-                      type="additional2"
-                    />
+                    {
+                      rl.identity === 'resource'
+                        ? (<FContentText
+                          text={`${rl.type} | ${rl.latestVersion || '暂无版本'} | ${rl.updateTime}`}
+                          type="additional2"
+                        />)
+                        : (<FContentText
+                          text={`${rl.type || '未设置类型'} | ${rl.updateTime}`}
+                          type="additional2"
+                        />)
+                    }
+
                     {
                       rl.name === replaceInformExhibit.checkedResourceName && rl.versions.length > 0 && (
                         <FVersionHandlerPopover

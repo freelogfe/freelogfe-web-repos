@@ -250,6 +250,7 @@ const Model: ReplaceInformExhibitModelType = {
         const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
 
         data3 = data2;
+
       }
 
       yield put<ChangeAction>({
