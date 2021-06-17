@@ -1,9 +1,9 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {FApiServer} from "@/services";
+// import {FApiServer} from ;
 import {ConnectState} from "@/models/connect";
-import FUtil from "@/utils";
+import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {successMessage} from '@/pages/logged/wallet';
 
 export type WalletPageModelState = WholeReadonly<{
@@ -119,12 +119,12 @@ const Model: WalletPageModelType = {
         user,
       }));
 
-      const {data: data1} = yield call(FApiServer.User.currentUserInfo);
+      const {data: data1} = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(user, 'user!@#$!@#$@#!$');
-      const params: Parameters<typeof FApiServer.Transaction.individualAccounts>[0] = {
+      const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: data1.userId,
       };
-      const {data} = yield call(FApiServer.Transaction.individualAccounts, params);
+      const {data} = yield call(FServiceAPI.Transaction.individualAccounts, params);
 
       if (data.status === 0) {
         return yield put<ChangeAction>({
@@ -135,13 +135,13 @@ const Model: WalletPageModelType = {
         });
       }
 
-      const params2: Parameters<typeof FApiServer.Transaction.details>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
         accountId: data.accountId,
         skip: 0,
         limit: 100,
       };
 
-      const {data: data2} = yield call(FApiServer.Transaction.details, params2);
+      const {data: data2} = yield call(FServiceAPI.Transaction.details, params2);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -177,11 +177,11 @@ const Model: WalletPageModelType = {
         walletPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Transaction.activateIndividualAccounts>[0] = {
+      const params: Parameters<typeof FServiceAPI.Transaction.activateIndividualAccounts>[0] = {
         password: walletPage.activatingAccountPasswordOne,
       };
 
-      const {data} = yield call(FApiServer.Transaction.activateIndividualAccounts, params);
+      const {data} = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
       // if (data) {
       //   successMessage();
@@ -203,12 +203,12 @@ const Model: WalletPageModelType = {
         walletPage,
       }));
 
-      const params: Parameters<typeof FApiServer.Transaction.changePassword>[0] = {
+      const params: Parameters<typeof FServiceAPI.Transaction.changePassword>[0] = {
         password: walletPage.changingPasswordPasswordOne,
         oldPassword: walletPage.changingPasswordPasswordOld,
       };
 
-      const {data} = yield call(FApiServer.Transaction.changePassword, params);
+      const {data} = yield call(FServiceAPI.Transaction.changePassword, params);
 
       if (data) {
         yield put<ChangeAction>({

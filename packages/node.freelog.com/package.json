@@ -17,11 +17,7 @@
   "author": "wwzh",
   "license": "ISC",
   "dependencies": {
-    "@freelog/freelog-common-lib": "^0.1.0",
-    "@freelog/freelog-policy-lang": "0.1.0",
-    "@freelog/freelog-report": "^0.1.0",
-    "@freelog/freelog-ui-contract": "^0.0.17",
-    "@freelog/freelog-ui-login": "0.1.0",
+
     "axios": "^0.19.2",
     "element-ui": "^2.13.1",
     "import-html-entry": "^1.7.3",

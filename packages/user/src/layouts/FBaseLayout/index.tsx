@@ -4,7 +4,7 @@ import FLayout from "@/components/FLayout";
 import {NavLink} from "umi";
 import FDropdown from '@/components/FDropdown';
 import {FContentText} from '@/components/FText';
-import FUtil from "@/utils";
+import {FUtil} from "@freelog/tools-lib";
 import {Space} from "antd";
 import {FRectBtn} from "@/components/FButton";
 import {connect} from 'dva';

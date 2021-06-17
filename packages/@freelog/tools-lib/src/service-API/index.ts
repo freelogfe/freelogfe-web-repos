@@ -6,6 +6,7 @@ import * as Resource from './resources';
 import * as User from './user';
 import * as InformalNode from './informalNodes';
 import * as Contract from './contracts';
+import * as Transaction from './transactions';
 
 const FServiceAPI = {
   Node,
@@ -16,6 +17,7 @@ const FServiceAPI = {
   User,
   InformalNode,
   Contract,
+  Transaction,
 };
 
 export default FServiceAPI;
