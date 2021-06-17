@@ -13,8 +13,13 @@ interface TestResourcesParamsType {
 }
 
 export function testResources({nodeId, ...params}: TestResourcesParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources`, {
-    params,
+  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/${nodeId}/testResources`,
+    params: params,
   });
 }
 
@@ -34,11 +39,16 @@ interface DependencyTreeParamsType {
   keywords: string;
 }
 
-export function dependencyTree({nodeId, keywords}: DependencyTreeParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
-    params: {
-      keywords,
-    },
+export function dependencyTree({nodeId, ...params}: DependencyTreeParamsType) {
+  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
+  //   params: {
+  //     keywords,
+  //   },
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/${nodeId}/testResources/dependencyTree/search`,
+    params: params,
   });
 }
 
@@ -48,9 +58,14 @@ interface PutRulesParamsType {
   additionalTestRule: string;
 }
 
-export function putRules({nodeId, additionalTestRule}: PutRulesParamsType) {
-  return FUtil.Axios.put(`/v2/testNodes/${nodeId}/rules`, {
-    additionalTestRule,
+export function putRules({nodeId, ...params}: PutRulesParamsType) {
+  // return FUtil.Axios.put(`/v2/testNodes/${nodeId}/rules`, {
+  //   additionalTestRule,
+  // });
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/testNodes/${nodeId}/rules`,
+    data: params,
   });
 }
 
@@ -60,7 +75,12 @@ interface TestNodeRulesParamsType {
 }
 
 export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/rules`, {});
+  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/rules`, {});
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/${nodeId}/rules`,
+    // params: params,
+  });
 }
 
 // 更新测试资源的授权合约
@@ -75,7 +95,12 @@ interface UpdateTestResourceContractsParamsType {
 }
 
 export function updateTestResourceContracts({testResourceId, ...params}: UpdateTestResourceContractsParamsType) {
-  return FUtil.Axios.put(`/v2/testNodes/testResources/${testResourceId}`, params);
+  // return FUtil.Axios.put(`/v2/testNodes/testResources/${testResourceId}`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/testNodes/testResources/${testResourceId}`,
+    data: params,
+  });
 }
 
 // 获取并过滤资源依赖树
@@ -86,8 +111,13 @@ interface DependencyTreeFilterParamsType {
 }
 
 export function dependencyTreeFilter({testResourceId, ...params}: DependencyTreeFilterParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`, {
-    params
+  // return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`, {
+  //   params
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/testResources/${testResourceId}/dependencyTree/filter`,
+    params: params,
   });
 }
 
@@ -97,7 +127,12 @@ interface TestResourceDetailsParamsType {
 }
 
 export function testResourceDetails({testResourceId}: TestResourceDetailsParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}`);
+  // return FUtil.Axios.get(`/v2/testNodes/testResources/${testResourceId}`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/testResources/${testResourceId}`,
+    // params: params,
+  });
 }
 
 // 查询包含指定依赖的测试资源
@@ -108,8 +143,13 @@ interface SearchTestResourcesByDependencyParamsType {
 }
 
 export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestResourcesByDependencyParamsType) {
-  return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/searchByDependency`, {
-    params,
+  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/searchByDependency`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/${nodeId}/testResources/searchByDependency`,
+    params: params,
   });
 }
 
@@ -119,5 +159,10 @@ interface RulesRematchParamsType {
 }
 
 export function rulesRematch({nodeId, ...params}: RulesRematchParamsType) {
-  return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
+  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules/rematch`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/testNodes/${nodeId}/rules/rematch`,
+    data: params,
+  });
 }

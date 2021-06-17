@@ -7,8 +7,13 @@ interface ContractDetailsParamsType {
 }
 
 export function contractDetails({contractId, ...params}: ContractDetailsParamsType) {
-  return FUtil.Axios.get(`/v2/contracts/${contractId}`, {
-    params,
+  // return FUtil.Axios.get(`/v2/contracts/${contractId}`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts/${contractId}`,
+    params: params,
   });
 }
 
@@ -31,8 +36,13 @@ interface ContractsParamsType {
 }
 
 export function contracts(params: ContractsParamsType) {
-  return FUtil.Axios.get('/v2/contracts', {
-    params,
+  // return FUtil.Axios.get('/v2/contracts', {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts`,
+    params: params,
   });
 }
 
@@ -49,7 +59,12 @@ interface BatchContractsParamsType {
 }
 
 export function batchContracts(params: BatchContractsParamsType) {
-  return FUtil.Axios.get('/v2/contracts/list', {
-    params,
+  // return FUtil.Axios.get('/v2/contracts/list', {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts/list`,
+    params: params,
   });
 }

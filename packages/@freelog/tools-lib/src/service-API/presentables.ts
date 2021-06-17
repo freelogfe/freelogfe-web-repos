@@ -16,7 +16,12 @@ export interface CreatePresentableParamsType {
 }
 
 export function createPresentable(params: CreatePresentableParamsType) {
-  return FUtil.Axios.post(`/v2/presentables`, params);
+  // return FUtil.Axios.post(`/v2/presentables`, params);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    params: params,
+  });
 }
 
 // 更新展品

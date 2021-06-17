@@ -9,8 +9,13 @@ interface PoliciesParamsType {
 }
 
 export function policies(params: PoliciesParamsType) {
-  return FUtil.Axios.get('/v2/policies', {
-    params,
+  // return FUtil.Axios.get('/v2/policies', {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    params: params,
   });
 }
 

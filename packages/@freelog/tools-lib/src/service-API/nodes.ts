@@ -7,7 +7,12 @@ export interface CreateParamsType {
 }
 
 export function create(params: CreateParamsType) {
-  return FUtil.Axios.post('/v2/nodes', params);
+  // return FUtil.Axios.post('/v2/nodes', params);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    params: params,
+  });
 }
 
 // 查看节点详情
