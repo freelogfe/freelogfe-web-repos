@@ -1,8 +1,4 @@
-import axios from 'axios';
-// import {notification} from 'antd';
-// import NProgress from '@/components/fNprogress';
-// import FileSaver from 'file-saver';
-// import {router} from "umi";
+import axios, {AxiosRequestConfig} from 'axios';
 import NProgress from 'nprogress';
 import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
@@ -71,6 +67,7 @@ axios.interceptors.request.use(function (config) {
  */
 axios.interceptors.response.use(function (response) {
   // Do something with response data
+  console.log(response, 'response!!!!!!');
   NProgress.done();
   if (response.status !== 200) {
 
@@ -112,6 +109,14 @@ axios.interceptors.response.use(function (response) {
 });
 
 export default axios;
+
+interface RequestParamsType extends AxiosRequestConfig{
+
+}
+
+export async function request(config: RequestParamsType) {
+  return axios.request(config);
+}
 
 // export function downloadFile(res: AxiosResponse) {
 //   const {data, headers} = res;

@@ -8,8 +8,13 @@ interface DetailsParamsType {
 }
 
 export function details({accountId, ...params}: DetailsParamsType) {
-  return FUtil.Axios.get(`/v2/transactions/details/${accountId}`, {
-    params,
+  // return FUtil.Axios.get(`/v2/transactions/details/${accountId}`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/transactions/details/${accountId}`,
+    params: params,
   });
 }
 
@@ -19,8 +24,13 @@ interface IndividualAccountsParamsType {
 }
 
 export function individualAccounts({userId, ...params}: IndividualAccountsParamsType) {
-  return FUtil.Axios.get(`/v2/accounts/individualAccounts/${userId}`, {
-    params,
+  // return FUtil.Axios.get(`/v2/accounts/individualAccounts/${userId}`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/accounts/individualAccounts/${userId}`,
+    params: params,
   });
 }
 
@@ -30,7 +40,12 @@ interface ActivateIndividualAccountsParamsType {
 }
 
 export function activateIndividualAccounts({...params}: ActivateIndividualAccountsParamsType) {
-  return FUtil.Axios.put(`/v2/accounts/individualAccounts/activate`, params);
+  // return FUtil.Axios.put(`/v2/accounts/individualAccounts/activate`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/accounts/individualAccounts/activate`,
+    data: params,
+  });
 }
 
 // 修改交易密码
@@ -40,5 +55,10 @@ interface ChangePasswordParamsType {
 }
 
 export function changePassword({...params}: ChangePasswordParamsType) {
-  return FUtil.Axios.put(`/v2/accounts/individualAccounts`, params);
+  // return FUtil.Axios.put(`/v2/accounts/individualAccounts`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/accounts/individualAccounts`,
+    data: params,
+  });
 }

@@ -7,7 +7,12 @@ export interface CreateBucketParamsType {
 }
 
 export function createBucket(params: CreateBucketParamsType) {
-  return FUtil.Axios.post(`/v1/storages/buckets`, params);
+  // return FUtil.Axios.post(`/v1/storages/buckets`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v1/storages/buckets`,
+    data: params,
+  });
 }
 
 // 查看用户的bucket列表
@@ -16,7 +21,12 @@ interface BucketListParamsType {
 }
 
 export function bucketList(params: BucketListParamsType) {
-  return FUtil.Axios.get(`/v1/storages/buckets`, {
+  // return FUtil.Axios.get(`/v1/storages/buckets`, {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets`,
     params: params,
   });
 }
@@ -26,7 +36,12 @@ export function bucketList(params: BucketListParamsType) {
 // }
 
 export function spaceStatistics() {
-  return FUtil.Axios.get(`/v1/storages/buckets/spaceStatistics`);
+  // return FUtil.Axios.get(`/v1/storages/buckets/spaceStatistics`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/spaceStatistics`,
+    // params: params,
+  });
 }
 
 // 删除bucket
@@ -35,7 +50,12 @@ interface DeleteBucketParamsType {
 }
 
 export function deleteBucket(params: DeleteBucketParamsType) {
-  return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}`);
+  // return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/${params.bucketName}`,
+    // params: params,
+  });
 }
 
 // 查询bucket详情
@@ -44,7 +64,12 @@ interface BucketDetailsParamsType {
 }
 
 export function bucketDetails({bucketName}: BucketDetailsParamsType) {
-  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}`);
+  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/${bucketName}`,
+    // params: params,
+  });
 }
 
 // 分页查看存储对象列表
@@ -61,8 +86,14 @@ interface ObjectListParamsType {
 }
 
 export function objectList({bucketName, ...params}: ObjectListParamsType) {
-  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/objects`, {
-    params,
+  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/objects`, {
+  //   params,
+  // });
+
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/${bucketName}/objects`,
+    params: params,
   });
 }
 
@@ -75,7 +106,12 @@ interface CreateObjectParamsType {
 }
 
 export function createObject({bucketName, ...params}: CreateObjectParamsType) {
-  return FUtil.Axios.post(`/v1/storages/buckets/${bucketName}/objects`, params);
+  // return FUtil.Axios.post(`/v1/storages/buckets/${bucketName}/objects`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v1/storages/buckets/${bucketName}/objects`,
+    data: params,
+  });
 }
 
 // 查看存储对象详情
@@ -90,9 +126,19 @@ interface ObjectDetailsParamsType2 {
 
 export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsParamsType2) {
   if ((params as ObjectDetailsParamsType2).objectIdOrName) {
-    return FUtil.Axios.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
+    // return FUtil.Axios.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
+    return FUtil.Request({
+      method: 'GET',
+      url: `/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`,
+      params: params,
+    });
   }
-  return FUtil.Axios.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
+  // return FUtil.Axios.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`,
+    params: params,
+  });
 }
 
 // 删除存储对象
@@ -102,7 +148,12 @@ interface DeleteObjectsParamsType {
 }
 
 export function deleteObjects(params: DeleteObjectsParamsType) {
-  return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
+  // return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
+  return FUtil.Request({
+    method: 'DELETE',
+    url: `/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`,
+    data: params,
+  });
 }
 
 // 查询bucket是否存在
@@ -111,7 +162,12 @@ interface BucketIsExistParamsType {
 }
 
 export function bucketIsExist({bucketName}: BucketIsExistParamsType) {
-  return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/isExist`);
+  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/isExist`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/buckets/${bucketName}/isExist`,
+    // params: params,
+  });
 }
 
 // 下载存储对象文件
@@ -121,12 +177,6 @@ interface DownloadObjectParamsType {
 
 export function downloadObject(params: DownloadObjectParamsType) {
   return window.location.href = FUtil.Format.completeUrlByDomain('qi', true) + `/v1/storages/objects/${params.objectIdOrName}/file`;
-  // return request.get(`/v1/storages/objects/${params.objectIdOrName}/file`, {
-  //   responseType: 'arraybuffer',
-  //   // onDownloadProgress: (progressEvent: any) => {
-  //   //   console.log(progressEvent, 'progressEvent230');
-  //   // }
-  // });
 }
 
 // 根据sha1查询文件是否存在
@@ -135,7 +185,12 @@ interface FileIsExistParamsType {
 }
 
 export function fileIsExist(params: FileIsExistParamsType) {
-  return FUtil.Axios.get('/v1/storages/files/fileIsExist', {
+  // return FUtil.Axios.get('/v1/storages/files/fileIsExist', {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/files/fileIsExist`,
     params: params,
   });
 }
@@ -155,14 +210,30 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
   }
 
   if (!returnCancel) {
-    return FUtil.Axios.post('/v1/storages/files/upload', formData, config);
+    // return FUtil.Axios.post('/v1/storages/files/upload', formData, config);
+    return FUtil.Request({
+      method: 'POST',
+      url: `/v1/storages/files/upload`,
+      data: formData,
+      ...config,
+    });
   }
 
   let cancel: any = null;
-  const promise = FUtil.Axios.post('/v1/storages/files/upload', formData, {
+  // const promise = FUtil.Axios.post('/v1/storages/files/upload', formData, {
+  //   cancelToken: new FUtil.Axios.CancelToken((c) => {
+  //     cancel = c;
+  //   }),
+  // });
+
+  const promise = FUtil.Request({
+    method: 'POST',
+    url: `/v1/storages/files/upload`,
+    data: formData,
     cancelToken: new FUtil.Axios.CancelToken((c) => {
       cancel = c;
     }),
+    ...config,
   });
   return [
     promise,
@@ -183,7 +254,13 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
       formData.append(key, value);
     }
   }
-  return FUtil.Axios.post('/v1/storages/files/uploadImage', formData, config);
+  // return FUtil.Axios.post('/v1/storages/files/uploadImage', formData, config);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v1/storages/files/uploadImage`,
+    data: params,
+    ...config,
+  });
 }
 
 // 更新存储对象属性
@@ -205,7 +282,12 @@ interface UpdateObjectParamsType {
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
-  return FUtil.Axios.put(`/v1/storages/objects/${objectIdOrName}`, params);
+  // return FUtil.Axios.put(`/v1/storages/objects/${objectIdOrName}`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v1/storages/objects/${objectIdOrName}`,
+    data: params,
+  });
 }
 
 // 批量查询存储对象列表
@@ -216,8 +298,13 @@ interface BatchObjectListParamsType {
 }
 
 export function batchObjectList(params: BatchObjectListParamsType) {
-  return FUtil.Axios.get(`/v1/storages/objects/list`, {
-    params,
+  // return FUtil.Axios.get(`/v1/storages/objects/list`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/objects/list`,
+    params: params,
   });
 }
 
@@ -228,8 +315,13 @@ interface FilePropertyParamsType {
 }
 
 export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
-  return FUtil.Axios.get(`/v1/storages/files/${sha1}/property`, {
-    params,
+  // return FUtil.Axios.get(`/v1/storages/files/${sha1}/property`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/files/${sha1}/property`,
+    params: params,
   });
 }
 
@@ -244,5 +336,10 @@ interface CycleDependencyCheckParamsType {
 }
 
 export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
-  return FUtil.Axios.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
+  // return FUtil.Axios.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
+    params: params,
+  });
 }

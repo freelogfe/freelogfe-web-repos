@@ -11,7 +11,12 @@ export interface CreateParamsType {
 }
 
 export function create(params: CreateParamsType) {
-  return FUtil.Axios.post('/v2/resources', params)
+  // return FUtil.Axios.post('/v2/resources', params)
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources`,
+    data: params,
+  });
 }
 
 // 更新资源信息
@@ -32,7 +37,12 @@ interface UpdateParamsType {
 }
 
 export function update(params: UpdateParamsType) {
-  return FUtil.Axios.put(`/v2/resources/${params.resourceId}`, params);
+  // return FUtil.Axios.put(`/v2/resources/${params.resourceId}`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/resources/${params.resourceId}`,
+    data: params,
+  });
 }
 
 // 查看资源分页列表
@@ -51,8 +61,13 @@ interface ListParamsType {
 }
 
 export function list(params: ListParamsType) {
-  return FUtil.Axios.get('/v2/resources', {
-    params,
+  // return FUtil.Axios.get('/v2/resources', {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources`,
+    params: params,
   });
 }
 
@@ -65,7 +80,12 @@ interface InfoParamsType {
 }
 
 export function info({resourceIdOrName, ...params}: InfoParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
+  // return FUtil.Axios.get(`/v2/resources/${encodeURIComponent(resourceIdOrName)}`, {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${encodeURIComponent(resourceIdOrName)}`,
     params: params,
   });
 }
@@ -80,7 +100,12 @@ interface BatchInfoParamsType {
 }
 
 export function batchInfo(params: BatchInfoParamsType) {
-  return FUtil.Axios.get(`/v2/resources/list`, {
+  // return FUtil.Axios.get(`/v2/resources/list`, {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/list`,
     params: params,
   });
 }
@@ -95,7 +120,12 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({resourceId, ...params}: DependencyTreeParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${resourceId}/dependencyTree`, {
+  // return FUtil.Axios.get(`/v2/resources/${resourceId}/dependencyTree`, {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/dependencyTree`,
     params: params,
   });
 }
@@ -107,7 +137,12 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({resourceId, ...params}: AuthTreeParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${resourceId}/authTree`, {
+  // return FUtil.Axios.get(`/v2/resources/${resourceId}/authTree`, {
+  //   params: params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/authTree`,
     params: params,
   });
 }
@@ -142,7 +177,12 @@ interface CreateVersionParamsType {
 }
 
 export function createVersion({resourceId, ...params}: CreateVersionParamsType) {
-  return FUtil.Axios.post(`/v2/resources/${resourceId}/versions`, params);
+  // return FUtil.Axios.post(`/v2/resources/${resourceId}/versions`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources/${resourceId}/versions`,
+    data: params,
+  });
 }
 
 // 查看资源版本信息
@@ -160,15 +200,25 @@ interface ResourceVersionInfoParamsType2 {
 export function resourceVersionInfo(params: ResourceVersionInfoParamsType1 | ResourceVersionInfoParamsType2) {
   // console.log('####!AAA');
   if ((params as ResourceVersionInfoParamsType1).version) {
-    return FUtil.Axios.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
-      params: {
-        projection: params.projection,
-      }
+    // return FUtil.Axios.get(`/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`, {
+    //   params: {
+    //     projection: params.projection,
+    //   }
+    // });
+    return FUtil.Request({
+      method: 'GET',
+      url: `/v2/resources/${(params as ResourceVersionInfoParamsType1).resourceId}/versions/${(params as ResourceVersionInfoParamsType1).version}`,
+      params: params,
     });
   }
 
-  return FUtil.Axios.get(`/v2/resources/versions/detail`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/versions/detail`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/versions/detail`,
+    params: params,
   });
 }
 
@@ -179,8 +229,13 @@ interface GetResourceVersionBySha1ParamsType {
 }
 
 export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersionBySha1ParamsType) {
-  return FUtil.Axios.get(`/v2/resources/files/${fileSha1}/versions`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/files/${fileSha1}/versions`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/files/${fileSha1}/versions`,
+    params: params,
   });
 }
 
@@ -191,8 +246,13 @@ interface GetResourceBySha1ParamsType {
 }
 
 export function getResourceBySha1({fileSha1, ...params}: GetResourceBySha1ParamsType) {
-  return FUtil.Axios.get(`/v2/resources/files/${fileSha1}`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/files/${fileSha1}`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/files/${fileSha1}`,
+    params: params,
   });
 }
 
@@ -217,7 +277,12 @@ interface UpdateResourceVersionInfoParamsType {
 }
 
 export function updateResourceVersionInfo(params: UpdateResourceVersionInfoParamsType) {
-  return FUtil.Axios.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
+  // return FUtil.Axios.put(`/v2/resources/${params.resourceId}/versions/${params.version}`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/resources/${params.resourceId}/versions/${params.version}`,
+    data: params,
+  });
 }
 
 // 保存或者更新资源版本草稿
@@ -227,7 +292,12 @@ interface SaveVersionsDraftParamsType {
 }
 
 export function saveVersionsDraft(params: SaveVersionsDraftParamsType) {
-  return FUtil.Axios.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
+  // return FUtil.Axios.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources/${params.resourceId}/versions/drafts`,
+    data: params,
+  });
 }
 
 // 查看资源版本草稿
@@ -236,7 +306,12 @@ interface LookDraftParamsType {
 }
 
 export function lookDraft(params: LookDraftParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${params.resourceId}/versions/drafts`);
+  // return FUtil.Axios.get(`/v2/resources/${params.resourceId}/versions/drafts`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${params.resourceId}/versions/drafts`,
+    params: params,
+  });
 }
 
 // 校验文件是否被引入资源
@@ -245,8 +320,13 @@ interface ResourceIsUsedByOtherParamsType {
 }
 
 export function resourceIsUsedByOther(params: ResourceIsUsedByOtherParamsType) {
-  return FUtil.Axios.get(`/v2/resources/versions/isCanBeCreate`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/versions/isCanBeCreate`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/versions/isCanBeCreate`,
+    params: params,
   });
 }
 
@@ -270,8 +350,13 @@ interface BatchGetCoverageVersionsParamsType {
 }
 
 export function batchGetCoverageVersions({resourceId, ...params}: BatchGetCoverageVersionsParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${resourceId}/contracts/coverageVersions`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/${resourceId}/contracts/coverageVersions`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/contracts/coverageVersions`,
+    params: params,
   });
 }
 
@@ -281,7 +366,12 @@ interface ResolveResourcesParamsType {
 }
 
 export function resolveResources(params: ResolveResourcesParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${params.resourceId}/resolveResources`);
+  // return FUtil.Axios.get(`/v2/resources/${params.resourceId}/resolveResources`);
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${params.resourceId}/resolveResources`,
+    params: params,
+  });
 }
 
 // 批量设置策略应用的版本
@@ -298,7 +388,12 @@ interface BatchSetContractsParamsType {
 }
 
 export function batchSetContracts({resourceId, ...params}: BatchSetContractsParamsType) {
-  return FUtil.Axios.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, params);
+  // return FUtil.Axios.put(`/v2/resources/${resourceId}/versions/batchSetContracts`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/resources/${resourceId}/versions/batchSetContracts`,
+    data: params,
+  });
 }
 
 // 资源依赖循环性检查
@@ -311,7 +406,12 @@ interface CycleDependencyCheckParamsType {
 }
 
 export function cycleDependencyCheck({resourceId, ...params}: CycleDependencyCheckParamsType) {
-  return FUtil.Axios.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, params);
+  // return FUtil.Axios.post(`/v2/resources/${resourceId}/versions/cycleDependencyCheck`, params);
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources/${resourceId}/versions/cycleDependencyCheck`,
+    data: params,
+  });
 }
 
 // 查看资源关系树
@@ -322,8 +422,13 @@ interface RelationTreeParamsType {
 }
 
 export function relationTree({resourceId, ...params}: RelationTreeParamsType) {
-  return FUtil.Axios.get(`/v2/resources/${resourceId}/relationTree`, {
-    params,
+  // return FUtil.Axios.get(`/v2/resources/${resourceId}/relationTree`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/${resourceId}/relationTree`,
+    params: params,
   });
 }
 
@@ -335,7 +440,12 @@ interface RelationTreeAuthParamsType {
 }
 
 export function relationTreeAuth({resourceId, ...params}: RelationTreeAuthParamsType) {
-  return FUtil.Axios.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
-    params,
+  // return FUtil.Axios.get(`/v2/auths/resources/${resourceId}/relationTreeAuth`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    params: params,
   });
 }
