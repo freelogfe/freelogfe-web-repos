@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
+import {FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
 import {FRectBtn} from "@/components/FButton";
 import {ChangeAction, LoginAction, LoginPageModelState} from "@/models/loginPage";

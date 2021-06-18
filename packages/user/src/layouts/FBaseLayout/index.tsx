@@ -4,12 +4,13 @@ import FLayout from "@/components/FLayout";
 import {NavLink} from "umi";
 import FDropdown from '@/components/FDropdown';
 import {FContentText} from '@/components/FText';
-import {FUtil} from "@freelog/tools-lib";
+import {FServiceAPI, FUtil} from "@freelog/tools-lib";
 import {Space} from "antd";
 import {FRectBtn} from "@/components/FButton";
 import {connect} from 'dva';
 import {ConnectState, UserModelState} from "@/models/connect";
 import UserSVG from '@/assets/user.svg';
+import {history} from 'umi';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -48,9 +49,11 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
           {/*<a onClick={() => {*/}
           {/*  window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/user/profile`;*/}
           {/*}}>个人中心</a>*/}
-          <a onClick={() => {
+          <a onClick={async () => {
             // window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
-            return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
+            await FServiceAPI.User.logout({});
+            // return window.location.replace(`${FUtil.Format.completeUrlByDomain('www')}/login`);
+            history.replace(FUtil.LinkTo.login());
           }}>登出</a>
         </div>
       </div>}>

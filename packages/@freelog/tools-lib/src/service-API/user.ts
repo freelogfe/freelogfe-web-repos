@@ -23,7 +23,7 @@ interface LogoutParamsType {
   returnUrl?: string;
 }
 
-export function logout({...params}: LogoutParamsType) {
+export function logout({...params}: LogoutParamsType = {}) {
   // return FUtil.Axios.get(`/passport/logout`, {
   //   params,
   // });
