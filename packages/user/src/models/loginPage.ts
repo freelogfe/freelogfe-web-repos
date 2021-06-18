@@ -63,6 +63,7 @@ const Model: LoginPageModelType = {
       const params: Parameters<typeof FServiceAPI.User.login>[0] = {
         loginName: loginPage.username,
         password: loginPage.password,
+        isRemember: 1,
       };
 
       const {data} = yield call(FServiceAPI.User.login, params);

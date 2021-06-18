@@ -4,7 +4,7 @@ import FUtil from '../utils';
 interface LoginParamsType {
   loginName: string;
   password: string;
-  isRemember?: boolean;
+  isRemember?: 0 | 1;
   returnUrl?: string;
   jwtType?: string;
 }

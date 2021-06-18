@@ -5,7 +5,7 @@ import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
 import {UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
-import {FUtil} from '@freelog/tools-lib';
+import {FServiceAPI, FUtil} from '@freelog/tools-lib';
 import UserSVG from '@/assets/user.svg';
 
 interface UserProps {
@@ -29,8 +29,14 @@ function User({dispatch, user}: UserProps) {
       <a onClick={() => {
         window.open(`${FUtil.Format.completeUrlByDomain('user')}/logged/wallet`);
       }}>个人中心</a>
-      <a onClick={() => {
-        window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
+      <a onClick={async () => {
+        // window.location.href = `${FUtil.Format.completeUrlByDomain('www')}/login`;
+        await FServiceAPI.User.logout({});
+
+        setTimeout(() => {
+          window.location.replace(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.login()}`);
+        }, 30);
+        // router.replace(FUtil.LinkTo.login());
       }}>登出</a>
     </div>
   </div>}>
