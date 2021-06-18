@@ -258,7 +258,7 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/files/uploadImage`,
-    data: params,
+    data: formData,
     ...config,
   });
 }

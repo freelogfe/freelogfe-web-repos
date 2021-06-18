@@ -19,6 +19,7 @@ interface FUploadImageProps {
 export default function ({children, onUploadSuccess, onError}: FUploadImageProps) {
 
   async function upload(file: File) {
+    console.log(file, 'file!@$!@#$!@#$23423234234234234');
     const res = await FServiceAPI.Storage.uploadImage({
       file: file,
     });
