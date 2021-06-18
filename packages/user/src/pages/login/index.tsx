@@ -27,6 +27,7 @@ function Login({dispatch, loginPage}: LoginProps) {
   }
 
   return (<div className={styles.style}>
+    <div style={{height: '30%', flexShrink: 1}}/>
     <div className={styles.container}>
       <i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
       <div style={{height: 20}}/>
@@ -77,8 +78,9 @@ function Login({dispatch, loginPage}: LoginProps) {
           }}
         >登 录</FRectBtn>
       </div>
-      <div style={{height: 100}}/>
     </div>
+    <div style={{height: '70%', flexShrink: 1}}/>
+
   </div>);
 }
 

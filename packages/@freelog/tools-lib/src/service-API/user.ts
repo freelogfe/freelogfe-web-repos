@@ -29,7 +29,7 @@ export function logout({...params}: LogoutParamsType = {}) {
   // });
   FUtil.Request({
     method: 'GET',
-    url: '/passport/logout',
+    url: '/v2/passport/logout',
     params: params,
   }, {noRedirect: true});
 }

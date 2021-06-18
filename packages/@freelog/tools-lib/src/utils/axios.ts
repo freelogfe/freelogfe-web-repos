@@ -2,6 +2,7 @@ import axios, {AxiosRequestConfig} from 'axios';
 import NProgress from 'nprogress';
 import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
+import * as LinkTo from './linkTo';
 
 const codeMessage: any = {
   200: '服务器成功返回请求的数据。',
@@ -117,7 +118,7 @@ export async function request(config: AxiosRequestConfig, {noRedirect = false}: 
   // const {data} = response;
 
   if ((result.errCode === 30 || result.errcode === 30) && !noRedirect) {
-    return window.location.replace(`${completeUrlByDomain('user')}/login`);
+    return window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
   }
   return result;
 }
