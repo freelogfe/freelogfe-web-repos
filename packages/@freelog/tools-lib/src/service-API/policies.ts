@@ -14,7 +14,7 @@ export function policies(params: PoliciesParamsType) {
   // });
   return FUtil.Request({
     method: 'GET',
-    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    url: `/v2/policies`,
     params: params,
   });
 }
@@ -28,7 +28,12 @@ interface PoliciesListParamsType {
 }
 
 export function policiesList(params: PoliciesListParamsType) {
-  return FUtil.Axios.get('/v2/policies/list', {
-    params,
+  // return FUtil.Axios.get('/v2/policies/list', {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/policies/list`,
+    params: params,
   });
 }

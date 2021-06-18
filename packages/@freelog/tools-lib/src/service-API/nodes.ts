@@ -10,7 +10,7 @@ export function create(params: CreateParamsType) {
   // return FUtil.Axios.post('/v2/nodes', params);
   return FUtil.Request({
     method: 'GET',
-    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    url: `/v2/nodes`,
     params: params,
   });
 }
@@ -27,10 +27,20 @@ interface NodeDetailParamsType2 {
 
 export function details(params: NodeDetailParamsType1 | NodeDetailParamsType2) {
   if ((params as NodeDetailParamsType1).nodeId) {
-    return FUtil.Axios.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
+    // return FUtil.Axios.get(`/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`);
+    return FUtil.Request({
+      method: 'GET',
+      url: `/v2/nodes/${(params as NodeDetailParamsType1).nodeId}`,
+      params: params,
+    });
   }
-  return FUtil.Axios.get(`/v2/nodes/detail`, {
-    params,
+  // return FUtil.Axios.get(`/v2/nodes/detail`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/nodes/detail`,
+    params: params,
   });
 }
 
@@ -43,8 +53,13 @@ interface NodesParamsType {
 }
 
 export function nodes(params: NodesParamsType) {
-  return FUtil.Axios.get('/v2/nodes', {
-    params
+  // return FUtil.Axios.get('/v2/nodes', {
+  //   params
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/nodes`,
+    params: params,
   });
 }
 

@@ -19,7 +19,7 @@ export function createPresentable(params: CreatePresentableParamsType) {
   // return FUtil.Axios.post(`/v2/presentables`, params);
   return FUtil.Request({
     method: 'GET',
-    url: `/v2/auths/resources/${resourceId}/relationTreeAuth`,
+    url: `/v2/presentables`,
     params: params,
   });
 }
@@ -48,7 +48,12 @@ interface UpdatePresentableParamsType {
 }
 
 export function updatePresentable({presentableId, ...params}: UpdatePresentableParamsType) {
-  return FUtil.Axios.put(`/v2/presentables/${presentableId}`, params);
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/presentables/${presentableId}`,
+    data: params,
+  });
 }
 
 // 上下线presentable
@@ -58,7 +63,12 @@ interface PresentablesOnlineParamsType {
 }
 
 export function presentablesOnlineStatus({presentableId, ...params}: PresentablesOnlineParamsType) {
-  return FUtil.Axios.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/presentables/${presentableId}/onlineStatus`,
+    data: params,
+  });
 }
 
 // 查看展品详情
@@ -83,12 +93,22 @@ interface PresentableDetailsParamsType2 {
 
 export function presentableDetails(params: PresentableDetailsParamsType1 | PresentableDetailsParamsType2) {
   if ((params as PresentableDetailsParamsType2).nodeId) {
-    return FUtil.Axios.get(`/v2/presentables/detail`, {
-      params,
+    // return FUtil.Axios.get(`/v2/presentables/detail`, {
+    //   params,
+    // });
+    return FUtil.Request({
+      method: 'GET',
+      url: `/v2/presentables/detail`,
+      params: params,
     });
   }
   const {presentableId, ...p} = params as PresentableDetailsParamsType1;
-  return FUtil.Axios.get(`/v2/presentables/${presentableId}`, {
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}`, {
+  //   params: p,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/${presentableId}`,
     params: p,
   });
 }
@@ -109,8 +129,13 @@ interface PresentablesParamsType {
 }
 
 export function presentables(params: PresentablesParamsType) {
-  return FUtil.Axios.get(`/v2/presentables`, {
-    params,
+  // return FUtil.Axios.get(`/v2/presentables`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables`,
+    params: params,
   });
 }
 
@@ -128,8 +153,13 @@ interface PresentableListParamsType {
 }
 
 export function presentableList(params: PresentableListParamsType) {
-  return FUtil.Axios.get(`/v2/presentables/list`, {
-    params,
+  // return FUtil.Axios.get(`/v2/presentables/list`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/list`,
+    params: params,
   });
 }
 
@@ -143,7 +173,12 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({presentableId, ...params}: DependencyTreeParamsType) {
-  return FUtil.Axios.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/${presentableId}/dependencyTree`,
+    params: params,
+  });
 }
 
 // 查看展品关系树
@@ -153,7 +188,12 @@ interface RelationTreeParamsType {
 }
 
 export function relationTree({presentableId, ...params}: RelationTreeParamsType) {
-  return FUtil.Axios.get(`/v2/presentables/${presentableId}/relationTree`, {params});
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/relationTree`, {params});
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/${presentableId}/relationTree`,
+    params: params,
+  });
 }
 
 // 查看展品授权树
@@ -166,7 +206,12 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({presentableId, ...params}: AuthTreeParamsType) {
-  return FUtil.Axios.get(`/v2/presentables/${presentableId}/authTree`, {params});
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/authTree`, {params});
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/${presentableId}/authTree`,
+    params: params,
+  });
 }
 
 // 切换展品版本
@@ -176,7 +221,12 @@ interface PresentablesVersionParamsType {
 }
 
 export function presentablesVersion({presentableId, ...params}: PresentablesVersionParamsType) {
-  return FUtil.Axios.put(`/v2/presentables/${presentableId}/version`, params);
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/version`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/presentables/${presentableId}/version`,
+    data: params,
+  });
 }
 
 // 设置展品自定义属性
@@ -190,7 +240,12 @@ interface UpdateRewritePropertyParamsType {
 }
 
 export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
-  return FUtil.Axios.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/presentables/${presentableId}/rewriteProperty`,
+    data: params,
+  });
 }
 
 // 批量获取展品授权结果
@@ -201,8 +256,13 @@ interface BatchAuthParamsType {
 }
 
 export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
-  return FUtil.Axios.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
-    params,
+  // return FUtil.Axios.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`,
+    params: params,
   });
 }
 
@@ -212,7 +272,12 @@ interface ContractAppliedPresentableParamsType {
 }
 
 export function contractAppliedPresentable({nodeId, ...params}: ContractAppliedPresentableParamsType) {
-  return FUtil.Axios.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
-    params,
+  // return FUtil.Axios.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
+  //   params,
+  // });
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/presentables/${nodeId}/contractAppliedPresentable`,
+    params: params,
   });
 }
