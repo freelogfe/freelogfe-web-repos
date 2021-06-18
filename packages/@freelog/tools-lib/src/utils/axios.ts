@@ -67,7 +67,7 @@ axios.interceptors.request.use(function (config) {
  */
 axios.interceptors.response.use(function (response) {
   // Do something with response data
-  console.log(response, 'response!!!!!!');
+  // console.log(response, 'response!!!!!!');
   NProgress.done();
   if (response.status !== 200) {
 
@@ -87,9 +87,6 @@ axios.interceptors.response.use(function (response) {
 
   // console.log(data, 'data2390jasdflkf');
 
-  if (data.errCode === 30 || data.errcode === 30) {
-    return window.location.replace(`${completeUrlByDomain('www')}/login?redirect=${encodeURIComponent(window.location.href)}`);
-  }
 
   // if ((data.errcode === undefined
   //   ? (data.errCode !== 0 && data.errCode !== 2)
@@ -110,12 +107,17 @@ axios.interceptors.response.use(function (response) {
 
 export default axios;
 
-interface RequestParamsType extends AxiosRequestConfig{
+interface RequestParamsType extends AxiosRequestConfig {
 
 }
 
 export async function request(config: RequestParamsType) {
-  return axios.request(config);
+  const response = await axios.request(config);
+  const {data} = response;
+  if (data.errCode === 30 || data.errcode === 30) {
+    return window.location.replace(`${completeUrlByDomain('user')}/login`);
+  }
+  return response;
 }
 
 // export function downloadFile(res: AxiosResponse) {
