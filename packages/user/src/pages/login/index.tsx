@@ -70,6 +70,7 @@ function Login({dispatch, loginPage}: LoginProps) {
           }}
         >登 录</FRectBtn>
       </div>
+      <div style={{height: 100}}/>
     </div>
   </div>);
 }

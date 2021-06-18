@@ -6,7 +6,7 @@ import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {successMessage} from '@/pages/logged/wallet';
 
-export type WalletPageModelState = WholeReadonly<{
+export interface WalletPageModelState {
   accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
 
   accountId: string;
@@ -43,7 +43,7 @@ export type WalletPageModelState = WholeReadonly<{
   changingPasswordPasswordOneError: string;
   changingPasswordPasswordTwo: string;
   changingPasswordPasswordTwoError: string;
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'walletPage/change';

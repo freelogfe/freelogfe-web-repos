@@ -107,17 +107,19 @@ axios.interceptors.response.use(function (response) {
 
 export default axios;
 
-interface RequestParamsType extends AxiosRequestConfig {
-
+interface RequestParamsType {
+  noRedirect?: boolean;
 }
 
-export async function request(config: RequestParamsType) {
-  const response = await axios.request(config);
-  const {data} = response;
-  if (data.errCode === 30 || data.errcode === 30) {
+export async function request(config: AxiosRequestConfig, {noRedirect = false}: RequestParamsType = {}) {
+  const result: any = await axios.request(config);
+  console.log(result, 'response');
+  // const {data} = response;
+
+  if ((result.errCode === 30 || result.errcode === 30) && !noRedirect) {
     return window.location.replace(`${completeUrlByDomain('user')}/login`);
   }
-  return response;
+  return result;
 }
 
 // export function downloadFile(res: AxiosResponse) {

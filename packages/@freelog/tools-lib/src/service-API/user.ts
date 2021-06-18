@@ -15,7 +15,7 @@ export function login({...params}: LoginParamsType) {
     method: 'POST',
     url: '/v2/passport/login',
     data: params,
-  });
+  }, {noRedirect: true});
 }
 
 // 用户登出
@@ -31,7 +31,7 @@ export function logout({...params}: LogoutParamsType) {
     method: 'GET',
     url: '/passport/logout',
     params: params,
-  });
+  }, {noRedirect: true});
 }
 
 // interface CurrentUserInfoParamsType {

@@ -167,22 +167,52 @@ export function resourceVersionCreateSuccess({resourceID, version}: resourceVers
   return `/result/resource/version/create/success/${resourceID}/${version}`;
 }
 
+// 403
 interface Exception403ParamsType {
   from?: string;
 }
 
-export function exception403({...params}: Exception403ParamsType = {}, from?: string) {
-  console.log(from, 'exception403!!!!!!!!');
+export function exception403({...params}: Exception403ParamsType = {}) {
+
+  // console.log(from, 'exception403!!!!!!!!');
 
   let fromUrl: string = params.from || '';
   if (!fromUrl) {
     const {href, origin} = window.location;
     fromUrl = href.replace(origin, '');
   }
-  console.log(fromUrl, 'fromUrl!!!!!!!!');
+
+  // console.log(fromUrl, 'fromUrl!!!!!!!!');
+
   return `/exception/403${handleQuery({
     from: fromUrl
   })}`;
+}
+
+// 登录
+interface LoginParamsType {
+  goTo?: string;
+}
+
+export function login({...params}: LoginParamsType = {}) {
+  return `/login${handleQuery(params)}`;
+}
+
+// 注册
+// interface LoginParamsType {
+//   goTo?: string;
+// }
+//
+// export function logon({...params}: LoginParamsType = {}) {
+//   return `/logon${handleQuery(params)}`;
+// }
+
+// 钱包
+// interface WalletParamsType {
+// }
+
+export function wallet() {
+  return `/logged/wallet`;
 }
 
 function handleQuery(query: object): string {
@@ -195,3 +225,5 @@ function handleQuery(query: object): string {
   const result: string = querystring.stringify(obj);
   return result ? ('?' + result) : '';
 }
+
+

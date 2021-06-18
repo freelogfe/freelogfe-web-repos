@@ -2,7 +2,9 @@ import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
-import {FServiceAPI} from "@freelog/tools-lib";
+import {FServiceAPI, FUtil} from "@freelog/tools-lib";
+import {history} from 'umi';
+import fMessage from "@/components/fMessage";
 
 export interface LoginPageModelState {
   username: string;
@@ -62,7 +64,12 @@ const Model: LoginPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.User.login, params);
-      console.log(data, 'data!!!!!!!11111111');
+      // console.log(data, 'data!!!!!!!11111111');
+      if (data) {
+        history.replace(payload || FUtil.LinkTo.wallet())
+      } else {
+        fMessage('账户或密码错误', 'error');
+      }
     },
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
