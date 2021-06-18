@@ -11,6 +11,7 @@ export interface LoginPageModelState {
   usernameError: string;
   password: string;
   passwordError: string;
+  btnState: 'normal' | 'verify' | 'jumping';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -47,6 +48,7 @@ const initStates: LoginPageModelState = {
   usernameError: '',
   password: '',
   passwordError: '',
+  btnState: 'normal',
 };
 
 const Model: LoginPageModelType = {
@@ -66,7 +68,11 @@ const Model: LoginPageModelType = {
       const {data} = yield call(FServiceAPI.User.login, params);
       // console.log(data, 'data!!!!!!!11111111');
       if (data) {
-        history.replace(payload || FUtil.LinkTo.wallet())
+        if (payload) {
+          window.location.replace(decodeURIComponent(payload));
+        } else {
+          history.replace(FUtil.LinkTo.wallet());
+        }
       } else {
         fMessage('账户或密码错误', 'error');
       }

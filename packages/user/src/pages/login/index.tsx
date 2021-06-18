@@ -6,6 +6,8 @@ import {FRectBtn} from "@/components/FButton";
 import {ChangeAction, LoginAction, LoginPageModelState} from "@/models/loginPage";
 import {connect, Dispatch} from 'dva';
 import {ConnectState} from "@/models/connect";
+import {FUtil} from "@freelog/tools-lib";
+import useUrlState from "@ahooksjs/use-url-state";
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -14,6 +16,8 @@ interface LoginProps {
 }
 
 function Login({dispatch, loginPage}: LoginProps) {
+
+  const [urlParams] = useUrlState<{ goTo: string }>();
 
   async function onChange(payload: Partial<LoginPageModelState>) {
     await dispatch<ChangeAction>({
@@ -30,6 +34,7 @@ function Login({dispatch, loginPage}: LoginProps) {
         <FTitleText type="h4" text={'用户名/手机号/邮箱'}/>
         <div style={{height: 5}}/>
         <FInput
+          name="username"
           value={loginPage.username}
           errorText={loginPage.usernameError}
           className={styles.Input}
@@ -46,6 +51,7 @@ function Login({dispatch, loginPage}: LoginProps) {
         <FTitleText type="h4" text={'密码'}/>
         <div style={{height: 5}}/>
         <FInput
+          name="password"
           value={loginPage.password}
           errorText={loginPage.passwordError}
           className={styles.Input}
@@ -62,10 +68,11 @@ function Login({dispatch, loginPage}: LoginProps) {
         <div style={{height: 50}}/>
         <FRectBtn
           className={styles.btn}
+          disabled={loginPage.btnState !== 'normal' || !loginPage.username || !!loginPage.usernameError || !loginPage.password || !!loginPage.passwordError}
           onClick={() => {
             dispatch<LoginAction>({
               type: 'loginPage/login',
-              payload: '',
+              payload: urlParams.goTo || '',
             });
           }}
         >登 录</FRectBtn>

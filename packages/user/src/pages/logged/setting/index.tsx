@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import useUrlState from '@ahooksjs/use-url-state';
+// import useUrlState from '@ahooksjs/use-url-state';
 
 interface SettingProps {
 
@@ -9,7 +9,7 @@ interface SettingProps {
 
 function Setting({}: SettingProps) {
 
-  const [state, setState] = useUrlState(initialState, options);
+  // const [state, setState] = useUrlState(initialState, options);
 
 
   return (<div className={styles.styles}>

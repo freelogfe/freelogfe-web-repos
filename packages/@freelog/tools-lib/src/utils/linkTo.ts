@@ -194,8 +194,10 @@ interface LoginParamsType {
   goTo?: string;
 }
 
-export function login({...params}: LoginParamsType = {}) {
-  return `/login${handleQuery(params)}`;
+export function login({goTo}: LoginParamsType = {}) {
+  return `/login${handleQuery({
+    goTo: goTo ? encodeURIComponent(goTo) : undefined,
+  })}`;
 }
 
 // 注册

@@ -113,7 +113,7 @@ interface RequestParamsType {
 
 export async function request(config: AxiosRequestConfig, {noRedirect = false}: RequestParamsType = {}) {
   const result: any = await axios.request(config);
-  console.log(result, 'response');
+  // console.log(result, 'response');
   // const {data} = response;
 
   if ((result.errCode === 30 || result.errcode === 30) && !noRedirect) {
