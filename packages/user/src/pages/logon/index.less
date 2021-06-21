@@ -6,7 +6,7 @@
   justify-content: center;
   flex-direction: column;
 
-  .container{
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,14 +23,29 @@
       border-radius: 10px;
       padding: 20px 30px;
 
-      .Input {
+      .ActivateAccountContent {
+        display: flex;
         width: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .verificationCodeInput {
+          width: 200px;
+        }
+
+        .blockInput {
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+        }
       }
 
-      .btn{
-        width: 100%;
-      }
     }
   }
 
 }
+
+

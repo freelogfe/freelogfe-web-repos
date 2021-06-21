@@ -28,11 +28,13 @@ export default defineConfig({
       exact: true,
       path: '/login',
       component: '@/pages/login/index',
+      title: '登录',
     },
     {
       exact: true,
       path: '/logon',
       component: '@/pages/logon/index',
+      title: '注册',
     },
     {
       path: '/logged',
@@ -42,17 +44,20 @@ export default defineConfig({
         {
           exact: true,
           path: 'wallet',
-          component: '@/pages/logged/wallet/index'
+          component: '@/pages/logged/wallet/index',
+          title: '钱包',
         },
         {
           exact: true,
           path: 'contract',
-          component: '@/pages/logged/contract/index'
+          component: '@/pages/logged/contract/index',
+          title: '合约',
         },
         {
           exact: true,
           path: 'setting',
-          component: '@/pages/logged/setting/index'
+          component: '@/pages/logged/setting/index',
+          title: '设置',
         }
       ]
     },

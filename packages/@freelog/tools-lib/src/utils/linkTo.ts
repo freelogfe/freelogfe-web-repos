@@ -201,13 +201,15 @@ export function login({goTo}: LoginParamsType = {}) {
 }
 
 // 注册
-// interface LoginParamsType {
-//   goTo?: string;
-// }
-//
-// export function logon({...params}: LoginParamsType = {}) {
-//   return `/logon${handleQuery(params)}`;
-// }
+interface LoginParamsType {
+  goTo?: string;
+}
+
+export function logon({goTo}: LoginParamsType = {}) {
+  return `/logon${handleQuery({
+    goTo: goTo ? encodeURIComponent(goTo) : undefined,
+  })}`;
+}
 
 // 钱包
 // interface WalletParamsType {

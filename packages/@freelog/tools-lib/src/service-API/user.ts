@@ -47,3 +47,20 @@ export function currentUserInfo() {
     // params: params,
   });
 }
+
+
+// 注册用户
+interface LogonParamsType {
+  loginName: string;
+  password: string;
+  username: string;
+  authCode: string;
+}
+
+export function logon(params: LogonParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: '/v2/users',
+    data: params,
+  });
+}
