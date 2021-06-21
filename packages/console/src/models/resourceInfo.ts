@@ -112,8 +112,9 @@ const Model: ResourceInfoModelType = {
 
       // console.log(data.userId, user.cookiesUserID, '@#@#$@#$@#$@#$@#$@$@$');
 
-      if (!data || data.userId !== user.cookiesUserID) {
-        router.replace(FUtil.LinkTo.exception403({}, '9023uopsadfuioasdiofjl;iasdjfll'));
+      // if (!data || data.userId !== user.cookiesUserID) {
+      if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
+        router.replace(FUtil.LinkTo.exception403());
         return;
       }
 

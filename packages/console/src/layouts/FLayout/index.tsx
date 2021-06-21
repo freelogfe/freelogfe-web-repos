@@ -18,19 +18,19 @@ interface FLayoutProps extends RouteComponentProps {
 
 function FLayout({dispatch, children, global}: FLayoutProps) {
 
-  const [cookiesUserID] = AHooks.useCookieState('uid', {
-    defaultValue: '50028',
-  });
-
-  React.useEffect(() => {
-    // console.log(cookiesUserID, '!~!!!!!!!!###3333333');
-    dispatch<ChangeAction>({
-      type: 'user/change',
-      payload: {
-        cookiesUserID: Number(cookiesUserID),
-      },
-    });
-  }, []);
+  // const [cookiesUserID] = AHooks.useCookieState('uid', {
+  //   defaultValue: '50028',
+  // });
+  //
+  // React.useEffect(() => {
+  //   // console.log(cookiesUserID, '!~!!!!!!!!###3333333');
+  //   dispatch<ChangeAction>({
+  //     type: 'user/change',
+  //     payload: {
+  //       cookiesUserID: Number(cookiesUserID),
+  //     },
+  //   });
+  // }, []);
 
   return (
     <Layout

@@ -16,7 +16,7 @@ export interface UserModelState {
     updateDate: string;
     headImage: string;
   };
-  cookiesUserID: number;
+  // cookiesUserID: number;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -24,15 +24,15 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<UserModelState>;
 }
 
-interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo';
+export interface FetchUserInfoAction extends AnyAction {
+  type: 'user/fetchUserInfo';
 }
 
 export interface MarketModelType {
   namespace: 'user';
   state: UserModelState;
   effects: {
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchUserInfo: (action: FetchUserInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<UserModelState, ChangeAction>;
@@ -46,11 +46,13 @@ const Model: MarketModelType = {
   namespace: 'user',
   state: {
     info: null,
-    cookiesUserID: -1,
+    // cookiesUserID: -1,
   },
   effects: {
-    * fetchInfo({}, {call, put}) {
+    * fetchUserInfo({}: FetchUserInfoAction, {call, put}: EffectsCommandMap) {
+      // console.log('!!!!!#423423423423');
       const {data} = yield call(FServiceAPI.User.currentUserInfo);
+      // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -69,9 +71,9 @@ const Model: MarketModelType = {
   },
   subscriptions: {
     setup({dispatch}) {
-      dispatch<FetchInfoAction>({
-        type: 'fetchInfo',
-      });
+      // dispatch<FetchUserInfoAction>({
+      //   type: 'fetchUserInfo',
+      // });
     },
   }
 };

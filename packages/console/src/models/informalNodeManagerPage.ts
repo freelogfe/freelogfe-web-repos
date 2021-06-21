@@ -278,8 +278,9 @@ const Model: InformalNodeManagerPageModelType = {
 
       const {data} = yield call(FServiceAPI.Node.details, params);
 
-      if (user.cookiesUserID !== data.ownerUserId) {
-        router.replace(FUtil.LinkTo.exception403({}, '90u-=-;dskf'));
+      // if (user.cookiesUserID !== data.ownerUserId) {
+      if (FUtil.Tool.getUserIDByCookies() !== data.ownerUserId) {
+        router.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 

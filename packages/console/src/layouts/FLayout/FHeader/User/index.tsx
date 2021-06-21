@@ -3,10 +3,11 @@ import styles from './index.less';
 import {FContentText} from "@/components/FText";
 import FDropdown from "@/components/FDropdown";
 import {connect, Dispatch} from 'dva';
-import {UserModelState} from "@/models/user";
+import {FetchUserInfoAction, UserModelState} from "@/models/user";
 import {ConnectState} from "@/models/connect";
 import {FServiceAPI, FUtil} from '@freelog/tools-lib';
 import UserSVG from '@/assets/user.svg';
+import * as AHooks from 'ahooks';
 
 interface UserProps {
   dispatch: Dispatch;
@@ -14,6 +15,14 @@ interface UserProps {
 }
 
 function User({dispatch, user}: UserProps) {
+
+  AHooks.useMount(() => {
+  // console.log('!@#$!@#$@#$@#$@#!423444333423423423');
+    dispatch<FetchUserInfoAction>({
+      type: 'user/fetchUserInfo',
+    });
+  });
+
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
       <img src={(user.info?.headImage || UserSVG) as string} alt="headImage"/>

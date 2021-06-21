@@ -340,6 +340,6 @@ export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependenc
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
-    params: params,
+    data: params,
   });
 }

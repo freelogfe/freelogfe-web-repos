@@ -20,7 +20,7 @@ export function createPresentable(params: CreatePresentableParamsType) {
   return FUtil.Request({
     method: 'POST',
     url: `/v2/presentables`,
-    params: params,
+    data: params,
   });
 }
 

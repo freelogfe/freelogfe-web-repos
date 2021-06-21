@@ -259,8 +259,9 @@ const Model: StorageHomePageModelType = {
       const {data} = yield call(FServiceAPI.Storage.bucketDetails, params);
       // console.log(data, '@!#@$!@#$@#$DDDDDDD');
 
-      if (!data || data.userId !== user.cookiesUserID) {
-        router.replace(FUtil.LinkTo.exception403({}, '86767g-=09-090hjh12321jkh'));
+      // if (!data || data.userId !== user.cookiesUserID) {
+      if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
+        router.replace(FUtil.LinkTo.exception403());
         return;
       }
 

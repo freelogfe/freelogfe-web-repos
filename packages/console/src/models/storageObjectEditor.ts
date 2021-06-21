@@ -215,8 +215,9 @@ const Model: StorageObjectEditorModelType = {
       };
       const {data} = yield call(FServiceAPI.Storage.objectDetails, params);
       // console.log(data, 'data@#Rwe90ifjsdlkfa');
-      if (!data || data.userId !== user.cookiesUserID) {
-        return router.replace(FUtil.LinkTo.exception403({}, '2390ujoidsf;kl8p9oi'));
+      // if (!data || data.userId !== user.cookiesUserID) {
+      if (!data || data.userId !== FUtil.Tool.getUserIDByCookies()) {
+        return router.replace(FUtil.LinkTo.exception403());
       }
       const resources: any[] = data.dependencies
         .filter((ro: any) => ro.type === 'resource');

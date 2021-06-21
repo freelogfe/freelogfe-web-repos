@@ -163,8 +163,9 @@ const Model: NodeManagerModelType = {
 
       // console.log(data, 'DDDFa90jlkasdjf;lkasdf');
       // console.log(user.cookiesUserID, 'user.cookiesUserID23423434');
-      if (!data || data.ownerUserId !== user.cookiesUserID) {
-        router.replace(FUtil.LinkTo.exception403({}, '90ujo3ijrlkajdsflkjal;dskf'));
+      // if (!data || data.ownerUserId !== user.cookiesUserID) {
+      if (!data || data.ownerUserId !== FUtil.Tool.getUserIDByCookies()) {
+        router.replace(FUtil.LinkTo.exception403());
         return;
       }
 

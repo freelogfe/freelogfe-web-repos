@@ -27,7 +27,7 @@ export function logout({...params}: LogoutParamsType = {}) {
   // return FUtil.Axios.get(`/passport/logout`, {
   //   params,
   // });
-  FUtil.Request({
+  return FUtil.Request({
     method: 'GET',
     url: '/v2/passport/logout',
     params: params,
@@ -41,7 +41,7 @@ export function logout({...params}: LogoutParamsType = {}) {
 
 export function currentUserInfo() {
   // return FUtil.Axios.get(`/v1/userinfos/current`);
-  FUtil.Request({
+  return FUtil.Request({
     method: 'GET',
     url: '/v2/users/current',
     // params: params,
