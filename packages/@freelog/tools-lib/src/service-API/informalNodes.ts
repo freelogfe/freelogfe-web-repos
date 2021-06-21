@@ -29,8 +29,13 @@ interface CreateRulesParamsType {
   testRuleText: string;
 }
 
-export function createRules({nodeId, testRuleText}: CreateRulesParamsType) {
-  return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
+export function createRules({nodeId, ...params}: CreateRulesParamsType) {
+  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/testNodes/${nodeId}/rules/rematch`,
+    data: params,
+  });
 }
 
 // 搜索测试资源依赖树

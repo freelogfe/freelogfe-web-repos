@@ -34,10 +34,16 @@ export function logout({...params}: LogoutParamsType = {}) {
   }, {noRedirect: true});
 }
 
+// 获取当前登录用户信息
 // interface CurrentUserInfoParamsType {
 
 // }
 
 export function currentUserInfo() {
-  return FUtil.Axios.get(`/v1/userinfos/current`);
+  // return FUtil.Axios.get(`/v1/userinfos/current`);
+  FUtil.Request({
+    method: 'GET',
+    url: '/v2/users/current',
+    // params: params,
+  });
 }

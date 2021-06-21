@@ -18,7 +18,7 @@ export interface CreatePresentableParamsType {
 export function createPresentable(params: CreatePresentableParamsType) {
   // return FUtil.Axios.post(`/v2/presentables`, params);
   return FUtil.Request({
-    method: 'GET',
+    method: 'POST',
     url: `/v2/presentables`,
     params: params,
   });
@@ -266,6 +266,7 @@ export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
   });
 }
 
+// 查看合约应用的展品列表
 interface ContractAppliedPresentableParamsType {
   nodeId: number;
   contractIds: string;

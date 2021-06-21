@@ -52,7 +52,7 @@ interface DeleteBucketParamsType {
 export function deleteBucket(params: DeleteBucketParamsType) {
   // return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}`);
   return FUtil.Request({
-    method: 'GET',
+    method: 'DELETE',
     url: `/v1/storages/buckets/${params.bucketName}`,
     // params: params,
   });
@@ -338,7 +338,7 @@ interface CycleDependencyCheckParamsType {
 export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
   // return FUtil.Axios.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
   return FUtil.Request({
-    method: 'GET',
+    method: 'POST',
     url: `/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
     params: params,
   });
