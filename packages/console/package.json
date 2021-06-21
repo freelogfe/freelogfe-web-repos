@@ -13,7 +13,7 @@
     "@ant-design/icons": "^4.2.1",
     "@antv/g6": "^4.0.3",
     "@freelog/nmr_translator": "^5.0.10",
-    "@freelog/tools-lib": "^0.1.8",
+    "@freelog/tools-lib": "^0.1.9",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "ahooks": "^2.4.0",
     "antd": "^4.9.0",
