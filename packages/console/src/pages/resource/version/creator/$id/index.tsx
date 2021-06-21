@@ -150,7 +150,7 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
             message: '还没有保存草稿或发行，现在离开会导致信息丢失',
             onOk() {
               // console.log('OK');
-              router.push(location.pathname + location.search,);
+              router.push(location.pathname + location.search);
             },
             onCancel() {
               // console.log('Cancel');

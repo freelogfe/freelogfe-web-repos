@@ -18,14 +18,14 @@ import {
 } from "../components/MappingRules";
 import FCodemirror from "@/components/FCodemirror";
 import {FRectBtn, FTextBtn} from "@/components/FButton";
-import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
 import FUpload from "@/components/FUpload";
-import FCheckbox from "@/components/FCheckbox";
 import FUtil1 from "@/utils";
+import Prompt from "umi/prompt";
+import * as H from "history";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -90,6 +90,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   }
 
   return (<>
+    {/*<Prompt*/}
+    {/*  when={true}*/}
+    {/*  message={(location: H.Location) => {*/}
+    {/*    console.log(location, 'location1234234124324##########');*/}
+    {/*    return false;*/}
+    {/*  }}*/}
+    {/*/>*/}
     <div className={styles.header}>
       <div className={styles.headerLeft}>
         <FTitleText text={'映射规则管理'}/>
@@ -133,16 +140,28 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
       {
         informalNodeManagerPage.isCodeEditing
-          ? (<a onClick={() => {
-            onChange({
-              isCodeEditing: false,
-            });
-          }}><FExit/> 退出代码模式</a>)
-          : (<a onClick={() => {
-            onChange({
-              isCodeEditing: true,
-            });
-          }}><FCode/> 进入代码模式</a>)
+          ? (<FTextBtn
+            onClick={() => {
+              onChange({
+                isCodeEditing: false,
+              });
+            }}>
+            <Space size={5}>
+              <FExit/>
+              <span>退出代码模式</span>
+            </Space>
+          </FTextBtn>)
+          : (<FTextBtn
+            onClick={() => {
+              onChange({
+                isCodeEditing: true,
+              });
+            }}>
+            <Space size={5}>
+              <FCode/>
+              <span>进入代码模式</span>
+            </Space>
+          </FTextBtn>)
       }
 
     </div>
