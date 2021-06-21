@@ -331,7 +331,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         })}
                         {obj.attrs && obj.attrs.map((attr: any, attrIndex: any) => {
                           return (
-                            <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule  {...attr}/></div>);
+                            <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr}/></div>);
                         })}
 
                       </Space>
