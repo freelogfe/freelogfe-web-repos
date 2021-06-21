@@ -28,3 +28,14 @@ export function generateRandomCode(strLen: number = 5): string {
   }
   return newStrArr.join('');
 }
+
+/**
+ * 通过读取 cookies 获取用户 ID
+ */
+export function getUserIDByCookies(): number {
+  const uid: string | undefined = document.cookie.split('; ').find((co) => co.startsWith('uid='));
+  if (!uid) {
+    return -1;
+  }
+  return Number(uid.replace('uid=', ''));
+}
