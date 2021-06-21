@@ -9,9 +9,9 @@ export interface CreateParamsType {
 export function create(params: CreateParamsType) {
   // return FUtil.Axios.post('/v2/nodes', params);
   return FUtil.Request({
-    method: 'GET',
+    method: 'POST',
     url: `/v2/nodes`,
-    params: params,
+    data: params,
   });
 }
 

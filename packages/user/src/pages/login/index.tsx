@@ -1,13 +1,15 @@
 import * as React from "react";
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
+import {FContentText, FTitleText} from "@/components/FText";
 import FInput from "@/components/FInput";
-import {FRectBtn} from "@/components/FButton";
+import {FRectBtn, FTextBtn} from "@/components/FButton";
 import {ChangeAction, LoginAction, LoginPageModelState} from "@/models/loginPage";
 import {connect, Dispatch} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {FUtil} from "@freelog/tools-lib";
 import useUrlState from "@ahooksjs/use-url-state";
+import {Space} from "antd";
+import {history} from 'umi';
 
 interface LoginProps {
   dispatch: Dispatch;
@@ -78,6 +80,22 @@ function Login({dispatch, loginPage}: LoginProps) {
           }}
         >登 录</FRectBtn>
       </div>
+
+      <div style={{height: 20}}/>
+
+      <Space size={10}>
+        <FContentText
+          text={'freelog新用户？'}
+          type="normal"
+        />
+        <FTextBtn
+          type="primary"
+          onClick={() => {
+            // history.replace()
+            window.location.replace('http://www.testfreelog.com/signup');
+          }}
+        >立即注册</FTextBtn>
+      </Space>
     </div>
     <div style={{height: '70%', flexShrink: 1}}/>
 
