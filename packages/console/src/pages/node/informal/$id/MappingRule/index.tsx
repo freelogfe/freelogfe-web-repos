@@ -69,14 +69,14 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       offline: r.online === false,
       labels: r.labels,
       replaces: r.replaces,
-      // attrs: r.attrs?.map((a: any) => {
-      //   return {
-      //     type: a.operation,
-      //     theKey: a.key,
-      //     value: a.value,
-      //     description: a.description,
-      //   };
-      // }) || undefined,
+      attrs: r.attrs?.map((a: any) => {
+        return {
+          type: a.operation,
+          theKey: a.key,
+          value: a.value,
+          description: a.description,
+        };
+      }),
     };
   });
 
