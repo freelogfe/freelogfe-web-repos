@@ -20,6 +20,7 @@ interface LoginProps {
 function Login({dispatch, loginPage}: LoginProps) {
 
   const [urlParams] = useUrlState<{ goTo: string }>();
+  const boxRef = React.useRef(null);
 
   async function onChange(payload: Partial<LoginPageModelState>) {
     await dispatch<ChangeAction>({
@@ -28,12 +29,14 @@ function Login({dispatch, loginPage}: LoginProps) {
     });
   }
 
+  const submitBtnDisabled: boolean = loginPage.btnState !== 'normal' || loginPage.btnState !== 'normal' || !loginPage.username || !!loginPage.usernameError || !loginPage.password || !!loginPage.passwordError;
+
   return (<div className={styles.style}>
     <div style={{height: '30%', flexShrink: 1}}/>
     <div className={styles.container}>
       <i className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}/>
       <div style={{height: 20}}/>
-      <div className={styles.box}>
+      <div className={styles.box} ref={boxRef}>
         <FTitleText type="h4" text={'用户名/手机号/邮箱'}/>
         <div style={{height: 5}}/>
         <FInput
@@ -54,6 +57,7 @@ function Login({dispatch, loginPage}: LoginProps) {
         <FTitleText type="h4" text={'密码'}/>
         <div style={{height: 5}}/>
         <FInput
+          // ref={passwordInput}
           name="password"
           value={loginPage.password}
           errorText={loginPage.passwordError}
@@ -69,18 +73,22 @@ function Login({dispatch, loginPage}: LoginProps) {
             // console.log('1111111');
           }}
           onPressEnter={(e) => {
-            // console.log(e, 'eeee!!!!!!!@#$!@#$');
-            // const value: string = e.target.value;
-            // onChange({
-            //   password: value,
-            //   passwordError: !value ? '密码不能为空' : '',
-            // });
+            // @ts-ignore
+            e.target.blur();
+            if (!submitBtnDisabled) {
+              setTimeout(() => {
+                dispatch<LoginAction>({
+                  type: 'loginPage/login',
+                  payload: urlParams.goTo || '',
+                });
+              }, 30);
+            }
           }}
         />
         <div style={{height: 50}}/>
         <FRectBtn
           className={styles.btn}
-          disabled={loginPage.btnState !== 'normal' || loginPage.btnState !== 'normal' || !loginPage.username || !!loginPage.usernameError || !loginPage.password || !!loginPage.passwordError}
+          disabled={submitBtnDisabled}
           onClick={() => {
             dispatch<LoginAction>({
               type: 'loginPage/login',
