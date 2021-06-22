@@ -60,6 +60,13 @@ const Model: LoginPageModelType = {
         loginPage,
       }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          btnState: 'verify',
+        },
+      });
+
       const params: Parameters<typeof FServiceAPI.User.login>[0] = {
         loginName: loginPage.username,
         password: loginPage.password,
@@ -67,8 +74,16 @@ const Model: LoginPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.User.login, params);
-      // console.log(data, 'data!!!!!!!11111111');
-      if (data) {
+      // console.log(JSON.stringify(data), 'data!!!!!!!11111111');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          btnState: 'normal',
+        },
+      });
+
+      if (data?.userId) {
         if (payload) {
           window.location.replace(decodeURIComponent(payload));
         } else {

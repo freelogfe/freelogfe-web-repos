@@ -66,19 +66,28 @@ function Login({dispatch, loginPage}: LoginProps) {
               password: value,
               passwordError: !value ? '密码不能为空' : '',
             });
+            // console.log('1111111');
+          }}
+          onPressEnter={(e) => {
+            // console.log(e, 'eeee!!!!!!!@#$!@#$');
+            // const value: string = e.target.value;
+            // onChange({
+            //   password: value,
+            //   passwordError: !value ? '密码不能为空' : '',
+            // });
           }}
         />
         <div style={{height: 50}}/>
         <FRectBtn
           className={styles.btn}
-          disabled={loginPage.btnState !== 'normal' || !loginPage.username || !!loginPage.usernameError || !loginPage.password || !!loginPage.passwordError}
+          disabled={loginPage.btnState !== 'normal' || loginPage.btnState !== 'normal' || !loginPage.username || !!loginPage.usernameError || !loginPage.password || !!loginPage.passwordError}
           onClick={() => {
             dispatch<LoginAction>({
               type: 'loginPage/login',
               payload: urlParams.goTo || '',
             });
           }}
-        >登 录</FRectBtn>
+        >{loginPage.btnState === 'verify' ? '正在登录' : '登 录'}</FRectBtn>
       </div>
 
       <div style={{height: 20}}/>

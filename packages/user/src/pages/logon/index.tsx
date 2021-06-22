@@ -293,6 +293,7 @@ function Logon({dispatch, logonPage}: LogonProps) {
                 className={styles.blockInput}
                 wrapClassName={styles.blockInput}
                 size="middle"
+                type="password"
                 value={logonPage.passwordInput}
                 onChange={(e) => {
                   const value = e.target.value;
