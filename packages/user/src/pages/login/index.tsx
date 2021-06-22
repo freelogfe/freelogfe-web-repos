@@ -91,8 +91,9 @@ function Login({dispatch, loginPage}: LoginProps) {
         <FTextBtn
           type="primary"
           onClick={() => {
-            // history.replace()
-            window.location.replace('http://www.testfreelog.com/signup');
+            history.replace(FUtil.LinkTo.logon(urlParams.goTo ? {
+              goTo: decodeURIComponent(urlParams.goTo)
+            } : {}));
           }}
         >立即注册</FTextBtn>
       </Space>

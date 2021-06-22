@@ -27,7 +27,9 @@ export const MOBILE_PHONE_NUMBER = /^((13[0-9])|(14[5-9])|(15([0-3]|[5-9]))|(16[
 export const EMAIL_ADDRESS = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
 // 用户名
+// export const USERNAME = /^(?!-)[A-Za-z0-9-]{1,30}(?<!-)$/;
 export const USERNAME = /^(?!-)[A-Za-z0-9-]{1,30}(?<!-)$/;
 
 // 用户密码
-export const PASSWORD = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,24}$/;
+// export const PASSWORD = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,24}$/;
+export const PASSWORD = /^(?=.*[0-9])(?=.*[a-zA-Z])(.{6,24})$/;

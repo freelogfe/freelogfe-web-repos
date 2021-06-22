@@ -48,6 +48,22 @@ export function currentUserInfo() {
   });
 }
 
+// 查看用户详情
+interface UserDetailsParamsType {
+  mobile?: string;
+  username?: string;
+  email?: string;
+  userId?: number;
+}
+
+export function userDetails(params: UserDetailsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users/detail`,
+    params: params,
+  });
+}
+
 
 // 注册用户
 interface LogonParamsType {
