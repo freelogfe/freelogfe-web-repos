@@ -26,6 +26,10 @@ import FUpload from "@/components/FUpload";
 import FUtil1 from "@/utils";
 import Prompt from "umi/prompt";
 import * as H from "history";
+import * as AHooks from 'ahooks';
+import fConfirmModal from "@/components/fConfirmModal";
+import {router} from "umi";
+import {FUtil} from '@freelog/tools-lib';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -42,6 +46,23 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       type: 'informalNodeManagerPage/fetchRules'
     });
   }, []);
+
+  React.useEffect(() => {
+    if (informalNodeManagerPage.codeIsDirty) {
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+
+  }, [informalNodeManagerPage.codeIsDirty]);
+
+  AHooks.useUnmount(() => {
+    window.onbeforeunload = null;
+    onChange({
+      promptLeavePath: '',
+      // codeIsDirty: false,
+    });
+  });
 
   const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
@@ -80,8 +101,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     };
   });
 
-  // console.log(rulesObj, 'rulesObjQ#@FDSZfj()Uew');
-
   async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'informalNodeManagerPage/change',
@@ -90,13 +109,30 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   }
 
   return (<>
-    {/*<Prompt*/}
-    {/*  when={true}*/}
-    {/*  message={(location: H.Location) => {*/}
-    {/*    console.log(location, 'location1234234124324##########');*/}
-    {/*    return false;*/}
-    {/*  }}*/}
-    {/*/>*/}
+    <Prompt
+      when={informalNodeManagerPage.codeIsDirty && informalNodeManagerPage.promptLeavePath === ''}
+      message={(location: H.Location) => {
+        const locationHref: string = location.pathname + location.search;
+        if (locationHref === FUtil.LinkTo.informNodeManagement({
+          nodeID: informalNodeManagerPage.nodeID,
+          showPage: 'mappingRule'
+        })) {
+          return true;
+        }
+        onChange({promptLeavePath: locationHref});
+        fConfirmModal({
+          message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
+          onOk() {
+            router.push(locationHref);
+          },
+          onCancel() {
+            onChange({promptLeavePath: ''});
+          },
+        });
+        // console.log(location, 'location1234234124324##########');
+        return false;
+      }}
+    />
     <div className={styles.header}>
       <div className={styles.headerLeft}>
         <FTitleText text={'映射规则管理'}/>

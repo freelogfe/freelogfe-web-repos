@@ -33,7 +33,7 @@ export function createRules({nodeId, ...params}: CreateRulesParamsType) {
   // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
   return FUtil.Request({
     method: 'POST',
-    url: `/v2/testNodes/${nodeId}/rules/rematch`,
+    url: `/v2/testNodes/${nodeId}/rules`,
     data: params,
   });
 }

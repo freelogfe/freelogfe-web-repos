@@ -79,6 +79,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
   isCodeEditing: boolean;
   codeInput: string;
   codeIsDirty: boolean;
+  promptLeavePath: string;
   codeIsChecking: boolean;
   codeCompileErrors: null | {
     charPositionInLine: number;
@@ -219,7 +220,7 @@ interface InformalNodeManagerPageModelType {
   };
 }
 
-const initStates: InformalNodeManagerPageModelState = {
+const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   nodeID: -1,
   nodeName: '',
@@ -229,34 +230,28 @@ const initStates: InformalNodeManagerPageModelState = {
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
-
   replaceHandlerModalVisible: false,
-
   replacerActivatedTab: 'market',
   replacerList: [],
   replacerInput: '',
-
   selectedType: '-1',
   selectedStatus: '2',
   filterKeywords: '',
-
   exhibitList: [],
   exhibitsTotal: -1,
-  // exhibitListIsLoading: false,
 
   themeList: [],
   themesTotal: -1,
-  // themeListIsLoading: false,
   addThemeDrawerVisible: false,
 
   isCodeEditing: false,
   codeInput: '',
   codeIsDirty: false,
+  promptLeavePath: '',
   codeIsChecking: false,
   codeCompileErrors: null,
   codeExecutionError: null,
   codeSaveSuccess: false,
-
   mappingRule: [],
   checkedExhibitName: [],
   checkedThemeName: '',
@@ -264,7 +259,7 @@ const initStates: InformalNodeManagerPageModelState = {
 
 const Model: InformalNodeManagerPageModelType = {
   namespace: 'informalNodeManagerPage',
-  state: initStates,
+  state: informalNodeManagerPageInitStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
       const {informalNodeManagerPage, user}: ConnectState = yield select(({informalNodeManagerPage, user}: ConnectState) => ({
@@ -297,7 +292,7 @@ const Model: InformalNodeManagerPageModelType = {
     * initModelStates({}: InitModelStatesAction, {put,}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: initStates,
+        payload: informalNodeManagerPageInitStates,
       });
     },
     * fetchExhibitList({payload: {isRematch = true, isRestart}}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
@@ -515,6 +510,7 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           codeInput: data.ruleText,
+          codeIsDirty: false,
         },
       });
     },

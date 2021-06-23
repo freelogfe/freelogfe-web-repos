@@ -60,7 +60,6 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
     } else {
       window.onbeforeunload = null;
     }
-
   }, [resourceCreatorPage.name, resourceCreatorPage.resourceType, resourceCreatorPage.introduction, resourceCreatorPage.cover, resourceCreatorPage.labels]);
 
   function onClickCreate() {
@@ -83,17 +82,20 @@ function ResourceCreator({dispatch, route, resourceCreatorPage, user}: ResourceC
       message={(location: H.Location, action: H.Action) => {
         // console.log(location, action, 'LAAAAL');
         // return window.confirm('还没有创建资源，现在离开会导致信息丢失');
+        if (location.pathname === FUtil.LinkTo.resourceCreator()) {
+          return true;
+        }
         dispatch<ChangeAction>({
           type: 'resourceCreatorPage/change',
           payload: {
-            promptLeavePath: location.pathname,
+            promptLeavePath: location.pathname + location.search,
           }
         });
         fConfirmModal({
           message: '还没有创建资源，现在离开会导致信息丢失',
           onOk() {
             // console.log('OK');
-            router.push(location.pathname);
+            router.push(location.pathname + location.search);
           },
           onCancel() {
             // console.log('Cancel');
