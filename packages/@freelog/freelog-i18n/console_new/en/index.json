@@ -307,7 +307,7 @@
 	"unnamed_version": "Unnamed Version",
 	"version_no_draft": "{VersionNo}（draft）",
 	"import_test_theme": "Import test theme",
-	"reflect_rule_pre_excute_error_object_not_existed": "",
-	"reflect_rule_pre_excute_error_resource_not_existed": "",
-	"reflect_rule_pre_excute_error_exhibit_not_existed": ""
+	"reflect_rule_pre_excute_error_object_not_existed": "No objects ​matched this name",
+	"reflect_rule_pre_excute_error_resource_not_existed": "No resources ​matched this name",
+	"reflect_rule_pre_excute_error_exhibit_not_existed": "No exhibits in the nodes matched this name "
 }
