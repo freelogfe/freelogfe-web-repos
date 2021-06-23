@@ -269,9 +269,9 @@ interface ActionsProps {
 }
 
 function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
-  let refDom: any = null;
+  const refDom = React.useRef(null);
 
-  return (<div ref={(ref) => refDom = ref}>
+  return (<div ref={refDom}>
     <Space size={25}>
       {
         onEdit && (<FTextBtn
@@ -297,12 +297,10 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
           // style={{width: 200}}
           overlayStyle={{width: 150}}
           trigger="hover"
-          getPopupContainer={() => refDom}
+          getPopupContainer={() => refDom.current || document.body}
           onConfirm={() => onDelete()}
         >
-          <FTextBtn
-            className={styles.Delete}
-          ><FDelete/></FTextBtn>
+          <div><FTextBtn className={styles.Delete}><FDelete/></FTextBtn></div>
         </Popconfirm>)
       }
 
