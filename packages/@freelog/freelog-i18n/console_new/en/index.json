@@ -306,5 +306,8 @@
 	"msg_have_no_access": "Sorry but you have no access to this page",
 	"unnamed_version": "Unnamed Version",
 	"version_no_draft": "{VersionNo}（draft）",
-	"import_test_theme": "Import test theme"
+	"import_test_theme": "Import test theme",
+	"reflect_rule_pre_excute_error_object_not_existed": "",
+	"reflect_rule_pre_excute_error_resource_not_existed": "",
+	"reflect_rule_pre_excute_error_exhibit_not_existed": ""
 }
