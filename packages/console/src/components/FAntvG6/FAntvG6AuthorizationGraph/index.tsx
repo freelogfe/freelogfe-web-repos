@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
-import {GraphData} from "@antv/g6/lib/types";
+import {GraphData} from "@antv/g6/lib";
 import {FTipText} from "@/components/FText";
 import {FServiceAPI} from '@freelog/tools-lib';
 
