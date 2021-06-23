@@ -10,5 +10,6 @@
 	"saved_successfully": "保存成功",
 	"cancel": "取消",
 	"relationship_status_pending": "待执行",
-	"btn_save": "保存"
+	"btn_save": "保存",
+	"msg_wait_for_processing": "处理中，请稍后……"
 }

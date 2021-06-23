@@ -10,5 +10,6 @@
 	"saved_successfully": "Saved successfully",
 	"cancel": "CANCEL",
 	"relationship_status_pending": "Pending",
-	"btn_save": "SAVE"
+	"btn_save": "SAVE",
+	"msg_wait_for_processing": "Please wait while we are processing your file……"
 }

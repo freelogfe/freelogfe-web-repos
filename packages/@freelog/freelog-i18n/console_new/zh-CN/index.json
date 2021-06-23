@@ -305,5 +305,6 @@
 	"btn_check": "查看",
 	"msg_have_no_access": "抱歉，您没有当前页面的操作权限",
 	"unnamed_version": "未命名版本",
-	"version_no_draft": "{VersionNo}（草稿）"
+	"version_no_draft": "{VersionNo}（草稿）",
+	"import_test_theme": "导入测试主题"
 }
