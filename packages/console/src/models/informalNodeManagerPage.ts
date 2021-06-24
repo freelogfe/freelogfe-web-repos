@@ -634,7 +634,7 @@ const Model: InformalNodeManagerPageModelType = {
           additionalTestRule: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
-        // console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
+        console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
         testRules = data?.testRules || [];
       } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
@@ -642,9 +642,12 @@ const Model: InformalNodeManagerPageModelType = {
           testRuleText: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
-        // console.log(data, 'data123423412341234');
+        console.log(data, 'data123423412341234');
         testRules = data?.testRules || [];
       }
+
+
+      // console.log(dat/**/a, 'data!@#$@#$@#$!@#$@#$');
 
       const codeExecutionError = testRules
         .filter((tr: any) => {
@@ -663,7 +666,7 @@ const Model: InformalNodeManagerPageModelType = {
         return yield put<ChangeAction>({
           type: 'change',
           payload: {
-            codeExecutionError: codeExecutionError,
+            addOrReplaceCodeExecutionErrorMessages: codeExecutionError,
           },
         });
       }

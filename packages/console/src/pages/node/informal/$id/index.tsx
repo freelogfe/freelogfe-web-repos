@@ -36,6 +36,13 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
     });
   }, [showPage]);
 
+  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+    await dispatch<ChangeAction>({
+      type: 'informalNodeManagerPage/change',
+      payload,
+    });
+  }
+
   return (<>
     <div>
       <div className={styles.headerTip}>
@@ -58,6 +65,14 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
 
     <FModal
       visible={!!informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages}
+      onOk={() => {
+        onChange({addOrReplaceCodeExecutionErrorMessages: null});
+      }}
+      cancelButtonProps={{
+        style: {
+          display: 'none',
+        }
+      }}
     >
       <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
       <div style={{height: 20}}/>
