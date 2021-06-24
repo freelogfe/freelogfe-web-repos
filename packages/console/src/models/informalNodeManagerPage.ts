@@ -38,17 +38,19 @@ interface IMappingRule {
   }[];
 }
 
-export type InformalNodeManagerPageModelState = WholeReadonly<{
+export interface InformalNodeManagerPageModelState {
   nodeID: number;
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
   ruleText: string;
-
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
-  addExhibitDrawerVisible: boolean;
+  addOrReplaceCodeExecutionErrorMessages: null | {
+    msg: string;
+  }[];
 
+  addExhibitDrawerVisible: boolean;
   replaceHandlerModalVisible: boolean;
   replacerActivatedTab: 'market' | 'resource' | 'collection';
   replacerInput: string;
@@ -62,37 +64,12 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     version: string;
     date: string;
   }[];
-
   selectedType: '-1' | string;
   selectedStatus: '0' | '1' | '2';
   filterKeywords: string;
-
   exhibitsTotal: number;
-  // exhibitListIsLoading: boolean;
+
   themesTotal: number;
-
-  // themeListIsLoading: boolean;
-  addThemeDrawerVisible: boolean;
-
-  mappingRule: IMappingRule[];
-  checkedExhibitName: string[];
-  checkedThemeName: string;
-  isCodeEditing: boolean;
-  codeInput: string;
-  codeIsDirty: boolean;
-  promptLeavePath: string;
-  codeIsChecking: boolean;
-  codeCompileErrors: null | {
-    charPositionInLine: number;
-    line: number;
-    msg: string;
-    offendingSymbol: string;
-  }[];
-  codeExecutionError: null | {
-    msg: string;
-  }[];
-  codeSaveSuccess: boolean;
-}> & {
   exhibitList: {
     id: string;
     cover: string;
@@ -112,6 +89,7 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
     authErrorText: string;
   }[];
 
+  addThemeDrawerVisible: boolean;
   themeList: {
     id: string;
     name: string;
@@ -128,7 +106,27 @@ export type InformalNodeManagerPageModelState = WholeReadonly<{
       type: 'resource' | 'object';
     };
   }[];
-};
+
+  mappingRule: IMappingRule[];
+  checkedExhibitName: string[];
+  checkedThemeName: string;
+  isCodeEditing: boolean;
+  codeInput: string;
+  codeIsDirty: boolean;
+  promptLeavePath: string;
+  codeIsChecking: boolean;
+  codeCompileErrors: null | {
+    charPositionInLine: number;
+    line: number;
+    msg: string;
+    offendingSymbol: string;
+  }[];
+  codeExecutionError: null | {
+    msg: string;
+  }[];
+  codeSaveSuccess: boolean;
+
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informalNodeManagerPage/change';
@@ -229,6 +227,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   testNodeUrl: '',
   ruleText: '',
   showPage: 'exhibit',
+  addOrReplaceCodeExecutionErrorMessages: null,
 
   addExhibitDrawerVisible: false,
   replaceHandlerModalVisible: false,
@@ -352,7 +351,9 @@ const Model: InformalNodeManagerPageModelType = {
               return ro.exhibitName === dl.testResourceName;
             });
 
-            console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
+            // console.log(rulesObjRule, 'rulesObjRulerulesObjRule!!!@@@@@@');
+
+            // console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
 
             const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
               add: operations.includes('add') ? {
@@ -379,7 +380,29 @@ const Model: InformalNodeManagerPageModelType = {
                   description: a.description,
                 };
               }) : undefined,
-              replaces: rulesObjRule?.replaces,
+              replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+                // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+                return {
+                  replaced: {
+                    ...rr.replaced,
+                    versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+                  },
+                  replacer: {
+                    ...rr.replacer,
+                    versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+                  },
+                  scopes: rr.scopes && (rr.scopes as any[])
+                    .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+                      // console.log(ss, 'ss!!!!@@@@##');
+                      return ss.map((sss: any) => {
+                        return {
+                          ...sss,
+                          versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                        };
+                      });
+                    }),
+                };
+              }),
             };
             // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
             return {
@@ -510,7 +533,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
-      console.log(data, 'data!!!!!@#$@#$@#$');
+      // console.log(data, 'data!!!!!@#$@#$@#$');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -579,7 +602,9 @@ const Model: InformalNodeManagerPageModelType = {
       // console.log(payload.data, 'payload.data0923jlkfasdfasdf');
       // console.log(JSON.stringify(payload.data), 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
-      // console.log(text, 'text1234fklsadj');
+      console.log(text, 'text1234fklsadj');
+
+      let testRules: any[] = [];
 
       if (payload.type === 'append') {
         const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
@@ -587,32 +612,55 @@ const Model: InformalNodeManagerPageModelType = {
           additionalTestRule: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
-      }
-
-      if (payload.type === 'replace') {
+        console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
+        testRules = data?.testRules || [];
+      } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
           nodeId: informalNodeManagerPage.nodeID,
           testRuleText: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+        console.log(data, 'data123423412341234');
+        testRules = data?.testRules || [];
       }
 
-      // if (informalNodeManagerPage.showPage === 'exhibit') {
-      //   yield put<FetchExhibitListAction>({
-      //     type: 'fetchExhibitList',
-      //     payload: {
-      //       isRematch: false,
-      //     },
-      //   });
-      // }
-      // if (informalNodeManagerPage.showPage === 'theme') {
-      //   yield put<FetchThemeListAction>({
-      //     type: 'fetchThemeList',
-      //     payload: {
-      //       isRematch: false,
-      //     },
-      //   });
-      // }
+      const codeExecutionError = testRules
+        .filter((tr: any) => {
+          return tr.matchErrors.length > 0;
+        })
+        .map((tr: any) => {
+          return tr.matchErrors.map((me: string) => {
+            return {
+              msg: me,
+            };
+          });
+        })
+        .flat();
+
+      if (codeExecutionError.length > 0) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            codeExecutionError: codeExecutionError,
+          },
+        });
+      }
+
+      if (informalNodeManagerPage.showPage === 'exhibit') {
+        yield put<FetchExhibitListAction>({
+          type: 'fetchExhibitList',
+          payload: {
+            isRematch: false,
+          },
+        });
+      } else if (informalNodeManagerPage.showPage === 'theme') {
+        yield put<FetchThemeListAction>({
+          type: 'fetchThemeList',
+          payload: {
+            isRematch: false,
+          },
+        });
+      }
     },
   },
   reducers: {

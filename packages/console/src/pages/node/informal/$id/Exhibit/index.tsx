@@ -242,9 +242,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         });
       }}
       onConfirm={(value) => {
-        // console.log(value, '@#ASDFASDfloj98p');
+        console.log(value, '@#ASDFASDfloj98pvaluevaluevalue');
         const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-        // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+        console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
 
         for (const v of value) {
           const rule = rules.find((r) => v.exhibitName === r.exhibitName);

@@ -61,7 +61,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.checkedKeys as string[]).map<string[]>((r) => {
         return r.split('-');
       });
-      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_');
+      console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
       const resultObj: { [key: string]: ICandidate[][] } = {};
       for (const simplifiedResult of simplifiedResults) {
         resultObj[simplifiedResult[0]] = [];
@@ -124,6 +124,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
         </div>
       </div>
       <div className={styles.arrow}>
+
         <SwapRightOutlined
           style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}
         />
@@ -147,6 +148,7 @@ export default connect(({replaceInformExhibit}: ConnectState) => ({
 }))(FReplaceModal);
 
 function simplifiedRelationship(relation: string[]): string[] {
+  console.log(relation, 'relation!!!!!@@@@@');
   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
 
   for (let i = 0; i < arr.length; i++) {
