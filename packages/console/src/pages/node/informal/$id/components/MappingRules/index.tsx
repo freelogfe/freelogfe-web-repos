@@ -210,10 +210,22 @@ export function ReplaceRule({replacer, replaced, scopes}: ReplaceRuleProps) {
       <div><label
         className={replaced.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replaced.name}</label>
       </div>
+      {
+        replaced.versionRange && (<>
+          <div><FContentText text={'版本'}/></div>
+          <div><FContentText type="highlight" text={replaced.versionRange}/></div>
+        </>)
+      }
       <div><FContentText text={'为'}/></div>
       <div><label
         className={replacer.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{replacer.name}</label>
       </div>
+      {
+        replacer.versionRange && (<>
+          <div><FContentText text={'版本'}/></div>
+          <div><FContentText type="highlight" text={replacer.versionRange}/></div>
+        </>)
+      }
       {
         scopes?.length > 0 && (<>
           <div><FContentText text={'，作用域'}/></div>

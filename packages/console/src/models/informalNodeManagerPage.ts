@@ -14,6 +14,7 @@ interface IMappingRule {
       type: 'resource' | 'object';
       name: string;
       version?: string;
+      versionRange?: string;
     };
   };
   alter?: string;
@@ -351,6 +352,8 @@ const Model: InformalNodeManagerPageModelType = {
               return ro.exhibitName === dl.testResourceName;
             });
 
+            console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
+
             const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
               add: operations.includes('add') ? {
                 exhibit: dl.testResourceName,
@@ -358,10 +361,11 @@ const Model: InformalNodeManagerPageModelType = {
                   type: dl.originInfo.type,
                   name: dl.originInfo.name,
                   version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+                  versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
                 },
               } : undefined,
               alter: operations.includes('alter') ? dl.testResourceName : undefined,
-              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+              // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
               labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
               title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
               cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
@@ -460,6 +464,7 @@ const Model: InformalNodeManagerPageModelType = {
                   type: dl.originInfo.type,
                   name: dl.originInfo.name,
                   version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+                  versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
                 }
               } : undefined,
               alter: operations.includes('alter') ? dl.testResourceName : undefined,
