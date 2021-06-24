@@ -79,7 +79,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         source: {
           type: r.candidate.type,
           name: r.candidate.name,
-          // $version: r.candidate.versionRange,
+          versionRange: r.candidate.versionRange && r.candidate.versionRange !== 'latest' ? r.candidate.versionRange : undefined,
         },
       } : undefined,
       alter: r.operation === 'alter' ? r.exhibitName : undefined,

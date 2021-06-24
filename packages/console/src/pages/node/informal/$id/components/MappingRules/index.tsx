@@ -16,7 +16,7 @@ interface AddRuleProps {
   source: {
     type: 'resource' | 'object';
     name: string;
-    version?: string;
+    versionRange?: string;
   };
 }
 
@@ -30,6 +30,12 @@ export function AddRule({exhibit, source}: AddRuleProps) {
       <div><label
         className={source.type === 'resource' ? styles.resourceLabel : styles.objectLabel}>{source.name}</label>
       </div>
+      {
+        source.versionRange && (<>
+          <div><FContentText text={'展示版本'}/></div>
+          <div><FContentText type="highlight" text={source.versionRange}/></div>
+        </>)
+      }
     </div>
   </div>);
 }

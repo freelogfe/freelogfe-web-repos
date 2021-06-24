@@ -505,6 +505,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
+      console.log(data, 'data!!!!!@#$@#$@#$');
 
       yield put<ChangeAction>({
         type: 'change',
