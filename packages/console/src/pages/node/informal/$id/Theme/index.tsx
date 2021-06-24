@@ -23,6 +23,7 @@ import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInfo
 import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
+import FUtil1 from "@/utils";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -79,13 +80,14 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             <Space size={30}>
               <Space size={5}>
                 <FTextBtn
+                  type="default"
                   onClick={() => {
                     onChange({
                       addThemeDrawerVisible: true,
                     });
                   }}><FAdd/></FTextBtn>
                 <FContentText
-                  text={'新增测试展品'}
+                  text={FUtil1.I18n.message('import_test_theme') }
                 />
               </Space>
               <div><FInput theme={'dark'}/></div>
