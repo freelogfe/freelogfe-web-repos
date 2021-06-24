@@ -4,7 +4,6 @@ import {FContentText} from "@/components/FText";
 import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
-import {SwapRightOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
 import {ConnectState} from "@/models/connect";
