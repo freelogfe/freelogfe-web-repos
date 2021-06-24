@@ -64,6 +64,7 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
     </div>
 
     <FModal
+      title={'提示'}
       visible={!!informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages}
       onOk={() => {
         onChange({addOrReplaceCodeExecutionErrorMessages: null});
@@ -74,24 +75,26 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
         }
       }}
     >
-      <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
-      <div style={{height: 20}}/>
-      <Space className={styles.errorList} size={5} direction="vertical">
-        {
-          informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages?.map((cme, index) => {
-            return (<div key={index} className={styles.errorListItem}>
-              <div>•</div>
-              <div style={{width: 5}}/>
-              <div>
+      <div className={styles.codeExecutionError}>
+        <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
+        <div style={{height: 20}}/>
+        <Space className={styles.errorList} size={5} direction="vertical">
+          {
+            informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages?.map((cme, index) => {
+              return (<div key={index} className={styles.errorListItem}>
+                <div>•</div>
+                <div style={{width: 5}}/>
                 <div>
-                  <div>错误提示：</div>
-                  <div>{cme.msg}</div>
+                  <div>
+                    <div>错误提示：</div>
+                    <div>{cme.msg}</div>
+                  </div>
                 </div>
-              </div>
-            </div>);
-          })
-        }
-      </Space>
+              </div>);
+            })
+          }
+        </Space>
+      </div>
     </FModal>
   </>);
 }

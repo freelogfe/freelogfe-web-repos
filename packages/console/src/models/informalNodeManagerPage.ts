@@ -626,7 +626,7 @@ const Model: InformalNodeManagerPageModelType = {
       const text = decompile(payload.data);
       // console.log(text, 'text1234fklsadj');
 
-      let testRules: any[] = [];
+      // let testRules: any[] = [];
 
       if (payload.type === 'append') {
         const params: Parameters<typeof FServiceAPI.InformalNode.putRules>[0] = {
@@ -634,22 +634,28 @@ const Model: InformalNodeManagerPageModelType = {
           additionalTestRule: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
-        console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
-        testRules = data?.testRules || [];
+        // console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
+        // testRules = data?.testRules || [];
       } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
           nodeId: informalNodeManagerPage.nodeID,
           testRuleText: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
-        console.log(data, 'data123423412341234');
-        testRules = data?.testRules || [];
+        // console.log(data, 'data123423412341234');
+        // testRules = data?.testRules || [];
       }
 
 
+      const params2: RuleMatchStatusParams = {
+        nodeID: informalNodeManagerPage.nodeID,
+        isRematch: true,
+      };
+
+      const {data: data1} = yield call(ruleMatchStatus, params2);
       // console.log(dat/**/a, 'data!@#$@#$@#$!@#$@#$');
 
-      const codeExecutionError = testRules
+      const codeExecutionError = data1.testRules
         .filter((tr: any) => {
           return tr.matchErrors.length > 0;
         })
@@ -663,7 +669,7 @@ const Model: InformalNodeManagerPageModelType = {
         .flat();
 
       if (codeExecutionError.length > 0) {
-        return yield put<ChangeAction>({
+        yield put<ChangeAction>({
           type: 'change',
           payload: {
             addOrReplaceCodeExecutionErrorMessages: codeExecutionError,
