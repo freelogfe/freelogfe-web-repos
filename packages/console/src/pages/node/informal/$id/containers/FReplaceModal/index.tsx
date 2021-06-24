@@ -147,7 +147,7 @@ export default connect(({replaceInformExhibit}: ConnectState) => ({
 }))(FReplaceModal);
 
 function simplifiedRelationship(relation: string[]): string[] {
-  console.log(relation, 'relation!!!!!@@@@@');
+  // console.log(relation, 'relation!!!!!@@@@@');
   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
 
   for (let i = 0; i < arr.length; i++) {

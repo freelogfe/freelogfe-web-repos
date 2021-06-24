@@ -311,6 +311,7 @@ const Model: AddInformExhibitType = {
         keywords: addInformExhibitDrawer.addExhibitInputValue,
         isLoadingTypeless: 0,
         omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
       };
 
       const {data} = yield call(FServiceAPI.Storage.objectList, params);
