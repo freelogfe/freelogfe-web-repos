@@ -8,6 +8,7 @@ import {SwapRightOutlined} from '@ant-design/icons';
 import {connect, Dispatch} from 'dva';
 import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
 import {ConnectState} from "@/models/connect";
+import FThickArrowRight from "@/components/FIcons/FThickArrowRight";
 
 interface ICandidate {
   name: string;
@@ -59,9 +60,9 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
     }}
     onOk={() => {
       const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.checkedKeys as string[]).map<string[]>((r) => {
-        return r.split('-');
+        return r.split(':');
       });
-      console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
+      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
       const resultObj: { [key: string]: ICandidate[][] } = {};
       for (const simplifiedResult of simplifiedResults) {
         resultObj[simplifiedResult[0]] = [];
@@ -124,8 +125,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
         </div>
       </div>
       <div className={styles.arrow}>
-
-        <SwapRightOutlined
+        <FThickArrowRight
           style={{fontSize: 36, fontWeight: 600, color: '#D8D8D8'}}
         />
       </div>

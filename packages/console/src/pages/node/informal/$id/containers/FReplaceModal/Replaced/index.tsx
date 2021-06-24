@@ -68,7 +68,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         checkable
         loadData={async (node: any) => {
           // console.log(node, 'n2390jlkjdsfdsf');
-          if (node.pos.split('-').length !== 2) {
+          if (node.pos.split(':').length !== 2) {
             return;
           }
           const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
@@ -149,7 +149,7 @@ interface OrganizeData {
 function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
   // console.log(data, 'data2WQR@#SDfolkj;lk');
   return data.map<TreeNode>((d) => {
-    const key = parentKey + '-' + (d.type === 'resource' ? '$' : '#') + d.name;
+    const key = parentKey + ':' + (d.type === 'resource' ? '$' : '#') + d.name;
 
     if (d.dependencies.length === 0) {
       return {
