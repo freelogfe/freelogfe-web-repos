@@ -154,6 +154,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
                   isCodeEditing: true,
                   codeIsDirty: true,
+                  codeCompileErrors: null,
+                  codeExecutionError: null,
+                  codeSaveSuccess: false,
                 });
               };
               return false;
