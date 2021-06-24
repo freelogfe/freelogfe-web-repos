@@ -89,7 +89,30 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       online: r.online === true,
       offline: r.online === false,
       labels: r.labels,
-      replaces: r.replaces,
+      // replaces: r.replaces,
+      replaces: r?.replaces && (r?.replaces as any[]).map((rr: any) => {
+        // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+        return {
+          replaced: {
+            ...rr.replaced,
+            versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+          },
+          replacer: {
+            ...rr.replacer,
+            versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+          },
+          scopes: rr.scopes && (rr.scopes as any[])
+            .map((ss: any) => {
+              // console.log(ss, 'ss!!!!@@@@##');
+              return ss.map((sss: any) => {
+                return {
+                  ...sss,
+                  versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                };
+              });
+            }),
+        };
+      }),
       attrs: r.attrs?.map((a: any) => {
         return {
           type: a.operation,

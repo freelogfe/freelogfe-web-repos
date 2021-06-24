@@ -505,7 +505,29 @@ const Model: InformalNodeManagerPageModelType = {
                 };
               }) : undefined,
               active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-              replaces: rulesObjRule?.replaces,
+              replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+                // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+                return {
+                  replaced: {
+                    ...rr.replaced,
+                    versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+                  },
+                  replacer: {
+                    ...rr.replacer,
+                    versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+                  },
+                  scopes: rr.scopes && (rr.scopes as any[])
+                    .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+                      // console.log(ss, 'ss!!!!@@@@##');
+                      return ss.map((sss: any) => {
+                        return {
+                          ...sss,
+                          versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                        };
+                      });
+                    }),
+                };
+              }),
             };
             return {
               id: dl.testResourceId,
@@ -602,7 +624,7 @@ const Model: InformalNodeManagerPageModelType = {
       // console.log(payload.data, 'payload.data0923jlkfasdfasdf');
       // console.log(JSON.stringify(payload.data), 'payload.data0923jlkfasdfasdf');
       const text = decompile(payload.data);
-      console.log(text, 'text1234fklsadj');
+      // console.log(text, 'text1234fklsadj');
 
       let testRules: any[] = [];
 
@@ -612,7 +634,7 @@ const Model: InformalNodeManagerPageModelType = {
           additionalTestRule: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
-        console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
+        // console.log(data, 'DDAFDSF#@%$R@Wefsdafasdf112222333444');
         testRules = data?.testRules || [];
       } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
@@ -620,7 +642,7 @@ const Model: InformalNodeManagerPageModelType = {
           testRuleText: text,
         };
         const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
-        console.log(data, 'data123423412341234');
+        // console.log(data, 'data123423412341234');
         testRules = data?.testRules || [];
       }
 
@@ -638,7 +660,7 @@ const Model: InformalNodeManagerPageModelType = {
         .flat();
 
       if (codeExecutionError.length > 0) {
-        yield put<ChangeAction>({
+        return yield put<ChangeAction>({
           type: 'change',
           payload: {
             codeExecutionError: codeExecutionError,
