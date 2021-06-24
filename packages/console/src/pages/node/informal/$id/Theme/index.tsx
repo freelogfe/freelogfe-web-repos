@@ -256,8 +256,10 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           },
         });
       }}
-      disabledResourceNames={['Freelog/blog-theme']}
-      disabledObjectNames={['234234/th002.jpeg']}
+      // disabledResourceNames={['Freelog/blog-theme']}
+      // disabledObjectNames={['234234/th002.jpeg']}
+      disabledResourceNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}
+      disabledObjectNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}
     />
   </>);
 }
