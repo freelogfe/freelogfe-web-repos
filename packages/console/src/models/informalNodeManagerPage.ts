@@ -107,9 +107,15 @@ export interface InformalNodeManagerPageModelState {
     };
   }[];
 
-  mappingRule: IMappingRule[];
+  ruleList: {
+    id: string;
+    matchErrors: string[];
+    ruleInfo: any;
+    efficientInfos: any[];
+  }[];
   checkedExhibitName: string[];
   checkedThemeName: string;
+
   isCodeEditing: boolean;
   codeInput: string;
   codeIsDirty: boolean;
@@ -244,6 +250,10 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   themesTotal: -1,
   addThemeDrawerVisible: false,
 
+  ruleList: [],
+  checkedExhibitName: [],
+  checkedThemeName: '',
+
   isCodeEditing: false,
   codeInput: '',
   codeIsDirty: false,
@@ -252,9 +262,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   codeCompileErrors: null,
   codeExecutionError: null,
   codeSaveSuccess: false,
-  mappingRule: [],
-  checkedExhibitName: [],
-  checkedThemeName: '',
+
 };
 
 const Model: InformalNodeManagerPageModelType = {
@@ -559,13 +567,14 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
-      // console.log(data, 'data!!!!!@#$@#$@#$');
+      console.log(data, 'data!!!!!@#$@#$@#$');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           codeInput: data.ruleText,
           codeIsDirty: false,
+          ruleList: data.testRules,
         },
       });
     },
@@ -595,6 +604,8 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const {data: data1} = yield call(ruleMatchStatus, params1);
 
+      console.log(data1, 'data1!@#$!@#$@#');
+
       const codeExecutionError = data1.testRules
         .filter((tr: any) => {
           return tr.matchErrors.length > 0;
@@ -615,6 +626,7 @@ const Model: InformalNodeManagerPageModelType = {
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           codeSaveSuccess: codeExecutionError.length === 0,
+          ruleList: data1.testRules,
         },
       });
     },

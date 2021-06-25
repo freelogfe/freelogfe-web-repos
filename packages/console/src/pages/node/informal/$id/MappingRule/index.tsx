@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from "@/components/FText";
 import {Space} from "antd";
-import {FImport, FExport, FCode, FExit} from "@/components/FIcons";
+import {FImport, FExport, FCode, FExit, FInfo, FWarning} from "@/components/FIcons";
 import TypesCaption from "../components/TypesCaption";
 import {
   AttrRule,
@@ -30,6 +30,7 @@ import * as AHooks from 'ahooks';
 import fConfirmModal from "@/components/fConfirmModal";
 import {router} from "umi";
 import {FUtil} from '@freelog/tools-lib';
+import FTooltip from "@/components/FTooltip";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -64,63 +65,70 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     });
   });
 
-  const {rules} = compile(informalNodeManagerPage.ruleText);
+  // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
-  const rulesObj = rules.map((r: any) => {
-    if (r.operation === 'activate_theme') {
-      return {
-        active: r.themeName,
+  const ruleObjList = informalNodeManagerPage.ruleList.map((rule) => {
+    const {ruleInfo} = rule;
+
+    let theRule: any = {};
+    if (ruleInfo.operation === 'activate_theme') {
+      theRule = {
+        active: ruleInfo.themeName,
+      };
+    } else {
+      theRule = {
+        add: ruleInfo.operation === 'add' ? {
+          exhibit: ruleInfo.exhibitName,
+          source: {
+            type: ruleInfo.candidate.type,
+            name: ruleInfo.candidate.name,
+            versionRange: ruleInfo.candidate.versionRange && ruleInfo.candidate.versionRange !== 'latest' ? ruleInfo.candidate.versionRange : undefined,
+          },
+        } : undefined,
+        alter: ruleInfo.operation === 'alter' ? ruleInfo.exhibitName : undefined,
+        // $version: r.candidate.versionRange,
+        cover: ruleInfo.cover,
+        title: ruleInfo.title,
+        online: ruleInfo.online === true,
+        offline: ruleInfo.online === false,
+        labels: ruleInfo.labels,
+        // replaces: r.replaces,
+        replaces: ruleInfo.replaces && (ruleInfo.replaces as any[]).map((rr: any) => {
+          // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+          return {
+            replaced: {
+              ...rr.replaced,
+              versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+            },
+            replacer: {
+              ...rr.replacer,
+              versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+            },
+            scopes: rr.scopes && (rr.scopes as any[])
+              .map((ss: any) => {
+                // console.log(ss, 'ss!!!!@@@@##');
+                return ss.map((sss: any) => {
+                  return {
+                    ...sss,
+                    versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                  };
+                });
+              }),
+          };
+        }),
+        attrs: ruleInfo.attrs?.map((a: any) => {
+          return {
+            type: a.operation,
+            theKey: a.key,
+            value: a.value,
+            description: a.description,
+          };
+        }),
       };
     }
-    // console.log(r, 'wjofldskafj;lasdkf');
     return {
-      add: r.operation === 'add' ? {
-        exhibit: r.exhibitName,
-        source: {
-          type: r.candidate.type,
-          name: r.candidate.name,
-          versionRange: r.candidate.versionRange && r.candidate.versionRange !== 'latest' ? r.candidate.versionRange : undefined,
-        },
-      } : undefined,
-      alter: r.operation === 'alter' ? r.exhibitName : undefined,
-      // $version: r.candidate.versionRange,
-      cover: r.cover,
-      title: r.title,
-      online: r.online === true,
-      offline: r.online === false,
-      labels: r.labels,
-      // replaces: r.replaces,
-      replaces: r?.replaces && (r?.replaces as any[]).map((rr: any) => {
-        // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-        return {
-          replaced: {
-            ...rr.replaced,
-            versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-          },
-          replacer: {
-            ...rr.replacer,
-            versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-          },
-          scopes: rr.scopes && (rr.scopes as any[])
-            .map((ss: any) => {
-              // console.log(ss, 'ss!!!!@@@@##');
-              return ss.map((sss: any) => {
-                return {
-                  ...sss,
-                  versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                };
-              });
-            }),
-        };
-      }),
-      attrs: r.attrs?.map((a: any) => {
-        return {
-          type: a.operation,
-          theKey: a.key,
-          value: a.value,
-          description: a.description,
-        };
-      }),
+      ...rule,
+      theRule,
     };
   });
 
@@ -340,9 +348,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             direction="vertical"
           >
             {
-              rulesObj.map((obj: any, index: number) => {
+              ruleObjList.map(({theRule, ...rule}, index: number) => {
                 return (<div
-                  key={index}
+                  key={rule.id}
                   className={styles.ruleCard}
                 >
                   <div className={styles.ruleCardHeader}>
@@ -384,33 +392,44 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                     {/*  }}*/}
                     {/*/>*/}
                     {/*<div style={{width: 20}}/>*/}
-                    {obj.add && <AddRule {...obj.add}/>}
-                    {obj.alter && <AlterRule alter={obj.alter}/>}
-                    {obj.active && <ActiveRule active={obj.active}/>}
+                    {theRule.add && <AddRule {...theRule.add}/>}
+                    {theRule.alter && <AlterRule alter={theRule.alter}/>}
+                    {theRule.active && <ActiveRule active={theRule.active}/>}
+
+                    {
+                      rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE,iinn) => {
+                        return (<div key={iinn}>{mE}</div>);
+                      })}>
+                        <div><FWarning/></div>
+                      </FTooltip>)
+                    }
+
                   </div>
                   {
-                    !(!obj.cover && !obj.title && !obj.labels && !obj.online && !obj.offline && !obj.replaces && !obj.attrs)
+                    !(!theRule.cover && !theRule.title && !theRule.labels && !theRule.online && !theRule.offline && !theRule.replaces && !theRule.attrs)
                     && (<div className={styles.ruleCardBody}>
                       <Space
                         className={styles.ruleCardBodyList}
                         size={15}
                         direction="vertical"
                       >
-                        {obj.version && <VersionRule version={obj.version}/>}
-                        {obj.cover && <div className={styles.ruleCardBodyListItem}><CoverRule cover={obj.cover}/></div>}
-                        {obj.title && <div className={styles.ruleCardBodyListItem}><TitleRule title={obj.title}/></div>}
-                        {obj.labels &&
-                        <div className={styles.ruleCardBodyListItem}><LabelRule labels={obj.labels}/></div>}
-                        {obj.online &&
-                        <div className={styles.ruleCardBodyListItem}><OnlineRule online={obj.online}/></div>}
-                        {obj.offline &&
-                        <div className={styles.ruleCardBodyListItem}><OfflineRule offline={obj.offline}/></div>}
-                        {obj.replaces && obj.replaces.map((replace: any, replaceIndex: any) => {
+                        {/*{theRule.version && <VersionRule version={theRule.version}/>}*/}
+                        {theRule.cover &&
+                        <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover}/></div>}
+                        {theRule.title &&
+                        <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title}/></div>}
+                        {theRule.labels &&
+                        <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels}/></div>}
+                        {theRule.online &&
+                        <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online}/></div>}
+                        {theRule.offline &&
+                        <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline}/></div>}
+                        {theRule.replaces && theRule.replaces.map((replace: any, replaceIndex: any) => {
                           return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
                             {...replace}
                           /></div>);
                         })}
-                        {obj.attrs && obj.attrs.map((attr: any, attrIndex: any) => {
+                        {theRule.attrs && theRule.attrs.map((attr: any, attrIndex: any) => {
                           return (
                             <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr}/></div>);
                         })}

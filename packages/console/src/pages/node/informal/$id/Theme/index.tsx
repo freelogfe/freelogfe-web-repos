@@ -146,11 +146,11 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                               });
                             } else {
                               data = [
-                                ...rules,
                                 {
                                   operation: 'activate_theme',
                                   themeName: t.name,
                                 },
+                                ...rules,
                               ];
                             }
                             // console.log(rule, 'rule21930usdf');
