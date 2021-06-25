@@ -108,12 +108,13 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                         {
                           t.isOnline
                             ? (<label className={styles.activated}>已激活</label>)
-                            : (<>
-                              <label className={styles.nonActivated}>未激活</label>
-                              <div style={{width: 10}}/>
-                              <FWarning/>
-                            </>)
+                            : null
                         }
+                        {/*(<>*/}
+                        {/*<label className={styles.nonActivated}>未激活</label>*/}
+                        {/*<div style={{width: 10}}/>*/}
+                        {/*<FWarning/>*/}
+                      {/*</>)*/}
                       </div>
                       <div className={styles.coverFooter}>
                         <div>
