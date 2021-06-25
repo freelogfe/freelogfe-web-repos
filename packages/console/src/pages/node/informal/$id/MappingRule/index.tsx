@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FTitleText} from "@/components/FText";
 import {Space} from "antd";
-import {FImport, FExport, FCode, FExit, FInfo, FWarning} from "@/components/FIcons";
+import {FImport, FExport, FCode, FExit, FInfo, FWarning, FDelete} from "@/components/FIcons";
 import TypesCaption from "../components/TypesCaption";
 import {
   AttrRule,
@@ -31,6 +31,7 @@ import fConfirmModal from "@/components/fConfirmModal";
 import {router} from "umi";
 import {FUtil} from '@freelog/tools-lib';
 import FTooltip from "@/components/FTooltip";
+import FCheckbox from "@/components/FCheckbox";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -194,7 +195,12 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }}
             showUploadList={false}
           >
-            <FTextBtn type="primary"><FImport/> <span>导入</span></FTextBtn>
+            <FTextBtn type="primary">
+              <Space size={5}>
+                <FImport/>
+                <span>导入</span>
+              </Space>
+            </FTextBtn>
           </FUpload>
           <FTextBtn
             type="primary"
@@ -203,8 +209,23 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
               FileSaver.saveAs(blob, fileName);
             }}
-          ><FExport/> <span>导出</span></FTextBtn>
-          {/*<a style={{}}><FDelete/> <span>删除</span></a>*/}
+          >
+            <Space size={5}>
+              <FExport/>
+              <span>导出</span>
+            </Space>
+          </FTextBtn>
+          <FTextBtn
+            type="danger"
+            onClick={() => {
+
+            }}
+          >
+            <Space size={5}>
+              <FDelete/>
+              <span>删除</span>
+            </Space>
+          </FTextBtn>
         </Space>
       </div>
 
@@ -354,50 +375,51 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   className={styles.ruleCard}
                 >
                   <div className={styles.ruleCardHeader}>
-                    {/*<FCheckbox*/}
-                    {/*  checked={*/}
-                    {/*    informalNodeManagerPage.checkedExhibitName.includes(obj.alter)*/}
-                    {/*    || informalNodeManagerPage.checkedExhibitName.includes(obj.add?.exhibit || '')*/}
-                    {/*    || informalNodeManagerPage.checkedThemeName === obj.active*/}
-                    {/*  }*/}
-                    {/*  onChange={(e) => {*/}
-                    {/*    const exhibitName: string = obj.alter || obj.add?.exhibit || '';*/}
-                    {/*    const themeName: string = obj.active || '';*/}
-                    {/*    if (e.target.checked) {*/}
-                    {/*      if (exhibitName) {*/}
-                    {/*        onChange({*/}
-                    {/*          checkedExhibitName: [*/}
-                    {/*            ...informalNodeManagerPage.checkedExhibitName,*/}
-                    {/*            exhibitName,*/}
-                    {/*          ],*/}
-                    {/*        });*/}
-                    {/*      } else {*/}
-                    {/*        onChange({*/}
-                    {/*          checkedThemeName: themeName,*/}
-                    {/*        });*/}
-                    {/*      }*/}
-                    {/*    } else {*/}
-                    {/*      if (exhibitName) {*/}
-                    {/*        onChange({*/}
-                    {/*          checkedExhibitName: informalNodeManagerPage.checkedExhibitName.filter((ce) => {*/}
-                    {/*            return ce !== exhibitName;*/}
-                    {/*          }),*/}
-                    {/*        });*/}
-                    {/*      } else {*/}
-                    {/*        onChange({*/}
-                    {/*          checkedThemeName: '',*/}
-                    {/*        });*/}
-                    {/*      }*/}
-                    {/*    }*/}
-                    {/*  }}*/}
-                    {/*/>*/}
-                    {/*<div style={{width: 20}}/>*/}
-                    {theRule.add && <AddRule {...theRule.add}/>}
-                    {theRule.alter && <AlterRule alter={theRule.alter}/>}
-                    {theRule.active && <ActiveRule active={theRule.active}/>}
-
+                    <Space size={20}>
+                      <FCheckbox
+                        checked={
+                          informalNodeManagerPage.checkedExhibitName.includes(theRule.alter)
+                          || informalNodeManagerPage.checkedExhibitName.includes(theRule.add?.exhibit || '')
+                          || informalNodeManagerPage.checkedThemeName === theRule.active
+                        }
+                        onChange={(e) => {
+                          const exhibitName: string = theRule.alter || theRule.add?.exhibit || '';
+                          const themeName: string = theRule.active || '';
+                          if (e.target.checked) {
+                            if (exhibitName) {
+                              onChange({
+                                checkedExhibitName: [
+                                  ...informalNodeManagerPage.checkedExhibitName,
+                                  exhibitName,
+                                ],
+                              });
+                            } else {
+                              onChange({
+                                checkedThemeName: themeName,
+                              });
+                            }
+                          } else {
+                            if (exhibitName) {
+                              onChange({
+                                checkedExhibitName: informalNodeManagerPage.checkedExhibitName.filter((ce) => {
+                                  return ce !== exhibitName;
+                                }),
+                              });
+                            } else {
+                              onChange({
+                                checkedThemeName: '',
+                              });
+                            }
+                          }
+                        }}
+                      />
+                      {/*<div style={{width: 20}}/>*/}
+                      {theRule.add && <AddRule {...theRule.add}/>}
+                      {theRule.alter && <AlterRule alter={theRule.alter}/>}
+                      {theRule.active && <ActiveRule active={theRule.active}/>}
+                    </Space>
                     {
-                      rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE,iinn) => {
+                      rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
                         return (<div key={iinn}>{mE}</div>);
                       })}>
                         <div><FWarning/></div>
