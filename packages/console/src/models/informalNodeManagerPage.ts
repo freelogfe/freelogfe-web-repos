@@ -567,7 +567,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
-      console.log(data, 'data!!!!!@#$@#$@#$');
+      // console.log(data, 'data!!!!!@#$@#$@#$');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -575,6 +575,8 @@ const Model: InformalNodeManagerPageModelType = {
           codeInput: data.ruleText,
           codeIsDirty: false,
           ruleList: data.testRules,
+          codeExecutionError: null,
+          codeCompileErrors: null,
         },
       });
     },
@@ -604,7 +606,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
       const {data: data1} = yield call(ruleMatchStatus, params1);
 
-      console.log(data1, 'data1!@#$!@#$@#');
+      // console.log(data1, 'data1!@#$!@#$@#');
 
       const codeExecutionError = data1.testRules
         .filter((tr: any) => {
@@ -622,6 +624,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          codeIsDirty: false,
           ruleText: data1.ruleText,
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,

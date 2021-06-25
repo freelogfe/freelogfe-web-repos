@@ -257,9 +257,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               // loading={informalNodeManagerPage.codeIsChecking}
               disabled={!informalNodeManagerPage.codeIsDirty || informalNodeManagerPage.codeIsChecking}
               onClick={() => {
-                onChange({
-                  codeIsDirty: false,
-                });
+                // onChange({
+                //   codeIsDirty: false,
+                // });
                 const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
                 if (errorObjects.length > 0) {
                   // return dispatch<ChangeAction>({
