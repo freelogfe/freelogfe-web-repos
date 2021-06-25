@@ -287,7 +287,6 @@ const Model: InformalNodeManagerPageModelType = {
           testNodeUrl: FUtil.Format.completeUrlByDomain('t.' + data.nodeDomain),
         },
       });
-
     },
     * initModelStates({}: InitModelStatesAction, {put,}: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -541,6 +540,11 @@ const Model: InformalNodeManagerPageModelType = {
               authErrorText: '',
               originInfo: dl.originInfo,
             };
+          }).sort((a, b) => {
+            if (a.isOnline && !b.isOnline) {
+              return -1;
+            }
+            return 0;
           }),
         },
       });
