@@ -171,62 +171,65 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         <div style={{width: 10}}/>
         <TypesCaption/>
         <div style={{width: 50}}/>
-        <Space size={30}>
-          <FUpload
-            accept={'text/plain'}
-            beforeUpload={(file) => {
-              // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
-              const reader = new FileReader();
-              reader.readAsText(file);
-              reader.onload = function (evt: any) {
-                // console.log(evt, 'evt@#RFDSf0(UJo90jsdal;f');
-                const exportText = evt.target.result;
-                // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
-                onChange({
-                  codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
-                  isCodeEditing: true,
-                  codeIsDirty: true,
-                  codeCompileErrors: null,
-                  codeExecutionError: null,
-                  codeSaveSuccess: false,
-                });
-              };
-              return false;
-            }}
-            showUploadList={false}
-          >
-            <FTextBtn type="primary">
+        {
+          !informalNodeManagerPage.isCodeEditing && (<Space size={30}>
+            <FUpload
+              accept={'text/plain'}
+              beforeUpload={(file) => {
+                // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
+                const reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function (evt: any) {
+                  // console.log(evt, 'evt@#RFDSf0(UJo90jsdal;f');
+                  const exportText = evt.target.result;
+                  // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
+                  onChange({
+                    codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
+                    isCodeEditing: true,
+                    codeIsDirty: true,
+                    codeCompileErrors: null,
+                    codeExecutionError: null,
+                    codeSaveSuccess: false,
+                  });
+                };
+                return false;
+              }}
+              showUploadList={false}
+            >
+              <FTextBtn type="primary">
+                <Space size={5}>
+                  <FImport/>
+                  <span>导入</span>
+                </Space>
+              </FTextBtn>
+            </FUpload>
+            <FTextBtn
+              type="primary"
+              onClick={() => {
+                const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+                const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
+                FileSaver.saveAs(blob, fileName);
+              }}
+            >
               <Space size={5}>
-                <FImport/>
-                <span>导入</span>
+                <FExport/>
+                <span>导出</span>
               </Space>
             </FTextBtn>
-          </FUpload>
-          <FTextBtn
-            type="primary"
-            onClick={() => {
-              const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-              const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
-              FileSaver.saveAs(blob, fileName);
-            }}
-          >
-            <Space size={5}>
-              <FExport/>
-              <span>导出</span>
-            </Space>
-          </FTextBtn>
-          <FTextBtn
-            type="danger"
-            onClick={() => {
+            <FTextBtn
+              type="danger"
+              onClick={() => {
 
-            }}
-          >
-            <Space size={5}>
-              <FDelete/>
-              <span>删除</span>
-            </Space>
-          </FTextBtn>
-        </Space>
+              }}
+            >
+              <Space size={5}>
+                <FDelete/>
+                <span>删除</span>
+              </Space>
+            </FTextBtn>
+          </Space>)
+        }
+
       </div>
 
       {
