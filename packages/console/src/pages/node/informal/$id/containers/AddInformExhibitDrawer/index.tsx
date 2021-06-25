@@ -31,8 +31,8 @@ interface AddInformExhibitDrawerProps {
 
 function AddInformExhibitDrawer({visible = false, isTheme = false, disabledResourceNames = [], disabledObjectNames = [], onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
 
-  console.log(disabledResourceNames, 'disabledResourceNamesdisabledResourceNames1234123');
-  console.log(disabledObjectNames, 'disabledObjectNamesdisabledObjectNames12341234');
+  // console.log(disabledResourceNames, 'disabledResourceNamesdisabledResourceNames1234123');
+  // console.log(disabledObjectNames, 'disabledObjectNamesdisabledObjectNames12341234');
 
   // React.useEffect(() => {
   //   init();
