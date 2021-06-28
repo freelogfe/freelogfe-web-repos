@@ -117,7 +117,10 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
           {
             informalNodeManagerPage.themeList.length === 0
-              ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 100px - 100px)'} tipText={'无搜索结果'}/>)
+              ? (<FNoDataTip
+                height={'calc(100vh - 70px - 24px - 100px - 100px)'}
+                tipText={'无搜索结果'}
+              />)
               : (<div className={styles.body}>
                 <div className={styles.list}>
                   {
