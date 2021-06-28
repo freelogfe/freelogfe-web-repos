@@ -12,7 +12,7 @@ import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
 import {
-  ChangeAction,
+  ChangeAction, exhibitPageInitData,
   FetchExhibitListAction,
   SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
@@ -25,6 +25,7 @@ import {FUtil} from '@freelog/tools-lib';
 import {
   ReplaceInformExhibitInitModelStatesAction,
 } from "@/models/replaceInformExhibitModal";
+import * as AHooks from 'ahooks';
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -51,6 +52,12 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     // console.log('exhibit');
     initData();
   }, []);
+
+  AHooks.useUnmount(() => {
+    onChange({
+      ...exhibitPageInitData,
+    });
+  });
 
   async function initData() {
     await dispatch<FetchExhibitListAction>({

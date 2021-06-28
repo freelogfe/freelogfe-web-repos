@@ -8,7 +8,7 @@ import {
   ChangeAction,
   FetchThemeListAction,
   InformalNodeManagerPageModelState,
-  SaveDataRulesAction
+  SaveDataRulesAction, themePageInitData
 } from "@/models/informalNodeManagerPage";
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
@@ -24,6 +24,7 @@ import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from "@/utils";
+import * as AHooks from 'ahooks';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -43,6 +44,12 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
       },
     });
   }, []);
+
+  AHooks.useUnmount(() => {
+    onChange({
+      ...themePageInitData,
+    });
+  });
 
   if (informalNodeManagerPage.themesTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);

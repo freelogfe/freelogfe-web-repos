@@ -224,16 +224,7 @@ interface InformalNodeManagerPageModelType {
   };
 }
 
-const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
-
-  nodeID: -1,
-  nodeName: '',
-  nodeUrl: '',
-  testNodeUrl: '',
-  ruleText: '',
-  showPage: 'exhibit',
-  addOrReplaceCodeExecutionErrorMessages: null,
-
+export const exhibitPageInitData: any = {
   addExhibitDrawerVisible: false,
   replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',
@@ -244,11 +235,28 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   filterKeywords: '',
   exhibitList: [],
   exhibitsTotal: -1,
+};
 
+export const themePageInitData: any = {
   themeList: [],
   themeFilterKeywords: '',
   themesTotal: -1,
   addThemeDrawerVisible: false,
+};
+
+const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
+
+  nodeID: -1,
+  nodeName: '',
+  nodeUrl: '',
+  testNodeUrl: '',
+  ruleText: '',
+  showPage: 'exhibit',
+  addOrReplaceCodeExecutionErrorMessages: null,
+
+  ...exhibitPageInitData,
+
+  ...themePageInitData,
 
   ruleListStatus: 'normal',
   ruleList: [],
