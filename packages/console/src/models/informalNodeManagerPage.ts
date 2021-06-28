@@ -434,6 +434,13 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     themesTotal: -1,
+      //   },
+      // });
+
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
         isRematch: isRematch,

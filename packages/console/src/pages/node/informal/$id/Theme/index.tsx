@@ -59,7 +59,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   return (<>
     {
-      informalNodeManagerPage.themeList.length === 0
+      informalNodeManagerPage.themeList.length === 0 && !informalNodeManagerPage.themeFilterKeywords
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前节点没有添加主题展品'}
@@ -108,135 +108,141 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
             </Space>
           </div>
 
-          <div className={styles.body}>
-            <div className={styles.list}>
-              {
-                informalNodeManagerPage.themeList.map((t, index, arr) => {
-                  return (<div
-                    key={t.id}
-                    className={styles.item}
-                  >
-                    <div className={styles.cover}>
-                      <img src={t.cover || imgSrc} alt=""/>
-                      <div className={styles.coverLabel}>
-                        {
-                          t.isOnline
-                            ? (<label className={styles.activated}>已激活</label>)
-                            : null
-                        }
-                        {/*(<>*/}
-                        {/*<label className={styles.nonActivated}>未激活</label>*/}
-                        {/*<div style={{width: 10}}/>*/}
-                        {/*<FWarning/>*/}
-                        {/*</>)*/}
-                      </div>
-                      <div className={styles.coverFooter}>
-                        <div>
-                          <div style={{width: 1}}/>
-                          <FLink to={FUtil.LinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
-                          {
-                            t.originInfo.type === 'resource' && (<>
+          {
+            informalNodeManagerPage.themeList.length === 0
+              ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 100px - 100px)'} tipText={'无搜索结果'}/>)
+              : (<div className={styles.body}>
+                <div className={styles.list}>
+                  {
+                    informalNodeManagerPage.themeList.map((t, index, arr) => {
+                      return (<div
+                        key={t.id}
+                        className={styles.item}
+                      >
+                        <div className={styles.cover}>
+                          <img src={t.cover || imgSrc} alt=""/>
+                          <div className={styles.coverLabel}>
+                            {
+                              t.isOnline
+                                ? (<label className={styles.activated}>已激活</label>)
+                                : null
+                            }
+                            {/*(<>*/}
+                            {/*<label className={styles.nonActivated}>未激活</label>*/}
+                            {/*<div style={{width: 10}}/>*/}
+                            {/*<FWarning/>*/}
+                            {/*</>)*/}
+                          </div>
+                          <div className={styles.coverFooter}>
+                            <div>
+                              <div style={{width: 1}}/>
+                              <FLink to={FUtil.LinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
                               <FDivider/>
                               <FLink
-                                to={FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})}
-                              >资源详情</FLink>
-                            </>)
-                          }
-                          {
-                            !t.isOnline && (<>
-                              <FDivider/>
-                              <a onClick={() => {
-                                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                                // console.log(rules, 'rules1234234');
-                                const rule = rules.find((r) => r.themeName);
+                                to={t.originInfo.type === 'resource'
+                                  ? FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})
+                                  : FUtil.LinkTo.objectDetails({
+                                    bucketName: t.originInfo.name.split('/')[0],
+                                    objectID: t.originInfo.id,
+                                  })}
+                              >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</FLink>
+                              {
+                                !t.isOnline && (<>
+                                  <FDivider/>
+                                  <a onClick={() => {
+                                    const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                                    // console.log(rules, 'rules1234234');
+                                    const rule = rules.find((r) => r.themeName);
 
-                                let data;
+                                    let data;
 
-                                if (rule) {
-                                  data = rules.map((r) => {
-                                    if (!r.themeName) {
-                                      return r;
+                                    if (rule) {
+                                      data = rules.map((r) => {
+                                        if (!r.themeName) {
+                                          return r;
+                                        }
+                                        return {
+                                          ...r,
+                                          themeName: t.name,
+                                        };
+                                      });
+                                    } else {
+                                      data = [
+                                        {
+                                          operation: 'activate_theme',
+                                          themeName: t.name,
+                                        },
+                                        ...rules,
+                                      ];
                                     }
-                                    return {
-                                      ...r,
-                                      themeName: t.name,
-                                    };
-                                  });
-                                } else {
-                                  data = [
-                                    {
-                                      operation: 'activate_theme',
-                                      themeName: t.name,
-                                    },
-                                    ...rules,
-                                  ];
-                                }
-                                // console.log(rule, 'rule21930usdf');
+                                    // console.log(rule, 'rule21930usdf');
 
-                                dispatch<SaveDataRulesAction>({
-                                  type: 'informalNodeManagerPage/saveDataRules',
-                                  payload: {
-                                    type: 'replace',
-                                    data: data,
-                                  },
-                                });
-                                onChange({
-                                  themeList: arr.map((ttt) => {
-                                    if (ttt.id !== t.id) {
-                                      return {
-                                        ...ttt,
-                                        isOnline: false,
-                                      };
-                                    }
-                                    return {
-                                      ...ttt,
-                                      isOnline: true,
-                                    };
-                                  }),
-                                  // mappingRule
-                                });
-                              }}>激活</a>
-                            </>)
-                          }
+                                    dispatch<SaveDataRulesAction>({
+                                      type: 'informalNodeManagerPage/saveDataRules',
+                                      payload: {
+                                        type: 'replace',
+                                        data: data,
+                                      },
+                                    });
+                                    onChange({
+                                      themeList: arr.map((ttt) => {
+                                        if (ttt.id !== t.id) {
+                                          return {
+                                            ...ttt,
+                                            isOnline: false,
+                                          };
+                                        }
+                                        return {
+                                          ...ttt,
+                                          isOnline: true,
+                                        };
+                                      }),
+                                      // mappingRule
+                                    });
+                                  }}>激活</a>
+                                </>)
+                              }
 
-                          <div style={{width: 1}}/>
+                              <div style={{width: 1}}/>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div style={{height: 12}}/>
-                    <div className={styles.itemTitle}>
-                      {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
-                      <FIdentityTypeBadge
-                        status={t.identity}
-                      />
-                      <div style={{width: 5}}/>
-                      <FContentText
-                        type="highlight"
-                        text={t.name}
-                        singleRow
-                      />
-                    </div>
-                    <div style={{height: 6}}/>
-                    <div className={styles.itemVersion}>
-                      {
-                        t.identity !== 'object' && (<FContentText
-                          text={`展示版本 ${t.version}`}
-                          type="additional1"
-                        />)
-                      }
+                        <div style={{height: 12}}/>
+                        <div className={styles.itemTitle}>
+                          {/*{console.log(t.identity, 'TTTTTTTTTTTTT')}*/}
+                          <FIdentityTypeBadge
+                            status={t.identity}
+                          />
+                          <div style={{width: 5}}/>
+                          <FContentText
+                            type="highlight"
+                            text={t.name}
+                            singleRow
+                          />
+                        </div>
+                        <div style={{height: 6}}/>
+                        <div className={styles.itemVersion}>
+                          {
+                            t.identity !== 'object' && (<FContentText
+                              text={`展示版本 ${t.version}`}
+                              type="additional1"
+                            />)
+                          }
 
-                    </div>
-                    <div style={{height: 10}}/>
-                    <div className={styles.itemBar}>
-                      <MappingRule
-                        {...t.rule}
-                      />
-                    </div>
-                  </div>);
-                })
-              }
-            </div>
-          </div>
+                        </div>
+                        <div style={{height: 10}}/>
+                        <div className={styles.itemBar}>
+                          <MappingRule
+                            {...t.rule}
+                          />
+                        </div>
+                      </div>);
+                    })
+                  }
+                </div>
+              </div>)
+          }
+
         </>)
     }
 
