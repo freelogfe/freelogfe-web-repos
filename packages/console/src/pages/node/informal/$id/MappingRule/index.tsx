@@ -32,6 +32,7 @@ import {router} from "umi";
 import {FUtil} from '@freelog/tools-lib';
 import FTooltip from "@/components/FTooltip";
 import FCheckbox from "@/components/FCheckbox";
+import FNoDataTip from "@/components/FNoDataTip";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -172,7 +173,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         <TypesCaption/>
         <div style={{width: 50}}/>
         {
-          !informalNodeManagerPage.isCodeEditing && (<Space size={30}>
+          informalNodeManagerPage.ruleListStatus === 'normal' && (<Space size={30}>
             <FUpload
               accept={'text/plain'}
               beforeUpload={(file) => {
@@ -185,7 +186,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
                   onChange({
                     codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
-                    isCodeEditing: true,
+                    ruleListStatus: 'coding',
                     codeIsDirty: true,
                     codeCompileErrors: null,
                     codeExecutionError: null,
@@ -206,9 +207,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <FTextBtn
               type="primary"
               onClick={() => {
-                const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-                const blob = new Blob([informalNodeManagerPage.codeInput], {type: "text/plain;charset=utf-8"});
-                FileSaver.saveAs(blob, fileName);
+                onChange({
+                  ruleListStatus: 'export',
+                });
               }}
             >
               <Space size={5}>
@@ -219,7 +220,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <FTextBtn
               type="danger"
               onClick={() => {
-
+                onChange({
+                  ruleListStatus: 'delete',
+                });
               }}
             >
               <Space size={5}>
@@ -233,35 +236,96 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       </div>
 
       {
-        informalNodeManagerPage.isCodeEditing
-          ? (<FTextBtn
-            onClick={() => {
-              onChange({
-                isCodeEditing: false,
-              });
-            }}>
-            <Space size={5}>
-              <FExit/>
-              <span>退出代码模式</span>
-            </Space>
-          </FTextBtn>)
-          : (<FTextBtn
-            onClick={() => {
-              onChange({
-                isCodeEditing: true,
-              });
-            }}>
-            <Space size={5}>
-              <FCode/>
-              <span>进入代码模式</span>
-            </Space>
-          </FTextBtn>)
+        informalNodeManagerPage.ruleListStatus === 'normal' && (<FTextBtn
+          onClick={() => {
+            onChange({
+              ruleListStatus: 'coding',
+            });
+          }}>
+          <Space size={5}>
+            <FCode/>
+            <span>进入代码模式</span>
+          </Space>
+        </FTextBtn>)
       }
 
+      {
+        informalNodeManagerPage.ruleListStatus === 'coding'
+        && (<FTextBtn
+          onClick={() => {
+            onChange({
+              ruleListStatus: 'normal',
+            });
+          }}>
+          <Space size={5}>
+            <FExit/>
+            <span>退出代码模式</span>
+          </Space>
+        </FTextBtn>)
+      }
+
+      {
+        informalNodeManagerPage.ruleListStatus === 'export'
+        && (<Space size={30}>
+          <FTextBtn
+            type="default"
+            onClick={() => {
+              onChange({
+                ruleListStatus: 'normal',
+              });
+            }}
+          >取消</FTextBtn>
+          <FRectBtn
+            type="primary"
+            onClick={() => {
+              const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
+              const text: string = informalNodeManagerPage.ruleList
+                .filter((rl) => rl.checked)
+                .map((rl) => {
+                  return rl.ruleInfo.text;
+                })
+                .join('\n\n');
+              const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+              FileSaver.saveAs(blob, fileName);
+            }}
+          >导出</FRectBtn>
+        </Space>)
+      }
+
+      {
+        informalNodeManagerPage.ruleListStatus === 'delete'
+        && (<Space size={30}>
+          <FTextBtn
+            type="default"
+            onClick={() => {
+              onChange({
+                ruleListStatus: 'normal',
+              });
+            }}
+          >取消</FTextBtn>
+          <FRectBtn
+            type="danger1"
+            onClick={async () => {
+              const text: string = informalNodeManagerPage.ruleList
+                .filter((rl) => !rl.checked)
+                .map((rl) => {
+                  return rl.ruleInfo.text;
+                })
+                .join('\n\n');
+              await onChange({
+                codeInput: text,
+              });
+              await dispatch<SaveRulesAction>({
+                type: 'informalNodeManagerPage/saveRules',
+              });
+            }}
+          >删除</FRectBtn>
+        </Space>)
+      }
     </div>
 
     {
-      informalNodeManagerPage.isCodeEditing
+      informalNodeManagerPage.ruleListStatus === 'coding'
         ? (<div className={styles.codeMirrorBody}>
           <div>
             <FCodemirror
@@ -371,99 +435,83 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             className={styles.ruleList}
             direction="vertical"
           >
+
             {
-              ruleObjList.map(({theRule, ...rule}, index: number) => {
-                return (<div
-                  key={rule.id}
-                  className={styles.ruleCard}
-                >
-                  <div className={styles.ruleCardHeader}>
-                    <Space size={20}>
-                      <FCheckbox
-                        checked={
-                          informalNodeManagerPage.checkedExhibitName.includes(theRule.alter)
-                          || informalNodeManagerPage.checkedExhibitName.includes(theRule.add?.exhibit || '')
-                          || informalNodeManagerPage.checkedThemeName === theRule.active
+              ruleObjList.length === 0
+                ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'}/>)
+                : ruleObjList.map(({theRule, ...rule}, index: number, ruleObjListArray) => {
+                  return (<div
+                    key={rule.id}
+                    className={styles.ruleCard}
+                  >
+                    <div className={styles.ruleCardHeader}>
+                      <Space size={20}>
+                        {
+                          informalNodeManagerPage.ruleListStatus !== 'normal' && (<FCheckbox
+                            checked={rule.checked}
+                            onChange={(e) => {
+                              onChange({
+                                ruleList: informalNodeManagerPage.ruleList.map((rl) => {
+                                  if (rl.id !== rule.id) {
+                                    return rl;
+                                  }
+                                  return {
+                                    ...rl,
+                                    checked: e.target.checked,
+                                  }
+                                })
+                              });
+                            }}
+                          />)
                         }
-                        onChange={(e) => {
-                          const exhibitName: string = theRule.alter || theRule.add?.exhibit || '';
-                          const themeName: string = theRule.active || '';
-                          if (e.target.checked) {
-                            if (exhibitName) {
-                              onChange({
-                                checkedExhibitName: [
-                                  ...informalNodeManagerPage.checkedExhibitName,
-                                  exhibitName,
-                                ],
-                              });
-                            } else {
-                              onChange({
-                                checkedThemeName: themeName,
-                              });
-                            }
-                          } else {
-                            if (exhibitName) {
-                              onChange({
-                                checkedExhibitName: informalNodeManagerPage.checkedExhibitName.filter((ce) => {
-                                  return ce !== exhibitName;
-                                }),
-                              });
-                            } else {
-                              onChange({
-                                checkedThemeName: '',
-                              });
-                            }
-                          }
-                        }}
-                      />
-                      {/*<div style={{width: 20}}/>*/}
-                      {theRule.add && <AddRule {...theRule.add}/>}
-                      {theRule.alter && <AlterRule alter={theRule.alter}/>}
-                      {theRule.active && <ActiveRule active={theRule.active}/>}
-                    </Space>
-                    {
-                      rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
-                        return (<div key={iinn}>{mE}</div>);
-                      })}>
-                        <div><FWarning/></div>
-                      </FTooltip>)
-                    }
 
-                  </div>
-                  {
-                    !(!theRule.cover && !theRule.title && !theRule.labels && !theRule.online && !theRule.offline && !theRule.replaces && !theRule.attrs)
-                    && (<div className={styles.ruleCardBody}>
-                      <Space
-                        className={styles.ruleCardBodyList}
-                        size={15}
-                        direction="vertical"
-                      >
-                        {/*{theRule.version && <VersionRule version={theRule.version}/>}*/}
-                        {theRule.cover &&
-                        <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover}/></div>}
-                        {theRule.title &&
-                        <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title}/></div>}
-                        {theRule.labels &&
-                        <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels}/></div>}
-                        {theRule.online &&
-                        <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online}/></div>}
-                        {theRule.offline &&
-                        <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline}/></div>}
-                        {theRule.replaces && theRule.replaces.map((replace: any, replaceIndex: any) => {
-                          return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
-                            {...replace}
-                          /></div>);
-                        })}
-                        {theRule.attrs && theRule.attrs.map((attr: any, attrIndex: any) => {
-                          return (
-                            <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr}/></div>);
-                        })}
-
+                        {theRule.add && <AddRule {...theRule.add}/>}
+                        {theRule.alter && <AlterRule alter={theRule.alter}/>}
+                        {theRule.active && <ActiveRule active={theRule.active}/>}
                       </Space>
-                    </div>)
-                  }
-                </div>);
-              })
+                      {
+                        rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
+                          return (<div key={iinn}>{mE}</div>);
+                        })}>
+                          <div><FWarning/></div>
+                        </FTooltip>)
+                      }
+
+                    </div>
+                    {
+                      !(!theRule.cover && !theRule.title && !theRule.labels && !theRule.online && !theRule.offline && !theRule.replaces && !theRule.attrs)
+                      && (<div className={styles.ruleCardBody}>
+                        <Space
+                          className={styles.ruleCardBodyList}
+                          size={15}
+                          direction="vertical"
+                        >
+                          {/*{theRule.version && <VersionRule version={theRule.version}/>}*/}
+                          {theRule.cover &&
+                          <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover}/></div>}
+                          {theRule.title &&
+                          <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title}/></div>}
+                          {theRule.labels &&
+                          <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels}/></div>}
+                          {theRule.online &&
+                          <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online}/></div>}
+                          {theRule.offline &&
+                          <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline}/></div>}
+                          {theRule.replaces && theRule.replaces.map((replace: any, replaceIndex: any) => {
+                            return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
+                              {...replace}
+                            /></div>);
+                          })}
+                          {theRule.attrs && theRule.attrs.map((attr: any, attrIndex: any) => {
+                            return (
+                              <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr}/></div>);
+                          })}
+
+                        </Space>
+                      </div>)
+                    }
+                  </div>);
+                })
             }
           </Space>
         </div>)

@@ -107,16 +107,15 @@ export interface InformalNodeManagerPageModelState {
     };
   }[];
 
+  ruleListStatus: 'normal' | 'export' | 'delete' | 'coding';
   ruleList: {
     id: string;
+    checked: boolean;
     matchErrors: string[];
     ruleInfo: any;
     efficientInfos: any[];
   }[];
-  checkedExhibitName: string[];
-  checkedThemeName: string;
 
-  isCodeEditing: boolean;
   codeInput: string;
   codeIsDirty: boolean;
   promptLeavePath: string;
@@ -250,11 +249,13 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   themesTotal: -1,
   addThemeDrawerVisible: false,
 
-  ruleList: [],
-  checkedExhibitName: [],
-  checkedThemeName: '',
+  // isCodeEditing: false,
 
-  isCodeEditing: false,
+  ruleListStatus: 'normal',
+  ruleList: [],
+  // checkedExhibitName: [],
+  // checkedThemeName: '',
+
   codeInput: '',
   codeIsDirty: false,
   promptLeavePath: '',
@@ -574,7 +575,12 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           codeInput: data.ruleText,
           codeIsDirty: false,
-          ruleList: data.testRules,
+          ruleList: data.testRules.map((tr:any) => {
+            return {
+              ...tr,
+              checked: false,
+            };
+          }),
           codeExecutionError: null,
           codeCompileErrors: null,
         },
@@ -629,7 +635,12 @@ const Model: InformalNodeManagerPageModelType = {
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           codeSaveSuccess: codeExecutionError.length === 0,
-          ruleList: data1.testRules,
+          ruleList: data1.testRules.map((tr:any) => {
+            return {
+              ...tr,
+              checked: false,
+            };
+          }),
         },
       });
     },
