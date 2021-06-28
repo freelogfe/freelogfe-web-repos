@@ -68,8 +68,6 @@ export interface InformalNodeManagerPageModelState {
   selectedStatus: '0' | '1' | '2';
   filterKeywords: string;
   exhibitsTotal: number;
-
-  themesTotal: number;
   exhibitList: {
     id: string;
     cover: string;
@@ -90,6 +88,8 @@ export interface InformalNodeManagerPageModelState {
   }[];
 
   addThemeDrawerVisible: boolean;
+  themeFilterKeywords: string;
+  themesTotal: number;
   themeList: {
     id: string;
     name: string;
@@ -246,15 +246,12 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   exhibitsTotal: -1,
 
   themeList: [],
+  themeFilterKeywords: '',
   themesTotal: -1,
   addThemeDrawerVisible: false,
 
-  // isCodeEditing: false,
-
   ruleListStatus: 'normal',
   ruleList: [],
-  // checkedExhibitName: [],
-  // checkedThemeName: '',
 
   codeInput: '',
   codeIsDirty: false,
@@ -313,13 +310,6 @@ const Model: InformalNodeManagerPageModelType = {
       if (!nodes.list || !nodes.list.some((n) => n.nodeId === informalNodeManagerPage.nodeID)) {
         return;
       }
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     exhibitListIsLoading: true,
-      //   }
-      // });
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
@@ -456,6 +446,7 @@ const Model: InformalNodeManagerPageModelType = {
         onlineStatus: 2,
         resourceType: 'theme',
         limit: FUtil.Predefined.pageSize,
+        keywords: informalNodeManagerPage.themeFilterKeywords || undefined,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
@@ -512,7 +503,8 @@ const Model: InformalNodeManagerPageModelType = {
                   description: a.description,
                 };
               }) : undefined,
-              active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+              // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+              active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
               replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
                 // console.log(rr, 'rr!!@#$#$@#$@#$444444');
                 return {
@@ -575,7 +567,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           codeInput: data.ruleText,
           codeIsDirty: false,
-          ruleList: data.testRules.map((tr:any) => {
+          ruleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
@@ -635,7 +627,7 @@ const Model: InformalNodeManagerPageModelType = {
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           codeSaveSuccess: codeExecutionError.length === 0,
-          ruleList: data1.testRules.map((tr:any) => {
+          ruleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,

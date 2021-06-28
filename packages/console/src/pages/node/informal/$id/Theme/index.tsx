@@ -48,10 +48,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
-  // if (informalNodeManagerPage.themeList.length === 0) {
-  //   return ();
-  // }
-
   function onChange(value: Partial<InformalNodeManagerPageModelState>) {
     dispatch<ChangeAction>({
       type: 'informalNodeManagerPage/change',
@@ -87,10 +83,28 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                     });
                   }}><FAdd/></FTextBtn>
                 <FContentText
-                  text={FUtil1.I18n.message('import_test_theme') }
+                  text={FUtil1.I18n.message('import_test_theme')}
                 />
               </Space>
-              <div><FInput theme={'dark'}/></div>
+              <div>
+                <FInput
+                  theme={'dark'}
+                  value={informalNodeManagerPage.themeFilterKeywords}
+                  debounce={300}
+                  onDebounceChange={async (value) => {
+                    await onChange({
+                      themeFilterKeywords: value
+                    });
+
+                    dispatch<FetchThemeListAction>({
+                      type: 'informalNodeManagerPage/fetchThemeList',
+                      payload: {
+                        isRestart: true,
+                      },
+                    });
+                  }}
+                />
+              </div>
             </Space>
           </div>
 
@@ -114,7 +128,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                         {/*<label className={styles.nonActivated}>未激活</label>*/}
                         {/*<div style={{width: 10}}/>*/}
                         {/*<FWarning/>*/}
-                      {/*</>)*/}
+                        {/*</>)*/}
                       </div>
                       <div className={styles.coverFooter}>
                         <div>
@@ -124,61 +138,67 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                             t.originInfo.type === 'resource' && (<>
                               <FDivider/>
                               <FLink
-                                to={FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})}>资源详情</FLink>
+                                to={FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})}
+                              >资源详情</FLink>
                             </>)
                           }
-                          <FDivider/>
-                          <a onClick={() => {
-                            const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                            // console.log(rules, 'rules1234234');
-                            const rule = rules.find((r) => r.themeName);
+                          {
+                            !t.isOnline && (<>
+                              <FDivider/>
+                              <a onClick={() => {
+                                const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+                                // console.log(rules, 'rules1234234');
+                                const rule = rules.find((r) => r.themeName);
 
-                            let data;
+                                let data;
 
-                            if (rule) {
-                              data = rules.map((r) => {
-                                if (!r.themeName) {
-                                  return r;
+                                if (rule) {
+                                  data = rules.map((r) => {
+                                    if (!r.themeName) {
+                                      return r;
+                                    }
+                                    return {
+                                      ...r,
+                                      themeName: t.name,
+                                    };
+                                  });
+                                } else {
+                                  data = [
+                                    {
+                                      operation: 'activate_theme',
+                                      themeName: t.name,
+                                    },
+                                    ...rules,
+                                  ];
                                 }
-                                return {
-                                  ...r,
-                                  themeName: t.name,
-                                };
-                              });
-                            } else {
-                              data = [
-                                {
-                                  operation: 'activate_theme',
-                                  themeName: t.name,
-                                },
-                                ...rules,
-                              ];
-                            }
-                            // console.log(rule, 'rule21930usdf');
+                                // console.log(rule, 'rule21930usdf');
 
-                            dispatch<SaveDataRulesAction>({
-                              type: 'informalNodeManagerPage/saveDataRules',
-                              payload: {
-                                type: 'replace',
-                                data: data,
-                              },
-                            });
-                            onChange({
-                              themeList: arr.map((ttt) => {
-                                if (ttt.id !== t.id) {
-                                  return {
-                                    ...ttt,
-                                    isOnline: false,
-                                  };
-                                }
-                                return {
-                                  ...ttt,
-                                  isOnline: true,
-                                };
-                              }),
-                              // mappingRule
-                            })
-                          }}>激活</a>
+                                dispatch<SaveDataRulesAction>({
+                                  type: 'informalNodeManagerPage/saveDataRules',
+                                  payload: {
+                                    type: 'replace',
+                                    data: data,
+                                  },
+                                });
+                                onChange({
+                                  themeList: arr.map((ttt) => {
+                                    if (ttt.id !== t.id) {
+                                      return {
+                                        ...ttt,
+                                        isOnline: false,
+                                      };
+                                    }
+                                    return {
+                                      ...ttt,
+                                      isOnline: true,
+                                    };
+                                  }),
+                                  // mappingRule
+                                });
+                              }}>激活</a>
+                            </>)
+                          }
+
                           <div style={{width: 1}}/>
                         </div>
                       </div>
@@ -257,8 +277,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           },
         });
       }}
-      // disabledResourceNames={['Freelog/blog-theme']}
-      // disabledObjectNames={['234234/th002.jpeg']}
       disabledResourceNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}
       disabledObjectNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}
     />
