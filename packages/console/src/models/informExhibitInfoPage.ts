@@ -13,6 +13,7 @@ interface ICandidate {
 }
 
 export interface InformExhibitInfoPageModelState {
+  resourceType: string;
   informExhibitID: string;
 
   nodeID: number;
@@ -154,8 +155,9 @@ const Model: ExhibitInfoPageModelType = {
   namespace: 'informExhibitInfoPage',
   state: {
     informExhibitID: '',
-
     nodeID: -1,
+
+    resourceType: '',
     // nodeName: '',
     informExhibitName: '',
     isOnline: false,

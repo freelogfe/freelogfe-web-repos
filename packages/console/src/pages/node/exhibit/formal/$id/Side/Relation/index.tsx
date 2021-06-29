@@ -40,6 +40,8 @@ function Relation({exhibitInfoPage}: RelationProps) {
       }}
     >
       <FContentText
+        style={{width: 220}}
+        singleRow
         text={exhibitInfoPage.resourceName}
       />
     </FTextBtn>

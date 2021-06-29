@@ -4,6 +4,7 @@ import {FContentText} from "@/components/FText";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {connect, Dispatch} from "dva";
 import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
+import {FTextBtn} from "@/components/FButton";
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -21,12 +22,26 @@ function Relation({informExhibitInfoPage}: RelationProps) {
     <div className={styles.cover} style={{cursor: 'default'}}>
       <img
         alt=""
+        onClick={() => {
+          window.open(informExhibitInfoPage.relation?.linkToDetails);
+        }}
         src={informExhibitInfoPage.relation?.cover || imgSrc}
       />
     </div>
 
     <div style={{height: 12}}/>
-    <FContentText singleRow text={informExhibitInfoPage.relation?.name}/>
+    <FTextBtn
+      type="default"
+      onClick={() => {
+        window.open(informExhibitInfoPage.relation?.linkToDetails);
+      }}
+    >
+      <FContentText
+        style={{width: 220}}
+        singleRow
+        text={informExhibitInfoPage.relation?.name}
+      />
+    </FTextBtn>
     <div style={{height: 10}}/>
     <div style={{fontSize: 12, color: '#666'}}>{informExhibitInfoPage.relation?.type}</div>
   </div>);

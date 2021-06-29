@@ -100,7 +100,7 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
         </div>
         <Space size={20}>
           {
-            informExhibitInfoPage.resourceType === 'theme'
+            informExhibitInfoPage.relation?.type === 'theme'
               ? (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
               : (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已上线' : '未上线'}</span>)
           }
