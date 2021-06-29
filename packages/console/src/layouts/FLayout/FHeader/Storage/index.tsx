@@ -29,18 +29,18 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   const cRoute = global.routerHistories[global.routerHistories.length - 1];
   const isCurrent: boolean = cRoute.pathname.startsWith('/storage');
 
-  React.useEffect(() => {
-    // console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
-    if (storageHomePage.bucketList) {
-      return;
-    }
-    dispatch<FetchBucketsAction>({
-      type: 'storageHomePage/fetchBuckets',
-      payload: {
-        from: 'header',
-      },
-    });
-  }, []);
+  // React.useEffect(() => {
+  //   // console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
+  //   if (storageHomePage.bucketList) {
+  //     return;
+  //   }
+  //   dispatch<FetchBucketsAction>({
+  //     type: 'storageHomePage/fetchBuckets',
+  //     payload: {
+  //       from: 'header',
+  //     },
+  //   });
+  // }, []);
 
   function onClickStorage() {
 

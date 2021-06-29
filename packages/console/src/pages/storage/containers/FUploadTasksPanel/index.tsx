@@ -17,6 +17,7 @@ import * as AHooks from 'ahooks';
 import fConfirmModal from "@/components/fConfirmModal";
 import FUtil1 from "@/utils";
 import FLoadingTip from "@/components/FLoadingTip";
+import {FClose, FDown, FUp} from "@/components/FIcons";
 
 export interface FUploadTasksPanelProps {
   dispatch: Dispatch;
@@ -115,8 +116,8 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
         >
           {
             storageHomePage.uploadPanelOpen
-              ? (<DownOutlined style={{fontSize: 12}}/>)
-              : (<UpOutlined style={{fontSize: 12}}/>)
+              ? (<FDown style={{fontSize: 12}}/>)
+              : (<FUp style={{fontSize: 12}}/>)
           }
         </FTextBtn>
         <FTextBtn
@@ -134,7 +135,7 @@ function FUploadTasksPanel({dispatch, storageHomePage}: FUploadTasksPanelProps) 
             closeAll();
           }}
           type="default"
-        ><CloseOutlined style={{fontSize: 12}}/></FTextBtn>
+        ><FClose style={{fontSize: 12}}/></FTextBtn>
       </Space>
     </div>
     <div

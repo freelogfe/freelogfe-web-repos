@@ -467,8 +467,13 @@ const Model: StorageHomePageModelType = {
     },
   },
   subscriptions: {
-    setup({}) {
-
+    setup({dispatch}, done) {
+      dispatch<FetchBucketsAction>({
+        type: 'fetchBuckets',
+        payload: {
+          from: 'header',
+        },
+      });
     }
   }
 };
