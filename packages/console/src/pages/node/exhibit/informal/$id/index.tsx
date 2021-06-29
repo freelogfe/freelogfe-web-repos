@@ -13,7 +13,7 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  FetchInfoAction, SyncRulesAction,
+  FetchInformalExhibitInfoAction, SyncRulesAction,
 } from '@/models/informExhibitInfoPage';
 import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';
@@ -43,8 +43,8 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
       },
     });
 
-    await dispatch<FetchInfoAction>({
-      type: 'informExhibitInfoPage/fetchInfo',
+    await dispatch<FetchInformalExhibitInfoAction>({
+      type: 'informExhibitInfoPage/fetchInformalExhibitInfo',
     });
   }
 
@@ -82,8 +82,8 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
           />
           <div style={{width: 20}}/>
           {
-            informExhibitInfoPage.mappingRule
-              ? (<MappingRule
+            informExhibitInfoPage.mappingRule && Object.entries(informExhibitInfoPage.mappingRule).filter((imr) => imr[1]).length > 0
+              && (<MappingRule
                 add={informExhibitInfoPage.mappingRule.add}
                 alter={informExhibitInfoPage.mappingRule.alter}
                 version={informExhibitInfoPage.mappingRule?.version}
@@ -96,7 +96,6 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
                 replaces={informExhibitInfoPage.mappingRule.replaces}
                 attrs={informExhibitInfoPage.mappingRule.attrs}
               />)
-              : (<MappingRule/>)
           }
         </div>
         <Space size={20}>

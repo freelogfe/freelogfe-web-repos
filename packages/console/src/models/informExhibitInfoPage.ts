@@ -12,7 +12,7 @@ interface ICandidate {
   type: 'resource' | 'object';
 }
 
-export type InformExhibitInfoPageModelState = WholeReadonly<{
+export interface InformExhibitInfoPageModelState {
   informExhibitID: string;
 
   nodeID: number;
@@ -63,13 +63,14 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
   resourceName: string;
   resourceType: string;
   resourceCover: string;
-}> & {
+
   mappingRule: {
     add?: {
       exhibit: string;
       source: {
         type: 'resource' | 'object';
         name: string;
+        version?: string;
       };
     };
     alter?: string;
@@ -92,15 +93,15 @@ export type InformExhibitInfoPageModelState = WholeReadonly<{
       description?: string;
     }[];
   } | null;
-};
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'informExhibitInfoPage/change';
   payload: Partial<InformExhibitInfoPageModelState>;
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo' | 'informExhibitInfoPage/fetchInfo';
+export interface FetchInformalExhibitInfoAction extends AnyAction {
+  type: 'fetchInformalExhibitInfo' | 'informExhibitInfoPage/fetchInformalExhibitInfo';
 }
 
 export interface SyncRulesAction extends AnyAction {
@@ -124,7 +125,7 @@ export interface ExhibitInfoPageModelType {
   namespace: 'informExhibitInfoPage';
   state: InformExhibitInfoPageModelState;
   effects: {
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
     syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
   };
@@ -178,7 +179,7 @@ const Model: ExhibitInfoPageModelType = {
     resourceCover: '',
   },
   effects: {
-    * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
+    * fetchInformalExhibitInfo({}: FetchInformalExhibitInfoAction, {call, select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage, nodes}: ConnectState = yield select(({informExhibitInfoPage, nodes}: ConnectState) => ({
         informExhibitInfoPage,
         nodes,
@@ -189,28 +190,24 @@ const Model: ExhibitInfoPageModelType = {
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
 
-      // console.log(data, '#######32409jkldfsmdslkdsf');
+      // console.log(data, '#######32409jkldfsmdslkdsf||||||||');
 
-      const result: HandleRelationResult = yield call(handleRelation, data.resolveResources);
+      let result: HandleRelationResult = [];
+      let data1: any = null;
+
+      if (data.originInfo.type === 'resource') {
+        result = yield call(handleRelation, data.resolveResources);
+
+        const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+          resourceIdOrName: data.originInfo.id,
+        };
+
+        const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
+        data1 = data2;
+      }
 
       // console.log(result, 'resultQ#$GFADSJf098uj5234');
 
-      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: data.originInfo.id,
-      };
-
-      const {data: data1} = yield call(FServiceAPI.Resource.info, params1);
-
-      // console.log(data1, 'data1data1data1@#ASDFASDFASDF');
-
-      let isOnline: boolean;
-
-      if (data.resourceType === 'theme') {
-        isOnline = data.stateInfo.themeInfo.isActivatedTheme === 1;
-      } else {
-        isOnline = (data.stateInfo.onlineStatusInfo.onlineStatus === 1);
-      }
-      // console.log(data, 'data@#ASDfjoisudfijowe');
       const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
       yield put<ChangeAction>({
         type: 'change',
@@ -218,11 +215,11 @@ const Model: ExhibitInfoPageModelType = {
           nodeID: data.nodeId,
           // nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
-          isOnline: isOnline,
+          isOnline: data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1,
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          resourceId: data?.resourceId || '',
+          resourceId: data1?.resourceId || '',
           resourceName: data1?.resourceName || '',
           resourceType: data1?.resourceType || '',
           resourceCover: data1?.coverImages[0] || '',
@@ -257,38 +254,31 @@ const Model: ExhibitInfoPageModelType = {
         isRematch: false,
       };
       const {data: data2} = yield call(ruleMatchStatus, params2);
-      // console.log(data1, '##@#$@#$@#');
+      // console.log(data2, '##@#$@#$@#!!!!!!!!!');
 
-      const {rules} = compile(data2.ruleText);
-      // console.log(rules, 'rulesiuhfwe89i34FFEWFP)(*');
-
-      const currentRule = rules.find((ro: any) => {
-        return ro.exhibitName === data.testResourceName;
+      const currentRule = data2.testRules.find((ro: any) => {
+        return ro.id === data.rules[0].ruleId;
       });
 
-      const currentThemeRule = rules.find((ro: any) => {
-        return ro.themeName === data.testResourceName;
-      });
-
-      // const params3:
-
-      const eRule = currentRule ? {
-        add: currentRule.operation === 'add' ? {
-          exhibit: currentRule.exhibitName,
+      const eRule = currentRule.ruleInfo ? {
+        add: currentRule.ruleInfo.operation === 'add' ? {
+          exhibit: currentRule.ruleInfo.exhibitName,
           source: {
-            type: currentRule.candidate.type,
-            name: currentRule.candidate.name,
-            // $version: currentRule.candidate.
+            name: currentRule.ruleInfo.candidate.name,
+            type: currentRule.ruleInfo.candidate.type,
+            versionRange: (currentRule.ruleInfo.candidate.versionRange && currentRule.ruleInfo.candidate.versionRange !== 'latest')
+              ? currentRule.ruleInfo.candidate.versionRange
+              : undefined,
           },
         } : undefined,
-        alter: currentRule.operation === 'alter' ? currentRule.exhibitName : undefined,
-        cover: currentRule.cover,
-        title: currentRule.title,
-        online: currentRule.online === true,
-        offline: currentRule.online === false,
-        labels: currentRule.labels,
-        replaces: currentRule.replaces,
-        attrs: currentRule.attrs?.map((a: any) => {
+        alter: currentRule.ruleInfo.operation === 'alter' ? currentRule.ruleInfo.exhibitName : undefined,
+        cover: currentRule.ruleInfo.cover,
+        title: currentRule.ruleInfo.title,
+        online: currentRule.ruleInfo.online === true,
+        offline: currentRule.ruleInfo.online === false,
+        labels: currentRule.ruleInfo.labels,
+        replaces: currentRule.ruleInfo.replaces,
+        attrs: currentRule.ruleInfo.attrs?.map((a: any) => {
           return {
             type: a.operation,
             theKey: a.key,
@@ -298,12 +288,12 @@ const Model: ExhibitInfoPageModelType = {
         }),
       } : {};
       const tRule = {
-        active: currentThemeRule || undefined,
+        active: data.stateInfo.themeInfo.ruleId !== 'default' ? data.testResourceName : undefined,
       };
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pCustomAttrs: currentRule?.attrs?.map((cr: any) => {
+          pCustomAttrs: currentRule?.ruleInfo.attrs?.map((cr: any) => {
             return {
               remark: cr.description,
               key: cr.key,
@@ -411,8 +401,8 @@ const Model: ExhibitInfoPageModelType = {
         ],
       };
       yield call(FServiceAPI.InformalNode.updateTestResourceContracts, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
       });
     },
   },

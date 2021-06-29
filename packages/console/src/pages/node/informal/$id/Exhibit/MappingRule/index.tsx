@@ -43,7 +43,7 @@ interface MappingRuleProps {
     source: {
       type: 'resource' | 'object';
       name: string;
-      version?: string;
+      versionRange?: string;
     };
   };
   alter?: string;

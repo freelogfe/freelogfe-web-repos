@@ -14,8 +14,8 @@ import FMappingRuleActive from "@/components/FIcons/FMappingRuleActive";
 interface AddRuleProps {
   exhibit: string;
   source: {
-    type: 'resource' | 'object';
     name: string;
+    type: 'resource' | 'object';
     versionRange?: string;
   };
 }
