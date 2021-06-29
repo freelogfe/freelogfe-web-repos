@@ -25,7 +25,7 @@ export interface ChangeAction extends AnyAction {
 }
 
 export interface FetchUserInfoAction extends AnyAction {
-  type: 'user/fetchUserInfo';
+  type: 'user/fetchUserInfo' | 'fetchUserInfo';
 }
 
 export interface MarketModelType {
@@ -71,9 +71,10 @@ const Model: MarketModelType = {
   },
   subscriptions: {
     setup({dispatch}) {
-      // dispatch<FetchUserInfoAction>({
-      //   type: 'fetchUserInfo',
-      // });
+      dispatch<FetchUserInfoAction>({
+        type: 'fetchUserInfo',
+      });
+      // console.log('!@#$!@#$!@#$@#$');
     },
   }
 };

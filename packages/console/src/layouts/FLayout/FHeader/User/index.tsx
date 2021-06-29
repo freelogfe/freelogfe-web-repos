@@ -16,12 +16,12 @@ interface UserProps {
 
 function User({dispatch, user}: UserProps) {
 
-  AHooks.useMount(() => {
-  // console.log('!@#$!@#$@#$@#$@#!423444333423423423');
-    dispatch<FetchUserInfoAction>({
-      type: 'user/fetchUserInfo',
-    });
-  });
+  // AHooks.useMount(() => {
+  // // console.log('!@#$!@#$@#$@#$@#!423444333423423423');
+  //   dispatch<FetchUserInfoAction>({
+  //     type: 'user/fetchUserInfo',
+  //   });
+  // });
 
   return (<FDropdown overlay={<div className={styles.userPanel}>
     <div className={styles.userPanelHeader}>
