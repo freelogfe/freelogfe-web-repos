@@ -6,7 +6,6 @@ import {FRectBtn} from "@/components/FButton";
 import FMenu from "@/components/FMenu";
 import {
   ChangeAction,
-  FetchBucketsAction,
   StorageHomePageModelState
 } from "@/models/storageHomePage";
 import {router} from "umi";
