@@ -59,10 +59,15 @@ export interface InformExhibitInfoPageModelState {
   pAddCustomDescription: string;
   pAddCustomDescriptionError: string;
 
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  resourceCover: string;
+  relation: {
+    cardTitle: string;
+    identity: 'resource' | 'object';
+    id: string;
+    name: string;
+    type: string;
+    cover: string;
+    linkToDetails: string;
+  } | null;
 
   mappingRule: {
     add?: {
@@ -173,10 +178,7 @@ const Model: ExhibitInfoPageModelType = {
     pAddCustomDescription: '',
     pAddCustomDescriptionError: '',
 
-    resourceId: '',
-    resourceName: '',
-    resourceType: '',
-    resourceCover: '',
+    relation: null,
   },
   effects: {
     * fetchInformalExhibitInfo({}: FetchInformalExhibitInfoAction, {call, select, put}: EffectsCommandMap) {
@@ -193,7 +195,7 @@ const Model: ExhibitInfoPageModelType = {
       // console.log(data, '#######32409jkldfsmdslkdsf||||||||');
 
       let result: HandleRelationResult = [];
-      let data1: any = null;
+      let relation: InformExhibitInfoPageModelState['relation'] = null;
 
       if (data.originInfo.type === 'resource') {
         result = yield call(handleRelation, data.resolveResources);
@@ -203,12 +205,41 @@ const Model: ExhibitInfoPageModelType = {
         };
 
         const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
-        data1 = data2;
+        // console.log(data2, 'data2!@#$@#$@#$3432444444');
+
+        relation = {
+          cardTitle: '关联资源',
+          identity: 'resource',
+          id: data2.resourceId,
+          name: data2.resourceName,
+          type: data2.resourceType,
+          cover: data2.coverImages[0],
+          linkToDetails: FUtil.LinkTo.resourceDetails({resourceID: data2.resourceId}),
+        };
+      } else {
+        const params3: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+          objectIdOrName: data.originInfo.id,
+        };
+
+        const {data: data3} = yield call(FServiceAPI.Storage.objectDetails, params3);
+        // console.log(data3, '!@#$!@#$234213423142134234');
+        relation = {
+          cardTitle: '关联对象',
+          identity: 'object',
+          id: data3.objectId,
+          name: data3.bucketName + '/' + data3.objectName,
+          type: data3.resourceType,
+          cover: '',
+          linkToDetails: FUtil.LinkTo.objectDetails({
+            bucketName: data3.bucketName,
+            objectID: data3.objectId,
+          }),
+        };
+
       }
 
-      // console.log(result, 'resultQ#$GFADSJf098uj5234');
-
       const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -219,13 +250,16 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          resourceId: data1?.resourceId || '',
-          resourceName: data1?.resourceName || '',
-          resourceType: data1?.resourceType || '',
-          resourceCover: data1?.coverImages[0] || '',
+          // relation {
+          //   identity: data.originInfo.type,
+          //
+          // },
+          // resourceId: relationResourceInfo?.resourceId || '',
+          // resourceName: relationResourceInfo?.resourceName || '',
+          // resourceType: relationResourceInfo?.resourceType || '',
+          // resourceCover: relationResourceInfo?.coverImages[0] || '',
 
-          associated: result.map((r, index, arr) => {
-
+          associated: result.map((r, index) => {
             return {
               selected: selectedID ? selectedID === r.resourceId : index === 0,
               id: r.resourceId,
@@ -246,6 +280,7 @@ const Model: ExhibitInfoPageModelType = {
               })),
             };
           }),
+          relation: relation,
         },
       });
 
@@ -253,14 +288,15 @@ const Model: ExhibitInfoPageModelType = {
         nodeID: data.nodeId,
         isRematch: false,
       };
+
       const {data: data2} = yield call(ruleMatchStatus, params2);
       // console.log(data2, '##@#$@#$@#!!!!!!!!!');
 
       const currentRule = data2.testRules.find((ro: any) => {
-        return ro.id === data.rules[0].ruleId;
+        return ro.id === data.rules[0]?.ruleId;
       });
 
-      const eRule = currentRule.ruleInfo ? {
+      const eRule = currentRule?.ruleInfo ? {
         add: currentRule.ruleInfo.operation === 'add' ? {
           exhibit: currentRule.ruleInfo.exhibitName,
           source: {
@@ -287,9 +323,11 @@ const Model: ExhibitInfoPageModelType = {
           };
         }),
       } : {};
+
       const tRule = {
         active: data.stateInfo.themeInfo.ruleId !== 'default' ? data.testResourceName : undefined,
       };
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -297,7 +335,7 @@ const Model: ExhibitInfoPageModelType = {
             return {
               remark: cr.description,
               key: cr.key,
-              // operation: "add"
+              // operation: "add",
               value: cr.value,
               isEditing: false,
             };
@@ -306,7 +344,7 @@ const Model: ExhibitInfoPageModelType = {
             ...eRule,
             ...tRule,
           },
-        }
+        },
       });
     },
     * syncRules({payload}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
@@ -322,13 +360,10 @@ const Model: ExhibitInfoPageModelType = {
       const {data: data1} = yield call(ruleMatchStatus, params2);
 
       const {rules} = compile(data1.ruleText);
-      // console.log(rules, '@##RFSDFSDFASD90就；sdf89');
 
       let newRulesObj;
 
       if (payload.active !== undefined) {
-        // console.log(payload.active, 'payload.active@SADFioJpoiu908sfup9OI:)_I');
-
         newRulesObj = rules.filter((r: any) => {
           return r.operation !== 'activate_theme';
         });

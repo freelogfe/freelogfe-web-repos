@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from "@/components/FText";
+import {FContentText} from "@/components/FText";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {connect, Dispatch} from "dva";
-import {ConnectState, ExhibitInfoPageModelState, InformExhibitInfoPageModelState} from "@/models/connect";
+import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
 
 interface RelationProps {
   dispatch: Dispatch;
@@ -11,24 +11,24 @@ interface RelationProps {
 }
 
 function Relation({informExhibitInfoPage}: RelationProps) {
-  if (!informExhibitInfoPage.resourceId) {
+  if (!informExhibitInfoPage.relation) {
     return null;
   }
 
   return (<div className={styles.info}>
-    <FContentText text={'关联资源'} type="highlight"/>
+    <FContentText text={informExhibitInfoPage.relation?.cardTitle} type="highlight"/>
     <div style={{height: 20}}/>
     <div className={styles.cover} style={{cursor: 'default'}}>
       <img
         alt=""
-        src={informExhibitInfoPage.resourceCover || imgSrc}
+        src={informExhibitInfoPage.relation?.cover || imgSrc}
       />
     </div>
 
     <div style={{height: 12}}/>
-    <FContentText singleRow text={informExhibitInfoPage.resourceName}/>
+    <FContentText singleRow text={informExhibitInfoPage.relation?.name}/>
     <div style={{height: 10}}/>
-    <div style={{fontSize: 12, color: '#666'}}>{informExhibitInfoPage.resourceType}</div>
+    <div style={{fontSize: 12, color: '#666'}}>{informExhibitInfoPage.relation?.type}</div>
   </div>);
 }
 
