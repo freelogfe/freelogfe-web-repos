@@ -117,10 +117,6 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
               />
             </>)
           }
-
-          {/*<FTooltip title={!informExhibitInfoPage.isAuth ? informExhibitInfoPage.authErrorText : '暂无上线策略'}>*/}
-          {/*  <FWarning/>*/}
-          {/*</FTooltip>*/}
         </Space>
       </div>
       <div className={styles.body}>

@@ -19,14 +19,6 @@ interface InfoProps {
 }
 
 function Info({dispatch, informExhibitInfoPage}: InfoProps) {
-  // function onChangePInputTitle(value: string | null) {
-  //   dispatch<ChangeAction>({
-  //     type: 'informExhibitInfoPage/change',
-  //     payload: {
-  //       pInputTitle: value,
-  //     },
-  //   });
-  // }
 
   if (informExhibitInfoPage.resourceType === 'theme') {
     return null;

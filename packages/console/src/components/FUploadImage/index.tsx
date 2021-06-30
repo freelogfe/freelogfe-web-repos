@@ -19,7 +19,7 @@ interface FUploadImageProps {
 export default function ({children, onUploadSuccess, onError}: FUploadImageProps) {
 
   async function upload(file: File) {
-    console.log(file, 'file!@$!@#$!@#$23423234234234234');
+    // console.log(file, 'file!@$!@#$!@#$23423234234234234');
     const res = await FServiceAPI.Storage.uploadImage({
       file: file,
     });
@@ -34,7 +34,7 @@ export default function ({children, onUploadSuccess, onError}: FUploadImageProps
         grid
         aspect={4 / 3}
         beforeCrop={(file) => {
-          console.log(file, '#FSDFSDFSDF');
+          // console.log(file, '#FSDFSDFSDF');
           if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
             onError && onError(FUtil1.I18n.message('limit_resource_image_format'));
             return false;
