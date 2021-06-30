@@ -258,7 +258,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
 
-      // console.log(data, 'data@!!!!!!!!1111');
+      console.log(data, 'data@!!!!!!!!1111');
       const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
       const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
 
@@ -280,6 +280,14 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
+          pCustomAttrs: data.stateInfo.propertyInfo.testResourceProperty.map((cr: any) => {
+            return {
+              remark: cr.remark,
+              key: cr.key,
+              value: cr.value,
+              isEditing: false,
+            };
+          }),
           associated: result.map((r, index) => {
             return {
               selected: selectedID ? selectedID === r.resourceId : index === 0,
@@ -352,15 +360,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pCustomAttrs: currentRule?.ruleInfo.attrs?.map((cr: any) => {
-            return {
-              remark: cr.description,
-              key: cr.key,
-              // operation: "add",
-              value: cr.value,
-              isEditing: false,
-            };
-          }) || [],
+
           mappingRule: {
             ...eRule,
             ...tRule,
@@ -430,13 +430,15 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
       const text = decompile(newRulesObj);
-      // console.log(text, 'newRulesObj90ij32.dsfsdf');
+      console.log(text, 'newRulesObj90ij32.dsfsdf');
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.nodeID,
         testRuleText: text,
       };
+      console.log(params, 'paramsparams!!@#$!@#$');
       const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+      // console.log(data, 'data!!@#$@#$');
 
       yield call(sleep, 300);
 
