@@ -13,7 +13,7 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  FetchInformalExhibitInfoAction, SyncRulesAction,
+  FetchInformalExhibitInfoAction, OnOnlineSwitchChangeAction, SyncRulesAction,
 } from '@/models/informExhibitInfoPage';
 import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';
@@ -83,53 +83,41 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
           <div style={{width: 20}}/>
           {
             informExhibitInfoPage.mappingRule && Object.entries(informExhibitInfoPage.mappingRule).filter((imr) => imr[1]).length > 0
-              && (<MappingRule
-                add={informExhibitInfoPage.mappingRule.add}
-                alter={informExhibitInfoPage.mappingRule.alter}
-                version={informExhibitInfoPage.mappingRule?.version}
-                active={informExhibitInfoPage.mappingRule.active}
-                cover={informExhibitInfoPage.mappingRule.cover}
-                title={informExhibitInfoPage.mappingRule.title}
-                online={informExhibitInfoPage.mappingRule.online}
-                offline={informExhibitInfoPage.mappingRule.offline}
-                labels={informExhibitInfoPage.mappingRule.labels}
-                replaces={informExhibitInfoPage.mappingRule.replaces}
-                attrs={informExhibitInfoPage.mappingRule.attrs}
-              />)
+            && (<MappingRule
+              add={informExhibitInfoPage.mappingRule.add}
+              alter={informExhibitInfoPage.mappingRule.alter}
+              version={informExhibitInfoPage.mappingRule?.version}
+              active={informExhibitInfoPage.mappingRule.active}
+              cover={informExhibitInfoPage.mappingRule.cover}
+              title={informExhibitInfoPage.mappingRule.title}
+              online={informExhibitInfoPage.mappingRule.online}
+              offline={informExhibitInfoPage.mappingRule.offline}
+              labels={informExhibitInfoPage.mappingRule.labels}
+              replaces={informExhibitInfoPage.mappingRule.replaces}
+              attrs={informExhibitInfoPage.mappingRule.attrs}
+            />)
           }
         </div>
         <Space size={20}>
           {
-            informExhibitInfoPage.relation?.type === 'theme'
-              ? (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已激活' : '未激活'}</span>)
-              : (<span style={{color: '#666'}}>{informExhibitInfoPage.isOnline ? '已上线' : '未上线'}</span>)
+            informExhibitInfoPage.onlineSwitchObj && (<>
+              <span
+                style={{color: informExhibitInfoPage.onlineSwitchObj?.checked ? '#44C28C' : '#666'}}>{informExhibitInfoPage.onlineSwitchObj?.text}</span>
+              <FSwitch
+                disabled={informExhibitInfoPage.onlineSwitchObj?.disabled}
+                checked={informExhibitInfoPage.onlineSwitchObj?.checked}
+                onChange={(value) => {
+                  dispatch<OnOnlineSwitchChangeAction>({
+                    type: 'informExhibitInfoPage/onOnlineSwitchChange',
+                    payload: {
+                      checked: value,
+                    },
+                  });
+                }}
+              />
+            </>)
           }
 
-          <FSwitch
-            disabled={informExhibitInfoPage.isOnline && informExhibitInfoPage.resourceType === 'theme'}
-            checked={informExhibitInfoPage.isOnline}
-            onChange={(value) => {
-
-              onChange({isOnline: value});
-
-              if (informExhibitInfoPage.resourceType === 'theme') {
-                dispatch<SyncRulesAction>({
-                  type: 'informExhibitInfoPage/syncRules',
-                  payload: {
-                    active: value,
-                  },
-                });
-              } else {
-                dispatch<SyncRulesAction>({
-                  type: 'informExhibitInfoPage/syncRules',
-                  payload: {
-                    online: value,
-                  },
-                });
-              }
-
-            }}
-          />
           {/*<FTooltip title={!informExhibitInfoPage.isAuth ? informExhibitInfoPage.authErrorText : '暂无上线策略'}>*/}
           {/*  <FWarning/>*/}
           {/*</FTooltip>*/}

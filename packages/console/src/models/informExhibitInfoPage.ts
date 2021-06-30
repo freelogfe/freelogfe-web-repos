@@ -3,6 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import FUtil1 from '@/utils'
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -19,7 +20,12 @@ export interface InformExhibitInfoPageModelState {
   nodeID: number;
   // nodeName: string;
   informExhibitName: string;
-  isOnline: boolean;
+  // isOnline: boolean;
+  onlineSwitchObj: {
+    checked: boolean;
+    text: string;
+    disabled: boolean;
+  } | null;
 
   associated: {
     selected: boolean;
@@ -106,12 +112,19 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<InformExhibitInfoPageModelState>;
 }
 
+export interface OnOnlineSwitchChangeAction extends AnyAction {
+  type: 'informExhibitInfoPage/onOnlineSwitchChange';
+  payload: {
+    checked: boolean;
+  };
+}
+
 export interface FetchInformalExhibitInfoAction extends AnyAction {
   type: 'fetchInformalExhibitInfo' | 'informExhibitInfoPage/fetchInformalExhibitInfo';
 }
 
 export interface SyncRulesAction extends AnyAction {
-  type: 'informExhibitInfoPage/syncRules';
+  type: 'informExhibitInfoPage/syncRules' | 'syncRules';
   payload: {
     cover?: string;
     labels?: string[];
@@ -134,6 +147,7 @@ export interface ExhibitInfoPageModelType {
     fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
     syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
+    onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
@@ -154,13 +168,13 @@ export interface UpdateRelationAction extends AnyAction {
 const Model: ExhibitInfoPageModelType = {
   namespace: 'informExhibitInfoPage',
   state: {
-    informExhibitID: '',
     nodeID: -1,
-
+    informExhibitID: '',
     resourceType: '',
     // nodeName: '',
     informExhibitName: '',
-    isOnline: false,
+    // isOnline: false,
+    onlineSwitchObj: null,
     mappingRule: null,
 
     associated: [],
@@ -216,7 +230,9 @@ const Model: ExhibitInfoPageModelType = {
           name: data2.resourceName,
           type: data2.resourceType,
           cover: data2.coverImages[0],
-          linkToDetails: FUtil.LinkTo.resourceDetails({resourceID: data2.resourceId}),
+          linkToDetails: FUtil.LinkTo.resourceDetails({
+            resourceID: data2.resourceId,
+          }),
         };
       } else {
         const params3: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
@@ -242,25 +258,28 @@ const Model: ExhibitInfoPageModelType = {
 
       const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
 
+      // console.log(data, 'data@!!!!!!!!1111');
+      const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
+      const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeID: data.nodeId,
+          resourceType: data.resourceType,
           // nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
-          isOnline: data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1,
+          // isOnline: ,
+          onlineSwitchObj: {
+            checked: isChecked,
+            text: data.resourceType === 'theme'
+              ? FUtil1.I18n.message('toggle_activate_theme')
+              : FUtil1.I18n.message('btn_show_exhibit'),
+            disabled: isDisabled,
+          },
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          // relation {
-          //   identity: data.originInfo.type,
-          //
-          // },
-          // resourceId: relationResourceInfo?.resourceId || '',
-          // resourceName: relationResourceInfo?.resourceName || '',
-          // resourceType: relationResourceInfo?.resourceType || '',
-          // resourceCover: relationResourceInfo?.coverImages[0] || '',
-
           associated: result.map((r, index) => {
             return {
               selected: selectedID ? selectedID === r.resourceId : index === 0,
@@ -354,6 +373,8 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
+      // console.log(payload, 'payload123421341!!!!!!');
+
       const params2: RuleMatchStatusParams = {
         nodeID: informExhibitInfoPage.nodeID,
         isRematch: false,
@@ -372,11 +393,11 @@ const Model: ExhibitInfoPageModelType = {
 
         if (payload.active) {
           newRulesObj = [
-            ...newRulesObj,
             {
               operation: 'activate_theme',
               themeName: informExhibitInfoPage.informExhibitName,
             },
+            ...newRulesObj,
           ];
         }
         // console.log(rules1, 'rules1!Q@#RFcdios89joe');
@@ -397,12 +418,12 @@ const Model: ExhibitInfoPageModelType = {
           });
         } else {
           newRulesObj = [
-            ...rules,
             {
               operation: 'alter',
               exhibitName: informExhibitInfoPage.informExhibitName,
               ...payload,
             },
+            ...rules,
           ];
         }
       }
@@ -416,6 +437,12 @@ const Model: ExhibitInfoPageModelType = {
         testRuleText: text,
       };
       const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+
+      yield call(sleep, 300);
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+      });
     },
     * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
@@ -441,6 +468,38 @@ const Model: ExhibitInfoPageModelType = {
       yield put<FetchInformalExhibitInfoAction>({
         type: 'fetchInformalExhibitInfo',
       });
+    },
+    * onOnlineSwitchChange({payload}: OnOnlineSwitchChangeAction, {put, select}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     onlineSwitchObj: {
+      //       checked: payload.checked,
+      //       text: informExhibitInfoPage.resourceType === 'theme' ? (payload.checked ? '已激活' : '未激活') : (payload.checked ? '已上线' : '未上线'),
+      //       disabled: false,
+      //     },
+      //   },
+      // });
+
+      if (informExhibitInfoPage.resourceType === 'theme') {
+        yield put<SyncRulesAction>({
+          type: 'syncRules',
+          payload: {
+            active: payload.checked,
+          },
+        });
+      } else {
+        yield put<SyncRulesAction>({
+          type: 'syncRules',
+          payload: {
+            online: payload.checked,
+          },
+        });
+      }
     },
   },
   reducers: {
@@ -577,13 +636,12 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
       return response;
     }
   }
-
-  function sleep(ms: number = 200) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve()
-      }, ms);
-    });
-  }
 }
 
+function sleep(ms: number = 200) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, ms);
+  });
+}
