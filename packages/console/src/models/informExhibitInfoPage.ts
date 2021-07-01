@@ -85,25 +85,24 @@ export interface InformExhibitInfoPageModelState {
   pAllVersions: string[];
   pVersion: string;
   pOnlyReadAttrs: {
-    key: string;
+    theKey: string;
     value: string;
   }[];
   pOnlyEditAttrs: {
-    key: string;
+    theKey: string;
     value: string; // 最终向服务端提交的value数据
     remark: string;
   }[];
   pEditDeleteAttrs: {
-    key: string;
+    theKey: string;
     value: string; // 最终向服务端提交的value数据
     remark: string;
-    isEditing: boolean; // 是否弹窗来编辑此属性
   }[];
 
   pCustomModalVisible: boolean;
   pCustomModalTitle: string;
   pCustomModalConfirmButtonDisabled: boolean;
-  pCustomMode: 'add' | 'alter';
+  pCustomMode: 'add' | 'edit';
   pCustomKey: string;
   pCustomKeyDisabled: boolean;
   pCustomKeyError: string;
@@ -341,7 +340,7 @@ const Model: ExhibitInfoPageModelType = {
             .map<InformExhibitInfoPageModelState['pOnlyReadAttrs'][number]>((cr: any) => {
               // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
               return {
-                key: cr.key,
+                theKey: cr.key,
                 value: cr.value,
                 // remark: cr.remark,
                 // isEditing: false,
@@ -354,10 +353,9 @@ const Model: ExhibitInfoPageModelType = {
             .map<InformExhibitInfoPageModelState['pOnlyEditAttrs'][number]>((cr: any) => {
               // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
               return {
-                key: cr.key,
+                theKey: cr.key,
                 value: cr.value,
                 remark: cr.remark,
-                // isEditing: false,
               };
             }),
           pEditDeleteAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
@@ -366,10 +364,9 @@ const Model: ExhibitInfoPageModelType = {
             })
             .map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][number]>((cr: any) => {
               return {
+                theKey: cr.key,
                 remark: cr.remark,
-                key: cr.key,
                 value: cr.value,
-                isEditing: false,
               };
             }),
           associated: result.map<InformExhibitInfoPageModelState['associated'][number]>((r, index) => {
@@ -588,11 +585,49 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
-    * onHandleAttrModal({}: OnHandleAttrModalAction, {select}: EffectsCommandMap) {
+    * onHandleAttrModal({payload}: OnHandleAttrModalAction, {select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
+      if (payload.type === 'add') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pCustomModalVisible: true,
+            pCustomModalTitle: '添加自定义选项',
+            pCustomModalConfirmButtonDisabled: true,
+            pCustomMode: 'add',
+            pCustomKey: '',
+            pCustomKeyDisabled: false,
+            pCustomKeyError: '',
+            pCustomValue: '',
+            pCustomValueError: '',
+            pCustomDescription: '',
+            pCustomDescriptionError: '',
+          },
+        });
+      } else {
+        const attrT = informExhibitInfoPage.pEditDeleteAttrs.find((ea) => {
+          return ea.theKey === payload.key;
+        });
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pCustomModalVisible: true,
+            pCustomModalTitle: '编辑自定义选项',
+            pCustomModalConfirmButtonDisabled: true,
+            pCustomMode: 'edit',
+            pCustomKey: attrT?.theKey || '',
+            pCustomKeyDisabled: true,
+            pCustomKeyError: '',
+            pCustomValue: attrT?.value || '',
+            pCustomValueError: '',
+            pCustomDescription: attrT?.remark || '',
+            pCustomDescriptionError: '',
+          },
+        });
+      }
 
     },
     * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
