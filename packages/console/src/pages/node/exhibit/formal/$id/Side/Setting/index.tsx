@@ -168,7 +168,7 @@ function Setting({dispatch, exhibitInfoPage}: SettingProps) {
                       className={styles.FSelect}
                       value={pc.value}
                       dataSource={pc.option.map((d) => ({value: d, title: d}))}
-                      onChange={(value) => {
+                      onChange={(value: any) => {
                         onChangeCustomAttrs({key: pc.key, value: value}, true);
                       }}
                     />)
