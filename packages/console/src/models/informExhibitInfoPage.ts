@@ -16,11 +16,42 @@ interface ICandidate {
 export interface InformExhibitInfoPageModelState {
   resourceType: string;
   informExhibitID: string;
-
   nodeID: number;
+  allRuleText: string;
+  allRuleResult: any;
+  theRuleID: string;
+
   // nodeName: string;
   informExhibitName: string;
-  // isOnline: boolean;
+  mappingRule: {
+    add?: {
+      exhibit: string;
+      source: {
+        type: 'resource' | 'object';
+        name: string;
+        version?: string;
+      };
+    };
+    alter?: string;
+    active?: string;
+    version?: string;
+    cover?: string;
+    title?: string;
+    online?: boolean;
+    offline?: boolean;
+    labels?: string[];
+    replaces?: {
+      replaced: ICandidate;
+      replacer: ICandidate;
+      scopes: ICandidate[][];
+    }[];
+    attrs?: {
+      type: 'add' | 'delete',
+      theKey: string;
+      value?: string;
+      description?: string;
+    }[];
+  } | null;
   onlineSwitchObj: {
     checked: boolean;
     text: string;
@@ -51,20 +82,36 @@ export interface InformExhibitInfoPageModelState {
   pTitle: string;
   pInputTitle: string | null;
   pTags: string[];
-  pCustomAttrs: {
+  pAllVersions: string[];
+  pVersion: string;
+  pOnlyReadAttrs: {
+    key: string;
+    value: string;
+  }[];
+  pOnlyEditAttrs: {
+    key: string;
+    value: string; // 最终向服务端提交的value数据
+    remark: string;
+  }[];
+  pEditDeleteAttrs: {
     key: string;
     value: string; // 最终向服务端提交的value数据
     remark: string;
     isEditing: boolean; // 是否弹窗来编辑此属性
   }[];
 
-  pAddCustomModalVisible: boolean;
-  pAddCustomKey: string;
-  pAddCustomKeyError: string;
-  pAddCustomValue: string;
-  pAddCustomValueError: string;
-  pAddCustomDescription: string;
-  pAddCustomDescriptionError: string;
+  pCustomModalVisible: boolean;
+  pCustomModalTitle: string;
+  pCustomModalConfirmButtonDisabled: boolean;
+  pCustomMode: 'add' | 'alter';
+  pCustomKey: string;
+  pCustomKeyDisabled: boolean;
+  pCustomKeyError: string;
+  pCustomValue: string;
+  pCustomValueError: string;
+  pCustomDescription: string;
+  pCustomDescriptionError: string;
+
 
   relation: {
     cardTitle: string;
@@ -74,36 +121,6 @@ export interface InformExhibitInfoPageModelState {
     type: string;
     cover: string;
     linkToDetails: string;
-  } | null;
-
-  mappingRule: {
-    add?: {
-      exhibit: string;
-      source: {
-        type: 'resource' | 'object';
-        name: string;
-        version?: string;
-      };
-    };
-    alter?: string;
-    active?: string;
-    version?: string;
-    cover?: string;
-    title?: string;
-    online?: boolean;
-    offline?: boolean;
-    labels?: string[];
-    replaces?: {
-      replaced: ICandidate;
-      replacer: ICandidate;
-      scopes: ICandidate[][];
-    }[];
-    attrs?: {
-      type: 'add' | 'delete',
-      theKey: string;
-      value?: string;
-      description?: string;
-    }[];
   } | null;
 }
 
@@ -171,6 +188,10 @@ const Model: ExhibitInfoPageModelType = {
     nodeID: -1,
     informExhibitID: '',
     resourceType: '',
+    allRuleText: '',
+    allRuleResult: null,
+    theRuleID: '',
+
     // nodeName: '',
     informExhibitName: '',
     // isOnline: false,
@@ -183,16 +204,23 @@ const Model: ExhibitInfoPageModelType = {
     pTitle: '',
     pInputTitle: null,
     pTags: [],
+    pAllVersions: [],
+    pVersion: '',
+    pOnlyReadAttrs: [],
+    pOnlyEditAttrs: [],
+    pEditDeleteAttrs: [],
 
-    pCustomAttrs: [],
-
-    pAddCustomModalVisible: false,
-    pAddCustomKey: '',
-    pAddCustomKeyError: '',
-    pAddCustomValue: '',
-    pAddCustomValueError: '',
-    pAddCustomDescription: '',
-    pAddCustomDescriptionError: '',
+    pCustomModalVisible: false,
+    pCustomModalTitle: '',
+    pCustomModalConfirmButtonDisabled: false,
+    pCustomMode: 'add',
+    pCustomKey: '',
+    pCustomKeyDisabled: false,
+    pCustomKeyError: '',
+    pCustomValue: '',
+    pCustomValueError: '',
+    pCustomDescription: '',
+    pCustomDescriptionError: '',
 
     relation: null,
   },
@@ -258,7 +286,7 @@ const Model: ExhibitInfoPageModelType = {
 
       const selectedID = informExhibitInfoPage.associated.find((a) => a.selected)?.id;
 
-      console.log(data, 'data@!!!!!!!!1111');
+      // console.log(data, 'data@!!!!!!!!1111');
       const isChecked: boolean = data.resourceType === 'theme' ? data.stateInfo.themeInfo.isActivatedTheme === 1 : data.stateInfo.onlineStatusInfo.onlineStatus === 1;
       const isDisabled: boolean = data.resourceType === 'theme' && isChecked;
 
@@ -269,6 +297,8 @@ const Model: ExhibitInfoPageModelType = {
           resourceType: data.resourceType,
           // nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
+          theRuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
+
           // isOnline: ,
           onlineSwitchObj: {
             checked: isChecked,
@@ -280,15 +310,47 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          pCustomAttrs: data.stateInfo.propertyInfo.testResourceProperty.map((cr: any) => {
-            return {
-              remark: cr.remark,
-              key: cr.key,
-              value: cr.value,
-              isEditing: false,
-            };
-          }),
-          associated: result.map((r, index) => {
+          pAllVersions: [...data.originInfo.versions].reverse(),
+          pVersion: data.originInfo.version,
+          pOnlyReadAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+            .filter((cr: any) => {
+              return cr.authority === 1;
+            })
+            .map<InformExhibitInfoPageModelState['pOnlyReadAttrs'][number]>((cr: any) => {
+              // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
+              return {
+                key: cr.key,
+                value: cr.value,
+                // remark: cr.remark,
+                // isEditing: false,
+              };
+            }),
+          pOnlyEditAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+            .filter((cr: any) => {
+              return cr.authority === 2;
+            })
+            .map<InformExhibitInfoPageModelState['pOnlyEditAttrs'][number]>((cr: any) => {
+              // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
+              return {
+                key: cr.key,
+                value: cr.value,
+                remark: cr.remark,
+                // isEditing: false,
+              };
+            }),
+          pEditDeleteAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
+            .filter((cr: any) => {
+              return cr.authority === 6;
+            })
+            .map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][number]>((cr: any) => {
+              return {
+                remark: cr.remark,
+                key: cr.key,
+                value: cr.value,
+                isEditing: false,
+              };
+            }),
+          associated: result.map<InformExhibitInfoPageModelState['associated'][number]>((r, index) => {
             return {
               selected: selectedID ? selectedID === r.resourceId : index === 0,
               id: r.resourceId,
@@ -319,7 +381,7 @@ const Model: ExhibitInfoPageModelType = {
       };
 
       const {data: data2} = yield call(ruleMatchStatus, params2);
-      // console.log(data2, '##@#$@#$@#!!!!!!!!!');
+      // console.log(data2, '##@#$@#$@#!!!!!!!!!1234');
 
       const currentRule = data2.testRules.find((ro: any) => {
         return ro.id === data.rules[0]?.ruleId;
@@ -360,11 +422,12 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-
           mappingRule: {
             ...eRule,
             ...tRule,
           },
+          allRuleText: data2.ruleText,
+          allRuleResult: data2.testRules,
         },
       });
     },
@@ -436,7 +499,7 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: informExhibitInfoPage.nodeID,
         testRuleText: text,
       };
-      console.log(params, 'paramsparams!!@#$!@#$');
+      // console.log(params, 'paramsparams!!@#$!@#$');
       const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
       // console.log(data, 'data!!@#$@#$');
 
