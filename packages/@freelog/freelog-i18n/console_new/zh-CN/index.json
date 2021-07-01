@@ -309,5 +309,16 @@
 	"import_test_theme": "导入测试主题",
 	"reflect_rule_pre_excute_error_object_not_existed": "不存在名称为{ObjectName}的对象",
 	"reflect_rule_pre_excute_error_resource_not_existed": "不存在名称为{ResourceName}的资源",
-	"reflect_rule_pre_excute_error_exhibit_not_existed": "节点中不存在名称为{ExhibitName}的展品"
+	"reflect_rule_pre_excute_error_exhibit_not_existed": "节点中不存在名称为{ExhibitName}的展品",
+	"reflect_rule_pre_excute_error_attribute_not_exist": "不存在键名称为{KeyName}的属性",
+	"reflect_rule_pre_excute_error_attribute_access_limited": "属性删除指令只对展品生效： {KeyName} ",
+	"reflect_rule_pre_excute_error_value_access_limited": "属性{KeyName}的值不可修改",
+	"reflect_rule_pre_excute_error_value_not_match": "{KeyName}的值不匹配",
+	"reflect_rule_pre_excute_error_access_limited": "当前账户没有该对象的操作权限：{ObjectName}",
+	"reflect_rule_pre_excute_error_no_resource_type": "对象{ObjectName}导入失败，请先设置资源类型",
+	"reflect_rule_pre_excute_error_test_resource_existed": "测试资源/对象重复：{TestResource/ObjectName}",
+	"reflect_rule_pre_excute_error_exhibit_name_existed": "展品名称已存在：{ExhibitName}",
+	"reflect_rule_pre_excute_error_circular_rely": "循环依赖错误：{ReplacingTestResourceName}",
+	"reflect_rule_pre_excute_error_duplicate_rely": "不支持重复依赖：{ReplacingTestResourceName}",
+	"reflect_rule_pre_excute_error_exceed_rely_limit": "依赖树层级不能超过50"
 }
