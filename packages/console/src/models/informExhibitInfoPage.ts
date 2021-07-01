@@ -112,7 +112,6 @@ export interface InformExhibitInfoPageModelState {
   pCustomDescription: string;
   pCustomDescriptionError: string;
 
-
   relation: {
     cardTitle: string;
     identity: 'resource' | 'object';
@@ -157,6 +156,26 @@ export interface SyncRulesAction extends AnyAction {
   };
 }
 
+export interface OnHandleAttrModalAction {
+  type: 'informExhibitInfoPage/onHandleAttrModal';
+  payload: {
+    type: 'add' | 'edit';
+    key?: string;
+  };
+}
+
+export interface OnSetAttrAction extends AnyAction {
+  type: 'informExhibitInfoPage/onSetAttr';
+}
+
+export interface OnClearAttrAction extends AnyAction {
+  type: 'informExhibitInfoPage/onClearAttr';
+  payload: {
+    type: 'delete' | 'reset';
+    key: string;
+  };
+}
+
 export interface ExhibitInfoPageModelType {
   namespace: 'informExhibitInfoPage';
   state: InformExhibitInfoPageModelState;
@@ -165,6 +184,9 @@ export interface ExhibitInfoPageModelType {
     syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
+    onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
+    onSetAttr: (action: OnSetAttrAction, effects: EffectsCommandMap) => void;
+    onClearAttr: (action: OnClearAttrAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
@@ -566,6 +588,27 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
+    * onHandleAttrModal({}: OnHandleAttrModalAction, {select}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+
+    },
+    * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+
+    },
+    * onClearAttr({payload}: OnClearAttrAction, {select}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+
+    }
   },
   reducers: {
     change(state, {payload}) {
