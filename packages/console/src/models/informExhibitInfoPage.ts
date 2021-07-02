@@ -159,8 +159,12 @@ export interface OnHandleAttrModalAction {
   type: 'informExhibitInfoPage/onHandleAttrModal';
   payload: {
     type: 'add' | 'edit';
-    key?: string;
+    theKey?: string;
   };
+}
+
+export interface OnCancelHandleAttrModalAction {
+  type: 'informExhibitInfoPage/onCancelHandleAttrModal';
 }
 
 export interface OnSetAttrAction extends AnyAction {
@@ -184,6 +188,7 @@ export interface ExhibitInfoPageModelType {
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
+    onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onSetAttr: (action: OnSetAttrAction, effects: EffectsCommandMap) => void;
     onClearAttr: (action: OnClearAttrAction, effects: EffectsCommandMap) => void;
   };
@@ -609,7 +614,7 @@ const Model: ExhibitInfoPageModelType = {
         });
       } else {
         const attrT = informExhibitInfoPage.pEditDeleteAttrs.find((ea) => {
-          return ea.theKey === payload.key;
+          return ea.theKey === payload.theKey;
         });
         yield put<ChangeAction>({
           type: 'change',
@@ -628,7 +633,24 @@ const Model: ExhibitInfoPageModelType = {
           },
         });
       }
-
+    },
+    * onCancelHandleAttrModal({}: OnCancelHandleAttrModalAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pCustomModalVisible: false,
+          pCustomModalTitle: '',
+          pCustomModalConfirmButtonDisabled: false,
+          pCustomMode: 'add',
+          pCustomKey: '',
+          pCustomKeyDisabled: false,
+          pCustomKeyError: '',
+          pCustomValue: '',
+          pCustomValueError: '',
+          pCustomDescription: '',
+          pCustomDescriptionError: '',
+        },
+      });
     },
     * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({

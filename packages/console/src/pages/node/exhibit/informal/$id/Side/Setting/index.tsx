@@ -5,7 +5,7 @@ import {Space} from "antd";
 import {FDelete, FEdit, FRedo, FSwap} from "@/components/FIcons";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
-  ChangeAction, SyncRulesAction,
+  ChangeAction, OnCancelHandleAttrModalAction, OnHandleAttrModalAction, SyncRulesAction,
 } from "@/models/informExhibitInfoPage";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
@@ -75,8 +75,8 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       <table>
         <tbody>
         {
-          informExhibitInfoPage.pOnlyReadAttrs.map((pb) => (<tr key={pb.key}>
-            <td><FContentText text={pb.key}/></td>
+          informExhibitInfoPage.pOnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
+            <td><FContentText text={pb.theKey}/></td>
             <td><FContentText text={pb.value}/></td>
           </tr>))
         }
@@ -94,9 +94,9 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
 
     <div className={styles.options}>
       {
-        informExhibitInfoPage.pOnlyEditAttrs.map((pc) => (<div key={pc.key}>
+        informExhibitInfoPage.pOnlyEditAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.key}/>
+            <FContentText text={pc.theKey}/>
 
             <Space size={10}>
               <FTextBtn
@@ -130,7 +130,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
             value={pc.value}
             // errorText={pc.newValueError}
             onChange={(e) => {
-              onChangeCustomAttrs({key: pc.key, value: e.target.value});
+              onChangeCustomAttrs({key: pc.theKey, value: e.target.value});
             }}
             // onBlur={() => dispatch<UpdateRewriteAction>({
             //   type: 'informExhibitInfoPage/updateRewrite',
@@ -140,9 +140,9 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       }
 
       {
-        informExhibitInfoPage.pEditDeleteAttrs.map((pc) => (<div key={pc.key}>
+        informExhibitInfoPage.pEditDeleteAttrs.map((pc) => (<div key={pc.theKey}>
           <div className={styles.optionTitle}>
-            <FContentText text={pc.key}/>
+            <FContentText text={pc.theKey}/>
 
             <Space size={10}>
               <FTextBtn
@@ -186,7 +186,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                         ...attrs,
                         {
                           operation: 'delete',
-                          key: pc.key,
+                          key: pc.theKey,
                         },
                       ],
                     },
@@ -202,7 +202,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
             value={pc.value}
             // errorText={pc.newValueError}
             onChange={(e) => {
-              onChangeCustomAttrs({key: pc.key, value: e.target.value});
+              onChangeCustomAttrs({key: pc.theKey, value: e.target.value});
             }}
             // onBlur={() => dispatch<UpdateRewriteAction>({
             //   type: 'informExhibitInfoPage/updateRewrite',
@@ -228,6 +228,12 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           //     pAddCustomDescriptionError: '',
           //   },
           // });
+          dispatch<OnHandleAttrModalAction>({
+            type: 'informExhibitInfoPage/onHandleAttrModal',
+            payload: {
+              type: 'add',
+            },
+          });
         }}
       />
       <span>添加自定义选项</span>
@@ -274,6 +280,9 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         //     })),
         //   },
         // });
+        dispatch<OnCancelHandleAttrModalAction>({
+          type: 'informExhibitInfoPage/onCancelHandleAttrModal',
+        });
       }}
       onOk={() => {
         // const editing = informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
