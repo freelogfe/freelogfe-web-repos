@@ -321,5 +321,6 @@
 	"reflect_rule_pre_excute_error_circular_rely": "循环依赖错误：{ReplacingTestResourceName}",
 	"reflect_rule_pre_excute_error_duplicate_rely": "不支持重复依赖：{ReplacingTestResourceName}",
 	"reflect_rule_pre_excute_error_exceed_rely_limit": "依赖树层级不能超过50",
-	"reflect_rule_pre_excute_error_exhibit_not_theme": "展品{ExhibitName}不是主题资源，无法激活"
+	"reflect_rule_pre_excute_error_exhibit_not_theme": "展品{ExhibitName}不是主题资源，无法激活",
+	"reflect_rule_pre_excute_error_version_invalid": "资源{ResourceName}版本范围{ResourceVersionSetting}设置无效，版本不存在"
 }
