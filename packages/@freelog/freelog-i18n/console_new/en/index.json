@@ -316,11 +316,13 @@
 	"reflect_rule_pre_excute_error_value_not_match": "The value of {KeyName} is not match",
 	"reflect_rule_pre_excute_error_access_limited": "No access to this object：{ObjectName}",
 	"reflect_rule_pre_excute_error_no_resource_type": "Failed to import the object {ObjectName}, as resource type is not set.",
-	"reflect_rule_pre_excute_error_test_resource_existed": "Duplicated resource/object：{TestResource/ObjectName}",
+	"reflect_rule_pre_excute_error_test_resource_existed": "Duplicated resource：{TestResourceName}",
 	"reflect_rule_pre_excute_error_exhibit_name_existed": "The exhibit of same name already exists: {ExhibitName}",
 	"reflect_rule_pre_excute_error_circular_rely": "Circular rely error：{ReplacingTestResourceName}",
 	"reflect_rule_pre_excute_error_duplicate_rely": "Duplicated rely error：{ReplacingTestResourceName}",
 	"reflect_rule_pre_excute_error_exceed_rely_limit": "Make sure the levels of rely tree is no more than 50",
 	"reflect_rule_pre_excute_error_exhibit_not_theme": "{ExhibitName} is not a theme resource, you can not activate it.",
-	"reflect_rule_pre_excute_error_version_invalid": "No versions mactched the version range {ResourceVersionSetting} of {ResourceName}"
+	"reflect_rule_pre_excute_error_version_invalid": "No versions mactched the version range {ResourceVersionSetting} of {ResourceName}",
+	"reflect_rule_pre_excute_error_show_hide_unavailable_for_theme": "Show/Hide directive is unavailable for theme: {ExhibitName}",
+	"reflect_rule_pre_excute_error_test_object_existed": "Duplicated object：{TestObjectName}"
 }
