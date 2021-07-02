@@ -5,7 +5,12 @@ import {Space} from "antd";
 import {FDelete, FEdit, FRedo, FSwap} from "@/components/FIcons";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
-  ChangeAction, OnCancelHandleAttrModalAction, OnHandleAttrModalAction, SyncRulesAction,
+  ChangeAction,
+  OnAttrModalChangeAction,
+  OnCancelHandleAttrModalAction,
+  OnChangeAttrsAction,
+  OnHandleAttrModalAction,
+  SyncRulesAction,
 } from "@/models/informExhibitInfoPage";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
@@ -127,10 +132,16 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           <div style={{height: 5}}/>
           <FInput
             className={styles.FInput}
-            value={pc.value}
-            // errorText={pc.newValueError}
+            value={pc.theValue}
+            errorText={pc.theValueError}
             onChange={(e) => {
-              onChangeCustomAttrs({key: pc.theKey, value: e.target.value});
+              dispatch<OnChangeAttrsAction>({
+                type: 'informExhibitInfoPage/onChangeAttrs',
+                payload: {
+                  theKey: pc.theKey,
+                  theValue: e.target.value,
+                },
+              });
             }}
             // onBlur={() => dispatch<UpdateRewriteAction>({
             //   type: 'informExhibitInfoPage/updateRewrite',
@@ -206,10 +217,16 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           <div style={{height: 5}}/>
           <FInput
             className={styles.FInput}
-            value={pc.value}
-            // errorText={pc.newValueError}
+            value={pc.theValue}
+            errorText={pc.theValueError}
             onChange={(e) => {
-              onChangeCustomAttrs({key: pc.theKey, value: e.target.value});
+              dispatch<OnChangeAttrsAction>({
+                type: 'informExhibitInfoPage/onChangeAttrs',
+                payload: {
+                  theKey: pc.theKey,
+                  theValue: e.target.value,
+                },
+              });
             }}
             // onBlur={() => dispatch<UpdateRewriteAction>({
             //   type: 'informExhibitInfoPage/updateRewrite',
@@ -358,28 +375,17 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         </div>
         <div style={{height: 5}}/>
         <FInput
+          disabled={informExhibitInfoPage.pCustomKeyDisabled}
           className={styles.modalBodyInput}
           value={informExhibitInfoPage.pCustomKey}
           errorText={informExhibitInfoPage.pCustomKeyError}
           onChange={(e) => {
-            // const baseKeys: string[] = informExhibitInfoPage.pBaseAttrs.map<string>((pb) => pb.key);
-            // const customKeys: string[] = informExhibitInfoPage.pCustomAttrs
-            //   .filter((pc) => !pc.isEditing)
-            //   .map<string>((pc) => pc.key);
-            // const value: string = e.target.value;
-            // let pAddCustomKeyError: string = '';
-            // if (!/^[a-zA-Z0-9_]{1,20}$/.test(value)) {
-            //   pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
-            // } else if ([...customKeys].includes(value)) {
-            //   pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
-            // }
-            // dispatch<ChangeAction>({
-            //   type: 'informExhibitInfoPage/change',
-            //   payload: {
-            //     pAddCustomKey: value,
-            //     pAddCustomKeyError: pAddCustomKeyError,
-            //   },
-            // });
+            dispatch<OnAttrModalChangeAction>({
+              type: 'informExhibitInfoPage/onAttrModalChange',
+              payload: {
+                theKey: e.target.value,
+              },
+            });
           }}
         />
         <div style={{height: 20}}/>
@@ -394,14 +400,12 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           value={informExhibitInfoPage.pCustomValue}
           errorText={informExhibitInfoPage.pCustomValueError}
           onChange={(e) => {
-            // const value: string = e.target.value;
-            // dispatch<ChangeAction>({
-            //   type: 'informExhibitInfoPage/change',
-            //   payload: {
-            //     pAddCustomValue: value,
-            //     pAddCustomValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
-            //   },
-            // });
+            dispatch<OnAttrModalChangeAction>({
+              type: 'informExhibitInfoPage/onAttrModalChange',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
         />
         <div style={{height: 20}}/>
@@ -414,14 +418,12 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
           value={informExhibitInfoPage.pCustomDescription}
           errorText={informExhibitInfoPage.pCustomDescriptionError}
           onChange={(e) => {
-            // const value: string = e.target.value;
-            // dispatch<ChangeAction>({
-            //   type: 'informExhibitInfoPage/change',
-            //   payload: {
-            //     pAddCustomDescription: value,
-            //     pAddCustomDescriptionError: (value.length > 50) ? '0~50个字符' : '',
-            //   },
-            // });
+            dispatch<OnAttrModalChangeAction>({
+              type: 'informExhibitInfoPage/onAttrModalChange',
+              payload: {
+                remark: e.target.value,
+              },
+            });
           }}
         />
       </div>

@@ -90,12 +90,14 @@ export interface InformExhibitInfoPageModelState {
   }[];
   pOnlyEditAttrs: {
     theKey: string;
-    value: string; // 最终向服务端提交的value数据
+    theValue: string;
+    theValueError: string;
     remark: string;
   }[];
   pEditDeleteAttrs: {
     theKey: string;
-    value: string; // 最终向服务端提交的value数据
+    theValue: string;
+    theValueError: string;
     remark: string;
   }[];
 
@@ -155,7 +157,7 @@ export interface SyncRulesAction extends AnyAction {
   };
 }
 
-export interface OnHandleAttrModalAction {
+export interface OnHandleAttrModalAction extends AnyAction {
   type: 'informExhibitInfoPage/onHandleAttrModal';
   payload: {
     type: 'add' | 'edit';
@@ -163,8 +165,25 @@ export interface OnHandleAttrModalAction {
   };
 }
 
-export interface OnCancelHandleAttrModalAction {
+export interface OnCancelHandleAttrModalAction extends AnyAction {
   type: 'informExhibitInfoPage/onCancelHandleAttrModal';
+}
+
+export interface OnAttrModalChangeAction extends AnyAction {
+  type: 'informExhibitInfoPage/onAttrModalChange';
+  payload: {
+    theKey?: string;
+    value?: string;
+    remark?: string;
+  };
+}
+
+export interface OnChangeAttrsAction extends AnyAction {
+  type: 'informExhibitInfoPage/onChangeAttrs';
+  payload: {
+    theKey: string;
+    theValue: string;
+  };
 }
 
 export interface OnSetAttrAction extends AnyAction {
@@ -189,6 +208,8 @@ export interface ExhibitInfoPageModelType {
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
+    onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
+    onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
     onSetAttr: (action: OnSetAttrAction, effects: EffectsCommandMap) => void;
     onClearAttr: (action: OnClearAttrAction, effects: EffectsCommandMap) => void;
   };
@@ -359,7 +380,8 @@ const Model: ExhibitInfoPageModelType = {
               // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
               return {
                 theKey: cr.key,
-                value: cr.value,
+                theValue: cr.value,
+                theValueError: '',
                 remark: cr.remark,
               };
             }),
@@ -370,8 +392,9 @@ const Model: ExhibitInfoPageModelType = {
             .map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][number]>((cr: any) => {
               return {
                 theKey: cr.key,
+                theValue: cr.value,
+                theValueError: '',
                 remark: cr.remark,
-                value: cr.value,
               };
             }),
           associated: result.map<InformExhibitInfoPageModelState['associated'][number]>((r, index) => {
@@ -563,17 +586,6 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     onlineSwitchObj: {
-      //       checked: payload.checked,
-      //       text: informExhibitInfoPage.resourceType === 'theme' ? (payload.checked ? '已激活' : '未激活') : (payload.checked ? '已上线' : '未上线'),
-      //       disabled: false,
-      //     },
-      //   },
-      // });
-
       if (informExhibitInfoPage.resourceType === 'theme') {
         yield put<SyncRulesAction>({
           type: 'syncRules',
@@ -626,7 +638,7 @@ const Model: ExhibitInfoPageModelType = {
             pCustomKey: attrT?.theKey || '',
             pCustomKeyDisabled: true,
             pCustomKeyError: '',
-            pCustomValue: attrT?.value || '',
+            pCustomValue: attrT?.theValue || '',
             pCustomValueError: '',
             pCustomDescription: attrT?.remark || '',
             pCustomDescriptionError: '',
@@ -652,18 +664,116 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
+    * onAttrModalChange({payload}: OnAttrModalChangeAction, {select, put, call}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      if (payload.theKey !== undefined) {
+        const valueText: string = payload.theKey;
+        const customKeys: string[] = [
+          ...informExhibitInfoPage.pOnlyReadAttrs
+            .map<string>((pc) => pc.theKey),
+          ...informExhibitInfoPage.pOnlyEditAttrs
+            .map<string>((poe) => poe.theKey),
+          ...informExhibitInfoPage.pEditDeleteAttrs
+            .map<string>((ped) => ped.theKey),
+        ];
+        let pAddCustomKeyError: string = '';
+        if (!/^[a-zA-Z0-9_]{1,20}$/.test(valueText)) {
+          pAddCustomKeyError = `需要符合正则^[a-zA-Z0-9_]{1,20}$`;
+        } else if ([...customKeys].includes(valueText)) {
+          pAddCustomKeyError = 'key不能与基础属性和其他自定义属性相同';
+        }
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pCustomKey: valueText,
+            pCustomKeyError: pAddCustomKeyError,
+            pCustomModalConfirmButtonDisabled: !valueText || !!pAddCustomKeyError
+              || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
+              || !!informExhibitInfoPage.pCustomDescriptionError
+          },
+        });
+      }
+
+      if (payload.value !== undefined) {
+        const valueText: string = payload.value;
+        const textError: string = (valueText.length > 30 || payload.value === '') ? '1~30个字符' : '';
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pCustomValue: valueText,
+            pCustomValueError: textError,
+            pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
+              || !valueText || !!textError
+              || !!informExhibitInfoPage.pCustomDescriptionError
+          },
+        });
+      }
+
+      if (payload.remark !== undefined) {
+        const valueText: string = payload.remark;
+        const textError: string = (valueText.length > 50) ? '0~50个字符' : '';
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pCustomDescription: valueText,
+            pCustomDescriptionError: textError,
+            pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
+              || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
+              || !!textError,
+          },
+        });
+      }
+    },
+    * onChangeAttrs({payload}: OnChangeAttrsAction, {select, put}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      console.log(payload, 'payload1234');
+
+      const theValue: string = payload.theValue;
+      const textError: string = (theValue.length > 30 || theValue === '') ? '1~30个字符' : '';
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pOnlyEditAttrs: informExhibitInfoPage.pOnlyEditAttrs.map<InformExhibitInfoPageModelState['pOnlyEditAttrs'][number]>((poe) => {
+            if (poe.theKey !== payload.theKey) {
+              return poe;
+            }
+            return {
+              ...poe,
+              theValue: theValue,
+              theValueError: textError,
+            }
+          }),
+          pEditDeleteAttrs: informExhibitInfoPage.pEditDeleteAttrs.map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][0]>((ped) => {
+            if (ped.theKey !== payload.theKey) {
+              return ped;
+            }
+            return {
+              ...ped,
+              theValue: theValue,
+              theValueError: textError,
+            };
+          })
+        },
+      });
+    },
     * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-
+      
     },
     * onClearAttr({payload}: OnClearAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
-
 
     }
   },
@@ -803,7 +913,7 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
   }
 }
 
-function sleep(ms: number = 200) {
+function sleep(ms: number = 200): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve()
