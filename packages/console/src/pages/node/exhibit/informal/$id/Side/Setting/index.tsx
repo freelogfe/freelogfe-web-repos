@@ -148,6 +148,13 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
               <FTextBtn
                 type="primary"
                 onClick={() => {
+                  dispatch<OnHandleAttrModalAction>({
+                    type: 'informExhibitInfoPage/onHandleAttrModal',
+                    payload: {
+                      type: 'edit',
+                      theKey: pc.theKey,
+                    },
+                  });
                   // const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
                   // if (!editing) {
                   //   return;
