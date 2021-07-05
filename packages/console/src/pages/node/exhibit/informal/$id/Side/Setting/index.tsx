@@ -5,12 +5,14 @@ import {Space} from "antd";
 import {FDelete, FEdit, FRedo, FSwap} from "@/components/FIcons";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
-  ChangeAction, OnAttrBlurAction,
+  OnAttrBlurAction,
   OnAttrModalChangeAction,
   OnCancelHandleAttrModalAction,
-  OnChangeAttrsAction, OnClickAttrModalConfirmBtnAction, OnClickDeleteAttrAction, OnClickResetAttrAction,
+  OnChangeAttrsAction,
+  OnClickAttrModalConfirmBtnAction,
+  OnClickDeleteAttrAction,
+  OnClickResetAttrAction,
   OnHandleAttrModalAction,
-  SyncRulesAction,
 } from "@/models/informExhibitInfoPage";
 import FInput from "@/components/FInput";
 import {connect, Dispatch} from "dva";
@@ -24,29 +26,6 @@ interface SettingProps {
 }
 
 function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
-
-  function onChangeCustomAttrs({key, value}: { key: string; value: string }, update: boolean = false) {
-    // dispatch<ChangeAction>({
-    //   type: 'informExhibitInfoPage/change',
-    //   payload: {
-    //     pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => {
-    //       if (pCustomAttr.key !== key) {
-    //         return pCustomAttr;
-    //       }
-    //       return {
-    //         ...pCustomAttr,
-    //         newValue: value,
-    //         newValueError: (value.length > 30 || value === '') ? '1~30个字符' : '',
-    //       };
-    //     }),
-    //   }
-    // });
-    // if (update) {
-    //   dispatch<UpdateRewriteAction>({
-    //     type: 'informExhibitInfoPage/updateRewrite',
-    //   });
-    // }
-  }
 
   return (<>
     <FContentText
@@ -113,22 +92,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                       theKey: pc.theKey
                     },
                   })
-                  // const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                  // if (!editing) {
-                  //   return;
-                  // }
-                  // dispatch<ChangeAction>({
-                  //   type: 'informExhibitInfoPage/change',
-                  //   payload: {
-                  //     pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                  //       ...pCustomAttr,
-                  //       isEditing: pCustomAttr.key === pc.key,
-                  //     })),
-                  //     pAddCustomKey: editing.key,
-                  //     pAddCustomValue: editing.value,
-                  //     pAddCustomDescription: editing.remark,
-                  //   },
-                  // });
+
                 }}
               ><FRedo/></FTextBtn>
 
@@ -178,22 +142,6 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                       theKey: pc.theKey,
                     },
                   });
-                  // const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
-                  // if (!editing) {
-                  //   return;
-                  // }
-                  // dispatch<ChangeAction>({
-                  //   type: 'informExhibitInfoPage/change',
-                  //   payload: {
-                  //     pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-                  //       ...pCustomAttr,
-                  //       isEditing: pCustomAttr.key === pc.key,
-                  //     })),
-                  //     pAddCustomKey: editing.key,
-                  //     pAddCustomValue: editing.value,
-                  //     pAddCustomDescription: editing.remark,
-                  //   },
-                  // });
                 }}
               ><FEdit/></FTextBtn>
               <FDelete
@@ -204,29 +152,7 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                     payload: {
                       theKey: pc.theKey
                     },
-                  })
-                  // const currentRule = informExhibitInfoPage.allRuleResult.find((rr: any) => {
-                  //   return rr.id === informExhibitInfoPage.theRuleID;
-                  // });
-                  //
-                  // let attrs = [];
-                  //
-                  // if (currentRule) {
-                  //   attrs = currentRule.ruleInfo.attrs;
-                  // }
-                  //
-                  // dispatch<SyncRulesAction>({
-                  //   type: 'informExhibitInfoPage/syncRules',
-                  //   payload: {
-                  //     attrs: [
-                  //       ...attrs,
-                  //       {
-                  //         operation: 'delete',
-                  //         key: pc.theKey,
-                  //       },
-                  //     ],
-                  //   },
-                  // });
+                  });
                 }}
               />
             </Space>

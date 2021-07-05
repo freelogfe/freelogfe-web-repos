@@ -880,6 +880,23 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pCustomModalVisible: false,
+          pCustomModalTitle: '',
+          pCustomModalConfirmButtonDisabled: false,
+          pCustomMode: 'add',
+          pCustomKey: '',
+          pCustomKeyDisabled: false,
+          pCustomKeyError: '',
+          pCustomValue: '',
+          pCustomValueError: '',
+          pCustomDescription: '',
+          pCustomDescriptionError: '',
+        },
+      });
+
     },
     * onClickDeleteAttr({payload}: OnClickDeleteAttrAction, {select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
