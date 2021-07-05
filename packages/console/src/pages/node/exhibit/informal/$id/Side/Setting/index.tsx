@@ -8,7 +8,7 @@ import {
   ChangeAction, OnAttrBlurAction,
   OnAttrModalChangeAction,
   OnCancelHandleAttrModalAction,
-  OnChangeAttrsAction,
+  OnChangeAttrsAction, OnClickAttrModalConfirmBtnAction, OnClickDeleteAttrAction, OnClickResetAttrAction,
   OnHandleAttrModalAction,
   SyncRulesAction,
 } from "@/models/informExhibitInfoPage";
@@ -107,6 +107,12 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
               <FTextBtn
                 type="primary"
                 onClick={() => {
+                  dispatch<OnClickResetAttrAction>({
+                    type: 'informExhibitInfoPage/onClickResetAttr',
+                    payload: {
+                      theKey: pc.theKey
+                    },
+                  })
                   // const editing = informExhibitInfoPage.pCustomAttrs.find((pCustomAttr) => pCustomAttr.key === pc.key);
                   // if (!editing) {
                   //   return;
@@ -193,28 +199,34 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
               <FDelete
                 style={{color: '#EE4040', cursor: 'pointer'}}
                 onClick={() => {
-                  const currentRule = informExhibitInfoPage.allRuleResult.find((rr: any) => {
-                    return rr.id === informExhibitInfoPage.theRuleID;
-                  });
-
-                  let attrs = [];
-
-                  if (currentRule) {
-                    attrs = currentRule.ruleInfo.attrs;
-                  }
-
-                  dispatch<SyncRulesAction>({
-                    type: 'informExhibitInfoPage/syncRules',
+                  dispatch<OnClickDeleteAttrAction>({
+                    type: 'informExhibitInfoPage/onClickDeleteAttr',
                     payload: {
-                      attrs: [
-                        ...attrs,
-                        {
-                          operation: 'delete',
-                          key: pc.theKey,
-                        },
-                      ],
+                      theKey: pc.theKey
                     },
-                  });
+                  })
+                  // const currentRule = informExhibitInfoPage.allRuleResult.find((rr: any) => {
+                  //   return rr.id === informExhibitInfoPage.theRuleID;
+                  // });
+                  //
+                  // let attrs = [];
+                  //
+                  // if (currentRule) {
+                  //   attrs = currentRule.ruleInfo.attrs;
+                  // }
+                  //
+                  // dispatch<SyncRulesAction>({
+                  //   type: 'informExhibitInfoPage/syncRules',
+                  //   payload: {
+                  //     attrs: [
+                  //       ...attrs,
+                  //       {
+                  //         operation: 'delete',
+                  //         key: pc.theKey,
+                  //       },
+                  //     ],
+                  //   },
+                  // });
                 }}
               />
             </Space>
@@ -280,90 +292,20 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       // title={'添加自定义选项'}
       title={informExhibitInfoPage.pCustomModalTitle}
       width={560}
-      // visible={informExhibitInfoPage.pAddCustomModalVisible || !!informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing)}
       visible={informExhibitInfoPage.pCustomModalVisible}
       okText={'添加'}
-      // okButtonProps={{
-      //   disabled:
-      //     !!informExhibitInfoPage.pAddCustomKeyError || informExhibitInfoPage.pAddCustomKey === ''
-      //     || !!informExhibitInfoPage.pAddCustomValueError || informExhibitInfoPage.pAddCustomValue === ''
-      //     || !!informExhibitInfoPage.pAddCustomDescriptionError
-      // }}
       okButtonProps={{
         disabled: informExhibitInfoPage.pCustomModalConfirmButtonDisabled
       }}
       onCancel={() => {
-        // dispatch<ChangeAction>({
-        //   type: 'informExhibitInfoPage/change',
-        //   payload: {
-        //     pAddCustomModalVisible: false,
-        //     pCustomAttrs: informExhibitInfoPage.pCustomAttrs.map((pCustomAttr) => ({
-        //       ...pCustomAttr,
-        //       isEditing: false,
-        //     })),
-        //   },
-        // });
         dispatch<OnCancelHandleAttrModalAction>({
           type: 'informExhibitInfoPage/onCancelHandleAttrModal',
         });
       }}
       onOk={() => {
-        // const editing = informExhibitInfoPage.pCustomAttrs.find((pca) => pca.isEditing);
-        //
-        // let pCustomAttrs;
-        // if (editing) {
-        //   pCustomAttrs = informExhibitInfoPage.pCustomAttrs
-        //     // .filter((pCustomAttr) => pCustomAttr.key !== exhibitInfoPage.pAddCustomKey)
-        //     .map<InformExhibitInfoPageModelState['pCustomAttrs'][number]>((pCustomAtt) => {
-        //       if (!pCustomAtt.isEditing) {
-        //         return pCustomAtt;
-        //       }
-        //       return {
-        //         ...pCustomAtt,
-        //         key: informExhibitInfoPage.pAddCustomKey,
-        //         value: informExhibitInfoPage.pAddCustomValue,
-        //         // newValue: informExhibitInfoPage.pAddCustomValue,
-        //         // newValueError: '',
-        //         remark: informExhibitInfoPage.pAddCustomDescription,
-        //         isEditing: false,
-        //       };
-        //     });
-        // } else {
-        //   pCustomAttrs = [
-        //     ...informExhibitInfoPage.pCustomAttrs
-        //       .filter((pCustomAttr) => pCustomAttr.key !== informExhibitInfoPage.pAddCustomKey),
-        //     {
-        //       key: informExhibitInfoPage.pAddCustomKey,
-        //       value: informExhibitInfoPage.pAddCustomValue,
-        //       // newValue: informExhibitInfoPage.pAddCustomValue,
-        //       // newValueError: '',
-        //       remark: informExhibitInfoPage.pAddCustomDescription,
-        //       isEditing: false,
-        //     }
-        //   ];
-        // }
-        //
-        // dispatch<ChangeAction>({
-        //   type: 'informExhibitInfoPage/change',
-        //   payload: {
-        //     pCustomAttrs: pCustomAttrs,
-        //     pAddCustomModalVisible: false,
-        //   }
-        // });
-        //
-        // dispatch<SyncRulesAction>({
-        //   type: 'informExhibitInfoPage/syncRules',
-        //   payload: {
-        //     attrs: pCustomAttrs.map((pca) => {
-        //       return {
-        //         operation: 'add',
-        //         key: pca.key,
-        //         value: pca.value,
-        //         description: pca.remark,
-        //       };
-        //     }),
-        //   },
-        // });
+        dispatch<OnClickAttrModalConfirmBtnAction>({
+          type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn',
+        });
       }}
     >
       <div className={styles.modalBody}>

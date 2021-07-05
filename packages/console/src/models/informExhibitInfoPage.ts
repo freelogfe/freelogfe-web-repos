@@ -19,6 +19,7 @@ export interface InformExhibitInfoPageModelState {
   nodeID: number;
   allRuleText: string;
   allRuleResult: any;
+  currentRuleResult: any;
   theRuleID: string;
 
   // nodeName: string;
@@ -193,15 +194,21 @@ export interface OnAttrBlurAction extends AnyAction {
   };
 }
 
-export interface OnSetAttrAction extends AnyAction {
-  type: 'informExhibitInfoPage/onSetAttr';
+export interface OnClickAttrModalConfirmBtnAction extends AnyAction {
+  type: 'informExhibitInfoPage/onClickAttrModalConfirmBtn';
 }
 
-export interface OnClearAttrAction extends AnyAction {
-  type: 'informExhibitInfoPage/onClearAttr';
+export interface OnClickDeleteAttrAction extends AnyAction {
+  type: 'informExhibitInfoPage/onClickDeleteAttr';
   payload: {
-    type: 'delete' | 'reset';
-    key: string;
+    theKey: string;
+  };
+}
+
+export interface OnClickResetAttrAction extends AnyAction {
+  type: 'informExhibitInfoPage/onClickResetAttr';
+  payload: {
+    theKey: string;
   };
 }
 
@@ -218,8 +225,9 @@ export interface ExhibitInfoPageModelType {
     onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
     onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
     onAttrBlur: (action: OnAttrBlurAction, effects: EffectsCommandMap) => void;
-    onSetAttr: (action: OnSetAttrAction, effects: EffectsCommandMap) => void;
-    onClearAttr: (action: OnClearAttrAction, effects: EffectsCommandMap) => void;
+    onClickAttrModalConfirmBtn: (action: OnClickAttrModalConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClickDeleteAttr: (action: OnClickDeleteAttrAction, effects: EffectsCommandMap) => void;
+    onClickResetAttr: (action: OnClickResetAttrAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformExhibitInfoPageModelState, ChangeAction>;
@@ -245,6 +253,7 @@ const Model: ExhibitInfoPageModelType = {
     resourceType: '',
     allRuleText: '',
     allRuleResult: null,
+    currentRuleResult: null,
     theRuleID: '',
 
     // nodeName: '',
@@ -483,6 +492,9 @@ const Model: ExhibitInfoPageModelType = {
           },
           allRuleText: data2.ruleText,
           allRuleResult: data2.testRules,
+          currentRuleResult: data.rules.length > 0 ? data2.testRules.find((tr: any) => {
+            return tr.id === data.rules[0].ruleId;
+          }) : null,
         },
       });
     },
@@ -548,7 +560,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // console.log(newRulesObj, 'newRulesObj908231jldsaF@#)_*()UJLK');
       const text = decompile(newRulesObj);
-      console.log(text, 'newRulesObj90ij32.dsfsdf');
+      // console.log(text, 'newRulesObj90ij32.dsfsdf');
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informExhibitInfoPage.nodeID,
@@ -788,22 +800,9 @@ const Model: ExhibitInfoPageModelType = {
         return;
       }
 
-      // console.log(attr, 'attr!@23453453555');
-
-      const rules: any[] = informExhibitInfoPage.allRuleResult.map((rr: any) => {
-        return rr.ruleInfo;
-      });
-
-      // console.log(rules, 'rules1234');
-      // const allExhibitName: string[] = rules.map((r) => {
-      //   return r.exhibitName;
-      // });
-
       let theRule: any = [];
 
-      const currentRule = rules.find((r) => {
-        return r.exhibitName === informExhibitInfoPage.informExhibitName;
-      });
+      const currentRule = informExhibitInfoPage.currentRuleResult?.ruleInfo || null;
 
       if (currentRule) {
         const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
@@ -841,7 +840,7 @@ const Model: ExhibitInfoPageModelType = {
         ];
       }
 
-      console.log(theRule, 'TTTTTTtttttt');
+      // console.log(theRule, 'TTTTTTtttttt');
 
       yield put<SyncRulesAction>({
         type: 'syncRules',
@@ -851,19 +850,85 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
+    * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, {select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      // const {} = {};
+      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+
+      // console.log(attrs, 'rules!!!!!!!');
+
+      let newAttrs = attrs.filter((rl: any) => {
+        return rl.key !== informExhibitInfoPage.pCustomKey;
+      });
+
+      newAttrs = [
+        {
+          operation: 'add',
+          key: informExhibitInfoPage.pCustomKey,
+          value: informExhibitInfoPage.pCustomValue,
+          description: informExhibitInfoPage.pCustomDescription,
+        },
+        ...newAttrs,
+      ];
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: newAttrs,
+        },
+      });
+
     },
-    * onClearAttr({payload}: OnClearAttrAction, {select}: EffectsCommandMap) {
+    * onClickDeleteAttr({payload}: OnClickDeleteAttrAction, {select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-    }
+      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+
+      // console.log(attrs, 'rules!!!!!!!');
+
+      let newAttrs = attrs.filter((rl: any) => {
+        return rl.key !== payload.theKey;
+      });
+
+      newAttrs = [
+        ...newAttrs,
+        {
+          operation: 'delete',
+          key: payload.theKey,
+        },
+      ];
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: newAttrs,
+        },
+      });
+    },
+    * onClickResetAttr({payload}: OnClickResetAttrAction, {select, put}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const attrs = informExhibitInfoPage.currentRuleResult?.ruleInfo.attrs;
+
+      // console.log(attrs, 'rules!!!!!!!');
+
+      const newAttrs = attrs.filter((rl: any) => {
+        return rl.key !== payload.theKey;
+      });
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: newAttrs,
+        },
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {
