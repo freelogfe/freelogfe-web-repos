@@ -186,6 +186,13 @@ export interface OnChangeAttrsAction extends AnyAction {
   };
 }
 
+export interface OnAttrBlurAction extends AnyAction {
+  type: 'informExhibitInfoPage/onAttrBlur';
+  payload: {
+    theKey: string;
+  };
+}
+
 export interface OnSetAttrAction extends AnyAction {
   type: 'informExhibitInfoPage/onSetAttr';
 }
@@ -210,6 +217,7 @@ export interface ExhibitInfoPageModelType {
     onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
     onChangeAttrs: (action: OnChangeAttrsAction, effects: EffectsCommandMap) => void;
+    onAttrBlur: (action: OnAttrBlurAction, effects: EffectsCommandMap) => void;
     onSetAttr: (action: OnSetAttrAction, effects: EffectsCommandMap) => void;
     onClearAttr: (action: OnClearAttrAction, effects: EffectsCommandMap) => void;
   };
@@ -763,12 +771,98 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
+    * onAttrBlur({payload}: OnAttrBlurAction, {select, call}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      const attr = informExhibitInfoPage.pOnlyEditAttrs.find((poe) => {
+        return poe.theKey === payload.theKey;
+      }) || informExhibitInfoPage.pEditDeleteAttrs.find((ped) => {
+        return ped.theKey === payload.theKey;
+      });
+
+      console.log(attr, 'attrattrattr!!!');
+
+      if (attr?.theValueError) {
+        return;
+      }
+
+      // console.log(attr, 'attr!@23453453555');
+
+      const rules: any[] = informExhibitInfoPage.allRuleResult.map((rr: any) => {
+        return rr.ruleInfo;
+      });
+
+      console.log(rules, 'rules1234');
+      const allExhibitName: string[] = rules.map((r) => {
+        return r.exhibitName;
+      });
+
+      let rules1: any[] = [];
+      if (allExhibitName.includes(informExhibitInfoPage.informExhibitName)) {
+        rules1 = rules.map((en1: any) => {
+          if (en1.exhibitName !== informExhibitInfoPage.informExhibitName) {
+            return en1;
+          }
+
+          const attrKeys: string[] = en1.attrs?.map((ar: any) => {
+            return ar.key;
+          }) || [];
+
+          console.log(attrKeys, 'attrKeys1@#$!@#$99999');
+          console.log(payload.theKey, 'payload.theKey!!!!!!');
+          return {
+            ...en1,
+            attrs: attrKeys.includes(payload.theKey)
+              ? en1.attrs.map((ar1: any) => {
+                if (ar1.key !== payload.theKey) {
+                  return ar1;
+                }
+                return {
+                  ...ar1,
+                  value: attr?.theValue,
+                  description: attr?.remark,
+                };
+              })
+              : [
+                ...en1.attrs,
+                {
+                  operation: 'add',
+                  key: attr?.theKey,
+                  value: attr?.theValue,
+                  description: attr?.remark,
+                },
+              ],
+          };
+        });
+      } else {
+        rules1 = [
+          ...rules,
+          {
+            operation: 'alter',
+            exhibitName: informExhibitInfoPage.informExhibitName,
+            attrs: [
+              {
+                operation: 'add',
+                key: attr?.theKey,
+                value: attr?.theValue,
+                description: attr?.remark,
+              },
+            ],
+          },
+        ];
+      }
+
+      console.log(rules1, 'rules1rules1rules1rules1!!!!34123412342134444444444');
+      // const {} = yield call();
+    },
     * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
-      
+      // const {} = {};
     },
     * onClearAttr({payload}: OnClearAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({

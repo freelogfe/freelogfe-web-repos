@@ -5,7 +5,7 @@ import {Space} from "antd";
 import {FDelete, FEdit, FRedo, FSwap} from "@/components/FIcons";
 import {FCircleBtn, FTextBtn} from "@/components/FButton";
 import {
-  ChangeAction,
+  ChangeAction, OnAttrBlurAction,
   OnAttrModalChangeAction,
   OnCancelHandleAttrModalAction,
   OnChangeAttrsAction,
@@ -143,9 +143,15 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                 },
               });
             }}
-            // onBlur={() => dispatch<UpdateRewriteAction>({
-            //   type: 'informExhibitInfoPage/updateRewrite',
-            // })}
+            onBlur={(event) => {
+              console.log(pc.theKey, 'pc.theKeypc.theKeypc.theKeypc.theKey');
+              dispatch<OnAttrBlurAction>({
+                type: 'informExhibitInfoPage/onAttrBlur',
+                payload: {
+                  theKey: pc.theKey,
+                },
+              });
+            }}
           />
         </div>))
       }
@@ -228,9 +234,14 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
                 },
               });
             }}
-            // onBlur={() => dispatch<UpdateRewriteAction>({
-            //   type: 'informExhibitInfoPage/updateRewrite',
-            // })}
+            onBlur={(event) => {
+              dispatch<OnAttrBlurAction>({
+                type: 'informExhibitInfoPage/onAttrBlur',
+                payload: {
+                  theKey: pc.theKey,
+                },
+              });
+            }}
           />
         </div>))
       }
@@ -240,18 +251,6 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
       <FCircleBtn
         type="transparent"
         onClick={() => {
-          // dispatch<ChangeAction>({
-          //   type: 'informExhibitInfoPage/change',
-          //   payload: {
-          //     pAddCustomModalVisible: true,
-          //     pAddCustomKey: '',
-          //     pAddCustomKeyError: '',
-          //     pAddCustomValue: '',
-          //     pAddCustomValueError: '',
-          //     pAddCustomDescription: '',
-          //     pAddCustomDescriptionError: '',
-          //   },
-          // });
           dispatch<OnHandleAttrModalAction>({
             type: 'informExhibitInfoPage/onHandleAttrModal',
             payload: {
