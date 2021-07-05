@@ -771,7 +771,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onAttrBlur({payload}: OnAttrBlurAction, {select, call}: EffectsCommandMap) {
+    * onAttrBlur({payload}: OnAttrBlurAction, {select, call, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
       }));
@@ -794,68 +794,62 @@ const Model: ExhibitInfoPageModelType = {
         return rr.ruleInfo;
       });
 
-      console.log(rules, 'rules1234');
-      const allExhibitName: string[] = rules.map((r) => {
-        return r.exhibitName;
+      // console.log(rules, 'rules1234');
+      // const allExhibitName: string[] = rules.map((r) => {
+      //   return r.exhibitName;
+      // });
+
+      let theRule: any = [];
+
+      const currentRule = rules.find((r) => {
+        return r.exhibitName === informExhibitInfoPage.informExhibitName;
       });
 
-      let rules1: any[] = [];
-      if (allExhibitName.includes(informExhibitInfoPage.informExhibitName)) {
-        rules1 = rules.map((en1: any) => {
-          if (en1.exhibitName !== informExhibitInfoPage.informExhibitName) {
-            return en1;
-          }
+      if (currentRule) {
+        const attrKeys: string[] = currentRule.attrs?.map((ar: any) => {
+          return ar.key;
+        }) || [];
 
-          const attrKeys: string[] = en1.attrs?.map((ar: any) => {
-            return ar.key;
-          }) || [];
-
-          console.log(attrKeys, 'attrKeys1@#$!@#$99999');
-          console.log(payload.theKey, 'payload.theKey!!!!!!');
-          return {
-            ...en1,
-            attrs: attrKeys.includes(payload.theKey)
-              ? en1.attrs.map((ar1: any) => {
-                if (ar1.key !== payload.theKey) {
-                  return ar1;
-                }
-                return {
-                  ...ar1,
-                  value: attr?.theValue,
-                  description: attr?.remark,
-                };
-              })
-              : [
-                ...en1.attrs,
-                {
-                  operation: 'add',
-                  key: attr?.theKey,
-                  value: attr?.theValue,
-                  description: attr?.remark,
-                },
-              ],
-          };
-        });
+        theRule = attrKeys.includes(payload.theKey)
+          ? currentRule.attrs.map((ar1: any) => {
+            if (ar1.key !== payload.theKey) {
+              return ar1;
+            }
+            return {
+              ...ar1,
+              value: attr?.theValue,
+              description: attr?.remark,
+            };
+          })
+          : [
+            ...currentRule.attrs,
+            {
+              operation: 'add',
+              key: attr?.theKey,
+              value: attr?.theValue,
+              description: attr?.remark,
+            },
+          ];
       } else {
-        rules1 = [
-          ...rules,
+        theRule = [
           {
-            operation: 'alter',
-            exhibitName: informExhibitInfoPage.informExhibitName,
-            attrs: [
-              {
-                operation: 'add',
-                key: attr?.theKey,
-                value: attr?.theValue,
-                description: attr?.remark,
-              },
-            ],
+            operation: 'add',
+            key: attr?.theKey,
+            value: attr?.theValue,
+            description: attr?.remark,
           },
         ];
       }
 
-      console.log(rules1, 'rules1rules1rules1rules1!!!!34123412342134444444444');
-      // const {} = yield call();
+      console.log(theRule, 'TTTTTTtttttt');
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          attrs: theRule,
+        },
+      });
+
     },
     * onSetAttr({}: OnSetAttrAction, {select}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
