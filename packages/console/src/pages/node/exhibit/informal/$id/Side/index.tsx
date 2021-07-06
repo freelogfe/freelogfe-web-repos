@@ -20,6 +20,7 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
       <Info/>
 
       <Setting/>
+
     </div>
 
     <div style={{height: 10}}/>
