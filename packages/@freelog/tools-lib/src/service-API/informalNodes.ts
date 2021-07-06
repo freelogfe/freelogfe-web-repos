@@ -13,9 +13,6 @@ interface TestResourcesParamsType {
 }
 
 export function testResources({nodeId, ...params}: TestResourcesParamsType) {
-  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testNodes/${nodeId}/testResources`,
@@ -30,10 +27,26 @@ interface CreateRulesParamsType {
 }
 
 export function createRules({nodeId, ...params}: CreateRulesParamsType) {
-  // return FUtil.Axios.post(`/v2/testNodes/${nodeId}/rules`, {testRuleText});
   return FUtil.Request({
     method: 'POST',
     url: `/v2/testNodes/${nodeId}/rules`,
+    data: params,
+  });
+}
+
+// 批量查询测试资源列表
+interface BatchTestResourcesParamsType {
+  nodeId: number;
+  entityType?: 'resource' | 'object';
+  entityIds?: string;
+  entityNames?: string;
+  projection?: string;
+}
+
+export function batchTestResources({nodeId, ...params}: BatchTestResourcesParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/testNodes/${nodeId}/testResources/list`,
     data: params,
   });
 }
@@ -45,11 +58,6 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({nodeId, ...params}: DependencyTreeParamsType) {
-  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/testResources/dependencyTree/search`, {
-  //   params: {
-  //     keywords,
-  //   },
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testNodes/${nodeId}/testResources/dependencyTree/search`,
@@ -64,9 +72,6 @@ interface PutRulesParamsType {
 }
 
 export function putRules({nodeId, ...params}: PutRulesParamsType) {
-  // return FUtil.Axios.put(`/v2/testNodes/${nodeId}/rules`, {
-  //   additionalTestRule,
-  // });
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/testNodes/${nodeId}/rules`,
@@ -80,7 +85,6 @@ interface TestNodeRulesParamsType {
 }
 
 export function testNodeRules({nodeId}: TestNodeRulesParamsType) {
-  // return FUtil.Axios.get(`/v2/testNodes/${nodeId}/rules`, {});
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testNodes/${nodeId}/rules`,
