@@ -22,7 +22,6 @@ export interface InformExhibitInfoPageModelState {
   currentRuleResult: any;
   theRuleID: string;
 
-  // nodeName: string;
   informExhibitName: string;
   mappingRule: {
     add?: {
@@ -362,8 +361,6 @@ const Model: ExhibitInfoPageModelType = {
           // nodeName: currentNode?.nodeName,
           informExhibitName: data.testResourceName,
           theRuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
-
-          // isOnline: ,
           onlineSwitchObj: {
             checked: isChecked,
             text: data.resourceType === 'theme'
