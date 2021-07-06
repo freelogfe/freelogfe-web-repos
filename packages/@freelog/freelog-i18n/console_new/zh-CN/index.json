@@ -324,5 +324,6 @@
 	"reflect_rule_pre_excute_error_exhibit_not_theme": "展品{ExhibitName}不是主题资源，无法激活",
 	"reflect_rule_pre_excute_error_version_invalid": "资源{ResourceName}版本范围{ResourceVersionSetting}设置无效，版本不存在",
 	"reflect_rule_pre_excute_error_show_hide_unavailable_for_theme": "上线/下线指令对主题展品不生效: {ExhibitName}",
-	"reflect_rule_pre_excute_error_test_object_existed": "测试对象重复：{ObjectName}"
+	"reflect_rule_pre_excute_error_test_object_existed": "测试对象重复：{ObjectName}",
+	"theme_state_active": "已激活"
 }

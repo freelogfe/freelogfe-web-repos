@@ -324,5 +324,6 @@
 	"reflect_rule_pre_excute_error_exhibit_not_theme": "{ExhibitName} is not a theme resource, you can not activate it.",
 	"reflect_rule_pre_excute_error_version_invalid": "No versions mactched the version range {ResourceVersionSetting} of {ResourceName}",
 	"reflect_rule_pre_excute_error_show_hide_unavailable_for_theme": "Show/Hide directive is unavailable for theme: {ExhibitName}",
-	"reflect_rule_pre_excute_error_test_object_existed": "Duplicated object：{TestObjectName}"
+	"reflect_rule_pre_excute_error_test_object_existed": "Duplicated object：{TestObjectName}",
+	"theme_state_active": "Active"
 }
