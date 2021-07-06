@@ -47,7 +47,7 @@ export function batchTestResources({nodeId, ...params}: BatchTestResourcesParams
   return FUtil.Request({
     method: 'GET',
     url: `/v2/testNodes/${nodeId}/testResources/list`,
-    data: params,
+    params: params,
   });
 }
 
