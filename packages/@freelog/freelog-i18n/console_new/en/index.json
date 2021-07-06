@@ -325,5 +325,10 @@
 	"reflect_rule_pre_excute_error_version_invalid": "No versions mactched the version range {ResourceVersionSetting} of {ResourceName}",
 	"reflect_rule_pre_excute_error_show_hide_unavailable_for_theme": "Show/Hide directive is unavailable for theme: {ExhibitName}",
 	"reflect_rule_pre_excute_error_test_object_existed": "Duplicated object：{TestObjectName}",
-	"theme_state_active": "Active"
+	"theme_state_active": "Active",
+	"label_test_node": "",
+	"tab_manage_reflect_rules": "",
+	"msg_naviagte_to_formal_node": "",
+	"manage_test_exhibits_empty": "",
+	"btn_import_test_exhibit": ""
 }
