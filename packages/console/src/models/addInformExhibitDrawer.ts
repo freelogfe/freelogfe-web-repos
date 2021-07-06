@@ -5,9 +5,10 @@ import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface AddInformExhibitDrawerModelState {
+  nodeID: number;
   isTheme: boolean;
-  disabledResourceNames: string[];
-  disabledObjectNames: string[];
+  // disabledResourceNames: string[];
+  // disabledObjectNames: string[];
 
   addExhibitOptions: { value: string; title: string }[];
   addExhibitSelectValue: string;
@@ -15,6 +16,7 @@ export interface AddInformExhibitDrawerModelState {
   addExhibitCheckedList: {
     id: string;
     disabled: boolean;
+    disabledReason: string;
     checked: boolean;
     name: string;
     identity: 'resource' | 'object';
@@ -80,9 +82,10 @@ interface AddInformExhibitType {
 }
 
 const initStates: AddInformExhibitDrawerModelState = {
+  nodeID: -1,
   isTheme: false,
-  disabledResourceNames: [],
-  disabledObjectNames: [],
+  // disabledResourceNames: [],
+  // disabledObjectNames: [],
 
   addExhibitOptions: [
     {value: '!market', title: '资源市场'},
@@ -159,7 +162,20 @@ const Model: AddInformExhibitType = {
       };
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(FServiceAPI.Resource.list, params);
-      // console.log(data, 'data98jhksjkdaf13453');
+      // console.log(data, 'data!~!@#$@!#$@#!411111');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
+      // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -170,9 +186,19 @@ const Model: AddInformExhibitType = {
                 return !inherentIDs.includes(rs.resourceId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                }
+
                 return {
                   id: rs.resourceId,
-                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  disabled,
+                  disabledReason,
                   checked: false,
                   identity: 'resource',
                   name: rs.resourceName,
@@ -214,6 +240,17 @@ const Model: AddInformExhibitType = {
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data13453');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -224,9 +261,17 @@ const Model: AddInformExhibitType = {
                 return !inherentIDs.includes(rs.resourceId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                }
                 return {
                   id: rs.resourceId,
-                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  disabled,
+                  disabledReason,
                   checked: false,
                   identity: 'resource',
                   name: rs.resourceName,
@@ -265,6 +310,16 @@ const Model: AddInformExhibitType = {
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
       // console.log(data, '@@@@@@ASEDFSADF');
 
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -275,9 +330,19 @@ const Model: AddInformExhibitType = {
                 return !inherentIDs.includes(rs.resourceId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                }
+
                 return {
                   id: rs.resourceId,
-                  disabled: addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName),
+                  disabled,
+                  disabledReason,
                   checked: false,
                   identity: 'resource',
                   name: rs.resourceName,
@@ -315,7 +380,18 @@ const Model: AddInformExhibitType = {
       };
 
       const {data} = yield call(FServiceAPI.Storage.objectList, params);
-      // console.log(data, 'data1q2349ojmdfsl');
+      console.log(data, 'data1q2349ojmdfsl');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'object',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.objectId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -328,9 +404,18 @@ const Model: AddInformExhibitType = {
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
                 const objectName: string = ob.bucketName + '/' + ob.objectName;
                 // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(ob.objectId)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                }
+
                 return {
                   id: ob.objectId,
-                  disabled: addInformExhibitDrawer.disabledObjectNames.includes(objectName) || !ob.resourceType,
+                  disabled,
+                  disabledReason,
                   checked: false,
                   identity: 'object',
                   name: objectName,
@@ -361,3 +446,28 @@ const Model: AddInformExhibitType = {
 };
 
 export default Model;
+
+interface GetUsedTargetIDsParams {
+  nodeID: number;
+  entityType: 'resource' | 'object';
+  entityIds: string[];
+}
+
+async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetIDsParams): Promise<string[]> {
+  if (entityIds.length === 0) {
+    return [];
+  }
+
+  const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+    nodeId: nodeID,
+    entityType: entityType,
+    entityIds: entityIds.join(),
+  };
+
+  const {data} = await FServiceAPI.InformalNode.batchTestResources(params1);
+
+  // console.log(data1, 'data98jhksjkdaf13453');
+  return (data as any[]).map<string>((d1: any) => {
+    return d1.originInfo.id;
+  });
+}

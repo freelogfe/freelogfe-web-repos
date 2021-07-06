@@ -3,6 +3,7 @@ import styles from './index.less';
 import {CloseOutlined} from '@ant-design/icons';
 import {Input, Form} from 'antd';
 import FUtil1 from "@/utils";
+import {FClose} from "@/components/FIcons";
 
 interface FLabelEditor {
   values?: string[];
@@ -82,7 +83,7 @@ export default function ({values = [], onChange}: FLabelEditor) {
           {
             values.map((i: string, j: number) => (<label key={i} className={styles.label}>
               <span>{i}</span>
-              <a onClick={() => onRemove(j)}><CloseOutlined/></a>
+              <a onClick={() => onRemove(j)}><FClose/></a>
             </label>))
           }
         </div>

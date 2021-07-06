@@ -197,6 +197,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     }
 
     <AddInformExhibitDrawer
+      nodeID={informalNodeManagerPage.nodeID}
       visible={informalNodeManagerPage.addExhibitDrawerVisible}
       isTheme={false}
       onCancel={() => {
@@ -233,8 +234,8 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           },
         });
       }}
-      disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}
-      disabledObjectNames={informalNodeManagerPage.exhibitList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}
+      // disabledResourceNames={informalNodeManagerPage.exhibitList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}
+      // disabledObjectNames={informalNodeManagerPage.exhibitList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}
     />
 
     <FReplaceModal
