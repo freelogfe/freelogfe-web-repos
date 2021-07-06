@@ -15,6 +15,7 @@ function Side({dispatch, exhibitInfoPage}: SideProps) {
 
 
   return (<div className={styles.side}>
+
     <div className={styles.base}>
 
       <Info/>
