@@ -1,9 +1,15 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from '@/models/connect';
+import {AddInformExhibitDrawerModelState, ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
+import {
+  FetchAddExhibitListAction,
+  FetchCollectionAction,
+  FetchMarketAction,
+  FetchMyResourcesAction, FetchObjectAction
+} from "@/models/addInformExhibitDrawer";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -49,11 +55,27 @@ export interface InformalNodeManagerPageModelState {
   ruleAllAddObjectNames: string[];
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
+  addExhibitDrawerVisible: boolean;
+  addExhibitDrawerOptions: { value: string; title: string }[];
+  addExhibitDrawerSelectValue: string;
+  addExhibitDrawerInputValue: string;
+  addExhibitDrawerCheckedList: {
+    id: string;
+    disabled: boolean;
+    disabledReason: string;
+    checked: boolean;
+    name: string;
+    identity: 'resource' | 'object';
+    type: string;
+    updateTime: string;
+    status: 'online' | 'offline' | 'unreleased' | '';
+  }[];
+  addExhibitDrawerCheckedListTotalNum: number;
+
   addOrReplaceCodeExecutionErrorMessages: null | {
     msg: string;
   }[];
 
-  addExhibitDrawerVisible: boolean;
   replaceHandlerModalVisible: boolean;
   replacerActivatedTab: 'market' | 'resource' | 'collection';
   replacerInput: string;
@@ -206,6 +228,31 @@ export interface SaveDataRulesAction extends AnyAction {
   }
 }
 
+export interface FetchAddExhibitDrawerListAction extends AnyAction {
+  type: 'informalNodeManagerPage/fetchAddExhibitDrawerList'
+  payload?: boolean; // 是否 restart
+}
+
+export interface FetchAddExhibitDrawerMarketAction extends AnyAction {
+  type: 'fetchAddExhibitDrawerMarket';
+  payload?: boolean; // 是否 restart
+}
+
+export interface FetchAddExhibitDrawerMyResourcesAction extends AnyAction {
+  type: 'fetchAddExhibitDrawerMyResources';
+  payload?: boolean; // 是否 restart
+}
+
+export interface FetchAddExhibitDrawerCollectionAction extends AnyAction {
+  type: 'fetchAddExhibitDrawerCollection';
+  payload?: boolean; // 是否 restart
+}
+
+export interface FetchAddExhibitDrawerObjectAction extends AnyAction {
+  type: 'fetchAddExhibitDrawerObject';
+  payload?: boolean; // 是否 restart
+}
+
 interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
   state: InformalNodeManagerPageModelState;
@@ -218,6 +265,12 @@ interface InformalNodeManagerPageModelType {
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
+
+    fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
+    fetchAddExhibitDrawerMarket: (action: FetchAddExhibitDrawerMarketAction, effects: EffectsCommandMap) => void;
+    fetchAddExhibitDrawerMyResources: (action: FetchAddExhibitDrawerMyResourcesAction, effects: EffectsCommandMap) => void;
+    fetchAddExhibitDrawerCollection: (action: FetchAddExhibitDrawerCollectionAction, effects: EffectsCommandMap) => void;
+    fetchAddExhibitDrawerObject: (action: FetchAddExhibitDrawerObjectAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<InformalNodeManagerPageModelState, ChangeAction>;
@@ -227,8 +280,9 @@ interface InformalNodeManagerPageModelType {
   };
 }
 
-export const exhibitPageInitData: any = {
-  addExhibitDrawerVisible: false,
+export const exhibitPageInitData = {
+
+
   replaceHandlerModalVisible: false,
   replacerActivatedTab: 'market',
   replacerList: [],
@@ -258,6 +312,18 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   ruleAllAddResourceNames: [],
   ruleAllAddObjectNames: [],
   showPage: 'exhibit',
+
+  addExhibitDrawerVisible: false,
+  addExhibitDrawerOptions: [
+    {value: '!market', title: '资源市场'},
+    {value: '!resource', title: '我的资源'},
+    {value: '!collection', title: '我的收藏'},
+  ],
+  addExhibitDrawerSelectValue: '!market',
+  addExhibitDrawerInputValue: '',
+  addExhibitDrawerCheckedList: [],
+  addExhibitDrawerCheckedListTotalNum: -1,
+
   addOrReplaceCodeExecutionErrorMessages: null,
 
   ...exhibitPageInitData,
@@ -343,7 +409,7 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      console.log(data1, 'DDD@@@@890j23poijrl;adsf@');
+      // console.log(data1, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
 
@@ -752,6 +818,335 @@ const Model: InformalNodeManagerPageModelType = {
         });
       }
     },
+
+    * fetchAddExhibitDrawerList({payload}: FetchAddExhibitDrawerListAction, {select, call, put}: EffectsCommandMap) {
+      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
+        addInformExhibitDrawer,
+      }));
+
+      if (addInformExhibitDrawer.addExhibitSelectValue === '!market') {
+        yield put<FetchMarketAction>({
+          type: 'fetchMarket',
+          payload,
+        });
+      } else if (addInformExhibitDrawer.addExhibitSelectValue === '!resource') {
+        yield put<FetchMyResourcesAction>({
+          type: 'fetchMyResources',
+          payload,
+        });
+      } else if (addInformExhibitDrawer.addExhibitSelectValue === '!collection') {
+        yield put<FetchCollectionAction>({
+          type: 'fetchCollection',
+          payload,
+        });
+      } else {
+        yield put<FetchObjectAction>({
+          type: 'fetchObject',
+          payload,
+        });
+      }
+    },
+    * fetchAddExhibitDrawerMarket({payload}: FetchAddExhibitDrawerMarketAction, {call, select, put}: EffectsCommandMap) {
+      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
+        addInformExhibitDrawer,
+      }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
+      const inherentIDs = inherentList.map((il) => il.id);
+
+      const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
+        skip: inherentList.length,
+        limit: FUtil.Predefined.pageSize + 10,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        keywords: addInformExhibitDrawer.addExhibitInputValue,
+      };
+      // console.log(params, 'paramsparams1234');
+      const {data} = yield call(FServiceAPI.Resource.list, params);
+      // console.log(data, 'data!~!@#$@!#$@#!411111');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
+      // console.log(usedResourceID, 'usedResourceID!!!!@@@222222222');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawerCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentIDs.includes(rs.resourceId);
+              })
+              .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+                // console.log(rs, 'rs!!!!@#$23423423423');
+
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
+                }
+
+                return {
+                  id: rs.resourceId,
+                  disabled,
+                  disabledReason,
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
+          ],
+          addExhibitDrawerCheckedListTotalNum: data.totalItem,
+        },
+      });
+    },
+    * fetchAddExhibitDrawerMyResources({payload}: FetchAddExhibitDrawerMyResourcesAction, {call, put, select}: EffectsCommandMap) {
+      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
+        addInformExhibitDrawer,
+      }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
+      const inherentIDs = inherentList.map((il) => il.id);
+      // console.log(inherentIDs, 'inherentIDs12342134');
+
+      const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
+        skip: inherentList.length,
+        limit: FUtil.Predefined.pageSize + 10,
+        isSelf: 1,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        keywords: addInformExhibitDrawer.addExhibitInputValue,
+      };
+      // console.log(params, 'paramsparams1234');
+      const {data} = yield call(FServiceAPI.Resource.list, params);
+      // console.log(data, 'data13453');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawerCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentIDs.includes(rs.resourceId);
+              })
+              .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
+                }
+                return {
+                  id: rs.resourceId,
+                  disabled,
+                  disabledReason,
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
+          ],
+          addExhibitDrawerCheckedListTotalNum: data.totalItem,
+        },
+      });
+    },
+    * fetchAddExhibitDrawerCollection({payload}: FetchAddExhibitDrawerCollectionAction, {select, call, put}: EffectsCommandMap) {
+
+      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
+        addInformExhibitDrawer,
+      }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
+      const inherentIDs = inherentList.map((il) => il.id);
+
+      const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
+        skip: inherentList.length,
+        limit: FUtil.Predefined.pageSize + 10,
+        keywords: addInformExhibitDrawer.addExhibitInputValue,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+      };
+
+      const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
+      // console.log(data, '@@@@@@ASEDFSADF');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'resource',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.resourceId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawerCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[])
+              .filter((rs) => {
+                return !inherentIDs.includes(rs.resourceId);
+              })
+              .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((rs) => {
+
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
+                }
+
+                return {
+                  id: rs.resourceId,
+                  disabled,
+                  disabledReason,
+                  checked: false,
+                  identity: 'resource',
+                  name: rs.resourceName,
+                  type: rs.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(rs.updateDate),
+                  status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
+                };
+              }),
+          ],
+          addExhibitDrawerCheckedListTotalNum: data.totalItem,
+        },
+      });
+    },
+    * fetchAddExhibitDrawerObject({payload}: FetchAddExhibitDrawerObjectAction, {put, select, call}: EffectsCommandMap) {
+      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
+        addInformExhibitDrawer,
+      }));
+
+      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+
+      if (!payload) {
+        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+      }
+
+      const inherentIDs = inherentList.map((il) => il.id);
+
+      const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
+        skip: inherentList.length,
+        limit: FUtil.Predefined.pageSize + 10,
+        bucketName: addInformExhibitDrawer.addExhibitSelectValue,
+        keywords: addInformExhibitDrawer.addExhibitInputValue,
+        isLoadingTypeless: 0,
+        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
+        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+      };
+
+      const {data} = yield call(FServiceAPI.Storage.objectList, params);
+      console.log(data, 'data1q2349ojmdfsl');
+
+      const params1: Parameters<typeof getUsedTargetIDs>[0] = {
+        nodeID: addInformExhibitDrawer.nodeID,
+        entityType: 'object',
+        entityIds: data.dataList.map((dl: any) => {
+          return dl.objectId;
+        }),
+      };
+
+      const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+      // console.log(usedResourceIDs, 'usedResourceIDs123412341234');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawerCheckedList: [
+            ...inherentList,
+            ...(data.dataList as any[])
+              .filter((ob) => {
+                return !inherentIDs.includes(ob.objectId);
+              })
+              .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((ob) => {
+                console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
+                const objectName: string = ob.bucketName + '/' + ob.objectName;
+                // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
+                let disabled: boolean = false;
+                let disabledReason: string = '';
+
+                if (usedResourceIDs.includes(ob.objectId) || addInformExhibitDrawer.disabledObjectNames.includes(objectName)) {
+                  disabled = true;
+                  disabledReason = '已被使用';
+                } else if (ob.resourceType === '') {
+                  disabled = true;
+                  disabledReason = '无资源类型';
+                }
+
+                return {
+                  id: ob.objectId,
+                  disabled,
+                  disabledReason,
+                  checked: false,
+                  identity: 'object',
+                  name: objectName,
+                  type: ob.resourceType,
+                  updateTime: FUtil.Format.formatDateTime(ob.updateDate),
+                  status: '',
+                };
+              }),
+          ],
+          addExhibitDrawerCheckedListTotalNum: data.totalItem,
+        },
+      });
+    },
   },
   reducers: {
     change(state, {payload}) {
@@ -804,4 +1199,29 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
       }, ms);
     });
   }
+}
+
+interface GetUsedTargetIDsParams {
+  nodeID: number;
+  entityType: 'resource' | 'object';
+  entityIds: string[];
+}
+
+async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetIDsParams): Promise<string[]> {
+  if (entityIds.length === 0) {
+    return [];
+  }
+
+  const params1: Parameters<typeof FServiceAPI.InformalNode.batchTestResources>[0] = {
+    nodeId: nodeID,
+    entityType: entityType,
+    entityIds: entityIds.join(),
+  };
+
+  const {data} = await FServiceAPI.InformalNode.batchTestResources(params1);
+
+  // console.log(data1, 'data98jhksjkdaf13453');
+  return (data as any[]).map<string>((d1: any) => {
+    return d1.originInfo.id;
+  });
 }

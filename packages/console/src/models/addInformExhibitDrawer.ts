@@ -24,7 +24,7 @@ export interface AddInformExhibitDrawerModelState {
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
   }[];
-  listLength: number;
+  addExhibitCheckedListTotalNum: number;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -94,7 +94,7 @@ const initStates: AddInformExhibitDrawerModelState = {
   addExhibitSelectValue: '!market',
   addExhibitInputValue: '',
   addExhibitCheckedList: [],
-  listLength: -1,
+  addExhibitCheckedListTotalNum: -1,
 };
 
 const Model: AddInformExhibitType = {
@@ -206,7 +206,7 @@ const Model: AddInformExhibitType = {
                 };
               }),
           ],
-          listLength: data.totalItem,
+          addExhibitCheckedListTotalNum: data.totalItem,
         },
       });
     },
@@ -279,7 +279,7 @@ const Model: AddInformExhibitType = {
                 };
               }),
           ],
-          listLength: data.totalItem,
+          addExhibitCheckedListTotalNum: data.totalItem,
         },
       });
     },
@@ -353,7 +353,7 @@ const Model: AddInformExhibitType = {
                 };
               }),
           ],
-          listLength: data.totalItem,
+          addExhibitCheckedListTotalNum: data.totalItem,
         },
       });
     },
@@ -431,7 +431,7 @@ const Model: AddInformExhibitType = {
                 };
               }),
           ],
-          listLength: data.totalItem,
+          addExhibitCheckedListTotalNum: data.totalItem,
         },
       });
     },

@@ -53,11 +53,11 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     initData();
   }, []);
 
-  AHooks.useUnmount(() => {
-    onChange({
-      ...exhibitPageInitData,
-    });
-  });
+  // AHooks.useUnmount(() => {
+  //   onChange({
+  //     ...exhibitPageInitData,
+  //   });
+  // });
 
   async function initData() {
     await dispatch<FetchExhibitListAction>({
@@ -196,47 +196,47 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         </FInfiniteScroll>)
     }
 
-    <AddInformExhibitDrawer
-      nodeID={informalNodeManagerPage.nodeID}
-      visible={informalNodeManagerPage.addExhibitDrawerVisible}
-      isTheme={false}
-      onCancel={() => {
-        onChange({
-          addExhibitDrawerVisible: false,
-        });
-      }}
-      onConfirm={async (value) => {
-        // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-        await onChange({
-          addExhibitDrawerVisible: false,
-        });
-        await dispatch<SaveDataRulesAction>({
-          type: 'informalNodeManagerPage/saveDataRules',
-          payload: {
-            type: 'append',
-            data: value.names.map((n) => {
-              return {
-                operation: 'add',
-                exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-                candidate: {
-                  name: n,
-                  versionRange: 'latest',
-                  type: value.identity,
-                },
-              };
-            }),
-          },
-        });
-        await dispatch<FetchExhibitListAction>({
-          type: 'informalNodeManagerPage/fetchExhibitList',
-          payload: {
-            isRematch: false,
-          },
-        });
-      }}
-      disabledResourceNames={informalNodeManagerPage.ruleAllAddResourceNames}
-      disabledObjectNames={informalNodeManagerPage.ruleAllAddObjectNames}
-    />
+    {/*<AddInformExhibitDrawer*/}
+    {/*  nodeID={informalNodeManagerPage.nodeID}*/}
+    {/*  visible={informalNodeManagerPage.addExhibitDrawerVisible}*/}
+    {/*  isTheme={false}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      addExhibitDrawerVisible: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={async (value) => {*/}
+    {/*    // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');*/}
+    {/*    await onChange({*/}
+    {/*      addExhibitDrawerVisible: false,*/}
+    {/*    });*/}
+    {/*    await dispatch<SaveDataRulesAction>({*/}
+    {/*      type: 'informalNodeManagerPage/saveDataRules',*/}
+    {/*      payload: {*/}
+    {/*        type: 'append',*/}
+    {/*        data: value.names.map((n) => {*/}
+    {/*          return {*/}
+    {/*            operation: 'add',*/}
+    {/*            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,*/}
+    {/*            candidate: {*/}
+    {/*              name: n,*/}
+    {/*              versionRange: 'latest',*/}
+    {/*              type: value.identity,*/}
+    {/*            },*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*    await dispatch<FetchExhibitListAction>({*/}
+    {/*      type: 'informalNodeManagerPage/fetchExhibitList',*/}
+    {/*      payload: {*/}
+    {/*        isRematch: false,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  disabledResourceNames={informalNodeManagerPage.ruleAllAddResourceNames}*/}
+    {/*  disabledObjectNames={informalNodeManagerPage.ruleAllAddObjectNames}*/}
+    {/*/>*/}
 
     <FReplaceModal
       nodeID={informalNodeManagerPage.nodeID}

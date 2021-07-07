@@ -10,54 +10,60 @@ import {FContentText} from "@/components/FText";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDrawer from "@/components/FDrawer";
 import {connect, Dispatch} from 'dva';
-import {AddInformExhibitDrawerModelState, ConnectState, StorageHomePageModelState} from '@/models/connect';
-import {ChangeAction, FetchAddExhibitListAction} from '@/models/addInformExhibitDrawer';
+import {
+  AddInformExhibitDrawerModelState,
+  ConnectState,
+  InformalNodeManagerPageModelState,
+  StorageHomePageModelState
+} from '@/models/connect';
+import {
+  ChangeAction,
+  FetchAddExhibitDrawerListAction,
+  FetchExhibitListAction,
+  SaveDataRulesAction
+} from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
+import {FUtil} from "@freelog/tools-lib";
 
 interface AddInformExhibitDrawerProps {
-  nodeID: number;
-  visible?: boolean;
-  isTheme?: boolean;
-  disabledResourceNames?: string[];
-  disabledObjectNames?: string[];
+  // nodeID: number;
+  // visible?: boolean;
+  // isTheme?: boolean;
+  // disabledResourceNames?: string[];
+  // disabledObjectNames?: string[];
 
-  onCancel?(): void;
+  // onCancel?(): void;
 
-  onConfirm?(value: { identity: 'resource' | 'object'; names: string[]; }): void;
+  // onConfirm?(value: { identity: 'resource' | 'object'; names: string[]; }): void;
 
   dispatch: Dispatch;
-  addInformExhibitDrawer: AddInformExhibitDrawerModelState;
-  storageHomePage: StorageHomePageModelState;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
+  // storageHomePage: StorageHomePageModelState;
+
 }
 
-function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage, disabledResourceNames = [], disabledObjectNames = []}: AddInformExhibitDrawerProps) {
+function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformExhibitDrawerProps) {
 
   const containerRef = React.useRef<any>(null);
 
   async function init() {
-    await onChange({
-      nodeID: nodeID,
-      isTheme,
-      disabledResourceNames,
-      disabledObjectNames,
-    });
 
-    await dispatch<FetchAddExhibitListAction>({
-      type: 'addInformExhibitDrawer/fetchAddExhibitList',
+    await dispatch<FetchAddExhibitDrawerListAction>({
+      type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
       payload: true,
     });
   }
 
-  async function onChange(value: Partial<AddInformExhibitDrawerModelState>, loadData: boolean = false) {
+  async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData: boolean = false) {
     await dispatch<ChangeAction>({
-      type: 'addInformExhibitDrawer/change',
+      type: 'informalNodeManagerPage/change',
       payload: value,
     });
     if (loadData) {
       // console.log('!@#$!@#$!@#$11111111');
-      await dispatch<FetchAddExhibitListAction>({
-        type: 'addInformExhibitDrawer/fetchAddExhibitList',
+      await dispatch<FetchAddExhibitDrawerListAction>({
+        type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
         payload: true,
       });
     }
@@ -65,28 +71,57 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
 
   function onClickConfirm() {
     let identity: 'resource' | 'object' = 'resource';
-    if (!addInformExhibitDrawer.addExhibitSelectValue.startsWith('!')) {
+    if (!informalNodeManagerPage.addExhibitDrawerSelectValue.startsWith('!')) {
       identity = 'object';
     }
     const value: { identity: 'resource' | 'object'; names: string[]; } = {
       identity,
-      names: addInformExhibitDrawer.addExhibitCheckedList
+      names: informalNodeManagerPage.addExhibitDrawerCheckedList
         .filter((ex) => ex.checked)
         .map<string>((ex) => {
           return ex.name;
         }),
     };
-    // onCancel && onCancel();
-    onConfirm && onConfirm(value);
+    // onConfirm && onConfirm(value);
+
+    onChange({
+      addExhibitDrawerVisible: false,
+    });
+    dispatch<SaveDataRulesAction>({
+      type: 'informalNodeManagerPage/saveDataRules',
+      payload: {
+        type: 'append',
+        data: value.names.map((n) => {
+          return {
+            operation: 'add',
+            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+            candidate: {
+              name: n,
+              versionRange: 'latest',
+              type: value.identity,
+            },
+          };
+        }),
+      },
+    });
+    dispatch<FetchExhibitListAction>({
+      type: 'informalNodeManagerPage/fetchExhibitList',
+      payload: {
+        isRematch: false,
+      },
+    });
   }
 
   return (<FDrawer
-    title={isTheme ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
+    title={informalNodeManagerPage.showPage === 'theme' ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
     // visible={informalNodeManagerPage.addExhibitDrawerVisible}
-    visible={visible}
+    visible={informalNodeManagerPage.addExhibitDrawerVisible}
     topRight={<Space size={30}>
       <FTextBtn type="default" onClick={() => {
-        onCancel && onCancel();
+        // onCancel && onCancel();
+        onChange({
+          addExhibitDrawerVisible: false,
+        });
       }}>取消</FTextBtn>
       <FRectBtn
         onClick={() => {
@@ -96,18 +131,20 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
       >添加</FRectBtn>
     </Space>}
     onClose={() => {
-      onCancel && onCancel();
-      // onChange({addExhibitDrawerVisible: false});
+      // onCancel && onCancel();
+      onChange({
+        addExhibitDrawerVisible: false,
+      });
     }}
     afterVisibleChange={(visible) => {
       if (visible) {
         init();
       } else {
         onChange({
-          addExhibitSelectValue: '!market',
-          addExhibitInputValue: '',
-          addExhibitCheckedList: [],
-          listLength: -1,
+          addExhibitDrawerSelectValue: '!market',
+          addExhibitDrawerInputValue: '',
+          addExhibitDrawerCheckedList: [],
+          addExhibitDrawerCheckedListTotalNum: -1,
         });
       }
     }}
@@ -115,25 +152,25 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
     <div ref={containerRef} className={styles.container}>
       <div className={styles.filter}>
         <FSelect
-          value={addInformExhibitDrawer.addExhibitSelectValue}
+          value={informalNodeManagerPage.addExhibitDrawerSelectValue}
           dataSource={[
-            ...addInformExhibitDrawer.addExhibitOptions as WholeMutable<AddInformExhibitDrawerModelState['addExhibitOptions']>,
-            ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
-              return {
-                value: b.bucketName,
-                title: b.bucketName,
-              };
-            }),
+            ...informalNodeManagerPage.addExhibitDrawerOptions as WholeMutable<AddInformExhibitDrawerModelState['addExhibitOptions']>,
+            // ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
+            //   return {
+            //     value: b.bucketName,
+            //     title: b.bucketName,
+            //   };
+            // }),
           ]}
           onChange={(value: any) => {
-            onChange({addExhibitSelectValue: value}, true);
+            onChange({addExhibitDrawerSelectValue: value}, true);
           }}
         />
         <FInput
-          value={addInformExhibitDrawer.addExhibitInputValue}
+          value={informalNodeManagerPage.addExhibitDrawerInputValue}
           debounce={300}
           onDebounceChange={(value) => {
-            onChange({addExhibitInputValue: value}, true);
+            onChange({addExhibitDrawerInputValue: value}, true);
           }}
           onChange={(e) => {
             // onChange({addExhibitInputValue: e.target.value}, true);
@@ -144,7 +181,7 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
       <div style={{height: 15}}/>
       <div className={styles.list}>
         {
-          addInformExhibitDrawer.addExhibitCheckedList
+          informalNodeManagerPage.addExhibitDrawerCheckedList
             .map((l, i, arr) => {
               return (<div key={l.id} className={styles.item}>
                 {
@@ -160,7 +197,7 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
                           disabled={l.disabled}
                           onChange={(e) => {
                             onChange({
-                              addExhibitCheckedList: arr.map((a) => {
+                              addExhibitDrawerCheckedList: arr.map((a) => {
                                 if (a.id !== l.id) {
                                   return a;
                                 }
@@ -179,7 +216,7 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
                       disabled={l.disabled}
                       onChange={(e) => {
                         onChange({
-                          addExhibitCheckedList: arr.map((a) => {
+                          addExhibitDrawerCheckedList: arr.map((a) => {
                             if (a.id !== l.id) {
                               return a;
                             }
@@ -218,11 +255,11 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
       <div style={{height: 20}}/>
       <div className={styles.footer}>
         {
-          addInformExhibitDrawer.listLength > addInformExhibitDrawer.addExhibitCheckedList.length
+          informalNodeManagerPage.addExhibitDrawerCheckedListTotalNum > informalNodeManagerPage.addExhibitDrawerCheckedList.length
             ? (<FRectBtn
               onClick={() => {
-                dispatch<FetchAddExhibitListAction>({
-                  type: 'addInformExhibitDrawer/fetchAddExhibitList',
+                dispatch<FetchAddExhibitDrawerListAction>({
+                  type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
                   payload: false,
                 });
               }}
@@ -235,7 +272,7 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
   </FDrawer>);
 }
 
-export default connect(({addInformExhibitDrawer, storageHomePage}: ConnectState) => ({
-  addInformExhibitDrawer,
+export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState) => ({
+  informalNodeManagerPage,
   storageHomePage,
 }))(AddInformExhibitDrawer);

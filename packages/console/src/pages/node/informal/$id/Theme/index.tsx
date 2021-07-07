@@ -256,46 +256,46 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
         </>)
     }
 
-    <AddInformExhibitDrawer
-      visible={informalNodeManagerPage.addThemeDrawerVisible}
-      isTheme={true}
-      onCancel={() => {
-        onChange({
-          addThemeDrawerVisible: false,
-        });
-      }}
-      onConfirm={async (value) => {
-        // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-        await onChange({
-          addThemeDrawerVisible: false,
-        });
-        await dispatch<SaveDataRulesAction>({
-          type: 'informalNodeManagerPage/saveDataRules',
-          payload: {
-            type: 'append',
-            data: value.names.map((n) => {
-              return {
-                operation: 'add',
-                exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-                candidate: {
-                  name: n,
-                  versionRange: 'latest',
-                  type: value.identity,
-                },
-              };
-            }),
-          },
-        });
-        await dispatch<FetchThemeListAction>({
-          type: 'informalNodeManagerPage/fetchThemeList',
-          payload: {
-            isRematch: false,
-          },
-        });
-      }}
-      disabledResourceNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}
-      disabledObjectNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}
-    />
+    {/*<AddInformExhibitDrawer*/}
+    {/*  visible={informalNodeManagerPage.addThemeDrawerVisible}*/}
+    {/*  isTheme={true}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      addThemeDrawerVisible: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={async (value) => {*/}
+    {/*    // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');*/}
+    {/*    await onChange({*/}
+    {/*      addThemeDrawerVisible: false,*/}
+    {/*    });*/}
+    {/*    await dispatch<SaveDataRulesAction>({*/}
+    {/*      type: 'informalNodeManagerPage/saveDataRules',*/}
+    {/*      payload: {*/}
+    {/*        type: 'append',*/}
+    {/*        data: value.names.map((n) => {*/}
+    {/*          return {*/}
+    {/*            operation: 'add',*/}
+    {/*            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,*/}
+    {/*            candidate: {*/}
+    {/*              name: n,*/}
+    {/*              versionRange: 'latest',*/}
+    {/*              type: value.identity,*/}
+    {/*            },*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*    await dispatch<FetchThemeListAction>({*/}
+    {/*      type: 'informalNodeManagerPage/fetchThemeList',*/}
+    {/*      payload: {*/}
+    {/*        isRematch: false,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  disabledResourceNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}*/}
+    {/*  disabledObjectNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}*/}
+    {/*/>*/}
   </>);
 }
 

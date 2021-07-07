@@ -5,8 +5,8 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
 import {
-  ChangeAction,
-  InformalNodeManagerPageModelState,
+  ChangeAction, FetchExhibitListAction,
+  InformalNodeManagerPageModelState, SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
@@ -17,6 +17,7 @@ import {FUtil} from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import FModal from "@/components/FModal";
 import {Space} from "antd";
+import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -96,6 +97,48 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
         </Space>
       </div>
     </FModal>
+
+    <AddInformExhibitDrawer
+      // nodeID={informalNodeManagerPage.nodeID}
+      // visible={informalNodeManagerPage.addExhibitDrawerVisible}
+      // isTheme={false}
+      // onCancel={() => {
+      //   onChange({
+      //     addExhibitDrawerVisible: false,
+      //   });
+      // }}
+      // onConfirm={async (value) => {
+      //   // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
+      //   await onChange({
+      //     addExhibitDrawerVisible: false,
+      //   });
+      //   await dispatch<SaveDataRulesAction>({
+      //     type: 'informalNodeManagerPage/saveDataRules',
+      //     payload: {
+      //       type: 'append',
+      //       data: value.names.map((n) => {
+      //         return {
+      //           operation: 'add',
+      //           exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
+      //           candidate: {
+      //             name: n,
+      //             versionRange: 'latest',
+      //             type: value.identity,
+      //           },
+      //         };
+      //       }),
+      //     },
+      //   });
+      //   await dispatch<FetchExhibitListAction>({
+      //     type: 'informalNodeManagerPage/fetchExhibitList',
+      //     payload: {
+      //       isRematch: false,
+      //     },
+      //   });
+      // }}
+      // disabledResourceNames={informalNodeManagerPage.ruleAllAddResourceNames}
+      // disabledObjectNames={informalNodeManagerPage.ruleAllAddObjectNames}
+    />
   </>);
 }
 
