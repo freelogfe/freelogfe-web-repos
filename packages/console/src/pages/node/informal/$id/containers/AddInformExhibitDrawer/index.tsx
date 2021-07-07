@@ -19,7 +19,7 @@ import {
 import {
   ChangeAction,
   FetchAddExhibitDrawerListAction,
-  FetchExhibitListAction,
+  FetchExhibitListAction, OnAddExhibitDrawerAfterVisibleChangeAction,
   SaveDataRulesAction
 } from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
@@ -137,19 +137,12 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
       });
     }}
     afterVisibleChange={(visible) => {
-      if (visible) {
-        dispatch<FetchAddExhibitDrawerListAction>({
-          type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-          payload: true,
-        });
-      } else {
-        onChange({
-          addExhibitDrawerSelectValue: '!market',
-          addExhibitDrawerInputValue: '',
-          addExhibitDrawerCheckedList: [],
-          addExhibitDrawerCheckedListTotalNum: -1,
-        });
-      }
+      dispatch<OnAddExhibitDrawerAfterVisibleChangeAction>({
+        type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange',
+        payload: {
+          visible,
+        }
+      });
     }}
   >
     <div ref={containerRef} className={styles.container}>
@@ -157,13 +150,8 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
         <FSelect
           value={informalNodeManagerPage.addExhibitDrawerSelectValue}
           dataSource={[
-            ...informalNodeManagerPage.addExhibitDrawerOptions as WholeMutable<InformalNodeManagerPageModelState['addExhibitDrawerOptions']>,
-            // ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
-            //   return {
-            //     value: b.bucketName,
-            //     title: b.bucketName,
-            //   };
-            // }),
+            ...informalNodeManagerPage.addExhibitDrawerResourceOptions,
+            ...informalNodeManagerPage.addExhibitDrawerBucketOptions,
           ]}
           onChange={(value: any) => {
             onChange({addExhibitDrawerSelectValue: value}, true);

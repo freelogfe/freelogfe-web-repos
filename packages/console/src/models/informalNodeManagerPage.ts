@@ -56,7 +56,8 @@ export interface InformalNodeManagerPageModelState {
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
-  addExhibitDrawerOptions: { value: string; title: string }[];
+  addExhibitDrawerResourceOptions: { value: string; title: string }[];
+  addExhibitDrawerBucketOptions: { value: string; title: string }[];
   addExhibitDrawerSelectValue: string;
   addExhibitDrawerInputValue: string;
   addExhibitDrawerCheckedList: {
@@ -228,8 +229,15 @@ export interface SaveDataRulesAction extends AnyAction {
   }
 }
 
+export interface OnAddExhibitDrawerAfterVisibleChangeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange';
+  payload: {
+    visible: boolean;
+  };
+}
+
 export interface FetchAddExhibitDrawerListAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchAddExhibitDrawerList'
+  type: 'informalNodeManagerPage/fetchAddExhibitDrawerList' | 'fetchAddExhibitDrawerList';
   payload?: boolean; // 是否 restart
 }
 
@@ -266,6 +274,7 @@ interface InformalNodeManagerPageModelType {
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
 
+    onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     fetchAddExhibitDrawerList: (action: FetchAddExhibitDrawerListAction, effects: EffectsCommandMap) => void;
     fetchAddExhibitDrawerMarket: (action: FetchAddExhibitDrawerMarketAction, effects: EffectsCommandMap) => void;
     fetchAddExhibitDrawerMyResources: (action: FetchAddExhibitDrawerMyResourcesAction, effects: EffectsCommandMap) => void;
@@ -314,11 +323,12 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
-  addExhibitDrawerOptions: [
+  addExhibitDrawerResourceOptions: [
     {value: '!market', title: '资源市场'},
     {value: '!resource', title: '我的资源'},
     {value: '!collection', title: '我的收藏'},
   ],
+  addExhibitDrawerBucketOptions: [],
   addExhibitDrawerSelectValue: '!market',
   addExhibitDrawerInputValue: '',
   addExhibitDrawerCheckedList: [],
@@ -819,6 +829,42 @@ const Model: InformalNodeManagerPageModelType = {
       }
     },
 
+    * onAddExhibitDrawerAfterVisibleChange({payload}: OnAddExhibitDrawerAfterVisibleChangeAction, {put, call}: EffectsCommandMap) {
+      if (payload.visible) {
+        yield put<FetchAddExhibitDrawerListAction>({
+          type: 'fetchAddExhibitDrawerList',
+          payload: true,
+        });
+
+        const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
+          bucketType: 1,
+        };
+
+        const {data} = yield call(FServiceAPI.Storage.bucketList, params);
+        // console.log(data, '!@#$!@#$#$!@111111111');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            addExhibitDrawerBucketOptions: (data as any[]).map<InformalNodeManagerPageModelState['addExhibitDrawerBucketOptions'][number]>((d: any) => {
+              return {
+                value: d.bucketName,
+                title: d.bucketName,
+              };
+            }),
+          }
+        })
+      } else {
+        yield put({
+          type: 'change',
+          payload: {
+            addExhibitDrawerSelectValue: '!market',
+            addExhibitDrawerInputValue: '',
+            addExhibitDrawerCheckedList: [],
+            addExhibitDrawerCheckedListTotalNum: -1,
+          }
+        });
+      }
+    },
     * fetchAddExhibitDrawerList({payload}: FetchAddExhibitDrawerListAction, {select, call, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
@@ -1119,7 +1165,7 @@ const Model: InformalNodeManagerPageModelType = {
                 return !inherentIDs.includes(ob.objectId);
               })
               .map<InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'][number]>((ob) => {
-                console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
+                // console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
                 const objectName: string = ob.bucketName + '/' + ob.objectName;
                 // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
                 let disabled: boolean = false;
