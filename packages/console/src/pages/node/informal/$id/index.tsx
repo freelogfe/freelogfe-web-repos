@@ -5,7 +5,7 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
 import {
-  ChangeAction, FetchExhibitListAction,
+  ChangeAction,
   InformalNodeManagerPageModelState, SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
