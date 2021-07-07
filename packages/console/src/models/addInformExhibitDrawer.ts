@@ -7,6 +7,8 @@ import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 export interface AddInformExhibitDrawerModelState {
   nodeID: number;
   isTheme: boolean;
+  disabledResourceNames: string[];
+  disabledObjectNames: string[];
 
   addExhibitOptions: { value: string; title: string }[];
   addExhibitSelectValue: string;
@@ -81,6 +83,8 @@ interface AddInformExhibitType {
 const initStates: AddInformExhibitDrawerModelState = {
   nodeID: -1,
   isTheme: false,
+  disabledResourceNames: [],
+  disabledObjectNames: [],
 
   addExhibitOptions: [
     {value: '!market', title: '资源市场'},
@@ -181,7 +185,7 @@ const Model: AddInformExhibitType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId)) {
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -255,7 +259,7 @@ const Model: AddInformExhibitType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId)) {
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -328,7 +332,7 @@ const Model: AddInformExhibitType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId)) {
+                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -406,7 +410,7 @@ const Model: AddInformExhibitType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(ob.objectId)) {
+                if (usedResourceIDs.includes(ob.objectId) || addInformExhibitDrawer.disabledObjectNames.includes(objectName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (ob.resourceType === '') {

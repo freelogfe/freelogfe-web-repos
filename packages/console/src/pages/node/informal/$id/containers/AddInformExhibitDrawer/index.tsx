@@ -10,17 +10,17 @@ import {FContentText} from "@/components/FText";
 import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDrawer from "@/components/FDrawer";
 import {connect, Dispatch} from 'dva';
-import {AddInformExhibitDrawerModelState, ConnectState, StorageHomePageModelState} from "@/models/connect";
-import {ChangeAction, FetchAddExhibitListAction} from "@/models/addInformExhibitDrawer";
-import FUtil1 from "@/utils";
-import FTooltip from "@/components/FTooltip";
+import {AddInformExhibitDrawerModelState, ConnectState, StorageHomePageModelState} from '@/models/connect';
+import {ChangeAction, FetchAddExhibitListAction} from '@/models/addInformExhibitDrawer';
+import FUtil1 from '@/utils';
+import FTooltip from '@/components/FTooltip';
 
 interface AddInformExhibitDrawerProps {
   nodeID: number;
   visible?: boolean;
   isTheme?: boolean;
-  // disabledResourceNames?: string[];
-  // disabledObjectNames?: string[];
+  disabledResourceNames?: string[];
+  disabledObjectNames?: string[];
 
   onCancel?(): void;
 
@@ -31,7 +31,7 @@ interface AddInformExhibitDrawerProps {
   storageHomePage: StorageHomePageModelState;
 }
 
-function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage}: AddInformExhibitDrawerProps) {
+function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCancel, onConfirm, dispatch, addInformExhibitDrawer, storageHomePage, disabledResourceNames = [], disabledObjectNames = []}: AddInformExhibitDrawerProps) {
 
   const containerRef = React.useRef<any>(null);
 
@@ -39,6 +39,8 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
     await onChange({
       nodeID: nodeID,
       isTheme,
+      disabledResourceNames,
+      disabledObjectNames,
     });
 
     await dispatch<FetchAddExhibitListAction>({
@@ -152,24 +154,24 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
                       getPopupContainer={() => containerRef.current}
                       trigger="hover"
                     >
-                    <div>
-                      <FCheckbox
-                        checked={l.checked}
-                        disabled={l.disabled}
-                        onChange={(e) => {
-                          onChange({
-                            addExhibitCheckedList: arr.map((a) => {
-                              if (a.id !== l.id) {
-                                return a;
-                              }
-                              return {
-                                ...a,
-                                checked: e.target.checked,
-                              };
-                            }),
-                          });
-                        }}
-                      />
+                      <div>
+                        <FCheckbox
+                          checked={l.checked}
+                          disabled={l.disabled}
+                          onChange={(e) => {
+                            onChange({
+                              addExhibitCheckedList: arr.map((a) => {
+                                if (a.id !== l.id) {
+                                  return a;
+                                }
+                                return {
+                                  ...a,
+                                  checked: e.target.checked,
+                                };
+                              }),
+                            });
+                          }}
+                        />
                       </div>
                     </FTooltip>)
                     : (<FCheckbox

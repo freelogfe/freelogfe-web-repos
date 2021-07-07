@@ -44,6 +44,9 @@ export interface InformalNodeManagerPageModelState {
   nodeUrl: string;
   testNodeUrl: string;
   ruleText: string;
+  allRuleResult: any;
+  ruleAllAddResourceNames: string[];
+  ruleAllAddObjectNames: string[];
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addOrReplaceCodeExecutionErrorMessages: null | {
@@ -251,6 +254,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   nodeUrl: '',
   testNodeUrl: '',
   ruleText: '',
+  allRuleResult: null,
+  ruleAllAddResourceNames: [],
+  ruleAllAddObjectNames: [],
   showPage: 'exhibit',
   addOrReplaceCodeExecutionErrorMessages: null,
 
@@ -337,96 +343,112 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      // console.log(data, 'DDD@@@@890j23poijrl;adsf@');
+      console.log(data1, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
+
+      const exhibitList: InformalNodeManagerPageModelState['exhibitList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
+        const operations: string[] = dl.rules[0]?.operations || [];
+        // console.log(operations, 'operations12334');
+        const stateInfo = dl.stateInfo;
+
+        const rulesObjRule = rulesObj.find((ro: any) => {
+          // console.log(ro, dl, '#############***********;ojsifw389');
+          return ro.exhibitName === dl.testResourceName;
+        });
+
+        // console.log(rulesObjRule, 'rulesObjRulerulesObjRule!!!@@@@@@');
+
+        // console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
+
+        const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
+          add: operations.includes('add') ? {
+            exhibit: dl.testResourceName,
+            source: {
+              type: dl.originInfo.type,
+              name: dl.originInfo.name,
+              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+              versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
+            },
+          } : undefined,
+          alter: operations.includes('alter') ? dl.testResourceName : undefined,
+          // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+          labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+          title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+          cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+          online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
+          offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+          attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+            return {
+              type: a.operation,
+              theKey: a.key,
+              value: a.value,
+              description: a.description,
+            };
+          }) : undefined,
+          replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+            // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+            return {
+              replaced: {
+                ...rr.replaced,
+                versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+              },
+              replacer: {
+                ...rr.replacer,
+                versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+              },
+              scopes: rr.scopes && (rr.scopes as any[])
+                .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+                  // console.log(ss, 'ss!!!!@@@@##');
+                  return ss.map((sss: any) => {
+                    return {
+                      ...sss,
+                      versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                    };
+                  });
+                }),
+            };
+          }),
+        };
+        // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
+        return {
+          id: dl.testResourceId,
+          key: dl.testResourceId,
+          associatedExhibitID: dl.associatedPresentableId,
+          cover: dl.stateInfo.coverInfo.coverImages[0] || '',
+          name: dl.testResourceName,
+          title: dl.stateInfo.titleInfo.title,
+          identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
+          rule: rule,
+          version: dl.originInfo.version,
+          isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
+          originInfo: dl.originInfo,
+          isAuth: true,
+          authErrorText: '',
+        };
+      });
+
+      const allAddRule = data1.testRules.filter((tr: any) => {
+        return tr.ruleInfo.operation === 'add';
+      });
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ruleText: data1.ruleText,
-          // exhibitListIsLoading: false,
-          exhibitsTotal: data.totalItem,
-          exhibitList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
-            const operations: string[] = dl.rules[0]?.operations || [];
-            // console.log(operations, 'operations12334');
-            const stateInfo = dl.stateInfo;
-
-            const rulesObjRule = rulesObj.find((ro: any) => {
-              // console.log(ro, dl, '#############***********;ojsifw389');
-              return ro.exhibitName === dl.testResourceName;
-            });
-
-            // console.log(rulesObjRule, 'rulesObjRulerulesObjRule!!!@@@@@@');
-
-            // console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
-
-            const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
-              add: operations.includes('add') ? {
-                exhibit: dl.testResourceName,
-                source: {
-                  type: dl.originInfo.type,
-                  name: dl.originInfo.name,
-                  version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-                  versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-                },
-              } : undefined,
-              alter: operations.includes('alter') ? dl.testResourceName : undefined,
-              // version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-              labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-              title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-              cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-              online: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 1 ? true : undefined,
-              offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-              attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-                return {
-                  type: a.operation,
-                  theKey: a.key,
-                  value: a.value,
-                  description: a.description,
-                };
-              }) : undefined,
-              replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-                // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-                return {
-                  replaced: {
-                    ...rr.replaced,
-                    versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-                  },
-                  replacer: {
-                    ...rr.replacer,
-                    versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-                  },
-                  scopes: rr.scopes && (rr.scopes as any[])
-                    .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-                      // console.log(ss, 'ss!!!!@@@@##');
-                      return ss.map((sss: any) => {
-                        return {
-                          ...sss,
-                          versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                        };
-                      });
-                    }),
-                };
-              }),
-            };
-            // console.log(dl, 'dl,!@#$!@#$!@#$!@#');
-            return {
-              id: dl.testResourceId,
-              key: dl.testResourceId,
-              associatedExhibitID: dl.associatedPresentableId,
-              cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-              name: dl.testResourceName,
-              title: dl.stateInfo.titleInfo.title,
-              identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-              rule: rule,
-              version: dl.originInfo.version,
-              isOnline: dl.stateInfo.onlineStatusInfo.onlineStatus === 1,
-              originInfo: dl.originInfo,
-              isAuth: true,
-              authErrorText: '',
-            };
+          allRuleResult: data1.testRules,
+          ruleAllAddObjectNames: allAddRule.filter((tr: any) => {
+            return tr.ruleInfo.candidate.type === 'object';
+          }).map((tr: any) => {
+            return tr.ruleInfo.candidate.name;
           }),
+          ruleAllAddResourceNames: allAddRule.filter((tr: any) => {
+            return tr.ruleInfo.candidate.type === 'resource';
+          }).map((tr: any) => {
+            return tr.ruleInfo.candidate.name;
+          }),
+          exhibitsTotal: data.totalItem,
+          exhibitList: exhibitList,
         },
       });
     },
