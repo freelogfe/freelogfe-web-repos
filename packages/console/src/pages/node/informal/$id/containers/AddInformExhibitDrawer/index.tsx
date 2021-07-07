@@ -47,13 +47,13 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
 
   const containerRef = React.useRef<any>(null);
 
-  async function init() {
-
-    await dispatch<FetchAddExhibitDrawerListAction>({
-      type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-      payload: true,
-    });
-  }
+  // async function init() {
+  //
+  //   await dispatch<FetchAddExhibitDrawerListAction>({
+  //     type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
+  //     payload: true,
+  //   });
+  // }
 
   async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData: boolean = false) {
     await dispatch<ChangeAction>({
@@ -138,7 +138,10 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
     }}
     afterVisibleChange={(visible) => {
       if (visible) {
-        init();
+        dispatch<FetchAddExhibitDrawerListAction>({
+          type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
+          payload: true,
+        });
       } else {
         onChange({
           addExhibitDrawerSelectValue: '!market',

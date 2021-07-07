@@ -1,15 +1,15 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {AddInformExhibitDrawerModelState, ConnectState} from '@/models/connect';
+import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
-import {
-  FetchAddExhibitListAction,
-  FetchCollectionAction,
-  FetchMarketAction,
-  FetchMyResourcesAction, FetchObjectAction
-} from "@/models/addInformExhibitDrawer";
+// import {
+//   FetchAddExhibitListAction,
+//   FetchCollectionAction,
+//   FetchMarketAction,
+//   FetchMyResourcesAction, FetchObjectAction
+// } from "@/models/addInformExhibitDrawer";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -820,58 +820,61 @@ const Model: InformalNodeManagerPageModelType = {
     },
 
     * fetchAddExhibitDrawerList({payload}: FetchAddExhibitDrawerListAction, {select, call, put}: EffectsCommandMap) {
-      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
-        addInformExhibitDrawer,
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
       }));
 
-      if (addInformExhibitDrawer.addExhibitSelectValue === '!market') {
-        yield put<FetchMarketAction>({
-          type: 'fetchMarket',
+      if (informalNodeManagerPage.addExhibitDrawerSelectValue === '!market') {
+        yield put<FetchAddExhibitDrawerMarketAction>({
+          type: 'fetchAddExhibitDrawerMarket',
           payload,
         });
-      } else if (addInformExhibitDrawer.addExhibitSelectValue === '!resource') {
-        yield put<FetchMyResourcesAction>({
-          type: 'fetchMyResources',
+      } else if (informalNodeManagerPage.addExhibitDrawerSelectValue === '!resource') {
+        yield put<FetchAddExhibitDrawerMyResourcesAction>({
+          type: 'fetchAddExhibitDrawerMyResources',
           payload,
         });
-      } else if (addInformExhibitDrawer.addExhibitSelectValue === '!collection') {
-        yield put<FetchCollectionAction>({
-          type: 'fetchCollection',
+      } else if (informalNodeManagerPage.addExhibitDrawerSelectValue === '!collection') {
+        yield put<FetchAddExhibitDrawerCollectionAction>({
+          type: 'fetchAddExhibitDrawerCollection',
           payload,
         });
       } else {
-        yield put<FetchObjectAction>({
-          type: 'fetchObject',
+        yield put<FetchAddExhibitDrawerObjectAction>({
+          type: 'fetchAddExhibitDrawerObject',
           payload,
         });
       }
     },
     * fetchAddExhibitDrawerMarket({payload}: FetchAddExhibitDrawerMarketAction, {call, select, put}: EffectsCommandMap) {
-      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
-        addInformExhibitDrawer,
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
       }));
 
-      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
-
+      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
+      // informalNodeManagerPageInitStates
+      // console.log(payload, 'payload12341234142134');
       if (!payload) {
-        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+        // console.log('!@#$#@$@#$@@@@@@@@@@@@@@@@@@@@@@@@');
+        inherentList = informalNodeManagerPage.addExhibitDrawerCheckedList;
       }
+      // console.log(inherentList, 'inherentList!@#$!@#$1234234134');
 
       const inherentIDs = inherentList.map((il) => il.id);
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize + 10,
-        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
-        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
-        keywords: addInformExhibitDrawer.addExhibitInputValue,
+        omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+        resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+        keywords: informalNodeManagerPage.addExhibitDrawerInputValue,
       };
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data!~!@#$@!#$@#!411111');
 
       const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-        nodeID: addInformExhibitDrawer.nodeID,
+        nodeID: informalNodeManagerPage.nodeID,
         entityType: 'resource',
         entityIds: data.dataList.map((dl: any) => {
           return dl.resourceId;
@@ -897,7 +900,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -923,14 +926,14 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchAddExhibitDrawerMyResources({payload}: FetchAddExhibitDrawerMyResourcesAction, {call, put, select}: EffectsCommandMap) {
-      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
-        addInformExhibitDrawer,
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
       }));
 
-      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
 
       if (!payload) {
-        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+        inherentList = informalNodeManagerPage.addExhibitDrawerCheckedList;
       }
 
       const inherentIDs = inherentList.map((il) => il.id);
@@ -940,16 +943,16 @@ const Model: InformalNodeManagerPageModelType = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize + 10,
         isSelf: 1,
-        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
-        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
-        keywords: addInformExhibitDrawer.addExhibitInputValue,
+        omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+        resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
+        keywords: informalNodeManagerPage.addExhibitDrawerInputValue,
       };
       // console.log(params, 'paramsparams1234');
       const {data} = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data13453');
 
       const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-        nodeID: addInformExhibitDrawer.nodeID,
+        nodeID: informalNodeManagerPage.nodeID,
         entityType: 'resource',
         entityIds: data.dataList.map((dl: any) => {
           return dl.resourceId;
@@ -971,7 +974,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -997,14 +1000,14 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * fetchAddExhibitDrawerCollection({payload}: FetchAddExhibitDrawerCollectionAction, {select, call, put}: EffectsCommandMap) {
 
-      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
-        addInformExhibitDrawer,
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
       }));
 
-      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
 
       if (!payload) {
-        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+        inherentList = informalNodeManagerPage.addExhibitDrawerCheckedList;
       }
 
       const inherentIDs = inherentList.map((il) => il.id);
@@ -1012,16 +1015,16 @@ const Model: InformalNodeManagerPageModelType = {
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize + 10,
-        keywords: addInformExhibitDrawer.addExhibitInputValue,
-        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
-        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        keywords: informalNodeManagerPage.addExhibitDrawerInputValue,
+        omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+        resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
       };
 
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
       // console.log(data, '@@@@@@ASEDFSADF');
 
       const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-        nodeID: addInformExhibitDrawer.nodeID,
+        nodeID: informalNodeManagerPage.nodeID,
         entityType: 'resource',
         entityIds: data.dataList.map((dl: any) => {
           return dl.resourceId;
@@ -1044,7 +1047,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || addInformExhibitDrawer.disabledResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -1070,14 +1073,14 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchAddExhibitDrawerObject({payload}: FetchAddExhibitDrawerObjectAction, {put, select, call}: EffectsCommandMap) {
-      const {addInformExhibitDrawer}: ConnectState = yield select(({addInformExhibitDrawer}: ConnectState) => ({
-        addInformExhibitDrawer,
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
       }));
 
-      let inherentList: AddInformExhibitDrawerModelState['addExhibitCheckedList'] = [];
+      let inherentList: InformalNodeManagerPageModelState['addExhibitDrawerCheckedList'] = [];
 
       if (!payload) {
-        inherentList = addInformExhibitDrawer.addExhibitCheckedList;
+        inherentList = informalNodeManagerPage.addExhibitDrawerCheckedList;
       }
 
       const inherentIDs = inherentList.map((il) => il.id);
@@ -1085,18 +1088,18 @@ const Model: InformalNodeManagerPageModelType = {
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         skip: inherentList.length,
         limit: FUtil.Predefined.pageSize + 10,
-        bucketName: addInformExhibitDrawer.addExhibitSelectValue,
-        keywords: addInformExhibitDrawer.addExhibitInputValue,
+        bucketName: informalNodeManagerPage.addExhibitDrawerSelectValue,
+        keywords: informalNodeManagerPage.addExhibitDrawerInputValue,
         isLoadingTypeless: 0,
-        omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
-        resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
+        omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
+        resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
       };
 
       const {data} = yield call(FServiceAPI.Storage.objectList, params);
       console.log(data, 'data1q2349ojmdfsl');
 
       const params1: Parameters<typeof getUsedTargetIDs>[0] = {
-        nodeID: addInformExhibitDrawer.nodeID,
+        nodeID: informalNodeManagerPage.nodeID,
         entityType: 'object',
         entityIds: data.dataList.map((dl: any) => {
           return dl.objectId;
@@ -1122,7 +1125,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(ob.objectId) || addInformExhibitDrawer.disabledObjectNames.includes(objectName)) {
+                if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.ruleAllAddObjectNames.includes(objectName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (ob.resourceType === '') {
@@ -1220,7 +1223,7 @@ async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetID
 
   const {data} = await FServiceAPI.InformalNode.batchTestResources(params1);
 
-  // console.log(data1, 'data98jhksjkdaf13453');
+  console.log(data, 'data98jhksjkdaf13453');
   return (data as any[]).map<string>((d1: any) => {
     return d1.originInfo.id;
   });
