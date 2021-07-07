@@ -24,6 +24,7 @@ import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from "@/utils";
 import * as AHooks from 'ahooks';
+import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -89,8 +90,18 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                     });
                   }}><FAdd/></FTextBtn>
                 <FContentText
-                  text={FUtil1.I18n.message('import_test_theme')}
+                  text={FUtil1.I18n.message('btn_add_test_theme')}
                 />
+              </Space>
+              <Space size={5}>
+                <FTextBtn
+                  type="default"
+                  onClick={() => {
+                    onChange({replaceHandlerModalVisible: true});
+                  }}>
+                  <FMappingRuleReplace/>
+                </FTextBtn>
+                <FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>
               </Space>
               <div>
                 <FInput

@@ -12,20 +12,21 @@ import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
 import {
-  ChangeAction, exhibitPageInitData,
+  ChangeAction,
   FetchExhibitListAction,
   SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import FLoadingTip from "@/components/FLoadingTip";
-import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
+// import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
 import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
 import {FUtil} from '@freelog/tools-lib';
 import {
   ReplaceInformExhibitInitModelStatesAction,
 } from "@/models/replaceInformExhibitModal";
-import * as AHooks from 'ahooks';
+// import * as AHooks from 'ahooks';
+import FUtil1 from '@/utils';
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -112,7 +113,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                   }}>
                   <FAdd/>
                 </FTextBtn>
-                <FContentText text={'新增测试展品'}/>
+                <FContentText text={FUtil1.I18n.message('title_add_test_exhibit')}/>
               </Space>
               <Space size={5}>
                 <FTextBtn
@@ -122,7 +123,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                   }}>
                   <FMappingRuleReplace/>
                 </FTextBtn>
-                <FContentText text={'资源替换'}/>
+                <FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>
               </Space>
               <div>
                 <span>类型：</span>
@@ -196,96 +197,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
         </FInfiniteScroll>)
     }
 
-    {/*<AddInformExhibitDrawer*/}
-    {/*  nodeID={informalNodeManagerPage.nodeID}*/}
-    {/*  visible={informalNodeManagerPage.addExhibitDrawerVisible}*/}
-    {/*  isTheme={false}*/}
-    {/*  onCancel={() => {*/}
-    {/*    onChange({*/}
-    {/*      addExhibitDrawerVisible: false,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  onConfirm={async (value) => {*/}
-    {/*    // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');*/}
-    {/*    await onChange({*/}
-    {/*      addExhibitDrawerVisible: false,*/}
-    {/*    });*/}
-    {/*    await dispatch<SaveDataRulesAction>({*/}
-    {/*      type: 'informalNodeManagerPage/saveDataRules',*/}
-    {/*      payload: {*/}
-    {/*        type: 'append',*/}
-    {/*        data: value.names.map((n) => {*/}
-    {/*          return {*/}
-    {/*            operation: 'add',*/}
-    {/*            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,*/}
-    {/*            candidate: {*/}
-    {/*              name: n,*/}
-    {/*              versionRange: 'latest',*/}
-    {/*              type: value.identity,*/}
-    {/*            },*/}
-    {/*          };*/}
-    {/*        }),*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*    await dispatch<FetchExhibitListAction>({*/}
-    {/*      type: 'informalNodeManagerPage/fetchExhibitList',*/}
-    {/*      payload: {*/}
-    {/*        isRematch: false,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  disabledResourceNames={informalNodeManagerPage.ruleAllAddResourceNames}*/}
-    {/*  disabledObjectNames={informalNodeManagerPage.ruleAllAddObjectNames}*/}
-    {/*/>*/}
 
-    <FReplaceModal
-      nodeID={informalNodeManagerPage.nodeID}
-      visible={informalNodeManagerPage.replaceHandlerModalVisible}
-      onCancel={() => {
-        onChange({
-          replaceHandlerModalVisible: false
-        });
-        dispatch<ReplaceInformExhibitInitModelStatesAction>({
-          type: 'replaceInformExhibit/initModelStates',
-        });
-      }}
-      onConfirm={(value) => {
-        // console.log(value, '@#ASDFASDfloj98pvaluevaluevalue');
-        const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-        // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
-
-        for (const v of value) {
-          const rule = rules.find((r) => v.exhibitName === r.exhibitName);
-          if (rule) {
-            let replaces = rule.replaces || [];
-            rule.replaces = [
-              ...replaces,
-              v,
-            ];
-          } else {
-            rules.push({
-              operation: 'alter',
-              exhibitName: v.exhibitName,
-              replaces: [v]
-            });
-          }
-        }
-        // console.log(rules, 'nowRules0923jlkfds()UOIJ');
-        dispatch<SaveDataRulesAction>({
-          type: 'informalNodeManagerPage/saveDataRules',
-          payload: {
-            type: 'replace',
-            data: rules,
-          },
-        });
-        onChange({
-          replaceHandlerModalVisible: false
-        });
-        dispatch<ReplaceInformExhibitInitModelStatesAction>({
-          type: 'replaceInformExhibit/initModelStates',
-        });
-      }}
-    />
   </>);
 }
 

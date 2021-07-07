@@ -18,6 +18,10 @@ import useUrlState from '@ahooksjs/use-url-state';
 import FModal from "@/components/FModal";
 import {Space} from "antd";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
+import {ReplaceInformExhibitInitModelStatesAction} from "@/models/replaceInformExhibitModal";
+import FReplaceModal from "@/pages/node/informal/$id/containers/FReplaceModal";
+
+const {decompile, compile} = require('@freelog/nmr_translator');
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -98,46 +102,55 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
       </div>
     </FModal>
 
-    <AddInformExhibitDrawer
-      // nodeID={informalNodeManagerPage.nodeID}
-      // visible={informalNodeManagerPage.addExhibitDrawerVisible}
-      // isTheme={false}
-      // onCancel={() => {
-      //   onChange({
-      //     addExhibitDrawerVisible: false,
-      //   });
-      // }}
-      // onConfirm={async (value) => {
-      //   // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');
-      //   await onChange({
-      //     addExhibitDrawerVisible: false,
-      //   });
-      //   await dispatch<SaveDataRulesAction>({
-      //     type: 'informalNodeManagerPage/saveDataRules',
-      //     payload: {
-      //       type: 'append',
-      //       data: value.names.map((n) => {
-      //         return {
-      //           operation: 'add',
-      //           exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-      //           candidate: {
-      //             name: n,
-      //             versionRange: 'latest',
-      //             type: value.identity,
-      //           },
-      //         };
-      //       }),
-      //     },
-      //   });
-      //   await dispatch<FetchExhibitListAction>({
-      //     type: 'informalNodeManagerPage/fetchExhibitList',
-      //     payload: {
-      //       isRematch: false,
-      //     },
-      //   });
-      // }}
-      // disabledResourceNames={informalNodeManagerPage.ruleAllAddResourceNames}
-      // disabledObjectNames={informalNodeManagerPage.ruleAllAddObjectNames}
+    <AddInformExhibitDrawer/>
+
+    <FReplaceModal
+      nodeID={informalNodeManagerPage.nodeID}
+      visible={informalNodeManagerPage.replaceHandlerModalVisible}
+      onCancel={() => {
+        onChange({
+          replaceHandlerModalVisible: false
+        });
+        dispatch<ReplaceInformExhibitInitModelStatesAction>({
+          type: 'replaceInformExhibit/initModelStates',
+        });
+      }}
+      onConfirm={(value) => {
+        // console.log(value, '@#ASDFASDfloj98pvaluevaluevalue');
+        const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+        // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+
+        for (const v of value) {
+          const rule = rules.find((r) => v.exhibitName === r.exhibitName);
+          if (rule) {
+            let replaces = rule.replaces || [];
+            rule.replaces = [
+              ...replaces,
+              v,
+            ];
+          } else {
+            rules.push({
+              operation: 'alter',
+              exhibitName: v.exhibitName,
+              replaces: [v]
+            });
+          }
+        }
+        // console.log(rules, 'nowRules0923jlkfds()UOIJ');
+        dispatch<SaveDataRulesAction>({
+          type: 'informalNodeManagerPage/saveDataRules',
+          payload: {
+            type: 'replace',
+            data: rules,
+          },
+        });
+        onChange({
+          replaceHandlerModalVisible: false
+        });
+        dispatch<ReplaceInformExhibitInitModelStatesAction>({
+          type: 'replaceInformExhibit/initModelStates',
+        });
+      }}
     />
   </>);
 }
