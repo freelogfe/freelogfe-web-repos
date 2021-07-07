@@ -13,13 +13,12 @@ import {
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {FWarning} from '@/components/FIcons';
 import {Dispatch, connect} from 'dva';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
-import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
+// import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
@@ -73,7 +72,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           btnText={'添加测试主题展品'}
           onClick={() => {
             onChange({
-              addThemeDrawerVisible: true,
+              addExhibitDrawerVisible: true,
             });
           }}
         />)
@@ -86,7 +85,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                   type="default"
                   onClick={() => {
                     onChange({
-                      addThemeDrawerVisible: true,
+                      addExhibitDrawerVisible: true,
                     });
                   }}><FAdd/></FTextBtn>
                 <FContentText

@@ -112,7 +112,7 @@ export interface InformalNodeManagerPageModelState {
     authErrorText: string;
   }[];
 
-  addThemeDrawerVisible: boolean;
+  // addThemeDrawerVisible: boolean;
   themeFilterKeywords: string;
   themesTotal: number;
   themeList: {
@@ -1223,7 +1223,7 @@ async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetID
 
   const {data} = await FServiceAPI.InformalNode.batchTestResources(params1);
 
-  console.log(data, 'data98jhksjkdaf13453');
+  // console.log(data, 'data98jhksjkdaf13453');
   return (data as any[]).map<string>((d1: any) => {
     return d1.originInfo.id;
   });

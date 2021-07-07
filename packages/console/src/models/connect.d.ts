@@ -20,7 +20,7 @@ import {ExhibitInfoPageModelState} from './exhibitInfoPage';
 import {ResourceDepSelectorModelState} from './resourceDepSelector';
 import {InformalNodeManagerPageModelState} from './informalNodeManagerPage';
 import {InformExhibitInfoPageModelState} from './informExhibitInfoPage';
-import {AddInformExhibitDrawerModelState} from './addInformExhibitDrawer';
+// import {AddInformExhibitDrawerModelState} from './addInformExhibitDrawer';
 import {ReplaceInformExhibitState} from './replaceInformExhibitModal';
 
 export {
@@ -47,7 +47,7 @@ export {
   ResourceDepSelectorModelState,
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
-  AddInformExhibitDrawerModelState,
+  // AddInformExhibitDrawerModelState,
   ReplaceInformExhibitState,
 };
 
@@ -75,6 +75,6 @@ export interface ConnectState {
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
-  addInformExhibitDrawer: AddInformExhibitDrawerModelState;
+  // addInformExhibitDrawer: AddInformExhibitDrawerModelState;
   replaceInformExhibit: ReplaceInformExhibitState;
 }

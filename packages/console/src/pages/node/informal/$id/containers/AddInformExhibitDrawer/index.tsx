@@ -11,7 +11,7 @@ import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDrawer from "@/components/FDrawer";
 import {connect, Dispatch} from 'dva';
 import {
-  AddInformExhibitDrawerModelState,
+  // AddInformExhibitDrawerModelState,
   ConnectState,
   InformalNodeManagerPageModelState,
   StorageHomePageModelState
@@ -157,7 +157,7 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
         <FSelect
           value={informalNodeManagerPage.addExhibitDrawerSelectValue}
           dataSource={[
-            ...informalNodeManagerPage.addExhibitDrawerOptions as WholeMutable<AddInformExhibitDrawerModelState['addExhibitOptions']>,
+            ...informalNodeManagerPage.addExhibitDrawerOptions as WholeMutable<InformalNodeManagerPageModelState['addExhibitDrawerOptions']>,
             // ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
             //   return {
             //     value: b.bucketName,
