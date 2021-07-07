@@ -7,8 +7,6 @@ import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 export interface AddInformExhibitDrawerModelState {
   nodeID: number;
   isTheme: boolean;
-  // disabledResourceNames: string[];
-  // disabledObjectNames: string[];
 
   addExhibitOptions: { value: string; title: string }[];
   addExhibitSelectValue: string;
@@ -65,7 +63,6 @@ interface AddInformExhibitType {
   namespace: 'addInformExhibitDrawer';
   state: AddInformExhibitDrawerModelState;
   effects: {
-    // fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchAddExhibitList: (action: FetchAddExhibitListAction, effects: EffectsCommandMap) => void;
     fetchMarket: (action: FetchMarketAction, effects: EffectsCommandMap) => void;
@@ -84,8 +81,6 @@ interface AddInformExhibitType {
 const initStates: AddInformExhibitDrawerModelState = {
   nodeID: -1,
   isTheme: false,
-  // disabledResourceNames: [],
-  // disabledObjectNames: [],
 
   addExhibitOptions: [
     {value: '!market', title: '资源市场'},
@@ -102,9 +97,6 @@ const Model: AddInformExhibitType = {
   namespace: 'addInformExhibitDrawer',
   state: initStates,
   effects: {
-    // * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
-    //
-    // },
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -150,11 +142,9 @@ const Model: AddInformExhibitType = {
       }
 
       const inherentIDs = inherentList.map((il) => il.id);
-      // console.log(inherentIDs, 'inherentIDs12342134');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: inherentList.length,
-        // startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
         limit: FUtil.Predefined.pageSize + 10,
         omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
         resourceType: addInformExhibitDrawer.isTheme ? 'theme' : undefined,
@@ -186,6 +176,7 @@ const Model: AddInformExhibitType = {
                 return !inherentIDs.includes(rs.resourceId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((rs) => {
+                // console.log(rs, 'rs!!!!@#$23423423423');
 
                 let disabled: boolean = false;
                 let disabledReason: string = '';
@@ -193,6 +184,9 @@ const Model: AddInformExhibitType = {
                 if (usedResourceIDs.includes(rs.resourceId)) {
                   disabled = true;
                   disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
                 }
 
                 return {
@@ -227,10 +221,7 @@ const Model: AddInformExhibitType = {
       // console.log(inherentIDs, 'inherentIDs12342134');
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-        // resourceType:''
-        // skip: 0,
         skip: inherentList.length,
-        // startResourceId: inherentList.length > 0 ? inherentList[inherentList.length - 1].id : undefined,
         limit: FUtil.Predefined.pageSize + 10,
         isSelf: 1,
         omitResourceType: addInformExhibitDrawer.isTheme ? undefined : 'theme',
@@ -267,6 +258,9 @@ const Model: AddInformExhibitType = {
                 if (usedResourceIDs.includes(rs.resourceId)) {
                   disabled = true;
                   disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
                 }
                 return {
                   id: rs.resourceId,
@@ -337,6 +331,9 @@ const Model: AddInformExhibitType = {
                 if (usedResourceIDs.includes(rs.resourceId)) {
                   disabled = true;
                   disabledReason = '已被使用';
+                } else if (rs.latestVersion === '') {
+                  disabled = true;
+                  disabledReason = '无可用版本';
                 }
 
                 return {
@@ -391,6 +388,7 @@ const Model: AddInformExhibitType = {
       };
 
       const usedResourceIDs: string[] = yield call(getUsedTargetIDs, params1);
+      // console.log(usedResourceIDs, 'usedResourceIDs123412341234');
 
       yield put<ChangeAction>({
         type: 'change',
@@ -402,6 +400,7 @@ const Model: AddInformExhibitType = {
                 return !inherentIDs.includes(ob.objectId);
               })
               .map<AddInformExhibitDrawerModelState['addExhibitCheckedList'][number]>((ob) => {
+                console.log(ob, 'ob!!@#$@#$@#$!@#$21342134');
                 const objectName: string = ob.bucketName + '/' + ob.objectName;
                 // console.log(objectName, addInformExhibitDrawer.disabledObjectNames, '##7908-2-34jokdsafhkl#-=##');
                 let disabled: boolean = false;
@@ -410,6 +409,9 @@ const Model: AddInformExhibitType = {
                 if (usedResourceIDs.includes(ob.objectId)) {
                   disabled = true;
                   disabledReason = '已被使用';
+                } else if (ob.resourceType === '') {
+                  disabled = true;
+                  disabledReason = '无资源类型';
                 }
 
                 return {

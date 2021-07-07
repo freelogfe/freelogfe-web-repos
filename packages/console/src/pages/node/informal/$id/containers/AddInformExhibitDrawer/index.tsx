@@ -147,7 +147,11 @@ function AddInformExhibitDrawer({nodeID, visible = false, isTheme = false, onCan
               return (<div key={l.id} className={styles.item}>
                 {
                   !!l.disabledReason
-                    ? (<FTooltip title={l.disabledReason} getPopupContainer={() => containerRef.current}>
+                    ? (<FTooltip
+                      title={l.disabledReason}
+                      getPopupContainer={() => containerRef.current}
+                      trigger="hover"
+                    >
                     <div>
                       <FCheckbox
                         checked={l.checked}
