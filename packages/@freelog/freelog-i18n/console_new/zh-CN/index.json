@@ -352,5 +352,13 @@
 	"btn_delete_reflect_rules": "",
 	"btn_enter_code_editor": "",
 	"btn_exit_code_editor": "",
-	"btn_verify_save_code": ""
+	"btn_verify_save_code": "",
+	"msg_verifying": "",
+	"msg_code_saved_successfully": "",
+	"label_matched_object_quantity": "",
+	"msg_code_saved_successfully_pre_excute_error": "",
+	"msg_pre_execute_result ": "",
+	"title_pre_execute_error": "",
+	"lable_error": "",
+	"msg_precompile_error": ""
 }
