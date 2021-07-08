@@ -264,7 +264,6 @@ interface InformalNodeManagerPageModelType {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
-    // rematchRules: (action: RematchRulesAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
