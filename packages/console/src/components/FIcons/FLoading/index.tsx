@@ -3,15 +3,16 @@ import styles from './index.less';
 import {LoadingOutlined} from '@ant-design/icons';
 import {CSSProperties} from "react";
 
-interface FInfoProps {
+interface FLoadingProps {
   className?: string;
   style?: CSSProperties;
 
   onClick?(): void;
 }
 
-function FInfo({className, ...props}: FInfoProps) {
+function FLoading({className, ...props}: FLoadingProps) {
+  // @ts-ignore
   return (<LoadingOutlined className={[styles.icon, className].join(' ')} {...props}/>);
 }
 
-export default FInfo;
+export default FLoading;

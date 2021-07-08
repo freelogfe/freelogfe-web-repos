@@ -41,7 +41,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       type: 'replaceInformExhibit/change',
       payload: {
         nodeID: nodeID,
-      }
+      },
     });
   }, [nodeID]);
 

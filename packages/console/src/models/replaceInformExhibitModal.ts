@@ -40,7 +40,7 @@ export interface ReplaceInformExhibitState {
     name: string;
     type: 'resource' | 'object';
     versions: string[],
-  }
+  };
   replacedVersion: string;
   treeData: TreeNode[];
   checkedKeys: string[];

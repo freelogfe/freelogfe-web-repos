@@ -20,6 +20,8 @@ import {
 import FTable from "@/components/FTable";
 import {FContentText} from '@/components/FText';
 import * as AHooks from 'ahooks';
+import FLoadingTip from "@/components/FLoadingTip";
+import {FLoading} from "@/components/FIcons";
 
 const errorTexts = {
   duplicated: FUtil1.I18n.message('resource_exist'),
@@ -277,7 +279,7 @@ function FSelectObject({dispatch, resourceVersionCreatorPage, user}: FSelectObje
             {
               resourceVersionCreatorPage.selectedFileStatus === -1
                 ? (<Space size={50} className={styles.checking}>
-                  <span>{FUtil1.I18n.message('verifying')}<LoadingOutlined style={{paddingLeft: 10}}/></span>
+                  <span>{FUtil1.I18n.message('verifying')}<FLoading style={{paddingLeft: 10}}/></span>
                   <span style={{color: '#666'}}>正在校验对象参数，好的创作值得等待…</span>
                 </Space>)
                 : (<Space size={15}>
