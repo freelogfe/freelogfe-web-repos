@@ -7,6 +7,7 @@ jest.mock('umi-plugin-locale');
 
 describe('Page: market', () => {
   it('Render correctly', () => {
+    // @ts-ignore
     const wrapper: ReactTestRenderer = renderer.create(<Index />);
     expect(wrapper.root.children.length).toBe(1);
     const outerLayer = wrapper.root.children[0] as ReactTestInstance;
