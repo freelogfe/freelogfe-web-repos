@@ -330,5 +330,7 @@
 	"tab_manage_reflect_rules": "",
 	"msg_naviagte_to_formal_node": "",
 	"manage_test_exhibits_empty": "",
-	"btn_import_test_exhibit": ""
+	"btn_import_test_exhibit": "",
+	"title_add_test_exhibit": "",
+	"btn_add_test_exhibit": ""
 }
