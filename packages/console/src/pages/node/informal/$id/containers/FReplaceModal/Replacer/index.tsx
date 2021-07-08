@@ -7,16 +7,19 @@ import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {
-  AddInformExhibitDrawerModelState,
   ConnectState,
   ReplaceInformExhibitState,
   StorageHomePageModelState,
 } from "@/models/connect";
-import {ChangeAction} from "@/models/replaceInformExhibitModal";
+import {
+  ChangeAction,
+  OnReplacerMountAction,
+  OnReplacerOriginChangeAction, OnReplacerUnmountAction
+} from "@/models/replaceInformExhibitModal";
 import {FetchReplacerListAction} from "@/models/replaceInformExhibitModal";
-import {WholeMutable} from "@/models/shared";
 import FSelect from "@/components/FSelect";
 import {FDown} from "@/components/FIcons";
+import * as AHooks from 'ahooks';
 
 interface ReplacerProps {
   dispatch: Dispatch,
@@ -26,12 +29,24 @@ interface ReplacerProps {
 
 function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerProps) {
 
-  React.useEffect(() => {
-    // console.log('@#SDFGDFXVXCZVXZCVSfd');
-    dispatch<FetchReplacerListAction>({
-      type: 'replaceInformExhibit/fetchReplacerList',
+  // React.useEffect(() => {
+  //   // console.log('@#SDFGDFXVXCZVXZCVSfd');
+  //   dispatch<FetchReplacerListAction>({
+  //     type: 'replaceInformExhibit/fetchReplacerList',
+  //   });
+  // }, []);
+
+  AHooks.useMount(() => {
+    dispatch<OnReplacerMountAction>({
+      type: 'replaceInformExhibit/onReplacerMount',
     });
-  }, []);
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnReplacerUnmountAction>({
+      type: 'replaceInformExhibit/onReplacerUnmount',
+    });
+  });
 
 
   async function onChange(value: Partial<ReplaceInformExhibitState>, loadData = false) {
@@ -44,6 +59,10 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
     if (loadData) {
       await dispatch<FetchReplacerListAction>({
         type: 'replaceInformExhibit/fetchReplacerList',
+        payload: {
+          restart: false,
+          origin: '!market',
+        },
       });
     }
   }
@@ -61,16 +80,17 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
       <FSelect
         value={replaceInformExhibit.replacerOrigin}
         dataSource={[
-          ...replaceInformExhibit.replacerOriginOptions as WholeMutable<ReplaceInformExhibitState['replacerOriginOptions']>,
-          ...(storageHomePage.bucketList || []).map<AddInformExhibitDrawerModelState['addExhibitOptions'][number]>((b) => {
-            return {
-              value: b.bucketName,
-              title: b.bucketName,
-            };
-          }),
+          ...replaceInformExhibit.replacerResourceOptions,
+          ...replaceInformExhibit.replacerBucketOptions,
         ]}
-        onChange={(value) => {
-          onChange({replacerOrigin: value}, true);
+        onChange={(value: string) => {
+          // onChange({replacerOrigin: value}, true);
+          dispatch<OnReplacerOriginChangeAction>({
+            type: 'replaceInformExhibit/onReplacerOriginChange',
+            payload: {
+              value: value,
+            },
+          });
         }}
       />
     </div>

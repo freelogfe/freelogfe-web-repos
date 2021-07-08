@@ -1,7 +1,7 @@
 import {DvaReducer, WholeReadonly} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from "@/models/connect";
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
 export interface TreeNode {
@@ -14,7 +14,10 @@ export interface TreeNode {
 
 export interface ReplaceInformExhibitState {
   nodeID: number;
-  replacerOriginOptions: { value: string; title: string }[];
+  isTheme: boolean;
+
+  replacerResourceOptions: { value: string; title: string }[];
+  replacerBucketOptions: { value: string; title: string }[];
   replacerOrigin: '!market' | '!resource' | '!collection' | string;
   replacerKeywords: string;
   replacerResourceList: {
@@ -48,13 +51,31 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ReplaceInformExhibitState>;
 }
 
+export interface OnReplacerMountAction extends AnyAction {
+  type: 'replaceInformExhibit/onReplacerMount';
+}
+
+export interface OnReplacerUnmountAction extends AnyAction {
+  type: 'replaceInformExhibit/onReplacerUnmount';
+}
+
+export interface OnReplacerOriginChangeAction extends AnyAction {
+  type: 'replaceInformExhibit/onReplacerOriginChange';
+  payload: {
+    value: string;
+  };
+}
+
 export interface ReplaceInformExhibitInitModelStatesAction extends AnyAction {
   type: 'replaceInformExhibit/initModelStates';
 }
 
 export interface FetchReplacerListAction extends AnyAction {
-  type: 'replaceInformExhibit/fetchReplacerList'
-  payload?: boolean; // 是否 restart
+  type: 'fetchReplacerList' | 'replaceInformExhibit/fetchReplacerList';
+  payload: {
+    restart: boolean;
+    origin: string;
+  }; // 是否 restart
 }
 
 export interface FetchMarketAction extends AnyAction {
@@ -74,7 +95,14 @@ export interface FetchCollectionAction extends AnyAction {
 
 export interface FetchObjectAction extends AnyAction {
   type: 'fetchObject';
-  payload?: boolean; // 是否 restart
+  payload: {
+    restart: boolean;
+    bucket: string;
+  }; // 是否 restart
+}
+
+export interface OnReplacerListLoadMoreAction extends AnyAction {
+  type: 'onReplacerListLoadMore';
 }
 
 export interface FetchDependencyTreeAction extends AnyAction {
@@ -90,11 +118,18 @@ interface ReplaceInformExhibitModelType {
   state: ReplaceInformExhibitState;
   effects: {
     initModelStates: (action: ReplaceInformExhibitInitModelStatesAction, effects: EffectsCommandMap) => void;
+
+    onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
+    onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
+    onReplacerOriginChange: (action: OnReplacerOriginChangeAction, effects: EffectsCommandMap) => void;
+
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
     fetchMarket: (action: FetchMarketAction, effects: EffectsCommandMap) => void;
     fetchMyResources: (action: FetchMyResourcesAction, effects: EffectsCommandMap) => void;
     fetchCollection: (action: FetchCollectionAction, effects: EffectsCommandMap) => void;
     fetchObject: (action: FetchObjectAction, effects: EffectsCommandMap) => void;
+    onReplacerListLoadMore: (action: OnReplacerListLoadMoreAction, effects: EffectsCommandMap) => void;
+
     fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
     fetchExhibitByDependency: (action: FetchExhibitByDependencyAction, effects: EffectsCommandMap) => void;
   };
@@ -108,11 +143,14 @@ interface ReplaceInformExhibitModelType {
 
 export const replaceInformExhibitModalInitStates: ReplaceInformExhibitState = {
   nodeID: -1,
-  replacerOriginOptions: [
+  isTheme: false,
+
+  replacerResourceOptions: [
     {value: '!market', title: '资源市场'},
     {value: '!resource', title: '我的资源'},
     {value: '!collection', title: '我的收藏'},
   ],
+  replacerBucketOptions: [],
   replacerOrigin: '!market',
   replacerKeywords: '',
   replacerResourceList: [],
@@ -130,27 +168,101 @@ const Model: ReplaceInformExhibitModelType = {
   namespace: 'replaceInformExhibit',
   state: replaceInformExhibitModalInitStates,
   effects: {
-    * fetchReplacerList({}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
-      // console.log('!!!!!!------');
+    * onReplacerMount({}: OnReplacerMountAction, {put, call}: EffectsCommandMap) {
+      yield put<FetchReplacerListAction>({
+        type: 'fetchReplacerList',
+        payload: {
+          restart: true,
+          origin: '!market',
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
+        bucketType: 1,
+      };
+
+      const {data} = yield call(FServiceAPI.Storage.bucketList, params);
+      // console.log(data, '!@#$!@#$#$!@111111111');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerBucketOptions: (data as any[]).map<ReplaceInformExhibitState['replacerBucketOptions'][number]>((d: any) => {
+            return {
+              value: d.bucketName,
+              title: d.bucketName,
+            };
+          }),
+        },
+      });
+    },
+    * onReplacerUnmount({}: OnReplacerUnmountAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: replaceInformExhibitModalInitStates,
+      });
+    },
+    * onReplacerOriginChange({payload}: OnReplacerOriginChangeAction, {put, select}: EffectsCommandMap) {
+
       const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
         replaceInformExhibit,
       }));
 
-      if (replaceInformExhibit.replacerOrigin === '!market') {
+      yield yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerOrigin: payload.value,
+        },
+      });
+
+      // yield ;
+      // console.log(replaceInformExhibit.replacerOrigin, '!@#$@#$!@#$!@#$');
+      if (payload.value === '!market') {
         yield put<FetchMarketAction>({
           type: 'fetchMarket',
         });
-      } else if (replaceInformExhibit.replacerOrigin === '!resource') {
+      } else if (payload.value === '!resource') {
         yield put<FetchMyResourcesAction>({
           type: 'fetchMyResources',
         });
-      } else if (replaceInformExhibit.replacerOrigin === '!collection') {
+      } else if (payload.value === '!collection') {
         yield put<FetchCollectionAction>({
           type: 'fetchCollection',
         });
       } else {
         yield put<FetchObjectAction>({
           type: 'fetchObject',
+          payload: {
+            bucket: payload.value,
+            restart: true,
+          },
+        });
+      }
+    },
+    * fetchReplacerList({payload}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
+      // console.log('!!!!!!------');
+      // const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+      //   replaceInformExhibit,
+      // }));
+
+      if (payload.origin === '!market') {
+        yield put<FetchMarketAction>({
+          type: 'fetchMarket',
+        });
+      } else if (payload.origin === '!resource') {
+        yield put<FetchMyResourcesAction>({
+          type: 'fetchMyResources',
+        });
+      } else if (payload.origin === '!collection') {
+        yield put<FetchCollectionAction>({
+          type: 'fetchCollection',
+        });
+      } else {
+        yield put<FetchObjectAction>({
+          type: 'fetchObject',
+          payload: {
+            restart: true,
+            bucket: payload.origin,
+          },
         });
       }
     },
@@ -308,6 +420,8 @@ const Model: ReplaceInformExhibitModelType = {
           }),
         },
       });
+    },
+    * onReplacerListLoadMore({}: OnReplacerListLoadMoreAction, {}: EffectsCommandMap) {
 
     },
     * fetchDependencyTree({}: FetchDependencyTreeAction, {put, select, call}: EffectsCommandMap) {
