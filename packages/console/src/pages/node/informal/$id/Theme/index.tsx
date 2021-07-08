@@ -97,7 +97,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                 <FTextBtn
                   type="default"
                   onClick={() => {
-                    onChange({replaceHandlerModalVisible: true});
+                    onChange({replaceModalVisible: true});
                   }}>
                   <FMappingRuleReplace/>
                 </FTextBtn>

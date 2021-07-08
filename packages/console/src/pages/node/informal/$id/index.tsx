@@ -68,48 +68,48 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
       </div>
     </div>
 
-    <FModal
-      title={'提示'}
-      visible={!!informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages}
-      onOk={() => {
-        onChange({addOrReplaceCodeExecutionErrorMessages: null});
-      }}
-      cancelButtonProps={{
-        style: {
-          display: 'none',
-        }
-      }}
-    >
-      <div className={styles.codeExecutionError}>
-        <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
-        <div style={{height: 20}}/>
-        <Space className={styles.errorList} size={5} direction="vertical">
-          {
-            informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages?.map((cme, index) => {
-              return (<div key={index} className={styles.errorListItem}>
-                <div>•</div>
-                <div style={{width: 5}}/>
-                <div>
-                  <div>
-                    <div>错误提示：</div>
-                    <div>{cme.msg}</div>
-                  </div>
-                </div>
-              </div>);
-            })
-          }
-        </Space>
-      </div>
-    </FModal>
+    {/*<FModal*/}
+    {/*  title={'提示'}*/}
+    {/*  visible={!!informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages}*/}
+    {/*  onOk={() => {*/}
+    {/*    onChange({addOrReplaceCodeExecutionErrorMessages: null});*/}
+    {/*  }}*/}
+    {/*  cancelButtonProps={{*/}
+    {/*    style: {*/}
+    {/*      display: 'none',*/}
+    {/*    }*/}
+    {/*  }}*/}
+    {/*>*/}
+    {/*  <div className={styles.codeExecutionError}>*/}
+    {/*    <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>*/}
+    {/*    <div style={{height: 20}}/>*/}
+    {/*    <Space className={styles.errorList} size={5} direction="vertical">*/}
+    {/*      {*/}
+    {/*        informalNodeManagerPage.addOrReplaceCodeExecutionErrorMessages?.map((cme, index) => {*/}
+    {/*          return (<div key={index} className={styles.errorListItem}>*/}
+    {/*            <div>•</div>*/}
+    {/*            <div style={{width: 5}}/>*/}
+    {/*            <div>*/}
+    {/*              <div>*/}
+    {/*                <div>错误提示：</div>*/}
+    {/*                <div>{cme.msg}</div>*/}
+    {/*              </div>*/}
+    {/*            </div>*/}
+    {/*          </div>);*/}
+    {/*        })*/}
+    {/*      }*/}
+    {/*    </Space>*/}
+    {/*  </div>*/}
+    {/*</FModal>*/}
 
     <AddInformExhibitDrawer/>
 
     <FReplaceModal
       nodeID={informalNodeManagerPage.nodeID}
-      visible={informalNodeManagerPage.replaceHandlerModalVisible}
+      visible={informalNodeManagerPage.replaceModalVisible}
       onCancel={() => {
         onChange({
-          replaceHandlerModalVisible: false
+          replaceModalVisible: false
         });
         dispatch<ReplaceInformExhibitInitModelStatesAction>({
           type: 'replaceInformExhibit/initModelStates',
@@ -145,7 +145,7 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
           },
         });
         onChange({
-          replaceHandlerModalVisible: false
+          replaceModalVisible: false
         });
         dispatch<ReplaceInformExhibitInitModelStatesAction>({
           type: 'replaceInformExhibit/initModelStates',

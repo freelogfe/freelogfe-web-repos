@@ -4,12 +4,6 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
-// import {
-//   FetchAddExhibitListAction,
-//   FetchCollectionAction,
-//   FetchMarketAction,
-//   FetchMyResourcesAction, FetchObjectAction
-// } from "@/models/addInformExhibitDrawer";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -73,23 +67,25 @@ export interface InformalNodeManagerPageModelState {
   }[];
   addExhibitDrawerCheckedListTotalNum: number;
 
-  addOrReplaceCodeExecutionErrorMessages: null | {
-    msg: string;
-  }[];
+  // addOrReplaceCodeExecutionErrorMessages: null | {
+  //   msg: string;
+  // }[];
 
-  replaceHandlerModalVisible: boolean;
-  replacerActivatedTab: 'market' | 'resource' | 'collection';
-  replacerInput: string;
-  replacerList: {
-    id: string;
-    checked: boolean;
-    name: string;
-    status: 'online' | 'offline' | 'unreleased';
-    type: string;
-    latestVersion: string;
-    version: string;
-    date: string;
-  }[];
+  replaceModalVisible: boolean;
+  // replaceModalReplacerOptions: Array<'!market' | '!resource' | '!collection'>;
+  // replaceModalReplacerOptionSelected: '!market',
+  // replaceModalReplacerInput: string;
+  // replaceModalReplacerList: {
+  //   id: string;
+  //   checked: boolean;
+  //   name: string;
+  //   status: 'online' | 'offline' | 'unreleased';
+  //   type: string;
+  //   latestVersion: string;
+  //   version: string;
+  //   date: string;
+  // }[];
+
   selectedType: '-1' | string;
   selectedStatus: '0' | '1' | '2';
   filterKeywords: string;
@@ -292,8 +288,9 @@ interface InformalNodeManagerPageModelType {
 export const exhibitPageInitData = {
 
 
-  replaceHandlerModalVisible: false,
-  replacerActivatedTab: 'market',
+  replaceModalVisible: false,
+  replaceModalReplacerOptions: ['!market', '!resource', '!collection'],
+  replaceModalReplacerOptionSelected: '!market',
   replacerList: [],
   replacerInput: '',
   selectedType: '-1',
@@ -303,11 +300,11 @@ export const exhibitPageInitData = {
   exhibitsTotal: -1,
 };
 
-export const themePageInitData: any = {
-  themeList: [],
+export const themePageInitData = {
   themeFilterKeywords: '',
+  themeList: [],
   themesTotal: -1,
-  addThemeDrawerVisible: false,
+  // addThemeDrawerVisible: false,
 };
 
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
@@ -334,11 +331,28 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   addExhibitDrawerCheckedList: [],
   addExhibitDrawerCheckedListTotalNum: -1,
 
-  addOrReplaceCodeExecutionErrorMessages: null,
+  replaceModalVisible: false,
+  // replaceModalReplacerOptions: ['!market', '!resource', '!collection'],
+  // replaceModalReplacerOptionSelected: '!market',
+  // replacerList: [],
+  // replacerInput: '',
+  selectedType: '-1',
+  selectedStatus: '2',
+  filterKeywords: '',
+  exhibitList: [],
+  exhibitsTotal: -1,
 
-  ...exhibitPageInitData,
+  // addOrReplaceCodeExecutionErrorMessages: null,
 
-  ...themePageInitData,
+  // ...exhibitPageInitData,
+  // filterKeywords: '',
+  // exhibitList: [],
+  // exhibitsTotal: -1,
+
+  // ...themePageInitData,
+  themeFilterKeywords: '',
+  themeList: [],
+  themesTotal: -1,
 
   ruleListStatus: 'normal',
   ruleList: [],
@@ -803,14 +817,14 @@ const Model: InformalNodeManagerPageModelType = {
         })
         .flat();
 
-      if (codeExecutionError.length > 0) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            addOrReplaceCodeExecutionErrorMessages: codeExecutionError,
-          },
-        });
-      }
+      // if (codeExecutionError.length > 0) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       addOrReplaceCodeExecutionErrorMessages: codeExecutionError,
+      //     },
+      //   });
+      // }
 
       if (informalNodeManagerPage.showPage === 'exhibit') {
         yield put<FetchExhibitListAction>({

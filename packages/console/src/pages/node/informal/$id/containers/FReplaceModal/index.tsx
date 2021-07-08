@@ -42,7 +42,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       payload: {
         nodeID: nodeID,
       }
-    })
+    });
   }, [nodeID]);
 
   return (<FModal

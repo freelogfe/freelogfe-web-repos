@@ -119,7 +119,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <FTextBtn
                   type="default"
                   onClick={() => {
-                    onChange({replaceHandlerModalVisible: true});
+                    onChange({replaceModalVisible: true});
                   }}>
                   <FMappingRuleReplace/>
                 </FTextBtn>
