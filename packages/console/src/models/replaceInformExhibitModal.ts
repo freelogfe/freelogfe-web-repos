@@ -3,6 +3,7 @@ import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import * as React from "react";
 
 export interface TreeNode {
   title: string;
@@ -121,10 +122,12 @@ export interface OnReplacedKeywordChangeAction extends AnyAction {
   };
 }
 
-export interface OnReplacedKeywordChangeAction extends AnyAction {
-  type: 'replaceInformExhibit/onReplacedKeywordChange';
+export interface OnReplacedTreeLoadDataAction extends AnyAction {
+  type: 'replaceInformExhibit/onReplacedTreeLoadData';
   payload: {
-    value: string;
+    pos: string;
+    id: string;
+    key: string;
   };
 }
 
@@ -163,6 +166,7 @@ interface ReplaceInformExhibitModelType {
     onReplacedMount: (action: OnReplacedMountAction, effects: EffectsCommandMap) => void;
     onReplacedUnmount: (action: OnReplacedUnmountAction, effects: EffectsCommandMap) => void;
     onReplacedKeywordChange: (action: OnReplacedKeywordChangeAction, effects: EffectsCommandMap) => void;
+    onReplacedTreeLoadData: (action: OnReplacedTreeLoadDataAction, effects: EffectsCommandMap) => void;
     // fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
     // fetchExhibitByDependency: (action: FetchExhibitByDependencyAction, effects: EffectsCommandMap) => void;
 
@@ -613,16 +617,18 @@ const Model: ReplaceInformExhibitModelType = {
         replaceInformExhibit,
       }));
 
+      const payloadValue: string = payload.value;
+
       yield put({
         type: 'change',
         payload: {
-          replacedKeywords: payload.value,
+          replacedKeywords: payloadValue,
         },
       });
 
       const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTree>[0] = {
         nodeId: replaceInformExhibit.nodeID,
-        keywords: payload.value,
+        keywords: payloadValue,
         resourceType: replaceInformExhibit.isTheme ? 'theme' : undefined,
         omitResourceType: replaceInformExhibit.isTheme ? undefined : 'theme',
       };
@@ -630,7 +636,7 @@ const Model: ReplaceInformExhibitModelType = {
       const {data} = yield call(FServiceAPI.InformalNode.dependencyTree, params);
       // console.log(data, '##@ADSFASDFSDCX');
 
-      let replacedSelectDependency = data.find((d: any) => d.name === payload.value);
+      let replacedSelectDependency = data.find((d: any) => d.name === payloadValue);
       // console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
       yield put<ChangeAction>({
         type: 'change',
@@ -654,7 +660,7 @@ const Model: ReplaceInformExhibitModelType = {
         omitResourceType: replaceInformExhibit.isTheme ? undefined : 'theme',
       };
       const {data: data3} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
-      // console.log(data, 'data!@EWFASDfasdfsad');
+      console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -665,7 +671,37 @@ const Model: ReplaceInformExhibitModelType = {
               title: d.testResourceName,
             };
           }),
-        }
+        },
+      });
+    },
+    * onReplacedTreeLoadData({payload}: OnReplacedTreeLoadDataAction, {select, put, call}: EffectsCommandMap) {
+
+      console.log(payload, 'payloadpayloadpayloadpayloadpayloadpayload!!!!!!@@@@@@@#3333333');
+
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
+
+      if (payload.pos.split('-').length !== 2) {
+        return;
+      }
+      const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
+        testResourceId: payload.id,
+        dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
+      };
+      const {data} = yield call(FServiceAPI.InformalNode.dependencyTreeFilter, params);
+      // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
+      const result = updateTreeData({
+        list: replaceInformExhibit.replacedTreeData as TreeNode[],
+        key: payload.key,
+        children: organizeData(data, payload.key),
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacedTreeData: result,
+        },
       });
     },
     // * fetchDependencyTree({}: FetchDependencyTreeAction, {put, select, call}: EffectsCommandMap) {
@@ -761,3 +797,61 @@ const Model: ReplaceInformExhibitModelType = {
 };
 
 export default Model;
+
+interface UpdateTreeDataParams {
+  list: TreeNode[];
+  key: React.Key;
+  children: TreeNode[];
+}
+
+function updateTreeData({list, key, children}: UpdateTreeDataParams): TreeNode[] {
+  return list.map(node => {
+    if (node.key === key) {
+      return {
+        ...node,
+        children,
+      };
+    } else if (node.children) {
+      return {
+        ...node,
+        children: updateTreeData({
+          list: node.children,
+          key,
+          children,
+        }),
+      };
+    }
+    return node;
+  });
+}
+
+interface OrganizeData {
+  id: string;
+  name: string;
+  type: string;
+  dependencies: OrganizeData[];
+}
+
+function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
+  // console.log(data, 'data2WQR@#SDfolkj;lk');
+  return data.map<TreeNode>((d) => {
+    const key = parentKey + ':' + (d.type === 'resource' ? '$' : '#') + d.name;
+
+    if (d.dependencies.length === 0) {
+      return {
+        title: d.name,
+        key,
+        id: d.id,
+        isLeaf: true,
+      };
+    }
+
+    return {
+      title: d.name,
+      key,
+      id: d.id,
+      isLeaf: false,
+      children: organizeData(d.dependencies, key),
+    };
+  });
+}

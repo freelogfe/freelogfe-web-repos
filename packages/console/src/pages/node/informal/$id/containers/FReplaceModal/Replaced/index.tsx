@@ -11,7 +11,7 @@ import {
   ChangeAction,
   OnReplacedKeywordChangeAction,
   // FetchDependencyTreeAction,
-  OnReplacedMountAction,
+  OnReplacedMountAction, OnReplacedTreeLoadDataAction,
   TreeNode
 } from "@/models/replaceInformExhibitModal";
 import {WholeMutable} from "@/models/shared";
@@ -62,8 +62,8 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
             type: 'replaceInformExhibit/onReplacedKeywordChange',
             payload: {
               value: value,
-            }
-          })
+            },
+          });
         }}
       />
       {
@@ -89,28 +89,34 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         checkable
         loadData={async (node: any) => {
           // console.log(node, 'n2390jlkjdsfdsf');
-          if (node.pos.split(':').length !== 2) {
-            return;
-          }
-          const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
-            testResourceId: node.id,
-            dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
-          };
-          const {data} = await FServiceAPI.InformalNode.dependencyTreeFilter(params);
-          // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
-          const result = updateTreeData({
-            list: replaceInformExhibit.replacedTreeData as TreeNode[],
-            key: node.key,
-            children: organizeData(data, node.key),
+
+          dispatch<OnReplacedTreeLoadDataAction>({
+            type: 'replaceInformExhibit/onReplacedTreeLoadData',
+            payload: node,
           });
 
-          // console.log(result, 'result2094uo1234u234');
-          await dispatch<ChangeAction>({
-            type: 'replaceInformExhibit/change',
-            payload: {
-              replacedTreeData: result,
-            },
-          });
+          // if (node.pos.split(':').length !== 2) {
+          //   return;
+          // }
+          // const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
+          //   testResourceId: node.id,
+          //   dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
+          // };
+          // const {data} = await FServiceAPI.InformalNode.dependencyTreeFilter(params);
+          // // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
+          // const result = updateTreeData({
+          //   list: replaceInformExhibit.replacedTreeData as TreeNode[],
+          //   key: node.key,
+          //   children: organizeData(data, node.key),
+          // });
+          //
+          // // console.log(result, 'result2094uo1234u234');
+          // await dispatch<ChangeAction>({
+          //   type: 'replaceInformExhibit/change',
+          //   payload: {
+          //     replacedTreeData: result,
+          //   },
+          // });
         }}
         checkedKeys={replaceInformExhibit.replacedCheckedKeys}
         onCheck={(checkedKeys) => {
@@ -133,60 +139,60 @@ export default connect(({replaceInformExhibit}: ConnectState) => ({
   replaceInformExhibit,
 }))(Replaced);
 
-interface UpdateTreeDataParams {
-  list: TreeNode[];
-  key: React.Key;
-  children: TreeNode[];
-}
-
-function updateTreeData({list, key, children}: UpdateTreeDataParams): TreeNode[] {
-  return list.map(node => {
-    if (node.key === key) {
-      return {
-        ...node,
-        children,
-      };
-    } else if (node.children) {
-      return {
-        ...node,
-        children: updateTreeData({
-          list: node.children,
-          key,
-          children,
-        }),
-      };
-    }
-    return node;
-  });
-}
-
-interface OrganizeData {
-  id: string;
-  name: string;
-  type: string;
-  dependencies: OrganizeData[];
-}
-
-function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
-  // console.log(data, 'data2WQR@#SDfolkj;lk');
-  return data.map<TreeNode>((d) => {
-    const key = parentKey + ':' + (d.type === 'resource' ? '$' : '#') + d.name;
-
-    if (d.dependencies.length === 0) {
-      return {
-        title: d.name,
-        key,
-        id: d.id,
-        isLeaf: true,
-      };
-    }
-
-    return {
-      title: d.name,
-      key,
-      id: d.id,
-      isLeaf: false,
-      children: organizeData(d.dependencies, key),
-    };
-  });
-}
+// interface UpdateTreeDataParams {
+//   list: TreeNode[];
+//   key: React.Key;
+//   children: TreeNode[];
+// }
+//
+// function updateTreeData({list, key, children}: UpdateTreeDataParams): TreeNode[] {
+//   return list.map(node => {
+//     if (node.key === key) {
+//       return {
+//         ...node,
+//         children,
+//       };
+//     } else if (node.children) {
+//       return {
+//         ...node,
+//         children: updateTreeData({
+//           list: node.children,
+//           key,
+//           children,
+//         }),
+//       };
+//     }
+//     return node;
+//   });
+// }
+//
+// interface OrganizeData {
+//   id: string;
+//   name: string;
+//   type: string;
+//   dependencies: OrganizeData[];
+// }
+//
+// function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] {
+//   // console.log(data, 'data2WQR@#SDfolkj;lk');
+//   return data.map<TreeNode>((d) => {
+//     const key = parentKey + ':' + (d.type === 'resource' ? '$' : '#') + d.name;
+//
+//     if (d.dependencies.length === 0) {
+//       return {
+//         title: d.name,
+//         key,
+//         id: d.id,
+//         isLeaf: true,
+//       };
+//     }
+//
+//     return {
+//       title: d.name,
+//       key,
+//       id: d.id,
+//       isLeaf: false,
+//       children: organizeData(d.dependencies, key),
+//     };
+//   });
+// }
