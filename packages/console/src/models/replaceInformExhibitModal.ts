@@ -240,14 +240,22 @@ const Model: ReplaceInformExhibitModelType = {
     },
     * onReplacerOriginChange({payload}: OnReplacerOriginChangeAction, {put, select}: EffectsCommandMap) {
 
-      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-        replaceInformExhibit,
-      }));
+      // const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+      //   replaceInformExhibit,
+      // }));
 
-      yield yield put<ChangeAction>({
+      yield put<ChangeAction>({
         type: 'change',
         payload: {
           replacerOrigin: payload.value,
+        },
+      });
+
+      yield put<FetchReplacerListAction>({
+        type: 'fetchReplacerList',
+        payload: {
+          restart: true,
+          origin: payload.value,
         },
       });
 
