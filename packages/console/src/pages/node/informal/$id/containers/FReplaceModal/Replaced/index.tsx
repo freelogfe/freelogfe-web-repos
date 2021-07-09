@@ -7,9 +7,16 @@ import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
-import {ChangeAction, FetchDependencyTreeAction, TreeNode} from "@/models/replaceInformExhibitModal";
+import {
+  ChangeAction,
+  OnReplacedKeywordChangeAction,
+  // FetchDependencyTreeAction,
+  OnReplacedMountAction,
+  TreeNode
+} from "@/models/replaceInformExhibitModal";
 import {WholeMutable} from "@/models/shared";
 import {FServiceAPI} from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ReplacedProps {
   dispatch: Dispatch;
@@ -17,6 +24,14 @@ interface ReplacedProps {
 }
 
 function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
+
+  // onReplacedMount
+  AHooks.useMount(async () => {
+    dispatch<OnReplacedMountAction>({
+      type: 'replaceInformExhibit/onReplacedMount',
+    });
+    // console.log(result, '$$$$$$$4444rrrrrrr');
+  });
 
   async function onChange(payload: Partial<ReplaceInformExhibitState>) {
     await dispatch<ChangeAction>({
@@ -37,12 +52,18 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         })}
         debounce={300}
         className={styles.filterInput}
-        onDebounceChange={async (value) => {
+        onDebounceChange={(value) => {
           // console.log(value, 'value1232adsjpkl;l;sdf4');
-          await onChange({replacedKeywords: value});
-          await dispatch<FetchDependencyTreeAction>({
-            type: 'replaceInformExhibit/fetchDependencyTree',
-          });
+          // await onChange({replacedKeywords: value});
+          // await dispatch<FetchDependencyTreeAction>({
+          //   type: 'replaceInformExhibit/fetchDependencyTree',
+          // });
+          dispatch<OnReplacedKeywordChangeAction>({
+            type: 'replaceInformExhibit/onReplacedKeywordChange',
+            payload: {
+              value: value,
+            }
+          })
         }}
       />
       {
@@ -51,12 +72,12 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         (<FDropdownMenu
           options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
           onChange={(value) => {
-            onChange({replacedVersion: value});
+            onChange({replacedTargetVersion: value});
           }}
         >
           <FContentText
             type="additional2"
-            text={replaceInformExhibit.replacedVersion || '选择版本'}
+            text={replaceInformExhibit.replacedTargetVersion || '选择版本'}
           />
         </FDropdownMenu>)
       }
@@ -78,7 +99,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
           const {data} = await FServiceAPI.InformalNode.dependencyTreeFilter(params);
           // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
           const result = updateTreeData({
-            list: replaceInformExhibit.treeData as TreeNode[],
+            list: replaceInformExhibit.replacedTreeData as TreeNode[],
             key: node.key,
             children: organizeData(data, node.key),
           });
@@ -87,21 +108,21 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
           await dispatch<ChangeAction>({
             type: 'replaceInformExhibit/change',
             payload: {
-              treeData: result,
+              replacedTreeData: result,
             },
           });
         }}
-        checkedKeys={replaceInformExhibit.checkedKeys as string[]}
+        checkedKeys={replaceInformExhibit.replacedCheckedKeys}
         onCheck={(checkedKeys) => {
           // console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
           dispatch<ChangeAction>({
             type: 'replaceInformExhibit/change',
             payload: {
-              checkedKeys: checkedKeys as string[],
-            }
-          })
+              replacedCheckedKeys: checkedKeys as string[],
+            },
+          });
         }}
-        treeData={replaceInformExhibit.treeData as WholeMutable<ReplaceInformExhibitState['treeData']>}
+        treeData={replaceInformExhibit.replacedTreeData}
         // treeData={treeData}
       />
     </div>

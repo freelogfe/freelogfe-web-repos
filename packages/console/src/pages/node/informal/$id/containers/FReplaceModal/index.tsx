@@ -55,10 +55,10 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       onCancel && onCancel();
     }}
     okButtonProps={{
-      disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.checkedKeys.length === 0,
+      disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.replacedCheckedKeys.length === 0,
     }}
     onOk={() => {
-      const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.checkedKeys as string[]).map<string[]>((r) => {
+      const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.replacedCheckedKeys).map<string[]>((r) => {
         return r.split(':');
       });
       // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
@@ -100,7 +100,7 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
           exhibitName: exhibitName,
           replaced: {
             name: replaceInformExhibit.replacedSelectDependency?.name || '',
-            versionRange: replaceInformExhibit.replacedVersion || 'latest',
+            versionRange: replaceInformExhibit.replacedTargetVersion || 'latest',
             type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
           },
           replacer: {
