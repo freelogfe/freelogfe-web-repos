@@ -55,6 +55,8 @@ export function batchTestResources({nodeId, ...params}: BatchTestResourcesParams
 interface DependencyTreeParamsType {
   nodeId: number;
   keywords: string;
+  resourceType?: string;
+  omitResourceType?: string;
 }
 
 export function dependencyTree({nodeId, ...params}: DependencyTreeParamsType) {
@@ -149,6 +151,8 @@ interface SearchTestResourcesByDependencyParamsType {
   nodeId: number;
   dependentEntityId: string;
   dependentEntityVersionRange?: string;
+  resourceType?: string;
+  omitResourceType?: string;
 }
 
 export function searchTestResourcesByDependency({nodeId, ...params}: SearchTestResourcesByDependencyParamsType) {
