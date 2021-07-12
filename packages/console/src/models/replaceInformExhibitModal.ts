@@ -135,14 +135,6 @@ export interface OnReplacedTreeLoadDataAction extends AnyAction {
   };
 }
 
-// export interface FetchDependencyTreeAction extends AnyAction {
-//   type: 'replaceInformExhibit/fetchDependencyTree' | 'fetchDependencyTree';
-// }
-
-// export interface FetchExhibitByDependencyAction extends AnyAction {
-//   type: 'replaceInformExhibit/fetchExhibitByDependency' | 'fetchExhibitByDependency';
-// }
-
 export interface OnReplaceModalCancelAction extends AnyAction {
   type: 'replaceInformExhibit/onReplaceModalCancel';
 }
@@ -161,10 +153,6 @@ interface ReplaceInformExhibitModelType {
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
     onReplacerOriginChange: (action: OnReplacerOriginChangeAction, effects: EffectsCommandMap) => void;
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
-    // fetchMarket: (action: FetchMarketAction, effects: EffectsCommandMap) => void;
-    // fetchMyResources: (action: FetchMyResourcesAction, effects: EffectsCommandMap) => void;
-    // fetchCollection: (action: FetchCollectionAction, effects: EffectsCommandMap) => void;
-    // fetchObject: (action: FetchObjectAction, effects: EffectsCommandMap) => void;
     onReplacerListLoadMore: (action: OnReplacerListLoadMoreAction, effects: EffectsCommandMap) => void;
 
     onReplacedMount: (action: OnReplacedMountAction, effects: EffectsCommandMap) => void;
@@ -172,8 +160,6 @@ interface ReplaceInformExhibitModelType {
     onReplacedKeywordChange: (action: OnReplacedKeywordChangeAction, effects: EffectsCommandMap) => void;
     onReplacedEntityVersionChange: (action: OnReplacedEntityVersionChangeAction, effects: EffectsCommandMap) => void;
     onReplacedTreeLoadData: (action: OnReplacedTreeLoadDataAction, effects: EffectsCommandMap) => void;
-    // fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
-    // fetchExhibitByDependency: (action: FetchExhibitByDependencyAction, effects: EffectsCommandMap) => void;
 
     onReplaceModalCancel: (action: OnReplaceModalCancelAction, effects: EffectsCommandMap) => void;
     onReplaceModalConfirm: (action: OnReplaceModalConfirmAction, effects: EffectsCommandMap) => void;
