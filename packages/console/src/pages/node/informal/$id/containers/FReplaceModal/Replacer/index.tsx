@@ -29,6 +29,10 @@ interface ReplacerProps {
 
 function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerProps) {
 
+  // AHooks.useMount(() => {
+  //   console.log('replacer**************');
+  // });
+
   // React.useEffect(() => {
   //   // console.log('@#SDFGDFXVXCZVXZCVSfd');
   //   dispatch<FetchReplacerListAction>({

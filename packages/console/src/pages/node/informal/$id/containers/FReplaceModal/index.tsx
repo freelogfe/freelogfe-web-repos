@@ -25,6 +25,7 @@ type IConfirmValue = {
 
 interface FReplaceModalProps {
   nodeID: number;
+  isTheme: boolean;
   visible?: boolean;
 
   onCancel?(): void;
@@ -35,9 +36,18 @@ interface FReplaceModalProps {
   onConfirm?(value: IConfirmValue): void;
 }
 
-function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceInformExhibit}: FReplaceModalProps) {
+function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, isTheme, replaceInformExhibit}: FReplaceModalProps) {
 
-
+  // AHooks.useMount(() => {
+  //   // console.log('modal**************');
+  //   console.log(nodeID, 'nodeIDnodeIDnodeID890upioj;ksadrf;sad');
+  //   dispatch<ChangeAction>({
+  //     type: 'replaceInformExhibit/change',
+  //     payload: {
+  //       nodeID: nodeID,
+  //     },
+  //   });
+  // });
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -47,6 +57,15 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       },
     });
   }, [nodeID]);
+
+  React.useEffect(() => {
+    dispatch<ChangeAction>({
+      type: 'replaceInformExhibit/change',
+      payload: {
+        isTheme: isTheme,
+      },
+    });
+  }, [isTheme]);
 
   return (<FModal
     title={null}
@@ -61,64 +80,12 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
       disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.replacedCheckedKeys.length === 0,
     }}
     onOk={async () => {
-      // const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.replacedCheckedKeys).map<string[]>((r) => {
-      //   return r.split(':');
-      // });
-      // // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
-      // const resultObj: { [key: string]: ICandidate[][] } = {};
-      // for (const simplifiedResult of simplifiedResults) {
-      //   resultObj[simplifiedResult[0]] = [];
-      // }
-      // for (const simplifiedResult of simplifiedResults) {
-      //   const [key, ...arr] = simplifiedResult;
-      //   // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
-      //   if (arr.length === 0) {
-      //     continue;
-      //   }
-      //   // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
-      //   resultObj[key].push(arr.map((o: string) => {
-      //     if (o.startsWith('$')) {
-      //       return {
-      //         name: o.replace('$', ''),
-      //         type: 'resource',
-      //         versionRange: 'latest',
-      //       }
-      //     } else {
-      //       return {
-      //         name: o.replace('#', ''),
-      //         type: 'object',
-      //         versionRange: 'latest',
-      //       }
-      //     }
-      //   }));
-      // }
-      // // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
-      // const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
-      //   return rr.name === replaceInformExhibit.checkedResourceName;
-      // });
-      // // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
-      // const results: IConfirmValue = [];
-      // for (const [exhibitName, scopes] of Object.entries(resultObj)) {
-      //   results.push({
-      //     exhibitName: exhibitName,
-      //     replaced: {
-      //       name: replaceInformExhibit.replacedSelectDependency?.name || '',
-      //       versionRange: replaceInformExhibit.replacedTargetVersion || 'latest',
-      //       type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
-      //     },
-      //     replacer: {
-      //       name: replacerData?.name || '',
-      //       versionRange: replacerData?.version || 'latest',
-      //       type: replacerData?.identity || 'object',
-      //     },
-      //     scopes: scopes,
-      //   });
-      // }
 
       const results = await dispatch<OnReplaceModalConfirmAction>({
         type: 'replaceInformExhibit/onReplaceModalConfirm',
       });
       onConfirm && onConfirm(results);
+
     }}
   >
     <div className={styles.replaceHandler}>

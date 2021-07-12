@@ -25,6 +25,10 @@ interface ReplacedProps {
 
 function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
 
+  // AHooks.useMount(() => {
+  //   console.log('replaced**************');
+  // });
+
   // onReplacedMount
   AHooks.useMount(async () => {
     dispatch<OnReplacedMountAction>({

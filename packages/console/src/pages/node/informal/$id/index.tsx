@@ -104,8 +104,10 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
 
     <AddInformExhibitDrawer/>
 
+    {/*{console.log(informalNodeManagerPage.nodeID, 'informalNodeManagerPage.nodeIDinformalNodeManagerPage.nodeID')}*/}
     <FReplaceModal
       nodeID={informalNodeManagerPage.nodeID}
+      isTheme={informalNodeManagerPage.showPage === 'theme'}
       visible={informalNodeManagerPage.replaceModalVisible}
       onCancel={() => {
         onChange({

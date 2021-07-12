@@ -160,9 +160,9 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<InformalNodeManagerPageModelState>;
 }
 
-export interface InitModelStatesAction extends AnyAction {
-  type: 'initModelStates';
-}
+// export interface InitModelStatesAction extends AnyAction {
+//   type: 'initModelStates';
+// }
 
 export interface FetchInfoAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchInfo';
@@ -262,7 +262,7 @@ interface InformalNodeManagerPageModelType {
   state: InformalNodeManagerPageModelState;
   effects: {
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    // initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
@@ -397,12 +397,12 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * initModelStates({}: InitModelStatesAction, {put,}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: informalNodeManagerPageInitStates,
-      });
-    },
+    // * initModelStates({}: InitModelStatesAction, {put,}: EffectsCommandMap) {
+    //   // yield put<ChangeAction>({
+    //   //   type: 'change',
+    //   //   payload: informalNodeManagerPageInitStates,
+    //   // });
+    // },
     * fetchExhibitList({payload: {isRematch = true, isRestart}}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
 
       const {informalNodeManagerPage, nodes}: ConnectState = yield select(({informalNodeManagerPage, nodes}: ConnectState) => ({
