@@ -20,7 +20,7 @@ import {
 import FTable from "@/components/FTable";
 import {FContentText} from '@/components/FText';
 import * as AHooks from 'ahooks';
-import FLoadingTip from "@/components/FLoadingTip";
+// import FLoadingTip from "@/components/FLoadingTip";
 import {FLoading} from "@/components/FIcons";
 
 const errorTexts = {

@@ -5,9 +5,10 @@ import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
+import {ChangeAction, OnReplaceModalConfirmAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
 import {ConnectState} from "@/models/connect";
 import FThickArrowRight from "@/components/FIcons/FThickArrowRight";
+import * as AHooks from 'ahooks';
 
 interface ICandidate {
   name: string;
@@ -36,6 +37,8 @@ interface FReplaceModalProps {
 
 function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceInformExhibit}: FReplaceModalProps) {
 
+
+
   React.useEffect(() => {
     dispatch<ChangeAction>({
       type: 'replaceInformExhibit/change',
@@ -57,60 +60,64 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, replaceI
     okButtonProps={{
       disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.replacedCheckedKeys.length === 0,
     }}
-    onOk={() => {
-      const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.replacedCheckedKeys).map<string[]>((r) => {
-        return r.split(':');
+    onOk={async () => {
+      // const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.replacedCheckedKeys).map<string[]>((r) => {
+      //   return r.split(':');
+      // });
+      // // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
+      // const resultObj: { [key: string]: ICandidate[][] } = {};
+      // for (const simplifiedResult of simplifiedResults) {
+      //   resultObj[simplifiedResult[0]] = [];
+      // }
+      // for (const simplifiedResult of simplifiedResults) {
+      //   const [key, ...arr] = simplifiedResult;
+      //   // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
+      //   if (arr.length === 0) {
+      //     continue;
+      //   }
+      //   // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
+      //   resultObj[key].push(arr.map((o: string) => {
+      //     if (o.startsWith('$')) {
+      //       return {
+      //         name: o.replace('$', ''),
+      //         type: 'resource',
+      //         versionRange: 'latest',
+      //       }
+      //     } else {
+      //       return {
+      //         name: o.replace('#', ''),
+      //         type: 'object',
+      //         versionRange: 'latest',
+      //       }
+      //     }
+      //   }));
+      // }
+      // // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+      // const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
+      //   return rr.name === replaceInformExhibit.checkedResourceName;
+      // });
+      // // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
+      // const results: IConfirmValue = [];
+      // for (const [exhibitName, scopes] of Object.entries(resultObj)) {
+      //   results.push({
+      //     exhibitName: exhibitName,
+      //     replaced: {
+      //       name: replaceInformExhibit.replacedSelectDependency?.name || '',
+      //       versionRange: replaceInformExhibit.replacedTargetVersion || 'latest',
+      //       type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
+      //     },
+      //     replacer: {
+      //       name: replacerData?.name || '',
+      //       versionRange: replacerData?.version || 'latest',
+      //       type: replacerData?.identity || 'object',
+      //     },
+      //     scopes: scopes,
+      //   });
+      // }
+
+      const results = await dispatch<OnReplaceModalConfirmAction>({
+        type: 'replaceInformExhibit/onReplaceModalConfirm',
       });
-      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
-      const resultObj: { [key: string]: ICandidate[][] } = {};
-      for (const simplifiedResult of simplifiedResults) {
-        resultObj[simplifiedResult[0]] = [];
-      }
-      for (const simplifiedResult of simplifiedResults) {
-        const [key, ...arr] = simplifiedResult;
-        // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
-        if (arr.length === 0) {
-          continue;
-        }
-        // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
-        resultObj[key].push(arr.map((o: string) => {
-          if (o.startsWith('$')) {
-            return {
-              name: o.replace('$', ''),
-              type: 'resource',
-              versionRange: 'latest',
-            }
-          } else {
-            return {
-              name: o.replace('#', ''),
-              type: 'object',
-              versionRange: 'latest',
-            }
-          }
-        }));
-      }
-      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
-      const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
-        return rr.name === replaceInformExhibit.checkedResourceName;
-      });
-      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
-      const results: IConfirmValue = [];
-      for (const [exhibitName, scopes] of Object.entries(resultObj)) {
-        results.push({
-          exhibitName: exhibitName,
-          replaced: {
-            name: replaceInformExhibit.replacedSelectDependency?.name || '',
-            versionRange: replaceInformExhibit.replacedTargetVersion || 'latest',
-            type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
-          },
-          replacer: {
-            name: replacerData?.name || '',
-            versionRange: replacerData?.version || 'latest',
-            type: replacerData?.identity || 'object',
-          },
-          scopes: scopes,
-        });
-      }
       onConfirm && onConfirm(results);
     }}
   >

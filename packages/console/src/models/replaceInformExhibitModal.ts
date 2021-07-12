@@ -13,6 +13,19 @@ export interface TreeNode {
   children?: TreeNode[];
 }
 
+interface ICandidate {
+  name: string;
+  versionRange?: string;
+  type: 'resource' | 'object';
+}
+
+type IConfirmValue = {
+  exhibitName: string;
+  replaced: ICandidate;
+  replacer: ICandidate;
+  scopes: ICandidate[][];
+}[];
+
 export interface ReplaceInformExhibitState {
   nodeID: number;
   isTheme: boolean;
@@ -237,10 +250,6 @@ const Model: ReplaceInformExhibitModelType = {
     },
     * onReplacerOriginChange({payload}: OnReplacerOriginChangeAction, {put, select}: EffectsCommandMap) {
 
-      // const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-      //   replaceInformExhibit,
-      // }));
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -255,30 +264,6 @@ const Model: ReplaceInformExhibitModelType = {
           origin: payload.value,
         },
       });
-
-      // yield ;
-      // console.log(replaceInformExhibit.replacerOrigin, '!@#$@#$!@#$!@#$');
-      // if (payload.value === '!market') {
-      //   yield put<FetchMarketAction>({
-      //     type: 'fetchMarket',
-      //   });
-      // } else if (payload.value === '!resource') {
-      //   yield put<FetchMyResourcesAction>({
-      //     type: 'fetchMyResources',
-      //   });
-      // } else if (payload.value === '!collection') {
-      //   yield put<FetchCollectionAction>({
-      //     type: 'fetchCollection',
-      //   });
-      // } else {
-      //   yield put<FetchObjectAction>({
-      //     type: 'fetchObject',
-      //     payload: {
-      //       bucket: payload.value,
-      //       restart: true,
-      //     },
-      //   });
-      // }
     },
     * fetchReplacerList({payload}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
       // console.log('!!!!!!------');
@@ -414,13 +399,6 @@ const Model: ReplaceInformExhibitModelType = {
         ]
 
       } else {
-        // yield put<FetchObjectAction>({
-        //   type: 'fetchObject',
-        //   payload: {
-        //     restart: true,
-        //     bucket: origin,
-        //   },
-        // });
         const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
           skip: 0,
           limit: FUtil.Predefined.pageSize,
@@ -631,8 +609,65 @@ const Model: ReplaceInformExhibitModelType = {
     * onReplaceModalCancel({}: OnReplaceModalCancelAction, {}: EffectsCommandMap) {
 
     },
-    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, {}: EffectsCommandMap) {
+    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, {select}: EffectsCommandMap) {
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
 
+      const simplifiedResults: string[][] = simplifiedRelationship(replaceInformExhibit.replacedCheckedKeys).map<string[]>((r) => {
+        return r.split(':');
+      });
+      // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
+      const resultObj: { [key: string]: ICandidate[][] } = {};
+      for (const simplifiedResult of simplifiedResults) {
+        resultObj[simplifiedResult[0]] = [];
+      }
+      for (const simplifiedResult of simplifiedResults) {
+        const [key, ...arr] = simplifiedResult;
+        // console.log(key, arr, '@#DASasiodfj_(UJLKjl;');
+        if (arr.length === 0) {
+          continue;
+        }
+        // console.log(arr, 'arr@#$R%DSFZ)_Jkl;sdafds');
+        resultObj[key].push(arr.map((o: string) => {
+          if (o.startsWith('$')) {
+            return {
+              name: o.replace('$', ''),
+              type: 'resource',
+              versionRange: 'latest',
+            }
+          } else {
+            return {
+              name: o.replace('#', ''),
+              type: 'object',
+              versionRange: 'latest',
+            }
+          }
+        }));
+      }
+      // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+      const replacerData = replaceInformExhibit.replacerResourceList.find((rr) => {
+        return rr.name === replaceInformExhibit.checkedResourceName;
+      });
+      // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
+      const results: IConfirmValue = [];
+      for (const [exhibitName, scopes] of Object.entries(resultObj)) {
+        results.push({
+          exhibitName: exhibitName,
+          replaced: {
+            name: replaceInformExhibit.replacedSelectDependency?.name || '',
+            versionRange: replaceInformExhibit.replacedTargetSelectedVersion?.value || 'latest',
+            type: replaceInformExhibit.replacedSelectDependency?.type || 'object',
+          },
+          replacer: {
+            name: replacerData?.name || '',
+            versionRange: replacerData?.version || 'latest',
+            type: replacerData?.identity || 'object',
+          },
+          scopes: scopes,
+        });
+      }
+      return results;
     },
   },
   reducers: {
@@ -708,4 +743,17 @@ function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] 
       children: organizeData(d.dependencies, key),
     };
   });
+}
+
+function simplifiedRelationship(relation: string[]): string[] {
+  // console.log(relation, 'relation!!!!!@@@@@');
+  let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
+
+  for (let i = 0; i < arr.length; i++) {
+    const current: string = arr[i];
+    arr = arr.filter((a) => {
+      return a === current || !a.startsWith(current);
+    })
+  }
+  return arr;
 }
