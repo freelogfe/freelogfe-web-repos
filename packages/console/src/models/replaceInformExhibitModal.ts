@@ -42,7 +42,14 @@ export interface ReplaceInformExhibitState {
     type: 'resource' | 'object';
     versions: string[],
   };
-  replacedTargetVersion: string;
+  replacedTargetVersions: {
+    value: string;
+    text: string;
+  }[],
+  replacedTargetSelectedVersion: {
+    value: string;
+    text: string;
+  } | null;
   replacedTreeData: TreeNode[];
   replacedCheckedKeys: string[];
 }
@@ -80,29 +87,6 @@ export interface FetchReplacerListAction extends AnyAction {
   };
 }
 
-// export interface FetchMarketAction extends AnyAction {
-//   type: 'fetchMarket';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchMyResourcesAction extends AnyAction {
-//   type: 'fetchMyResources';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchCollectionAction extends AnyAction {
-//   type: 'fetchCollection';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchObjectAction extends AnyAction {
-//   type: 'fetchObject';
-//   payload: {
-//     restart: boolean;
-//     bucket: string;
-//   }; // 是否 restart
-// }
-
 export interface OnReplacerListLoadMoreAction extends AnyAction {
   type: 'onReplacerListLoadMore';
 }
@@ -117,6 +101,13 @@ export interface OnReplacedUnmountAction extends AnyAction {
 
 export interface OnReplacedKeywordChangeAction extends AnyAction {
   type: 'replaceInformExhibit/onReplacedKeywordChange';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnReplacedEntityVersionChangeAction extends AnyAction {
+  type: 'replaceInformExhibit/onReplacedEntityVersionChange';
   payload: {
     value: string;
   };
@@ -166,6 +157,7 @@ interface ReplaceInformExhibitModelType {
     onReplacedMount: (action: OnReplacedMountAction, effects: EffectsCommandMap) => void;
     onReplacedUnmount: (action: OnReplacedUnmountAction, effects: EffectsCommandMap) => void;
     onReplacedKeywordChange: (action: OnReplacedKeywordChangeAction, effects: EffectsCommandMap) => void;
+    onReplacedEntityVersionChange: (action: OnReplacedEntityVersionChangeAction, effects: EffectsCommandMap) => void;
     onReplacedTreeLoadData: (action: OnReplacedTreeLoadDataAction, effects: EffectsCommandMap) => void;
     // fetchDependencyTree: (action: FetchDependencyTreeAction, effects: EffectsCommandMap) => void;
     // fetchExhibitByDependency: (action: FetchExhibitByDependencyAction, effects: EffectsCommandMap) => void;
@@ -200,7 +192,8 @@ export const replaceInformExhibitModalInitStates: ReplaceInformExhibitState = {
   replacedKeywords: '',
   replacedDependencyTreeList: [],
   replacedSelectDependency: null,
-  replacedTargetVersion: '',
+  replacedTargetVersions: [],
+  replacedTargetSelectedVersion: null,
   replacedTreeData: [],
   replacedCheckedKeys: [],
 };
@@ -317,6 +310,7 @@ const Model: ReplaceInformExhibitModelType = {
           limit: FUtil.Predefined.pageSize,
           keywords: payloadKeywords,
         };
+
         const {data} = yield call(FServiceAPI.Resource.list, params);
 
         replacerResourceList = [
@@ -464,145 +458,6 @@ const Model: ReplaceInformExhibitModelType = {
       });
 
     },
-    // * fetchMarket({payload}: FetchMarketAction, {call, select, put}: EffectsCommandMap) {
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //   const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-    //     skip: 0,
-    //     limit: FUtil.Predefined.pageSize,
-    //     keywords: replaceInformExhibit.replacerKeywords,
-    //   };
-    //   const {data} = yield call(FServiceAPI.Resource.list, params);
-    //   // console.log(data, 'data134@@@#@#@##@@@@@53');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       replacerResourceList: ,
-    //     },
-    //   });
-    // },
-    // * fetchMyResources({payload}: FetchMyResourcesAction, {call, put, select}: EffectsCommandMap) {
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //   const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-    //     // resourceType:''
-    //     skip: 0,
-    //     limit: FUtil.Predefined.pageSize,
-    //     isSelf: 1,
-    //     // resourceType: replaceInformExhibit.isTheme ? 'theme' : undefined,
-    //     keywords: replaceInformExhibit.replacerKeywords,
-    //   };
-    //   // console.log(params, 'paramsparams1234');
-    //   const {data} = yield call(FServiceAPI.Resource.list, params);
-    //   // console.log(data, 'data13453');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       replacerResourceList: (data.dataList as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((rs) => {
-    //         return {
-    //           id: rs.resourceId,
-    //           identity: 'resource',
-    //           name: rs.resourceName,
-    //           type: rs.resourceType,
-    //           latestVersion: rs.latestVersion,
-    //           updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-    //           status: rs.status === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-    //           versions: rs.resourceVersions.map((rv: any) => {
-    //             return rv.version;
-    //           }),
-    //           version: '',
-    //         };
-    //       }),
-    //     },
-    //   });
-    // },
-    // * fetchCollection({}: FetchCollectionAction, {select, call, put}: EffectsCommandMap) {
-    //
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //
-    //   const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-    //     skip: 0,
-    //     limit: FUtil.Predefined.pageSize,
-    //     keywords: replaceInformExhibit.replacerKeywords,
-    //   };
-    //
-    //   const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
-    //   // console.log(data, '@@@@@@ASEDFSADF');
-    //
-    //   let data3 = [];
-    //
-    //   if (data.dataList.length > 0) {
-    //     const params2: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-    //       resourceIds: data.dataList.map((dl: any) => {
-    //         return dl.resourceId;
-    //       }).join(),
-    //     };
-    //
-    //     const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
-    //
-    //     data3 = data2;
-    //   }
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       replacerResourceList: (data3 as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((rs) => {
-    //         return {
-    //           id: rs.resourceId,
-    //           identity: 'resource',
-    //           name: rs.resourceName,
-    //           type: rs.resourceType,
-    //           updateTime: FUtil.Format.formatDateTime(rs.updateDate),
-    //           latestVersion: rs.latestVersion,
-    //           status: rs.resourceStatus === 1 ? '' : (rs.latestVersion ? 'offline' : 'unreleased'),
-    //           versions: rs.resourceVersions.map((rv: any) => {
-    //             return rv.version;
-    //           }),
-    //           version: '',
-    //         };
-    //       }),
-    //     },
-    //   });
-    // },
-    // * fetchObject({}: FetchObjectAction, {put, select, call}: EffectsCommandMap) {
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //
-    //   const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
-    //     skip: 0,
-    //     limit: FUtil.Predefined.pageSize,
-    //     bucketName: replaceInformExhibit.replacerOrigin,
-    //     keywords: replaceInformExhibit.replacerKeywords,
-    //   };
-    //
-    //   const {data} = yield call(FServiceAPI.Storage.objectList, params);
-    //   // console.log(data, 'data1q2349ojmdfsl');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       replacerResourceList: (data.dataList as any[]).map<ReplaceInformExhibitState['replacerResourceList'][number]>((ob) => {
-    //         const objectName: string = ob.bucketName + '/' + ob.objectName;
-    //         // console.log(objectName, replaceInformExhibit.disabledObjectNames, '#####');
-    //         return {
-    //           id: ob.objectId,
-    //           identity: 'object',
-    //           name: objectName,
-    //           type: ob.resourceType,
-    //           latestVersion: '',
-    //           updateTime: FUtil.Format.formatDateTime(ob.updateDate),
-    //           status: '',
-    //           versions: [],
-    //           version: '',
-    //         };
-    //       }),
-    //     },
-    //   });
-    // },
     * onReplacerListLoadMore({}: OnReplacerListLoadMoreAction, {}: EffectsCommandMap) {
 
     },
@@ -638,21 +493,32 @@ const Model: ReplaceInformExhibitModelType = {
 
       let replacedSelectDependency = data.find((d: any) => d.name === payloadValue);
       // console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
+
+      const replacedTargetVersions: ReplaceInformExhibitState['replacedTargetVersions'] = replacedSelectDependency
+        ? [
+          {value: '', text: '全部版本'},
+          ...replacedSelectDependency.versions.map((v: any) => {
+            return {
+              value: v,
+              text: v,
+            };
+          }),
+        ]
+        : [];
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replacedDependencyTreeList: data.map((d: any) => d.name),
+          replacedDependencyTreeList: data?.map((d: any) => d.name) || [],
           replacedSelectDependency: replacedSelectDependency || null,
-          replacedTargetVersion: '',
+          replacedTargetVersions: replacedTargetVersions,
+          replacedTargetSelectedVersion: replacedTargetVersions.length > 0 ? replacedTargetVersions[0] : null,
         },
       });
 
       if (!replacedSelectDependency) {
         return;
       }
-      // yield put<FetchExhibitByDependencyAction>({
-      //   type: 'fetchExhibitByDependency',
-      // });
+
       const params3: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
         nodeId: replaceInformExhibit.nodeID,
         dependentEntityId: replacedSelectDependency.id,
@@ -660,23 +526,67 @@ const Model: ReplaceInformExhibitModelType = {
         omitResourceType: replaceInformExhibit.isTheme ? undefined : 'theme',
       };
       const {data: data3} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
-      console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
+      // console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           replacedTreeData: (data3 as any[]).map<ReplaceInformExhibitState['replacedTreeData'][number]>((d: any) => {
             return {
-              key: d.testResourceName,
+              key: `${FUtil.Tool.generateRandomCode()}:${d.testResourceName}`,
               id: d.testResourceId,
-              title: d.testResourceName,
+              title: `${d.entityName}(${d.testResourceName})`,
             };
           }),
+          replacedCheckedKeys: [],
+        },
+      });
+    },
+    * onReplacedEntityVersionChange({payload}: OnReplacedEntityVersionChangeAction, {select, call, put}: EffectsCommandMap) {
+
+      const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
+        replaceInformExhibit,
+      }));
+
+      if (!replaceInformExhibit.replacedSelectDependency) {
+        return;
+      }
+
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacedTargetSelectedVersion: replaceInformExhibit.replacedTargetVersions.find((rtv) => {
+            return rtv.value === payload.value;
+          }) || null,
+        },
+      });
+
+      const params3: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
+        nodeId: replaceInformExhibit.nodeID,
+        dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
+        resourceType: replaceInformExhibit.isTheme ? 'theme' : undefined,
+        omitResourceType: replaceInformExhibit.isTheme ? undefined : 'theme',
+        dependentEntityVersionRange: payload.value || undefined,
+      };
+      const {data: data3} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
+      // console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacedTreeData: (data3 as any[]).map<ReplaceInformExhibitState['replacedTreeData'][number]>((d: any) => {
+            return {
+              key: `${FUtil.Tool.generateRandomCode()}:${d.testResourceName}`,
+              id: d.testResourceId,
+              title: `${d.entityName}(${d.testResourceName})`,
+            };
+          }),
+          replacedCheckedKeys: [],
         },
       });
     },
     * onReplacedTreeLoadData({payload}: OnReplacedTreeLoadDataAction, {select, put, call}: EffectsCommandMap) {
 
-      console.log(payload, 'payloadpayloadpayloadpayloadpayloadpayload!!!!!!@@@@@@@#3333333');
+      // console.log(payload, 'payloadpayloadpayloadpayloadpayloadpayload!!!!!!@@@@@@@#3333333');
 
       const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
         replaceInformExhibit,
@@ -688,13 +598,14 @@ const Model: ReplaceInformExhibitModelType = {
       const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
         testResourceId: payload.id,
         dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
+        dependentEntityVersionRange: replaceInformExhibit.replacedTargetSelectedVersion?.value || undefined,
       };
       const {data} = yield call(FServiceAPI.InformalNode.dependencyTreeFilter, params);
       // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
       const result = updateTreeData({
         list: replaceInformExhibit.replacedTreeData as TreeNode[],
         key: payload.key,
-        children: organizeData(data, payload.key),
+        children: organizeData(data[0].dependencies, payload.key),
       });
 
       yield put<ChangeAction>({
@@ -704,63 +615,6 @@ const Model: ReplaceInformExhibitModelType = {
         },
       });
     },
-    // * fetchDependencyTree({}: FetchDependencyTreeAction, {put, select, call}: EffectsCommandMap) {
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //
-    //   const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTree>[0] = {
-    //     nodeId: replaceInformExhibit.nodeID,
-    //     keywords: replaceInformExhibit.replacedKeywords,
-    //   };
-    //
-    //   const {data} = yield call(FServiceAPI.InformalNode.dependencyTree, params);
-    //   // console.log(data, '##@ADSFASDFSDCX');
-    //
-    //   let replacedSelectDependency = data.find((d: any) => d.name === replaceInformExhibit.replacedKeywords);
-    //   // console.log(replacedSelectDependency, 'replacedSelectDependency#$FDS_)+(Ujoi');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       replacedDependencyTreeList: data.map((d: any) => d.name),
-    //       replacedSelectDependency: replacedSelectDependency || null,
-    //       replacedVersion: '',
-    //     },
-    //   });
-    //   if (replacedSelectDependency) {
-    //     yield put<FetchExhibitByDependencyAction>({
-    //       type: 'fetchExhibitByDependency',
-    //     });
-    //   }
-    // },
-    // * fetchExhibitByDependency({}: FetchExhibitByDependencyAction, {select, call, put}: EffectsCommandMap) {
-    //   const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
-    //     replaceInformExhibit,
-    //   }));
-    //
-    //   if (!replaceInformExhibit.replacedSelectDependency) {
-    //     return;
-    //   }
-    //
-    //   const params: Parameters<typeof FServiceAPI.InformalNode.searchTestResourcesByDependency>[0] = {
-    //     nodeId: replaceInformExhibit.nodeID,
-    //     dependentEntityId: replaceInformExhibit.replacedSelectDependency.id,
-    //   };
-    //   const {data} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params);
-    //   // console.log(data, 'data!@EWFASDfasdfsad');
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       treeData: (data as any[]).map<ReplaceInformExhibitState['treeData'][number]>((d: any) => {
-    //         return {
-    //           key: d.testResourceName,
-    //           id: d.testResourceId,
-    //           title: d.testResourceName,
-    //         };
-    //       }),
-    //     }
-    //   })
-    // },
     * initModelStates({}: ReplaceInformExhibitInitModelStatesAction, {put, select}: EffectsCommandMap) {
       const {replaceInformExhibit}: ConnectState = yield select(({replaceInformExhibit}: ConnectState) => ({
         replaceInformExhibit,

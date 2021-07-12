@@ -8,7 +8,7 @@ import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
 import {
-  ChangeAction,
+  ChangeAction, OnReplacedEntityVersionChangeAction,
   OnReplacedKeywordChangeAction,
   // FetchDependencyTreeAction,
   OnReplacedMountAction, OnReplacedTreeLoadDataAction,
@@ -53,11 +53,6 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         debounce={300}
         className={styles.filterInput}
         onDebounceChange={(value) => {
-          // console.log(value, 'value1232adsjpkl;l;sdf4');
-          // await onChange({replacedKeywords: value});
-          // await dispatch<FetchDependencyTreeAction>({
-          //   type: 'replaceInformExhibit/fetchDependencyTree',
-          // });
           dispatch<OnReplacedKeywordChangeAction>({
             type: 'replaceInformExhibit/onReplacedKeywordChange',
             payload: {
@@ -70,15 +65,24 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         replaceInformExhibit.replacedSelectDependency?.versions &&
         replaceInformExhibit.replacedSelectDependency.versions.length > 0 &&
         (<FDropdownMenu
-          options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
+          // options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
+          options={replaceInformExhibit.replacedTargetVersions}
           onChange={(value) => {
-            onChange({replacedTargetVersion: value});
+            // onChange({replacedTargetVersion: value});
+            dispatch<OnReplacedEntityVersionChangeAction>({
+              type: 'replaceInformExhibit/onReplacedEntityVersionChange',
+              payload: {
+                value: value,
+              },
+            });
           }}
         >
-          <FContentText
-            type="additional2"
-            text={replaceInformExhibit.replacedTargetVersion || '选择版本'}
-          />
+          <div style={{cursor: 'pointer'}}>
+            <FContentText
+              type="additional2"
+              text={replaceInformExhibit.replacedTargetSelectedVersion?.text}
+            />
+          </div>
         </FDropdownMenu>)
       }
 
@@ -88,35 +92,10 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
       <Tree
         checkable
         loadData={async (node: any) => {
-          // console.log(node, 'n2390jlkjdsfdsf');
-
           dispatch<OnReplacedTreeLoadDataAction>({
             type: 'replaceInformExhibit/onReplacedTreeLoadData',
             payload: node,
           });
-
-          // if (node.pos.split(':').length !== 2) {
-          //   return;
-          // }
-          // const params: Parameters<typeof FServiceAPI.InformalNode.dependencyTreeFilter>[0] = {
-          //   testResourceId: node.id,
-          //   dependentEntityId: replaceInformExhibit.replacedSelectDependency?.id || '',
-          // };
-          // const {data} = await FServiceAPI.InformalNode.dependencyTreeFilter(params);
-          // // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
-          // const result = updateTreeData({
-          //   list: replaceInformExhibit.replacedTreeData as TreeNode[],
-          //   key: node.key,
-          //   children: organizeData(data, node.key),
-          // });
-          //
-          // // console.log(result, 'result2094uo1234u234');
-          // await dispatch<ChangeAction>({
-          //   type: 'replaceInformExhibit/change',
-          //   payload: {
-          //     replacedTreeData: result,
-          //   },
-          // });
         }}
         checkedKeys={replaceInformExhibit.replacedCheckedKeys}
         onCheck={(checkedKeys) => {
