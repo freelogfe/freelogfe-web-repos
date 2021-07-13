@@ -69,7 +69,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
   // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
-  const ruleObjList = informalNodeManagerPage.ruleList.map((rule) => {
+  const ruleObjList = informalNodeManagerPage.rulePageRuleList.map((rule) => {
     const {ruleInfo} = rule;
 
     let theRule: any = {};
@@ -173,7 +173,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         <TypesCaption/>
         <div style={{width: 50}}/>
         {
-          informalNodeManagerPage.ruleListStatus === 'normal' && (<Space size={30}>
+          informalNodeManagerPage.rulePageStatus === 'normal' && (<Space size={30}>
             <FUpload
               accept={'text/plain'}
               beforeUpload={(file) => {
@@ -186,7 +186,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
                   onChange({
                     codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
-                    ruleListStatus: 'coding',
+                    rulePageStatus: 'coding',
                     codeIsDirty: true,
                     codeCompileErrors: null,
                     codeExecutionError: null,
@@ -208,7 +208,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               type="primary"
               onClick={() => {
                 onChange({
-                  ruleListStatus: 'export',
+                  rulePageStatus: 'export',
                 });
               }}
             >
@@ -221,7 +221,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               type="danger"
               onClick={() => {
                 onChange({
-                  ruleListStatus: 'delete',
+                  rulePageStatus: 'delete',
                 });
               }}
             >
@@ -236,10 +236,10 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       </div>
 
       {
-        informalNodeManagerPage.ruleListStatus === 'normal' && (<FTextBtn
+        informalNodeManagerPage.rulePageStatus === 'normal' && (<FTextBtn
           onClick={() => {
             onChange({
-              ruleListStatus: 'coding',
+              rulePageStatus: 'coding',
             });
           }}>
           <Space size={5}>
@@ -250,11 +250,11 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       }
 
       {
-        informalNodeManagerPage.ruleListStatus === 'coding'
+        informalNodeManagerPage.rulePageStatus === 'coding'
         && (<FTextBtn
           onClick={() => {
             onChange({
-              ruleListStatus: 'normal',
+              rulePageStatus: 'normal',
             });
           }}>
           <Space size={5}>
@@ -265,13 +265,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       }
 
       {
-        informalNodeManagerPage.ruleListStatus === 'export'
+        informalNodeManagerPage.rulePageStatus === 'export'
         && (<Space size={30}>
           <FTextBtn
             type="default"
             onClick={() => {
               onChange({
-                ruleListStatus: 'normal',
+                rulePageStatus: 'normal',
               });
             }}
           >取消</FTextBtn>
@@ -279,7 +279,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             type="primary"
             onClick={() => {
               const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
-              const text: string = informalNodeManagerPage.ruleList
+              const text: string = informalNodeManagerPage.rulePageRuleList
                 .filter((rl) => rl.checked)
                 .map((rl) => {
                   return rl.ruleInfo.text;
@@ -293,20 +293,20 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       }
 
       {
-        informalNodeManagerPage.ruleListStatus === 'delete'
+        informalNodeManagerPage.rulePageStatus === 'delete'
         && (<Space size={30}>
           <FTextBtn
             type="default"
             onClick={() => {
               onChange({
-                ruleListStatus: 'normal',
+                rulePageStatus: 'normal',
               });
             }}
           >取消</FTextBtn>
           <FRectBtn
             type="danger1"
             onClick={async () => {
-              const text: string = informalNodeManagerPage.ruleList
+              const text: string = informalNodeManagerPage.rulePageRuleList
                 .filter((rl) => !rl.checked)
                 .map((rl) => {
                   return rl.ruleInfo.text;
@@ -325,7 +325,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     </div>
 
     {
-      informalNodeManagerPage.ruleListStatus === 'coding'
+      informalNodeManagerPage.rulePageStatus === 'coding'
         ? (<div className={styles.codeMirrorBody}>
           <div>
             <FCodemirror
@@ -447,11 +447,11 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                     <div className={styles.ruleCardHeader}>
                       <Space size={20}>
                         {
-                          informalNodeManagerPage.ruleListStatus !== 'normal' && (<FCheckbox
+                          informalNodeManagerPage.rulePageStatus !== 'normal' && (<FCheckbox
                             checked={rule.checked}
                             onChange={(e) => {
                               onChange({
-                                ruleList: informalNodeManagerPage.ruleList.map((rl) => {
+                                rulePageRuleList: informalNodeManagerPage.rulePageRuleList.map((rl) => {
                                   if (rl.id !== rule.id) {
                                     return rl;
                                   }

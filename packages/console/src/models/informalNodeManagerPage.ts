@@ -167,8 +167,8 @@ export interface InformalNodeManagerPageModelState {
     };
   }[];
 
-  ruleListStatus: 'normal' | 'export' | 'delete' | 'coding';
-  ruleList: {
+  rulePageStatus: 'normal' | 'export' | 'delete' | 'coding';
+  rulePageRuleList: {
     id: string;
     checked: boolean;
     matchErrors: string[];
@@ -468,8 +468,8 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   themePageThemeList: [],
   themePageThemesTotal: -1,
 
-  ruleListStatus: 'normal',
-  ruleList: [],
+  rulePageStatus: 'normal',
+  rulePageRuleList: [],
 
   codeInput: '',
   codeIsDirty: false,
@@ -486,9 +486,8 @@ const Model: InformalNodeManagerPageModelType = {
   state: informalNodeManagerPageInitStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
-      const {informalNodeManagerPage, user}: ConnectState = yield select(({informalNodeManagerPage, user}: ConnectState) => ({
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
-        user,
       }));
 
       const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
@@ -808,7 +807,7 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           codeInput: data.ruleText,
           codeIsDirty: false,
-          ruleList: data.testRules.map((tr: any) => {
+          rulePageRuleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
@@ -868,7 +867,7 @@ const Model: InformalNodeManagerPageModelType = {
           codeIsChecking: false,
           codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           codeSaveSuccess: codeExecutionError.length === 0,
-          ruleList: data1.testRules.map((tr: any) => {
+          rulePageRuleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
