@@ -122,9 +122,9 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
           informalNodeManagerPage.replacerResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
               <Radio
-                checked={rl.name === informalNodeManagerPage.checkedResourceName}
+                checked={rl.name === informalNodeManagerPage.replacerCheckedResourceName}
                 onClick={() => {
-                  onChange({checkedResourceName: rl.name})
+                  onChange({replacerCheckedResourceName: rl.name})
                 }}
               />
               <div className={styles.replacerListItemContent}>
@@ -152,7 +152,7 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
                     }
 
                     {
-                      rl.name === informalNodeManagerPage.checkedResourceName && rl.versions.length > 0 && (
+                      rl.name === informalNodeManagerPage.replacerCheckedResourceName && rl.versions.length > 0 && (
                         <FVersionHandlerPopover
                           value={rl.version}
                           versionOptions={rl.versions}

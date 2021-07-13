@@ -5,7 +5,6 @@ import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 import * as React from "react";
-import FReplaceModal from "@/pages/node/informal/$id/containers/FReplaceModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -106,7 +105,7 @@ export interface InformalNodeManagerPageModelState {
     versions: string[];
     version: string;
   }[];
-  checkedResourceName: string;
+  replacerCheckedResourceName: string;
   replacedKeywords: string;
   replacedDependencyTreeList: string[];
   replacedSelectDependency: null | {
@@ -408,49 +407,6 @@ interface InformalNodeManagerPageModelType {
   };
 }
 
-// export const exhibitPageInitData = {
-//
-//
-//   replaceModalVisible: false,
-//   replaceModalReplacerOptions: ['!market', '!resource', '!collection'],
-//   replaceModalReplacerOptionSelected: '!market',
-//   replacerList: [],
-//   replacerInput: '',
-//   selectedType: '-1',
-//   selectedStatus: '2',
-//   filterKeywords: '',
-//   exhibitList: [],
-//   exhibitsTotal: -1,
-// };
-//
-// export const themePageInitData = {
-//   themeFilterKeywords: '',
-//   themeList: [],
-//   themesTotal: -1,
-//   // addThemeDrawerVisible: false,
-// };
-//
-// export const replaceModalInitData = {
-//   replacerResourceOptions: [
-//     {value: '!market', title: '资源市场'},
-//     {value: '!resource', title: '我的资源'},
-//     {value: '!collection', title: '我的收藏'},
-//   ],
-//   replacerBucketOptions: [],
-//   replacerOrigin: '!market',
-//   replacerKeywords: '',
-//   replacerResourceList: [],
-//   checkedResourceName: '',
-//
-//   replacedKeywords: '',
-//   replacedDependencyTreeList: [],
-//   replacedSelectDependency: null,
-//   replacedTargetVersions: [],
-//   replacedTargetSelectedVersion: null,
-//   replacedTreeData: [],
-//   replacedCheckedKeys: [],
-// };
-
 const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   nodeID: -1,
@@ -485,7 +441,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacerOrigin: '!market',
   replacerKeywords: '',
   replacerResourceList: [],
-  checkedResourceName: '',
+  replacerCheckedResourceName: '',
   replacedKeywords: '',
   replacedDependencyTreeList: [],
   replacedSelectDependency: null,
@@ -1799,7 +1755,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
       const replacerData = informalNodeManagerPage.replacerResourceList.find((rr) => {
-        return rr.name === informalNodeManagerPage.checkedResourceName;
+        return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
       });
       // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
       const results: IConfirmValue = [];
