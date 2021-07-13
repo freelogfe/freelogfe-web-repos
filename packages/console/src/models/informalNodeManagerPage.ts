@@ -148,9 +148,9 @@ export interface InformalNodeManagerPageModelState {
     authErrorText: string;
   }[];
 
-  themeFilterKeywords: string;
-  themesTotal: number;
-  themeList: {
+  themePageFilterKeywords: string;
+  themePageThemesTotal: number;
+  themePageThemeList: {
     id: string;
     name: string;
     identity: 'resource' | 'object' | 'exhibit';
@@ -464,9 +464,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   // exhibitsTotal: -1,
 
   // ...themePageInitData,
-  themeFilterKeywords: '',
-  themeList: [],
-  themesTotal: -1,
+  themePageFilterKeywords: '',
+  themePageThemeList: [],
+  themePageThemesTotal: -1,
 
   ruleListStatus: 'normal',
   ruleList: [],
@@ -687,7 +687,7 @@ const Model: InformalNodeManagerPageModelType = {
         onlineStatus: 2,
         resourceType: 'theme',
         limit: FUtil.Predefined.pageSize,
-        keywords: informalNodeManagerPage.themeFilterKeywords || undefined,
+        keywords: informalNodeManagerPage.themePageFilterKeywords || undefined,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
@@ -705,8 +705,8 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           ruleText: data1.ruleText,
           // themeListIsLoading: false,
-          themesTotal: data.totalItem,
-          themeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themeList'][number]>((dl) => {
+          themePageThemesTotal: data.totalItem,
+          themePageThemeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themePageThemeList'][number]>((dl) => {
 
             // console.log(dl, 'dl!@@#$#$');
 
@@ -720,7 +720,7 @@ const Model: InformalNodeManagerPageModelType = {
             });
 
             // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-            const rule: InformalNodeManagerPageModelState['themeList'][number]['rule'] = {
+            const rule: InformalNodeManagerPageModelState['themePageThemeList'][number]['rule'] = {
               add: operations.includes('add') ? {
                 exhibit: dl.testResourceName,
                 source: {

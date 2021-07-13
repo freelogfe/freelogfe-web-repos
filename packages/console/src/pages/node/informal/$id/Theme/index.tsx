@@ -51,7 +51,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
     });
   });
 
-  if (informalNodeManagerPage.themesTotal === -1) {
+  if (informalNodeManagerPage.themePageThemesTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
@@ -66,7 +66,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   return (<>
     {
-      informalNodeManagerPage.themeList.length === 0 && !informalNodeManagerPage.themeFilterKeywords
+      informalNodeManagerPage.themePageThemeList.length === 0 && !informalNodeManagerPage.themePageFilterKeywords
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前节点没有添加主题展品'}
@@ -106,11 +106,11 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               <div>
                 <FInput
                   theme={'dark'}
-                  value={informalNodeManagerPage.themeFilterKeywords}
+                  value={informalNodeManagerPage.themePageFilterKeywords}
                   debounce={300}
                   onDebounceChange={async (value) => {
                     await onChange({
-                      themeFilterKeywords: value
+                      themePageFilterKeywords: value
                     });
 
                     dispatch<FetchThemeListAction>({
@@ -126,7 +126,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           </div>
 
           {
-            informalNodeManagerPage.themeList.length === 0
+            informalNodeManagerPage.themePageThemeList.length === 0
               ? (<FNoDataTip
                 height={'calc(100vh - 70px - 24px - 100px - 100px)'}
                 tipText={'无搜索结果'}
@@ -134,7 +134,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               : (<div className={styles.body}>
                 <div className={styles.list}>
                   {
-                    informalNodeManagerPage.themeList.map((t, index, arr) => {
+                    informalNodeManagerPage.themePageThemeList.map((t, index, arr) => {
                       return (<div
                         key={t.id}
                         className={styles.item}
@@ -205,7 +205,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                       },
                                     });
                                     onChange({
-                                      themeList: arr.map((ttt) => {
+                                      themePageThemeList: arr.map((ttt) => {
                                         if (ttt.id !== t.id) {
                                           return {
                                             ...ttt,
