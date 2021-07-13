@@ -367,7 +367,7 @@
 	"tab_settings": "Settings",
 	"title_feather_account": "Feather Account",
 	"msg_activate_feather_account": "Welcome to Freelog",
-	"btn_activate_feather_account": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT",
+	"btn_activate_feather_account": "ACTIVATE FEATHER ACCOUNT",
 	"btn_go_to_console": "GO TO CONSOLE",
 	"title_feather_balance": "Balance",
 	"btn_change_paymentpassword": "CHANGE PAYMENT PASSWORD",
@@ -405,5 +405,8 @@
 	"msg_payment_password_changed": "Payment password Changed!",
 	"title_verify_password": "Enter Login Password",
 	"msg_verify_password": "Because you are accessing security functions, you need to verify your login password.",
-	"hint_enter_password": "Enter login password"
+	"hint_enter_password": "Enter login password",
+	"title_activate_feather_account": "Activate Feather Account",
+	"msg_feather_account_successfully_actived": "Account activated",
+	"btn_activate_feather_account_now": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT"
 }
