@@ -14,7 +14,7 @@ import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelSta
 import {
   ChangeAction,
   FetchExhibitListAction,
-  SaveDataRulesAction,
+  // SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import FLoadingTip from "@/components/FLoadingTip";
@@ -30,16 +30,16 @@ import FUtil1 from '@/utils';
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
-const resourceTypeOptions = [
-  {text: '全部', value: '-1'},
-  ...FUtil.Predefined.resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
-];
+// const resourceTypeOptions = [
+//   {text: '全部', value: '-1'},
+//   ...FUtil.Predefined.resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
+// ];
 
-const resourceStatusOptions = [
-  {text: '全部', value: '2'},
-  {text: '已上线', value: '1'},
-  {text: '已下线', value: '0'},
-];
+// const resourceStatusOptions = [
+//   {text: '全部', value: '2'},
+//   {text: '已上线', value: '1'},
+//   {text: '已下线', value: '0'},
+// ];
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -128,7 +128,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
               <div>
                 <span>类型：</span>
                 <FDropdownMenu
-                  options={resourceTypeOptions}
+                  options={informalNodeManagerPage.exhibitPageTypeOptions}
                   onChange={async (value) => {
                     await onChange({exhibitPageSelectedType: value});
                     await dispatch<FetchExhibitListAction>({
@@ -140,14 +140,14 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                   }}
                 >
             <span
-              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === informalNodeManagerPage.exhibitPageSelectedType)?.text || ''}<FDown
+              style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibitPageTypeOptions.find((rto) => rto.value === informalNodeManagerPage.exhibitPageSelectedType)?.text || ''}<FDown
               style={{marginLeft: 8}}/></span>
                 </FDropdownMenu>
               </div>
               <div>
                 <span>状态：</span>
                 <FDropdownMenu
-                  options={resourceStatusOptions}
+                  options={informalNodeManagerPage.exhibitPageStatusOptions}
                   onChange={async (value) => {
                     await onChange({exhibitPageSelectedStatus: value as '0'});
                     await dispatch<FetchExhibitListAction>({
@@ -158,7 +158,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                     });
                   }}
                 >
-            <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
+            <span style={{cursor: 'pointer'}}>{informalNodeManagerPage.exhibitPageStatusOptions.find((rso) => {
               return rso.value === informalNodeManagerPage.exhibitPageSelectedStatus.toString();
             })?.text}<FDown style={{marginLeft: 10}}/></span>
                 </FDropdownMenu>

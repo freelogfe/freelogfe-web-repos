@@ -125,7 +125,9 @@ export interface InformalNodeManagerPageModelState {
   replacedTreeData: TreeNode[];
   replacedCheckedKeys: string[];
 
+  exhibitPageTypeOptions: { value: string; text: string; }[];
   exhibitPageSelectedType: '-1' | string;
+  exhibitPageStatusOptions: { value: string; text: string; }[];
   exhibitPageSelectedStatus: '0' | '1' | '2';
   exhibitPageFilterKeywords: string;
   exhibitPageExhibitsTotal: number;
@@ -450,7 +452,16 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacedTreeData: [],
   replacedCheckedKeys: [],
 
+  exhibitPageTypeOptions: [
+    {text: '全部', value: '-1'},
+    ...FUtil.Predefined.resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
+  ],
   exhibitPageSelectedType: '-1',
+  exhibitPageStatusOptions: [
+    {text: '全部', value: '2'},
+    {text: '已上线', value: '1'},
+    {text: '已下线', value: '0'},
+  ],
   exhibitPageSelectedStatus: '2',
   exhibitPageFilterKeywords: '',
   exhibitPageExhibitList: [],
