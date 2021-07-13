@@ -6,7 +6,7 @@ import {FContentText} from '@/components/FText';
 import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, InformalNodeManagerPageModelState, ReplaceInformExhibitState} from "@/models/connect";
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {
   ChangeAction, OnReplacedEntityVersionChangeAction,
   OnReplacedKeywordChangeAction,
@@ -33,12 +33,12 @@ function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
     // console.log(result, '$$$$$$$4444rrrrrrr');
   });
 
-  async function onChange(payload: Partial<ReplaceInformExhibitState>) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload: payload,
-    });
-  }
+  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload: payload,
+  //   });
+  // }
 
   return (<>
     <div style={{height: 15}}/>

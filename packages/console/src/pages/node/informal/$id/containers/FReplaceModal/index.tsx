@@ -80,7 +80,7 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
       });
     }}
     okButtonProps={{
-      disabled: !informalNodeManagerPage.checkedResourceName || informalNodeManagerPage.replacedCheckedKeys.length === 0,
+      disabled: !informalNodeManagerPage.replacerCheckedResourceName || informalNodeManagerPage.replacedCheckedKeys.length === 0,
     }}
     onOk={async () => {
 

@@ -67,8 +67,8 @@ export interface InformalNodeManagerPageModelState {
   testNodeUrl: string;
   ruleText: string;
   allRuleResult: any;
-  ruleAllAddResourceNames: string[];
-  ruleAllAddObjectNames: string[];
+  ruleAllAddedResourceNames: string[];
+  ruleAllAddedObjectNames: string[];
   showPage: 'exhibit' | 'theme' | 'mappingRule';
 
   addExhibitDrawerVisible: boolean;
@@ -415,8 +415,8 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   testNodeUrl: '',
   ruleText: '',
   allRuleResult: null,
-  ruleAllAddResourceNames: [],
-  ruleAllAddObjectNames: [],
+  ruleAllAddedResourceNames: [],
+  ruleAllAddedObjectNames: [],
   showPage: 'exhibit',
 
   addExhibitDrawerVisible: false,
@@ -640,12 +640,12 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           ruleText: data1.ruleText,
           allRuleResult: data1.testRules,
-          ruleAllAddObjectNames: allAddRule.filter((tr: any) => {
+          ruleAllAddedObjectNames: allAddRule.filter((tr: any) => {
             return tr.ruleInfo.candidate.type === 'object';
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
           }),
-          ruleAllAddResourceNames: allAddRule.filter((tr: any) => {
+          ruleAllAddedResourceNames: allAddRule.filter((tr: any) => {
             return tr.ruleInfo.candidate.type === 'resource';
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
@@ -1073,7 +1073,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -1147,7 +1147,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -1220,7 +1220,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddResourceNames.includes(rs.resourceName)) {
+                if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (rs.latestVersion === '') {
@@ -1298,7 +1298,7 @@ const Model: InformalNodeManagerPageModelType = {
                 let disabled: boolean = false;
                 let disabledReason: string = '';
 
-                if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.ruleAllAddObjectNames.includes(objectName)) {
+                if (usedResourceIDs.includes(ob.objectId) || informalNodeManagerPage.ruleAllAddedObjectNames.includes(objectName)) {
                   disabled = true;
                   disabledReason = '已被使用';
                 } else if (ob.resourceType === '') {
