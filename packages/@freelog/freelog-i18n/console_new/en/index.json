@@ -361,5 +361,12 @@
 	"title_pre_execute_error": "Invalid rules",
 	"lable_error": "error: ",
 	"msg_precompile_error": "Save failed with following errors:",
-	"title_matched_results": "Matching results"
+	"title_matched_results": "Matching results",
+	"tab_my_wallet": "My Wallet",
+	"tab_my_contracts": "My Contracts",
+	"tab_settings": "Settings",
+	"title_feather_account": "",
+	"msg_activate_feather_account": "Welcome to Freelog",
+	"btn_activate_feather_account": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT",
+	"btn_go_to_console": "GO TO CONSOLE"
 }

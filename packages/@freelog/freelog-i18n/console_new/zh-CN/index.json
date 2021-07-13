@@ -361,5 +361,12 @@
 	"title_pre_execute_error": "无效规则",
 	"lable_error": "错误：",
 	"msg_precompile_error": "保存失败，出现如下错误:",
-	"title_matched_results": "匹配结果"
+	"title_matched_results": "匹配结果",
+	"tab_my_wallet": "我的钱包",
+	"tab_my_contracts": "我的合约",
+	"tab_settings": "设置",
+	"title_feather_account": "",
+	"msg_activate_feather_account": "欢迎使用Freelog",
+	"btn_activate_feather_account": "点击此处激活你的羽币账户",
+	"btn_go_to_console": "进入工作台"
 }
