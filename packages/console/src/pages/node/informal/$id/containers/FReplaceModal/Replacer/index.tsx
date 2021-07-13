@@ -7,27 +7,25 @@ import FVersionHandlerPopover from "@/components/FVersionHandlerPopover";
 import {FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {
-  ConnectState,
-  ReplaceInformExhibitState,
-  StorageHomePageModelState,
+  ConnectState, InformalNodeManagerPageModelState,
+  // ReplaceInformExhibitState,
 } from "@/models/connect";
 import {
   ChangeAction,
   OnReplacerMountAction,
-  OnReplacerOriginChangeAction, OnReplacerUnmountAction
-} from "@/models/replaceInformExhibitModal";
-import {FetchReplacerListAction} from "@/models/replaceInformExhibitModal";
+  OnReplacerOriginChangeAction, OnReplacerUnmountAction, FetchReplacerListAction, OnReplacerKeywordsChangeAction
+} from "@/models/informalNodeManagerPage";
+// import {} from "@/models/replaceInformExhibitModal";
 import FSelect from "@/components/FSelect";
 import {FDown} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
 
 interface ReplacerProps {
   dispatch: Dispatch,
-  replaceInformExhibit: ReplaceInformExhibitState;
-  storageHomePage: StorageHomePageModelState;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerProps) {
+function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
 
   // AHooks.useMount(() => {
   //   console.log('replacer**************');
@@ -42,27 +40,27 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
 
   AHooks.useMount(() => {
     dispatch<OnReplacerMountAction>({
-      type: 'replaceInformExhibit/onReplacerMount',
+      type: 'informalNodeManagerPage/onReplacerMount',
     });
   });
 
   AHooks.useUnmount(() => {
     dispatch<OnReplacerUnmountAction>({
-      type: 'replaceInformExhibit/onReplacerUnmount',
+      type: 'informalNodeManagerPage/onReplacerUnmount',
     });
   });
 
 
-  async function onChange(value: Partial<ReplaceInformExhibitState>, loadData = false) {
+  async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData = false) {
     dispatch<ChangeAction>({
-      type: 'replaceInformExhibit/change',
+      type: 'informalNodeManagerPage/change',
       payload: {
         ...value,
       },
     });
     if (loadData) {
       await dispatch<FetchReplacerListAction>({
-        type: 'replaceInformExhibit/fetchReplacerList',
+        type: 'informalNodeManagerPage/fetchReplacerList',
         payload: {
           restart: false,
           origin: '!market',
@@ -82,15 +80,15 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
   return (<>
     <div className={styles.replacerHeader}>
       <FSelect
-        value={replaceInformExhibit.replacerOrigin}
+        value={informalNodeManagerPage.replacerOrigin}
         dataSource={[
-          ...replaceInformExhibit.replacerResourceOptions,
-          ...replaceInformExhibit.replacerBucketOptions,
+          ...informalNodeManagerPage.replacerResourceOptions,
+          ...informalNodeManagerPage.replacerBucketOptions,
         ]}
         onChange={(value: string) => {
           // onChange({replacerOrigin: value}, true);
           dispatch<OnReplacerOriginChangeAction>({
-            type: 'replaceInformExhibit/onReplacerOriginChange',
+            type: 'informalNodeManagerPage/onReplacerOriginChange',
             payload: {
               value: value,
             },
@@ -104,21 +102,27 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
         <FInput
           theme="dark"
           wrapClassName={styles.replacerFilterInput}
-          value={replaceInformExhibit.replacerKeywords}
+          value={informalNodeManagerPage.replacerKeywords}
           debounce={300}
           onDebounceChange={(value) => {
             // console.log(value, 'value!@#$');
-            onChange({replacerKeywords: value}, true);
+            // onChange({replacerKeywords: value}, true);
+            dispatch<OnReplacerKeywordsChangeAction>({
+              type: 'informalNodeManagerPage/onReplacerKeywordsChange',
+              payload: {
+                value: value,
+              },
+            });
           }}
         />
       </div>
       <div style={{height: 15}}/>
       <Space size={10} direction="vertical" className={styles.replacerList}>
         {
-          replaceInformExhibit.replacerResourceList.map((rl) => {
+          informalNodeManagerPage.replacerResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
               <Radio
-                checked={rl.name === replaceInformExhibit.checkedResourceName}
+                checked={rl.name === informalNodeManagerPage.checkedResourceName}
                 onClick={() => {
                   onChange({checkedResourceName: rl.name})
                 }}
@@ -148,7 +152,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                     }
 
                     {
-                      rl.name === replaceInformExhibit.checkedResourceName && rl.versions.length > 0 && (
+                      rl.name === informalNodeManagerPage.checkedResourceName && rl.versions.length > 0 && (
                         <FVersionHandlerPopover
                           value={rl.version}
                           versionOptions={rl.versions}
@@ -156,7 +160,7 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
                           onChange={(version) => {
                             // console.log(version, '!!!!@2222222222');
                             onChange({
-                              replacerResourceList: replaceInformExhibit.replacerResourceList.map((rr) => {
+                              replacerResourceList: informalNodeManagerPage.replacerResourceList.map((rr) => {
                                 if (rr.id !== rl.id) {
                                   return rr;
                                 }
@@ -193,7 +197,6 @@ function Replacer({dispatch, replaceInformExhibit, storageHomePage}: ReplacerPro
   </>);
 }
 
-export default connect(({replaceInformExhibit, storageHomePage}: ConnectState) => ({
-  replaceInformExhibit,
-  storageHomePage,
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
 }))(Replacer);

@@ -5,8 +5,8 @@ import Replacer from "./Replacer";
 import Replaced from "./Replaced";
 import FModal from "@/components/FModal";
 import {connect, Dispatch} from 'dva';
-import {ChangeAction, OnReplaceModalConfirmAction, ReplaceInformExhibitState} from "@/models/replaceInformExhibitModal";
-import {ConnectState} from "@/models/connect";
+import {OnReplaceModalCancelAction, OnReplaceModalConfirmAction} from "@/models/informalNodeManagerPage";
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import FThickArrowRight from "@/components/FIcons/FThickArrowRight";
 import * as AHooks from 'ahooks';
 
@@ -24,19 +24,19 @@ type IConfirmValue = {
 }[];
 
 interface FReplaceModalProps {
-  nodeID: number;
-  isTheme: boolean;
-  visible?: boolean;
+  // nodeID: number;
+  // isTheme: boolean;
+  // visible?: boolean;
 
-  onCancel?(): void;
+  // onCancel?(): void;
 
   dispatch: Dispatch;
-  replaceInformExhibit: ReplaceInformExhibitState;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 
-  onConfirm?(value: IConfirmValue): void;
+  // onConfirm?(value: IConfirmValue): void;
 }
 
-function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, isTheme, replaceInformExhibit}: FReplaceModalProps) {
+function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) {
 
   // AHooks.useMount(() => {
   //   // console.log('modal**************');
@@ -49,42 +49,45 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, isTheme,
   //   });
   // });
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'replaceInformExhibit/change',
-      payload: {
-        nodeID: nodeID,
-      },
-    });
-  }, [nodeID]);
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload: {
+  //       nodeID: nodeID,
+  //     },
+  //   });
+  // }, [nodeID]);
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'replaceInformExhibit/change',
-      payload: {
-        isTheme: isTheme,
-      },
-    });
-  }, [isTheme]);
+  // React.useEffect(() => {
+  //   dispatch<ChangeAction>({
+  //     type: 'replaceInformExhibit/change',
+  //     payload: {
+  //       isTheme: isTheme,
+  //     },
+  //   });
+  // }, [isTheme]);
 
   return (<FModal
     title={null}
     width={947}
-    visible={visible}
+    visible={informalNodeManagerPage.replaceModalVisible}
     closable={false}
     destroyOnClose
     onCancel={() => {
-      onCancel && onCancel();
+      // onCancel && onCancel();
+      dispatch<OnReplaceModalCancelAction>({
+        type: 'informalNodeManagerPage/onReplaceModalCancel',
+      });
     }}
     okButtonProps={{
-      disabled: !replaceInformExhibit.checkedResourceName || replaceInformExhibit.replacedCheckedKeys.length === 0,
+      disabled: !informalNodeManagerPage.checkedResourceName || informalNodeManagerPage.replacedCheckedKeys.length === 0,
     }}
     onOk={async () => {
 
-      const results = await dispatch<OnReplaceModalConfirmAction>({
-        type: 'replaceInformExhibit/onReplaceModalConfirm',
+      dispatch<OnReplaceModalConfirmAction>({
+        type: 'informalNodeManagerPage/onReplaceModalConfirm',
       });
-      onConfirm && onConfirm(results);
+      // onConfirm && onConfirm(results);
 
     }}
   >
@@ -116,8 +119,8 @@ function FReplaceModal({visible, onCancel, onConfirm, dispatch, nodeID, isTheme,
   </FModal>);
 }
 
-export default connect(({replaceInformExhibit}: ConnectState) => ({
-  replaceInformExhibit,
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
 }))(FReplaceModal);
 
 function simplifiedRelationship(relation: string[]): string[] {

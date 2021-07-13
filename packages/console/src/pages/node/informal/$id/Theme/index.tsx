@@ -8,7 +8,7 @@ import {
   ChangeAction,
   FetchThemeListAction,
   InformalNodeManagerPageModelState,
-  SaveDataRulesAction, themePageInitData
+  SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
@@ -47,7 +47,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   AHooks.useUnmount(() => {
     onChange({
-      ...themePageInitData,
+      // ...themePageInitData,
     });
   });
 

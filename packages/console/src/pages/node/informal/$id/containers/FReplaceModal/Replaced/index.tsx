@@ -6,24 +6,20 @@ import {FContentText} from '@/components/FText';
 import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, ReplaceInformExhibitState} from "@/models/connect";
+import {ConnectState, InformalNodeManagerPageModelState, ReplaceInformExhibitState} from "@/models/connect";
 import {
   ChangeAction, OnReplacedEntityVersionChangeAction,
   OnReplacedKeywordChangeAction,
-  // FetchDependencyTreeAction,
   OnReplacedMountAction, OnReplacedTreeLoadDataAction,
-  TreeNode
-} from "@/models/replaceInformExhibitModal";
-import {WholeMutable} from "@/models/shared";
-import {FServiceAPI} from '@freelog/tools-lib';
+} from "@/models/informalNodeManagerPage";
 import * as AHooks from 'ahooks';
 
 interface ReplacedProps {
   dispatch: Dispatch;
-  replaceInformExhibit: ReplaceInformExhibitState;
+  informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
+function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
 
   // AHooks.useMount(() => {
   //   console.log('replaced**************');
@@ -32,14 +28,14 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
   // onReplacedMount
   AHooks.useMount(async () => {
     dispatch<OnReplacedMountAction>({
-      type: 'replaceInformExhibit/onReplacedMount',
+      type: 'informalNodeManagerPage/onReplacedMount',
     });
     // console.log(result, '$$$$$$$4444rrrrrrr');
   });
 
   async function onChange(payload: Partial<ReplaceInformExhibitState>) {
     await dispatch<ChangeAction>({
-      type: 'replaceInformExhibit/change',
+      type: 'informalNodeManagerPage/change',
       payload: payload,
     });
   }
@@ -48,8 +44,8 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
     <div style={{height: 15}}/>
     <div className={styles.filter}>
       <FAutoComplete
-        value={replaceInformExhibit.replacedKeywords}
-        options={replaceInformExhibit.replacedDependencyTreeList.map<{ value: string; }>((dt) => {
+        value={informalNodeManagerPage.replacedKeywords}
+        options={informalNodeManagerPage.replacedDependencyTreeList.map<{ value: string; }>((dt) => {
           return {
             value: dt,
           };
@@ -58,7 +54,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         className={styles.filterInput}
         onDebounceChange={(value) => {
           dispatch<OnReplacedKeywordChangeAction>({
-            type: 'replaceInformExhibit/onReplacedKeywordChange',
+            type: 'informalNodeManagerPage/onReplacedKeywordChange',
             payload: {
               value: value,
             },
@@ -66,15 +62,15 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         }}
       />
       {
-        replaceInformExhibit.replacedSelectDependency?.versions &&
-        replaceInformExhibit.replacedSelectDependency.versions.length > 0 &&
+        informalNodeManagerPage.replacedSelectDependency?.versions &&
+        informalNodeManagerPage.replacedSelectDependency.versions.length > 0 &&
         (<FDropdownMenu
           // options={replaceInformExhibit.replacedSelectDependency.versions.map((v) => ({value: v}))}
-          options={replaceInformExhibit.replacedTargetVersions}
+          options={informalNodeManagerPage.replacedTargetVersions}
           onChange={(value) => {
             // onChange({replacedTargetVersion: value});
             dispatch<OnReplacedEntityVersionChangeAction>({
-              type: 'replaceInformExhibit/onReplacedEntityVersionChange',
+              type: 'informalNodeManagerPage/onReplacedEntityVersionChange',
               payload: {
                 value: value,
               },
@@ -84,7 +80,7 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
           <div style={{cursor: 'pointer'}}>
             <FContentText
               type="additional2"
-              text={replaceInformExhibit.replacedTargetSelectedVersion?.text}
+              text={informalNodeManagerPage.replacedTargetSelectedVersion?.text}
             />
           </div>
         </FDropdownMenu>)
@@ -97,29 +93,29 @@ function Replaced({dispatch, replaceInformExhibit}: ReplacedProps) {
         checkable
         loadData={async (node: any) => {
           dispatch<OnReplacedTreeLoadDataAction>({
-            type: 'replaceInformExhibit/onReplacedTreeLoadData',
+            type: 'informalNodeManagerPage/onReplacedTreeLoadData',
             payload: node,
           });
         }}
-        checkedKeys={replaceInformExhibit.replacedCheckedKeys}
+        checkedKeys={informalNodeManagerPage.replacedCheckedKeys}
         onCheck={(checkedKeys) => {
           // console.log(checkedKeys, 'checkedKeys!@#$@#$@#@#$@#$');
           dispatch<ChangeAction>({
-            type: 'replaceInformExhibit/change',
+            type: 'informalNodeManagerPage/change',
             payload: {
               replacedCheckedKeys: checkedKeys as string[],
             },
           });
         }}
-        treeData={replaceInformExhibit.replacedTreeData}
+        treeData={informalNodeManagerPage.replacedTreeData}
         // treeData={treeData}
       />
     </div>
   </>);
 }
 
-export default connect(({replaceInformExhibit}: ConnectState) => ({
-  replaceInformExhibit,
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
+  informalNodeManagerPage,
 }))(Replaced);
 
 // interface UpdateTreeDataParams {

@@ -5,6 +5,7 @@ import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
 import * as React from "react";
+import FReplaceModal from "@/pages/node/informal/$id/containers/FReplaceModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -306,6 +307,13 @@ export interface OnReplacerOriginChangeAction extends AnyAction {
   };
 }
 
+export interface OnReplacerKeywordsChangeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onReplacerKeywordsChange'
+  payload: {
+    value: string;
+  };
+}
+
 export interface FetchReplacerListAction extends AnyAction {
   type: 'fetchReplacerList' | 'informalNodeManagerPage/fetchReplacerList';
   payload: {
@@ -380,6 +388,7 @@ interface InformalNodeManagerPageModelType {
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
     onReplacerOriginChange: (action: OnReplacerOriginChangeAction, effects: EffectsCommandMap) => void;
+    onReplacerKeywordsChange: (action: OnReplacerKeywordsChangeAction, effects: EffectsCommandMap) => void;
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
     onReplacerListLoadMore: (action: OnReplacerListLoadMoreAction, effects: EffectsCommandMap) => void;
     onReplacedMount: (action: OnReplacedMountAction, effects: EffectsCommandMap) => void;
@@ -1410,6 +1419,22 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
+    * onReplacerKeywordsChange({payload}: OnReplacerKeywordsChangeAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerKeywords: payload.value,
+        },
+      });
+
+      yield put<FetchReplacerListAction>({
+        type: 'fetchReplacerList',
+        payload: {
+          restart: true,
+          keywords: payload.value,
+        },
+      });
+    },
     * fetchReplacerList({payload}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
@@ -1728,10 +1753,15 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplaceModalCancel({}: OnReplaceModalCancelAction, {}: EffectsCommandMap) {
-
+    * onReplaceModalCancel({}: OnReplaceModalCancelAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replaceModalVisible: false,
+        },
+      });
     },
-    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, {select}: EffectsCommandMap) {
+    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, {select, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));
@@ -1789,7 +1819,41 @@ const Model: InformalNodeManagerPageModelType = {
           scopes: scopes,
         });
       }
-      return results;
+      // return results;
+
+      const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+
+      for (const v of results) {
+        const rule = rules.find((r) => v.exhibitName === r.exhibitName);
+        if (rule) {
+          let replaces = rule.replaces || [];
+          rule.replaces = [
+            ...replaces,
+            v,
+          ];
+        } else {
+          rules.push({
+            operation: 'alter',
+            exhibitName: v.exhibitName,
+            replaces: [v]
+          });
+        }
+      }
+      // console.log(rules, 'nowRules0923jlkfds()UOIJ');
+      yield put<SaveDataRulesAction>({
+        type: 'informalNodeManagerPage/saveDataRules',
+        payload: {
+          type: 'replace',
+          data: rules,
+        },
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replaceModalVisible: false
+        },
+      });
     },
   },
   reducers: {

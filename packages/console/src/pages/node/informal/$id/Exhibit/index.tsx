@@ -22,9 +22,9 @@ import FLoadingTip from "@/components/FLoadingTip";
 import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
 import {FUtil} from '@freelog/tools-lib';
-import {
-  ReplaceInformExhibitInitModelStatesAction,
-} from "@/models/replaceInformExhibitModal";
+// import {
+//   ReplaceInformExhibitInitModelStatesAction,
+// } from "@/models/replaceInformExhibitModal";
 // import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
 

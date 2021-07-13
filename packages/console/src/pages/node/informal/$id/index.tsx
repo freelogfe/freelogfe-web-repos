@@ -18,7 +18,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import FModal from "@/components/FModal";
 import {Space} from "antd";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
-import {ReplaceInformExhibitInitModelStatesAction} from "@/models/replaceInformExhibitModal";
+// import {ReplaceInformExhibitInitModelStatesAction} from "@/models/replaceInformExhibitModal";
 import FReplaceModal from "@/pages/node/informal/$id/containers/FReplaceModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
@@ -106,53 +106,53 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
 
     {/*{console.log(informalNodeManagerPage.nodeID, 'informalNodeManagerPage.nodeIDinformalNodeManagerPage.nodeID')}*/}
     <FReplaceModal
-      nodeID={informalNodeManagerPage.nodeID}
-      isTheme={informalNodeManagerPage.showPage === 'theme'}
-      visible={informalNodeManagerPage.replaceModalVisible}
-      onCancel={() => {
-        onChange({
-          replaceModalVisible: false
-        });
-        dispatch<ReplaceInformExhibitInitModelStatesAction>({
-          type: 'replaceInformExhibit/initModelStates',
-        });
-      }}
-      onConfirm={(value) => {
-        // console.log(value, '@#ASDFASDfloj98pvaluevaluevalue');
-        const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-        // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
-
-        for (const v of value) {
-          const rule = rules.find((r) => v.exhibitName === r.exhibitName);
-          if (rule) {
-            let replaces = rule.replaces || [];
-            rule.replaces = [
-              ...replaces,
-              v,
-            ];
-          } else {
-            rules.push({
-              operation: 'alter',
-              exhibitName: v.exhibitName,
-              replaces: [v]
-            });
-          }
-        }
-        // console.log(rules, 'nowRules0923jlkfds()UOIJ');
-        dispatch<SaveDataRulesAction>({
-          type: 'informalNodeManagerPage/saveDataRules',
-          payload: {
-            type: 'replace',
-            data: rules,
-          },
-        });
-        onChange({
-          replaceModalVisible: false
-        });
-        dispatch<ReplaceInformExhibitInitModelStatesAction>({
-          type: 'replaceInformExhibit/initModelStates',
-        });
-      }}
+      // nodeID={informalNodeManagerPage.nodeID}
+      // isTheme={informalNodeManagerPage.showPage === 'theme'}
+      // visible={informalNodeManagerPage.replaceModalVisible}
+      // onCancel={() => {
+      //   onChange({
+      //     replaceModalVisible: false
+      //   });
+      //   dispatch<ReplaceInformExhibitInitModelStatesAction>({
+      //     type: 'replaceInformExhibit/initModelStates',
+      //   });
+      // }}
+      // onConfirm={(value) => {
+      //   // console.log(value, '@#ASDFASDfloj98pvaluevaluevalue');
+      //   const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      //   // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
+      //
+      //   for (const v of value) {
+      //     const rule = rules.find((r) => v.exhibitName === r.exhibitName);
+      //     if (rule) {
+      //       let replaces = rule.replaces || [];
+      //       rule.replaces = [
+      //         ...replaces,
+      //         v,
+      //       ];
+      //     } else {
+      //       rules.push({
+      //         operation: 'alter',
+      //         exhibitName: v.exhibitName,
+      //         replaces: [v]
+      //       });
+      //     }
+      //   }
+      //   // console.log(rules, 'nowRules0923jlkfds()UOIJ');
+      //   dispatch<SaveDataRulesAction>({
+      //     type: 'informalNodeManagerPage/saveDataRules',
+      //     payload: {
+      //       type: 'replace',
+      //       data: rules,
+      //     },
+      //   });
+      //   onChange({
+      //     replaceModalVisible: false
+      //   });
+      //   dispatch<ReplaceInformExhibitInitModelStatesAction>({
+      //     type: 'replaceInformExhibit/initModelStates',
+      //   });
+      // }}
     />
   </>);
 }
