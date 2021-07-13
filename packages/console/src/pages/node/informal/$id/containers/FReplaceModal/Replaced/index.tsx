@@ -10,7 +10,7 @@ import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect"
 import {
   ChangeAction, OnReplacedEntityVersionChangeAction,
   OnReplacedKeywordChangeAction,
-  OnReplacedMountAction, OnReplacedTreeLoadDataAction,
+  OnReplacedMountAction, OnReplacedTreeLoadDataAction, OnReplacedUnmountAction,
 } from "@/models/informalNodeManagerPage";
 import * as AHooks from 'ahooks';
 
@@ -21,24 +21,17 @@ interface ReplacedProps {
 
 function Replaced({dispatch, informalNodeManagerPage}: ReplacedProps) {
 
-  // AHooks.useMount(() => {
-  //   console.log('replaced**************');
-  // });
-
-  // onReplacedMount
   AHooks.useMount(async () => {
     dispatch<OnReplacedMountAction>({
       type: 'informalNodeManagerPage/onReplacedMount',
     });
-    // console.log(result, '$$$$$$$4444rrrrrrr');
   });
 
-  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload: payload,
-  //   });
-  // }
+  AHooks.useUnmount(() => {
+    dispatch<OnReplacedUnmountAction>({
+      type: 'informalNodeManagerPage/onReplacedUnmount',
+    });
+  });
 
   return (<>
     <div style={{height: 15}}/>

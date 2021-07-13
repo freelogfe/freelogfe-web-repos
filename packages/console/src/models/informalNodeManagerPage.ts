@@ -106,7 +106,6 @@ export interface InformalNodeManagerPageModelState {
     versions: string[];
     versionRange: string;
   }[];
-  // replacerCheckedResourceName: string;
   replacedKeywords: string;
   replacedDependencyTreeList: string[];
   replacedSelectDependency: null | {
@@ -462,7 +461,6 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacerOrigin: '!market',
   replacerKeywords: '',
   replacerResourceList: [],
-  // replacerCheckedResourceName: '',
   replacedKeywords: '',
   replacedDependencyTreeList: [],
   replacedSelectDependency: null,
@@ -1637,8 +1635,19 @@ const Model: InformalNodeManagerPageModelType = {
     * onReplacedMount({}: OnReplacedMountAction, {}: EffectsCommandMap) {
 
     },
-    * onReplacedUnmount({}: OnReplacedUnmountAction, {}: EffectsCommandMap) {
-
+    * onReplacedUnmount({}: OnReplacedUnmountAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacedKeywords: '',
+          replacedDependencyTreeList: [],
+          replacedSelectDependency: null,
+          replacedTargetVersions: [],
+          replacedTargetSelectedVersion: null,
+          replacedTreeData: [],
+          replacedCheckedKeys: [],
+        },
+      });
     },
     * onReplacedKeywordChange({payload}: OnReplacedKeywordChangeAction, {put, select, call}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
@@ -1800,9 +1809,13 @@ const Model: InformalNodeManagerPageModelType = {
         informalNodeManagerPage,
       }));
 
-      const simplifiedResults: string[][] = simplifiedRelationship(informalNodeManagerPage.replacedCheckedKeys).map<string[]>((r) => {
-        return r.split(':');
-      });
+      const simplifiedResults: string[][] = simplifiedRelationship(informalNodeManagerPage.replacedCheckedKeys)
+        .map<string[]>((r) => {
+          return r.split(':')
+            .filter((_, i) => {
+              return i !== 0;
+            });
+        });
       // console.log(simplifiedResults, 're90j23DSF@#AFSd0-_simplifiedResults');
       const resultObj: { [key: string]: ICandidate[][] } = {};
       for (const simplifiedResult of simplifiedResults) {
@@ -1832,6 +1845,7 @@ const Model: InformalNodeManagerPageModelType = {
         }));
       }
       // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
+
       const replacerData = informalNodeManagerPage.replacerResourceList.find((rr) => {
         // return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
         return rr.checked;
@@ -1856,11 +1870,13 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // return results;
 
-      const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      const rules: any[] = informalNodeManagerPage.allRuleResult.map((rr: any) => {
+        return rr.ruleInfo;
+      });
       // console.log(rules, '@#XDFZFSWEAfdjs9flkasjd');
 
       for (const v of results) {
-        const rule = rules.find((r) => v.exhibitName === r.exhibitName);
+        const rule = rules.find((r: any) => v.exhibitName === r.exhibitName);
         if (rule) {
           let replaces = rule.replaces || [];
           rule.replaces = [
@@ -1868,7 +1884,7 @@ const Model: InformalNodeManagerPageModelType = {
             v,
           ];
         } else {
-          rules.push({
+          rules.unshift({
             operation: 'alter',
             exhibitName: v.exhibitName,
             replaces: [v]
@@ -1893,6 +1909,10 @@ const Model: InformalNodeManagerPageModelType = {
   },
   reducers: {
     change(state, {payload}) {
+      // const newState = {...state};
+      // if (payload.replacedCheckedKeys && payload.replacedCheckedKeys.length === 0 && state.replacerResourceList.some((rr) => rr.checked)) {
+      //
+      // }
       return {
         ...state,
         ...payload,
@@ -2028,14 +2048,13 @@ function organizeData(data: OrganizeData[], parentKey: string = ''): TreeNode[] 
 }
 
 function simplifiedRelationship(relation: string[]): string[] {
-  // console.log(relation, 'relation!!!!!@@@@@');
   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
 
   for (let i = 0; i < arr.length; i++) {
     const current: string = arr[i];
     arr = arr.filter((a) => {
       return a === current || !a.startsWith(current);
-    })
+    });
   }
   return arr;
 }

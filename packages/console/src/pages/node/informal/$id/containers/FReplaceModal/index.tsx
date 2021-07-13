@@ -74,26 +74,21 @@ function FReplaceModal({dispatch, informalNodeManagerPage}: FReplaceModalProps) 
     closable={false}
     destroyOnClose
     onCancel={() => {
-      // onCancel && onCancel();
       dispatch<OnReplaceModalCancelAction>({
         type: 'informalNodeManagerPage/onReplaceModalCancel',
       });
     }}
     okButtonProps={{
-      disabled: !informalNodeManagerPage.replacerCheckedResourceName || informalNodeManagerPage.replacedCheckedKeys.length === 0,
+      disabled: !informalNodeManagerPage.replacerResourceList.some((rr) => rr.checked) || informalNodeManagerPage.replacedCheckedKeys.length === 0,
     }}
     onOk={async () => {
-
       dispatch<OnReplaceModalConfirmAction>({
         type: 'informalNodeManagerPage/onReplaceModalConfirm',
       });
-      // onConfirm && onConfirm(results);
-
     }}
   >
     <div className={styles.replaceHandler}>
       <div className={styles.replacer}>
-        {/*<FTitleText type="h5" text={'选择替换资源'}/>*/}
         <FContentText type="highlight" text={'选择替换资源'}/>
         <div style={{height: 5}}/>
         <div className={styles.content}>
@@ -123,15 +118,15 @@ export default connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
 }))(FReplaceModal);
 
-function simplifiedRelationship(relation: string[]): string[] {
-  // console.log(relation, 'relation!!!!!@@@@@');
-  let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
-
-  for (let i = 0; i < arr.length; i++) {
-    const current: string = arr[i];
-    arr = arr.filter((a) => {
-      return a === current || !a.startsWith(current);
-    })
-  }
-  return arr;
-}
+// function simplifiedRelationship(relation: string[]): string[] {
+//   // console.log(relation, 'relation!!!!!@@@@@');
+//   let arr: string[] = [...relation].sort((a: string, b: string) => a.length - b.length);
+//
+//   for (let i = 0; i < arr.length; i++) {
+//     const current: string = arr[i];
+//     arr = arr.filter((a) => {
+//       return a === current || !a.startsWith(current);
+//     })
+//   }
+//   return arr;
+// }
