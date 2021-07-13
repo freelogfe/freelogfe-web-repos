@@ -125,11 +125,11 @@ export interface InformalNodeManagerPageModelState {
   replacedTreeData: TreeNode[];
   replacedCheckedKeys: string[];
 
-  selectedType: '-1' | string;
-  selectedStatus: '0' | '1' | '2';
-  filterKeywords: string;
-  exhibitsTotal: number;
-  exhibitList: {
+  exhibitPageSelectedType: '-1' | string;
+  exhibitPageSelectedStatus: '0' | '1' | '2';
+  exhibitPageFilterKeywords: string;
+  exhibitPageExhibitsTotal: number;
+  exhibitPageExhibitList: {
     id: string;
     cover: string;
     associatedExhibitID: string;
@@ -450,11 +450,11 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacedTreeData: [],
   replacedCheckedKeys: [],
 
-  selectedType: '-1',
-  selectedStatus: '2',
-  filterKeywords: '',
-  exhibitList: [],
-  exhibitsTotal: -1,
+  exhibitPageSelectedType: '-1',
+  exhibitPageSelectedStatus: '2',
+  exhibitPageFilterKeywords: '',
+  exhibitPageExhibitList: [],
+  exhibitPageExhibitsTotal: -1,
 
   // addOrReplaceCodeExecutionErrorMessages: null,
 
@@ -539,11 +539,11 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
-        onlineStatus: Number(informalNodeManagerPage.selectedStatus) as 2,
+        onlineStatus: Number(informalNodeManagerPage.exhibitPageSelectedStatus) as 2,
         omitResourceType: 'theme',
-        resourceType: informalNodeManagerPage.selectedType === '-1' ? undefined : informalNodeManagerPage.selectedType,
+        resourceType: informalNodeManagerPage.exhibitPageSelectedType === '-1' ? undefined : informalNodeManagerPage.exhibitPageSelectedType,
         limit: FUtil.Predefined.pageSize,
-        keywords: informalNodeManagerPage.filterKeywords || undefined,
+        keywords: informalNodeManagerPage.exhibitPageFilterKeywords || undefined,
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
@@ -551,7 +551,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const {rules: rulesObj} = compile(data1.ruleText);
 
-      const exhibitList: InformalNodeManagerPageModelState['exhibitList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitList'][number]>((dl) => {
+      const exhibitList: InformalNodeManagerPageModelState['exhibitPageExhibitList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]>((dl) => {
         const operations: string[] = dl.rules[0]?.operations || [];
         // console.log(operations, 'operations12334');
         const stateInfo = dl.stateInfo;
@@ -565,7 +565,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         // console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
 
-        const rule: InformalNodeManagerPageModelState['exhibitList'][number]['rule'] = {
+        const rule: InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]['rule'] = {
           add: operations.includes('add') ? {
             exhibit: dl.testResourceName,
             source: {
@@ -651,8 +651,8 @@ const Model: InformalNodeManagerPageModelType = {
           }).map((tr: any) => {
             return tr.ruleInfo.candidate.name;
           }),
-          exhibitsTotal: data.totalItem,
-          exhibitList: exhibitList,
+          exhibitPageExhibitsTotal: data.totalItem,
+          exhibitPageExhibitList: exhibitList,
         },
       });
     },

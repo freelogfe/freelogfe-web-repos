@@ -69,7 +69,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
     });
   }
 
-  if (informalNodeManagerPage.exhibitsTotal === -1) {
+  if (informalNodeManagerPage.exhibitPageExhibitsTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
@@ -86,7 +86,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
 
   return (<>
     {
-      informalNodeManagerPage.exhibitList.length === 0 && informalNodeManagerPage.selectedType === '-1' && informalNodeManagerPage.selectedStatus === '2' && informalNodeManagerPage.filterKeywords === ''
+      informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords === ''
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前测试节点没有添加展品'}
@@ -130,7 +130,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <FDropdownMenu
                   options={resourceTypeOptions}
                   onChange={async (value) => {
-                    await onChange({selectedType: value});
+                    await onChange({exhibitPageSelectedType: value});
                     await dispatch<FetchExhibitListAction>({
                       type: 'informalNodeManagerPage/fetchExhibitList',
                       payload: {
@@ -140,7 +140,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                   }}
                 >
             <span
-              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === informalNodeManagerPage.selectedType)?.text || ''}<FDown
+              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === informalNodeManagerPage.exhibitPageSelectedType)?.text || ''}<FDown
               style={{marginLeft: 8}}/></span>
                 </FDropdownMenu>
               </div>
@@ -149,7 +149,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                 <FDropdownMenu
                   options={resourceStatusOptions}
                   onChange={async (value) => {
-                    await onChange({selectedStatus: value as '0'});
+                    await onChange({exhibitPageSelectedStatus: value as '0'});
                     await dispatch<FetchExhibitListAction>({
                       type: 'informalNodeManagerPage/fetchExhibitList',
                       payload: {
@@ -159,17 +159,17 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
                   }}
                 >
             <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
-              return rso.value === informalNodeManagerPage.selectedStatus.toString();
+              return rso.value === informalNodeManagerPage.exhibitPageSelectedStatus.toString();
             })?.text}<FDown style={{marginLeft: 10}}/></span>
                 </FDropdownMenu>
               </div>
               <div>
                 <FInput
                   theme={'dark'}
-                  value={informalNodeManagerPage.filterKeywords}
+                  value={informalNodeManagerPage.exhibitPageFilterKeywords}
                   debounce={300}
                   onDebounceChange={async (value) => {
-                    await onChange({filterKeywords: value});
+                    await onChange({exhibitPageFilterKeywords: value});
                     await dispatch<FetchExhibitListAction>({
                       type: 'informalNodeManagerPage/fetchExhibitList',
                       payload: {
@@ -182,7 +182,7 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
             </Space>
           </div>
           {
-            informalNodeManagerPage.exhibitList.length === 0
+            informalNodeManagerPage.exhibitPageExhibitList.length === 0
               ? (<FNoDataTip
                 height={'calc(100vh - 294px)'}
                 tipText={'无筛选结果'}
