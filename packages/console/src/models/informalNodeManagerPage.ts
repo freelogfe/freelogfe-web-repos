@@ -235,7 +235,7 @@ interface ICandidate {
 }
 
 export interface SaveDataRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/saveDataRules';
+  type: 'informalNodeManagerPage/saveDataRules' | 'saveDataRules';
   payload: {
     type: 'append' | 'replace';
     data: {
@@ -1382,10 +1382,20 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onReplacerUnmount({}: OnReplacerUnmountAction, {put}: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: replaceInformExhibitModalInitStates,
-      // });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerResourceOptions: [
+            {value: '!market', title: '资源市场'},
+            {value: '!resource', title: '我的资源'},
+            {value: '!collection', title: '我的收藏'},
+          ],
+          replacerBucketOptions: [],
+          replacerOrigin: '!market',
+          replacerKeywords: '',
+          replacerResourceList: [],
+        },
+      });
     },
     * onReplacerOriginChange({payload}: OnReplacerOriginChangeAction, {put, select}: EffectsCommandMap) {
 
@@ -1893,7 +1903,7 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // console.log(rules, 'nowRules0923jlkfds()UOIJ');
       yield put<SaveDataRulesAction>({
-        type: 'informalNodeManagerPage/saveDataRules',
+        type: 'saveDataRules',
         payload: {
           type: 'replace',
           data: rules,
