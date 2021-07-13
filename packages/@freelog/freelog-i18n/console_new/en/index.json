@@ -402,5 +402,8 @@
 	"btn_change_payment_password": "CHANGE PAYMENT PASSWORD",
 	"hint_reenter_payment_password": "再次输入新的支付密码",
 	"reenter_payment_password": "Reenter payment password",
-	"msg_payment_password_changed": "Payment password Changed!"
+	"msg_payment_password_changed": "Payment password Changed!",
+	"title_verify_password": "Enter Login Password",
+	"msg_verify_password": "Because you are accessing security functions, you need to verify your login password.",
+	"hint_enter_password": "Enter login password"
 }
