@@ -380,5 +380,13 @@
 	"header_tran_amount": "Amount",
 	"balance_after": "Balance after",
 	"tran_type_transfer": "Transfer",
-	"header_tran_description": "Details | Counterparty | Transaction ID"
+	"header_tran_description": "Details | Counterparty | Transaction ID",
+	"title_verify_identity": "Verify Your Identity",
+	"btn_continue": "CONTINUE",
+	"btn_resend_code": "SEND CODE",
+	"error_incorrectpaymentpassword": "---",
+	"error_incorrectpaymentpasswordformat    ": "----",
+	"error_incorrectpaymentpasswordformat": "Make sure it's including 6 numbers.",
+	"password_incorrect": "Incorrect password",
+	"alert_paymentpasswordincorrect": " Incorrect payment password"
 }
