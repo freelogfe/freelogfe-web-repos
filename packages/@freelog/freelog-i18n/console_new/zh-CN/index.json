@@ -365,8 +365,20 @@
 	"tab_my_wallet": "我的钱包",
 	"tab_my_contracts": "我的合约",
 	"tab_settings": "设置",
-	"title_feather_account": "",
+	"title_feather_account": "羽币账户",
 	"msg_activate_feather_account": "欢迎使用Freelog",
 	"btn_activate_feather_account": "点击此处激活你的羽币账户",
-	"btn_go_to_console": "进入工作台"
+	"btn_go_to_console": "进入工作台",
+	"title_feather_balance": "余额",
+	"btn_change_paymentpassword": "修改交易密码",
+	"title_feather_tranaction_history": "交易记录",
+	"header_tran_time": "交易时间",
+	"header_tran_status": "交易状态",
+	"tran_status_completed": "交易完成",
+	"tran_status_closed": "交易关闭",
+	"tran_status_in_progress": "系统处理中",
+	"header_tran_amount": "金额",
+	"balance_after": "余额",
+	"tran_type_transfer": "转账",
+	"header_tran_description": "交易说明 | 交易方 | 交易编号"
 }

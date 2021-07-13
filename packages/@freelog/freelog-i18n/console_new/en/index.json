@@ -365,8 +365,20 @@
 	"tab_my_wallet": "My Wallet",
 	"tab_my_contracts": "My Contracts",
 	"tab_settings": "Settings",
-	"title_feather_account": "",
+	"title_feather_account": "Feather Account",
 	"msg_activate_feather_account": "Welcome to Freelog",
 	"btn_activate_feather_account": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT",
-	"btn_go_to_console": "GO TO CONSOLE"
+	"btn_go_to_console": "GO TO CONSOLE",
+	"title_feather_balance": "Balance",
+	"btn_change_paymentpassword": "CHANGE PAYMENT PASSWORD",
+	"title_feather_tranaction_history": "Transactions",
+	"header_tran_time": "Time",
+	"header_tran_status": "Status",
+	"tran_status_completed": "Completed",
+	"tran_status_closed": "Closed",
+	"tran_status_in_progress": "In progress",
+	"header_tran_amount": "Amount",
+	"balance_after": "Balance after",
+	"tran_type_transfer": "Transfer",
+	"header_tran_description": "Details | Counterparty | Transaction ID"
 }
