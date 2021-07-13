@@ -13,7 +13,11 @@ import {
 import {
   ChangeAction,
   OnReplacerMountAction,
-  OnReplacerOriginChangeAction, OnReplacerUnmountAction, FetchReplacerListAction, OnReplacerKeywordsChangeAction
+  OnReplacerOriginChangeAction,
+  OnReplacerUnmountAction,
+  FetchReplacerListAction,
+  OnReplacerKeywordsChangeAction,
+  OnReplacerListCheckedChangeAction, OnReplacerListVersionRangeChangeAction
 } from "@/models/informalNodeManagerPage";
 // import {} from "@/models/replaceInformExhibitModal";
 import FSelect from "@/components/FSelect";
@@ -69,14 +73,6 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
     }
   }
 
-  // async function onChange(value: Partial<AddInformExhibitDrawerModelState>, loadData: boolean = false) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'addInformExhibitDrawer/change',
-  //     payload: value,
-  //   });
-  //
-  // }
-
   return (<>
     <div className={styles.replacerHeader}>
       <FSelect
@@ -122,9 +118,17 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
           informalNodeManagerPage.replacerResourceList.map((rl) => {
             return (<div key={rl.id} className={styles.replacerListItem}>
               <Radio
-                checked={rl.name === informalNodeManagerPage.replacerCheckedResourceName}
-                onClick={() => {
-                  onChange({replacerCheckedResourceName: rl.name})
+                // checked={rl.name === informalNodeManagerPage.replacerCheckedResourceName}
+                checked={rl.checked}
+                onClick={(e) => {
+                  // onChange({replacerCheckedResourceName: rl.name})
+                  dispatch<OnReplacerListCheckedChangeAction>({
+                    type: 'informalNodeManagerPage/onReplacerListCheckedChange',
+                    payload: {
+                      id: rl.id,
+                      // checked: true,
+                    },
+                  });
                 }}
               />
               <div className={styles.replacerListItemContent}>
@@ -152,23 +156,18 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
                     }
 
                     {
-                      rl.name === informalNodeManagerPage.replacerCheckedResourceName && rl.versions.length > 0 && (
+                      rl.checked && rl.versions.length > 0 && (
                         <FVersionHandlerPopover
-                          value={rl.version}
+                          value={rl.versionRange}
                           versionOptions={rl.versions}
                           allowEmpty
                           onChange={(version) => {
-                            // console.log(version, '!!!!@2222222222');
-                            onChange({
-                              replacerResourceList: informalNodeManagerPage.replacerResourceList.map((rr) => {
-                                if (rr.id !== rl.id) {
-                                  return rr;
-                                }
-                                return {
-                                  ...rr,
-                                  version,
-                                };
-                              }),
+                            dispatch<OnReplacerListVersionRangeChangeAction>({
+                              type: 'informalNodeManagerPage/onReplacerListVersionRangeChange',
+                              payload: {
+                                id: rl.id,
+                                versionRange: version,
+                              },
                             });
                           }}
                         >
@@ -176,7 +175,7 @@ function Replacer({dispatch, informalNodeManagerPage}: ReplacerProps) {
                             type="default"
                             style={{fontSize: 12}}
                           >
-                            {rl.version ? rl.version : '选择版本'}
+                            {rl.versionRange || '最新版本'}
                             &nbsp;
                             <FDown/>
                           </FTextBtn>

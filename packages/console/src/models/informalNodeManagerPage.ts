@@ -95,6 +95,7 @@ export interface InformalNodeManagerPageModelState {
   replacerOrigin: '!market' | '!resource' | '!collection' | string;
   replacerKeywords: string;
   replacerResourceList: {
+    checked: boolean;
     id: string;
     name: string;
     identity: 'resource' | 'object';
@@ -103,9 +104,9 @@ export interface InformalNodeManagerPageModelState {
     updateTime: string;
     status: 'online' | 'offline' | 'unreleased' | '';
     versions: string[];
-    version: string;
+    versionRange: string;
   }[];
-  replacerCheckedResourceName: string;
+  // replacerCheckedResourceName: string;
   replacedKeywords: string;
   replacedDependencyTreeList: string[];
   replacedSelectDependency: null | {
@@ -324,6 +325,22 @@ export interface FetchReplacerListAction extends AnyAction {
   };
 }
 
+export interface OnReplacerListCheckedChangeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onReplacerListCheckedChange';
+  payload: {
+    id: string;
+    // checked: boolean;
+  };
+}
+
+export interface OnReplacerListVersionRangeChangeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onReplacerListVersionRangeChange';
+  payload: {
+    id: string;
+    versionRange: string;
+  };
+}
+
 export interface OnReplacerListLoadMoreAction extends AnyAction {
   type: 'onReplacerListLoadMore';
 }
@@ -391,6 +408,8 @@ interface InformalNodeManagerPageModelType {
     onReplacerOriginChange: (action: OnReplacerOriginChangeAction, effects: EffectsCommandMap) => void;
     onReplacerKeywordsChange: (action: OnReplacerKeywordsChangeAction, effects: EffectsCommandMap) => void;
     fetchReplacerList: (action: FetchReplacerListAction, effects: EffectsCommandMap) => void;
+    onReplacerListCheckedChange: (action: OnReplacerListCheckedChangeAction, effects: EffectsCommandMap) => void;
+    onReplacerListVersionRangeChange: (action: OnReplacerListVersionRangeChangeAction, effects: EffectsCommandMap) => void;
     onReplacerListLoadMore: (action: OnReplacerListLoadMoreAction, effects: EffectsCommandMap) => void;
     onReplacedMount: (action: OnReplacedMountAction, effects: EffectsCommandMap) => void;
     onReplacedUnmount: (action: OnReplacedUnmountAction, effects: EffectsCommandMap) => void;
@@ -443,7 +462,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacerOrigin: '!market',
   replacerKeywords: '',
   replacerResourceList: [],
-  replacerCheckedResourceName: '',
+  // replacerCheckedResourceName: '',
   replacedKeywords: '',
   replacedDependencyTreeList: [],
   replacedSelectDependency: null,
@@ -454,7 +473,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   exhibitPageTypeOptions: [
     {text: '全部', value: '-1'},
-    ...FUtil.Predefined.resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
+    ...FUtil.Predefined.resourceTypes
+      .filter((i) => i !== 'theme')
+      .map((i) => ({value: i, text: i}))
   ],
   exhibitPageSelectedType: '-1',
   exhibitPageStatusOptions: [
@@ -1432,6 +1453,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
             // console.log(rs, '######2341234');
             return {
+              checked: false,
               id: rs.resourceId,
               identity: 'resource',
               name: rs.resourceName,
@@ -1442,7 +1464,7 @@ const Model: InformalNodeManagerPageModelType = {
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
               }),
-              version: '',
+              versionRange: '',
             };
           }),
         ];
@@ -1465,6 +1487,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...replacerResourceList,
           ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
             return {
+              checked: false,
               id: rs.resourceId,
               identity: 'resource',
               name: rs.resourceName,
@@ -1475,7 +1498,7 @@ const Model: InformalNodeManagerPageModelType = {
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
               }),
-              version: '',
+              versionRange: '',
             };
           }),
         ];
@@ -1511,6 +1534,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...replacerResourceList,
           ...(data3 as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rs) => {
             return {
+              checked: false,
               id: rs.resourceId,
               identity: 'resource',
               name: rs.resourceName,
@@ -1521,7 +1545,7 @@ const Model: InformalNodeManagerPageModelType = {
               versions: rs.resourceVersions.map((rv: any) => {
                 return rv.version;
               }),
-              version: '',
+              versionRange: '',
             };
           }),
         ]
@@ -1541,6 +1565,7 @@ const Model: InformalNodeManagerPageModelType = {
           ...(data.dataList as any[]).map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((ob) => {
             const objectName: string = ob.bucketName + '/' + ob.objectName;
             return {
+              checked: false,
               id: ob.objectId,
               identity: 'object',
               name: objectName,
@@ -1549,7 +1574,7 @@ const Model: InformalNodeManagerPageModelType = {
               updateTime: FUtil.Format.formatDateTime(ob.updateDate),
               status: '',
               versions: [],
-              version: '',
+              versionRange: '',
             };
           }),
         ];
@@ -1562,6 +1587,49 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
 
+    },
+    * onReplacerListCheckedChange({payload}: OnReplacerListCheckedChangeAction, {select, put}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerResourceList: informalNodeManagerPage.replacerResourceList.map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rr) => {
+            if (rr.id !== payload.id) {
+              return {
+                ...rr,
+                checked: false,
+              };
+            }
+            return {
+              ...rr,
+              checked: true,
+            };
+          }),
+        },
+      });
+    },
+    * onReplacerListVersionRangeChange({payload}: OnReplacerListVersionRangeChangeAction, {put, select}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          replacerResourceList: informalNodeManagerPage.replacerResourceList.map<InformalNodeManagerPageModelState['replacerResourceList'][number]>((rr) => {
+            if (rr.id !== payload.id) {
+              return rr;
+            }
+            return {
+              ...rr,
+              versionRange: payload.versionRange,
+            };
+          }),
+        },
+      });
     },
     * onReplacerListLoadMore({}: OnReplacerListLoadMoreAction, {}: EffectsCommandMap) {
 
@@ -1765,7 +1833,8 @@ const Model: InformalNodeManagerPageModelType = {
       }
       // console.log(resultObj, 'resultObj@#AFDSFASD)(_&UOIJ:');
       const replacerData = informalNodeManagerPage.replacerResourceList.find((rr) => {
-        return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
+        // return rr.name === informalNodeManagerPage.replacerCheckedResourceName;
+        return rr.checked;
       });
       // console.log(replacerData, 'replacerData234edf@#$SDF)(JLK');
       const results: IConfirmValue = [];
@@ -1779,7 +1848,7 @@ const Model: InformalNodeManagerPageModelType = {
           },
           replacer: {
             name: replacerData?.name || '',
-            versionRange: replacerData?.version || 'latest',
+            versionRange: replacerData?.versionRange || 'latest',
             type: replacerData?.identity || 'object',
           },
           scopes: scopes,
