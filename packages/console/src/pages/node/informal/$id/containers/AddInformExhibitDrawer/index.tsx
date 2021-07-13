@@ -19,7 +19,13 @@ import {
 import {
   ChangeAction,
   FetchAddExhibitDrawerListAction,
-  FetchExhibitListAction, OnAddExhibitDrawerAfterVisibleChangeAction,
+  FetchExhibitListAction,
+  OnAddExhibitDrawerAfterVisibleChangeAction,
+  OnAddExhibitDrawerCancelChangeAction,
+  OnAddExhibitDrawerConfirmChangeAction,
+  OnAddExhibitDrawerKeywordsChangeAction,
+  OnAddExhibitDrawerListLoadMoreAction,
+  OnAddExhibitDrawerOriginChangeAction,
   SaveDataRulesAction
 } from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
@@ -64,7 +70,9 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
       // console.log('!@#$!@#$!@#$11111111');
       await dispatch<FetchAddExhibitDrawerListAction>({
         type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-        payload: true,
+        payload: {
+          restart: true,
+        },
       });
     }
   }
@@ -84,9 +92,9 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
     };
     // onConfirm && onConfirm(value);
 
-    onChange({
-      addExhibitDrawerVisible: false,
-    });
+    // onChange({
+    //   addExhibitDrawerVisible: false,
+    // });
     dispatch<SaveDataRulesAction>({
       type: 'informalNodeManagerPage/saveDataRules',
       payload: {
@@ -119,21 +127,30 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
     topRight={<Space size={30}>
       <FTextBtn type="default" onClick={() => {
         // onCancel && onCancel();
-        onChange({
-          addExhibitDrawerVisible: false,
+        // onChange({
+        //   addExhibitDrawerVisible: false,
+        // });
+        dispatch<OnAddExhibitDrawerCancelChangeAction>({
+          type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
         });
       }}>取消</FTextBtn>
       <FRectBtn
         onClick={() => {
-          onClickConfirm();
+          // onClickConfirm();
+          dispatch<OnAddExhibitDrawerConfirmChangeAction>({
+            type: 'informalNodeManagerPage/onAddExhibitDrawerConfirmChange',
+          });
         }}
         type="primary"
       >添加</FRectBtn>
     </Space>}
     onClose={() => {
       // onCancel && onCancel();
-      onChange({
-        addExhibitDrawerVisible: false,
+      // onChange({
+      //   addExhibitDrawerVisible: false,
+      // });
+      dispatch<OnAddExhibitDrawerCancelChangeAction>({
+        type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
       });
     }}
     afterVisibleChange={(visible) => {
@@ -153,15 +170,27 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
             ...informalNodeManagerPage.addExhibitDrawerResourceOptions,
             ...informalNodeManagerPage.addExhibitDrawerBucketOptions,
           ]}
-          onChange={(value: any) => {
-            onChange({addExhibitDrawerSelectValue: value}, true);
+          onChange={(value: string) => {
+            // onChange({addExhibitDrawerSelectValue: value}, true);
+            dispatch<OnAddExhibitDrawerOriginChangeAction>({
+              type: 'informalNodeManagerPage/onAddExhibitDrawerOriginChange',
+              payload: {
+                value: value,
+              },
+            });
           }}
         />
         <FInput
           value={informalNodeManagerPage.addExhibitDrawerInputValue}
           debounce={300}
           onDebounceChange={(value) => {
-            onChange({addExhibitDrawerInputValue: value}, true);
+            // onChange({addExhibitDrawerInputValue: value}, true);
+            dispatch<OnAddExhibitDrawerKeywordsChangeAction>({
+              type: 'informalNodeManagerPage/onAddExhibitDrawerKeywordsChange',
+              payload: {
+                value: value,
+              },
+            });
           }}
           onChange={(e) => {
             // onChange({addExhibitInputValue: e.target.value}, true);
@@ -249,9 +278,14 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
           informalNodeManagerPage.addExhibitDrawerCheckedListTotalNum > informalNodeManagerPage.addExhibitDrawerCheckedList.length
             ? (<FRectBtn
               onClick={() => {
-                dispatch<FetchAddExhibitDrawerListAction>({
-                  type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-                  payload: false,
+                // dispatch<FetchAddExhibitDrawerListAction>({
+                //   type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
+                //   payload: {
+                //     restart: false,
+                //   },
+                // });
+                dispatch<OnAddExhibitDrawerListLoadMoreAction>({
+                  type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore',
                 });
               }}
               size="small"
