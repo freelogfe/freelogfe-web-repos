@@ -200,6 +200,38 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<InformalNodeManagerPageModelState>;
 }
 
+export interface OnPageMountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onPageMount';
+}
+
+export interface OnPageUnmountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onPageUnmount';
+}
+
+export interface OnExhibitPageMountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onExhibitPageMount';
+}
+
+export interface OnExhibitPageUnmountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onExhibitPageUnmount';
+}
+
+export interface OnThemePageMountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onThemePageMount';
+}
+
+export interface OnThemePageUnmountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onThemePageUnmount';
+}
+
+export interface OnRulePageMountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onRulePageMount';
+}
+
+export interface OnRulePageUnmountAction extends AnyAction {
+  type: 'informalNodeManagerPage/onRulePageUnmount';
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchInfo';
 }
@@ -387,8 +419,15 @@ interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
   state: InformalNodeManagerPageModelState;
   effects: {
+    onPageMount: (action: OnPageMountAction, effects: EffectsCommandMap) => void;
+    onPageUnmount: (action: OnPageUnmountAction, effects: EffectsCommandMap) => void;
+    onExhibitPageMount: (action: OnExhibitPageMountAction, effects: EffectsCommandMap) => void;
+    onExhibitPageUnmount: (action: OnExhibitPageUnmountAction, effects: EffectsCommandMap) => void;
+    onThemePageMount: (action: OnThemePageMountAction, effects: EffectsCommandMap) => void;
+    onThemePageUnmount: (action: OnThemePageUnmountAction, effects: EffectsCommandMap) => void;
+    onRulePageMount: (action: OnRulePageMountAction, effects: EffectsCommandMap) => void;
+    onRulePageUnmount: (action: OnRulePageUnmountAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    // initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
@@ -486,21 +525,12 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   exhibitPageExhibitList: [],
   exhibitPageExhibitsTotal: -1,
 
-  // addOrReplaceCodeExecutionErrorMessages: null,
-
-  // ...exhibitPageInitData,
-  // filterKeywords: '',
-  // exhibitList: [],
-  // exhibitsTotal: -1,
-
-  // ...themePageInitData,
   themePageFilterKeywords: '',
   themePageThemeList: [],
   themePageThemesTotal: -1,
 
   rulePageStatus: 'normal',
   rulePageRuleList: [],
-
   rulePageCodeInput: '',
   rulePageCodeIsDirty: false,
   rulePagePromptLeavePath: '',
@@ -515,6 +545,30 @@ const Model: InformalNodeManagerPageModelType = {
   namespace: 'informalNodeManagerPage',
   state: informalNodeManagerPageInitStates,
   effects: {
+    * onPageMount({}: OnPageMountAction, {}: EffectsCommandMap) {
+
+    },
+    * onPageUnmount({}: OnPageUnmountAction, {}: EffectsCommandMap) {
+
+    },
+    * onExhibitPageMount({}: OnExhibitPageMountAction, {}: EffectsCommandMap) {
+
+    },
+    * onExhibitPageUnmount({}: OnExhibitPageUnmountAction, {}: EffectsCommandMap) {
+
+    },
+    * onThemePageMount({}: OnThemePageMountAction, {}: EffectsCommandMap) {
+
+    },
+    * onThemePageUnmount({}: OnThemePageUnmountAction, {}: EffectsCommandMap) {
+
+    },
+    * onRulePageMount(action: OnRulePageMountAction, effects: EffectsCommandMap) {
+
+    },
+    * onRulePageUnmount(action: OnRulePageUnmountAction, effects: EffectsCommandMap) {
+
+    },
     * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
