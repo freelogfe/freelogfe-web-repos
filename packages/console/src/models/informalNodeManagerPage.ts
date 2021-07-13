@@ -178,20 +178,20 @@ export interface InformalNodeManagerPageModelState {
     efficientInfos: any[];
   }[];
 
-  codeInput: string;
-  codeIsDirty: boolean;
-  promptLeavePath: string;
-  codeIsChecking: boolean;
-  codeCompileErrors: null | {
+  rulePageCodeInput: string;
+  rulePageCodeIsDirty: boolean;
+  rulePagePromptLeavePath: string;
+  rulePageCodeIsChecking: boolean;
+  rulePageCodeCompileErrors: null | {
     charPositionInLine: number;
     line: number;
     msg: string;
     offendingSymbol: string;
   }[];
-  codeExecutionError: null | {
+  rulePageCodeExecutionError: null | {
     msg: string;
   }[];
-  codeSaveSuccess: boolean;
+  rulePageCodeSaveSuccess: boolean;
 
 }
 
@@ -501,13 +501,13 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   rulePageStatus: 'normal',
   rulePageRuleList: [],
 
-  codeInput: '',
-  codeIsDirty: false,
-  promptLeavePath: '',
-  codeIsChecking: false,
-  codeCompileErrors: null,
-  codeExecutionError: null,
-  codeSaveSuccess: false,
+  rulePageCodeInput: '',
+  rulePageCodeIsDirty: false,
+  rulePagePromptLeavePath: '',
+  rulePageCodeIsChecking: false,
+  rulePageCodeCompileErrors: null,
+  rulePageCodeExecutionError: null,
+  rulePageCodeSaveSuccess: false,
 
 };
 
@@ -835,16 +835,16 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          codeInput: data.ruleText,
-          codeIsDirty: false,
+          rulePageCodeInput: data.ruleText,
+          rulePageCodeIsDirty: false,
           rulePageRuleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
               checked: false,
             };
           }),
-          codeExecutionError: null,
-          codeCompileErrors: null,
+          rulePageCodeExecutionError: null,
+          rulePageCodeCompileErrors: null,
         },
       });
     },
@@ -856,7 +856,7 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          codeIsChecking: true,
+          rulePageCodeIsChecking: true,
           // codeCompileErrors: null,
           // codeExecutionError: null,
           // codeSaveSuccess: null,
@@ -865,7 +865,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
-        testRuleText: informalNodeManagerPage.codeInput,
+        testRuleText: informalNodeManagerPage.rulePageCodeInput,
       };
       const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
 
@@ -892,11 +892,11 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          codeIsDirty: false,
+          rulePageCodeIsDirty: false,
           ruleText: data1.ruleText,
-          codeIsChecking: false,
-          codeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
-          codeSaveSuccess: codeExecutionError.length === 0,
+          rulePageCodeIsChecking: false,
+          rulePageCodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
+          rulePageCodeSaveSuccess: codeExecutionError.length === 0,
           rulePageRuleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,

@@ -51,18 +51,18 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   }, []);
 
   React.useEffect(() => {
-    if (informalNodeManagerPage.codeIsDirty) {
+    if (informalNodeManagerPage.rulePageCodeIsDirty) {
       window.onbeforeunload = () => true;
     } else {
       window.onbeforeunload = null;
     }
 
-  }, [informalNodeManagerPage.codeIsDirty]);
+  }, [informalNodeManagerPage.rulePageCodeIsDirty]);
 
   AHooks.useUnmount(() => {
     window.onbeforeunload = null;
     onChange({
-      promptLeavePath: '',
+      rulePagePromptLeavePath: '',
       // codeIsDirty: false,
     });
   });
@@ -143,7 +143,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
   return (<>
     <Prompt
-      when={informalNodeManagerPage.codeIsDirty && informalNodeManagerPage.promptLeavePath === ''}
+      when={informalNodeManagerPage.rulePageCodeIsDirty && informalNodeManagerPage.rulePagePromptLeavePath === ''}
       message={(location: H.Location) => {
         const locationHref: string = location.pathname + location.search;
         if (locationHref === FUtil.LinkTo.informNodeManagement({
@@ -152,14 +152,14 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         })) {
           return true;
         }
-        onChange({promptLeavePath: locationHref});
+        onChange({rulePagePromptLeavePath: locationHref});
         fConfirmModal({
           message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
           onOk() {
             router.push(locationHref);
           },
           onCancel() {
-            onChange({promptLeavePath: ''});
+            onChange({rulePagePromptLeavePath: ''});
           },
         });
         // console.log(location, 'location1234234124324##########');
@@ -185,12 +185,12 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   const exportText = evt.target.result;
                   // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
                   onChange({
-                    codeInput: exportText + '\n' + informalNodeManagerPage.codeInput,
+                    rulePageCodeInput: exportText + '\n' + informalNodeManagerPage.rulePageCodeInput,
                     rulePageStatus: 'coding',
-                    codeIsDirty: true,
-                    codeCompileErrors: null,
-                    codeExecutionError: null,
-                    codeSaveSuccess: false,
+                    rulePageCodeIsDirty: true,
+                    rulePageCodeCompileErrors: null,
+                    rulePageCodeExecutionError: null,
+                    rulePageCodeSaveSuccess: false,
                   });
                 };
                 return false;
@@ -313,7 +313,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 })
                 .join('\n\n');
               await onChange({
-                codeInput: text,
+                rulePageCodeInput: text,
               });
               await dispatch<SaveRulesAction>({
                 type: 'informalNodeManagerPage/saveRules',
@@ -329,26 +329,26 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         ? (<div className={styles.codeMirrorBody}>
           <div>
             <FCodemirror
-              value={informalNodeManagerPage.codeInput}
+              value={informalNodeManagerPage.rulePageCodeInput}
               onChange={(value) => {
                 onChange({
-                  codeInput: value,
-                  codeIsDirty: true,
-                  codeCompileErrors: null,
-                  codeExecutionError: null,
-                  codeSaveSuccess: false,
+                  rulePageCodeInput: value,
+                  rulePageCodeIsDirty: true,
+                  rulePageCodeCompileErrors: null,
+                  rulePageCodeExecutionError: null,
+                  rulePageCodeSaveSuccess: false,
                 });
               }}
             />
             <div style={{height: 15}}/>
             <FRectBtn
               // loading={informalNodeManagerPage.codeIsChecking}
-              disabled={!informalNodeManagerPage.codeIsDirty || informalNodeManagerPage.codeIsChecking}
+              disabled={!informalNodeManagerPage.rulePageCodeIsDirty || informalNodeManagerPage.rulePageCodeIsChecking}
               onClick={() => {
                 // onChange({
                 //   codeIsDirty: false,
                 // });
-                const {errors, rules, errorObjects} = compile(informalNodeManagerPage.codeInput);
+                const {errors, rules, errorObjects} = compile(informalNodeManagerPage.rulePageCodeInput);
                 if (errorObjects.length > 0) {
                   // return dispatch<ChangeAction>({
                   //   type: 'informalNodeManagerPage/change',
@@ -357,22 +357,22 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   //   },
                   // });
                   return onChange({
-                    codeCompileErrors: errorObjects,
+                    rulePageCodeCompileErrors: errorObjects,
                   });
                 }
                 dispatch<SaveRulesAction>({
                   type: 'informalNodeManagerPage/saveRules',
                 });
               }}
-            >{informalNodeManagerPage.codeIsChecking ? FUtil1.I18n.message('msg_verifying_code') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rulePageCodeIsChecking ? FUtil1.I18n.message('msg_verifying_code') : '校验并保存'}</FRectBtn>
             {
-              informalNodeManagerPage.codeCompileErrors && (<div className={styles.codeCompileErrors}>
+              informalNodeManagerPage.rulePageCodeCompileErrors && (<div className={styles.codeCompileErrors}>
                 <div style={{height: 20}}/>
                 <div className={styles.errorTitle}>编译错误，请检查更正后提交。</div>
                 <div style={{height: 20}}/>
                 <Space className={styles.errorList} size={5} direction="vertical">
                   {
-                    informalNodeManagerPage.codeCompileErrors.map((cme, index) => {
+                    informalNodeManagerPage.rulePageCodeCompileErrors.map((cme, index) => {
                       return (<div key={index} className={styles.errorListItem}>
                         <div>•</div>
                         <div style={{width: 5}}/>
@@ -397,13 +397,13 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }
 
             {
-              informalNodeManagerPage.codeExecutionError && (<div className={styles.codeExecutionError}>
+              informalNodeManagerPage.rulePageCodeExecutionError && (<div className={styles.codeExecutionError}>
                 <div style={{height: 20}}/>
                 <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
                 <div style={{height: 20}}/>
                 <Space className={styles.errorList} size={5} direction="vertical">
                   {
-                    informalNodeManagerPage.codeExecutionError.map((cme, index) => {
+                    informalNodeManagerPage.rulePageCodeExecutionError.map((cme, index) => {
                       return (<div key={index} className={styles.errorListItem}>
                         <div>•</div>
                         <div style={{width: 5}}/>
@@ -421,7 +421,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }
 
             {
-              informalNodeManagerPage.codeSaveSuccess && (<>
+              informalNodeManagerPage.rulePageCodeSaveSuccess && (<>
                 <div style={{height: 20}}/>
                 <div className={styles.codeSaveSuccess}>
                   校验并保存成功。
