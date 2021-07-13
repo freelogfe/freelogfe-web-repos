@@ -75,7 +75,7 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
           className={styles.FAutoComplete}
           value={input}
           options={versionOptions.map<{ value: string }>((vo) => ({value: vo}))}
-          onSelect={(value) => run(value, true)}
+          onSelect={(value: string) => run(value, true)}
           onChange={(value) => run(value)}
         />
         {
