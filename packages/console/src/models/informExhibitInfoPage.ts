@@ -22,6 +22,7 @@ export interface InformExhibitInfoPageModelState {
   currentRuleResult: any;
   theRuleID: string;
 
+  nodeName: string;
   informExhibitName: string;
   mappingRule: {
     add?: {
@@ -129,6 +130,17 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<InformExhibitInfoPageModelState>;
 }
 
+export interface OnPageMountAction extends AnyAction {
+  type: 'informExhibitInfoPage/onPageMount';
+  payload: {
+    informExhibitID: string;
+  };
+}
+
+export interface OnPageUnmountAction extends AnyAction {
+  type: 'informExhibitInfoPage/onPageUnmount';
+}
+
 export interface OnOnlineSwitchChangeAction extends AnyAction {
   type: 'informExhibitInfoPage/onOnlineSwitchChange';
   payload: {
@@ -138,6 +150,9 @@ export interface OnOnlineSwitchChangeAction extends AnyAction {
 
 export interface FetchInformalExhibitInfoAction extends AnyAction {
   type: 'fetchInformalExhibitInfo' | 'informExhibitInfoPage/fetchInformalExhibitInfo';
+  payload?: {
+    informExhibitID?: string;
+  };
 }
 
 export interface SyncRulesAction extends AnyAction {
@@ -215,9 +230,15 @@ export interface ExhibitInfoPageModelType {
   namespace: 'informExhibitInfoPage';
   state: InformExhibitInfoPageModelState;
   effects: {
+    onPageMount: (action: OnPageMountAction, effects: EffectsCommandMap) => void;
+    onPageUnmount: (action: OnPageUnmountAction, effects: EffectsCommandMap) => void;
+
     fetchInformalExhibitInfo: (action: FetchInformalExhibitInfoAction, effects: EffectsCommandMap) => void;
+
     syncRules: (action: SyncRulesAction, effects: EffectsCommandMap) => void;
+
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
+
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
@@ -255,9 +276,8 @@ const Model: ExhibitInfoPageModelType = {
     currentRuleResult: null,
     theRuleID: '',
 
-    // nodeName: '',
+    nodeName: '',
     informExhibitName: '',
-    // isOnline: false,
     onlineSwitchObj: null,
     mappingRule: null,
 
@@ -287,19 +307,47 @@ const Model: ExhibitInfoPageModelType = {
 
     relation: null,
   },
+
+
   effects: {
-    * fetchInformalExhibitInfo({}: FetchInformalExhibitInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage, nodes}: ConnectState = yield select(({informExhibitInfoPage, nodes}: ConnectState) => ({
+    * onPageMount({payload}: OnPageMountAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          informExhibitID: payload.informExhibitID,
+        },
+      });
+
+      yield put<FetchInformalExhibitInfoAction>({
+        type: 'fetchInformalExhibitInfo',
+        payload: {
+          informExhibitID: payload.informExhibitID,
+        },
+      });
+    },
+    * onPageUnmount({}: OnPageUnmountAction, {}: EffectsCommandMap) {
+
+    },
+    * fetchInformalExhibitInfo({payload}: FetchInformalExhibitInfoAction, {call, select, put}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
-        nodes,
       }));
 
+      const informExhibitID: string = payload?.informExhibitID !== undefined ? payload.informExhibitID : informExhibitInfoPage.informExhibitID;
+
       const params: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
-        testResourceId: informExhibitInfoPage.informExhibitID,
+        testResourceId: informExhibitID,
       };
       const {data} = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
 
       // console.log(data, '#######32409jkldfsmdslkdsf||||||||');
+
+      const params4: Parameters<typeof FServiceAPI.Node.details>[0] = {
+        nodeId: data.nodeId,
+      };
+
+      const {data: data4} = yield call(FServiceAPI.Node.details, params4);
+      // console.log(data4, 'data41234234123423412341234');
 
       let result: HandleRelationResult = [];
       let relation: InformExhibitInfoPageModelState['relation'] = null;
@@ -358,7 +406,7 @@ const Model: ExhibitInfoPageModelType = {
         payload: {
           nodeID: data.nodeId,
           resourceType: data.resourceType,
-          // nodeName: currentNode?.nodeName,
+          nodeName: data4.nodeName,
           informExhibitName: data.testResourceName,
           theRuleID: data.rules.length > 0 ? data.rules[0].ruleId : '',
           onlineSwitchObj: {

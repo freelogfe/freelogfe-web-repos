@@ -9,17 +9,19 @@ import Side from './Side';
 import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
-  InformExhibitInfoPageModelState, NodesModelState
+  InformExhibitInfoPageModelState,
+  NodesModelState
 } from '@/models/connect';
 import {
-  ChangeAction,
-  FetchInformalExhibitInfoAction, OnOnlineSwitchChangeAction, SyncRulesAction,
+  OnPageMountAction,
+  OnOnlineSwitchChangeAction, OnPageUnmountAction,
 } from '@/models/informExhibitInfoPage';
 import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';
 import {RouteComponentProps} from "react-router";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {FUtil} from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -29,33 +31,20 @@ interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
 
 function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhibitProps) {
 
-  React.useEffect(() => {
-
-    initDate();
-
-  }, []);
-
-  async function initDate() {
-    await dispatch<ChangeAction>({
-      type: 'informExhibitInfoPage/change',
+  AHooks.useMount(() => {
+    dispatch<OnPageMountAction>({
+      type: 'informExhibitInfoPage/onPageMount',
       payload: {
         informExhibitID: match.params.id,
       },
     });
+  });
 
-    await dispatch<FetchInformalExhibitInfoAction>({
-      type: 'informExhibitInfoPage/fetchInformalExhibitInfo',
+  AHooks.useUnmount(() => {
+    dispatch<OnPageUnmountAction>({
+      type: 'informExhibitInfoPage/onPageUnmount',
     });
-  }
-
-  async function onChange(value: Partial<InformExhibitInfoPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informExhibitInfoPage/change',
-      payload: {
-        ...value,
-      },
-    });
-  }
+  });
 
   return (<div className={styles.styles}>
     <div>
@@ -67,7 +56,8 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
             router.push(FUtil.LinkTo.informNodeManagement({nodeID: informExhibitInfoPage.nodeID, showPage: 'exhibit'}));
           }}><FContentText
             type="negative"
-            text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
+            // text={nodes.list.find((n) => n.nodeId === informExhibitInfoPage.nodeID)?.nodeName || ''}
+            text={informExhibitInfoPage.nodeName}
           /></FTextBtn>
           <div style={{width: 2}}/>
           <FContentText
@@ -82,7 +72,9 @@ function Presentable({dispatch, match, informExhibitInfoPage, nodes}: InformExhi
           />
           <div style={{width: 20}}/>
           {
-            informExhibitInfoPage.mappingRule && Object.entries(informExhibitInfoPage.mappingRule).filter((imr) => imr[1]).length > 0
+            informExhibitInfoPage.mappingRule
+            && Object.entries(informExhibitInfoPage.mappingRule)
+              .filter((imr) => imr[1]).length > 0
             && (<MappingRule
               add={informExhibitInfoPage.mappingRule.add}
               alter={informExhibitInfoPage.mappingRule.alter}
