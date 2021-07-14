@@ -196,7 +196,7 @@ export interface FetchInformalExhibitInfoAction extends AnyAction {
 }
 
 export interface SyncRulesAction extends AnyAction {
-  type: 'informExhibitInfoPage/syncRules' | 'syncRules';
+  type: 'syncRules';
   payload: {
     cover?: string;
     labels?: string[];
@@ -594,8 +594,6 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      // console.log(payload, 'payload123421341!!!!!!');
-
       const params2: RuleMatchStatusParams = {
         nodeID: informExhibitInfoPage.nodeID,
         isRematch: false,
@@ -750,10 +748,12 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
+      const pInputTitle: string = informExhibitInfoPage.pInputTitle || '';
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          pTitle: informExhibitInfoPage.pInputTitle || '',
+          pTitle: pInputTitle,
           pInputTitle: null,
         },
       });
@@ -761,7 +761,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<SyncRulesAction>({
         type: 'syncRules',
         payload: {
-          title: informExhibitInfoPage.pInputTitle || '',
+          title: pInputTitle,
         },
       });
     },

@@ -85,7 +85,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
               <FContentText text={informExhibitInfoPage.pTitle}/>
             </div>
             <a onClick={() => {
-              // onChange({pInputTitle: informExhibitInfoPage.pTitle});
               dispatch<OnClickPTitleEditBtnAction>({
                 type: 'informExhibitInfoPage/onClickPTitleEditBtn',
               });
@@ -96,7 +95,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
               className={styles.FInput}
               value={informExhibitInfoPage.pInputTitle || ''}
               onChange={(e) => {
-                // onChange({pInputTitle: e.target.value});
                 dispatch<OnChangePTitleInputAction>({
                   type: 'informExhibitInfoPage/onChangePTitleInput',
                   payload: {
@@ -108,7 +106,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
             <div style={{height: 10}}/>
             <div className={styles.btn}>
               <FTextBtn
-                // size="small"
                 type="default"
                 onClick={() => {
                   dispatch<OnClickPTitleCancelBtnAction>({
@@ -123,7 +120,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
                   dispatch<OnClickPTitleConfirmBtnAction>({
                     type: 'informExhibitInfoPage/onClickPTitleConfirmBtn',
                   });
-
                 }}
                 type="primary"
               >确定</FRectBtn>
@@ -143,15 +139,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       <FLabelEditor
         values={informExhibitInfoPage.pTags as string[]}
         onChange={async (value) => {
-          // await onChange({
-          //   pTags: value,
-          // });
-          // await dispatch<SyncRulesAction>({
-          //   type: 'informExhibitInfoPage/syncRules',
-          //   payload: {
-          //     labels: value,
-          //   },
-          // });
           dispatch<OnChangePLabelsAction>({
             type: 'informExhibitInfoPage/onChangePLabels',
             payload: {
