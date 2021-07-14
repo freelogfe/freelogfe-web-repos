@@ -3,7 +3,6 @@ import {Space} from "antd";
 import {FRectBtn, FTextBtn} from "@/components/FButton";
 import styles from "@/pages/node/informal/$id/Exhibit/index.less";
 import FSelect from "@/components/FSelect";
-import {WholeMutable} from "@/models/shared";
 import FInput from "@/components/FInput";
 import FCheckbox from "@/components/FCheckbox";
 import {FContentText} from "@/components/FText";
@@ -11,132 +10,41 @@ import FResourceStatusBadge from "@/components/FResourceStatusBadge";
 import FDrawer from "@/components/FDrawer";
 import {connect, Dispatch} from 'dva';
 import {
-  // AddInformExhibitDrawerModelState,
   ConnectState,
   InformalNodeManagerPageModelState,
-  StorageHomePageModelState
 } from '@/models/connect';
 import {
-  ChangeAction,
-  FetchAddExhibitDrawerListAction,
-  FetchExhibitListAction,
   OnAddExhibitDrawerAfterVisibleChangeAction,
   OnAddExhibitDrawerCancelChangeAction,
   OnAddExhibitDrawerConfirmChangeAction,
   OnAddExhibitDrawerKeywordsChangeAction,
+  OnAddExhibitDrawerListCheckedChangeAction,
   OnAddExhibitDrawerListLoadMoreAction,
   OnAddExhibitDrawerOriginChangeAction,
-  SaveDataRulesAction
 } from '@/models/informalNodeManagerPage';
 import FUtil1 from '@/utils';
 import FTooltip from '@/components/FTooltip';
-import {FUtil} from "@freelog/tools-lib";
 
 interface AddInformExhibitDrawerProps {
-  // nodeID: number;
-  // visible?: boolean;
-  // isTheme?: boolean;
-  // disabledResourceNames?: string[];
-  // disabledObjectNames?: string[];
-
-  // onCancel?(): void;
-
-  // onConfirm?(value: { identity: 'resource' | 'object'; names: string[]; }): void;
-
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
-  // storageHomePage: StorageHomePageModelState;
-
 }
 
 function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformExhibitDrawerProps) {
 
   const containerRef = React.useRef<any>(null);
 
-  // async function init() {
-  //
-  //   await dispatch<FetchAddExhibitDrawerListAction>({
-  //     type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-  //     payload: true,
-  //   });
-  // }
-
-  async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData: boolean = false) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload: value,
-    });
-    if (loadData) {
-      // console.log('!@#$!@#$!@#$11111111');
-      await dispatch<FetchAddExhibitDrawerListAction>({
-        type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-        payload: {
-          restart: true,
-        },
-      });
-    }
-  }
-
-  function onClickConfirm() {
-    let identity: 'resource' | 'object' = 'resource';
-    if (!informalNodeManagerPage.addExhibitDrawerSelectValue.startsWith('!')) {
-      identity = 'object';
-    }
-    const value: { identity: 'resource' | 'object'; names: string[]; } = {
-      identity,
-      names: informalNodeManagerPage.addExhibitDrawerCheckedList
-        .filter((ex) => ex.checked)
-        .map<string>((ex) => {
-          return ex.name;
-        }),
-    };
-    // onConfirm && onConfirm(value);
-
-    // onChange({
-    //   addExhibitDrawerVisible: false,
-    // });
-    dispatch<SaveDataRulesAction>({
-      type: 'informalNodeManagerPage/saveDataRules',
-      payload: {
-        type: 'append',
-        data: value.names.map((n) => {
-          return {
-            operation: 'add',
-            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,
-            candidate: {
-              name: n,
-              versionRange: 'latest',
-              type: value.identity,
-            },
-          };
-        }),
-      },
-    });
-    dispatch<FetchExhibitListAction>({
-      type: 'informalNodeManagerPage/fetchExhibitList',
-      payload: {
-        isRematch: false,
-      },
-    });
-  }
-
   return (<FDrawer
     title={informalNodeManagerPage.showPage === 'theme' ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
-    // visible={informalNodeManagerPage.addExhibitDrawerVisible}
     visible={informalNodeManagerPage.addExhibitDrawerVisible}
     topRight={<Space size={30}>
       <FTextBtn type="default" onClick={() => {
-        // onCancel && onCancel();
-        // onChange({
-        //   addExhibitDrawerVisible: false,
-        // });
         dispatch<OnAddExhibitDrawerCancelChangeAction>({
           type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
         });
       }}>取消</FTextBtn>
       <FRectBtn
         onClick={() => {
-          // onClickConfirm();
           dispatch<OnAddExhibitDrawerConfirmChangeAction>({
             type: 'informalNodeManagerPage/onAddExhibitDrawerConfirmChange',
           });
@@ -171,7 +79,6 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
             ...informalNodeManagerPage.addExhibitDrawerBucketOptions,
           ]}
           onChange={(value: string) => {
-            // onChange({addExhibitDrawerSelectValue: value}, true);
             dispatch<OnAddExhibitDrawerOriginChangeAction>({
               type: 'informalNodeManagerPage/onAddExhibitDrawerOriginChange',
               payload: {
@@ -184,16 +91,12 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
           value={informalNodeManagerPage.addExhibitDrawerInputValue}
           debounce={300}
           onDebounceChange={(value) => {
-            // onChange({addExhibitDrawerInputValue: value}, true);
             dispatch<OnAddExhibitDrawerKeywordsChangeAction>({
               type: 'informalNodeManagerPage/onAddExhibitDrawerKeywordsChange',
               payload: {
                 value: value,
               },
             });
-          }}
-          onChange={(e) => {
-            // onChange({addExhibitInputValue: e.target.value}, true);
           }}
           theme="dark"
         />
@@ -204,51 +107,28 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
           informalNodeManagerPage.addExhibitDrawerCheckedList
             .map((l, i, arr) => {
               return (<div key={l.id} className={styles.item}>
-                {
-                  !!l.disabledReason
-                    ? (<FTooltip
-                      title={l.disabledReason}
-                      getPopupContainer={() => containerRef.current}
-                      trigger="hover"
-                    >
-                      <div>
-                        <FCheckbox
-                          checked={l.checked}
-                          disabled={l.disabled}
-                          onChange={(e) => {
-                            onChange({
-                              addExhibitDrawerCheckedList: arr.map((a) => {
-                                if (a.id !== l.id) {
-                                  return a;
-                                }
-                                return {
-                                  ...a,
-                                  checked: e.target.checked,
-                                };
-                              }),
-                            });
-                          }}
-                        />
-                      </div>
-                    </FTooltip>)
-                    : (<FCheckbox
+                <FTooltip
+                  title={l.disabledReason}
+                  getPopupContainer={() => containerRef.current}
+                  trigger="hover"
+                  visible={l.disabled ? undefined : false}
+                >
+                  <div>
+                    <FCheckbox
                       checked={l.checked}
                       disabled={l.disabled}
                       onChange={(e) => {
-                        onChange({
-                          addExhibitDrawerCheckedList: arr.map((a) => {
-                            if (a.id !== l.id) {
-                              return a;
-                            }
-                            return {
-                              ...a,
-                              checked: e.target.checked,
-                            };
-                          }),
+                        dispatch<OnAddExhibitDrawerListCheckedChangeAction>({
+                          type: 'informalNodeManagerPage/onAddExhibitDrawerListCheckedChange',
+                          payload: {
+                            id: l.id,
+                            checked: e.target.checked,
+                          },
                         });
                       }}
-                    />)
-                }
+                    />
+                  </div>
+                </FTooltip>
 
                 <div style={{width: 15}}/>
                 <div className={styles.itemContent}>
@@ -278,12 +158,6 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
           informalNodeManagerPage.addExhibitDrawerCheckedListTotalNum > informalNodeManagerPage.addExhibitDrawerCheckedList.length
             ? (<FRectBtn
               onClick={() => {
-                // dispatch<FetchAddExhibitDrawerListAction>({
-                //   type: 'informalNodeManagerPage/fetchAddExhibitDrawerList',
-                //   payload: {
-                //     restart: false,
-                //   },
-                // });
                 dispatch<OnAddExhibitDrawerListLoadMoreAction>({
                   type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore',
                 });
@@ -297,7 +171,6 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
   </FDrawer>);
 }
 
-export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState) => ({
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
-  storageHomePage,
 }))(AddInformExhibitDrawer);
