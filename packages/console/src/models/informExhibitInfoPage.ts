@@ -166,11 +166,11 @@ export interface OnChangePTitleInputAction extends AnyAction {
   };
 }
 
-export interface OnClickPTitleConfirmBtnAction {
+export interface OnClickPTitleConfirmBtnAction extends AnyAction {
   type: 'informExhibitInfoPage/onClickPTitleConfirmBtn';
 }
 
-export interface OnClickPTitleCancelBtnAction {
+export interface OnClickPTitleCancelBtnAction extends AnyAction {
   type: 'informExhibitInfoPage/onClickPTitleCancelBtn';
 }
 
@@ -725,16 +725,53 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, {}: EffectsCommandMap) {
+    * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, {put, select}: EffectsCommandMap) {
 
-    },
-    * onChangePTitleInput({}: OnChangePTitleInputAction, {}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {pInputTitle: informExhibitInfoPage.pTitle}
+      });
     },
-    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, {}: EffectsCommandMap) {
+    * onChangePTitleInput({payload}: OnChangePTitleInputAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pInputTitle: payload.value,
+        },
+      });
+    },
+    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, {put, select}: EffectsCommandMap) {
 
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pTitle: informExhibitInfoPage.pInputTitle || '',
+          pInputTitle: null,
+        },
+      });
+
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          title: informExhibitInfoPage.pInputTitle || '',
+        },
+      });
     },
-    * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, {}: EffectsCommandMap) {
+    * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pInputTitle: null,
+        },
+      });
 
     },
     * onChangePLabels({payload}: OnChangePLabelsAction, {put}: EffectsCommandMap) {
@@ -742,7 +779,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           pTags: payload.value,
-        }
+        },
       });
       yield put<SyncRulesAction>({
         type: 'informExhibitInfoPage/syncRules',

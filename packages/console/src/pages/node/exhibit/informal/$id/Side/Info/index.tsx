@@ -6,7 +6,10 @@ import {
   ChangeAction,
   OnChangePCoverAction,
   OnChangePLabelsAction,
-  SyncRulesAction
+  OnChangePTitleInputAction,
+  OnClickPTitleCancelBtnAction,
+  OnClickPTitleConfirmBtnAction,
+  OnClickPTitleEditBtnAction,
 } from "@/models/informExhibitInfoPage";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
@@ -45,13 +48,6 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
           fMessage(err, 'error');
         }}
         onUploadSuccess={async (url: string) => {
-          // await onChange({pCover: url});
-          // await dispatch<SyncRulesAction>({
-          //   type: 'informExhibitInfoPage/syncRules',
-          //   payload: {
-          //     cover: url,
-          //   },
-          // });
           dispatch<OnChangePCoverAction>({
             type: 'informExhibitInfoPage/onChangePCover',
             payload: {
@@ -89,7 +85,10 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
               <FContentText text={informExhibitInfoPage.pTitle}/>
             </div>
             <a onClick={() => {
-              onChange({pInputTitle: informExhibitInfoPage.pTitle});
+              // onChange({pInputTitle: informExhibitInfoPage.pTitle});
+              dispatch<OnClickPTitleEditBtnAction>({
+                type: 'informExhibitInfoPage/onClickPTitleEditBtn',
+              });
             }}><FEdit/></a>
           </Space>)
           : (<>
@@ -97,7 +96,13 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
               className={styles.FInput}
               value={informExhibitInfoPage.pInputTitle || ''}
               onChange={(e) => {
-                onChange({pInputTitle: e.target.value});
+                // onChange({pInputTitle: e.target.value});
+                dispatch<OnChangePTitleInputAction>({
+                  type: 'informExhibitInfoPage/onChangePTitleInput',
+                  payload: {
+                    value: e.target.value,
+                  },
+                });
               }}
             />
             <div style={{height: 10}}/>
@@ -106,23 +111,19 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
                 // size="small"
                 type="default"
                 onClick={() => {
-                  onChange({pInputTitle: null});
+                  dispatch<OnClickPTitleCancelBtnAction>({
+                    type: 'informExhibitInfoPage/onClickPTitleCancelBtn',
+                  });
                 }}
               >取消</FTextBtn>
               <div style={{width: 15}}/>
               <FRectBtn
                 size="small"
                 onClick={async () => {
-                  await onChange({
-                    pTitle: informExhibitInfoPage.pInputTitle || '',
-                    pInputTitle: null,
+                  dispatch<OnClickPTitleConfirmBtnAction>({
+                    type: 'informExhibitInfoPage/onClickPTitleConfirmBtn',
                   });
-                  await dispatch<SyncRulesAction>({
-                    type: 'informExhibitInfoPage/syncRules',
-                    payload: {
-                      title: informExhibitInfoPage.pInputTitle || '',
-                    },
-                  });
+
                 }}
                 type="primary"
               >确定</FRectBtn>
