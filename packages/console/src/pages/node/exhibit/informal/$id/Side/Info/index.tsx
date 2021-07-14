@@ -2,7 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import FUploadImage from "@/components/FUploadImage";
-import {ChangeAction, OnChangePCoverAction, SyncRulesAction} from "@/models/informExhibitInfoPage";
+import {
+  ChangeAction,
+  OnChangePCoverAction,
+  OnChangePLabelsAction,
+  SyncRulesAction
+} from "@/models/informExhibitInfoPage";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
@@ -137,13 +142,19 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
       <FLabelEditor
         values={informExhibitInfoPage.pTags as string[]}
         onChange={async (value) => {
-          await onChange({
-            pTags: value,
-          });
-          await dispatch<SyncRulesAction>({
-            type: 'informExhibitInfoPage/syncRules',
+          // await onChange({
+          //   pTags: value,
+          // });
+          // await dispatch<SyncRulesAction>({
+          //   type: 'informExhibitInfoPage/syncRules',
+          //   payload: {
+          //     labels: value,
+          //   },
+          // });
+          dispatch<OnChangePLabelsAction>({
+            type: 'informExhibitInfoPage/onChangePLabels',
             payload: {
-              labels: value,
+              value: value,
             },
           });
         }}

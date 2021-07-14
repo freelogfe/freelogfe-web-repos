@@ -155,7 +155,7 @@ export interface OnChangePCoverAction extends AnyAction {
   };
 }
 
-export interface OnClickPTitleEditBtnAction {
+export interface OnClickPTitleEditBtnAction extends AnyAction {
   type: 'informExhibitInfoPage/onClickPTitleEditBtn';
 }
 
@@ -177,7 +177,7 @@ export interface OnClickPTitleCancelBtnAction {
 export interface OnChangePLabelsAction extends AnyAction {
   type: 'informExhibitInfoPage/onChangePLabels';
   payload: {
-    value: boolean;
+    value: string[];
   };
 }
 
@@ -737,8 +737,19 @@ const Model: ExhibitInfoPageModelType = {
     * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, {}: EffectsCommandMap) {
 
     },
-    * onChangePLabels({}: OnChangePLabelsAction, {}: EffectsCommandMap) {
-
+    * onChangePLabels({payload}: OnChangePLabelsAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pTags: payload.value,
+        }
+      });
+      yield put<SyncRulesAction>({
+        type: 'informExhibitInfoPage/syncRules',
+        payload: {
+          labels: payload.value,
+        },
+      });
     },
     * onChangePVersion({}: OnChangePVersionAction, {}: EffectsCommandMap) {
 
