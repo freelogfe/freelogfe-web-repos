@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {FContentText, FTitleText} from "@/components/FText";
 import FUploadImage from "@/components/FUploadImage";
-import {ChangeAction, SyncRulesAction} from "@/models/informExhibitInfoPage";
+import {ChangeAction, OnChangePCoverAction, SyncRulesAction} from "@/models/informExhibitInfoPage";
 import * as imgSrc from "@/assets/default-resource-cover.jpg";
 import {FEdit} from "@/components/FIcons";
 import {Space} from "antd";
@@ -40,11 +40,17 @@ function Info({dispatch, informExhibitInfoPage}: InfoProps) {
           fMessage(err, 'error');
         }}
         onUploadSuccess={async (url: string) => {
-          await onChange({pCover: url});
-          await dispatch<SyncRulesAction>({
-            type: 'informExhibitInfoPage/syncRules',
+          // await onChange({pCover: url});
+          // await dispatch<SyncRulesAction>({
+          //   type: 'informExhibitInfoPage/syncRules',
+          //   payload: {
+          //     cover: url,
+          //   },
+          // });
+          dispatch<OnChangePCoverAction>({
+            type: 'informExhibitInfoPage/onChangePCover',
             payload: {
-              cover: url,
+              value: url,
             },
           });
         }}>

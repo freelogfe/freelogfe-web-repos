@@ -148,6 +148,46 @@ export interface OnOnlineSwitchChangeAction extends AnyAction {
   };
 }
 
+export interface OnChangePCoverAction extends AnyAction {
+  type: 'informExhibitInfoPage/onChangePCover';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClickPTitleEditBtnAction {
+  type: 'informExhibitInfoPage/onClickPTitleEditBtn';
+}
+
+export interface OnChangePTitleInputAction extends AnyAction {
+  type: 'informExhibitInfoPage/onChangePTitleInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClickPTitleConfirmBtnAction {
+  type: 'informExhibitInfoPage/onClickPTitleConfirmBtn';
+}
+
+export interface OnClickPTitleCancelBtnAction {
+  type: 'informExhibitInfoPage/onClickPTitleCancelBtn';
+}
+
+export interface OnChangePLabelsAction extends AnyAction {
+  type: 'informExhibitInfoPage/onChangePLabels';
+  payload: {
+    value: boolean;
+  };
+}
+
+export interface OnChangePVersionAction extends AnyAction {
+  type: 'informExhibitInfoPage/onChangePVersion';
+  payload: {
+    value: boolean;
+  };
+}
+
 export interface FetchInformalExhibitInfoAction extends AnyAction {
   type: 'fetchInformalExhibitInfo' | 'informExhibitInfoPage/fetchInformalExhibitInfo';
   payload?: {
@@ -240,6 +280,15 @@ export interface ExhibitInfoPageModelType {
     updateRelation: (action: UpdateRelationAction, effects: EffectsCommandMap) => void;
 
     onOnlineSwitchChange: (action: OnOnlineSwitchChangeAction, effects: EffectsCommandMap) => void;
+
+    onChangePCover: (action: OnChangePCoverAction, effects: EffectsCommandMap) => void;
+    onClickPTitleEditBtn: (action: OnClickPTitleEditBtnAction, effects: EffectsCommandMap) => void;
+    onChangePTitleInput: (action: OnChangePTitleInputAction, effects: EffectsCommandMap) => void;
+    onClickPTitleConfirmBtn: (action: OnClickPTitleConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClickPTitleCancelBtn: (action: OnClickPTitleCancelBtnAction, effects: EffectsCommandMap) => void;
+    onChangePLabels: (action: OnChangePLabelsAction, effects: EffectsCommandMap) => void;
+    onChangePVersion: (action: OnChangePVersionAction, effects: EffectsCommandMap) => void;
+
     onHandleAttrModal: (action: OnHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onCancelHandleAttrModal: (action: OnCancelHandleAttrModalAction, effects: EffectsCommandMap) => void;
     onAttrModalChange: (action: OnAttrModalChangeAction, effects: EffectsCommandMap) => void;
@@ -426,12 +475,9 @@ const Model: ExhibitInfoPageModelType = {
               return cr.authority === 1;
             })
             .map<InformExhibitInfoPageModelState['pOnlyReadAttrs'][number]>((cr: any) => {
-              // console.log(cr, 'cr!!@#$!@#$!@#$!@#$!@#$');
               return {
                 theKey: cr.key,
-                value: cr.value,
-                // remark: cr.remark,
-                // isEditing: false,
+                value: cr.key === 'fileSize' ? FUtil.Format.humanizeSize(cr.value) : cr.value,
               };
             }),
           pOnlyEditAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
@@ -667,6 +713,37 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
+    * onChangePCover({payload}: OnChangePCoverAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {pCover: payload.value}
+      });
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          cover: payload.value,
+        },
+      });
+    },
+    * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, {}: EffectsCommandMap) {
+
+    },
+    * onChangePTitleInput({}: OnChangePTitleInputAction, {}: EffectsCommandMap) {
+
+    },
+    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, {}: EffectsCommandMap) {
+
+    },
+    * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, {}: EffectsCommandMap) {
+
+    },
+    * onChangePLabels({}: OnChangePLabelsAction, {}: EffectsCommandMap) {
+
+    },
+    * onChangePVersion({}: OnChangePVersionAction, {}: EffectsCommandMap) {
+
+    },
+
     * onHandleAttrModal({payload}: OnHandleAttrModalAction, {select, put}: EffectsCommandMap) {
       const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
         informExhibitInfoPage,
