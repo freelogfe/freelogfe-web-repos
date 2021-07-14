@@ -14,9 +14,10 @@ interface ICandidate {
 }
 
 export interface InformExhibitInfoPageModelState {
-  resourceType: string;
-  informExhibitID: string;
   nodeID: number;
+  informExhibitID: string;
+  informExhibitIdentity: 'resource' | 'object';
+  resourceType: string;
   allRuleText: string;
   allRuleResult: any;
   currentRuleResult: any;
@@ -44,7 +45,7 @@ export interface InformExhibitInfoPageModelState {
     replaces?: {
       replaced: ICandidate;
       replacer: ICandidate;
-      scopes: ICandidate[][];
+      scopes?: ICandidate[][];
     }[];
     attrs?: {
       type: 'add' | 'delete',
@@ -184,7 +185,7 @@ export interface OnChangePLabelsAction extends AnyAction {
 export interface OnChangePVersionAction extends AnyAction {
   type: 'informExhibitInfoPage/onChangePVersion';
   payload: {
-    value: boolean;
+    value: string;
   };
 }
 
@@ -209,6 +210,11 @@ export interface SyncRulesAction extends AnyAction {
     }[];
     online?: boolean;
     active?: boolean;
+    replaces?: {
+      replaced: ICandidate;
+      replacer: ICandidate;
+      scopes?: ICandidate[][];
+    }[];
   };
 }
 
@@ -319,7 +325,9 @@ const Model: ExhibitInfoPageModelType = {
   state: {
     nodeID: -1,
     informExhibitID: '',
+    informExhibitIdentity: 'resource',
     resourceType: '',
+
     allRuleText: '',
     allRuleResult: null,
     currentRuleResult: null,
@@ -356,7 +364,6 @@ const Model: ExhibitInfoPageModelType = {
 
     relation: null,
   },
-
 
   effects: {
     * onPageMount({payload}: OnPageMountAction, {put}: EffectsCommandMap) {
@@ -454,6 +461,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           nodeID: data.nodeId,
+          informExhibitIdentity: data.originInfo.type,
           resourceType: data.resourceType,
           nodeName: data4.nodeName,
           informExhibitName: data.testResourceName,
@@ -791,8 +799,37 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onChangePVersion({}: OnChangePVersionAction, {}: EffectsCommandMap) {
+    * onChangePVersion({payload}: OnChangePVersionAction, {select, put}: EffectsCommandMap) {
+      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+        informExhibitInfoPage,
+      }));
 
+      console.log(payload, 'payloadpayloadpayloadpayload2214111111');
+      const replace: {
+        replaced: ICandidate;
+        replacer: ICandidate;
+        scopes?: ICandidate[][];
+      }[] = [
+        ...(informExhibitInfoPage.currentRuleResult?.ruleInfo?.replaces || []),
+        {
+          replacer: {
+            name: informExhibitInfoPage.informExhibitName,
+            versionRange: payload.value,
+            type: informExhibitInfoPage.informExhibitIdentity,
+          },
+          replaced: {
+            name: informExhibitInfoPage.informExhibitName,
+            versionRange: '*',
+            type: informExhibitInfoPage.informExhibitIdentity,
+          },
+        },
+      ];
+      yield put<SyncRulesAction>({
+        type: 'syncRules',
+        payload: {
+          replaces: replace,
+        },
+      });
     },
 
     * onHandleAttrModal({payload}: OnHandleAttrModalAction, {select, put}: EffectsCommandMap) {
@@ -967,7 +1004,7 @@ const Model: ExhibitInfoPageModelType = {
         return ped.theKey === payload.theKey;
       });
 
-      console.log(attr, 'attrattrattr!!!');
+      // console.log(attr, 'attrattrattr!!!');
 
       if (attr?.theValueError) {
         return;

@@ -8,7 +8,7 @@ import {
   OnAttrBlurAction,
   OnAttrModalChangeAction,
   OnCancelHandleAttrModalAction,
-  OnChangeAttrsAction,
+  OnChangeAttrsAction, OnChangePVersionAction,
   OnClickAttrModalConfirmBtnAction,
   OnClickDeleteAttrAction,
   OnClickResetAttrAction,
@@ -40,7 +40,12 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
     <FDropdownMenu
       options={informExhibitInfoPage.pAllVersions.map((av: string) => ({value: av, text: av}))}
       onChange={(value) => {
-
+        dispatch<OnChangePVersionAction>({
+          type: 'informExhibitInfoPage/onChangePVersion',
+          payload: {
+            value: value,
+          },
+        });
       }}
     >
       <Space style={{cursor: 'pointer'}} size={15}><FContentText text={informExhibitInfoPage.pVersion}/><FSwap/></Space>
