@@ -601,7 +601,10 @@ const Model: ExhibitInfoPageModelType = {
 
       const {data: data1} = yield call(ruleMatchStatus, params2);
 
-      const {rules} = compile(data1.ruleText);
+      // const {rules} = compile(data1.ruleText);
+      const rules = informExhibitInfoPage.allRuleResult.map((rr: any) => {
+        return rr.ruleInfo;
+      });
 
       let newRulesObj;
 
@@ -782,7 +785,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
       yield put<SyncRulesAction>({
-        type: 'informExhibitInfoPage/syncRules',
+        type: 'syncRules',
         payload: {
           labels: payload.value,
         },
