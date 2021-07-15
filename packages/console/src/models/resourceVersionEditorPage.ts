@@ -228,7 +228,7 @@ const Model: ResourceVersionEditorModelType = {
       };
 
       const {data: data4} = yield call(FServiceAPI.Resource.relationTreeAuth, params4);
-      console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
+      // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
       const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
       // console.log(relationGraphNodes, relationGraphEdges, 'relationGraphEdges@Q@#$!@#$!@$@#$@!#$');
 

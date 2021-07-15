@@ -16,17 +16,21 @@ interface NodeProps {
   dispatch: Dispatch;
   nodes: NodesModelState;
   // global: GlobalModelState;
+  router: {
+    location: Location;
+  };
 }
 
-function Node({dispatch, nodes}: NodeProps) {
-
+function Node({dispatch, nodes, router: routerObj}: NodeProps) {
+  // console.log(routerObj, 'nnnnNNNNNNNNNnnnnnnnnnNNNNNNNooooijsodfjlkdsjf');
   // const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = /\/node\/formal\/(\d*)/.test(window.location.pathname) || /\/node\/informal\/(\d*)/.test(window.location.pathname);
+  const isCurrent: boolean = /\/node\/formal\/(\d*)/.test(routerObj.location.pathname) || /\/node\/informal\/(\d*)/.test(routerObj.location.pathname);
   // console.log(isCurrent, 'isCurrent');
   // console.log(cRoute.pathname, 'cRoute.pathname');
-  const nodeId: string | null = (window.location.pathname.match(/\/node\/formal\/(\d*)/) || window.location.pathname.match(/\/node\/informal\/(\d*)/) || [null, null])[1];
+  const nodeId: string | null = (routerObj.location.pathname.match(/\/node\/formal\/(\d*)/) || routerObj.location.pathname.match(/\/node\/informal\/(\d*)/) || [null, null])[1];
 
   function onClickNodes(value: string) {
+    console.log(value, '!@#$!@#$!@#$');
     return router.push(FUtil.LinkTo.nodeManagement({nodeID: Number(value)}));
   }
 
@@ -66,6 +70,7 @@ function Node({dispatch, nodes}: NodeProps) {
   </FDropdown>);
 }
 
-export default connect(({nodes}: ConnectState) => ({
+export default connect(({nodes, router}: ConnectState) => ({
   nodes,
+  router,
 }))(Node);

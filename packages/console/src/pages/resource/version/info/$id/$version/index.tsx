@@ -47,8 +47,8 @@ interface VersionEditorProps extends RouteComponentProps<{
   // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
 }
-
 function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: VersionEditorProps & RouterTypes) {
+  // console.log(route, 'route!@#$@!#$@!#42134');
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));

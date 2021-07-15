@@ -21,13 +21,15 @@ const resourcesOptions = [
 ];
 
 interface ResourceProps {
-  global: GlobalModelState;
+  router: {
+    location: Location;
+  };
 }
 
-function Resource({global}: ResourceProps) {
+function Resource({router: routerObj}: ResourceProps) {
   // console.log(window.location.pathname, 'router!Q@#$!2342342134');
   // const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = window.location.pathname === '/resource/list' || window.location.pathname === '/resource/collect';
+  const isCurrent: boolean = routerObj.location.pathname === '/resource/list' || routerObj.location.pathname === '/resource/collect';
 
   // function onClickResource(value: string) {
   //   console.log(value, 'value!@#$@#$');
@@ -56,6 +58,6 @@ function Resource({global}: ResourceProps) {
   </FDropdown>);
 }
 
-export default connect(({global}: ConnectState) => ({
-  global
+export default connect(({router}: ConnectState) => ({
+  router,
 }))(Resource);
