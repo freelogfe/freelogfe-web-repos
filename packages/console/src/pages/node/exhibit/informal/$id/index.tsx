@@ -14,7 +14,8 @@ import {
 } from '@/models/connect';
 import {
   OnPageMountAction,
-  OnOnlineSwitchChangeAction, OnPageUnmountAction,
+  OnOnlineSwitchChangeAction,
+  OnPageUnmountAction,
 } from '@/models/informExhibitInfoPage';
 import {FTextBtn} from '@/components/FButton';
 import {router} from 'umi';

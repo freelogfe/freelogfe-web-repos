@@ -63,8 +63,8 @@ function Setting({dispatch, informExhibitInfoPage}: SettingProps) {
         <tbody>
         {
           informExhibitInfoPage.pOnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
-            <td><FContentText text={pb.theKey}/></td>
-            <td><FContentText text={pb.value}/></td>
+            <td><FContentText style={{width: 80}} singleRow text={pb.theKey}/></td>
+            <td><FContentText style={{width: 100}} singleRow text={pb.value}/></td>
           </tr>))
         }
         </tbody>
