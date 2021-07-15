@@ -812,7 +812,17 @@ const Model: ExhibitInfoPageModelType = {
         replacer: ICandidate;
         scopes?: ICandidate[][];
       }[] = [
-        ...(informExhibitInfoPage.currentRuleResult?.ruleInfo?.replaces || []),
+        ...(informExhibitInfoPage.currentRuleResult?.ruleInfo?.replaces || []).filter((r: any) => {
+          console.log(r, 'r!@#$!@#$!@!11RRRRRRRRR');
+          const replacer = r.replacer;
+          const replaced = r.replaced;
+          return !(replaced.name === informExhibitInfoPage.relation?.name
+            && replaced.versionRange === '*'
+            && replaced.type === informExhibitInfoPage.relation?.identity
+            && replacer.name === informExhibitInfoPage.relation?.name
+            && replacer.type === informExhibitInfoPage.relation?.identity
+            && !r.scopes);
+        }),
         {
           replacer: {
             name: informExhibitInfoPage.relation?.name,
