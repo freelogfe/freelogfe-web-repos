@@ -45,12 +45,12 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
     });
   }, [showPage]);
 
-  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload,
+  //   });
+  // }
 
   return (<>
     <div>
@@ -71,7 +71,7 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
         </div>
       </div>
     </div>
-    
+
     <AddInformExhibitDrawer/>
 
     <FReplaceModal/>
