@@ -13,27 +13,13 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
 import {
   ChangeAction,
-  FetchExhibitListAction,
-  // SaveDataRulesAction,
+  FetchExhibitListAction, OnMountExhibitPageAction,
 } from "@/models/informalNodeManagerPage";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FDown} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
-
-// const {decompile, compile} = require('@freelog/nmr_translator');
-
-// const resourceTypeOptions = [
-//   {text: '全部', value: '-1'},
-//   ...FUtil.Predefined.resourceTypes.filter((i) => i !== 'theme').map((i) => ({value: i, text: i}))
-// ];
-
-// const resourceStatusOptions = [
-//   {text: '全部', value: '2'},
-//   {text: '已上线', value: '1'},
-//   {text: '已下线', value: '0'},
-// ];
 
 interface ExhibitProps {
   dispatch: Dispatch;
@@ -44,17 +30,19 @@ interface ExhibitProps {
 function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMountExhibitPageAction>({
+      type: 'informalNodeManagerPage/onMountExhibitPage',
+    });
   });
 
   AHooks.useUnmount(() => {
 
   });
 
-  React.useEffect(() => {
-    // console.log('exhibit');
-    initData();
-  }, []);
+  // React.useEffect(() => {
+  //   // console.log('exhibit');
+  //   initData();
+  // }, []);
 
   // AHooks.useUnmount(() => {
   //   onChange({
@@ -62,14 +50,14 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   //   });
   // });
 
-  async function initData() {
-    await dispatch<FetchExhibitListAction>({
-      type: 'informalNodeManagerPage/fetchExhibitList',
-      payload: {
-        isRematch: true,
-      },
-    });
-  }
+  // async function initData() {
+  //   await dispatch<FetchExhibitListAction>({
+  //     type: 'informalNodeManagerPage/fetchExhibitList',
+  //     payload: {
+  //       isRematch: true,
+  //     },
+  //   });
+  // }
 
   if (informalNodeManagerPage.exhibitPageExhibitsTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);

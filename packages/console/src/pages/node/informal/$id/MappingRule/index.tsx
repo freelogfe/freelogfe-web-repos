@@ -20,7 +20,7 @@ import FCodemirror from "@/components/FCodemirror";
 import {FRectBtn, FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {ChangeAction, FetchRulesAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchRulesAction, OnMountRulePageAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
 import FUpload from "@/components/FUpload";
 import FUtil1 from "@/utils";
@@ -44,11 +44,15 @@ interface MappingRuleProps {
 
 function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
-  React.useEffect(() => {
-    dispatch<FetchRulesAction>({
-      type: 'informalNodeManagerPage/fetchRules'
+  AHooks.useMount(() => {
+    dispatch<OnMountRulePageAction>({
+      type: 'informalNodeManagerPage/onMountRulePage',
     });
-  }, []);
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   React.useEffect(() => {
     if (informalNodeManagerPage.rulePageCodeIsDirty) {

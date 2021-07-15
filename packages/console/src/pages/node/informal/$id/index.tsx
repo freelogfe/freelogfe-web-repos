@@ -6,7 +6,9 @@ import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
 import {
   ChangeAction,
-  InformalNodeManagerPageModelState,
+  InformalNodeManagerPageModelState, OnChangePageAction,
+  OnMountPageAction,
+  OnUnmountPageAction,
 } from "@/models/informalNodeManagerPage";
 import {ConnectState} from "@/models/connect";
 import Theme from "./Theme";
@@ -27,21 +29,31 @@ interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
 function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMountPageAction>({
+      type: 'informalNodeManagerPage/onMountPage',
+    });
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmountPageAction>({
+      type: 'informalNodeManagerPage/onUnmountPage',
+    });
   });
 
   const [{showPage}] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
 
   React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
+    // dispatch<ChangeAction>({
+    //   type: 'informalNodeManagerPage/change',
+    //   payload: {
+    //     showPage: showPage,
+    //   },
+    // });
+    dispatch<OnChangePageAction>({
+      type: 'informalNodeManagerPage/onChangePage',
       payload: {
-        showPage: showPage,
-      },
+        value: showPage,
+      }
     });
   }, [showPage]);
 

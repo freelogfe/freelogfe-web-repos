@@ -199,36 +199,43 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<InformalNodeManagerPageModelState>;
 }
 
-export interface OnPageMountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onPageMount';
+export interface OnMountPageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onMountPage';
 }
 
-export interface OnPageUnmountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onPageUnmount';
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onUnmountPage';
 }
 
-export interface OnExhibitPageMountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onExhibitPageMount';
+export interface OnChangePageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangePage';
+  payload: {
+    value: string;
+  };
 }
 
-export interface OnExhibitPageUnmountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onExhibitPageUnmount';
+export interface OnMountExhibitPageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onMountExhibitPage';
 }
 
-export interface OnThemePageMountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onThemePageMount';
+export interface OnUnmountExhibitPageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onUnmountExhibitPage';
 }
 
-export interface OnThemePageUnmountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onThemePageUnmount';
+export interface OnMountThemePageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onMountThemePage';
 }
 
-export interface OnRulePageMountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onRulePageMount';
+export interface OnUnmountThemePageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onUnmountThemePage';
 }
 
-export interface OnRulePageUnmountAction extends AnyAction {
-  type: 'informalNodeManagerPage/onRulePageUnmount';
+export interface OnMountRulePageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onMountRulePage';
+}
+
+export interface OnUnmountRulePageAction extends AnyAction {
+  type: 'informalNodeManagerPage/onUnmountRulePage';
 }
 
 export interface FetchInfoAction extends AnyAction {
@@ -252,7 +259,7 @@ export interface FetchThemeListAction extends AnyAction {
 }
 
 export interface FetchRulesAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchRules';
+  type: 'informalNodeManagerPage/fetchRules' | 'fetchRules';
 }
 
 export interface SaveRulesAction extends AnyAction {
@@ -456,14 +463,15 @@ interface InformalNodeManagerPageModelType {
   namespace: 'informalNodeManagerPage';
   state: InformalNodeManagerPageModelState;
   effects: {
-    onPageMount: (action: OnPageMountAction, effects: EffectsCommandMap) => void;
-    onPageUnmount: (action: OnPageUnmountAction, effects: EffectsCommandMap) => void;
-    onExhibitPageMount: (action: OnExhibitPageMountAction, effects: EffectsCommandMap) => void;
-    onExhibitPageUnmount: (action: OnExhibitPageUnmountAction, effects: EffectsCommandMap) => void;
-    onThemePageMount: (action: OnThemePageMountAction, effects: EffectsCommandMap) => void;
-    onThemePageUnmount: (action: OnThemePageUnmountAction, effects: EffectsCommandMap) => void;
-    onRulePageMount: (action: OnRulePageMountAction, effects: EffectsCommandMap) => void;
-    onRulePageUnmount: (action: OnRulePageUnmountAction, effects: EffectsCommandMap) => void;
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onChangePage: (action: OnChangePageAction, effects: EffectsCommandMap) => void;
+    onMountExhibitPage: (action: OnMountExhibitPageAction, effects: EffectsCommandMap) => void;
+    onUnmountExhibitPage: (action: OnUnmountExhibitPageAction, effects: EffectsCommandMap) => void;
+    onMountThemePage: (action: OnMountThemePageAction, effects: EffectsCommandMap) => void;
+    onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
+    onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
+    onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
@@ -588,28 +596,50 @@ const Model: InformalNodeManagerPageModelType = {
   namespace: 'informalNodeManagerPage',
   state: informalNodeManagerPageInitStates,
   effects: {
-    * onPageMount({}: OnPageMountAction, {}: EffectsCommandMap) {
+    * onMountPage({}: OnMountPageAction, {}: EffectsCommandMap) {
+      // console.log('onMountPage982h3rjkadfhslkfasdfasdf');
+    },
+    * onUnmountPage({}: OnUnmountPageAction, {}: EffectsCommandMap) {
 
     },
-    * onPageUnmount({}: OnPageUnmountAction, {}: EffectsCommandMap) {
+    * onChangePage({payload}: OnChangePageAction, {put}: EffectsCommandMap) {
+      // console.log('onChangePage,9032hjkjadslkjflasd');
+      yield put({
+        type: 'change',
+        payload: {
+          showPage: payload.value,
+        },
+      });
+    },
+    * onMountExhibitPage({}: OnMountExhibitPageAction, {select, put}: EffectsCommandMap) {
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: true,
+          isRestart: true,
+        },
+      });
+    },
+    * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, {}: EffectsCommandMap) {
 
     },
-    * onExhibitPageMount({}: OnExhibitPageMountAction, {}: EffectsCommandMap) {
+    * onMountThemePage({}: OnMountThemePageAction, {put}: EffectsCommandMap) {
+      yield put<FetchThemeListAction>({
+        type: 'fetchThemeList',
+        payload: {
+          isRematch: true,
+        },
+      });
+    },
+    * onUnmountThemePage({}: OnUnmountThemePageAction, {}: EffectsCommandMap) {
 
     },
-    * onExhibitPageUnmount({}: OnExhibitPageUnmountAction, {}: EffectsCommandMap) {
-
+    * onMountRulePage({}: OnMountRulePageAction, {put}: EffectsCommandMap) {
+      yield put<FetchRulesAction>({
+        type: 'fetchRules'
+      });
     },
-    * onThemePageMount({}: OnThemePageMountAction, {}: EffectsCommandMap) {
-
-    },
-    * onThemePageUnmount({}: OnThemePageUnmountAction, {}: EffectsCommandMap) {
-
-    },
-    * onRulePageMount(action: OnRulePageMountAction, effects: EffectsCommandMap) {
-
-    },
-    * onRulePageUnmount(action: OnRulePageUnmountAction, effects: EffectsCommandMap) {
+    * onUnmountRulePage({}: OnUnmountRulePageAction, {}: EffectsCommandMap) {
 
     },
     * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
@@ -777,23 +807,10 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     themeListIsLoading: true,
-      //   }
-      // });
 
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     themesTotal: -1,
-      //   },
-      // });
 
       const params2: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,

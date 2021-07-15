@@ -8,6 +8,7 @@ import {
   ChangeAction,
   FetchThemeListAction,
   InformalNodeManagerPageModelState,
+  OnMountThemePageAction,
   SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
 import FAdd from "@/components/FIcons/FAdd";
@@ -18,7 +19,6 @@ import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {ConnectState} from "@/models/connect";
 import FLoadingTip from "@/components/FLoadingTip";
-// import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
 import FDivider from "@/components/FDivider";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
@@ -37,21 +37,14 @@ interface ThemeProps {
 function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMountThemePageAction>({
+      type: 'informalNodeManagerPage/onMountThemePage',
+    })
   });
 
   AHooks.useUnmount(() => {
 
   });
-
-  React.useEffect(() => {
-    dispatch<FetchThemeListAction>({
-      type: 'informalNodeManagerPage/fetchThemeList',
-      payload: {
-        isRematch: true,
-      },
-    });
-  }, []);
 
   if (informalNodeManagerPage.themePageThemesTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
