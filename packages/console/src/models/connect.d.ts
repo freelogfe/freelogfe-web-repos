@@ -52,6 +52,9 @@ export {
 };
 
 export interface ConnectState {
+  router: {
+    location: Location;
+  };
   // routerHistories: RouterHistoriesModelState,
   globalSearching: GlobalSearchingModelState,
   marketPage: MarketPageModelState;
@@ -75,9 +78,7 @@ export interface ConnectState {
   resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
-  router: {
-    location: Location;
-  };
+
   // addInformExhibitDrawer: AddInformExhibitDrawerModelState;
   // replaceInformExhibit: ReplaceInformExhibitState;
 }
