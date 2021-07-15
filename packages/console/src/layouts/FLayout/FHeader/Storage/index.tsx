@@ -21,12 +21,14 @@ interface StorageProps {
   dispatch: Dispatch;
 
   storageHomePage: StorageHomePageModelState;
-  global: GlobalModelState;
+  router: {
+    location: Location;
+  };
 }
 
-function Storage({dispatch, storageHomePage, global}: StorageProps) {
-  const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = cRoute.pathname.startsWith('/storage');
+function Storage({dispatch, storageHomePage, router: routerObj}: StorageProps) {
+  // const cRoute = global.routerHistories[global.routerHistories.length - 1];
+  const isCurrent: boolean = routerObj.location.pathname.startsWith('/storage');
 
   // React.useEffect(() => {
   //   // console.log(storageHomePage.bucketList, 'storageHomePage.bucketList!@#$@#$#');
@@ -117,7 +119,7 @@ function Storage({dispatch, storageHomePage, global}: StorageProps) {
   </FDropdown>);
 }
 
-export default connect(({storageHomePage, global}: ConnectState) => ({
+export default connect(({storageHomePage, router}: ConnectState) => ({
   storageHomePage,
-  global,
+  router,
 }))(Storage);

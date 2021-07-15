@@ -22,17 +22,19 @@ const discoverOptions = [
 
 interface DiscoverProps {
   dispatch: Dispatch;
-  global: GlobalModelState;
+  router: {
+    location: Location;
+  };
   marketPage: MarketPageModelState;
 }
 
-function Discover({global, marketPage}: DiscoverProps) {
-  const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = cRoute.pathname.startsWith('/market');
+function Discover({router: routerObj, marketPage}: DiscoverProps) {
+  // const cRoute = global.routerHistories[global.routerHistories.length - 1];
+  const isCurrent: boolean = routerObj.location.pathname.startsWith('/market');
 
   function onDiscoverClick(value: string) {
     // console.log(params, 'paramsparams');
-    if (value === '1' && cRoute.pathname !== '/market') {
+    if (value === '1' && routerObj.location.pathname !== '/market') {
       return router.push(FUtil.LinkTo.market());
     } else if (value === '2') {
       return window.open('https://f-presentations.freelog.com');
@@ -56,7 +58,7 @@ function Discover({global, marketPage}: DiscoverProps) {
   </FDropdown>);
 }
 
-export default connect(({global, marketPage}: ConnectState) => ({
-  global,
+export default connect(({router, marketPage}: ConnectState) => ({
+  router,
   marketPage,
 }))(Discover);
