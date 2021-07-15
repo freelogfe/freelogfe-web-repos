@@ -12,11 +12,11 @@ import {FUtil} from '@freelog/tools-lib';
 const resourcesOptions = [
   {
     text: '我的资源',
-    value: '1'
+    value: FUtil.LinkTo.myResources()
   },
   {
     text: '我的收藏',
-    value: '2'
+    value: FUtil.LinkTo.myCollects(),
   },
 ];
 
@@ -25,23 +25,27 @@ interface ResourceProps {
 }
 
 function Resource({global}: ResourceProps) {
+  // console.log(window.location.pathname, 'router!Q@#$!2342342134');
+  // const cRoute = global.routerHistories[global.routerHistories.length - 1];
+  const isCurrent: boolean = window.location.pathname === '/resource/list' || window.location.pathname === '/resource/collect';
 
-  const cRoute = global.routerHistories[global.routerHistories.length - 1];
-  const isCurrent: boolean = cRoute.pathname === '/resource/list' || cRoute.pathname === '/resource/collect';
-
-  function onClickResource(value: string) {
-    if (value === '1' && !cRoute.pathname.startsWith('/resource/list')) {
-      return router.push(FUtil.LinkTo.myResources());
-    }
-    if (value === '2' && !cRoute.pathname.startsWith('/resource/collect')) {
-      return router.push(FUtil.LinkTo.myCollects());
-    }
-  }
+  // function onClickResource(value: string) {
+  //   console.log(value, 'value!@#$@#$');
+  //   if (value === '1' && !cRoute.pathname.startsWith('/resource/list')) {
+  //     return router.push(value);
+  //   }
+  //   if (value === '2' && !cRoute.pathname.startsWith('/resource/collect')) {
+  //     return router.push(value);
+  //   }
+  // }
 
   return (<FDropdown
     overlay={<FMenu
-      value={cRoute.pathname.startsWith('/resource/list') ? '1' : cRoute.pathname.startsWith('/resource/collect') ? '2' : ''}
-      onClick={onClickResource}
+      // value={cRoute.pathname.startsWith('/resource/list') ? '1' : cRoute.pathname.startsWith('/resource/collect') ? '2' : ''}
+      value={window.location.pathname}
+      onClick={(value) => {
+        router.push(value);
+      }}
       options={resourcesOptions}
     />}>
     <FNavLink

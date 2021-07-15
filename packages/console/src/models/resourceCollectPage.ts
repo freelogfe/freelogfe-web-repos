@@ -113,7 +113,7 @@ const Model: ResourceCollectModelType = {
       };
 
       const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
-      console.log(data, 'data3290joisdf');
+      // console.log(data, 'data3290joisdf');
 
       let data1: any[] = [];
 
@@ -128,8 +128,7 @@ const Model: ResourceCollectModelType = {
         data1 = data2;
       }
 
-
-      console.log(data1, 'data1w09ejflk23');
+      // console.log(data1, 'data1w09ejflk23');
 
       yield put<ChangeAction>({
         type: 'change',
