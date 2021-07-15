@@ -18,17 +18,11 @@ import {
 } from "@/models/informalNodeManagerPage";
 import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
 import FLoadingTip from "@/components/FLoadingTip";
-// import AddInformExhibitDrawer from '../containers/AddInformExhibitDrawer';
-import FReplaceModal from '../containers/FReplaceModal';
 import {FDown} from "@/components/FIcons";
-import {FUtil} from '@freelog/tools-lib';
-// import {
-//   ReplaceInformExhibitInitModelStatesAction,
-// } from "@/models/replaceInformExhibitModal";
-// import * as AHooks from 'ahooks';
+import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
 
-const {decompile, compile} = require('@freelog/nmr_translator');
+// const {decompile, compile} = require('@freelog/nmr_translator');
 
 // const resourceTypeOptions = [
 //   {text: '全部', value: '-1'},
@@ -48,6 +42,14 @@ interface ExhibitProps {
 }
 
 function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   React.useEffect(() => {
     // console.log('exhibit');

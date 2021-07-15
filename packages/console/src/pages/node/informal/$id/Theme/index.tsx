@@ -36,6 +36,14 @@ interface ThemeProps {
 
 function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
+
   React.useEffect(() => {
     dispatch<FetchThemeListAction>({
       type: 'informalNodeManagerPage/fetchThemeList',
@@ -44,12 +52,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
       },
     });
   }, []);
-
-  AHooks.useUnmount(() => {
-    onChange({
-      // ...themePageInitData,
-    });
-  });
 
   if (informalNodeManagerPage.themePageThemesTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);

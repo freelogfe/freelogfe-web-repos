@@ -23,6 +23,7 @@ import FLink from "@/components/FLink";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
 import InfiniteScroll from 'react-infinite-scroller';
+import * as AHooks from 'ahooks';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -41,6 +42,14 @@ const resourceStatusOptions = [
 ];
 
 function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   const dataSource: NodeManagerModelState['exhibitList'] = nodeManagerPage.exhibitList.map((i) => ({
     key: i.id,

@@ -15,6 +15,8 @@ import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import FIdentityTypeBadge from "@/components/FIdentityTypeBadge";
 import {ChangeAction, SaveDataRulesAction} from "@/models/informalNodeManagerPage";
 import {FServiceAPI, FUtil} from '@freelog/tools-lib';
+import FUtil1 from "@/utils";
+import FTooltip from "@/components/FTooltip";
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -274,21 +276,29 @@ function Actions({onEdit, onSearch, onDelete}: ActionsProps) {
   return (<div ref={refDom}>
     <Space size={25}>
       {
-        onEdit && (<FTextBtn
-          type="primary"
-          onClick={() => onEdit()}
-        >
-          <FEdit/>
-        </FTextBtn>)
+        onEdit && (<FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
+          <span>
+          <FTextBtn
+            type="primary"
+            onClick={() => onEdit()}
+          >
+            <FEdit/>
+          </FTextBtn>
+            </span>
+        </FTooltip>)
       }
 
       {
-        onSearch && (<FTextBtn
-          type="primary"
-          onClick={() => onSearch()}
-        >
-          <FFileSearch/>
-        </FTextBtn>)
+        onSearch && (<FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
+          <span>
+          <FTextBtn
+            type="primary"
+            onClick={() => onSearch()}
+          >
+            <FFileSearch/>
+          </FTextBtn>
+            </span>
+        </FTooltip>)
       }
 
       {

@@ -15,13 +15,9 @@ import {RouteComponentProps} from "react-router";
 import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
-// import FModal from "@/components/FModal";
-// import {Space} from "antd";
 import AddInformExhibitDrawer from "@/pages/node/informal/$id/containers/AddInformExhibitDrawer";
-// import {ReplaceInformExhibitInitModelStatesAction} from "@/models/replaceInformExhibitModal";
 import FReplaceModal from "@/pages/node/informal/$id/containers/FReplaceModal";
-
-// const {decompile, compile} = require('@freelog/nmr_translator');
+import * as AHooks from 'ahooks';
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -29,6 +25,14 @@ interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
 }
 
 function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodeProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   const [{showPage}] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
 
