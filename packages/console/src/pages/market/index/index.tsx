@@ -4,13 +4,15 @@ import FAffixTabs from '@/components/FAffixTabs';
 import {withRouter} from 'umi';
 import Resources from "./Resources";
 import Examples from "@/pages/market/Examples";
-import {RouteComponentProps} from "react-router";
 import {connect, Dispatch} from "dva";
-import {FetchDataSourceAction} from "@/models/marketPage";
+import {
+  OnMountPageAction,
+  OnUnmountPageAction,
+} from "@/models/marketPage";
 import {ConnectState, MarketPageModelState} from "@/models/connect";
 import FFooter from '@/layouts/FFooter';
 import FCenterLayout from "@/layouts/FCenterLayout";
-// import FResourcesDisplayLayout from "@/layouts/FRourcesDisplayLayout";
+import * as AHooks from 'ahooks';
 
 const navs = [
   {
@@ -24,41 +26,34 @@ const navs = [
 ];
 
 
-interface MarketProps extends RouteComponentProps {
+interface MarketProps {
   dispatch: Dispatch;
-  route: any;
 
   marketPage: MarketPageModelState;
 }
 
-function Market({dispatch, match, history, location, route, marketPage, ...props}: MarketProps) {
+function Market({dispatch, marketPage, ...props}: MarketProps) {
 
-  React.useEffect(() => {
-    // console.log('@#WERF09ujiojlFetchDataSourceAction');
-    dispatch<FetchDataSourceAction>({
-      type: 'marketPage/fetchDataSource',
-      payload: true,
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'marketPage/onMountPage',
     });
-  }, []);
+  });
 
-  // 路由更新路由匹配信息
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'marketPage/onUnmountPage',
+    });
+  });
+
+
   // React.useEffect(() => {
-  //   dispatch<GlobalChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
+  //   // console.log('@#WERF09ujiojlFetchDataSourceAction');
+  //   dispatch<FetchDataSourceAction>({
+  //     type: 'marketPage/fetchDataSource',
+  //     payload: true,
   //   });
-  // }, [route]);
-
-  // React.useEffect(() => {
-  //   dispatch<ChangeAction>({
-  //     type: 'marketPage/change',
-  //     payload: {
-  //       tabValue: match.path === '/market' ? '1' : '2',
-  //     },
-  //   })
-  // }, [match.path]);
+  // }, []);
 
   function onChangeTab(value: '1' | '2') {
     // if (value === '1' && marketPage.tabValue !== '1') {

@@ -2,7 +2,13 @@ import * as React from 'react';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from '@/models/connect';
 import styles from '@/pages/market/index/index.less';
-import {ChangeAction, ChangeStatesAction, FetchDataSourceAction, marketInitData} from '@/models/marketPage';
+import {
+  ChangeAction,
+  ChangeStatesAction,
+  marketInitData, OnChangeKeywordsAction,
+  OnChangeResourceTypeAction,
+  OnClickLoadMoreBtnAction, OnUnmountMarketPageAction
+} from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
 import {Button} from 'antd';
@@ -24,10 +30,13 @@ interface ResourcesProps {
 
 function Resources({dispatch, marketPage}: ResourcesProps) {
 
+  AHooks.useMount(() => {
+
+  });
+
   AHooks.useUnmount(() => {
-    dispatch<ChangeAction>({
-      type: 'marketPage/change',
-      payload: marketInitData,
+    dispatch<OnUnmountMarketPageAction>({
+      type: 'marketPage/onUnmountMarketPage',
     });
   });
 
@@ -37,18 +46,26 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
       <Labels
         options={filters}
         value={marketPage.resourceType}
-        onChange={(value) => dispatch<ChangeStatesAction>({
-          type: 'marketPage/changeStates',
-          payload: {resourceType: value as string},
-        })}
+        onChange={(value) => {
+          dispatch<OnChangeResourceTypeAction>({
+            type: 'marketPage/onChangeResourceType',
+            payload: {
+              value: value,
+            },
+          });
+        }}
       />
       <FInput
         value={marketPage.inputText}
         debounce={300}
-        onDebounceChange={(value) => dispatch<ChangeStatesAction>({
-          type: 'marketPage/changeStates',
-          payload: {inputText: value},
-        })}
+        onDebounceChange={(value) => {
+          dispatch<OnChangeKeywordsAction>({
+            type: 'marketPage/onChangeKeywords',
+            payload: {
+              value: value,
+            },
+          });
+        }}
         // onChange={(e) => }
         theme="dark"
         size="small"
@@ -92,10 +109,11 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
               <div className={styles.bottom}>
                 <Button
                   className={styles.loadMore}
-                  onClick={() => dispatch<FetchDataSourceAction>({
-                    type: 'marketPage/fetchDataSource',
-                    payload: false,
-                  })}
+                  onClick={() => {
+                    dispatch<OnClickLoadMoreBtnAction>({
+                      type: 'marketPage/onClickLoadMoreBtn',
+                    });
+                  }}
                 >加载更多</Button>
               </div>
             </>)
@@ -119,11 +137,11 @@ export default connect(({marketPage}: ConnectState) => ({
 
 interface Labels {
   options: {
-    value: string | number;
-    text?: string | number;
+    value: string;
+    text?: string;
   }[];
-  value: string | number;
-  onChange?: (value: string | number) => void;
+  value: string;
+  onChange?: (value: string) => void;
 }
 
 function Labels({options, value, onChange}: Labels) {
