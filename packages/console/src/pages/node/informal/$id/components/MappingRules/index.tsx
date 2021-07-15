@@ -198,7 +198,7 @@ interface ICandidate {
 interface ReplaceRuleProps {
   replaced: ICandidate;
   replacer: ICandidate;
-  scopes: ICandidate[][];
+  scopes?: ICandidate[][];
 }
 
 export function ReplaceRule({replacer, replaced, scopes}: ReplaceRuleProps) {
@@ -227,7 +227,7 @@ export function ReplaceRule({replacer, replaced, scopes}: ReplaceRuleProps) {
         </>)
       }
       {
-        scopes?.length > 0 && (<>
+        scopes && scopes.length > 0 && (<>
           <div><FContentText text={'，作用域'}/></div>
           {
             scopes.map((sco, index) => {

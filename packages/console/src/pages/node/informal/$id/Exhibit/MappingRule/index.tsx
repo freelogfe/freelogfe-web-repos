@@ -57,7 +57,7 @@ interface MappingRuleProps {
   replaces?: {
     replaced: ICandidate;
     replacer: ICandidate;
-    scopes: ICandidate[][];
+    scopes?: ICandidate[][];
   }[];
   attrs?: {
     type: 'add' | 'delete',
