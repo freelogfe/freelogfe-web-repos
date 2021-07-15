@@ -408,11 +408,13 @@ const Model: ExhibitInfoPageModelType = {
       let result: HandleRelationResult = [];
       let relation: InformExhibitInfoPageModelState['relation'] = null;
 
-      if (data.originInfo.type === 'resource') {
+      const actualOriginInfo = data.stateInfo.replaceInfo.rootResourceReplacer || data.originInfo;
+
+      if (actualOriginInfo.type === 'resource') {
         result = yield call(handleRelation, data.resolveResources);
 
         const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-          resourceIdOrName: data.originInfo.id,
+          resourceIdOrName: actualOriginInfo.id,
         };
 
         const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
@@ -431,7 +433,7 @@ const Model: ExhibitInfoPageModelType = {
         };
       } else {
         const params3: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
-          objectIdOrName: data.originInfo.id,
+          objectIdOrName: actualOriginInfo.id,
         };
 
         const {data: data3} = yield call(FServiceAPI.Storage.objectDetails, params3);
@@ -461,7 +463,7 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           nodeID: data.nodeId,
-          informExhibitIdentity: data.originInfo.type,
+          informExhibitIdentity: actualOriginInfo.type,
           resourceType: data.resourceType,
           nodeName: data4.nodeName,
           informExhibitName: data.testResourceName,
@@ -476,8 +478,8 @@ const Model: ExhibitInfoPageModelType = {
           pCover: data.stateInfo.coverInfo.coverImages[0] || '',
           pTitle: data.stateInfo.titleInfo.title || '',
           pTags: data.stateInfo.tagInfo.tags || [],
-          pAllVersions: [...data.originInfo.versions].reverse(),
-          pVersion: data.originInfo.version,
+          pAllVersions: [...actualOriginInfo.versions].reverse(),
+          pVersion: actualOriginInfo.version,
           pOnlyReadAttrs: (data.stateInfo.propertyInfo.testResourceProperty as any[])
             .filter((cr: any) => {
               return cr.authority === 1;
@@ -813,14 +815,14 @@ const Model: ExhibitInfoPageModelType = {
         ...(informExhibitInfoPage.currentRuleResult?.ruleInfo?.replaces || []),
         {
           replacer: {
-            name: informExhibitInfoPage.informExhibitName,
+            name: informExhibitInfoPage.relation?.name,
             versionRange: payload.value,
-            type: informExhibitInfoPage.informExhibitIdentity,
+            type: informExhibitInfoPage.relation?.identity,
           },
           replaced: {
-            name: informExhibitInfoPage.informExhibitName,
+            name: informExhibitInfoPage.relation?.name,
             versionRange: '*',
-            type: informExhibitInfoPage.informExhibitIdentity,
+            type: informExhibitInfoPage.relation?.identity,
           },
         },
       ];
