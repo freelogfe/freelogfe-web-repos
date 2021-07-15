@@ -806,7 +806,7 @@ const Model: ExhibitInfoPageModelType = {
         informExhibitInfoPage,
       }));
 
-      console.log(payload, 'payloadpayloadpayloadpayload2214111111');
+      // console.log(payload, 'payloadpayloadpayloadpayload2214111111');
       const replace: {
         replaced: ICandidate;
         replacer: ICandidate;
