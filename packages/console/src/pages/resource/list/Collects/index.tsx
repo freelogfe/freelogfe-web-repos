@@ -12,6 +12,7 @@ import {
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from "@/components/FLoadingTip";
 import {FUtil} from '@freelog/tools-lib';
+import * as AHooks from "ahooks";
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -19,6 +20,14 @@ interface ResourceCollectProps {
 }
 
 function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   React.useEffect(() => {
 

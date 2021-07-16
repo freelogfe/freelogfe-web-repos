@@ -9,6 +9,8 @@ import {Dispatch, connect} from "dva";
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
 import FCenterLayout from "@/layouts/FCenterLayout";
+import * as AHooks from 'ahooks';
+import {ConnectState} from "@/models/connect";
 
 const navs = [
   {
@@ -27,6 +29,14 @@ interface ListProps extends RouteComponentProps {
 
 function List({match, dispatch, route}: ListProps & RouterTypes) {
   const [tabValue, setTabValue] = React.useState<'1' | '2'>(match.path === '/resource/list' ? '1' : '2');
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   React.useEffect(() => {
     dispatch<ChangeAction>({
@@ -65,4 +75,6 @@ function List({match, dispatch, route}: ListProps & RouterTypes) {
   );
 }
 
-export default withRouter(connect()(List));
+export default withRouter(connect(({router}: ConnectState) => ({
+  router,
+}))(List));

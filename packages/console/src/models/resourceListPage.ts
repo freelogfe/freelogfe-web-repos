@@ -21,6 +21,19 @@ export interface ResourceListPageModelState {
   }[];
 }
 
+export interface ChangeAction extends AnyAction {
+  type: 'change',
+  payload: Partial<ResourceListPageModelState>;
+}
+
+export interface OnMountAction extends AnyAction {
+  type: 'resourceListPage/onMount';
+}
+
+export interface OnUnmountAction extends AnyAction {
+  type: 'resourceListPage/onUnmount';
+}
+
 export interface FetchDataSourceAction extends AnyAction {
   type: 'fetchDataSource' | 'resourceListPage/fetchDataSource';
   payload?: boolean; // 是否 restart
@@ -31,22 +44,24 @@ export interface ChangeStatesAction extends AnyAction {
   payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
 }
 
-export interface ChangeAction extends AnyAction {
-  type: 'change',
-  payload: Partial<ResourceListPageModelState>;
+export interface OnClickLoadingMordAction extends AnyAction {
+  type: 'resourceListPage/onClickLoadingMord';
 }
 
-export interface ClearDataAction extends AnyAction {
-  type: 'resourceListPage/clearData';
-}
+// export interface ClearDataAction extends AnyAction {
+//   type: 'resourceListPage/clearData';
+// }
 
 export interface ResourceListPageModelType {
   namespace: 'resourceListPage';
   state: ResourceListPageModelState;
   effects: {
+    onMount: (action: OnMountAction, effects: EffectsCommandMap) => void;
+    onUnmount: (action: OnUnmountAction, effects: EffectsCommandMap) => void;
     changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
-    clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
+    onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
+    // clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceListPageModelState, ChangeAction>;
@@ -72,6 +87,17 @@ const Model: ResourceListPageModelType = {
   state: initStates,
 
   effects: {
+    * onMount({}: OnMountAction, {put}: EffectsCommandMap) {
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+      });
+    },
+    * onUnmount({}: OnUnmountAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
     * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -125,12 +151,18 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
+    * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: false,
       });
     },
+    // * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: initStates,
+    //   });
+    // },
   },
 
   reducers: {
@@ -144,15 +176,8 @@ const Model: ResourceListPageModelType = {
 
   subscriptions: {
     setup({dispatch, history}: SubscriptionAPI) {
-      // history.listen((listener) => {
-      //   if (listener.pathname === '/resource/list') {
-      //     dispatch<FetchDataSourceAction>({
-      //       type: 'fetchDataSource',
-      //     });
-      //   }
-      // });
-    },
 
+    },
   },
 
 };

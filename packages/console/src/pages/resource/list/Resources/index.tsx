@@ -1,6 +1,10 @@
 import * as React from 'react';
 import {
-  ChangeStatesAction, ClearDataAction, FetchDataSourceAction, ResourceListPageModelState
+  ChangeStatesAction,
+  OnClickLoadingMordAction,
+  OnMountAction,
+  OnUnmountAction,
+  ResourceListPageModelState,
 } from "@/models/resourceListPage";
 import {router} from "umi";
 import FResourceCardsList from "@/pages/resource/components/FResourceCardsList";
@@ -9,6 +13,7 @@ import {ConnectState} from "@/models/connect";
 import FNoDataTip from "@/components/FNoDataTip";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FUtil} from '@freelog/tools-lib';
+import * as AHooks from "ahooks";
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -17,17 +22,29 @@ interface ResourceProps {
 
 function Resources({dispatch, resource}: ResourceProps) {
 
-  React.useEffect(() => {
-    dispatch<FetchDataSourceAction>({
-      type: 'resourceListPage/fetchDataSource',
+  AHooks.useMount(() => {
+    dispatch<OnMountAction>({
+      type: 'resourceListPage/onMount',
     });
+  });
 
-    return () => {
-      dispatch<ClearDataAction>({
-        type: 'resourceListPage/clearData',
-      });
-    };
-  }, []);
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountAction>({
+      type: 'resourceListPage/onUnmount',
+    });
+  });
+
+  // React.useEffect(() => {
+  //   dispatch<FetchDataSourceAction>({
+  //     type: 'resourceListPage/fetchDataSource',
+  //   });
+  //
+  //   return () => {
+  //     dispatch<ClearDataAction>({
+  //       type: 'resourceListPage/clearData',
+  //     });
+  //   };
+  // }, []);
 
   if (resource.totalNum === -1) {
     return (<FLoadingTip height={'calc(100vh - 140px)'}/>);
@@ -85,9 +102,8 @@ function Resources({dispatch, resource}: ResourceProps) {
     }))}
     // onClickMore={(id) => router.push(`/resource/${id}`)}
     onloadMore={() => {
-      dispatch<FetchDataSourceAction>({
-        type: 'resourceListPage/fetchDataSource',
-        payload: false,
+      dispatch<OnClickLoadingMordAction>({
+        type: 'resourceListPage/onClickLoadingMord',
       });
     }}
   />)
