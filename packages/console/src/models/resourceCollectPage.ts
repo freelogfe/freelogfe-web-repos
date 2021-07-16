@@ -27,22 +27,57 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceCollectPageModelState>;
 }
 
+export interface OnMountAction extends AnyAction {
+  type: 'resourceCollectPage/onMount';
+}
+
+export interface OnUnmountAction extends AnyAction {
+  type: 'resourceCollectPage/onUnmount';
+}
+
 export interface InitModelStatesAction extends AnyAction {
   type: 'resourceCollectPage/initModelStates';
 }
 
 export interface FetchDataSourceAction extends AnyAction {
   type: 'resourceCollectPage/fetchDataSource' | 'fetchDataSource';
-  payload?: boolean; // 是否 restart
+  payload: {
+    restart: boolean;
+  };
 }
 
-export interface ChangeStatesAction extends AnyAction {
-  type: 'resourceCollectPage/changeStates',
-  payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
+export interface OnChangeResourceTypeAction extends AnyAction {
+  type: 'resourceCollectPage/onChangeResourceType';
+  payload: {
+    value: string;
+  };
 }
 
-export interface BoomJuiceAction {
-  type: 'resourceCollectPage/boomJuice';
+export interface OnChangeStatusAction extends AnyAction {
+  type: 'resourceCollectPage/onChangeStatus';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChangeKeywordsAction extends AnyAction {
+  type: 'resourceCollectPage/onChangeKeywords';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClickLoadingMordAction extends AnyAction {
+  type: 'resourceCollectPage/onClickLoadingMord';
+}
+
+// export interface ChangeStatesAction extends AnyAction {
+//   type: 'resourceCollectPage/changeStates',
+//   payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
+// }
+
+export interface OnBoomJuiceAction extends AnyAction{
+  type: 'resourceCollectPage/onBoomJuice';
   payload: string;
 }
 
@@ -50,10 +85,16 @@ export interface ResourceCollectModelType {
   namespace: 'resourceCollectPage';
   state: ResourceCollectPageModelState;
   effects: {
+    onMount: (action: OnMountAction, effects: EffectsCommandMap) => void;
+    onUnmount: (action: OnUnmountAction, effects: EffectsCommandMap) => void;
     initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
-    changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
+    // changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
-    boomJuice: (action: BoomJuiceAction, effects: EffectsCommandMap) => void;
+    onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
+    onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
+    onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
+    onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
+    onBoomJuice: (action: OnBoomJuiceAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCollectPageModelState, ChangeAction>;
@@ -77,6 +118,20 @@ const Model: ResourceCollectModelType = {
   state: initStates,
 
   effects: {
+    * onMount({}: OnMountAction, {put}: EffectsCommandMap) {
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onUnmount({}: OnUnmountAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
     * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       // console.log('InitModelStatesAction#@#@#@#@##@#');
       yield put<ChangeAction>({
@@ -84,15 +139,15 @@ const Model: ResourceCollectModelType = {
         payload: initStates,
       });
     },
-    * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload,
-      });
-      yield put<FetchDataSourceAction>({
-        type: 'fetchDataSource',
-      });
-    },
+    // * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload,
+    //   });
+    //   yield put<FetchDataSourceAction>({
+    //     type: 'fetchDataSource',
+    //   });
+    // },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
       // console.log('FetchDataSourceAction23423434');
       const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
@@ -149,7 +204,60 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * boomJuice({payload}: BoomJuiceAction, {call, put, select}: EffectsCommandMap) {
+    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceType: payload.value
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onChangeStatus({payload}: OnChangeStatusAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceStatus: payload.value as '1',
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          inputText: payload.value
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: {
+          restart: false,
+        },
+      });
+    },
+    * onBoomJuice({payload}: OnBoomJuiceAction, {call, put, select}: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
         resourceId: payload,
       };

@@ -41,10 +41,10 @@ export interface FetchDataSourceAction extends AnyAction {
   };
 }
 
-export interface ChangeStatesAction extends AnyAction {
-  type: 'resourceListPage/changeStates',
-  payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
-}
+// export interface ChangeStatesAction extends AnyAction {
+//   type: 'resourceListPage/changeStates',
+//   payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
+// }
 
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceListPage/onChangeResourceType';
@@ -81,7 +81,7 @@ export interface ResourceListPageModelType {
   effects: {
     onMount: (action: OnMountAction, effects: EffectsCommandMap) => void;
     onUnmount: (action: OnUnmountAction, effects: EffectsCommandMap) => void;
-    changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
+    // changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
@@ -127,19 +127,19 @@ const Model: ResourceListPageModelType = {
         payload: initStates,
       });
     },
-    * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload,
-      });
-
-      yield put<FetchDataSourceAction>({
-        type: 'fetchDataSource',
-        payload: {
-          restart: true,
-        },
-      });
-    },
+    // * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload,
+    //   });
+    //
+    //   yield put<FetchDataSourceAction>({
+    //     type: 'fetchDataSource',
+    //     payload: {
+    //       restart: true,
+    //     },
+    //   });
+    // },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
       // yield put({type: 'save'});
       const {resourceListPage}: ConnectState = yield select(({resourceListPage}: ConnectState) => ({
