@@ -1,5 +1,5 @@
 import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
+import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
 import {DvaReducer} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
@@ -35,8 +35,10 @@ export interface OnUnmountAction extends AnyAction {
 }
 
 export interface FetchDataSourceAction extends AnyAction {
-  type: 'fetchDataSource' | 'resourceListPage/fetchDataSource';
-  payload?: boolean; // 是否 restart
+  type: 'fetchDataSource';
+  payload: {
+    restart: boolean;
+  };
 }
 
 export interface ChangeStatesAction extends AnyAction {
@@ -114,6 +116,9 @@ const Model: ResourceListPageModelType = {
     * onMount({}: OnMountAction, {put}: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
+        payload: {
+          restart: true,
+        },
       });
     },
     * onUnmount({}: OnUnmountAction, {put}: EffectsCommandMap) {
@@ -130,7 +135,9 @@ const Model: ResourceListPageModelType = {
 
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
-        payload: true,
+        payload: {
+          restart: true,
+        },
       });
     },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
@@ -186,7 +193,9 @@ const Model: ResourceListPageModelType = {
 
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
-        payload: true,
+        payload: {
+          restart: true,
+        },
       });
     },
     * onChangeStatus({payload}: OnChangeStatusAction, {put}: EffectsCommandMap) {
@@ -199,7 +208,9 @@ const Model: ResourceListPageModelType = {
 
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
-        payload: true,
+        payload: {
+          restart: true,
+        },
       });
     },
     * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
@@ -212,13 +223,17 @@ const Model: ResourceListPageModelType = {
 
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
-        payload: true,
+        payload: {
+          restart: true,
+        },
       });
     },
     * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
-        payload: false,
+        payload: {
+          restart: false,
+        },
       });
     },
     // * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
