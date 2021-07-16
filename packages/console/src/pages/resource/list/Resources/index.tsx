@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {
-  ChangeStatesAction,
+  OnChangeKeywordsAction,
+  OnChangeResourceTypeAction,
+  OnChangeStatusAction,
   OnClickLoadingMordAction,
   OnMountAction,
   OnUnmountAction,
@@ -34,18 +36,6 @@ function Resources({dispatch, resource}: ResourceProps) {
     });
   });
 
-  // React.useEffect(() => {
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'resourceListPage/fetchDataSource',
-  //   });
-  //
-  //   return () => {
-  //     dispatch<ClearDataAction>({
-  //       type: 'resourceListPage/clearData',
-  //     });
-  //   };
-  // }, []);
-
   if (resource.totalNum === -1) {
     return (<FLoadingTip height={'calc(100vh - 140px)'}/>);
   }
@@ -59,13 +49,6 @@ function Resources({dispatch, resource}: ResourceProps) {
     />);
   }
 
-  function changeStatus(payload: ChangeStatesAction['payload']) {
-    dispatch<ChangeStatesAction>({
-      type: 'resourceListPage/changeStates',
-      payload,
-    })
-  }
-
   return (<FResourceCardsList
     resourceType={resource.resourceType}
     resourceStatus={resource.resourceStatus}
@@ -73,22 +56,28 @@ function Resources({dispatch, resource}: ResourceProps) {
     dataSource={resource.dataSource}
     totalNum={resource.totalNum}
     onChangeResourceType={(value) => {
-      if (value === resource.resourceType) {
-        return;
-      }
-      changeStatus({resourceType: value});
+      dispatch<OnChangeResourceTypeAction>({
+        type: 'resourceListPage/onChangeResourceType',
+        payload: {
+          value: value,
+        },
+      });
     }}
     onChangeResourceStatus={(value) => {
-      if (value === resource.resourceStatus) {
-        return;
-      }
-      changeStatus({resourceStatus: value});
+      dispatch<OnChangeStatusAction>({
+        type: 'resourceListPage/onChangeStatus',
+        payload: {
+          value: value,
+        },
+      });
     }}
     onChangeInputText={(value) => {
-      if (value === resource.inputText) {
-        return;
-      }
-      changeStatus({inputText: value});
+      dispatch<OnChangeKeywordsAction>({
+        type: 'resourceListPage/onChangeKeywords',
+        payload: {
+          value: value,
+        },
+      });
     }}
     showGotoCreateBtn={true}
     onClickDetails={(id) => router.push(FUtil.LinkTo.resourceDetails({

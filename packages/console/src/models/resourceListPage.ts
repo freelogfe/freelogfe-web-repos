@@ -44,6 +44,27 @@ export interface ChangeStatesAction extends AnyAction {
   payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
 }
 
+export interface OnChangeResourceTypeAction extends AnyAction {
+  type: 'resourceListPage/onChangeResourceType';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChangeStatusAction extends AnyAction {
+  type: 'resourceListPage/onChangeStatus';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChangeKeywordsAction extends AnyAction {
+  type: 'resourceListPage/onChangeKeywords';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceListPage/onClickLoadingMord';
 }
@@ -60,6 +81,9 @@ export interface ResourceListPageModelType {
     onUnmount: (action: OnUnmountAction, effects: EffectsCommandMap) => void;
     changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+    onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
+    onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
+    onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
     onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
     // clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
   };
@@ -149,6 +173,45 @@ const Model: ResourceListPageModelType = {
           ],
           totalNum: data.totalItem,
         },
+      });
+    },
+    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceType: payload.value
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: true,
+      });
+    },
+    * onChangeStatus({payload}: OnChangeStatusAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceStatus: payload.value
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: true,
+      });
+    },
+    * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          inputText: payload.value
+        },
+      });
+
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+        payload: true,
       });
     },
     * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
