@@ -3,11 +3,10 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, MarketPageModelState} from '@/models/connect';
 import styles from '@/pages/market/index/index.less';
 import {
-  ChangeAction,
-  ChangeStatesAction,
-  marketInitData, OnChangeKeywordsAction,
+  OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
-  OnClickLoadMoreBtnAction, OnUnmountMarketPageAction
+  OnClickLoadMoreBtnAction,
+  OnUnmountMarketPageAction,
 } from '@/models/marketPage';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
@@ -17,11 +16,6 @@ import FNoDataTip from "@/components/FNoDataTip";
 import {FUtil} from '@freelog/tools-lib';
 import FLoadingTip from "@/components/FLoadingTip";
 import * as AHooks from 'ahooks';
-
-const filters = [{
-  value: '-1',
-  text: '全部类型'
-}, ...FUtil.Predefined.resourceTypes.map((i) => ({value: i}))];
 
 interface ResourcesProps {
   dispatch: Dispatch;
@@ -44,7 +38,7 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
     <div style={{height: 30}}/>
     <div className={styles.filter}>
       <Labels
-        options={filters}
+        options={marketPage.resourceTypeOptions}
         value={marketPage.resourceType}
         onChange={(value) => {
           dispatch<OnChangeResourceTypeAction>({
@@ -66,7 +60,6 @@ function Resources({dispatch, marketPage}: ResourcesProps) {
             },
           });
         }}
-        // onChange={(e) => }
         theme="dark"
         size="small"
         className={styles.filterInput}

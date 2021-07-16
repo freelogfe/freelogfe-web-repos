@@ -14,18 +14,6 @@ import FFooter from '@/layouts/FFooter';
 import FCenterLayout from "@/layouts/FCenterLayout";
 import * as AHooks from 'ahooks';
 
-const navs = [
-  {
-    value: '1',
-    text: '资源市场',
-  },
-  {
-    value: '2',
-    text: '示例节点',
-  },
-];
-
-
 interface MarketProps {
   dispatch: Dispatch;
 
@@ -46,19 +34,7 @@ function Market({dispatch, marketPage, ...props}: MarketProps) {
     });
   });
 
-
-  // React.useEffect(() => {
-  //   // console.log('@#WERF09ujiojlFetchDataSourceAction');
-  //   dispatch<FetchDataSourceAction>({
-  //     type: 'marketPage/fetchDataSource',
-  //     payload: true,
-  //   });
-  // }, []);
-
   function onChangeTab(value: '1' | '2') {
-    // if (value === '1' && marketPage.tabValue !== '1') {
-    // }
-
     if (value === '2' && marketPage.tabValue !== '2') {
       return window.open('https://f-presentations.freelog.com');
     }
@@ -67,15 +43,13 @@ function Market({dispatch, marketPage, ...props}: MarketProps) {
   return (<>
     <FCenterLayout>
       <FAffixTabs
-        options={navs}
+        options={marketPage.navOptions}
         value={marketPage.tabValue}
-        // onChange={(value) => dispatch<OnChangeTabValueAction>({type: 'marketPage/onChangeTabValue', payload: value})}
         onChange={onChangeTab}
       />
       {marketPage.tabValue === '1' && <Resources/>}
       {marketPage.tabValue === '2' && <Examples/>}
     </FCenterLayout>
-    {/*<FLayoutFooter/>*/}
     <FFooter/>
   </>);
 }

@@ -4,8 +4,16 @@ import {DvaReducer, WholeReadonly} from './shared';
 import {ConnectState} from "@/models/connect";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 
-export type  MarketPageModelState = WholeReadonly<{
-  tabValue: '1' | '2',
+export interface MarketPageModelState {
+  navOptions: {
+    text: string;
+    value: string;
+  }[];
+  tabValue: '1' | '2';
+  resourceTypeOptions: {
+    text: string;
+    value: string;
+  }[];
   resourceType: string;
   inputText: string;
   dataSource: {
@@ -17,7 +25,7 @@ export type  MarketPageModelState = WholeReadonly<{
     type: string,
   }[];
   totalItem: number;
-}>;
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'marketPage/change';
@@ -93,8 +101,24 @@ export interface MarketModelType {
 }
 
 export const marketInitData: MarketPageModelState = {
+  navOptions: [
+    {
+      value: '1',
+      text: '资源市场',
+    },
+    {
+      value: '2',
+      text: '示例节点',
+    },
+  ],
   tabValue: '1',
-  // pageCurrent: 1,
+  resourceTypeOptions: [
+    {
+      value: '-1',
+      text: '全部类型'
+    },
+    ...FUtil.Predefined.resourceTypes.map((i) => ({value: i, text: i})),
+  ],
   resourceType: '-1',
   inputText: '',
   dataSource: [],
