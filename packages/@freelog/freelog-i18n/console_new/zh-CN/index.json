@@ -275,8 +275,8 @@
 	"btn_create_custom_option": "自定义选项",
 	"tab_manage_nodes": "展品管理",
 	"manage_theme": "主题管理",
-	"msg_navigate_to_test_node": "如果想要测试资源或者对象，可以{LinkButtonToTestNode}",
-	"btn_navigate_to_test_node": "------",
+	"msg_navigate_to_test_node": "如果想要测试资源或者对象，可以",
+	"btn_navigate_to_test_node": "前往测试节点",
 	"manage_exhibits_empty": "你签约的资源会变成展品出现在这里。逛逛资源市场，把想要运营的资源添加到你的节点中。",
 	"btn_go_to_resource_market": "逛逛资源市场",
 	"tip_copy_node_domain": "复制",
@@ -328,7 +328,7 @@
 	"theme_state_active": "已激活",
 	"label_test_node": "测试",
 	"tab_manage_reflect_rules": "映射规则管理",
-	"msg_naviagte_to_formal_node": "当前是测试节点，点击{LinkButtonToFormalNode}返回正式节点",
+	"msg_naviagte_to_formal_node": "当前处于测试节点，如需管理正是节点，",
 	"manage_test_exhibits_empty": "当前节点还没有展品",
 	"btn_import_test_exhibit": "马上添加一个测试展品",
 	"title_add_test_exhibit": "添加测试展品",
@@ -408,5 +408,7 @@
 	"hint_enter_password": "输入登录密码",
 	"title_activate_feather_account": "激活羽币账户",
 	"msg_feather_account_successfully_actived": "账户激活成功",
-	"btn_activate_feather_account_now": "点击此处激活你的羽币账户"
+	"btn_activate_feather_account_now": "点击此处激活你的羽币账户",
+	"btn_go_to_formal_node": "点此处返回",
+	"tag_added": "已添加"
 }

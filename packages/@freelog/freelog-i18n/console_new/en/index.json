@@ -275,8 +275,8 @@
 	"btn_create_custom_option": "NEW OPTION",
 	"tab_manage_nodes": "Manage Exhibits",
 	"manage_theme": "Manage Themes",
-	"msg_navigate_to_test_node": "If you want to test resource or object, you can {LinkButtonToTestNode}",
-	"btn_navigate_to_test_node": "---------",
+	"msg_navigate_to_test_node": "If you want to test resource or object, you can ",
+	"btn_navigate_to_test_node": "go to test node",
 	"manage_exhibits_empty": "Reousces signed as exhibits will appear here. Explore our resource market to find some intersting resource for your node.",
 	"btn_go_to_resource_market": "EXPLORE RESOURCE MARKET",
 	"tip_copy_node_domain": "Copy",
@@ -328,7 +328,7 @@
 	"theme_state_active": "Active",
 	"label_test_node": "TEST",
 	"tab_manage_reflect_rules": "Manage Reflect Rules",
-	"msg_naviagte_to_formal_node": "You are at test node now, click {LinkButtonToFormalNode} to return formal node",
+	"msg_naviagte_to_formal_node": "You are at test node now, to manage the formal node, ",
 	"manage_test_exhibits_empty": "No exhibits in the node",
 	"btn_import_test_exhibit": "ADD A TEST EXHIBIT NOW",
 	"title_add_test_exhibit": "Add Test Exhibit",
@@ -408,5 +408,7 @@
 	"hint_enter_password": "Enter login password",
 	"title_activate_feather_account": "Activate Feather Account",
 	"msg_feather_account_successfully_actived": "Account activated",
-	"btn_activate_feather_account_now": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT"
+	"btn_activate_feather_account_now": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT",
+	"btn_go_to_formal_node": "click here to return",
+	"tag_added": "Added"
 }
