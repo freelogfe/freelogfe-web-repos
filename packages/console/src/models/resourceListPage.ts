@@ -140,6 +140,7 @@ const Model: ResourceListPageModelType = {
       }));
 
       let dataSource: ResourceListPageModelState['dataSource'] = [];
+
       if (!payload) {
         dataSource = resourceListPage.dataSource;
       }
