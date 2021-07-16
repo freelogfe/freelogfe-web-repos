@@ -410,5 +410,6 @@
 	"msg_feather_account_successfully_actived": "Account activated",
 	"btn_activate_feather_account_now": "CLICK HERE TO ACTIVATE YOUR FEATHER ACCOUNT",
 	"btn_go_to_formal_node": "click here to return",
-	"tag_added": "Added"
+	"tag_added": "Added",
+	"msg_set_resource_type": "Please set the resource type first"
 }

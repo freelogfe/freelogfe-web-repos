@@ -410,5 +410,6 @@
 	"msg_feather_account_successfully_actived": "账户激活成功",
 	"btn_activate_feather_account_now": "点击此处激活你的羽币账户",
 	"btn_go_to_formal_node": "点此处返回",
-	"tag_added": "已添加"
+	"tag_added": "已添加",
+	"msg_set_resource_type": "请先设置资源类型"
 }
