@@ -151,33 +151,6 @@ const Model: MarketModelType = {
     * onUnmountMarketPage({}: OnUnmountMarketPageAction, {put}: EffectsCommandMap) {
 
     },
-    // * changeStates({payload}: ChangeStatesAction, {put, select}: EffectsCommandMap) {
-    //
-    //   const {marketPage}: ConnectState = yield select(({marketPage}: ConnectState) => ({
-    //     marketPage,
-    //   }));
-    //
-    //   if (payload.resourceType && payload.resourceType === marketPage.resourceType) {
-    //     return;
-    //   }
-    //
-    //   if (payload.inputText && payload.inputText === marketPage.inputText) {
-    //     return;
-    //   }
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       ...payload,
-    //     },
-    //   });
-    //   yield put<FetchDataSourceAction>({
-    //     type: 'fetchDataSource',
-    //     payload: {
-    //       restart: true,
-    //     },
-    //   });
-    // },
     * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select, take}: EffectsCommandMap) {
 
       const {marketPage}: ConnectState = yield select(({marketPage}: ConnectState) => ({
@@ -242,10 +215,6 @@ const Model: MarketModelType = {
       });
     },
     * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
-      // yield put<ChangeStatesAction>({
-      //   type: 'marketPage/changeStates',
-      //   payload: {inputText: payload.value},
-      // });
 
       yield put<ChangeAction>({
         type: 'change',
