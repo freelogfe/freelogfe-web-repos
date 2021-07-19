@@ -311,6 +311,11 @@ const Model: NodeManagerModelType = {
               authErrorText: authInfo.error,
               resourceId: i.resourceInfo.resourceId,
             };
+          }).sort((a, b) => {
+            if (a.isOnline && !b.isOnline) {
+              return -1;
+            }
+            return 0;
           }),
           themeDataState: data.totalItem !== 0 ? ''
             : nodeManagerPage.themeInputFilter === '' ? 'noData' : 'noSearchData',
