@@ -10,12 +10,17 @@ import FAdd from "@/components/FIcons/FAdd";
 import FDropdownMenu from "@/components/FDropdownMenu";
 import FInfiniteScroll from "@/components/FInfiniteScroll";
 import {connect, Dispatch} from 'dva';
-import {ConnectState, InformalNodeManagerPageModelState, StorageHomePageModelState} from "@/models/connect";
+import {
+  ConnectState,
+  InformalNodeManagerPageModelState,
+  StorageHomePageModelState,
+} from "@/models/connect";
 import {
   ChangeAction,
-  FetchExhibitListAction, OnMountExhibitPageAction,
+  FetchExhibitListAction,
+  OnMountExhibitPageAction,
 } from "@/models/informalNodeManagerPage";
-import ExhibitTable from "@/pages/node/informal/$id/Exhibit/ExhibitTable";
+import ExhibitTable from "./ExhibitTable";
 import FLoadingTip from "@/components/FLoadingTip";
 import {FDown} from "@/components/FIcons";
 import * as AHooks from 'ahooks';
@@ -71,26 +76,31 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
           <div className={styles.header}>
             <FTitleText text={'展品管理'}/>
             <Space size={30}>
-              <Space size={5}>
-                <FTextBtn
-                  type="default"
-                  onClick={() => {
-                    onChange({addExhibitDrawerVisible: true});
-                  }}>
+
+              <FTextBtn
+                type="default"
+                onClick={() => {
+                  onChange({addExhibitDrawerVisible: true});
+                }}>
+                <Space size={5}>
                   <FAdd/>
-                </FTextBtn>
-                <FContentText text={FUtil1.I18n.message('title_add_test_exhibit')}/>
-              </Space>
-              <Space size={5}>
-                <FTextBtn
-                  type="default"
-                  onClick={() => {
-                    onChange({replaceModalVisible: true});
-                  }}>
+                  {/*<FContentText text={}/>*/}
+                  <span>{FUtil1.I18n.message('title_add_test_exhibit')}</span>
+                </Space>
+              </FTextBtn>
+
+              <FTextBtn
+                type="default"
+                onClick={() => {
+                  onChange({replaceModalVisible: true});
+                }}>
+                <Space size={5}>
                   <FMappingRuleReplace/>
-                </FTextBtn>
-                <FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>
-              </Space>
+                  {/*<FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>*/}
+                  <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
+                </Space>
+              </FTextBtn>
+
               <div>
                 <span>类型：</span>
                 <FDropdownMenu

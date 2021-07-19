@@ -76,28 +76,31 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           <div className={styles.header}>
             <FTitleText text={'主题管理'}/>
             <Space size={30}>
-              <Space size={5}>
-                <FTextBtn
-                  type="default"
-                  onClick={() => {
-                    onChange({
-                      addExhibitDrawerVisible: true,
-                    });
-                  }}><FAdd/></FTextBtn>
-                <FContentText
-                  text={FUtil1.I18n.message('btn_add_test_theme')}
-                />
-              </Space>
-              <Space size={5}>
-                <FTextBtn
-                  type="default"
-                  onClick={() => {
-                    onChange({replaceModalVisible: true});
-                  }}>
+
+              <FTextBtn
+                type="default"
+                onClick={() => {
+                  onChange({
+                    addExhibitDrawerVisible: true,
+                  });
+                }}>
+                <Space size={5}>
+                  <FAdd/>
+                  <span>{FUtil1.I18n.message('btn_add_test_theme')}</span>
+                </Space>
+              </FTextBtn>
+
+              <FTextBtn
+                type="default"
+                onClick={() => {
+                  onChange({replaceModalVisible: true});
+                }}>
+                <Space size={5}>
                   <FMappingRuleReplace/>
-                </FTextBtn>
-                <FContentText text={FUtil1.I18n.message('btn_replace_resource')}/>
-              </Space>
+                  <span>{FUtil1.I18n.message('btn_replace_resource')}</span>
+                </Space>
+              </FTextBtn>
+
               <div>
                 <FInput
                   theme={'dark'}
@@ -142,11 +145,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                 ? (<label className={styles.activated}>已激活</label>)
                                 : null
                             }
-                            {/*(<>*/}
-                            {/*<label className={styles.nonActivated}>未激活</label>*/}
-                            {/*<div style={{width: 10}}/>*/}
-                            {/*<FWarning/>*/}
-                            {/*</>)*/}
                           </div>
                           <div className={styles.coverFooter}>
                             <div>

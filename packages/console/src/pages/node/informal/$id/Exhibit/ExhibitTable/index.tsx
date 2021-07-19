@@ -4,7 +4,7 @@ import FTable from "@/components/FTable";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {ColumnsType} from "antd/lib/table/interface";
-import {FContentText} from "@/components/FText";
+import {FContentText, FTitleText} from "@/components/FText";
 import MappingRule from "@/pages/node/informal/$id/Exhibit/MappingRule";
 import {router} from "umi";
 import {Popconfirm, Space} from "antd";
@@ -29,7 +29,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
 
   const columns: ColumnsType<InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]> = [
     {
-      title: (<FContentText text={'来源｜封面'}/>),
+      title: (<FTitleText type="table" text={'来源｜封面'}/>),
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
@@ -52,7 +52,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       },
     },
     {
-      title: (<FContentText text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
+      title: (<FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'}/>),
       dataIndex: 'name',
       key: 'name',
       render(text, record, index) {
@@ -89,10 +89,10 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
             />
           </div>
         </div>);
-      }
+      },
     },
     {
-      title: <FContentText text={''}/>,
+      title: (<FTitleText type="table" text={''}/>),
       dataIndex: 'action',
       key: 'action',
       width: 110,
@@ -138,14 +138,13 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
                   return e.name !== record.name;
                 }),
               });
-
             }}
           />
         </div>);
       },
     },
     {
-      title: <FContentText text={'展示版本'}/>,
+      title: (<FTitleText type="table" text={'展示版本'}/>),
       dataIndex: 'version',
       key: 'version',
       width: 123,
@@ -156,7 +155,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
       },
     },
     {
-      title: <FContentText text={'上线'}/>,
+      title: (<FTitleText type="table" text={'上线'}/>),
       dataIndex: 'online',
       key: 'online',
       width: 65,
@@ -168,7 +167,6 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               checked={record.isOnline}
               onChange={async (value) => {
                 const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                // console.log(rules, '0-23jlksdjflkasdfio;ajsdlf');
 
                 const rule = rules.find((r) => r.exhibitName === record.name);
 
