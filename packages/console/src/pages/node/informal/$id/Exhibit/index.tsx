@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FNoDataTip from "@/components/FNoDataTip";
-import {FContentText, FTitleText} from "@/components/FText";
+import {FTitleText} from "@/components/FText";
 import {Space} from "antd";
 import FInput from "@/components/FInput";
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
@@ -13,7 +13,6 @@ import {connect, Dispatch} from 'dva';
 import {
   ConnectState,
   InformalNodeManagerPageModelState,
-  StorageHomePageModelState,
 } from "@/models/connect";
 import {
   ChangeAction,
@@ -29,10 +28,9 @@ import FUtil1 from '@/utils';
 interface ExhibitProps {
   dispatch: Dispatch;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
-  storageHomePage: StorageHomePageModelState;
 }
 
-function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitProps) {
+function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountExhibitPageAction>({
@@ -177,7 +175,6 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
   </>);
 }
 
-export default connect(({informalNodeManagerPage, storageHomePage}: ConnectState) => ({
+export default connect(({informalNodeManagerPage}: ConnectState) => ({
   informalNodeManagerPage,
-  storageHomePage,
 }))(Exhibit);

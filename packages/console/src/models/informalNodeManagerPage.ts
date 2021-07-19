@@ -210,7 +210,7 @@ export interface OnUnmountPageAction extends AnyAction {
 export interface OnChangePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onChangePage';
   payload: {
-    value: string;
+    value: 'exhibit' | 'theme' | 'mappingRule';
   };
 }
 
@@ -349,26 +349,6 @@ export interface OnAddExhibitDrawerListCheckedChangeAction extends AnyAction {
   };
 }
 
-// export interface FetchAddExhibitDrawerMarketAction extends AnyAction {
-//   type: 'fetchAddExhibitDrawerMarket';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchAddExhibitDrawerMyResourcesAction extends AnyAction {
-//   type: 'fetchAddExhibitDrawerMyResources';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchAddExhibitDrawerCollectionAction extends AnyAction {
-//   type: 'fetchAddExhibitDrawerCollection';
-//   payload?: boolean; // 是否 restart
-// }
-//
-// export interface FetchAddExhibitDrawerObjectAction extends AnyAction {
-//   type: 'fetchAddExhibitDrawerObject';
-//   payload?: boolean; // 是否 restart
-// }
-
 export interface OnReplacerMountAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerMount';
 }
@@ -487,10 +467,6 @@ interface InformalNodeManagerPageModelType {
     onAddExhibitDrawerKeywordsChange: (action: OnAddExhibitDrawerKeywordsChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerListLoadMore: (action: OnAddExhibitDrawerListLoadMoreAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerListCheckedChange: (action: OnAddExhibitDrawerListCheckedChangeAction, effects: EffectsCommandMap) => void;
-    // fetchAddExhibitDrawerMarket: (action: FetchAddExhibitDrawerMarketAction, effects: EffectsCommandMap) => void;
-    // fetchAddExhibitDrawerMyResources: (action: FetchAddExhibitDrawerMyResourcesAction, effects: EffectsCommandMap) => void;
-    // fetchAddExhibitDrawerCollection: (action: FetchAddExhibitDrawerCollectionAction, effects: EffectsCommandMap) => void;
-    // fetchAddExhibitDrawerObject: (action: FetchAddExhibitDrawerObjectAction, effects: EffectsCommandMap) => void;
 
     onReplacerMount: (action: OnReplacerMountAction, effects: EffectsCommandMap) => void;
     onReplacerUnmount: (action: OnReplacerUnmountAction, effects: EffectsCommandMap) => void;
@@ -623,6 +599,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onUnmountExhibitPage({}: OnUnmountExhibitPageAction, {}: EffectsCommandMap) {
 
     },
+
     * onMountThemePage({}: OnMountThemePageAction, {put}: EffectsCommandMap) {
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
