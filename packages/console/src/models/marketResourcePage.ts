@@ -68,14 +68,6 @@ export interface MarketResourcePageModelState {
       text: string;
     }[];
   }[];
-  // signedResources: null | {
-  //   selected: boolean;
-  //   id: string;
-  //   name: string;
-  //   type: string;
-  //
-  //   policies: Policy[];
-  // }[];
   signedResourceExhibitID: string;
 
   allVersions: string[];
@@ -138,6 +130,24 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<MarketResourcePageModelState>;
 }
 
+export interface OnMountPageAction extends AnyAction {
+  type: 'marketResourcePage/onMountPage';
+  payload: {
+    resourceID: string;
+  },
+}
+
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'marketResourcePage/onUnmountPage';
+}
+
+export interface OnChangeVersionAction extends AnyAction {
+  type: 'marketResourcePage/onChangeVersion';
+  payload: {
+    version: string;
+  },
+}
+
 export interface ClearDataDataAction extends AnyAction {
   type: 'marketResourcePage/clearData';
 }
@@ -180,6 +190,9 @@ interface MarketResourcePageModelType {
   namespace: 'marketResourcePage';
   state: MarketResourcePageModelState;
   effects: {
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
     clearData: (action: ClearDataDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
@@ -245,16 +258,37 @@ const Model: MarketResourcePageModelType = {
   namespace: 'marketResourcePage',
   state: initStates,
   effects: {
-    // * initData({payload}: InitDataAction, {put}: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       resourceId: payload,
-    //     }
-    //   });
-    //
-    //
-    // },
+    * onMountPage({payload}: OnMountPageAction, {put}: EffectsCommandMap) {
+      yield put({
+        type: 'change',
+        payload: {
+          resourceId: payload.resourceID,
+        },
+      });
+
+      yield put<FetchCollectionInfoAction>({
+        type: 'fetchCollectionInfo',
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+    },
+    * onUnmountPage({}: OnUnmountPageAction, {}: EffectsCommandMap) {
+
+    },
+    * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
+      yield put({
+        type: 'change',
+        payload: {
+          version: payload.version,
+        }
+      });
+
+      yield put<FetchVersionInfoAction>({
+        type: 'fetchVersionInfo',
+      });
+    },
     * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',

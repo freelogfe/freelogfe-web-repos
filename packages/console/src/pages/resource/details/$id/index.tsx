@@ -10,9 +10,12 @@ import Option from './Option';
 import Viewport from './Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {
-  ClearDataDataAction, FetchCollectionInfoAction, FetchInfoAction,
+  ClearDataDataAction,
+  FetchCollectionInfoAction,
+  FetchInfoAction,
   OnClickCollectionAction,
-  ChangeAction, FetchVersionInfoAction,
+  ChangeAction,
+  FetchVersionInfoAction, OnMountPageAction, OnChangeVersionAction,
 } from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert, Space} from 'antd';
@@ -34,36 +37,41 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
   const [state] = useUrlState<{ version: string }>();
 
   AHooks.useMount(async () => {
-    await onChange({
-      resourceId: match.params.id,
+    dispatch<OnMountPageAction>({
+      type: 'marketResourcePage/onMountPage',
+      payload: {
+        resourceID: match.params.id,
+      },
     });
+  });
 
-    await dispatch<FetchCollectionInfoAction>({
-      type: 'marketResourcePage/fetchCollectionInfo',
-    });
+  AHooks.useUnmount(() => {
 
-    await dispatch<FetchInfoAction>({
-      type: 'marketResourcePage/fetchInfo',
-    });
   });
 
   React.useEffect(() => {
     // console.log(state.version, 'state.version2334234234');
-    if (state.version) {
-      fetchVersionInfo();
-    }
+    // if (state.version) {
+    //   fetchVersionInfo();
+    // }
+    dispatch<OnChangeVersionAction>({
+      type: 'marketResourcePage/onChangeVersion',
+      payload: {
+        version: state.version,
+      },
+    });
   }, [state]);
 
-  async function fetchVersionInfo() {
-    await onChange({
-      version: state.version,
-    });
-
-    await dispatch<FetchVersionInfoAction>({
-      type: 'marketResourcePage/fetchVersionInfo',
-    });
-
-  }
+  // async function fetchVersionInfo() {
+  //   await onChange({
+  //     version: state.version,
+  //   });
+  //
+  //   await dispatch<FetchVersionInfoAction>({
+  //     type: 'marketResourcePage/fetchVersionInfo',
+  //   });
+  //
+  // }
 
   AHooks.useUnmount(() => {
     dispatch<ClearDataDataAction>({
