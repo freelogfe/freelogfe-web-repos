@@ -368,7 +368,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   type: 'informalNodeManagerPage/saveRules',
                 });
               }}
-            >{informalNodeManagerPage.rulePageCodeIsChecking ? FUtil1.I18n.message('msg_verifying_code') : '校验并保存'}</FRectBtn>
+            >{informalNodeManagerPage.rulePageCodeIsChecking ? FUtil1.I18n.message('msg_verifying') : '校验并保存'}</FRectBtn>
             {
               informalNodeManagerPage.rulePageCodeCompileErrors && (<div className={styles.codeCompileErrors}>
                 <div style={{height: 20}}/>
