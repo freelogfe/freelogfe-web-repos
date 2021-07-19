@@ -274,8 +274,11 @@ const Model: MarketResourcePageModelType = {
         type: 'fetchInfo',
       });
     },
-    * onUnmountPage({}: OnUnmountPageAction, {}: EffectsCommandMap) {
-
+    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
     },
     * onChangeVersion({payload}: OnChangeVersionAction, {put}: EffectsCommandMap) {
       yield put({
@@ -290,10 +293,7 @@ const Model: MarketResourcePageModelType = {
       });
     },
     * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-      });
+
     },
     * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
       const {marketResourcePage, user}: ConnectState = yield select(({marketResourcePage, user}: ConnectState) => ({

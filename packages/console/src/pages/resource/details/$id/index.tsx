@@ -10,12 +10,10 @@ import Option from './Option';
 import Viewport from './Viewport';
 import {ConnectState, MarketResourcePageModelState} from '@/models/connect';
 import {
-  ClearDataDataAction,
-  FetchCollectionInfoAction,
-  FetchInfoAction,
   OnClickCollectionAction,
-  ChangeAction,
-  FetchVersionInfoAction, OnMountPageAction, OnChangeVersionAction,
+  OnMountPageAction,
+  OnChangeVersionAction,
+  OnUnmountPageAction,
 } from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import {Alert, Space} from 'antd';
@@ -46,14 +44,12 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmountPageAction>({
+      type: 'marketResourcePage/onUnmountPage',
+    });
   });
 
   React.useEffect(() => {
-    // console.log(state.version, 'state.version2334234234');
-    // if (state.version) {
-    //   fetchVersionInfo();
-    // }
     dispatch<OnChangeVersionAction>({
       type: 'marketResourcePage/onChangeVersion',
       payload: {
@@ -62,29 +58,12 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
     });
   }, [state]);
 
-  // async function fetchVersionInfo() {
-  //   await onChange({
-  //     version: state.version,
+  // async function onChange(payload: Partial<MarketResourcePageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'marketResourcePage/change',
+  //     payload: payload,
   //   });
-  //
-  //   await dispatch<FetchVersionInfoAction>({
-  //     type: 'marketResourcePage/fetchVersionInfo',
-  //   });
-  //
   // }
-
-  AHooks.useUnmount(() => {
-    dispatch<ClearDataDataAction>({
-      type: 'marketResourcePage/clearData',
-    });
-  });
-
-  async function onChange(payload: Partial<MarketResourcePageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'marketResourcePage/change',
-      payload: payload,
-    });
-  }
 
   if (marketResourcePage.isSignPage) {
     return (<SignPage/>);
