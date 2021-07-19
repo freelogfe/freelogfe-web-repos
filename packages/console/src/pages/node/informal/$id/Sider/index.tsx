@@ -8,6 +8,7 @@ import {router, withRouter} from "umi";
 import {ChangeAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
 import {RouteComponentProps} from "react-router";
 import {FUtil} from "@freelog/tools-lib";
+import FUtil1 from "@/utils";
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -48,7 +49,8 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
       }}>{informalNodeManagerPage.testNodeUrl.replace(/http(s)?:\/\//, '')}</a>
       <FCopyToClipboard
         text={informalNodeManagerPage.testNodeUrl}
-        title={'复制测试节点地址'}
+        // title={'复制测试节点地址'}
+        title={FUtil1.I18n.message('tip_copy_node_domain')}
       />
     </Space>
     <div style={{height: 35}}/>
@@ -56,12 +58,6 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
         onClick={() => {
-          // dispatch<ChangeAction>({
-          //   type: 'informalNodeManagerPage/change',
-          //   payload: {
-          //     showPage: 'exhibit',
-          //   },
-          // });
           router.push(FUtil.LinkTo.informNodeManagement({
             nodeID: informalNodeManagerPage.nodeID,
             showPage: 'exhibit',
@@ -72,12 +68,6 @@ function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
       <div
         className={informalNodeManagerPage.showPage === 'theme' ? styles.activated : ''}
         onClick={() => {
-          // dispatch<ChangeAction>({
-          //   type: 'informalNodeManagerPage/change',
-          //   payload: {
-          //     showPage: 'theme',
-          //   },
-          // });
           router.push(FUtil.LinkTo.informNodeManagement({
             nodeID: informalNodeManagerPage.nodeID,
             showPage: 'theme',

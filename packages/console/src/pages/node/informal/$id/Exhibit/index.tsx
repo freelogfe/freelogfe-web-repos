@@ -39,33 +39,9 @@ function Exhibit({dispatch, informalNodeManagerPage, storageHomePage}: ExhibitPr
 
   });
 
-  // React.useEffect(() => {
-  //   // console.log('exhibit');
-  //   initData();
-  // }, []);
-
-  // AHooks.useUnmount(() => {
-  //   onChange({
-  //     ...exhibitPageInitData,
-  //   });
-  // });
-
-  // async function initData() {
-  //   await dispatch<FetchExhibitListAction>({
-  //     type: 'informalNodeManagerPage/fetchExhibitList',
-  //     payload: {
-  //       isRematch: true,
-  //     },
-  //   });
-  // }
-
   if (informalNodeManagerPage.exhibitPageExhibitsTotal === -1) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
-
-  // if (informalNodeManagerPage.exhibitList.length === 0) {
-  //   return ();
-  // }
 
   async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
     await dispatch<ChangeAction>({
