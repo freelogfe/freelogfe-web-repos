@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {withRouter} from "umi";
+import {router, withRouter} from "umi";
 import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
@@ -20,6 +20,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import AddInformExhibitDrawer from "./containers/AddInformExhibitDrawer";
 import FReplaceModal from "./containers/FReplaceModal";
 import * as AHooks from 'ahooks';
+import {FTextBtn} from "@/components/FButton";
 
 interface InformalNodeProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -43,12 +44,6 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
   const [{showPage}] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' }>();
 
   React.useEffect(() => {
-    // dispatch<ChangeAction>({
-    //   type: 'informalNodeManagerPage/change',
-    //   payload: {
-    //     showPage: showPage,
-    //   },
-    // });
     dispatch<OnChangePageAction>({
       type: 'informalNodeManagerPage/onChangePage',
       payload: {
@@ -57,18 +52,19 @@ function InformalNode({match, dispatch, informalNodeManagerPage}: InformalNodePr
     });
   }, [showPage]);
 
-  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload,
-  //   });
-  // }
-
   return (<>
     <div>
       <div className={styles.headerTip}>
-        <span>这里是测试节点管理页面，如需管理正式节点，你可以 </span>
-        <FLink to={FUtil.LinkTo.nodeManagement({nodeID: Number(match.params.id)})}> 进入正式节点</FLink></div>
+        <span>这里是测试节点管理页面，如需管理正式节点，你可以</span>
+        &nbsp;
+        {/*<FLink to={FUtil.LinkTo.nodeManagement({nodeID: Number(match.params.id)})}> 进入正式节点</FLink></div>*/}
+        <FTextBtn
+          type="primary"
+          style={{fontSize: 12}}
+          onClick={() => {
+            window.open(FUtil.LinkTo.nodeManagement({nodeID: Number(match.params.id)}));
+          }}
+        >进入正式节点</FTextBtn></div>
       <div style={{height: 24}}/>
       <div style={{minHeight: 'calc(100vh - 94px)'}} className={styles.container}>
         <div className={styles.sider}>
