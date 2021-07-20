@@ -47,7 +47,8 @@ function NodeSelector({dispatch, marketResourcePage, nodes}: NodeSelectorProps) 
       </Menu>
       <a
         href={FUtil.LinkTo.nodeCreator()}
-        className={styles.newButton}>
+        className={styles.newButton}
+      >
         <Space size={10}>
           <FPlus style={{fontSize: 14}}/>
           <span>创建节点</span>
