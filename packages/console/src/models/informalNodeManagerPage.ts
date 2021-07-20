@@ -4,6 +4,7 @@ import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import {router} from "umi";
+import fConfirmModal from "@/components/fConfirmModal";
 
 const {decompile, compile} = require('@freelog/nmr_translator');
 
@@ -249,6 +250,21 @@ export interface OnUnmountRulePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onUnmountRulePage';
 }
 
+export interface OnPromptRulePageLeaveAction extends AnyAction {
+  type: 'informalNodeManagerPage/onPromptRulePageLeave';
+  payload: {
+    href: string;
+  };
+}
+
+export interface OnConfirmRulePageLeaveAction extends AnyAction {
+  type: 'informalNodeManagerPage/onConfirmRulePageLeave';
+}
+
+export interface OnCancelRulePageLeaveAction extends AnyAction {
+  type: 'informalNodeManagerPage/onCancelRulePageLeave';
+}
+
 export interface FetchNodeInfoAction extends AnyAction {
   type: 'fetchNodeInfo';
 }
@@ -418,7 +434,6 @@ export interface OnReplacerListCheckedChangeAction extends AnyAction {
   type: 'informalNodeManagerPage/onReplacerListCheckedChange';
   payload: {
     id: string;
-    // checked: boolean;
   };
 }
 
@@ -488,6 +503,9 @@ interface InformalNodeManagerPageModelType {
     onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
     onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
     onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
+    onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
+    onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
+    onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
@@ -674,6 +692,30 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onUnmountRulePage({}: OnUnmountRulePageAction, {put}: EffectsCommandMap) {
       window.onbeforeunload = null;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePagePromptLeavePath: '',
+        },
+      });
+    },
+    * onPromptRulePageLeave({payload}: OnPromptRulePageLeaveAction, {put}: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePagePromptLeavePath: payload.href,
+        },
+      });
+
+    },
+    * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, {select}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+      router.push(informalNodeManagerPage.rulePagePromptLeavePath);
+    },
+    * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {

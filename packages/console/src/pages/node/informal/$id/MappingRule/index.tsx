@@ -21,13 +21,13 @@ import {FRectBtn, FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {
-  ChangeAction,
+  ChangeAction, OnCancelRulePageLeaveAction,
   OnClickDeleteRulesBtnAction,
   OnClickEntryCodingBtnAction,
   OnClickExitCodingBtnAction,
-  OnClickExportRulesBtnAction,
+  OnClickExportRulesBtnAction, OnConfirmRulePageLeaveAction,
   OnImportRulesBtnAction,
-  OnMountRulePageAction, OnUnmountRulePageAction,
+  OnMountRulePageAction, OnPromptRulePageLeaveAction, OnUnmountRulePageAction,
   SaveRulesAction
 } from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
@@ -152,6 +152,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     <Prompt
       when={informalNodeManagerPage.rulePageCodeIsDirty && informalNodeManagerPage.rulePagePromptLeavePath === ''}
       message={(location: H.Location) => {
+        console.log(location, 'location12341234123411111111@@@@@@');
         const locationHref: string = location.pathname + location.search;
         if (locationHref === FUtil.LinkTo.informNodeManagement({
           nodeID: informalNodeManagerPage.nodeID,
@@ -159,17 +160,25 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         })) {
           return true;
         }
-        onChange({rulePagePromptLeavePath: locationHref});
+        dispatch<OnPromptRulePageLeaveAction>({
+          type: 'informalNodeManagerPage/onPromptRulePageLeave',
+          payload: {
+            href: locationHref,
+          },
+        });
         fConfirmModal({
           message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
           onOk() {
-            router.push(locationHref);
+            dispatch<OnConfirmRulePageLeaveAction>({
+              type: 'informalNodeManagerPage/onConfirmRulePageLeave',
+            });
           },
           onCancel() {
-            onChange({rulePagePromptLeavePath: ''});
+            dispatch<OnCancelRulePageLeaveAction>({
+              type: 'informalNodeManagerPage/onCancelRulePageLeave',
+            });
           },
         });
-        // console.log(location, 'location1234234124324##########');
         return false;
       }}
     />

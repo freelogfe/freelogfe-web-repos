@@ -5,16 +5,15 @@ import Sider from './Sider';
 import Exhibit from './Exhibit';
 import {connect, Dispatch} from "dva";
 import {
-  ChangeAction,
-  InformalNodeManagerPageModelState, OnChangePageAction,
+  OnChangePageAction,
   OnMountPageAction,
   OnUnmountPageAction,
 } from "@/models/informalNodeManagerPage";
-import {ConnectState} from "@/models/connect";
+import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import Theme from "./Theme";
 import MappingRule from "./MappingRule";
 import {RouteComponentProps} from "react-router";
-import FLink from "@/components/FLink";
+// import FLink from "@/components/FLink";
 import {FUtil} from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import AddInformExhibitDrawer from "./containers/AddInformExhibitDrawer";
