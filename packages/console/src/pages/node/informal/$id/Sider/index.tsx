@@ -5,10 +5,11 @@ import FCopyToClipboard from "@/components/FCopyToClipboard";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {router, withRouter} from "umi";
-import {ChangeAction, FetchInfoAction} from "@/models/informalNodeManagerPage";
+import {ChangeAction, FetchNodeInfoAction, OnMountPageSiderAction} from "@/models/informalNodeManagerPage";
 import {RouteComponentProps} from "react-router";
 import {FUtil} from "@freelog/tools-lib";
 import FUtil1 from "@/utils";
+import * as AHooks from "ahooks";
 
 interface SiderProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -18,22 +19,35 @@ interface SiderProps extends RouteComponentProps<{ id: string }> {
 
 function Sider({match, dispatch, informalNodeManagerPage}: SiderProps) {
 
-  React.useEffect(() => {
-    initData();
-  }, []);
-
-  async function initData() {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
+  AHooks.useMount(() => {
+    dispatch<OnMountPageSiderAction>({
+      type: 'informalNodeManagerPage/onMountPageSider',
       payload: {
         nodeID: Number(match.params.id),
       },
     });
+  });
 
-    await dispatch<FetchInfoAction>({
-      type: 'informalNodeManagerPage/fetchInfo',
-    });
-  }
+  AHooks.useUnmount(() => {
+
+  });
+
+  // React.useEffect(() => {
+  //   initData();
+  // }, []);
+  //
+  // async function initData() {
+  //   await dispatch<ChangeAction>({
+  //     type: 'informalNodeManagerPage/change',
+  //     payload: {
+  //       nodeID: Number(match.params.id),
+  //     },
+  //   });
+  //
+  //   await dispatch<FetchNodeInfoAction>({
+  //     type: 'informalNodeManagerPage/fetchNodeInfo',
+  //   });
+  // }
 
   return (<>
     <div style={{height: 35}}/>

@@ -207,6 +207,17 @@ export interface OnUnmountPageAction extends AnyAction {
   type: 'informalNodeManagerPage/onUnmountPage';
 }
 
+export interface OnMountPageSiderAction extends AnyAction {
+  type: 'informalNodeManagerPage/onMountPageSider';
+  payload: {
+    nodeID: number;
+  };
+}
+
+export interface OnUnmountPageSiderAction extends AnyAction {
+  type: 'informalNodeManagerPage/onUnmountPageSider';
+}
+
 export interface OnChangePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onChangePage';
   payload: {
@@ -238,8 +249,8 @@ export interface OnUnmountRulePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onUnmountRulePage';
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'informalNodeManagerPage/fetchInfo';
+export interface FetchNodeInfoAction extends AnyAction {
+  type: 'fetchNodeInfo';
 }
 
 export interface FetchExhibitListAction extends AnyAction {
@@ -468,6 +479,8 @@ interface InformalNodeManagerPageModelType {
   effects: {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onMountPageSider: (action: OnMountPageSiderAction, effects: EffectsCommandMap) => void;
+    onUnmountPageSider: (action: OnUnmountPageSiderAction, effects: EffectsCommandMap) => void;
     onChangePage: (action: OnChangePageAction, effects: EffectsCommandMap) => void;
     onMountExhibitPage: (action: OnMountExhibitPageAction, effects: EffectsCommandMap) => void;
     onUnmountExhibitPage: (action: OnUnmountExhibitPageAction, effects: EffectsCommandMap) => void;
@@ -475,7 +488,7 @@ interface InformalNodeManagerPageModelType {
     onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
     onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
     onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
+    fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
@@ -601,9 +614,24 @@ const Model: InformalNodeManagerPageModelType = {
   state: informalNodeManagerPageInitStates,
   effects: {
     * onMountPage({}: OnMountPageAction, {}: EffectsCommandMap) {
-      // console.log('onMountPage982h3rjkadfhslkfasdfasdf');
+
     },
     * onUnmountPage({}: OnUnmountPageAction, {}: EffectsCommandMap) {
+
+    },
+    * onMountPageSider({payload}: OnMountPageSiderAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'informalNodeManagerPage/change',
+        payload: {
+          nodeID: payload.nodeID,
+        },
+      });
+
+      yield put<FetchNodeInfoAction>({
+        type: 'fetchNodeInfo',
+      });
+    },
+    * onUnmountPageSider({}: OnUnmountPageSiderAction, {}: EffectsCommandMap) {
 
     },
     * onChangePage({payload}: OnChangePageAction, {put}: EffectsCommandMap) {
@@ -653,7 +681,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
+    * fetchNodeInfo({}: FetchNodeInfoAction, {select, put, call}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,
       }));
