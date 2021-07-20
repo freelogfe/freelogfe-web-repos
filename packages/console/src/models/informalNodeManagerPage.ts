@@ -644,8 +644,14 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'fetchRules'
       });
     },
-    * onUnmountRulePage({}: OnUnmountRulePageAction, {}: EffectsCommandMap) {
-
+    * onUnmountRulePage({}: OnUnmountRulePageAction, {put}: EffectsCommandMap) {
+      window.onbeforeunload = null;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePagePromptLeavePath: '',
+        },
+      });
     },
     * fetchInfo({}: FetchInfoAction, {select, put, call}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({

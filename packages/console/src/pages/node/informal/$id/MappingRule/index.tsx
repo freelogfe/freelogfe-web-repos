@@ -22,13 +22,12 @@ import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {
   ChangeAction,
-  FetchRulesAction,
   OnClickDeleteRulesBtnAction,
   OnClickEntryCodingBtnAction,
   OnClickExitCodingBtnAction,
   OnClickExportRulesBtnAction,
   OnImportRulesBtnAction,
-  OnMountRulePageAction,
+  OnMountRulePageAction, OnUnmountRulePageAction,
   SaveRulesAction
 } from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
@@ -61,7 +60,9 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmountRulePageAction>({
+      type: 'informalNodeManagerPage/onUnmountRulePage',
+    });
   });
 
   React.useEffect(() => {
@@ -72,14 +73,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     }
 
   }, [informalNodeManagerPage.rulePageCodeIsDirty]);
-
-  AHooks.useUnmount(() => {
-    window.onbeforeunload = null;
-    onChange({
-      rulePagePromptLeavePath: '',
-      // codeIsDirty: false,
-    });
-  });
 
   // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
