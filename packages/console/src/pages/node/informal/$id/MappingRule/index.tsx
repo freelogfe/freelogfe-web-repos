@@ -20,7 +20,17 @@ import FCodemirror from "@/components/FCodemirror";
 import {FRectBtn, FTextBtn} from "@/components/FButton";
 import {connect, Dispatch} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
-import {ChangeAction, FetchRulesAction, OnMountRulePageAction, SaveRulesAction} from "@/models/informalNodeManagerPage";
+import {
+  ChangeAction,
+  FetchRulesAction,
+  OnClickDeleteRulesBtnAction,
+  OnClickEntryCodingBtnAction,
+  OnClickExitCodingBtnAction,
+  OnClickExportRulesBtnAction,
+  OnImportRulesBtnAction,
+  OnMountRulePageAction,
+  SaveRulesAction
+} from "@/models/informalNodeManagerPage";
 import FileSaver from 'file-saver';
 import FUpload from "@/components/FUpload";
 import FUtil1 from "@/utils";
@@ -185,16 +195,11 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 const reader = new FileReader();
                 reader.readAsText(file);
                 reader.onload = function (evt: any) {
-                  // console.log(evt, 'evt@#RFDSf0(UJo90jsdal;f');
-                  const exportText = evt.target.result;
-                  // console.log(exportText, 'exportText@#$AFSD;f-[k;lzzfsasdf');
-                  onChange({
-                    rulePageCodeInput: exportText + '\n' + informalNodeManagerPage.rulePageCodeInput,
-                    rulePageStatus: 'coding',
-                    rulePageCodeIsDirty: true,
-                    rulePageCodeCompileErrors: null,
-                    rulePageCodeExecutionError: null,
-                    rulePageCodeSaveSuccess: false,
+                  dispatch<OnImportRulesBtnAction>({
+                    type: 'informalNodeManagerPage/onImportRulesBtn',
+                    payload: {
+                      value: evt.target.result,
+                    },
                   });
                 };
                 return false;
@@ -211,8 +216,8 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <FTextBtn
               type="primary"
               onClick={() => {
-                onChange({
-                  rulePageStatus: 'export',
+                dispatch<OnClickExportRulesBtnAction>({
+                  type: 'informalNodeManagerPage/onClickExportRulesBtn',
                 });
               }}
             >
@@ -224,8 +229,8 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             <FTextBtn
               type="danger"
               onClick={() => {
-                onChange({
-                  rulePageStatus: 'delete',
+                dispatch<OnClickDeleteRulesBtnAction>({
+                  type: 'informalNodeManagerPage/onClickDeleteRulesBtn',
                 });
               }}
             >
@@ -242,8 +247,8 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
       {
         informalNodeManagerPage.rulePageStatus === 'normal' && (<FTextBtn
           onClick={() => {
-            onChange({
-              rulePageStatus: 'coding',
+            dispatch<OnClickEntryCodingBtnAction>({
+              type: 'informalNodeManagerPage/onClickEntryCodingBtn',
             });
           }}>
           <Space size={5}>
@@ -257,8 +262,8 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         informalNodeManagerPage.rulePageStatus === 'coding'
         && (<FTextBtn
           onClick={() => {
-            onChange({
-              rulePageStatus: 'normal',
+            dispatch<OnClickExitCodingBtnAction>({
+              type: 'informalNodeManagerPage/onClickExitCodingBtn',
             });
           }}>
           <Space size={5}>

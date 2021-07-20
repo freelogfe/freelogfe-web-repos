@@ -266,6 +266,29 @@ export interface SaveRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/saveRules';
 }
 
+export interface OnImportRulesBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onImportRulesBtn';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClickExportRulesBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExportRulesBtn';
+}
+
+export interface OnClickDeleteRulesBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickDeleteRulesBtn';
+}
+
+export interface OnClickEntryCodingBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickEntryCodingBtn';
+}
+
+export interface OnClickExitCodingBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExitCodingBtn';
+}
+
 interface ICandidate {
   name: string;
   versionRange?: string;
@@ -458,6 +481,11 @@ interface InformalNodeManagerPageModelType {
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
+    onImportRulesBtn: (action: OnImportRulesBtnAction, effects: EffectsCommandMap) => void;
+    onClickExportRulesBtn: (action: OnClickExportRulesBtnAction, effects: EffectsCommandMap) => void;
+    onClickDeleteRulesBtn: (action: OnClickDeleteRulesBtnAction, effects: EffectsCommandMap) => void;
+    onClickEntryCodingBtn: (action: OnClickEntryCodingBtnAction, effects: EffectsCommandMap) => void;
+    onClickExitCodingBtn: (action: OnClickExitCodingBtnAction, effects: EffectsCommandMap) => void;
 
     onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerCancelChange: (action: OnAddExhibitDrawerCancelChangeAction, effects: EffectsCommandMap) => void;
@@ -1050,6 +1078,55 @@ const Model: InformalNodeManagerPageModelType = {
           },
         });
       }
+    },
+    * onImportRulesBtn({payload}: OnImportRulesBtnAction, {put, select}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      yield put({
+        type: 'change',
+        payload: {
+          rulePageCodeInput: payload.value + '\n' + informalNodeManagerPage.rulePageCodeInput,
+          rulePageStatus: 'coding',
+          rulePageCodeIsDirty: true,
+          rulePageCodeCompileErrors: null,
+          rulePageCodeExecutionError: null,
+          rulePageCodeSaveSuccess: false,
+        },
+      });
+    },
+    * onClickExportRulesBtn({}: OnClickExportRulesBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePageStatus: 'export',
+        },
+      });
+    },
+    * onClickDeleteRulesBtn({}: OnClickDeleteRulesBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePageStatus: 'delete',
+        },
+      });
+    },
+    * onClickEntryCodingBtn({}: OnClickEntryCodingBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePageStatus: 'coding',
+        },
+      });
+    },
+    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePageStatus: 'normal',
+        },
+      });
     },
 
     * onAddExhibitDrawerAfterVisibleChange({payload}: OnAddExhibitDrawerAfterVisibleChangeAction, {put, call}: EffectsCommandMap) {
@@ -2049,7 +2126,7 @@ const Model: InformalNodeManagerPageModelType = {
     setup({}) {
 
     }
-  }
+  },
 };
 
 export default Model;
