@@ -16,7 +16,7 @@ import {
   OnUnmountPageAction,
 } from '@/models/marketResourcePage';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import {Alert, Space} from 'antd';
+import {Space} from 'antd';
 import SignPage from './SignPage';
 import {RouteComponentProps} from "react-router";
 import * as AHooks from 'ahooks';

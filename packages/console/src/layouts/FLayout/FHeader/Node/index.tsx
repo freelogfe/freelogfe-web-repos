@@ -15,7 +15,6 @@ import {FUtil} from '@freelog/tools-lib';
 interface NodeProps {
   dispatch: Dispatch;
   nodes: NodesModelState;
-  // global: GlobalModelState;
   router: {
     location: Location;
   };

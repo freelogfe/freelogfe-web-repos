@@ -13,7 +13,7 @@ export interface FMenuProps {
   onClick?: (value: string) => void;
 }
 
-export default function FMenu({options, value, onClick}: FMenuProps) {
+function FMenu({options, value, onClick}: FMenuProps) {
   return (
     <Menu
       selectable={false}
@@ -31,3 +31,5 @@ export default function FMenu({options, value, onClick}: FMenuProps) {
     </Menu>
   );
 }
+
+export default FMenu;
