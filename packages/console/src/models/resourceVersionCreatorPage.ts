@@ -5,7 +5,7 @@ import {ConnectState, MarketPageModelState, StorageObjectEditorModelState} from 
 import {router} from 'umi';
 import BraftEditor, {EditorState} from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import {FetchDataSourceAction} from '@/models/resourceInfo';
+import {FetchDataSourceAction, FetchDraftDataAction} from '@/models/resourceInfo';
 import * as semver from 'semver';
 import moment from "moment";
 import FUtil1 from "@/utils";
@@ -48,7 +48,7 @@ export type Relationships = WholeReadonly<{
   }>[];
 }[]>;
 
-export type ResourceVersionCreatorPageModelState = WholeReadonly<{
+export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
   latestVersion: string;
   resourceType: string;
@@ -64,7 +64,8 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */;
+  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */
+  ;
   selectedFileUsedResource: {
     resourceID: string;
     resourceName: string;
@@ -79,7 +80,7 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   depActivatedID: string;
 
   dataIsDirty: boolean;
-}> & {
+
   rawProperties: {
     key: string;
     value: string;
@@ -164,11 +165,34 @@ export type ResourceVersionCreatorPageModelState = WholeReadonly<{
   };
 
   promptLeavePath: string;
-};
+}
 
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceVersionCreatorPage/change',
   payload: Partial<ResourceVersionCreatorPageModelState>;
+}
+
+export interface OnMountPageAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onMountPage';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onUnmountPage';
+}
+
+export interface OnPromptPageLeaveAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onPromptPageLeave';
+}
+
+export interface OnClickCreateBtnAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClickCreateBtn';
+}
+
+export interface OnClickCacheBtnAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClickCacheBtn';
 }
 
 export interface InitModelStatesAction extends AnyAction {
@@ -176,11 +200,11 @@ export interface InitModelStatesAction extends AnyAction {
 }
 
 export interface FetchDraftAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/fetchDraft';
+  type: 'fetchDraft';
 }
 
 export interface FetchResourceInfoAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/fetchResourceInfo';
+  type: 'fetchResourceInfo';
 }
 
 export interface CreateVersionAction extends AnyAction {
@@ -228,14 +252,20 @@ export interface ImportLastVersionDataAction extends AnyAction {
   payload: 'baseProps' | 'optionProps' | 'deps';
 }
 
-export interface LeaveAndClearDataAction extends AnyAction {
-  type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
-}
+// export interface LeaveAndClearDataAction extends AnyAction {
+//   type: 'leaveAndClearData' | 'resourceVersionCreatorPage/leaveAndClearData';
+// }
 
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
   state: ResourceVersionCreatorPageModelState;
   effects: {
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
+    onClickCreateBtn: (action: OnClickCreateBtnAction, effects: EffectsCommandMap) => void;
+    onClickCacheBtn: (action: OnClickCacheBtnAction, effects: EffectsCommandMap) => void;
+
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
@@ -249,7 +279,7 @@ export interface ResourceVersionCreatorModelType {
     deleteDependencyByID: (action: DeleteDependencyByIDAction, effects: EffectsCommandMap) => void;
     importLastVersionData: (action: ImportLastVersionDataAction, effects: EffectsCommandMap) => void;
     // goToResourceDetailsBySha1: (action: GoToResourceDetailsBySha1, effects: EffectsCommandMap) => void;
-    leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
+    // leaveAndClearData: (action: LeaveAndClearDataAction, effects: EffectsCommandMap) => void;
     initModelState: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -315,6 +345,49 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
+    * onMountPage({payload}: OnMountPageAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceId: payload.resourceID,
+        }
+      });
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
+      });
+      yield put<FetchDraftAction>({
+        type: 'fetchDraft',
+      });
+    },
+    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
+      window.onbeforeunload = null;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+        caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
+      });
+    },
+    * onPromptPageLeave({}: OnPromptPageLeaveAction, {}: EffectsCommandMap) {
+
+    },
+    * onClickCreateBtn({}: OnClickCreateBtnAction, {put}: EffectsCommandMap) {
+      yield put<CreateVersionAction>({
+        type: 'resourceVersionCreatorPage/createVersion',
+        // payload: match.params.id,
+      });
+      yield put<FetchDraftDataAction>({
+        type: 'resourceInfo/fetchDraftData',
+      });
+    },
+    * onClickCacheBtn({}: OnClickCacheBtnAction, {put}: EffectsCommandMap) {
+      yield put<SaveDraftAction>({
+        type: 'resourceVersionCreatorPage/saveDraft',
+      });
+      yield put<FetchDraftDataAction>({
+        type: 'resourceInfo/fetchDraftData',
+      });
+    },
+
     * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
@@ -1036,13 +1109,13 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
     },
-    * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: initStates,
-        caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
-      });
-    },
+    // * leaveAndClearData({}: LeaveAndClearDataAction, {put}: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: initStates,
+    //     caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
+    //   });
+    // },
     * initModelState({}: InitModelStatesAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',

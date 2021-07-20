@@ -15,10 +15,9 @@ import {
 import {
   ChangeAction,
   CreateVersionAction,
-  FetchDraftAction,
-  FetchResourceInfoAction,
-  InitModelStatesAction,
-  LeaveAndClearDataAction,
+  InitModelStatesAction, OnClickCacheBtnAction, OnClickCreateBtnAction,
+  OnMountPageAction,
+  OnUnmountPageAction,
   SaveDraftAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
@@ -45,6 +44,21 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string; }> {
 
 function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: VersionCreatorProps & RouterTypes) {
 
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'resourceVersionCreatorPage/onMountPage',
+      payload: {
+        resourceID: match.params.id,
+      },
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'resourceVersionCreatorPage/onUnmountPage',
+    });
+  });
+
   React.useEffect(() => {
     // const func = () => 1234;
     if (resourceVersionCreatorPage.dataIsDirty) {
@@ -54,10 +68,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     }
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
-
-  AHooks.useUnmount(() => {
-    window.onbeforeunload = null;
-  });
 
   React.useEffect(() => {
     dispatch<GlobalChangeAction>({
@@ -74,46 +84,46 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     };
   }, [route]);
 
-  React.useEffect(() => {
-    // console.log(match, 'creator902jfsadlk');
-    init();
+  // React.useEffect(() => {
+  //   // console.log(match, 'creator902jfsadlk');
+  //   init();
+  //
+  //   // return () => {
+  //   //   // console.log(match.params.id, 'match.param90823u947890234890s.id');
+  //   //   dispatch<LeaveAndClearDataAction>({
+  //   //     type: 'resourceVersionCreatorPage/leaveAndClearData',
+  //   //   });
+  //   // }
+  // }, []);
 
-    return () => {
-      // console.log(match.params.id, 'match.param90823u947890234890s.id');
-      dispatch<LeaveAndClearDataAction>({
-        type: 'resourceVersionCreatorPage/leaveAndClearData',
-      });
-    }
-  }, []);
+  // async function init() {
+  //   await onChange({resourceId: match.params.id});
+  //   await dispatch<FetchResourceInfoAction>({
+  //     type: 'resourceVersionCreatorPage/fetchResourceInfo',
+  //   });
+  //   await dispatch<FetchDraftAction>({
+  //     type: 'resourceVersionCreatorPage/fetchDraft',
+  //   });
+  // }
 
-  async function init() {
-    await onChange({resourceId: match.params.id});
-    await dispatch<FetchResourceInfoAction>({
-      type: 'resourceVersionCreatorPage/fetchResourceInfo',
-    });
-    await dispatch<FetchDraftAction>({
-      type: 'resourceVersionCreatorPage/fetchDraft',
-    });
-  }
-
-  async function onClickCache() {
-    await dispatch<SaveDraftAction>({
-      type: 'resourceVersionCreatorPage/saveDraft',
-    });
-    await dispatch<FetchDraftDataAction>({
-      type: 'resourceInfo/fetchDraftData',
-    });
-  }
-
-  async function onClickCreate() {
-    await dispatch<CreateVersionAction>({
-      type: 'resourceVersionCreatorPage/createVersion',
-      // payload: match.params.id,
-    });
-    await dispatch<FetchDraftDataAction>({
-      type: 'resourceInfo/fetchDraftData',
-    });
-  }
+  // async function onClickCache() {
+  //   await dispatch<SaveDraftAction>({
+  //     type: 'resourceVersionCreatorPage/saveDraft',
+  //   });
+  //   await dispatch<FetchDraftDataAction>({
+  //     type: 'resourceInfo/fetchDraftData',
+  //   });
+  // }
+  //
+  // async function onClickCreate() {
+  //   await dispatch<CreateVersionAction>({
+  //     type: 'resourceVersionCreatorPage/createVersion',
+  //     // payload: match.params.id,
+  //   });
+  //   await dispatch<FetchDraftDataAction>({
+  //     type: 'resourceInfo/fetchDraftData',
+  //   });
+  // }
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
@@ -169,8 +179,16 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
       <FLeftSiderLayout
         sider={<Sider/>}
         header={<Header
-          onClickCreate={onClickCreate}
-          onClickCache={onClickCache}
+          onClickCreate={() => {
+            dispatch<OnClickCreateBtnAction>({
+              type: 'resourceVersionCreatorPage/onClickCreateBtn',
+            });
+          }}
+          onClickCache={() => {
+            dispatch<OnClickCacheBtnAction>({
+              type: 'resourceVersionCreatorPage/onClickCacheBtn',
+            });
+          }}
           disabledCreate={hasError}
         />}
       >
