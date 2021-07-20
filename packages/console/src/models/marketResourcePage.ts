@@ -148,10 +148,6 @@ export interface OnChangeVersionAction extends AnyAction {
   },
 }
 
-export interface ClearDataDataAction extends AnyAction {
-  type: 'marketResourcePage/clearData';
-}
-
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo' | 'marketResourcePage/fetchInfo';
 }
@@ -193,7 +189,6 @@ interface MarketResourcePageModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onChangeVersion: (action: OnChangeVersionAction, effects: EffectsCommandMap) => void;
-    clearData: (action: ClearDataDataAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     fetchCollectionInfo: (action: FetchCollectionInfoAction, effects: EffectsCommandMap) => void;
     onClickCollection: (action: OnClickCollectionAction, effects: EffectsCommandMap) => void;
@@ -291,9 +286,6 @@ const Model: MarketResourcePageModelType = {
       yield put<FetchVersionInfoAction>({
         type: 'fetchVersionInfo',
       });
-    },
-    * clearData({}: ClearDataDataAction, {put}: EffectsCommandMap) {
-
     },
     * fetchInfo({}: FetchInfoAction, {call, put, select}: EffectsCommandMap) {
       const {marketResourcePage, user}: ConnectState = yield select(({marketResourcePage, user}: ConnectState) => ({

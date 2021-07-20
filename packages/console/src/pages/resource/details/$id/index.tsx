@@ -58,13 +58,6 @@ function ResourceDetails({match, dispatch, marketResourcePage}: ResourceDetailsP
     });
   }, [state]);
 
-  // async function onChange(payload: Partial<MarketResourcePageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'marketResourcePage/change',
-  //     payload: payload,
-  //   });
-  // }
-
   if (marketResourcePage.isSignPage) {
     return (<SignPage/>);
   }
