@@ -24,7 +24,7 @@ import {
   ChangeAction, OnCancelRulePageLeaveAction,
   OnClickDeleteRulesBtnAction,
   OnClickEntryCodingBtnAction,
-  OnClickExitCodingBtnAction,
+  OnClickExitCodingBtnAction, OnClickExitCodingCancelBtnAction, OnClickExitCodingConfirmBtnAction,
   OnClickExportRulesBtnAction, OnConfirmRulePageLeaveAction,
   OnImportRulesBtnAction,
   OnMountRulePageAction, OnPromptRulePageLeaveAction, OnUnmountRulePageAction,
@@ -264,6 +264,22 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         informalNodeManagerPage.rulePageStatus === 'coding'
         && (<FTextBtn
           onClick={() => {
+            if (informalNodeManagerPage.rulePageCodeIsDirty) {
+              fConfirmModal({
+                message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
+                onOk() {
+                  dispatch<OnClickExitCodingConfirmBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExitCodingConfirmBtn',
+                  });
+                },
+                onCancel() {
+                  dispatch<OnClickExitCodingCancelBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExitCodingCancelBtn',
+                  });
+                },
+              });
+              return;
+            }
             dispatch<OnClickExitCodingBtnAction>({
               type: 'informalNodeManagerPage/onClickExitCodingBtn',
             });

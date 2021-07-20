@@ -316,6 +316,14 @@ export interface OnClickExitCodingBtnAction extends AnyAction {
   type: 'informalNodeManagerPage/onClickExitCodingBtn';
 }
 
+export interface OnClickExitCodingConfirmBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExitCodingConfirmBtn';
+}
+
+export interface OnClickExitCodingCancelBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExitCodingCancelBtn';
+}
+
 interface ICandidate {
   name: string;
   versionRange?: string;
@@ -517,6 +525,8 @@ interface InformalNodeManagerPageModelType {
     onClickDeleteRulesBtn: (action: OnClickDeleteRulesBtnAction, effects: EffectsCommandMap) => void;
     onClickEntryCodingBtn: (action: OnClickEntryCodingBtnAction, effects: EffectsCommandMap) => void;
     onClickExitCodingBtn: (action: OnClickExitCodingBtnAction, effects: EffectsCommandMap) => void;
+    onClickExitCodingConfirmBtn: (action: OnClickExitCodingConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClickExitCodingCancelBtn: (action: OnClickExitCodingCancelBtnAction, effects: EffectsCommandMap) => void;
 
     onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerCancelChange: (action: OnAddExhibitDrawerCancelChangeAction, effects: EffectsCommandMap) => void;
@@ -696,6 +706,14 @@ const Model: InformalNodeManagerPageModelType = {
         type: 'change',
         payload: {
           rulePagePromptLeavePath: '',
+
+          rulePageRuleList: [],
+          rulePageCodeInput: '',
+          rulePageCodeIsDirty: false,
+          rulePageCodeIsChecking: false,
+          rulePageCodeCompileErrors: null,
+          rulePageCodeExecutionError: null,
+          rulePageCodeSaveSuccess: false,
         },
       });
     },
@@ -1196,13 +1214,47 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, {put}: EffectsCommandMap) {
+    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, {put, select}: EffectsCommandMap) {
+
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           rulePageStatus: 'normal',
+
+          rulePageCodeInput: informalNodeManagerPage.ruleText,
+          rulePageCodeIsDirty: false,
+          rulePageCodeIsChecking: false,
+          rulePageCodeCompileErrors: null,
+          rulePageCodeExecutionError: null,
+          rulePageCodeSaveSuccess: false,
         },
       });
+    },
+    * onClickExitCodingConfirmBtn({}: OnClickExitCodingConfirmBtnAction, {put, select}: EffectsCommandMap) {
+      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          rulePageStatus: 'normal',
+
+          rulePageCodeInput: informalNodeManagerPage.ruleText,
+          rulePageCodeIsDirty: false,
+          rulePageCodeIsChecking: false,
+          rulePageCodeCompileErrors: null,
+          rulePageCodeExecutionError: null,
+          rulePageCodeSaveSuccess: false,
+        },
+      })
+    },
+    * onClickExitCodingCancelBtn({}: OnClickExitCodingCancelBtnAction, {}: EffectsCommandMap) {
+
     },
 
     * onAddExhibitDrawerAfterVisibleChange({payload}: OnAddExhibitDrawerAfterVisibleChangeAction, {put, call}: EffectsCommandMap) {
