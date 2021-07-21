@@ -64,7 +64,8 @@ export interface ResourceVersionCreatorPageModelState {
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */;
+  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */
+  ;
   selectedFileUsedResource: {
     resourceID: string;
     resourceName: string;
@@ -357,19 +358,33 @@ const Model: ResourceVersionCreatorModelType = {
   state: initStates,
 
   effects: {
-    * onMountPage({payload}: OnMountPageAction, {put}: EffectsCommandMap) {
+    * onMountPage({payload}: OnMountPageAction, {put, call}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           resourceId: payload.resourceID,
         }
       });
+
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
       });
-      yield put<FetchDraftAction>({
-        type: 'fetchDraft',
-      });
+
+      const params: HandledDraftParamsType = {
+        resourceID: payload.resourceID,
+      };
+
+      const result: ResourceVersionCreatorPageModelState | null = yield call(handledDraft, params);
+
+      if (result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            ...result,
+          },
+        });
+      }
+
     },
     * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
       window.onbeforeunload = null;
@@ -395,19 +410,14 @@ const Model: ResourceVersionCreatorModelType = {
       router.push(resourceVersionCreatorPage.promptLeavePath);
     },
     * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, {put}: EffectsCommandMap) {
-      // yield put<ChangeAction>({
-      //   type: 'resourceVersionCreatorPage/change',
-      //   payload: {
-      //     promptLeavePath: '',
-      //   },
-      // });
+      yield put<ChangeAction>({
+        type: 'resourceVersionCreatorPage/change',
+        payload: {
+          promptLeavePath: '',
+        },
+      });
     },
     * onClickCreateBtn({}: OnClickCreateBtnAction, {put, call, select}: EffectsCommandMap) {
-      // yield put<CreateVersionAction>({
-      //   type: 'resourceVersionCreatorPage/createVersion',
-      //   // payload: match.params.id,
-      // });
-
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
@@ -599,22 +609,7 @@ const Model: ResourceVersionCreatorModelType = {
           resourceVersionCreatorPage,
         };
       });
-      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceVersionCreatorPage.resourceId,
-      };
-      const {data} = yield call(FServiceAPI.Resource.lookDraft, params);
-      if (!data) {
-        return;
-      }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          ...data.draftData,
-          description: BraftEditor.createEditorState(data.draftData.description),
-          dataIsDirty: false,
-        },
-        caller: '9729380900(*)(*)*)74823yu4oi234io23hjkfdsasdf',
-      });
+
     },
     * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
@@ -709,31 +704,31 @@ const Model: ResourceVersionCreatorModelType = {
           preVersionDeps,
           description,
         },
-        caller: '97293879uoijlkll4823yu4oi234io23hjkfdsasdf',
+        // caller: '97293879uoijlkll4823yu4oi234io23hjkfdsasdf',
       });
     },
     // * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
-      // const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-      //   resourceInfo, resourceVersionCreatorPage
-      // }));
-      //
-      // const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-      //   resourceId: resourceInfo.info?.resourceId || '',
-      //   draftData: {
-      //     ...resourceVersionCreatorPage,
-      //     description: resourceVersionCreatorPage.description.toHTML(),
-      //     dataIsDirty: false,
-      //   },
-      // };
-      // yield call(FServiceAPI.Resource.saveVersionsDraft, params);
-      // fMessage('暂存草稿成功');
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     dataIsDirty: false,
-      //   },
-      //   caller: '9734890uoreiwu==293874823yu4oi234io23hjkfdsasdf',
-      // });
+    // const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+    //   resourceInfo, resourceVersionCreatorPage
+    // }));
+    //
+    // const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+    //   resourceId: resourceInfo.info?.resourceId || '',
+    //   draftData: {
+    //     ...resourceVersionCreatorPage,
+    //     description: resourceVersionCreatorPage.description.toHTML(),
+    //     dataIsDirty: false,
+    //   },
+    // };
+    // yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+    // fMessage('暂存草稿成功');
+    // yield put<ChangeAction>({
+    //   type: 'change',
+    //   payload: {
+    //     dataIsDirty: false,
+    //   },
+    //   caller: '9734890uoreiwu==293874823yu4oi234io23hjkfdsasdf',
+    // });
     // },
     * verifyVersionInput({}: VerifyVersionInputAction, {select, put}: EffectsCommandMap) {
       const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
@@ -1370,4 +1365,133 @@ function repeatedKeys(str1: string[], str2: string[]): string[] {
     }
   }
   return keys;
+}
+
+interface HandledDraftParamsType {
+  resourceID: string;
+}
+
+async function handledDraft({resourceID}: HandledDraftParamsType): Promise<ResourceVersionCreatorPageModelState | null> {
+  const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+    resourceId: resourceID,
+  };
+
+  const {data: data3} = await FServiceAPI.Resource.lookDraft(params3);
+
+  // console.log(data3, 'dat2342890fj;lkasdf;adsjf;lfda');
+  if (!data3) {
+    return null;
+  }
+
+  const draftData: ResourceVersionCreatorPageModelState = data3.draftData;
+
+  // 本次要添加全部资源 ID
+  // const allIDs: string[] = [
+  //   ...draftData.depRelationship
+  //     .map((r: any) => r.id),
+  //   ...draftData.depRelationship
+  //     .map((r: any) => r.children)
+  //     .flat()
+  //     .map((c: any) => c.id),
+  // ];
+  const allIDs: string[] = draftData.dependencies.map((d) => d.id);
+
+  // if (allIDs.length === 0) {
+  //   return yield put<ChangeAction>({
+  //     type: 'change',
+  //     payload: {
+  //       depRelationship: [
+  //         ...relationships,
+  //         ...resourceVersionCreatorPage.depRelationship,
+  //       ],
+  //     },
+  //     caller: '$97&*&&293874823yu4oi234io23hjkfdsasdf',
+  //   });
+  // }
+
+  const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+    resourceIds: allIDs.join(','),
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
+  };
+
+  const {data} = await FServiceAPI.Resource.batchInfo(params);
+
+  const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
+    subjectIds: allIDs.join(','),
+    licenseeId: resourceID,
+    subjectType: 1,
+    licenseeIdentityType: 1,
+    isLoadPolicyInfo: 1,
+  };
+  const {data: data1} = await FServiceAPI.Contract.batchContracts(params1);
+  // console.log(data1, 'data1 109234ui2o34');
+
+  // 如果有合约，就获取合约应用的版本
+  let coverageVersions: any[] = [];
+  if (data1.length > 0) {
+    const params2: Parameters<typeof FServiceAPI.Resource.batchGetCoverageVersions>[0] = {
+      resourceId: resourceID,
+      contractIds: data1.map((ci: any) => ci.contractId).join(','),
+    };
+    const {data: data2} = await FServiceAPI.Resource.batchGetCoverageVersions(params2);
+    coverageVersions = data2;
+  }
+
+  // 组织添加的依赖数据
+  const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
+
+    // console.log(dr, 'dr!@#$!@#$!@#4213421342134');
+
+    const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
+    const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
+    // const theVersion = versions?.find((v) => v.id === dr.resourceId);
+    const theVersion = draftData.dependencies.find((v) => v.id === dr.resourceId);
+
+    const isUpthrow: boolean = draftData.baseUpcastResources.some((b) => dr.resourceId === b.resourceId);
+
+    return {
+      id: dr.resourceId,
+      title: dr.resourceName,
+      resourceType: dr.resourceType,
+      status: isUpthrow ? 4 : dr.status,
+      versionRange: theVersion ? theVersion.versionRange : '^' + dr.latestVersion,
+      versions: dr.resourceVersions.map((version: any) => version.version),
+      upthrow: isUpthrow,
+      upthrowDisabled: !!draftData.latestVersion,
+      enableReuseContracts: depC.map<ResourceVersionCreatorPageModelState['dependencies'][number]['enableReuseContracts'][number]>((c: any) => {
+        return {
+          checked: true,
+          id: c.contractId,
+          policyId: c.policyId,
+          title: c.contractName,
+          status: c.status,
+          code: c.policyInfo.policyText,
+          date: moment(c.createDate).format('YYYY-MM-DD HH:mm'),
+          versions: coverageVersions
+            .find((cv) => c.contractId === cv.contractId)
+            .versions.map((ccc: any) => ccc.version),
+        };
+      }),
+      enabledPolicies: dr.policies
+        .filter((policy: any) => !allDepCIDs.includes(policy.policyId) && policy.status === 1)
+        .map((policy: any) => {
+          // console.log(policy, 'PPPPafwe98iokl');
+          return {
+            checked: false,
+            id: policy.policyId,
+            title: policy.policyName,
+            code: policy.policyText,
+            status: policy.status,
+          };
+        }),
+    }
+  });
+
+  return {
+    ...data3.draftData,
+    description: BraftEditor.createEditorState(draftData.description),
+    dataIsDirty: false,
+    dependencies: dependencies,
+  };
 }

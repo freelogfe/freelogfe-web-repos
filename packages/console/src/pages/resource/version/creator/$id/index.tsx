@@ -26,7 +26,6 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import {router, withRouter} from 'umi';
 import RouterTypes from 'umi/routerTypes';
-import {FetchDraftDataAction} from "@/models/resourceInfo";
 import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
 import Sider from "@/pages/resource/containers/Sider";
 import FFormLayout from "@/components/FFormLayout";
@@ -70,22 +69,6 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
     }
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
-
-  // React.useEffect(() => {
-  //   console.log(route, 'route123412342341234');
-  //   dispatch<GlobalChangeAction>({
-  //     type: 'global/change',
-  //     payload: {
-  //       route: route,
-  //     },
-  //   });
-  //
-  //   return () => {
-  //     dispatch<InitModelStatesAction>({
-  //       type: 'resourceVersionCreatorPage/initModelStates',
-  //     });
-  //   };
-  // }, [route]);
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
