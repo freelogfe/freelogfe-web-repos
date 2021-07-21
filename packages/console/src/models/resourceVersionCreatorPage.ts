@@ -185,6 +185,17 @@ export interface OnUnmountPageAction extends AnyAction {
 
 export interface OnPromptPageLeaveAction extends AnyAction {
   type: 'resourceVersionCreatorPage/onPromptPageLeave';
+  payload: {
+    href: string;
+  };
+}
+
+export interface OnPromptPageLeaveConfirmAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm';
+}
+
+export interface OnPromptPageLeaveCancelAction extends AnyAction {
+  type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel';
 }
 
 export interface OnClickCreateBtnAction extends AnyAction {
@@ -207,13 +218,13 @@ export interface FetchResourceInfoAction extends AnyAction {
   type: 'fetchResourceInfo';
 }
 
-export interface CreateVersionAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/createVersion';
-}
+// export interface CreateVersionAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/createVersion';
+// }
 
-export interface SaveDraftAction extends AnyAction {
-  type: 'resourceVersionCreatorPage/saveDraft';
-}
+// export interface SaveDraftAction extends AnyAction {
+//   type: 'resourceVersionCreatorPage/saveDraft';
+// }
 
 export interface VerifyVersionInputAction extends AnyAction {
   type: 'resourceVersionCreatorPage/verifyVersionInput' | 'verifyVersionInput';
@@ -263,13 +274,15 @@ export interface ResourceVersionCreatorModelType {
     onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onPromptPageLeave: (action: OnPromptPageLeaveAction, effects: EffectsCommandMap) => void;
+    onPromptPageLeaveConfirm: (action: OnPromptPageLeaveConfirmAction, effects: EffectsCommandMap) => void;
+    onPromptPageLeaveCancel: (action: OnPromptPageLeaveCancelAction, effects: EffectsCommandMap) => void;
     onClickCreateBtn: (action: OnClickCreateBtnAction, effects: EffectsCommandMap) => void;
     onClickCacheBtn: (action: OnClickCacheBtnAction, effects: EffectsCommandMap) => void;
 
     fetchDraft: (action: FetchDraftAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
-    createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
-    saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
+    // createVersion: (action: CreateVersionAction, effects: EffectsCommandMap) => void;
+    // saveDraft: (action: SaveDraftAction, effects: EffectsCommandMap) => void;
     fetchRawProps: (action: FetchRawPropsAction, effects: EffectsCommandMap) => void;
     verifyVersionInput: (action: VerifyVersionInputAction, effects: EffectsCommandMap) => void;
     // 处理从对象导入的数据
@@ -367,33 +380,38 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '972938748$%$%$%$%$%$%23yu4oi234io23hjkfdsasdf',
       });
     },
-    * onPromptPageLeave({}: OnPromptPageLeaveAction, {}: EffectsCommandMap) {
+    * onPromptPageLeave({payload}: OnPromptPageLeaveAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          promptLeavePath: payload.href,
+        },
+      });
+    },
+    * onPromptPageLeaveConfirm({}: OnPromptPageLeaveConfirmAction, {select}: EffectsCommandMap) {
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
 
+      router.push(resourceVersionCreatorPage.promptLeavePath);
     },
-    * onClickCreateBtn({}: OnClickCreateBtnAction, {put}: EffectsCommandMap) {
-      yield put<CreateVersionAction>({
-        type: 'resourceVersionCreatorPage/createVersion',
-        // payload: match.params.id,
-      });
-      yield put<FetchDraftDataAction>({
-        type: 'resourceInfo/fetchDraftData',
-      });
+    * onPromptPageLeaveCancel({}: OnPromptPageLeaveCancelAction, {put}: EffectsCommandMap) {
+      // yield put<ChangeAction>({
+      //   type: 'resourceVersionCreatorPage/change',
+      //   payload: {
+      //     promptLeavePath: '',
+      //   },
+      // });
     },
-    * onClickCacheBtn({}: OnClickCacheBtnAction, {put}: EffectsCommandMap) {
-      yield put<SaveDraftAction>({
-        type: 'resourceVersionCreatorPage/saveDraft',
-      });
-      yield put<FetchDraftDataAction>({
-        type: 'resourceInfo/fetchDraftData',
-      });
-    },
+    * onClickCreateBtn({}: OnClickCreateBtnAction, {put, call, select}: EffectsCommandMap) {
+      // yield put<CreateVersionAction>({
+      //   type: 'resourceVersionCreatorPage/createVersion',
+      //   // payload: match.params.id,
+      // });
 
-    * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
-      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
-        return {
-          resourceVersionCreatorPage,
-        };
-      });
+      const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
       const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
         .filter((dep) => dep.upthrow)
         .map((dep) => dep.id);
@@ -466,7 +484,116 @@ const Model: ResourceVersionCreatorModelType = {
         resourceID: data.resourceId,
         version: data.version,
       }));
+
+      yield put<FetchDraftDataAction>({
+        type: 'resourceInfo/fetchDraftData',
+      });
     },
+    * onClickCacheBtn({}: OnClickCacheBtnAction, {put, select, call}: EffectsCommandMap) {
+
+      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+        resourceInfo, resourceVersionCreatorPage
+      }));
+
+      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+        resourceId: resourceInfo.info?.resourceId || '',
+        draftData: {
+          ...resourceVersionCreatorPage,
+          description: resourceVersionCreatorPage.description.toHTML(),
+          dataIsDirty: false,
+        },
+      };
+      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      fMessage('暂存草稿成功');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          dataIsDirty: false,
+        },
+      });
+
+      yield put<FetchDraftDataAction>({
+        type: 'resourceInfo/fetchDraftData',
+      });
+    },
+
+    // * createVersion({}: CreateVersionAction, {call, select, put}: EffectsCommandMap) {
+    // const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage}: ConnectState) => ({
+    //   resourceVersionCreatorPage,
+    // }));
+    // const baseUpcastResourceIds = resourceVersionCreatorPage.dependencies
+    //   .filter((dep) => dep.upthrow)
+    //   .map((dep) => dep.id);
+    // const resolveResources = resourceVersionCreatorPage.dependencies
+    //   .filter((dep) => !baseUpcastResourceIds.includes(dep.id))
+    //   .map((dep) => ({
+    //     resourceId: dep.id,
+    //     contracts: [
+    //       ...dep.enabledPolicies
+    //         .filter((p) => (p.checked))
+    //         .map((p) => ({policyId: p.id})),
+    //       ...dep.enableReuseContracts
+    //         .filter((c) => (c.checked))
+    //         .map((c) => ({policyId: c.policyId})),
+    //     ],
+    //   }));
+    //
+    // const directlyDependentIds: string[] = resourceVersionCreatorPage.depRelationship.map((drs) => drs.id);
+    // const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
+    //   resourceId: resourceVersionCreatorPage.resourceId,
+    //   version: resourceVersionCreatorPage.version,
+    //   fileSha1: resourceVersionCreatorPage.selectedFileSha1,
+    //   filename: resourceVersionCreatorPage.selectedFileName,
+    //   baseUpcastResources: baseUpcastResourceIds.map((baseUpId) => ({resourceId: baseUpId})),
+    //   dependencies: resourceVersionCreatorPage.dependencies
+    //     .filter((dep) => directlyDependentIds.includes(dep.id))
+    //     .map((dep) => {
+    //       return {
+    //         resourceId: dep.id,
+    //         versionRange: dep.versionRange,
+    //       }
+    //     }),
+    //   resolveResources: resolveResources,
+    //   customPropertyDescriptors: [
+    //     ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+    //       return {
+    //         type: 'readonlyText',
+    //         key: i.key,
+    //         remark: i.description,
+    //         defaultValue: i.value,
+    //       };
+    //     }),
+    //     ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+    //       const isInput: boolean = i.custom === 'input';
+    //       const options: string[] = i.customOption.split(',');
+    //       return {
+    //         type: isInput ? 'editableText' : 'select',
+    //         key: i.key,
+    //         remark: i.description,
+    //         defaultValue: isInput ? i.defaultValue : options[0],
+    //         candidateItems: isInput ? undefined : options,
+    //       };
+    //     }),
+    //   ],
+    //   description: resourceVersionCreatorPage.description.toHTML() === '<p></p>' ? '' : resourceVersionCreatorPage.description.toHTML(),
+    // };
+    //
+    // const {data} = yield call(FServiceAPI.Resource.createVersion, params);
+    // yield put<FetchDataSourceAction>({
+    //   type: 'resourceInfo/fetchDataSource',
+    //   payload: params.resourceId,
+    // });
+    // yield put<ChangeAction>({
+    //   type: 'change',
+    //   payload: initStates,
+    //   caller: '97293874823yu4oi234io23hjkfdsasdf',
+    // });
+    // // router.replace(`/resource/${data.resourceId}/$version/${data.$version}/success`)
+    // router.replace(FUtil.LinkTo.resourceVersionCreateSuccess({
+    //   resourceID: data.resourceId,
+    //   version: data.version,
+    // }));
+    // },
     * fetchDraft({}: FetchDraftAction, {call, put, select}: EffectsCommandMap) {
       const {resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => {
         return {
@@ -586,30 +713,29 @@ const Model: ResourceVersionCreatorModelType = {
         caller: '97293879uoijlkll4823yu4oi234io23hjkfdsasdf',
       });
     },
-    * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
-      const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
-        resourceInfo, resourceVersionCreatorPage
-      }));
-
-      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-        resourceId: resourceInfo.info?.resourceId || '',
-        draftData: {
-          ...resourceVersionCreatorPage,
-          description: resourceVersionCreatorPage.description.toHTML(),
-          dataIsDirty: false,
-        },
-      };
-      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
-      fMessage('暂存草稿成功');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          dataIsDirty: false,
-        },
-        caller: '9734890uoreiwu==293874823yu4oi234io23hjkfdsasdf',
-      });
-
-    },
+    // * saveDraft({}: SaveDraftAction, {call, select, put}: EffectsCommandMap) {
+      // const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceVersionCreatorPage, resourceInfo}: ConnectState) => ({
+      //   resourceInfo, resourceVersionCreatorPage
+      // }));
+      //
+      // const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+      //   resourceId: resourceInfo.info?.resourceId || '',
+      //   draftData: {
+      //     ...resourceVersionCreatorPage,
+      //     description: resourceVersionCreatorPage.description.toHTML(),
+      //     dataIsDirty: false,
+      //   },
+      // };
+      // yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      // fMessage('暂存草稿成功');
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     dataIsDirty: false,
+      //   },
+      //   caller: '9734890uoreiwu==293874823yu4oi234io23hjkfdsasdf',
+      // });
+    // },
     * verifyVersionInput({}: VerifyVersionInputAction, {select, put}: EffectsCommandMap) {
       const {resourceInfo, resourceVersionCreatorPage}: ConnectState = yield select(({resourceInfo, resourceVersionCreatorPage}: ConnectState) => ({
         resourceInfo,

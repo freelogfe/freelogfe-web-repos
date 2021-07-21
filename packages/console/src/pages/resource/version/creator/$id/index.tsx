@@ -14,14 +14,16 @@ import {
 } from '@/models/connect';
 import {
   ChangeAction,
-  CreateVersionAction,
-  InitModelStatesAction, OnClickCacheBtnAction, OnClickCreateBtnAction,
+  // CreateVersionAction,
+  OnClickCacheBtnAction,
+  OnClickCreateBtnAction,
   OnMountPageAction,
+  OnPromptPageLeaveAction,
+  OnPromptPageLeaveCancelAction,
+  OnPromptPageLeaveConfirmAction,
   OnUnmountPageAction,
-  SaveDraftAction,
   VerifyVersionInputAction,
 } from '@/models/resourceVersionCreatorPage';
-import {ChangeAction as GlobalChangeAction} from '@/models/global';
 import {router, withRouter} from 'umi';
 import RouterTypes from 'umi/routerTypes';
 import {FetchDraftDataAction} from "@/models/resourceInfo";
@@ -69,61 +71,21 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
 
   }, [resourceVersionCreatorPage.dataIsDirty]);
 
-  React.useEffect(() => {
-    dispatch<GlobalChangeAction>({
-      type: 'global/change',
-      payload: {
-        route: route,
-      },
-    });
-
-    return () => {
-      dispatch<InitModelStatesAction>({
-        type: 'resourceVersionCreatorPage/initModelStates',
-      });
-    };
-  }, [route]);
-
   // React.useEffect(() => {
-  //   // console.log(match, 'creator902jfsadlk');
-  //   init();
+  //   console.log(route, 'route123412342341234');
+  //   dispatch<GlobalChangeAction>({
+  //     type: 'global/change',
+  //     payload: {
+  //       route: route,
+  //     },
+  //   });
   //
-  //   // return () => {
-  //   //   // console.log(match.params.id, 'match.param90823u947890234890s.id');
-  //   //   dispatch<LeaveAndClearDataAction>({
-  //   //     type: 'resourceVersionCreatorPage/leaveAndClearData',
-  //   //   });
-  //   // }
-  // }, []);
-
-  // async function init() {
-  //   await onChange({resourceId: match.params.id});
-  //   await dispatch<FetchResourceInfoAction>({
-  //     type: 'resourceVersionCreatorPage/fetchResourceInfo',
-  //   });
-  //   await dispatch<FetchDraftAction>({
-  //     type: 'resourceVersionCreatorPage/fetchDraft',
-  //   });
-  // }
-
-  // async function onClickCache() {
-  //   await dispatch<SaveDraftAction>({
-  //     type: 'resourceVersionCreatorPage/saveDraft',
-  //   });
-  //   await dispatch<FetchDraftDataAction>({
-  //     type: 'resourceInfo/fetchDraftData',
-  //   });
-  // }
-  //
-  // async function onClickCreate() {
-  //   await dispatch<CreateVersionAction>({
-  //     type: 'resourceVersionCreatorPage/createVersion',
-  //     // payload: match.params.id,
-  //   });
-  //   await dispatch<FetchDraftDataAction>({
-  //     type: 'resourceInfo/fetchDraftData',
-  //   });
-  // }
+  //   return () => {
+  //     dispatch<InitModelStatesAction>({
+  //       type: 'resourceVersionCreatorPage/initModelStates',
+  //     });
+  //   };
+  // }, [route]);
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
@@ -149,27 +111,25 @@ function VersionCreator({dispatch, route, resourceVersionCreatorPage, match}: Ve
         message={(location: H.Location, action: H.Action) => {
           // console.log(location, action, 'LAAAAL');
           // return window.confirm('还没有保存草稿或发行，现在离开会导致信息丢失');
-          dispatch<ChangeAction>({
-            type: 'resourceVersionCreatorPage/change',
+          const locationHref: string = location.pathname + location.search;
+
+          dispatch<OnPromptPageLeaveAction>({
+            type: 'resourceVersionCreatorPage/onPromptPageLeave',
             payload: {
-              promptLeavePath: location.pathname + location.search,
+              href: locationHref,
             },
-            caller: '2345$#%%#$%#$%#$532434345234324534%#$%#$%#$%#$#$',
           });
+
           fConfirmModal({
             message: '还没有保存草稿或发行，现在离开会导致信息丢失',
             onOk() {
-              // console.log('OK');
-              router.push(location.pathname + location.search);
+              dispatch<OnPromptPageLeaveConfirmAction>({
+                type: 'resourceVersionCreatorPage/onPromptPageLeaveConfirm',
+              });
             },
             onCancel() {
-              // console.log('Cancel');
-              dispatch<ChangeAction>({
-                type: 'resourceVersionCreatorPage/change',
-                payload: {
-                  promptLeavePath: '',
-                },
-                caller: '234532434()))(*())(()345234324534%#$%#$%#$%#$#$',
+              dispatch<OnPromptPageLeaveCancelAction>({
+                type: 'resourceVersionCreatorPage/onPromptPageLeaveCancel'
               });
             },
           });
