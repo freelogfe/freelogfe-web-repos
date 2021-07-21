@@ -1386,28 +1386,7 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
   const draftData: ResourceVersionCreatorPageModelState = data3.draftData;
 
   // 本次要添加全部资源 ID
-  // const allIDs: string[] = [
-  //   ...draftData.depRelationship
-  //     .map((r: any) => r.id),
-  //   ...draftData.depRelationship
-  //     .map((r: any) => r.children)
-  //     .flat()
-  //     .map((c: any) => c.id),
-  // ];
   const allIDs: string[] = draftData.dependencies.map((d) => d.id);
-
-  // if (allIDs.length === 0) {
-  //   return yield put<ChangeAction>({
-  //     type: 'change',
-  //     payload: {
-  //       depRelationship: [
-  //         ...relationships,
-  //         ...resourceVersionCreatorPage.depRelationship,
-  //       ],
-  //     },
-  //     caller: '$97&*&&293874823yu4oi234io23hjkfdsasdf',
-  //   });
-  // }
 
   const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: allIDs.join(','),
@@ -1440,8 +1419,6 @@ async function handledDraft({resourceID}: HandledDraftParamsType): Promise<Resou
 
   // 组织添加的依赖数据
   const dependencies: DepResources = (data as any[]).map<DepResources[number]>((dr: any) => {
-
-    // console.log(dr, 'dr!@#$!@#$!@#4213421342134');
 
     const depC: any[] = data1.filter((dc: any) => dc.licensorId === dr.resourceId);
     const allDepCIDs: string[] = depC.map<string>((adcs) => adcs.policyId);
