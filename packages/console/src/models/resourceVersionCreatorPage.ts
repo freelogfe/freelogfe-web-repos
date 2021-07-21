@@ -12,7 +12,7 @@ import FUtil1 from "@/utils";
 import {FUtil, FServiceAPI} from '@freelog/tools-lib';
 import fConfirmModal from "@/components/fConfirmModal";
 
-export type DepResources = WholeReadonly<{
+export type DepResources = {
   id: string;
   title: string;
   resourceType: string;
@@ -39,14 +39,14 @@ export type DepResources = WholeReadonly<{
     code: string;
     status: 0 | 1;
   }[];
-}[]>;
+}[];
 
-export type Relationships = WholeReadonly<{
+export type Relationships = {
   id: string;
   children: Readonly<{
     id: string;
   }>[];
-}[]>;
+}[];
 
 export interface ResourceVersionCreatorPageModelState {
   resourceId: string;
@@ -64,8 +64,7 @@ export interface ResourceVersionCreatorPageModelState {
   selectedFileName: string;
   selectedFileSha1: string;
   selectedFileOrigin: string;
-  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */
-  ;
+  selectedFileStatus: -3 /* 上传成功 */ | -2 /* 正在上传 */ | -1 /* 正在校验 */ | 0 /* 未上传 */ | 1 /* 文件太大 */ | 2 /* 类型不符 */ | 3 /* 自己已上传 */ | 4 /* 他人已上传 */;
   selectedFileUsedResource: {
     resourceID: string;
     resourceName: string;
