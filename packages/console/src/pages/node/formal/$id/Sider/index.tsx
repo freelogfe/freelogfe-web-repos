@@ -45,17 +45,6 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
               iconStyle={{fontSize: 14}}
             />
           </Space>
-          {/*<a*/}
-          {/*  className={styles.url}*/}
-          {/*  // href={nodeManagerPage.nodeUrl}*/}
-          {/*  onClick={() => {*/}
-          {/*    window.open(nodeManagerPage.nodeUrl);*/}
-          {/*  }}*/}
-          {/*>{nodeManagerPage.nodeUrl}</a>*/}
-          {/*<FCopyToClipboard*/}
-          {/*  text={nodeManagerPage.nodeUrl}*/}
-          {/*  title={'复制节点地址'}*/}
-          {/*/>*/}
         </div>
 
         <div style={{height: 35}}/>
