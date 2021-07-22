@@ -17,8 +17,8 @@ interface SiderProps {
   match: {
     params: {
       id: string;
-    }
-  }
+    };
+  };
 }
 
 function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
