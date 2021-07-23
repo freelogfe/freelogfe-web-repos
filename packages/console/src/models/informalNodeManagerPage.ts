@@ -950,8 +950,6 @@ const Model: InformalNodeManagerPageModelType = {
               : 'noSearchResult',
         },
       });
-
-      // console.log('fetchExhibitList 22222');
     },
     * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
