@@ -15,8 +15,9 @@ import {
   InformalNodeManagerPageModelState,
 } from "@/models/connect";
 import {
-  ChangeAction,
-  FetchExhibitListAction, OnChangeExhibitKeywordsAction, OnChangeExhibitStatusAction,
+
+  OnChangeExhibitKeywordsAction,
+  OnChangeExhibitStatusAction,
   OnChangeExhibitTypeAction,
   OnClickExhibitsAddBtnAction,
   OnClickExhibitsReplaceBtnAction,
@@ -50,23 +51,15 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
     return (<FLoadingTip height={'calc(100vh - 94px)'}/>);
   }
 
-  async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'informalNodeManagerPage/change',
-      payload,
-    });
-  }
-
   return (<>
     {
-      informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords === ''
+      // informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords === ''
+      informalNodeManagerPage.exhibitPageDataState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前测试节点没有添加展品'}
           btnText={'添加测试展品'}
           onClick={() => {
-            // console.log('@#$!@#$!@#$@#$90j.k23');
-            // onChange({addExhibitDrawerVisible: true});
             dispatch<OnClickExhibitsAddBtnAction>({
               type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
             });
@@ -74,7 +67,6 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
         />)
         : (<FInfiniteScroll
           loadMore={() => {
-            // console.log('1234####0-p23[k,l;dsf#');
             dispatch<OnLoadMoreExhibitsAction>({
               type: 'informalNodeManagerPage/onLoadMoreExhibits',
             });
@@ -156,13 +148,6 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                   value={informalNodeManagerPage.exhibitPageFilterKeywords}
                   debounce={300}
                   onDebounceChange={async (value) => {
-                    // await onChange({exhibitPageFilterKeywords: value});
-                    // await dispatch<FetchExhibitListAction>({
-                    //   type: 'informalNodeManagerPage/fetchExhibitList',
-                    //   payload: {
-                    //     isRematch: false,
-                    //   },
-                    // });
                     dispatch<OnChangeExhibitKeywordsAction>({
                       type: 'informalNodeManagerPage/onChangeExhibitKeywords',
                       payload: {
@@ -175,7 +160,7 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
             </Space>
           </div>
           {
-            informalNodeManagerPage.exhibitPageExhibitList.length === 0
+            informalNodeManagerPage.exhibitPageDataState === 'noSearchResult'
               ? (<FNoDataTip
                 height={'calc(100vh - 294px)'}
                 tipText={'无筛选结果'}

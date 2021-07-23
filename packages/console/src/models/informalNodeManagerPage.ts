@@ -130,6 +130,7 @@ export interface InformalNodeManagerPageModelState {
   exhibitPageStatusOptions: { value: string; text: string; }[];
   exhibitPageSelectedStatus: '0' | '1' | '2';
   exhibitPageFilterKeywords: string;
+  exhibitPageDataState: 'loading' | 'display' | 'noData' | 'noSearchResult';
   exhibitPageExhibitsTotal: number;
   exhibitPageExhibitList: {
     id: string;
@@ -660,6 +661,7 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   ],
   exhibitPageSelectedStatus: '2',
   exhibitPageFilterKeywords: '',
+  exhibitPageDataState: 'loading',
   exhibitPageExhibitList: [],
   exhibitPageExhibitsTotal: -1,
 
@@ -838,7 +840,6 @@ const Model: InformalNodeManagerPageModelType = {
       };
 
       const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
-      // console.log(data1, 'DDD@@@@890j23poijrl;adsf@');
 
       const {rules: rulesObj} = compile(data1.ruleText);
 
@@ -851,10 +852,6 @@ const Model: InformalNodeManagerPageModelType = {
           // console.log(ro, dl, '#############***********;ojsifw389');
           return ro.exhibitName === dl.testResourceName;
         });
-
-        // console.log(rulesObjRule, 'rulesObjRulerulesObjRule!!!@@@@@@');
-
-        // console.log(dl, 'dl!@#$@#$@#$!@#$@#$12341234');
 
         const rule: InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]['rule'] = {
           add: operations.includes('add') ? {
@@ -944,8 +941,15 @@ const Model: InformalNodeManagerPageModelType = {
           }),
           exhibitPageExhibitsTotal: data.totalItem,
           exhibitPageExhibitList: exhibitList,
+          exhibitPageDataState: exhibitList.length > 0
+            ? 'display'
+            : informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords
+              ? 'noData'
+              : 'noSearchResult',
         },
       });
+
+      // console.log('fetchExhibitList 22222');
     },
     * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -960,7 +964,8 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
     * onChangeExhibitType({payload}: OnChangeExhibitTypeAction, {put}: EffectsCommandMap) {
-      // await onChange({exhibitPageSelectedType: value});
+
+      console.log('onChangeExhibitType 11111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -974,6 +979,8 @@ const Model: InformalNodeManagerPageModelType = {
           isRestart: true,
         },
       });
+      console.log('onChangeExhibitType 22222');
+
     },
     * onChangeExhibitStatus({payload}: OnChangeExhibitStatusAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1451,7 +1458,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
       yield put<FetchExhibitListAction>({
-        type: 'informalNodeManagerPage/fetchExhibitList',
+        type: 'fetchExhibitList',
         payload: {
           isRematch: false,
         },
