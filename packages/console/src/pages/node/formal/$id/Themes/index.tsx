@@ -60,12 +60,14 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
               className={styles.input}
               theme="dark"
               debounce={300}
-              onDebounceChange={(value) => dispatch<OnChangeThemeAction>({
-                type: 'nodeManagerPage/onChangeTheme',
-                payload: {
-                  themeInputFilter: value,
-                },
-              })}
+              onDebounceChange={(value) => {
+                dispatch<OnChangeThemeAction>({
+                  type: 'nodeManagerPage/onChangeTheme',
+                  payload: {
+                    themeInputFilter: value,
+                  },
+                });
+              }}
             />
           </div>
           {
