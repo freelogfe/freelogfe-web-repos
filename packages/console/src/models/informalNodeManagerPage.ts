@@ -277,6 +277,39 @@ export interface FetchExhibitListAction extends AnyAction {
   };
 }
 
+export interface OnClickExhibitsAddBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExhibitsAddBtn';
+}
+
+export interface OnClickExhibitsReplaceBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExhibitsReplaceBtn';
+}
+
+export interface OnChangeExhibitTypeAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeExhibitType';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChangeExhibitStatusAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeExhibitStatus';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChangeExhibitKeywordsAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeExhibitKeywords';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnLoadMoreExhibitsAction extends AnyAction {
+  type: 'informalNodeManagerPage/onLoadMoreExhibits';
+}
+
 export interface FetchThemeListAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchThemeList' | 'fetchThemeList';
   payload: {
@@ -514,8 +547,17 @@ interface InformalNodeManagerPageModelType {
     onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
     onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
     onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
+
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
+
     fetchExhibitList: (action: FetchExhibitListAction, effects: EffectsCommandMap) => void;
+    onClickExhibitsAddBtn: (action: OnClickExhibitsAddBtnAction, effects: EffectsCommandMap) => void;
+    onClickExhibitsReplaceBtn: (action: OnClickExhibitsReplaceBtnAction, effects: EffectsCommandMap) => void;
+    onChangeExhibitType: (action: OnChangeExhibitTypeAction, effects: EffectsCommandMap) => void;
+    onChangeExhibitStatus: (action: OnChangeExhibitStatusAction, effects: EffectsCommandMap) => void;
+    onChangeExhibitKeywords: (action: OnChangeExhibitKeywordsAction, effects: EffectsCommandMap) => void;
+    onLoadMoreExhibits: (action: OnLoadMoreExhibitsAction, effects: EffectsCommandMap) => void;
+
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
@@ -905,6 +947,71 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
+    * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {addExhibitDrawerVisible: true},
+      });
+    },
+    * onClickExhibitsReplaceBtn({}: OnClickExhibitsReplaceBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {replaceModalVisible: true},
+      });
+    },
+    * onChangeExhibitType({payload}: OnChangeExhibitTypeAction, {put}: EffectsCommandMap) {
+      // await onChange({exhibitPageSelectedType: value});
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibitPageSelectedType: payload.value,
+        },
+      });
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+          isRestart: true,
+        },
+      });
+    },
+    * onChangeExhibitStatus({payload}: OnChangeExhibitStatusAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {exhibitPageSelectedStatus: payload.value as '0'},
+      });
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+          isRestart: true,
+        },
+      });
+    },
+    * onChangeExhibitKeywords({payload}: OnChangeExhibitKeywordsAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {exhibitPageFilterKeywords: payload.value},
+      });
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+          isRestart: true,
+        },
+      });
+    },
+    * onLoadMoreExhibits({}: OnLoadMoreExhibitsAction, {put}: EffectsCommandMap) {
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+          isRestart: false,
+        },
+      });
+    },
+
+
     * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
 
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({

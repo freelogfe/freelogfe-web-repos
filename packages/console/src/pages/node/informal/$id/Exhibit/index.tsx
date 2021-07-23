@@ -16,7 +16,11 @@ import {
 } from "@/models/connect";
 import {
   ChangeAction,
-  FetchExhibitListAction,
+  FetchExhibitListAction, OnChangeExhibitKeywordsAction, OnChangeExhibitStatusAction,
+  OnChangeExhibitTypeAction,
+  OnClickExhibitsAddBtnAction,
+  OnClickExhibitsReplaceBtnAction,
+  OnLoadMoreExhibitsAction,
   OnMountExhibitPageAction,
 } from "@/models/informalNodeManagerPage";
 import ExhibitTable from "./ExhibitTable";
@@ -62,12 +66,18 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
           btnText={'添加测试展品'}
           onClick={() => {
             // console.log('@#$!@#$!@#$@#$90j.k23');
-            onChange({addExhibitDrawerVisible: true});
+            // onChange({addExhibitDrawerVisible: true});
+            dispatch<OnClickExhibitsAddBtnAction>({
+              type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
+            });
           }}
         />)
         : (<FInfiniteScroll
           loadMore={() => {
-            console.log('1234####0-p23[k,l;dsf#');
+            // console.log('1234####0-p23[k,l;dsf#');
+            dispatch<OnLoadMoreExhibitsAction>({
+              type: 'informalNodeManagerPage/onLoadMoreExhibits',
+            });
           }}
           hasMore={true}
         >
@@ -78,7 +88,9 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
               <FTextBtn
                 type="default"
                 onClick={() => {
-                  onChange({addExhibitDrawerVisible: true});
+                  dispatch<OnClickExhibitsAddBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
+                  });
                 }}>
                 <Space size={5}>
                   <FAdd/>
@@ -90,7 +102,10 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
               <FTextBtn
                 type="default"
                 onClick={() => {
-                  onChange({replaceModalVisible: true});
+                  // onChange({replaceModalVisible: true});
+                  dispatch<OnClickExhibitsReplaceBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExhibitsReplaceBtn',
+                  });
                 }}>
                 <Space size={5}>
                   <FMappingRuleReplace/>
@@ -103,12 +118,11 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                 <span>类型：</span>
                 <FDropdownMenu
                   options={informalNodeManagerPage.exhibitPageTypeOptions}
-                  onChange={async (value) => {
-                    await onChange({exhibitPageSelectedType: value});
-                    await dispatch<FetchExhibitListAction>({
-                      type: 'informalNodeManagerPage/fetchExhibitList',
+                  onChange={(value) => {
+                    dispatch<OnChangeExhibitTypeAction>({
+                      type: 'informalNodeManagerPage/onChangeExhibitType',
                       payload: {
-                        isRematch: false,
+                        value: value,
                       },
                     });
                   }}
@@ -122,12 +136,11 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                 <span>状态：</span>
                 <FDropdownMenu
                   options={informalNodeManagerPage.exhibitPageStatusOptions}
-                  onChange={async (value) => {
-                    await onChange({exhibitPageSelectedStatus: value as '0'});
-                    await dispatch<FetchExhibitListAction>({
-                      type: 'informalNodeManagerPage/fetchExhibitList',
+                  onChange={(value) => {
+                    dispatch<OnChangeExhibitStatusAction>({
+                      type: 'informalNodeManagerPage/onChangeExhibitStatus',
                       payload: {
-                        isRematch: false,
+                        value: value,
                       },
                     });
                   }}
@@ -143,11 +156,17 @@ function Exhibit({dispatch, informalNodeManagerPage}: ExhibitProps) {
                   value={informalNodeManagerPage.exhibitPageFilterKeywords}
                   debounce={300}
                   onDebounceChange={async (value) => {
-                    await onChange({exhibitPageFilterKeywords: value});
-                    await dispatch<FetchExhibitListAction>({
-                      type: 'informalNodeManagerPage/fetchExhibitList',
+                    // await onChange({exhibitPageFilterKeywords: value});
+                    // await dispatch<FetchExhibitListAction>({
+                    //   type: 'informalNodeManagerPage/fetchExhibitList',
+                    //   payload: {
+                    //     isRematch: false,
+                    //   },
+                    // });
+                    dispatch<OnChangeExhibitKeywordsAction>({
+                      type: 'informalNodeManagerPage/onChangeExhibitKeywords',
                       payload: {
-                        isRematch: false,
+                        value: value,
                       },
                     });
                   }}
