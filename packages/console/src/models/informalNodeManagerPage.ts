@@ -943,7 +943,9 @@ const Model: InformalNodeManagerPageModelType = {
           exhibitPageExhibitList: exhibitList,
           exhibitPageDataState: exhibitList.length > 0
             ? 'display'
-            : informalNodeManagerPage.exhibitPageExhibitList.length === 0 && informalNodeManagerPage.exhibitPageSelectedType === '-1' && informalNodeManagerPage.exhibitPageSelectedStatus === '2' && informalNodeManagerPage.exhibitPageFilterKeywords
+            : informalNodeManagerPage.exhibitPageSelectedType === '-1'
+            && informalNodeManagerPage.exhibitPageSelectedStatus === '2'
+            && informalNodeManagerPage.exhibitPageFilterKeywords === ''
               ? 'noData'
               : 'noSearchResult',
         },
