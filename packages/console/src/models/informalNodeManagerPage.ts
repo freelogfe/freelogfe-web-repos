@@ -152,6 +152,7 @@ export interface InformalNodeManagerPageModelState {
   }[];
 
   themePageFilterKeywords: string;
+  themePageDataState: 'loading' | 'display' | 'noData' | 'noSearchResult';
   themePageThemesTotal: number;
   themePageThemeList: {
     id: string;
@@ -317,6 +318,25 @@ export interface FetchThemeListAction extends AnyAction {
     isRematch?: boolean;
     isRestart?: boolean;
   };
+}
+
+export interface OnClickThemesAddBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExhibitsAddBtn';
+}
+
+export interface OnClickThemesReplaceBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickExhibitsReplaceBtn';
+}
+
+export interface OnChangeThemeKeywordsAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeThemeKeywords';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnLoadMoreThemesAction extends AnyAction {
+  type: 'informalNodeManagerPage/onLoadMoreThemes';
 }
 
 export interface FetchRulesAction extends AnyAction {
@@ -560,6 +580,11 @@ interface InformalNodeManagerPageModelType {
     onLoadMoreExhibits: (action: OnLoadMoreExhibitsAction, effects: EffectsCommandMap) => void;
 
     fetchThemeList: (action: FetchThemeListAction, effects: EffectsCommandMap) => void;
+    onClickThemesAddBtn: (action: OnClickThemesAddBtnAction, effects: EffectsCommandMap) => void;
+    onClickThemesReplaceBtn: (action: OnClickThemesReplaceBtnAction, effects: EffectsCommandMap) => void;
+    onChangeThemeKeywords: (action: OnChangeThemeKeywordsAction, effects: EffectsCommandMap) => void;
+    onLoadMoreThemes: (action: OnLoadMoreThemesAction, effects: EffectsCommandMap) => void;
+
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
     saveDataRules: (action: SaveDataRulesAction, effects: EffectsCommandMap) => void;
@@ -666,8 +691,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   exhibitPageExhibitsTotal: -1,
 
   themePageFilterKeywords: '',
-  themePageThemeList: [],
+  themePageDataState: 'loading',
   themePageThemesTotal: -1,
+  themePageThemeList: [],
 
   rulePageStatus: 'normal',
   rulePageRuleList: [],
@@ -1050,97 +1076,138 @@ const Model: InformalNodeManagerPageModelType = {
       const {rules: rulesObj} = compile(data1.ruleText);
       // console.log(rulesObj, 'rulesObjiosfjewwef');
 
+      const themePageThemeList: InformalNodeManagerPageModelState['themePageThemeList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['themePageThemeList'][number]>((dl) => {
+        const operations: string[] = dl.rules[0]?.operations || [];
+        // console.log(operations, 'operations12334');
+        const stateInfo = dl.stateInfo;
+
+        const rulesObjRule = rulesObj.find((ro: any) => {
+          // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
+          return ro.exhibitName === dl.testResourceName;
+        });
+
+        // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
+        const rule: InformalNodeManagerPageModelState['themePageThemeList'][number]['rule'] = {
+          add: operations.includes('add') ? {
+            exhibit: dl.testResourceName,
+            source: {
+              type: dl.originInfo.type,
+              name: dl.originInfo.name,
+              version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
+              versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
+            }
+          } : undefined,
+          alter: operations.includes('alter') ? dl.testResourceName : undefined,
+          labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
+          title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
+          cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
+          // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+          // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
+          attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
+            return {
+              type: a.operation,
+              theKey: a.key,
+              value: a.value,
+              description: a.description,
+            };
+          }) : undefined,
+          // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
+          active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
+          replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
+            // console.log(rr, 'rr!!@#$#$@#$@#$444444');
+            return {
+              replaced: {
+                ...rr.replaced,
+                versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
+              },
+              replacer: {
+                ...rr.replacer,
+                versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
+              },
+              scopes: rr.scopes && (rr.scopes as any[])
+                .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
+                  // console.log(ss, 'ss!!!!@@@@##');
+                  return ss.map((sss: any) => {
+                    return {
+                      ...sss,
+                      versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
+                    };
+                  });
+                }),
+            };
+          }),
+        };
+        return {
+          id: dl.testResourceId,
+          cover: dl.stateInfo.coverInfo.coverImages[0] || '',
+          name: dl.testResourceName,
+          identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
+          rule: rule,
+          version: dl.originInfo.version,
+          isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
+          isAuth: true,
+          authErrorText: '',
+          originInfo: dl.originInfo,
+        };
+      }).sort((a, b) => {
+        if (a.isOnline && !b.isOnline) {
+          return -1;
+        }
+        return 0;
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ruleText: data1.ruleText,
-          // themeListIsLoading: false,
           themePageThemesTotal: data.totalItem,
-          themePageThemeList: (data.dataList as any[]).map<InformalNodeManagerPageModelState['themePageThemeList'][number]>((dl) => {
-
-            // console.log(dl, 'dl!@@#$#$');
-
-            const operations: string[] = dl.rules[0]?.operations || [];
-            // console.log(operations, 'operations12334');
-            const stateInfo = dl.stateInfo;
-
-            const rulesObjRule = rulesObj.find((ro: any) => {
-              // console.log(ro, dl, '98uwi@#DSAFUHJ(*)hjkljl');
-              return ro.exhibitName === dl.testResourceName;
-            });
-
-            // operations.map<InformalNodeManagerPageModelState['exhibitList'][number]['rules'][number]>((o) => {
-            const rule: InformalNodeManagerPageModelState['themePageThemeList'][number]['rule'] = {
-              add: operations.includes('add') ? {
-                exhibit: dl.testResourceName,
-                source: {
-                  type: dl.originInfo.type,
-                  name: dl.originInfo.name,
-                  version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
-                  versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-                }
-              } : undefined,
-              alter: operations.includes('alter') ? dl.testResourceName : undefined,
-              labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
-              title: operations.includes('setTitle') ? stateInfo.titleInfo.title : undefined,
-              cover: operations.includes('setCover') ? stateInfo.coverInfo.coverImages[0] : undefined,
-              // online: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-              // offline: operations.includes('setOnlineStatus') && stateInfo.onlineStatusInfo.onlineStatus === 0 ? true : undefined,
-              attrs: rulesObjRule?.attrs ? rulesObjRule.attrs.map((a: any) => {
-                return {
-                  type: a.operation,
-                  theKey: a.key,
-                  value: a.value,
-                  description: a.description,
-                };
-              }) : undefined,
-              // active: activatedTheme === dl.testResourceName ? dl.testResourceName : undefined,
-              active: dl.stateInfo.themeInfo.ruleId !== 'default' ? dl.testResourceName : undefined,
-              replaces: rulesObjRule?.replaces && (rulesObjRule?.replaces as any[]).map<NonNullable<IMappingRule['replaces']>[0]>((rr: any) => {
-                // console.log(rr, 'rr!!@#$#$@#$@#$444444');
-                return {
-                  replaced: {
-                    ...rr.replaced,
-                    versionRange: (rr.replaced.versionRange && rr.replaced.versionRange !== '*') ? rr.replaced.versionRange : undefined,
-                  },
-                  replacer: {
-                    ...rr.replacer,
-                    versionRange: (rr.replacer.versionRange && rr.replacer.versionRange !== 'latest') ? rr.replacer.versionRange : undefined,
-                  },
-                  scopes: rr.scopes && (rr.scopes as any[])
-                    .map<NonNullable<IMappingRule['replaces']>[0]['scopes'][0]>((ss: any) => {
-                      // console.log(ss, 'ss!!!!@@@@##');
-                      return ss.map((sss: any) => {
-                        return {
-                          ...sss,
-                          versionRange: (sss.versionRange && sss.versionRange !== 'latest') ? sss.versionRange : undefined,
-                        };
-                      });
-                    }),
-                };
-              }),
-            };
-            return {
-              id: dl.testResourceId,
-              cover: dl.stateInfo.coverInfo.coverImages[0] || '',
-              name: dl.testResourceName,
-              identity: !!dl.associatedPresentableId ? 'exhibit' : dl.originInfo.type,
-              rule: rule,
-              version: dl.originInfo.version,
-              isOnline: activatedTheme ? activatedTheme === dl.testResourceName : stateInfo.onlineStatusInfo.onlineStatus === 1,
-              isAuth: true,
-              authErrorText: '',
-              originInfo: dl.originInfo,
-            };
-          }).sort((a, b) => {
-            if (a.isOnline && !b.isOnline) {
-              return -1;
-            }
-            return 0;
-          }),
+          themePageThemeList: themePageThemeList,
+          themePageDataState: themePageThemeList.length > 0
+            ? 'display'
+            : informalNodeManagerPage.themePageFilterKeywords === ''
+              ? 'noData'
+              : 'noSearchResult',
         },
       });
     },
+    * onClickThemesAddBtn({}: OnClickThemesAddBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          addExhibitDrawerVisible: true,
+        },
+      });
+    },
+    * onClickThemesReplaceBtn({}: OnClickThemesReplaceBtnAction, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {replaceModalVisible: true},
+      });
+    },
+    * onChangeThemeKeywords({payload}: OnChangeThemeKeywordsAction, {put}: EffectsCommandMap) {
+      yield put({
+        type: 'change',
+        payload: {themePageFilterKeywords: payload.value}
+      });
+
+      yield put<FetchThemeListAction>({
+        type: 'fetchThemeList',
+        payload: {
+          isRestart: true,
+          isRematch: false,
+        },
+      });
+    },
+    * onLoadMoreThemes({}: OnLoadMoreThemesAction, {put}: EffectsCommandMap) {
+      yield put<FetchExhibitListAction>({
+        type: 'fetchExhibitList',
+        payload: {
+          isRematch: false,
+          isRestart: false,
+        },
+      });
+    },
+
     * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
       const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
         informalNodeManagerPage,

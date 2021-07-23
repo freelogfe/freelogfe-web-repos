@@ -6,8 +6,10 @@ import {Space} from "antd";
 import {FTextBtn} from "@/components/FButton";
 import {
   ChangeAction,
-  FetchThemeListAction,
   InformalNodeManagerPageModelState,
+  OnChangeThemeKeywordsAction,
+  OnClickThemesAddBtnAction,
+  OnClickThemesReplaceBtnAction,
   OnMountThemePageAction,
   SaveDataRulesAction,
 } from "@/models/informalNodeManagerPage";
@@ -61,14 +63,14 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
 
   return (<>
     {
-      informalNodeManagerPage.themePageThemeList.length === 0 && !informalNodeManagerPage.themePageFilterKeywords
+      informalNodeManagerPage.themePageDataState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 94px)'}
           tipText={'当前节点没有添加主题展品'}
           btnText={'添加测试主题展品'}
           onClick={() => {
-            onChange({
-              addExhibitDrawerVisible: true,
+            dispatch<OnClickThemesAddBtnAction>({
+              type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
             });
           }}
         />)
@@ -80,8 +82,8 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               <FTextBtn
                 type="default"
                 onClick={() => {
-                  onChange({
-                    addExhibitDrawerVisible: true,
+                  dispatch<OnClickThemesAddBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExhibitsAddBtn',
                   });
                 }}>
                 <Space size={5}>
@@ -93,7 +95,9 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
               <FTextBtn
                 type="default"
                 onClick={() => {
-                  onChange({replaceModalVisible: true});
+                  dispatch<OnClickThemesReplaceBtnAction>({
+                    type: 'informalNodeManagerPage/onClickExhibitsReplaceBtn',
+                  });
                 }}>
                 <Space size={5}>
                   <FMappingRuleReplace/>
@@ -106,15 +110,11 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                   theme={'dark'}
                   value={informalNodeManagerPage.themePageFilterKeywords}
                   debounce={300}
-                  onDebounceChange={async (value) => {
-                    await onChange({
-                      themePageFilterKeywords: value
-                    });
-
-                    dispatch<FetchThemeListAction>({
-                      type: 'informalNodeManagerPage/fetchThemeList',
+                  onDebounceChange={(value) => {
+                    dispatch<OnChangeThemeKeywordsAction>({
+                      type: 'informalNodeManagerPage/onChangeThemeKeywords',
                       payload: {
-                        isRestart: true,
+                        value: value,
                       },
                     });
                   }}
@@ -124,7 +124,7 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
           </div>
 
           {
-            informalNodeManagerPage.themePageThemeList.length === 0
+            informalNodeManagerPage.themePageDataState === 'noSearchResult'
               ? (<FNoDataTip
                 height={'calc(100vh - 70px - 24px - 100px - 100px)'}
                 tipText={'无搜索结果'}
@@ -259,46 +259,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
         </>)
     }
 
-    {/*<AddInformExhibitDrawer*/}
-    {/*  visible={informalNodeManagerPage.addThemeDrawerVisible}*/}
-    {/*  isTheme={true}*/}
-    {/*  onCancel={() => {*/}
-    {/*    onChange({*/}
-    {/*      addThemeDrawerVisible: false,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  onConfirm={async (value) => {*/}
-    {/*    // console.log(value, 'VVVV234pjl;kdsfl;kdf;lVV');*/}
-    {/*    await onChange({*/}
-    {/*      addThemeDrawerVisible: false,*/}
-    {/*    });*/}
-    {/*    await dispatch<SaveDataRulesAction>({*/}
-    {/*      type: 'informalNodeManagerPage/saveDataRules',*/}
-    {/*      payload: {*/}
-    {/*        type: 'append',*/}
-    {/*        data: value.names.map((n) => {*/}
-    {/*          return {*/}
-    {/*            operation: 'add',*/}
-    {/*            exhibitName: n.split('/')[1] + `_${FUtil.Tool.generateRandomCode()}`,*/}
-    {/*            candidate: {*/}
-    {/*              name: n,*/}
-    {/*              versionRange: 'latest',*/}
-    {/*              type: value.identity,*/}
-    {/*            },*/}
-    {/*          };*/}
-    {/*        }),*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*    await dispatch<FetchThemeListAction>({*/}
-    {/*      type: 'informalNodeManagerPage/fetchThemeList',*/}
-    {/*      payload: {*/}
-    {/*        isRematch: false,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*  disabledResourceNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'resource').map((e) => e.originInfo.name)}*/}
-    {/*  disabledObjectNames={informalNodeManagerPage.themeList.filter((e) => e.originInfo.type === 'object').map((e) => e.originInfo.name)}*/}
-    {/*/>*/}
   </>);
 }
 
