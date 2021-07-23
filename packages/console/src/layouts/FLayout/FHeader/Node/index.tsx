@@ -29,7 +29,7 @@ function Node({dispatch, nodes, router: routerObj}: NodeProps) {
   const nodeId: string | null = (routerObj.location.pathname.match(/\/node\/formal\/(\d*)/) || routerObj.location.pathname.match(/\/node\/informal\/(\d*)/) || [null, null])[1];
 
   function onClickNodes(value: string) {
-    console.log(value, '!@#$!@#$!@#$');
+    // console.log(value, '!@#$!@#$!@#$');
     return router.push(FUtil.LinkTo.nodeManagement({nodeID: Number(value)}));
   }
 
