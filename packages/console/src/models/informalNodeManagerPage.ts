@@ -649,7 +649,7 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onMountPageSider({payload}: OnMountPageSiderAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
-        type: 'informalNodeManagerPage/change',
+        type: 'change',
         payload: {
           nodeID: payload.nodeID,
         },
