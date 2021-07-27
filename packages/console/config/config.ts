@@ -4,11 +4,13 @@ import * as path from 'path';
 import * as os from 'os';
 import routes from './routes';
 
-const freelogDir = path.resolve(os.homedir(), '.freelog/');
-const authInfoPath = path.resolve(freelogDir, 'authInfo.json');
-if (!fs.existsSync(authInfoPath)) {
-  throw new Error('请登录');
-}
+// const freelogDir = path.resolve(os.homedir(), '.freelog/');
+// const authInfoPath = path.resolve(freelogDir, 'authInfo.json');
+// if (!fs.existsSync(authInfoPath)) {
+//   throw new Error('请登录');
+// }
+
+const Cookie = 'locale=en-us; authInfo=eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDI4LCJ1c2VybmFtZSI6IjEyMzQ1Njc2Nzg5IiwidXNlclR5cGUiOjEsIm1vYmlsZSI6IjE4NTY1Njg0MDkwIiwiZW1haWwiOiIiLCJpc3MiOiJodHRwczovL2lkZW50aXR5LmZyZWVsb2cuY29tIiwic3ViIjoiNTAwMjgiLCJhdWQiOiJmcmVlbG9nLXdlYnNpdGUiLCJleHAiOjE2Mjg2NjgyNjYsImlhdCI6MTYyNzM3MjI2NiwianRpIjoiNTdkODAxNGZiOGFhNGIwMWE4YjQ4NDVlZTFlOGNmMjMifQ==.03dd6615a2312dcc07012dba520d942585b1ebd28dc90f6cfc380b73e62ce42a319f3ed212790f0e6fa2627b3b81564bad9bb44c199214a0ebf8373e03aeddd11fa257769ee710ee4f08170860f1c941c5f5cdf1e856dadda24d15ed51d5a4c8943d317e45359e9dac6278d660e2c2bd29c88607ec0147c44b8cecba72ea42f3; uid=50028';
 
 // ref: https://umijs.org/config/
 const config: IConfig | any = {
@@ -113,8 +115,8 @@ const config: IConfig | any = {
         secure: false,
         changeOrigin: true,
         headers: {
-          'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          // 'Cookie': 'locale=zh-cn; authInfo=eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDE3LCJ1c2VybmFtZSI6Inl1bGlhbmciLCJ1c2VyVHlwZSI6MSwibW9iaWxlIjoiMTg5MjM4MDM1OTMiLCJlbWFpbCI6IjQ4OTY4MTlAcXEuY29tIiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5mcmVlbG9nLmNvbSIsInN1YiI6IjUwMDE3IiwiYXVkIjoiZnJlZWxvZy13ZWJzaXRlIiwiZXhwIjoxNjIwOTg1MzU5LCJpYXQiOjE2MTk2ODkzNTksImp0aSI6ImU3YmI5Yzc4YjIwNjQ0YmZiNzg5MzY4YzNkZDE0NTc0In0=.ae88b456ec2927790f13590ad422d00b497fea1167d6dc2e7db096916edba47c7e017cf302f7e278984af66eb7e7efebdf2ba61863e80c16af2fa04eaeca266c20c8347773a057d39c4a59a501d9e4f3807556249413950d48ea7a431ca487f1d7a2ba717ad958fba119a45174f60160aeb9e671cb6396098e07da6870f0f382; uid=50017',
+          // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
+          'Cookie': Cookie,
         },
       },
       '/v1': {
@@ -123,8 +125,8 @@ const config: IConfig | any = {
         secure: false,
         changeOrigin: true,
         headers: {
-          'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
-          // 'Cookie': 'locale=zh-cn; authInfo=eyJhbGciOiJSU0EtU0hBMjU2IiwidHlwIjoiSldUIn0=.eyJ1c2VySWQiOjUwMDE3LCJ1c2VybmFtZSI6Inl1bGlhbmciLCJ1c2VyVHlwZSI6MSwibW9iaWxlIjoiMTg5MjM4MDM1OTMiLCJlbWFpbCI6IjQ4OTY4MTlAcXEuY29tIiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5mcmVlbG9nLmNvbSIsInN1YiI6IjUwMDE3IiwiYXVkIjoiZnJlZWxvZy13ZWJzaXRlIiwiZXhwIjoxNjIwOTg1MzU5LCJpYXQiOjE2MTk2ODkzNTksImp0aSI6ImU3YmI5Yzc4YjIwNjQ0YmZiNzg5MzY4YzNkZDE0NTc0In0=.ae88b456ec2927790f13590ad422d00b497fea1167d6dc2e7db096916edba47c7e017cf302f7e278984af66eb7e7efebdf2ba61863e80c16af2fa04eaeca266c20c8347773a057d39c4a59a501d9e4f3807556249413950d48ea7a431ca487f1d7a2ba717ad958fba119a45174f60160aeb9e671cb6396098e07da6870f0f382; uid=50017',
+          // 'Cookie': JSON.parse(fs.readFileSync(authInfoPath, 'utf-8')).cookies
+          'Cookie': Cookie,
         },
       }
     },
