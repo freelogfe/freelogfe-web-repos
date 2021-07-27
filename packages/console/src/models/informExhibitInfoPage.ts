@@ -1,4 +1,4 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
+import {DvaReducer} from '@/models/shared';
 import {AnyAction} from 'redux';
 import {EffectsCommandMap, Subscription} from 'dva';
 import {ConnectState} from '@/models/connect';
