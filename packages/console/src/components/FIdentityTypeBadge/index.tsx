@@ -13,6 +13,7 @@ const statusTextObj = {
 };
 
 function FIdentityTypeBadge({status = 'resource'}: FIdentityTypeBadgeBadgeProps) {
+  // return (<label className={styles[status]}>{statusTextObj[status]}</label>);
   return (<label className={styles[status]}>{statusTextObj[status]}</label>);
 }
 
