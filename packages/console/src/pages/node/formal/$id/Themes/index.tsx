@@ -140,11 +140,16 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                               <FDivider/>
                             </>)
                           }
-                          <FLink
-                            to={FUtil.LinkTo.exhibitManagement({exhibitID: i.id})}>{FUtil1.I18n.message('btn_edit_exhibit')}</FLink>
+                          <a
+                            onClick={() => {
+                              window.open(FUtil.LinkTo.exhibitManagement({exhibitID: i.id}));
+                            }}
+                          >{FUtil1.I18n.message('btn_edit_exhibit')}</a>
                           <FDivider/>
-                          <FLink
-                            to={FUtil.LinkTo.resourceDetails({resourceID: i.resourceId})}>{FUtil1.I18n.message('btn_check_resource_details')}</FLink>
+                          <a
+                            onClick={() => {
+                              window.open(FUtil.LinkTo.resourceDetails({resourceID: i.resourceId}));
+                            }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>
                           <div style={{width: 1}}/>
                         </div>
                       </div>

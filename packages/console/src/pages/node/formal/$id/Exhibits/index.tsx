@@ -19,7 +19,6 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FTooltip from '@/components/FTooltip';
-import FLink from '@/components/FLink';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import InfiniteScroll from 'react-infinite-scroller';
