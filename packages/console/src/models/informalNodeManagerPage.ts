@@ -1,12 +1,13 @@
-import {DvaReducer} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from '@/models/connect';
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import {router} from "umi";
-import fConfirmModal from "@/components/fConfirmModal";
+import { DvaReducer } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { router } from 'umi';
+import fConfirmModal from '@/components/fConfirmModal';
+import FUtil1 from '@/utils'
 
-const {decompile, compile} = require('@freelog/nmr_translator');
+const { decompile, compile } = require('@freelog/nmr_translator');
 
 interface IMappingRule {
   add?: {
@@ -408,7 +409,7 @@ export interface SaveDataRulesAction extends AnyAction {
         description?: string;
       }[];
     }[];
-  }
+  };
 }
 
 export interface OnAddExhibitDrawerAfterVisibleChangeAction extends AnyAction {
@@ -477,7 +478,7 @@ export interface OnReplacerOriginChangeAction extends AnyAction {
 }
 
 export interface OnReplacerKeywordsChangeAction extends AnyAction {
-  type: 'informalNodeManagerPage/onReplacerKeywordsChange'
+  type: 'informalNodeManagerPage/onReplacerKeywordsChange';
   payload: {
     value: string;
   };
@@ -644,9 +645,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   addExhibitDrawerVisible: false,
   addExhibitDrawerResourceOptions: [
-    {value: '!market', title: '资源市场'},
-    {value: '!resource', title: '我的资源'},
-    {value: '!collection', title: '我的收藏'},
+    { value: '!market', title: '资源市场' },
+    { value: '!resource', title: '我的资源' },
+    { value: '!collection', title: '我的收藏' },
   ],
   addExhibitDrawerBucketOptions: [],
   addExhibitDrawerSelectValue: '!market',
@@ -656,9 +657,9 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
 
   replaceModalVisible: false,
   replacerResourceOptions: [
-    {value: '!market', title: '资源市场'},
-    {value: '!resource', title: '我的资源'},
-    {value: '!collection', title: '我的收藏'},
+    { value: '!market', title: '资源市场' },
+    { value: '!resource', title: '我的资源' },
+    { value: '!collection', title: '我的收藏' },
   ],
   replacerBucketOptions: [],
   replacerOrigin: '!market',
@@ -673,16 +674,16 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   replacedCheckedKeys: [],
 
   exhibitPageTypeOptions: [
-    {text: '全部', value: '-1'},
+    { text: '全部', value: '-1' },
     ...FUtil.Predefined.resourceTypes
       .filter((i) => i !== 'theme')
-      .map((i) => ({value: i, text: i}))
+      .map((i) => ({ value: i, text: i })),
   ],
   exhibitPageSelectedType: '-1',
   exhibitPageStatusOptions: [
-    {text: '全部', value: '2'},
-    {text: '已上线', value: '1'},
-    {text: '已下线', value: '0'},
+    { text: '全部', value: '2' },
+    { text: '已上线', value: '1' },
+    { text: '已下线', value: '0' },
   ],
   exhibitPageSelectedStatus: '2',
   exhibitPageFilterKeywords: '',
@@ -717,7 +718,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onUnmountPage({}: OnUnmountPageAction, {}: EffectsCommandMap) {
 
     },
-    * onMountPageSider({payload}: OnMountPageSiderAction, {put}: EffectsCommandMap) {
+    * onMountPageSider({ payload }: OnMountPageSiderAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -732,7 +733,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onUnmountPageSider({}: OnUnmountPageSiderAction, {}: EffectsCommandMap) {
 
     },
-    * onChangePage({payload}: OnChangePageAction, {put}: EffectsCommandMap) {
+    * onChangePage({ payload }: OnChangePageAction, { put }: EffectsCommandMap) {
       // console.log('onChangePage,9032hjkjadslkjflasd');
       yield put({
         type: 'change',
@@ -741,7 +742,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onMountExhibitPage({}: OnMountExhibitPageAction, {select, put}: EffectsCommandMap) {
+    * onMountExhibitPage({}: OnMountExhibitPageAction, { select, put }: EffectsCommandMap) {
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -754,7 +755,7 @@ const Model: InformalNodeManagerPageModelType = {
 
     },
 
-    * onMountThemePage({}: OnMountThemePageAction, {put}: EffectsCommandMap) {
+    * onMountThemePage({}: OnMountThemePageAction, { put }: EffectsCommandMap) {
       yield put<FetchThemeListAction>({
         type: 'fetchThemeList',
         payload: {
@@ -765,12 +766,12 @@ const Model: InformalNodeManagerPageModelType = {
     * onUnmountThemePage({}: OnUnmountThemePageAction, {}: EffectsCommandMap) {
 
     },
-    * onMountRulePage({}: OnMountRulePageAction, {put}: EffectsCommandMap) {
+    * onMountRulePage({}: OnMountRulePageAction, { put }: EffectsCommandMap) {
       yield put<FetchRulesAction>({
-        type: 'fetchRules'
+        type: 'fetchRules',
       });
     },
-    * onUnmountRulePage({}: OnUnmountRulePageAction, {put}: EffectsCommandMap) {
+    * onUnmountRulePage({}: OnUnmountRulePageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
       yield put<ChangeAction>({
         type: 'change',
@@ -787,7 +788,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onPromptRulePageLeave({payload}: OnPromptRulePageLeaveAction, {put}: EffectsCommandMap) {
+    * onPromptRulePageLeave({ payload }: OnPromptRulePageLeaveAction, { put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -797,13 +798,13 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
     },
-    * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, {select}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, { select }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
       router.push(informalNodeManagerPage.rulePagePromptLeavePath);
     },
-    * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, {put}: EffectsCommandMap) {
+    * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -811,8 +812,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchNodeInfo({}: FetchNodeInfoAction, {select, put, call}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * fetchNodeInfo({}: FetchNodeInfoAction, { select, put, call }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -820,7 +821,7 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.nodeID,
       };
 
-      const {data} = yield call(FServiceAPI.Node.details, params);
+      const { data } = yield call(FServiceAPI.Node.details, params);
 
       // if (user.cookiesUserID !== data.ownerUserId) {
       if (FUtil.Tool.getUserIDByCookies() !== data.ownerUserId) {
@@ -837,9 +838,16 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchExhibitList({payload: {isRematch = true, isRestart}}: FetchExhibitListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchExhibitList({ payload: { isRematch = true, isRestart } }: FetchExhibitListAction, {
+      call,
+      select,
+      put,
+    }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage, nodes}: ConnectState = yield select(({informalNodeManagerPage, nodes}: ConnectState) => ({
+      const { informalNodeManagerPage, nodes }: ConnectState = yield select(({
+                                                                               informalNodeManagerPage,
+                                                                               nodes,
+                                                                             }: ConnectState) => ({
         informalNodeManagerPage,
         nodes,
       }));
@@ -853,7 +861,7 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: isRematch,
       };
 
-      const {data: data1} = yield call(ruleMatchStatus, params2);
+      const { data: data1 } = yield call(ruleMatchStatus, params2);
       // console.log(data1, '2434234234234234');
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
@@ -865,9 +873,9 @@ const Model: InformalNodeManagerPageModelType = {
         keywords: informalNodeManagerPage.exhibitPageFilterKeywords || undefined,
       };
 
-      const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
+      const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
 
-      const {rules: rulesObj} = compile(data1.ruleText);
+      const { rules: rulesObj } = compile(data1.ruleText);
 
       const exhibitList: InformalNodeManagerPageModelState['exhibitPageExhibitList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['exhibitPageExhibitList'][number]>((dl) => {
         const operations: string[] = dl.rules[0]?.operations || [];
@@ -977,19 +985,19 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, {put}: EffectsCommandMap) {
+    * onClickExhibitsAddBtn({}: OnClickExhibitsAddBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {addExhibitDrawerVisible: true},
+        payload: { addExhibitDrawerVisible: true },
       });
     },
-    * onClickExhibitsReplaceBtn({}: OnClickExhibitsReplaceBtnAction, {put}: EffectsCommandMap) {
+    * onClickExhibitsReplaceBtn({}: OnClickExhibitsReplaceBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {replaceModalVisible: true},
+        payload: { replaceModalVisible: true },
       });
     },
-    * onChangeExhibitType({payload}: OnChangeExhibitTypeAction, {put}: EffectsCommandMap) {
+    * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
 
       console.log('onChangeExhibitType 11111');
       yield put<ChangeAction>({
@@ -1008,10 +1016,10 @@ const Model: InformalNodeManagerPageModelType = {
       console.log('onChangeExhibitType 22222');
 
     },
-    * onChangeExhibitStatus({payload}: OnChangeExhibitStatusAction, {put}: EffectsCommandMap) {
+    * onChangeExhibitStatus({ payload }: OnChangeExhibitStatusAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {exhibitPageSelectedStatus: payload.value as '0'},
+        payload: { exhibitPageSelectedStatus: payload.value as '0' },
       });
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
@@ -1021,10 +1029,10 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onChangeExhibitKeywords({payload}: OnChangeExhibitKeywordsAction, {put}: EffectsCommandMap) {
+    * onChangeExhibitKeywords({ payload }: OnChangeExhibitKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {exhibitPageFilterKeywords: payload.value},
+        payload: { exhibitPageFilterKeywords: payload.value },
       });
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
@@ -1034,7 +1042,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onLoadMoreExhibits({}: OnLoadMoreExhibitsAction, {put}: EffectsCommandMap) {
+    * onLoadMoreExhibits({}: OnLoadMoreExhibitsAction, { put }: EffectsCommandMap) {
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -1045,9 +1053,13 @@ const Model: InformalNodeManagerPageModelType = {
     },
 
 
-    * fetchThemeList({payload: {isRematch = true, isRestart}}: FetchThemeListAction, {call, select, put}: EffectsCommandMap) {
+    * fetchThemeList({ payload: { isRematch = true, isRestart } }: FetchThemeListAction, {
+      call,
+      select,
+      put,
+    }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1056,7 +1068,7 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: isRematch,
       };
 
-      const {data: data1} = yield call(ruleMatchStatus, params2);
+      const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         nodeId: informalNodeManagerPage.nodeID,
@@ -1065,7 +1077,7 @@ const Model: InformalNodeManagerPageModelType = {
         limit: FUtil.Predefined.pageSize,
         keywords: informalNodeManagerPage.themePageFilterKeywords || undefined,
       };
-      const {data} = yield call(FServiceAPI.InformalNode.testResources, params);
+      const { data } = yield call(FServiceAPI.InformalNode.testResources, params);
       // console.log(data, '890234ujndlskfl;asd@@@@1111111');
 
       const activatedTheme: string | null = data.dataList.find((dd: any) => {
@@ -1073,7 +1085,7 @@ const Model: InformalNodeManagerPageModelType = {
       })?.testResourceName || null;
 
       // console.log(activatedTheme, 'activatedTheme0923jldskv90zpasdf');
-      const {rules: rulesObj} = compile(data1.ruleText);
+      const { rules: rulesObj } = compile(data1.ruleText);
       // console.log(rulesObj, 'rulesObjiosfjewwef');
 
       const themePageThemeList: InformalNodeManagerPageModelState['themePageThemeList'] = (data.dataList as any[]).map<InformalNodeManagerPageModelState['themePageThemeList'][number]>((dl) => {
@@ -1095,7 +1107,7 @@ const Model: InformalNodeManagerPageModelType = {
               name: dl.originInfo.name,
               version: dl.originInfo.type === 'resource' ? dl.originInfo.version : undefined,
               versionRange: (dl.originInfo.versionRange && dl.originInfo.versionRange !== 'latest') ? dl.originInfo.versionRange : undefined,
-            }
+            },
           } : undefined,
           alter: operations.includes('alter') ? dl.testResourceName : undefined,
           labels: operations.includes('setTags') ? stateInfo.tagInfo.tags : undefined,
@@ -1170,7 +1182,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickThemesAddBtn({}: OnClickThemesAddBtnAction, {put}: EffectsCommandMap) {
+    * onClickThemesAddBtn({}: OnClickThemesAddBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1178,16 +1190,16 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickThemesReplaceBtn({}: OnClickThemesReplaceBtnAction, {put}: EffectsCommandMap) {
+    * onClickThemesReplaceBtn({}: OnClickThemesReplaceBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {replaceModalVisible: true},
+        payload: { replaceModalVisible: true },
       });
     },
-    * onChangeThemeKeywords({payload}: OnChangeThemeKeywordsAction, {put}: EffectsCommandMap) {
+    * onChangeThemeKeywords({ payload }: OnChangeThemeKeywordsAction, { put }: EffectsCommandMap) {
       yield put({
         type: 'change',
-        payload: {themePageFilterKeywords: payload.value}
+        payload: { themePageFilterKeywords: payload.value },
       });
 
       yield put<FetchThemeListAction>({
@@ -1198,7 +1210,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onLoadMoreThemes({}: OnLoadMoreThemesAction, {put}: EffectsCommandMap) {
+    * onLoadMoreThemes({}: OnLoadMoreThemesAction, { put }: EffectsCommandMap) {
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -1208,8 +1220,8 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
 
-    * fetchRules({}: FetchRulesAction, {call, select, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * fetchRules({}: FetchRulesAction, { call, select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1217,7 +1229,7 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.nodeID,
       };
 
-      const {data} = yield call(FServiceAPI.InformalNode.testNodeRules, params);
+      const { data } = yield call(FServiceAPI.InformalNode.testNodeRules, params);
       // console.log(data, 'data!!!!!@#$@#$@#$');
 
       yield put<ChangeAction>({
@@ -1236,8 +1248,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * saveRules({}: SaveRulesAction, {select, call, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * saveRules({}: SaveRulesAction, { select, call, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1255,12 +1267,12 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.nodeID,
         testRuleText: informalNodeManagerPage.rulePageCodeInput,
       };
-      const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
 
       const params1: RuleMatchStatusParams = {
         nodeID: informalNodeManagerPage.nodeID,
       };
-      const {data: data1} = yield call(ruleMatchStatus, params1);
+      const { data: data1 } = yield call(ruleMatchStatus, params1);
 
       // console.log(data1, 'data1!@#$!@#$@#');
 
@@ -1295,9 +1307,9 @@ const Model: InformalNodeManagerPageModelType = {
       });
     },
 
-    * saveDataRules({payload}: SaveDataRulesAction, {call, select, put}: EffectsCommandMap) {
+    * saveDataRules({ payload }: SaveDataRulesAction, { call, select, put }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1309,13 +1321,13 @@ const Model: InformalNodeManagerPageModelType = {
           nodeId: informalNodeManagerPage.nodeID,
           additionalTestRule: text,
         };
-        const {data} = yield call(FServiceAPI.InformalNode.putRules, params);
+        const { data } = yield call(FServiceAPI.InformalNode.putRules, params);
       } else if (payload.type === 'replace') {
         const params: Parameters<typeof FServiceAPI.InformalNode.createRules>[0] = {
           nodeId: informalNodeManagerPage.nodeID,
           testRuleText: text,
         };
-        const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+        const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
       }
 
       const params2: RuleMatchStatusParams = {
@@ -1323,7 +1335,7 @@ const Model: InformalNodeManagerPageModelType = {
         isRematch: true,
       };
 
-      const {data: data1} = yield call(ruleMatchStatus, params2);
+      const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       const codeExecutionError = data1.testRules
         .filter((tr: any) => {
@@ -1354,8 +1366,8 @@ const Model: InformalNodeManagerPageModelType = {
         });
       }
     },
-    * onImportRulesBtn({payload}: OnImportRulesBtnAction, {put, select}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onImportRulesBtn({ payload }: OnImportRulesBtnAction, { put, select }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1371,7 +1383,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExportRulesBtn({}: OnClickExportRulesBtnAction, {put}: EffectsCommandMap) {
+    * onClickExportRulesBtn({}: OnClickExportRulesBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1379,7 +1391,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickDeleteRulesBtn({}: OnClickDeleteRulesBtnAction, {put}: EffectsCommandMap) {
+    * onClickDeleteRulesBtn({}: OnClickDeleteRulesBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1387,7 +1399,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickEntryCodingBtn({}: OnClickEntryCodingBtnAction, {put}: EffectsCommandMap) {
+    * onClickEntryCodingBtn({}: OnClickEntryCodingBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1395,9 +1407,9 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, {put, select}: EffectsCommandMap) {
+    * onClickExitCodingBtn({}: OnClickExitCodingBtnAction, { put, select }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1415,8 +1427,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickExitCodingConfirmBtn({}: OnClickExitCodingConfirmBtnAction, {put, select}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onClickExitCodingConfirmBtn({}: OnClickExitCodingConfirmBtnAction, { put, select }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1432,13 +1444,16 @@ const Model: InformalNodeManagerPageModelType = {
           rulePageCodeExecutionError: null,
           rulePageCodeSaveSuccess: false,
         },
-      })
+      });
     },
     * onClickExitCodingCancelBtn({}: OnClickExitCodingCancelBtnAction, {}: EffectsCommandMap) {
 
     },
 
-    * onAddExhibitDrawerAfterVisibleChange({payload}: OnAddExhibitDrawerAfterVisibleChangeAction, {put, call}: EffectsCommandMap) {
+    * onAddExhibitDrawerAfterVisibleChange({ payload }: OnAddExhibitDrawerAfterVisibleChangeAction, {
+      put,
+      call,
+    }: EffectsCommandMap) {
       if (payload.visible) {
         yield put<FetchAddExhibitDrawerListAction>({
           type: 'fetchAddExhibitDrawerList',
@@ -1451,7 +1466,7 @@ const Model: InformalNodeManagerPageModelType = {
           bucketType: 1,
         };
 
-        const {data} = yield call(FServiceAPI.Storage.bucketList, params);
+        const { data } = yield call(FServiceAPI.Storage.bucketList, params);
         // console.log(data, '!@#$!@#$#$!@111111111');
         yield put<ChangeAction>({
           type: 'change',
@@ -1462,8 +1477,8 @@ const Model: InformalNodeManagerPageModelType = {
                 title: d.bucketName,
               };
             }),
-          }
-        })
+          },
+        });
       } else {
         yield put({
           type: 'change',
@@ -1476,7 +1491,7 @@ const Model: InformalNodeManagerPageModelType = {
         });
       }
     },
-    * onAddExhibitDrawerCancelChange({}: OnAddExhibitDrawerCancelChangeAction, {put}: EffectsCommandMap) {
+    * onAddExhibitDrawerCancelChange({}: OnAddExhibitDrawerCancelChangeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1484,8 +1499,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerConfirmChange({}: OnAddExhibitDrawerConfirmChangeAction, {select, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onAddExhibitDrawerConfirmChange({}: OnAddExhibitDrawerConfirmChangeAction, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1531,8 +1546,12 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchAddExhibitDrawerList({payload}: FetchAddExhibitDrawerListAction, {select, call, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * fetchAddExhibitDrawerList({ payload }: FetchAddExhibitDrawerListAction, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1560,7 +1579,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: keywords,
         };
         // console.log(params, 'paramsparams1234');
-        const {data} = yield call(FServiceAPI.Resource.list, params);
+        const { data } = yield call(FServiceAPI.Resource.list, params);
         // console.log(data, 'data!~!@#$@!#$@#!411111');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -1589,10 +1608,10 @@ const Model: InformalNodeManagerPageModelType = {
 
               if (usedResourceIDs.includes(rs.resourceId) || informalNodeManagerPage.ruleAllAddedResourceNames.includes(rs.resourceName)) {
                 disabled = true;
-                disabledReason = '已被使用';
+                disabledReason = FUtil1.I18n.message('tag_added ');
               } else if (rs.latestVersion === '') {
                 disabled = true;
-                disabledReason = '无可用版本';
+                disabledReason = FUtil1.I18n.message('msg_set_resource_type');
               }
 
               return {
@@ -1621,7 +1640,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: keywords,
         };
         // console.log(params, 'paramsparams1234');
-        const {data} = yield call(FServiceAPI.Resource.list, params);
+        const { data } = yield call(FServiceAPI.Resource.list, params);
         // console.log(data, 'data13453');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -1676,7 +1695,7 @@ const Model: InformalNodeManagerPageModelType = {
           resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         };
 
-        const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
+        const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
         // console.log(data, '@@@@@@ASEDFSADF');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -1735,7 +1754,7 @@ const Model: InformalNodeManagerPageModelType = {
           resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         };
 
-        const {data} = yield call(FServiceAPI.Storage.objectList, params);
+        const { data } = yield call(FServiceAPI.Storage.objectList, params);
         // console.log(data, 'data1q2349ojmdfsl');
 
         const params1: Parameters<typeof getUsedTargetIDs>[0] = {
@@ -1793,7 +1812,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerOriginChange({payload}: OnAddExhibitDrawerOriginChangeAction, {put}: EffectsCommandMap) {
+    * onAddExhibitDrawerOriginChange({ payload }: OnAddExhibitDrawerOriginChangeAction, { put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1810,7 +1829,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerKeywordsChange({payload}: OnAddExhibitDrawerKeywordsChangeAction, {put}: EffectsCommandMap) {
+    * onAddExhibitDrawerKeywordsChange({ payload }: OnAddExhibitDrawerKeywordsChangeAction, { put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1827,7 +1846,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerListLoadMore({}: OnAddExhibitDrawerListLoadMoreAction, {put}: EffectsCommandMap) {
+    * onAddExhibitDrawerListLoadMore({}: OnAddExhibitDrawerListLoadMoreAction, { put }: EffectsCommandMap) {
       yield put<FetchAddExhibitDrawerListAction>({
         type: 'fetchAddExhibitDrawerList',
         payload: {
@@ -1835,9 +1854,12 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onAddExhibitDrawerListCheckedChange({payload}: OnAddExhibitDrawerListCheckedChangeAction, {put, select}: EffectsCommandMap) {
+    * onAddExhibitDrawerListCheckedChange({ payload }: OnAddExhibitDrawerListCheckedChangeAction, {
+      put,
+      select,
+    }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1856,7 +1878,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacerMount({}: OnReplacerMountAction, {put, call}: EffectsCommandMap) {
+    * onReplacerMount({}: OnReplacerMountAction, { put, call }: EffectsCommandMap) {
       yield put<FetchReplacerListAction>({
         type: 'fetchReplacerList',
         payload: {
@@ -1869,7 +1891,7 @@ const Model: InformalNodeManagerPageModelType = {
         bucketType: 1,
       };
 
-      const {data} = yield call(FServiceAPI.Storage.bucketList, params);
+      const { data } = yield call(FServiceAPI.Storage.bucketList, params);
       // console.log(data, '!@#$!@#$#$!@111111111');
       yield put<ChangeAction>({
         type: 'change',
@@ -1883,14 +1905,14 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacerUnmount({}: OnReplacerUnmountAction, {put}: EffectsCommandMap) {
+    * onReplacerUnmount({}: OnReplacerUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           replacerResourceOptions: [
-            {value: '!market', title: '资源市场'},
-            {value: '!resource', title: '我的资源'},
-            {value: '!collection', title: '我的收藏'},
+            { value: '!market', title: '资源市场' },
+            { value: '!resource', title: '我的资源' },
+            { value: '!collection', title: '我的收藏' },
           ],
           replacerBucketOptions: [],
           replacerOrigin: '!market',
@@ -1899,7 +1921,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacerOriginChange({payload}: OnReplacerOriginChangeAction, {put, select}: EffectsCommandMap) {
+    * onReplacerOriginChange({ payload }: OnReplacerOriginChangeAction, { put, select }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1916,7 +1938,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacerKeywordsChange({payload}: OnReplacerKeywordsChangeAction, {put}: EffectsCommandMap) {
+    * onReplacerKeywordsChange({ payload }: OnReplacerKeywordsChangeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1932,8 +1954,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * fetchReplacerList({payload}: FetchReplacerListAction, {select, call, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * fetchReplacerList({ payload }: FetchReplacerListAction, { select, call, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -1956,7 +1978,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: payloadKeywords,
         };
 
-        const {data} = yield call(FServiceAPI.Resource.list, params);
+        const { data } = yield call(FServiceAPI.Resource.list, params);
 
         replacerResourceList = [
           ...replacerResourceList,
@@ -1991,7 +2013,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: payloadKeywords,
         };
         // console.log(params, 'paramsparams1234');
-        const {data} = yield call(FServiceAPI.Resource.list, params);
+        const { data } = yield call(FServiceAPI.Resource.list, params);
         // console.log(data, 'data13453');
         replacerResourceList = [
           ...replacerResourceList,
@@ -2023,7 +2045,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: payloadKeywords,
         };
 
-        const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
+        const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
         // console.log(data, '@@@@@@ASEDFSADF');
 
         let data3 = [];
@@ -2035,7 +2057,7 @@ const Model: InformalNodeManagerPageModelType = {
             }).join(),
           };
 
-          const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
+          const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
 
           data3 = data2;
         }
@@ -2058,7 +2080,7 @@ const Model: InformalNodeManagerPageModelType = {
               versionRange: '',
             };
           }),
-        ]
+        ];
 
       } else {
         const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
@@ -2068,7 +2090,7 @@ const Model: InformalNodeManagerPageModelType = {
           keywords: payloadKeywords,
         };
 
-        const {data} = yield call(FServiceAPI.Storage.objectList, params);
+        const { data } = yield call(FServiceAPI.Storage.objectList, params);
         // console.log(data, 'data1q2349ojmdfsl');
         replacerResourceList = [
           ...replacerResourceList,
@@ -2098,8 +2120,8 @@ const Model: InformalNodeManagerPageModelType = {
       });
 
     },
-    * onReplacerListCheckedChange({payload}: OnReplacerListCheckedChangeAction, {select, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onReplacerListCheckedChange({ payload }: OnReplacerListCheckedChangeAction, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2121,8 +2143,11 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacerListVersionRangeChange({payload}: OnReplacerListVersionRangeChangeAction, {put, select}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onReplacerListVersionRangeChange({ payload }: OnReplacerListVersionRangeChangeAction, {
+      put,
+      select,
+    }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2147,7 +2172,7 @@ const Model: InformalNodeManagerPageModelType = {
     * onReplacedMount({}: OnReplacedMountAction, {}: EffectsCommandMap) {
 
     },
-    * onReplacedUnmount({}: OnReplacedUnmountAction, {put}: EffectsCommandMap) {
+    * onReplacedUnmount({}: OnReplacedUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -2161,8 +2186,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacedKeywordChange({payload}: OnReplacedKeywordChangeAction, {put, select, call}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onReplacedKeywordChange({ payload }: OnReplacedKeywordChangeAction, { put, select, call }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2182,7 +2207,7 @@ const Model: InformalNodeManagerPageModelType = {
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
       };
 
-      const {data} = yield call(FServiceAPI.InformalNode.dependencyTree, params);
+      const { data } = yield call(FServiceAPI.InformalNode.dependencyTree, params);
       // console.log(data, '##@ADSFASDFSDCX');
 
       let replacedSelectDependency = data.find((d: any) => d.name === payloadValue);
@@ -2190,7 +2215,7 @@ const Model: InformalNodeManagerPageModelType = {
 
       const replacedTargetVersions: InformalNodeManagerPageModelState['replacedTargetVersions'] = replacedSelectDependency
         ? [
-          {value: '', text: '全部版本'},
+          { value: '', text: '全部版本' },
           ...replacedSelectDependency.versions.map((v: any) => {
             return {
               value: v,
@@ -2219,7 +2244,7 @@ const Model: InformalNodeManagerPageModelType = {
         resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
       };
-      const {data: data3} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
+      const { data: data3 } = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
       // console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
       yield put<ChangeAction>({
         type: 'change',
@@ -2235,9 +2260,13 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacedEntityVersionChange({payload}: OnReplacedEntityVersionChangeAction, {select, call, put}: EffectsCommandMap) {
+    * onReplacedEntityVersionChange({ payload }: OnReplacedEntityVersionChangeAction, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2261,7 +2290,7 @@ const Model: InformalNodeManagerPageModelType = {
         omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
         dependentEntityVersionRange: payload.value || undefined,
       };
-      const {data: data3} = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
+      const { data: data3 } = yield call(FServiceAPI.InformalNode.searchTestResourcesByDependency, params3);
       // console.log(data3, 'data3data3data3data3data3data3data309789079877897989797');
       yield put<ChangeAction>({
         type: 'change',
@@ -2277,11 +2306,11 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplacedTreeLoadData({payload}: OnReplacedTreeLoadDataAction, {select, put, call}: EffectsCommandMap) {
+    * onReplacedTreeLoadData({ payload }: OnReplacedTreeLoadDataAction, { select, put, call }: EffectsCommandMap) {
 
       // console.log(payload, 'payloadpayloadpayloadpayloadpayloadpayload!!!!!!@@@@@@@#3333333');
 
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2293,7 +2322,7 @@ const Model: InformalNodeManagerPageModelType = {
         dependentEntityId: informalNodeManagerPage.replacedSelectDependency?.id || '',
         dependentEntityVersionRange: informalNodeManagerPage.replacedTargetSelectedVersion?.value || undefined,
       };
-      const {data} = yield call(FServiceAPI.InformalNode.dependencyTreeFilter, params);
+      const { data } = yield call(FServiceAPI.InformalNode.dependencyTreeFilter, params);
       // console.log(data, 'dependencyTreeFilter!@#$@!#$@#$@#$');
       const result = updateTreeData({
         list: informalNodeManagerPage.replacedTreeData as TreeNode[],
@@ -2308,7 +2337,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplaceModalCancel({}: OnReplaceModalCancelAction, {put}: EffectsCommandMap) {
+    * onReplaceModalCancel({}: OnReplaceModalCancelAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -2316,8 +2345,8 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, {select, put}: EffectsCommandMap) {
-      const {informalNodeManagerPage}: ConnectState = yield select(({informalNodeManagerPage}: ConnectState) => ({
+    * onReplaceModalConfirm({}: OnReplaceModalConfirmAction, { select, put }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
@@ -2346,13 +2375,13 @@ const Model: InformalNodeManagerPageModelType = {
               name: o.replace('$', ''),
               type: 'resource',
               versionRange: 'latest',
-            }
+            };
           } else {
             return {
               name: o.replace('#', ''),
               type: 'object',
               versionRange: 'latest',
-            }
+            };
           }
         }));
       }
@@ -2399,7 +2428,7 @@ const Model: InformalNodeManagerPageModelType = {
           rules.unshift({
             operation: 'alter',
             exhibitName: v.exhibitName,
-            replaces: [v]
+            replaces: [v],
           });
         }
       }
@@ -2414,13 +2443,13 @@ const Model: InformalNodeManagerPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          replaceModalVisible: false
+          replaceModalVisible: false,
         },
       });
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       // const newState = {...state};
       // if (payload.replacedCheckedKeys && payload.replacedCheckedKeys.length === 0 && state.replacerResourceList.some((rr) => rr.checked)) {
       //
@@ -2428,13 +2457,13 @@ const Model: InformalNodeManagerPageModelType = {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
+    },
   },
 };
 
@@ -2445,17 +2474,17 @@ interface RuleMatchStatusParams {
   isRematch?: boolean;
 }
 
-async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParams): Promise<any> {
+async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<any> {
   // const params: RulesRematchParamsType = {
   //   nodeId: nodeID,
   // };
 
   if (isRematch) {
-    await FServiceAPI.InformalNode.rulesRematch({nodeId: nodeID});
+    await FServiceAPI.InformalNode.rulesRematch({ nodeId: nodeID });
   }
 
   while (true) {
-    const response = await FServiceAPI.InformalNode.testNodeRules({nodeId: nodeID});
+    const response = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
       await sleep();
@@ -2467,10 +2496,10 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
     }
   }
 
-  function sleep(ms: number = 200) {
+  function sleep(ms: number = 200): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve()
+        resolve();
       }, ms);
     });
   }
@@ -2482,7 +2511,7 @@ interface GetUsedTargetIDsParams {
   entityIds: string[];
 }
 
-async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetIDsParams): Promise<string[]> {
+async function getUsedTargetIDs({ nodeID, entityType, entityIds }: GetUsedTargetIDsParams): Promise<string[]> {
   if (entityIds.length === 0) {
     return [];
   }
@@ -2493,7 +2522,7 @@ async function getUsedTargetIDs({nodeID, entityType, entityIds}: GetUsedTargetID
     entityIds: entityIds.join(),
   };
 
-  const {data} = await FServiceAPI.InformalNode.batchTestResources(params1);
+  const { data } = await FServiceAPI.InformalNode.batchTestResources(params1);
 
   // console.log(data, 'data98jhksjkdaf13453');
   return (data as any[]).map<string>((d1: any) => {
@@ -2507,7 +2536,7 @@ interface UpdateTreeDataParams {
   children: TreeNode[];
 }
 
-function updateTreeData({list, key, children}: UpdateTreeDataParams): TreeNode[] {
+function updateTreeData({ list, key, children }: UpdateTreeDataParams): TreeNode[] {
   return list.map(node => {
     if (node.key === key) {
       return {

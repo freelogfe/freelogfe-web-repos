@@ -13,7 +13,6 @@ import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connec
 import Theme from './Theme';
 import MappingRule from './MappingRule';
 import { RouteComponentProps } from 'react-router';
-// import FLink from "@/components/FLink";
 import { FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import AddInformExhibitDrawer from './containers/AddInformExhibitDrawer';

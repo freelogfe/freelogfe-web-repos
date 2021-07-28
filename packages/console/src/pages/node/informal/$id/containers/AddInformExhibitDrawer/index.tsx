@@ -138,7 +138,8 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
                       text={l.name}
                     />
                     <div style={{width: 5}}/>
-                    {l.status && <FResourceStatusBadge status={l.status}/>}
+                    {!l.disabledReason && l.status && <FResourceStatusBadge status={l.status}/>}
+                    {l.disabledReason && <label className={styles.itemNameLabel}>{l.disabledReason}</label>}
                   </div>
                   <div style={{height: 2}}/>
                   <FContentText
