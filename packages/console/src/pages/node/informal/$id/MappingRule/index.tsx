@@ -329,7 +329,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                 rulePageStatus: 'normal',
               });
             }}
-          >取消</FTextBtn>
+          >{FUtil1.I18n.message('btn_cancel')}</FTextBtn>
           <FRectBtn
             type='danger1'
             onClick={async () => {
@@ -477,7 +477,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                       });
                     }}
                   />
-                  <span>全选</span>
+                  <span style={{ fontSize: 14, fontWeight: 600 }}>全选</span>
                 </Space>
               </div>)
             }
