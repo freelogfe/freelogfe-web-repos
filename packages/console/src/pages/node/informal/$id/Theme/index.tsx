@@ -149,16 +149,20 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                           <div className={styles.coverFooter}>
                             <div>
                               <div style={{width: 1}}/>
-                              <FLink to={FUtil.LinkTo.informExhibitManagement({exhibitID: t.id})}>编辑</FLink>
+                              <a onClick={() => {
+                                window.open(FUtil.LinkTo.informExhibitManagement({exhibitID: t.id}));
+                              }}>编辑</a>
                               <FDivider/>
-                              <FLink
-                                to={t.originInfo.type === 'resource'
-                                  ? FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})
-                                  : FUtil.LinkTo.objectDetails({
-                                    bucketName: t.originInfo.name.split('/')[0],
-                                    objectID: t.originInfo.id,
-                                  })}
-                              >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</FLink>
+                              <a
+                                onClick={() => {
+                                  window.open(t.originInfo.type === 'resource'
+                                    ? FUtil.LinkTo.resourceDetails({resourceID: t.originInfo.id})
+                                    : FUtil.LinkTo.objectDetails({
+                                      bucketName: t.originInfo.name.split('/')[0],
+                                      objectID: t.originInfo.id,
+                                    }));
+                                }}
+                              >{t.originInfo.type === 'resource' ? '资源详情' : '对象详情'}</a>
                               {
                                 !t.isOnline && (<>
                                   <FDivider/>
