@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {Space} from "antd";
-import {FRectBtn, FTextBtn} from "@/components/FButton";
-import styles from "@/pages/node/informal/$id/Exhibit/index.less";
-import FSelect from "@/components/FSelect";
-import FInput from "@/components/FInput";
-import FCheckbox from "@/components/FCheckbox";
-import {FContentText} from "@/components/FText";
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
-import FDrawer from "@/components/FDrawer";
-import {connect, Dispatch} from 'dva';
+import { Space } from 'antd';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import styles from '@/pages/node/informal/$id/Exhibit/index.less';
+import FSelect from '@/components/FSelect';
+import FInput from '@/components/FInput';
+import FCheckbox from '@/components/FCheckbox';
+import { FContentText } from '@/components/FText';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
+import FDrawer from '@/components/FDrawer';
+import { connect, Dispatch } from 'dva';
 import {
   ConnectState,
   InformalNodeManagerPageModelState,
@@ -30,7 +30,7 @@ interface AddInformExhibitDrawerProps {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformExhibitDrawerProps) {
+function AddInformExhibitDrawer({ dispatch, informalNodeManagerPage }: AddInformExhibitDrawerProps) {
 
   const containerRef = React.useRef<any>(null);
 
@@ -38,7 +38,7 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
     title={informalNodeManagerPage.showPage === 'theme' ? FUtil1.I18n.message('import_test_theme') : '添加测试展品'}
     visible={informalNodeManagerPage.addExhibitDrawerVisible}
     topRight={<Space size={30}>
-      <FTextBtn type="default" onClick={() => {
+      <FTextBtn type='default' onClick={() => {
         dispatch<OnAddExhibitDrawerCancelChangeAction>({
           type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
         });
@@ -49,14 +49,10 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
             type: 'informalNodeManagerPage/onAddExhibitDrawerConfirmChange',
           });
         }}
-        type="primary"
+        type='primary'
       >添加</FRectBtn>
     </Space>}
     onClose={() => {
-      // onCancel && onCancel();
-      // onChange({
-      //   addExhibitDrawerVisible: false,
-      // });
       dispatch<OnAddExhibitDrawerCancelChangeAction>({
         type: 'informalNodeManagerPage/onAddExhibitDrawerCancelChange',
       });
@@ -66,7 +62,7 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
         type: 'informalNodeManagerPage/onAddExhibitDrawerAfterVisibleChange',
         payload: {
           visible,
-        }
+        },
       });
     }}
   >
@@ -98,10 +94,10 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
               },
             });
           }}
-          theme="dark"
+          theme='dark'
         />
       </div>
-      <div style={{height: 15}}/>
+      <div style={{ height: 15 }} />
       <div className={styles.list}>
         {
           informalNodeManagerPage.addExhibitDrawerCheckedList
@@ -110,7 +106,7 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
                 <FTooltip
                   title={l.disabledReason}
                   getPopupContainer={() => containerRef.current}
-                  trigger="hover"
+                  trigger='hover'
                   visible={l.disabled ? undefined : false}
                 >
                   <div>
@@ -130,21 +126,21 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
                   </div>
                 </FTooltip>
 
-                <div style={{width: 15}}/>
+                <div style={{ width: 15 }} />
                 <div className={styles.itemContent}>
                   <div className={styles.itemName}>
                     <FContentText
                       singleRow
                       text={l.name}
                     />
-                    <div style={{width: 5}}/>
-                    {!l.disabledReason && l.status && <FResourceStatusBadge status={l.status}/>}
+                    <div style={{ width: 5 }} />
+                    {!l.disabledReason && l.status && <FResourceStatusBadge status={l.status} />}
                     {l.disabledReason && <label className={styles.itemNameLabel}>{l.disabledReason}</label>}
                   </div>
-                  <div style={{height: 2}}/>
+                  <div style={{ height: 2 }} />
                   <FContentText
                     text={(l.type ? `资源类型 ${l.type}` : '未设置类型') + ` | 更新时间 ${l.updateTime}`}
-                    type="additional2"
+                    type='additional2'
                   />
                 </div>
               </div>);
@@ -153,7 +149,7 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
 
       </div>
 
-      <div style={{height: 20}}/>
+      <div style={{ height: 20 }} />
       <div className={styles.footer}>
         {
           informalNodeManagerPage.addExhibitDrawerCheckedListTotalNum > informalNodeManagerPage.addExhibitDrawerCheckedList.length
@@ -163,15 +159,15 @@ function AddInformExhibitDrawer({dispatch, informalNodeManagerPage}: AddInformEx
                   type: 'informalNodeManagerPage/onAddExhibitDrawerListLoadMore',
                 });
               }}
-              size="small"
+              size='small'
             >加载更多</FRectBtn>)
-            : (<FContentText type="additional1" text={'没有更多了~'}/>)
+            : (<FContentText type='additional1' text={'没有更多了~'} />)
         }
       </div>
     </div>
   </FDrawer>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(AddInformExhibitDrawer);
