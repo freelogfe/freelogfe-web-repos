@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { router, withRouter } from 'umi';
+import { withRouter } from 'umi';
 import Sider from './Sider';
 import Exhibit from './Exhibit';
 import { connect, Dispatch } from 'dva';

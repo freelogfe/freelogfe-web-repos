@@ -463,7 +463,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             direction='vertical'
           >
             {
-              informalNodeManagerPage.rulePageStatus !== 'normal' && (<div style={{ paddingLeft: 20 }}>
+              ruleObjList.length > 0 && informalNodeManagerPage.rulePageStatus !== 'normal' && (<div style={{ paddingLeft: 20 }}>
                 <Space size={10}>
                   <FCheckbox
                     indeterminate={informalNodeManagerPage.ruleIndeterminate}
