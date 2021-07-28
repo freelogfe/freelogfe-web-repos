@@ -120,12 +120,12 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                   }
 
                                   fConfirmModal({
-                                    // message: FUtil.I18n.message('msg_change_theme_confirm'),
-                                    message: '激活该主题，将下线其它主题',
-                                    // okText: FUtil.I18n.message('active_new_theme'),
-                                    okText: '激活',
-                                    // cancelText: FUtil.I18n.message('keep_current_theme'),
-                                    cancelText: '保持当前主题',
+                                    message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                    // message: '激活该主题，将下线其它主题',
+                                    okText: FUtil1.I18n.message('active_new_theme'),
+                                    // okText: '激活',
+                                    cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                    // cancelText: '保持当前主题',
                                     onOk() {
                                       dispatch<OnActiveAction>({
                                         type: 'nodeManagerPage/onActive',
@@ -189,11 +189,3 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
 export default connect(({nodeManagerPage}: ConnectState) => ({
   nodeManagerPage,
 }))(Themes);
-
-// interface LabelProps {
-//   active?: boolean
-// }
-//
-// function Label({active = true}: LabelProps) {
-//   return ();
-// }
