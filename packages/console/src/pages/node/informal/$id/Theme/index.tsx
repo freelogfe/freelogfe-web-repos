@@ -7,12 +7,12 @@ import {FTextBtn} from "@/components/FButton";
 import {
   ChangeAction,
   InformalNodeManagerPageModelState,
-  OnChangeThemeKeywordsAction,
+  OnChangeThemeKeywordsAction, OnClickActiveThemeBtnAction,
   OnClickThemesAddBtnAction,
   OnClickThemesReplaceBtnAction,
   OnMountThemePageAction,
   SaveDataRulesAction,
-} from "@/models/informalNodeManagerPage";
+} from '@/models/informalNodeManagerPage';
 import FAdd from "@/components/FIcons/FAdd";
 import FInput from "@/components/FInput";
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
@@ -27,6 +27,8 @@ import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from "@/utils";
 import * as AHooks from 'ahooks';
 import FMappingRuleReplace from "@/components/FIcons/FMappingRuleReplace";
+import fConfirmModal from '@/components/fConfirmModal';
+import { OnActiveAction } from '@/models/nodeManagerPage';
 
 const {compile} = require('@freelog/nmr_translator');
 
@@ -167,55 +169,20 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                 !t.isOnline && (<>
                                   <FDivider/>
                                   <a onClick={() => {
-                                    const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
-                                    // console.log(rules, 'rules1234234');
-                                    const rule = rules.find((r) => r.themeName);
-
-                                    let data;
-
-                                    if (rule) {
-                                      data = rules.map((r) => {
-                                        if (!r.themeName) {
-                                          return r;
-                                        }
-                                        return {
-                                          ...r,
-                                          themeName: t.name,
-                                        };
-                                      });
-                                    } else {
-                                      data = [
-                                        {
-                                          operation: 'activate_theme',
-                                          themeName: t.name,
-                                        },
-                                        ...rules,
-                                      ];
-                                    }
-                                    // console.log(rule, 'rule21930usdf');
-
-                                    dispatch<SaveDataRulesAction>({
-                                      type: 'informalNodeManagerPage/saveDataRules',
-                                      payload: {
-                                        type: 'replace',
-                                        data: data,
+                                    fConfirmModal({
+                                      message: FUtil1.I18n.message('msg_change_theme_confirm'),
+                                      okText: FUtil1.I18n.message('active_new_theme'),
+                                      cancelText: FUtil1.I18n.message('keep_current_theme'),
+                                      onOk() {
+                                        dispatch<OnClickActiveThemeBtnAction>({
+                                          type: 'informalNodeManagerPage/onClickActiveThemeBtn',
+                                          payload: {
+                                            themeName: t.name,
+                                          }
+                                        });
                                       },
                                     });
-                                    onChange({
-                                      themePageThemeList: arr.map((ttt) => {
-                                        if (ttt.id !== t.id) {
-                                          return {
-                                            ...ttt,
-                                            isOnline: false,
-                                          };
-                                        }
-                                        return {
-                                          ...ttt,
-                                          isOnline: true,
-                                        };
-                                      }),
-                                      // mappingRule
-                                    });
+
                                   }}>激活</a>
                                 </>)
                               }

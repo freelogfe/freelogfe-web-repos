@@ -340,6 +340,13 @@ export interface OnLoadMoreThemesAction extends AnyAction {
   type: 'informalNodeManagerPage/onLoadMoreThemes';
 }
 
+export interface OnClickActiveThemeBtnAction extends AnyAction {
+  type: 'informalNodeManagerPage/onClickActiveThemeBtn';
+  payload: {
+    themeName: string;
+  };
+}
+
 export interface FetchRulesAction extends AnyAction {
   type: 'informalNodeManagerPage/fetchRules' | 'fetchRules';
 }
@@ -585,6 +592,7 @@ interface InformalNodeManagerPageModelType {
     onClickThemesReplaceBtn: (action: OnClickThemesReplaceBtnAction, effects: EffectsCommandMap) => void;
     onChangeThemeKeywords: (action: OnChangeThemeKeywordsAction, effects: EffectsCommandMap) => void;
     onLoadMoreThemes: (action: OnLoadMoreThemesAction, effects: EffectsCommandMap) => void;
+    onClickActiveThemeBtn: (action: OnClickActiveThemeBtnAction, effects: EffectsCommandMap) => void;
 
     fetchRules: (action: FetchRulesAction, effects: EffectsCommandMap) => void;
     saveRules: (action: SaveRulesAction, effects: EffectsCommandMap) => void;
@@ -1219,6 +1227,62 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
+    * onClickActiveThemeBtn ({payload}: OnClickActiveThemeBtnAction, {select, put}: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      // console.log(rules, 'rules1234234');
+      const rule = rules.find((r) => r.themeName);
+
+      let data;
+
+      if (rule) {
+        data = rules.map((r) => {
+          if (!r.themeName) {
+            return r;
+          }
+          return {
+            ...r,
+            themeName: payload.themeName,
+          };
+        });
+      } else {
+        data = [
+          {
+            operation: 'activate_theme',
+            themeName: payload.themeName,
+          },
+          ...rules,
+        ];
+      }
+
+      yield put<SaveDataRulesAction>({
+        type: 'saveDataRules',
+        payload: {
+          type: 'replace',
+          data: data,
+        },
+      });
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          themePageThemeList: informalNodeManagerPage.themePageThemeList.map((ttt) => {
+            if (ttt.name !== payload.themeName) {
+              return {
+                ...ttt,
+                isOnline: false,
+              };
+            }
+            return {
+              ...ttt,
+              isOnline: true,
+            };
+          }),
+        }
+      });
+    },
 
     * fetchRules({}: FetchRulesAction, { call, select, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
@@ -1523,7 +1587,7 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
       yield put<SaveDataRulesAction>({
-        type: 'informalNodeManagerPage/saveDataRules',
+        type: 'saveDataRules',
         payload: {
           type: 'append',
           data: value.names.map((n) => {
