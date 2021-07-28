@@ -102,11 +102,13 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
           className={styles.hoverVisible}
         >
           <Actions
-            onEdit={() => router.push(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}))}
+            onEdit={() => {
+              window.open(FUtil.LinkTo.informExhibitManagement({exhibitID: record.id}));
+            }}
             onSearch={async () => {
               // console.log(record, 'record0ojlakfsdfj09ewalkfsjdl');
               if (record.originInfo.type === 'resource') {
-                return router.push(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
+                return window.open(FUtil.LinkTo.resourceDetails({resourceID: record.originInfo.id}));
               }
 
               const {data} = await FServiceAPI.Storage.objectDetails({
@@ -114,7 +116,7 @@ function ExhibitTable({dispatch, informalNodeManagerPage}: ExhibitTableProps) {
               });
 
               // console.log(data, '!@!#$!@#$@!#$@#$@#$@#');
-              router.push(FUtil.LinkTo.objectDetails({
+              window.open(FUtil.LinkTo.objectDetails({
                 bucketName: data.bucketName,
                 objectID: record.originInfo.id,
               }));
