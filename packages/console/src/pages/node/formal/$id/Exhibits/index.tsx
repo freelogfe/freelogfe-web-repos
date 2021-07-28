@@ -1,29 +1,30 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FDown, FEdit, FExclamation, FFileSearch, FWarning} from '@/components/FIcons';
+import { FDown, FEdit, FExclamation, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {FContentText, FTitleText} from '@/components/FText';
-import {Space} from 'antd';
+import { FContentText, FTitleText } from '@/components/FText';
+import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, NodeManagerModelState} from '@/models/connect';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
-import {router} from "umi";
-import {ColumnsType} from "antd/lib/table/interface";
-import {FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
-import {ChangeAction as MarketChangeAction} from '@/models/marketPage';
-import FNoDataTip from "@/components/FNoDataTip";
-import FDropdownMenu from "@/components/FDropdownMenu";
-import FLoadingTip from "@/components/FLoadingTip";
-import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/node/formal/$id/Sider";
-import FTooltip from "@/components/FTooltip";
-import FLink from "@/components/FLink";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import { router } from 'umi';
+import { ColumnsType } from 'antd/lib/table/interface';
+import { FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction } from '@/models/nodeManagerPage';
+import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
+import FNoDataTip from '@/components/FNoDataTip';
+import FDropdownMenu from '@/components/FDropdownMenu';
+import FLoadingTip from '@/components/FLoadingTip';
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import Sider from '@/pages/node/formal/$id/Sider';
+import FTooltip from '@/components/FTooltip';
+import FLink from '@/components/FLink';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as AHooks from 'ahooks';
+import { FTextBtn } from '@/components/FButton';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -31,17 +32,17 @@ interface ExhibitsProps {
 }
 
 const resourceTypeOptions = [
-  {text: '全部', value: '-1'},
-  ...FUtil.Predefined.resourceTypes.map((i) => ({value: i, text: i}))
+  { text: '全部', value: '-1' },
+  ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
 ];
 
 const resourceStatusOptions = [
-  {text: '全部', value: '2'},
-  {text: '已上线', value: '1'},
-  {text: '已下线', value: '0'},
+  { text: '全部', value: '2' },
+  { text: '已上线', value: '1' },
+  { text: '已下线', value: '0' },
 ];
 
-function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
+function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
   AHooks.useMount(() => {
 
@@ -57,7 +58,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   }));
 
   if (nodeManagerPage.exhibitDataState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
+    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
   }
 
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
@@ -65,7 +66,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       title: (<FTitleText
         // text={'展品名称｜类型｜展品标题｜策略'}
         text={FUtil1.I18n.message('tableheader_exhibit')}
-        type="table"
+        type='table'
       />),
       dataIndex: 'name',
       key: 'name',
@@ -73,8 +74,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       // width: 100,
       render(_, record) {
         return (<div className={styles.info}>
-          <img src={record.cover || imgSrc} alt={''}/>
-          <div style={{width: 10, flexShrink: 0}}/>
+          <img src={record.cover || imgSrc} alt={''} />
+          <div style={{ width: 10, flexShrink: 0 }} />
           <div className={styles.infos}>
             <FContentText
               singleRow
@@ -82,9 +83,9 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
             />
             <div className={styles.sub}>
               <label>{record.type}</label>
-              <div style={{width: 5}}/>
+              <div style={{ width: 5 }} />
               <FContentText
-                type="additional2"
+                type='additional2'
                 text={record.title}
                 singleRow
               />
@@ -107,22 +108,31 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       render(_, record): any {
         return (<Space size={25} className={[styles.toolBar, styles.hoverVisible].join(' ')}>
           <FTooltip title={FUtil1.I18n.message('tip_edit_exhibit')}>
-            <FLink to={FUtil.LinkTo.exhibitManagement({
-              exhibitID: record.id
-            })}><FEdit/></FLink>
+            <FTextBtn
+              type='primary'
+              onClick={() => {
+                window.open(FUtil.LinkTo.exhibitManagement({
+                  exhibitID: record.id,
+                }));
+              }}
+            ><FEdit /></FTextBtn>
           </FTooltip>
 
           <FTooltip title={FUtil1.I18n.message('tip_check_relevant_resource')}>
-            <FLink to={FUtil.LinkTo.resourceDetails({
-              resourceID: record.resourceId
-            })}><FFileSearch/></FLink>
+            <FTextBtn
+              type='primary'
+              onClick={() => {
+                window.open(FUtil.LinkTo.resourceDetails({
+                  resourceID: record.resourceId,
+                }));
+              }}><FFileSearch /></FTextBtn>
           </FTooltip>
-        </Space>)
-      }
+        </Space>);
+      },
     },
     {
       title: (<FTitleText
-        type="table"
+        type='table'
         text={FUtil1.I18n.message('tableheader_exhibit_version')}
       />),
       dataIndex: 'version',
@@ -130,12 +140,12 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
       // width: 125,
       className: styles.tableVersion,
       render(_, record): any {
-        return (<FContentText text={record.version}/>)
+        return (<FContentText text={record.version} />);
       },
     },
     {
       title: (<FTitleText
-        type="table"
+        type='table'
         text={FUtil1.I18n.message('tableheader_show_exhibit')}
       />),
       dataIndex: 'status',
@@ -159,18 +169,18 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
           />
           {!record.isAuth || record.policies.length === 0 ?
             <FTooltip title={!record.isAuth ? record.authErrorText : '暂无上线策略'}>
-              <FWarning/>
+              <FWarning />
             </FTooltip> : ''}
-        </Space>)
-      }
+        </Space>);
+      },
     },
   ];
 
   return (<FLeftSiderLayout
     type={nodeManagerPage.exhibitDataState === 'noData' ? 'empty' : 'table'}
-    sider={<Sider/>}
+    sider={<Sider />}
     header={<div className={styles.header}>
-      <FTitleText type="h1" text={'展品管理'}/>
+      <FTitleText type='h1' text={'展品管理'} />
       <Space size={80}>
         <div>
           <span>类型：</span>
@@ -184,8 +194,8 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
             })}
           >
             <span
-              style={{cursor: 'pointer'}}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.selectedType)?.text || ''}<FDown
-              style={{marginLeft: 8}}/></span>
+              style={{ cursor: 'pointer' }}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.selectedType)?.text || ''}<FDown
+              style={{ marginLeft: 8 }} /></span>
           </FDropdownMenu>
         </div>
         <div>
@@ -199,15 +209,15 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
               },
             })}
           >
-            <span style={{cursor: 'pointer'}}>{resourceStatusOptions.find((rso) => {
+            <span style={{ cursor: 'pointer' }}>{resourceStatusOptions.find((rso) => {
               return rso.value === nodeManagerPage.selectedStatus.toString();
-            })?.text}<FDown style={{marginLeft: 10}}/></span>
+            })?.text}<FDown style={{ marginLeft: 10 }} /></span>
           </FDropdownMenu>
         </div>
         <div>
           <FInput
             className={styles.input}
-            theme="dark"
+            theme='dark'
             value={nodeManagerPage.exhibitInputFilter}
             debounce={300}
             onDebounceChange={(value) => dispatch<OnChangeExhibitAction>({
@@ -232,7 +242,7 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
             type: 'marketPage/change',
             payload: {
               resourceType: '-1',
-            }
+            },
           });
           router.push(FUtil.LinkTo.market());
         }}
@@ -275,6 +285,6 @@ function Exhibits({dispatch, nodeManagerPage}: ExhibitsProps) {
   </FLeftSiderLayout>);
 }
 
-export default connect(({nodeManagerPage}: ConnectState) => ({
+export default connect(({ nodeManagerPage }: ConnectState) => ({
   nodeManagerPage,
 }))(Exhibits);
