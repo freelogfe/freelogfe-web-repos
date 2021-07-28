@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { router } from 'umi';
 import fConfirmModal from '@/components/fConfirmModal';
-import FUtil1 from '@/utils'
+import FUtil1 from '@/utils';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
@@ -173,6 +173,8 @@ export interface InformalNodeManagerPageModelState {
   }[];
 
   rulePageStatus: 'normal' | 'export' | 'delete' | 'coding';
+  ruleIndeterminate: boolean;
+  ruleIndeterminateChecked: boolean;
   rulePageRuleList: {
     id: string;
     checked: boolean;
@@ -384,6 +386,21 @@ export interface OnClickExitCodingConfirmBtnAction extends AnyAction {
 
 export interface OnClickExitCodingCancelBtnAction extends AnyAction {
   type: 'informalNodeManagerPage/onClickExitCodingCancelBtn';
+}
+
+export interface OnChangeRuleIndeterminateCheckboxAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeRuleIndeterminateCheckbox';
+  payload: {
+    checked: boolean;
+  };
+}
+
+export interface OnChangeRuleCheckedAction extends AnyAction {
+  type: 'informalNodeManagerPage/onChangeRuleChecked';
+  payload: {
+    ruleID: string;
+    checked: boolean;
+  };
 }
 
 interface ICandidate {
@@ -604,6 +621,8 @@ interface InformalNodeManagerPageModelType {
     onClickExitCodingBtn: (action: OnClickExitCodingBtnAction, effects: EffectsCommandMap) => void;
     onClickExitCodingConfirmBtn: (action: OnClickExitCodingConfirmBtnAction, effects: EffectsCommandMap) => void;
     onClickExitCodingCancelBtn: (action: OnClickExitCodingCancelBtnAction, effects: EffectsCommandMap) => void;
+    onChangeRuleIndeterminateCheckbox: (action: OnChangeRuleIndeterminateCheckboxAction, effects: EffectsCommandMap) => void;
+    onChangeRuleChecked: (action: OnChangeRuleCheckedAction, effects: EffectsCommandMap) => void;
 
     onAddExhibitDrawerAfterVisibleChange: (action: OnAddExhibitDrawerAfterVisibleChangeAction, effects: EffectsCommandMap) => void;
     onAddExhibitDrawerCancelChange: (action: OnAddExhibitDrawerCancelChangeAction, effects: EffectsCommandMap) => void;
@@ -705,6 +724,8 @@ const informalNodeManagerPageInitStates: InformalNodeManagerPageModelState = {
   themePageThemeList: [],
 
   rulePageStatus: 'normal',
+  ruleIndeterminate: false,
+  ruleIndeterminateChecked: false,
   rulePageRuleList: [],
   rulePageCodeInput: '',
   rulePageCodeIsDirty: false,
@@ -786,6 +807,8 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rulePagePromptLeavePath: '',
 
+          ruleIndeterminate: false,
+          ruleIndeterminateChecked: false,
           rulePageRuleList: [],
           rulePageCodeInput: '',
           rulePageCodeIsDirty: false,
@@ -1227,12 +1250,12 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onClickActiveThemeBtn ({payload}: OnClickActiveThemeBtnAction, {select, put}: EffectsCommandMap) {
+    * onClickActiveThemeBtn({ payload }: OnClickActiveThemeBtnAction, { select, put }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
       }));
 
-      const {rules}: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
+      const { rules }: { rules: any[] } = compile(informalNodeManagerPage.ruleText);
       // console.log(rules, 'rules1234234');
       const rule = rules.find((r) => r.themeName);
 
@@ -1280,7 +1303,7 @@ const Model: InformalNodeManagerPageModelType = {
               isOnline: true,
             };
           }),
-        }
+        },
       });
     },
 
@@ -1301,6 +1324,8 @@ const Model: InformalNodeManagerPageModelType = {
         payload: {
           rulePageCodeInput: data.ruleText,
           rulePageCodeIsDirty: false,
+          ruleIndeterminate: false,
+          ruleIndeterminateChecked: false,
           rulePageRuleList: data.testRules.map((tr: any) => {
             return {
               ...tr,
@@ -1361,6 +1386,8 @@ const Model: InformalNodeManagerPageModelType = {
           rulePageCodeIsChecking: false,
           rulePageCodeExecutionError: codeExecutionError.length > 0 ? codeExecutionError : null,
           rulePageCodeSaveSuccess: codeExecutionError.length === 0,
+          ruleIndeterminate: false,
+          ruleIndeterminateChecked: false,
           rulePageRuleList: data1.testRules.map((tr: any) => {
             return {
               ...tr,
@@ -1513,6 +1540,65 @@ const Model: InformalNodeManagerPageModelType = {
     * onClickExitCodingCancelBtn({}: OnClickExitCodingCancelBtnAction, {}: EffectsCommandMap) {
 
     },
+    * onChangeRuleIndeterminateCheckbox({ payload }: OnChangeRuleIndeterminateCheckboxAction, {
+      put,
+      select,
+    }: EffectsCommandMap) {
+      // console.log(payload, 'payloadpayloadpayload89234uoijdhflkasdf');
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ruleIndeterminate: false,
+          ruleIndeterminateChecked: payload.checked,
+          rulePageRuleList: informalNodeManagerPage.rulePageRuleList.map((rpr) => {
+            return {
+              ...rpr,
+              checked: payload.checked,
+            };
+          }),
+        },
+      });
+    },
+    * onChangeRuleChecked({ payload }: OnChangeRuleCheckedAction, { put, select }: EffectsCommandMap) {
+      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
+        informalNodeManagerPage,
+      }));
+
+
+      const rulePageRuleList: InformalNodeManagerPageModelState['rulePageRuleList'] = informalNodeManagerPage.rulePageRuleList.map((rl) => {
+        if (rl.id !== payload.ruleID) {
+          return rl;
+        }
+        return {
+          ...rl,
+          checked: payload.checked,
+        };
+      });
+      let ruleIndeterminateChecked: boolean = false;
+
+      if (rulePageRuleList.every((rp) => {
+        return rp.checked;
+      })) {
+        ruleIndeterminateChecked = true;
+      }
+      yield put({
+        type: 'change',
+        payload: {
+          ruleIndeterminateChecked,
+          ruleIndeterminate: !(rulePageRuleList.every((rp) => {
+            return !rp.checked;
+          }) || rulePageRuleList.every((rp) => {
+            return rp.checked;
+          })),
+          rulePageRuleList: rulePageRuleList,
+        },
+      });
+    },
+
 
     * onAddExhibitDrawerAfterVisibleChange({ payload }: OnAddExhibitDrawerAfterVisibleChangeAction, {
       put,

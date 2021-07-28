@@ -182,7 +182,6 @@ function Theme({dispatch, informalNodeManagerPage}: ThemeProps) {
                                         });
                                       },
                                     });
-
                                   }}>激活</a>
                                 </>)
                               }

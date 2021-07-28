@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from "@/components/FText";
-import {Space} from "antd";
-import {FImport, FExport, FCode, FExit, FInfo, FWarning, FDelete} from "@/components/FIcons";
-import TypesCaption from "../components/TypesCaption";
+import { FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import { FImport, FExport, FCode, FExit, FInfo, FWarning, FDelete } from '@/components/FIcons';
+import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
   VersionRule,
@@ -14,36 +14,36 @@ import {
   LabelRule,
   CoverRule,
   AlterRule,
-  AddRule, ActiveRule
-} from "../components/MappingRules";
-import FCodemirror from "@/components/FCodemirror";
-import {FRectBtn, FTextBtn} from "@/components/FButton";
-import {connect, Dispatch} from 'dva';
-import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
+  AddRule, ActiveRule,
+} from '../components/MappingRules';
+import FCodemirror from '@/components/FCodemirror';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
-  ChangeAction, OnCancelRulePageLeaveAction,
+  ChangeAction, OnCancelRulePageLeaveAction, OnChangeRuleCheckedAction, OnChangeRuleIndeterminateCheckboxAction,
   OnClickDeleteRulesBtnAction,
   OnClickEntryCodingBtnAction,
   OnClickExitCodingBtnAction, OnClickExitCodingCancelBtnAction, OnClickExitCodingConfirmBtnAction,
   OnClickExportRulesBtnAction, OnConfirmRulePageLeaveAction,
   OnImportRulesBtnAction,
   OnMountRulePageAction, OnPromptRulePageLeaveAction, OnUnmountRulePageAction,
-  SaveRulesAction
-} from "@/models/informalNodeManagerPage";
+  SaveRulesAction,
+} from '@/models/informalNodeManagerPage';
 import FileSaver from 'file-saver';
-import FUpload from "@/components/FUpload";
-import FUtil1 from "@/utils";
-import Prompt from "umi/prompt";
-import * as H from "history";
+import FUpload from '@/components/FUpload';
+import FUtil1 from '@/utils';
+import Prompt from 'umi/prompt';
+import * as H from 'history';
 import * as AHooks from 'ahooks';
-import fConfirmModal from "@/components/fConfirmModal";
-import {router} from "umi";
-import {FUtil} from '@freelog/tools-lib';
-import FTooltip from "@/components/FTooltip";
-import FCheckbox from "@/components/FCheckbox";
-import FNoDataTip from "@/components/FNoDataTip";
+import fConfirmModal from '@/components/fConfirmModal';
+import { router } from 'umi';
+import { FUtil } from '@freelog/tools-lib';
+import FTooltip from '@/components/FTooltip';
+import FCheckbox from '@/components/FCheckbox';
+import FNoDataTip from '@/components/FNoDataTip';
 
-const {compile} = require('@freelog/nmr_translator');
+const { compile } = require('@freelog/nmr_translator');
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -51,7 +51,7 @@ interface MappingRuleProps {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
-function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
+function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountRulePageAction>({
@@ -77,7 +77,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   // const {rules} = compile(informalNodeManagerPage.ruleText);
   // console.log(rules, '@#$RASDF)(JULK');
   const ruleObjList = informalNodeManagerPage.rulePageRuleList.map((rule) => {
-    const {ruleInfo} = rule;
+    const { ruleInfo } = rule;
 
     let theRule: any = {};
     if (ruleInfo.operation === 'activate_theme') {
@@ -156,7 +156,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         const locationHref: string = location.pathname + location.search;
         if (locationHref === FUtil.LinkTo.informNodeManagement({
           nodeID: informalNodeManagerPage.nodeID,
-          showPage: 'mappingRule'
+          showPage: 'mappingRule',
         })) {
           return true;
         }
@@ -184,10 +184,10 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
     />
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <FTitleText text={'映射规则管理'}/>
-        <div style={{width: 10}}/>
-        <TypesCaption/>
-        <div style={{width: 50}}/>
+        <FTitleText text={'映射规则管理'} />
+        <div style={{ width: 10 }} />
+        <TypesCaption />
+        <div style={{ width: 50 }} />
         {
           informalNodeManagerPage.rulePageStatus === 'normal' && (<Space size={30}>
             <FUpload
@@ -196,7 +196,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
                 const reader = new FileReader();
                 reader.readAsText(file);
-                reader.onload = function (evt: any) {
+                reader.onload = function(evt: any) {
                   dispatch<OnImportRulesBtnAction>({
                     type: 'informalNodeManagerPage/onImportRulesBtn',
                     payload: {
@@ -208,15 +208,15 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               }}
               showUploadList={false}
             >
-              <FTextBtn type="primary">
+              <FTextBtn type='primary'>
                 <Space size={5}>
-                  <FImport/>
+                  <FImport />
                   <span>导入</span>
                 </Space>
               </FTextBtn>
             </FUpload>
             <FTextBtn
-              type="primary"
+              type='primary'
               onClick={() => {
                 dispatch<OnClickExportRulesBtnAction>({
                   type: 'informalNodeManagerPage/onClickExportRulesBtn',
@@ -224,12 +224,12 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               }}
             >
               <Space size={5}>
-                <FExport/>
+                <FExport />
                 <span>导出</span>
               </Space>
             </FTextBtn>
             <FTextBtn
-              type="danger"
+              type='danger'
               onClick={() => {
                 dispatch<OnClickDeleteRulesBtnAction>({
                   type: 'informalNodeManagerPage/onClickDeleteRulesBtn',
@@ -237,7 +237,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
               }}
             >
               <Space size={5}>
-                <FDelete/>
+                <FDelete />
                 <span>删除</span>
               </Space>
             </FTextBtn>
@@ -254,7 +254,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FCode/>
+            <FCode />
             <span>进入代码模式</span>
           </Space>
         </FTextBtn>)
@@ -285,7 +285,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FExit/>
+            <FExit />
             <span>退出代码模式</span>
           </Space>
         </FTextBtn>)
@@ -295,7 +295,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         informalNodeManagerPage.rulePageStatus === 'export'
         && (<Space size={30}>
           <FTextBtn
-            type="default"
+            type='default'
             onClick={() => {
               onChange({
                 rulePageStatus: 'normal',
@@ -303,7 +303,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }}
           >取消</FTextBtn>
           <FRectBtn
-            type="primary"
+            type='primary'
             onClick={() => {
               const fileName = `测试节点.映射规则.${informalNodeManagerPage.nodeID}.txt`;
               const text: string = informalNodeManagerPage.rulePageRuleList
@@ -312,7 +312,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                   return rl.ruleInfo.text;
                 })
                 .join('\n\n');
-              const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+              const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
               FileSaver.saveAs(blob, fileName);
             }}
           >导出</FRectBtn>
@@ -323,7 +323,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         informalNodeManagerPage.rulePageStatus === 'delete'
         && (<Space size={30}>
           <FTextBtn
-            type="default"
+            type='default'
             onClick={() => {
               onChange({
                 rulePageStatus: 'normal',
@@ -331,7 +331,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             }}
           >取消</FTextBtn>
           <FRectBtn
-            type="danger1"
+            type='danger1'
             onClick={async () => {
               const text: string = informalNodeManagerPage.rulePageRuleList
                 .filter((rl) => !rl.checked)
@@ -367,7 +367,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 });
               }}
             />
-            <div style={{height: 15}}/>
+            <div style={{ height: 15 }} />
             <FRectBtn
               // loading={informalNodeManagerPage.codeIsChecking}
               disabled={!informalNodeManagerPage.rulePageCodeIsDirty || informalNodeManagerPage.rulePageCodeIsChecking}
@@ -375,7 +375,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                 // onChange({
                 //   codeIsDirty: false,
                 // });
-                const {errors, rules, errorObjects} = compile(informalNodeManagerPage.rulePageCodeInput);
+                const { errors, rules, errorObjects } = compile(informalNodeManagerPage.rulePageCodeInput);
                 if (errorObjects.length > 0) {
                   // return dispatch<ChangeAction>({
                   //   type: 'informalNodeManagerPage/change',
@@ -394,15 +394,15 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
             >{informalNodeManagerPage.rulePageCodeIsChecking ? FUtil1.I18n.message('msg_verifying') : '校验并保存'}</FRectBtn>
             {
               informalNodeManagerPage.rulePageCodeCompileErrors && (<div className={styles.codeCompileErrors}>
-                <div style={{height: 20}}/>
+                <div style={{ height: 20 }} />
                 <div className={styles.errorTitle}>编译错误，请检查更正后提交。</div>
-                <div style={{height: 20}}/>
-                <Space className={styles.errorList} size={5} direction="vertical">
+                <div style={{ height: 20 }} />
+                <Space className={styles.errorList} size={5} direction='vertical'>
                   {
                     informalNodeManagerPage.rulePageCodeCompileErrors.map((cme, index) => {
                       return (<div key={index} className={styles.errorListItem}>
                         <div>•</div>
-                        <div style={{width: 5}}/>
+                        <div style={{ width: 5 }} />
                         <div>
                           {
                             !!cme.offendingSymbol && (<div>
@@ -425,15 +425,15 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
             {
               informalNodeManagerPage.rulePageCodeExecutionError && (<div className={styles.codeExecutionError}>
-                <div style={{height: 20}}/>
+                <div style={{ height: 20 }} />
                 <div className={styles.errorTitle}>校验并保存成功，但存在预执行错误。</div>
-                <div style={{height: 20}}/>
-                <Space className={styles.errorList} size={5} direction="vertical">
+                <div style={{ height: 20 }} />
+                <Space className={styles.errorList} size={5} direction='vertical'>
                   {
                     informalNodeManagerPage.rulePageCodeExecutionError.map((cme, index) => {
                       return (<div key={index} className={styles.errorListItem}>
                         <div>•</div>
-                        <div style={{width: 5}}/>
+                        <div style={{ width: 5 }} />
                         <div>
                           <div>
                             <div>错误提示：</div>
@@ -449,7 +449,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
 
             {
               informalNodeManagerPage.rulePageCodeSaveSuccess && (<>
-                <div style={{height: 20}}/>
+                <div style={{ height: 20 }} />
                 <div className={styles.codeSaveSuccess}>
                   校验并保存成功。
                 </div>
@@ -460,13 +460,32 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
         : (<div className={styles.ruleListBody}>
           <Space
             className={styles.ruleList}
-            direction="vertical"
+            direction='vertical'
           >
+            {
+              informalNodeManagerPage.rulePageStatus !== 'normal' && (<div style={{ paddingLeft: 20 }}>
+                <Space size={10}>
+                  <FCheckbox
+                    indeterminate={informalNodeManagerPage.ruleIndeterminate}
+                    checked={informalNodeManagerPage.ruleIndeterminateChecked}
+                    onChange={(e) => {
+                      dispatch<OnChangeRuleIndeterminateCheckboxAction>({
+                        type: 'informalNodeManagerPage/onChangeRuleIndeterminateCheckbox',
+                        payload: {
+                          checked: e.target.checked,
+                        },
+                      });
+                    }}
+                  />
+                  <span>全选</span>
+                </Space>
+              </div>)
+            }
 
             {
               ruleObjList.length === 0
-                ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'}/>)
-                : ruleObjList.map(({theRule, ...rule}, index: number, ruleObjListArray) => {
+                ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'} />)
+                : ruleObjList.map(({ theRule, ...rule }, index: number, ruleObjListArray) => {
                   return (<div
                     key={rule.id}
                     className={styles.ruleCard}
@@ -477,30 +496,26 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                           informalNodeManagerPage.rulePageStatus !== 'normal' && (<FCheckbox
                             checked={rule.checked}
                             onChange={(e) => {
-                              onChange({
-                                rulePageRuleList: informalNodeManagerPage.rulePageRuleList.map((rl) => {
-                                  if (rl.id !== rule.id) {
-                                    return rl;
-                                  }
-                                  return {
-                                    ...rl,
-                                    checked: e.target.checked,
-                                  }
-                                })
+                              dispatch<OnChangeRuleCheckedAction>({
+                                type: 'informalNodeManagerPage/onChangeRuleChecked',
+                                payload: {
+                                  ruleID: rule.id,
+                                  checked: e.target.checked,
+                                },
                               });
                             }}
                           />)
                         }
 
-                        {theRule.add && <AddRule {...theRule.add}/>}
-                        {theRule.alter && <AlterRule alter={theRule.alter}/>}
-                        {theRule.active && <ActiveRule active={theRule.active}/>}
+                        {theRule.add && <AddRule {...theRule.add} />}
+                        {theRule.alter && <AlterRule alter={theRule.alter} />}
+                        {theRule.active && <ActiveRule active={theRule.active} />}
                       </Space>
                       {
                         rule.matchErrors.length > 0 && (<FTooltip title={rule.matchErrors.map((mE, iinn) => {
                           return (<div key={iinn}>{mE}</div>);
                         })}>
-                          <div><FWarning/></div>
+                          <div><FWarning /></div>
                         </FTooltip>)
                       }
 
@@ -511,19 +526,19 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                         <Space
                           className={styles.ruleCardBodyList}
                           size={15}
-                          direction="vertical"
+                          direction='vertical'
                         >
                           {/*{theRule.version && <VersionRule version={theRule.version}/>}*/}
                           {theRule.cover &&
-                          <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover}/></div>}
+                          <div className={styles.ruleCardBodyListItem}><CoverRule cover={theRule.cover} /></div>}
                           {theRule.title &&
-                          <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title}/></div>}
+                          <div className={styles.ruleCardBodyListItem}><TitleRule title={theRule.title} /></div>}
                           {theRule.labels &&
-                          <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels}/></div>}
+                          <div className={styles.ruleCardBodyListItem}><LabelRule labels={theRule.labels} /></div>}
                           {theRule.online &&
-                          <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online}/></div>}
+                          <div className={styles.ruleCardBodyListItem}><OnlineRule online={theRule.online} /></div>}
                           {theRule.offline &&
-                          <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline}/></div>}
+                          <div className={styles.ruleCardBodyListItem}><OfflineRule offline={theRule.offline} /></div>}
                           {theRule.replaces && theRule.replaces.map((replace: any, replaceIndex: any) => {
                             return (<div key={replaceIndex} className={styles.ruleCardBodyListItem}><ReplaceRule
                               {...replace}
@@ -531,7 +546,7 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
                           })}
                           {theRule.attrs && theRule.attrs.map((attr: any, attrIndex: any) => {
                             return (
-                              <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr}/></div>);
+                              <div key={attrIndex} className={styles.ruleCardBodyListItem}><AttrRule {...attr} /></div>);
                           })}
 
                         </Space>
@@ -547,6 +562,6 @@ function MappingRule({dispatch, informalNodeManagerPage}: MappingRuleProps) {
   </>);
 }
 
-export default connect(({informalNodeManagerPage}: ConnectState) => ({
+export default connect(({ informalNodeManagerPage }: ConnectState) => ({
   informalNodeManagerPage,
 }))(MappingRule);
