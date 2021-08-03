@@ -1,20 +1,22 @@
 import * as React from 'react';
 
 import styles from './index.less';
-// import {UnControlled as CodeMirror} from "react-codemirror2";
-import {Controlled as CodeMirror, IControlledCodeMirror} from 'react-codemirror2'
+import { Controlled as CodeMirror, IControlledCodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
-interface FCodemirror extends Partial<IControlledCodeMirror>{
+interface FCodemirror extends Partial<IControlledCodeMirror> {
   value: string;
   onChange?: (value: string) => void;
+
+  className?: string;
+  // style?: CSSProperties;
   // onBeforeChange?: (editor, data, value) => void;
 }
 
-function FCodemirror({value, onChange}: FCodemirror) {
+function FCodemirror({ value, onChange, className = '' }: FCodemirror) {
   return (<CodeMirror
-    className={styles.CodeMirror}
+    className={[styles.CodeMirror, className].join(' ')}
     value={value}
     options={{
       lineNumbers: true,

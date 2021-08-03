@@ -3,10 +3,11 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
 import { Space } from 'antd';
-import { FFileText } from '@/components/FIcons';
+import { FCode, FFileText } from '@/components/FIcons';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '@/components/FDrawer';
+import FComposition from '@/components/FIcons/FComposition';
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -76,15 +77,54 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     }}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
-    <FInput
-      className={styles.newTitle}
-      value={title}
-      // errorText={titleError}
-      onChange={(e) => {
-        onChangeTitleInput(e.target.value);
-      }}
-      placeholder={'请输入授权策略名称'}
-    />
+    <div className={styles.policyHeader}>
+      <FInput
+        className={styles.policyTitle}
+        // className={styles.newTitle}
+        value={title}
+        // errorText={titleError}
+        onChange={(e) => {
+          onChangeTitleInput(e.target.value);
+        }}
+        // placeholder={'请输入授权策略名称'}
+        placeholder={'输入策略名称…'}
+      />
+
+      <Space size={20}>
+        {
+          true
+            ? (<FTextBtn
+              type='default'
+              onClick={() => {
+                // setTemplateVisible(true);
+              }}>
+              <Space size={4}>
+                <FComposition />
+                <span>组合模式</span>
+              </Space>
+            </FTextBtn>)
+            : (<FTextBtn
+              type='default'
+              onClick={() => {
+                // setTemplateVisible(true);
+              }}>
+              <Space size={4}>
+                <FCode />
+                <span>代码模式</span>
+              </Space>
+            </FTextBtn>)
+        }
+
+        <FTextBtn
+          type='default'
+          onClick={() => setTemplateVisible(true)}>
+          <Space size={4}>
+            <FFileText />
+            <span>策略模板</span>
+          </Space>
+        </FTextBtn>
+      </Space>
+    </div>
     {titleError && <>
       <div style={{ height: 5 }} />
       <div className={styles.textError}>{titleError}</div>
@@ -100,18 +140,11 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       <div style={{ height: 5 }} />
       <div className={styles.textError}>{textError}</div>
     </>}
-    <div style={{ height: 10 }} />
-    <div className={styles.footer}>
-      <a
-        style={{ color: '#666' }}
-        onClick={() => setTemplateVisible(true)}>
-        <Space size={4}>
-          <FFileText />
-          <span>策略模板</span>
-        </Space>
-      </a>
+    {/*<div style={{ height: 10 }} />*/}
+    {/*<div className={styles.footer}>*/}
+    {/*  */}
 
-    </div>
+    {/*</div>*/}
 
     <FDrawer
       width={640}
