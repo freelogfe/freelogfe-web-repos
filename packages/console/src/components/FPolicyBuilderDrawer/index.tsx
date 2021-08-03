@@ -21,13 +21,28 @@ interface FPolicyBuilderDrawerProps {
   onCancel?(): void;
 }
 
+interface FPolicyBuilderDrawerStates {
+  title: string;
+  titleError: string;
+  editMode: 'code' | 'composition';
+
+  codeText: string;
+  codeTextError: string;
+
+
+}
+
+
 function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FPolicyBuilderDrawerProps) {
 
-  const [title, setTitle] = React.useState<string>('');
-  const [titleError, setTitleError] = React.useState<string>('');
+  const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
+  const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
+  const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>('composition');
 
-  const [text, setText] = React.useState<string>('');
-  const [textError, setTextError] = React.useState<string>('');
+  const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
+  const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
+
+
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
   const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
   const [usedTexts, setUsedTexts] = React.useState<string[]>([]);
@@ -45,8 +60,8 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
   function onChangeTextInput(value: string) {
     // const value: string = e.target.value;
-    setText(value);
-    setTextError(verifyText(value, usedTexts));
+    setCodeText(value);
+    setCodeTextError(verifyText(value, usedTexts));
   }
 
   return (<FDrawer
@@ -56,95 +71,109 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     width={720}
     topRight={<Space size={30}>
       <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
-      <FRectBtn
-        onClick={() => {
-          onConfirm && onConfirm({
-            title,
-            text,
-          });
-        }}
-        disabled={title === '' || text === '' || !!titleError || !!textError}
-        type='primary'
-      >确定</FRectBtn>
+
+      {
+        true
+          ? (<FRectBtn
+            onClick={() => {
+              onConfirm && onConfirm({
+                title,
+                text: codeText,
+              });
+            }}
+            disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
+            type='primary'
+          >校验</FRectBtn>)
+          : (<FRectBtn
+            onClick={() => {
+              onConfirm && onConfirm({
+                title,
+                text: codeText,
+              });
+            }}
+            disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
+            type='primary'
+          >创建</FRectBtn>)
+      }
+
+
     </Space>}
     afterVisibleChange={(visible) => {
       if (!visible) {
         setTitle('');
         setTitleError('');
-        setText('');
-        setTextError('');
+        setCodeText('');
+        setCodeTextError('');
       }
     }}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
-    <div className={styles.policyHeader}>
-      <FInput
-        className={styles.policyTitle}
-        // className={styles.newTitle}
-        value={title}
-        // errorText={titleError}
-        onChange={(e) => {
-          onChangeTitleInput(e.target.value);
+    <div className={styles.maskingContainer}>
+      <div className={styles.policyHeader}>
+        <FInput
+          className={styles.policyTitle}
+          // className={styles.newTitle}
+          value={title}
+          // errorText={titleError}
+          onChange={(e) => {
+            onChangeTitleInput(e.target.value);
+          }}
+          // placeholder={'请输入授权策略名称'}
+          placeholder={'输入策略名称…'}
+        />
+
+        <Space size={20}>
+          {
+            true
+              ? (<FTextBtn
+                type='default'
+                onClick={() => {
+                  // setTemplateVisible(true);
+                }}>
+                <Space size={4}>
+                  <FComposition />
+                  <span>组合模式</span>
+                </Space>
+              </FTextBtn>)
+              : (<FTextBtn
+                type='default'
+                onClick={() => {
+                  // setTemplateVisible(true);
+                }}>
+                <Space size={4}>
+                  <FCode />
+                  <span>代码模式</span>
+                </Space>
+              </FTextBtn>)
+          }
+
+          <FTextBtn
+            type='default'
+            onClick={() => setTemplateVisible(true)}>
+            <Space size={4}>
+              <FFileText />
+              <span>策略模板</span>
+            </Space>
+          </FTextBtn>
+        </Space>
+      </div>
+      {titleError && <>
+        <div style={{ height: 5 }} />
+        <div className={styles.textError}>{titleError}</div>
+      </>}
+      <div style={{ height: 20 }} />
+      <FCodemirror
+        value={codeText}
+        onChange={(value) => {
+          // console.log(value, 'value1234231421344324');
+          onChangeTextInput(value);
         }}
-        // placeholder={'请输入授权策略名称'}
-        placeholder={'输入策略名称…'}
       />
-
-      <Space size={20}>
-        {
-          true
-            ? (<FTextBtn
-              type='default'
-              onClick={() => {
-                // setTemplateVisible(true);
-              }}>
-              <Space size={4}>
-                <FComposition />
-                <span>组合模式</span>
-              </Space>
-            </FTextBtn>)
-            : (<FTextBtn
-              type='default'
-              onClick={() => {
-                // setTemplateVisible(true);
-              }}>
-              <Space size={4}>
-                <FCode />
-                <span>代码模式</span>
-              </Space>
-            </FTextBtn>)
-        }
-
-        <FTextBtn
-          type='default'
-          onClick={() => setTemplateVisible(true)}>
-          <Space size={4}>
-            <FFileText />
-            <span>策略模板</span>
-          </Space>
-        </FTextBtn>
-      </Space>
+      {codeTextError && <>
+        <div style={{ height: 5 }} />
+        <div className={styles.textError}>{codeTextError}</div>
+      </>}
     </div>
-    {titleError && <>
-      <div style={{ height: 5 }} />
-      <div className={styles.textError}>{titleError}</div>
-    </>}
-    <div style={{ height: 20 }} />
-    <FCodemirror
-      value={text}
-      onChange={(value) => {
-        onChangeTextInput(value);
-      }}
-    />
-    {textError && <>
-      <div style={{ height: 5 }} />
-      <div className={styles.textError}>{textError}</div>
-    </>}
-    {/*<div style={{ height: 10 }} />*/}
-    {/*<div className={styles.footer}>*/}
-    {/*  */}
-
-    {/*</div>*/}
 
     <FDrawer
       width={640}
