@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from "@/components/FInput";
-import FCodemirror from "@/components/FCodemirror";
-import {Space} from "antd";
-import {FFileText} from "@/components/FIcons";
-import {FRectBtn, FTextBtn} from "@/components/FButton";
-import PolicyTemplates from "./PolicyTemplates";
-import FDrawer from "@/components/FDrawer";
+import FInput from '@/components/FInput';
+import FCodemirror from '@/components/FCodemirror';
+import { Space } from 'antd';
+import { FFileText } from '@/components/FIcons';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
+import PolicyTemplates from './PolicyTemplates';
+import FDrawer from '@/components/FDrawer';
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -15,15 +15,16 @@ interface FPolicyBuilderDrawerProps {
     text: string;
   }[];
 
-  onConfirm?({title, text}: { title: string, text: string }): void;
+  onConfirm?({ title, text }: { title: string, text: string }): void;
 
   onCancel?(): void;
 }
 
-function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPolicyBuilderDrawerProps) {
+function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FPolicyBuilderDrawerProps) {
 
   const [title, setTitle] = React.useState<string>('');
   const [titleError, setTitleError] = React.useState<string>('');
+
   const [text, setText] = React.useState<string>('');
   const [textError, setTextError] = React.useState<string>('');
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
@@ -50,7 +51,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
   return (<FDrawer
     title={'添加授权策略'}
     onClose={() => onCancel && onCancel()}
-    visible={visible}
+    visible={true}
     width={720}
     topRight={<Space size={30}>
       <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
@@ -62,10 +63,10 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
           });
         }}
         disabled={title === '' || text === '' || !!titleError || !!textError}
-        type="primary"
+        type='primary'
       >确定</FRectBtn>
     </Space>}
-    afterVisibleChange={(visible  )=> {
+    afterVisibleChange={(visible) => {
       if (!visible) {
         setTitle('');
         setTitleError('');
@@ -85,10 +86,10 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
       placeholder={'请输入授权策略名称'}
     />
     {titleError && <>
-      <div style={{height: 5}}/>
+      <div style={{ height: 5 }} />
       <div className={styles.textError}>{titleError}</div>
     </>}
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
     <FCodemirror
       value={text}
       onChange={(value) => {
@@ -96,16 +97,16 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
       }}
     />
     {textError && <>
-      <div style={{height: 5}}/>
+      <div style={{ height: 5 }} />
       <div className={styles.textError}>{textError}</div>
     </>}
-    <div style={{height: 10}}/>
+    <div style={{ height: 10 }} />
     <div className={styles.footer}>
       <a
-        style={{color: '#666'}}
+        style={{ color: '#666' }}
         onClick={() => setTemplateVisible(true)}>
         <Space size={4}>
-          <FFileText/>
+          <FFileText />
           <span>策略模板</span>
         </Space>
       </a>
@@ -124,7 +125,7 @@ function FPolicyBuilder({visible = false, alreadyHas, onCancel, onConfirm}: FPol
           onChangeTitleInput(p.title);
           onChangeTextInput(p.text);
           setTemplateVisible(false);
-        }}/>
+        }} />
     </FDrawer>
   </FDrawer>);
 }
