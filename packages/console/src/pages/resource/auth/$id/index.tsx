@@ -29,7 +29,6 @@ import {ColumnsType} from "antd/lib/table/interface";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {RouteComponentProps} from "react-router";
 import FBasicUpcastCard from "@/components/FBasicUpcastCard";
-import FPolicyList from "@/components/FPolicyList";
 
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -60,7 +59,7 @@ function Auth({dispatch, resourceAuthPage, match}: AuthProps & RouterTypes) {
       type: 'resourceAuthPage/fetchAuthorized',
       payload: {},
     });
-  }, []);
+  }, [dispatch, match.params.id]);
 
   const columns: ColumnsType<{
     key: string,
