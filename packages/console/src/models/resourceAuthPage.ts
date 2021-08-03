@@ -1,10 +1,10 @@
-import {AnyAction} from 'redux';
-import {Effect, EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
-import {FetchDataSourceAction} from "@/models/resourceInfo";
-import moment from "moment";
-import {ConnectState} from "@/models/connect";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
+import { FetchDataSourceAction } from '@/models/resourceInfo';
+import moment from 'moment';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -146,8 +146,8 @@ const Model: ResourceAuthPageModelType = {
     detailContractID: '',
   },
   effects: {
-    * fetchResourceInfo({}: FetchResourceInfoAction, {select, call, put}: EffectsCommandMap) {
-      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+    * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
 
@@ -156,7 +156,7 @@ const Model: ResourceAuthPageModelType = {
         isLoadPolicyInfo: 1,
       };
 
-      const {data} = yield call(FServiceAPI.Resource.info, params);
+      const { data } = yield call(FServiceAPI.Resource.info, params);
       // console.log(data, '@#$RFDSASDFSDFASDF');
 
       yield put<ChangeAction>({
@@ -164,11 +164,11 @@ const Model: ResourceAuthPageModelType = {
         payload: {
           policies: data.policies,
           baseUastResources: data.baseUpcastResources,
-        }
-      })
+        },
+      });
     },
-    * updatePolicies({payload}: UpdatePoliciesAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceAuthPage}: ConnectState = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
+    * updatePolicies({ payload }: UpdatePoliciesAction, { call, put, select }: EffectsCommandMap) {
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceInfo, resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
       const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
@@ -184,15 +184,19 @@ const Model: ResourceAuthPageModelType = {
         type: 'fetchResourceInfo',
       });
     },
-    * fetchAuthorized({payload: {activatedResourceId}}: FetchAuthorizedAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+    * fetchAuthorized({ payload: { activatedResourceId } }: FetchAuthorizedAction, {
+      call,
+      put,
+      select,
+    }: EffectsCommandMap) {
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
 
       const params: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
         resourceId: resourceAuthPage.resourceID,
       };
-      const {data} = yield call(FServiceAPI.Resource.resolveResources, params);
+      const { data } = yield call(FServiceAPI.Resource.resolveResources, params);
 
       // console.log(data, 'datadata232323');
       if (data.length === 0) {
@@ -209,7 +213,7 @@ const Model: ResourceAuthPageModelType = {
         isLoadPolicyInfo: 1,
       };
       // console.log(resourceParams, 'resourceParams908hik');
-      const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params2);
+      const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params2);
       // console.log(resourcesInfoData, 'resourcesInfoDataresourcesInfoData');
 
       const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -219,7 +223,7 @@ const Model: ResourceAuthPageModelType = {
         licenseeIdentityType: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data: data1} = yield call(FServiceAPI.Contract.batchContracts, params1);
+      const { data: data1 } = yield call(FServiceAPI.Contract.batchContracts, params1);
       // console.log(data1, 'data112#$!@#$!@#$!@#$12341234');
 
       // const contractsParams: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
@@ -284,7 +288,7 @@ const Model: ResourceAuthPageModelType = {
             code: policy.policyText,
             allEnabledVersions: allEnabledVersions,
           })),
-        }
+        };
       });
       // console.log(contractsAuthorized, 'contractsAuthorized');
       yield put<ChangeAction>({
@@ -294,8 +298,8 @@ const Model: ResourceAuthPageModelType = {
         },
       });
     },
-    * fetchAuthorize({payload}: FetchAuthorizeAction, {call, put, select}: EffectsCommandMap) {
-      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+    * fetchAuthorize({ payload }: FetchAuthorizeAction, { call, put, select }: EffectsCommandMap) {
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
 
@@ -305,7 +309,7 @@ const Model: ResourceAuthPageModelType = {
         limit: FUtil.Predefined.pageSize,
       };
       // console.log('@#RWEQFRSDF');
-      const {data} = yield call(FServiceAPI.Contract.contracts, params);
+      const { data } = yield call(FServiceAPI.Contract.contracts, params);
       // console.log(data, '12342139(((((()))()())(134');
       yield put<ChangeAction>({
         type: 'change',
@@ -320,15 +324,15 @@ const Model: ResourceAuthPageModelType = {
             // status: i.isAuth ? 'executing' : 'stopped',
             status: i.status === 1 ? 2 : ((i.authStatus & 1) === 1) ? 1 : 0,
           })),
-        }
+        },
       });
     },
-    * updateAuthorized({payload}: UpdateAuthorizedAction, {select, call, put}: EffectsCommandMap) {
+    * updateAuthorized({ payload }: UpdateAuthorizedAction, { select, call, put }: EffectsCommandMap) {
       // const {resourceId, activatedResourceId} = yield select(({resourceInfo, resourceAuthPage}: ConnectState) => ({
       //   resourceId: resourceInfo.info?.resourceId,
       //   activatedResourceId: (resourceAuthPage.contractsAuthorized.find((auth) => auth.activated) as any).id,
       // }));
-      const {resourceAuthPage}: ConnectState = yield select(({resourceAuthPage}: ConnectState) => ({
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
       const params: Parameters<typeof FServiceAPI.Resource.batchSetContracts>[0] = {
@@ -338,7 +342,7 @@ const Model: ResourceAuthPageModelType = {
           versions: payload,
         }],
       };
-      const {data} = yield call(FServiceAPI.Resource.batchSetContracts, params);
+      const { data } = yield call(FServiceAPI.Resource.batchSetContracts, params);
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
@@ -349,7 +353,7 @@ const Model: ResourceAuthPageModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -357,7 +361,7 @@ const Model: ResourceAuthPageModelType = {
     },
   },
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
     },
   },
 };
