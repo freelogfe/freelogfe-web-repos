@@ -3,7 +3,7 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
 import { Space, Divider } from 'antd';
-import { FCode, FDown, FFileText, FPlus } from '@/components/FIcons';
+import { FCode, FDown, FFileText, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '@/components/FDrawer';
@@ -29,6 +29,7 @@ interface FPolicyBuilderDrawerStates {
   title: string;
   titleError: string;
   editMode: 'code' | 'composition' | 'checked';
+  isChecking: boolean;
 
   codeText: string;
   codeTextError: string;
@@ -39,6 +40,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
   const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
   const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>('composition');
+  const [isChecking, setIsChecking] = React.useState<FPolicyBuilderDrawerStates['isChecking']>(false);
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
@@ -107,6 +109,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     }}
     // bodyStyle={{paddingLeft: 40, paddingRight: 40, height: 600, overflow: 'auto'}}
   >
+    <div className={styles.isCheckingTip}>
+      <FLoading />
+      <div style={{ width: 5 }} />
+      <span>校验中，请勿离开</span>
+    </div>
+
+    <div style={{ height: 30 }} />
+
     <div className={styles.maskingContainer}>
       <div className={styles.policyHeader}>
         <FInput
@@ -312,62 +322,6 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                     <FCircleBtn type='danger' />
                   </div>
 
-                  <div className={styles.compositionStateBodyItem}>
-                    <div className={styles.compositionStateBodyEvent}>
-
-                      <div>
-                        <FTitleText type='h4' text={'事件3'} />
-                      </div>
-
-                      <div style={{ height: 10 }} />
-
-                      <div>
-                        <FContentText text={'支付'} type='normal' />
-                        <div style={{ width: 10 }} />
-                        <FInput style={{ width: 120 }} />
-                        <div style={{ width: 10 }} />
-                        <FSelect
-                          style={{ width: 120 }}
-                          dataSource={[]}
-                        />
-                        <div style={{ width: 10 }} />
-                        <FContentText text={'至'} type='normal' />
-                        <div style={{ width: 10 }} />
-                        <FSelect
-                          style={{ width: 180 }}
-                          dataSource={[]}
-                        />
-                        <div style={{ width: 10 }} />
-                        <FContentText
-                          type='normal'
-                          text={'之后'}
-                        />
-                      </div>
-
-                      <div style={{ height: 10 }}></div>
-
-                      <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                        <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                        </FTitleText>
-                      </Divider>
-
-                      <div style={{ height: 10 }}></div>
-
-                      <div>
-                        <FTitleText type='h4' text={'目标状态'} />
-                      </div>
-
-                      <div style={{ height: 10 }}></div>
-
-                      <div>
-                        <FSelect style={{ width: '100%' }} dataSource={[]} />
-                      </div>
-
-                    </div>
-
-                    <FCircleBtn type='danger' />
-                  </div>
-
                 </Space>
 
                 <div className={styles.compositionStateFooter}>
@@ -387,17 +341,8 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                     <div>
                       <label className={styles.compositionStateIndex}>2</label>
                       <div style={{ width: 15 }} />
-                      {/*<FTitleText*/}
-                      {/*  type='h3'*/}
-                      {/*  text={'完成签约'}*/}
-                      {/*/>*/}
                       <FInput style={{ width: 400 }} />
                     </div>
-
-                    {/*<FContentText*/}
-                    {/*  text={'初始状态不可删除'}*/}
-                    {/*  type='negative'*/}
-                    {/*/>*/}
                     <FTextBtn type='danger'>删除</FTextBtn>
                   </div>
 
@@ -512,7 +457,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       }
 
       {
-        false && (<div className={styles.maskingBox} />)
+        isChecking && (<div className={styles.maskingBox} />)
       }
 
     </div>
