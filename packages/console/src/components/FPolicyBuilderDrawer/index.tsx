@@ -28,7 +28,7 @@ interface FPolicyBuilderDrawerProps {
 interface FPolicyBuilderDrawerStates {
   title: string;
   titleError: string;
-  editMode: 'code' | 'composition';
+  editMode: 'code' | 'composition' | 'checked';
 
   codeText: string;
   codeTextError: string;
@@ -42,7 +42,6 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
-
 
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
   const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
@@ -74,7 +73,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
 
       {
-        true
+        editMode !== 'checked'
           ? (<FRectBtn
             onClick={() => {
               onConfirm && onConfirm({
@@ -124,11 +123,11 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
         <Space size={20}>
           {
-            true
+            editMode === 'code'
               ? (<FTextBtn
                 type='default'
                 onClick={() => {
-                  // setTemplateVisible(true);
+                  setEditMode('composition');
                 }}>
                 <Space size={4}>
                   <FComposition />
@@ -138,7 +137,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
               : (<FTextBtn
                 type='default'
                 onClick={() => {
-                  // setTemplateVisible(true);
+                  setEditMode('code');
                 }}>
                 <Space size={4}>
                   <FCode />
