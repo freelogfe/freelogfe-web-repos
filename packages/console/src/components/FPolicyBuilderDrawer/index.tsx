@@ -3,7 +3,7 @@ import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
 import { Space, Divider } from 'antd';
-import { FCode, FDown, FFileText, FLoading, FPlus } from '@/components/FIcons';
+import { FCheck, FCode, FDown, FFileText, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '@/components/FDrawer';
@@ -40,7 +40,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
   const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
   const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>('composition');
-  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>('unchecked');
+  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>('checked');
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
@@ -77,10 +77,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       {
         checkResult === 'unchecked' && (<FRectBtn
           onClick={() => {
-            onConfirm && onConfirm({
-              title,
-              text: codeText,
-            });
+            // onConfirm && onConfirm({
+            //   title,
+            //   text: codeText,
+            // });
           }}
           disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
           type='primary'
@@ -103,12 +103,11 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       {
         checkResult === 'checked' && (<FRectBtn
           onClick={() => {
-            onConfirm && onConfirm({
-              title,
-              text: codeText,
-            });
+            // onConfirm && onConfirm({
+            //   title,
+            //   text: codeText,
+            // });
           }}
-          disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
           type='primary'
         >创建</FRectBtn>)
       }
@@ -125,7 +124,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
   >
     {
       checkResult === 'checked' && (<div>
-
+        <div className={styles.PolicyChecked}>
+          <FCheck />
+          <div style={{ width: 5 }} />
+          <div>校验成功</div>
+          <div style={{ width: 20 }} />
+          <span>以下是策略相关内容</span>
+        </div>
+        <div style={{ height: 30 }} />
       </div>)
     }
 
