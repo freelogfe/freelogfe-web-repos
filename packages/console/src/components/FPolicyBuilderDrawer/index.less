@@ -152,3 +152,52 @@
     align-items: center;
   }
 }
+
+
+.PolicyShowcase {
+
+  background-color: #FAFBFC;
+  border-radius: 4px;
+
+  .PolicyShowcaseHeader {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E5E7EB;
+
+    & > a {
+      color: #222;
+      font-size: 14px;
+      border-bottom: 2px solid transparent;
+      border-top: 2px solid transparent;
+      height: 45px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+
+      &.AActivated {
+        color: #2784FF;
+        border-bottom-color: #2784FF;
+      }
+    }
+  }
+
+  .PolicyShowcaseBody {
+    height: 355px;
+    overflow: auto;
+
+    & > div {
+      padding: 15px;
+
+      pre {
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #222222;
+        line-height: 24px;
+      }
+    }
+  }
+}

@@ -77,10 +77,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       {
         checkResult === 'unchecked' && (<FRectBtn
           onClick={() => {
-            // onConfirm && onConfirm({
-            //   title,
-            //   text: codeText,
-            // });
+            setCheckResult('checking');
+            setTimeout(() => {
+              setCheckResult('checked');
+            }, 2000);
           }}
           disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
           type='primary'
@@ -132,6 +132,21 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
           <span>以下是策略相关内容</span>
         </div>
         <div style={{ height: 30 }} />
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <FTitleText type='h1' text={'试用后订阅（包月/包年）'} />
+
+          <FTextBtn
+            type='primary'
+            onClick={() => {
+              setCheckResult('unchecked');
+            }}
+          >返回编辑</FTextBtn>
+        </div>
+
+        <div style={{ height: 30 }} />
+
+        <PolicyShowcase text={''} />
       </div>)
     }
 
@@ -535,4 +550,70 @@ function verifyText(text: string, allTexts: string[]): string {
     error = '内容已存在';
   }
   return error;
+}
+
+const policyText: string = `公开（所有人可签约）
+
+初始状态[已授权]
+  1周后 进入 状态 auth
+状态 auth
+  支付 10枚 羽币 进入 状态 auth_month
+  支付 100枚 羽币 进入 状态 auth_year
+  3天后 进入 终止状态
+状态 auth_month[已授权]
+  1个月后 进入 终止状态
+状态 auth_year[已授权]
+  1年后 进入 终止状态
+终止状态
+  停止接收事件`;
+
+interface PolicyShowcaseProps {
+  text: string;
+}
+
+function PolicyShowcase({ text }: PolicyShowcaseProps) {
+
+  const [activated, setActivated] = React.useState<'content' | 'code' | 'view'>('content');
+
+  return (<div className={styles.PolicyShowcase}>
+    <div className={styles.PolicyShowcaseHeader}>
+      <div style={{ width: 15 }} />
+      <a
+        onClick={() => {
+          setActivated('content');
+        }}
+        className={[activated === 'content' ? styles.AActivated : ''].join(' ')}
+      >策略内容</a>
+      <div style={{ width: 20 }} />
+      <a
+        onClick={() => {
+          setActivated('code');
+        }}
+        className={[activated === 'code' ? styles.AActivated : ''].join(' ')}
+      >策略代码</a>
+      <div style={{ width: 20 }} />
+      <a
+        onClick={() => {
+          setActivated('view');
+        }}
+        className={[activated === 'view' ? styles.AActivated : ''].join(' ')}
+      >状态机视图</a>
+    </div>
+
+    <div className={styles.PolicyShowcaseBody}>
+      <div>
+        {
+          activated === 'content' && (<pre>{policyText}</pre>)
+        }
+
+        {
+          activated === 'code' && (<pre>{policyText}</pre>)
+        }
+
+        {
+          activated === 'view' && (<div />)
+        }
+      </div>
+    </div>
+  </div>);
 }
