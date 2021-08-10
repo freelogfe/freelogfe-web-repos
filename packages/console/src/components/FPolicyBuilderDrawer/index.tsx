@@ -12,6 +12,7 @@ import FSelect from '@/components/FSelect';
 import { FContentText, FTitleText } from '@/components/FText';
 import FCheckbox from '@/components/FCheckbox';
 import FGuideDown from '@/components/FIcons/FGuideDown';
+import FCodeFormatter from '@/components/FCodeFormatter';
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -603,11 +604,11 @@ function PolicyShowcase({ text }: PolicyShowcaseProps) {
     <div className={styles.PolicyShowcaseBody}>
       <div>
         {
-          activated === 'content' && (<pre>{policyText}</pre>)
+          activated === 'content' && (<FCodeFormatter code={policyText}/>)
         }
 
         {
-          activated === 'code' && (<pre>{policyText}</pre>)
+          activated === 'code' && (<FCodeFormatter code={policyText}/>)
         }
 
         {
