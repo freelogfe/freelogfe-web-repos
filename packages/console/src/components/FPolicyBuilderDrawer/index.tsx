@@ -130,15 +130,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     }
 
     {
-      checkResult === 'checking' && (<div className={styles.isCheckingTip}>
-        <FLoading />
-        <div style={{ width: 5 }} />
-        <span>校验中，请勿离开</span>
-      </div>)
+      checkResult === 'checking' && (<>
+        <div className={styles.isCheckingTip}>
+          <FLoading />
+          <div style={{ width: 5 }} />
+          <span>校验中，请勿离开</span>
+        </div>
+        <div style={{ height: 30 }} />
+      </>)
     }
 
-
-    <div style={{ height: 30 }} />
 
     {
       checkResult !== 'checked' && (<div className={styles.maskingContainer}>
