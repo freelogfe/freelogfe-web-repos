@@ -9,13 +9,21 @@ interface PolicyTemplatesProps {
   onSelect?({title, text}: { title: string, text: string }): void;
 }
 
-const text1: string = `for public initial[active]:
+const text1: string = `for public
+
+initial[active]:
+  ~freelog.RelativeTimeEvent("1","month") => finish
+finish:
   terminate`;
 
 const text2: string = `for public
-  initial:
-    ~freelog.TransactionEvent("100","self.account") => finish finish[active]:
-      terminate`;
+
+initial:
+  ~freelog.TransactionEvent("10","self.account") => auth // 设置价格
+auth[active]:
+  ~freelog.RelativeTimeEvent("1","month")  =>  finish // 设置订阅周期
+finish:
+  terminate`;
 
 const policiesText: string[] = [];
 
