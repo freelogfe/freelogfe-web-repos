@@ -63,7 +63,7 @@ interface PolicyTemplateProps {
 
 function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplateProps) {
 
-  const [visible, setVisible] = React.useState<'none' | 'code' | 'view'>(false);
+  const [visible, setVisible] = React.useState<'none' | 'code' | 'view'>('none');
 
   return (<div className={styles.PolicyTemplate}>
     <div className={styles.header}>
