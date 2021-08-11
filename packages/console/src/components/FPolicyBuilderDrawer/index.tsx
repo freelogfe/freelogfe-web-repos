@@ -32,21 +32,113 @@ interface FPolicyBuilderDrawerStates {
   editMode: 'code' | 'composition';
   checkResult: 'unchecked' | 'checking' | 'checked';
 
+  combinationData: CombinationStructureType;
+
   codeText: string;
   codeTextError: string;
 }
+
+const timeUnits = [
+  { value: 'year', title: '年' },
+  { value: 'month', title: '月' },
+  { value: 'week', title: '周' },
+  { value: 'day', title: '天' },
+  { value: 'cycle', title: '周期' },
+];
+
+const accounts = [
+  { value: 'my', title: '我的代币账户' },
+];
+
+const currencies = [
+  { value: 'feather', title: '羽币' },
+];
+
+type CombinationStructureType = {
+  name: string;
+  nameError: string;
+  auth: boolean;
+  testAuth: boolean;
+  events: Array<{
+    type: 'payment';
+    eventName: string;
+    amount: number;
+    target: string;
+  } | {
+    type: 'relativeTime';
+    eventName: string;
+    num: number;
+    unit: 'year' | 'month' | 'week' | 'day' | 'cycle';
+    target: string;
+  } | {
+    type: 'absoluteTime';
+    eventName: string;
+    dateTime: string;
+    target: string;
+  } | {
+    type: 'terminate';
+  }>;
+}[];
 
 function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FPolicyBuilderDrawerProps) {
 
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
   const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
   const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>('composition');
-  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>('checked');
+  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>('unchecked');
+
+  const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>([
+    {
+      name: 'initial',
+      nameError: '',
+      auth: true,
+      testAuth: true,
+      events: [
+        {
+          type: 'payment',
+          eventName: '事件一',
+          amount: 10,
+          target: 'finish',
+        },
+      ],
+    },
+    {
+      name: 'auth',
+      nameError: '',
+      auth: true,
+      testAuth: false,
+      events: [
+        {
+          type: 'absoluteTime',
+          eventName: '事件一',
+          dateTime: '2022-01-01 00:00:00',
+          target: 'finish',
+        },
+        {
+          type: 'relativeTime',
+          eventName: '事件二',
+          num: 1,
+          unit: 'month',
+          target: 'finish',
+        },
+      ],
+    },
+    {
+      name: 'finish',
+      nameError: '',
+      auth: false,
+      testAuth: true,
+      events: [{
+        type: 'terminate',
+      }],
+    },
+  ]);
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
 
-  const [templateVisible, setTemplateVisible] = React.useState<boolean>(true);
+
+  const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
   const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
   const [usedTexts, setUsedTexts] = React.useState<string[]>([]);
 
@@ -71,7 +163,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     <FDrawer
       title={'添加授权策略'}
       onClose={() => onCancel && onCancel()}
-      visible={false}
+      visible={visible}
       width={720}
       topRight={<Space size={30}>
         <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
@@ -235,253 +327,200 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                 <div style={{ height: 20 }} />
 
                 <Space size={20} style={{ width: '100%' }} direction='vertical'>
-                  <div className={styles.compositionState}>
+                  {
+                    combinationData.map((cd, stateIndex) => {
+                      return (<div key={stateIndex} className={styles.compositionState}>
 
-                    <div className={styles.compositionStateHeader}>
-                      <div style={{ height: 15 }} />
-                      <div className={styles.compositionStateHeader1}>
-                        <div>
-                          <label className={styles.compositionStateIndex}>1</label>
-                          <div style={{ width: 15 }} />
-                          <FTitleText
-                            type='h3'
-                            text={'完成签约'}
-                          />
+                        <div className={styles.compositionStateHeader}>
+                          <div style={{ height: 15 }} />
+                          {
+                            cd.name === 'initial'
+                              ? (<div className={styles.compositionStateHeader1}>
+                                <div>
+                                  <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
+                                  <div style={{ width: 15 }} />
+                                  <FTitleText
+                                    type='h3'
+                                    text={cd.name}
+                                  />
+                                </div>
+
+                                <FContentText
+                                  text={'初始状态不可删除'}
+                                  type='negative'
+                                />
+                              </div>)
+                              : (<div className={styles.compositionStateHeader1}>
+                                <div>
+                                  <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
+                                  <div style={{ width: 15 }} />
+                                  <FInput style={{ width: 400 }} />
+                                </div>
+                                <FTextBtn type='danger'>删除</FTextBtn>
+                              </div>)
+                          }
+
+
+                          <div style={{ height: 15 }} />
+
+                          <div className={styles.compositionStateHeader2}>
+                            <div style={{ width: 50 }} />
+                            <FCheckbox checked={cd.auth} />
+                            <div style={{ width: 5 }} />
+                            <FContentText text={'授权'} />
+                            <div style={{ width: 20 }} />
+                            <FCheckbox checked={cd.testAuth} />
+                            <div style={{ width: 5 }} />
+                            <FContentText text={'测试授权'} />
+                          </div>
                         </div>
 
-                        <FContentText
-                          text={'初始状态不可删除'}
-                          type='negative'
-                        />
-                      </div>
+                        <div style={{ height: 15 }} />
 
-                      <div style={{ height: 15 }} />
+                        <Space
+                          className={styles.compositionStateBody}
+                          size={15}
+                          direction='vertical'
+                        >
+                          {
+                            cd.events.map((et,eventIndex) => {
+                              return (<div key={eventIndex} className={styles.compositionStateBodyItem}>
+                                <div className={styles.compositionStateBodyEvent}>
 
-                      <div className={styles.compositionStateHeader2}>
-                        <div style={{ width: 50 }} />
-                        <FCheckbox />
-                        <div style={{ width: 5 }} />
-                        <FContentText text={'授权'} />
-                        <div style={{ width: 20 }} />
-                        <FCheckbox />
-                        <div style={{ width: 5 }} />
-                        <FContentText text={'测试授权'} />
-                      </div>
-                    </div>
+                                  {
+                                    et.type !== 'terminate' && (<>
+                                      <div>
+                                        <FTitleText type='h4' text={'事件' + (eventIndex + 1)} />
+                                      </div>
 
-                    <div style={{ height: 15 }} />
+                                      <div style={{ height: 10 }} />
+                                    </>)
+                                  }
 
-                    <Space
-                      className={styles.compositionStateBody}
-                      size={15}
-                      direction='vertical'
-                    >
-                      <div className={styles.compositionStateBodyItem}>
-                        <div className={styles.compositionStateBodyEvent}>
+                                  {
+                                    et.type === 'payment' && (<div>
+                                        <FContentText text={'支付'} type='normal' />
+                                        <div style={{ width: 10 }} />
+                                        <FInput
+                                          style={{ width: 120 }}
+                                          value={String(et.amount)}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FSelect
+                                          value={'feather'}
+                                          disabled
+                                          style={{ width: 120 }}
+                                          dataSource={currencies}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText text={'至'} type='normal' />
+                                        <div style={{ width: 10 }} />
+                                        <FSelect
+                                          value={'my'}
+                                          disabled
+                                          style={{ width: 180 }}
+                                          dataSource={accounts}
+                                        />
+                                        <div style={{ width: 10 }} />
+                                        <FContentText
+                                          type='normal'
+                                          text={'之后'}
+                                        />
+                                      </div>)
+                                  }
 
-                          <div>
-                            <FTitleText type='h4' text={'事件1'} />
-                          </div>
+                                  {
+                                    et.type === 'relativeTime' && (<div>
+                                      <FInput
+                                        style={{ width: 250 }}
+                                        value={String(et.num)}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FSelect
+                                        style={{ width: 250 }}
+                                        dataSource={timeUnits}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FContentText
+                                        type='normal'
+                                        text={'之后'}
+                                      />
+                                    </div>)
+                                  }
 
-                          <div style={{ height: 10 }} />
+                                  {
+                                    et.type === 'absoluteTime' && (<div>
+                                      <FInput style={{ width: 250 }} />
+                                      <div style={{ width: 10 }} />
+                                      <FSelect
+                                        style={{ width: 250 }}
+                                        dataSource={[]}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FContentText
+                                        type='normal'
+                                        text={'之后'}
+                                      />
+                                    </div>)
+                                  }
 
-                          <div>
-                            <FInput style={{ width: 250 }} />
-                            <div style={{ width: 10 }} />
-                            <FSelect
-                              style={{ width: 250 }}
-                              dataSource={[]}
-                            />
-                            <div style={{ width: 10 }} />
-                            <FContentText
-                              type='normal'
-                              text={'之后'}
-                            />
-                          </div>
+                                  {
+                                    et.type === 'terminate' && (<div>
+                                      <FContentText type='normal' text={'状态机终止，不再接受事件'} />
+                                    </div>)
+                                  }
 
-                          <div style={{ height: 10 }}></div>
+                                  {
+                                    et.type !== 'terminate' && (<>
+                                      <div style={{ height: 10 }}></div>
 
-                          <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                            <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                            </FTitleText>
-                          </Divider>
+                                      <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
+                                        <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
+                                        </FTitleText>
+                                      </Divider>
 
-                          <div style={{ height: 10 }}></div>
+                                      <div style={{ height: 10 }}></div>
 
-                          <div>
-                            <FTitleText type='h4' text={'目标状态'} />
-                          </div>
+                                      <div>
+                                        <FTitleText type='h4' text={'目标状态'} />
+                                      </div>
 
-                          <div style={{ height: 10 }}></div>
+                                      <div style={{ height: 10 }}></div>
 
-                          <div>
-                            <FSelect style={{ width: '100%' }} dataSource={[]} />
-                          </div>
+                                      <div>
+                                        <FSelect style={{ width: '100%' }} dataSource={[]} />
+                                      </div>
+                                    </>)
+                                  }
 
-                        </div>
+                                </div>
 
-                        <FCircleBtn type='danger' />
-                      </div>
+                                <FCircleBtn type='danger' />
+                              </div>);
 
-                      <div className={styles.compositionStateBodyItem}>
-                        <div className={styles.compositionStateBodyEvent}>
+                            })
+                          }
 
-                          <div>
-                            <FTitleText type='h4' text={'事件2'} />
-                          </div>
+                        </Space>
 
-                          <div style={{ height: 10 }} />
+                        {
+                          !cd.events.some((et) => {
+                            return et.type === 'terminate';
+                          }) && (<>
+                            <div className={styles.compositionStateFooter}>
+                              <FCircleBtn type='minor'><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                              <div style={{ width: 5 }} />
+                              <FTextBtn type='primary'>添加事件或指令</FTextBtn>
+                            </div>
 
-                          <div>
-                            <FInput style={{ width: 250 }} />
-                            <div style={{ width: 10 }} />
-                            <FSelect
-                              style={{ width: 250 }}
-                              dataSource={[]}
-                            />
-                            <div style={{ width: 10 }} />
-                            <FContentText
-                              type='normal'
-                              text={'之后'}
-                            />
-                          </div>
+                            <div style={{ height: 15 }} />
+                          </>)
+                        }
 
-                          <div style={{ height: 10 }}></div>
+                      </div>);
+                    })
+                  }
 
-                          <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                            <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                            </FTitleText>
-                          </Divider>
-
-                          <div style={{ height: 10 }}></div>
-
-                          <div>
-                            <FTitleText type='h4' text={'目标状态'} />
-                          </div>
-
-                          <div style={{ height: 10 }}></div>
-
-                          <div>
-                            <FSelect style={{ width: '100%' }} dataSource={[]} />
-                          </div>
-
-                        </div>
-
-                        <FCircleBtn type='danger' />
-                      </div>
-
-                    </Space>
-
-                    <div className={styles.compositionStateFooter}>
-                      <FCircleBtn type='minor'><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
-                      <div style={{ width: 5 }} />
-                      <FTextBtn type='primary'>添加事件或指令</FTextBtn>
-                    </div>
-
-                    <div style={{ height: 15 }} />
-                  </div>
-
-                  <div className={styles.compositionState}>
-
-                    <div className={styles.compositionStateHeader}>
-                      <div style={{ height: 15 }} />
-                      <div className={styles.compositionStateHeader1}>
-                        <div>
-                          <label className={styles.compositionStateIndex}>2</label>
-                          <div style={{ width: 15 }} />
-                          <FInput style={{ width: 400 }} />
-                        </div>
-                        <FTextBtn type='danger'>删除</FTextBtn>
-                      </div>
-
-                      <div style={{ height: 15 }} />
-
-                      <div className={styles.compositionStateHeader2}>
-                        <div style={{ width: 50 }} />
-                        <FCheckbox />
-                        <div style={{ width: 5 }} />
-                        <FContentText text={'授权'} />
-                        <div style={{ width: 20 }} />
-                        <FCheckbox />
-                        <div style={{ width: 5 }} />
-                        <FContentText text={'测试授权'} />
-                      </div>
-                    </div>
-
-                    <div style={{ height: 15 }} />
-
-                    <Space
-                      className={styles.compositionStateBody}
-                      size={15}
-                      direction='vertical'
-                    >
-
-                      <div className={styles.compositionStateBodyItem}>
-                        <div className={styles.compositionStateBodyEvent}>
-
-                          <div>
-                            <FTitleText type='h4' text={'事件3'} />
-                          </div>
-
-                          <div style={{ height: 10 }} />
-
-                          <div>
-                            <FContentText text={'支付'} type='normal' />
-                            <div style={{ width: 10 }} />
-                            <FInput style={{ width: 120 }} />
-                            <div style={{ width: 10 }} />
-                            <FSelect
-                              style={{ width: 120 }}
-                              dataSource={[]}
-                            />
-                            <div style={{ width: 10 }} />
-                            <FContentText text={'至'} type='normal' />
-                            <div style={{ width: 10 }} />
-                            <FSelect
-                              style={{ width: 180 }}
-                              dataSource={[]}
-                            />
-                            <div style={{ width: 10 }} />
-                            <FContentText
-                              type='normal'
-                              text={'之后'}
-                            />
-                          </div>
-
-                          <div style={{ height: 10 }}></div>
-
-                          <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                            <FTitleText type='h4'>跳转至&nbsp;<FGuideDown style={{ fontSize: 10 }} />
-                            </FTitleText>
-                          </Divider>
-
-                          <div style={{ height: 10 }}></div>
-
-                          <div>
-                            <FTitleText type='h4' text={'目标状态'} />
-                          </div>
-
-                          <div style={{ height: 10 }}></div>
-
-                          <div>
-                            <FSelect style={{ width: '100%' }} dataSource={[]} />
-                          </div>
-
-                        </div>
-
-                        <FCircleBtn type='danger' />
-                      </div>
-
-                    </Space>
-                    {/*<div style={{ height: 20 }} />*/}
-                    <div className={styles.compositionStateFooter}>
-                      <FCircleBtn type='minor'><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
-                      <div style={{ width: 5 }} />
-                      <FTextBtn type='primary'>添加事件或指令</FTextBtn>
-                    </div>
-
-                    <div style={{ height: 15 }} />
-                  </div>
                 </Space>
 
                 <div style={{ height: 15 }} />
@@ -511,28 +550,30 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         </div>)
       }
 
+      <FDrawer
+        width={640}
+        visible={templateVisible}
+        title={'策略模板'}
+        onClose={() => setTemplateVisible(false)}
+      >
+        <div className={styles.SelectTemplateTip}>
+          <FInfo style={{ fontSize: 16 }} />
+          <div style={{ width: 5 }} />
+          <span>选择模版后可对其进行编辑</span>
+        </div>
+        <div style={{ height: 30 }} />
+        <PolicyTemplates
+          onSelect={(p) => {
+            // setTitle(p.title);
+            onChangeTitleInput(p.title);
+            onChangeTextInput(p.text);
+            setTemplateVisible(false);
+          }}
+        />
+      </FDrawer>
+
     </FDrawer>
-    <FDrawer
-      width={640}
-      visible={templateVisible}
-      title={'策略模板'}
-      onClose={() => setTemplateVisible(false)}
-    >
-      <div className={styles.SelectTemplateTip}>
-        <FInfo style={{ fontSize: 16 }} />
-        <div style={{ width: 5 }} />
-        <span>选择模版后可对其进行编辑</span>
-      </div>
-      <div style={{ height: 30 }} />
-      <PolicyTemplates
-        onSelect={(p) => {
-          // setTitle(p.title);
-          onChangeTitleInput(p.title);
-          onChangeTextInput(p.text);
-          setTemplateVisible(false);
-        }}
-      />
-    </FDrawer>
+
   </>);
 }
 
