@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
-import { FDown } from '@/components/FIcons';
-import { Space } from 'antd';
-import FUp from '@/components/FIcons/FUp';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
 
