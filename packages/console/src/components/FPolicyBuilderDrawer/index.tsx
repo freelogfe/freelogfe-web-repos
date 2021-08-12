@@ -13,6 +13,7 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FCheckbox from '@/components/FCheckbox';
 import FGuideDown from '@/components/FIcons/FGuideDown';
 import FCodeFormatter from '@/components/FCodeFormatter';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -55,6 +56,7 @@ const currencies = [
 ];
 
 type CombinationStructureType = {
+  randomID: string;
   type: 'initial' | 'other';
   name: string;
   nameError: string;
@@ -62,22 +64,26 @@ type CombinationStructureType = {
   auth: boolean;
   testAuth: boolean;
   events: Array<{
+    randomID: string;
     type: 'payment';
     eventName: string;
     amount: number;
     target: string;
   } | {
+    randomID: string;
     type: 'relativeTime';
     eventName: string;
     num: number;
     unit: 'year' | 'month' | 'week' | 'day' | 'cycle';
     target: string;
   } | {
+    randomID: string;
     type: 'absoluteTime';
     eventName: string;
     dateTime: string;
     target: string;
   } | {
+    randomID: string;
     type: 'terminate';
   }>;
 }[];
@@ -91,6 +97,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
   const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>([
     {
+      randomID: FUtil.Tool.generateRandomCode(10),
       type: 'initial',
       name: 'initial',
       nameError: '',
@@ -99,6 +106,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       testAuth: true,
       events: [
         {
+          randomID: FUtil.Tool.generateRandomCode(10),
           type: 'payment',
           eventName: '事件一',
           amount: 10,
@@ -107,6 +115,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       ],
     },
     {
+      randomID: FUtil.Tool.generateRandomCode(10),
       type: 'other',
       name: 'auth',
       nameError: '',
@@ -115,12 +124,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       testAuth: false,
       events: [
         {
+          randomID: FUtil.Tool.generateRandomCode(10),
           type: 'absoluteTime',
           eventName: '事件一',
           dateTime: '2022-01-01 00:00:00',
           target: 'finish',
         },
         {
+          randomID: FUtil.Tool.generateRandomCode(10),
           type: 'relativeTime',
           eventName: '事件二',
           num: 1,
@@ -130,6 +141,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       ],
     },
     {
+      randomID: FUtil.Tool.generateRandomCode(10),
       type: 'other',
       name: 'finish',
       nameError: '',
@@ -137,6 +149,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       auth: false,
       testAuth: true,
       events: [{
+        randomID: FUtil.Tool.generateRandomCode(10),
         type: 'terminate',
       }],
     },
@@ -386,7 +399,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                 <Space size={20} style={{ width: '100%' }} direction='vertical'>
                   {
                     combinationData.map((cd, stateIndex) => {
-                      return (<div key={stateIndex} className={styles.compositionState}>
+                      return (<div key={cd.randomID} className={styles.compositionState}>
 
                         <div className={styles.compositionStateHeader}>
                           <div style={{ height: 15 }} />
@@ -415,6 +428,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                     <div style={{ width: 15 }} />
                                     <FInput
                                       style={{ width: 400 }}
+                                      value={cd.name}
                                       onChange={(e) => {
                                         const value: string = e.target.value;
 
@@ -425,7 +439,18 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                       }}
                                     />
                                   </div>
-                                  <FTextBtn type='danger'>删除</FTextBtn>
+                                  <FTextBtn
+                                    type='danger'
+                                    onClick={() => {
+                                      const result: CombinationStructureType = combinationData.filter((cd, si) => {
+                                        // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
+                                        return stateIndex !== si;
+                                      });
+
+                                      console.log(result, 'result!@#412341234123412434444dsfsdfdsf');
+                                      setCombinationData(result);
+                                    }}
+                                  >删除</FTextBtn>
                                 </div>
                                 {
                                   cd.nameError
@@ -483,7 +508,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                         >
                           {
                             cd.events.map((et, eventIndex) => {
-                              return (<div key={eventIndex} className={styles.compositionStateBodyItem}>
+                              return (<div key={et.randomID} className={styles.compositionStateBodyItem}>
                                 <div className={styles.compositionStateBodyEvent}>
 
                                   {
@@ -636,7 +661,24 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
                 <div style={{ height: 15 }} />
 
-                <FRectBtn type='default'>新建状态</FRectBtn>
+                <FRectBtn
+                  type='default'
+                  onClick={() => {
+                    setCombinationData([
+                      ...combinationData,
+                      {
+                        randomID: FUtil.Tool.generateRandomCode(10),
+                        type: 'other',
+                        name: '',
+                        nameError: '',
+                        isNameDuplicate: false,
+                        auth: false,
+                        testAuth: false,
+                        events: [],
+                      },
+                    ]);
+                  }}
+                >新建状态</FRectBtn>
 
               </div>)
               : (<>
