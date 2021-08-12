@@ -180,9 +180,9 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     setCodeTextError(verifyText(value, usedTexts));
   }
 
-  function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, index: number) {
-    let result: CombinationStructureType = combinationData.map((cd, ii) => {
-      if (ii !== index) {
+  function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
+    let result: CombinationStructureType = combinationData.map((cd) => {
+      if (cd.randomID !== randomID) {
         return cd;
       }
       return {
@@ -207,16 +207,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     setCombinationData(result);
   }
 
-  function onChangeCombinationEvent(data: Partial<CombinationStructureType[number]['events'][number]>, stateIndex: number, eventIndex: number) {
+  function onChangeCombinationEvent(data: Partial<CombinationStructureType[number]['events'][number]>, randomID1: string, randomID2: string) {
     // console.log(data, stateIndex, eventIndex, '!@#$@!#$234213423412342342134');
     const result: CombinationStructureType = combinationData.map<CombinationStructureType[number]>((cd, si) => {
-      if (si !== stateIndex) {
+      if (cd.randomID !== randomID1) {
         return cd;
       }
       return {
         ...cd,
         events: cd.events.map<CombinationStructureType[number]['events'][number]>((et: any, ei) => {
-          if (ei !== eventIndex) {
+          if (et.randomID !== randomID2) {
             return et;
           }
           return {
@@ -227,6 +227,32 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       };
     });
 
+    setCombinationData(result);
+  }
+
+  function deleteState(randomID: string) {
+    const result: CombinationStructureType = combinationData.filter((cd) => {
+      // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
+      return cd.randomID !== randomID;
+    });
+
+    // console.log(result, 'result!@#412341234123412434444dsfsdfdsf');
+    setCombinationData(result);
+  }
+
+  function deleteEvent(randomID1: string, randomID2: string) {
+    const result: CombinationStructureType = combinationData.map((cd) => {
+      if (cd.randomID !== randomID1) {
+        return cd;
+      }
+      return {
+        ...cd,
+        events: cd.events.filter((et) => {
+          return et.randomID !== randomID2;
+        }),
+      };
+    });
+    // console.log(result, 'resultresultresult!@#$2134234');
     setCombinationData(result);
   }
 
@@ -435,20 +461,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                         onChangeCombinationData({
                                           name: value,
                                           nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
-                                        }, stateIndex);
+                                        }, cd.randomID);
                                       }}
                                     />
                                   </div>
                                   <FTextBtn
                                     type='danger'
                                     onClick={() => {
-                                      const result: CombinationStructureType = combinationData.filter((cd, si) => {
-                                        // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
-                                        return stateIndex !== si;
-                                      });
-
-                                      console.log(result, 'result!@#412341234123412434444dsfsdfdsf');
-                                      setCombinationData(result);
+                                      deleteState(cd.randomID);
                                     }}
                                   >删除</FTextBtn>
                                 </div>
@@ -480,7 +500,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                               onChange={(e) => {
                                 onChangeCombinationData({
                                   auth: e.target.checked,
-                                }, stateIndex);
+                                }, cd.randomID);
                               }}
                             />
                             <div style={{ width: 5 }} />
@@ -491,7 +511,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                               onChange={(e) => {
                                 onChangeCombinationData({
                                   testAuth: e.target.checked,
-                                }, stateIndex);
+                                }, cd.randomID);
                               }}
                             />
                             <div style={{ width: 5 }} />
@@ -573,7 +593,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                         onChange={(value) => {
                                           onChangeCombinationEvent({
                                             unit: value as 'year',
-                                          }, stateIndex, eventIndex);
+                                          }, cd.randomID, et.randomID);
                                         }}
                                       />
                                       <div style={{ width: 10 }} />
@@ -631,7 +651,12 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
                                 </div>
 
-                                <FCircleBtn type='danger' />
+                                <FCircleBtn
+                                  type='danger'
+                                  onClick={() => {
+                                    deleteEvent(cd.randomID, et.randomID);
+                                  }}
+                                />
                               </div>);
 
                             })
