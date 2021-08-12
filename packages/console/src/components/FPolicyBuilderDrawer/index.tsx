@@ -55,8 +55,10 @@ const currencies = [
 ];
 
 type CombinationStructureType = {
+  type: 'initial' | 'other';
   name: string;
   nameError: string;
+  isNameDuplicate: boolean;
   auth: boolean;
   testAuth: boolean;
   events: Array<{
@@ -89,8 +91,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
   const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>([
     {
+      type: 'initial',
       name: 'initial',
       nameError: '',
+      isNameDuplicate: false,
       auth: true,
       testAuth: true,
       events: [
@@ -103,8 +107,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       ],
     },
     {
+      type: 'other',
       name: 'auth',
       nameError: '',
+      isNameDuplicate: false,
       auth: true,
       testAuth: false,
       events: [
@@ -124,8 +130,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       ],
     },
     {
+      type: 'other',
       name: 'finish',
       nameError: '',
+      isNameDuplicate: false,
       auth: false,
       testAuth: true,
       events: [{
@@ -157,6 +165,56 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     // const value: string = e.target.value;
     setCodeText(value);
     setCodeTextError(verifyText(value, usedTexts));
+  }
+
+  function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, index: number) {
+    let result: CombinationStructureType = combinationData.map((cd, ii) => {
+      if (ii !== index) {
+        return cd;
+      }
+      return {
+        ...cd,
+        ...data,
+      };
+    });
+
+    const duplicateNames: string[] = searchDuplicateElements<string>(result.map((r) => {
+      return r.name;
+    }));
+
+    // console.log(duplicateNames, 'duplicateNames9023uj;i4orjlkj');
+
+    result = result.map((r) => {
+      return {
+        ...r,
+        isNameDuplicate: duplicateNames.includes(r.name),
+      };
+    });
+
+    setCombinationData(result);
+  }
+
+  function onChangeCombinationEvent(data: Partial<CombinationStructureType[number]['events'][number]>, stateIndex: number, eventIndex: number) {
+    // console.log(data, stateIndex, eventIndex, '!@#$@!#$234213423412342342134');
+    const result: CombinationStructureType = combinationData.map<CombinationStructureType[number]>((cd, si) => {
+      if (si !== stateIndex) {
+        return cd;
+      }
+      return {
+        ...cd,
+        events: cd.events.map<CombinationStructureType[number]['events'][number]>((et: any, ei) => {
+          if (ei !== eventIndex) {
+            return et;
+          }
+          return {
+            ...et,
+            ...data,
+          };
+        }),
+      };
+    });
+
+    setCombinationData(result);
   }
 
   return (<>
@@ -255,7 +313,6 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         </>)
       }
 
-
       {
         checkResult !== 'checked' && (<div className={styles.maskingContainer}>
           <div className={styles.policyHeader}>
@@ -334,7 +391,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                         <div className={styles.compositionStateHeader}>
                           <div style={{ height: 15 }} />
                           {
-                            cd.name === 'initial'
+                            cd.type === 'initial'
                               ? (<div className={styles.compositionStateHeader1}>
                                 <div>
                                   <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
@@ -349,27 +406,69 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                   text={'初始状态不可删除'}
                                   type='negative'
                                 />
-                              </div>)
-                              : (<div className={styles.compositionStateHeader1}>
-                                <div>
-                                  <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
-                                  <div style={{ width: 15 }} />
-                                  <FInput style={{ width: 400 }} />
-                                </div>
-                                <FTextBtn type='danger'>删除</FTextBtn>
-                              </div>)
-                          }
 
+                              </div>)
+                              : (<>
+                                <div className={styles.compositionStateHeader1}>
+                                  <div>
+                                    <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
+                                    <div style={{ width: 15 }} />
+                                    <FInput
+                                      style={{ width: 400 }}
+                                      onChange={(e) => {
+                                        const value: string = e.target.value;
+
+                                        onChangeCombinationData({
+                                          name: value,
+                                          nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
+                                        }, stateIndex);
+                                      }}
+                                    />
+                                  </div>
+                                  <FTextBtn type='danger'>删除</FTextBtn>
+                                </div>
+                                {
+                                  cd.nameError
+                                    ? (<div style={{
+                                      color: '#EE4040',
+                                      paddingLeft: 55,
+                                      paddingTop: 5,
+                                    }}>{cd.nameError}</div>)
+                                    : cd.isNameDuplicate
+                                      ? (<div style={{
+                                        color: '#EE4040',
+                                        paddingLeft: 55,
+                                        paddingTop: 5,
+                                      }}>有重复的名称</div>)
+                                      : null
+                                }
+
+                              </>)
+                          }
 
                           <div style={{ height: 15 }} />
 
                           <div className={styles.compositionStateHeader2}>
                             <div style={{ width: 50 }} />
-                            <FCheckbox checked={cd.auth} />
+                            <FCheckbox
+                              checked={cd.auth}
+                              onChange={(e) => {
+                                onChangeCombinationData({
+                                  auth: e.target.checked,
+                                }, stateIndex);
+                              }}
+                            />
                             <div style={{ width: 5 }} />
                             <FContentText text={'授权'} />
                             <div style={{ width: 20 }} />
-                            <FCheckbox checked={cd.testAuth} />
+                            <FCheckbox
+                              checked={cd.testAuth}
+                              onChange={(e) => {
+                                onChangeCombinationData({
+                                  testAuth: e.target.checked,
+                                }, stateIndex);
+                              }}
+                            />
                             <div style={{ width: 5 }} />
                             <FContentText text={'测试授权'} />
                           </div>
@@ -383,7 +482,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                           direction='vertical'
                         >
                           {
-                            cd.events.map((et,eventIndex) => {
+                            cd.events.map((et, eventIndex) => {
                               return (<div key={eventIndex} className={styles.compositionStateBodyItem}>
                                 <div className={styles.compositionStateBodyEvent}>
 
@@ -399,34 +498,40 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
                                   {
                                     et.type === 'payment' && (<div>
-                                        <FContentText text={'支付'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <FInput
-                                          style={{ width: 120 }}
-                                          value={String(et.amount)}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'feather'}
-                                          disabled
-                                          style={{ width: 120 }}
-                                          dataSource={currencies}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText text={'至'} type='normal' />
-                                        <div style={{ width: 10 }} />
-                                        <FSelect
-                                          value={'my'}
-                                          disabled
-                                          style={{ width: 180 }}
-                                          dataSource={accounts}
-                                        />
-                                        <div style={{ width: 10 }} />
-                                        <FContentText
-                                          type='normal'
-                                          text={'之后'}
-                                        />
-                                      </div>)
+                                      <FContentText text={'支付'} type='normal' />
+                                      <div style={{ width: 10 }} />
+                                      <FInput
+                                        style={{ width: 120 }}
+                                        value={String(et.amount)}
+                                        onChange={(e) => {
+
+                                        }}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FSelect
+                                        value={'feather'}
+                                        disabled
+                                        style={{ width: 120 }}
+                                        dataSource={currencies}
+                                        // onChange={(value) => {
+                                        //   onChangeCombinationEvent({});
+                                        // }}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FContentText text={'至'} type='normal' />
+                                      <div style={{ width: 10 }} />
+                                      <FSelect
+                                        value={'my'}
+                                        disabled
+                                        style={{ width: 180 }}
+                                        dataSource={accounts}
+                                      />
+                                      <div style={{ width: 10 }} />
+                                      <FContentText
+                                        type='normal'
+                                        text={'之后'}
+                                      />
+                                    </div>)
                                   }
 
                                   {
@@ -437,8 +542,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                       />
                                       <div style={{ width: 10 }} />
                                       <FSelect
+                                        value={et.unit}
                                         style={{ width: 250 }}
                                         dataSource={timeUnits}
+                                        onChange={(value) => {
+                                          onChangeCombinationEvent({
+                                            unit: value as 'year',
+                                          }, stateIndex, eventIndex);
+                                        }}
                                       />
                                       <div style={{ width: 10 }} />
                                       <FContentText
@@ -665,4 +776,16 @@ function PolicyShowcase({ text }: PolicyShowcaseProps) {
       </div>
     </div>
   </div>);
+}
+
+function searchDuplicateElements<T>(arr: T[]): T[] {
+  const myMap: Map<T, number> = new Map<T, number>();
+  for (const i of arr) {
+    myMap.set(i, (myMap.get(i) || 0) + 1);
+  }
+  return Array.from(myMap).filter((mm) => {
+    return mm[1] > 1;
+  }).map((mm) => {
+    return mm[0];
+  });
 }
