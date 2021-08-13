@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
-import { Space, Divider } from 'antd';
+import { Space, Divider, DatePicker } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates from './PolicyTemplates';
@@ -66,20 +66,17 @@ type CombinationStructureType = {
   events: Array<{
     randomID: string;
     type: 'payment';
-    eventName: string;
     amount: number;
     target: string;
   } | {
     randomID: string;
     type: 'relativeTime';
-    eventName: string;
     num: number;
     unit: 'year' | 'month' | 'week' | 'day' | 'cycle';
     target: string;
   } | {
     randomID: string;
     type: 'absoluteTime';
-    eventName: string;
     dateTime: string;
     target: string;
   } | {
@@ -102,62 +99,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       name: 'initial',
       nameError: '',
       isNameDuplicate: false,
-      auth: true,
-      testAuth: true,
-      events: [
-        {
-          randomID: FUtil.Tool.generateRandomCode(10),
-          type: 'payment',
-          eventName: '事件一',
-          amount: 10,
-          target: 'finish',
-        },
-      ],
-    },
-    {
-      randomID: FUtil.Tool.generateRandomCode(10),
-      type: 'other',
-      name: 'auth',
-      nameError: '',
-      isNameDuplicate: false,
-      auth: true,
-      testAuth: false,
-      events: [
-        {
-          randomID: FUtil.Tool.generateRandomCode(10),
-          type: 'absoluteTime',
-          eventName: '事件一',
-          dateTime: '2022-01-01 00:00:00',
-          target: 'finish',
-        },
-        {
-          randomID: FUtil.Tool.generateRandomCode(10),
-          type: 'relativeTime',
-          eventName: '事件二',
-          num: 1,
-          unit: 'month',
-          target: 'finish',
-        },
-      ],
-    },
-    {
-      randomID: FUtil.Tool.generateRandomCode(10),
-      type: 'other',
-      name: 'finish',
-      nameError: '',
-      isNameDuplicate: false,
       auth: false,
-      testAuth: true,
-      events: [{
-        randomID: FUtil.Tool.generateRandomCode(10),
-        type: 'terminate',
-      }],
+      testAuth: false,
+      events: [],
     },
   ]);
+  const [enabledTargetState, setEnabledTargetState] = React.useState<string[]>([]);
+  const [addingEventStateID, setAddingEventStateID] = React.useState<string>('');
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
-
 
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
   const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
@@ -236,8 +187,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       return cd.randomID !== randomID;
     });
 
-    // console.log(result, 'result!@#412341234123412434444dsfsdfdsf');
-    setCombinationData(result);
+    handleTargetState(result);
   }
 
   function deleteEvent(randomID1: string, randomID2: string) {
@@ -254,6 +204,87 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
     });
     // console.log(result, 'resultresultresult!@#$2134234');
     setCombinationData(result);
+  }
+
+  function addEvent(eventType: 'payment' | 'relativeTime' | 'absoluteTime' | 'terminate') {
+
+    let evn: CombinationStructureType[number]['events'][number];
+
+    if (eventType === 'payment') {
+      evn = {
+        randomID: FUtil.Tool.generateRandomCode(10),
+        type: 'payment',
+        amount: 10,
+        target: '',
+      };
+    } else if (eventType === 'relativeTime') {
+      evn = {
+        randomID: FUtil.Tool.generateRandomCode(10),
+        type: 'relativeTime',
+        num: 1,
+        unit: 'month',
+        target: '',
+      };
+    } else if (eventType === 'absoluteTime') {
+      evn = {
+        randomID: FUtil.Tool.generateRandomCode(10),
+        type: 'absoluteTime',
+        dateTime: '',
+        target: '',
+      };
+    } else {
+      evn = {
+        randomID: FUtil.Tool.generateRandomCode(10),
+        type: 'terminate',
+      };
+    }
+
+    const result: CombinationStructureType = combinationData.map((cd) => {
+      if (addingEventStateID !== cd.randomID) {
+        return cd;
+      }
+      return {
+        ...cd,
+        events: [
+          ...cd.events,
+          evn,
+        ],
+      };
+    });
+
+    setCombinationData(result);
+    setAddingEventStateID('');
+  }
+
+  function handleTargetState(data: CombinationStructureType) {
+    const results: string[] = Array.from(new Set(data
+      .filter((cd) => {
+        return !!cd.name && !cd.nameError;
+      })
+      .map((cd) => {
+        return cd.name;
+      })));
+    // console.log(results, 'resultsresultsresults!@#$234234');
+
+    const results2: CombinationStructureType = data
+      .map((cd) => {
+        return {
+          ...cd,
+          events: cd.events.map((et) => {
+            if (et.type === 'terminate') {
+              return et;
+            }
+            // console.log(et.target, 'et.targetet.targetet.target234234');
+            return {
+              ...et,
+              target: results.includes(et.target) ? et.target : '',
+            };
+          }),
+        };
+      });
+
+    setEnabledTargetState(results);
+    setCombinationData(results2);
   }
 
   return (<>
@@ -453,6 +484,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                     <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
                                     <div style={{ width: 15 }} />
                                     <FInput
+                                      placeholder='输入状态名称'
                                       style={{ width: 400 }}
                                       value={cd.name}
                                       onChange={(e) => {
@@ -462,6 +494,9 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                           name: value,
                                           nameError: /^[A-Za-z$_][\w$_]*$/.test(value) ? '' : '请使用JavaScript英文变量命名规则',
                                         }, cd.randomID);
+                                      }}
+                                      onBlur={() => {
+                                        handleTargetState(combinationData);
                                       }}
                                     />
                                   </div>
@@ -546,6 +581,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                       <FContentText text={'支付'} type='normal' />
                                       <div style={{ width: 10 }} />
                                       <FInput
+                                        placeholder='输入数值'
                                         style={{ width: 120 }}
                                         value={String(et.amount)}
                                         onChange={(e) => {
@@ -582,11 +618,13 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                   {
                                     et.type === 'relativeTime' && (<div>
                                       <FInput
+                                        placeholder='输入数值'
                                         style={{ width: 250 }}
                                         value={String(et.num)}
                                       />
                                       <div style={{ width: 10 }} />
                                       <FSelect
+                                        placeholder='选择时间单位'
                                         value={et.unit}
                                         style={{ width: 250 }}
                                         dataSource={timeUnits}
@@ -606,11 +644,24 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
                                   {
                                     et.type === 'absoluteTime' && (<div>
-                                      <FInput style={{ width: 250 }} />
+                                      <FContentText
+                                        type='normal'
+                                        text={'于'}
+                                      />
                                       <div style={{ width: 10 }} />
-                                      <FSelect
-                                        style={{ width: 250 }}
-                                        dataSource={[]}
+                                      <DatePicker
+                                        placeholder='选择日期时间'
+                                        style={{ width: 480 }}
+                                        showTime
+                                        onChange={(value, dateString) => {
+                                          // console.log(value, dateString, 'onChange23423423');
+                                          onChangeCombinationEvent({
+                                            dateTime: dateString,
+                                          }, cd.randomID, et.randomID);
+                                        }}
+                                        // onOk={(date) => {
+                                        //   console.log(date, 'onOk');
+                                        // }}
                                       />
                                       <div style={{ width: 10 }} />
                                       <FContentText
@@ -644,7 +695,22 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                       <div style={{ height: 10 }}></div>
 
                                       <div>
-                                        <FSelect style={{ width: '100%' }} dataSource={[]} />
+                                        <FSelect
+                                          value={et.target || undefined}
+                                          placeholder='选择目标状态'
+                                          style={{ width: '100%' }}
+                                          dataSource={enabledTargetState.map((ets) => {
+                                            return {
+                                              value: ets,
+                                              title: ets,
+                                            };
+                                          })}
+                                          onChange={(value) => {
+                                            onChangeCombinationEvent({
+                                              target: value,
+                                            }, cd.randomID, et.randomID);
+                                          }}
+                                        />
                                       </div>
                                     </>)
                                   }
@@ -669,9 +735,19 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                             return et.type === 'terminate';
                           }) && (<>
                             <div className={styles.compositionStateFooter}>
-                              <FCircleBtn type='minor'><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
+                              <FCircleBtn
+                                type='minor'
+                                onClick={() => {
+                                  setAddingEventStateID(cd.randomID);
+                                }}
+                              ><FPlus style={{ fontSize: 12 }} /></FCircleBtn>
                               <div style={{ width: 5 }} />
-                              <FTextBtn type='primary'>添加事件或指令</FTextBtn>
+                              <FTextBtn
+                                type='primary'
+                                onClick={() => {
+                                  setAddingEventStateID(cd.randomID);
+                                }}
+                              >添加事件或指令</FTextBtn>
                             </div>
 
                             <div style={{ height: 15 }} />
@@ -689,7 +765,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                 <FRectBtn
                   type='default'
                   onClick={() => {
-                    setCombinationData([
+                    const results: CombinationStructureType = [
                       ...combinationData,
                       {
                         randomID: FUtil.Tool.generateRandomCode(10),
@@ -701,7 +777,8 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                         testAuth: false,
                         events: [],
                       },
-                    ]);
+                    ];
+                    handleTargetState(results);
                   }}
                 >新建状态</FRectBtn>
 
@@ -750,6 +827,94 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         />
       </FDrawer>
 
+      <FDrawer
+        width={640}
+        visible={!!addingEventStateID}
+        title={'添加事件或指令'}
+        onClose={() => {
+          setAddingEventStateID('');
+        }}
+      >
+        <FTitleText type='h3' text={'事件'} />
+        <div style={{ height: 20 }} />
+        <div className={styles.templateEvent}>
+          <div>
+            <div style={{ width: 130 }}>
+              <FContentText type='normal' text={'相对时间事件'} />
+            </div>
+            <div>
+              <FContentText type='negative' text={'示例：1 周之后'} />
+            </div>
+          </div>
+          <FRectBtn
+            type='secondary'
+            size='small'
+            onClick={() => {
+              addEvent('relativeTime');
+            }}>选择</FRectBtn>
+        </div>
+
+        <div style={{ height: 10 }} />
+
+        <div className={styles.templateEvent}>
+          <div>
+            <div style={{ width: 130 }}>
+              <FContentText type='normal' text={'绝对时间事件'} />
+            </div>
+            <div>
+              <FContentText type='negative' text={'示例：于 2021/05/03'} />
+            </div>
+          </div>
+          <FRectBtn
+            type='secondary'
+            size='small'
+            onClick={() => {
+              addEvent('absoluteTime');
+            }}>选择</FRectBtn>
+        </div>
+
+        <div style={{ height: 10 }} />
+
+        <div className={styles.templateEvent}>
+          <div>
+            <div style={{ width: 130 }}>
+              <FContentText type='normal' text={'支付事件'} />
+            </div>
+            <div>
+              <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />
+            </div>
+          </div>
+          <FRectBtn
+            type='secondary'
+            size='small'
+            onClick={() => {
+              addEvent('payment');
+            }}
+          >选择</FRectBtn>
+        </div>
+
+        <div style={{ height: 30 }} />
+
+        <FTitleText type='h3' text={'指令'} />
+
+        <div style={{ height: 20 }} />
+
+        <div className={styles.templateEvent}>
+          <div>
+            <FContentText type='normal' text={'状态机终止，停止接收事件'} />
+          </div>
+          <FRectBtn
+            type='secondary'
+            size='small'
+            disabled={!!(combinationData.find((cd) => {
+              return cd.randomID === addingEventStateID;
+            })?.events.length)}
+            onClick={() => {
+              addEvent('terminate');
+            }}
+          >选择</FRectBtn>
+        </div>
+      </FDrawer>
     </FDrawer>
 
   </>);
