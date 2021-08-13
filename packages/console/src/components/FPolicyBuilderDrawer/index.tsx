@@ -85,6 +85,22 @@ type CombinationStructureType = {
   }>;
 }[];
 
+const text1: string = `for public
+
+initial[active]:
+  ~freelog.RelativeTimeEvent("1","month") => finish
+finish:
+  terminate`;
+
+const text2: string = `for public
+
+initial:
+  ~freelog.TransactionEvent("10","self.account") => auth
+auth[active]:
+  ~freelog.RelativeTimeEvent("1","month")  =>  finish
+finish:
+  terminate`;
+
 function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FPolicyBuilderDrawerProps) {
 
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
@@ -285,6 +301,105 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
     setEnabledTargetState(results);
     setCombinationData(results2);
+  }
+
+  function handleTemplate(num: 1 | 2) {
+    // console.log(num, 'handleTemplatehandleTemplate23423423');
+    setTemplateVisible(false);
+    if (num === 1) {
+      setCodeText(text1);
+      const result: CombinationStructureType = [
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'initial',
+          name: 'initial',
+          nameError: '',
+          isNameDuplicate: false,
+          auth: true,
+          testAuth: false,
+          events: [
+            {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'relativeTime',
+              num: 1,
+              unit: 'month',
+              target: 'finish',
+            },
+          ],
+        },
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'other',
+          name: 'finish',
+          nameError: '',
+          isNameDuplicate: false,
+          auth: false,
+          testAuth: false,
+          events: [
+            {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'terminate',
+            },
+          ],
+        },
+      ];
+      handleTargetState(result);
+    } else {
+      setCodeText(text2);
+      const result: CombinationStructureType = [
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'initial',
+          name: 'initial',
+          nameError: '',
+          isNameDuplicate: false,
+          auth: false,
+          testAuth: false,
+          events: [
+            {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'payment',
+              amount: 10,
+              target: 'auth',
+            },
+          ],
+        },
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'other',
+          name: 'auth',
+          nameError: '',
+          isNameDuplicate: false,
+          auth: true,
+          testAuth: false,
+          events: [
+            {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'relativeTime',
+              num: 1,
+              unit: 'month',
+              target: 'finish',
+            },
+          ],
+        },
+        {
+          randomID: FUtil.Tool.generateRandomCode(10),
+          type: 'other',
+          name: 'finish',
+          nameError: '',
+          isNameDuplicate: false,
+          auth: false,
+          testAuth: false,
+          events: [
+            {
+              randomID: FUtil.Tool.generateRandomCode(10),
+              type: 'terminate',
+            },
+          ],
+        },
+      ];
+      handleTargetState(result);
+    }
   }
 
   return (<>
@@ -820,9 +935,12 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         <PolicyTemplates
           onSelect={(p) => {
             // setTitle(p.title);
-            onChangeTitleInput(p.title);
-            onChangeTextInput(p.text);
-            setTemplateVisible(false);
+            // onChangeTitleInput(p.title);
+            // onChangeTextInput(p.text);
+            // setTemplateVisible(false);
+          }}
+          onClickSelect={(num) => {
+            handleTemplate(num);
           }}
         />
       </FDrawer>

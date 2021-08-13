@@ -6,6 +6,8 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 
 interface PolicyTemplatesProps {
   onSelect?({ title, text }: { title: string, text: string }): void;
+
+  onClickSelect?(num: 1 | 2): void;
 }
 
 const text1: string = `for public
@@ -24,9 +26,7 @@ auth[active]:
 finish:
   terminate`;
 
-const policiesText: string[] = [];
-
-function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
+function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
   return (<div>
     <PolicyTemplate
       text={text1}
@@ -34,6 +34,7 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
       translation={'免费获取授权一个月'}
       onSelect={() => {
         onSelect && onSelect({ text: text1, title: '免费策略' });
+        onClickSelect && onClickSelect(1);
       }}
     />
     <div style={{ height: 20 }} />
@@ -43,6 +44,7 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
       translation={'支付 10枚 羽币，可获取一个月的授权'}
       onSelect={() => {
         onSelect && onSelect({ text: text2, title: '收费策略' });
+        onClickSelect && onClickSelect(2);
       }}
     />
   </div>);
@@ -65,7 +67,13 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
   return (<div className={styles.PolicyTemplate}>
     <div className={styles.header}>
       <FTitleText type='h1' text={title} />
-      <FRectBtn type='primary' size='small'>选择</FRectBtn>
+      <FRectBtn
+        type='primary'
+        size='small'
+        onClick={() => {
+          onSelect && onSelect();
+        }}
+      >选择</FRectBtn>
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.translation}>
