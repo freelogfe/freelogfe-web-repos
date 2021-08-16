@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
-import { Space, Divider, DatePicker } from 'antd';
+import { Space, Divider, DatePicker, InputNumber } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates from './PolicyTemplates';
@@ -120,7 +120,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       events: [],
     },
   ]);
-  const [enabledTargetState, setEnabledTargetState] = React.useState<string[]>([]);
+  const [enabledTargetState, setEnabledTargetState] = React.useState<string[]>(['initial']);
   const [addingEventStateID, setAddingEventStateID] = React.useState<string>('');
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
@@ -129,6 +129,26 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
   const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
   const [usedTexts, setUsedTexts] = React.useState<string[]>([]);
+
+  const disabledExecute: boolean = title.trim() === ''
+    || !!titleError
+    || (editMode === 'code'
+      ? codeText.trim() === '' || !!codeTextError
+      : combinationData.some((cd) => {
+        return cd.name.trim() === ''
+          || !!cd.nameError
+          || cd.events.some((et) => {
+            if (et.type === 'payment') {
+              return !et.amount || !et.target;
+            } else if (et.type === 'relativeTime') {
+              return !et.num || !et.unit || !et.target;
+            } else if (et.type === 'absoluteTime') {
+              return !et.dateTime || !et.target;
+            } else {
+              return false;
+            }
+          });
+      }));
 
   React.useEffect(() => {
     setUsedTitles(alreadyHas?.map<string>((ah) => ah.title) || []);
@@ -411,13 +431,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       visible={visible}
       width={720}
       topRight={<Space size={30}>
-        <FTextBtn onClick={() => onCancel && onCancel()}>取消</FTextBtn>
+        <FTextBtn
+          onClick={() => {
+            onCancel && onCancel();
+          }}>取消</FTextBtn>
 
         {
           checkResult === 'unchecked' && (<FRectBtn
             onClick={() => {
               const code: string = dataToCode(combinationData);
-              console.log(code, 'codecodecodecode23421342134234234');
+              // console.log(code, 'codecodecodecode23421342134234234');
               setCheckResult('checking');
               setTimeout(() => {
                 setCheckResult('checked');
@@ -425,6 +448,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
             }}
             // disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
             type='primary'
+            disabled={disabledExecute}
           >校验</FRectBtn>)
         }
 
@@ -699,12 +723,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                     et.type === 'payment' && (<div>
                                       <FContentText text={'支付'} type='normal' />
                                       <div style={{ width: 10 }} />
-                                      <FInput
+                                      <InputNumber
+                                        min={1}
                                         placeholder='输入数值'
                                         style={{ width: 120 }}
-                                        value={String(et.amount)}
-                                        onChange={(e) => {
-
+                                        value={et.amount}
+                                        onChange={(value) => {
+                                          console.log(value, 'valuevaluevalue980upoaisdjfl');
+                                          onChangeCombinationEvent({
+                                            amount: value,
+                                          }, cd.randomID, et.randomID);
                                         }}
                                       />
                                       <div style={{ width: 10 }} />
@@ -736,10 +764,16 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
                                   {
                                     et.type === 'relativeTime' && (<div>
-                                      <FInput
+                                      <InputNumber
+                                        min={1}
                                         placeholder='输入数值'
                                         style={{ width: 250 }}
-                                        value={String(et.num)}
+                                        value={et.num}
+                                        onChange={(value) => {
+                                          onChangeCombinationEvent({
+                                            num: value,
+                                          }, cd.randomID, et.randomID);
+                                        }}
                                       />
                                       <div style={{ width: 10 }} />
                                       <FSelect
