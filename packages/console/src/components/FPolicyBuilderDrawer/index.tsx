@@ -15,12 +15,14 @@ import FGuideDown from '@/components/FIcons/FGuideDown';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import { FUtil } from '@freelog/tools-lib';
 
+// const { compile } = require('@freelog/resource-policy-lang');
+import {compile} from '@freelog/resource-policy-lang';
+
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
-  alreadyHas?: {
-    title: string;
-    text: string;
-  }[];
+
+  alreadyUsedTitles?: string[];
+  alreadyUsedTexts?: string[];
 
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
@@ -34,9 +36,14 @@ interface FPolicyBuilderDrawerStates {
   checkResult: 'unchecked' | 'checking' | 'checked';
 
   combinationData: CombinationStructureType;
+  combinationDataError: string;
+  enabledTargetState: string[];
+  addingEventStateID: string;
 
   codeText: string;
   codeTextError: string;
+
+  templateVisible: boolean;
 }
 
 const timeUnits = [
@@ -101,7 +108,13 @@ auth[active]:
 finish:
   terminate`;
 
-function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FPolicyBuilderDrawerProps) {
+function FPolicyBuilder({
+                          visible = false,
+                          onCancel,
+                          onConfirm,
+                          alreadyUsedTitles = [],
+                          alreadyUsedTexts = [],
+                        }: FPolicyBuilderDrawerProps) {
 
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
   const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
@@ -120,15 +133,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
       events: [],
     },
   ]);
-  const [enabledTargetState, setEnabledTargetState] = React.useState<string[]>(['initial']);
-  const [addingEventStateID, setAddingEventStateID] = React.useState<string>('');
+  const [combinationDataError, setCombinationDataError] = React.useState<FPolicyBuilderDrawerStates['combinationDataError']>('');
+  const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(['initial']);
+  const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>('');
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
 
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
-  const [usedTitles, setUsedTitles] = React.useState<string[]>([]);
-  const [usedTexts, setUsedTexts] = React.useState<string[]>([]);
 
   const disabledExecute: boolean = title.trim() === ''
     || !!titleError
@@ -150,21 +162,21 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
           });
       }));
 
-  React.useEffect(() => {
-    setUsedTitles(alreadyHas?.map<string>((ah) => ah.title) || []);
-    setUsedTexts(alreadyHas?.map<string>((ah) => ah.text) || []);
-  }, [alreadyHas]);
+  // React.useEffect(() => {
+  //   setUsedTitles(alreadyHas?.map<string>((ah) => ah.title) || []);
+  //   setUsedTexts(alreadyHas?.map<string>((ah) => ah.text) || []);
+  // }, [alreadyHas]);
 
   function onChangeTitleInput(value: string) {
     // const value: string = e.target.value;
     setTitle(value);
-    setTitleError(verifyTitle(value, usedTitles));
+    setTitleError(verifyTitle(value, alreadyUsedTitles));
   }
 
   function onChangeTextInput(value: string) {
     // const value: string = e.target.value;
     setCodeText(value);
-    setCodeTextError(verifyText(value, usedTexts));
+    setCodeTextError(verifyText(value, alreadyUsedTexts));
   }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
@@ -440,11 +452,15 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
           checkResult === 'unchecked' && (<FRectBtn
             onClick={() => {
               const code: string = dataToCode(combinationData);
-              // console.log(code, 'codecodecodecode23421342134234234');
-              setCheckResult('checking');
-              setTimeout(() => {
+              if (editMode === 'code') {
                 setCheckResult('checked');
-              }, 2000);
+              } else {
+                setCheckResult('checking');
+
+                const code: string = dataToCode(combinationData);
+                const result = compile(code);
+                console.log(result, '!@#$@!#$@#42390upoijdsilfjl;asdf');
+              }
             }}
             // disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
             type='primary'
@@ -454,12 +470,6 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
         {
           checkResult === 'checking' && (<FRectBtn
-            onClick={() => {
-              onConfirm && onConfirm({
-                title,
-                text: codeText,
-              });
-            }}
             disabled={true}
             type='primary'
           >校验中</FRectBtn>)
@@ -468,10 +478,10 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         {
           checkResult === 'checked' && (<FRectBtn
             onClick={() => {
-              // onConfirm && onConfirm({
-              //   title,
-              //   text: codeText,
-              // });
+              onConfirm && onConfirm({
+                title,
+                text: codeText,
+              });
             }}
             type='primary'
           >创建</FRectBtn>)
@@ -521,6 +531,17 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
             <FLoading />
             <div style={{ width: 5 }} />
             <span>校验中，请勿离开</span>
+          </div>
+          <div style={{ height: 30 }} />
+        </>)
+      }
+
+      {
+        !!combinationDataError && (<>
+          <div className={styles.combinationDataError}>
+            <FInfo />
+            <div style={{ width: 5 }} />
+            <span>{combinationDataError}</span>
           </div>
           <div style={{ height: 30 }} />
         </>)
@@ -729,7 +750,7 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
                                         style={{ width: 120 }}
                                         value={et.amount}
                                         onChange={(value) => {
-                                          console.log(value, 'valuevaluevalue980upoaisdjfl');
+                                          // console.log(value, 'valuevaluevalue980upoaisdjfl');
                                           onChangeCombinationEvent({
                                             amount: value,
                                           }, cd.randomID, et.randomID);
