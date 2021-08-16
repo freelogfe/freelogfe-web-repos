@@ -160,6 +160,8 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
 
     const duplicateNames: string[] = searchDuplicateElements<string>(result.map((r) => {
       return r.name;
+    }).filter((n) => {
+      return !!n;
     }));
 
     // console.log(duplicateNames, 'duplicateNames9023uj;i4orjlkj');
@@ -414,12 +416,14 @@ function FPolicyBuilder({ visible = false, alreadyHas, onCancel, onConfirm }: FP
         {
           checkResult === 'unchecked' && (<FRectBtn
             onClick={() => {
+              const code: string = dataToCode(combinationData);
+              console.log(code, 'codecodecodecode23421342134234234');
               setCheckResult('checking');
               setTimeout(() => {
                 setCheckResult('checked');
               }, 2000);
             }}
-            disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
+            // disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
             type='primary'
           >校验</FRectBtn>)
         }
@@ -1138,4 +1142,38 @@ function searchDuplicateElements<T>(arr: T[]): T[] {
   }).map((mm) => {
     return mm[0];
   });
+}
+
+function dataToCode(data: CombinationStructureType): string {
+  let result: string = 'for public\n';
+  for (const st of data) {
+    result += '\n';
+    const colors: string[] = [];
+    if (st.auth) {
+      colors.push('active');
+    }
+    if (st.testAuth) {
+      colors.push('testActive');
+    }
+    result += `${st.name}${colors.length > 0 ? `[${colors.join(',')}]` : ''}:`;
+
+
+    for (const et of st.events) {
+      result += '\n  ';
+      if (et.type === 'payment') {
+        result += `~freelog.TransactionEvent("${et.amount}","self.account") => ${et.target}`;
+      } else if (et.type === 'relativeTime') {
+        result += `~freelog.RelativeTimeEvent("${et.num}","${et.unit}") => ${et.target}`;
+      } else if (et.type === 'absoluteTime') {
+        result += `~freelog.TimeEvent("${et.dateTime}") => ${et.target}`;
+      } else {
+        result += 'terminate';
+      }
+    }
+  }
+  return result;
+}
+
+function codeToData(code: string): CombinationStructureType {
+  return [];
 }
