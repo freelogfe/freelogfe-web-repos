@@ -27,6 +27,8 @@ interface FPolicyBuilderDrawerProps {
   alreadyUsedTitles?: string[];
   alreadyUsedTexts?: string[];
 
+  targetType: 'resource' | 'presentable';
+
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
   onCancel?(): void;
@@ -122,6 +124,7 @@ finish:
 
 function FPolicyBuilder({
                           visible = false,
+                          targetType,
                           onCancel,
                           onConfirm,
                           alreadyUsedTitles = [],
@@ -491,7 +494,8 @@ function FPolicyBuilder({
               // console.log(code, 'code1234123421341234');
 
               try {
-                const result = await compile(code, 'resource', 'http://qi.testfreelog.com', 'dev');
+                // const result = await compile(code, 'resource', 'http://qi.testfreelog.com', 'dev');
+                const result = await compile(code, targetType, FUtil.Format.completeUrlByDomain('qi'), window.location.origin.endsWith('.freelog.com') ? 'prod' : 'dev');
                 // console.log(result, '!@#$@!#$@#42390upoijdsilfjl;asdf');
                 const contract: ContractEntity = {
                   audiences: result.state_machine.audiences,

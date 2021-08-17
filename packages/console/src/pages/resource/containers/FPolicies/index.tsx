@@ -81,6 +81,7 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
       alreadyUsedTitles={resourceAuthPage.policies.map((ip) => {
         return ip.policyName;
       })}
+      targetType="resource"
       onCancel={closeNewVisible}
       onConfirm={({ title, text }) => {
         dispatch<UpdatePoliciesAction>({
