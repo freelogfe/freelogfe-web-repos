@@ -75,10 +75,12 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
 
     <FPolicyBuilderDrawer
       visible={resourceAuthPage.policyEditorVisible}
-      alreadyHas={resourceAuthPage.policies.map((ip) => ({
-        title: ip.policyName,
-        text: ip.policyText,
-      }))}
+      alreadyUsedTexts={resourceAuthPage.policies.map<string>((ip) => {
+        return ip.policyText;
+      })}
+      alreadyUsedTitles={resourceAuthPage.policies.map((ip) => {
+        return ip.policyName;
+      })}
       onCancel={closeNewVisible}
       onConfirm={({ title, text }) => {
         dispatch<UpdatePoliciesAction>({

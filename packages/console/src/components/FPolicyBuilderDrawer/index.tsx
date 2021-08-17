@@ -474,9 +474,18 @@ function FPolicyBuilder({
               setCheckResult('checking');
               let code: string;
               if (editMode === 'code') {
+
                 code = codeText;
               } else {
                 code = dataToCode(combinationData);
+                const err: string = await verifyText(code, alreadyUsedTexts);
+                if (err) {
+                  setCombinationDataError(err);
+                  setCheckResult('unchecked');
+                  return;
+                } else {
+                  setCombinationDataError('');
+                }
               }
 
               // console.log(code, 'code1234123421341234');
@@ -518,13 +527,15 @@ function FPolicyBuilder({
               } catch (err) {
                 // console.log(e, '@#$!@#$!@#$2134');
                 if (editMode === 'code') {
-                  setCodeTextError(err.message)
+                  setCodeTextError(err.message);
                 } else {
-                  setCombinationDataError(err.message)
+                  setCombinationDataError(err.message);
                 }
-              } finally {
-                setCheckResult('checked');
+                setCheckResult('unchecked');
               }
+              // finally {
+              //   setCheckResult('checked');
+              // }
             }}
             // disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
             type='primary'
@@ -543,8 +554,8 @@ function FPolicyBuilder({
           checkResult === 'checked' && (<FRectBtn
             onClick={() => {
               onConfirm && onConfirm({
-                title,
-                text: codeText,
+                title: successResult?.title || '',
+                text: successResult?.code || '',
               });
             }}
             type='primary'
