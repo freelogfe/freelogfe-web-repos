@@ -16,7 +16,10 @@ import FCodeFormatter from '@/components/FCodeFormatter';
 import { FUtil } from '@freelog/tools-lib';
 
 // const { compile } = require('@freelog/resource-policy-lang');
-import {compile} from '@freelog/resource-policy-lang';
+import { report } from '@freelog/resource-policy-lang/dist';
+import { ContractEntity } from '@freelog/resource-policy-lang/dist/tools/ContractTool';
+
+const { compile } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -42,6 +45,13 @@ interface FPolicyBuilderDrawerStates {
 
   codeText: string;
   codeTextError: string;
+
+  successResult: {
+    title: string;
+    code: string;
+    translation: string;
+    view: any;
+  } | null;
 
   templateVisible: boolean;
 }
@@ -92,6 +102,7 @@ type CombinationStructureType = {
   }>;
 }[];
 
+const title1: string = '免费订阅（包月）';
 const text1: string = `for public
 
 initial[active]:
@@ -99,6 +110,7 @@ initial[active]:
 finish:
   terminate`;
 
+const title2: string = '付费订阅（包月）';
 const text2: string = `for public
 
 initial:
@@ -140,6 +152,8 @@ function FPolicyBuilder({
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
   const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
 
+  const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(null);
+
   const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
 
   const disabledExecute: boolean = title.trim() === ''
@@ -173,10 +187,10 @@ function FPolicyBuilder({
     setTitleError(verifyTitle(value, alreadyUsedTitles));
   }
 
-  function onChangeTextInput(value: string) {
+  async function onChangeTextInput(value: string) {
     // const value: string = e.target.value;
     setCodeText(value);
-    setCodeTextError(verifyText(value, alreadyUsedTexts));
+    setCodeTextError(await verifyText(value, alreadyUsedTexts));
   }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
@@ -337,11 +351,14 @@ function FPolicyBuilder({
     setCombinationData(results2);
   }
 
-  function handleTemplate(num: 1 | 2) {
+  async function handleTemplate(num: 1 | 2) {
     // console.log(num, 'handleTemplatehandleTemplate23423423');
     setTemplateVisible(false);
     if (num === 1) {
       setCodeText(text1);
+      setCodeTextError(await verifyText(text1, alreadyUsedTexts));
+      setTitle(title1);
+      setTitleError(verifyTitle(title1, alreadyUsedTitles));
       const result: CombinationStructureType = [
         {
           randomID: FUtil.Tool.generateRandomCode(10),
@@ -380,6 +397,9 @@ function FPolicyBuilder({
       handleTargetState(result);
     } else {
       setCodeText(text2);
+      setCodeTextError(await verifyText(text2, alreadyUsedTexts));
+      setTitle(title2);
+      setTitleError(verifyTitle(title2, alreadyUsedTitles));
       const result: CombinationStructureType = [
         {
           randomID: FUtil.Tool.generateRandomCode(10),
@@ -450,16 +470,60 @@ function FPolicyBuilder({
 
         {
           checkResult === 'unchecked' && (<FRectBtn
-            onClick={() => {
-              const code: string = dataToCode(combinationData);
+            onClick={async () => {
+              setCheckResult('checking');
+              let code: string;
               if (editMode === 'code') {
-                setCheckResult('checked');
+                code = codeText;
               } else {
-                setCheckResult('checking');
+                code = dataToCode(combinationData);
+              }
 
-                const code: string = dataToCode(combinationData);
-                const result = compile(code);
-                console.log(result, '!@#$@!#$@#42390upoijdsilfjl;asdf');
+              // console.log(code, 'code1234123421341234');
+
+              try {
+                const result = await compile(code, 'resource', 'http://qi.testfreelog.com', 'dev');
+                // console.log(result, '!@#$@!#$@#42390upoijdsilfjl;asdf');
+                const contract: ContractEntity = {
+                  audiences: result.state_machine.audiences,
+                  fsmStates: Object.entries<any>(result.state_machine.states)
+                    .map((st) => {
+                      return {
+                        name: st[0],
+                        serviceStates: st[1].serviceStates,
+                        events: st[1].transitions.map((ts: any) => {
+
+                          return {
+                            id: ts.code,
+                            name: ts.name,
+                            args: ts.args,
+                            state: ts.toState,
+                          };
+                        }),
+                      };
+                    }),
+                };
+                // console.log(contract, 'contract12341234213421342134');
+                const rrr = report(contract);
+                // console.log(rrr, 'rrr!$!@#$2134123412341234');
+
+                setCheckResult('checked');
+                setSuccessResult({
+                  title: title,
+                  code: code,
+                  translation: rrr.audienceInfos[0].content + rrr.content,
+                  view: [],
+                });
+
+              } catch (err) {
+                // console.log(e, '@#$!@#$!@#$2134');
+                if (editMode === 'code') {
+                  setCodeTextError(err.message)
+                } else {
+                  setCombinationDataError(err.message)
+                }
+              } finally {
+                setCheckResult('checked');
               }
             }}
             // disabled={title === '' || codeText === '' || !!titleError || !!codeTextError}
@@ -509,7 +573,10 @@ function FPolicyBuilder({
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FTitleText type='h1' text={'试用后订阅（包月/包年）'} />
+            <FTitleText
+              type='h1'
+              text={successResult?.title || ''}
+            />
 
             <FTextBtn
               type='primary'
@@ -521,7 +588,11 @@ function FPolicyBuilder({
 
           <div style={{ height: 30 }} />
 
-          <PolicyShowcase text={''} />
+          <PolicyShowcase
+            content={successResult?.translation || ''}
+            code={successResult?.code || ''}
+            view={successResult?.view || ''}
+          />
         </div>)
       }
 
@@ -826,7 +897,8 @@ function FPolicyBuilder({
                                       <DatePicker
                                         placeholder='选择日期时间'
                                         style={{ width: 480 }}
-                                        showTime
+                                        showTime={{ format: 'HH:mm' }}
+                                        format='YYYY-MM-DD HH:mm'
                                         onChange={(value, dateString) => {
                                           // console.log(value, dateString, 'onChange23423423');
                                           onChangeCombinationEvent({
@@ -1111,36 +1183,30 @@ function verifyTitle(title: string, allTitles: string[]): string {
   return error;
 }
 
-function verifyText(text: string, allTexts: string[]): string {
+async function verifyText(text: string, allTexts: string[]): Promise<string> {
   let error: string = '';
   if (text === '') {
     error = '请输入内容';
   } else if (allTexts.includes(text)) {
     error = '内容已存在';
+  } else {
+    try {
+      const result = await compile(text, 'resource', 'http://qi.testfreelog.com', 'dev');
+    } catch (err) {
+      // console.log(err.message, 'err234234234');
+      error = err.message;
+    }
   }
   return error;
 }
 
-const policyText: string = `公开（所有人可签约）
-
-初始状态[已授权]
-  1周后 进入 状态 auth
-状态 auth
-  支付 10枚 羽币 进入 状态 auth_month
-  支付 100枚 羽币 进入 状态 auth_year
-  3天后 进入 终止状态
-状态 auth_month[已授权]
-  1个月后 进入 终止状态
-状态 auth_year[已授权]
-  1年后 进入 终止状态
-终止状态
-  停止接收事件`;
-
 interface PolicyShowcaseProps {
-  text: string;
+  code: string;
+  content: string;
+  view: any;
 }
 
-function PolicyShowcase({ text }: PolicyShowcaseProps) {
+function PolicyShowcase({ code, content, view }: PolicyShowcaseProps) {
 
   const [activated, setActivated] = React.useState<'content' | 'code' | 'view'>('content');
 
@@ -1172,11 +1238,11 @@ function PolicyShowcase({ text }: PolicyShowcaseProps) {
     <div className={styles.PolicyShowcaseBody}>
       <div>
         {
-          activated === 'content' && (<FCodeFormatter code={policyText} />)
+          activated === 'content' && (<FCodeFormatter code={content} />)
         }
 
         {
-          activated === 'code' && (<FCodeFormatter code={policyText} />)
+          activated === 'code' && (<FCodeFormatter code={code} />)
         }
 
         {
