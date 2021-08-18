@@ -1,8 +1,5 @@
-// import * as Format from './format';
-// import * as Regexp from './regexp';
-// import * as LinkTo from './linkTo';
 import * as I18n from './i18n';
-// import * as Predefined from './predefined';
+import * as Tool from './tools';
 
 const FUtil = {
   // Format,
@@ -10,6 +7,7 @@ const FUtil = {
   // LinkTo,
   I18n,
   // Predefined,
+  Tool,
 };
 
 export default FUtil;

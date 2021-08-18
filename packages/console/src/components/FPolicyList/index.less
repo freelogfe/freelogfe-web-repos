@@ -11,13 +11,13 @@
     background: #FFFFFF;
     border-radius: 10px;
     border: 1px solid #E5E7EB;
-    width: 270px;
+    width: 420px;
     margin-bottom: 30px;
     position: relative;
 
     .header {
-      height: 50px;
-      padding: 0 15px;
+      //height: 50px;
+      padding: 15px 20px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -28,12 +28,9 @@
     }
 
     .body {
-      height: 150px;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      overflow-y: auto;
-      overscroll-behavior-y: contain;
-      border-top: 1px solid #E5E7EB;
+      //height: 150px;
+
+      //border-top: 1px solid #E5E7EB;
 
       & > pre {
         margin: 0;
@@ -62,5 +59,72 @@
         }
       }
     }
+  }
+}
+
+.PolicyBody {
+  position: relative;
+
+  .PolicyFullScreenBtn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .PolicyFullScreenBtn {
+      visibility: visible;
+    }
+  }
+
+}
+
+.ModalTile {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+}
+
+.PolicyBodyTabs {
+  padding: 0 20px;
+  height: 30px;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+
+  & > a {
+    color: #222;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+
+    &.PolicyBodyTabActivated {
+      color: @f-primary-color;
+      border-bottom-color: @f-primary-color;
+    }
+  }
+}
+
+.PolicyBodyContainer {
+  height: 170px;
+  overflow: auto;
+  overscroll-behavior: contain;
+
+  & > div {
+    padding: 15px 20px;
+    width: fit-content;
+    height: fit-content;
   }
 }
