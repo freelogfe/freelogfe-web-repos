@@ -98,125 +98,123 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
         />
       </Space>
     </div>
-    <div className={styles.body}>
-      <div className={styles.PolicyBody}>
-        <div className={styles.PolicyBodyTabs}>
-          <a
-            className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
-            onClick={() => {
-              setActivated('text');
-            }}
-          >策略内容</a>
-          <div style={{ width: 20 }} />
-          <a
-            className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-            onClick={() => {
-              setActivated('view');
-            }}
-          >状态机视图</a>
-          <div style={{ width: 20 }} />
-          <a
-            className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
-            onClick={() => {
-              setActivated('code');
-            }}
-          >策略代码</a>
-        </div>
-        <div className={styles.PolicyBodyContainer}>
-
-          {
-            activated === 'text' && (<div>
-              <FCodeFormatter code={text} />
-            </div>)
-          }
-
-          {
-            activated === 'view' && (<div>
-            </div>)
-          }
-
-          {
-            activated === 'code' && (<div>
-              <FCodeFormatter code={code} />
-            </div>)
-          }
-        </div>
-
+    <div className={styles.PolicyBody}>
+      <div className={styles.PolicyBodyTabs}>
         <a
-          className={styles.PolicyFullScreenBtn}
+          className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
           onClick={() => {
-            setFullScreenVisible(true);
+            setActivated('text');
           }}
-        ><FFullScreen style={{ fontSize: 12 }} /></a>
-
-        <FModal
-          title={null}
-          visible={fullScreenVisible}
-          onCancel={() => {
-            setFullScreenVisible(false);
+        >策略内容</a>
+        <div style={{ width: 20 }} />
+        <a
+          className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
+          onClick={() => {
+            setActivated('view');
           }}
-          width={1240}
-          footer={null}
-          centered
-        >
-          <div className={styles.ModalTile}>
-            <FTitleText text={name} type='h2' />
-            <div style={{ width: 20 }} />
-            <label
-              style={{ color: online ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
-            <div style={{ width: 10 }} />
-            <FSwitch
-              disabled={onlineDisable}
-              checked={online}
-              onChange={(value) => {
-                onOnlineChange && onOnlineChange(value);
-              }}
-            />
-          </div>
-
-          <div className={styles.PolicyBodyTabs}>
-            <a
-              className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
-              onClick={() => {
-                setActivated('text');
-              }}
-            >策略内容</a>
-            <div style={{ width: 20 }} />
-            <a
-              className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-              onClick={() => {
-                setActivated('view');
-              }}
-            >状态机视图</a>
-            <div style={{ width: 20 }} />
-            <a
-              className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
-              onClick={() => {
-                setActivated('code');
-              }}
-            >策略代码</a>
-          </div>
-          <div className={styles.PolicyBodyContainer} style={{ height: 770 }}>
-
-            {
-              activated === 'text' && (<div>
-                <FCodeFormatter code={text} />
-              </div>)
-            }
-
-            {
-              activated === 'view' && (<div>
-              </div>)
-            }
-
-            {
-              activated === 'code' && (<div>
-                <FCodeFormatter code={code} />
-              </div>)
-            }
-          </div>
-        </FModal>
+        >状态机视图</a>
+        <div style={{ width: 20 }} />
+        <a
+          className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
+          onClick={() => {
+            setActivated('code');
+          }}
+        >策略代码</a>
       </div>
+      <div className={styles.PolicyBodyContainer}>
+
+        {
+          activated === 'text' && (<div>
+            <FCodeFormatter code={text} />
+          </div>)
+        }
+
+        {
+          activated === 'view' && (<div>
+          </div>)
+        }
+
+        {
+          activated === 'code' && (<div>
+            <FCodeFormatter code={code} />
+          </div>)
+        }
+      </div>
+
+      <a
+        className={styles.PolicyFullScreenBtn}
+        onClick={() => {
+          setFullScreenVisible(true);
+        }}
+      ><FFullScreen style={{ fontSize: 12 }} /></a>
     </div>
+    <FModal
+      title={null}
+      visible={fullScreenVisible}
+      onCancel={() => {
+        setFullScreenVisible(false);
+      }}
+      width={1240}
+      footer={null}
+      centered
+    >
+      <div className={styles.ModalTile}>
+        <FTitleText text={name} type='h2' />
+        <div style={{ width: 20 }} />
+        <label
+          style={{ color: online ? '#42C28C' : '#B4B6BA' }}>{FUtil1.I18n.message('btn_activate_auth_plan')}</label>
+        <div style={{ width: 10 }} />
+        <FSwitch
+          disabled={onlineDisable}
+          checked={online}
+          onChange={(value) => {
+            onOnlineChange && onOnlineChange(value);
+          }}
+        />
+      </div>
+
+      <div className={styles.PolicyBodyTabs}>
+        <a
+          className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
+          onClick={() => {
+            setActivated('text');
+          }}
+        >策略内容</a>
+        <div style={{ width: 20 }} />
+        <a
+          className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
+          onClick={() => {
+            setActivated('view');
+          }}
+        >状态机视图</a>
+        <div style={{ width: 20 }} />
+        <a
+          className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
+          onClick={() => {
+            setActivated('code');
+          }}
+        >策略代码</a>
+      </div>
+      <div className={styles.PolicyBodyContainer} style={{ height: 770 }}>
+
+        {
+          activated === 'text' && (<div>
+            <FCodeFormatter code={text} />
+          </div>)
+        }
+
+        {
+          activated === 'view' && (<div>
+          </div>)
+        }
+
+        {
+          activated === 'code' && (<div>
+            <FCodeFormatter code={code} />
+          </div>)
+        }
+      </div>
+    </FModal>
+
   </div>);
 }
