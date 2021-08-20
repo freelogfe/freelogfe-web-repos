@@ -20,6 +20,7 @@ function FDrawer({children, topRight, width = 720, title, onClose, ...props}: FD
     bodyStyle={{padding: 0}}
     width={width || 720}
     onClose={onClose}
+    maskClosable={false}
     {...props}
   >
     <div className={styles.header} style={{width: width}}>
