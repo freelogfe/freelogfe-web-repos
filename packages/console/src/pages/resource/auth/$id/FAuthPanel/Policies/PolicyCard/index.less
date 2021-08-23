@@ -2,6 +2,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   background-color: white;
+  position: relative;
 
   .PolicyName {
     display: flex;
@@ -10,12 +11,36 @@
     padding: 0 20px;
   }
 
-  .PolicyGrammar {
-    padding: 15px 20px;
-    border-top: 1px solid #E5E7EB;
+  //.PolicyGrammar {
+  //  padding: 15px 20px;
+  //  border-top: 1px solid #E5E7EB;
+  //
+  //  & > pre {
+  //    margin: 0;
+  //  }
+  //}
 
-    & > pre {
-      margin: 0;
+  .PolicyFullScreenBtn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .PolicyFullScreenBtn {
+      visibility: visible;
     }
   }
 }
@@ -48,4 +73,10 @@
   }
 }
 
+.ModalTile {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+}
 
