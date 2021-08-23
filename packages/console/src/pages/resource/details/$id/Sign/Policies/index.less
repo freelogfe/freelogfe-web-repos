@@ -8,18 +8,45 @@
   margin-bottom: 20px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  position: relative;
 
   .singPolicyTitle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 50px;
-    border-bottom: 1px solid #E5E7EB;
-    padding: 0 15px;
+    //height: 50px;
+    //border-bottom: 1px solid #E5E7EB;
+    padding: 15px 20px 0;
   }
 
-  & > pre {
+  .PolicyFullScreenBtn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 0;
     margin: 0;
-    padding: 15px;
+    visibility: hidden;
   }
+
+  &:hover {
+    .PolicyFullScreenBtn {
+      visibility: visible;
+    }
+  }
+}
+
+.ModalTile {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
 }

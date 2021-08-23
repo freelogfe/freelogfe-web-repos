@@ -4,7 +4,12 @@ import { Checkbox, Space } from 'antd';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/marketResourcePage';
-import { FContentText } from '@/components/FText';
+import { FContentText, FTitleText } from '@/components/FText';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
+import FFullScreen from '@/components/FIcons/FFullScreen';
+import FUtil1 from '@/utils';
+import FSwitch from '@/components/FSwitch';
+import FModal from '@/components/FModal';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -12,6 +17,8 @@ interface PoliciesProps {
 }
 
 function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
+
+  const [visibleModalPolicyID, setVisibleModalPolicyID] = React.useState<string>('');
 
   const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
 
@@ -23,6 +30,35 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
   const isSignedNode: boolean = marketResourcePage.signedNodeIDs.includes(marketResourcePage.selectedNodeID);
 
+  const modalPolicy = policies.find((pl) => {
+    return pl.id === visibleModalPolicyID;
+  });
+
+  function onChangeResourceChecked(id: string, checked: boolean) {
+    dispatch<ChangeAction>({
+      type: 'marketResourcePage/change',
+      payload: {
+        signResources: marketResourcePage.signResources.map((sr) => {
+          if (!sr.selected) {
+            return sr;
+          }
+          return {
+            ...sr,
+            policies: sr.policies.map((srp) => {
+              if (srp.id !== id) {
+                return srp;
+              }
+              return {
+                ...srp,
+                checked: checked,
+              };
+            }),
+          };
+        }),
+      },
+    });
+  }
+
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>
     <div style={{ height: 5 }} />
@@ -33,44 +69,64 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
           key={p.id}
         >
           <div className={styles.singPolicyTitle}>
-            <div>{p.name}</div>
-
+            <FContentText text={p.name} type='highlight' />
             {
               !isSignedNode && (<Checkbox
                 checked={p.checked}
                 disabled={p.status === 0}
                 onChange={(e) => {
-                  dispatch<ChangeAction>({
-                    type: 'marketResourcePage/change',
-                    payload: {
-                      signResources: marketResourcePage.signResources.map((sr) => {
-                        if (!sr.selected) {
-                          return sr;
-                        }
-                        return {
-                          ...sr,
-                          policies: sr.policies.map((srp) => {
-                            if (srp.id !== p.id) {
-                              return srp;
-                            }
-                            return {
-                              ...srp,
-                              checked: e.target.checked,
-                            };
-                          }),
-                        };
-                      }),
-                    },
-                  });
+                  onChangeResourceChecked(p.id, e.target.checked);
                 }}
               />)
             }
 
           </div>
-          <pre>{p.text}</pre>
+          {/*<pre>{p.text}</pre>*/}
+          <FPolicyDisplay code={p.text} containerHeight={170} />
+
+          <a
+            className={styles.PolicyFullScreenBtn}
+            onClick={() => {
+              // setFullScreenVisible(true);
+              setVisibleModalPolicyID(p.id);
+            }}
+          ><FFullScreen style={{ fontSize: 12 }} /></a>
+
+
         </div>);
       })
     }
+
+    <FModal
+      title={null}
+      visible={!!visibleModalPolicyID}
+      onCancel={() => {
+        setVisibleModalPolicyID('');
+      }}
+      width={1240}
+      footer={null}
+      centered
+    >
+      <div className={styles.ModalTile}>
+        <FTitleText text={modalPolicy?.name || ''} type='h2' />
+        <div style={{ width: 20 }} />
+
+        {
+          !isSignedNode && (<Checkbox
+            checked={modalPolicy?.checked}
+            disabled={modalPolicy?.status === 0}
+            onChange={(e) => {
+              onChangeResourceChecked(modalPolicy?.id || '', e.target.checked);
+            }}
+          />)
+        }
+      </div>
+
+      <FPolicyDisplay
+        containerHeight={770}
+        code={modalPolicy?.text || ''}
+      />
+    </FModal>
   </div>);
 }
 

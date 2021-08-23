@@ -65,19 +65,7 @@ interface PolicyCardProps {
 
 function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: PolicyCardProps) {
 
-  // const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
-  // const [text, setText] = React.useState<string>('');
-
   const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
-
-  // AHooks.useMount(async () => {
-  //   const { error, text } = await FUtil1.Tool.codeTranslationToText({ code, targetType: 'resource' });
-  //   if (error) {
-  //     setText('!!!解析错误\n' + '    ' + error[0]);
-  //     return;
-  //   }
-  //   setText(text || '');
-  // });
 
   return (<div className={styles.policy}>
     <div className={styles.header}>
