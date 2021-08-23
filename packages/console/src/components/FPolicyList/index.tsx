@@ -4,11 +4,12 @@ import FUtil1 from '@/utils';
 import FSwitch from '@/components/FSwitch';
 import { Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import FModal from '@/components/FModal';
-import FCodeFormatter from '@/components/FCodeFormatter';
+// import FCodeFormatter from '@/components/FCodeFormatter';
 import * as AHooks from 'ahooks';
 import FFullScreen from '@/components/FIcons/FFullScreen';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
 
 interface FPolicyListProps {
   dataSource: {
@@ -64,19 +65,19 @@ interface PolicyCardProps {
 
 function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: PolicyCardProps) {
 
-  const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
-  const [text, setText] = React.useState<string>('');
+  // const [activated, setActivated] = React.useState<'code' | 'text' | 'view'>('text');
+  // const [text, setText] = React.useState<string>('');
 
   const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
 
-  AHooks.useMount(async () => {
-    const { error, text } = await FUtil1.Tool.codeTranslationToText({ code, targetType: 'resource' });
-    if (error) {
-      setText('!!!解析错误\n' + '    ' + error[0]);
-      return;
-    }
-    setText(text || '');
-  });
+  // AHooks.useMount(async () => {
+  //   const { error, text } = await FUtil1.Tool.codeTranslationToText({ code, targetType: 'resource' });
+  //   if (error) {
+  //     setText('!!!解析错误\n' + '    ' + error[0]);
+  //     return;
+  //   }
+  //   setText(text || '');
+  // });
 
   return (<div className={styles.policy}>
     <div className={styles.header}>
@@ -98,56 +99,17 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
         />
       </Space>
     </div>
-    <div className={styles.PolicyBody}>
-      <div className={styles.PolicyBodyTabs}>
-        <a
-          className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('text');
-          }}
-        >策略内容</a>
-        <div style={{ width: 20 }} />
-        <a
-          className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('view');
-          }}
-        >状态机视图</a>
-        <div style={{ width: 20 }} />
-        <a
-          className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('code');
-          }}
-        >策略代码</a>
-      </div>
-      <div className={styles.PolicyBodyContainer}>
+    <FPolicyDisplay
+      containerHeight={170}
+      code={code}
+    />
 
-        {
-          activated === 'text' && (<div>
-            <FCodeFormatter code={text} />
-          </div>)
-        }
-
-        {
-          activated === 'view' && (<div>
-          </div>)
-        }
-
-        {
-          activated === 'code' && (<div>
-            <FCodeFormatter code={code} />
-          </div>)
-        }
-      </div>
-
-      <a
-        className={styles.PolicyFullScreenBtn}
-        onClick={() => {
-          setFullScreenVisible(true);
-        }}
-      ><FFullScreen style={{ fontSize: 12 }} /></a>
-    </div>
+    <a
+      className={styles.PolicyFullScreenBtn}
+      onClick={() => {
+        setFullScreenVisible(true);
+      }}
+    ><FFullScreen style={{ fontSize: 12 }} /></a>
     <FModal
       title={null}
       visible={fullScreenVisible}
@@ -173,47 +135,10 @@ function PolicyCard({ name, online, onlineDisable, code, onOnlineChange }: Polic
         />
       </div>
 
-      <div className={styles.PolicyBodyTabs}>
-        <a
-          className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('text');
-          }}
-        >策略内容</a>
-        <div style={{ width: 20 }} />
-        <a
-          className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('view');
-          }}
-        >状态机视图</a>
-        <div style={{ width: 20 }} />
-        <a
-          className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
-          onClick={() => {
-            setActivated('code');
-          }}
-        >策略代码</a>
-      </div>
-      <div className={styles.PolicyBodyContainer} style={{ height: 770 }}>
-
-        {
-          activated === 'text' && (<div>
-            <FCodeFormatter code={text} />
-          </div>)
-        }
-
-        {
-          activated === 'view' && (<div>
-          </div>)
-        }
-
-        {
-          activated === 'code' && (<div>
-            <FCodeFormatter code={code} />
-          </div>)
-        }
-      </div>
+      <FPolicyDisplay
+        containerHeight={770}
+        code={code}
+      />
     </FModal>
 
   </div>);

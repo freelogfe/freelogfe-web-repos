@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Checkbox, Space} from "antd";
-import {connect, Dispatch} from "dva";
-import {ConnectState, MarketResourcePageModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/marketResourcePage";
-import {FContentText} from '@/components/FText';
+import { Checkbox, Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, MarketResourcePageModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/marketResourcePage';
+import { FContentText } from '@/components/FText';
 
 interface PoliciesProps {
   dispatch: Dispatch;
   marketResourcePage: MarketResourcePageModelState;
 }
 
-function Policies({dispatch, marketResourcePage}: PoliciesProps) {
+function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
   const policies = marketResourcePage.signResources.find((r) => r.selected)?.policies;
 
@@ -25,7 +25,7 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
 
   return (<div>
     <div className={styles.smallTitle}>{isSignedNode ? '未签约策略' : '可进行签约的策略'}</div>
-    <div style={{height: 5}}/>
+    <div style={{ height: 5 }} />
     {
       policies.filter((p) => p.status !== 0).map((p) => {
         return (<div
@@ -56,11 +56,11 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
                             return {
                               ...srp,
                               checked: e.target.checked,
-                            }
+                            };
                           }),
                         };
                       }),
-                    }
+                    },
                   });
                 }}
               />)
@@ -74,4 +74,16 @@ function Policies({dispatch, marketResourcePage}: PoliciesProps) {
   </div>);
 }
 
-export default connect(({marketResourcePage}: ConnectState) => ({marketResourcePage}))(Policies);
+export default connect(({ marketResourcePage }: ConnectState) => ({ marketResourcePage }))(Policies);
+
+interface PolicyCardProps {
+  name: string;
+  code: string;
+  checked: boolean;
+
+  onChangeChecked?(checked: boolean): void;
+}
+
+function PolicyCard({ name, code, checked }: PolicyCardProps) {
+
+}
