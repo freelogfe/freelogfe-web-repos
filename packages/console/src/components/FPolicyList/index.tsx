@@ -4,10 +4,7 @@ import FUtil1 from '@/utils';
 import FSwitch from '@/components/FSwitch';
 import { Space } from 'antd';
 import { FContentText, FTitleText } from '@/components/FText';
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import FModal from '@/components/FModal';
-// import FCodeFormatter from '@/components/FCodeFormatter';
-import * as AHooks from 'ahooks';
 import FFullScreen from '@/components/FIcons/FFullScreen';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 
