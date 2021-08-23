@@ -1,19 +1,24 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
-import {Space} from 'antd';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, InformExhibitInfoPageModelState} from "@/models/connect";
-import {ChangeAction, UpdateRelationAction} from "@/models/informExhibitInfoPage";
-import {FUtil} from '@freelog/tools-lib';
-import {FTextBtn} from "@/components/FButton";
+import { FContentText, FTitleText } from '@/components/FText';
+import { Space } from 'antd';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
+import { ChangeAction, UpdateRelationAction } from '@/models/informExhibitInfoPage';
+import { FUtil } from '@freelog/tools-lib';
+import { FTextBtn } from '@/components/FButton';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
+import FFullScreen from '@/components/FIcons/FFullScreen';
+import FModal from '@/components/FModal';
+import FUtil1 from '@/utils';
+import FSwitch from '@/components/FSwitch';
 
 interface ContractsProps {
   dispatch: Dispatch;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
 }
 
-function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
+function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
 
   if (informExhibitInfoPage.associated.length === 0) {
     return null;
@@ -31,19 +36,19 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
       payload: {
         associated: informExhibitInfoPage.associated.map((a) => ({
           ...a,
-          selected: a.id === id
+          selected: a.id === id,
         })),
-      }
-    })
+      },
+    });
   }
 
   return (<div>
     <FTitleText
       text={'关联合约'}
-      type="h3"
+      type='h3'
     />
 
-    <div style={{height: 20}}/>
+    <div style={{ height: 20 }} />
 
     <div className={styles.sign}>
       <div className={styles.signLeft}>
@@ -62,19 +67,19 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
                 }));
               }}
             >
-            <FContentText
-              type="highlight"
-              text={r.name}
-              singleRow
-              className={styles.FContentText}
-            />
+              <FContentText
+                type='highlight'
+                text={r.name}
+                singleRow
+                className={styles.FContentText}
+              />
             </FTextBtn>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <FContentText
-              type="additional2"
+              type='additional2'
               text={r.type}
             />
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <div className={styles.policeTags}>
               {
                 r.contracts.map((c) => (<label key={c.id}>{c.name}</label>))
@@ -90,7 +95,7 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
           {
             selectedResource?.contracts && selectedResource?.contracts.length > 0 && (<>
               <div className={styles.smallTitle}>当前合约</div>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               {
                 selectedResource?.contracts.map((c) => (<div
                   key={c.id}
@@ -101,9 +106,9 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
                       <span>{c.name}</span>
                       <label className={styles.executing}>执行中</label>
                     </Space>
-                    <div style={{height: 10}}/>
+                    <div style={{ height: 10 }} />
                     <pre>{c.text}</pre>
-                    <div style={{height: 10}}/>
+                    <div style={{ height: 10 }} />
                   </div>
                   <div className={styles.footer}>
                     <div>
@@ -122,31 +127,22 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
             selectedResource?.policies && selectedResource?.policies.length > 0 &&
             (<>
               <div className={styles.smallTitle}>未签约策略</div>
-              <div style={{height: 5}}/>
+              <div style={{ height: 5 }} />
               {
-                selectedResource?.policies.map((p) => (<div
-                  className={styles.singPolicy}
+                selectedResource?.policies.map((p) => (<SinglePolicy
                   key={p.id}
-                >
-                  <div className={styles.singPolicyHeader}>
-                    <span>{p.name}</span>
-                    <a
-                      className={styles.singPolicyHeaderBtn}
-                      onClick={() => {
-                        // console.log(selectedResource, 'selectedResource#FSDjf89uew2323');
-                        dispatch<UpdateRelationAction>({
-                          type: 'informExhibitInfoPage/updateRelation',
-                          payload: {
-                            resourceId: selectedResource.id,
-                            policyId: p.id,
-                          },
-                        });
-                      }}
-                    >签约</a>
-                  </div>
-                  <div style={{height: 15}}/>
-                  <pre>{p.text}</pre>
-                </div>))
+                  name={p.name}
+                  text={p.text}
+                  onClickSign={() => {
+                    dispatch<UpdateRelationAction>({
+                      type: 'informExhibitInfoPage/updateRelation',
+                      payload: {
+                        resourceId: selectedResource.id,
+                        policyId: p.id,
+                      },
+                    });
+                  }}
+                />))
               }
             </>)
           }
@@ -156,6 +152,70 @@ function Contracts({dispatch, informExhibitInfoPage}: ContractsProps) {
   </div>);
 }
 
-export default connect(({informExhibitInfoPage}: ConnectState) => ({
+export default connect(({ informExhibitInfoPage }: ConnectState) => ({
   informExhibitInfoPage,
 }))(Contracts);
+
+interface SinglePolicyProps {
+  name: string;
+  text: string;
+
+  onClickSign?(): void;
+}
+
+function SinglePolicy({ name, text, onClickSign }: SinglePolicyProps) {
+
+  const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>(false);
+
+  return (<div
+    className={styles.singPolicy}
+  >
+    <div className={styles.singPolicyHeader}>
+      <span>{name}</span>
+      <a
+        className={styles.singPolicyHeaderBtn}
+        onClick={() => {
+          onClickSign && onClickSign();
+        }}
+      >签约</a>
+    </div>
+    {/*<div style={{ height: 15 }} />*/}
+    {/*<pre>{text}</pre>*/}
+    <FPolicyDisplay code={text} containerHeight={170} />
+
+    <a
+      className={styles.PolicyFullScreenBtn}
+      onClick={() => {
+        setFullScreenVisible(true);
+      }}
+    ><FFullScreen style={{ fontSize: 12 }} /></a>
+
+    <FModal
+      title={null}
+      visible={fullScreenVisible}
+      onCancel={() => {
+        setFullScreenVisible(false);
+      }}
+      width={1240}
+      footer={null}
+      centered
+    >
+      <div className={styles.ModalTile}>
+        <FTitleText text={name} type='h2' />
+        <div style={{ width: 20 }} />
+        <a
+          className={styles.singPolicyHeaderBtn}
+          onClick={() => {
+            onClickSign && onClickSign();
+          }}
+        >签约</a>
+      </div>
+
+      <FPolicyDisplay
+        containerHeight={770}
+        code={text}
+      />
+    </FModal>
+
+  </div>);
+}
