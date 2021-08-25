@@ -68,3 +68,18 @@ export function batchContracts(params: BatchContractsParamsType) {
     params: params,
   });
 }
+
+// 查看合同流转记录分页列表
+interface TransitionRecordsParamsType {
+  skip?: number;
+  limit?: number;
+  contractId: string;
+}
+
+export function transitionRecords({contractId, ...params}: TransitionRecordsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts/${contractId}/transitionRecords`,
+    params: params,
+  });
+}
