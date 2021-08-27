@@ -14,7 +14,7 @@
     "@antv/g6": "^4.0.3",
     "@freelog/nmr_translator": "^5.0.13",
     "@freelog/resource-policy-lang": "^1.1.17",
-    "@freelog/tools-lib": "^0.1.19",
+    "@freelog/tools-lib": "^0.1.24",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "ahooks": "^2.4.0",
     "antd": "^4.9.0",

@@ -41,3 +41,82 @@
     }
   }
 }
+
+.TransferringRecords {
+  background-color: #FAFBFC;
+  border-radius: 6px;
+  padding: 15px;
+
+  .TransferringRecord {
+    .Authorized, .Unauthorized {
+      font-size: 12px;
+      height: 20px;
+      border-radius: 10px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      color: white;
+    }
+
+    .Authorized {
+      background-color: #42C28C;
+    }
+
+    .Unauthorized {
+      background-color: #E9A923;
+    }
+
+    .paymentEvent {
+      border-radius: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
+
+.ModalTitle {
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #E4E7EB;
+}
+
+.paymentAmount {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  & > label {
+    font-size: 50px;
+    line-height: 1;
+  }
+}
+
+.paymentInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .paymentInfoRow {
+    display: flex;
+    align-items: center;
+
+    & > div:first-child {
+      width: 90px;
+    }
+
+    & > div:last-child {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .paymentPassword {
+    width: 100%;
+  }
+}
+

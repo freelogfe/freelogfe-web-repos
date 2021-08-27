@@ -17,10 +17,7 @@ export interface ResourceAuthPageModelState {
   }[];
   policyPreviewVisible: boolean;
   policyPreviewText: string;
-  // newPolicyTitle: string;
-  // newPolicyText: string;
   policyEditorVisible: boolean;
-  // policyTemplateVisible: boolean;
 
   baseUastResources: {
     resourceId: string;
@@ -143,7 +140,7 @@ const Model: ResourceAuthPageModelType = {
     contractsAuthorized: [],
     contractsAuthorize: [],
 
-    detailContractID: '',
+    detailContractID: '612365c823fa520039faf59f',
   },
   effects: {
     * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {

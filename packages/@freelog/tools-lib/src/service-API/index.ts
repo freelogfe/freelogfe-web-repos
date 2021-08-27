@@ -8,6 +8,7 @@ import * as InformalNode from './informalNodes';
 import * as Contract from './contracts';
 import * as Transaction from './transactions';
 import * as Captcha from './captcha';
+import * as Event from './events';
 
 const FServiceAPI = {
   Node,
@@ -20,6 +21,7 @@ const FServiceAPI = {
   Contract,
   Transaction,
   Captcha,
+  Event,
 };
 
 export default FServiceAPI;

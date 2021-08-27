@@ -1,9 +1,11 @@
 import FUtil from '../utils';
 
+// 查看合同详情
 interface ContractDetailsParamsType {
   contractId: string;
   isLoadPolicyInfo?: 0 | 1;
   projection?: string;
+  isTranslate?: 0 | 1;
 }
 
 export function contractDetails({contractId, ...params}: ContractDetailsParamsType) {
@@ -33,6 +35,7 @@ interface ContractsParamsType {
   licenseeIdentityType?: number;
   isLoadPolicyInfo?: 0 | 1;
   projection?: string;
+  isTranslate?: 0 | 1;
 }
 
 export function contracts(params: ContractsParamsType) {
@@ -56,6 +59,7 @@ interface BatchContractsParamsType {
   licenseeId?: string | number;
   isLoadPolicyInfo?: 0 | 1;
   projection?: string;
+  isTranslate?: 0 | 1;
 }
 
 export function batchContracts(params: BatchContractsParamsType) {
