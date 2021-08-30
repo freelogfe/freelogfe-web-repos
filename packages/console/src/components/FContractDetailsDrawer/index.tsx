@@ -60,7 +60,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
       return;
     }
     fetchHandleD();
-  }, [contractID, fetchHandleD]);
+  }, [contractID]);
 
   async function fetchHandleD() {
 

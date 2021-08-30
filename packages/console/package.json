@@ -5,8 +5,7 @@
     "start": "umi dev",
     "build": "umi build",
     "test": "umi test",
-    "lint": "eslint {src,mock,tests}/**/*.{ts,tsx} --fix",
-    "precommit": "lint-staged"
+    "lint": "eslint {src,mock,tests}/**/*.{ts,tsx} --fix"
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^2.5.6",
