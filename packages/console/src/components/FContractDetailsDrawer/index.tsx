@@ -59,10 +59,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
     if (!contractID) {
       return;
     }
-    fetchHandleD();
+    fetchHandleData();
   }, [contractID]);
 
-  async function fetchHandleD() {
+  async function fetchHandleData() {
 
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
@@ -230,7 +230,7 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
               />)}
 
               <div style={{ height: 10 }} />
-              <div style={{padding: '0 20px'}}>
+              <div style={{ padding: '0 20px' }}>
                 <Space size={5}>
                   <FContentText
                     type='additional2'
