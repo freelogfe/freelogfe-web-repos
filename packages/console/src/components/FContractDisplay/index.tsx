@@ -58,7 +58,8 @@ function ContractDisplay({ contractID }: IContractDisplay) {
 
   React.useEffect(() => {
     fetchInitDa();
-  }, [contractID]);
+    
+  }, [contractID, fetchInitDa]);
 
   async function fetchInitDa() {
     if (!contractID) {
