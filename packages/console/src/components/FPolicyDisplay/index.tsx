@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FCodeFormatter from '@/components/FCodeFormatter';
-import FFullScreen from '@/components/FIcons/FFullScreen';
 import * as AHooks from 'ahooks';
 import FUtil1 from '@/utils';
 

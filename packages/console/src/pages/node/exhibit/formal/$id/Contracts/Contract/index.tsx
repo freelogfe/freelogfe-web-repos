@@ -12,6 +12,7 @@ import FSwitch from "@/components/FSwitch";
 import {ChangeAction, UpdateContractUsedAction} from "@/models/exhibitInfoPage";
 import {FTextBtn} from "@/components/FButton";
 import {FDown, FUp} from "@/components/FIcons";
+import FContractDisplay from '@/components/FContractDisplay';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -48,23 +49,25 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
                 status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}
               />
             </Space>
-            <div style={{height: 10}}/>
-            <Space style={{padding: '0 20px'}} size={2}>
-              <FContentText
-                type="additional2"
-                text={FUtil1.I18n.message('contract_id') + '：' + c.id}
-              />
-              <FDivider style={{fontSize: 14}}/>
-              <FContentText
-                type="additional2"
-                text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
-              />
-            </Space>
-            <div style={{height: 15}}/>
           </div>
-          <div className={styles.content}>
-            <pre>{c.text}</pre>
-          </div>
+          {/*<div className={styles.content}>*/}
+          {/*  <pre>{c.text}</pre>*/}
+          {/*</div>*/}
+          <FContractDisplay contractID={c.id}/>
+
+          <div style={{height: 10}}/>
+          <Space style={{padding: '0 20px'}} size={5}>
+            <FContentText
+              type="additional2"
+              text={FUtil1.I18n.message('contract_id') + '：' + c.id}
+            />
+            <FDivider style={{fontSize: 14}}/>
+            <FContentText
+              type="additional2"
+              text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
+            />
+          </Space>
+          <div style={{height: 10}}/>
 
           <div className={styles.footer}>
             <div className={styles.action}>
