@@ -56,13 +56,14 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
   const [associateContracts, setAssociateContracts] = React.useState<AssociateContracts | null>(null);
 
   React.useEffect(() => {
+    if (!contractID) {
+      return;
+    }
     fetchHandleD();
   }, [contractID, fetchHandleD]);
 
   async function fetchHandleD() {
-    if (!contractID) {
-      return;
-    }
+
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
       isLoadPolicyInfo: 1,
