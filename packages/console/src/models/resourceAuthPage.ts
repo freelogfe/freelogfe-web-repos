@@ -140,7 +140,7 @@ const Model: ResourceAuthPageModelType = {
     contractsAuthorized: [],
     contractsAuthorize: [],
 
-    detailContractID: '612365c823fa520039faf59f',
+    detailContractID: '',
   },
   effects: {
     * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
