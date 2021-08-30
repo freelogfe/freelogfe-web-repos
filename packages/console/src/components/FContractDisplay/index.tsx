@@ -57,10 +57,10 @@ function ContractDisplay({ contractID }: IContractDisplay) {
   const [modalPassword, setModalPassword] = React.useState<IContractDisplayStates['modalPassword']>('');
 
   React.useEffect(() => {
-    fetchInitData();
-  }, [contractID, fetchInitData]);
+    fetchInitDa();
+  }, [contractID, fetchInitDa]);
 
-  async function fetchInitData() {
+  async function fetchInitDa() {
     if (!contractID) {
       return;
     }

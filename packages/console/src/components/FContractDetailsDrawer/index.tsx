@@ -56,10 +56,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
   const [associateContracts, setAssociateContracts] = React.useState<AssociateContracts | null>(null);
 
   React.useEffect(() => {
-    fetchHandleData();
-  }, [contractID, fetchHandleData]);
+    fetchHandleD();
+  }, [contractID, fetchHandleD]);
 
-  async function fetchHandleData() {
+  async function fetchHandleD() {
     if (!contractID) {
       return;
     }
