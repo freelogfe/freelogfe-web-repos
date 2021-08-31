@@ -8,6 +8,7 @@ import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import FUtil1 from '@/utils';
+import fMessage from '@/components/fMessage';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -20,11 +21,16 @@ interface IContractDisplayStates {
   activated: 'record' | 'code' | 'text' | 'view';
 
   currentState: IStateAndEvents | null;
+  historyStates: IStateAndEvents[];
+
   modalVisible: boolean;
+  modalAccountBalance: number;
+  modalTarget: string;
+  modalContractName: string;
+  modalPayee: string;
   modalEventID: string;
-  modalFromAccountID: string;
-  modalPaymentAmount: number;
-  modalUserUserBanace: number;
+  modalAccountID: string;
+  modalTransactionAmount: number;
   modalPassword: string;
 
   text: string;
@@ -39,14 +45,14 @@ type IStateAndEvents = {
   eventTranslateInfos: {
     content: string;
     origin: {
-      args: { elapsed: number, timeUnit: string; };
       id: string;
       name: 'RelativeTimeEvent'
+      args: { elapsed: number, timeUnit: string; };
       state: string;
     } | {
-      args: { amount: number, account: string; };
       id: string;
       name: 'TransactionEvent'
+      args: { amount: number, account: string; };
       state: string;
     };
   }[];
@@ -58,13 +64,16 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
 
   const [currentState, setCurrentState] = React.useState<IContractDisplayStates['currentState']>(null);
+  const [historyStates, setHistoryStates] = React.useState<IContractDisplayStates['historyStates']>([]);
 
   const [modalVisible, setModalVisible] = React.useState<IContractDisplayStates['modalVisible']>(false);
+  const [modalAccountBalance, setModalAccountBalance] = React.useState<IContractDisplayStates['modalAccountBalance']>(-1);
+  const [modalTarget, setModalTarget] = React.useState<IContractDisplayStates['modalTarget']>('');
+  const [modalContractName, setModalContractName] = React.useState<IContractDisplayStates['modalContractName']>('');
+  const [modalPayee, setModalPayee] = React.useState<IContractDisplayStates['modalContractName']>('');
   const [modalEventID, setModalEventID] = React.useState<IContractDisplayStates['modalEventID']>('');
-  const [modalPaymentAmount, setModalPaymentAmount] = React.useState<IContractDisplayStates['modalPaymentAmount']>(-1);
-
-  const [modalFromAccountID, setModalFromAccountID] = React.useState<IContractDisplayStates['modalFromAccountID']>('');
-  const [modalUserBanace, setModalUserBanace] = React.useState<IContractDisplayStates['modalUserUserBanace']>(-1);
+  const [modalAccountID, setModalAccountID] = React.useState<IContractDisplayStates['modalAccountID']>('');
+  const [modalTransactionAmount, setModalTransactionAmount] = React.useState<IContractDisplayStates['modalTransactionAmount']>(-1);
   const [modalPassword, setModalPassword] = React.useState<IContractDisplayStates['modalPassword']>('');
 
   const [text, setText] = React.useState<IContractDisplayStates['text']>('');
@@ -87,7 +96,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
-
+    console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       contractId: contractID,
     };
@@ -95,12 +104,27 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
 
     const fsmInfos: IStateAndEvents[] = data.policyInfo.translateInfo.fsmInfos;
-    console.log(data, fsmInfos, 'fsmInfos24123423423');
+    // console.log(data, fsmInfos, 'fsmInfos24123423423');
     const currentState = fsmInfos.find((fi) => {
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
-    // console.log(data, currentState, 'currentState9087098-09');
+
+    console.log(fsmInfos, data1, 'data1data1data1currentState9087098-09');
+
+    setModalTarget(data.subjectName);
+    setModalContractName(data.contractName);
+    setModalPayee(data.licensorOwnerName);
     setCurrentState(currentState || null);
+
+    const historyStates1: IContractDisplayStates['historyStates'] = (data1.dataList as any[])
+      .map<IContractDisplayStates['historyStates'][number]>((d1l: any) => {
+        // console.log(d1l, 'd1l12341234');
+        return fsmInfos.find((fi) => {
+          return fi.stateInfo.origin === d1l.fromState;
+        }) as IContractDisplayStates['historyStates'][number];
+      });
+    console.log(historyStates1, 'historyStates1historyStates1!@!!!!!!!');
+    setHistoryStates([]);
     setCode(data.policyInfo.policyText);
     const { error, text } = await FUtil1.Tool.codeTranslationToText({
       code: data.policyInfo.policyText,
@@ -111,6 +135,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
       return;
     }
     setText(text || '');
+
   }
 
   async function readyPay() {
@@ -120,8 +145,8 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     const { data } = await FServiceAPI.Transaction.individualAccounts(params);
 
     console.log(data, '@!#$#@!$@#$2314123432');
-    setModalUserBanace(data.balance);
-    setModalFromAccountID(data.accountId);
+    setModalAccountBalance(data.balance);
+    setModalAccountID(data.accountId);
     setModalVisible(true);
   }
 
@@ -129,12 +154,16 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     const params: Parameters<typeof FServiceAPI.Event.transaction>[0] = {
       contractId: contractID,
       eventId: modalEventID,
-      accountId: modalFromAccountID,
-      transactionAmount: modalUserBanace,
-      password: '123456',
+      accountId: modalAccountID,
+      transactionAmount: modalTransactionAmount,
+      password: modalPassword,
     };
-    const { data } = await FServiceAPI.Event.transaction(params);
-    console.log(data, 'D234324');
+    const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
+    if (ret + (errCode || 0) + (errcode || 0) > 0) {
+      fMessage(msg, 'error');
+    } else {
+      fMessage('支付成功');
+    }
   }
 
   return (<div>
@@ -194,7 +223,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
                   />
                   {/*<div style={{ height: 10 }} />*/}
                   {
-                    currentState.eventTranslateInfos.map((eti) => {
+                    currentState.eventTranslateInfos.map((eti, ind) => {
                       if (eti.origin.name === 'TransactionEvent') {
                         return (<div key={eti.origin.id} className={styles.paymentEvent}>
                           <FContentText
@@ -205,17 +234,84 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
                             type='primary'
                             size='small'
                             onClick={() => {
+                              setModalEventID(eti.origin.id);
+                              // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                              setModalTransactionAmount((eti.origin.args as any).amount);
                               readyPay();
                             }}
                           >支付</FRectBtn>
                         </div>);
+                      } else if (eti.origin.name === 'RelativeTimeEvent') {
+                        return (<div key={eti.origin.id}>
+                          <FContentText
+                            key={eti.origin.id}
+                            type='normal'
+                            text={eti.content}
+                          />
+                        </div>);
                       } else {
-                        return (<div>1234</div>);
+                        return (<div key={ind}>1234</div>);
                       }
                     })
                   }
 
                 </div>)
+              }
+
+              {
+                historyStates.map((hs) => {
+                  return (<div className={styles.TransferringRecord}>
+                    <Space size={5}>
+                      {
+                        false && (<label className={styles.Authorized}>未授权</label>)
+                      }
+                      {
+                        true && (<label className={styles.Unauthorized}>未授权</label>)
+                      }
+
+                      <FContentText text={'2021/04/23 17:03'} type='normal' />
+                    </Space>
+                    <div style={{ height: 10 }} />
+                    <FContentText
+                      type='highlight'
+                      text={hs.stateInfo.content}
+                    />
+                    {/*<div style={{ height: 10 }} />*/}
+                    {
+                      hs.eventTranslateInfos.map((eti, ind) => {
+                        if (eti.origin.name === 'TransactionEvent') {
+                          return (<div key={eti.origin.id} className={styles.paymentEvent}>
+                            <FContentText
+                              type='normal'
+                              text={eti.content}
+                            />
+                            <FRectBtn
+                              type='primary'
+                              size='small'
+                              onClick={() => {
+                                setModalEventID(eti.origin.id);
+                                // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                setModalTransactionAmount((eti.origin.args as any).amount);
+                                readyPay();
+                              }}
+                            >支付</FRectBtn>
+                          </div>);
+                        } else if (eti.origin.name === 'RelativeTimeEvent') {
+                          return (<div key={eti.origin.id}>
+                            <FContentText
+                              key={eti.origin.id}
+                              type='normal'
+                              text={eti.content}
+                            />
+                          </div>);
+                        } else {
+                          return (<div key={ind}>1234</div>);
+                        }
+                      })
+                    }
+
+                  </div>);
+                })
               }
 
             </Space>
@@ -260,7 +356,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
       </div>
       <div style={{ height: 40 }} />
       <div className={styles.paymentAmount}>
-        <label>100</label>
+        <label>{modalTransactionAmount}</label>
         <div style={{ width: 10 }} />
         <FTipText text={'羽币'} type='third' />
       </div>
@@ -269,17 +365,17 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
         <Space size={20} direction='vertical' style={{ width: 440 }}>
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'标的物'} type='normal' /></div>
-            <div><FContentText text={'资源-职场图片1'} type='highlight' /></div>
+            <div><FContentText text={modalTarget} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'授权合约'} type='normal' /></div>
-            <div><FContentText text={'试用后订阅（包月/包年）'} type='highlight' /></div>
+            <div><FContentText text={modalContractName} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
             <div><FContentText text={'收款方'} type='normal' /></div>
-            <div><FContentText text={'yang'} type='highlight' /></div>
+            <div><FContentText text={modalPayee} type='highlight' /></div>
           </div>
 
           <div className={styles.paymentInfoRow}>
@@ -287,7 +383,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
             <div>
               <FContentText text={'羽币账户'} type='highlight' />
               <div style={{ width: 10 }} />
-              <FContentText text={`(余额 ${modalUserBanace}枚 )`} type='negative' />
+              <FContentText text={`(余额 ${modalAccountBalance}枚 )`} type='negative' />
             </div>
           </div>
 
@@ -305,7 +401,12 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
           </div>
 
           <div>
-            <FRectBtn style={{ width: '100%' }}>确认支付</FRectBtn>
+            <FRectBtn
+              style={{ width: '100%' }}
+              onClick={() => {
+                confirmPay();
+              }}
+            >确认支付</FRectBtn>
           </div>
         </Space>
       </div>
