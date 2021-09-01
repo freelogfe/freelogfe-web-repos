@@ -23,6 +23,33 @@ interface IContractDisplayStates {
   currentState: IStateAndEvents | null;
   historyStates: IStateAndEvents[];
 
+  currentS: {
+    name: string;
+    isAuth: boolean;
+    datetime: string;
+    events: Array<{
+      id: string;
+      tip: string;
+    } & ({
+      type: 'RelativeTimeEvent';
+    } | {
+      type: 'TimeEvent';
+    } | {
+      type: 'TransactionEvent';
+      amount: number;
+    })>;
+  } | null;
+  historySs: {
+    name: string;
+    isAuth: boolean;
+    datetime: string;
+    event: {
+      id: string;
+      tip: string;
+      type: 'RelativeTimeEvent' | 'TimeEvent' | 'TransactionEvent';
+    };
+  }[];
+
   modalVisible: boolean;
   modalAccountBalance: number;
   modalTarget: string;
@@ -63,8 +90,11 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
 
-  const [currentState, setCurrentState] = React.useState<IContractDisplayStates['currentState']>(null);
-  const [historyStates, setHistoryStates] = React.useState<IContractDisplayStates['historyStates']>([]);
+  // const [currentState, setCurrentState] = React.useState<IContractDisplayStates['currentState']>(null);
+  // const [historyStates, setHistoryStates] = React.useState<IContractDisplayStates['historyStates']>([]);
+
+  const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
+  const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
 
   const [modalVisible, setModalVisible] = React.useState<IContractDisplayStates['modalVisible']>(false);
   const [modalAccountBalance, setModalAccountBalance] = React.useState<IContractDisplayStates['modalAccountBalance']>(-1);
@@ -96,35 +126,85 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     };
 
     const { data } = await FServiceAPI.Contract.contractDetails(params);
-    console.log(data, 'data111122222333333333');
+    // console.log(data, 'data111122222333333333');
     const params1: Parameters<typeof FServiceAPI.Contract.transitionRecords>[0] = {
       contractId: contractID,
     };
 
     const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
 
-    const fsmInfos: IStateAndEvents[] = data.policyInfo.translateInfo.fsmInfos;
+    // console.log(data1, 'data1data1data1111111122222222222###########');
+
+    const fsmInfos: any = data.policyInfo.translateInfo.fsmInfos;
     // console.log(data, fsmInfos, 'fsmInfos24123423423');
-    const currentState = fsmInfos.find((fi) => {
+    const currentState: any = fsmInfos.find((fi: any) => {
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
 
-    console.log(fsmInfos, data1, 'data1data1data1currentState9087098-09');
+    // console.log(fsmInfos, data1, 'data1data1data1currentState9087098-09');
 
     setModalTarget(data.subjectName);
     setModalContractName(data.contractName);
     setModalPayee(data.licensorOwnerName);
-    setCurrentState(currentState || null);
+    // setCurrentState(currentState || null);
 
-    const historyStates1: IContractDisplayStates['historyStates'] = (data1.dataList as any[])
-      .map<IContractDisplayStates['historyStates'][number]>((d1l: any) => {
-        // console.log(d1l, 'd1l12341234');
-        return fsmInfos.find((fi) => {
+    // console.log(fsmInfos, 'fsmInfos!@#$!@#$@!#$');
+
+    const currentSData: IContractDisplayStates['currentS'] = {
+      name: currentState.stateInfo.content,
+      isAuth: currentState.serviceStateInfos.length > 0,
+      datetime: data1.dataList.length === 0
+        ? ''
+        : FUtil.Format.formatDateTime(data1.dataList[data1.dataList.length - 1].createDate, true),
+      // datetime: '2001-01-01 00:00',
+      events: (currentState.eventTranslateInfos as any[]).map((eti) => {
+        const obj = {
+          id: eti.origin.id,
+          tip: eti.content,
+          type: eti.origin.name,
+        };
+        if (eti.origin.name === 'TransactionEvent') {
+          return {
+            ...obj,
+            amount: eti.origin.args.amount,
+          };
+        } else {
+          return obj;
+        }
+      }),
+    };
+    setCurrentS(currentSData);
+
+    // console.log(currentSData, 'currentSDatacurrentSData11111111');
+    const historySsData: IContractDisplayStates['historySs'] = (data1.dataList as any[])
+      .map<IContractDisplayStates['historySs'][number]>((d1l: any, ind, arr) => {
+        // console.log(d1l, 'd1l123412344444444');
+        const currS = fsmInfos.find((fi: any) => {
           return fi.stateInfo.origin === d1l.fromState;
-        }) as IContractDisplayStates['historyStates'][number];
-      });
-    console.log(historyStates1, 'historyStates1historyStates1!@!!!!!!!');
-    setHistoryStates([]);
+        });
+        // console.log(currS, 'currScurrScurrS55555555');
+        const currE = currS.eventTranslateInfos.find((eti: any) => {
+          return eti.origin.id === d1l.eventId;
+        });
+        // console.log(currE, 'currE111111');
+        return {
+          name: currS.stateInfo.content,
+          isAuth: currS.serviceStateInfos.length > 0,
+          datetime: ind === 0
+            ? ''
+            : FUtil.Format.formatDateTime(arr[ind - 1].createDate, true),
+          event: {
+            id: currE.origin.id,
+            tip: currE.content,
+            type: currE.origin.name,
+          },
+        };
+      }).reverse();
+
+    // console.log(historySsData, 'historySsData000000000000');
+    setHistorySs(historySsData);
+
+    // setHistoryStates(historyStates1);
     setCode(data.policyInfo.policyText);
     const { error, text } = await FUtil1.Tool.codeTranslationToText({
       code: data.policyInfo.policyText,
@@ -162,7 +242,10 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
     if (ret + (errCode || 0) + (errcode || 0) > 0) {
       fMessage(msg, 'error');
     } else {
+      fetchInitDa();
       fMessage('支付成功');
+      setModalVisible(false);
+      setModalPassword('');
     }
   }
 
@@ -198,125 +281,110 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
       >策略代码</a>
     </div>
 
-    <div className={styles.PolicyBodyContainer} style={{ height: containerHeight }}>
+    <div
+      className={styles.PolicyBodyContainer}
+      style={{ height: containerHeight }}
+    >
+      {console.log(currentS, 'currentScurrentS')}
+      {console.log(historySs, 'historySshistorySs')}
       {
-        activated === 'record' && (
+        activated === 'record' && (<>
+          {
+            currentS && (<div className={styles.CurrentState}>
+              <Space size={5}>
+                {
+                  currentS.isAuth
+                    ? (<label className={styles.Authorized}>已授权</label>)
+                    : (<label className={styles.Unauthorized}>未授权</label>)
+                }
+                <FContentText text={currentS.datetime} type='normal' />
+              </Space>
+              <div style={{ height: 10 }} />
+              <FContentText
+                type='highlight'
+                text={currentS.name}
+              />
+              {/*<div style={{ height: 10 }} />*/}
+              {
+                currentS.events.map((eti) => {
+                  if (eti.type === 'TransactionEvent') {
+                    return (<div key={eti.id} className={styles.Event}>
+                      <FContentText
+                        type='normal'
+                        text={eti.tip}
+                      />
+                      <FRectBtn
+                        type='primary'
+                        size='small'
+                        onClick={() => {
+                          setModalEventID(eti.id);
+                          // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                          setModalTransactionAmount(eti.amount);
+                          readyPay();
+                        }}
+                      >支付</FRectBtn>
+                    </div>);
+                  } else if (eti.type === 'RelativeTimeEvent') {
+                    return (<div key={eti.id} className={styles.Event}>
+                      <FContentText
+                        type='normal'
+                        text={eti.tip}
+                      />
+                    </div>);
+                  } else if (eti.type === 'TimeEvent') {
+                    return (<div key={eti.id} className={styles.Event}>
+                      <FContentText
+                        type='normal'
+                        text={eti.tip}
+                      />
+                    </div>);
+                  }
+                })
+              }
+
+            </div>)
+          }
+
           <div className={styles.TransferringRecords} style={{ width: '100%' }}>
 
             <Space size={20} direction='vertical' style={{ width: '100%' }}>
-              {
-                currentState && (<div className={styles.TransferringRecord}>
-                  <Space size={5}>
-                    {
-                      false && (<label className={styles.Authorized}>未授权</label>)
-                    }
-                    {
-                      true && (<label className={styles.Unauthorized}>未授权</label>)
-                    }
 
-                    <FContentText text={'2021/04/23 17:03'} type='normal' />
-                  </Space>
-                  <div style={{ height: 10 }} />
-                  <FContentText
-                    type='highlight'
-                    text={currentState.stateInfo.content}
-                  />
-                  {/*<div style={{ height: 10 }} />*/}
-                  {
-                    currentState.eventTranslateInfos.map((eti, ind) => {
-                      if (eti.origin.name === 'TransactionEvent') {
-                        return (<div key={eti.origin.id} className={styles.paymentEvent}>
-                          <FContentText
-                            type='normal'
-                            text={eti.content}
-                          />
-                          <FRectBtn
-                            type='primary'
-                            size='small'
-                            onClick={() => {
-                              setModalEventID(eti.origin.id);
-                              // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                              setModalTransactionAmount((eti.origin.args as any).amount);
-                              readyPay();
-                            }}
-                          >支付</FRectBtn>
-                        </div>);
-                      } else if (eti.origin.name === 'RelativeTimeEvent') {
-                        return (<div key={eti.origin.id}>
-                          <FContentText
-                            key={eti.origin.id}
-                            type='normal'
-                            text={eti.content}
-                          />
-                        </div>);
-                      } else {
-                        return (<div key={ind}>1234</div>);
-                      }
-                    })
-                  }
-
-                </div>)
-              }
 
               {
-                historyStates.map((hs) => {
+                historySs.map((hs) => {
+                  // console.log(hs, 'hshshshshshshs1234234');
                   return (<div className={styles.TransferringRecord}>
                     <Space size={5}>
                       {
-                        false && (<label className={styles.Authorized}>未授权</label>)
-                      }
-                      {
-                        true && (<label className={styles.Unauthorized}>未授权</label>)
+                        hs.isAuth
+                          ? (<label className={styles.Authorized}>已授权</label>)
+                          : (<label className={styles.Unauthorized}>未授权</label>)
                       }
 
-                      <FContentText text={'2021/04/23 17:03'} type='normal' />
+                      <FContentText text={hs.datetime} type='normal' />
                     </Space>
                     <div style={{ height: 10 }} />
                     <FContentText
                       type='highlight'
-                      text={hs.stateInfo.content}
+                      text={hs.name}
                     />
-                    {/*<div style={{ height: 10 }} />*/}
-                    {
-                      hs.eventTranslateInfos.map((eti, ind) => {
-                        if (eti.origin.name === 'TransactionEvent') {
-                          return (<div key={eti.origin.id} className={styles.paymentEvent}>
-                            <FContentText
-                              type='normal'
-                              text={eti.content}
-                            />
-                            <FRectBtn
-                              type='primary'
-                              size='small'
-                              onClick={() => {
-                                setModalEventID(eti.origin.id);
-                                // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                                setModalTransactionAmount((eti.origin.args as any).amount);
-                                readyPay();
-                              }}
-                            >支付</FRectBtn>
-                          </div>);
-                        } else if (eti.origin.name === 'RelativeTimeEvent') {
-                          return (<div key={eti.origin.id}>
-                            <FContentText
-                              key={eti.origin.id}
-                              type='normal'
-                              text={eti.content}
-                            />
-                          </div>);
-                        } else {
-                          return (<div key={ind}>1234</div>);
-                        }
-                      })
-                    }
 
+                    <div className={styles.Event}>
+                      <FContentText
+                        type='normal'
+                        text={hs.event.tip}
+                      />
+                    </div>
+
+                    <div className={styles.mask} />
                   </div>);
                 })
               }
 
             </Space>
 
-          </div>)
+          </div>
+        </>)
       }
 
 
