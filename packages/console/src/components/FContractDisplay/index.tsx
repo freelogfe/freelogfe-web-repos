@@ -25,7 +25,7 @@ interface IContractDisplayStates {
 
   currentS: {
     name: string;
-    isAuth: boolean;
+    colors: string[];
     datetime: string;
     events: Array<{
       id: string;
@@ -41,7 +41,7 @@ interface IContractDisplayStates {
   } | null;
   historySs: {
     name: string;
-    isAuth: boolean;
+    colors: string[];
     datetime: string;
     event: {
       id: string;
@@ -64,34 +64,9 @@ interface IContractDisplayStates {
   code: string;
 }
 
-// type IStateAndEvents = {
-//   stateInfo: {
-//     content: string;
-//     origin: string;
-//   };
-//   eventTranslateInfos: {
-//     content: string;
-//     origin: {
-//       id: string;
-//       name: 'RelativeTimeEvent'
-//       args: { elapsed: number, timeUnit: string; };
-//       state: string;
-//     } | {
-//       id: string;
-//       name: 'TransactionEvent'
-//       args: { amount: number, account: string; };
-//       state: string;
-//     };
-//   }[];
-//
-// };
-
 function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent }: FContractDisplayProps) {
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
-
-  // const [currentState, setCurrentState] = React.useState<IContractDisplayStates['currentState']>(null);
-  // const [historyStates, setHistoryStates] = React.useState<IContractDisplayStates['historyStates']>([]);
 
   const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
   const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
@@ -133,29 +108,26 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
 
     const { data: data1 } = await FServiceAPI.Contract.transitionRecords(params1);
 
-    // console.log(data1, 'data1data1data1111111122222222222###########');
-
     const fsmInfos: any = data.policyInfo.translateInfo.fsmInfos;
     // console.log(data, fsmInfos, 'fsmInfos24123423423');
     const currentState: any = fsmInfos.find((fi: any) => {
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
 
-    // console.log(fsmInfos, data1, 'data1data1data1currentState9087098-09');
+    console.log(fsmInfos, 'data1data1data1currentState9087098-09');
 
     setModalTarget(data.subjectName);
     setModalContractName(data.contractName);
     setModalPayee(data.licensorOwnerName);
-    // setCurrentState(currentState || null);
-
-    // console.log(fsmInfos, 'fsmInfos!@#$!@#$@!#$');
 
     const currentSData: IContractDisplayStates['currentS'] = {
       name: currentState.stateInfo.content,
-      isAuth: currentState.serviceStateInfos.length > 0,
-      datetime: data1.dataList.length === 0
-        ? ''
-        : FUtil.Format.formatDateTime(data1.dataList[data1.dataList.length - 1].createDate, true),
+      colors: currentState.serviceStateInfos.map((ssi: any) => {
+        return ssi.content;
+      }),
+      datetime: FUtil.Format.formatDateTime(data1.dataList.length === 0
+        ? data.createDate
+        : data1.dataList[data1.dataList.length - 1].createDate, true),
       // datetime: '2001-01-01 00:00',
       events: (currentState.eventTranslateInfos as any[]).map((eti) => {
         const obj = {
@@ -189,10 +161,12 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
         // console.log(currE, 'currE111111');
         return {
           name: currS.stateInfo.content,
-          isAuth: currS.serviceStateInfos.length > 0,
-          datetime: ind === 0
-            ? ''
-            : FUtil.Format.formatDateTime(arr[ind - 1].createDate, true),
+          colors: currS.serviceStateInfos.map((ssi: any) => {
+            return ssi.content;
+          }),
+          datetime: FUtil.Format.formatDateTime(ind === 0
+            ? data.createDate
+            : arr[ind - 1].createDate, true),
           event: {
             id: currE.origin.id,
             tip: currE.content,
@@ -294,8 +268,10 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
                 {
-                  currentS.isAuth
-                    ? (<label className={styles.Authorized}>已授权</label>)
+                  currentS.colors.length > 0
+                    ? currentS.colors.map((cl) => {
+                      return (<label key={cl} className={styles.Authorized}>{cl}</label>);
+                    })
                     : (<label className={styles.Unauthorized}>未授权</label>)
                 }
                 <FContentText text={currentS.datetime} type='normal' />
@@ -359,8 +335,10 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
                   return (<div className={styles.TransferringRecord}>
                     <Space size={5}>
                       {
-                        hs.isAuth
-                          ? (<label className={styles.Authorized}>已授权</label>)
+                        hs.colors.length > 0
+                          ? hs.colors.map((cl) => {
+                            return (<label key={cl} className={styles.Authorized}>{cl}</label>);
+                          })
                           : (<label className={styles.Unauthorized}>未授权</label>)
                       }
 

@@ -45,9 +45,9 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
           <div className={styles.title}>
             <Space style={{padding: '0 20px'}} size={10}>
               <FContentText type="highlight" text={c.name}/>
-              <FContractStatusBadge
-                status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}
-              />
+              {/*<FContractStatusBadge*/}
+              {/*  status={FUtil.Predefined.EnumContractStatus[c.status] as 'pending'}*/}
+              {/*/>*/}
             </Space>
           </div>
           <div style={{height: 10}}/>
