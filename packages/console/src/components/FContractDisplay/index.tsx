@@ -12,16 +12,16 @@ import fMessage from '@/components/fMessage';
 
 interface FContractDisplayProps {
   contractID: string;
-
   containerHeight?: string | number;
 
+  onChangedEvent?(): void;
 }
 
 interface IContractDisplayStates {
   activated: 'record' | 'code' | 'text' | 'view';
 
-  currentState: IStateAndEvents | null;
-  historyStates: IStateAndEvents[];
+  // currentState: IStateAndEvents | null;
+  // historyStates: IStateAndEvents[];
 
   currentS: {
     name: string;
@@ -64,29 +64,29 @@ interface IContractDisplayStates {
   code: string;
 }
 
-type IStateAndEvents = {
-  stateInfo: {
-    content: string;
-    origin: string;
-  };
-  eventTranslateInfos: {
-    content: string;
-    origin: {
-      id: string;
-      name: 'RelativeTimeEvent'
-      args: { elapsed: number, timeUnit: string; };
-      state: string;
-    } | {
-      id: string;
-      name: 'TransactionEvent'
-      args: { amount: number, account: string; };
-      state: string;
-    };
-  }[];
+// type IStateAndEvents = {
+//   stateInfo: {
+//     content: string;
+//     origin: string;
+//   };
+//   eventTranslateInfos: {
+//     content: string;
+//     origin: {
+//       id: string;
+//       name: 'RelativeTimeEvent'
+//       args: { elapsed: number, timeUnit: string; };
+//       state: string;
+//     } | {
+//       id: string;
+//       name: 'TransactionEvent'
+//       args: { amount: number, account: string; };
+//       state: string;
+//     };
+//   }[];
+//
+// };
 
-};
-
-function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDisplayProps) {
+function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent }: FContractDisplayProps) {
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
 
@@ -246,6 +246,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
       fMessage('支付成功');
       setModalVisible(false);
       setModalPassword('');
+      onChangedEvent && onChangedEvent();
     }
   }
 
@@ -285,10 +286,10 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
       className={styles.PolicyBodyContainer}
       style={{ height: containerHeight }}
     >
-      {console.log(currentS, 'currentScurrentS')}
-      {console.log(historySs, 'historySshistorySs')}
+      {/*{console.log(currentS, 'currentScurrentS')}*/}
+      {/*{console.log(historySs, 'historySshistorySs')}*/}
       {
-        activated === 'record' && (<>
+        activated === 'record' && (<div style={{ width: '100%' }}>
           {
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
@@ -304,7 +305,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
                 type='highlight'
                 text={currentS.name}
               />
-              {/*<div style={{ height: 10 }} />*/}
+              <div style={{ height: 10 }} />
               {
                 currentS.events.map((eti) => {
                   if (eti.type === 'TransactionEvent') {
@@ -345,6 +346,8 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
             </div>)
           }
 
+          <div style={{ height: 20 }} />
+
           <div className={styles.TransferringRecords} style={{ width: '100%' }}>
 
             <Space size={20} direction='vertical' style={{ width: '100%' }}>
@@ -368,6 +371,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
                       type='highlight'
                       text={hs.name}
                     />
+                    <div style={{ height: 10 }} />
 
                     <div className={styles.Event}>
                       <FContentText
@@ -384,7 +388,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto' }: FContractDis
             </Space>
 
           </div>
-        </>)
+        </div>)
       }
 
 

@@ -9,7 +9,7 @@ import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
 import FSwitch from "@/components/FSwitch";
-import {ChangeAction, UpdateContractUsedAction} from "@/models/exhibitInfoPage";
+import { ChangeAction, FetchInfoAction, UpdateContractUsedAction } from '@/models/exhibitInfoPage';
 import {FTextBtn} from "@/components/FButton";
 import {FDown, FUp} from "@/components/FIcons";
 import FContractDisplay from '@/components/FContractDisplay';
@@ -50,10 +50,17 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
               />
             </Space>
           </div>
-          {/*<div className={styles.content}>*/}
-          {/*  <pre>{c.text}</pre>*/}
-          {/*</div>*/}
-          <FContractDisplay contractID={c.id}/>
+          <div style={{height: 10}}/>
+
+          <FContractDisplay
+            containerHeight={300}
+            contractID={c.id}
+            onChangedEvent={() => {
+              dispatch<FetchInfoAction>({
+                type: 'exhibitInfoPage/fetchInfo',
+              });
+            }}
+          />
 
           <div style={{height: 10}}/>
           <Space style={{padding: '0 20px'}} size={5}>
