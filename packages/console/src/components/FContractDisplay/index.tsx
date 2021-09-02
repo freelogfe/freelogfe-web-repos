@@ -3,25 +3,25 @@ import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
-import { FRectBtn } from '@/components/FButton';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import FUtil1 from '@/utils';
 import fMessage from '@/components/fMessage';
+import { FDown, FUp } from '@/components/FIcons';
 
 interface FContractDisplayProps {
   contractID: string;
-  containerHeight?: string | number;
+
+  // containerHeight?: string | number;
 
   onChangedEvent?(): void;
 }
 
 interface IContractDisplayStates {
   activated: 'record' | 'code' | 'text' | 'view';
-
-  // currentState: IStateAndEvents | null;
-  // historyStates: IStateAndEvents[];
+  recodeFold: boolean;
 
   currentS: {
     name: string;
@@ -64,9 +64,10 @@ interface IContractDisplayStates {
   code: string;
 }
 
-function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent }: FContractDisplayProps) {
+function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps) {
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
+  const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
 
   const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
   const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
@@ -114,7 +115,7 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
 
-    console.log(fsmInfos, 'data1data1data1currentState9087098-09');
+    // console.log(fsmInfos, 'data1data1data1currentState9087098-09');
 
     setModalTarget(data.subjectName);
     setModalContractName(data.contractName);
@@ -258,12 +259,10 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
 
     <div
       className={styles.PolicyBodyContainer}
-      style={{ height: containerHeight }}
+      // style={{ height: containerHeight }}
     >
-      {/*{console.log(currentS, 'currentScurrentS')}*/}
-      {/*{console.log(historySs, 'historySshistorySs')}*/}
       {
-        activated === 'record' && (<div style={{ width: '100%' }}>
+        activated === 'record' && (<div className={styles.StateRecord}>
           {
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
@@ -282,107 +281,135 @@ function FContractDisplay({ contractID, containerHeight = 'auto', onChangedEvent
                 text={currentS.name}
               />
               <div style={{ height: 10 }} />
-              {
-                currentS.events.map((eti) => {
-                  if (eti.type === 'TransactionEvent') {
-                    return (<div key={eti.id} className={styles.Event}>
-                      <FContentText
-                        type='normal'
-                        text={eti.tip}
-                      />
-                      <FRectBtn
-                        type='primary'
-                        size='small'
-                        onClick={() => {
-                          setModalEventID(eti.id);
-                          // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                          setModalTransactionAmount(eti.amount);
-                          readyPay();
-                        }}
-                      >支付</FRectBtn>
-                    </div>);
-                  } else if (eti.type === 'RelativeTimeEvent') {
-                    return (<div key={eti.id} className={styles.Event}>
-                      <FContentText
-                        type='normal'
-                        text={eti.tip}
-                      />
-                    </div>);
-                  } else if (eti.type === 'TimeEvent') {
-                    return (<div key={eti.id} className={styles.Event}>
-                      <FContentText
-                        type='normal'
-                        text={eti.tip}
-                      />
-                    </div>);
-                  }
-                })
-              }
 
+              <Space size={10} direction='vertical' style={{ width: '100%' }}>
+                {
+                  currentS.events.map((eti) => {
+                    if (eti.type === 'TransactionEvent') {
+                      return (<div key={eti.id} className={styles.Event}>
+                        <FContentText
+                          type='normal'
+                          text={eti.tip}
+                        />
+                        <FRectBtn
+                          type='primary'
+                          size='small'
+                          onClick={() => {
+                            setModalEventID(eti.id);
+                            // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                            setModalTransactionAmount(eti.amount);
+                            readyPay();
+                          }}
+                        >支付</FRectBtn>
+                      </div>);
+                    } else if (eti.type === 'RelativeTimeEvent') {
+                      return (<div key={eti.id} className={styles.Event}>
+                        <FContentText
+                          type='normal'
+                          text={eti.tip}
+                        />
+                      </div>);
+                    } else if (eti.type === 'TimeEvent') {
+                      return (<div key={eti.id} className={styles.Event}>
+                        <FContentText
+                          type='normal'
+                          text={eti.tip}
+                        />
+                      </div>);
+                    }
+                  })
+                }
+              </Space>
             </div>)
           }
 
-          <div style={{ height: 20 }} />
-
-          <div className={styles.TransferringRecords} style={{ width: '100%' }}>
-
-            <Space size={20} direction='vertical' style={{ width: '100%' }}>
-
-
+          {
+            historySs.length > 0 && (<>
               {
-                historySs.map((hs) => {
-                  // console.log(hs, 'hshshshshshshs1234234');
-                  return (<div className={styles.TransferringRecord}>
-                    <Space size={5}>
-                      {
-                        hs.colors.length > 0
-                          ? hs.colors.map((cl) => {
-                            return (<label key={cl} className={styles.Authorized}>{cl}</label>);
-                          })
-                          : (<label className={styles.Unauthorized}>未授权</label>)
-                      }
+                !recodeFold && (<>
+                  <div style={{ height: 20 }} />
 
-                      <FContentText text={hs.datetime} type='normal' />
-                    </Space>
-                    <div style={{ height: 10 }} />
-                    <FContentText
-                      type='highlight'
-                      text={hs.name}
-                    />
-                    <div style={{ height: 10 }} />
+                  <Space className={styles.TransferringRecords} size={20} direction='vertical'>
 
-                    <div className={styles.Event}>
-                      <FContentText
-                        type='normal'
-                        text={hs.event.tip}
-                      />
-                    </div>
+                    {
+                      historySs.map((hs) => {
+                        // console.log(hs, 'hshshshshshshs1234234');
+                        return (<div className={styles.TransferringRecord}>
+                          <Space size={5}>
+                            {
+                              hs.colors.length > 0
+                                ? hs.colors.map((cl) => {
+                                  return (<label key={cl} className={styles.Authorized}>{cl}</label>);
+                                })
+                                : (<label className={styles.Unauthorized}>未授权</label>)
+                            }
 
-                    <div className={styles.mask} />
-                  </div>);
-                })
+                            <FContentText text={hs.datetime} type='normal' />
+                          </Space>
+                          <div style={{ height: 10 }} />
+                          <FContentText
+                            type='highlight'
+                            text={hs.name}
+                          />
+                          <div style={{ height: 10 }} />
+
+                          <div className={styles.Event}>
+                            <FContentText
+                              type='normal'
+                              text={hs.event.tip}
+                            />
+
+                            <span style={{ color: '#2784FF' }}>已执行</span>
+                          </div>
+
+                          <div className={styles.mask} />
+                        </div>);
+                      })
+                    }
+
+                  </Space>
+
+                </>)
               }
 
-            </Space>
+              <div style={{ height: 20 }} />
+              <div className={styles.recodeFold}>
+                {
+                  recodeFold
+                    ? (<FTextBtn
+                      type='default'
+                      onClick={() => {
+                        setRecodeFold(false);
+                      }}
+                    >展开流转记录 <FDown /></FTextBtn>)
+                    : (<FTextBtn
+                      type='default'
+                      onClick={() => {
+                        setRecodeFold(true);
+                      }}
+                    >收起流转记录 <FUp /></FTextBtn>)
+                }
+              </div>
+            </>)
+          }
 
-          </div>
         </div>)
       }
 
 
       {
-        activated === 'text' && (<div>
+        activated === 'text' && (<div className={styles.Text}>
           <FCodeFormatter code={text} />
         </div>)
       }
 
       {
-        activated === 'view' && (<div>
+        activated === 'view' && (<div className={styles.View}>
         </div>)
       }
 
       {
-        activated === 'code' && (<div>
+        activated === 'code' && (<div className={styles.Code}>
           <FCodeFormatter code={code} />
         </div>)
       }

@@ -56,9 +56,9 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
             containerHeight={300}
             contractID={c.id}
             onChangedEvent={() => {
-              dispatch<FetchInfoAction>({
-                type: 'exhibitInfoPage/fetchInfo',
-              });
+              // dispatch<FetchInfoAction>({
+              //   type: 'exhibitInfoPage/fetchInfo',
+              // });
             }}
           />
 
