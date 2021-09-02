@@ -5,6 +5,7 @@ import {ChangeAction} from '@/models/resourceVersionCreatorPage';
 import {connect, Dispatch} from 'dva';
 import {ConnectState, ResourceVersionCreatorPageModelState} from '@/models/connect';
 import {FContentText} from '@/components/FText';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
 
 interface PoliciesProps {
   dispatch: Dispatch;
@@ -79,10 +80,11 @@ function Policies({resourceVersionCreatorPage, dispatch}: PoliciesProps) {
             onChange={(e) => onChangeChecked(e.target.checked, i)}
           />
         </div>
-        <div style={{height: 15}}/>
-        <div className={styles.PolicyGrammar}>
-          <pre>{i.code}</pre>
-        </div>
+        {/*<div style={{height: 15}}/>*/}
+        {/*<div className={styles.PolicyGrammar}>*/}
+        {/*  <pre>{i.code}</pre>*/}
+        {/*</div>*/}
+        <FPolicyDisplay code={i.code}/>
       </div>
     ))}
   </Space>);

@@ -53,7 +53,7 @@ function Contract({dispatch, exhibitInfoPage}: ContractProps) {
           <div style={{height: 10}}/>
 
           <FContractDisplay
-            containerHeight={300}
+            // containerHeight={300}
             contractID={c.id}
             onChangedEvent={() => {
               // dispatch<FetchInfoAction>({

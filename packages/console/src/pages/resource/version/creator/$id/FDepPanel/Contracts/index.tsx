@@ -10,6 +10,7 @@ import {
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
 import FDivider from "@/components/FDivider";
+import FContractDisplay from '@/components/FContractDisplay';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -69,8 +70,8 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
         <div className={styles.PolicyGrammarName}>
           <Space size={10}>
             <span>{k.title}</span>
-            <label
-              className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>
+            {/*<label*/}
+            {/*  className={styles[k.status === 0 ? 'executing' : 'stopped']}>{k.status === 0 ? '执行中' : '已终止'}</label>*/}
           </Space>
           <Checkbox
             checked={k.checked}
@@ -78,7 +79,19 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
             onChange={(e) => onChangeChecked(e.target.checked, k)}
           />
         </div>
+        {/*<div style={{height: 10}}/>*/}
+
+        {/*<div style={{height: 15}}/>*/}
+        {/*<div className={styles.PolicyGrammar}>*/}
+        {/*  <pre className={styles.highlight}>{k.code}</pre>*/}
+        {/*</div>*/}
+
         <div style={{height: 10}}/>
+
+        <FContractDisplay contractID={k.id}/>
+
+        <div style={{height: 10}}/>
+
         <Space style={{padding: '0 20px'}} size={2}>
           <FContentText
             type="additional2"
@@ -90,10 +103,9 @@ function Contracts({resourceVersionCreatorPage, dispatch}: ContractsProps) {
             text={FUtil1.I18n.message('contract_signed_time') + '：' + k.date}
           />
         </Space>
-        <div style={{height: 15}}/>
-        <div className={styles.PolicyGrammar}>
-          <pre className={styles.highlight}>{k.code}</pre>
-        </div>
+
+        {/*<div style={{height: 10}}/>*/}
+
         <div className={styles.PolicyInfo}>
           <FContentText type="additional2" text={'当前合约在此资源上被多个版本应用：'}/>
           <div style={{height: 8}}/>
