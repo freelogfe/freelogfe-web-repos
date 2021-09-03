@@ -51,7 +51,7 @@ function Contracts({resourceAuthPage, dispatch}: ContractsProps) {
           <Space size={10}>
             <span>{k.title}</span>
             {/*<label className={styles.executing}>执行中</label>*/}
-            <FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[k.status] as 'authorized'}/>
+            {/*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[k.status] as 'authorized'}/>*/}
           </Space>
         </div>
 
