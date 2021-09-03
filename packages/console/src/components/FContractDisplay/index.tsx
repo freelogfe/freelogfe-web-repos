@@ -280,46 +280,53 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                 type='highlight'
                 text={currentS.name}
               />
-              <div style={{ height: 10 }} />
 
-              <Space size={10} direction='vertical' style={{ width: '100%' }}>
-                {
-                  currentS.events.map((eti) => {
-                    if (eti.type === 'TransactionEvent') {
-                      return (<div key={eti.id} className={styles.Event}>
-                        <FContentText
-                          type='normal'
-                          text={eti.tip}
-                        />
-                        <FRectBtn
-                          type='primary'
-                          size='small'
-                          onClick={() => {
-                            setModalEventID(eti.id);
-                            // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                            setModalTransactionAmount(eti.amount);
-                            readyPay();
-                          }}
-                        >支付</FRectBtn>
-                      </div>);
-                    } else if (eti.type === 'RelativeTimeEvent') {
-                      return (<div key={eti.id} className={styles.Event}>
-                        <FContentText
-                          type='normal'
-                          text={eti.tip}
-                        />
-                      </div>);
-                    } else if (eti.type === 'TimeEvent') {
-                      return (<div key={eti.id} className={styles.Event}>
-                        <FContentText
-                          type='normal'
-                          text={eti.tip}
-                        />
-                      </div>);
+              {
+                currentS.events.length > 0 && (<>
+                  <div style={{ height: 10 }} />
+
+                  <Space size={10} direction='vertical' style={{ width: '100%' }}>
+                    {
+                      currentS.events.map((eti) => {
+
+                        if (eti.type === 'TransactionEvent') {
+                          return (<div key={eti.id} className={styles.Event}>
+                            <FContentText
+                              type='normal'
+                              text={eti.tip}
+                            />
+                            <FRectBtn
+                              type='primary'
+                              size='small'
+                              onClick={() => {
+                                setModalEventID(eti.id);
+                                // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                setModalTransactionAmount(eti.amount);
+                                readyPay();
+                              }}
+                            >支付</FRectBtn>
+                          </div>);
+                        } else if (eti.type === 'RelativeTimeEvent') {
+                          return (<div key={eti.id} className={styles.Event}>
+                            <FContentText
+                              type='normal'
+                              text={eti.tip}
+                            />
+                          </div>);
+                        } else if (eti.type === 'TimeEvent') {
+                          return (<div key={eti.id} className={styles.Event}>
+                            <FContentText
+                              type='normal'
+                              text={eti.tip}
+                            />
+                          </div>);
+                        }
+                      })
                     }
-                  })
-                }
-              </Space>
+                  </Space>
+                </>)
+              }
+
             </div>)
           }
 
