@@ -31,14 +31,14 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
           setActivated('text');
         }}
       >策略内容</a>
-      <div style={{ width: 20 }} />
+      <div style={{ width: 15 }} />
       <a
         className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
         onClick={() => {
           setActivated('view');
         }}
       >状态机视图</a>
-      <div style={{ width: 20 }} />
+      <div style={{ width: 15 }} />
       <a
         className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
         onClick={() => {
@@ -55,7 +55,7 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
       }
 
       {
-        activated === 'view' && (<div style={{ height: containerHeight || 170 }}>
+        activated === 'view' && (<div style={{ height: (typeof containerHeight === 'number') ? containerHeight : 170 }}>
         </div>)
       }
 

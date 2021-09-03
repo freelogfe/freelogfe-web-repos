@@ -199,7 +199,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     };
     const { data } = await FServiceAPI.Transaction.individualAccounts(params);
 
-    console.log(data, '@!#$#@!$@#$2314123432');
+    // console.log(data, '@!#$#@!$@#$2314123432');
     setModalAccountBalance(data.balance);
     setModalAccountID(data.accountId);
     setModalVisible(true);
@@ -233,7 +233,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           setActivated('record');
         }}
       >合约流转记录</a>
-      <div style={{ width: 20 }} />
+      <div style={{ width: 15 }} />
 
       <a
         className={activated === 'text' ? styles.PolicyBodyTabActivated : ''}
@@ -241,14 +241,14 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
           setActivated('text');
         }}
       >策略内容</a>
-      <div style={{ width: 20 }} />
+      <div style={{ width: 15 }} />
       <a
         className={activated === 'view' ? styles.PolicyBodyTabActivated : ''}
         onClick={() => {
           setActivated('view');
         }}
       >状态机视图</a>
-      <div style={{ width: 20 }} />
+      <div style={{ width: 15 }} />
       <a
         className={activated === 'code' ? styles.PolicyBodyTabActivated : ''}
         onClick={() => {
@@ -292,10 +292,12 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         if (eti.type === 'TransactionEvent') {
                           return (<div key={eti.id} className={styles.Event}>
                             <FContentText
+                              style={{flexShrink: 1}}
                               type='normal'
                               text={eti.tip}
                             />
                             <FRectBtn
+                              style={{ flexShrink: 0 }}
                               type='primary'
                               size='small'
                               onClick={() => {

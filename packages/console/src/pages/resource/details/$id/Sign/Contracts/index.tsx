@@ -7,6 +7,7 @@ import {ChangeAction} from "@/models/marketResourcePage";
 import FContractStatusBadge from "@/components/FContractStatusBadge";
 import {FTextBtn} from "@/components/FButton";
 import {FUtil} from '@freelog/tools-lib';
+import FContractDisplay from '@/components/FContractDisplay';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -33,7 +34,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
             <Space size={5}>
               <span>{c.name}</span>
               {/*<label className={styles.executing}>执行中</label>*/}
-              <FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>
+              {/*<FContractStatusBadge status={FUtil.Predefined.EnumContractStatus[c.status] as 'authorized'}/>*/}
             </Space>
             {
               !isSignedNode && (<Checkbox
@@ -66,7 +67,8 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
             }
           </div>
           {/*<div style={{height: 10}}/>*/}
-          <pre>{c.text}</pre>
+          {/*<pre>{c.text}</pre>*/}
+          <FContractDisplay contractID={c.id}/>
           {/*<div style={{height: 10}}/>*/}
           <div className={styles.footer}>
             <Space size={0}>
@@ -81,7 +83,7 @@ function Contracts({dispatch, marketResourcePage}: ContractsProps) {
           </div>
 
           <div className={styles.exhibit}>
-            <div style={{borderTop: '1px solid #E5E7EB'}}/>
+            {/*<div style={{borderTop: '1px solid #E5E7EB'}}/>*/}
             <div style={{height: 10}}/>
             <div>当前合约在此节点上存在 <span style={{color: '#2784FF'}}>{c.exhibits.length}</span> 次复用：</div>
             <div style={{height: 8}}/>
