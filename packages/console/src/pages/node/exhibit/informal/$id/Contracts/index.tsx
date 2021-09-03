@@ -12,6 +12,9 @@ import FFullScreen from '@/components/FIcons/FFullScreen';
 import FModal from '@/components/FModal';
 import FUtil1 from '@/utils';
 import FSwitch from '@/components/FSwitch';
+import FContractDisplay from '@/components/FContractDisplay';
+import FDivider from '@/components/FDivider';
+import { FRectBtn } from '@/components/FButton';
 
 interface ContractsProps {
   dispatch: Dispatch;
@@ -27,8 +30,6 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
   const otherResource = informExhibitInfoPage.associated;
 
   const selectedResource = informExhibitInfoPage.associated.find((a) => a.selected);
-
-  // console.log(selectedResource, 'selectedResource@#RFasdj90ujlkjlkp0[');
 
   function onChangeSelect(id: string) {
     dispatch<ChangeAction>({
@@ -93,58 +94,79 @@ function Contracts({ dispatch, informExhibitInfoPage }: ContractsProps) {
       <div className={styles.signRight}>
         <div>
           {
-            selectedResource?.contracts && selectedResource?.contracts.length > 0 && (<>
-              <div className={styles.smallTitle}>当前合约</div>
-              <div style={{ height: 5 }} />
-              {
-                selectedResource?.contracts.map((c) => (<div
-                  key={c.id}
-                  className={styles.Contracts}
-                >
-                  <div className={styles.content}>
-                    <Space size={5}>
-                      <span>{c.name}</span>
-                      <label className={styles.executing}>执行中</label>
+            selectedResource?.contracts && selectedResource?.contracts.length > 0 && (<div>
+              <FTitleText type='h4'>{FUtil1.I18n.message('valid_contracts_list')}</FTitleText>
+              <div style={{ height: 10 }} />
+              <Space style={{ width: '100%' }} size={15} direction='vertical'>
+                {
+                  selectedResource?.contracts.map((c) => (<div
+                    key={c.id}
+                    className={styles.Contracts}
+                  >
+                    {/*<div className={styles.content}>*/}
+                    <div style={{ height: 10 }} />
+                    <Space size={5} style={{ padding: '0 20px' }}>
+                      <FContentText type='highlight'>{c.name}</FContentText>
+                      {/*<label className={styles.executing}>执行中</label>*/}
                     </Space>
                     <div style={{ height: 10 }} />
-                    <pre>{c.text}</pre>
+                    <FContractDisplay contractID={c.id} />
                     <div style={{ height: 10 }} />
-                  </div>
-                  <div className={styles.footer}>
-                    <div>
-                      合约ID {c.id}
-                    </div>
-                    <div>
-                      签约时间 {c.createTime}
-                    </div>
-                  </div>
-                </div>))
-              }
-            </>)
+                    {/*</div>*/}
+                    {/*<div className={styles.footer}>*/}
+                    {/*  <div>*/}
+                    {/*    合约ID {c.id}*/}
+                    {/*  </div>*/}
+                    {/*  <div>*/}
+                    {/*    签约时间 {c.createTime}*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
+
+                    <Space style={{ padding: '0 20px' }} size={5}>
+                      <FContentText
+                        type='additional2'
+                        text={FUtil1.I18n.message('contract_id') + '：' + c.id}
+                      />
+                      <FDivider style={{ fontSize: 14 }} />
+                      <FContentText
+                        type='additional2'
+                        text={FUtil1.I18n.message('contract_signed_time') + '：' + c.createTime}
+                      />
+                    </Space>
+
+                    <div style={{ height: 10 }} />
+                  </div>))
+                }
+              </Space>
+            </div>)
           }
+
+          <div style={{ height: 15 }} />
 
           {
             selectedResource?.policies && selectedResource?.policies.length > 0 &&
-            (<>
-              <div className={styles.smallTitle}>未签约策略</div>
+            (<div>
+              <FTitleText type='h4'>未签约策略</FTitleText>
               <div style={{ height: 5 }} />
-              {
-                selectedResource?.policies.map((p) => (<SinglePolicy
-                  key={p.id}
-                  name={p.name}
-                  text={p.text}
-                  onClickSign={() => {
-                    dispatch<UpdateRelationAction>({
-                      type: 'informExhibitInfoPage/updateRelation',
-                      payload: {
-                        resourceId: selectedResource.id,
-                        policyId: p.id,
-                      },
-                    });
-                  }}
-                />))
-              }
-            </>)
+              <Space style={{ width: '100%' }} size={15} direction='vertical'>
+                {
+                  selectedResource?.policies.map((p) => (<SinglePolicy
+                    key={p.id}
+                    name={p.name}
+                    text={p.text}
+                    onClickSign={() => {
+                      dispatch<UpdateRelationAction>({
+                        type: 'informExhibitInfoPage/updateRelation',
+                        payload: {
+                          resourceId: selectedResource.id,
+                          policyId: p.id,
+                        },
+                      });
+                    }}
+                  />))
+                }
+              </Space>
+            </div>)
           }
         </div>
       </div>
@@ -167,21 +189,26 @@ function SinglePolicy({ name, text, onClickSign }: SinglePolicyProps) {
 
   const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>(false);
 
-  return (<div
-    className={styles.singPolicy}
-  >
+  return (<div className={styles.singPolicy}>
     <div className={styles.singPolicyHeader}>
-      <span>{name}</span>
-      <a
-        className={styles.singPolicyHeaderBtn}
+      {/*<span>{name}</span>*/}
+      <FContentText type='highlight' text={name} />
+      <FRectBtn
+        style={{ height: 26, padding: '0 15px' }}
+        // className={styles.singPolicyHeaderBtn}
+        size='small'
         onClick={() => {
           onClickSign && onClickSign();
         }}
-      >签约</a>
+      >签约</FRectBtn>
     </div>
+    <div style={{ height: 10 }} />
     {/*<div style={{ height: 15 }} />*/}
     {/*<pre>{text}</pre>*/}
-    <FPolicyDisplay code={text} containerHeight={170} />
+    <FPolicyDisplay
+      code={text}
+      // containerHeight={170}
+    />
 
     <a
       className={styles.PolicyFullScreenBtn}

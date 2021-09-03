@@ -30,9 +30,10 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
     return pl.id === fullScreenVisibleID;
   });
 
-  return (<>
+  return (<div>
+    <FTitleText type='h4'>未签约策略</FTitleText>
+    <div style={{ height: 5 }} />
     <Space style={{ width: '100%' }} size={15} direction='vertical'>
-      <FTitleText type='h4'>未签约策略</FTitleText>
       {
         selectedResource?.policies.map((p) => (<div
           className={styles.singPolicy}
@@ -53,6 +54,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
               })}
             >签约</FRectBtn>
           </div>
+          <div style={{ height: 10 }} />
           {/*<div style={{height: 15}}/>*/}
           {/*<pre>{p.text}</pre>*/}
           <FPolicyDisplay containerHeight={170} code={p.text} />
@@ -101,7 +103,7 @@ function Policy({ dispatch, exhibitInfoPage }: PolicyProps) {
         code={fullScreenPolicy?.text || ''}
       />
     </FModal>
-  </>);
+  </div>);
 }
 
 export default connect(({ exhibitInfoPage }: ConnectState) => ({
