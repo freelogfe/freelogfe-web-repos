@@ -54,7 +54,7 @@ function PolicyCard({ title, code, allVersions, onClickLicense, resourceInfo, di
     </div>
     <FPolicyDisplay
       code={code}
-      containerHeight={170}
+      // containerHeight={170}
     />
 
     <a
