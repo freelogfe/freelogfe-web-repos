@@ -55,7 +55,7 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
       }
 
       {
-        activated === 'view' && (<div>
+        activated === 'view' && (<div style={{ height: 170 }}>
         </div>)
       }
 
