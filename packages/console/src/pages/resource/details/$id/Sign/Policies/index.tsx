@@ -82,7 +82,10 @@ function Policies({ dispatch, marketResourcePage }: PoliciesProps) {
 
           </div>
           {/*<pre>{p.text}</pre>*/}
-          <FPolicyDisplay code={p.text} containerHeight={170} />
+          <FPolicyDisplay
+            code={p.text}
+            // containerHeight={170}
+          />
 
           <a
             className={styles.PolicyFullScreenBtn}
