@@ -2,33 +2,56 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  background-color: white;
 
-  .container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .cover {
+    width: fit-content;
     flex-shrink: 0;
 
-    .logo {
-      font-size: 36px;
-      margin: 0 auto;
+    & > img {
+      height: 100vh;
     }
+  }
 
-    .box {
-      width: 400px;
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px 30px;
+  .action {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 1;
 
-      .Input {
-        width: 100%;
-      }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: fit-content;
 
-      .btn{
-        width: 100%;
+      //.logo {
+      //  font-size: 36px;
+      //  margin: 0 auto;
+      //}
+
+      .box {
+        width: 360px;
+        background-color: white;
+        //border-radius: 10px;
+        //padding: 20px 30px;
+
+        .Input {
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .errorTip {
+          color: #EE4040;
+          line-height: 20px;
+          font-size: 14px;
+        }
       }
     }
   }
