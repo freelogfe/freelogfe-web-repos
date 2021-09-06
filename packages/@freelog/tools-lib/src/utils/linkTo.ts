@@ -116,7 +116,11 @@ interface InformNodeManagementParamsType {
   showPage?: 'exhibit' | 'theme' | 'mappingRule';
 }
 
-export function informNodeManagement({nodeID, showPage = 'exhibit', ...params}: InformNodeManagementParamsType): TReturnType {
+export function informNodeManagement({
+                                       nodeID,
+                                       showPage = 'exhibit',
+                                       ...params
+                                     }: InformNodeManagementParamsType): TReturnType {
   return `/node/informal/${nodeID}${handleQuery({showPage, ...params})}`;
 }
 
@@ -207,6 +211,17 @@ interface LoginParamsType {
 
 export function logon({goTo}: LoginParamsType = {}) {
   return `/logon${handleQuery({
+    goTo: goTo ? encodeURIComponent(goTo) : undefined,
+  })}`;
+}
+
+// 找回密码
+interface RetrieveUserPasswordParamsType {
+  goTo?: string;
+}
+
+export function retrieveUserPassword({goTo}: RetrieveUserPasswordParamsType = {}) {
+  return `/retrieve${handleQuery({
     goTo: goTo ? encodeURIComponent(goTo) : undefined,
   })}`;
 }

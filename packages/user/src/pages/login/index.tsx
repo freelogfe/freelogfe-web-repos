@@ -69,9 +69,9 @@ function Login({ dispatch, loginPage }: LoginProps) {
               style={{ fontSize: 12 }}
               type='primary'
               onClick={() => {
-                // history.replace(FUtil.LinkTo.logon(urlParams.goTo ? {
-                //   goTo: decodeURIComponent(urlParams.goTo),
-                // } : {}));
+                history.replace(FUtil.LinkTo.retrieveUserPassword(urlParams.goTo ? {
+                  goTo: decodeURIComponent(urlParams.goTo),
+                } : {}));
               }}
             >忘记密码？</FTextBtn>
           </div>

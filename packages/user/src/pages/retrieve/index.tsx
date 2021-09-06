@@ -4,16 +4,26 @@ import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import { Input, Radio, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, RetrievePageModelState } from '@/models/connect';
+import { history } from 'umi';
+import { FUtil } from '@freelog/tools-lib';
+import useUrlState from '@ahooksjs/use-url-state';
 
 interface RetrieveProps {
+  dispatch: Dispatch;
 
+  retrievePage: RetrievePageModelState;
 }
 
-function Retrieve({}: RetrieveProps) {
+function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
+
+  const [urlParams] = useUrlState<{ goTo: string }>();
+
   return (<div className={styles.styles}>
     <div className={styles.container}>
       {
-        true
+        retrievePage.showView === 'verify'
           ? (<>
             <FTitleText text={'忘记密码？'} type='h1' />
             <div style={{ height: 30 }} />
@@ -22,35 +32,63 @@ function Retrieve({}: RetrieveProps) {
             <div className={styles.verificationMode}>
               <div className={styles.verificationModeHeader}>
                 <div className={styles.title}>
-                  <label />
+                  <i />
                   <div style={{ width: 5 }} />
                   <FTitleText type='h4' text={'验证方式'} />
                 </div>
                 <Space size={25}>
                   <Space size={5}>
-                    <Radio style={{ margin: 0 }} />
+                    <Radio
+                      style={{ margin: 0 }}
+                      value={retrievePage.verifyMode === 'phone'}
+                    />
                     <FContentText text={'手机号'} type='additional2' />
                   </Space>
                   <Space>
-                    <Radio style={{ margin: 0 }} />
+                    <Radio
+                      style={{ margin: 0 }}
+                      value={retrievePage.verifyMode === 'email'}
+                    />
                     <FContentText text={'邮箱'} type='additional2' />
                   </Space>
                 </Space>
               </div>
               <div style={{ height: 5 }} />
-              <FInput
-                placeholder='输入11位手机号码'
-                className={styles.verificationModeInput}
-                wrapClassName={styles.verificationModeInput}
-              />
-              {/*<div style={{ height: 5 }} />*/}
-              <div className={styles.errorTip}>请输入账号</div>
+              {
+                retrievePage.verifyMode === 'phone'
+                  ? (<>
+                    <FInput
+                      placeholder='输入11位手机号码'
+                      className={styles.verificationModeInput}
+                      wrapClassName={styles.verificationModeInput}
+                      value={retrievePage.phoneInput}
+                    />
+                    {
+                      retrievePage.phoneInputError && (
+                        <div className={styles.errorTip}>{retrievePage.phoneInputError}</div>)
+                    }
+
+                  </>)
+                  : (<>
+                    <FInput
+                      placeholder='输入邮箱'
+                      className={styles.verificationModeInput}
+                      wrapClassName={styles.verificationModeInput}
+                      value={retrievePage.emailInput}
+                    />
+                    {
+                      retrievePage.emailInputError && (
+                        <div className={styles.errorTip}>{retrievePage.emailInputError}</div>)
+                    }
+                  </>)
+              }
+
             </div>
             <div style={{ height: 20 }} />
             <div className={styles.identifyingCode}>
               <div className={styles.identifyingCodeHeader}>
                 <div className={styles.title}>
-                  <label />
+                  <i />
                   <div style={{ width: 5 }} />
                   <FTitleText type='h4' text={'验证方式'} />
                 </div>
@@ -61,8 +99,12 @@ function Retrieve({}: RetrieveProps) {
                   className={styles.identifyingCodeInput}
                   wrapClassName={styles.identifyingCodeInput}
                   placeholder='输入验证码'
+                  value={retrievePage.verifyCode}
                 />
-                <FRectBtn style={{ width: 110 }}>获取验证码</FRectBtn>
+                <FRectBtn
+                  style={{ width: 110 }}
+                  disabled={retrievePage.verifyCodeReSendWait > 0}
+                >获取验证码</FRectBtn>
               </div>
               <div className={styles.errorTip}>请输入账号</div>
             </div>
@@ -77,7 +119,7 @@ function Retrieve({}: RetrieveProps) {
             <div>
               <div>
                 <div className={styles.title}>
-                  <label />
+                  <i />
                   <div style={{ width: 5 }} />
                   <FTitleText type='h4' text={'新密码'} />
                 </div>
@@ -87,15 +129,18 @@ function Retrieve({}: RetrieveProps) {
                 placeholder='密码必须包含数字和字母；且由6-24个字符组成'
                 className={styles.input}
                 wrapClassName={styles.input}
+                value={retrievePage.newPasswordInput}
               />
-              {/*<div style={{ height: 5 }} />*/}
-              <div className={styles.errorTip}>请输入账号</div>
+              {
+                retrievePage.newPasswordInput && (<div className={styles.errorTip}>{retrievePage.newPasswordInput}</div>)
+              }
+
             </div>
             <div style={{ height: 20 }} />
             <div className={styles.identifyingCode}>
               <div className={styles.identifyingCodeHeader}>
                 <div className={styles.title}>
-                  <label />
+                  <i />
                   <div style={{ width: 5 }} />
                   <FTitleText type='h4' text={'验证新密码'} />
                 </div>
@@ -105,8 +150,13 @@ function Retrieve({}: RetrieveProps) {
                 className={styles.input}
                 wrapClassName={styles.input}
                 placeholder='再次输入新密码'
+                value={retrievePage.confirmPasswordInput}
               />
-              <div className={styles.errorTip}>请输入账号</div>
+              {
+                retrievePage.confirmPasswordInput && (
+                  <div className={styles.errorTip}>{retrievePage.confirmPasswordInputError}</div>)
+              }
+
             </div>
             <div style={{ height: 40 }} />
             <FRectBtn style={{ width: 360 }}>下一步</FRectBtn>
@@ -115,12 +165,24 @@ function Retrieve({}: RetrieveProps) {
 
       <div style={{ height: 128 }} />
       <Space size={50}>
-        <FTextBtn>返回登陆页</FTextBtn>
-        <FTextBtn>注册新帐户</FTextBtn>
+        <FTextBtn onClick={() => {
+          // history.replace(FUtil.LinkTo.login());
+          history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
+            goTo: decodeURIComponent(urlParams.goTo),
+          } : {}));
+        }}>返回登陆页</FTextBtn>
+        <FTextBtn onClick={() => {
+          history.replace(FUtil.LinkTo.logon(urlParams.goTo ? {
+            goTo: decodeURIComponent(urlParams.goTo),
+          } : {}));
+          // history.replace(FUtil.LinkTo.logon());
+        }}>注册新帐户</FTextBtn>
       </Space>
     </div>
     <div style={{ height: 20 }} />
   </div>);
 }
 
-export default Retrieve;
+export default connect(({ retrievePage }: ConnectState) => ({
+  retrievePage,
+}))(Retrieve);
