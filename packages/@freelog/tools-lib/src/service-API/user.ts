@@ -64,7 +64,6 @@ export function userDetails(params: UserDetailsParamsType) {
   });
 }
 
-
 // 注册用户
 interface LogonParamsType {
   loginName: string;
@@ -77,6 +76,56 @@ export function logon(params: LogonParamsType) {
   return FUtil.Request({
     method: 'POST',
     url: '/v2/users',
+    data: params,
+  });
+}
+
+// 重置密码
+interface ResetPasswordParamsType {
+  loginName: string;
+  password: string;
+  authCode: string;
+}
+
+export function resetPassword({loginName, ...params}: ResetPasswordParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/users/${loginName}/resetPassword`,
+    data: params,
+  });
+}
+
+// 修改密码
+interface UpdatePasswordParamsType {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export function updatePassword(params: UpdatePasswordParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/users/current/updatePassword`,
+    data: params,
+  });
+}
+
+// 上传头像
+interface UploadHeadImgParamsType {
+  file: File;
+}
+
+export function uploadHeadImg(params: UploadHeadImgParamsType) {
+
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) {
+      formData.append(key, value);
+    }
+  }
+
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/users/current/uploadHeadImg`,
     data: params,
   });
 }
