@@ -1,6 +1,11 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import fMessage from '@/components/fMessage';
+import { history } from 'umi';
+import { resetPasswordSuccessResult } from '@freelog/tools-lib/dist/utils/linkTo';
 
 export type RetrievePageModelState = WholeReadonly<{
   showView: 'verify' | 'reset';
@@ -24,20 +29,106 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<RetrievePageModelState>;
 }
 
-export interface InitModelStatesAction extends AnyAction {
-  type: 'initModelStates';
+export interface OnMountPageAction extends AnyAction {
+  type: 'retrievePage/onMountPage';
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo';
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'retrievePage/onUnmountPage';
+}
+
+export interface OnChangeVerifyModeAction extends AnyAction {
+  type: 'retrievePage/onChangeVerifyMode';
+  payload: {
+    value: 'phone' | 'email';
+  };
+}
+
+export interface OnChangePhoneInputAction extends AnyAction {
+  type: 'retrievePage/onChangePhoneInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlurPhoneInputAction extends AnyAction {
+  type: 'retrievePage/onBlurPhoneInput';
+}
+
+export interface OnChangeEmailInputAction extends AnyAction {
+  type: 'retrievePage/onChangeEmailInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlurEmailInputAction extends AnyAction {
+  type: 'retrievePage/onBlurEmailInput';
+}
+
+export interface OnChangeVerifyCodeInputAction extends AnyAction {
+  type: 'retrievePage/onChangeVerifyCodeInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClickSendVerifyCodeBtnAction extends AnyAction {
+  type: 'retrievePage/onClickSendVerifyCodeBtn';
+}
+
+export interface OnChangeVerifyCodeReSendWaitAction extends AnyAction {
+  type: 'retrievePage/onChangeVerifyCodeReSendWait';
+  payload: {
+    value: number;
+  };
+}
+
+export interface OnChangeNewPasswordInputAction extends AnyAction {
+  type: 'retrievePage/onChangeNewPasswordInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlurNewPasswordInputAction extends AnyAction {
+  type: 'retrievePage/onBlurNewPasswordInput';
+}
+
+export interface OnChangeConfirmPasswordInputAction extends AnyAction {
+  type: 'retrievePage/onChangeConfirmPasswordInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnBlurConfirmPasswordInputAction extends AnyAction {
+  type: 'retrievePage/onBlurConfirmPasswordInput';
+}
+
+export interface OnClickResetBtnAction extends AnyAction {
+  type: 'retrievePage/onClickResetBtn';
 }
 
 interface RetrievePageModelType {
   namespace: 'retrievePage';
   state: RetrievePageModelState;
   effects: {
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
+    onChangeVerifyMode: (action: OnChangeVerifyModeAction, effects: EffectsCommandMap) => void;
+    onChangePhoneInput: (action: OnChangePhoneInputAction, effects: EffectsCommandMap) => void;
+    onBlurPhoneInput: (action: OnBlurPhoneInputAction, effects: EffectsCommandMap) => void;
+    onChangeEmailInput: (action: OnChangeEmailInputAction, effects: EffectsCommandMap) => void;
+    onBlurEmailInput: (action: OnBlurEmailInputAction, effects: EffectsCommandMap) => void;
+    onChangeVerifyCodeInput: (action: OnChangeVerifyCodeInputAction, effects: EffectsCommandMap) => void;
+    onClickSendVerifyCodeBtn: (action: OnClickSendVerifyCodeBtnAction, effects: EffectsCommandMap) => void;
+    onChangeVerifyCodeReSendWait: (action: OnChangeVerifyCodeReSendWaitAction, effects: EffectsCommandMap) => void;
+    onChangeNewPasswordInput: (action: OnChangeNewPasswordInputAction, effects: EffectsCommandMap) => void;
+    onBlurNewPasswordInput: (action: OnBlurNewPasswordInputAction, effects: EffectsCommandMap) => void;
+    onChangeConfirmPasswordInput: (action: OnChangeConfirmPasswordInputAction, effects: EffectsCommandMap) => void;
+    onBlurConfirmPasswordInput: (action: OnBlurConfirmPasswordInputAction, effects: EffectsCommandMap) => void;
+    onClickResetBtn: (action: OnClickResetBtnAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<RetrievePageModelState, ChangeAction>;
@@ -68,14 +159,189 @@ const Model: RetrievePageModelType = {
   namespace: 'retrievePage',
   state: initStates,
   effects: {
-    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
+    * onMountPage({}: OnMountPageAction, {}: EffectsCommandMap) {
 
     },
-    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
+    },
+    * onChangeVerifyMode({ payload }: OnChangeVerifyModeAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          verifyMode: payload.value,
+        },
+      });
+    },
+    * onChangePhoneInput({ payload }: OnChangePhoneInputAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          phoneInput: payload.value,
+        },
+      });
+    },
+    * onBlurPhoneInput({}: OnBlurPhoneInputAction, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let phoneInputError: string = '';
+
+      if (!retrievePage.phoneInput) {
+        phoneInputError = '不能为空';
+      } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(retrievePage.phoneInput)) {
+        phoneInputError = '请输入正确格式手机号';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          phoneInputError,
+        },
+      });
+    },
+    * onChangeEmailInput({ payload }: OnChangeEmailInputAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          emailInput: payload.value,
+        },
+      });
+    },
+    * onBlurEmailInput({}: OnBlurEmailInputAction, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let emailInputError: string = '';
+
+      if (!retrievePage.emailInput) {
+        emailInputError = '不能为空';
+      } else if (!FUtil.Regexp.EMAIL_ADDRESS.test(retrievePage.emailInput)) {
+        emailInputError = '请输入正确格式邮箱';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          emailInputError,
+        },
+      });
+    },
+    * onChangeVerifyCodeInput({ payload }: OnChangeVerifyCodeInputAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          verifyCode: payload.value,
+        },
+      });
+    },
+    * onClickSendVerifyCodeBtn({}: OnClickSendVerifyCodeBtnAction, { select, call, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          verifyCodeReSendWait: 60,
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
+        loginName: retrievePage.verifyMode === 'phone' ? retrievePage.phoneInput : retrievePage.emailInput,
+        authCodeType: 'resetPassword',
+      };
+
+      yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+
+    },
+    * onChangeVerifyCodeReSendWait({ payload }: OnChangeVerifyCodeReSendWaitAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          verifyCodeReSendWait: payload.value,
+        },
+      });
+    },
+    * onChangeNewPasswordInput({ payload }: OnChangeNewPasswordInputAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          newPasswordInput: payload.value,
+        },
+      });
+    },
+    * onBlurNewPasswordInput({}: OnBlurNewPasswordInputAction, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let newPasswordInputError: string = '';
+
+      if (!retrievePage.newPasswordInput) {
+        newPasswordInputError = '请输入密码';
+      } else if (!FUtil.Regexp.PASSWORD.test(retrievePage.newPasswordInput)) {
+        newPasswordInputError = '密码必须包含数字和字母；且由6-24个字符组成';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          newPasswordInputError,
+        },
+      });
+    },
+    * onChangeConfirmPasswordInput({ payload }: OnChangeConfirmPasswordInputAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          confirmPasswordInput: payload.value,
+        },
+      });
+
+    },
+    * onBlurConfirmPasswordInput({}: OnBlurConfirmPasswordInputAction, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let confirmPasswordInputError: string = '';
+
+      if (!retrievePage.confirmPasswordInput) {
+        confirmPasswordInputError = '请输入密码';
+      } else if (retrievePage.newPasswordInput !== retrievePage.confirmPasswordInput) {
+        confirmPasswordInputError = '两次输入不一致';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          confirmPasswordInputError,
+        },
+      });
+    },
+    * onClickResetBtn({}: OnClickResetBtnAction, { select, call }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.resetPassword>[0] = {
+        loginName: retrievePage.verifyMode === 'phone' ? retrievePage.phoneInput : retrievePage.emailInput,
+        password: retrievePage.newPasswordInput,
+        authCode: retrievePage.verifyCode,
+      };
+
+      const { data, msg } = yield call(FServiceAPI.User.resetPassword, params);
+      // console.log(data, 'DDDDDDDdd123423');
+      if (!data) {
+        return fMessage(msg, 'error');
+      }
+      history.replace(FUtil.LinkTo.resetPasswordSuccessResult());
     },
   },
   reducers: {

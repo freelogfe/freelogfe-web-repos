@@ -42,8 +42,30 @@ export default defineConfig({
       exact: true,
       path: '/retrieve',
       component: '@/pages/retrieve/index',
-      title: '忘记密码',
+      title: '找回密码',
     },
+    {
+      exact: true,
+      path: '/result/resetPassword/success',
+      title: '重置密码成功',
+      component: '@/pages/result/resetPassword/success/index',
+    },
+    // {
+    //   path: '/result',
+    //   routes: [
+    //     {
+    //       path: 'resetPassword',
+    //       route: [
+    //         {
+    //           exact: true,
+    //           path: 'success',
+    //           title: '重置密码成功',
+    //           component: '@/pages/result/resetPassword/success/index',
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       path: '/logged',
       component: '@/pages/logged/index',

@@ -234,6 +234,14 @@ export function wallet() {
   return `/logged/wallet`;
 }
 
+// 重置密码成功
+// interface ResetPasswordSuccessResultParamsType {
+// }
+
+export function resetPasswordSuccessResult() {
+  return `/result/resetPassword/success`;
+}
+
 function handleQuery(query: object): string {
   const obj: any = {};
   for (const [key, value] of Object.entries(query)) {
