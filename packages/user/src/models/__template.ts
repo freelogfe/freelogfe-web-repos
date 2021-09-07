@@ -11,20 +11,20 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<TempModelState>;
 }
 
-export interface InitModelStatesAction extends AnyAction {
-  type: 'initModelStates';
+export interface OnMountPageAction extends AnyAction {
+  type: 'temp/onMountPage';
 }
 
-export interface FetchInfoAction extends AnyAction {
-  type: 'fetchInfo';
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'temp/onUnmountPage';
 }
 
 interface TempModelType {
   namespace: 'temp';
   state: TempModelState;
   effects: {
-    fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
-    initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<TempModelState, ChangeAction>;
@@ -42,10 +42,10 @@ const Model: TempModelType = {
   namespace: 'temp',
   state: initStates,
   effects: {
-    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
+    * onMountPage({}: OnMountPageAction, {}: EffectsCommandMap) {
 
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
