@@ -30,13 +30,13 @@ export default defineConfig({
       exact: true,
       path: '/login',
       component: '@/pages/login/index',
-      title: '登录',
+      title: '登录freelog',
     },
     {
       exact: true,
       path: '/logon',
       component: '@/pages/logon/index',
-      title: '注册',
+      title: '注册freelog帐户',
     },
     {
       exact: true,

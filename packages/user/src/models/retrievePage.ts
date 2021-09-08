@@ -210,9 +210,9 @@ const Model: RetrievePageModelType = {
       let phoneInputError: string = '';
 
       if (!retrievePage.phoneInput) {
-        phoneInputError = '不能为空';
+        phoneInputError = '手机号不能为空';
       } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(retrievePage.phoneInput)) {
-        phoneInputError = '请输入正确格式手机号';
+        phoneInputError = '输入格式有误，请输入正确的手机号';
       }
 
       yield put<ChangeAction>({
@@ -238,9 +238,9 @@ const Model: RetrievePageModelType = {
       let emailInputError: string = '';
 
       if (!retrievePage.emailInput) {
-        emailInputError = '不能为空';
+        emailInputError = '邮箱不能为空';
       } else if (!FUtil.Regexp.EMAIL_ADDRESS.test(retrievePage.emailInput)) {
-        emailInputError = '请输入正确格式邮箱';
+        emailInputError = '输入格式有误，请输入正确的邮箱';
       }
 
       yield put<ChangeAction>({
@@ -266,7 +266,7 @@ const Model: RetrievePageModelType = {
       let verifyCodeError: string = '';
 
       if (!retrievePage.emailInput) {
-        verifyCodeError = '不能为空';
+        verifyCodeError = '验证码不能为空';
       }
 
       yield put<ChangeAction>({

@@ -1,58 +1,86 @@
 @import '../../config.less';
 
-.style {
+.styles {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+
+    .title {
+      display: flex;
+      align-items: center;
+
+      & > i {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: #EE4040;
+      }
+    }
+
+    .input {
+      width: 360px;
+    }
+
+    .errorTip {
+      font-size: 14px;
+      color: #EE4040;
+      width: 360px;
+    }
+
+    .verificationMode {
+
+      .verificationModeHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+
+      .verificationModeInput {
+        width: 360px;
+      }
+    }
+
+    .identifyingCode {
+      .identifyingCodeHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .identifyingCodeBody {
+        width: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .identifyingCodeInput {
+          width: 240px;
+        }
+      }
+    }
+  }
+}
+
+.resetPasswordSuccess {
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 
-  .container {
+  .box {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-shrink: 0;
-
-    .logo {
-      font-size: 36px;
-      margin: 0 auto;
-    }
-
-    .box {
-      width: 400px;
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px 30px;
-
-      .ActivateAccountContent {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        .verificationCodeInput {
-          width: 200px;
-        }
-
-        .blockInput {
-          width: 100%;
-        }
-
-        .btn {
-          width: 100%;
-        }
-
-        .inputError {
-          font-size: 12px;
-          color: @f-error-color1;
-        }
-      }
-
-    }
   }
-
 }
-
-
