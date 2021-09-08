@@ -14,7 +14,7 @@ import * as AHooks from 'ahooks';
 import {
   OnBlurConfirmPasswordInputAction,
   OnBlurEmailInputAction, OnBlurNewPasswordInputAction,
-  OnBlurPhoneInputAction,
+  OnBlurPhoneInputAction, OnBlurVerifyCodeInputAction,
   OnChangeConfirmPasswordInputAction,
   OnChangeEmailInputAction, OnChangeNewPasswordInputAction,
   OnChangePhoneInputAction, OnChangeVerifyCodeInputAction, OnChangeVerifyCodeReSendWaitAction,
@@ -222,6 +222,11 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
                 },
               });
             }}
+            onBlur={() => {
+              dispatch<OnBlurVerifyCodeInputAction>({
+                type: 'retrievePage/onBlurVerifyCodeInput',
+              });
+            }}
           />
           <FRectBtn
             style={{ width: 110 }}
@@ -236,7 +241,10 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             }}
           >{retrievePage.verifyCodeReSendWait === 0 ? '获取验证码' : `${retrievePage.verifyCodeReSendWait}秒`}</FRectBtn>
         </div>
-        {/*<div className={styles.errorTip}>请输入账号</div>*/}
+        {
+          retrievePage.verifyCodeError && (<div className={styles.errorTip}>{retrievePage.verifyCodeError}</div>)
+        }
+
       </div>
 
       <div style={{ height: 20 }} />

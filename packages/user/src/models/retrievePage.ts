@@ -15,6 +15,7 @@ export type RetrievePageModelState = WholeReadonly<{
   emailInput: string;
   emailInputError: string;
   verifyCode: string;
+  verifyCodeError: string;
   verifyCodeReSendWait: number;
 
   newPasswordInput: string;
@@ -74,6 +75,10 @@ export interface OnChangeVerifyCodeInputAction extends AnyAction {
   };
 }
 
+export interface OnBlurVerifyCodeInputAction extends AnyAction {
+  type: 'retrievePage/onBlurVerifyCodeInput';
+}
+
 export interface OnClickSendVerifyCodeBtnAction extends AnyAction {
   type: 'retrievePage/onClickSendVerifyCodeBtn';
 }
@@ -130,6 +135,7 @@ interface RetrievePageModelType {
     onChangeEmailInput: (action: OnChangeEmailInputAction, effects: EffectsCommandMap) => void;
     onBlurEmailInput: (action: OnBlurEmailInputAction, effects: EffectsCommandMap) => void;
     onChangeVerifyCodeInput: (action: OnChangeVerifyCodeInputAction, effects: EffectsCommandMap) => void;
+    onBlurVerifyCodeInput: (action: OnBlurVerifyCodeInputAction, effects: EffectsCommandMap) => void;
     onClickSendVerifyCodeBtn: (action: OnClickSendVerifyCodeBtnAction, effects: EffectsCommandMap) => void;
     onChangeVerifyCodeReSendWait: (action: OnChangeVerifyCodeReSendWaitAction, effects: EffectsCommandMap) => void;
     onChangeNewPasswordInput: (action: OnChangeNewPasswordInputAction, effects: EffectsCommandMap) => void;
@@ -156,6 +162,7 @@ const initStates: RetrievePageModelState = {
   emailInput: '',
   emailInputError: '',
   verifyCode: '',
+  verifyCodeError: '',
   verifyCodeReSendWait: 0,
 
   newPasswordInput: '',
@@ -248,6 +255,24 @@ const Model: RetrievePageModelType = {
         type: 'change',
         payload: {
           verifyCode: payload.value,
+        },
+      });
+    },
+    * onBlurVerifyCodeInput({}: OnBlurVerifyCodeInputAction, { select, put }: EffectsCommandMap) {
+      const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
+        retrievePage,
+      }));
+
+      let verifyCodeError: string = '';
+
+      if (!retrievePage.emailInput) {
+        verifyCodeError = '不能为空';
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          verifyCodeError,
         },
       });
     },
