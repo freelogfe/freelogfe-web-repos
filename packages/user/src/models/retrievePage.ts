@@ -349,7 +349,7 @@ const Model: RetrievePageModelType = {
       }));
 
       let confirmPasswordInputError: string = '';
-
+      console.log(retrievePage.confirmPasswordInput, '######3@@@@@@@@@');
       if (!retrievePage.confirmPasswordInput) {
         confirmPasswordInputError = '请输入密码';
       } else if (retrievePage.newPasswordInput !== retrievePage.confirmPasswordInput) {

@@ -232,9 +232,6 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             style={{ width: 110 }}
             disabled={retrievePage.verifyCodeReSendWait > 0 || !isVerifyModeValid}
             onClick={() => {
-              // dispatch<OnChangeVerifyCodeReSendWaitAction>({
-              //
-              // });
               dispatch<OnClickSendVerifyCodeBtnAction>({
                 type: 'retrievePage/onClickSendVerifyCodeBtn',
               });
@@ -315,7 +312,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
           }}
         />
         {
-          retrievePage.confirmPasswordInput && (
+          retrievePage.confirmPasswordInputError && (
             <div className={styles.errorTip}>{retrievePage.confirmPasswordInputError}</div>)
         }
 
@@ -335,7 +332,6 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
       <div style={{ height: 128 }} />
       <Space size={50}>
         <FTextBtn onClick={() => {
-          // history.replace(FUtil.LinkTo.login());
           history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
             goTo: decodeURIComponent(urlParams.goTo),
           } : {}));
@@ -345,9 +341,7 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
             history.replace(FUtil.LinkTo.logon(urlParams.goTo ? {
               goTo: decodeURIComponent(urlParams.goTo),
             } : {}));
-            // history.replace(FUtil.LinkTo.logon());
           }}
-          // disabled={!isVerifyAllForm}
         >注册新帐户</FTextBtn>
       </Space>
     </div>

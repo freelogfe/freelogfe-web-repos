@@ -154,7 +154,7 @@ interface LogonPageModelType {
 }
 
 const initStates: LogonPageModelState = {
-  showView: 'success',
+  showView: 'logon',
 
   usernameInput: '',
   usernameInputError: '',
@@ -169,7 +169,7 @@ const initStates: LogonPageModelState = {
   passwordInput: '',
   passwordInputError: '',
 
-  waitingTimeToLogin: 3,
+  waitingTimeToLogin: 0,
 };
 
 const Model: LogonPageModelType = {
