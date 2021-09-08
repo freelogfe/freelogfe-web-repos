@@ -5,10 +5,9 @@ import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { history } from 'umi';
-import { resetPasswordSuccessResult } from '@freelog/tools-lib/dist/utils/linkTo';
 
 export type RetrievePageModelState = WholeReadonly<{
-  showView: 'verify' | 'reset';
+  showView: 'reset' | 'success';
 
   verifyMode: 'phone' | 'email';
   phoneInput: string;
@@ -22,6 +21,8 @@ export type RetrievePageModelState = WholeReadonly<{
   newPasswordInputError: string;
   confirmPasswordInput: string;
   confirmPasswordInputError: string;
+
+  waitingTimeToLogin: number;
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -110,6 +111,13 @@ export interface OnClickResetBtnAction extends AnyAction {
   type: 'retrievePage/onClickResetBtn';
 }
 
+export interface OnChangeWaitingTimeAction extends AnyAction {
+  type: 'retrievePage/onChangeWaitingTime';
+  payload: {
+    value: number;
+  };
+}
+
 interface RetrievePageModelType {
   namespace: 'retrievePage';
   state: RetrievePageModelState;
@@ -129,6 +137,7 @@ interface RetrievePageModelType {
     onChangeConfirmPasswordInput: (action: OnChangeConfirmPasswordInputAction, effects: EffectsCommandMap) => void;
     onBlurConfirmPasswordInput: (action: OnBlurConfirmPasswordInputAction, effects: EffectsCommandMap) => void;
     onClickResetBtn: (action: OnClickResetBtnAction, effects: EffectsCommandMap) => void;
+    onChangeWaitingTime: (action: OnChangeWaitingTimeAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<RetrievePageModelState, ChangeAction>;
@@ -139,7 +148,7 @@ interface RetrievePageModelType {
 }
 
 const initStates: RetrievePageModelState = {
-  showView: 'verify',
+  showView: 'reset',
 
   verifyMode: 'phone',
   phoneInput: '',
@@ -153,6 +162,8 @@ const initStates: RetrievePageModelState = {
   newPasswordInputError: '',
   confirmPasswordInput: '',
   confirmPasswordInputError: '',
+
+  waitingTimeToLogin: 0,
 };
 
 const Model: RetrievePageModelType = {
@@ -257,8 +268,11 @@ const Model: RetrievePageModelType = {
         authCodeType: 'resetPassword',
       };
 
-      yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
 
+      if (!data) {
+        fMessage(msg, 'error');
+      }
     },
     * onChangeVerifyCodeReSendWait({ payload }: OnChangeVerifyCodeReSendWaitAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -303,7 +317,6 @@ const Model: RetrievePageModelType = {
           confirmPasswordInput: payload.value,
         },
       });
-
     },
     * onBlurConfirmPasswordInput({}: OnBlurConfirmPasswordInputAction, { select, put }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
@@ -325,7 +338,7 @@ const Model: RetrievePageModelType = {
         },
       });
     },
-    * onClickResetBtn({}: OnClickResetBtnAction, { select, call }: EffectsCommandMap) {
+    * onClickResetBtn({}: OnClickResetBtnAction, { select, call, put }: EffectsCommandMap) {
       const { retrievePage }: ConnectState = yield select(({ retrievePage }: ConnectState) => ({
         retrievePage,
       }));
@@ -341,7 +354,22 @@ const Model: RetrievePageModelType = {
       if (!data) {
         return fMessage(msg, 'error');
       }
-      history.replace(FUtil.LinkTo.resetPasswordSuccessResult());
+      // history.replace(FUtil.LinkTo.resetPasswordSuccessResult());
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          showView: 'success',
+          waitingTimeToLogin: 3,
+        },
+      });
+    },
+    * onChangeWaitingTime({ payload }: OnChangeWaitingTimeAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          waitingTimeToLogin: payload.value,
+        },
+      });
     },
   },
   reducers: {

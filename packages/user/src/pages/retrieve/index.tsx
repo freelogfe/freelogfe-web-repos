@@ -18,10 +18,11 @@ import {
   OnChangeConfirmPasswordInputAction,
   OnChangeEmailInputAction, OnChangeNewPasswordInputAction,
   OnChangePhoneInputAction, OnChangeVerifyCodeInputAction, OnChangeVerifyCodeReSendWaitAction,
-  OnChangeVerifyModeAction, OnClickResetBtnAction, OnClickSendVerifyCodeBtnAction,
+  OnChangeVerifyModeAction, OnChangeWaitingTimeAction, OnClickResetBtnAction, OnClickSendVerifyCodeBtnAction,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePage';
+import { FCheck } from '@/components/FIcons';
 
 interface RetrieveProps {
   dispatch: Dispatch;
@@ -54,6 +55,20 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
     });
   }, retrievePage.verifyCodeReSendWait === 0 ? null : 1000);
 
+
+  AHooks.useInterval(() => {
+    dispatch<OnChangeWaitingTimeAction>({
+      type: 'retrievePage/onChangeWaitingTime',
+      payload: {
+        value: retrievePage.waitingTimeToLogin - 1,
+      },
+    });
+    if (retrievePage.waitingTimeToLogin - 1 === 0) {
+      // console.log(1234);
+      gotoLogin();
+    }
+  }, retrievePage.waitingTimeToLogin === 0 ? null : 1000);
+
   const isVerifyModeValid: boolean = retrievePage.verifyMode === 'phone'
     ? (!!retrievePage.phoneInput && !retrievePage.phoneInputError)
     : (!!retrievePage.emailInput && !retrievePage.emailInputError);
@@ -62,6 +77,30 @@ function Retrieve({ dispatch, retrievePage }: RetrieveProps) {
     && !!retrievePage.verifyCode
     && !!retrievePage.newPasswordInput && !retrievePage.newPasswordInputError
     && !!retrievePage.confirmPasswordInput && !retrievePage.confirmPasswordInputError;
+
+  function gotoLogin() {
+    history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
+      goTo: decodeURIComponent(urlParams.goTo),
+    } : {}));
+  }
+
+  if (retrievePage.showView === 'success') {
+    return (<div className={styles.resetPasswordSuccess}>
+      <div className={styles.box}>
+        <FCheck style={{ fontSize: 96 }} />
+        <div style={{ height: 30 }} />
+        <FTitleText text={'重置密码成功'} />
+        <div style={{ height: 40 }} />
+        <Space size={0}>
+          <FContentText text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`} type='negative' />
+          <FTextBtn onClick={() => {
+            gotoLogin();
+          }}>立即登录</FTextBtn>
+        </Space>
+        <div style={{ height: 10 }} />
+      </div>
+    </div>);
+  }
 
   return (<div className={styles.styles}>
     <div className={styles.container}>

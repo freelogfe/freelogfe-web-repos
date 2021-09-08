@@ -44,12 +44,12 @@ export default defineConfig({
       component: '@/pages/retrieve/index',
       title: '找回密码',
     },
-    {
-      exact: true,
-      path: '/result/resetPassword/success',
-      title: '重置密码成功',
-      component: '@/pages/result/resetPassword/success/index',
-    },
+    // {
+    //   exact: true,
+    //   path: '/result/resetPassword/success',
+    //   title: '重置密码成功',
+    //   component: '@/pages/result/resetPassword/success/index',
+    // },
     // {
     //   path: '/result',
     //   routes: [
