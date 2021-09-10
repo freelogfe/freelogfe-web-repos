@@ -1,11 +1,9 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-// import {FApiServer} from ;
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { successMessage } from '@/pages/logged/wallet';
-import { message } from 'antd';
 import fMessage from '@/components/fMessage';
 
 export interface WalletPageModelState {
@@ -33,6 +31,8 @@ export interface WalletPageModelState {
   activatingAccountEmail: string;
   activatingAccountType: 'phone' | 'email';
   activatingAccountCaptcha: string;
+  activatingAccountCaptchaError: string;
+  activatingAccountSentCaptchaWait: number;
   activatingAccountPasswordOne: string;
   activatingAccountPasswordOneError: string;
   activatingAccountPasswordTwo: string;
@@ -43,6 +43,7 @@ export interface WalletPageModelState {
   changingPasswordEmail: string;
   changingPasswordType: 'phone' | 'email';
   changingPasswordCaptcha: string;
+  changingPasswordCaptchaError: string;
   changingPasswordPasswordOld: string;
   changingPasswordPasswordOldError: string;
   changingPasswordPasswordOne: string;
@@ -90,26 +91,33 @@ export interface OnClickActivateAccountCaptchaBtnAction extends AnyAction {
   type: 'walletPage/onClickActivateAccountCaptchaBtn';
 }
 
+export interface OnChangeActivatingAccountSentCaptchaWaitAction extends AnyAction {
+  type: 'walletPage/onChangeActivatingAccountSentCaptchaWait';
+  payload: {
+    value: number;
+  };
+}
+
 export interface OnChangeActivateAccountPassword1Action extends AnyAction {
-  type: 'walletPage/OnChangeActivateAccountPassword1';
+  type: 'walletPage/onChangeActivateAccountPassword1';
   payload: {
     value: string;
   };
 }
 
 export interface OnBlurActivateAccountPassword1Action extends AnyAction {
-  type: 'walletPage/OnBlurActivateAccountPassword1';
+  type: 'walletPage/onBlurActivateAccountPassword1';
 }
 
 export interface OnChangeActivateAccountPassword2Action extends AnyAction {
-  type: 'walletPage/OnChangeActivateAccountPassword2';
+  type: 'walletPage/onChangeActivateAccountPassword2';
   payload: {
     value: string;
   };
 }
 
 export interface OnBlurActivateAccountPassword2Action extends AnyAction {
-  type: 'walletPage/OnBlurActivateAccountPassword2';
+  type: 'walletPage/onBlurActivateAccountPassword2';
 }
 
 export interface OnClickActivateAccountConfirmBtnAction extends AnyAction {
@@ -186,10 +194,11 @@ interface WalletPageModelType {
     onChangeActivateAccountMode: (action: OnChangeActivateAccountModeAction, effects: EffectsCommandMap) => void;
     onChangeActivateAccountCaptchaInput: (action: OnChangeActivateAccountCaptchaInputAction, effects: EffectsCommandMap) => void;
     onClickActivateAccountCaptchaBtn: (action: OnClickActivateAccountCaptchaBtnAction, effects: EffectsCommandMap) => void;
-    OnChangeActivateAccountPassword1: (action: OnChangeActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
-    OnBlurActivateAccountPassword1: (action: OnBlurActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
-    OnChangeActivateAccountPassword2: (action: OnChangeActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
-    OnBlurActivateAccountPassword2: (action: OnBlurActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
+    onChangeActivatingAccountSentCaptchaWait: (action: OnChangeActivatingAccountSentCaptchaWaitAction, effects: EffectsCommandMap) => void;
+    onChangeActivateAccountPassword1: (action: OnChangeActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
+    onBlurActivateAccountPassword1: (action: OnBlurActivateAccountPassword1Action, effects: EffectsCommandMap) => void;
+    onChangeActivateAccountPassword2: (action: OnChangeActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
+    onBlurActivateAccountPassword2: (action: OnBlurActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
     onClickActivateAccountConfirmBtn: (action: OnClickActivateAccountConfirmBtnAction, effects: EffectsCommandMap) => void;
     onClickUpdatePaymentPasswordBtn: (action: OnClickUpdatePaymentPasswordBtnAction, effects: EffectsCommandMap) => void;
     onCancelUpdatePaymentPasswordModal: (action: OnCancelUpdatePaymentPasswordModalAction, effects: EffectsCommandMap) => void;
@@ -224,6 +233,8 @@ const initStates: WalletPageModelState = {
   activatingAccountEmail: '',
   activatingAccountType: 'phone',
   activatingAccountCaptcha: '',
+  activatingAccountCaptchaError: '',
+  activatingAccountSentCaptchaWait: 0,
   activatingAccountPasswordOne: '',
   activatingAccountPasswordOneError: '',
   activatingAccountPasswordTwo: '',
@@ -234,6 +245,7 @@ const initStates: WalletPageModelState = {
   changingPasswordEmail: '',
   changingPasswordType: 'phone',
   changingPasswordCaptcha: '',
+  changingPasswordCaptchaError: '',
   changingPasswordPasswordOld: '',
   changingPasswordPasswordOldError: '',
   changingPasswordPasswordOne: '',
@@ -249,29 +261,25 @@ const Model: WalletPageModelType = {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       const { data: data1 } = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(user, 'user!@#$!@#$@#!$');
-      console.log(data1, ' data112342342342344');
+      console.log(data1, ' data1123423423423442@@@@@@@');
       const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: data1.userId,
       };
       const { data } = yield call(FServiceAPI.Transaction.individualAccounts, params);
 
-      if (data.status === 0) {
-        return yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            accountStatus: data.status,
-          },
-        });
+      let transactionRecord = [];
+      if (data.status !== 0) {
+        const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
+          accountId: data.accountId,
+          skip: 0,
+          limit: 100,
+        };
+
+        const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
+        transactionRecord = data2.dataList;
       }
 
-      const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
-        accountId: data.accountId,
-        skip: 0,
-        limit: 100,
-      };
-
-      const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
-
+      // console.log(data1.email, 'data1.emaildata1.email111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -279,7 +287,7 @@ const Model: WalletPageModelType = {
           userPhone: data1.mobile,
           accountStatus: data.status,
           accountBalance: data.balance,
-          transactionRecord: (data2.dataList as any[]).map((dl) => {
+          transactionRecord: transactionRecord.map((dl: any) => {
             const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
             return {
               serialNo: dl.serialNo,
@@ -341,10 +349,47 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onClickActivateAccountCaptchaBtn(action: OnClickActivateAccountCaptchaBtnAction, effects: EffectsCommandMap) {
+    * onClickActivateAccountCaptchaBtn(action: OnClickActivateAccountCaptchaBtnAction, {
+      select,
+      put,
+      call,
+    }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activatingAccountSentCaptchaWait: 60,
+        },
+      });
+
+      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
+        loginName: walletPage.activatingAccountType === 'email' ? walletPage.activatingAccountEmail : walletPage.activatingAccountMobile,
+        authCodeType: 'activateTransactionAccount',
+      };
+      const { data } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+      if (data) {
+        return;
+      }
+      fMessage('验证码发送失败', 'error');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activatingAccountSentCaptchaWait: 0,
+        },
+      });
     },
-    * OnChangeActivateAccountPassword1({ payload }: OnChangeActivateAccountPassword1Action, { put }: EffectsCommandMap) {
+    * onChangeActivatingAccountSentCaptchaWait({ payload }: OnChangeActivatingAccountSentCaptchaWaitAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          activatingAccountSentCaptchaWait: payload.value,
+        },
+      });
+    },
+    * onChangeActivateAccountPassword1({ payload }: OnChangeActivateAccountPassword1Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -352,7 +397,7 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * OnBlurActivateAccountPassword1(action: OnBlurActivateAccountPassword1Action, { select, put }: EffectsCommandMap) {
+    * onBlurActivateAccountPassword1(action: OnBlurActivateAccountPassword1Action, { select, put }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
@@ -365,7 +410,7 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * OnChangeActivateAccountPassword2({ payload }: OnChangeActivateAccountPassword2Action, { put }: EffectsCommandMap) {
+    * onChangeActivateAccountPassword2({ payload }: OnChangeActivateAccountPassword2Action, { put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -377,7 +422,7 @@ const Model: WalletPageModelType = {
       // onChange({
       // });
     },
-    * OnBlurActivateAccountPassword2({}: OnBlurActivateAccountPassword2Action, { select, put }: EffectsCommandMap) {
+    * onBlurActivateAccountPassword2({}: OnBlurActivateAccountPassword2Action, { select, put }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
@@ -401,8 +446,11 @@ const Model: WalletPageModelType = {
         password: walletPage.activatingAccountPasswordOne,
       };
 
-      const { data } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
+      const { data, msg, errCode, errcode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
 
+      if (errCode !== 0 || errcode !== 0) {
+        return fMessage(msg, 'error');
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {

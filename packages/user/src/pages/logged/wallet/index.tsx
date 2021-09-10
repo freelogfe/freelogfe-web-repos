@@ -12,29 +12,31 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, UserModelState, WalletPageModelState } from '@/models/connect';
 import {
   OnBlurActivateAccountPassword1Action,
-  OnBlurActivateAccountPassword2Action, OnBlurUpdatePaymentPasswordNew1Action, OnBlurUpdatePaymentPasswordNew2Action,
+  OnBlurActivateAccountPassword2Action,
+  OnBlurUpdatePaymentPasswordNew1Action,
+  OnBlurUpdatePaymentPasswordNew2Action,
   OnCancelActivateAccountModalAction,
   OnCancelUpdatePaymentPasswordModalAction,
   OnChangeActivateAccountCaptchaInputAction,
   OnChangeActivateAccountModeAction,
   OnChangeActivateAccountPassword1Action,
-  OnChangeActivateAccountPassword2Action,
+  OnChangeActivateAccountPassword2Action, OnChangeActivatingAccountSentCaptchaWaitAction,
   OnChangeUpdatePaymentPasswordCaptchaInputAction,
   OnChangeUpdatePaymentPasswordModeAction,
-  OnChangeUpdatePaymentPasswordNew1Action, OnChangeUpdatePaymentPasswordNew2Action,
+  OnChangeUpdatePaymentPasswordNew1Action,
+  OnChangeUpdatePaymentPasswordNew2Action,
   OnChangeUpdatePaymentPasswordOldAction,
   OnClickActivateAccountBtnAction,
   OnClickActivateAccountCaptchaBtnAction,
   OnClickActivateAccountConfirmBtnAction,
-  OnClickUpdatePaymentPasswordCaptchaBtnAction, OnClickUpdatePaymentPasswordConfirmBtnAction,
+  OnClickUpdatePaymentPasswordCaptchaBtnAction,
+  OnClickUpdatePaymentPasswordConfirmBtnAction,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/walletPage';
-import { FUtil } from '@freelog/tools-lib';
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
-
-// import useUrlState from '@ahooksjs/use-url-state';
+import { OnChangeVerifyCodeReSendWaitAction } from '@/models/logonPage';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -56,12 +58,14 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
     });
   });
 
-  async function onChange(payload: Partial<WalletPageModelState>) {
-    // await dispatch<ChangeAction>({
-    //   type: 'walletPage/change',
-    //   payload,
-    // });
-  }
+  AHooks.useInterval(() => {
+    dispatch<OnChangeActivatingAccountSentCaptchaWaitAction>({
+      type: 'walletPage/onChangeActivatingAccountSentCaptchaWait',
+      payload: {
+        value: walletPage.activatingAccountSentCaptchaWait - 1,
+      },
+    });
+  }, walletPage.activatingAccountSentCaptchaWait === 0 ? null : 1000);
 
   const columns: ColumnsType<{
     serialNo: string;
@@ -278,12 +282,13 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               <FRectBtn
                 style={{ width: 110 }}
                 type='primary'
+                disabled={walletPage.activatingAccountSentCaptchaWait > 0}
                 onClick={() => {
                   dispatch<OnClickActivateAccountCaptchaBtnAction>({
                     type: 'walletPage/onClickActivateAccountCaptchaBtn',
                   });
                 }}
-              >获取验证码</FRectBtn>
+              >{walletPage.activatingAccountSentCaptchaWait === 0 ? '获取验证码' : `${walletPage.activatingAccountSentCaptchaWait}秒`}</FRectBtn>
             </Space>
           </div>
 
@@ -298,7 +303,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               errorText={walletPage.activatingAccountPasswordOneError}
               onChange={(e) => {
                 dispatch<OnChangeActivateAccountPassword1Action>({
-                  type: 'walletPage/OnChangeActivateAccountPassword1',
+                  type: 'walletPage/onChangeActivateAccountPassword1',
                   payload: {
                     value: e.target.value,
                   },
@@ -306,7 +311,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               }}
               onBlur={() => {
                 dispatch<OnBlurActivateAccountPassword1Action>({
-                  type: 'walletPage/OnBlurActivateAccountPassword1',
+                  type: 'walletPage/onBlurActivateAccountPassword1',
                 });
               }}
             />
@@ -323,7 +328,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               errorText={walletPage.activatingAccountPasswordTwoError}
               onChange={(e) => {
                 dispatch<OnChangeActivateAccountPassword2Action>({
-                  type: 'walletPage/OnChangeActivateAccountPassword2',
+                  type: 'walletPage/onChangeActivateAccountPassword2',
                   payload: {
                     value: e.target.value,
                   },
@@ -331,7 +336,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               }}
               onBlur={() => {
                 dispatch<OnBlurActivateAccountPassword2Action>({
-                  type: 'walletPage/OnBlurActivateAccountPassword2',
+                  type: 'walletPage/onBlurActivateAccountPassword2',
                 });
               }}
             />
