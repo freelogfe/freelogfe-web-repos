@@ -7,6 +7,7 @@ import { successMessage } from '@/pages/logged/wallet';
 import fMessage from '@/components/fMessage';
 
 export interface WalletPageModelState {
+  userID: number;
   userPhone: string;
   userEmail: string;
   accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
@@ -220,14 +221,18 @@ interface WalletPageModelType {
   };
 }
 
-const initStates: WalletPageModelState = {
-  userPhone: '',
-  userEmail: '',
-  accountStatus: -1,
-  accountId: '',
-  accountBalance: -1,
-  transactionRecord: [],
-
+const activatingAccountInitStates: Pick<WalletPageModelState,
+  'activatingAccount'
+  | 'activatingAccountMobile'
+  | 'activatingAccountEmail'
+  | 'activatingAccountType'
+  | 'activatingAccountCaptcha'
+  | 'activatingAccountCaptchaError'
+  | 'activatingAccountSentCaptchaWait'
+  | 'activatingAccountPasswordOne'
+  | 'activatingAccountPasswordOneError'
+  | 'activatingAccountPasswordTwo'
+  | 'activatingAccountPasswordTwoError'> = {
   activatingAccount: false,
   activatingAccountMobile: '',
   activatingAccountEmail: '',
@@ -239,7 +244,21 @@ const initStates: WalletPageModelState = {
   activatingAccountPasswordOneError: '',
   activatingAccountPasswordTwo: '',
   activatingAccountPasswordTwoError: '',
+};
 
+const changingPasswordInitStates: Pick<WalletPageModelState,
+  'changingPassword'
+  | 'changingPasswordMobile'
+  | 'changingPasswordEmail'
+  | 'changingPasswordType'
+  | 'changingPasswordCaptcha'
+  | 'changingPasswordCaptchaError'
+  | 'changingPasswordPasswordOld'
+  | 'changingPasswordPasswordOldError'
+  | 'changingPasswordPasswordOne'
+  | 'changingPasswordPasswordOneError'
+  | 'changingPasswordPasswordTwo'
+  | 'changingPasswordPasswordTwoError'> = {
   changingPassword: false,
   changingPasswordMobile: '',
   changingPasswordEmail: '',
@@ -254,6 +273,20 @@ const initStates: WalletPageModelState = {
   changingPasswordPasswordTwoError: '',
 };
 
+const initStates: WalletPageModelState = {
+  userID: -1,
+  userPhone: '',
+  userEmail: '',
+  accountStatus: -1,
+  accountId: '',
+  accountBalance: -1,
+  transactionRecord: [],
+
+  ...activatingAccountInitStates,
+
+  ...changingPasswordInitStates,
+};
+
 const Model: WalletPageModelType = {
   namespace: 'walletPage',
   state: initStates,
@@ -261,7 +294,7 @@ const Model: WalletPageModelType = {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       const { data: data1 } = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(user, 'user!@#$!@#$@#!$');
-      console.log(data1, ' data1123423423423442@@@@@@@');
+      // console.log(data1, ' data1123423423423442@@@@@@@');
       const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: data1.userId,
       };
@@ -283,6 +316,7 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          userID: data1.userId,
           userEmail: data1.email,
           userPhone: data1.mobile,
           accountStatus: data.status,
@@ -321,7 +355,7 @@ const Model: WalletPageModelType = {
           activatingAccount: true,
           activatingAccountMobile: walletPage.userPhone,
           activatingAccountEmail: walletPage.userEmail,
-          activatingAccountType: walletPage.userPhone ? 'phone' : 'email',
+          activatingAccountType: walletPage.userEmail ? 'email' : 'phone',
         },
       });
     },
@@ -329,7 +363,7 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccount: false,
+          ...activatingAccountInitStates,
         },
       });
     },
@@ -444,6 +478,8 @@ const Model: WalletPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.Transaction.activateIndividualAccounts>[0] = {
         password: walletPage.activatingAccountPasswordOne,
+        authCode: walletPage.activatingAccountCaptcha,
+        messageAddress: walletPage.activatingAccountType === 'phone' ? walletPage.activatingAccountMobile : walletPage.activatingAccountEmail,
       };
 
       const { data, msg, errCode, errcode } = yield call(FServiceAPI.Transaction.activateIndividualAccounts, params);
@@ -451,16 +487,20 @@ const Model: WalletPageModelType = {
       if (errCode !== 0 || errcode !== 0) {
         return fMessage(msg, 'error');
       }
+
+      const params1: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+        userId: walletPage.userID,
+      };
+      const { data: data1 } = yield call(FServiceAPI.Transaction.individualAccounts, params1);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          activatingAccount: false,
+          ...activatingAccountInitStates,
+          accountStatus: data1.status,
+          accountBalance: data1.balance,
         },
       });
-
-      // yield put<FetchAccountInfoAction>({
-      //   type: 'fetchAccountInfo',
-      // });
     },
     * onClickUpdatePaymentPasswordBtn(action: OnClickUpdatePaymentPasswordBtnAction, {
       select,

@@ -37,6 +37,8 @@ export function individualAccounts({userId, ...params}: IndividualAccountsParams
 // 激活个人账户
 interface ActivateIndividualAccountsParamsType {
   password: string;
+  authCode: string;
+  messageAddress: string;
 }
 
 export function activateIndividualAccounts({...params}: ActivateIndividualAccountsParamsType) {
@@ -52,6 +54,8 @@ export function activateIndividualAccounts({...params}: ActivateIndividualAccoun
 interface ChangePasswordParamsType {
   password: string;
   oldPassword: string;
+  authCode: string;
+  messageAddress: string;
 }
 
 export function changePassword({...params}: ChangePasswordParamsType) {

@@ -296,6 +296,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
+              type="password"
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -321,6 +322,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'验证支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
+              type="password"
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -345,7 +347,8 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          disabled={!walletPage.activatingAccountPasswordOne
+          disabled={!walletPage.activatingAccountCaptcha
+          || !walletPage.activatingAccountPasswordOne
           || !walletPage.activatingAccountPasswordTwo
           || !!walletPage.activatingAccountPasswordOneError
           || !!walletPage.activatingAccountPasswordTwoError}
