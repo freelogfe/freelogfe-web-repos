@@ -25,10 +25,10 @@ import {
   OnChangeUpdatePaymentPasswordModeAction,
   OnChangeUpdatePaymentPasswordNew1Action,
   OnChangeUpdatePaymentPasswordNew2Action,
-  OnChangeUpdatePaymentPasswordOldAction,
+  OnChangeUpdatePaymentPasswordOldAction, OnChangeUpdatePaymentPasswordSentCaptchaWaitBtnAction,
   OnClickActivateAccountBtnAction,
   OnClickActivateAccountCaptchaBtnAction,
-  OnClickActivateAccountConfirmBtnAction,
+  OnClickActivateAccountConfirmBtnAction, OnClickUpdatePaymentPasswordBtnAction,
   OnClickUpdatePaymentPasswordCaptchaBtnAction,
   OnClickUpdatePaymentPasswordConfirmBtnAction,
   OnMountPageAction,
@@ -66,6 +66,15 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
       },
     });
   }, walletPage.activatingAccountSentCaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChangeUpdatePaymentPasswordSentCaptchaWaitBtnAction>({
+      type: 'walletPage/onChangeUpdatePaymentPasswordSentCaptchaWaitBtn',
+      payload: {
+        value: walletPage.changingPasswordSentCaptchaWait - 1,
+      },
+    });
+  }, walletPage.changingPasswordSentCaptchaWait === 0 ? null : 1000);
 
   const columns: ColumnsType<{
     serialNo: string;
@@ -175,7 +184,9 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <div
               className={styles.ChangePassword}
               onClick={() => {
-
+                dispatch<OnClickUpdatePaymentPasswordBtnAction>({
+                  type: 'walletPage/onClickUpdatePaymentPasswordBtn',
+                });
               }}
             >
               <FSafetyLock style={{ fontSize: 32, color: '#DA6666' }} />
@@ -296,7 +307,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
-              type="password"
+              type='password'
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -322,7 +333,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'验证支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
-              type="password"
+              type='password'
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -440,13 +451,14 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               />
               <FRectBtn
                 style={{ width: 110 }}
+                disabled={walletPage.changingPasswordSentCaptchaWait > 0}
                 type='primary'
                 onClick={() => {
                   dispatch<OnClickUpdatePaymentPasswordCaptchaBtnAction>({
                     type: 'walletPage/onClickUpdatePaymentPasswordCaptchaBtn',
                   });
                 }}
-              >获取验证码</FRectBtn>
+              >{walletPage.changingPasswordSentCaptchaWait === 0 ? '获取验证码' : `${walletPage.changingPasswordSentCaptchaWait}秒`}</FRectBtn>
             </Space>
           </div>
 
@@ -454,6 +466,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'原支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
+              type='password'
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -474,6 +487,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
+              type='password'
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -499,6 +513,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
             <FTipText type='third' text={'验证支付密码'} />
             <div style={{ height: 5 }} />
             <FInput
+              type='password'
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
@@ -523,7 +538,8 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          disabled={!walletPage.changingPasswordPasswordOne
+          disabled={!walletPage.changingPasswordCaptcha
+          || !walletPage.changingPasswordPasswordOne
           || !walletPage.changingPasswordPasswordTwo
           || !!walletPage.changingPasswordPasswordOneError
           || !!walletPage.changingPasswordPasswordTwoError
