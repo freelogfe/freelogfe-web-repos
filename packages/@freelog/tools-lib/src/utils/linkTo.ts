@@ -234,13 +234,19 @@ export function wallet() {
   return `/logged/wallet`;
 }
 
-// 重置密码成功
-// interface ResetPasswordSuccessResultParamsType {
+// interface ContractParamsType {
 // }
 
-// export function resetPasswordSuccessResult() {
-//   return `/result/resetPassword/success`;
+export function contract() {
+  return `/logged/contract`;
+}
+
+// interface SettingParamsType {
 // }
+
+export function setting() {
+  return `/logged/setting`;
+}
 
 function handleQuery(query: object): string {
   const obj: any = {};
