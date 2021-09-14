@@ -5,11 +5,35 @@
   margin: 0 auto;
   display: block;
 
+  .header {
+    height: 100px;
+    display: flex;
+    align-items: center;
+
+    & > a {
+      font-size: 24px;
+      font-weight: 600;
+      color: #222;
+      line-height: 32px;
+      border-bottom: 2px solid transparent;
+      padding-top: 4px;
+      padding-bottom: 2px;
+      display: inline-block;
+
+      &.active {
+        color: #2784FF;
+        border-bottom-color: #2784FF
+      }
+    }
+  }
+
   .content {
     background-color: white;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     min-height: 600px;
     padding: 30px;
+
+
   }
 }
