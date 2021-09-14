@@ -1,35 +1,38 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-// import useUrlState from '@ahooksjs/use-url-state';
+import { Space } from 'antd';
+import { connect } from 'dva';
+import { ConnectState, UserModelState } from '@/models/connect';
+import Profile from './Profile';
+import Security from './Security';
+import Privacy from './Privacy';
 
 interface SettingProps {
-
+  user: UserModelState;
 }
 
-function Setting({}: SettingProps) {
-
-  // const [state, setState] = useUrlState(initialState, options);
+function Setting({ user }: SettingProps) {
 
 
   return (<div className={styles.styles}>
-    <div style={{height: 100}}/>
+    <div className={styles.header}>
+      <a className={styles.active}>个人资料</a>
+      <div style={{ width: 30 }} />
+      <a>账号安全</a>
+      <div style={{ width: 30 }} />
+      <a>隐私</a>
+    </div>
     <div className={styles.content}>
-      <FFormLayout>
-        <FFormLayout.FBlock
-          title={'账号安全'}
-        >
+      <Profile />
 
-        </FFormLayout.FBlock>
+      {/*<Security />*/}
 
-        <FFormLayout.FBlock
-          title={'第三方账号绑定'}
-        >
-
-        </FFormLayout.FBlock>
-      </FFormLayout>
+      {/*<Privacy />*/}
     </div>
   </div>);
 }
 
-export default Setting;
+export default connect(({ user }: ConnectState) => ({
+  user,
+}))(Setting);
