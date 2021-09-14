@@ -226,6 +226,15 @@ export function retrieveUserPassword({goTo}: RetrieveUserPasswordParamsType = {}
   })}`;
 }
 
+// 找回支付密码
+// interface RetrievePayPasswordParamsType {
+//   goTo?: string;
+// }
+
+export function retrievePayPassword() {
+  return `/retrievePayPassword`;
+}
+
 // 钱包
 // interface WalletParamsType {
 // }

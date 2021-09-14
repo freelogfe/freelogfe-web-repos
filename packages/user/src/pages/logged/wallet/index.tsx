@@ -37,6 +37,7 @@ import {
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
 import { OnChangeVerifyCodeReSendWaitAction } from '@/models/logonPage';
+import { FUtil } from '@freelog/tools-lib';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -463,7 +464,18 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           </div>
 
           <div>
-            <FTipText type='third' text={'原支付密码'} />
+            <div className={styles.payPassword}>
+              <FTipText type='third' text={'原支付密码'} />
+              <FTextBtn
+                style={{ fontSize: 12 }}
+                type='primary'
+                onClick={() => {
+                  const path: string = FUtil.LinkTo.retrievePayPassword();
+                  // const host: string = FUtil.Format.completeUrlByDomain('user');
+                  window.open(path);
+                }}
+              >忘记密码？</FTextBtn>
+            </div>
             <div style={{ height: 5 }} />
             <FInput
               type='password'

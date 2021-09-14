@@ -75,7 +75,7 @@ function RetrievePayPassword({
                                retrievePayPasswordPage,
                              }: RetrievePayPasswordProps) {
 
-  const [urlParams] = useUrlState<{ goTo: string }>();
+  // const [urlParams] = useUrlState<{ goTo: string }>();
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -98,11 +98,11 @@ function RetrievePayPassword({
     });
   }, retrievePayPasswordPage.sentCaptchaWait === 0 ? null : 1000);
 
-  function gotoLogin() {
-    history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
-      goTo: decodeURIComponent(urlParams.goTo),
-    } : {}));
-  }
+  // function gotoLogin() {
+  //   history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
+  //     goTo: decodeURIComponent(urlParams.goTo),
+  //   } : {}));
+  // }
 
   if (retrievePayPasswordPage.showView === 'success') {
     return (<div className={styles.resetPasswordSuccess}>
@@ -137,9 +137,7 @@ function RetrievePayPassword({
                 style={{ fontSize: 12 }}
                 type='primary'
                 onClick={() => {
-                  const path: string = FUtil.LinkTo.retrieveUserPassword(urlParams.goTo ? {
-                    goTo: decodeURIComponent(urlParams.goTo),
-                  } : {});
+                  const path: string = FUtil.LinkTo.retrieveUserPassword();
                   // const host: string = FUtil.Format.completeUrlByDomain('user');
                   window.open(path);
                 }}
