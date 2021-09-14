@@ -45,6 +45,12 @@ export default defineConfig({
       component: '@/pages/retrieve/index',
       title: '找回密码',
     },
+    {
+      exact: true,
+      path: '/retrievePayPassword',
+      component: '@/pages/retrievePayPassword/index',
+      title: '找回支付密码',
+    },
     // {
     //   exact: true,
     //   path: '/result/resetPassword/success',

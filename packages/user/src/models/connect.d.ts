@@ -3,6 +3,7 @@ import { WalletPageModelState } from './walletPage';
 import { LoginPageModelState } from './loginPage';
 import { LogonPageModelState } from './logonPage';
 import { RetrievePageModelState } from './retrievePage';
+import { RetrievePayPasswordPageModelState } from './retrievePayPasswordPage';
 
 export {
   UserModelState,
@@ -10,6 +11,7 @@ export {
   LoginPageModelState,
   LogonPageModelState,
   RetrievePageModelState,
+  RetrievePayPasswordPageModelState,
 };
 
 export interface ConnectState {
@@ -18,4 +20,5 @@ export interface ConnectState {
   loginPage: LoginPageModelState;
   logonPage: LogonPageModelState;
   retrievePage: RetrievePageModelState;
+  retrievePayPasswordPage: RetrievePayPasswordPageModelState;
 }

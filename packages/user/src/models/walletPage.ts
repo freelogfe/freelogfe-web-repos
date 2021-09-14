@@ -306,8 +306,6 @@ const Model: WalletPageModelType = {
   effects: {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       const { data: data1 } = yield call(FServiceAPI.User.currentUserInfo);
-      // console.log(user, 'user!@#$!@#$@#!$');
-      // console.log(data1, ' data1123423423423442@@@@@@@');
       const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
         userId: data1.userId,
       };
