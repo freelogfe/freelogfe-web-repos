@@ -85,6 +85,8 @@ function Profile({ user }: ProfileProps) {
                 className={styles.blockInput}
                 wrapClassName={styles.blockInput}
                 placeholder={'一句话介绍自己'}
+                lengthLimit={40}
+                errorText={''}
               />
             </div>
           </div>
