@@ -4,7 +4,7 @@ import FFormLayout from '@/components/FFormLayout';
 import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import FInput from '@/components/FInput';
-import { Cascader, DatePicker, Space } from 'antd';
+import { Cascader, DatePicker, Modal, Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
 
 interface SecurityProps {
@@ -63,7 +63,12 @@ function Security({}: SecurityProps) {
       </FFormLayout.FBlock>
     </FFormLayout>
 
-    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+    <Modal
+      title='Basic Modal'
+      // visible={isModalVisible}
+      // onOk={handleOk}
+      // onCancel={handleCancel}
+    >
       <p>Some contents...</p>
       <p>Some contents...</p>
       <p>Some contents...</p>
