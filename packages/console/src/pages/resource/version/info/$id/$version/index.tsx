@@ -146,14 +146,14 @@ function VersionEditor({ dispatch, route, resourceVersionEditorPage, match }: Ve
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.$version}/download`}
         onClickDownload={() => {
           // FUtil.Format.completeUrlByDomain('qi') +
-          // FServiceAPI.Resource.resourcesDownload({
-          //   resourceId: match.params.id,
-          //   version: match.params.version,
-          // });
-          console.log(FUtil.Format.completeUrlByDomain('qi'), '1111111');
-          const href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`;
-          console.log(href, '!@#$@!#$');
-          return window.location.href;
+          FServiceAPI.Resource.resourcesDownload({
+            resourceId: match.params.id,
+            version: match.params.version,
+          });
+          // console.log(FUtil.Format.completeUrlByDomain('qi'), '1111111');
+          // const href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`;
+          // console.log(href, '!@#$@!#$');
+          // return window.location.href;
         }}
       />}>
       <FFormLayout>
