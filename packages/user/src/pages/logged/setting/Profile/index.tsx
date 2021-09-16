@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
 import { connect } from 'dva';
-import { ConnectState, UserModelState } from '@/models/connect';
+import { ConnectState, SettingPageModelState, UserModelState } from '@/models/connect';
 import { FContentText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
@@ -12,6 +12,7 @@ import { FRectBtn } from '@/components/FButton';
 
 interface ProfileProps {
   user: UserModelState;
+  settingPage: SettingPageModelState;
 }
 
 const options = [
@@ -50,7 +51,7 @@ const options = [
 ];
 
 
-function Profile({ user }: ProfileProps) {
+function Profile({ user, settingPage }: ProfileProps) {
   return (<>
     <div className={styles.avatar}>
       <div>
@@ -140,6 +141,6 @@ function Profile({ user }: ProfileProps) {
   </>);
 }
 
-export default connect(({ user }: ConnectState) => ({
-  user,
+export default connect(({ user, settingPage }: ConnectState) => ({
+  user, settingPage,
 }))(Profile);

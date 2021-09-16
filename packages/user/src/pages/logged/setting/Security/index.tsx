@@ -6,12 +6,14 @@ import FRadio from '@/components/FRadio';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, Input, Modal, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { connect } from 'dva';
+import { ConnectState, SettingPageModelState } from '@/models/connect';
 
 interface SecurityProps {
-
+  settingPage: SettingPageModelState;
 }
 
-function Security({}: SecurityProps) {
+function Security({settingPage}: SecurityProps) {
   return (<>
     <FFormLayout>
       <FFormLayout.FBlock
@@ -282,4 +284,6 @@ function Security({}: SecurityProps) {
   </>);
 }
 
-export default Security;
+export default connect(({ settingPage }: ConnectState) => ({
+  settingPage,
+}))(Security);

@@ -5,12 +5,14 @@ import { FContentText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import { FTextBtn } from '@/components/FButton';
+import { connect } from 'dva';
+import { ConnectState, SettingPageModelState } from '@/models/connect';
 
 interface PrivacyProps {
-
+  settingPage: SettingPageModelState;
 }
 
-function Privacy({}: PrivacyProps) {
+function Privacy({ settingPage }: PrivacyProps) {
   return (<>
     <FFormLayout>
       <FFormLayout.FBlock
@@ -33,4 +35,6 @@ function Privacy({}: PrivacyProps) {
   </>);
 }
 
-export default Privacy;
+export default connect(({ settingPage }: ConnectState) => ({
+  settingPage,
+}))(Privacy);
