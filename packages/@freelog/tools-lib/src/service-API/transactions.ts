@@ -29,11 +29,11 @@ export function individualAccounts({userId, ...params}: IndividualAccountsParams
 }
 
 // 查询交易记录详情
-interface IndividualAccountsParamsType {
+interface TransactionDetailsParamsType {
   recordId: string;
 }
 
-export function individualAccounts({recordId}: IndividualAccountsParamsType) {
+export function transactionDetails({recordId}: TransactionDetailsParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/transactions/records/${recordId}`,
