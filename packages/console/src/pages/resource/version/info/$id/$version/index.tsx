@@ -1,43 +1,43 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
-import {FTextBtn, FRectBtn} from '@/components/FButton';
-import {Space} from 'antd';
+import { FContentText, FTitleText } from '@/components/FText';
+import { FTextBtn, FRectBtn } from '@/components/FButton';
+import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceVersionEditorPageModelState} from '@/models/connect';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ResourceVersionEditorPageModelState } from '@/models/connect';
 import {
   UpdateDataSourceAction,
   ChangeAction,
   FetchDataSourceAction,
-  SyncAllPropertiesAction
+  SyncAllPropertiesAction,
 } from '@/models/resourceVersionEditorPage';
-import BraftEditor, {EditorState} from 'braft-editor';
-import {ChangeAction as GlobalChangeAction} from '@/models/global';
+import BraftEditor, { EditorState } from 'braft-editor';
+import { ChangeAction as GlobalChangeAction } from '@/models/global';
 import RouterTypes from 'umi/routerTypes';
-import {withRouter} from 'umi';
-import FInput from "@/components/FInput";
-import FSelect from "@/components/FSelect";
-import FTooltip from "@/components/FTooltip";
-import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/resource/containers/Sider";
-import FFormLayout from "@/components/FFormLayout";
-import FDrawer from "@/components/FDrawer";
-import FDownload from "@/components/FIcons/FDownload";
+import { withRouter } from 'umi';
+import FInput from '@/components/FInput';
+import FSelect from '@/components/FSelect';
+import FTooltip from '@/components/FTooltip';
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import Sider from '@/pages/resource/containers/Sider';
+import FFormLayout from '@/components/FFormLayout';
+import FDrawer from '@/components/FDrawer';
+import FDownload from '@/components/FIcons/FDownload';
 import {
   FAntvG6AuthorizationGraph,
   FAntvG6DependencyGraph,
   FAntvG6RelationshipGraph,
-  FViewportTabs
-} from "@/components/FAntvG6";
-import FUtil1 from "@/utils";
-import {FServiceAPI} from '@freelog/tools-lib';
-import FDivider from "@/components/FDivider";
-import {FTipText} from '@/components/FText';
-import FCustomOptionsCards from "@/components/FCustomOptionsCards";
-import {RouteComponentProps} from 'react-router';
-import FBasePropertiesCards from "@/components/FBasePropertiesCards";
-import FCustomOptionEditorDrawer from "@/components/FCustomOptionEditorDrawer";
+  FViewportTabs,
+} from '@/components/FAntvG6';
+import FUtil1 from '@/utils';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import FDivider from '@/components/FDivider';
+import { FTipText } from '@/components/FText';
+import FCustomOptionsCards from '@/components/FCustomOptionsCards';
+import { RouteComponentProps } from 'react-router';
+import FBasePropertiesCards from '@/components/FBasePropertiesCards';
+import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -47,7 +47,8 @@ interface VersionEditorProps extends RouteComponentProps<{
   // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
 }
-function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: VersionEditorProps & RouterTypes) {
+
+function VersionEditor({ dispatch, route, resourceVersionEditorPage, match }: VersionEditorProps & RouterTypes) {
   // console.log(route, 'route!@#$@!#$@!#42134');
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
@@ -100,7 +101,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           candidateItems: i.customOption ? i.customOption.split(',') : [],
           remark: i.description,
         })),
-      }
+      },
     });
   }
 
@@ -137,16 +138,23 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
   return (<>
     <FLeftSiderLayout
-      sider={<Sider/>}
+      sider={<Sider />}
       header={<Header
         version={resourceVersionEditorPage.version}
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
         // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.$version}/download`}
-        onClickDownload={() => FServiceAPI.Resource.resourcesDownload({
-          resourceId: match.params.id,
-          version: match.params.version
-        })}
+        onClickDownload={() => {
+          // FUtil.Format.completeUrlByDomain('qi') +
+          // FServiceAPI.Resource.resourcesDownload({
+          //   resourceId: match.params.id,
+          //   version: match.params.version,
+          // });
+          console.log(FUtil.Format.completeUrlByDomain('qi'), '1111111');
+          const href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`;
+          console.log(href, '!@#$@!#$');
+          return window.location.href;
+        }}
       />}>
       <FFormLayout>
         <FFormLayout.FBlock
@@ -156,36 +164,36 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
               isEditing
                 ? (<>
                   <FTextBtn
-                    type="default"
+                    type='default'
                     onClick={() => {
-                      onChange({descriptionFullScreen: true});
+                      onChange({ descriptionFullScreen: true });
                     }}
                   >全屏编辑</FTextBtn>
-                  <FDivider/>
+                  <FDivider />
                   <FTextBtn
-                    type="default"
+                    type='default'
                     onClick={() => setIsEditing(false)}
                   >{FUtil1.I18n.message('cancel')}</FTextBtn>
                   <FTextBtn
-                    type="primary"
+                    type='primary'
                     onClick={onUpdateEditorText}
                   >{FUtil1.I18n.message('save')}</FTextBtn>
                 </>)
                 : !!resourceVersionEditorPage.description
-                ? (<>
-                  <FTextBtn
-                    type="default"
-                    onClick={() => {
-                      onChange({descriptionFullScreen: true});
-                    }}
-                  >全屏查看</FTextBtn>
-                  <FDivider/>
-                  <FTextBtn
-                    type="primary"
-                    onClick={() => setIsEditing(true)}
-                  >编辑</FTextBtn>
-                </>)
-                : undefined
+                  ? (<>
+                    <FTextBtn
+                      type='default'
+                      onClick={() => {
+                        onChange({ descriptionFullScreen: true });
+                      }}
+                    >全屏查看</FTextBtn>
+                    <FDivider />
+                    <FTextBtn
+                      type='primary'
+                      onClick={() => setIsEditing(true)}
+                    >编辑</FTextBtn>
+                  </>)
+                  : undefined
             }
           </Space>}
         >
@@ -195,9 +203,9 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             && (<div className={styles.noDescription}>
               <FTipText
                 text={'动动手，让你的资源看起来更丰富多彩吧～'}
-                type="second"
+                type='second'
               />
-              <div style={{height: 20}}/>
+              <div style={{ height: 20 }} />
               <FRectBtn onClick={() => {
                 setIsEditing(true);
               }}>添加版本描述</FRectBtn>
@@ -210,13 +218,13 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
                 value={editor}
                 // defaultValue={editorText}
                 onChange={(value) => setEditor(value)}
-                style={{height: 500}}
+                style={{ height: 500 }}
               />)
               : (resourceVersionEditorPage.description && (
                 <div className={styles.description}>
                   <div
                     className={styles.container}
-                    dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
+                    dangerouslySetInnerHTML={{ __html: resourceVersionEditorPage.description }}
                   />
                 </div>))
           }
@@ -224,7 +232,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         <FFormLayout.FBlock
           title={'相关视图'}
           extra={<FTextBtn
-            type="default"
+            type='default'
             onClick={() => {
               onChange({
                 graphFullScreen: true,
@@ -234,9 +242,9 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
         >
           <FViewportTabs
             options={[
-              {label: '关系树', value: 'relationship'},
-              {label: '授权链', value: 'authorization'},
-              {label: '依赖树', value: 'dependency'},
+              { label: '关系树', value: 'relationship' },
+              { label: '授权链', value: 'authorization' },
+              { label: '依赖树', value: 'dependency' },
             ]}
             value={resourceVersionEditorPage.viewportGraphShow}
             onChange={(value) => {
@@ -247,7 +255,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
           >
             {
               resourceVersionEditorPage.graphFullScreen
-                ? (<div style={{height: 500}}/>)
+                ? (<div style={{ height: 500 }} />)
                 : (<>
                   {
                     resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph
@@ -359,14 +367,14 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       width={720}
       topRight={<Space size={30}>
         <FTextBtn
-          type="default"
+          type='default'
           onClick={() => {
             onCloseBaseAttrDrawer();
           }}
         >取消</FTextBtn>
 
         <FRectBtn
-          type="primary"
+          type='primary'
           disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
           onClick={async () => {
             await onChange({
@@ -395,15 +403,15 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
     >
       <Space
         size={20}
-        direction="vertical"
-        style={{width: '100%'}}
+        direction='vertical'
+        style={{ width: '100%' }}
       >
         <div className={styles.input}>
           <div className={styles.title}>
-            <i className={styles.dot}/>
-            <FTitleText type="h4">key</FTitleText>
+            <i className={styles.dot} />
+            <FTitleText type='h4'>key</FTitleText>
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FInput
             disabled={true}
             value={resourceVersionEditorPage.basePKeyInput}
@@ -413,10 +421,10 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
         <div className={styles.input}>
           <div className={styles.title}>
-            <i className={styles.dot}/>
-            <FTitleText type="h4">value</FTitleText>
+            <i className={styles.dot} />
+            <FTitleText type='h4'>value</FTitleText>
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FInput
             value={resourceVersionEditorPage.basePValueInput}
             // errorText={}
@@ -437,16 +445,16 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
             placeholder={'输入value'}
           />
           {resourceVersionEditorPage.basePValueInputError && (<>
-            <div style={{height: 5}}/>
+            <div style={{ height: 5 }} />
             <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>
           </>)}
         </div>
 
         <div className={styles.input}>
           <div className={styles.title}>
-            <FTitleText type="h4">属性说明</FTitleText>
+            <FTitleText type='h4'>属性说明</FTitleText>
           </div>
-          <div style={{height: 5}}/>
+          <div style={{ height: 5 }} />
           <FInput
             value={resourceVersionEditorPage.basePDescriptionInput}
             errorText={resourceVersionEditorPage.basePDescriptionInputError}
@@ -740,9 +748,9 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
 
       <FViewportTabs
         options={[
-          {label: '关系树', value: 'relationship'},
-          {label: '授权链', value: 'authorization'},
-          {label: '依赖树', value: 'dependency'},
+          { label: '关系树', value: 'relationship' },
+          { label: '授权链', value: 'authorization' },
+          { label: '依赖树', value: 'dependency' },
         ]}
         value={resourceVersionEditorPage.viewportGraphShow}
         onChange={(value) => {
@@ -787,43 +795,43 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
       destroyOnClose
       mask={false}
       onClose={() => {
-        onChange({descriptionFullScreen: false});
+        onChange({ descriptionFullScreen: false });
       }}
       width={'100%'}
       topRight={<Space size={25}>
         {isEditing
           ? (<>
             <FTextBtn
-              type="default"
+              type='default'
               onClick={() => {
-                onChange({descriptionFullScreen: false});
+                onChange({ descriptionFullScreen: false });
               }}
             >取消全屏</FTextBtn>
-            <FDivider/>
+            <FDivider />
             <FTextBtn
-              type="default"
+              type='default'
               onClick={() => {
                 setIsEditing(false);
                 if (!resourceVersionEditorPage.description) {
-                  onChange({descriptionFullScreen: false});
+                  onChange({ descriptionFullScreen: false });
                 }
               }}
             >{FUtil1.I18n.message('cancel')}</FTextBtn>
             <FTextBtn
-              type="primary"
+              type='primary'
               onClick={onUpdateEditorText}
             >{FUtil1.I18n.message('save')}</FTextBtn>
           </>)
           : (<>
             <FTextBtn
-              type="default"
+              type='default'
               onClick={() => {
-                onChange({descriptionFullScreen: false});
+                onChange({ descriptionFullScreen: false });
               }}
             >取消全屏</FTextBtn>
-            <FDivider/>
+            <FDivider />
             <FTextBtn
-              type="primary"
+              type='primary'
               onClick={() => setIsEditing(true)}
             >编辑</FTextBtn>
           </>)}
@@ -850,7 +858,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
               >
                 <div
                   className={styles.container}
-                  dangerouslySetInnerHTML={{__html: resourceVersionEditorPage.description}}
+                  dangerouslySetInnerHTML={{ __html: resourceVersionEditorPage.description }}
                 />
               </div>))
         }
@@ -859,7 +867,7 @@ function VersionEditor({dispatch, route, resourceVersionEditorPage, match}: Vers
   </>);
 }
 
-export default withRouter(connect(({resourceVersionEditorPage, resourceInfo}: ConnectState) => ({
+export default withRouter(connect(({ resourceVersionEditorPage, resourceInfo }: ConnectState) => ({
   // $version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
 }))(VersionEditor));
@@ -872,25 +880,25 @@ interface HeaderProps {
   onClickDownload?(): void;
 }
 
-function Header({version, resourceID, signingDate, onClickDownload}: HeaderProps) {
+function Header({ version, resourceID, signingDate, onClickDownload }: HeaderProps) {
 
   return (
     <div className={styles.Header}>
-      <FTitleText text={version} type="h1"/>
-      <div style={{height: 10}}/>
+      <FTitleText text={version} type='h1' />
+      <div style={{ height: 10 }} />
       <Space size={0}>
-        <FContentText type="additional2" text={FUtil1.I18n.message('release_date') + '：' + signingDate}/>
-        <div style={{width: 40}}/>
-        <FContentText type="additional2" text={FUtil1.I18n.message('object_id') + '：' + resourceID}/>
-        <div style={{width: 20}}/>
+        <FContentText type='additional2' text={FUtil1.I18n.message('release_date') + '：' + signingDate} />
+        <div style={{ width: 40 }} />
+        <FContentText type='additional2' text={FUtil1.I18n.message('object_id') + '：' + resourceID} />
+        <div style={{ width: 20 }} />
         <FTooltip title={'下载'}>
           <div>
             <FTextBtn
-              type="primary"
+              type='primary'
               onClick={() => onClickDownload && onClickDownload()}
             >
               <FDownload
-                style={{fontSize: 16, fontWeight: 600}}
+                style={{ fontSize: 16, fontWeight: 600 }}
               />
             </FTextBtn>
           </div>
@@ -908,16 +916,16 @@ interface FieldProps {
   className?: string;
 }
 
-function Field({className, dot = false, title, topRight, children}: FieldProps) {
+function Field({ className, dot = false, title, topRight, children }: FieldProps) {
   return (<div className={styles.Field + ' ' + (className || '')}>
       <div className={styles.header}>
         <div className={styles.FieldTitle}>
-          {dot && <i className={styles.dot}/>}
+          {dot && <i className={styles.dot} />}
           <span>{title}</span>
         </div>
         <div>{topRight}</div>
       </div>
-      <div style={{height: 5}}/>
+      <div style={{ height: 5 }} />
       {children}
     </div>
   );
