@@ -153,6 +153,7 @@ const Model: RetrievePayPasswordPageModelType = {
           userID: data.userId,
           userEmail: data.email,
           userPhone: data.mobile,
+          verifyMode: data.mobile ? 'phone' : 'email',
         },
       });
     },
