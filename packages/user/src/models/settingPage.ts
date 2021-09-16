@@ -402,7 +402,7 @@ interface SettingPageModelType {
 }
 
 const initStates: SettingPageModelState = {
-  showPage: 'privacy',
+  showPage: 'security',
 
   avatar: '',
   gender: 'unknown',
