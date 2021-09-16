@@ -6,14 +6,24 @@ import FRadio from '@/components/FRadio';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, Input, Modal, Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
-import { connect } from 'dva';
+import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
+import {
+  OnCancel_BindEmail_Modal_Action,
+  OnCancel_BindPhone_Modal_Action,
+  OnCancel_ChangeEmail_New_Modal_Action,
+  OnCancel_ChangeEmail_Old_Modal_Action, OnCancel_ChangePhone_New_Modal_Action, OnCancel_ChangePhone_Old_Modal_Action,
+  OnClick_BindEmailBtn_Action,
+  OnClick_ChangePhone_Old_NextBtn_Action,
+  OnClick_ReplacePhoneBtn_Action,
+} from '@/models/settingPage';
 
 interface SecurityProps {
+  dispatch: Dispatch;
   settingPage: SettingPageModelState;
 }
 
-function Security({settingPage}: SecurityProps) {
+function Security({ dispatch, settingPage }: SecurityProps) {
   return (<>
     <FFormLayout>
       <FFormLayout.FBlock
@@ -36,7 +46,12 @@ function Security({settingPage}: SecurityProps) {
             <div className={styles.right}>
               <FTipText text={'未绑定'} type='third' />
               <div style={{ width: 30 }} />
-              <FTextBtn type='primary'>立即绑定</FTextBtn>
+              <FTextBtn onClick={() => {
+                // onClick_BindEmailBtn_Action
+                dispatch<OnClick_BindEmailBtn_Action>({
+                  type: 'settingPage/onClick_BindEmailBtn',
+                });
+              }} type='primary'>立即绑定</FTextBtn>
             </div>
           </div>
 
@@ -47,7 +62,15 @@ function Security({settingPage}: SecurityProps) {
             <div className={styles.right}>
               <FContentText text={'13344556677'} type='highlight' />
               <div style={{ width: 30 }} />
-              <FTextBtn type='primary'>更换号码</FTextBtn>
+              <FTextBtn
+                type='primary'
+                onClick={() => {
+                  // onClick_BindEmailBtn_Action
+                  dispatch<OnClick_ReplacePhoneBtn_Action>({
+                    type: 'settingPage/onClick_ReplacePhoneBtn',
+                  });
+                }}
+              >更换号码</FTextBtn>
             </div>
           </div>
 
@@ -67,9 +90,12 @@ function Security({settingPage}: SecurityProps) {
 
     <Modal
       title='绑定邮箱'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      visible={settingPage.bindEmail_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_BindEmail_Modal_Action>({
+          type: 'settingPage/onCancel_BindEmail_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >
@@ -104,9 +130,12 @@ function Security({settingPage}: SecurityProps) {
 
     <Modal
       title='更换邮箱身份验证'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      visible={settingPage.changeEmail_Old_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_ChangeEmail_Old_Modal_Action>({
+          type: 'settingPage/onCancel_ChangeEmail_Old_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >
@@ -131,7 +160,7 @@ function Security({settingPage}: SecurityProps) {
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn type='primary'>下一步</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -139,9 +168,12 @@ function Security({settingPage}: SecurityProps) {
 
     <Modal
       title='输入新邮箱地址'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      visible={settingPage.changeEmail_New_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_ChangeEmail_New_Modal_Action>({
+          type: 'settingPage/onCancel_ChangeEmail_New_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >
@@ -176,9 +208,12 @@ function Security({settingPage}: SecurityProps) {
 
     <Modal
       title='绑定手机'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      visible={settingPage.bindPhone_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_BindPhone_Modal_Action>({
+          type: 'settingPage/onCancel_BindPhone_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >
@@ -212,9 +247,12 @@ function Security({settingPage}: SecurityProps) {
 
     <Modal
       title='更换手机号身份验证'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      visible={settingPage.changePhone_Old_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_ChangePhone_Old_Modal_Action>({
+          type: 'settingPage/onCancel_ChangePhone_Old_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >
@@ -239,17 +277,27 @@ function Security({settingPage}: SecurityProps) {
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn
+            type='primary'
+            onClick={() => {
+              dispatch<OnClick_ChangePhone_Old_NextBtn_Action>({
+                type: 'settingPage/onClick_ChangePhone_Old_NextBtn',
+              });
+            }}
+          >下一步</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
     </Modal>
 
     <Modal
-      title='输入新邮箱地址'
-      visible={false}
-      // onOk={handleOk}
-      // onCancel={handleCancel}
+      title='输入新手机号'
+      visible={settingPage.changePhone_New_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_ChangePhone_New_Modal_Action>({
+          type: 'settingPage/onCancel_ChangePhone_New_Modal',
+        });
+      }}
       footer={null}
       width={540}
     >

@@ -28,6 +28,19 @@ export function individualAccounts({userId, ...params}: IndividualAccountsParams
   });
 }
 
+// 查询交易记录详情
+interface IndividualAccountsParamsType {
+  recordId: string;
+}
+
+export function individualAccounts({recordId}: IndividualAccountsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/transactions/records/${recordId}`,
+    // params: params,
+  });
+}
+
 // 激活个人账户
 interface ActivateIndividualAccountsParamsType {
   password: string;
