@@ -24,7 +24,7 @@ function Privacy({ settingPage }: PrivacyProps) {
               <FContentText text={'已存储的节点数据文件'} type='normal' />
             </div>
             <div className={styles.right}>
-              <FContentText text={'31 M'} type='highlight' />
+              <FContentText text={settingPage.nodeDataSize} type='highlight' />
               <div style={{ width: 30 }} />
               <FTextBtn type='danger'>清理节点数据</FTextBtn>
             </div>
