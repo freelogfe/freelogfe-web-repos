@@ -39,7 +39,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               <FContentText text={'用户名'} type='normal' />
             </div>
             <div className={styles.right}>
-              <FContentText text={'YANGHONGTIAN'} type='highlight' />
+              <FContentText text={settingPage.username} type='highlight' />
             </div>
           </div>
 
@@ -47,35 +47,66 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             <div className={styles.left}>
               <FContentText text={'邮箱'} type='normal' />
             </div>
-            <div className={styles.right}>
-              <FTipText text={'未绑定'} type='third' />
-              <div style={{ width: 30 }} />
-              <FTextBtn onClick={() => {
-                // onClick_BindEmailBtn_Action
-                dispatch<OnClick_BindEmailBtn_Action>({
-                  type: 'settingPage/onClick_BindEmailBtn',
-                });
-              }} type='primary'>立即绑定</FTextBtn>
-            </div>
+            {
+              settingPage.email === ''
+                ? (<div className={styles.right}>
+                  <FTipText text={'未绑定'} type='third' />
+                  <div style={{ width: 30 }} />
+                  <FTextBtn onClick={() => {
+                    // onClick_BindEmailBtn_Action
+                    dispatch<OnClick_BindEmailBtn_Action>({
+                      type: 'settingPage/onClick_BindEmailBtn',
+                    });
+                  }} type='primary'>立即绑定</FTextBtn>
+                </div>)
+                : (<div className={styles.right}>
+                  <FContentText text={settingPage.email} type='highlight' />
+                  <div style={{ width: 30 }} />
+                  <FTextBtn
+                    type='primary'
+                    onClick={() => {
+                      // onClick_BindEmailBtn_Action
+                      dispatch<OnClick_ReplacePhoneBtn_Action>({
+                        type: 'settingPage/onClick_ReplacePhoneBtn',
+                      });
+                    }}
+                  >更换邮箱</FTextBtn>
+                </div>)
+            }
+
           </div>
 
           <div className={styles.row}>
             <div className={styles.left}>
               <FContentText text={'手机号'} type='normal' />
             </div>
-            <div className={styles.right}>
-              <FContentText text={'13344556677'} type='highlight' />
-              <div style={{ width: 30 }} />
-              <FTextBtn
-                type='primary'
-                onClick={() => {
-                  // onClick_BindEmailBtn_Action
-                  dispatch<OnClick_ReplacePhoneBtn_Action>({
-                    type: 'settingPage/onClick_ReplacePhoneBtn',
-                  });
-                }}
-              >更换号码</FTextBtn>
-            </div>
+            {
+              settingPage.phone === ''
+                ? (<div className={styles.right}>
+                  <FTipText text={'未绑定'} type='third' />
+                  <div style={{ width: 30 }} />
+                  <FTextBtn onClick={() => {
+                    // onClick_BindEmailBtn_Action
+                    dispatch<OnClick_BindEmailBtn_Action>({
+                      type: 'settingPage/onClick_BindEmailBtn',
+                    });
+                  }} type='primary'>立即绑定</FTextBtn>
+                </div>)
+                : (<div className={styles.right}>
+                  <FContentText text={settingPage.phone} type='highlight' />
+                  <div style={{ width: 30 }} />
+                  <FTextBtn
+                    type='primary'
+                    onClick={() => {
+                      // onClick_BindEmailBtn_Action
+                      dispatch<OnClick_ReplacePhoneBtn_Action>({
+                        type: 'settingPage/onClick_ReplacePhoneBtn',
+                      });
+                    }}
+                  >更换号码</FTextBtn>
+                </div>)
+            }
+
           </div>
 
           <div className={styles.row}>
@@ -113,6 +144,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          value={settingPage.bindEmail_EmailInput}
+          onChange={() => {
+
+          }}
+          errorText={settingPage.bindEmail_EmailInputError}
           placeholder='请输入邮箱'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -122,15 +158,32 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.bindEmail_CaptchaInput}
+            onChange={() => {
+
+            }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            style={{ width: 110 }}
+            type='primary'
+            disabled={settingPage.bindEmail_EmailInput === '' || settingPage.bindEmail_EmailInputError !== '' || settingPage.bindEmail_CaptchaWait > 0}
+            onClick={() => {
+
+            }}
+          >{settingPage.bindEmail_CaptchaWait > 0 ? `${settingPage.bindEmail_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn
+            type='primary'
+            // disabled={}
+            onClick={() => {
+
+            }}
+          >立即绑定</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -153,22 +206,36 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <div className={styles.modalOldMedium}>
-          123***@freelog.com
+          {settingPage.email}
         </div>
         <div style={{ height: 25 }} />
         <FTipText text={'验证码'} type='third' />
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.changeEmail_Old_CaptchaInput}
+            onChange={() => {
+
+            }}
+            errorText={settingPage.changeEmail_Old_CaptchaInput}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.changeEmail_Old_CaptchaWait > 0}
+            style={{ width: 110 }}
+            type='primary'
+          >{settingPage.changeEmail_Old_CaptchaWait > 0 ? `${settingPage.changeEmail_Old_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>下一步</FRectBtn>
+          <FRectBtn
+            type='primary'
+            onClick={() => {
+
+            }}
+          >下一步</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -191,6 +258,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          value={settingPage.changeEmail_New_EmailInput}
+          onChange={() => {
+
+          }}
+          errorText={settingPage.changeEmail_New_EmailInputError}
           placeholder='请输入邮箱'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -200,15 +272,31 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.changeEmail_New_CaptchaInput}
+            onChange={() => {
+
+            }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.changeEmail_New_EmailInput === '' || settingPage.changeEmail_New_EmailInputError !== '' || settingPage.changeEmail_New_CaptchaWait > 0}
+            style={{ width: 110 }}
+            type='primary'
+            onClick={() => {
+
+            }}
+          >{settingPage.changeEmail_New_CaptchaWait > 0 ? `${settingPage.changeEmail_New_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn
+            type='primary'
+            onClick={() => {
+
+            }}
+          >立即绑定</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -230,6 +318,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FTipText text={'手机号'} type='third' />
         <div style={{ height: 5 }} />
         <FInput
+          value={settingPage.bindPhone_PhoneInput}
+          onChange={() => {
+
+          }}
+          errorText={settingPage.bindPhone_PhoneInputError}
           placeholder='请输入手机号'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -239,15 +332,31 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.bindPhone_CaptchaInput}
+            onChange={() => {
+
+            }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.bindPhone_PhoneInput === '' || settingPage.bindPhone_PhoneInputError !== '' || settingPage.bindPhone_CaptchaWait > 0}
+            style={{ width: 110 }}
+            type='primary'
+            onClick={() => {
+
+            }}
+          >{settingPage.bindPhone_CaptchaWait > 0 ? `${settingPage.bindPhone_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn
+            type='primary'
+            onClick={() => {
+
+            }}
+          >立即绑定</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -270,18 +379,26 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <div className={styles.modalOldMedium}>
-          123***@freelog.com
+          {settingPage.phone}
         </div>
         <div style={{ height: 25 }} />
         <FTipText text={'验证码'} type='third' />
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.changePhone_Old_CaptchaInput}
+            onClick={() => {
+
+            }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.changePhone_Old_CaptchaWait > 0}
+            style={{ width: 110 }}
+            type='primary'
+          >{settingPage.changePhone_Old_CaptchaWait > 0 ? `${settingPage.changePhone_Old_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
@@ -315,6 +432,14 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          value={settingPage.changePhone_New_PhoneInput}
+          onChange={() => {
+
+          }}
+          onBlur={() => {
+
+          }}
+          errorText={settingPage.changePhone_New_PhoneInputError}
           placeholder='请输入手机号'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -324,15 +449,31 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <div className={styles.modalCaptcha}>
           <FInput
+            value={settingPage.changePhone_New_CaptchaInput}
+            onChange={() => {
+
+            }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
           />
-          <FRectBtn style={{ width: 110 }} type='primary'>获取验证码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.changePhone_New_PhoneInput === '' || settingPage.changePhone_New_PhoneInputError !== '' || settingPage.changePhone_New_CaptchaWait > 0}
+            onClick={() => {
+
+            }}
+            style={{ width: 110 }}
+            type='primary'
+          >{settingPage.changePhone_New_CaptchaWait > 0 ? `${settingPage.changePhone_New_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>立即绑定</FRectBtn>
+          <FRectBtn
+            type='primary'
+            onClick={() => {
+
+            }}
+          >立即绑定</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>
@@ -356,6 +497,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.changePassword_Old_PasswordInput}
+          onChange={() => {
+
+          }}
           placeholder='请输入原密码'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -368,6 +512,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FInput
           value={settingPage.changePassword_New1_PasswordInput}
           errorText={settingPage.changePassword_New1_PasswordInput_Error}
+          onChange={() => {
+
+          }}
+          onBlur={() => {
+
+          }}
           placeholder='请输入新密码'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -381,6 +531,12 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FInput
           value={settingPage.changePassword_New2_PasswordInput}
           errorText={settingPage.changePassword_New2_PasswordInput_Error}
+          onChange={() => {
+
+          }}
+          onBlur={() => {
+
+          }}
           placeholder='请输入新密码'
           className={styles.modalBlockInput}
           wrapClassName={styles.modalBlockInput}
@@ -388,7 +544,15 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
-          <FRectBtn type='primary'>修改密码</FRectBtn>
+          <FRectBtn
+            disabled={settingPage.changePassword_Old_PasswordInput === ''
+            || settingPage.changePassword_New1_PasswordInput === '' || settingPage.changePassword_New1_PasswordInput_Error !== ''
+            || settingPage.changePassword_New2_PasswordInput === '' || settingPage.changePassword_New2_PasswordInput_Error !== ''}
+            type='primary'
+            onClick={() => {
+
+            }}
+          >修改密码</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>

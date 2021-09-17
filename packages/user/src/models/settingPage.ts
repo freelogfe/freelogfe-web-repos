@@ -4,11 +4,12 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
+import moment, { Moment } from 'moment';
 
 type ResidenceOptions = {
   value: string;
   label: string;
-  children: ResidenceOptions;
+  children?: ResidenceOptions;
 }[];
 
 export interface SettingPageModelState {
@@ -17,7 +18,7 @@ export interface SettingPageModelState {
   avatar: string;
   gender: 'male' | 'female' | 'unknown';
   profileText: string;
-  birthday: string;
+  birthday: Moment;
   residenceOptions: ResidenceOptions;
   residence: string[];
   career: string;
@@ -36,14 +37,14 @@ export interface SettingPageModelState {
 
   changeEmail_Old_ModalVisible: boolean;
   changeEmail_Old_CaptchaInput: string;
-  changeEmail_Old_CaptchaWait: string;
+  changeEmail_Old_CaptchaWait: number;
 
   changeEmail_New_ModalVisible: boolean;
   changeEmail_New_EmailInput: string;
   changeEmail_New_EmailInputError: string;
   // changeEmail_New_EmailWait: string;
   changeEmail_New_CaptchaInput: string;
-  changeEmail_New_CaptchaWait: string;
+  changeEmail_New_CaptchaWait: number;
 
   bindPhone_ModalVisible: boolean;
   bindPhone_PhoneInput: string;
@@ -115,7 +116,7 @@ export interface OnChange_ProfileText_Action extends AnyAction {
 export interface OnChange_Birthday_Action extends AnyAction {
   type: 'settingPage/onChange_Birthday';
   payload: {
-    value: string;
+    value: Moment;
   };
 }
 
@@ -222,7 +223,7 @@ export interface OnClick_ChangeEmail_Old_SendCaptchaBtn_Action extends AnyAction
 export interface OnChange_ChangeEmail_Old_CaptchaWait_Action extends AnyAction {
   type: 'settingPage/onChange_ChangeEmail_Old_CaptchaWait';
   payload: {
-    value: string;
+    value: number;
   };
 }
 
@@ -262,7 +263,7 @@ export interface OnClick_ChangeEmail_New_SendCaptchaBtn_Action extends AnyAction
 export interface OnChange_ChangeEmail_New_CaptchaWait_Action extends AnyAction {
   type: 'settingPage/onChange_ChangeEmail_New_CaptchaWait';
   payload: {
-    value: string;
+    value: number;
   };
 }
 
@@ -497,8 +498,41 @@ const initStates: SettingPageModelState = {
   avatar: '',
   gender: 'unknown',
   profileText: '',
-  birthday: '',
-  residenceOptions: [],
+  birthday: moment(),
+  residenceOptions: [
+    {
+      value: 'zhejiang',
+      label: 'Zhejiang',
+      children: [
+        {
+          value: 'hangzhou',
+          label: 'Hangzhou',
+          children: [
+            {
+              value: 'xihu',
+              label: 'West Lake',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      value: 'jiangsu',
+      label: 'Jiangsu',
+      children: [
+        {
+          value: 'nanjing',
+          label: 'Nanjing',
+          children: [
+            {
+              value: 'zhonghuamen',
+              label: 'Zhong Hua Men',
+            },
+          ],
+        },
+      ],
+    },
+  ],
   residence: [],
   career: '',
 
@@ -516,14 +550,14 @@ const initStates: SettingPageModelState = {
 
   changeEmail_Old_ModalVisible: false,
   changeEmail_Old_CaptchaInput: '',
-  changeEmail_Old_CaptchaWait: '',
+  changeEmail_Old_CaptchaWait: 0,
 
   changeEmail_New_ModalVisible: false,
   changeEmail_New_EmailInput: '',
   changeEmail_New_EmailInputError: '',
   // changeEmail_New_EmailWait: '',
   changeEmail_New_CaptchaInput: '',
-  changeEmail_New_CaptchaWait: '',
+  changeEmail_New_CaptchaWait: 0,
 
   bindPhone_ModalVisible: false,
   bindPhone_PhoneInput: '',
@@ -563,7 +597,7 @@ const Model: SettingPageModelType = {
         payload: {
           avatar: data.headImage,
           username: data.username,
-          email: data.username,
+          email: data.email,
           phone: data.mobile,
         },
       });

@@ -15,48 +15,12 @@ interface ProfileProps {
   settingPage: SettingPageModelState;
 }
 
-const options = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-];
-
-
 function Profile({ user, settingPage }: ProfileProps) {
   return (<>
     <div className={styles.avatar}>
       <div>
         <img
-          src={user.userInfo?.headImage || ''}
+          src={settingPage.avatar || ''}
           alt={'头像'} />
       </div>
     </div>
@@ -71,9 +35,19 @@ function Profile({ user, settingPage }: ProfileProps) {
               <FContentText text={'性别'} type='normal' />
             </div>
             <div className={styles.right}>
-              <FRadio>男</FRadio>
+              <FRadio
+                checked={settingPage.gender === 'male'}
+                onClick={() => {
+
+                }}
+              >男</FRadio>
               <div style={{ width: 20 }} />
-              <FRadio>女</FRadio>
+              <FRadio
+                checked={settingPage.gender === 'female'}
+                onClick={() => {
+
+                }}
+              >女</FRadio>
             </div>
           </div>
 
@@ -83,11 +57,15 @@ function Profile({ user, settingPage }: ProfileProps) {
             </div>
             <div className={styles.right}>
               <FInput
+                value={settingPage.profileText}
                 className={styles.blockInput}
                 wrapClassName={styles.blockInput}
                 placeholder={'一句话介绍自己'}
                 lengthLimit={40}
                 errorText={''}
+                onChange={() => {
+
+                }}
               />
             </div>
           </div>
@@ -98,8 +76,12 @@ function Profile({ user, settingPage }: ProfileProps) {
             </div>
             <div className={styles.right}>
               <DatePicker
+                value={settingPage.birthday}
                 style={{ width: 220, height: 38 }}
                 placeholder={'出生年月日'}
+                onChange={() => {
+
+                }}
               />
             </div>
           </div>
@@ -111,9 +93,12 @@ function Profile({ user, settingPage }: ProfileProps) {
             <div className={styles.right}>
               <Cascader
                 className={styles.Cascader}
-                options={options}
-                // onChange={onChange}
+                options={settingPage.residenceOptions}
+                value={settingPage.residence}
                 placeholder='常驻城市'
+                onChange={() => {
+
+                }}
               />
             </div>
           </div>
@@ -124,6 +109,10 @@ function Profile({ user, settingPage }: ProfileProps) {
             </div>
             <div className={styles.right}>
               <FInput
+                value={settingPage.career}
+                onChange={() => {
+
+                }}
                 placeholder='职位名称'
                 className={styles.widthInput}
                 wrapClassName={styles.widthInput}
@@ -133,7 +122,9 @@ function Profile({ user, settingPage }: ProfileProps) {
         </Space>
         <div style={{ height: 40 }} />
         <div className={styles.submit}>
-          <FRectBtn type='primary'>提交修改</FRectBtn>
+          <FRectBtn
+            type='primary'
+          >提交修改</FRectBtn>
         </div>
 
       </FFormLayout.FBlock>
