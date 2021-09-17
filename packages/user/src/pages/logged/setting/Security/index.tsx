@@ -12,8 +12,12 @@ import {
   OnCancel_BindEmail_Modal_Action,
   OnCancel_BindPhone_Modal_Action,
   OnCancel_ChangeEmail_New_Modal_Action,
-  OnCancel_ChangeEmail_Old_Modal_Action, OnCancel_ChangePhone_New_Modal_Action, OnCancel_ChangePhone_Old_Modal_Action,
+  OnCancel_ChangeEmail_Old_Modal_Action, OnCancel_ChangePassword_Modal_Action,
+  OnCancel_ChangePhone_New_Modal_Action,
+  OnCancel_ChangePhone_Old_Modal_Action,
+  OnChange_ChangePassword_Old_PasswordInput_Action,
   OnClick_BindEmailBtn_Action,
+  OnClick_ChangePasswordBtn_Action,
   OnClick_ChangePhone_Old_NextBtn_Action,
   OnClick_ReplacePhoneBtn_Action,
 } from '@/models/settingPage';
@@ -81,7 +85,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             <div className={styles.right}>
               <FContentText text={'密码必须包含数字和字母，长度必须为6-24个字'} type='highlight' />
               <div style={{ width: 30 }} />
-              <FTextBtn type='primary'>修改密码</FTextBtn>
+              <FTextBtn onClick={() => {
+                dispatch<OnClick_ChangePasswordBtn_Action>({
+                  type: 'settingPage/onClick_ChangePasswordBtn',
+                });
+              }} type='primary'>修改密码</FTextBtn>
             </div>
           </div>
         </Space>
@@ -325,6 +333,62 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn type='primary'>立即绑定</FRectBtn>
+        </div>
+        <div style={{ height: 5 }} />
+      </div>
+    </Modal>
+
+    <Modal
+      title='修改密码'
+      visible={settingPage.changePassword_ModalVisible}
+      onCancel={() => {
+        dispatch<OnCancel_ChangePassword_Modal_Action>({
+          type: 'settingPage/onCancel_ChangePassword_Modal',
+        });
+      }}
+      footer={null}
+      width={540}
+    >
+      <div className={styles.ModalContainer}>
+        <div style={{ height: 15 }} />
+        <FTipText text={'原密码'} type='third' />
+
+        <div style={{ height: 5 }} />
+        <FInput
+          value={settingPage.changePassword_Old_PasswordInput}
+          placeholder='请输入原密码'
+          className={styles.modalBlockInput}
+          wrapClassName={styles.modalBlockInput}
+        />
+        <div style={{ height: 25 }} />
+
+        <FTipText text={'新密码'} type='third' />
+
+        <div style={{ height: 5 }} />
+        <FInput
+          value={settingPage.changePassword_New1_PasswordInput}
+          errorText={settingPage.changePassword_New1_PasswordInput_Error}
+          placeholder='请输入新密码'
+          className={styles.modalBlockInput}
+          wrapClassName={styles.modalBlockInput}
+        />
+
+        <div style={{ height: 25 }} />
+
+        <FTipText text={'重新输入新密码'} type='third' />
+
+        <div style={{ height: 5 }} />
+        <FInput
+          value={settingPage.changePassword_New2_PasswordInput}
+          errorText={settingPage.changePassword_New2_PasswordInput_Error}
+          placeholder='请输入新密码'
+          className={styles.modalBlockInput}
+          wrapClassName={styles.modalBlockInput}
+        />
+
+        <div style={{ height: 80 }} />
+        <div className={styles.modalFooter}>
+          <FRectBtn type='primary'>修改密码</FRectBtn>
         </div>
         <div style={{ height: 5 }} />
       </div>

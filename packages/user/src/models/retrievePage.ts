@@ -321,6 +321,7 @@ const Model: RetrievePageModelType = {
       }));
 
       let newPasswordInputError: string = '';
+      let confirmPasswordInputError: string = '';
 
       if (!retrievePage.newPasswordInput) {
         newPasswordInputError = '请输入密码';
@@ -328,10 +329,15 @@ const Model: RetrievePageModelType = {
         newPasswordInputError = '密码必须包含数字和字母；且由6-24个字符组成';
       }
 
+      if (retrievePage.confirmPasswordInput !== '' && (retrievePage.confirmPasswordInput !== retrievePage.newPasswordInput)) {
+        confirmPasswordInputError = '两次输入不一致';
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           newPasswordInputError,
+          confirmPasswordInputError,
         },
       });
     },
@@ -349,7 +355,7 @@ const Model: RetrievePageModelType = {
       }));
 
       let confirmPasswordInputError: string = '';
-      console.log(retrievePage.confirmPasswordInput, '######3@@@@@@@@@');
+      // console.log(retrievePage.confirmPasswordInput, '######3@@@@@@@@@');
       if (!retrievePage.confirmPasswordInput) {
         confirmPasswordInputError = '请输入密码';
       } else if (retrievePage.newPasswordInput !== retrievePage.confirmPasswordInput) {
