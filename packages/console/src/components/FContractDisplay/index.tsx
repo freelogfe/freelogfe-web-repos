@@ -90,10 +90,10 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       return;
     }
 
-    fetchInitDa();
+    fetchInitData();
   }, [contractID]);
 
-  async function fetchInitDa() {
+  async function fetchInitData() {
 
     const params: Parameters<typeof FServiceAPI.Contract.contractDetails>[0] = {
       contractId: contractID,
@@ -215,14 +215,21 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     };
     const { data, errCode, errcode, msg, ret } = await FServiceAPI.Event.transaction(params);
     if (ret + (errCode || 0) + (errcode || 0) > 0) {
-      fMessage(msg, 'error');
-    } else {
-      fetchInitDa();
-      fMessage('支付成功');
-      setModalVisible(false);
-      setModalPassword('');
-      onChangedEvent && onChangedEvent();
+      return fMessage(msg, 'error');
     }
+
+    console.log(data, 'data13241234');
+
+    const bool: boolean = await paymentStatus(data.transactionRecordId);
+    if (!bool) {
+      return fMessage('交易关闭', 'error');
+    }
+
+    fetchInitData();
+    fMessage('支付成功');
+    setModalVisible(false);
+    setModalPassword('');
+    onChangedEvent && onChangedEvent();
   }
 
   return (<div>
@@ -292,7 +299,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                         if (eti.type === 'TransactionEvent') {
                           return (<div key={eti.id} className={styles.Event}>
                             <FContentText
-                              style={{flexShrink: 1}}
+                              style={{ flexShrink: 1 }}
                               type='normal'
                               text={eti.tip}
                             />
@@ -502,3 +509,26 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 }
 
 export default FContractDisplay;
+
+async function paymentStatus(recordId: string): Promise<boolean> {
+  const params: Parameters<typeof FServiceAPI.Transaction.transactionDetails>[0] = {
+    recordId: recordId,
+  };
+  do {
+    const { data } = await FServiceAPI.Transaction.transactionDetails(params);
+    if (data.status === 2) {
+      return true;
+    } else if (data.status === 3) {
+      return false;
+    }
+    await sleep(300);
+  } while (true);
+}
+
+function sleep(ms: number = 300): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
