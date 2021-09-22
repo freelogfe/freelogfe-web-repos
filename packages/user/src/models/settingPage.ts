@@ -936,11 +936,6 @@ const Model: SettingPageModelType = {
     * onClick_ChangeEmail_New_ConfirmBtn(action: OnClick_ChangeEmail_New_ConfirmBtn_Action, effects: EffectsCommandMap) {
       // TODO:
     },
-// bindPhone_ModalVisible: false,
-    // bindPhone_PhoneInput: '',
-    // bindPhone_PhoneInputError: '',
-    // bindPhone_CaptchaInput: '',
-    // bindPhone_CaptchaWait: 0,
     * onCancel_BindPhone_Modal(action: OnCancel_BindPhone_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -997,9 +992,6 @@ const Model: SettingPageModelType = {
     },
     * onClick_BindPhone_ConfirmBtn(action: OnClick_BindPhone_ConfirmBtn_Action, effects: EffectsCommandMap) {
     },
-    // changePhone_Old_ModalVisible: false,
-    // changePhone_Old_CaptchaInput: '',
-    // changePhone_Old_CaptchaWait: 0,
     * onCancel_ChangePhone_Old_Modal(action: OnCancel_ChangePhone_Old_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1059,12 +1051,6 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    // changePhone_New_ModalVisible: false,
-    // changePhone_New_PhoneInput: '',
-    // changePhone_New_PhoneInputError: '',
-    // changePhone_New_PhoneWait: '',
-    // changePhone_New_CaptchaInput: '',
-    // changePhone_New_CaptchaWait: 0,
     * onCancel_ChangePhone_New_Modal({}: OnCancel_ChangePhone_New_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1148,12 +1134,6 @@ const Model: SettingPageModelType = {
     * onClick_ChangePhone_New_ConfirmBtn(action: OnClick_ChangePhone_New_ConfirmBtn_Action, effects: EffectsCommandMap) {
       // TODO:
     },
-    // changePassword_ModalVisible: false,
-    // changePassword_Old_PasswordInput: '',
-    // changePassword_New1_PasswordInput: '',
-    // changePassword_New1_PasswordInput_Error: '',
-    // changePassword_New2_PasswordInput: '',
-    // changePassword_New2_PasswordInput_Error: '',
     * onCancel_ChangePassword_Modal(action: OnCancel_ChangePassword_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1257,3 +1237,4 @@ const Model: SettingPageModelType = {
 };
 
 export default Model;
+
