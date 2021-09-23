@@ -338,7 +338,8 @@ const Model: LogonPageModelType = {
         },
       });
     },
-    * onClickSendVerifyCodeBtn(action: OnClickSendVerifyCodeBtnAction, { select, call, put }: EffectsCommandMap) {
+    * onClickSendVerifyCodeBtn({}: OnClickSendVerifyCodeBtnAction, { select, call, put }: EffectsCommandMap) {
+      // console.log('AAAAAAAAA3234234234');
       const { logonPage }: ConnectState = yield select(({ logonPage }: ConnectState) => ({
         logonPage,
       }));
@@ -354,17 +355,19 @@ const Model: LogonPageModelType = {
         loginName: logonPage.accountType === 'email' ? logonPage.emailInput : logonPage.phoneInput,
         authCodeType: 'register',
       };
-      const { data } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
+      const { errCode, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
+      // console.log(errCode, msg, 'errCode, msg!!!!');
+      if (errCode !== 0) {
+        fMessage(msg, 'error');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            verifyCodeReSendWait: 0,
+          },
+        });
         return;
       }
-      fMessage('验证码发送失败', 'error');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          verifyCodeReSendWait: 0,
-        },
-      });
+
     },
     * onChangeVerifyCodeReSendWait({ payload }: OnChangeVerifyCodeReSendWaitAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

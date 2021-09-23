@@ -74,13 +74,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
     } : {}));
   }
 
-  const isUserNameError: boolean = logonPage.usernameInput === '' || logonPage.usernameInputError !== '';
-
   const isVerifyAccountError: boolean = logonPage.accountType === 'email'
     ? (logonPage.emailInput === '' || logonPage.emailInputError !== '')
     : (logonPage.phoneInput === '' || logonPage.phoneInputError !== '');
 
-  const isVerifyAllFormError: boolean = isUserNameError
+  const isVerifyAllFormError: boolean = logonPage.usernameInput === '' || logonPage.usernameInputError !== ''
     || isVerifyAccountError
     || logonPage.verificationCodeInput === '' || logonPage.verificationCodeInputError !== ''
     || logonPage.passwordInput === '' || logonPage.passwordInputError !== '';
@@ -268,7 +266,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           />
           <FRectBtn
             style={{ width: 110 }}
-            disabled={logonPage.verifyCodeReSendWait > 0 || isUserNameError || isVerifyAccountError}
+            disabled={logonPage.verifyCodeReSendWait > 0 || isVerifyAccountError}
             onClick={() => {
               dispatch<OnClickSendVerifyCodeBtnAction>({
                 type: 'logonPage/onClickSendVerifyCodeBtn',
