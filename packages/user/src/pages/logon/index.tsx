@@ -22,6 +22,7 @@ import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import { FCheck } from '@/components/FIcons';
+
 // import { OnChangeWaitingTimeAction } from '@/models/retrievePage';
 
 interface LogonProps {
@@ -73,14 +74,16 @@ function Logon({ dispatch, logonPage }: LogonProps) {
     } : {}));
   }
 
-  const isVerifyAccount: boolean = logonPage.accountType === 'email'
-    ? (!!logonPage.emailInput && !logonPage.emailInputError)
-    : (!!logonPage.phoneInput && !logonPage.phoneInputError);
+  const isUserNameError: boolean = logonPage.usernameInput === '' || logonPage.usernameInputError !== '';
 
-  const isVerifyAllForm: boolean = !logonPage.usernameInput || !!logonPage.usernameInputError
-    || isVerifyAccount
-    || !logonPage.verificationCodeInput || !!logonPage.verificationCodeInputError
-    || !logonPage.passwordInput || !!logonPage.passwordInputError;
+  const isVerifyAccountError: boolean = logonPage.accountType === 'email'
+    ? (logonPage.emailInput === '' || logonPage.emailInputError !== '')
+    : (logonPage.phoneInput === '' || logonPage.phoneInputError !== '');
+
+  const isVerifyAllFormError: boolean = isUserNameError
+    || isVerifyAccountError
+    || logonPage.verificationCodeInput === '' || logonPage.verificationCodeInputError !== ''
+    || logonPage.passwordInput === '' || logonPage.passwordInputError !== '';
 
   if (logonPage.showView === 'success') {
     return (<div className={styles.resetPasswordSuccess}>
@@ -165,7 +168,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             <FRadio
               checked={logonPage.accountType === 'email'}
               onChange={(e) => {
-                console.log('33333333333');
+                // console.log('33333333333');
                 dispatch<OnChangeAccountTypeAction>({
                   type: 'logonPage/onChangeAccountType',
                   payload: {
@@ -265,7 +268,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
           />
           <FRectBtn
             style={{ width: 110 }}
-            disabled={logonPage.verifyCodeReSendWait > 0 || !isVerifyAccount}
+            disabled={logonPage.verifyCodeReSendWait > 0 || isUserNameError || isVerifyAccountError}
             onClick={() => {
               dispatch<OnClickSendVerifyCodeBtnAction>({
                 type: 'logonPage/onClickSendVerifyCodeBtn',
@@ -321,7 +324,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
       <div style={{ height: 40 }} />
       <FRectBtn
         style={{ width: 360 }}
-        disabled={!isVerifyAllForm}
+        disabled={isVerifyAllFormError}
         onClick={() => {
           dispatch<OnClickLogonBtnAction>({
             type: 'logonPage/onClickLogonBtn',

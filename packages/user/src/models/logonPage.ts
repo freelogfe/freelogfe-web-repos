@@ -4,7 +4,6 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
-import { history } from '@@/core/history';
 
 export type LogonPageModelState = WholeReadonly<{
 
@@ -259,8 +258,10 @@ const Model: LogonPageModelType = {
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           mobile: logonPage.phoneInput,
         };
-        const { data } = yield call(FServiceAPI.User.userDetails, params);
-        if (data) {
+        const { data, errCode, msg } = yield call(FServiceAPI.User.userDetails, params);
+        if (errCode !== 0) {
+          phoneInputError = msg;
+        } else if (data) {
           phoneInputError = '手机号已被占用注册';
         }
       }
