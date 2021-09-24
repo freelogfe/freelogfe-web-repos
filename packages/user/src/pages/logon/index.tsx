@@ -8,22 +8,29 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import {
-  OnBlurEmailInputAction, OnBlurPasswordInputAction, OnBlurPhoneInputAction,
-  OnBlurUsernameInputAction, OnBlurVerifyCodeInputAction,
-  OnChangeAccountTypeAction, OnChangeEmailInputAction, OnChangePasswordInputAction,
+  OnBlurEmailInputAction,
+  OnBlurPasswordInputAction,
+  OnBlurPhoneInputAction,
+  OnBlurUsernameInputAction,
+  OnBlurVerifyCodeInputAction,
+  OnChangeAccountTypeAction,
+  OnChangeEmailInputAction,
+  OnChangePasswordInputAction,
   OnChangePhoneInputAction,
-  OnChangeUsernameInputAction, OnChangeVerifyCodeInputAction,
-  OnChangeVerifyCodeReSendWaitAction, OnClickLogonBtnAction, OnClickSendVerifyCodeBtnAction,
+  OnChangeUsernameInputAction,
+  OnChangeVerifyCodeInputAction,
+  OnChangeVerifyCodeReSendWaitAction,
+  OnClickLogonBtnAction,
+  OnClickSendVerifyCodeBtnAction,
   OnMountPageAction,
-  OnUnmountPageAction, OnChangeWaitingTimeAction,
+  OnUnmountPageAction,
+  OnChangeWaitingTimeAction,
 } from '@/models/logonPage';
 import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
 import { FCheck } from '@/components/FIcons';
-
-// import { OnChangeWaitingTimeAction } from '@/models/retrievePage';
 
 interface LogonProps {
   dispatch: Dispatch;
