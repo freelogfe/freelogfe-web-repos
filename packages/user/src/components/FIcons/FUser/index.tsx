@@ -11,7 +11,7 @@ interface FUserProps {
 
 function FUser({className, ...props}: FUserProps) {
   // return (<SwapOutlined {...props}/>);
-  return (<i className={['freelog', 'fl-icon-yonghu', className].join(' ')} {...props}/>);
+  return (<i className={['freelog', 'fl-icon-yonghu', className, styles.style].join(' ')} {...props}/>);
 }
 
 export default FUser;
