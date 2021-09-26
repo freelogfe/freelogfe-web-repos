@@ -138,7 +138,7 @@ function Contract({}: ContractProps) {
     </div>
 
     <div style={{ height: 30 }} />
-    
+
     <div className={styles.content}>
       <FTable
         columns={columns}
