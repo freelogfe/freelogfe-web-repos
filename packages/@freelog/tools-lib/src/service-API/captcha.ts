@@ -3,7 +3,7 @@ import FUtil from '../utils';
 // 发送短信或邮件验证码
 interface SendVerificationCodeParamsType {
   loginName: string;
-  authCodeType: 'register' | 'resetPassword' | 'activateTransactionAccount' | 'updateTransactionAccountPwd';
+  authCodeType: 'register' | 'resetPassword' | 'activateTransactionAccount' | 'updateTransactionAccountPwd' | 'updateMobileOrEmail';
 }
 
 export function sendVerificationCode(params: SendVerificationCodeParamsType) {
