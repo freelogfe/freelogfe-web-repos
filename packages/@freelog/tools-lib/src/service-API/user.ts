@@ -129,3 +129,58 @@ export function uploadHeadImg(params: UploadHeadImgParamsType) {
     data: params,
   });
 }
+
+// 修改用户详细信息
+interface UpdateDetailInfoParamsType {
+  areaCode: string;
+  occupation: string;
+  birthday: string;
+}
+
+export function updateDetailInfo(params: UpdateDetailInfoParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/users/current/detailInfo`,
+    data: params,
+  });
+}
+
+// 校验当前登录用户的密码
+interface VerifyLoginPasswordParamsType {
+  password: string;
+}
+
+export function verifyLoginPassword(params: VerifyLoginPasswordParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/users/verifyLoginPassword`,
+    params: params,
+  });
+}
+
+// 获取省份列表
+interface AreasProvincesParamsType {
+}
+
+export function areasProvinces(params: AreasProvincesParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/areas/provinces`,
+    params: params,
+  });
+}
+
+// 绑定或换绑手机号和邮箱
+interface UpdateMobileOrEmailParamsType {
+  oldAuthCod?: string;
+  newAuthCode: string;
+  newLoginName: string;
+}
+
+export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/users/current/updatePassword`,
+    data: params,
+  });
+}
