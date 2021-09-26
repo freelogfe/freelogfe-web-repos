@@ -26,67 +26,74 @@
     }
   }
 
-  .target {
-    display: flex;
-    align-items: center;
+  .content {
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 
-    .targetCover {
-      position: relative;
+    .target {
+      display: flex;
+      align-items: center;
 
-      & > div {
-        position: absolute;
-        top: 5px;
-        left: 5px;
+      .targetCover {
+        position: relative;
+
+        & > div {
+          position: absolute;
+          top: 5px;
+          left: 5px;
+        }
+
+        & > img {
+          width: 120px;
+          height: 90px;
+        }
       }
 
-      & > img {
-        width: 120px;
-        height: 90px;
-      }
-    }
-
-    .targetInfo {
-      .targetInfoLabels {
-        label {
-          background: #E9F2FF;
-          border-radius: 2px;
-          border: 1px solid #AED0FF;
-          font-size: 12px;
-          font-weight: 400;
-          color: #2784FF;
-          line-height: 18px;
-          padding: 0 6px;
-          display: inline-block;
+      .targetInfo {
+        .targetInfoLabels {
+          label {
+            background: #E9F2FF;
+            border-radius: 2px;
+            border: 1px solid #AED0FF;
+            font-size: 12px;
+            font-weight: 400;
+            color: #2784FF;
+            line-height: 18px;
+            padding: 0 6px;
+            display: inline-block;
+          }
         }
       }
     }
+
+    .signatory {
+
+    }
+
+    .contract {
+      .authorized, .pending, .exception, .terminated {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .authorized {
+        color: #42C28C;
+      }
+
+      .pending {
+        color: #E9A923;
+      }
+
+      .exception {
+        color: #EE4040;
+      }
+
+      .terminated {
+        color: #666666;
+      }
+    }
   }
 
-  .signatory {
-
-  }
-
-  .contract {
-    .authorized, .pending, .exception, .terminated {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .authorized {
-      color: #42C28C;
-    }
-
-    .pending {
-      color: #E9A923;
-    }
-
-    .exception {
-      color: #EE4040;
-    }
-
-    .terminated {
-      color: #666666;
-    }
-  }
 }
 

@@ -137,10 +137,14 @@ function Contract({}: ContractProps) {
         className={''}>被授权合约</a>
     </div>
 
-    <FTable
-      columns={columns}
-      dataSource={[{}]}
-    />
+    <div style={{ height: 30 }} />
+    
+    <div className={styles.content}>
+      <FTable
+        columns={columns}
+        dataSource={[{}]}
+      />
+    </div>
   </div>);
 }
 
