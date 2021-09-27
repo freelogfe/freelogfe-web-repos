@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Input} from 'antd';
-import {InputProps} from 'antd/lib/input';
+import { Input } from 'antd';
+import { InputProps } from 'antd/lib/input';
 import styles from './index.less';
-import {ChangeEvent} from 'react';
+import { ChangeEvent } from 'react';
 import * as AHooks from 'ahooks';
 
 interface FInputProps extends InputProps {
@@ -32,7 +32,7 @@ function FInput({
                 }: FInputProps) {
 
   const [inputText, setInputText] = React.useState<string>(value || '');
-  const {run} = AHooks.useDebounceFn(
+  const { run } = AHooks.useDebounceFn(
     () => {
       onDebounceChange && onDebounceChange(inputText);
     },
@@ -66,20 +66,20 @@ function FInput({
         ? (
           <Input
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
-            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix}/>}
+            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
             className={[...commentClass, styles.dark].join(' ')}
             allowClear={true}
-            style={{height: size === 'middle' ? 38 : 32}}
+            style={{ height: size === 'middle' ? 38 : 32 }}
             {...inputProps}
           />
         )
         : (<Input
           className={[...commentClass, styles.light].join(' ')}
-          style={{height: size === 'middle' ? 38 : 32}}
+          style={{ height: size === 'middle' ? 38 : 32 }}
           suffix={lengthLimit > 0
             ? (<span
               className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
-            >{lengthLimit - inputText.length}</span>)
+            >{lengthLimit - (debounce ? inputText.length : (value?.length || 0))}</span>)
             : undefined}
           {...inputProps}
         />)
