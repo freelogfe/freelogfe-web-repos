@@ -42,7 +42,6 @@ export interface SettingPageModelState {
   changeEmail_New_ModalVisible: boolean;
   changeEmail_New_EmailInput: string;
   changeEmail_New_EmailInputError: string;
-  // changeEmail_New_EmailWait: string;
   changeEmail_New_CaptchaInput: string;
   changeEmail_New_CaptchaWait: number;
 
@@ -59,7 +58,6 @@ export interface SettingPageModelState {
   changePhone_New_ModalVisible: boolean;
   changePhone_New_PhoneInput: string;
   changePhone_New_PhoneInputError: string;
-  // changePhone_New_PhoneWait: string;
   changePhone_New_CaptchaInput: string;
   changePhone_New_CaptchaWait: number;
 
