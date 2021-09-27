@@ -554,17 +554,6 @@ const Model: SettingPageModelType = {
       const { data: data1 } = yield call(FServiceAPI.User.areasProvinces);
       // console.log(data1, 'data1!@#$!@#$@#$');
       const userDetail = data.userDetail;
-      // areaCode: "1302"
-      // areaName: "唐山市"
-      // birthday: "2021-09-28"
-      // createDate: "2021-09-27T07:18:10.494Z"
-      // intro: "214"
-      // latestLoginDate: null
-      // latestLoginIp: ""
-      // occupation: "1234"
-      // sex: 1
-      // statusChangeRemark: ""
-      // updateDate: "2021-09-27T07:18:10.494Z"
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -661,16 +650,17 @@ const Model: SettingPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.User.updateDetailInfo>[0] = {
-        areaCode: String(settingPage.residence[settingPage.residence.length - 1]),
+        areaCode: settingPage.residence.length === 2 ? String(settingPage.residence[settingPage.residence.length - 1]) : undefined,
         occupation: settingPage.career,
-        birthday: settingPage.birthday?.format('YYYY-MM-DD') || '',
+        birthday: settingPage.birthday?.format('YYYY-MM-DD') || undefined,
         sex: settingPage.gender === 'male' ? 1 : settingPage.gender === 'female' ? 2 : 0,
         intro: settingPage.profileText,
       };
 
-      const { data } = yield call(FServiceAPI.User.updateDetailInfo, params);
-
-      console.log(data, 'data!@#$@!#$@#!$23142344444');
+      const { errCode, msg } = yield call(FServiceAPI.User.updateDetailInfo, params);
+      if (errCode !== 0) {
+        fMessage(msg, 'error');
+      }
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

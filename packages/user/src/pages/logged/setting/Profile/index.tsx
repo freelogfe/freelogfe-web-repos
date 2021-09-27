@@ -99,6 +99,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             </div>
             <div className={styles.right}>
               <DatePicker
+                allowClear={false}
                 value={settingPage.birthday}
                 style={{ width: 220, height: 38 }}
                 placeholder={'出生年月日'}
@@ -120,6 +121,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
             </div>
             <div className={styles.right}>
               <Cascader
+                allowClear={false}
                 className={styles.Cascader}
                 options={settingPage.residenceOptions}
                 value={settingPage.residence}
