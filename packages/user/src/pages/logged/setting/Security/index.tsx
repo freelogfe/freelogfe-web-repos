@@ -20,19 +20,19 @@ import {
   OnCancel_ChangePassword_Modal_Action,
   OnCancel_ChangePhone_New_Modal_Action,
   OnCancel_ChangePhone_Old_Modal_Action,
-  OnChange_BindEmail_CaptchaInput_Action,
+  OnChange_BindEmail_CaptchaInput_Action, OnChange_BindEmail_CaptchaWait_Action,
   OnChange_BindEmail_EmailInput_Action,
-  OnChange_BindPhone_CaptchaInput_Action,
+  OnChange_BindPhone_CaptchaInput_Action, OnChange_BindPhone_CaptchaWait_Action,
   OnChange_BindPhone_PhoneInput_Action,
-  OnChange_ChangeEmail_New_CaptchaInput_Action,
+  OnChange_ChangeEmail_New_CaptchaInput_Action, OnChange_ChangeEmail_New_CaptchaWait_Action,
   OnChange_ChangeEmail_New_EmailInput_Action,
-  OnChange_ChangeEmail_Old_CaptchaInput_Action,
+  OnChange_ChangeEmail_Old_CaptchaInput_Action, OnChange_ChangeEmail_Old_CaptchaWait_Action,
   OnChange_ChangePassword_New1_PasswordInput_Action,
   OnChange_ChangePassword_New2_PasswordInput_Action,
   OnChange_ChangePassword_Old_PasswordInput_Action,
-  OnChange_ChangePhone_New_CaptchaInput_Action,
+  OnChange_ChangePhone_New_CaptchaInput_Action, OnChange_ChangePhone_New_CaptchaWait_Action,
   OnChange_ChangePhone_New_PhoneInput_Action,
-  OnChange_ChangePhone_Old_CaptchaInput_Action,
+  OnChange_ChangePhone_Old_CaptchaInput_Action, OnChange_ChangePhone_Old_CaptchaWait_Action,
   OnClick_BindEmail_ConfirmBtn_Action,
   OnClick_BindEmail_SendCaptchaBtn_Action,
   OnClick_BindEmailBtn_Action,
@@ -59,18 +59,60 @@ interface SecurityProps {
 
 function Security({ dispatch, settingPage }: SecurityProps) {
 
-  // AHooks.useInterval(() => {
-  //   dispatch<OnChangeWaitingTimeAction>({
-  //     type: 'logonPage/onChangeWaitingTime',
-  //     payload: {
-  //       value: logonPage.waitingTimeToLogin - 1,
-  //     },
-  //   });
-  //   if (logonPage.waitingTimeToLogin - 1 === 0) {
-  //     // console.log(1234);
-  //     gotoLogin();
-  //   }
-  // }, logonPage.waitingTimeToLogin === 0 ? null : 1000);
+  AHooks.useInterval(() => {
+    dispatch<OnChange_BindEmail_CaptchaWait_Action>({
+      type: 'settingPage/onChange_BindEmail_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+
+  }, settingPage.bindEmail_CaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChange_ChangeEmail_Old_CaptchaWait_Action>({
+      type: 'settingPage/onChange_ChangeEmail_Old_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+  }, settingPage.changeEmail_Old_CaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChange_ChangeEmail_New_CaptchaWait_Action>({
+      type: 'settingPage/onChange_ChangeEmail_New_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+  }, settingPage.changeEmail_New_CaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChange_BindPhone_CaptchaWait_Action>({
+      type: 'settingPage/onChange_BindPhone_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+  }, settingPage.bindPhone_CaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChange_ChangePhone_Old_CaptchaWait_Action>({
+      type: 'settingPage/onChange_ChangePhone_Old_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+  }, settingPage.changePhone_Old_CaptchaWait === 0 ? null : 1000);
+
+  AHooks.useInterval(() => {
+    dispatch<OnChange_ChangePhone_New_CaptchaWait_Action>({
+      type: 'settingPage/onChange_ChangePhone_New_CaptchaWait',
+      payload: {
+        value: settingPage.bindEmail_CaptchaWait - 1,
+      },
+    });
+  }, settingPage.changePhone_New_CaptchaWait === 0 ? null : 1000);
 
   return (<>
     <FFormLayout>
