@@ -13,3 +13,18 @@ export function sendVerificationCode(params: SendVerificationCodeParamsType) {
     data: params,
   });
 }
+
+// 校验短信或邮件验证码
+interface VerifyVerificationCodeParamsType {
+  authCode: string;
+  address: string;
+  authCodeType: 'register' | 'resetPassword' | 'activateTransactionAccount' | 'updateTransactionAccountPwd' | 'updateMobileOrEmail';
+}
+
+export function verifyVerificationCode(params: VerifyVerificationCodeParamsType): Promise<any> {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/messages/verify`,
+    params: params,
+  });
+}

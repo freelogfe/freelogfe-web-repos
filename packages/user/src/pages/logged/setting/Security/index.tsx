@@ -37,7 +37,7 @@ import {
   OnClick_BindEmail_SendCaptchaBtn_Action,
   OnClick_BindEmailBtn_Action,
   OnClick_BindPhone_ConfirmBtn_Action,
-  OnClick_BindPhone_SendCaptchaBtn_Action,
+  OnClick_BindPhone_SendCaptchaBtn_Action, OnClick_BindPhoneBtn_Action,
   OnClick_ChangeEmail_New_ConfirmBtn_Action,
   OnClick_ChangeEmail_New_SendCaptchaBtn_Action,
   OnClick_ChangeEmail_Old_NextBtn_Action,
@@ -46,7 +46,7 @@ import {
   OnClick_ChangePhone_New_ConfirmBtn_Action,
   OnClick_ChangePhone_New_SendCaptchaBtn_Action,
   OnClick_ChangePhone_Old_NextBtn_Action,
-  OnClick_ChangePhone_Old_SendCaptchaBtn_Action,
+  OnClick_ChangePhone_Old_SendCaptchaBtn_Action, OnClick_ReplaceEmailBtn_Action,
   OnClick_ReplacePhoneBtn_Action,
 } from '@/models/settingPage';
 import * as AHooks from 'ahooks';
@@ -70,10 +70,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
   }, settingPage.bindEmail_CaptchaWait === 0 ? null : 1000);
 
   AHooks.useInterval(() => {
+    // console.log(settingPage.changeEmail_Old_CaptchaWait, '64456456settingPage.changeEmail_Old_CaptchaWait');
     dispatch<OnChange_ChangeEmail_Old_CaptchaWait_Action>({
       type: 'settingPage/onChange_ChangeEmail_Old_CaptchaWait',
       payload: {
-        value: settingPage.bindEmail_CaptchaWait - 1,
+        value: settingPage.changeEmail_Old_CaptchaWait - 1,
       },
     });
   }, settingPage.changeEmail_Old_CaptchaWait === 0 ? null : 1000);
@@ -82,7 +83,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     dispatch<OnChange_ChangeEmail_New_CaptchaWait_Action>({
       type: 'settingPage/onChange_ChangeEmail_New_CaptchaWait',
       payload: {
-        value: settingPage.bindEmail_CaptchaWait - 1,
+        value: settingPage.changeEmail_New_CaptchaWait - 1,
       },
     });
   }, settingPage.changeEmail_New_CaptchaWait === 0 ? null : 1000);
@@ -91,7 +92,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     dispatch<OnChange_BindPhone_CaptchaWait_Action>({
       type: 'settingPage/onChange_BindPhone_CaptchaWait',
       payload: {
-        value: settingPage.bindEmail_CaptchaWait - 1,
+        value: settingPage.bindPhone_CaptchaWait - 1,
       },
     });
   }, settingPage.bindPhone_CaptchaWait === 0 ? null : 1000);
@@ -100,7 +101,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     dispatch<OnChange_ChangePhone_Old_CaptchaWait_Action>({
       type: 'settingPage/onChange_ChangePhone_Old_CaptchaWait',
       payload: {
-        value: settingPage.bindEmail_CaptchaWait - 1,
+        value: settingPage.changePhone_Old_CaptchaWait - 1,
       },
     });
   }, settingPage.changePhone_Old_CaptchaWait === 0 ? null : 1000);
@@ -109,7 +110,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
     dispatch<OnChange_ChangePhone_New_CaptchaWait_Action>({
       type: 'settingPage/onChange_ChangePhone_New_CaptchaWait',
       payload: {
-        value: settingPage.bindEmail_CaptchaWait - 1,
+        value: settingPage.changePhone_New_CaptchaWait - 1,
       },
     });
   }, settingPage.changePhone_New_CaptchaWait === 0 ? null : 1000);
@@ -152,8 +153,8 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     type='primary'
                     onClick={() => {
                       // onClick_BindEmailBtn_Action
-                      dispatch<OnClick_ReplacePhoneBtn_Action>({
-                        type: 'settingPage/onClick_ReplacePhoneBtn',
+                      dispatch<OnClick_ReplaceEmailBtn_Action>({
+                        type: 'settingPage/onClick_ReplaceEmailBtn',
                       });
                     }}
                   >更换邮箱</FTextBtn>
@@ -173,8 +174,8 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   <div style={{ width: 30 }} />
                   <FTextBtn onClick={() => {
                     // onClick_BindEmailBtn_Action
-                    dispatch<OnClick_BindEmailBtn_Action>({
-                      type: 'settingPage/onClick_BindEmailBtn',
+                    dispatch<OnClick_BindPhoneBtn_Action>({
+                      type: 'settingPage/onClick_BindPhoneBtn',
                     });
                   }} type='primary'>立即绑定</FTextBtn>
                 </div>)

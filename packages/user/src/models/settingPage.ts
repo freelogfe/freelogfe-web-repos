@@ -549,7 +549,7 @@ const Model: SettingPageModelType = {
     * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
       // console.log('onMountPage111111');
       const { data } = yield call(FServiceAPI.User.currentUserInfo);
-      console.log(data, 'data!@#$!@#$!@#$!21111');
+      // console.log(data, 'data!@#$!@#$!@#$!21111');
 
       const { data: data1 } = yield call(FServiceAPI.User.areasProvinces);
       // console.log(data1, 'data1!@#$!@#$@#$');
@@ -728,17 +728,17 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
-      let bindPhone_PhoneInputError: string = '';
-      if (!settingPage.bindPhone_PhoneInput) {
-        bindPhone_PhoneInputError = '请输入邮箱';
-      } else if (!FUtil.Regexp.EMAIL_ADDRESS.test(settingPage.bindPhone_PhoneInput)) {
-        bindPhone_PhoneInputError = '请输入正确格式的邮箱';
+      let bindEmail_EmailInputError: string = '';
+      if (settingPage.bindEmail_EmailInput === '') {
+        bindEmail_EmailInputError = '请输入邮箱';
+      } else if (!FUtil.Regexp.EMAIL_ADDRESS.test(settingPage.bindEmail_EmailInput)) {
+        bindEmail_EmailInputError = '请输入正确格式的邮箱';
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_PhoneInputError,
+          bindEmail_EmailInputError,
         },
       });
     },
@@ -746,7 +746,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaInput: payload.value,
+          bindEmail_CaptchaInput: payload.value,
         },
       });
     },
@@ -754,7 +754,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaWait: payload.value,
+          bindEmail_CaptchaWait: payload.value,
         },
       });
     },
@@ -767,15 +767,22 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          bindEmail_CaptchaWait: 60,
+        },
+      });
+      // console.log(settingPage.bindEmail_EmailInput, 'settingPage.bindEmail_CaptchaInput!@#$@#$#@$@#$');
       const params: Parameters<typeof sentVerificationCode>[0] = {
-        loginName: settingPage.bindEmail_CaptchaInput,
+        loginName: settingPage.bindEmail_EmailInput,
       };
       const result = yield call(sentVerificationCode, params);
-      if (result) {
+      if (!result) {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            bindPhone_CaptchaWait: 0,
+            bindEmail_CaptchaWait: 0,
           },
         });
       }
@@ -790,7 +797,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changeEmail_Old_ModalVisible: true,
+          changeEmail_Old_ModalVisible: false,
         },
       });
     },
@@ -811,22 +818,25 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
-      // TODO: 发送验证码
-      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: settingPage.email,
-        authCodeType: 'updateTransactionAccountPwd',
-      };
-      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
-        return;
-      }
-      fMessage(msg, 'error');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaWait: 0,
+          changeEmail_Old_CaptchaWait: 60,
         },
       });
+
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.email,
+      };
+      const result = yield call(sentVerificationCode, params);
+      if (!result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changeEmail_Old_CaptchaWait: 0,
+          },
+        });
+      }
     },
     * onChange_ChangeEmail_Old_CaptchaWait({ payload }: OnChange_ChangeEmail_Old_CaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -836,8 +846,26 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangeEmail_Old_NextBtn(action: OnClick_ChangeEmail_Old_NextBtn_Action, { put }: EffectsCommandMap) {
-      // TODO:
+    * onClick_ChangeEmail_Old_NextBtn({}: OnClick_ChangeEmail_Old_NextBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
+        authCode: settingPage.changeEmail_Old_CaptchaWait,
+        address: settingPage.email,
+        authCodeType: 'updateMobileOrEmail',
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -898,26 +926,30 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
+
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
 
-      // TODO: 发送验证码
-      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: settingPage.email,
-        authCodeType: 'updateTransactionAccountPwd',
-      };
-      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
-        return;
-      }
-      fMessage(msg, 'error');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaWait: 0,
+          changeEmail_New_CaptchaWait: 60,
         },
       });
+
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.changeEmail_New_EmailInput,
+      };
+      const result = yield call(sentVerificationCode, params);
+      if (!result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changeEmail_New_CaptchaWait: 0,
+          },
+        });
+      }
     },
     * onChange_ChangeEmail_New_CaptchaWait({ payload }: OnChange_ChangeEmail_New_CaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -982,9 +1014,37 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_BindPhone_SendCaptchaBtn(action: OnClick_BindPhone_SendCaptchaBtn_Action, effects: EffectsCommandMap) {
+    * onClick_BindPhone_SendCaptchaBtn({}: OnClick_BindPhone_SendCaptchaBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          bindPhone_CaptchaWait: 60,
+        },
+      });
+
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.bindPhone_PhoneInput,
+      };
+      const result = yield call(sentVerificationCode, params);
+      if (!result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            bindPhone_CaptchaWait: 0,
+          },
+        });
+      }
     },
     * onClick_BindPhone_ConfirmBtn(action: OnClick_BindPhone_ConfirmBtn_Action, effects: EffectsCommandMap) {
+
     },
     * onCancel_ChangePhone_Old_Modal(action: OnCancel_ChangePhone_Old_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1007,26 +1067,31 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
+
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
 
-      // TODO: 发送验证码
-      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: settingPage.email,
-        authCodeType: 'updateTransactionAccountPwd',
-      };
-      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
-        return;
-      }
-      fMessage(msg, 'error');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaWait: 0,
+          changePhone_Old_CaptchaWait: 60,
         },
       });
+
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.phone,
+      };
+      const result = yield call(sentVerificationCode, params);
+      if (!result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changePhone_Old_CaptchaWait: 0,
+          },
+        });
+      }
+
     },
     * onChange_ChangePhone_Old_CaptchaWait({ payload }: OnChange_ChangePhone_Old_CaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1036,7 +1101,26 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangePhone_Old_NextBtn(action: OnClick_ChangePhone_Old_NextBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_ChangePhone_Old_NextBtn({}: OnClick_ChangePhone_Old_NextBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
+        authCode: settingPage.changePhone_Old_CaptchaWait,
+        address: settingPage.phone,
+        authCodeType: 'updateMobileOrEmail',
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1100,22 +1184,25 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
-      // TODO: 发送验证码
-      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: settingPage.email,
-        authCodeType: 'updateTransactionAccountPwd',
-      };
-      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
-        return;
-      }
-      fMessage(msg, 'error');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_CaptchaWait: 0,
+          changePhone_New_CaptchaWait: 60,
         },
       });
+
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.changePhone_New_PhoneInput,
+      };
+      const result = yield call(sentVerificationCode, params);
+      if (!result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changePhone_New_CaptchaWait: 0,
+          },
+        });
+      }
     },
     * onChange_ChangePhone_New_CaptchaWait({ payload }: OnChange_ChangePhone_New_CaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1237,12 +1324,13 @@ interface SentVerificationCode {
 }
 
 async function sentVerificationCode({ loginName }: SentVerificationCode): Promise<boolean> {
+  // console.log(loginName, 'loginName!!!!!!!');
   const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
     loginName: loginName,
     authCodeType: 'updateMobileOrEmail',
   };
-  const { data, msg } = await FServiceAPI.Captcha.sendVerificationCode(params);
-  if (data) {
+  const { errCode, msg } = await FServiceAPI.Captcha.sendVerificationCode(params);
+  if (errCode === 0) {
     return true;
   }
   fMessage(msg, 'error');
