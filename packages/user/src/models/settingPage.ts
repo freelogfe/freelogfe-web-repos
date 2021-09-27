@@ -490,40 +490,7 @@ const initStates: SettingPageModelState = {
   gender: 'unknown',
   profileText: '',
   birthday: null,
-  residenceOptions: [
-    {
-      value: 'zhejiang',
-      label: 'Zhejiang',
-      children: [
-        {
-          value: 'hangzhou',
-          label: 'Hangzhou',
-          children: [
-            {
-              value: 'xihu',
-              label: 'West Lake',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: 'jiangsu',
-      label: 'Jiangsu',
-      children: [
-        {
-          value: 'nanjing',
-          label: 'Nanjing',
-          children: [
-            {
-              value: 'zhonghuamen',
-              label: 'Zhong Hua Men',
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  residenceOptions: [],
   residence: [],
   career: '',
 
@@ -582,14 +549,48 @@ const Model: SettingPageModelType = {
     * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
       // console.log('onMountPage111111');
       const { data } = yield call(FServiceAPI.User.currentUserInfo);
+      console.log(data, 'data!@#$!@#$!@#$!21111');
 
+      const { data: data1 } = yield call(FServiceAPI.User.areasProvinces);
+      // console.log(data1, 'data1!@#$!@#$@#$');
+      const userDetail = data.userDetail;
+      // areaCode: "1302"
+      // areaName: "唐山市"
+      // birthday: "2021-09-28"
+      // createDate: "2021-09-27T07:18:10.494Z"
+      // intro: "214"
+      // latestLoginDate: null
+      // latestLoginIp: ""
+      // occupation: "1234"
+      // sex: 1
+      // statusChangeRemark: ""
+      // updateDate: "2021-09-27T07:18:10.494Z"
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           avatar: data.headImage,
+          gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
+          profileText: userDetail?.intro || '',
+          birthday: userDetail?.birthday ? moment(userDetail?.birthday, 'YYYY-MM-DD') : null,
+          residence: userDetail?.areaCode ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode] : [],
+          career: userDetail?.occupation || '',
+
           username: data.username,
           email: data.email,
           phone: data.mobile,
+
+          residenceOptions: data1.map((d1: any) => {
+            return {
+              value: d1.code,
+              label: d1.name,
+              children: d1.children.map((d2: any) => {
+                return {
+                  value: d2.code,
+                  label: d2.name,
+                };
+              }),
+            };
+          }),
         },
       });
     },
@@ -663,9 +664,13 @@ const Model: SettingPageModelType = {
         areaCode: String(settingPage.residence[settingPage.residence.length - 1]),
         occupation: settingPage.career,
         birthday: settingPage.birthday?.format('YYYY-MM-DD') || '',
+        sex: settingPage.gender === 'male' ? 1 : settingPage.gender === 'female' ? 2 : 0,
+        intro: settingPage.profileText,
       };
 
       const { data } = yield call(FServiceAPI.User.updateDetailInfo, params);
+
+      console.log(data, 'data!@#$@!#$@#!$23142344444');
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -772,25 +777,24 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
-      // TODO: 发送验证码
-      const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: settingPage.email,
-        authCodeType: 'updateTransactionAccountPwd',
+      const params: Parameters<typeof sentVerificationCode>[0] = {
+        loginName: settingPage.bindEmail_CaptchaInput,
       };
-      const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
-      if (data) {
-        return;
+      const result = yield call(sentVerificationCode, params);
+      if (result) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            bindPhone_CaptchaWait: 0,
+          },
+        });
       }
-      fMessage(msg, 'error');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          bindPhone_CaptchaWait: 0,
-        },
-      });
     },
-    * onClick_BindEmail_ConfirmBtn(action: OnClick_BindEmail_ConfirmBtn_Action, effects: EffectsCommandMap) {
-      // TODO:
+    * onClick_BindEmail_ConfirmBtn({}: OnClick_BindEmail_ConfirmBtn_Action, { select, call }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
     },
     * onCancel_ChangeEmail_Old_Modal(action: OnCancel_ChangeEmail_Old_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -1238,3 +1242,19 @@ const Model: SettingPageModelType = {
 
 export default Model;
 
+interface SentVerificationCode {
+  loginName: string;
+}
+
+async function sentVerificationCode({ loginName }: SentVerificationCode): Promise<boolean> {
+  const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
+    loginName: loginName,
+    authCodeType: 'updateMobileOrEmail',
+  };
+  const { data, msg } = await FServiceAPI.Captcha.sendVerificationCode(params);
+  if (data) {
+    return true;
+  }
+  fMessage(msg, 'error');
+  return false;
+}
