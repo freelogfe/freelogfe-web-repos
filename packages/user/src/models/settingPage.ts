@@ -7,7 +7,7 @@ import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 
 type ResidenceOptions = {
-  value: string;
+  value: string | number;
   label: string;
   children?: ResidenceOptions;
 }[];
@@ -18,9 +18,9 @@ export interface SettingPageModelState {
   avatar: string;
   gender: 'male' | 'female' | 'unknown';
   profileText: string;
-  birthday: Moment;
+  birthday: Moment | null;
   residenceOptions: ResidenceOptions;
-  residence: string[];
+  residence: Array<string | number>;
   career: string;
 
   username: string;
@@ -100,7 +100,7 @@ export interface OnChange_Avatar_Action extends AnyAction {
 }
 
 export interface OnChange_Gender_Action extends AnyAction {
-  type: 'settingPage/onChange_Gender_Action';
+  type: 'settingPage/onChange_Gender';
   payload: {
     value: 'male' | 'female';
   };
@@ -116,14 +116,14 @@ export interface OnChange_ProfileText_Action extends AnyAction {
 export interface OnChange_Birthday_Action extends AnyAction {
   type: 'settingPage/onChange_Birthday';
   payload: {
-    value: Moment;
+    value: Moment | null;
   };
 }
 
 export interface OnChange_Residence_Action extends AnyAction {
   type: 'settingPage/onChange_Residence';
   payload: {
-    value: string[];
+    value: Array<string | number>;
   };
 }
 
@@ -177,9 +177,6 @@ export interface OnChange_BindEmail_EmailInput_Action extends AnyAction {
 
 export interface OnBlur_BindEmail_EmailInput_Action extends AnyAction {
   type: 'settingPage/onBlur_BindEmail_EmailInput';
-  payload: {
-    value: string;
-  };
 }
 
 export interface OnChange_BindEmail_CaptchaInput_Action extends AnyAction {
@@ -229,9 +226,6 @@ export interface OnChange_ChangeEmail_Old_CaptchaWait_Action extends AnyAction {
 
 export interface OnClick_ChangeEmail_Old_NextBtn_Action extends AnyAction {
   type: 'settingPage/onClick_ChangeEmail_Old_NextBtn';
-  payload: {
-    value: string;
-  };
 }
 
 export interface OnCancel_ChangeEmail_New_Modal_Action extends AnyAction {
@@ -285,9 +279,6 @@ export interface OnChange_BindPhone_PhoneInput_Action extends AnyAction {
 
 export interface OnBlur_BindPhone_PhoneInput_Action extends AnyAction {
   type: 'settingPage/onBlur_BindPhone_PhoneInput';
-  payload: {
-    value: string;
-  };
 }
 
 export interface OnChange_BindPhone_CaptchaInput_Action extends AnyAction {
@@ -498,7 +489,7 @@ const initStates: SettingPageModelState = {
   avatar: '',
   gender: 'unknown',
   profileText: '',
-  birthday: moment(),
+  birthday: null,
   residenceOptions: [
     {
       value: 'zhejiang',
@@ -663,9 +654,18 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_SubmitUserInfoBtn(action: OnClick_SubmitUserInfoBtn_Action, effects: EffectsCommandMap) {
-      // TODO:
+    * onClick_SubmitUserInfoBtn({}: OnClick_SubmitUserInfoBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
 
+      const params: Parameters<typeof FServiceAPI.User.updateDetailInfo>[0] = {
+        areaCode: String(settingPage.residence[settingPage.residence.length - 1]),
+        occupation: settingPage.career,
+        birthday: settingPage.birthday?.format('YYYY-MM-DD') || '',
+      };
+
+      const { data } = yield call(FServiceAPI.User.updateDetailInfo, params);
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -724,7 +724,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_PhoneInput: payload.value,
+          bindEmail_EmailInput: payload.value,
         },
       });
     },

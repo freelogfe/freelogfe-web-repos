@@ -9,18 +9,48 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import {
+  OnBlur_BindEmail_EmailInput_Action,
+  OnBlur_BindPhone_PhoneInput_Action,
+  OnBlur_ChangePassword_New1_PasswordInput_Action, OnBlur_ChangePassword_New2_PasswordInput_Action,
+  OnBlur_ChangePhone_New_PhoneInput_Action,
   OnCancel_BindEmail_Modal_Action,
   OnCancel_BindPhone_Modal_Action,
   OnCancel_ChangeEmail_New_Modal_Action,
-  OnCancel_ChangeEmail_Old_Modal_Action, OnCancel_ChangePassword_Modal_Action,
+  OnCancel_ChangeEmail_Old_Modal_Action,
+  OnCancel_ChangePassword_Modal_Action,
   OnCancel_ChangePhone_New_Modal_Action,
   OnCancel_ChangePhone_Old_Modal_Action,
+  OnChange_BindEmail_CaptchaInput_Action,
+  OnChange_BindEmail_EmailInput_Action,
+  OnChange_BindPhone_CaptchaInput_Action,
+  OnChange_BindPhone_PhoneInput_Action,
+  OnChange_ChangeEmail_New_CaptchaInput_Action,
+  OnChange_ChangeEmail_New_EmailInput_Action,
+  OnChange_ChangeEmail_Old_CaptchaInput_Action,
+  OnChange_ChangePassword_New1_PasswordInput_Action,
+  OnChange_ChangePassword_New2_PasswordInput_Action,
   OnChange_ChangePassword_Old_PasswordInput_Action,
+  OnChange_ChangePhone_New_CaptchaInput_Action,
+  OnChange_ChangePhone_New_PhoneInput_Action,
+  OnChange_ChangePhone_Old_CaptchaInput_Action,
+  OnClick_BindEmail_ConfirmBtn_Action,
+  OnClick_BindEmail_SendCaptchaBtn_Action,
   OnClick_BindEmailBtn_Action,
+  OnClick_BindPhone_ConfirmBtn_Action,
+  OnClick_BindPhone_SendCaptchaBtn_Action,
+  OnClick_ChangeEmail_New_ConfirmBtn_Action,
+  OnClick_ChangeEmail_New_SendCaptchaBtn_Action,
+  OnClick_ChangeEmail_Old_NextBtn_Action,
+  OnClick_ChangeEmail_Old_SendCaptchaBtn_Action, OnClick_ChangePassword_ConfirmBtn_Action,
   OnClick_ChangePasswordBtn_Action,
+  OnClick_ChangePhone_New_ConfirmBtn_Action,
+  OnClick_ChangePhone_New_SendCaptchaBtn_Action,
   OnClick_ChangePhone_Old_NextBtn_Action,
+  OnClick_ChangePhone_Old_SendCaptchaBtn_Action,
   OnClick_ReplacePhoneBtn_Action,
 } from '@/models/settingPage';
+import * as AHooks from 'ahooks';
+import { OnChangeWaitingTimeAction } from '@/models/logonPage';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -28,6 +58,20 @@ interface SecurityProps {
 }
 
 function Security({ dispatch, settingPage }: SecurityProps) {
+
+  // AHooks.useInterval(() => {
+  //   dispatch<OnChangeWaitingTimeAction>({
+  //     type: 'logonPage/onChangeWaitingTime',
+  //     payload: {
+  //       value: logonPage.waitingTimeToLogin - 1,
+  //     },
+  //   });
+  //   if (logonPage.waitingTimeToLogin - 1 === 0) {
+  //     // console.log(1234);
+  //     gotoLogin();
+  //   }
+  // }, logonPage.waitingTimeToLogin === 0 ? null : 1000);
+
   return (<>
     <FFormLayout>
       <FFormLayout.FBlock
@@ -145,8 +189,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.bindEmail_EmailInput}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_BindEmail_EmailInput_Action>({
+              type: 'settingPage/onChange_BindEmail_EmailInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
+          }}
+          onBlur={() => {
+            dispatch<OnBlur_BindEmail_EmailInput_Action>({
+              type: 'settingPage/onBlur_BindEmail_EmailInput',
+            });
           }}
           errorText={settingPage.bindEmail_EmailInputError}
           placeholder='请输入邮箱'
@@ -159,8 +213,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.bindEmail_CaptchaInput}
-            onChange={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_BindEmail_CaptchaInput_Action>({
+                type: 'settingPage/onChange_BindEmail_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
@@ -171,7 +230,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             type='primary'
             disabled={settingPage.bindEmail_EmailInput === '' || settingPage.bindEmail_EmailInputError !== '' || settingPage.bindEmail_CaptchaWait > 0}
             onClick={() => {
-
+              dispatch<OnClick_BindEmail_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_BindEmail_SendCaptchaBtn',
+              });
             }}
           >{settingPage.bindEmail_CaptchaWait > 0 ? `${settingPage.bindEmail_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
@@ -181,7 +242,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             type='primary'
             // disabled={}
             onClick={() => {
-
+              dispatch<OnClick_BindEmail_ConfirmBtn_Action>({
+                type: 'settingPage/onClick_BindEmail_ConfirmBtn',
+              });
             }}
           >立即绑定</FRectBtn>
         </div>
@@ -214,8 +277,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.changeEmail_Old_CaptchaInput}
-            onChange={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_ChangeEmail_Old_CaptchaInput_Action>({
+                type: 'settingPage/onChange_ChangeEmail_Old_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             errorText={settingPage.changeEmail_Old_CaptchaInput}
             placeholder='请输入验证码'
@@ -226,6 +294,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             disabled={settingPage.changeEmail_Old_CaptchaWait > 0}
             style={{ width: 110 }}
             type='primary'
+            onClick={() => {
+              dispatch<OnClick_ChangeEmail_Old_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_ChangeEmail_Old_SendCaptchaBtn',
+              });
+            }}
           >{settingPage.changeEmail_Old_CaptchaWait > 0 ? `${settingPage.changeEmail_Old_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
@@ -233,7 +306,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_ChangeEmail_Old_NextBtn_Action>({
+                type: 'settingPage/onClick_ChangeEmail_Old_NextBtn',
+              });
             }}
           >下一步</FRectBtn>
         </div>
@@ -259,8 +334,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.changeEmail_New_EmailInput}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_ChangeEmail_New_EmailInput_Action>({
+              type: 'settingPage/onChange_ChangeEmail_New_EmailInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
           errorText={settingPage.changeEmail_New_EmailInputError}
           placeholder='请输入邮箱'
@@ -273,8 +353,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.changeEmail_New_CaptchaInput}
-            onChange={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_ChangeEmail_New_CaptchaInput_Action>({
+                type: 'settingPage/onChange_ChangeEmail_New_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
@@ -285,7 +370,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             style={{ width: 110 }}
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_ChangeEmail_New_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_ChangeEmail_New_SendCaptchaBtn',
+              });
             }}
           >{settingPage.changeEmail_New_CaptchaWait > 0 ? `${settingPage.changeEmail_New_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
@@ -294,7 +381,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_ChangeEmail_New_ConfirmBtn_Action>({
+                type: 'settingPage/OnClick_ChangeEmail_New_ConfirmBtn',
+              });
             }}
           >立即绑定</FRectBtn>
         </div>
@@ -319,8 +408,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.bindPhone_PhoneInput}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_BindPhone_PhoneInput_Action>({
+              type: 'settingPage/onChange_BindPhone_PhoneInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
+          }}
+          onBlur={() => {
+            dispatch<OnBlur_BindPhone_PhoneInput_Action>({
+              type: 'settingPage/onBlur_BindPhone_PhoneInput',
+            });
           }}
           errorText={settingPage.bindPhone_PhoneInputError}
           placeholder='请输入手机号'
@@ -333,8 +432,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.bindPhone_CaptchaInput}
-            onChange={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_BindPhone_CaptchaInput_Action>({
+                type: 'settingPage/onChange_BindPhone_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
@@ -345,7 +449,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             style={{ width: 110 }}
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_BindPhone_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_BindPhone_SendCaptchaBtn',
+              });
             }}
           >{settingPage.bindPhone_CaptchaWait > 0 ? `${settingPage.bindPhone_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
@@ -354,7 +460,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_BindPhone_ConfirmBtn_Action>({
+                type: 'settingPage/onClick_BindPhone_ConfirmBtn',
+              });
             }}
           >立即绑定</FRectBtn>
         </div>
@@ -387,8 +495,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.changePhone_Old_CaptchaInput}
-            onClick={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_ChangePhone_Old_CaptchaInput_Action>({
+                type: 'settingPage/onChange_ChangePhone_Old_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
@@ -398,6 +511,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             disabled={settingPage.changePhone_Old_CaptchaWait > 0}
             style={{ width: 110 }}
             type='primary'
+            onClick={() => {
+              dispatch<OnClick_ChangePhone_Old_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_ChangePhone_Old_SendCaptchaBtn',
+              });
+            }}
           >{settingPage.changePhone_Old_CaptchaWait > 0 ? `${settingPage.changePhone_Old_CaptchaWait}s` : '获取验证码'}</FRectBtn>
         </div>
         <div style={{ height: 80 }} />
@@ -433,11 +551,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.changePhone_New_PhoneInput}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_ChangePhone_New_PhoneInput_Action>({
+              type: 'settingPage/onChange_ChangePhone_New_PhoneInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
           onBlur={() => {
-
+            dispatch<OnBlur_ChangePhone_New_PhoneInput_Action>({
+              type: 'settingPage/onBlur_ChangePhone_New_PhoneInput',
+            });
           }}
           errorText={settingPage.changePhone_New_PhoneInputError}
           placeholder='请输入手机号'
@@ -450,8 +575,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalCaptcha}>
           <FInput
             value={settingPage.changePhone_New_CaptchaInput}
-            onChange={() => {
-
+            onChange={(e) => {
+              dispatch<OnChange_ChangePhone_New_CaptchaInput_Action>({
+                type: 'settingPage/onChange_ChangePhone_New_CaptchaInput',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
@@ -460,7 +590,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             disabled={settingPage.changePhone_New_PhoneInput === '' || settingPage.changePhone_New_PhoneInputError !== '' || settingPage.changePhone_New_CaptchaWait > 0}
             onClick={() => {
-
+              // OnClick_ChangePhone_New_SendCaptchaBtn_Action
+              dispatch<OnClick_ChangePhone_New_SendCaptchaBtn_Action>({
+                type: 'settingPage/onClick_ChangePhone_New_SendCaptchaBtn',
+              });
             }}
             style={{ width: 110 }}
             type='primary'
@@ -471,7 +604,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_ChangePhone_New_ConfirmBtn_Action>({
+                type: 'settingPage/OnClick_ChangePhone_New_ConfirmBtn',
+              });
             }}
           >立即绑定</FRectBtn>
         </div>
@@ -497,8 +632,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
         <FInput
           value={settingPage.changePassword_Old_PasswordInput}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_ChangePassword_Old_PasswordInput_Action>({
+              type: 'settingPage/onChange_ChangePassword_Old_PasswordInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
           placeholder='请输入原密码'
           className={styles.modalBlockInput}
@@ -512,11 +652,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FInput
           value={settingPage.changePassword_New1_PasswordInput}
           errorText={settingPage.changePassword_New1_PasswordInput_Error}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_ChangePassword_New1_PasswordInput_Action>({
+              type: 'settingPage/onChange_ChangePassword_New1_PasswordInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
           onBlur={() => {
-
+            dispatch<OnBlur_ChangePassword_New1_PasswordInput_Action>({
+              type: 'settingPage/onBlur_ChangePassword_New1_PasswordInput',
+            });
           }}
           placeholder='请输入新密码'
           className={styles.modalBlockInput}
@@ -531,11 +678,18 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FInput
           value={settingPage.changePassword_New2_PasswordInput}
           errorText={settingPage.changePassword_New2_PasswordInput_Error}
-          onChange={() => {
-
+          onChange={(e) => {
+            dispatch<OnChange_ChangePassword_New2_PasswordInput_Action>({
+              type: 'settingPage/onChange_ChangePassword_New2_PasswordInput',
+              payload: {
+                value: e.target.value,
+              },
+            });
           }}
           onBlur={() => {
-
+            dispatch<OnBlur_ChangePassword_New2_PasswordInput_Action>({
+              type: 'settingPage/onBlur_ChangePassword_New2_PasswordInput',
+            });
           }}
           placeholder='请输入新密码'
           className={styles.modalBlockInput}
@@ -550,7 +704,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             || settingPage.changePassword_New2_PasswordInput === '' || settingPage.changePassword_New2_PasswordInput_Error !== ''}
             type='primary'
             onClick={() => {
-
+              dispatch<OnClick_ChangePassword_ConfirmBtn_Action>({
+                type: 'settingPage/onClick_ChangePassword_ConfirmBtn',
+              });
             }}
           >修改密码</FRectBtn>
         </div>

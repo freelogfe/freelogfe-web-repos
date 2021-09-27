@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FFormLayout from '@/components/FFormLayout';
-import { connect } from 'dva';
+import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState, UserModelState } from '@/models/connect';
 import { FContentText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
@@ -9,13 +9,21 @@ import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker } from 'antd';
 import { FRectBtn } from '@/components/FButton';
+import {
+  OnChange_Birthday_Action, OnChange_Career_Action,
+  OnChange_Gender_Action,
+  OnChange_ProfileText_Action,
+  OnChange_Residence_Action, OnClick_SubmitUserInfoBtn_Action,
+} from '@/models/settingPage';
+import { Moment } from 'moment';
 
 interface ProfileProps {
+  dispatch: Dispatch;
   user: UserModelState;
   settingPage: SettingPageModelState;
 }
 
-function Profile({ user, settingPage }: ProfileProps) {
+function Profile({ dispatch, user, settingPage }: ProfileProps) {
   return (<>
     <div className={styles.avatar}>
       <div>
@@ -38,14 +46,24 @@ function Profile({ user, settingPage }: ProfileProps) {
               <FRadio
                 checked={settingPage.gender === 'male'}
                 onClick={() => {
-
+                  dispatch<OnChange_Gender_Action>({
+                    type: 'settingPage/onChange_Gender',
+                    payload: {
+                      value: 'male',
+                    },
+                  });
                 }}
               >男</FRadio>
               <div style={{ width: 20 }} />
               <FRadio
                 checked={settingPage.gender === 'female'}
                 onClick={() => {
-
+                  dispatch<OnChange_Gender_Action>({
+                    type: 'settingPage/onChange_Gender',
+                    payload: {
+                      value: 'female',
+                    },
+                  });
                 }}
               >女</FRadio>
             </div>
@@ -63,8 +81,13 @@ function Profile({ user, settingPage }: ProfileProps) {
                 placeholder={'一句话介绍自己'}
                 lengthLimit={40}
                 errorText={''}
-                onChange={() => {
-
+                onChange={(e) => {
+                  dispatch<OnChange_ProfileText_Action>({
+                    type: 'settingPage/onChange_ProfileText',
+                    payload: {
+                      value: e.target.value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -79,8 +102,13 @@ function Profile({ user, settingPage }: ProfileProps) {
                 value={settingPage.birthday}
                 style={{ width: 220, height: 38 }}
                 placeholder={'出生年月日'}
-                onChange={() => {
-
+                onChange={(value: Moment | null, dateString: string) => {
+                  dispatch<OnChange_Birthday_Action>({
+                    type: 'settingPage/onChange_Birthday',
+                    payload: {
+                      value: value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -96,8 +124,13 @@ function Profile({ user, settingPage }: ProfileProps) {
                 options={settingPage.residenceOptions}
                 value={settingPage.residence}
                 placeholder='常驻城市'
-                onChange={() => {
-
+                onChange={(value) => {
+                  dispatch<OnChange_Residence_Action>({
+                    type: 'settingPage/onChange_Residence',
+                    payload: {
+                      value: value,
+                    },
+                  });
                 }}
               />
             </div>
@@ -110,8 +143,13 @@ function Profile({ user, settingPage }: ProfileProps) {
             <div className={styles.right}>
               <FInput
                 value={settingPage.career}
-                onChange={() => {
-
+                onChange={(e) => {
+                  dispatch<OnChange_Career_Action>({
+                    type: 'settingPage/onChange_Career',
+                    payload: {
+                      value: e.target.value,
+                    },
+                  });
                 }}
                 placeholder='职位名称'
                 className={styles.widthInput}
@@ -124,6 +162,11 @@ function Profile({ user, settingPage }: ProfileProps) {
         <div className={styles.submit}>
           <FRectBtn
             type='primary'
+            onClick={() => {
+              dispatch<OnClick_SubmitUserInfoBtn_Action>({
+                type: 'settingPage/onClick_SubmitUserInfoBtn',
+              });
+            }}
           >提交修改</FRectBtn>
         </div>
 
