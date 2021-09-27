@@ -328,7 +328,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 },
               });
             }}
-            errorText={settingPage.changeEmail_Old_CaptchaInput}
+            // errorText={settingPage.changeEmail_Old_CaptchaInput}
             placeholder='请输入验证码'
             className={styles.modalCaptchaInput}
             wrapClassName={styles.modalCaptchaInput}
