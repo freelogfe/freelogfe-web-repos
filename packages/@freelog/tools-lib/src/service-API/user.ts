@@ -174,7 +174,7 @@ export function areasProvinces(params: AreasProvincesParamsType = {}) {
 
 // 绑定或换绑手机号和邮箱
 interface UpdateMobileOrEmailParamsType {
-  oldAuthCod?: string;
+  oldAuthCode?: string;
   newAuthCode: string;
   newLoginName: string;
 }
@@ -182,7 +182,7 @@ interface UpdateMobileOrEmailParamsType {
 export function updateMobileOrEmail(params: UpdateMobileOrEmailParamsType) {
   return FUtil.Request({
     method: 'PUT',
-    url: `/v2/users/current/updatePassword`,
+    url: `/v2/users/current/mobileOrEmail`,
     data: params,
   });
 }

@@ -266,7 +266,7 @@ export interface OnChange_ChangeEmail_New_CaptchaWait_Action extends AnyAction {
 }
 
 export interface OnClick_ChangeEmail_New_ConfirmBtn_Action extends AnyAction {
-  type: 'settingPage/OnClick_ChangeEmail_New_ConfirmBtn';
+  type: 'settingPage/onClick_ChangeEmail_New_ConfirmBtn';
 }
 
 // 绑定手机
@@ -487,6 +487,96 @@ interface SettingPageModelType {
   };
 }
 
+const initStates_BindEmail: Pick<SettingPageModelState,
+  'bindEmail_ModalVisible' |
+  'bindEmail_EmailInput' |
+  'bindEmail_EmailInput_VerifyState' |
+  'bindEmail_EmailInputError' |
+  'bindEmail_CaptchaInput' |
+  'bindEmail_CaptchaWait'> = {
+  bindEmail_ModalVisible: false,
+  bindEmail_EmailInput: '',
+  bindEmail_EmailInput_VerifyState: 'unverified',
+  bindEmail_EmailInputError: '',
+  bindEmail_CaptchaInput: '',
+  bindEmail_CaptchaWait: 0,
+};
+
+const initStates_ChangeEmail: Pick<SettingPageModelState,
+  'changeEmail_Old_ModalVisible' |
+  'changeEmail_Old_CaptchaInput' |
+  'changeEmail_Old_CaptchaWait' |
+  'changeEmail_New_ModalVisible' |
+  'changeEmail_New_EmailInput' |
+  'changeEmail_New_EmailInput_VerifyState' |
+  'changeEmail_New_EmailInputError' |
+  'changeEmail_New_CaptchaInput' |
+  'changeEmail_New_CaptchaWait'> = {
+  changeEmail_Old_ModalVisible: false,
+  changeEmail_Old_CaptchaInput: '',
+  changeEmail_Old_CaptchaWait: 0,
+
+  changeEmail_New_ModalVisible: false,
+  changeEmail_New_EmailInput: '',
+  changeEmail_New_EmailInput_VerifyState: 'unverified',
+  changeEmail_New_EmailInputError: '',
+  changeEmail_New_CaptchaInput: '',
+  changeEmail_New_CaptchaWait: 0,
+};
+
+const initStates_BindPhone: Pick<SettingPageModelState,
+  'bindPhone_ModalVisible' |
+  'bindPhone_PhoneInput' |
+  'bindPhone_PhoneInput_VerifyState' |
+  'bindPhone_PhoneInputError' |
+  'bindPhone_CaptchaInput' |
+  'bindPhone_CaptchaWait'> = {
+  bindPhone_ModalVisible: false,
+  bindPhone_PhoneInput: '',
+  bindPhone_PhoneInput_VerifyState: 'unverified',
+  bindPhone_PhoneInputError: '',
+  bindPhone_CaptchaInput: '',
+  bindPhone_CaptchaWait: 0,
+};
+
+const initStates_ChangePhone: Pick<SettingPageModelState,
+  'changePhone_Old_ModalVisible' |
+  'changePhone_Old_CaptchaInput' |
+  'changePhone_Old_CaptchaWait' |
+
+  'changePhone_New_ModalVisible' |
+  'changePhone_New_PhoneInput' |
+  'changePhone_New_PhoneInput_VerifyState' |
+  'changePhone_New_PhoneInputError' |
+  'changePhone_New_CaptchaInput' |
+  'changePhone_New_CaptchaWait'> = {
+  changePhone_Old_ModalVisible: false,
+  changePhone_Old_CaptchaInput: '',
+  changePhone_Old_CaptchaWait: 0,
+
+  changePhone_New_ModalVisible: false,
+  changePhone_New_PhoneInput: '',
+  changePhone_New_PhoneInput_VerifyState: 'unverified',
+  changePhone_New_PhoneInputError: '',
+  changePhone_New_CaptchaInput: '',
+  changePhone_New_CaptchaWait: 0,
+};
+
+const initStates_ChangePassword: Pick<SettingPageModelState,
+  'changePassword_ModalVisible' |
+  'changePassword_Old_PasswordInput' |
+  'changePassword_New1_PasswordInput' |
+  'changePassword_New1_PasswordInput_Error' |
+  'changePassword_New2_PasswordInput' |
+  'changePassword_New2_PasswordInput_Error'> = {
+  changePassword_ModalVisible: false,
+  changePassword_Old_PasswordInput: '',
+  changePassword_New1_PasswordInput: '',
+  changePassword_New1_PasswordInput_Error: '',
+  changePassword_New2_PasswordInput: '',
+  changePassword_New2_PasswordInput_Error: '',
+};
+
 const initStates: SettingPageModelState = {
   showPage: 'profile',
 
@@ -504,48 +594,15 @@ const initStates: SettingPageModelState = {
 
   nodeDataSize: '',
 
-  bindEmail_ModalVisible: false,
-  bindEmail_EmailInput: '',
-  bindEmail_EmailInput_VerifyState: 'unverified',
-  bindEmail_EmailInputError: '',
-  bindEmail_CaptchaInput: '',
-  bindEmail_CaptchaWait: 0,
+  ...initStates_BindEmail,
 
-  changeEmail_Old_ModalVisible: false,
-  changeEmail_Old_CaptchaInput: '',
-  changeEmail_Old_CaptchaWait: 0,
+  ...initStates_ChangeEmail,
 
-  changeEmail_New_ModalVisible: false,
-  changeEmail_New_EmailInput: '',
-  changeEmail_New_EmailInput_VerifyState: 'unverified',
-  changeEmail_New_EmailInputError: '',
-  changeEmail_New_CaptchaInput: '',
-  changeEmail_New_CaptchaWait: 0,
+  ...initStates_BindPhone,
 
-  bindPhone_ModalVisible: false,
-  bindPhone_PhoneInput: '',
-  bindPhone_PhoneInput_VerifyState: 'unverified',
-  bindPhone_PhoneInputError: '',
-  bindPhone_CaptchaInput: '',
-  bindPhone_CaptchaWait: 0,
+  ...initStates_ChangePhone,
 
-  changePhone_Old_ModalVisible: false,
-  changePhone_Old_CaptchaInput: '',
-  changePhone_Old_CaptchaWait: 0,
-
-  changePhone_New_ModalVisible: false,
-  changePhone_New_PhoneInput: '',
-  changePhone_New_PhoneInput_VerifyState: 'unverified',
-  changePhone_New_PhoneInputError: '',
-  changePhone_New_CaptchaInput: '',
-  changePhone_New_CaptchaWait: 0,
-
-  changePassword_ModalVisible: false,
-  changePassword_Old_PasswordInput: '',
-  changePassword_New1_PasswordInput: '',
-  changePassword_New1_PasswordInput_Error: '',
-  changePassword_New2_PasswordInput: '',
-  changePassword_New2_PasswordInput_Error: '',
+  ...initStates_ChangePassword,
 };
 
 const Model: SettingPageModelType = {
@@ -709,15 +766,19 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_DataCleaningBtn(action: OnClick_DataCleaningBtn_Action, effects: EffectsCommandMap) {
-      // TODO:
+    * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, { call }: EffectsCommandMap) {
+
+      // const params : Parameters<typeof FServiceAPI.Storage.clearUserNodeData>[0] = {
+      //
+      // }
+      // const {} = yield
     },
 
     * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindEmail_ModalVisible: false,
+          ...initStates_BindEmail,
         },
       });
     },
@@ -832,11 +893,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindEmail_ModalVisible: false,
-          bindEmail_EmailInput: '',
-          bindEmail_EmailInputError: '',
-          bindEmail_CaptchaInput: '',
-          bindEmail_CaptchaWait: 0,
+          ...initStates_BindEmail,
         },
       });
 
@@ -845,7 +902,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changeEmail_Old_ModalVisible: false,
+          ...initStates_ChangeEmail,
         },
       });
     },
@@ -904,7 +961,7 @@ const Model: SettingPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
-        authCode: settingPage.changeEmail_Old_CaptchaWait,
+        authCode: settingPage.changeEmail_Old_CaptchaInput,
         address: settingPage.email,
         authCodeType: 'updateMobileOrEmail',
       };
@@ -926,7 +983,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changeEmail_New_ModalVisible: false,
+          ...initStates_ChangeEmail,
         },
       });
     },
@@ -954,10 +1011,27 @@ const Model: SettingPageModelType = {
         changeEmail_New_EmailInputError = '请输入正确格式的邮箱';
       }
 
+      if (changeEmail_New_EmailInputError === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changeEmail_New_EmailInput_VerifyState: 'verifying',
+          },
+        });
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          email: settingPage.changeEmail_New_EmailInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (data) {
+          changeEmail_New_EmailInputError = '邮箱已被占用';
+        }
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           changeEmail_New_EmailInputError,
+          changeEmail_New_EmailInput_VerifyState: 'verified',
         },
       });
     },
@@ -1007,18 +1081,41 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangeEmail_New_ConfirmBtn(action: OnClick_ChangeEmail_New_ConfirmBtn_Action, effects: EffectsCommandMap) {
-      // TODO:
+    * onClick_ChangeEmail_New_ConfirmBtn({}: OnClick_ChangeEmail_New_ConfirmBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
+        oldAuthCode: settingPage.changeEmail_Old_CaptchaInput,
+        newAuthCode: settingPage.changeEmail_New_CaptchaInput,
+        newLoginName: settingPage.changeEmail_New_EmailInput,
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
+      fMessage('绑定成功', 'success');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates_ChangeEmail,
+        },
+      });
     },
     * onCancel_BindPhone_Modal(action: OnCancel_BindPhone_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_ModalVisible: false,
-          bindPhone_PhoneInput: '',
-          bindPhone_PhoneInputError: '',
-          bindPhone_CaptchaInput: '',
-          bindPhone_CaptchaWait: 0,
+          ...initStates_BindPhone,
         },
       });
     },
@@ -1044,6 +1141,12 @@ const Model: SettingPageModelType = {
       }
 
       if (bindPhone_PhoneInputError === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            bindPhone_PhoneInput_VerifyState: 'verifying',
+          },
+        });
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
           mobile: settingPage.bindPhone_PhoneInput,
         };
@@ -1057,6 +1160,7 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           bindPhone_PhoneInputError,
+          bindPhone_PhoneInput_VerifyState: 'verified',
         },
       });
     },
@@ -1111,14 +1215,11 @@ const Model: SettingPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
-        // oldAuthCod?: string;
         newAuthCode: settingPage.bindPhone_CaptchaInput,
         newLoginName: settingPage.bindPhone_PhoneInput,
       };
 
       const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
-
-      // console.log(errCode, msg, 'ADFSADFa9f093ujlksadjlfasdlfk');
 
       if (errCode !== 0) {
         return fMessage(msg, 'error');
@@ -1129,11 +1230,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          bindPhone_ModalVisible: false,
-          bindPhone_PhoneInput: '',
-          bindPhone_PhoneInputError: '',
-          bindPhone_CaptchaInput: '',
-          bindPhone_CaptchaWait: 0,
+          ...initStates_BindPhone,
         },
       });
 
@@ -1142,7 +1239,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changePhone_Old_ModalVisible: false,
+          ...initStates_ChangePhone,
         },
       });
     },
@@ -1204,7 +1301,7 @@ const Model: SettingPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
-        authCode: settingPage.changePhone_Old_CaptchaWait,
+        authCode: settingPage.changePhone_Old_CaptchaInput,
         address: settingPage.phone,
         authCodeType: 'updateMobileOrEmail',
       };
@@ -1225,7 +1322,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changePhone_New_ModalVisible: false,
+          ...initStates_ChangePhone,
         },
       });
     },
@@ -1239,6 +1336,7 @@ const Model: SettingPageModelType = {
     },
     * onBlur_ChangePhone_New_PhoneInput({}: OnBlur_ChangePhone_New_PhoneInput_Action, {
       select,
+      call,
       put,
     }: EffectsCommandMap) {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
@@ -1252,10 +1350,27 @@ const Model: SettingPageModelType = {
         changePhone_New_PhoneInputError = '请输入正确格式的手机号';
       }
 
+      if (changePhone_New_PhoneInputError === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            changePhone_New_PhoneInput_VerifyState: 'verifying',
+          },
+        });
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          mobile: settingPage.bindPhone_PhoneInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (data) {
+          changePhone_New_PhoneInputError = '手机号已被占用';
+        }
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           changePhone_New_PhoneInputError,
+          changePhone_New_PhoneInput_VerifyState: 'verified',
         },
       });
     },
@@ -1304,14 +1419,41 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangePhone_New_ConfirmBtn(action: OnClick_ChangePhone_New_ConfirmBtn_Action, effects: EffectsCommandMap) {
-      // TODO:
+    * onClick_ChangePhone_New_ConfirmBtn(action: OnClick_ChangePhone_New_ConfirmBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
+        oldAuthCode: settingPage.changePhone_Old_CaptchaInput,
+        newAuthCode: settingPage.changePhone_New_CaptchaInput,
+        newLoginName: settingPage.changePhone_New_PhoneInput,
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
+      fMessage('绑定成功', 'success');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates_ChangePhone,
+        },
+      });
     },
     * onCancel_ChangePassword_Modal(action: OnCancel_ChangePassword_Modal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changePassword_ModalVisible: false,
+          ...initStates_ChangePassword,
         },
       });
     },

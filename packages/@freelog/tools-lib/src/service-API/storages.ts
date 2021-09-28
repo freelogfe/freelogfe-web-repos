@@ -86,6 +86,20 @@ export function objectList({bucketName, ...params}: ObjectListParamsType) {
   });
 }
 
+// 分页查看用户节点数据列表
+interface UserNodeDataListParamsType {
+  skip?: number;
+  limit?: number;
+}
+
+export function UserNodeDataList(params: UserNodeDataListParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/storages/buckets/.UserNodeData/objects`,
+    params: params,
+  });
+}
+
 // 创建存储对象
 interface CreateObjectParamsType {
   bucketName: string;
@@ -318,8 +332,8 @@ export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependenc
 
 // 删除用户节点数据对象(清理节点数据)
 interface ClearUserNodeDataParamsType {
-  nodeId: number;
-  nodeDomain: string;
+  nodeIds: number[];
+  nodeDomains: string[];
 }
 
 export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {

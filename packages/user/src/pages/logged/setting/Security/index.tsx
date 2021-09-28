@@ -10,7 +10,7 @@ import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import {
   OnBlur_BindEmail_EmailInput_Action,
-  OnBlur_BindPhone_PhoneInput_Action,
+  OnBlur_BindPhone_PhoneInput_Action, OnBlur_ChangeEmail_New_EmailInput_Action,
   OnBlur_ChangePassword_New1_PasswordInput_Action, OnBlur_ChangePassword_New2_PasswordInput_Action,
   OnBlur_ChangePhone_New_PhoneInput_Action,
   OnCancel_BindEmail_Modal_Action,
@@ -347,6 +347,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn
+            disabled={settingPage.changeEmail_Old_CaptchaInput === ''}
             type='primary'
             onClick={() => {
               dispatch<OnClick_ChangeEmail_Old_NextBtn_Action>({
@@ -385,6 +386,11 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               },
             });
           }}
+          onBlur={() => {
+            dispatch<OnBlur_ChangeEmail_New_EmailInput_Action>({
+              type: 'settingPage/onBlur_ChangeEmail_New_EmailInput',
+            });
+          }}
           errorText={settingPage.changeEmail_New_EmailInputError}
           placeholder='请输入邮箱'
           className={styles.modalBlockInput}
@@ -409,7 +415,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalCaptchaInput}
           />
           <FRectBtn
-            disabled={settingPage.changeEmail_New_EmailInput === '' || settingPage.changeEmail_New_EmailInputError !== '' || settingPage.changeEmail_New_CaptchaWait > 0}
+            disabled={settingPage.changeEmail_New_EmailInput === ''
+            || settingPage.changeEmail_New_EmailInput_VerifyState !== 'verified'
+            || settingPage.changeEmail_New_EmailInputError !== ''
+            || settingPage.changeEmail_New_CaptchaWait > 0}
             style={{ width: 110 }}
             type='primary'
             onClick={() => {
@@ -423,9 +432,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalFooter}>
           <FRectBtn
             type='primary'
+            disabled={settingPage.changeEmail_New_EmailInput === ''
+            || settingPage.changeEmail_New_EmailInput_VerifyState !== 'verified'
+            || settingPage.changeEmail_New_EmailInputError !== ''
+            || settingPage.changeEmail_New_CaptchaInput === ''}
             onClick={() => {
               dispatch<OnClick_ChangeEmail_New_ConfirmBtn_Action>({
-                type: 'settingPage/OnClick_ChangeEmail_New_ConfirmBtn',
+                type: 'settingPage/onClick_ChangeEmail_New_ConfirmBtn',
               });
             }}
           >立即绑定</FRectBtn>
