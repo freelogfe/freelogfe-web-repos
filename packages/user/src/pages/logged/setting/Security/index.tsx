@@ -501,6 +501,8 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn
+            disabled={settingPage.bindPhone_PhoneInput === '' || settingPage.bindPhone_PhoneInputError !== ''
+            || settingPage.bindPhone_CaptchaInput === ''}
             type='primary'
             onClick={() => {
               dispatch<OnClick_BindPhone_ConfirmBtn_Action>({

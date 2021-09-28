@@ -12,6 +12,8 @@ type ResidenceOptions = {
   children?: ResidenceOptions;
 }[];
 
+type VerifyState = 'unverified' | 'verifying' | 'verified';
+
 export interface SettingPageModelState {
   showPage: 'profile' | 'security' | 'privacy';
 
@@ -31,6 +33,7 @@ export interface SettingPageModelState {
 
   bindEmail_ModalVisible: boolean;
   bindEmail_EmailInput: string;
+  bindEmail_EmailInput_VerifyState: VerifyState;
   bindEmail_EmailInputError: string;
   bindEmail_CaptchaInput: string;
   bindEmail_CaptchaWait: number;
@@ -41,12 +44,14 @@ export interface SettingPageModelState {
 
   changeEmail_New_ModalVisible: boolean;
   changeEmail_New_EmailInput: string;
+  changeEmail_New_EmailInput_VerifyState: VerifyState;
   changeEmail_New_EmailInputError: string;
   changeEmail_New_CaptchaInput: string;
   changeEmail_New_CaptchaWait: number;
 
   bindPhone_ModalVisible: boolean;
   bindPhone_PhoneInput: string;
+  bindPhone_PhoneInput_VerifyState: VerifyState;
   bindPhone_PhoneInputError: string;
   bindPhone_CaptchaInput: string;
   bindPhone_CaptchaWait: number;
@@ -57,6 +62,7 @@ export interface SettingPageModelState {
 
   changePhone_New_ModalVisible: boolean;
   changePhone_New_PhoneInput: string;
+  changePhone_New_PhoneInput_VerifyState: VerifyState;
   changePhone_New_PhoneInputError: string;
   changePhone_New_CaptchaInput: string;
   changePhone_New_CaptchaWait: number;
@@ -500,6 +506,7 @@ const initStates: SettingPageModelState = {
 
   bindEmail_ModalVisible: false,
   bindEmail_EmailInput: '',
+  bindEmail_EmailInput_VerifyState: 'unverified',
   bindEmail_EmailInputError: '',
   bindEmail_CaptchaInput: '',
   bindEmail_CaptchaWait: 0,
@@ -510,13 +517,14 @@ const initStates: SettingPageModelState = {
 
   changeEmail_New_ModalVisible: false,
   changeEmail_New_EmailInput: '',
+  changeEmail_New_EmailInput_VerifyState: 'unverified',
   changeEmail_New_EmailInputError: '',
-  // changeEmail_New_EmailWait: '',
   changeEmail_New_CaptchaInput: '',
   changeEmail_New_CaptchaWait: 0,
 
   bindPhone_ModalVisible: false,
   bindPhone_PhoneInput: '',
+  bindPhone_PhoneInput_VerifyState: 'unverified',
   bindPhone_PhoneInputError: '',
   bindPhone_CaptchaInput: '',
   bindPhone_CaptchaWait: 0,
@@ -527,8 +535,8 @@ const initStates: SettingPageModelState = {
 
   changePhone_New_ModalVisible: false,
   changePhone_New_PhoneInput: '',
+  changePhone_New_PhoneInput_VerifyState: 'unverified',
   changePhone_New_PhoneInputError: '',
-  // changePhone_New_PhoneWait: '',
   changePhone_New_CaptchaInput: '',
   changePhone_New_CaptchaWait: 0,
 
@@ -721,7 +729,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onBlur_BindEmail_EmailInput({}: OnBlur_BindEmail_EmailInput_Action, { select, put }: EffectsCommandMap) {
+    * onBlur_BindEmail_EmailInput({}: OnBlur_BindEmail_EmailInput_Action, { select, call, put }: EffectsCommandMap) {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -733,10 +741,27 @@ const Model: SettingPageModelType = {
         bindEmail_EmailInputError = '请输入正确格式的邮箱';
       }
 
+      if (bindEmail_EmailInputError === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            bindEmail_EmailInput_VerifyState: 'verifying',
+          },
+        });
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          email: settingPage.bindEmail_EmailInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (data) {
+          bindEmail_EmailInputError = '邮箱已被占用';
+        }
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           bindEmail_EmailInputError,
+          bindEmail_EmailInput_VerifyState: 'verified',
         },
       });
     },
@@ -785,10 +810,35 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onClick_BindEmail_ConfirmBtn({}: OnClick_BindEmail_ConfirmBtn_Action, { select, call }: EffectsCommandMap) {
+    * onClick_BindEmail_ConfirmBtn({}: OnClick_BindEmail_ConfirmBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
+        // oldAuthCod?: string;
+        newAuthCode: settingPage.bindEmail_CaptchaInput,
+        newLoginName: settingPage.bindEmail_EmailInput,
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
+      fMessage('绑定成功', 'success');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          bindEmail_ModalVisible: false,
+          bindEmail_EmailInput: '',
+          bindEmail_EmailInputError: '',
+          bindEmail_CaptchaInput: '',
+          bindEmail_CaptchaWait: 0,
+        },
+      });
 
     },
     * onCancel_ChangeEmail_Old_Modal(action: OnCancel_ChangeEmail_Old_Modal_Action, { put }: EffectsCommandMap) {
@@ -965,6 +1015,10 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           bindPhone_ModalVisible: false,
+          bindPhone_PhoneInput: '',
+          bindPhone_PhoneInputError: '',
+          bindPhone_CaptchaInput: '',
+          bindPhone_CaptchaWait: 0,
         },
       });
     },
@@ -977,7 +1031,7 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onBlur_BindPhone_PhoneInput({}: OnBlur_BindPhone_PhoneInput_Action, { select, put }: EffectsCommandMap) {
+    * onBlur_BindPhone_PhoneInput({}: OnBlur_BindPhone_PhoneInput_Action, { select, call, put }: EffectsCommandMap) {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -987,6 +1041,16 @@ const Model: SettingPageModelType = {
         bindPhone_PhoneInputError = '请输入手机号';
       } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(settingPage.bindPhone_PhoneInput)) {
         bindPhone_PhoneInputError = '请输入正确格式的手机号';
+      }
+
+      if (bindPhone_PhoneInputError === '') {
+        const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
+          mobile: settingPage.bindPhone_PhoneInput,
+        };
+        const { data } = yield call(FServiceAPI.User.userDetails, params);
+        if (data) {
+          bindPhone_PhoneInputError = '手机号已被占用';
+        }
       }
 
       yield put<ChangeAction>({
@@ -1041,7 +1105,37 @@ const Model: SettingPageModelType = {
         });
       }
     },
-    * onClick_BindPhone_ConfirmBtn(action: OnClick_BindPhone_ConfirmBtn_Action, effects: EffectsCommandMap) {
+    * onClick_BindPhone_ConfirmBtn({}: OnClick_BindPhone_ConfirmBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
+        // oldAuthCod?: string;
+        newAuthCode: settingPage.bindPhone_CaptchaInput,
+        newLoginName: settingPage.bindPhone_PhoneInput,
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.User.updateMobileOrEmail, params);
+
+      // console.log(errCode, msg, 'ADFSADFa9f093ujlksadjlfasdlfk');
+
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
+      fMessage('绑定成功', 'success');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          bindPhone_ModalVisible: false,
+          bindPhone_PhoneInput: '',
+          bindPhone_PhoneInputError: '',
+          bindPhone_CaptchaInput: '',
+          bindPhone_CaptchaWait: 0,
+        },
+      });
 
     },
     * onCancel_ChangePhone_Old_Modal(action: OnCancel_ChangePhone_Old_Modal_Action, { put }: EffectsCommandMap) {
