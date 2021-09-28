@@ -368,7 +368,7 @@ export interface OnChange_ChangePhone_New_CaptchaWait_Action extends AnyAction {
 }
 
 export interface OnClick_ChangePhone_New_ConfirmBtn_Action extends AnyAction {
-  type: 'settingPage/OnClick_ChangePhone_New_ConfirmBtn';
+  type: 'settingPage/onClick_ChangePhone_New_ConfirmBtn';
 }
 
 // 修改密码
@@ -783,6 +783,7 @@ const Model: SettingPageModelType = {
       });
     },
     * onChange_BindEmail_EmailInput({ payload }: OnChange_BindEmail_EmailInput_Action, { put }: EffectsCommandMap) {
+      // console.log(payload, 'payloadpayloadpayloadpayload12342134234234');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -966,9 +967,9 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (errCode !== 0) {
-        return fMessage(msg, 'error');
+      const { data, errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (!data) {
+        return fMessage('验证码错误', 'error');
       }
 
       yield put<ChangeAction>({
@@ -1306,9 +1307,9 @@ const Model: SettingPageModelType = {
         authCodeType: 'updateMobileOrEmail',
       };
 
-      const { errCode, msg } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
-      if (errCode !== 0) {
-        return fMessage(msg, 'error');
+      const { data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+      if (!data) {
+        return fMessage('验证码错误', 'error');
       }
       yield put<ChangeAction>({
         type: 'change',
@@ -1339,14 +1340,16 @@ const Model: SettingPageModelType = {
       call,
       put,
     }: EffectsCommandMap) {
+
+      // console.log('#######BGBBBBGGFG');
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
 
       let changePhone_New_PhoneInputError: string = '';
-      if (!settingPage.bindPhone_PhoneInput) {
+      if (settingPage.changePhone_New_PhoneInput === '') {
         changePhone_New_PhoneInputError = '请输入手机号';
-      } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(settingPage.bindPhone_PhoneInput)) {
+      } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(settingPage.changePhone_New_PhoneInput)) {
         changePhone_New_PhoneInputError = '请输入正确格式的手机号';
       }
 
@@ -1358,7 +1361,7 @@ const Model: SettingPageModelType = {
           },
         });
         const params: Parameters<typeof FServiceAPI.User.userDetails>[0] = {
-          mobile: settingPage.bindPhone_PhoneInput,
+          mobile: settingPage.changePhone_New_PhoneInput,
         };
         const { data } = yield call(FServiceAPI.User.userDetails, params);
         if (data) {

@@ -233,6 +233,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <FInput
           value={settingPage.bindEmail_EmailInput}
           onChange={(e) => {
+            // console.log('@#$#$#@$@$234234');
             dispatch<OnChange_BindEmail_EmailInput_Action>({
               type: 'settingPage/onChange_BindEmail_EmailInput',
               payload: {
@@ -271,7 +272,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FRectBtn
             style={{ width: 110 }}
             type='primary'
-            disabled={settingPage.bindEmail_EmailInput === '' || settingPage.bindEmail_EmailInputError !== '' || settingPage.bindEmail_CaptchaWait > 0}
+            disabled={settingPage.bindEmail_EmailInput === ''
+            || settingPage.bindEmail_EmailInput_VerifyState !== 'verified'
+            || settingPage.bindEmail_EmailInputError !== ''
+            || settingPage.bindEmail_CaptchaWait > 0}
             onClick={() => {
               dispatch<OnClick_BindEmail_SendCaptchaBtn_Action>({
                 type: 'settingPage/onClick_BindEmail_SendCaptchaBtn',
@@ -283,7 +287,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div className={styles.modalFooter}>
           <FRectBtn
             type='primary'
-            // disabled={}
+            disabled={settingPage.bindEmail_EmailInput === ''
+            || settingPage.bindEmail_EmailInput_VerifyState !== 'verified'
+            || settingPage.bindEmail_EmailInputError !== ''
+            || settingPage.bindEmail_CaptchaInput === ''}
             onClick={() => {
               dispatch<OnClick_BindEmail_ConfirmBtn_Action>({
                 type: 'settingPage/onClick_BindEmail_ConfirmBtn',
@@ -501,7 +508,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalCaptchaInput}
           />
           <FRectBtn
-            disabled={settingPage.bindPhone_PhoneInput === '' || settingPage.bindPhone_PhoneInputError !== '' || settingPage.bindPhone_CaptchaWait > 0}
+            disabled={settingPage.bindPhone_PhoneInput === ''
+            || settingPage.bindPhone_PhoneInput_VerifyState !== 'verified'
+            || settingPage.bindPhone_PhoneInputError !== ''
+            || settingPage.bindPhone_CaptchaWait > 0}
             style={{ width: 110 }}
             type='primary'
             onClick={() => {
@@ -514,7 +524,9 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn
-            disabled={settingPage.bindPhone_PhoneInput === '' || settingPage.bindPhone_PhoneInputError !== ''
+            disabled={settingPage.bindPhone_PhoneInput === ''
+            || settingPage.bindPhone_PhoneInput_VerifyState !== 'verified'
+            || settingPage.bindPhone_PhoneInputError !== ''
             || settingPage.bindPhone_CaptchaInput === ''}
             type='primary'
             onClick={() => {
@@ -579,6 +591,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn
+            disabled={settingPage.changePhone_Old_CaptchaInput === ''}
             type='primary'
             onClick={() => {
               dispatch<OnClick_ChangePhone_Old_NextBtn_Action>({
@@ -618,6 +631,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             });
           }}
           onBlur={() => {
+            // console.log('BBBBBBLLLLLUUUURRRR');
             dispatch<OnBlur_ChangePhone_New_PhoneInput_Action>({
               type: 'settingPage/onBlur_ChangePhone_New_PhoneInput',
             });
@@ -646,7 +660,10 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             wrapClassName={styles.modalCaptchaInput}
           />
           <FRectBtn
-            disabled={settingPage.changePhone_New_PhoneInput === '' || settingPage.changePhone_New_PhoneInputError !== '' || settingPage.changePhone_New_CaptchaWait > 0}
+            disabled={settingPage.changePhone_New_PhoneInput === ''
+            || settingPage.changePhone_New_PhoneInput_VerifyState !== 'verified'
+            || settingPage.changePhone_New_PhoneInputError !== ''
+            || settingPage.changePhone_New_CaptchaWait > 0}
             onClick={() => {
               // OnClick_ChangePhone_New_SendCaptchaBtn_Action
               dispatch<OnClick_ChangePhone_New_SendCaptchaBtn_Action>({
@@ -660,10 +677,14 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 80 }} />
         <div className={styles.modalFooter}>
           <FRectBtn
+            disabled={settingPage.changePhone_New_PhoneInput === ''
+            || settingPage.changePhone_New_PhoneInput_VerifyState !== 'verified'
+            || settingPage.changePhone_New_PhoneInputError !== ''
+            || settingPage.changePhone_New_CaptchaInput === ''}
             type='primary'
             onClick={() => {
               dispatch<OnClick_ChangePhone_New_ConfirmBtn_Action>({
-                type: 'settingPage/OnClick_ChangePhone_New_ConfirmBtn',
+                type: 'settingPage/onClick_ChangePhone_New_ConfirmBtn',
               });
             }}
           >立即绑定</FRectBtn>
