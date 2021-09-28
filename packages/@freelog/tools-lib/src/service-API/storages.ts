@@ -7,7 +7,6 @@ export interface CreateBucketParamsType {
 }
 
 export function createBucket(params: CreateBucketParamsType) {
-  // return FUtil.Axios.post(`/v1/storages/buckets`, params);
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/buckets`,
@@ -21,9 +20,6 @@ interface BucketListParamsType {
 }
 
 export function bucketList(params: BucketListParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/buckets`, {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets`,
@@ -32,15 +28,14 @@ export function bucketList(params: BucketListParamsType) {
 }
 
 // 查询bucket使用情况
-// interface SpaceStatisticsParamsType {
-// }
+interface SpaceStatisticsParamsType {
+}
 
-export function spaceStatistics() {
-  // return FUtil.Axios.get(`/v1/storages/buckets/spaceStatistics`);
+export function spaceStatistics(params: SpaceStatisticsParamsType = {}) {
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets/spaceStatistics`,
-    // params: params,
+    params: params,
   });
 }
 
@@ -50,7 +45,6 @@ interface DeleteBucketParamsType {
 }
 
 export function deleteBucket(params: DeleteBucketParamsType) {
-  // return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}`);
   return FUtil.Request({
     method: 'DELETE',
     url: `/v1/storages/buckets/${params.bucketName}`,
@@ -64,7 +58,6 @@ interface BucketDetailsParamsType {
 }
 
 export function bucketDetails({bucketName}: BucketDetailsParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}`);
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets/${bucketName}`,
@@ -86,10 +79,6 @@ interface ObjectListParamsType {
 }
 
 export function objectList({bucketName, ...params}: ObjectListParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/objects`, {
-  //   params,
-  // });
-
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets/${bucketName}/objects`,
@@ -106,7 +95,6 @@ interface CreateObjectParamsType {
 }
 
 export function createObject({bucketName, ...params}: CreateObjectParamsType) {
-  // return FUtil.Axios.post(`/v1/storages/buckets/${bucketName}/objects`, params);
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/buckets/${bucketName}/objects`,
@@ -126,14 +114,12 @@ interface ObjectDetailsParamsType2 {
 
 export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsParamsType2) {
   if ((params as ObjectDetailsParamsType2).objectIdOrName) {
-    // return FUtil.Axios.get(`/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`);
     return FUtil.Request({
       method: 'GET',
       url: `/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`,
       params: params,
     });
   }
-  // return FUtil.Axios.get(`/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`);
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`,
@@ -148,7 +134,6 @@ interface DeleteObjectsParamsType {
 }
 
 export function deleteObjects(params: DeleteObjectsParamsType) {
-  // return FUtil.Axios.delete(`/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`);
   return FUtil.Request({
     method: 'DELETE',
     url: `/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`,
@@ -162,7 +147,6 @@ interface BucketIsExistParamsType {
 }
 
 export function bucketIsExist({bucketName}: BucketIsExistParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/buckets/${bucketName}/isExist`);
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/buckets/${bucketName}/isExist`,
@@ -176,7 +160,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi', true) + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v1/storages/objects/${params.objectIdOrName}/file`;
 }
 
 // 根据sha1查询文件是否存在
@@ -185,9 +169,6 @@ interface FileIsExistParamsType {
 }
 
 export function fileIsExist(params: FileIsExistParamsType) {
-  // return FUtil.Axios.get('/v1/storages/files/fileIsExist', {
-  //   params: params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/files/fileIsExist`,
@@ -254,7 +235,6 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
       formData.append(key, value);
     }
   }
-  // return FUtil.Axios.post('/v1/storages/files/uploadImage', formData, config);
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/files/uploadImage`,
@@ -282,7 +262,6 @@ interface UpdateObjectParamsType {
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
-  // return FUtil.Axios.put(`/v1/storages/objects/${objectIdOrName}`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v1/storages/objects/${objectIdOrName}`,
@@ -298,9 +277,6 @@ interface BatchObjectListParamsType {
 }
 
 export function batchObjectList(params: BatchObjectListParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/objects/list`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/objects/list`,
@@ -315,9 +291,6 @@ interface FilePropertyParamsType {
 }
 
 export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
-  // return FUtil.Axios.get(`/v1/storages/files/${sha1}/property`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v1/storages/files/${sha1}/property`,
@@ -336,10 +309,23 @@ interface CycleDependencyCheckParamsType {
 }
 
 export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
-  // return FUtil.Axios.post(`/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`, params);
   return FUtil.Request({
     method: 'POST',
     url: `/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
+    data: params,
+  });
+}
+
+// 删除用户节点数据对象(清理节点数据)
+interface ClearUserNodeDataParamsType {
+  nodeId: number;
+  nodeDomain: string;
+}
+
+export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {
+  return FUtil.Request({
+    method: 'DELETE',
+    url: `/v2/storages/buckets/.UserNodeData/objects/clear`,
     data: params,
   });
 }
