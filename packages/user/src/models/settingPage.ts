@@ -5,6 +5,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
+import { FetchInfoAction } from '@/models/user';
 
 type ResidenceOptions = {
   value: string | number;
@@ -889,13 +890,18 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage('绑定成功', 'success');
+      // fMessage('绑定成功', 'success');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ...initStates_BindEmail,
+          email: settingPage.bindEmail_EmailInput,
         },
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'user/fetchInfo',
       });
 
     },
@@ -1103,13 +1109,18 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage('绑定成功', 'success');
+      // fMessage('绑定成功', 'success');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ...initStates_ChangeEmail,
+          email: settingPage.changeEmail_New_EmailInput,
         },
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'user/fetchInfo',
       });
     },
     * onCancel_BindPhone_Modal(action: OnCancel_BindPhone_Modal_Action, { put }: EffectsCommandMap) {
@@ -1226,13 +1237,18 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage('绑定成功', 'success');
+      // fMessage('绑定成功', 'success');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ...initStates_BindPhone,
+          phone: settingPage.bindPhone_PhoneInput,
         },
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'user/fetchInfo',
       });
 
     },
@@ -1443,13 +1459,18 @@ const Model: SettingPageModelType = {
         return fMessage(msg, 'error');
       }
 
-      fMessage('绑定成功', 'success');
+      // fMessage('绑定成功', 'success');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           ...initStates_ChangePhone,
+          phone: settingPage.changePhone_New_PhoneInput,
         },
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'user/fetchInfo',
       });
     },
     * onCancel_ChangePassword_Modal(action: OnCancel_ChangePassword_Modal_Action, { put }: EffectsCommandMap) {
