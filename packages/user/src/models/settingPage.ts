@@ -579,7 +579,7 @@ const initStates_ChangePassword: Pick<SettingPageModelState,
 };
 
 const initStates: SettingPageModelState = {
-  showPage: 'profile',
+  showPage: 'privacy',
 
   avatar: '',
   gender: 'unknown',
@@ -618,6 +618,13 @@ const Model: SettingPageModelType = {
       const { data: data1 } = yield call(FServiceAPI.User.areasProvinces);
       // console.log(data1, 'data1!@#$!@#$@#$');
       const userDetail = data.userDetail;
+
+      const params2: Parameters<typeof FServiceAPI.Storage.bucketDetails>[0] = {
+        bucketName: '.UserNodeData',
+      };
+
+      const { data: data3 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -644,6 +651,8 @@ const Model: SettingPageModelType = {
               }),
             };
           }),
+
+          nodeDataSize: FUtil.Format.humanizeSize(data3.totalFileSize),
         },
       });
     },

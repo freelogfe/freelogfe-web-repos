@@ -51,6 +51,7 @@ import {
 } from '@/models/settingPage';
 import * as AHooks from 'ahooks';
 import { OnChangeWaitingTimeAction } from '@/models/logonPage';
+import FDrawer from '@/components/FDrawer';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -795,6 +796,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         <div style={{ height: 5 }} />
       </div>
     </Modal>
+
   </>);
 }
 
