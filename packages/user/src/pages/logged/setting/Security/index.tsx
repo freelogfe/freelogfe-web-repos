@@ -710,6 +710,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          type='password'
           value={settingPage.changePassword_Old_PasswordInput}
           onChange={(e) => {
             dispatch<OnChange_ChangePassword_Old_PasswordInput_Action>({
@@ -729,6 +730,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          type='password'
           value={settingPage.changePassword_New1_PasswordInput}
           errorText={settingPage.changePassword_New1_PasswordInput_Error}
           onChange={(e) => {
@@ -755,6 +757,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
 
         <div style={{ height: 5 }} />
         <FInput
+          type='password'
           value={settingPage.changePassword_New2_PasswordInput}
           errorText={settingPage.changePassword_New2_PasswordInput_Error}
           onChange={(e) => {

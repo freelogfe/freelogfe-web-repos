@@ -1505,23 +1505,23 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
-      let changePhone_New_PhoneInputError: string = '';
+      let changePassword_New1_PasswordInput_Error: string = '';
       let changePassword_New2_PasswordInput_Error: string = '';
 
-      if (!settingPage.changePassword_New1_PasswordInput_Error) {
-        changePhone_New_PhoneInputError = '请输入新密码';
-      } else if (!FUtil.Regexp.MOBILE_PHONE_NUMBER.test(settingPage.changePassword_New1_PasswordInput_Error)) {
-        changePhone_New_PhoneInputError = '请输入正确格式的密码';
+      if (settingPage.changePassword_New1_PasswordInput === '') {
+        changePassword_New1_PasswordInput_Error = '请输入新密码';
+      } else if (!FUtil.Regexp.PASSWORD.test(settingPage.changePassword_New1_PasswordInput)) {
+        changePassword_New1_PasswordInput_Error = '请输入正确格式的密码';
       }
 
-      if (settingPage.changePassword_New2_PasswordInput !== '' && (settingPage.changePassword_New2_PasswordInput !== settingPage.changePhone_New_PhoneInputError)) {
-        changePassword_New2_PasswordInput_Error = '两次输入不一致';
+      if (settingPage.changePassword_New1_PasswordInput !== '' && settingPage.changePassword_New2_PasswordInput !== '' && (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput)) {
+        changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changePhone_New_PhoneInputError,
+          changePassword_New1_PasswordInput_Error,
           changePassword_New2_PasswordInput_Error,
         },
       });
@@ -1542,9 +1542,9 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
       let changePassword_New2_PasswordInput_Error: string = '';
-      if (!settingPage.changePassword_New2_PasswordInput_Error) {
+      if (settingPage.changePassword_New2_PasswordInput === '') {
         changePassword_New2_PasswordInput_Error = '请输入确认密码';
-      } else if (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New2_PasswordInput_Error) {
+      } else if (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput) {
         changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
       }
 
@@ -1555,8 +1555,33 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_ChangePassword_ConfirmBtn({}: OnClick_ChangePassword_ConfirmBtn_Action, {}: EffectsCommandMap) {
-      // TODO:
+    * onClick_ChangePassword_ConfirmBtn({}: OnClick_ChangePassword_ConfirmBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.User.updatePassword>[0] = {
+        oldPassword: settingPage.changePassword_Old_PasswordInput,
+        newPassword: settingPage.changePassword_New1_PasswordInput,
+      };
+
+      const { errCode, msg } = yield call(FServiceAPI.User.updatePassword, params);
+
+      if (errCode !== 0) {
+        return fMessage(msg, 'error');
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates_ChangePassword,
+        },
+      });
+
     },
 
   },
