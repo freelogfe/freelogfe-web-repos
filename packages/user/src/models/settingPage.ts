@@ -75,6 +75,15 @@ export interface SettingPageModelState {
   changePassword_New2_PasswordInput: string;
   changePassword_New2_PasswordInput_Error: string;
 
+  nodeDataDrawerVisible: boolean;
+  nodeDataList: {
+    checked: boolean;
+    id: number;
+    name: string;
+    url: string;
+    size: string;
+    dateTime: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -410,6 +419,28 @@ export interface OnClick_ChangePassword_ConfirmBtn_Action extends AnyAction {
   type: 'settingPage/onClick_ChangePassword_ConfirmBtn';
 }
 
+export interface OnChange_NodeDate_CheckedAll_Action extends AnyAction {
+  type: 'settingPage/onChange_NodeDate_CheckedAll';
+  payload: {
+    value: boolean;
+  };
+}
+
+export interface OnChange_NodeDate_ItemChecked_Action extends AnyAction {
+  type: 'settingPage/onChange_NodeDate_ItemChecked';
+  payload: {
+    nodeID: number;
+    value: boolean;
+  };
+}
+
+export interface OnCancel_NodeDate_Drawer_Action extends AnyAction {
+  type: 'settingPage/onCancel_NodeDate_Drawer';
+}
+
+export interface OnClick_NodeDate_ConfirmBtn_Action extends AnyAction {
+  type: 'settingPage/onClick_NodeDate_ConfirmBtn';
+}
 
 interface SettingPageModelType {
   namespace: 'settingPage';
@@ -479,6 +510,11 @@ interface SettingPageModelType {
     onChange_ChangePassword_New2_PasswordInput: (action: OnChange_ChangePassword_New2_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onBlur_ChangePassword_New2_PasswordInput: (action: OnBlur_ChangePassword_New2_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onClick_ChangePassword_ConfirmBtn: (action: OnClick_ChangePassword_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+
+    onChange_NodeDate_CheckedAll: (action: OnChange_NodeDate_CheckedAll_Action, effects: EffectsCommandMap) => void;
+    onChange_NodeDate_ItemChecked: (action: OnChange_NodeDate_ItemChecked_Action, effects: EffectsCommandMap) => void;
+    onCancel_NodeDate_Drawer: (action: OnCancel_NodeDate_Drawer_Action, effects: EffectsCommandMap) => void;
+    onClick_NodeDate_ConfirmBtn: (action: OnClick_NodeDate_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<SettingPageModelState, ChangeAction>;
@@ -604,6 +640,9 @@ const initStates: SettingPageModelState = {
   ...initStates_ChangePhone,
 
   ...initStates_ChangePassword,
+
+  nodeDataDrawerVisible: false,
+  nodeDataList: [],
 };
 
 const Model: SettingPageModelType = {
@@ -776,12 +815,22 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, { call }: EffectsCommandMap) {
+    * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, { call, put }: EffectsCommandMap) {
 
-      // const params : Parameters<typeof FServiceAPI.Storage.clearUserNodeData>[0] = {
-      //
-      // }
-      // const {} = yield
+      const params: Parameters<typeof FServiceAPI.Storage.UserNodeDataList>[0] = {
+        skip: 0,
+        limit: 100,
+      };
+
+      const {} = yield call(FServiceAPI.Storage.UserNodeDataList, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDataDrawerVisible: true,
+        },
+      });
+
     },
 
     * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, { put }: EffectsCommandMap) {
@@ -1592,7 +1641,65 @@ const Model: SettingPageModelType = {
       });
 
     },
+    * onChange_NodeDate_CheckedAll({ payload }: OnChange_NodeDate_CheckedAll_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDataList: settingPage.nodeDataList.map((nd) => {
+            return {
+              ...nd,
+              checked: payload.value,
+            };
+          }),
+        },
+      });
+    },
+    * onChange_NodeDate_ItemChecked({ payload }: OnChange_NodeDate_ItemChecked_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDataList: settingPage.nodeDataList.map((nd) => {
+            if (nd.id !== payload.nodeID) {
+              return nd;
+            }
+            return {
+              ...nd,
+              checked: payload.value,
+            };
+          }),
+        },
+      });
+    },
+    * onCancel_NodeDate_Drawer({}: OnCancel_NodeDate_Drawer_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDataDrawerVisible: false,
+        },
+      });
+    },
+    * onClick_NodeDate_ConfirmBtn(action: OnClick_NodeDate_ConfirmBtn_Action, { select }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
 
+      // const params : Parameters<typeof FServiceAPI.Storage.clearUserNodeData>[0] = {
+      //
+      // }
+      // const {} = yield
+    },
   },
   reducers: {
     change(state, { payload }) {

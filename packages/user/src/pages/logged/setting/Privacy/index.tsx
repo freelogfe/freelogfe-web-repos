@@ -5,16 +5,22 @@ import { FContentText, FTitleText } from '@/components/FText';
 import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
-import { connect } from 'dva';
+import { connect, Dispatch } from 'dva';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
+import {
+  OnCancel_NodeDate_Drawer_Action,
+  OnClick_DataCleaningBtn_Action,
+  OnClick_NodeDate_ConfirmBtn_Action,
+} from '@/models/settingPage';
 
 interface PrivacyProps {
+  dispatch: Dispatch;
   settingPage: SettingPageModelState;
 }
 
-function Privacy({ settingPage }: PrivacyProps) {
+function Privacy({ dispatch, settingPage }: PrivacyProps) {
   return (<>
     <FFormLayout>
       <FFormLayout.FBlock
@@ -28,7 +34,15 @@ function Privacy({ settingPage }: PrivacyProps) {
             <div className={styles.right}>
               <FContentText text={settingPage.nodeDataSize} type='highlight' />
               <div style={{ width: 30 }} />
-              <FTextBtn type='danger'>清理节点数据</FTextBtn>
+              <FTextBtn
+                type='danger'
+                onClick={() => {
+                  // OnClick_DataCleaningBtn_Action
+                  dispatch<OnClick_DataCleaningBtn_Action>({
+                    type: 'settingPage/onClick_DataCleaningBtn',
+                  });
+                }}
+              >清理节点数据</FTextBtn>
             </div>
           </div>
         </Space>
@@ -36,18 +50,41 @@ function Privacy({ settingPage }: PrivacyProps) {
     </FFormLayout>
 
     <FDrawer
-      visible={true}
+      visible={settingPage.nodeDataDrawerVisible}
       title={'清理节点数据'}
       width={700}
       topRight={<Space size={30}>
-        <FTextBtn type='default'>取消</FTextBtn>
-        <FRectBtn type='danger1'>清理</FRectBtn>
+        <FTextBtn
+          type='default'
+          onClick={() => {
+            dispatch<OnCancel_NodeDate_Drawer_Action>({
+              type: 'settingPage/onCancel_NodeDate_Drawer',
+            });
+          }}
+        >取消</FTextBtn>
+        <FRectBtn
+          type='danger1'
+          onClick={() => {
+            dispatch<OnClick_NodeDate_ConfirmBtn_Action>({
+              type: 'settingPage/onClick_NodeDate_ConfirmBtn',
+            });
+          }}
+        >清理</FRectBtn>
       </Space>}
     >
       <div className={styles.nodesList}>
         <div className={styles.nodeItem} style={{ paddingTop: 0 }}>
           <div className={styles.nodeCheckBox}>
-            <FCheckbox checked={true} />
+            <FCheckbox
+              checked={settingPage.nodeDataList.every((nd) => {
+                return nd.checked;
+              })}
+              indeterminate={!(settingPage.nodeDataList.every((nd) => {
+                return nd.checked;
+              }) || settingPage.nodeDataList.every((nd) => {
+                return !nd.checked;
+              }))}
+            />
           </div>
           <div className={styles.nodeName}>
             <FTitleText text={'节点名称/地址'} type='table' />

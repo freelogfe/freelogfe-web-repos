@@ -92,7 +92,7 @@ interface UserNodeDataListParamsType {
   limit?: number;
 }
 
-export function UserNodeDataList(params: UserNodeDataListParamsType) {
+export function userNodeDataList(params: UserNodeDataListParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/storages/buckets/.UserNodeData/objects`,
