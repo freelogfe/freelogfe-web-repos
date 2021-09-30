@@ -663,7 +663,7 @@ const Model: SettingPageModelType = {
         bucketName: '.UserNodeData',
       };
 
-      const { data: data3 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
+      const { data: data2 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -692,7 +692,7 @@ const Model: SettingPageModelType = {
             };
           }),
 
-          nodeDataSize: FUtil.Format.humanizeSize(data3.totalFileSize),
+          nodeDataSize: FUtil.Format.humanizeSize(data2.totalFileSize),
         },
       });
     },
@@ -1723,15 +1723,25 @@ const Model: SettingPageModelType = {
       // console.log(params, ' params2343432423fsdaasdfsd');
       const { data } = yield call(FServiceAPI.Storage.clearUserNodeData, params);
 
-      if (data) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            nodeDataDrawerVisible: false,
-            nodeDataList: [],
-          },
-        });
+      if (!data) {
+        return;
       }
+
+      const params2: Parameters<typeof FServiceAPI.Storage.bucketDetails>[0] = {
+        bucketName: '.UserNodeData',
+      };
+
+      const { data: data2 } = yield call(FServiceAPI.Storage.bucketDetails, params2);
+      console.log(data2, 'data2!@#$@!#$@#4');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          nodeDataDrawerVisible: false,
+          nodeDataList: [],
+          // nodeDataSize: FUtil.Format.humanizeSize(data2.totalFileSize),
+        },
+      });
     },
   },
   reducers: {

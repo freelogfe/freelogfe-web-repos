@@ -34,15 +34,18 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
             <div className={styles.right}>
               <FContentText text={settingPage.nodeDataSize} type='highlight' />
               <div style={{ width: 30 }} />
-              <FTextBtn
-                type='danger'
-                onClick={() => {
-                  // OnClick_DataCleaningBtn_Action
-                  dispatch<OnClick_DataCleaningBtn_Action>({
-                    type: 'settingPage/onClick_DataCleaningBtn',
-                  });
-                }}
-              >清理节点数据</FTextBtn>
+              {
+                settingPage.nodeDataSize !== '0 B' && (<FTextBtn
+                  type='danger'
+                  onClick={() => {
+                    // OnClick_DataCleaningBtn_Action
+                    dispatch<OnClick_DataCleaningBtn_Action>({
+                      type: 'settingPage/onClick_DataCleaningBtn',
+                    });
+                  }}
+                >清理节点数据</FTextBtn>)
+              }
+
             </div>
           </div>
         </Space>
@@ -63,6 +66,9 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
           }}
         >取消</FTextBtn>
         <FRectBtn
+          disabled={!settingPage.nodeDataList.some((nd) => {
+            return nd.checked;
+          })}
           type='danger1'
           onClick={() => {
             dispatch<OnClick_NodeDate_ConfirmBtn_Action>({
