@@ -332,8 +332,8 @@ export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependenc
 
 // 删除用户节点数据对象(清理节点数据)
 interface ClearUserNodeDataParamsType {
-  nodeIds: number[];
-  nodeDomains: string[];
+  nodeIds?: number[];
+  nodeDomains?: string[];
 }
 
 export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {

@@ -10,7 +10,7 @@ import { ConnectState, SettingPageModelState } from '@/models/connect';
 import FDrawer from '@/components/FDrawer';
 import FCheckbox from '@/components/FCheckbox';
 import {
-  OnCancel_NodeDate_Drawer_Action,
+  OnCancel_NodeDate_Drawer_Action, OnChange_NodeDate_CheckedAll_Action, OnChange_NodeDate_ItemChecked_Action,
   OnClick_DataCleaningBtn_Action,
   OnClick_NodeDate_ConfirmBtn_Action,
 } from '@/models/settingPage';
@@ -84,6 +84,14 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
               }) || settingPage.nodeDataList.every((nd) => {
                 return !nd.checked;
               }))}
+              onChange={(e) => {
+                dispatch<OnChange_NodeDate_CheckedAll_Action>({
+                  type: 'settingPage/onChange_NodeDate_CheckedAll',
+                  payload: {
+                    value: e.target.checked,
+                  },
+                });
+              }}
             />
           </div>
           <div className={styles.nodeName}>
@@ -97,25 +105,38 @@ function Privacy({ dispatch, settingPage }: PrivacyProps) {
           </div>
         </div>
 
-        <div className={styles.nodeItem}>
-          <div className={styles.nodeCheckBox}>
-            <FCheckbox checked={true} />
-          </div>
-          <div className={styles.nodeName}>
-            <FContentText text={'节点名称'} type='highlight' />
-            <div style={{ height: 2 }} />
-            <FContentText text={'www.jiedian.com'} type='additional2' />
-          </div>
-          <div className={styles.nodeSize}>
-            <FContentText text={'235K'} type='highlight' />
-          </div>
-          <div className={styles.nodeDateTime}>
-            <FContentText text={'2020/04/22  13:23'} type='highlight' />
-          </div>
-        </div>
+        {
+          settingPage.nodeDataList.map((nd) => {
+            return (<div key={nd.id} className={styles.nodeItem}>
+              <div className={styles.nodeCheckBox}>
+                <FCheckbox
+                  checked={nd.checked}
+                  onChange={(e) => {
+                    dispatch<OnChange_NodeDate_ItemChecked_Action>({
+                      type: 'settingPage/onChange_NodeDate_ItemChecked',
+                      payload: {
+                        nodeID: nd.id,
+                        value: e.target.checked,
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <div className={styles.nodeName}>
+                <FContentText text={nd.name} type='highlight' />
+                <div style={{ height: 2 }} />
+                <FContentText text={nd.url} type='additional2' />
+              </div>
+              <div className={styles.nodeSize}>
+                <FContentText text={nd.size} type='highlight' />
+              </div>
+              <div className={styles.nodeDateTime}>
+                <FContentText text={nd.dateTime} type='highlight' />
+              </div>
+            </div>);
+          })
+        }
       </div>
-
-
     </FDrawer>
   </>);
 }

@@ -79,6 +79,7 @@ export interface SettingPageModelState {
   nodeDataList: {
     checked: boolean;
     id: number;
+    domain: string;
     name: string;
     url: string;
     size: string;
@@ -822,12 +823,23 @@ const Model: SettingPageModelType = {
         limit: 100,
       };
 
-      const {} = yield call(FServiceAPI.Storage.UserNodeDataList, params);
+      const { data } = yield call(FServiceAPI.Storage.UserNodeDataList, params);
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           nodeDataDrawerVisible: true,
+          nodeDataList: (data.dataList as any[]).map<SettingPageModelState['nodeDataList'][number]>((dl: any) => {
+            return {
+              checked: false,
+              id: dl.nodeInfo.nodeId,
+              domain: dl.nodeInfo.nodeDomain,
+              name: dl.nodeInfo.nodeName,
+              url: FUtil.Format.completeUrlByDomain(dl.nodeInfo.nodeDomain).replace(/^http(s)?:\/\//, ''),
+              size: FUtil.Format.humanizeSize(dl.systemProperty.fileSize),
+              dateTime: FUtil.Format.formatDateTime(dl.updateDate, true),
+            };
+          }),
         },
       });
 
@@ -1667,6 +1679,7 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+      console.log(payload, '@#$@#$@#422222222');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1690,15 +1703,35 @@ const Model: SettingPageModelType = {
         },
       });
     },
-    * onClick_NodeDate_ConfirmBtn(action: OnClick_NodeDate_ConfirmBtn_Action, { select }: EffectsCommandMap) {
+    * onClick_NodeDate_ConfirmBtn(action: OnClick_NodeDate_ConfirmBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
 
-      // const params : Parameters<typeof FServiceAPI.Storage.clearUserNodeData>[0] = {
-      //
-      // }
-      // const {} = yield
+      const params: Parameters<typeof FServiceAPI.Storage.clearUserNodeData>[0] = {
+        nodeDomains: settingPage.nodeDataList.filter((nd) => {
+          return nd.checked;
+        }).map((nd) => {
+          return nd.domain;
+        }),
+      };
+
+      // console.log(params, ' params2343432423fsdaasdfsd');
+      const { data } = yield call(FServiceAPI.Storage.clearUserNodeData, params);
+
+      if (data) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            nodeDataDrawerVisible: false,
+            nodeDataList: [],
+          },
+        });
+      }
     },
   },
   reducers: {
