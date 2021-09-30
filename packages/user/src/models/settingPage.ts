@@ -818,12 +818,12 @@ const Model: SettingPageModelType = {
     },
     * onClick_DataCleaningBtn({}: OnClick_DataCleaningBtn_Action, { call, put }: EffectsCommandMap) {
 
-      const params: Parameters<typeof FServiceAPI.Storage.UserNodeDataList>[0] = {
+      const params: Parameters<typeof FServiceAPI.Storage.userNodeDataList>[0] = {
         skip: 0,
         limit: 100,
       };
 
-      const { data } = yield call(FServiceAPI.Storage.UserNodeDataList, params);
+      const { data } = yield call(FServiceAPI.Storage.userNodeDataList, params);
 
       yield put<ChangeAction>({
         type: 'change',
