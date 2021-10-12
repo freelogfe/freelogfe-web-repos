@@ -35,6 +35,7 @@ function FLogged({ dispatch, user, children, match, history, location, route }: 
 
   return (<FBaseLayout>
     <div className={styles.container}>
+      <div className={styles.padding} />
       <div className={styles.sider}>
         <div style={{ height: 35 }} />
         <div className={styles.userInfo}>
@@ -63,6 +64,7 @@ function FLogged({ dispatch, user, children, match, history, location, route }: 
           </FLink>
         </div>
       </div>
+
       <div className={styles.content}>
         {children}
       </div>

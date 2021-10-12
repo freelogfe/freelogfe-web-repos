@@ -1,4 +1,7 @@
 .container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
 
   .sider {
     width: 280px;
@@ -9,13 +12,15 @@
     bottom: 0;
   }
 
-  .content {
-    width: calc(100vw - 280px);
-    margin-left: 280px;
-    //height: 100px;
-    //background-color: #2784FF;
+  .padding {
+    width: 280px;
+    flex-shrink: 0;
   }
 
+  .content {
+    width: 100%;
+    flex-shrink: 1;
+  }
 }
 
 
