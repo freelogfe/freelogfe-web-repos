@@ -4,19 +4,22 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 
+type Authorize_SubjectType = 'resource' | 'exhibit';
+type Authorize_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
+
 export interface ContractPageModelState {
   showPage: 'authorize' | 'authorized';
 
   authorize_SubjectType_Options: {
-    value: string;
-    label: string;
+    value: 'all' | Authorize_SubjectType
+    text: string;
   }[];
-  authorize_SubjectType: string;
+  authorize_SubjectType: 'all' | Authorize_SubjectType;
   authorize_Status_Options: {
-    value: string;
-    label: string;
+    value: 'all' | Authorize_Status
+    text: string;
   }[];
-  authorize_Status: string;
+  authorize_Status: 'all' | Authorize_Status;
   authorize_Date: [Moment | null, Moment | null];
   authorize_List: {
     cover: string;
@@ -29,19 +32,19 @@ export interface ContractPageModelState {
     licenseeId: string;
     licenseeType: 'resource' | 'node' | 'user';
     licenseeName: string;
-    status: 'authorization' | 'pending' | 'exception' | 'terminated';
+    status: Authorize_Status;
     dataTime: string;
     contractID: string;
   }[];
 
   authorized_SubjectType_Options: {
     value: string;
-    label: string;
+    text: string;
   }[];
   authorized_SubjectType: string;
   authorized_Status_Options: {
     value: string;
-    label: string;
+    text: string;
   }[];
   authorized_Status: string;
   authorized_Date: [Moment | null, Moment | null];
@@ -99,14 +102,14 @@ export interface OnCloseContractDetailsDrawerAction extends AnyAction {
 export interface OnChange_Authorize_SubjectType_Action extends AnyAction {
   type: 'contractPage/onChange_Authorize_SubjectType';
   payload: {
-    value: string;
+    value: 'all' | Authorize_SubjectType;
   };
 }
 
 export interface OnChange_Authorize_Status_Action extends AnyAction {
   type: 'contractPage/onChange_Authorize_Status';
   payload: {
-    value: string;
+    value: 'all' | Authorize_Status;
   };
 }
 
@@ -142,26 +145,41 @@ const initStates: ContractPageModelState = {
   showPage: 'authorize',
 
   authorize_SubjectType_Options: [{
-    value: '1234',
-    label: '1234',
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'resource',
+    text: '资源',
+  }, {
+    value: 'exhibit',
+    text: '展品',
   }],
-  authorize_SubjectType: '1234',
+  authorize_SubjectType: 'all',
   authorize_Status_Options: [{
-    value: '1234',
-    label: '1234',
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'authorization',
+    text: '已授权',
+  }, {
+    value: 'pending',
+    text: '待执行',
+  }, {
+    value: 'terminated',
+    text: '已授权',
   }],
-  authorize_Status: '1234',
+  authorize_Status: 'all',
   authorize_Date: [null, null],
   authorize_List: [],
 
   authorized_SubjectType_Options: [{
     value: '1234',
-    label: '1234',
+    text: '1234',
   }],
   authorized_SubjectType: '1234',
   authorized_Status_Options: [{
     value: '1234',
-    label: '1234',
+    text: '1234',
   }],
   authorized_Status: '1234',
   authorized_Date: [null, null],

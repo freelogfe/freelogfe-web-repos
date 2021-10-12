@@ -13,6 +13,9 @@ import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ContractPageModelState } from '@/models/connect';
 import {
+  OnChange_Authorize_Date_Action,
+  OnChange_Authorize_Status_Action,
+  OnChange_Authorize_SubjectType_Action,
   OnChangeShowPageAction,
   OnClickViewDetailsBtnAction,
   OnCloseContractDetailsDrawerAction,
@@ -279,23 +282,48 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 <FContentText text={'标的物类型：'} />
                 <FDropdownMenu
                   options={contractPage.authorize_SubjectType_Options}
-                  text={contractPage.authorize_SubjectType}
+                  text={contractPage.authorize_SubjectType_Options.find((so) => {
+                    return contractPage.authorize_SubjectType === so.value;
+                  })?.text || ''}
+                  onChange={(value) => {
+                    dispatch<OnChange_Authorize_SubjectType_Action>({
+                      type: 'contractPage/onChange_Authorize_SubjectType',
+                      payload: {
+                        value: value as 'all',
+                      },
+                    });
+                  }}
                 />
               </Space>
               <Space size={2}>
-                <FContentText text={'合约状态：已授权'} />
+                <FContentText text={'合约状态：'} />
                 <FDropdownMenu
                   options={contractPage.authorize_Status_Options}
-                  text={contractPage.authorize_Status}
+                  text={contractPage.authorize_Status_Options.find((so) => {
+                    return so.value === contractPage.authorize_Status;
+                  })?.text || ''}
+                  onChange={(value) => {
+                    dispatch<OnChange_Authorize_Status_Action>({
+                      type: 'contractPage/onChange_Authorize_Status',
+                      payload: {
+                        value: value as 'all',
+                      },
+                    });
+                  }}
                 />
               </Space>
               <Space size={2}>
                 <FContentText text={'签约时间：'} />
                 <DatePicker.RangePicker
                   // value={}
-                  onChange={([start, end]: any) => {
+                  onChange={(value: any) => {
                     // console.log(value, '@Asdfai89jhkljrlk');
-
+                    dispatch<OnChange_Authorize_Date_Action>({
+                      type: 'contractPage/onChange_Authorize_Date',
+                      payload: {
+                        value: value,
+                      },
+                    });
                   }}
                 />
               </Space>
