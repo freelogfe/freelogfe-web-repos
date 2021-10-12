@@ -2,6 +2,7 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import moment, { Moment } from 'moment';
 
 export interface ContractPageModelState {
   showPage: 'authorize' | 'authorized';
@@ -16,8 +17,7 @@ export interface ContractPageModelState {
     label: string;
   }[];
   authorize_Status: string;
-  authorize_Date_Start: string;
-  authorize_Date_End: string;
+  authorize_Date: [Moment | null, Moment | null];
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -44,8 +44,7 @@ export interface ContractPageModelState {
     label: string;
   }[];
   authorized_Status: string;
-  authorized_Date_Start: string;
-  authorized_Date_End: string;
+  authorized_Date: [Moment | null, Moment | null];
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -97,6 +96,27 @@ export interface OnCloseContractDetailsDrawerAction extends AnyAction {
   type: 'contractPage/onCloseContractDetailsDrawer';
 }
 
+export interface OnChange_Authorize_SubjectType_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorize_SubjectType';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Authorize_Status_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorize_Status';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Authorize_Date_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorize_Date';
+  payload: {
+    value: [Moment | null, Moment | null];
+  };
+}
+
 interface ContractPageModelType {
   namespace: 'contractPage';
   state: ContractPageModelState;
@@ -106,6 +126,9 @@ interface ContractPageModelType {
     onChangeShowPage: (action: OnChangeShowPageAction, effects: EffectsCommandMap) => void;
     onClickViewDetailsBtn: (action: OnClickViewDetailsBtnAction, effects: EffectsCommandMap) => void;
     onCloseContractDetailsDrawer: (action: OnCloseContractDetailsDrawerAction, effects: EffectsCommandMap) => void;
+    onChange_Authorize_SubjectType: (action: OnChange_Authorize_SubjectType_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorize_Status: (action: OnChange_Authorize_Status_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ContractPageModelState, ChangeAction>;
@@ -128,8 +151,7 @@ const initStates: ContractPageModelState = {
     label: '1234',
   }],
   authorize_Status: '1234',
-  authorize_Date_Start: '12343',
-  authorize_Date_End: '1234',
+  authorize_Date: [null, null],
   authorize_List: [],
 
   authorized_SubjectType_Options: [{
@@ -142,8 +164,7 @@ const initStates: ContractPageModelState = {
     label: '1234',
   }],
   authorized_Status: '1234',
-  authorized_Date_Start: '12343',
-  authorized_Date_End: '1234',
+  authorized_Date: [null, null],
   authorized_List: [],
 
   contractDetailsID: '',
@@ -234,6 +255,31 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload: {
           contractDetailsID: '',
+        },
+      });
+    },
+
+    * onChange_Authorize_SubjectType({ payload }: OnChange_Authorize_SubjectType_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_SubjectType: payload.value,
+        },
+      });
+    },
+    * onChange_Authorize_Status({ payload }: OnChange_Authorize_Status_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_Status: payload.value,
+        },
+      });
+    },
+    * onChange_Authorize_Date({ payload }: OnChange_Authorize_Date_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_Date: payload.value,
         },
       });
     },

@@ -4,7 +4,7 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { FContentText, FTitleText } from '@/components/FText';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import { Space } from 'antd';
+import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
 import { FNodes, FUser } from '@/components/FIcons';
@@ -20,6 +20,7 @@ import {
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -274,9 +275,30 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         ? (<div className={styles.content}>
           <div className={styles.filter}>
             <Space size={50}>
-              <FContentText text={'标的物类型：资源'} />
-              <FContentText text={'合约状态：已授权'} />
-              <FContentText text={'签约时间：2020/09/11～2020/09/20'} />
+              <Space size={2}>
+                <FContentText text={'标的物类型：'} />
+                <FDropdownMenu
+                  options={contractPage.authorize_SubjectType_Options}
+                  text={contractPage.authorize_SubjectType}
+                />
+              </Space>
+              <Space size={2}>
+                <FContentText text={'合约状态：已授权'} />
+                <FDropdownMenu
+                  options={contractPage.authorize_Status_Options}
+                  text={contractPage.authorize_Status}
+                />
+              </Space>
+              <Space size={2}>
+                <FContentText text={'签约时间：'} />
+                <DatePicker.RangePicker
+                  // value={}
+                  onChange={([start, end]: any) => {
+                    // console.log(value, '@Asdfai89jhkljrlk');
+
+                  }}
+                />
+              </Space>
             </Space>
             <FInput
               className={styles.filterInput}
