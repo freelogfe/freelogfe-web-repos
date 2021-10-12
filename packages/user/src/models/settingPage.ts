@@ -616,7 +616,7 @@ const initStates_ChangePassword: Pick<SettingPageModelState,
 };
 
 const initStates: SettingPageModelState = {
-  showPage: 'privacy',
+  showPage: 'profile',
 
   avatar: '',
   gender: 'unknown',
