@@ -24,6 +24,20 @@
     //  border-color: @f-error-color1;
     //}
   }
+
+  //&.ant-input-affix-wrapper:focus, &.ant-input-affix-wrapper-focused {
+  //  border-color: @f-primary-color !important;
+  //}
+
+  &.ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+    border-color: @f-primary-color !important;
+    background-color: #fff;
+  }
+
+
+  :global(.ant-input:focus) {
+    border-color: @f-primary-color !important;
+  }
 }
 
 
@@ -41,6 +55,10 @@
   border-color: rgba(0, 0, 0, 0.03);
   background-color: rgba(0, 0, 0, 0.03);
   border-radius: 22px;
+
+  input {
+    background-color: transparent;
+  }
 }
 
 .errorText {

@@ -6,7 +6,19 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 export interface ContractPageModelState {
   showPage: 'authorize' | 'authorized';
 
-  authorizeList: {
+  authorize_SubjectType_Options: {
+    value: string;
+    label: string;
+  }[];
+  authorize_SubjectType: string;
+  authorize_Status_Options: {
+    value: string;
+    label: string;
+  }[];
+  authorize_Status: string;
+  authorize_Date_Start: string;
+  authorize_Date_End: string;
+  authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
     subjectName: string;
@@ -22,7 +34,19 @@ export interface ContractPageModelState {
     contractID: string;
   }[];
 
-  authorizedList: {
+  authorized_SubjectType_Options: {
+    value: string;
+    label: string;
+  }[];
+  authorized_SubjectType: string;
+  authorized_Status_Options: {
+    value: string;
+    label: string;
+  }[];
+  authorized_Status: string;
+  authorized_Date_Start: string;
+  authorized_Date_End: string;
+  authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
     subjectName: string;
@@ -93,8 +117,35 @@ interface ContractPageModelType {
 
 const initStates: ContractPageModelState = {
   showPage: 'authorize',
-  authorizeList: [],
-  authorizedList: [],
+
+  authorize_SubjectType_Options: [{
+    value: '1234',
+    label: '1234',
+  }],
+  authorize_SubjectType: '1234',
+  authorize_Status_Options: [{
+    value: '1234',
+    label: '1234',
+  }],
+  authorize_Status: '1234',
+  authorize_Date_Start: '12343',
+  authorize_Date_End: '1234',
+  authorize_List: [],
+
+  authorized_SubjectType_Options: [{
+    value: '1234',
+    label: '1234',
+  }],
+  authorized_SubjectType: '1234',
+  authorized_Status_Options: [{
+    value: '1234',
+    label: '1234',
+  }],
+  authorized_Status: '1234',
+  authorized_Date_Start: '12343',
+  authorized_Date_End: '1234',
+  authorized_List: [],
+
   contractDetailsID: '',
 };
 
@@ -118,7 +169,7 @@ const Model: ContractPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          authorizeList: (data1.dataList as any[]).map<ContractPageModelState['authorizeList'][number]>((al: any) => {
+          authorize_List: (data1.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
             return {
               cover: '',
               subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
@@ -135,7 +186,7 @@ const Model: ContractPageModelType = {
               contractID: al.contractId,
             };
           }),
-          authorizedList: (data2.dataList as any[]).map<ContractPageModelState['authorizedList'][number]>((al: any) => {
+          authorized_List: (data2.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
             return {
               cover: '',
               subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',

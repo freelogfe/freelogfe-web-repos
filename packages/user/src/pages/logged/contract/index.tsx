@@ -19,6 +19,7 @@ import {
   OnMountPageAction,
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
+import FInput from '@/components/FInput';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -33,7 +34,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     });
   });
 
-  const columns1: ColumnsType<typeof contractPage.authorizeList[number]> = [
+  const columns1: ColumnsType<typeof contractPage.authorize_List[number]> = [
     {
       title: (<FTitleText type='table' text={'标的物 | 类型 | 所签授权策略'} />),
       dataIndex: 'target',
@@ -136,7 +137,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     },
   ];
 
-  const columns2: ColumnsType<typeof contractPage.authorizedList[number]> = [
+  const columns2: ColumnsType<typeof contractPage.authorized_List[number]> = [
     {
       title: (<FTitleText type='table' text={'标的物 | 类型 | 所签授权策略'} />),
       dataIndex: 'target',
@@ -267,30 +268,44 @@ function Contract({ dispatch, contractPage }: ContractProps) {
 
     <div style={{ height: 30 }} />
 
-    <div className={styles.content}>
-      {
-        contractPage.showPage === 'authorize'
-          ? (<FTable
-            columns={columns1}
-            dataSource={contractPage.authorizeList.map((al) => {
-              return {
-                key: al.contractID,
-                ...al,
-              };
-            })}
-          />)
-          : (<FTable
-            columns={columns2}
-            dataSource={contractPage.authorizedList.map((al) => {
-              return {
-                key: al.contractID,
-                ...al,
-              };
-            })}
-          />)
-      }
 
-    </div>
+    {
+      contractPage.showPage === 'authorize'
+        ? (<div className={styles.content}>
+          <div className={styles.filter}>
+            <Space size={50}>
+              <FContentText text={'标的物类型：资源'} />
+              <FContentText text={'合约状态：已授权'} />
+              <FContentText text={'签约时间：2020/09/11～2020/09/20'} />
+            </Space>
+            <FInput
+              className={styles.filterInput}
+              wrapClassName={styles.filterInput}
+              theme='dark'
+            />
+          </div>
+          <FTable
+            columns={columns1}
+            dataSource={contractPage.authorize_List.map((al) => {
+              return {
+                key: al.contractID,
+                ...al,
+              };
+            })}
+          />
+        </div>)
+        : (<div className={styles.content}>
+          <FTable
+            columns={columns2}
+            dataSource={contractPage.authorized_List.map((al) => {
+              return {
+                key: al.contractID,
+                ...al,
+              };
+            })}
+          />
+        </div>)
+    }
 
     <div style={{ height: 100 }} />
 
