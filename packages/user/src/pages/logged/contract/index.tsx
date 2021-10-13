@@ -13,7 +13,7 @@ import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ContractPageModelState } from '@/models/connect';
 import {
-  OnChange_Authorize_Date_Action,
+  OnChange_Authorize_Date_Action, OnChange_Authorize_KeywordsInput_Action,
   OnChange_Authorize_Status_Action,
   OnChange_Authorize_SubjectType_Action,
   OnChangeShowPageAction,
@@ -24,6 +24,7 @@ import {
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import moment, { Moment } from 'moment';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -325,6 +326,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       },
                     });
                   }}
+                  disabledDate={(date) => {
+                    // console.log(date, 'date234234234');
+                    return moment().isBefore(date);
+                  }}
                 />
               </Space>
             </Space>
@@ -332,6 +337,15 @@ function Contract({ dispatch, contractPage }: ContractProps) {
               className={styles.filterInput}
               wrapClassName={styles.filterInput}
               theme='dark'
+              debounce={300}
+              onDebounceChange={(value) => {
+                dispatch<OnChange_Authorize_KeywordsInput_Action>({
+                  type: 'contractPage/onChange_Authorize_KeywordsInput',
+                  payload: {
+                    value: value,
+                  },
+                });
+              }}
             />
           </div>
           <FTable

@@ -658,9 +658,9 @@ const Model: WalletPageModelType = {
         messageAddress: walletPage.changingPasswordType === 'phone' ? walletPage.changingPasswordMobile : walletPage.changingPasswordEmail,
       };
 
-      const { data, msg } = yield call(FServiceAPI.Transaction.changePassword, params);
+      const { errCode, data, msg } = yield call(FServiceAPI.Transaction.changePassword, params);
 
-      if (!data) {
+      if (errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
 

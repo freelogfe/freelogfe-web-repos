@@ -671,7 +671,7 @@ const Model: SettingPageModelType = {
           avatar: data.headImage,
           gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
           profileText: userDetail?.intro || '',
-          birthday: userDetail?.birthday ? moment(userDetail?.birthday, 'YYYY-MM-DD') : null,
+          birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
           residence: userDetail?.areaCode ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode] : [],
           career: userDetail?.occupation || '',
 
@@ -765,7 +765,7 @@ const Model: SettingPageModelType = {
       const params: Parameters<typeof FServiceAPI.User.updateDetailInfo>[0] = {
         areaCode: settingPage.residence.length === 2 ? String(settingPage.residence[settingPage.residence.length - 1]) : undefined,
         occupation: settingPage.career,
-        birthday: settingPage.birthday?.format('YYYY-MM-DD') || undefined,
+        birthday: settingPage.birthday?.format(FUtil.Predefined.momentDateFormat) || undefined,
         sex: settingPage.gender === 'male' ? 1 : settingPage.gender === 'female' ? 2 : 0,
         intro: settingPage.profileText,
       };

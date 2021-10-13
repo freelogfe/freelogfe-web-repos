@@ -6,6 +6,10 @@ export const resourceTypes: string[] = ['json', 'widget', 'image', 'audio', 'mar
 // 全局列表加载条目数
 export const pageSize: number = 20;
 
+// Moment 日期时间格式
+export const momentDateFormat: string = 'YYYY-MM-DD'
+export const momentDateTimeFormat: string = 'YYYY-MM-DD HH:mm';
+
 // 签约方用户的身份类型定义
 export enum EnumContractPartyIdentityType {
   resource = 1,

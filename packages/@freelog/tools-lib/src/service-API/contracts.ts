@@ -24,7 +24,7 @@ interface ContractsParamsType {
   licensorId?: string;
   licenseeId?: string;
   subjectIds?: string;
-  subjectType?: number;
+  subjectType?: 1 | 2 | 3;
   isDefault?: number;
   keywords?: string;
   status?: 0 | 1 | 2; // 合同状态 0:生效中 1:已终止 2:异常的
@@ -33,6 +33,8 @@ interface ContractsParamsType {
   licenseeIdentityType?: number;
   isLoadPolicyInfo?: 0 | 1;
   isTranslate?: 0 | 1;
+  startDate?: string;
+  endDate?: string;
   projection?: string;
 }
 
