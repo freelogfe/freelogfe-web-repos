@@ -23,6 +23,7 @@ export interface ContractPageModelState {
   authorize_Status: 'all' | Authorize_Status;
   authorize_Date: [Moment | null, Moment | null];
   authorize_Keywords: string;
+  authorize_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -187,6 +188,7 @@ const initStates: ContractPageModelState = {
   authorize_Status: 'all',
   authorize_Date: [null, null],
   authorize_Keywords: '',
+  authorize_ListState: 'loading',
   authorize_List: [],
 
   authorized_SubjectType_Options: [{
@@ -210,7 +212,7 @@ const Model: ContractPageModelType = {
   state: initStates,
   effects: {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
-
+      // console.log('#@#$@#$!!!!!!!');
       yield put<Fetch_Authorize_List_Action>({
         type: 'fetch_Authorize_List',
       });
@@ -318,7 +320,7 @@ const Model: ContractPageModelType = {
           authorize_Keywords: payload.value,
         },
       });
-      console.log('@$!@#$213423143444444');
+      // console.log('@$!@#$213423143444444');
 
       yield put<Fetch_Authorize_List_Action>({
         type: 'fetch_Authorize_List',
@@ -329,6 +331,14 @@ const Model: ContractPageModelType = {
       const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
         contractPage,
       }));
+      // console.log('#@#$@#$23423422222@@@@@@@@');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_ListState: 'loading',
+        },
+      });
 
       const status: { [k: string]: 0 | 1 | 2 } = {
         'authorization': 0,
@@ -363,10 +373,33 @@ const Model: ContractPageModelType = {
       };
 
       const { data: data1 } = yield call(FServiceAPI.Contract.contracts, params1);
+      // const data1 = { dataList: [] };
+
+      if (data1.dataList.length === 0) {
+        if (params1.subjectType === undefined && params1.status === undefined && params1.authStatus === undefined && params1.startDate === undefined && params1.endDate === undefined && params1.keywords === undefined) {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              authorize_ListState: 'noData',
+              authorize_List: [],
+            },
+          });
+        } else {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              authorize_ListState: 'noSearchResult',
+              authorize_List: [],
+            },
+          });
+        }
+        return;
+      }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          authorize_ListState: 'loaded',
           authorize_List: (data1.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
             return {
               cover: '',

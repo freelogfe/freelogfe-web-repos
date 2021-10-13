@@ -7,7 +7,7 @@ import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
-import { FNodes, FUser } from '@/components/FIcons';
+import { FLoading, FNodes, FUser } from '@/components/FIcons';
 import { FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
@@ -25,6 +25,10 @@ import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import moment, { Moment } from 'moment';
+import FNoDataTip from '@/components/FNoDataTip';
+import FLoadingTip from '@/components/FLoadingTip';
+import FUtil1 from '@/utils';
+import { message } from '@/utils/i18n';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -32,7 +36,6 @@ interface ContractProps {
 }
 
 function Contract({ dispatch, contractPage }: ContractProps) {
-
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'contractPage/onMountPage',
@@ -277,86 +280,104 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     {
       contractPage.showPage === 'authorize'
         ? (<div className={styles.content}>
-          <div className={styles.filter}>
-            <Space size={50}>
-              <Space size={2}>
-                <FContentText text={'标的物类型：'} />
-                <FDropdownMenu
-                  options={contractPage.authorize_SubjectType_Options}
-                  text={contractPage.authorize_SubjectType_Options.find((so) => {
-                    return contractPage.authorize_SubjectType === so.value;
-                  })?.text || ''}
-                  onChange={(value) => {
-                    dispatch<OnChange_Authorize_SubjectType_Action>({
-                      type: 'contractPage/onChange_Authorize_SubjectType',
-                      payload: {
-                        value: value as 'all',
-                      },
-                    });
-                  }}
-                />
-              </Space>
-              <Space size={2}>
-                <FContentText text={'合约状态：'} />
-                <FDropdownMenu
-                  options={contractPage.authorize_Status_Options}
-                  text={contractPage.authorize_Status_Options.find((so) => {
-                    return so.value === contractPage.authorize_Status;
-                  })?.text || ''}
-                  onChange={(value) => {
-                    dispatch<OnChange_Authorize_Status_Action>({
-                      type: 'contractPage/onChange_Authorize_Status',
-                      payload: {
-                        value: value as 'all',
-                      },
-                    });
-                  }}
-                />
-              </Space>
-              <Space size={2}>
-                <FContentText text={'签约时间：'} />
-                <DatePicker.RangePicker
-                  // value={}
-                  onChange={(value: any) => {
-                    // console.log(value, '@Asdfai89jhkljrlk');
-                    dispatch<OnChange_Authorize_Date_Action>({
-                      type: 'contractPage/onChange_Authorize_Date',
-                      payload: {
-                        value: value,
-                      },
-                    });
-                  }}
-                  disabledDate={(date) => {
-                    // console.log(date, 'date234234234');
-                    return moment().isBefore(date);
-                  }}
-                />
-              </Space>
-            </Space>
-            <FInput
-              className={styles.filterInput}
-              wrapClassName={styles.filterInput}
-              theme='dark'
-              debounce={300}
-              onDebounceChange={(value) => {
-                dispatch<OnChange_Authorize_KeywordsInput_Action>({
-                  type: 'contractPage/onChange_Authorize_KeywordsInput',
-                  payload: {
-                    value: value,
-                  },
-                });
-              }}
-            />
-          </div>
-          <FTable
-            columns={columns1}
-            dataSource={contractPage.authorize_List.map((al) => {
-              return {
-                key: al.contractID,
-                ...al,
-              };
-            })}
-          />
+          {
+            contractPage.authorize_ListState === 'noData'
+              ? (<FNoDataTip height={600} tipText={'无数据'} />)
+              : (<>
+                <div className={styles.filter}>
+                  <Space size={50}>
+                    <Space size={2}>
+                      <FContentText text={'标的物类型：'} />
+                      <FDropdownMenu
+                        options={contractPage.authorize_SubjectType_Options}
+                        text={contractPage.authorize_SubjectType_Options.find((so) => {
+                          return contractPage.authorize_SubjectType === so.value;
+                        })?.text || ''}
+                        onChange={(value) => {
+                          dispatch<OnChange_Authorize_SubjectType_Action>({
+                            type: 'contractPage/onChange_Authorize_SubjectType',
+                            payload: {
+                              value: value as 'all',
+                            },
+                          });
+                        }}
+                      />
+                    </Space>
+                    <Space size={2}>
+                      <FContentText text={'合约状态：'} />
+                      <FDropdownMenu
+                        options={contractPage.authorize_Status_Options}
+                        text={contractPage.authorize_Status_Options.find((so) => {
+                          return so.value === contractPage.authorize_Status;
+                        })?.text || ''}
+                        onChange={(value) => {
+                          dispatch<OnChange_Authorize_Status_Action>({
+                            type: 'contractPage/onChange_Authorize_Status',
+                            payload: {
+                              value: value as 'all',
+                            },
+                          });
+                        }}
+                      />
+                    </Space>
+                    <Space size={2}>
+                      <FContentText text={'签约时间：'} />
+                      <DatePicker.RangePicker
+                        // value={}
+                        onChange={(value: any) => {
+                          // console.log(value, '@Asdfai89jhkljrlk');
+                          dispatch<OnChange_Authorize_Date_Action>({
+                            type: 'contractPage/onChange_Authorize_Date',
+                            payload: {
+                              value: value,
+                            },
+                          });
+                        }}
+                        // locale={{lang: 'en'}}
+                        disabledDate={(date) => {
+                          // console.log(date, 'date234234234');
+                          return moment().isBefore(date);
+                        }}
+                      />
+                    </Space>
+                  </Space>
+                  <FInput
+                    className={styles.filterInput}
+                    wrapClassName={styles.filterInput}
+                    theme='dark'
+                    debounce={300}
+                    onDebounceChange={(value) => {
+                      dispatch<OnChange_Authorize_KeywordsInput_Action>({
+                        type: 'contractPage/onChange_Authorize_KeywordsInput',
+                        payload: {
+                          value: value,
+                        },
+                      });
+                    }}
+                  />
+                </div>
+                {
+                  contractPage.authorize_ListState === 'loading' && (<FLoadingTip height={600} />)
+                }
+
+                {
+                  contractPage.authorize_ListState === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无搜索结果'} />)
+                }
+                {
+                  contractPage.authorize_ListState === 'loaded' && (<FTable
+                    columns={columns1}
+                    dataSource={contractPage.authorize_List.map((al) => {
+                      return {
+                        key: al.contractID,
+                        ...al,
+                      };
+                    })}
+                  />)
+                }
+              </>)
+          }
+
+
         </div>)
         : (<div className={styles.content}>
           <FTable
