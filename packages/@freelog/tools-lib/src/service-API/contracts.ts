@@ -9,9 +9,6 @@ interface ContractDetailsParamsType {
 }
 
 export function contractDetails({contractId, ...params}: ContractDetailsParamsType) {
-  // return FUtil.Axios.get(`/v2/contracts/${contractId}`, {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/contracts/${contractId}`,
@@ -30,18 +27,16 @@ interface ContractsParamsType {
   subjectType?: number;
   isDefault?: number;
   keywords?: string;
-  status?: 2 | 4 | 6;
-  order?: string;
+  status?: 0 | 1 | 2; // 合同状态 0:生效中 1:已终止 2:异常的
+  authStatus?: 1 | 2 | 128; // 合同授权状态 1:正式授权 2:测试授权 128:未获得授权,多个通过'与'运算
+  order?: 'asc' | 'desc'; // asc:正序 desc:倒序
   licenseeIdentityType?: number;
   isLoadPolicyInfo?: 0 | 1;
-  projection?: string;
   isTranslate?: 0 | 1;
+  projection?: string;
 }
 
 export function contracts(params: ContractsParamsType) {
-  // return FUtil.Axios.get('/v2/contracts', {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/contracts`,
@@ -63,9 +58,6 @@ interface BatchContractsParamsType {
 }
 
 export function batchContracts(params: BatchContractsParamsType) {
-  // return FUtil.Axios.get('/v2/contracts/list', {
-  //   params,
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/contracts/list`,
