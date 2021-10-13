@@ -325,9 +325,11 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       />
                     </Space>
                     <Space size={2}>
-                      <FContentText text={'签约时间：'} />
+                      <FContentText
+                        text={'签约时间：'}
+                      />
                       <DatePicker.RangePicker
-                        // value={}
+                        value={contractPage.authorize_Date}
                         onChange={(value: any) => {
                           // console.log(value, '@Asdfai89jhkljrlk');
                           dispatch<OnChange_Authorize_Date_Action>({
@@ -425,7 +427,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     <Space size={2}>
                       <FContentText text={'签约时间：'} />
                       <DatePicker.RangePicker
-                        // value={}
+                        value={contractPage.authorized_Date}
                         onChange={(value: any) => {
                           // console.log(value, '@Asdfai89jhkljrlk');
                           dispatch<OnChange_Authorized_Date_Action>({
