@@ -8,6 +8,9 @@ import { ConnectState } from '@/models/connect';
 type Authorize_SubjectType = 'resource' | 'exhibit';
 type Authorize_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
 
+type Authorized_SubjectType = 'resource' | 'exhibit';
+type Authorized_Status = 'authorization' | 'pending' | 'exception' | 'terminated';
+
 export interface ContractPageModelState {
   showPage: 'authorize' | 'authorized';
 
@@ -41,16 +44,18 @@ export interface ContractPageModelState {
   }[];
 
   authorized_SubjectType_Options: {
-    value: string;
+    value: 'all' | Authorized_SubjectType;
     text: string;
   }[];
-  authorized_SubjectType: string;
+  authorized_SubjectType: 'all' | Authorized_SubjectType;
   authorized_Status_Options: {
-    value: string;
+    value: 'all' | Authorized_Status;
     text: string;
   }[];
-  authorized_Status: string;
+  authorized_Status: 'all' | Authorized_Status;
   authorized_Date: [Moment | null, Moment | null];
+  authorized_Keywords: string;
+  authorized_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -130,8 +135,40 @@ export interface OnChange_Authorize_KeywordsInput_Action extends AnyAction {
   };
 }
 
+export interface OnChange_Authorized_SubjectType_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_SubjectType';
+  payload: {
+    value: 'all' | Authorized_SubjectType;
+  };
+}
+
+export interface OnChange_Authorized_Status_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_Status';
+  payload: {
+    value: 'all' | Authorized_Status;
+  };
+}
+
+export interface OnChange_Authorized_Date_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_Date';
+  payload: {
+    value: [Moment | null, Moment | null];
+  };
+}
+
+export interface OnChange_Authorized_KeywordsInput_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_KeywordsInput';
+  payload: {
+    value: string
+  };
+}
+
 export interface Fetch_Authorize_List_Action extends AnyAction {
   type: 'fetch_Authorize_List';
+}
+
+export interface Fetch_Authorized_List_Action extends AnyAction {
+  type: 'fetch_Authorized_List';
 }
 
 interface ContractPageModelType {
@@ -143,12 +180,19 @@ interface ContractPageModelType {
     onChangeShowPage: (action: OnChangeShowPageAction, effects: EffectsCommandMap) => void;
     onClickViewDetailsBtn: (action: OnClickViewDetailsBtnAction, effects: EffectsCommandMap) => void;
     onCloseContractDetailsDrawer: (action: OnCloseContractDetailsDrawerAction, effects: EffectsCommandMap) => void;
+
     onChange_Authorize_SubjectType: (action: OnChange_Authorize_SubjectType_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_Status: (action: OnChange_Authorize_Status_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_KeywordsInput: (action: OnChange_Authorize_KeywordsInput_Action, effects: EffectsCommandMap) => void;
 
+    onChange_Authorized_SubjectType: (action: OnChange_Authorized_SubjectType_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorized_Status: (action: OnChange_Authorized_Status_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorized_Date: (action: OnChange_Authorized_Date_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorized_KeywordsInput: (action: OnChange_Authorized_KeywordsInput_Action, effects: EffectsCommandMap) => void;
+
     fetch_Authorize_List: (action: Fetch_Authorize_List_Action, effects: EffectsCommandMap) => void;
+    fetch_Authorized_List: (action: Fetch_Authorized_List_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ContractPageModelState, ChangeAction>;
@@ -192,16 +236,33 @@ const initStates: ContractPageModelState = {
   authorize_List: [],
 
   authorized_SubjectType_Options: [{
-    value: '1234',
-    text: '1234',
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'resource',
+    text: '资源',
+  }, {
+    value: 'exhibit',
+    text: '展品',
   }],
-  authorized_SubjectType: '1234',
+  authorized_SubjectType: 'all',
   authorized_Status_Options: [{
-    value: '1234',
-    text: '1234',
+    value: 'all',
+    text: '全部',
+  }, {
+    value: 'authorization',
+    text: '已授权',
+  }, {
+    value: 'pending',
+    text: '待执行',
+  }, {
+    value: 'terminated',
+    text: '已终止',
   }],
-  authorized_Status: '1234',
+  authorized_Status: 'all',
   authorized_Date: [null, null],
+  authorized_Keywords: '',
+  authorized_ListState: 'loading',
   authorized_List: [],
 
   contractDetailsID: '',
@@ -217,36 +278,40 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorize_List',
       });
 
-      const params2: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
-        identityType: 2,
-      };
-
-
-      const { data: data2 } = yield call(FServiceAPI.Contract.contracts, params2);
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-
-          authorized_List: (data2.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
-            return {
-              cover: '',
-              subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
-              subjectName: al.subjectName,
-              contractName: al.contractName,
-              licensorId: al.licenseeId,
-              licensorType: al.subjectType === 1 ? 'resource' : 'node',
-              licensorName: al.licensorName,
-              licenseeId: al.licenseeId,
-              licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
-              licenseeName: al.licenseeName,
-              status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
-              dataTime: FUtil.Format.formatDateTime(al.createDate, true),
-              contractID: al.contractId,
-            };
-          }),
-        },
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
       });
+
+      // const params2: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
+      //   identityType: 2,
+      // };
+      //
+      //
+      // const { data: data2 } = yield call(FServiceAPI.Contract.contracts, params2);
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //
+      //     authorized_List: (data2.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
+      //       return {
+      //         cover: '',
+      //         subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+      //         subjectName: al.subjectName,
+      //         contractName: al.contractName,
+      //         licensorId: al.licenseeId,
+      //         licensorType: al.subjectType === 1 ? 'resource' : 'node',
+      //         licensorName: al.licensorName,
+      //         licenseeId: al.licenseeId,
+      //         licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
+      //         licenseeName: al.licenseeName,
+      //         status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+      //         dataTime: FUtil.Format.formatDateTime(al.createDate, true),
+      //         contractID: al.contractId,
+      //       };
+      //     }),
+      //   },
+      // });
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -327,6 +392,53 @@ const Model: ContractPageModelType = {
       });
     },
 
+    * onChange_Authorized_SubjectType({ payload }: OnChange_Authorized_SubjectType_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_SubjectType: payload.value,
+        },
+      });
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
+    * onChange_Authorized_Status({ payload }: OnChange_Authorized_Status_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_Status: payload.value,
+        },
+      });
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
+    * onChange_Authorized_Date({ payload }: OnChange_Authorized_Date_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_Date: payload.value,
+        },
+      });
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
+    * onChange_Authorized_KeywordsInput({ payload }: OnChange_Authorized_KeywordsInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_Keywords: payload.value,
+        },
+      });
+      // console.log('@$!@#$213423143444444');
+
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
+
     * fetch_Authorize_List(action: Fetch_Authorize_List_Action, { select, call, put }: EffectsCommandMap) {
       const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
         contractPage,
@@ -360,7 +472,7 @@ const Model: ContractPageModelType = {
         'exhibit': 2,
       };
 
-      const params1: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
+      const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: 0,
         limit: FUtil.Predefined.pageSize,
         identityType: 1,
@@ -372,11 +484,11 @@ const Model: ContractPageModelType = {
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
-      const { data: data1 } = yield call(FServiceAPI.Contract.contracts, params1);
+      const { data } = yield call(FServiceAPI.Contract.contracts, params);
       // const data1 = { dataList: [] };
 
-      if (data1.dataList.length === 0) {
-        if (params1.subjectType === undefined && params1.status === undefined && params1.authStatus === undefined && params1.startDate === undefined && params1.endDate === undefined && params1.keywords === undefined) {
+      if (data.dataList.length === 0) {
+        if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
@@ -400,7 +512,100 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload: {
           authorize_ListState: 'loaded',
-          authorize_List: (data1.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
+          authorize_List: (data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
+            return {
+              cover: '',
+              subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+              subjectName: al.subjectName,
+              contractName: al.contractName,
+              licensorId: al.licenseeId,
+              licensorType: al.subjectType === 1 ? 'resource' : 'node',
+              licensorName: al.licensorName,
+              licenseeId: al.licenseeId,
+              licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
+              licenseeName: al.licenseeName,
+              status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+              dataTime: FUtil.Format.formatDateTime(al.createDate, true),
+              contractID: al.contractId,
+            };
+          }),
+        },
+      });
+    },
+    * fetch_Authorized_List(action: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
+      const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
+        contractPage,
+      }));
+      // console.log('#@#$@#$23423422222@@@@@@@@');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_ListState: 'loading',
+        },
+      });
+
+      const status: { [k: string]: 0 | 1 | 2 } = {
+        'authorization': 0,
+        'pending': 0,
+        'exception': 2,
+        'terminated': 1,
+      };
+
+      const authStatus: { [key: string]: 1 | 128 | undefined } = {
+        'authorization': 1,
+        'pending': 128,
+        'exception': undefined,
+        'terminated': undefined,
+      };
+
+      const subjectType: { [key: string]: 1 | 2 | undefined } = {
+        'all': undefined,
+        'resource': 1,
+        'exhibit': 2,
+      };
+
+      const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
+        skip: 0,
+        limit: FUtil.Predefined.pageSize,
+        identityType: 2,
+        subjectType: subjectType[contractPage.authorized_SubjectType],
+        status: contractPage.authorized_Status === 'all' ? undefined : status[contractPage.authorized_Status],
+        authStatus: contractPage.authorized_Status === 'all' ? undefined : authStatus[contractPage.authorized_Status],
+        startDate: contractPage.authorized_Date[0] ? contractPage.authorized_Date[0]?.format(FUtil.Predefined.momentDateFormat) : undefined,
+        endDate: contractPage.authorized_Date[1] ? contractPage.authorized_Date[1]?.format(FUtil.Predefined.momentDateFormat) : undefined,
+        keywords: contractPage.authorized_Keywords || undefined,
+      };
+
+      const { data } = yield call(FServiceAPI.Contract.contracts, params);
+      // const data1 = { dataList: [] };
+
+      if (data.dataList.length === 0) {
+        if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              authorized_ListState: 'noData',
+              authorized_List: [],
+            },
+          });
+        } else {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              authorized_ListState: 'noSearchResult',
+              authorized_List: [],
+            },
+          });
+        }
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_ListState: 'loaded',
+          authorized_List: (data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
             return {
               cover: '',
               subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
