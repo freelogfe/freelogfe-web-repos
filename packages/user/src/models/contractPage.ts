@@ -24,7 +24,7 @@ export interface ContractPageModelState {
     text: string;
   }[];
   authorize_Status: 'all' | Authorize_Status;
-  authorize_Date: [Moment | null, Moment | null];
+  authorize_Date: [Moment, Moment] | null;
   authorize_Keywords: string;
   authorize_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorize_List: {
@@ -53,7 +53,7 @@ export interface ContractPageModelState {
     text: string;
   }[];
   authorized_Status: 'all' | Authorized_Status;
-  authorized_Date: [Moment | null, Moment | null];
+  authorized_Date: [Moment, Moment] | null;
   authorized_Keywords: string;
   authorized_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorized_List: {
@@ -124,7 +124,7 @@ export interface OnChange_Authorize_Status_Action extends AnyAction {
 export interface OnChange_Authorize_Date_Action extends AnyAction {
   type: 'contractPage/onChange_Authorize_Date';
   payload: {
-    value: [Moment | null, Moment | null];
+    value: [Moment, Moment] | null;
   };
 }
 
@@ -152,7 +152,7 @@ export interface OnChange_Authorized_Status_Action extends AnyAction {
 export interface OnChange_Authorized_Date_Action extends AnyAction {
   type: 'contractPage/onChange_Authorized_Date';
   payload: {
-    value: [Moment | null, Moment | null];
+    value: [Moment, Moment] | null;
   };
 }
 
@@ -230,7 +230,7 @@ const initStates: ContractPageModelState = {
     text: '已终止',
   }],
   authorize_Status: 'all',
-  authorize_Date: [null, null],
+  authorize_Date: null,
   authorize_Keywords: '',
   authorize_ListState: 'loading',
   authorize_List: [],
@@ -260,7 +260,7 @@ const initStates: ContractPageModelState = {
     text: '已终止',
   }],
   authorized_Status: 'all',
-  authorized_Date: [null, null],
+  authorized_Date: null,
   authorized_Keywords: '',
   authorized_ListState: 'loading',
   authorized_List: [],
@@ -479,8 +479,8 @@ const Model: ContractPageModelType = {
         subjectType: subjectType[contractPage.authorize_SubjectType],
         status: contractPage.authorize_Status === 'all' ? undefined : status[contractPage.authorize_Status],
         authStatus: contractPage.authorize_Status === 'all' ? undefined : authStatus[contractPage.authorize_Status],
-        startDate: contractPage.authorize_Date[0] ? contractPage.authorize_Date[0]?.format(FUtil.Predefined.momentDateFormat) : undefined,
-        endDate: contractPage.authorize_Date[1] ? contractPage.authorize_Date[1]?.format(FUtil.Predefined.momentDateFormat) : undefined,
+        startDate: contractPage.authorize_Date ? contractPage.authorize_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
+        endDate: contractPage.authorize_Date ? contractPage.authorize_Date[1]?.format(FUtil.Predefined.momentDateFormat) : undefined,
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
@@ -564,7 +564,7 @@ const Model: ContractPageModelType = {
         'resource': 1,
         'exhibit': 2,
       };
-
+      // console.log(contractPage, 'contractPagecontractPage@#%@#@#@#@@@');
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: 0,
         limit: FUtil.Predefined.pageSize,
@@ -572,8 +572,8 @@ const Model: ContractPageModelType = {
         subjectType: subjectType[contractPage.authorized_SubjectType],
         status: contractPage.authorized_Status === 'all' ? undefined : status[contractPage.authorized_Status],
         authStatus: contractPage.authorized_Status === 'all' ? undefined : authStatus[contractPage.authorized_Status],
-        startDate: contractPage.authorized_Date[0] ? contractPage.authorized_Date[0]?.format(FUtil.Predefined.momentDateFormat) : undefined,
-        endDate: contractPage.authorized_Date[1] ? contractPage.authorized_Date[1]?.format(FUtil.Predefined.momentDateFormat) : undefined,
+        startDate: contractPage.authorized_Date ? contractPage.authorized_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
+        endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
       };
 
