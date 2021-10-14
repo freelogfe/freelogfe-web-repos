@@ -4,7 +4,7 @@
 export const resourceTypes: string[] = ['json', 'widget', 'image', 'audio', 'markdown', 'theme', 'reveal_slide', 'license', 'video', 'catalog'];
 
 // 全局列表加载条目数
-export const pageSize: number = 20;
+export const pageSize: number = 100;
 
 // Moment 日期时间格式
 export const momentDateFormat: string = 'YYYY-MM-DD'
