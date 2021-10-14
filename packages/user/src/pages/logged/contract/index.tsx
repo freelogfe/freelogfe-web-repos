@@ -2,13 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
-import { FContentText, FTitleText } from '@/components/FText';
+import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FResource from '@/components/FIcons/FResource';
 import { FLoading, FNodes, FUser } from '@/components/FIcons';
-import { FTextBtn } from '@/components/FButton';
+import { FRectBtn, FTextBtn } from '@/components/FButton';
 import * as AHooks from 'ahooks';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, ContractPageModelState } from '@/models/connect';
@@ -20,7 +20,7 @@ import {
   OnChange_Authorized_Date_Action, OnChange_Authorized_KeywordsInput_Action,
   OnChange_Authorized_Status_Action,
   OnChange_Authorized_SubjectType_Action,
-  OnChangeShowPageAction,
+  OnChangeShowPageAction, OnClick_Authorize_LoadMoreBtn_Action, OnClick_Authorized_LoadMoreBtn_Action,
   OnClickViewDetailsBtnAction,
   OnCloseContractDetailsDrawerAction,
   OnMountPageAction,
@@ -370,7 +370,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   contractPage.authorize_ListState === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无搜索结果'} />)
                 }
                 {
-                  contractPage.authorize_ListState === 'loaded' && (<FTable
+                  contractPage.authorize_ListState === 'loaded' && (<><FTable
                     columns={columns1}
                     dataSource={contractPage.authorize_List.map((al) => {
                       return {
@@ -378,10 +378,35 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                         ...al,
                       };
                     })}
-                  />)
+                  />
+                    <div className={styles.contentFooter}>
+                      {
+                        contractPage.authorize_ListMore === 'andMore' && (<FRectBtn
+                          type='primary'
+                          onClick={() => {
+                            dispatch<OnClick_Authorize_LoadMoreBtn_Action>({
+                              type: 'contractPage/onClick_Authorize_LoadMoreBtn',
+                            });
+                          }}
+                        >
+                          加载更多
+                        </FRectBtn>)
+                      }
+
+                      {
+                        contractPage.authorize_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+                      }
+
+                      {
+                        contractPage.authorize_ListMore === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
+                      }
+
+                    </div>
+                  </>)
                 }
               </>)
           }
+
         </div>)
         : (<div className={styles.content}>
           {
@@ -468,18 +493,45 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   contractPage.authorized_ListState === 'noSearchResult' && (<FNoDataTip height={600} tipText={'无搜索结果'} />)
                 }
                 {
-                  contractPage.authorized_ListState === 'loaded' && (<FTable
-                    columns={columns2}
-                    dataSource={contractPage.authorized_List.map((al) => {
-                      return {
-                        key: al.contractID,
-                        ...al,
-                      };
-                    })}
-                  />)
+                  contractPage.authorized_ListState === 'loaded' && (<>
+                    <FTable
+                      columns={columns2}
+                      dataSource={contractPage.authorized_List.map((al) => {
+                        return {
+                          key: al.contractID,
+                          ...al,
+                        };
+                      })}
+                    />
+                    <div className={styles.contentFooter}>
+                      {
+                        contractPage.authorized_ListMore === 'andMore' && (<FRectBtn
+                          type='primary'
+                          onClick={() => {
+                            dispatch<OnClick_Authorized_LoadMoreBtn_Action>({
+                              type: 'contractPage/onClick_Authorized_LoadMoreBtn',
+                            });
+                          }}
+                        >
+                          加载更多
+                        </FRectBtn>)
+                      }
+
+                      {
+                        contractPage.authorized_ListMore === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+                      }
+
+                      {
+                        contractPage.authorized_ListMore === 'noMore' && (<FTipText text={'没有更多~'} type='third' />)
+                      }
+
+                    </div>
+                  </>)
                 }
               </>)
           }
+
+
         </div>)
     }
 

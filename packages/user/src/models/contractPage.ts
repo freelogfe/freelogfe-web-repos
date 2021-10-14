@@ -27,6 +27,7 @@ export interface ContractPageModelState {
   authorize_Date: [Moment, Moment] | null;
   authorize_Keywords: string;
   authorize_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  authorize_ListMore: 'loading' | 'andMore' | 'noMore';
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -56,6 +57,7 @@ export interface ContractPageModelState {
   authorized_Date: [Moment, Moment] | null;
   authorized_Keywords: string;
   authorized_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  authorized_ListMore: 'loading' | 'andMore' | 'noMore';
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
@@ -135,6 +137,10 @@ export interface OnChange_Authorize_KeywordsInput_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Authorize_LoadMoreBtn_Action extends AnyAction {
+  type: 'contractPage/onClick_Authorize_LoadMoreBtn';
+}
+
 export interface OnChange_Authorized_SubjectType_Action extends AnyAction {
   type: 'contractPage/onChange_Authorized_SubjectType';
   payload: {
@@ -163,12 +169,22 @@ export interface OnChange_Authorized_KeywordsInput_Action extends AnyAction {
   };
 }
 
+export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
+  type: 'contractPage/onClick_Authorized_LoadMoreBtn';
+}
+
 export interface Fetch_Authorize_List_Action extends AnyAction {
   type: 'fetch_Authorize_List';
+  payload?: {
+    loadMore: boolean;
+  };
 }
 
 export interface Fetch_Authorized_List_Action extends AnyAction {
   type: 'fetch_Authorized_List';
+  payload?: {
+    loadMore: boolean;
+  };
 }
 
 interface ContractPageModelType {
@@ -185,11 +201,13 @@ interface ContractPageModelType {
     onChange_Authorize_Status: (action: OnChange_Authorize_Status_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_KeywordsInput: (action: OnChange_Authorize_KeywordsInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Authorize_LoadMoreBtn: (action: OnClick_Authorize_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
 
     onChange_Authorized_SubjectType: (action: OnChange_Authorized_SubjectType_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Status: (action: OnChange_Authorized_Status_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Date: (action: OnChange_Authorized_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_KeywordsInput: (action: OnChange_Authorized_KeywordsInput_Action, effects: EffectsCommandMap) => void;
+    onClick_Authorized_LoadMoreBtn: (action: OnClick_Authorized_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
 
     fetch_Authorize_List: (action: Fetch_Authorize_List_Action, effects: EffectsCommandMap) => void;
     fetch_Authorized_List: (action: Fetch_Authorized_List_Action, effects: EffectsCommandMap) => void;
@@ -233,6 +251,7 @@ const initStates: ContractPageModelState = {
   authorize_Date: null,
   authorize_Keywords: '',
   authorize_ListState: 'loading',
+  authorize_ListMore: 'loading',
   authorize_List: [],
 
   authorized_SubjectType_Options: [{
@@ -263,6 +282,7 @@ const initStates: ContractPageModelState = {
   authorized_Date: null,
   authorized_Keywords: '',
   authorized_ListState: 'loading',
+  authorized_ListMore: 'loading',
   authorized_List: [],
 
   contractDetailsID: '',
@@ -281,37 +301,6 @@ const Model: ContractPageModelType = {
       yield put<Fetch_Authorized_List_Action>({
         type: 'fetch_Authorized_List',
       });
-
-      // const params2: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
-      //   identityType: 2,
-      // };
-      //
-      //
-      // const { data: data2 } = yield call(FServiceAPI.Contract.contracts, params2);
-      //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //
-      //     authorized_List: (data2.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
-      //       return {
-      //         cover: '',
-      //         subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
-      //         subjectName: al.subjectName,
-      //         contractName: al.contractName,
-      //         licensorId: al.licenseeId,
-      //         licensorType: al.subjectType === 1 ? 'resource' : 'node',
-      //         licensorName: al.licensorName,
-      //         licenseeId: al.licenseeId,
-      //         licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
-      //         licenseeName: al.licenseeName,
-      //         status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
-      //         dataTime: FUtil.Format.formatDateTime(al.createDate, true),
-      //         contractID: al.contractId,
-      //       };
-      //     }),
-      //   },
-      // });
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -391,6 +380,14 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorize_List',
       });
     },
+    * onClick_Authorize_LoadMoreBtn(action: OnClick_Authorize_LoadMoreBtn_Action, { put }: EffectsCommandMap) {
+      yield put<Fetch_Authorize_List_Action>({
+        type: 'fetch_Authorize_List',
+        payload: {
+          loadMore: true,
+        },
+      });
+    },
 
     * onChange_Authorized_SubjectType({ payload }: OnChange_Authorized_SubjectType_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -438,19 +435,37 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorized_List',
       });
     },
+    * onClick_Authorized_LoadMoreBtn({}: OnClick_Authorized_LoadMoreBtn_Action, {put}: EffectsCommandMap) {
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+        payload: {
+          loadMore: true,
+        },
+      });
+    },
 
-    * fetch_Authorize_List(action: Fetch_Authorize_List_Action, { select, call, put }: EffectsCommandMap) {
+    * fetch_Authorize_List({ payload }: Fetch_Authorize_List_Action, { select, call, put }: EffectsCommandMap) {
       const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
         contractPage,
       }));
       // console.log('#@#$@#$23423422222@@@@@@@@');
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          authorize_ListState: 'loading',
-        },
-      });
+      if (payload?.loadMore) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            authorize_ListMore: 'loading',
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            authorize_ListState: 'loading',
+            authorize_ListMore: 'loading',
+          },
+        });
+      }
 
       const status: { [k: string]: 0 | 1 | 2 } = {
         'authorization': 0,
@@ -472,9 +487,17 @@ const Model: ContractPageModelType = {
         'exhibit': 2,
       };
 
+      let beforeData: ContractPageModelState['authorize_List'] = [];
+      if (payload?.loadMore) {
+        beforeData = [
+          ...contractPage.authorize_List,
+        ];
+      }
+
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
-        skip: 0,
+        skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
+        // limit: 100,
         identityType: 1,
         subjectType: subjectType[contractPage.authorize_SubjectType],
         status: contractPage.authorize_Status === 'all' ? undefined : status[contractPage.authorize_Status],
@@ -487,12 +510,34 @@ const Model: ContractPageModelType = {
       const { data } = yield call(FServiceAPI.Contract.contracts, params);
       // const data1 = { dataList: [] };
 
-      if (data.dataList.length === 0) {
+      const resultList: ContractPageModelState['authorize_List'] = [
+        ...beforeData,
+        ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
+          return {
+            cover: '',
+            subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectName: al.subjectName,
+            contractName: al.contractName,
+            licensorId: al.licenseeId,
+            licensorType: al.subjectType === 1 ? 'resource' : 'node',
+            licensorName: al.licensorName,
+            licenseeId: al.licenseeId,
+            licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
+            licenseeName: al.licenseeName,
+            status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            dataTime: FUtil.Format.formatDateTime(al.createDate, true),
+            contractID: al.contractId,
+          };
+        }),
+      ];
+
+      if (resultList.length === 0) {
         if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
               authorize_ListState: 'noData',
+              authorize_ListMore: 'noMore',
               authorize_List: [],
             },
           });
@@ -501,6 +546,7 @@ const Model: ContractPageModelType = {
             type: 'change',
             payload: {
               authorize_ListState: 'noSearchResult',
+              authorize_ListMore: 'noMore',
               authorize_List: [],
             },
           });
@@ -512,38 +558,33 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload: {
           authorize_ListState: 'loaded',
-          authorize_List: (data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
-            return {
-              cover: '',
-              subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
-              subjectName: al.subjectName,
-              contractName: al.contractName,
-              licensorId: al.licenseeId,
-              licensorType: al.subjectType === 1 ? 'resource' : 'node',
-              licensorName: al.licensorName,
-              licenseeId: al.licenseeId,
-              licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
-              licenseeName: al.licenseeName,
-              status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
-              dataTime: FUtil.Format.formatDateTime(al.createDate, true),
-              contractID: al.contractId,
-            };
-          }),
+          authorize_ListMore: data.totalItem > resultList.length ? 'andMore' : 'noMore',
+          authorize_List: resultList,
         },
       });
     },
-    * fetch_Authorized_List(action: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
+    * fetch_Authorized_List({payload}: Fetch_Authorized_List_Action, { select, call, put }: EffectsCommandMap) {
       const { contractPage }: ConnectState = yield select(({ contractPage }: ConnectState) => ({
         contractPage,
       }));
       // console.log('#@#$@#$23423422222@@@@@@@@');
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          authorized_ListState: 'loading',
-        },
-      });
+      if (payload?.loadMore) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            authorized_ListMore: 'loading',
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            authorized_ListState: 'loading',
+            authorized_ListMore: 'loading',
+          },
+        });
+      }
 
       const status: { [k: string]: 0 | 1 | 2 } = {
         'authorization': 0,
@@ -564,10 +605,19 @@ const Model: ContractPageModelType = {
         'resource': 1,
         'exhibit': 2,
       };
+
+      let beforeData: ContractPageModelState['authorized_List'] = [];
+      if (payload?.loadMore) {
+        beforeData = [
+          ...contractPage.authorized_List,
+        ];
+      }
+
       // console.log(contractPage, 'contractPagecontractPage@#%@#@#@#@@@');
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
-        skip: 0,
+        skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
+        // limit: 100,
         identityType: 2,
         subjectType: subjectType[contractPage.authorized_SubjectType],
         status: contractPage.authorized_Status === 'all' ? undefined : status[contractPage.authorized_Status],
@@ -579,13 +629,34 @@ const Model: ContractPageModelType = {
 
       const { data } = yield call(FServiceAPI.Contract.contracts, params);
       // const data1 = { dataList: [] };
+      const resultList: ContractPageModelState['authorized_List'] = [
+        ...beforeData,
+        ...(data.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
+          return {
+            cover: '',
+            subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectName: al.subjectName,
+            contractName: al.contractName,
+            licensorId: al.licenseeId,
+            licensorType: al.subjectType === 1 ? 'resource' : 'node',
+            licensorName: al.licensorName,
+            licenseeId: al.licenseeId,
+            licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
+            licenseeName: al.licenseeName,
+            status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
+            dataTime: FUtil.Format.formatDateTime(al.createDate, true),
+            contractID: al.contractId,
+          };
+        }),
+      ];
 
-      if (data.dataList.length === 0) {
+      if (resultList.length === 0) {
         if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
               authorized_ListState: 'noData',
+              authorized_ListMore: 'noMore',
               authorized_List: [],
             },
           });
@@ -594,6 +665,7 @@ const Model: ContractPageModelType = {
             type: 'change',
             payload: {
               authorized_ListState: 'noSearchResult',
+              authorized_ListMore: 'noMore',
               authorized_List: [],
             },
           });
@@ -605,23 +677,8 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload: {
           authorized_ListState: 'loaded',
-          authorized_List: (data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
-            return {
-              cover: '',
-              subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
-              subjectName: al.subjectName,
-              contractName: al.contractName,
-              licensorId: al.licenseeId,
-              licensorType: al.subjectType === 1 ? 'resource' : 'node',
-              licensorName: al.licensorName,
-              licenseeId: al.licenseeId,
-              licenseeType: al.licenseeIdentityType === 1 ? 'resource' : al.licenseeIdentityType === 2 ? 'node' : 'user',
-              licenseeName: al.licenseeName,
-              status: al.status === 1 ? 'terminated' : ((al.authStatus & 1) === 1) ? 'authorization' : 'pending',
-              dataTime: FUtil.Format.formatDateTime(al.createDate, true),
-              contractID: al.contractId,
-            };
-          }),
+          authorized_ListMore: data.totalItem > resultList.length ? 'andMore' : 'noMore',
+          authorized_List: resultList,
         },
       });
     },
