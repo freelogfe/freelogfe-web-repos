@@ -13,6 +13,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FResource from '@/components/FIcons/FResource';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FDivider from '@/components/FDivider';
+import FContractDisplay from '@/components/FContractDisplay';
 
 interface BaseInfo {
   subjectId: string;

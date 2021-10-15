@@ -23,6 +23,7 @@ interface FContractDisplayProps {
 interface IContractDisplayStates {
   activated: 'record' | 'code' | 'text' | 'view';
   recodeFold: boolean;
+  isSelfLicensorOwner: boolean;
 
   currentS: {
     name: string;
@@ -69,6 +70,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
   const [activated, setActivated] = React.useState<IContractDisplayStates['activated']>('record');
   const [recodeFold, setRecodeFold] = React.useState<IContractDisplayStates['recodeFold']>(true);
+  const [isSelfLicensorOwner, setIsSelfLicensorOwner] = React.useState<IContractDisplayStates['isSelfLicensorOwner']>(false);
 
   const [currentS, setCurrentS] = React.useState<IContractDisplayStates['currentS']>(null);
   const [historySs, setHistorySs] = React.useState<IContractDisplayStates['historySs']>([]);
@@ -116,8 +118,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       return fi.stateInfo.origin === data.fsmCurrentState;
     });
 
-    // console.log(fsmInfos, 'data1data1data1currentState9087098-09');
-
+    // console.log(data, FUtil.Tool.getUserIDByCookies(), '#@#$@#$@#@@@@@@@@@@');
+    setIsSelfLicensorOwner(data.licensorOwnerId === FUtil.Tool.getUserIDByCookies());
     setModalTarget(data.subjectName);
     setModalContractName(data.contractName);
     setModalPayee(data.licensorOwnerName);
@@ -216,7 +218,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       return fMessage(msg, 'error');
     }
 
-    console.log(data, 'data13241234');
+    // console.log(data, 'data13241234');
 
     const bool: boolean = await paymentStatus(data.transactionRecordId);
     if (!bool) {
@@ -301,17 +303,20 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                               type='normal'
                               text={eti.tip}
                             />
-                            <FRectBtn
-                              style={{ flexShrink: 0 }}
-                              type='primary'
-                              size='small'
-                              onClick={() => {
-                                setModalEventID(eti.id);
-                                // console.log(eti.origin.args.amount, '!#@$!234123412341234');
-                                setModalTransactionAmount(eti.amount);
-                                readyPay();
-                              }}
-                            >支付</FRectBtn>
+                            {
+                              !isSelfLicensorOwner && (<FRectBtn
+                                style={{ flexShrink: 0 }}
+                                type='primary'
+                                size='small'
+                                onClick={() => {
+                                  setModalEventID(eti.id);
+                                  // console.log(eti.origin.args.amount, '!#@$!234123412341234');
+                                  setModalTransactionAmount(eti.amount);
+                                  readyPay();
+                                }}
+                              >支付</FRectBtn>)
+                            }
+
                           </div>);
                         } else if (eti.type === 'RelativeTimeEvent') {
                           return (<div key={eti.id} className={styles.Event}>
@@ -346,9 +351,9 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
                   <Space className={styles.TransferringRecords} size={20} direction='vertical'>
 
                     {
-                      historySs.map((hs) => {
+                      historySs.map((hs, index) => {
                         // console.log(hs, 'hshshshshshshs1234234');
-                        return (<div className={styles.TransferringRecord}>
+                        return (<div key={index} className={styles.TransferringRecord}>
                           <Space size={5}>
                             {
                               hs.colors.length > 0

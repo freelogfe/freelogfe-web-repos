@@ -13,6 +13,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FResource from '@/components/FIcons/FResource';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FDivider from '@/components/FDivider';
+import FContractDisplay from '@/components/FContractDisplay';
 
 interface BaseInfo {
   subjectId: string;
@@ -224,10 +225,17 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
               {/*<div style={{ height: 10 }} />*/}
 
-              {baseInfo && (<FPolicyDisplay
-                code={baseInfo.contractText}
-                containerHeight={170}
-              />)}
+              {/*{baseInfo && (<FPolicyDisplay*/}
+              {/*  code={baseInfo.contractText}*/}
+              {/*  containerHeight={170}*/}
+              {/*/>)}*/}
+
+              {/*{console.log(contractID, 'contractID12342342ojlksdfjlasdkfsdf')}*/}
+              {
+                contractID && (<FContractDisplay
+                  contractID={contractID}
+                />)
+              }
 
               <div style={{ height: 10 }} />
               <div style={{ padding: '0 20px' }}>
