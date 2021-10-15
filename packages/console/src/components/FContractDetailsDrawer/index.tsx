@@ -217,9 +217,9 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                     text={baseInfo?.contractName}
                     type='highlight'
                   />
-                  <FContractStatusBadge
-                    status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
-                  />
+                  {/*<FContractStatusBadge*/}
+                  {/*  status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}*/}
+                  {/*/>*/}
                 </Space>
               </div>
 
@@ -285,10 +285,10 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                               text={ac.contractName}
                               type='highlight'
                             />
-                            <FContractStatusBadge
-                              // status={ac.contractStatus === 1 ? 'authorized' : 'stopped'}
-                              status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}
-                            />
+                            {/*<FContractStatusBadge*/}
+                            {/*  // status={ac.contractStatus === 1 ? 'authorized' : 'stopped'}*/}
+                            {/*  status={FUtil.Predefined.EnumContractStatus[baseInfo?.contractStatus || 0] as 'authorized'}*/}
+                            {/*/>*/}
                           </Space>
                           <div style={{ height: 10 }} />
                           <Space size={40}>
@@ -317,12 +317,18 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
                         }
 
                       </div>
-                      {
-                        ac.expansion && (<FPolicyDisplay
-                          code={ac.contractText}
-                          containerHeight={170}
-                        />)
-                      }
+                      {/*{*/}
+                      {/*  ac.expansion && (<FPolicyDisplay*/}
+                      {/*    code={ac.contractText}*/}
+                      {/*    containerHeight={170}*/}
+                      {/*  />)*/}
+                      {/*}*/}
+
+                      <div style={{ display: ac.expansion ? 'block' : 'none'}}>
+                        <FContractDisplay
+                          contractID={ac.contractId}
+                        />
+                      </div>
 
                     </div>);
                   })
