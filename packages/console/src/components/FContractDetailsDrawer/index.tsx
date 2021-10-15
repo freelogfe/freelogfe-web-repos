@@ -225,10 +225,17 @@ function FContractDetailsDrawer({ contractID = '', onClose }: FContractDetailsDr
 
               {/*<div style={{ height: 10 }} />*/}
 
-              {baseInfo && (<FPolicyDisplay
-                code={baseInfo.contractText}
-                containerHeight={170}
-              />)}
+              {/*{baseInfo && (<FPolicyDisplay*/}
+              {/*  code={baseInfo.contractText}*/}
+              {/*  containerHeight={170}*/}
+              {/*/>)}*/}
+
+              {/*{console.log(contractID, 'contractID12342342ojlksdfjlasdkfsdf')}*/}
+              {
+                contractID && (<FContractDisplay
+                  contractID={contractID}
+                />)
+              }
 
               <div style={{ height: 10 }} />
               <div style={{ padding: '0 20px' }}>
