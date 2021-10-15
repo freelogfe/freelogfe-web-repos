@@ -169,7 +169,7 @@ const Model: MarketModelType = {
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
-        limit: FUtil.Predefined.pageSize + 10,
+        limit: FUtil.Predefined.pageSize,
         // startResourceId: dataSource[0]?.id,
         keywords: marketPage.inputText,
         resourceType: marketPage.resourceType === '-1' ? undefined : marketPage.resourceType,

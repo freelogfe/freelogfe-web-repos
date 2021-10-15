@@ -1715,7 +1715,7 @@ const Model: InformalNodeManagerPageModelType = {
       let addExhibitDrawerCheckedListTotalNum: number = -1;
 
       const skip: number = inherentList.length;
-      const limit: number = FUtil.Predefined.pageSize + 10;
+      const limit: number = FUtil.Predefined.pageSize;
       const theOrigin: string = payload.origin !== undefined ? payload.origin : informalNodeManagerPage.addExhibitDrawerSelectValue;
       const keywords: string = payload.keywords !== undefined ? payload.keywords : informalNodeManagerPage.addExhibitDrawerInputValue;
 
@@ -1783,7 +1783,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
           skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize + 10,
+          limit: FUtil.Predefined.pageSize,
           isSelf: 1,
           omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
           resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
@@ -1839,7 +1839,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
           skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize + 10,
+          limit: FUtil.Predefined.pageSize,
           keywords: keywords,
           omitResourceType: informalNodeManagerPage.showPage === 'theme' ? undefined : 'theme',
           resourceType: informalNodeManagerPage.showPage === 'theme' ? 'theme' : undefined,
@@ -1896,7 +1896,7 @@ const Model: InformalNodeManagerPageModelType = {
 
         const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
           skip: inherentList.length,
-          limit: FUtil.Predefined.pageSize + 10,
+          limit: FUtil.Predefined.pageSize,
           bucketName: theOrigin,
           keywords: keywords,
           isLoadingTypeless: 0,
