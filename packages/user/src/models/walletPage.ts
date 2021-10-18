@@ -11,7 +11,7 @@ export interface WalletPageModelState {
   userPhone: string;
   userEmail: string;
   accountStatus: -1 | 0 | 1 | 2; // 0:未激活 1:正常 2:冻结
-  // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze'; // 0:未激活 1:正常 2:冻结
+  // accountStatus: 'initial' | 'inactive' | 'active' | 'freeze';
   accountId: string;
   accountBalance: number;
   transactionRecord: {
@@ -39,19 +39,23 @@ export interface WalletPageModelState {
   activatingAccountPasswordTwo: string;
   activatingAccountPasswordTwoError: string;
 
-  changingPassword: boolean;
-  changingPasswordMobile: string;
-  changingPasswordEmail: string;
-  changingPasswordType: 'phone' | 'email';
-  changingPasswordCaptcha: string;
-  changingPasswordSentCaptchaWait: number;
-  changingPasswordCaptchaError: string;
-  changingPasswordPasswordOld: string;
-  changingPasswordPasswordOldError: string;
-  changingPasswordPasswordOne: string;
-  changingPasswordPasswordOneError: string;
-  changingPasswordPasswordTwo: string;
-  changingPasswordPasswordTwoError: string;
+  changingPassword_CaptchaModal_Visible: boolean;
+  changingPassword_CaptchaModal_Phone: string;
+  changingPassword_CaptchaModal_Email: string;
+  changingPassword_CaptchaModal_TypeCheckbox: 'phone' | 'email';
+  changingPassword_CaptchaModal_CaptchaInput: string;
+  changingPassword_CaptchaModal_SentCaptchaWait: number;
+  changingPassword_CaptchaModal_CaptchaError: string;
+
+  changingPassword_OldPasswordModal_Visible: boolean;
+  changingPassword_OldPasswordModal_PasswordInput: string;
+  // changingPassword_OldPasswordModal_PasswordInputError: string;
+
+  changingPassword_NewPasswordModal_Visible: boolean;
+  changingPassword_NewPasswordModal_Password1: string;
+  changingPassword_NewPasswordModal_Password1Error: string;
+  changingPassword_NewPasswordModal_Password2: string;
+  changingPassword_NewPasswordModal_Password2Error: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -126,70 +130,86 @@ export interface OnClickActivateAccountConfirmBtnAction extends AnyAction {
   type: 'walletPage/onClickActivateAccountConfirmBtn';
 }
 
-export interface OnClickUpdatePaymentPasswordBtnAction extends AnyAction {
-  type: 'walletPage/onClickUpdatePaymentPasswordBtn';
+export interface OnClick_ChangingPasswordBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_ChangingPasswordBtn';
 }
 
-export interface OnCancelUpdatePaymentPasswordModalAction extends AnyAction {
-  type: 'walletPage/onCancelUpdatePaymentPasswordModal';
+export interface OnCancel_ChangingPassword_CaptchaModal_Action extends AnyAction {
+  type: 'walletPage/onCancel_ChangingPassword_CaptchaModal';
 }
 
-export interface OnChangeUpdatePaymentPasswordModeAction extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordMode';
+export interface OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_CaptchaModal_TypeCheckbox';
   payload: {
     value: 'phone' | 'email';
   };
 }
 
-export interface OnChangeUpdatePaymentPasswordCaptchaInputAction extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordCaptchaInput';
+export interface OnChange_ChangingPassword_CaptchaModal_CaptchaInput_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_CaptchaModal_CaptchaInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnClickUpdatePaymentPasswordCaptchaBtnAction extends AnyAction {
-  type: 'walletPage/onClickUpdatePaymentPasswordCaptchaBtn';
+export interface OnClick_ChangingPassword_CaptchaModal_SendBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_ChangingPassword_CaptchaModal_SendBtn';
 }
 
-export interface OnChangeUpdatePaymentPasswordSentCaptchaWaitBtnAction extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordSentCaptchaWaitBtn';
+export interface OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_CaptchaModal_SentCaptchaWait';
   payload: {
     value: number;
   };
 }
 
-export interface OnChangeUpdatePaymentPasswordOldAction extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordOld';
+export interface OnClick_ChangingPassword_CaptchaModal_NextBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_ChangingPassword_CaptchaModal_NextBtn';
+}
+
+export interface OnCancel_ChangingPassword_OldPasswordModal_Action extends AnyAction {
+  type: 'walletPage/onCancel_ChangingPassword_OldPasswordModal';
+}
+
+export interface OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_OldPasswordModal_PasswordInput';
   payload: {
     value: string;
   };
 }
 
-export interface OnChangeUpdatePaymentPasswordNew1Action extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordNew1';
+export interface OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_ChangingPassword_OldPasswordModal_NextBtn';
+}
+
+export interface OnCancel_ChangingPassword_NewPasswordModal_Action extends AnyAction {
+  type: 'walletPage/onCancel_ChangingPassword_NewPasswordModal';
+}
+
+export interface OnChange_ChangingPassword_NewPasswordModal_Password1_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password1Input';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurUpdatePaymentPasswordNew1Action extends AnyAction {
-  type: 'walletPage/onBlurUpdatePaymentPasswordNew1';
+export interface OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action extends AnyAction {
+  type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password1Input';
 }
 
-export interface OnChangeUpdatePaymentPasswordNew2Action extends AnyAction {
-  type: 'walletPage/onChangeUpdatePaymentPasswordNew2';
+export interface OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action extends AnyAction {
+  type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password2Input';
   payload: {
     value: string;
   };
 }
 
-export interface OnBlurUpdatePaymentPasswordNew2Action extends AnyAction {
-  type: 'walletPage/onBlurUpdatePaymentPasswordNew2';
+export interface OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action extends AnyAction {
+  type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password2Input';
 }
 
-export interface OnClickUpdatePaymentPasswordConfirmBtnAction extends AnyAction {
-  type: 'walletPage/onClickUpdatePaymentPasswordConfirmBtn';
+export interface OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action extends AnyAction {
+  type: 'walletPage/onClick_ChangingPassword_NewPasswordModal_ConfirmBtn';
 }
 
 interface WalletPageModelType {
@@ -211,18 +231,25 @@ interface WalletPageModelType {
     onBlurActivateAccountPassword2: (action: OnBlurActivateAccountPassword2Action, effects: EffectsCommandMap) => void;
     onClickActivateAccountConfirmBtn: (action: OnClickActivateAccountConfirmBtnAction, effects: EffectsCommandMap) => void;
 
-    onClickUpdatePaymentPasswordBtn: (action: OnClickUpdatePaymentPasswordBtnAction, effects: EffectsCommandMap) => void;
-    onCancelUpdatePaymentPasswordModal: (action: OnCancelUpdatePaymentPasswordModalAction, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordMode: (action: OnChangeUpdatePaymentPasswordModeAction, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordCaptchaInput: (action: OnChangeUpdatePaymentPasswordCaptchaInputAction, effects: EffectsCommandMap) => void;
-    onClickUpdatePaymentPasswordCaptchaBtn: (action: OnClickUpdatePaymentPasswordCaptchaBtnAction, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordSentCaptchaWaitBtn: (action: OnChangeUpdatePaymentPasswordSentCaptchaWaitBtnAction, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordOld: (action: OnChangeUpdatePaymentPasswordOldAction, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordNew1: (action: OnChangeUpdatePaymentPasswordNew1Action, effects: EffectsCommandMap) => void;
-    onBlurUpdatePaymentPasswordNew1: (action: OnBlurUpdatePaymentPasswordNew1Action, effects: EffectsCommandMap) => void;
-    onChangeUpdatePaymentPasswordNew2: (action: OnChangeUpdatePaymentPasswordNew2Action, effects: EffectsCommandMap) => void;
-    onBlurUpdatePaymentPasswordNew2: (action: OnBlurUpdatePaymentPasswordNew2Action, effects: EffectsCommandMap) => void;
-    onClickUpdatePaymentPasswordConfirmBtn: (action: OnClickUpdatePaymentPasswordConfirmBtnAction, effects: EffectsCommandMap) => void;
+    onClick_ChangingPasswordBtn: (action: OnClick_ChangingPasswordBtn_Action, effects: EffectsCommandMap) => void;
+
+    onCancel_ChangingPassword_CaptchaModal: (action: OnCancel_ChangingPassword_CaptchaModal_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_CaptchaModal_TypeCheckbox: (action: OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_CaptchaModal_CaptchaInput: (action: OnChange_ChangingPassword_CaptchaModal_CaptchaInput_Action, effects: EffectsCommandMap) => void;
+    onClick_ChangingPassword_CaptchaModal_SendBtn: (action: OnClick_ChangingPassword_CaptchaModal_SendBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_CaptchaModal_SentCaptchaWait: (action: OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action, effects: EffectsCommandMap) => void;
+    onClick_ChangingPassword_CaptchaModal_NextBtn: (action: OnClick_ChangingPassword_CaptchaModal_NextBtn_Action, effects: EffectsCommandMap) => void;
+
+    onCancel_ChangingPassword_OldPasswordModal: (action: OnCancel_ChangingPassword_OldPasswordModal_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_OldPasswordModal_PasswordInput: (action: OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action, effects: EffectsCommandMap) => void;
+    onClick_ChangingPassword_OldPasswordModal_NextBtn: (action: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, effects: EffectsCommandMap) => void;
+
+    onCancel_ChangingPassword_NewPasswordModal: (action: OnCancel_ChangingPassword_NewPasswordModal_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_NewPasswordModal_Password1Input: (action: OnChange_ChangingPassword_NewPasswordModal_Password1_Action, effects: EffectsCommandMap) => void;
+    onBlur_ChangingPassword_NewPasswordModal_Password1Input: (action: OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action, effects: EffectsCommandMap) => void;
+    onChange_ChangingPassword_NewPasswordModal_Password2Input: (action: OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action, effects: EffectsCommandMap) => void;
+    onBlur_ChangingPassword_NewPasswordModal_Password2Input: (action: OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action, effects: EffectsCommandMap) => void;
+    onClick_ChangingPassword_NewPasswordModal_ConfirmBtn: (action: OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<WalletPageModelState, ChangeAction>;
@@ -258,32 +285,40 @@ const activatingAccountInitStates: Pick<WalletPageModelState,
 };
 
 const changingPasswordInitStates: Pick<WalletPageModelState,
-  'changingPassword'
-  | 'changingPasswordMobile'
-  | 'changingPasswordEmail'
-  | 'changingPasswordType'
-  | 'changingPasswordCaptcha'
-  | 'changingPasswordCaptchaError'
-  | 'changingPasswordSentCaptchaWait'
-  | 'changingPasswordPasswordOld'
-  | 'changingPasswordPasswordOldError'
-  | 'changingPasswordPasswordOne'
-  | 'changingPasswordPasswordOneError'
-  | 'changingPasswordPasswordTwo'
-  | 'changingPasswordPasswordTwoError'> = {
-  changingPassword: false,
-  changingPasswordMobile: '',
-  changingPasswordEmail: '',
-  changingPasswordType: 'phone',
-  changingPasswordCaptcha: '',
-  changingPasswordCaptchaError: '',
-  changingPasswordSentCaptchaWait: 0,
-  changingPasswordPasswordOld: '',
-  changingPasswordPasswordOldError: '',
-  changingPasswordPasswordOne: '',
-  changingPasswordPasswordOneError: '',
-  changingPasswordPasswordTwo: '',
-  changingPasswordPasswordTwoError: '',
+  'changingPassword_CaptchaModal_Visible' |
+  'changingPassword_CaptchaModal_Phone' |
+  'changingPassword_CaptchaModal_Email' |
+  'changingPassword_CaptchaModal_TypeCheckbox' |
+  'changingPassword_CaptchaModal_CaptchaInput' |
+  'changingPassword_CaptchaModal_SentCaptchaWait' |
+  'changingPassword_CaptchaModal_CaptchaError' |
+
+  'changingPassword_OldPasswordModal_Visible' |
+  'changingPassword_OldPasswordModal_PasswordInput' |
+  // 'changingPassword_OldPasswordModal_PasswordInputError' |
+
+  'changingPassword_NewPasswordModal_Visible' |
+  'changingPassword_NewPasswordModal_Password1' |
+  'changingPassword_NewPasswordModal_Password1Error' |
+  'changingPassword_NewPasswordModal_Password2' |
+  'changingPassword_NewPasswordModal_Password2Error'> = {
+  changingPassword_CaptchaModal_Visible: false,
+  changingPassword_CaptchaModal_Phone: '',
+  changingPassword_CaptchaModal_Email: '',
+  changingPassword_CaptchaModal_TypeCheckbox: 'phone',
+  changingPassword_CaptchaModal_CaptchaInput: '',
+  changingPassword_CaptchaModal_SentCaptchaWait: 0,
+  changingPassword_CaptchaModal_CaptchaError: '',
+
+  changingPassword_OldPasswordModal_Visible: false,
+  changingPassword_OldPasswordModal_PasswordInput: '',
+  // changingPassword_OldPasswordModal_PasswordInputError: '',
+
+  changingPassword_NewPasswordModal_Visible: false,
+  changingPassword_NewPasswordModal_Password1: '',
+  changingPassword_NewPasswordModal_Password1Error: '',
+  changingPassword_NewPasswordModal_Password2: '',
+  changingPassword_NewPasswordModal_Password2Error: '',
 };
 
 const initStates: WalletPageModelState = {
@@ -510,24 +545,25 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onClickUpdatePaymentPasswordBtn({}: OnClickUpdatePaymentPasswordBtnAction, {
+    * onClick_ChangingPasswordBtn({}: OnClick_ChangingPasswordBtn_Action, {
       select,
       put,
     }: EffectsCommandMap) {
       const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
         walletPage,
       }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPassword: true,
-          changingPasswordMobile: walletPage.userPhone,
-          changingPasswordEmail: walletPage.userEmail,
-          changingPasswordType: walletPage.userPhone ? 'phone' : 'email',
+          changingPassword_CaptchaModal_Visible: true,
+          changingPassword_CaptchaModal_Phone: walletPage.userPhone,
+          changingPassword_CaptchaModal_Email: walletPage.userEmail,
+          changingPassword_CaptchaModal_TypeCheckbox: walletPage.userPhone ? 'phone' : 'email',
         },
       });
     },
-    * onCancelUpdatePaymentPasswordModal(action: OnCancelUpdatePaymentPasswordModalAction, { put }: EffectsCommandMap) {
+    * onCancel_ChangingPassword_CaptchaModal(action: OnCancel_ChangingPassword_CaptchaModal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -535,23 +571,25 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onChangeUpdatePaymentPasswordMode({ payload }: OnChangeUpdatePaymentPasswordModeAction, { put }: EffectsCommandMap) {
+    * onChange_ChangingPassword_CaptchaModal_TypeCheckbox({ payload }: OnChange_ChangingPassword_CaptchaModal_TypeCheckbox_Action, { put }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordType: payload.value,
+          changingPassword_CaptchaModal_TypeCheckbox: payload.value,
         },
       });
     },
-    * onChangeUpdatePaymentPasswordCaptchaInput({ payload }: OnChangeUpdatePaymentPasswordCaptchaInputAction, { put }: EffectsCommandMap) {
+    * onChange_ChangingPassword_CaptchaModal_CaptchaInput({ payload }: OnChange_ChangingPassword_CaptchaModal_CaptchaInput_Action, { put }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordCaptcha: payload.value,
+          changingPassword_CaptchaModal_CaptchaInput: payload.value,
         },
       });
     },
-    * onClickUpdatePaymentPasswordCaptchaBtn(action: OnClickUpdatePaymentPasswordCaptchaBtnAction, {
+    * onClick_ChangingPassword_CaptchaModal_SendBtn(action: OnClick_ChangingPassword_CaptchaModal_SendBtn_Action, {
       select,
       put,
       call,
@@ -563,12 +601,12 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordSentCaptchaWait: 60,
+          changingPassword_CaptchaModal_SentCaptchaWait: 60,
         },
       });
 
       const params: Parameters<typeof FServiceAPI.Captcha.sendVerificationCode>[0] = {
-        loginName: walletPage.changingPasswordType === 'email' ? walletPage.changingPasswordEmail : walletPage.changingPasswordMobile,
+        loginName: walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'email' ? walletPage.changingPassword_CaptchaModal_Email : walletPage.changingPassword_CaptchaModal_Phone,
         authCodeType: 'updateTransactionAccountPwd',
       };
       const { data, msg } = yield call(FServiceAPI.Captcha.sendVerificationCode, params);
@@ -576,38 +614,84 @@ const Model: WalletPageModelType = {
         return;
       }
       fMessage(msg, 'error');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordSentCaptchaWait: 0,
+          changingPassword_CaptchaModal_SentCaptchaWait: 0,
         },
       });
     },
-    * onChangeUpdatePaymentPasswordSentCaptchaWaitBtn({ payload }: OnChangeUpdatePaymentPasswordSentCaptchaWaitBtnAction, { put }: EffectsCommandMap) {
+    * onChange_ChangingPassword_CaptchaModal_SentCaptchaWait({ payload }: OnChange_ChangingPassword_CaptchaModal_SentCaptchaWait_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordSentCaptchaWait: payload.value,
+          changingPassword_CaptchaModal_SentCaptchaWait: payload.value,
         },
       });
     },
-    * onChangeUpdatePaymentPasswordOld({ payload }: OnChangeUpdatePaymentPasswordOldAction, { put }: EffectsCommandMap) {
+    * onClick_ChangingPassword_CaptchaModal_NextBtn({}: OnClick_ChangingPassword_CaptchaModal_NextBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onCancel_ChangingPassword_OldPasswordModal({}: OnCancel_ChangingPassword_OldPasswordModal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordPasswordOld: payload.value,
+          changingPassword_OldPasswordModal_Visible: false,
         },
       });
     },
-    * onChangeUpdatePaymentPasswordNew1({ payload }: OnChangeUpdatePaymentPasswordNew1Action, { put }: EffectsCommandMap) {
+    * onChange_ChangingPassword_OldPasswordModal_PasswordInput({ payload }: OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action, { put }: EffectsCommandMap) {
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordPasswordOne: payload.value,
+          changingPassword_OldPasswordModal_PasswordInput: payload.value,
         },
       });
     },
-    * onBlurUpdatePaymentPasswordNew1({ payload }: OnBlurUpdatePaymentPasswordNew1Action, {
+    * onClick_ChangingPassword_OldPasswordModal_NextBtn({}: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onCancel_ChangingPassword_NewPasswordModal(action: OnCancel_ChangingPassword_NewPasswordModal_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: { changingPassword_NewPasswordModal_Visible: false },
+      });
+    },
+    * onChange_ChangingPassword_NewPasswordModal_Password1Input({ payload }: OnChange_ChangingPassword_NewPasswordModal_Password1_Action, { put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: { changingPassword_NewPasswordModal_Password1: payload.value },
+      });
+    },
+    * onBlur_ChangingPassword_NewPasswordModal_Password1Input({ payload }: OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changingPassword_NewPasswordModal_Password1Error: FUtil.Regexp.PAY_PASSWORD.test(walletPage.changingPassword_NewPasswordModal_Password1) ? '' : '必须为6为数字',
+          changingPassword_NewPasswordModal_Password2Error: (walletPage.changingPassword_NewPasswordModal_Password2 && walletPage.changingPassword_NewPasswordModal_Password1 !== walletPage.changingPassword_NewPasswordModal_Password2) ? '两次密码必须一致' : '',
+        },
+      });
+    },
+    * onChange_ChangingPassword_NewPasswordModal_Password2Input({ payload }: OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action, { put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changingPassword_NewPasswordModal_Password2: payload.value,
+        },
+      });
+    },
+    * onBlur_ChangingPassword_NewPasswordModal_Password2Input({}: OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action, {
       select,
       put,
     }: EffectsCommandMap) {
@@ -617,32 +701,11 @@ const Model: WalletPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPasswordPasswordOneError: FUtil.Regexp.PAY_PASSWORD.test(walletPage.changingPasswordPasswordOne) ? '' : '必须为6为数字',
-          changingPasswordPasswordTwoError: (walletPage.changingPasswordPasswordTwo && walletPage.changingPasswordPasswordOne !== walletPage.changingPasswordPasswordTwo) ? '两次密码必须一致' : '',
+          changingPassword_NewPasswordModal_Password2Error: walletPage.changingPassword_NewPasswordModal_Password2 === walletPage.changingPassword_NewPasswordModal_Password1 ? '' : '两次密码必须一致',
         },
       });
     },
-    * onChangeUpdatePaymentPasswordNew2({ payload }: OnChangeUpdatePaymentPasswordNew2Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          changingPasswordPasswordTwo: payload.value,
-        },
-      });
-    },
-    * onBlurUpdatePaymentPasswordNew2({}: OnBlurUpdatePaymentPasswordNew2Action, { select, put }: EffectsCommandMap) {
-      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
-        walletPage,
-      }));
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          changingPasswordPasswordTwoError: walletPage.changingPasswordPasswordTwo === walletPage.changingPasswordPasswordOne ? '' : '两次密码必须一致',
-        },
-      });
-    },
-    * onClickUpdatePaymentPasswordConfirmBtn(action: OnClickUpdatePaymentPasswordConfirmBtnAction, {
+    * onClick_ChangingPassword_NewPasswordModal_ConfirmBtn(action: OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action, {
       select,
       call,
       put,
@@ -652,10 +715,10 @@ const Model: WalletPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.Transaction.changePassword>[0] = {
-        password: walletPage.changingPasswordPasswordOne,
-        oldPassword: walletPage.changingPasswordPasswordOld,
-        authCode: walletPage.changingPasswordCaptcha,
-        messageAddress: walletPage.changingPasswordType === 'phone' ? walletPage.changingPasswordMobile : walletPage.changingPasswordEmail,
+        password: walletPage.changingPassword_NewPasswordModal_Password1,
+        oldPassword: walletPage.changingPassword_OldPasswordModal_PasswordInput,
+        authCode: walletPage.changingPassword_CaptchaModal_CaptchaInput,
+        messageAddress: walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'phone' ? walletPage.changingPassword_CaptchaModal_Phone : walletPage.changingPassword_CaptchaModal_Email,
       };
 
       const { errCode, data, msg } = yield call(FServiceAPI.Transaction.changePassword, params);
@@ -673,69 +736,6 @@ const Model: WalletPageModelType = {
 
       successMessage();
     },
-
-
-    // * fetchAccountInfo({}: FetchAccountInfoAction, { call, select, put }: EffectsCommandMap) {
-
-    // const { data: data1 } = yield call(FServiceAPI.User.currentUserInfo);
-    // // console.log(user, 'user!@#$!@#$@#!$');
-    // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-    //   userId: data1.userId,
-    // };
-    // const { data } = yield call(FServiceAPI.Transaction.individualAccounts, params);
-    //
-    // if (data.status === 0) {
-    //   return yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       accountStatus: data.status,
-    //     },
-    //   });
-    // }
-    //
-    // const params2: Parameters<typeof FServiceAPI.Transaction.details>[0] = {
-    //   accountId: data.accountId,
-    //   skip: 0,
-    //   limit: 100,
-    // };
-    //
-    // const { data: data2 } = yield call(FServiceAPI.Transaction.details, params2);
-    //
-    // yield put<ChangeAction>({
-    //   type: 'change',
-    //   payload: {
-    //     accountStatus: data.status,
-    //     accountBalance: data.balance,
-    //     transactionRecord: (data2.dataList as any[]).map((dl) => {
-    //       const [date, time] = FUtil.Format.formatDateTime(dl.updateDate, true).split(' ');
-    //       return {
-    //         serialNo: dl.serialNo,
-    //         date: date,
-    //         time: time,
-    //         digest: dl.digest,
-    //         reciprocalAccountId: dl.reciprocalAccountId,
-    //         reciprocalAccountName: dl.reciprocalAccountName,
-    //         reciprocalAccountType: dl.reciprocalAccountType,
-    //         transactionAmount: dl.transactionAmount,
-    //         afterBalance: dl.afterBalance,
-    //         status: dl.status,
-    //       };
-    //     }),
-    //   },
-    // });
-    // },
-    // * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: initStates,
-    //   });
-    // },
-    // * activeAccount({}: ActiveAccountAction, { put, call, select }: EffectsCommandMap) {
-
-    // },
-    // * changePassword({}: ChangePasswordAction, { put, call, select }: EffectsCommandMap) {
-
-    // },
   },
   reducers: {
     change(state, { payload }) {
