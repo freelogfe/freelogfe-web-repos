@@ -7,10 +7,8 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import FModal from '@/components/FModal';
 import FInput from '@/components/FInput';
 import FCodeFormatter from '@/components/FCodeFormatter';
-import FUtil1 from '@/utils';
 import fMessage from '@/components/fMessage';
 import { FDown, FUp } from '@/components/FIcons';
-import { policyCodeTranslationToText } from '@freelog/tools-lib/dist/utils/format';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -270,6 +268,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     >
       {
         activated === 'record' && (<div className={styles.StateRecord}>
+          {console.log(currentS, 'currentS!!!!!@#$@#$@#$@#$')}
           {
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>
