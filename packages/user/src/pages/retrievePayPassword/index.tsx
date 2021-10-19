@@ -7,55 +7,22 @@ import { FRectBtn, FTextBtn } from '@/components/FButton';
 import { connect, Dispatch } from 'dva';
 import {
   ConnectState,
-  RetrievePageModelState,
   RetrievePayPasswordPageModelState,
-  WalletPageModelState,
 } from '@/models/connect';
-import { history } from 'umi';
 import { FUtil } from '@freelog/tools-lib';
-import useUrlState from '@ahooksjs/use-url-state';
-import FRadio from '@/components/FRadio';
 import * as AHooks from 'ahooks';
-// import {
-//   OnBlurConfirmPasswordInputAction,
-//   OnBlurEmailInputAction,
-//   OnBlurNewPasswordInputAction,
-//   OnBlurPhoneInputAction,
-//   OnBlurVerifyCodeInputAction,
-//   OnChangeConfirmPasswordInputAction,
-//   OnChangeEmailInputAction,
-//   OnChangeNewPasswordInputAction,
-//   OnChangePhoneInputAction,
-//   OnChangeVerifyCodeInputAction,
-//   OnChangeVerifyCodeReSendWaitAction,
-//   OnChangeVerifyModeAction,
-//   OnChangeWaitingTimeAction,
-//   OnClickResetBtnAction,
-//   OnClickSendVerifyCodeBtnAction,
-//   OnMountPageAction,
-//   OnUnmountPageAction,
-// } from '@/models/retrievePage';
 import { FCheck } from '@/components/FIcons';
-// import {
-//   OnBlurUpdatePaymentPasswordNew1Action, OnBlurUpdatePaymentPasswordNew2Action,
-//   OnChangeUpdatePaymentPasswordCaptchaInputAction,
-//   OnChangeUpdatePaymentPasswordModeAction,
-//   OnChangeUpdatePaymentPasswordNew1Action,
-//   OnChangeUpdatePaymentPasswordNew2Action,
-//   OnChangeUpdatePaymentPasswordOldAction,
-//   OnClickUpdatePaymentPasswordCaptchaBtnAction, OnClickUpdatePaymentPasswordConfirmBtnAction,
-// } from '@/models/walletPage';
 import {
-  OnBlurPassword1InputAction,
-  OnBlurPassword2InputAction,
-  OnChangeCaptchaInputAction,
-  OnChangePassword1InputAction,
-  OnChangePassword2InputAction,
-  OnChangeUserPasswordInputAction,
-  OnChangeVerifyModeAction,
-  OnChangSentWaitAction,
-  OnClickSentBtnAction,
-  OnClickUpdatePasswordBtnAction,
+  OnBlur_PaymentPassword_Password1Input_Action,
+  OnBlur_PaymentPassword_Password2Input_Action,
+  OnChange_Captcha_CaptchaInput_Action,
+  OnChange_Captcha_SentCaptchaWait_Action,
+  OnChange_Captcha_VerifyMode_Action,
+  OnChange_PaymentPassword_Password1Input_Action,
+  OnChange_PaymentPassword_Password2Input_Action,
+  OnChange_UserPassword_PasswordInput_Action,
+  OnClick_Captcha_SentBtn_Action,
+  OnClick_PaymentPassword_ConfirmBtn_Action,
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
@@ -63,19 +30,10 @@ import {
 interface RetrievePayPasswordProps {
   dispatch: Dispatch;
 
-  retrievePage: RetrievePageModelState;
-  walletPage: WalletPageModelState;
   retrievePayPasswordPage: RetrievePayPasswordPageModelState;
 }
 
-function RetrievePayPassword({
-                               dispatch,
-                               // retrievePage,
-                               // walletPage,
-                               retrievePayPasswordPage,
-                             }: RetrievePayPasswordProps) {
-
-  // const [urlParams] = useUrlState<{ goTo: string }>();
+function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayPasswordProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -90,19 +48,13 @@ function RetrievePayPassword({
   });
 
   AHooks.useInterval(() => {
-    dispatch<OnChangSentWaitAction>({
-      type: 'retrievePayPasswordPage/onChangSentWait',
+    dispatch<OnChange_Captcha_SentCaptchaWait_Action>({
+      type: 'retrievePayPasswordPage/onChange_Captcha_SentCaptchaWait',
       payload: {
-        value: retrievePayPasswordPage.sentCaptchaWait - 1,
+        value: retrievePayPasswordPage.captcha_SentCaptchaWait - 1,
       },
     });
-  }, retrievePayPasswordPage.sentCaptchaWait === 0 ? null : 1000);
-
-  // function gotoLogin() {
-  //   history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
-  //     goTo: decodeURIComponent(urlParams.goTo),
-  //   } : {}));
-  // }
+  }, retrievePayPasswordPage.captcha_SentCaptchaWait === 0 ? null : 1000);
 
   if (retrievePayPasswordPage.showView === 'success') {
     return (<div className={styles.resetPasswordSuccess}>
@@ -110,13 +62,6 @@ function RetrievePayPassword({
         <FCheck style={{ fontSize: 96 }} />
         <div style={{ height: 30 }} />
         <FTitleText text={'重置支付密码成功'} />
-        {/*<div style={{ height: 40 }} />*/}
-        {/*<Space size={0}>*/}
-        {/*  <FContentText text={`${retrievePage.waitingTimeToLogin}s后返回登陆界面；`} type='negative' />*/}
-        {/*  <FTextBtn onClick={() => {*/}
-        {/*    gotoLogin();*/}
-        {/*  }}>立即登录</FTextBtn>*/}
-        {/*</Space>*/}
         <div style={{ height: 10 }} />
       </div>
     </div>);
@@ -150,11 +95,11 @@ function RetrievePayPassword({
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
-              value={retrievePayPasswordPage.userPasswordInput}
+              value={retrievePayPasswordPage.userPassword_PasswordInput}
               // errorText={retrievePayPasswordPage.userPasswordInputE}
               onChange={(e) => {
-                dispatch<OnChangeUserPasswordInputAction>({
-                  type: 'retrievePayPasswordPage/onChangeUserPasswordInput',
+                dispatch<OnChange_UserPassword_PasswordInput_Action>({
+                  type: 'retrievePayPasswordPage/onChange_UserPassword_PasswordInput',
                   payload: {
                     value: e.target.value,
                   },
@@ -168,10 +113,10 @@ function RetrievePayPassword({
             {
               retrievePayPasswordPage.userPhone && (<Space size={2}>
                 <Radio
-                  checked={retrievePayPasswordPage.verifyMode === 'phone'}
+                  checked={retrievePayPasswordPage.captcha_VerifyMode === 'phone'}
                   onChange={(e) => {
-                    dispatch<OnChangeVerifyModeAction>({
-                      type: 'retrievePayPasswordPage/onChangeVerifyMode',
+                    dispatch<OnChange_Captcha_VerifyMode_Action>({
+                      type: 'retrievePayPasswordPage/onChange_Captcha_VerifyMode',
                       payload: {
                         value: 'phone',
                       },
@@ -188,10 +133,10 @@ function RetrievePayPassword({
             {
               retrievePayPasswordPage.userEmail && (<Space size={2}>
                 <Radio
-                  checked={retrievePayPasswordPage.verifyMode === 'email'}
+                  checked={retrievePayPasswordPage.captcha_VerifyMode === 'email'}
                   onChange={(e) => {
-                    dispatch<OnChangeVerifyModeAction>({
-                      type: 'retrievePayPasswordPage/onChangeVerifyMode',
+                    dispatch<OnChange_Captcha_VerifyMode_Action>({
+                      type: 'retrievePayPasswordPage/onChange_Captcha_VerifyMode',
                       payload: {
                         value: 'email',
                       },
@@ -216,10 +161,10 @@ function RetrievePayPassword({
                 className={styles.verificationCodeInput}
                 wrapClassName={styles.verificationCodeInput}
                 size='middle'
-                value={retrievePayPasswordPage.captchaInput}
+                value={retrievePayPasswordPage.captcha_CaptchaInput}
                 onChange={(e) => {
-                  dispatch<OnChangeCaptchaInputAction>({
-                    type: 'retrievePayPasswordPage/onChangeCaptchaInput',
+                  dispatch<OnChange_Captcha_CaptchaInput_Action>({
+                    type: 'retrievePayPasswordPage/onChange_Captcha_CaptchaInput',
                     payload: {
                       value: e.target.value,
                     },
@@ -228,14 +173,14 @@ function RetrievePayPassword({
               />
               <FRectBtn
                 style={{ width: 110 }}
-                disabled={retrievePayPasswordPage.sentCaptchaWait > 0}
+                disabled={retrievePayPasswordPage.captcha_SentCaptchaWait > 0}
                 type='primary'
                 onClick={() => {
-                  dispatch<OnClickSentBtnAction>({
-                    type: 'retrievePayPasswordPage/onClickSentBtn',
+                  dispatch<OnClick_Captcha_SentBtn_Action>({
+                    type: 'retrievePayPasswordPage/onClick_Captcha_SentBtn',
                   });
                 }}
-              >{retrievePayPasswordPage.sentCaptchaWait === 0 ? '获取验证码' : `${retrievePayPasswordPage.sentCaptchaWait}秒`}</FRectBtn>
+              >{retrievePayPasswordPage.captcha_SentCaptchaWait === 0 ? '获取验证码' : `${retrievePayPasswordPage.captcha_SentCaptchaWait}秒`}</FRectBtn>
             </Space>
           </div>
 
@@ -248,19 +193,19 @@ function RetrievePayPassword({
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
-              value={retrievePayPasswordPage.passwordOneInput}
-              errorText={retrievePayPasswordPage.passwordOneInputError}
+              value={retrievePayPasswordPage.paymentPassword_Password1Input}
+              errorText={retrievePayPasswordPage.paymentPassword_Password1InputError}
               onChange={(e) => {
-                dispatch<OnChangePassword1InputAction>({
-                  type: 'retrievePayPasswordPage/onChangePassword1Input',
+                dispatch<OnChange_PaymentPassword_Password1Input_Action>({
+                  type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password1Input',
                   payload: {
                     value: e.target.value,
                   },
                 });
               }}
               onBlur={() => {
-                dispatch<OnBlurPassword1InputAction>({
-                  type: 'retrievePayPasswordPage/onBlurPassword1Input',
+                dispatch<OnBlur_PaymentPassword_Password1Input_Action>({
+                  type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password1Input',
                 });
               }}
             />
@@ -275,19 +220,19 @@ function RetrievePayPassword({
               className={styles.blockInput}
               wrapClassName={styles.blockInput}
               size='middle'
-              value={retrievePayPasswordPage.passwordTwoInput}
-              errorText={retrievePayPasswordPage.passwordTwoInputError}
+              value={retrievePayPasswordPage.paymentPassword_Password2Input}
+              errorText={retrievePayPasswordPage.paymentPassword_Password2InputError}
               onChange={(e) => {
-                dispatch<OnChangePassword2InputAction>({
-                  type: 'retrievePayPasswordPage/onChangePassword2Input',
+                dispatch<OnChange_PaymentPassword_Password2Input_Action>({
+                  type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password2Input',
                   payload: {
                     value: e.target.value,
                   },
                 });
               }}
               onBlur={() => {
-                dispatch<OnBlurPassword2InputAction>({
-                  type: 'retrievePayPasswordPage/onBlurPassword2Input',
+                dispatch<OnBlur_PaymentPassword_Password2Input_Action>({
+                  type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password2Input',
                 });
               }}
             />
@@ -296,13 +241,13 @@ function RetrievePayPassword({
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          disabled={!retrievePayPasswordPage.userPasswordInput
-          || !retrievePayPasswordPage.captchaInput
-          || !retrievePayPasswordPage.passwordOneInput || !!retrievePayPasswordPage.passwordOneInputError
-          || !retrievePayPasswordPage.passwordTwoInput || !!retrievePayPasswordPage.passwordTwoInputError}
+          disabled={retrievePayPasswordPage.userPassword_PasswordInput === ''
+          || retrievePayPasswordPage.captcha_CaptchaInput === ''
+          || retrievePayPasswordPage.paymentPassword_Password1Input === '' || retrievePayPasswordPage.paymentPassword_Password1InputError !== ''
+          || retrievePayPasswordPage.paymentPassword_Password2Input === '' || retrievePayPasswordPage.paymentPassword_Password2InputError !== ''}
           onClick={() => {
-            dispatch<OnClickUpdatePasswordBtnAction>({
-              type: 'retrievePayPasswordPage/onClickUpdatePasswordBtn',
+            dispatch<OnClick_PaymentPassword_ConfirmBtn_Action>({
+              type: 'retrievePayPasswordPage/onClick_PaymentPassword_ConfirmBtn',
             });
           }}
         >修改支付密码</FRectBtn>

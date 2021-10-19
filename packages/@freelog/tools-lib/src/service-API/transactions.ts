@@ -87,3 +87,19 @@ export function resetPassword({...params}: ResetPasswordParamsType) {
     data: params,
   });
 }
+
+// 验证交易密码
+interface VerifyTransactionPasswordParamsType {
+  loginPassword: string;
+  password: string;
+  authCode: string;
+  messageAddress: string;
+}
+
+export function verifyTransactionPassword({...params}: VerifyTransactionPasswordParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/accounts/individualAccounts/verifyTransactionPassword?password=123456`,
+    data: params,
+  });
+}
