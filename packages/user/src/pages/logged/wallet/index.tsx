@@ -382,8 +382,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
     <Modal
       title={<FTitleText text={'修改支付密码验证'} type='popup' />}
-      // visible={walletPage.changingPassword}
-      visible={false}
+      visible={walletPage.changingPassword_CaptchaModal_Visible}
       // onOk={handleOk}
       onCancel={() => {
         dispatch<OnCancel_ChangingPassword_CaptchaModal_Action>({
@@ -473,13 +472,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          // disabled={!walletPage.changingPasswordCaptcha
-          // || !walletPage.changingPasswordPasswordOne
-          // || !walletPage.changingPasswordPasswordTwo
-          // || !!walletPage.changingPasswordPasswordOneError
-          // || !!walletPage.changingPasswordPasswordTwoError
-          // || !!walletPage.changingPasswordPasswordOldError
-          // }
+          disabled={walletPage.changingPassword_CaptchaModal_CaptchaInput === ''}
           onClick={() => {
             dispatch<OnClick_ChangingPassword_CaptchaModal_NextBtn_Action>({
               type: 'walletPage/onClick_ChangingPassword_CaptchaModal_NextBtn',
@@ -492,7 +485,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
     <Modal
       title={<FTitleText text={'验证原支付密码'} type='popup' />}
-      visible={false}
+      visible={walletPage.changingPassword_OldPasswordModal_Visible}
       // onOk={handleOk}
       onCancel={() => {
         dispatch<OnCancel_ChangingPassword_OldPasswordModal_Action>({
@@ -540,13 +533,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          // disabled={!walletPage.changingPasswordCaptcha
-          // || !walletPage.changingPasswordPasswordOne
-          // || !walletPage.changingPasswordPasswordTwo
-          // || !!walletPage.changingPasswordPasswordOneError
-          // || !!walletPage.changingPasswordPasswordTwoError
-          // || !!walletPage.changingPasswordPasswordOldError
-          // }
+          disabled={walletPage.changingPassword_OldPasswordModal_PasswordInput === ''}
           onClick={() => {
             dispatch<OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action>({
               type: 'walletPage/onClick_ChangingPassword_OldPasswordModal_NextBtn',
@@ -558,7 +545,7 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
 
     <Modal
       title={<FTitleText text={'设置新支付密码'} type='popup' />}
-      visible={true}
+      visible={walletPage.changingPassword_NewPasswordModal_Visible}
       // onOk={handleOk}
       onCancel={() => {
         dispatch<OnCancel_ChangingPassword_NewPasswordModal_Action>({
@@ -626,13 +613,10 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          // disabled={!walletPage.changingPasswordCaptcha
-          // || !walletPage.changingPasswordPasswordOne
-          // || !walletPage.changingPasswordPasswordTwo
-          // || !!walletPage.changingPasswordPasswordOneError
-          // || !!walletPage.changingPasswordPasswordTwoError
-          // || !!walletPage.changingPasswordPasswordOldError
-          // }
+          disabled={walletPage.changingPassword_NewPasswordModal_Password1 === ''
+          || walletPage.changingPassword_NewPasswordModal_Password1Error !== ''
+          || walletPage.changingPassword_NewPasswordModal_Password2 === ''
+          || walletPage.changingPassword_NewPasswordModal_Password2Error !== ''}
           onClick={() => {
             dispatch<OnClick_ChangingPassword_NewPasswordModal_ConfirmBtn_Action>({
               type: 'walletPage/onClick_ChangingPassword_NewPasswordModal_ConfirmBtn',

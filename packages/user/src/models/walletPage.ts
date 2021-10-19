@@ -49,7 +49,6 @@ export interface WalletPageModelState {
 
   changingPassword_OldPasswordModal_Visible: boolean;
   changingPassword_OldPasswordModal_PasswordInput: string;
-  // changingPassword_OldPasswordModal_PasswordInputError: string;
 
   changingPassword_NewPasswordModal_Visible: boolean;
   changingPassword_NewPasswordModal_Password1: string;
@@ -630,14 +629,40 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onClick_ChangingPassword_CaptchaModal_NextBtn({}: OnClick_ChangingPassword_CaptchaModal_NextBtn_Action, {}: EffectsCommandMap) {
+    * onClick_ChangingPassword_CaptchaModal_NextBtn({}: OnClick_ChangingPassword_CaptchaModal_NextBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
 
+      const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
+        authCode: walletPage.changingPassword_CaptchaModal_CaptchaInput,
+        address: walletPage.changingPassword_CaptchaModal_TypeCheckbox === 'email' ? walletPage.changingPassword_CaptchaModal_Email : walletPage.changingPassword_CaptchaModal_Phone,
+        authCodeType: 'updateTransactionAccountPwd',
+      };
+
+      const { data } = yield call(FServiceAPI.Captcha.verifyVerificationCode, params);
+
+      if (!data) {
+        return fMessage('验证码错误', 'error');
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changingPassword_CaptchaModal_Visible: false,
+          changingPassword_OldPasswordModal_Visible: true,
+        },
+      });
     },
     * onCancel_ChangingPassword_OldPasswordModal({}: OnCancel_ChangingPassword_OldPasswordModal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          changingPassword_OldPasswordModal_Visible: false,
+          ...changingPasswordInitStates,
         },
       });
     },
@@ -650,20 +675,29 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onClick_ChangingPassword_OldPasswordModal_NextBtn({}: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, {}: EffectsCommandMap) {
-
+    * onClick_ChangingPassword_OldPasswordModal_NextBtn({}: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changingPassword_OldPasswordModal_Visible: false,
+          changingPassword_NewPasswordModal_Visible: true,
+        },
+      });
     },
     * onCancel_ChangingPassword_NewPasswordModal(action: OnCancel_ChangingPassword_NewPasswordModal_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: { changingPassword_NewPasswordModal_Visible: false },
+        payload: {
+          ...changingPasswordInitStates,
+        },
       });
     },
     * onChange_ChangingPassword_NewPasswordModal_Password1Input({ payload }: OnChange_ChangingPassword_NewPasswordModal_Password1_Action, { put }: EffectsCommandMap) {
-
       yield put<ChangeAction>({
         type: 'change',
-        payload: { changingPassword_NewPasswordModal_Password1: payload.value },
+        payload: {
+          changingPassword_NewPasswordModal_Password1: payload.value,
+        },
       });
     },
     * onBlur_ChangingPassword_NewPasswordModal_Password1Input({ payload }: OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action, {
