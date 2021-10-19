@@ -2,8 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import * as AHooks from 'ahooks';
-import FUtil1 from '@/utils';
-
+import { FUtil } from '@freelog/tools-lib';
 interface FPolicyDisplayProps {
   code: string;
   containerHeight?: string | number;
@@ -15,7 +14,8 @@ function FPolicyDisplay({ code, containerHeight = 'auto' }: FPolicyDisplayProps)
   const [text, setText] = React.useState<string>('');
 
   AHooks.useMount(async () => {
-    const { error, text } = await FUtil1.Tool.codeTranslationToText({ code, targetType: 'resource' });
+    const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, 'resource');
+    // console.log(text, code, '@@@@@@########$#$#$#$');
     if (error) {
       setText('!!!解析错误\n' + '    ' + error[0]);
       return;
