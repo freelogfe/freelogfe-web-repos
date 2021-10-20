@@ -82,13 +82,13 @@ type CombinationStructureType = {
   events: Array<{
     randomID: string;
     type: 'payment';
-    amount: number;
+    amount: number | null;
     target: string;
   } | {
     randomID: string;
     type: 'relativeTime';
-    num: number;
-    unit: 'year' | 'month' | 'week' | 'day' | 'cycle';
+    num: number | null;
+    unit: '' | 'year' | 'month' | 'week' | 'day' | 'cycle';
     target: string;
   } | {
     randomID: string;
@@ -271,15 +271,15 @@ function FPolicyBuilder({
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'payment',
-        amount: 10,
+        amount: null,
         target: '',
       };
     } else if (eventType === 'relativeTime') {
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'relativeTime',
-        num: 1,
-        unit: 'month',
+        num: null,
+        unit: '',
         target: '',
       };
     } else if (eventType === 'absoluteTime') {
@@ -795,11 +795,11 @@ function FPolicyBuilder({
                                       <div style={{ width: 10 }} />
                                       <InputNumber
                                         min={1}
-                                        placeholder='输入数值'
+                                        placeholder={'输入交易金额'}
                                         style={{ width: 120 }}
-                                        value={et.amount}
+                                        value={et.amount as 0}
                                         onChange={(value) => {
-                                          // console.log(value, 'valuevaluevalue980upoaisdjfl');
+                                          console.log(value, 'valuevaluevalue980upoaisdjfl');
                                           onChangeCombinationEvent({
                                             amount: value,
                                           }, cd.randomID, et.randomID);
@@ -836,9 +836,9 @@ function FPolicyBuilder({
                                     et.type === 'relativeTime' && (<div>
                                       <InputNumber
                                         min={1}
-                                        placeholder='输入数值'
+                                        placeholder={'输入周期数目'}
                                         style={{ width: 250 }}
-                                        value={et.num}
+                                        value={et.num as number}
                                         onChange={(value) => {
                                           onChangeCombinationEvent({
                                             num: value,
@@ -847,8 +847,9 @@ function FPolicyBuilder({
                                       />
                                       <div style={{ width: 10 }} />
                                       <FSelect
-                                        placeholder='选择时间单位'
-                                        value={et.unit}
+                                        placeholder={'输入周期单位'}
+                                        value={et.unit || null}
+                                        // value={''}
                                         style={{ width: 250 }}
                                         dataSource={timeUnits}
                                         onChange={(value) => {
@@ -873,7 +874,7 @@ function FPolicyBuilder({
                                       />
                                       <div style={{ width: 10 }} />
                                       <DatePicker
-                                        placeholder='选择日期时间'
+                                        placeholder={'选择日期时间'}
                                         style={{ width: 480 }}
                                         showTime={{ format: 'HH:mm' }}
                                         format='YYYY-MM-DD HH:mm'
