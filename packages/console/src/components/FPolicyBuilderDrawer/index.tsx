@@ -120,21 +120,12 @@ auth[active]:
 finish:
   terminate`;
 
-function FPolicyBuilder({
-                          visible = false,
-                          targetType,
-                          onCancel,
-                          onConfirm,
-                          alreadyUsedTitles = [],
-                          alreadyUsedTexts = [],
-                        }: FPolicyBuilderDrawerProps) {
-
-  const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>('');
-  const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>('');
-  const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>('composition');
-  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>('unchecked');
-
-  const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>([
+const initStates: FPolicyBuilderDrawerStates = {
+  title: '',
+  titleError: '',
+  editMode: 'composition',
+  checkResult: 'unchecked',
+  combinationData: [
     {
       randomID: FUtil.Tool.generateRandomCode(10),
       type: 'initial',
@@ -145,17 +136,41 @@ function FPolicyBuilder({
       testAuth: false,
       events: [],
     },
-  ]);
-  const [combinationDataError, setCombinationDataError] = React.useState<FPolicyBuilderDrawerStates['combinationDataError']>('');
-  const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(['initial']);
-  const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>('');
+  ],
+  combinationDataError: '',
+  enabledTargetState: ['initial'],
+  addingEventStateID: '',
+  codeText: '',
+  codeTextError: '',
+  successResult: null,
+  templateVisible: false,
+};
 
-  const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>('');
-  const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>('');
+function FPolicyBuilder({
+                          visible = false,
+                          targetType,
+                          onCancel,
+                          onConfirm,
+                          alreadyUsedTitles = [],
+                          alreadyUsedTexts = [],
+                        }: FPolicyBuilderDrawerProps) {
 
-  const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(null);
+  const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>(initStates.title);
+  const [titleError, setTitleError] = React.useState<FPolicyBuilderDrawerStates['titleError']>(initStates.titleError);
+  const [editMode, setEditMode] = React.useState<FPolicyBuilderDrawerStates['editMode']>(initStates.editMode);
+  const [checkResult, setCheckResult] = React.useState<FPolicyBuilderDrawerStates['checkResult']>(initStates.checkResult);
 
-  const [templateVisible, setTemplateVisible] = React.useState<boolean>(false);
+  const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>(initStates.combinationData);
+  const [combinationDataError, setCombinationDataError] = React.useState<FPolicyBuilderDrawerStates['combinationDataError']>(initStates.combinationDataError);
+  const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
+  const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>(initStates.addingEventStateID);
+
+  const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>(initStates.codeText);
+  const [codeTextError, setCodeTextError] = React.useState<FPolicyBuilderDrawerStates['codeTextError']>(initStates.codeTextError);
+
+  const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(initStates.successResult);
+
+  const [templateVisible, setTemplateVisible] = React.useState<FPolicyBuilderDrawerStates['templateVisible']>(initStates.templateVisible);
 
   const disabledExecute: boolean = title.trim() === ''
     || !!titleError
@@ -235,7 +250,7 @@ function FPolicyBuilder({
         }),
       };
     });
-    console.log(result, 'resultresultresult09213j4lkjsdfalafasdf');
+    // console.log(r/**/esult, 'resultresultresult09213j4lkjsdfalafasdf');
     setCombinationData(result);
   }
 
