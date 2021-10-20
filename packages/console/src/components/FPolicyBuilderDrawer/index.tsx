@@ -795,11 +795,12 @@ function FPolicyBuilder({
                                       <div style={{ width: 10 }} />
                                       <InputNumber
                                         min={1}
-                                        placeholder={'输入交易金额'}
+                                        // placeholder={'输入交易金额'}
+                                        placeholder={FUil1.I18n.message('hint_transaction_amount')}
                                         style={{ width: 120 }}
                                         value={et.amount as 0}
                                         onChange={(value) => {
-                                          console.log(value, 'valuevaluevalue980upoaisdjfl');
+                                          // console.log(value, 'valuevaluevalue980upoaisdjfl');
                                           onChangeCombinationEvent({
                                             amount: value,
                                           }, cd.randomID, et.randomID);
@@ -836,7 +837,8 @@ function FPolicyBuilder({
                                     et.type === 'relativeTime' && (<div>
                                       <InputNumber
                                         min={1}
-                                        placeholder={'输入周期数目'}
+                                        // placeholder={'输入周期数目'}
+                                        placeholder={FUil1.I18n.message('hint_relativetime_cyclecount')}
                                         style={{ width: 250 }}
                                         value={et.num as number}
                                         onChange={(value) => {
@@ -847,7 +849,7 @@ function FPolicyBuilder({
                                       />
                                       <div style={{ width: 10 }} />
                                       <FSelect
-                                        placeholder={'输入周期单位'}
+                                        placeholder={FUil1.I18n.message('hint_relativetime_unit')}
                                         value={et.unit || null}
                                         // value={''}
                                         style={{ width: 250 }}
@@ -874,7 +876,8 @@ function FPolicyBuilder({
                                       />
                                       <div style={{ width: 10 }} />
                                       <DatePicker
-                                        placeholder={'选择日期时间'}
+                                        // placeholder={'选择日期时间'}
+                                        placeholder={FUil1.I18n.message('hint_time_datetime')}
                                         style={{ width: 480 }}
                                         showTime={{ format: 'HH:mm' }}
                                         format='YYYY-MM-DD HH:mm'
