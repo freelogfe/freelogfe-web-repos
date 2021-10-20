@@ -15,6 +15,7 @@ import FGuideDown from '@/components/FIcons/FGuideDown';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import { FUtil } from '@freelog/tools-lib';
 import FUil1 from '@/utils';
+import moment, { Moment } from 'moment';
 
 const { compile } = require('@freelog/resource-policy-lang');
 
@@ -93,7 +94,7 @@ type CombinationStructureType = {
   } | {
     randomID: string;
     type: 'absoluteTime';
-    dateTime: string;
+    dateTime: Moment | null;
     target: string;
   } | {
     randomID: string;
@@ -234,7 +235,7 @@ function FPolicyBuilder({
         }),
       };
     });
-
+    console.log(result, 'resultresultresult09213j4lkjsdfalafasdf');
     setCombinationData(result);
   }
 
@@ -286,7 +287,7 @@ function FPolicyBuilder({
       evn = {
         randomID: FUtil.Tool.generateRandomCode(10),
         type: 'absoluteTime',
-        dateTime: '',
+        dateTime: null,
         target: '',
       };
     } else {
@@ -483,7 +484,7 @@ function FPolicyBuilder({
 
               // console.log(code, 'code1234123421341234');
 
-              const { error, text } = await FUil1.Tool.codeTranslationToText({ code, targetType });
+              const { error, text } = await FUtil.Format.policyCodeTranslationToText(code, targetType);
 
               if (error) {
                 if (editMode === 'code') {
@@ -881,10 +882,42 @@ function FPolicyBuilder({
                                         style={{ width: 480 }}
                                         showTime={{ format: 'HH:mm' }}
                                         format='YYYY-MM-DD HH:mm'
+                                        disabledDate={(data) => {
+                                          // console.log(data, 'datadatadatadata980234u23oi4');
+                                          return data.valueOf() < moment().subtract(1, 'days').valueOf();
+                                        }}
+                                        allowClear={false}
+                                        value={et.dateTime}
+                                        disabledTime={(date) => {
+                                          const isToday: boolean = date?.format(FUtil.Predefined.momentDateFormat) === moment().format(FUtil.Predefined.momentDateFormat);
+                                          // console.log(date?.format(FUtil.Predefined.momentDateFormat), moment().format(FUtil.Predefined.momentDateFormat), 'isTodayisToday23412342314');
+                                          return {
+                                            disabledHours(): number[] {
+                                              const dis = !isToday
+                                                ? []
+                                                : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].slice(0, moment().hours());
+                                              // console.log(dis, 'disdisdis23423423423lksdjfl;sdkf');
+                                              return dis;
+                                            },
+                                            disabledMinutes(hour: number): number[] {
+                                              const isTheHour: boolean = hour <= moment().hours();
+                                              // console.log(isTheHour, 'isTheHour234234234234234');
+                                              return isToday && isTheHour
+                                                ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].slice(0, moment().minutes())
+                                                : [];
+                                            },
+                                            // disabledSeconds(hour: number, minute: number): number[] {
+                                            //   return [];
+                                            // },
+                                          };
+                                        }}
                                         onChange={(value, dateString) => {
                                           // console.log(value, dateString, 'onChange23423423');
+                                          // console.log(value?.valueOf(), moment().valueOf(), '@#$@$@4092309uoifsadijoj;lkfdslkj;afdssfdaljk;fsda');
+                                          const mo: Moment | null = (value?.valueOf() || -1) < moment().valueOf() ? moment() : value;
+                                          // console.log(mo, 'momomomolsdfasldfksj');
                                           onChangeCombinationEvent({
-                                            dateTime: dateString,
+                                            dateTime: mo,
                                           }, cd.randomID, et.randomID);
                                         }}
                                         // onOk={(date) => {
@@ -1170,7 +1203,7 @@ async function verifyText(text: string, allTexts: string[]): Promise<string> {
   if (text === '') {
     error = '请输入内容';
   } else if (allTexts.includes(text)) {
-    error = '内容已存在';
+    error = FUil1.I18n.message('error_auth_plan_existed');
   } else {
     try {
       const result = await compile(text, 'resource', 'http://qi.testfreelog.com', 'dev');
