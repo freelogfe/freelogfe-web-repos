@@ -3,6 +3,7 @@ import styles from './index.less';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { FUtil } from '@freelog/tools-lib';
+
 interface FPolicyDisplayProps {
   code: string;
   containerHeight?: string | number;

@@ -15,6 +15,7 @@ import FGuideDown from '@/components/FIcons/FGuideDown';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import { FUtil } from '@freelog/tools-lib';
 import FUil1 from '@/utils';
+
 const { compile } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
@@ -175,11 +176,6 @@ function FPolicyBuilder({
           });
       }));
 
-  // React.useEffect(() => {
-  //   setUsedTitles(alreadyHas?.map<string>((ah) => ah.title) || []);
-  //   setUsedTexts(alreadyHas?.map<string>((ah) => ah.text) || []);
-  // }, [alreadyHas]);
-
   function onChangeTitleInput(value: string) {
     // const value: string = e.target.value;
     setTitle(value);
@@ -208,8 +204,6 @@ function FPolicyBuilder({
     }).filter((n) => {
       return !!n;
     }));
-
-    // console.log(duplicateNames, 'duplicateNames9023uj;i4orjlkj');
 
     result = result.map((r) => {
       return {

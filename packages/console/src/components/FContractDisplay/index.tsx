@@ -268,7 +268,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
     >
       {
         activated === 'record' && (<div className={styles.StateRecord}>
-          {console.log(currentS, 'currentS!!!!!@#$@#$@#$@#$')}
+          {/*{console.log(currentS, 'currentS!!!!!@#$@#$@#$@#$')}*/}
           {
             currentS && (<div className={styles.CurrentState}>
               <Space size={5}>

@@ -3,6 +3,8 @@ import styles from './index.less';
 import { FContentText, FTitleText } from '@/components/FText';
 import FCodeFormatter from '@/components/FCodeFormatter';
 import { FRectBtn, FTextBtn } from '@/components/FButton';
+import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface PolicyTemplatesProps {
   onSelect?({ title, text }: { title: string, text: string }): void;
@@ -27,11 +29,21 @@ finish:
   terminate`;
 
 function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
+  const [translation1, setTranslation1] = React.useState<string>('');
+  const [translation2, setTranslation2] = React.useState<string>('');
+
+  AHooks.useMount(async () => {
+    const promise1 = FUtil.Format.policyCodeTranslationToText(text1, 'resource');
+    const promise2 = FUtil.Format.policyCodeTranslationToText(text2, 'resource');
+    setTranslation1((await promise1)?.text || '');
+    setTranslation2((await promise2)?.text || '');
+  });
+
   return (<div>
     <PolicyTemplate
       text={text1}
       title={'免费订阅（包月）'}
-      translation={'免费获取授权一个月'}
+      translation={translation1}
       onSelect={() => {
         onSelect && onSelect({ text: text1, title: '免费策略' });
         onClickSelect && onClickSelect(1);
@@ -41,7 +53,7 @@ function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
     <PolicyTemplate
       text={text2}
       title={'付费订阅（包月）'}
-      translation={'支付 10枚 羽币，可获取一个月的授权'}
+      translation={translation2}
       onSelect={() => {
         onSelect && onSelect({ text: text2, title: '收费策略' });
         onClickSelect && onClickSelect(2);
@@ -77,7 +89,7 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.translation}>
-      <FContentText text={translation} />
+      <FCodeFormatter code={translation} />
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.navs}>
