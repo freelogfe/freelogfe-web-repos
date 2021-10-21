@@ -1,13 +1,29 @@
 @import '../../config.less';
 
-.PolicyChecked {
+.PolicyVerifySuccess {
   height: 36px;
-  background-color: #E5F6EF;
+  background-color: @f-success-color2;
   border-radius: 4px;
   display: flex;
   align-items: center;
   font-size: 14px;
-  color: #42C28C;
+  color: @f-success-color1;
+  padding: 0 10px;
+
+  & > span {
+    color: #999;
+    font-size: 14px;
+  }
+}
+
+.PolicyVerifyFail{
+  height: 36px;
+  background-color: @f-error-color2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: @f-error-color1;
   padding: 0 10px;
 
   & > span {
