@@ -72,7 +72,10 @@ interface FPolicyBuilderDrawerStates {
   isVerifying: boolean;
 
   combinationData: CombinationStructureType;
-  enabledTargetState: string[];
+  // enabledTargetState: {
+  //   value: string | number;
+  //   title: string | number;
+  // }[];
   addingEventStateID: string;
 
   codeText: string;
@@ -126,6 +129,8 @@ auth[active]:
 finish:
   terminate`;
 
+const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
+
 const initStates: FPolicyBuilderDrawerStates = {
   showView: 'edit',
 
@@ -136,7 +141,7 @@ const initStates: FPolicyBuilderDrawerStates = {
 
   combinationData: [
     {
-      randomID: FUtil.Tool.generateRandomCode(10),
+      randomID: combinationDataInitialRandomID,
       type: 'initial',
       name: 'initial',
       nameError: '',
@@ -147,7 +152,10 @@ const initStates: FPolicyBuilderDrawerStates = {
     },
   ],
   // combinationDataError: '',
-  enabledTargetState: ['initial'],
+  // enabledTargetState: [{
+  //   value: combinationDataInitialRandomID,
+  //   title: '(1) initial',
+  // }],
   addingEventStateID: '',
 
   codeText: '',
@@ -177,7 +185,7 @@ function FPolicyBuilder({
   const [isVerifying, setIsVerifying] = React.useState<FPolicyBuilderDrawerStates['isVerifying']>(initStates.isVerifying);
 
   const [combinationData, setCombinationData] = React.useState<FPolicyBuilderDrawerStates['combinationData']>(initStates.combinationData);
-  const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
+  // const [enabledTargetState, setEnabledTargetState] = React.useState<FPolicyBuilderDrawerStates['enabledTargetState']>(initStates.enabledTargetState);
   const [addingEventStateID, setAddingEventStateID] = React.useState<FPolicyBuilderDrawerStates['addingEventStateID']>(initStates.addingEventStateID);
 
   const [codeText, setCodeText] = React.useState<FPolicyBuilderDrawerStates['codeText']>(initStates.codeText);
@@ -196,7 +204,7 @@ function FPolicyBuilder({
     setEditMode(initStates.editMode);
     setIsVerifying(initStates.isVerifying);
     setCombinationData(initStates.combinationData);
-    setEnabledTargetState(initStates.enabledTargetState);
+    // setEnabledTargetState(initStates.enabledTargetState);
     setAddingEventStateID(initStates.addingEventStateID);
     setCodeText(initStates.codeText);
     setCodeTextError(initStates.codeTextError);
@@ -266,29 +274,44 @@ function FPolicyBuilder({
     setCombinationData(result);
   }
 
-  function onClickDeleteStateBtn(randomID: string) {
-    const result: CombinationStructureType = combinationData.filter((cd) => {
-      // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
-      return cd.randomID !== randomID;
-    });
+  function onClickAddStateBtn() {
+    const results: FPolicyBuilderDrawerStates['combinationData'] = [
+      ...combinationData,
+      {
+        randomID: FUtil.Tool.generateRandomCode(10),
+        type: 'other',
+        name: '',
+        nameError: '',
+        isNameDuplicate: false,
+        auth: false,
+        testAuth: false,
+        events: [],
+      },
+    ];
 
-    handleTargetState(result);
+    setCombinationData(results);
   }
 
-  function onClickDeleteEventBtn(randomID1: string, randomID2: string) {
-    const result: CombinationStructureType = combinationData.map((cd) => {
-      if (cd.randomID !== randomID1) {
-        return cd;
-      }
+  function onClickDeleteStateBtn(randomID: string) {
+    const result: FPolicyBuilderDrawerStates['combinationData'] = combinationData.filter((cd) => {
+      // console.log(stateIndex, si, '@!$@#$@##$%@#$%#$@%#@$%#$@5');
+      return cd.randomID !== randomID;
+    }).map((cd) => {
       return {
         ...cd,
-        events: cd.events.filter((et) => {
-          return et.randomID !== randomID2;
+        events: cd.events.map((ev) => {
+          if ((ev as any).target && (ev as any).target === randomID) {
+            return {
+              ...ev,
+              target: '',
+            };
+          }
+          return ev;
         }),
       };
     });
-    // console.log(result, 'resultresultresult!@#$2134234');
     setCombinationData(result);
+    // handleTargetState(result);
   }
 
   function onClickAddEventBtn(eventType: 'payment' | 'relativeTime' | 'absoluteTime' | 'terminate') {
@@ -341,36 +364,55 @@ function FPolicyBuilder({
     setAddingEventStateID('');
   }
 
-  function handleTargetState(data: CombinationStructureType) {
-    const results: string[] = Array.from(new Set(data
-      .filter((cd) => {
-        return !!cd.name && !cd.nameError;
-      })
-      .map((cd) => {
-        return cd.name;
-      })));
-    // console.log(results, 'resultsresultsresults!@#$234234');
-
-    const results2: CombinationStructureType = data
-      .map((cd) => {
-        return {
-          ...cd,
-          events: cd.events.map((et) => {
-            if (et.type === 'terminate') {
-              return et;
-            }
-            // console.log(et.target, 'et.targetet.targetet.target234234');
-            return {
-              ...et,
-              target: results.includes(et.target) ? et.target : '',
-            };
-          }),
-        };
-      });
-
-    setEnabledTargetState(results);
-    setCombinationData(results2);
+  function onClickDeleteEventBtn(randomID1: string, randomID2: string) {
+    const result: CombinationStructureType = combinationData.map((cd) => {
+      if (cd.randomID !== randomID1) {
+        return cd;
+      }
+      return {
+        ...cd,
+        events: cd.events.filter((et) => {
+          return et.randomID !== randomID2;
+        }),
+      };
+    });
+    // console.log(result, 'resultresultresult!@#$2134234');
+    setCombinationData(result);
   }
+
+  // function handleTargetState(data: CombinationStructureType) {
+  //   const results: FPolicyBuilderDrawerStates['enabledTargetState'] = Array.from(new Set(data
+  //     .filter((cd) => {
+  //       return !!cd.name && !cd.nameError;
+  //     })
+  //     .map<FPolicyBuilderDrawerStates['enabledTargetState'][number]>((cd, index) => {
+  //       return {
+  //         value: cd.randomID,
+  //         title: `(${index + 1})${cd.name}`,
+  //       };
+  //     })));
+  //   // console.log(results, 'resultsresultsresults!@#$234234');
+  //
+  //   // const results2: CombinationStructureType = data
+  //   //   .map((cd) => {
+  //   //     return {
+  //   //       ...cd,
+  //   //       events: cd.events.map((et) => {
+  //   //         if (et.type === 'terminate') {
+  //   //           return et;
+  //   //         }
+  //   //         // console.log(et.target, 'et.targetet.targetet.target234234');
+  //   //         return {
+  //   //           ...et,
+  //   //           target: results.includes(et.target) ? et.target : '',
+  //   //         };
+  //   //       }),
+  //   //     };
+  //   //   });
+  //
+  //   setEnabledTargetState(results);
+  //   // setCombinationData(results2);
+  // }
 
   function onClickSelectTemplateBtn(num: 1 | 2) {
     // console.log(num, 'handleTemplatehandleTemplate23423423');
@@ -380,9 +422,12 @@ function FPolicyBuilder({
       // setCodeTextError(await verifyText(text1, alreadyUsedTexts));
       setTitle(title1);
       setTitleError(verifyTitle(title1, alreadyUsedTitles));
+
+      const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+      const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
       const result: CombinationStructureType = [
         {
-          randomID: FUtil.Tool.generateRandomCode(10),
+          randomID: initialRandomID,
           type: 'initial',
           name: 'initial',
           nameError: '',
@@ -395,12 +440,12 @@ function FPolicyBuilder({
               type: 'relativeTime',
               num: 1,
               unit: 'month',
-              target: 'finish',
+              target: finishRandomID,
             },
           ],
         },
         {
-          randomID: FUtil.Tool.generateRandomCode(10),
+          randomID: finishRandomID,
           type: 'other',
           name: 'finish',
           nameError: '',
@@ -415,15 +460,19 @@ function FPolicyBuilder({
           ],
         },
       ];
-      handleTargetState(result);
+      setCombinationData(result);
     } else {
       setCodeText(text2);
       // setCodeTextError(await verifyText(text2, alreadyUsedTexts));
       setTitle(title2);
       setTitleError(verifyTitle(title2, alreadyUsedTitles));
+
+      const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
+      const authRandomID: string = FUtil.Tool.generateRandomCode(10);
+      const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
       const result: CombinationStructureType = [
         {
-          randomID: FUtil.Tool.generateRandomCode(10),
+          randomID: initialRandomID,
           type: 'initial',
           name: 'initial',
           nameError: '',
@@ -435,12 +484,12 @@ function FPolicyBuilder({
               randomID: FUtil.Tool.generateRandomCode(10),
               type: 'payment',
               amount: 10,
-              target: 'auth',
+              target: authRandomID,
             },
           ],
         },
         {
-          randomID: FUtil.Tool.generateRandomCode(10),
+          randomID: authRandomID,
           type: 'other',
           name: 'auth',
           nameError: '',
@@ -453,12 +502,12 @@ function FPolicyBuilder({
               type: 'relativeTime',
               num: 1,
               unit: 'month',
-              target: 'finish',
+              target: finishRandomID,
             },
           ],
         },
         {
-          randomID: FUtil.Tool.generateRandomCode(10),
+          randomID: finishRandomID,
           type: 'other',
           name: 'finish',
           nameError: '',
@@ -473,7 +522,8 @@ function FPolicyBuilder({
           ],
         },
       ];
-      handleTargetState(result);
+      setCombinationData(result);
+      // handleTargetState(result);
     }
   }
 
@@ -538,51 +588,56 @@ function FPolicyBuilder({
           });
       }));
 
-  function DrawerTopRight() {
-    return (<Space size={30}>
-      <FTextBtn
+  const enabledTargetState: { value: string; title: string }[] = combinationData.map<{ value: string; title: string }>((cd, index) => {
+    return {
+      value: cd.randomID,
+      title: `(${index + 1}) ${cd.name}`,
+    };
+  });
+
+  const DrawerTopRight = (<Space size={30}>
+    <FTextBtn
+      onClick={() => {
+        onCancel && onCancel();
+      }}>取消</FTextBtn>
+
+    {
+      showView === 'edit' && <>
+        {
+          isVerifying
+            ? (<FRectBtn
+              disabled={true}
+              type='primary'
+            >校验中</FRectBtn>)
+            : (<FRectBtn
+              onClick={onClickVerifyBtn}
+              type='primary'
+              disabled={disabledExecute}
+            >校验</FRectBtn>)
+        }
+      </>
+    }
+
+    {
+      showView === 'fail' && (<FRectBtn
+        disabled={true}
+        type='primary'
+      >校验失败</FRectBtn>)
+    }
+
+    {
+      showView === 'success' && (<FRectBtn
         onClick={() => {
-          onCancel && onCancel();
-        }}>取消</FTextBtn>
+          onConfirm && onConfirm({
+            title: successResult?.title || '',
+            text: successResult?.code || '',
+          });
+        }}
+        type='primary'
+      >创建</FRectBtn>)
+    }
 
-      {
-        showView === 'edit' && <>
-          {
-            isVerifying
-              ? (<FRectBtn
-                disabled={true}
-                type='primary'
-              >校验中</FRectBtn>)
-              : (<FRectBtn
-                onClick={onClickVerifyBtn}
-                type='primary'
-                disabled={disabledExecute}
-              >校验</FRectBtn>)
-          }
-        </>
-      }
-
-      {
-        showView === 'fail' && (<FRectBtn
-          disabled={true}
-          type='primary'
-        >校验失败</FRectBtn>)
-      }
-
-      {
-        showView === 'success' && (<FRectBtn
-          onClick={() => {
-            onConfirm && onConfirm({
-              title: successResult?.title || '',
-              text: successResult?.code || '',
-            });
-          }}
-          type='primary'
-        >创建</FRectBtn>)
-      }
-
-    </Space>);
-  }
+  </Space>);
 
   const EditView = (<div className={styles.maskingContainer}>
     <div className={styles.policyHeader}>
@@ -696,7 +751,7 @@ function FPolicyBuilder({
                                   }, cd.randomID);
                                 }}
                                 onBlur={() => {
-                                  handleTargetState(combinationData);
+                                  // handleTargetState(combinationData);
                                 }}
                               />
                             </div>
@@ -915,12 +970,7 @@ function FPolicyBuilder({
                                     value={et.target || undefined}
                                     placeholder='选择目标状态'
                                     style={{ width: '100%' }}
-                                    dataSource={enabledTargetState.map((ets) => {
-                                      return {
-                                        value: ets,
-                                        title: ets,
-                                      };
-                                    })}
+                                    dataSource={enabledTargetState}
                                     onChange={(value) => {
                                       onChangeCombinationEvent({
                                         target: value,
@@ -980,22 +1030,7 @@ function FPolicyBuilder({
 
           <FRectBtn
             type='default'
-            onClick={() => {
-              const results: CombinationStructureType = [
-                ...combinationData,
-                {
-                  randomID: FUtil.Tool.generateRandomCode(10),
-                  type: 'other',
-                  name: '',
-                  nameError: '',
-                  isNameDuplicate: false,
-                  auth: false,
-                  testAuth: false,
-                  events: [],
-                },
-              ];
-              handleTargetState(results);
-            }}
+            onClick={onClickAddStateBtn}
           >新建状态</FRectBtn>
 
         </div>)
@@ -1026,7 +1061,7 @@ function FPolicyBuilder({
       onClose={() => onCancel && onCancel()}
       visible={visible}
       width={720}
-      topRight={<DrawerTopRight />}
+      topRight={DrawerTopRight}
       afterVisibleChange={onChangeDrawerVisible}
     >
       {
@@ -1357,12 +1392,14 @@ function dataToCode(data: CombinationStructureType): string {
 
     for (const et of st.events) {
       result += '\n  ';
+
+      const targetStateName: string = data.find((dt) => dt.randomID === (et as any).target)?.name || '';
       if (et.type === 'payment') {
-        result += `~freelog.TransactionEvent("${et.amount}","self.account") => ${et.target}`;
+        result += `~freelog.TransactionEvent("${et.amount}","self.account") => ${targetStateName}`;
       } else if (et.type === 'relativeTime') {
-        result += `~freelog.RelativeTimeEvent("${et.num}","${et.unit}") => ${et.target}`;
+        result += `~freelog.RelativeTimeEvent("${et.num}","${et.unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {
-        result += `~freelog.TimeEvent("${et.dateTime}") => ${et.target}`;
+        result += `~freelog.TimeEvent("${et.dateTime}") => ${targetStateName}`;
       } else {
         result += 'terminate';
       }
