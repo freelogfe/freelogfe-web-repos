@@ -5,7 +5,7 @@ import FCodemirror from '@/components/FCodemirror';
 import { Space, Divider, DatePicker, InputNumber } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
-import PolicyTemplates from './PolicyTemplates';
+import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
 import FDrawer from '@/components/FDrawer';
 import FComposition from '@/components/FIcons/FComposition';
 import FSelect from '@/components/FSelect';
@@ -111,23 +111,23 @@ const currencies = [
   { value: 'feather', title: '羽币' },
 ];
 
-const title1: string = '免费订阅（包月）';
-const text1: string = `for public
-
-initial[active]:
-  ~freelog.RelativeTimeEvent("1","month") => finish
-finish:
-  terminate`;
-
-const title2: string = '付费订阅（包月）';
-const text2: string = `for public
-
-initial:
-  ~freelog.TransactionEvent("10","self.account") => auth
-auth[active]:
-  ~freelog.RelativeTimeEvent("1","month")  =>  finish
-finish:
-  terminate`;
+// const title1: string = '免费订阅（包月）';
+// const text1: string = `for public
+//
+// initial[active]:
+//   ~freelog.RelativeTimeEvent("1","month") => finish
+// finish:
+//   terminate`;
+//
+// const title2: string = '付费订阅（包月）';
+// const text2: string = `for public
+//
+// initial:
+//   ~freelog.TransactionEvent("10","self.account") => auth
+// auth[active]:
+//   ~freelog.RelativeTimeEvent("1","month")  =>  finish
+// finish:
+//   terminate`;
 
 const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
 
@@ -535,6 +535,7 @@ function FPolicyBuilder({
     } else {
       code = dataToCode(combinationData);
     }
+    console.log(code, 'code823u423u4ooij');
     const err: string = await verifyCodeText(code, alreadyUsedTexts);
     if (err) {
       setIsVerifying(false);
@@ -1316,6 +1317,8 @@ function verifyTitle(title: string, allTitles: string[]): string {
 }
 
 async function verifyCodeText(text: string, allTexts: string[]): Promise<string> {
+  console.log(allTexts, 'allTexts2342323423234234');
+  console.log(text, 'text234234234');
   let error: string = '';
   if (text === '') {
     error = '请输入内容';

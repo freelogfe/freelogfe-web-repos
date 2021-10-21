@@ -12,21 +12,23 @@ interface PolicyTemplatesProps {
   onClickSelect?(num: 1 | 2): void;
 }
 
-const text1: string = `for public
+export const title1: string = '免费订阅（包月）';
+export const text1: string = 'for public\n' +
+  '\n' +
+  'initial[active]:\n' +
+  '  ~freelog.RelativeTimeEvent("1","month") => finish\n' +
+  'finish:\n' +
+  '  terminate';
 
-initial[active]:
-  ~freelog.RelativeTimeEvent("1","month") => finish
-finish:
-  terminate`;
-
-const text2: string = `for public
-
-initial:
-  ~freelog.TransactionEvent("10","self.account") => auth
-auth[active]:
-  ~freelog.RelativeTimeEvent("1","month")  =>  finish
-finish:
-  terminate`;
+export const title2: string = '付费订阅（包月）';
+export const text2: string = 'for public\n' +
+  '\n' +
+  'initial:\n' +
+  '  ~freelog.TransactionEvent("10","self.account") => auth\n' +
+  'auth[active]:\n' +
+  '  ~freelog.RelativeTimeEvent("1","month") => finish\n' +
+  'finish:\n' +
+  '  terminate';
 
 function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
   const [translation1, setTranslation1] = React.useState<string>('');
@@ -42,7 +44,7 @@ function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
   return (<div>
     <PolicyTemplate
       text={text1}
-      title={'免费订阅（包月）'}
+      title={title1}
       translation={translation1}
       onSelect={() => {
         onSelect && onSelect({ text: text1, title: '免费策略' });
@@ -52,7 +54,7 @@ function PolicyTemplates({ onSelect, onClickSelect }: PolicyTemplatesProps) {
     <div style={{ height: 20 }} />
     <PolicyTemplate
       text={text2}
-      title={'付费订阅（包月）'}
+      title={title2}
       translation={translation2}
       onSelect={() => {
         onSelect && onSelect({ text: text2, title: '收费策略' });
