@@ -176,7 +176,7 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                         }: FPolicyBuilderDrawerProps) {
-
+  const refContainer = React.useRef(null);
   const [showView, setShowView] = React.useState<FPolicyBuilderDrawerStates['showView']>('edit');
 
   const [title, setTitle] = React.useState<FPolicyBuilderDrawerStates['title']>(initStates.title);
@@ -639,7 +639,7 @@ function FPolicyBuilder({
 
   </Space>);
 
-  const EditView = (<div className={styles.maskingContainer}>
+  const EditView = (<div className={styles.maskingContainer} ref={refContainer}>
     <div className={styles.policyHeader}>
       <FInput
         className={styles.policyTitle}
@@ -696,7 +696,7 @@ function FPolicyBuilder({
 
     {
       editMode === 'composition'
-        ? (<div>
+        ? (<div className={styles.compositionView}>
           <div className={styles.compositionSelect}>
             <Space size={10}>
               <span>可签约人群</span>
@@ -976,6 +976,26 @@ function FPolicyBuilder({
                                         target: value,
                                       }, cd.randomID, et.randomID);
                                     }}
+                                    getPopupContainer={() => {
+                                      return refContainer?.current || document.body;
+                                    }}
+                                    dropdownRender={menu => (<>
+                                      {menu}
+                                      <div className={styles.dropdownRenderAdd}>
+                                        <FCircleBtn
+                                          size='small'
+                                          type='minor'
+                                          onClick={onClickAddStateBtn}
+                                        >
+                                          <FPlus style={{ fontSize: 12 }} />
+                                        </FCircleBtn>
+                                        <div style={{ width: 5 }} />
+                                        <FTextBtn
+                                          type='primary'
+                                          onClick={onClickAddStateBtn}
+                                        >新建状态</FTextBtn>
+                                      </div>
+                                    </>)}
                                   />
                                 </div>
                               </>)
@@ -1303,6 +1323,7 @@ async function verifyCodeText(text: string, allTexts: string[]): Promise<string>
     error = FUil1.I18n.message('error_auth_plan_existed');
   } else {
     try {
+      // TODO:
       const result = await compile(text, 'resource', 'http://qi.testfreelog.com', 'dev');
     } catch (err) {
       // console.log(err.message, 'err234234234');
