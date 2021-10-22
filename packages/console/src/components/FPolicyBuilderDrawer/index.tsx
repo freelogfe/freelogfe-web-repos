@@ -72,10 +72,7 @@ interface FPolicyBuilderDrawerStates {
   isVerifying: boolean;
 
   combinationData: CombinationStructureType;
-  // enabledTargetState: {
-  //   value: string | number;
-  //   title: string | number;
-  // }[];
+
   addingEventStateID: string;
 
   codeText: string;
@@ -111,24 +108,6 @@ const currencies = [
   { value: 'feather', title: '羽币' },
 ];
 
-// const title1: string = '免费订阅（包月）';
-// const text1: string = `for public
-//
-// initial[active]:
-//   ~freelog.RelativeTimeEvent("1","month") => finish
-// finish:
-//   terminate`;
-//
-// const title2: string = '付费订阅（包月）';
-// const text2: string = `for public
-//
-// initial:
-//   ~freelog.TransactionEvent("10","self.account") => auth
-// auth[active]:
-//   ~freelog.RelativeTimeEvent("1","month")  =>  finish
-// finish:
-//   terminate`;
-
 const combinationDataInitialRandomID: string = FUtil.Tool.generateRandomCode(10);
 
 const initStates: FPolicyBuilderDrawerStates = {
@@ -151,11 +130,7 @@ const initStates: FPolicyBuilderDrawerStates = {
       events: [],
     },
   ],
-  // combinationDataError: '',
-  // enabledTargetState: [{
-  //   value: combinationDataInitialRandomID,
-  //   title: '(1) initial',
-  // }],
+
   addingEventStateID: '',
 
   codeText: '',
@@ -221,7 +196,7 @@ function FPolicyBuilder({
   async function onChangeCodemirror(value: string) {
     // const value: string = e.target.value;
     setCodeText(value);
-    setCodeTextError(await verifyCodeText(value, alreadyUsedTexts));
+    setCodeTextError(await verifyCodeText(value, alreadyUsedTexts, targetType));
   }
 
   function onChangeCombinationData(data: Partial<Omit<CombinationStructureType[number], 'events'>>, randomID: string) {
@@ -502,7 +477,7 @@ function FPolicyBuilder({
       code = dataToCode(combinationData);
     }
     console.log(code, 'code823u423u4ooij');
-    const err: string = await verifyCodeText(code, alreadyUsedTexts);
+    const err: string = await verifyCodeText(code, alreadyUsedTexts, targetType);
     if (err) {
       setIsVerifying(false);
       setShowView('fail');
@@ -1088,13 +1063,6 @@ function FPolicyBuilder({
         </div>)
       }
 
-      {/*{*/}
-      {/*  showView === 'fail' && (<div className={styles.combinationDataError}>*/}
-      {/*    <FInfo />*/}
-      {/*    <div style={{ width: 5 }} />*/}
-      {/*    <span>校验失败</span>*/}
-      {/*  </div>)*/}
-      {/*}*/}
       {
         showView === 'fail' && (<div>
           <div className={styles.PolicyVerifyFail}>
@@ -1107,11 +1075,6 @@ function FPolicyBuilder({
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {/*<FTitleText*/}
-            {/*  type='h1'*/}
-            {/*  text={successResult?.title || ''}*/}
-            {/*/>*/}
-
             <div />
 
             <FTextBtn
@@ -1295,9 +1258,9 @@ function verifyTitle(title: string, allTitles: string[]): string {
   return error;
 }
 
-async function verifyCodeText(text: string, allTexts: string[]): Promise<string> {
-  console.log(allTexts, 'allTexts2342323423234234');
-  console.log(text, 'text234234234');
+async function verifyCodeText(text: string, allTexts: string[], targetType = 'resource'): Promise<string> {
+  // console.log(allTexts, 'allTexts2342323423234234');
+  // console.log(text, 'text234234234');
   let error: string = '';
   if (text === '') {
     error = '请输入内容';
@@ -1306,9 +1269,11 @@ async function verifyCodeText(text: string, allTexts: string[]): Promise<string>
   } else {
     try {
       // TODO:
-      const result = await compile(text, 'resource', 'http://qi.testfreelog.com', 'dev');
+      console.log('@@@@@@@############');
+      const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
+      console.log(result, 'resultresult@$!@$#@#$');
     } catch (err) {
-      // console.log(err.message, 'err234234234');
+      console.log(err.message, 'err234234234');
       error = err.message;
     }
   }
