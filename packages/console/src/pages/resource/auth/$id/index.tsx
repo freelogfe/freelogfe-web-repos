@@ -12,7 +12,8 @@ import {
 import {
   ChangeAction,
   FetchAuthorizeAction,
-  FetchAuthorizedAction, FetchResourceInfoAction,
+  FetchAuthorizedAction,
+  FetchResourceInfoAction,
 } from '@/models/resourceAuthPage';
 import { RouterTypes, withRouter } from 'umi';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
@@ -172,7 +173,7 @@ function Auth({ dispatch, resourceAuthPage, match }: AuthProps & RouterTypes) {
               });
             }}
           />
-          <FTextBtn type="primary" onClick={() => {
+          <FTextBtn type='primary' onClick={() => {
             dispatch<ChangeAction>({
               type: 'resourceAuthPage/change',
               payload: {
