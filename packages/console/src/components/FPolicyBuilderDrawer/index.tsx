@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FCodemirror from '@/components/FCodemirror';
-import { Space, Divider, DatePicker, InputNumber } from 'antd';
+import { Space, Divider, DatePicker, InputNumber, Modal } from 'antd';
 import { FCheck, FCode, FDown, FFileText, FInfo, FLoading, FPlus } from '@/components/FIcons';
 import { FCircleBtn, FRectBtn, FTextBtn } from '@/components/FButton';
 import PolicyTemplates, { title1, text1, title2, text2 } from './PolicyTemplates';
@@ -379,40 +379,6 @@ function FPolicyBuilder({
     // console.log(result, 'resultresultresult!@#$2134234');
     setCombinationData(result);
   }
-
-  // function handleTargetState(data: CombinationStructureType) {
-  //   const results: FPolicyBuilderDrawerStates['enabledTargetState'] = Array.from(new Set(data
-  //     .filter((cd) => {
-  //       return !!cd.name && !cd.nameError;
-  //     })
-  //     .map<FPolicyBuilderDrawerStates['enabledTargetState'][number]>((cd, index) => {
-  //       return {
-  //         value: cd.randomID,
-  //         title: `(${index + 1})${cd.name}`,
-  //       };
-  //     })));
-  //   // console.log(results, 'resultsresultsresults!@#$234234');
-  //
-  //   // const results2: CombinationStructureType = data
-  //   //   .map((cd) => {
-  //   //     return {
-  //   //       ...cd,
-  //   //       events: cd.events.map((et) => {
-  //   //         if (et.type === 'terminate') {
-  //   //           return et;
-  //   //         }
-  //   //         // console.log(et.target, 'et.targetet.targetet.target234234');
-  //   //         return {
-  //   //           ...et,
-  //   //           target: results.includes(et.target) ? et.target : '',
-  //   //         };
-  //   //       }),
-  //   //     };
-  //   //   });
-  //
-  //   setEnabledTargetState(results);
-  //   // setCombinationData(results2);
-  // }
 
   function onClickSelectTemplateBtn(num: 1 | 2) {
     // console.log(num, 'handleTemplatehandleTemplate23423423');
@@ -1204,7 +1170,20 @@ function FPolicyBuilder({
           //   // setTemplateVisible(false);
           // }}
           onClickSelect={(num) => {
-            onClickSelectTemplateBtn(num);
+            if (codeText === '' && JSON.stringify(combinationData) === JSON.stringify(initStates.combinationData)) {
+              return onClickSelectTemplateBtn(num);
+            }
+            Modal.confirm({
+              title: FUil1.I18n.message('alert_plan_cover '),
+              okText: FUil1.I18n.message('btn_import'),
+              cancelText: FUil1.I18n.message('btn_cancel'),
+              onOk() {
+                onClickSelectTemplateBtn(num);
+              },
+              onCancel() {
+                // console.log('Cancel');
+              },
+            });
           }}
         />
       </FDrawer>
