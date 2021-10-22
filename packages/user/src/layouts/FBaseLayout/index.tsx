@@ -21,7 +21,7 @@ function FBaseLayout({children, user}: FBaseLayoutProps) {
   return (<FLayout
     headerLeft={
       <NavLink
-        to={'/'}
+        to={FUtil.LinkTo.wallet()}
         className={['freelog', 'fl-icon-logo-freelog', styles.logo].join(' ')}
       />
     }

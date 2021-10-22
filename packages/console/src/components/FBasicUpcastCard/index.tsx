@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { FInfo } from '@/components/FIcons';
-import FPopover from '@/components/FPopover';
+// import FPopover from '@/components/FPopover';
 import FTooltip from '@/components/FTooltip';
 import FUtil1 from '@/utils';
 
