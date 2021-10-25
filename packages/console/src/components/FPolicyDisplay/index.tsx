@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FCodeFormatter from '@/components/FCodeFormatter';
+import FCodeFormatter from '../FCodeFormatter';
 import * as AHooks from 'ahooks';
 import { FUtil } from '@freelog/tools-lib';
 

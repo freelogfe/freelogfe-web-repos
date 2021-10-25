@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FContentText, FTitleText} from "@/components/FText";
-import FInput from "@/components/FInput";
-import {FCircleBtn, FRectBtn, FTextBtn} from "@/components/FButton";
-import FDrawer from "@/components/FDrawer";
+import {FContentText, FTitleText} from "../FText";
+import FInput from "../FInput";
+import {FCircleBtn, FRectBtn, FTextBtn} from "../FButton";
+import FDrawer from "../FDrawer";
 import {FUtil} from '@freelog/tools-lib';
 
 interface FBasePropsEditorDrawerProps {

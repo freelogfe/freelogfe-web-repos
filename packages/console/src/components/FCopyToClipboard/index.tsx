@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTextBtn} from '@/components/FButton';
+import {FTextBtn} from '../FButton';
 // @ts-ignore
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {Tooltip} from 'antd';
-import {FCopy} from "@/components/FIcons";
+import {FCopy} from "../FIcons";
 import {CSSProperties} from "react";
 
 interface FCopyToClipboardProps {

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import {List} from 'antd';
-import {FRectBtn} from '@/components/FButton';
-import {FContentText} from '@/components/FText';
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import {FRectBtn} from '../FButton';
+import {FContentText} from '../FText';
+import FResourceStatusBadge from "../FResourceStatusBadge";
 
 export interface FResourceListProps {
   loading: boolean;

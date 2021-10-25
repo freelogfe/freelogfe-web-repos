@@ -1,19 +1,19 @@
 import * as React from 'react';
 import styles from './index.less';
-import FFormLayout from '@/components/FFormLayout';
+import FFormLayout from '../FFormLayout';
 import { Space } from 'antd';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import { FContentText } from '@/components/FText';
-import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import { FDown, FNodes, FUp, FUser } from '@/components/FIcons';
-import FDrawer from '@/components/FDrawer';
-import FContractStatusBadge from '@/components/FContractStatusBadge';
+import { FContentText } from '../FText';
+import FIdentityTypeBadge from '../FIdentityTypeBadge';
+import { FDown, FNodes, FUp, FUser } from '../FIcons';
+import FDrawer from '../FDrawer';
+// import FContractStatusBadge from '../FContractStatusBadge';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import FLoadingTip from '@/components/FLoadingTip';
-import FResource from '@/components/FIcons/FResource';
-import FPolicyDisplay from '@/components/FPolicyDisplay';
-import FDivider from '@/components/FDivider';
-import FContractDisplay from '@/components/FContractDisplay';
+import FLoadingTip from '../FLoadingTip';
+import FResource from '../FIcons/FResource';
+import FPolicyDisplay from '../FPolicyDisplay';
+import FDivider from '../FDivider';
+import FContractDisplay from '../FContractDisplay';
 
 interface BaseInfo {
   subjectId: string;

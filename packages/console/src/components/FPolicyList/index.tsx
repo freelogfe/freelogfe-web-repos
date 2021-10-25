@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import FUtil1 from '@/utils';
-import FSwitch from '@/components/FSwitch';
+import FSwitch from '../FSwitch';
 import { Space } from 'antd';
-import { FContentText, FTitleText } from '@/components/FText';
-import FModal from '@/components/FModal';
-import FFullScreen from '@/components/FIcons/FFullScreen';
-import FPolicyDisplay from '@/components/FPolicyDisplay';
+import { FContentText, FTitleText } from '../FText';
+import FModal from '../FModal';
+import FFullScreen from '../FIcons/FFullScreen';
+import FPolicyDisplay from '../FPolicyDisplay';
 
 interface FPolicyListProps {
   dataSource: {

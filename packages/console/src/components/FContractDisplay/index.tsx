@@ -2,13 +2,13 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { Space } from 'antd';
-import { FContentText, FTipText, FTitleText } from '@/components/FText';
-import { FRectBtn, FTextBtn } from '@/components/FButton';
-import FModal from '@/components/FModal';
-import FInput from '@/components/FInput';
-import FCodeFormatter from '@/components/FCodeFormatter';
-import fMessage from '@/components/fMessage';
-import { FDown, FUp } from '@/components/FIcons';
+import { FContentText, FTipText, FTitleText } from '../FText';
+import { FRectBtn, FTextBtn } from '../FButton';
+import FModal from '../FModal';
+import FInput from '../FInput';
+import FCodeFormatter from '../FCodeFormatter';
+import fMessage from '../fMessage';
+import { FDown, FUp } from '../FIcons';
 
 interface FContractDisplayProps {
   contractID: string;

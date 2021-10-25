@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FBasePropertiesCards from "@/components/FBasePropertiesCards";
+import FBasePropertiesCards from "../FBasePropertiesCards";
 
 interface FBasePropertiesProps {
   basics: {

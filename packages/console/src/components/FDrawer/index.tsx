@@ -2,9 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import {Drawer} from 'antd';
 import {DrawerProps} from "antd/lib/drawer";
-import {FTitleText} from '@/components/FText';
-import {FTextBtn} from '@/components/FButton';
-import {FClose} from '@/components/FIcons';
+import {FTitleText} from '../FText';
+import {FTextBtn} from '../FButton';
+import {FClose} from '../FIcons';
 
 interface FDrawerProps extends DrawerProps {
   children: React.ReactNode | React.ReactNodeArray;

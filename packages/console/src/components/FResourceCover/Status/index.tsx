@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 // import warning from '../../../assets/warning.svg';
-import {FWarning} from '@/components/FIcons';
+import {FWarning} from '../../FIcons';
 
 interface SiderProps {
   // normal: 'online' | 'stopped';

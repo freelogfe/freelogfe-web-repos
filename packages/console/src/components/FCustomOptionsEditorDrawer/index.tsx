@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from "antd";
-import {FContentText} from "@/components/FText";
-import {FCircleBtn, FRectBtn, FTextBtn} from "@/components/FButton";
+import {FContentText} from "../FText";
+import {FCircleBtn, FRectBtn, FTextBtn} from "../FButton";
 import FCustomOptions, {Data} from './FCustomOptions';
-import FDrawer from "@/components/FDrawer";
+import FDrawer from "../FDrawer";
 
 interface FCustomOptionsEditorDrawerProps {
   visible: boolean;

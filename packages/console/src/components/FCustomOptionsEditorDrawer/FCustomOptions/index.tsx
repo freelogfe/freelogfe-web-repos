@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import {Space} from 'antd';
 import Property from './Property';
-import {FCircleBtn} from "@/components/FButton";
+import {FCircleBtn} from "../../FButton";
 
 export interface Data {
   key: string;

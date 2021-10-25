@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Button, Checkbox, Popover} from 'antd';
-import {FRectBtn} from '@/components/FButton';
-import FAutoComplete from "@/components/FAutoComplete";
+import {FRectBtn} from '../FButton';
+import FAutoComplete from "../FAutoComplete";
 import * as AHooks from 'ahooks';
 import * as semver from 'semver';
 

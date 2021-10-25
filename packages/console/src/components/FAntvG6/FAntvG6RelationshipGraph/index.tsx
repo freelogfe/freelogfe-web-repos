@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
 import {GraphData} from "@antv/g6/lib";
-import {FTipText} from "@/components/FText";
+import {FTipText} from "../../FText";
 
 G6.registerNode('relationship-resource', {
   jsx: (cfg: any) => {

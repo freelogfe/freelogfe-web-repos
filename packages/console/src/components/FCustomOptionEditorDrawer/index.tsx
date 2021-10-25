@@ -3,9 +3,9 @@ import styles from './index.less';
 import {Space, Row, Col} from "antd";
 import {FRectBtn, FTextBtn} from "../FButton";
 import FDrawer from "../FDrawer";
-import {FTitleText} from '@/components/FText';
-import FInput from "@/components/FInput";
-import FSelect from "@/components/FSelect";
+import {FTitleText} from '../FText';
+import FInput from "../FInput";
+import FSelect from "../FSelect";
 import {FUtil} from '@freelog/tools-lib';
 
 interface FCustomOptionEditorDrawerProps {

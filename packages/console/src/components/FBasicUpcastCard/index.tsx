@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FInfo } from '@/components/FIcons';
+import { FInfo } from '../FIcons';
 // import FPopover from '@/components/FPopover';
-import FTooltip from '@/components/FTooltip';
+import FTooltip from '../FTooltip';
 import FUtil1 from '@/utils';
 
 interface FBasicUpcastCardProps {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import Status from './Status';
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+// import Status from './Status';
+import FResourceStatusBadge from "../FResourceStatusBadge";
 
 interface FResourceCoverProps {
   width?: number | string;

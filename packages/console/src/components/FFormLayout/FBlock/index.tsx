@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText} from "@/components/FText";
+import {FContentText} from "../../FText";
 
 interface FBlockProps {
   children?: React.ReactNode | React.ReactNodeArray;

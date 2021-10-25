@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Space} from 'antd';
-import FInput from '@/components/FInput';
-import FSelect from '@/components/FSelect';
+import FInput from '../../FInput';
+import FSelect from '../../FSelect';
 import {Data} from '../index';
 import Field from '../Field';
 import FUtil1 from "@/utils";

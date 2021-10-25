@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FWarning} from '@/components/FIcons';
+import {FWarning} from '../../FIcons';
 import FUtil1 from "@/utils";
 // import {FUtil} from '@freelog/tools-lib';
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Col, Row, Space, Switch} from 'antd';
-import FInput from '@/components/FInput';
-import FSelect from '@/components/FSelect';
+import FInput from '../../../FInput';
+import FSelect from '../../../FSelect';
 import {Data} from '../index';
 import FUtil1 from "@/utils";
 import {FUtil} from '@freelog/tools-lib';
-import {FTitleText} from "@/components/FText";
+import {FTitleText} from "../../../FText";
 
 interface PropertyProps {
   data: Data;

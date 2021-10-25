@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Policy from './Policy';
-import {FContentText} from '@/components/FText';
+import {FContentText} from '../FText';
 import styles from './index.less';
-import FResourceStatusBadge from "@/components/FResourceStatusBadge";
+import FResourceStatusBadge from "../FResourceStatusBadge";
 // import {FUtil} from '@freelog/tools-lib';
 import FUtil1 from '@/utils';
 
