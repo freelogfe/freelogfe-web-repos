@@ -1,42 +1,56 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FContentText, FTitleText} from '@/components/FText';
+import { FContentText, FTitleText } from '@/components/FText';
 import FSwitch from '@/components/FSwitch';
-import {Space} from 'antd';
+import { Space } from 'antd';
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
 import Side from './Side';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ExhibitInfoPageModelState} from '@/models/connect';
-import {ChangeAction, FetchInfoAction, UpdateStatusAction} from '@/models/exhibitInfoPage';
-import FTooltip from "@/components/FTooltip";
-import {FWarning} from "@/components/FIcons";
-import {RouteComponentProps} from "react-router";
-import fConfirmModal from "@/components/fConfirmModal";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {FTextBtn} from "@/components/FButton";
+import { connect, Dispatch } from 'dva';
+import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
+import {
+  ChangeAction,
+  FetchInfoAction,
+  OnMountPageAction,
+  OnUnmountPageAction,
+  UpdateStatusAction,
+} from '@/models/exhibitInfoPage';
+import FTooltip from '@/components/FTooltip';
+import { FLoading, FWarning } from '@/components/FIcons';
+import { RouteComponentProps } from 'react-router';
+import fConfirmModal from '@/components/fConfirmModal';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import { FTextBtn } from '@/components/FButton';
+import * as AHooks from 'ahooks';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   exhibitInfoPage: ExhibitInfoPageModelState;
 }
 
-function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
+function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
-  React.useEffect(() => {
-    dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+  AHooks.useMount(() => {
+    dispatch<OnMountPageAction>({
+      type: 'exhibitInfoPage/onMountPage',
       payload: {
-        presentableId: match.params.id,
+        exhibitID: match.params.id,
       },
     });
+  });
 
-    dispatch<FetchInfoAction>({
-      type: 'exhibitInfoPage/fetchInfo',
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'exhibitInfoPage/onUnmountPage',
     });
-  }, []);
+  });
+
+  if (exhibitInfoPage.pageLoading) {
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
+  }
 
   return (<div className={styles.styles}>
     <div>
@@ -45,24 +59,24 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           {/*<FLink to={}>*/}
           <FTextBtn
             onClick={() => {
-              window.open(FUtil.LinkTo.nodeManagement({nodeID: exhibitInfoPage.nodeId}));
+              window.open(FUtil.LinkTo.nodeManagement({ nodeID: exhibitInfoPage.nodeId }));
             }}
-            style={{fontWeight: 600}}
-            type="default"
+            style={{ fontWeight: 600 }}
+            type='default'
           >
             <FContentText
-              type="negative"
+              type='negative'
               text={exhibitInfoPage.nodeName}
               className={styles.nodeName}
             />
           </FTextBtn>
           {/*</FLink>*/}
-          <div style={{width: 2}}/>
+          <div style={{ width: 2 }} />
           <FContentText
-            type="negative"
+            type='negative'
             text={'>'}
           />
-          <div style={{width: 2}}/>
+          <div style={{ width: 2 }} />
           <FTitleText
             text={exhibitInfoPage.pName}
             style={{
@@ -75,9 +89,9 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           {
             exhibitInfoPage.resourceType === 'theme'
               ? (<span
-                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil1.I18n.message('toggle_activate_theme')}</span>)
+                style={{ color: exhibitInfoPage.isOnline ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('toggle_activate_theme')}</span>)
               : (<span
-                style={{color: exhibitInfoPage.isOnline ? '#42C28C' : '#666'}}>{FUtil1.I18n.message('btn_show_exhibit')}</span>)
+                style={{ color: exhibitInfoPage.isOnline ? '#42C28C' : '#666' }}>{FUtil1.I18n.message('btn_show_exhibit')}</span>)
           }
 
           <FSwitch
@@ -111,7 +125,7 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
           {
             !exhibitInfoPage.isAuth || exhibitInfoPage.policies.filter((p) => p.status === 1).length === 0 ? (
               <FTooltip title={!exhibitInfoPage.isAuth ? exhibitInfoPage.authErrorText : '暂无上线策略'}>
-                <FWarning/>
+                <FWarning />
               </FTooltip>) : ''
           }
         </Space>
@@ -119,21 +133,21 @@ function Presentable({dispatch, exhibitInfoPage, match}: PresentableProps) {
       <div className={styles.body}>
         <div className={styles.content}>
           <div>
-            <Policies/>
-            <div style={{height: 50}}/>
-            <Contracts/>
-            <div style={{height: 50}}/>
-            <Viewports/>
+            <Policies />
+            <div style={{ height: 50 }} />
+            <Contracts />
+            <div style={{ height: 50 }} />
+            <Viewports />
           </div>
         </div>
-        <div style={{width: 10}}/>
-        <Side/>
+        <div style={{ width: 10 }} />
+        <Side />
       </div>
     </div>
-    <div style={{height: 100}}/>
+    <div style={{ height: 100 }} />
   </div>);
 }
 
-export default connect(({exhibitInfoPage}: ConnectState) => ({
+export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Presentable);

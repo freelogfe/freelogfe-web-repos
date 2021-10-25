@@ -24,6 +24,7 @@ import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface InformExhibitProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -47,6 +48,11 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
       type: 'informExhibitInfoPage/onPageUnmount',
     });
   });
+
+  if (informExhibitInfoPage.pageLoading) {
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
+  }
+
 
   return (<div className={styles.styles}>
     <div>

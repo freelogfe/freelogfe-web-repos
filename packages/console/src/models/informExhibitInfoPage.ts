@@ -1,11 +1,11 @@
-import {DvaReducer} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from '@/models/connect';
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
-import FUtil1 from '@/utils'
+import { DvaReducer } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import FUtil1 from '@/utils';
 
-const {decompile, compile} = require('@freelog/nmr_translator');
+const { decompile, compile } = require('@freelog/nmr_translator');
 
 interface ICandidate {
   name: string;
@@ -22,6 +22,8 @@ export interface InformExhibitInfoPageModelState {
   allRuleResult: any;
   currentRuleResult: any;
   theRuleID: string;
+
+  pageLoading: boolean;
 
   nodeName: string;
   informExhibitName: string;
@@ -320,53 +322,57 @@ export interface UpdateRelationAction extends AnyAction {
   };
 }
 
+const initStates: InformExhibitInfoPageModelState = {
+  nodeID: -1,
+  informExhibitID: '',
+  informExhibitIdentity: 'resource',
+  resourceType: '',
+
+  allRuleText: '',
+  allRuleResult: null,
+  currentRuleResult: null,
+  theRuleID: '',
+
+  pageLoading: true,
+
+  nodeName: '',
+  informExhibitName: '',
+  onlineSwitchObj: null,
+  mappingRule: null,
+
+  associated: [],
+
+  pCover: '',
+  pTitle: '',
+  pInputTitle: null,
+  pTags: [],
+  pAllVersions: [],
+  pVersion: '',
+  pOnlyReadAttrs: [],
+  pOnlyEditAttrs: [],
+  pEditDeleteAttrs: [],
+
+  pCustomModalVisible: false,
+  pCustomModalTitle: '',
+  pCustomModalConfirmButtonDisabled: false,
+  pCustomMode: 'add',
+  pCustomKey: '',
+  pCustomKeyDisabled: false,
+  pCustomKeyError: '',
+  pCustomValue: '',
+  pCustomValueError: '',
+  pCustomDescription: '',
+  pCustomDescriptionError: '',
+
+  relation: null,
+};
+
 const Model: ExhibitInfoPageModelType = {
   namespace: 'informExhibitInfoPage',
-  state: {
-    nodeID: -1,
-    informExhibitID: '',
-    informExhibitIdentity: 'resource',
-    resourceType: '',
-
-    allRuleText: '',
-    allRuleResult: null,
-    currentRuleResult: null,
-    theRuleID: '',
-
-    nodeName: '',
-    informExhibitName: '',
-    onlineSwitchObj: null,
-    mappingRule: null,
-
-    associated: [],
-
-    pCover: '',
-    pTitle: '',
-    pInputTitle: null,
-    pTags: [],
-    pAllVersions: [],
-    pVersion: '',
-    pOnlyReadAttrs: [],
-    pOnlyEditAttrs: [],
-    pEditDeleteAttrs: [],
-
-    pCustomModalVisible: false,
-    pCustomModalTitle: '',
-    pCustomModalConfirmButtonDisabled: false,
-    pCustomMode: 'add',
-    pCustomKey: '',
-    pCustomKeyDisabled: false,
-    pCustomKeyError: '',
-    pCustomValue: '',
-    pCustomValueError: '',
-    pCustomDescription: '',
-    pCustomDescriptionError: '',
-
-    relation: null,
-  },
+  state: initStates,
 
   effects: {
-    * onPageMount({payload}: OnPageMountAction, {put}: EffectsCommandMap) {
+    * onPageMount({ payload }: OnPageMountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -384,8 +390,8 @@ const Model: ExhibitInfoPageModelType = {
     * onPageUnmount({}: OnPageUnmountAction, {}: EffectsCommandMap) {
 
     },
-    * fetchInformalExhibitInfo({payload}: FetchInformalExhibitInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * fetchInformalExhibitInfo({ payload }: FetchInformalExhibitInfoAction, { call, select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -394,7 +400,7 @@ const Model: ExhibitInfoPageModelType = {
       const params: Parameters<typeof FServiceAPI.InformalNode.testResourceDetails>[0] = {
         testResourceId: informExhibitID,
       };
-      const {data} = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
+      const { data } = yield call(FServiceAPI.InformalNode.testResourceDetails, params);
 
       // console.log(data, '#######32409jkldfsmdslkdsf||||||||');
 
@@ -402,7 +408,7 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: data.nodeId,
       };
 
-      const {data: data4} = yield call(FServiceAPI.Node.details, params4);
+      const { data: data4 } = yield call(FServiceAPI.Node.details, params4);
       // console.log(data4, 'data41234234123423412341234');
 
       let result: HandleRelationResult = [];
@@ -417,7 +423,7 @@ const Model: ExhibitInfoPageModelType = {
           resourceIdOrName: actualOriginInfo.id,
         };
 
-        const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
+        const { data: data2 } = yield call(FServiceAPI.Resource.info, params2);
         // console.log(data2, 'data2!@#$@#$@#$3432444444');
 
         relation = {
@@ -436,7 +442,7 @@ const Model: ExhibitInfoPageModelType = {
           objectIdOrName: actualOriginInfo.id,
         };
 
-        const {data: data3} = yield call(FServiceAPI.Storage.objectDetails, params3);
+        const { data: data3 } = yield call(FServiceAPI.Storage.objectDetails, params3);
         // console.log(data3, '!@#$!@#$234213423142134234');
         relation = {
           cardTitle: '关联对象',
@@ -462,6 +468,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          pageLoading: false,
           nodeID: data.nodeId,
           informExhibitIdentity: actualOriginInfo.type,
           resourceType: data.resourceType,
@@ -545,7 +552,7 @@ const Model: ExhibitInfoPageModelType = {
         isRematch: false,
       };
 
-      const {data: data2} = yield call(ruleMatchStatus, params2);
+      const { data: data2 } = yield call(ruleMatchStatus, params2);
       // console.log(data2, '##@#$@#$@#!!!!!!!!!1234');
 
       const currentRule = data2.testRules.find((ro: any) => {
@@ -599,8 +606,8 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * syncRules({payload}: SyncRulesAction, {select, call, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * syncRules({ payload }: SyncRulesAction, { select, call, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -609,7 +616,7 @@ const Model: ExhibitInfoPageModelType = {
         isRematch: false,
       };
 
-      const {data: data1} = yield call(ruleMatchStatus, params2);
+      const { data: data1 } = yield call(ruleMatchStatus, params2);
 
       // const {rules} = compile(data1.ruleText);
       const rules = informExhibitInfoPage.allRuleResult.map((rr: any) => {
@@ -669,7 +676,7 @@ const Model: ExhibitInfoPageModelType = {
         testRuleText: text,
       };
       // console.log(params, 'paramsparams!!@#$!@#$');
-      const {data} = yield call(FServiceAPI.InformalNode.createRules, params);
+      const { data } = yield call(FServiceAPI.InformalNode.createRules, params);
       // console.log(data, 'data!!@#$@#$');
 
       yield call(sleep, 300);
@@ -678,8 +685,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInformalExhibitInfo',
       });
     },
-    * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * updateRelation({ payload }: UpdateRelationAction, { select, call, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
       const resource = informExhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
@@ -692,8 +699,8 @@ const Model: ExhibitInfoPageModelType = {
           {
             resourceId: resource?.id || '',
             contracts: [
-              ...(resource?.contracts || []).map((c) => ({policyId: c.policyId})),
-              {policyId: payload.policyId},
+              ...(resource?.contracts || []).map((c) => ({ policyId: c.policyId })),
+              { policyId: payload.policyId },
             ],
           },
         ],
@@ -703,8 +710,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInformalExhibitInfo',
       });
     },
-    * onOnlineSwitchChange({payload}: OnOnlineSwitchChangeAction, {put, select}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onOnlineSwitchChange({ payload }: OnOnlineSwitchChangeAction, { put, select }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -724,10 +731,10 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
-    * onChangePCover({payload}: OnChangePCoverAction, {put}: EffectsCommandMap) {
+    * onChangePCover({ payload }: OnChangePCoverAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: {pCover: payload.value}
+        payload: { pCover: payload.value },
       });
       yield put<SyncRulesAction>({
         type: 'syncRules',
@@ -736,18 +743,18 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, {put, select}: EffectsCommandMap) {
+    * onClickPTitleEditBtn({}: OnClickPTitleEditBtnAction, { put, select }: EffectsCommandMap) {
 
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
       yield put<ChangeAction>({
         type: 'change',
-        payload: {pInputTitle: informExhibitInfoPage.pTitle}
+        payload: { pInputTitle: informExhibitInfoPage.pTitle },
       });
     },
-    * onChangePTitleInput({payload}: OnChangePTitleInputAction, {put}: EffectsCommandMap) {
+    * onChangePTitleInput({ payload }: OnChangePTitleInputAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -755,9 +762,9 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, {put, select}: EffectsCommandMap) {
+    * onClickPTitleConfirmBtn({}: OnClickPTitleConfirmBtnAction, { put, select }: EffectsCommandMap) {
 
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -778,7 +785,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, {put}: EffectsCommandMap) {
+    * onClickPTitleCancelBtn({}: OnClickPTitleCancelBtnAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -787,7 +794,7 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onChangePLabels({payload}: OnChangePLabelsAction, {put}: EffectsCommandMap) {
+    * onChangePLabels({ payload }: OnChangePLabelsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -801,8 +808,8 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onChangePVersion({payload}: OnChangePVersionAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onChangePVersion({ payload }: OnChangePVersionAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -844,8 +851,8 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
-    * onHandleAttrModal({payload}: OnHandleAttrModalAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onHandleAttrModal({ payload }: OnHandleAttrModalAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -888,7 +895,7 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
-    * onCancelHandleAttrModal({}: OnCancelHandleAttrModalAction, {put}: EffectsCommandMap) {
+    * onCancelHandleAttrModal({}: OnCancelHandleAttrModalAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -906,8 +913,8 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onAttrModalChange({payload}: OnAttrModalChangeAction, {select, put, call}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onAttrModalChange({ payload }: OnAttrModalChangeAction, { select, put, call }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -934,7 +941,7 @@ const Model: ExhibitInfoPageModelType = {
             pCustomKeyError: pAddCustomKeyError,
             pCustomModalConfirmButtonDisabled: !valueText || !!pAddCustomKeyError
               || !informExhibitInfoPage.pCustomValue || !!informExhibitInfoPage.pCustomValueError
-              || !!informExhibitInfoPage.pCustomDescriptionError
+              || !!informExhibitInfoPage.pCustomDescriptionError,
           },
         });
       }
@@ -949,7 +956,7 @@ const Model: ExhibitInfoPageModelType = {
             pCustomValueError: textError,
             pCustomModalConfirmButtonDisabled: !informExhibitInfoPage.pCustomKey || !!informExhibitInfoPage.pCustomKeyError
               || !valueText || !!textError
-              || !!informExhibitInfoPage.pCustomDescriptionError
+              || !!informExhibitInfoPage.pCustomDescriptionError,
           },
         });
       }
@@ -969,8 +976,8 @@ const Model: ExhibitInfoPageModelType = {
         });
       }
     },
-    * onChangeAttrs({payload}: OnChangeAttrsAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onChangeAttrs({ payload }: OnChangeAttrsAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -990,7 +997,7 @@ const Model: ExhibitInfoPageModelType = {
               ...poe,
               theValue: theValue,
               theValueError: textError,
-            }
+            };
           }),
           pEditDeleteAttrs: informExhibitInfoPage.pEditDeleteAttrs.map<InformExhibitInfoPageModelState['pEditDeleteAttrs'][0]>((ped) => {
             if (ped.theKey !== payload.theKey) {
@@ -1001,12 +1008,12 @@ const Model: ExhibitInfoPageModelType = {
               theValue: theValue,
               theValueError: textError,
             };
-          })
+          }),
         },
       });
     },
-    * onAttrBlur({payload}: OnAttrBlurAction, {select, call, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onAttrBlur({ payload }: OnAttrBlurAction, { select, call, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -1072,8 +1079,8 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onClickAttrModalConfirmBtn({}: OnClickAttrModalConfirmBtnAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -1120,8 +1127,8 @@ const Model: ExhibitInfoPageModelType = {
       });
 
     },
-    * onClickDeleteAttr({payload}: OnClickDeleteAttrAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onClickDeleteAttr({ payload }: OnClickDeleteAttrAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -1148,8 +1155,8 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onClickResetAttr({payload}: OnClickResetAttrAction, {select, put}: EffectsCommandMap) {
-      const {informExhibitInfoPage}: ConnectState = yield select(({informExhibitInfoPage}: ConnectState) => ({
+    * onClickResetAttr({ payload }: OnClickResetAttrAction, { select, put }: EffectsCommandMap) {
+      const { informExhibitInfoPage }: ConnectState = yield select(({ informExhibitInfoPage }: ConnectState) => ({
         informExhibitInfoPage,
       }));
 
@@ -1170,18 +1177,18 @@ const Model: ExhibitInfoPageModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
-  }
+    },
+  },
 };
 
 export default Model;
@@ -1234,9 +1241,9 @@ async function handleRelation(params: HandleRelationParams): Promise<HandleRelat
     isLoadPolicyInfo: 1,
   };
 
-  const {data: data0}: any = await FServiceAPI.Resource.batchInfo(params0);
+  const { data: data0 }: any = await FServiceAPI.Resource.batchInfo(params0);
   // console.log(data0, 'data0, data123rfsdadata0');
-  const {data: data1}: any = params1.contractIds ? (await FServiceAPI.Contract.batchContracts(params1)) : {data: []};
+  const { data: data1 }: any = params1.contractIds ? (await FServiceAPI.Contract.batchContracts(params1)) : { data: [] };
   // console.log(data1, '@#$Fsdjfj;flsdkafjlij;iojdata1');
 
   const result = params.map((r) => {
@@ -1282,7 +1289,7 @@ interface RuleMatchStatusParams {
   isRematch?: boolean;
 }
 
-async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParams): Promise<any> {
+async function ruleMatchStatus({ nodeID, isRematch = false }: RuleMatchStatusParams): Promise<any> {
   const params: Parameters<typeof FServiceAPI.InformalNode.rulesRematch>[0] = {
     nodeId: nodeID,
   };
@@ -1292,7 +1299,7 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
   }
 
   while (true) {
-    const response = await FServiceAPI.InformalNode.testNodeRules({nodeId: nodeID});
+    const response = await FServiceAPI.InformalNode.testNodeRules({ nodeId: nodeID });
     // console.log(response, 'response1234');
     if (response.data.status === 1) {
       await sleep();
@@ -1308,7 +1315,7 @@ async function ruleMatchStatus({nodeID, isRematch = false}: RuleMatchStatusParam
 function sleep(ms: number = 200): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve()
+      resolve();
     }, ms);
   });
 }

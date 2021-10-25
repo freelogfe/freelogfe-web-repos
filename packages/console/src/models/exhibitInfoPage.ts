@@ -1,15 +1,16 @@
-import {DvaReducer, WholeReadonly} from '@/models/shared';
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription} from 'dva';
-import {ConnectState} from '@/models/connect';
-import fMessage from "@/components/fMessage";
-import {handleAuthorizationGraphData} from "@/components/FAntvG6/FAntvG6AuthorizationGraph";
-import {FUtil, FServiceAPI} from "@freelog/tools-lib";
-import {router} from "umi";
-import {handleExhibitRelationGraphData} from "@/components/FAntvG6/FAntvG6RelationshipGraph";
+import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription } from 'dva';
+import { ConnectState } from '@/models/connect';
+import fMessage from '@/components/fMessage';
+import { handleAuthorizationGraphData } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { router } from 'umi';
+import { handleExhibitRelationGraphData } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
 
 export type ExhibitInfoPageModelState = WholeReadonly<{
   presentableId: string;
+  pageLoading: boolean;
 
   nodeId: number;
   nodeName: string;
@@ -155,6 +156,17 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ExhibitInfoPageModelState>;
 }
 
+export interface OnMountPageAction extends AnyAction {
+  type: 'exhibitInfoPage/onMountPage';
+  payload: {
+    exhibitID: string;
+  };
+}
+
+export interface OnUnmountPageAction extends AnyAction {
+  type: 'exhibitInfoPage/onUnmountPage';
+}
+
 export interface FetchInfoAction extends AnyAction {
   type: 'fetchInfo' | 'exhibitInfoPage/fetchInfo';
 }
@@ -220,6 +232,8 @@ export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
   state: ExhibitInfoPageModelState;
   effects: {
+    onMountPage: (action: OnMountPageAction, effects: EffectsCommandMap) => void;
+    onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     fetchInfo: (action: FetchInfoAction, effects: EffectsCommandMap) => void;
     addAPolicy: (action: AddAPolicyAction, effects: EffectsCommandMap) => void;
     updateAPolicy: (action: UpdateAPolicyAction, effects: EffectsCommandMap) => void;
@@ -238,62 +252,86 @@ export interface ExhibitInfoPageModelType {
   };
 }
 
+const initStates: ExhibitInfoPageModelState = {
+  presentableId: '',
+  pageLoading: true,
+
+  nodeId: -1,
+  nodeName: '',
+  nodeThemeId: '',
+  pID: '',
+  pName: '',
+  isOnline: false,
+  isAuth: true,
+  authErrorText: '',
+
+  policies: [],
+  addPolicyDrawerVisible: false,
+  exhibitAllContractIDs: [],
+  selectedAssociatedID: '',
+  associated: [],
+
+  graphFullScreen: false,
+  viewportGraphShow: 'relationship',
+  relationGraphNodes: [],
+  relationGraphEdges: [],
+  authorizationGraphNodes: [],
+  authorizationGraphEdges: [],
+
+  pCover: '',
+  pTitle: '',
+  pInputTitle: null,
+  pTags: [],
+
+  allVersions: [],
+  version: '',
+
+  settingUnfold: false,
+
+  pBaseAttrs: [],
+  pCustomAttrs: [],
+
+  pAddCustomModalVisible: false,
+  pAddCustomKey: '',
+  pAddCustomKeyError: '',
+  pAddCustomValue: '',
+  pAddCustomValueError: '',
+  pAddCustomDescription: '',
+  pAddCustomDescriptionError: '',
+
+  resourceId: '',
+  resourceName: '',
+  resourceType: '',
+  resourceCover: '',
+};
+
 const Model: ExhibitInfoPageModelType = {
   namespace: 'exhibitInfoPage',
-  state: {
-    presentableId: '',
-
-    nodeId: -1,
-    nodeName: '',
-    nodeThemeId: '',
-    pID: '',
-    pName: '',
-    isOnline: false,
-    isAuth: true,
-    authErrorText: '',
-
-    policies: [],
-    addPolicyDrawerVisible: false,
-    exhibitAllContractIDs: [],
-    selectedAssociatedID: '',
-    associated: [],
-
-    graphFullScreen: false,
-    viewportGraphShow: 'relationship',
-    relationGraphNodes: [],
-    relationGraphEdges: [],
-    authorizationGraphNodes: [],
-    authorizationGraphEdges: [],
-
-    pCover: '',
-    pTitle: '',
-    pInputTitle: null,
-    pTags: [],
-
-    allVersions: [],
-    version: '',
-
-    settingUnfold: false,
-
-    pBaseAttrs: [],
-    pCustomAttrs: [],
-
-    pAddCustomModalVisible: false,
-    pAddCustomKey: '',
-    pAddCustomKeyError: '',
-    pAddCustomValue: '',
-    pAddCustomValueError: '',
-    pAddCustomDescription: '',
-    pAddCustomDescriptionError: '',
-
-    resourceId: '',
-    resourceName: '',
-    resourceType: '',
-    resourceCover: '',
-  },
+  state: initStates,
   effects: {
-    * fetchInfo({}: FetchInfoAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage, user}: ConnectState = yield select(({exhibitInfoPage, user}: ConnectState) => ({
+    * onMountPage({ payload }: OnMountPageAction, { put, call }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          presentableId: payload.exhibitID,
+        },
+      });
+
+      yield put<FetchInfoAction>({
+        type: 'fetchInfo',
+      });
+
+    },
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates,
+        },
+      });
+    },
+    * fetchInfo({}: FetchInfoAction, { call, select, put }: EffectsCommandMap) {
+      const { exhibitInfoPage, user }: ConnectState = yield select(({ exhibitInfoPage, user }: ConnectState) => ({
         exhibitInfoPage,
         user,
       }));
@@ -303,7 +341,7 @@ const Model: ExhibitInfoPageModelType = {
         isLoadCustomPropertyDescriptors: 1,
         isLoadPolicyInfo: 1,
       };
-      const {data} = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
@@ -317,14 +355,14 @@ const Model: ExhibitInfoPageModelType = {
         nodeId: data.nodeId,
       };
 
-      const {data: data3} = yield call(FServiceAPI.Node.details, params3);
+      const { data: data3 } = yield call(FServiceAPI.Node.details, params3);
       // console.log(data3, 'data90j23rlkfjasdfa');
 
       const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: data.resourceInfo.resourceId,
       };
 
-      const {data: data2} = yield call(FServiceAPI.Resource.info, params2);
+      const { data: data2 } = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
@@ -343,7 +381,7 @@ const Model: ExhibitInfoPageModelType = {
         authType: 3,
         presentableIds: data.presentableId,
       };
-      const {data: data1} = yield call(FServiceAPI.Exhibit.batchAuth, params1);
+      const { data: data1 } = yield call(FServiceAPI.Exhibit.batchAuth, params1);
       // console.log(data1, 'data1123434');
 
       // 关系树数据
@@ -351,11 +389,14 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: data.presentableId,
       };
 
-      const {data: data6} = yield call(FServiceAPI.Exhibit.relationTree, params6);
+      const { data: data6 } = yield call(FServiceAPI.Exhibit.relationTree, params6);
       // console.log(data, 'datadatadatadatadatadatadata');
       // console.log(data6, 'DDDDDD!!@#$@!#$!@#$@#$6666');
 
-      const {nodes: relationGraphNodes, edges: relationGraphEdges} = yield call(handleExhibitRelationGraphData, data6, {
+      const {
+        nodes: relationGraphNodes,
+        edges: relationGraphEdges,
+      } = yield call(handleExhibitRelationGraphData, data6, {
         nodeId: data.nodeId,
         nodeName: data3.nodeName,
         exhibitId: data.presentableId,
@@ -369,10 +410,13 @@ const Model: ExhibitInfoPageModelType = {
         presentableId: exhibitInfoPage.presentableId,
       };
 
-      const {data: data4} = yield call(FServiceAPI.Exhibit.authTree, params4);
+      const { data: data4 } = yield call(FServiceAPI.Exhibit.authTree, params4);
 
       // console.log(data4, '@@@@@#4234234324234');
-      const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data4, {
+      const {
+        nodes: authorizationGraphNodes,
+        edges: authorizationGraphEdges,
+      } = yield call(handleAuthorizationGraphData, data4, {
         id: data.presentableId,
         nodeId: data.nodeId,
         nodeName: data3.nodeName,
@@ -388,7 +432,7 @@ const Model: ExhibitInfoPageModelType = {
         }).join(','),
       };
 
-      const {data: data5} = yield call(FServiceAPI.Exhibit.presentableList, params5);
+      const { data: data5 } = yield call(FServiceAPI.Exhibit.presentableList, params5);
 
       // console.log(data5, 'data5!@#$!@#$@#$!@#$!@#$!@#4123421341234');
       const exhibitAllContractIDs: {
@@ -410,6 +454,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          pageLoading: false,
           nodeId: data.nodeId,
           nodeName: data3.nodeName,
           nodeThemeId: data3.nodeThemeId,
@@ -526,8 +571,8 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * addAPolicy({payload}: AddAPolicyAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * addAPolicy({ payload }: AddAPolicyAction, { call, select, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
@@ -543,8 +588,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateAPolicy({payload}: UpdateAPolicyAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateAPolicy({ payload }: UpdateAPolicyAction, { call, select, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
@@ -559,8 +604,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateBaseInfo({payload}: UpdateBaseInfoAction, {select, call, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateBaseInfo({ payload }: UpdateBaseInfoAction, { select, call, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
@@ -575,15 +620,15 @@ const Model: ExhibitInfoPageModelType = {
         payload,
       });
     },
-    * updateStatus({payload}: UpdateStatusAction, {call, select, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateStatus({ payload }: UpdateStatusAction, { call, select, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: exhibitInfoPage.presentableId,
         onlineStatus: payload,
       };
-      const {data} = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
         fMessage(exhibitInfoPage.resourceType === 'theme' ? '激活失败' : '上线失败', 'error');
         return;
@@ -598,8 +643,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateRelation({payload}: UpdateRelationAction, {select, call, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateRelation({ payload }: UpdateRelationAction, { select, call, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const resource = exhibitInfoPage.associated.find((a) => a.id === payload.resourceId);
@@ -611,15 +656,15 @@ const Model: ExhibitInfoPageModelType = {
           resourceID: payload.resourceId,
           policyID: payload.policyId,
           isUsed: true,
-        })
+        }),
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
       yield put<FetchInfoAction>({
         type: 'fetchInfo',
       });
     },
-    * updateRewrite({}: UpdateRewriteAction, {select, call, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateRewrite({}: UpdateRewriteAction, { select, call, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
 
@@ -648,11 +693,11 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           pCustomAttrs,
-        }
-      })
+        },
+      });
     },
-    * changeVersion({payload}: ChangeVersionAction, {call, put, select}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * changeVersion({ payload }: ChangeVersionAction, { call, put, select }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesVersion>[0] = {
@@ -664,8 +709,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'fetchInfo',
       });
     },
-    * updateContractUsed({payload}: UpdateContractUsedAction, {select, call, put}: EffectsCommandMap) {
-      const {exhibitInfoPage}: ConnectState = yield select(({exhibitInfoPage}: ConnectState) => ({
+    * updateContractUsed({ payload }: UpdateContractUsedAction, { select, call, put }: EffectsCommandMap) {
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
 
@@ -677,7 +722,7 @@ const Model: ExhibitInfoPageModelType = {
       };
       // console.log(params2, 'params2!@!@#$@!#$!@#$');
 
-      const {data: data2} = yield call(FServiceAPI.Exhibit.updatePresentable, params2);
+      const { data: data2 } = yield call(FServiceAPI.Exhibit.updatePresentable, params2);
 
       // 根据资源 id 批量查询所有合同
       const params5: Parameters<typeof FServiceAPI.Exhibit.presentableList>[0] = {
@@ -687,7 +732,7 @@ const Model: ExhibitInfoPageModelType = {
         }).join(','),
       };
 
-      const {data: data5} = yield call(FServiceAPI.Exhibit.presentableList, params5);
+      const { data: data5 } = yield call(FServiceAPI.Exhibit.presentableList, params5);
 
       const exhibitAllContractIDs: {
         exhibitID: string;
@@ -714,18 +759,18 @@ const Model: ExhibitInfoPageModelType = {
     },
   },
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
   subscriptions: {
     setup({}) {
 
-    }
-  }
+    },
+  },
 };
 
 export default Model;
@@ -788,7 +833,7 @@ async function handleRelation(params: HandleRelationParams, nodeID: number): Pro
     isLoadPolicyInfo: 1,
   };
 
-  const {data: data0}: any = await FServiceAPI.Resource.batchInfo(params0);
+  const { data: data0 }: any = await FServiceAPI.Resource.batchInfo(params0);
   // console.log(data0, data1, 'data0, data123rfsda');
 
   const result: HandleRelationResult = params.map((r) => {
@@ -853,7 +898,7 @@ type GetAllContractsReturnType = {
   };
 }[];
 
-async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
+async function getAllContracts({ nodeID, resourceIDs }: GetAllContractsParamsType): Promise<GetAllContractsReturnType> {
   // console.log(resourceIDs, 'resourceIDs!!@#$!@#$!@$1230900000000');
   const allPromises = resourceIDs.map(async (id) => {
     const params: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
@@ -864,7 +909,7 @@ async function getAllContracts({nodeID, resourceIDs}: GetAllContractsParamsType)
       subjectIds: id,
       subjectType: 1,
     };
-    const {data} = await FServiceAPI.Contract.batchContracts(params);
+    const { data } = await FServiceAPI.Contract.batchContracts(params);
     // console.log(data, 'data!!!1111100000000))))))');
     return data;
   });
@@ -879,12 +924,17 @@ interface HandleFinalResolveResourceParams {
   isUsed: boolean;
 }
 
-async function handleFinalResolveResource({exhibitID, resourceID, policyID, isUsed}: HandleFinalResolveResourceParams) {
+async function handleFinalResolveResource({
+                                            exhibitID,
+                                            resourceID,
+                                            policyID,
+                                            isUsed,
+                                          }: HandleFinalResolveResourceParams) {
   const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
     presentableId: exhibitID,
   };
 
-  const {data} = await FServiceAPI.Exhibit.presentableDetails(params);
+  const { data } = await FServiceAPI.Exhibit.presentableDetails(params);
 
   return data.resolveResources?.map((rrs: any) => {
     if (resourceID !== rrs.resourceId) {
@@ -906,7 +956,7 @@ async function handleFinalResolveResource({exhibitID, resourceID, policyID, isUs
               policyId: cccttt.policyId,
             };
           }),
-          {policyId: policyID}
+          { policyId: policyID },
         ]
         : rrs.contracts
           .filter((ccc: any) => {
