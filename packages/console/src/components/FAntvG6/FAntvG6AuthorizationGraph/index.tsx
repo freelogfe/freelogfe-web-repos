@@ -321,8 +321,8 @@ export async function handleAuthorizationGraphData(data: AuthorizationTree, root
   }[] = [];
 
   const resourceNodes: Array<ResourceNode | ExhibitNode> = [{
-    id: (root as any).versionId || (root as any).exhibitId,
     ...root,
+    id: (root as any).versionId || (root as any).exhibitId,
   }];
 
   const edges: AuthorizationGraphData['edges'] = [];
