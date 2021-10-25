@@ -1,8 +1,8 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
-import {ConnectState, ResourceListPageModelState} from '@/models/connect';
-import {FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
+import { ConnectState, ResourceListPageModelState } from '@/models/connect';
+import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCollectPageModelState {
   resourceType: string;
@@ -76,7 +76,7 @@ export interface OnClickLoadingMordAction extends AnyAction {
 //   payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
 // }
 
-export interface OnBoomJuiceAction extends AnyAction{
+export interface OnBoomJuiceAction extends AnyAction {
   type: 'resourceCollectPage/onBoomJuice';
   payload: string;
 }
@@ -118,7 +118,7 @@ const Model: ResourceCollectModelType = {
   state: initStates,
 
   effects: {
-    * onMount({}: OnMountAction, {put}: EffectsCommandMap) {
+    * onMount({}: OnMountAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -126,13 +126,13 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * onUnmount({}: OnUnmountAction, {put}: EffectsCommandMap) {
+    * onUnmount({}: OnUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * initModelStates({}: InitModelStatesAction, {put}: EffectsCommandMap) {
+    * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
       // console.log('InitModelStatesAction#@#@#@#@##@#');
       yield put<ChangeAction>({
         type: 'change',
@@ -148,9 +148,9 @@ const Model: ResourceCollectModelType = {
     //     type: 'fetchDataSource',
     //   });
     // },
-    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+    * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // console.log('FetchDataSourceAction23423434');
-      const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
+      const { resourceCollectPage }: ConnectState = yield select(({ resourceCollectPage }: ConnectState) => ({
         resourceCollectPage,
       }));
 
@@ -167,7 +167,7 @@ const Model: ResourceCollectModelType = {
         resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
       };
 
-      const {data} = yield call(FServiceAPI.Collection.collectionResources, params);
+      const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
       // console.log(data, 'data3290joisdf');
 
       let data1: any[] = [];
@@ -178,7 +178,7 @@ const Model: ResourceCollectModelType = {
           resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
         };
 
-        const {data: data2} = yield call(FServiceAPI.Resource.batchInfo, params1);
+        const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params1);
 
         data1 = data2;
       }
@@ -190,25 +190,31 @@ const Model: ResourceCollectModelType = {
         payload: {
           dataSource: [
             ...dataSource,
-            ...(data1 as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => ({
-              id: i.resourceId,
-              cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-              title: i.resourceName,
-              version: i.latestVersion,
-              policy: i.policies.map((l: any) => l.policyName),
-              type: i.resourceType,
-              status: i.status,
-            })),
+            ...(data1 as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
+              return {
+                id: i.resourceId,
+                cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+                title: i.resourceName,
+                version: i.latestVersion,
+                policy: i.policies
+                  .filter((l: any) => {
+                    return l.status === 1;
+                  })
+                  .map((l: any) => l.policyName),
+                type: i.resourceType,
+                status: i.status,
+              };
+            }),
           ],
           totalNum: data.totalItem,
         },
       });
     },
-    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value
+          resourceType: payload.value,
         },
       });
 
@@ -219,7 +225,7 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * onChangeStatus({payload}: OnChangeStatusAction, {put}: EffectsCommandMap) {
+    * onChangeStatus({ payload }: OnChangeStatusAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -234,11 +240,11 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
+    * onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          inputText: payload.value
+          inputText: payload.value,
         },
       });
 
@@ -249,7 +255,7 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
+    * onClickLoadingMord({}: OnClickLoadingMordAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -257,12 +263,12 @@ const Model: ResourceCollectModelType = {
         },
       });
     },
-    * onBoomJuice({payload}: OnBoomJuiceAction, {call, put, select}: EffectsCommandMap) {
+    * onBoomJuice({ payload }: OnBoomJuiceAction, { call, put, select }: EffectsCommandMap) {
       const params: Parameters<typeof FServiceAPI.Collection.deleteCollectResource>[0] = {
         resourceId: payload,
       };
       yield call(FServiceAPI.Collection.deleteCollectResource, params);
-      const {resourceCollectPage}: ConnectState = yield select(({resourceCollectPage}: ConnectState) => ({
+      const { resourceCollectPage }: ConnectState = yield select(({ resourceCollectPage }: ConnectState) => ({
         resourceCollectPage,
       }));
       yield put<ChangeAction>({
@@ -272,20 +278,20 @@ const Model: ResourceCollectModelType = {
           totalNum: resourceCollectPage.totalNum - 1,
         },
       });
-    }
+    },
   },
 
   reducers: {
-    change(state: ResourceCollectPageModelState, {payload}: ChangeAction): ResourceCollectPageModelState {
+    change(state: ResourceCollectPageModelState, { payload }: ChangeAction): ResourceCollectPageModelState {
       return {
         ...state,
-        ...payload
+        ...payload,
       };
     },
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
       // history.listen((listener) => {
       //   if (listener.pathname === '/resource/collect') {
       //     dispatch<FetchDataSourceAction>({

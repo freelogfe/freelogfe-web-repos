@@ -1,8 +1,8 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer, WholeReadonly} from './shared';
-import {ConnectState} from "@/models/connect";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer, WholeReadonly } from './shared';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface MarketPageModelState {
   navOptions: {
@@ -100,7 +100,7 @@ export interface MarketModelType {
   };
 }
 
-export const marketInitData: MarketPageModelState = {
+export const initStates: MarketPageModelState = {
   navOptions: [
     {
       value: '1',
@@ -115,9 +115,9 @@ export const marketInitData: MarketPageModelState = {
   resourceTypeOptions: [
     {
       value: '-1',
-      text: '全部类型'
+      text: '全部类型',
     },
-    ...FUtil.Predefined.resourceTypes.map((i) => ({value: i, text: i})),
+    ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
   ],
   resourceType: '-1',
   inputText: '',
@@ -129,10 +129,10 @@ const Model: MarketModelType = {
 
   namespace: 'marketPage',
 
-  state: marketInitData,
+  state: initStates,
 
   effects: {
-    * onMountPage({}: OnMountPageAction, {put}: EffectsCommandMap) {
+    * onMountPage({}: OnMountPageAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -140,20 +140,20 @@ const Model: MarketModelType = {
         },
       });
     },
-    * onUnmountPage({}: OnUnmountPageAction, {put}: EffectsCommandMap) {
+    * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
-        payload: marketInitData,
+        payload: initStates,
       });
     },
     * onMountMarketPage({}: OnMountMarketPageAction, {}: EffectsCommandMap) {
     },
-    * onUnmountMarketPage({}: OnUnmountMarketPageAction, {put}: EffectsCommandMap) {
+    * onUnmountMarketPage({}: OnUnmountMarketPageAction, { put }: EffectsCommandMap) {
 
     },
-    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select, take}: EffectsCommandMap) {
+    * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select, take }: EffectsCommandMap) {
 
-      const {marketPage}: ConnectState = yield select(({marketPage}: ConnectState) => ({
+      const { marketPage }: ConnectState = yield select(({ marketPage }: ConnectState) => ({
         marketPage,
       }));
 
@@ -176,7 +176,7 @@ const Model: MarketModelType = {
         status: 1,
       };
 
-      const {data} = yield call(FServiceAPI.Resource.list, params);
+      const { data } = yield call(FServiceAPI.Resource.list, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -187,19 +187,26 @@ const Model: MarketModelType = {
               .filter((i) => {
                 return !existentResourceIDs.includes(i.resourceId);
               })
-              .map<MarketPageModelState['dataSource'][number]>((i: any) => ({
-                id: i.resourceId,
-                cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-                title: i.resourceName,
-                version: i.latestVersion,
-                policy: i.policies.map((l: any) => l.policyName),
-                type: i.resourceType,
-              })),
+              .map<MarketPageModelState['dataSource'][number]>((i: any) => {
+                console.log(i, 'i#@@#$@#$@#$@#$@#4234098ijosfdlksd');
+                return {
+                  id: i.resourceId,
+                  cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+                  title: i.resourceName,
+                  version: i.latestVersion,
+                  policy: i.policies
+                    .filter((l: any) => {
+                      return l.status === 1;
+                    })
+                    .map((l: any) => l.policyName),
+                  type: i.resourceType,
+                };
+              }),
           ],
         },
       });
     },
-    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -214,7 +221,7 @@ const Model: MarketModelType = {
         },
       });
     },
-    * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
+    * onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
 
       yield put<ChangeAction>({
         type: 'change',
@@ -230,7 +237,7 @@ const Model: MarketModelType = {
         },
       });
     },
-    * onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, {put}: EffectsCommandMap) {
+    * onClickLoadMoreBtn({}: OnClickLoadMoreBtnAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -241,16 +248,16 @@ const Model: MarketModelType = {
   },
 
   reducers: {
-    change(state, {payload}) {
+    change(state, { payload }) {
       return {
         ...state,
         ...payload,
-      }
+      };
     },
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
 
     },
   },

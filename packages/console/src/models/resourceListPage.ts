@@ -1,8 +1,8 @@
-import {AnyAction} from 'redux';
-import {EffectsCommandMap, Subscription, SubscriptionAPI} from 'dva';
-import {DvaReducer} from './shared';
-import {ConnectState} from "@/models/connect";
-import {FUtil, FServiceAPI} from '@freelog/tools-lib';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
+import { DvaReducer } from './shared';
+import { ConnectState } from '@/models/connect';
+import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
   resourceType: string;
@@ -113,7 +113,7 @@ const Model: ResourceListPageModelType = {
   state: initStates,
 
   effects: {
-    * onMount({}: OnMountAction, {put}: EffectsCommandMap) {
+    * onMount({}: OnMountAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -121,28 +121,15 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * onUnmount({}: OnUnmountAction, {put}: EffectsCommandMap) {
+    * onUnmount({}: OnUnmountAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    // * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload,
-    //   });
-    //
-    //   yield put<FetchDataSourceAction>({
-    //     type: 'fetchDataSource',
-    //     payload: {
-    //       restart: true,
-    //     },
-    //   });
-    // },
-    * fetchDataSource({payload}: FetchDataSourceAction, {call, put, select}: EffectsCommandMap) {
+    * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // yield put({type: 'save'});
-      const {resourceListPage}: ConnectState = yield select(({resourceListPage}: ConnectState) => ({
+      const { resourceListPage }: ConnectState = yield select(({ resourceListPage }: ConnectState) => ({
         resourceListPage,
       }));
 
@@ -161,7 +148,7 @@ const Model: ResourceListPageModelType = {
         status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         isSelf: 1,
       };
-      const {data} = yield call(FServiceAPI.Resource.list, params);
+      const { data } = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data')
 
       yield put<ChangeAction>({
@@ -169,25 +156,31 @@ const Model: ResourceListPageModelType = {
         payload: {
           dataSource: [
             ...dataSource,
-            ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => ({
-              id: i.resourceId,
-              cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-              title: i.resourceName,
-              version: i.latestVersion,
-              policy: i.policies.map((l: any) => l.policyName),
-              type: i.resourceType,
-              status: i.status,
-            })),
+            ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
+              return {
+                id: i.resourceId,
+                cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+                title: i.resourceName,
+                version: i.latestVersion,
+                policy: i.policies
+                  .filter((l: any) => {
+                    return l.status === 1;
+                  })
+                  .map((l: any) => l.policyName),
+                type: i.resourceType,
+                status: i.status,
+              };
+            }),
           ],
           totalNum: data.totalItem,
         },
       });
     },
-    * onChangeResourceType({payload}: OnChangeResourceTypeAction, {put}: EffectsCommandMap) {
+    * onChangeResourceType({ payload }: OnChangeResourceTypeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value
+          resourceType: payload.value,
         },
       });
 
@@ -198,11 +191,11 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * onChangeStatus({payload}: OnChangeStatusAction, {put}: EffectsCommandMap) {
+    * onChangeStatus({ payload }: OnChangeStatusAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceStatus: payload.value
+          resourceStatus: payload.value,
         },
       });
 
@@ -213,11 +206,11 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * onChangeKeywords({payload}: OnChangeKeywordsAction, {put}: EffectsCommandMap) {
+    * onChangeKeywords({ payload }: OnChangeKeywordsAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          inputText: payload.value
+          inputText: payload.value,
         },
       });
 
@@ -228,7 +221,7 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * onClickLoadingMord({}: OnClickLoadingMordAction, {put}: EffectsCommandMap) {
+    * onClickLoadingMord({}: OnClickLoadingMordAction, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -248,13 +241,13 @@ const Model: ResourceListPageModelType = {
     change(state: ResourceListPageModelState, action: ChangeAction): ResourceListPageModelState {
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     },
   },
 
   subscriptions: {
-    setup({dispatch, history}: SubscriptionAPI) {
+    setup({ dispatch, history }: SubscriptionAPI) {
 
     },
   },
