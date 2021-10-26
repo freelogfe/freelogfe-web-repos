@@ -79,6 +79,7 @@ G6.registerNode('authorization-exhibit', {
   },
 });
 
+//       <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
 G6.registerNode('authorization-contract', {
   jsx: (cfg) => {
 
@@ -116,7 +117,7 @@ G6.registerNode('authorization-contract', {
       marginTop: 10,
     }}>
       <text style={{fontSize: 14, fill: '#222', marginTop: 10, marginLeft: 10}}>${contract.contractName}&nbsp;</text>
-      <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '执行中' : '待执行'}&nbsp;</text>
+      <text style={{fontSize: 12, fill: ${contract.isAuth ? '#42C28C' : '#E9A923'}, marginTop: 18, marginLeft: 10}}>${contract.isAuth ? '已授权' : '未授权'}&nbsp;</text>
     </rect>
   </group>
 `;

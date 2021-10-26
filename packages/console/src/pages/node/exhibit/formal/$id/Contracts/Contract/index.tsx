@@ -86,8 +86,8 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                 <FSwitch
                   checked={exhibitInfoExhibit?.contractIDs.includes(c.id)}
                   disabled={exhibitInfoExhibit && (exhibitInfoExhibit.contractIDs.length <= 1) && exhibitInfoExhibit?.contractIDs.includes(c.id)}
-                  onChange={(value) => {
-                    dispatch<UpdateContractUsedAction>({
+                  onChange={async (value) => {
+                    await dispatch<UpdateContractUsedAction>({
                       type: 'exhibitInfoPage/updateContractUsed',
                       payload: {
                         exhibitID: exhibitInfoPage.pID,
@@ -95,6 +95,9 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                         policyID: c.policyId,
                         isUsed: value,
                       },
+                    });
+                    await dispatch<FetchInfoAction>({
+                      type: 'exhibitInfoPage/fetchInfo',
                     });
                   }}
                 />
@@ -155,8 +158,8 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                               <FSwitch
                                 checked={currentExhibitChecked}
                                 disabled={currentExhibitChecked && currentExhibit && (currentExhibit.contractIDs.length <= 1)}
-                                onChange={(value) => {
-                                  dispatch<UpdateContractUsedAction>({
+                                onChange={async (value) => {
+                                  await dispatch<UpdateContractUsedAction>({
                                     type: 'exhibitInfoPage/updateContractUsed',
                                     payload: {
                                       exhibitID: ex.id,
@@ -164,6 +167,10 @@ function Contract({ dispatch, exhibitInfoPage }: ContractProps) {
                                       policyID: c.policyId,
                                       isUsed: value,
                                     },
+                                  });
+
+                                  await dispatch<FetchInfoAction>({
+                                    type: 'exhibitInfoPage/fetchInfo',
                                   });
                                 }}
                               />

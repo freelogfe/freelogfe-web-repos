@@ -331,9 +331,8 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
     * fetchInfo({}: FetchInfoAction, { call, select, put }: EffectsCommandMap) {
-      const { exhibitInfoPage, user }: ConnectState = yield select(({ exhibitInfoPage, user }: ConnectState) => ({
+      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
-        user,
       }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {

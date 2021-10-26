@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
 import G6 from '@antv/g6';
-import {GraphData} from "@antv/g6/lib";
-import {FTipText} from "../../FText";
+import { GraphData } from '@antv/g6/lib';
+import { FTipText } from '../../FText';
 
+// // <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '待执行' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
 G6.registerNode('relationship-resource', {
   jsx: (cfg: any) => {
     const isRoot: boolean = cfg.id.split('-').length === 1;
@@ -21,7 +22,7 @@ G6.registerNode('relationship-resource', {
         }}>
           <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14,marginLeft: 10,}}>${cfg.resourceName}&nbsp;</text>
           <text style={{fontSize: 12, fontWeight: 400, fill: '#666', marginTop: 16,marginLeft: 10,}}>${cfg.resourceType}${cfg.version ? `｜${cfg.version}` : ''}&nbsp;</text>
-          <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '待执行' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
+          <text style={{fontSize: 14, fill: '#E9A923', marginTop: 24, marginLeft: 10}}>${cfg.pending ? '未授权' : ''}${cfg.pending && cfg.exception ? ' ' : ''}${cfg.exception ? '授权异常' : ''}</text>
       </rect>
     </group>
 `;
@@ -47,7 +48,7 @@ G6.registerNode('relationship-exhibit', {
         <text style={{fontSize: 14, fontWeight: 600, fill: '#222', marginTop: 14, marginLeft: 10}}>${cfg.exhibitName}&nbsp;</text>
     </rect>
   </group>
-`
+`;
   },
 });
 
@@ -73,7 +74,7 @@ interface FAntvG6RelationshipGraphProps extends GraphData {
   height?: number;
 }
 
-function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAntvG6RelationshipGraphProps) {
+function FAntvG6RelationshipGraph({ nodes, edges, width = 920, height = 500 }: FAntvG6RelationshipGraphProps) {
 
   const ref = React.useRef(null);
 
@@ -193,11 +194,11 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
       className={styles.noEdges}
       style={{
         width: width,
-        height: height
+        height: height,
       }}
     >
       <FTipText
-        type="first"
+        type='first'
         text={'无关系树'}
       />
     </div>);
@@ -206,7 +207,7 @@ function FAntvG6RelationshipGraph({nodes, edges, width = 920, height = 500}: FAn
   return (<div
     style={{
       width: width,
-      height: height
+      height: height,
     }}
     ref={ref}
   />);
@@ -328,7 +329,7 @@ export async function handleExhibitRelationGraphData(data: ExhibitRelationTree, 
     ...root,
   }];
   const edges: ExhibitRelationGraphData['edges'] = [];
-
+  console.log(data, 'data!@#$@!#$@!#$');
   traversal(data, root.exhibitId);
 
   return {
