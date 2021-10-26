@@ -218,7 +218,7 @@ const Model: RetrievePayPasswordPageModelType = {
       const { data } = yield call(FServiceAPI.User.verifyLoginPassword, params);
       // data: {userId: 50028, isVerifySuccessful: false}
       if (!data.isVerifySuccessful) {
-        return fMessage('密码输入错误');
+        return fMessage('密码输入错误', 'error');
       }
       yield put<ChangeAction>({
         type: 'change',

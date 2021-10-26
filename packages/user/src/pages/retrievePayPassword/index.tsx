@@ -26,6 +26,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
+import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 
 interface RetrievePayPasswordProps {
   dispatch: Dispatch;
@@ -236,19 +237,13 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
             <div>
               <FTipText type='third' text={'支付密码'} />
               <div style={{ height: 5 }} />
-              <FInput
-                placeholder='支付密码由6位数字组成'
-                type='password'
-                className={styles.blockInput}
-                wrapClassName={styles.blockInput}
-                size='middle'
+              <FPaymentPasswordInput
                 value={retrievePayPasswordPage.paymentPassword_Password1Input}
-                errorText={retrievePayPasswordPage.paymentPassword_Password1InputError}
-                onChange={(e) => {
+                onChange={(value) => {
                   dispatch<OnChange_PaymentPassword_Password1Input_Action>({
                     type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password1Input',
                     payload: {
-                      value: e.target.value,
+                      value: value,
                     },
                   });
                 }}
@@ -258,24 +253,40 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                   });
                 }}
               />
+              {/*<FInput*/}
+              {/*  placeholder='支付密码由6位数字组成'*/}
+              {/*  type='password'*/}
+              {/*  className={styles.blockInput}*/}
+              {/*  wrapClassName={styles.blockInput}*/}
+              {/*  size='middle'*/}
+              {/*  value={retrievePayPasswordPage.paymentPassword_Password1Input}*/}
+              {/*  errorText={retrievePayPasswordPage.paymentPassword_Password1InputError}*/}
+              {/*  onChange={(e) => {*/}
+              {/*    dispatch<OnChange_PaymentPassword_Password1Input_Action>({*/}
+              {/*      type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password1Input',*/}
+              {/*      payload: {*/}
+              {/*        value: e.target.value,*/}
+              {/*      },*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  onBlur={() => {*/}
+              {/*    dispatch<OnBlur_PaymentPassword_Password1Input_Action>({*/}
+              {/*      type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password1Input',*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*/>*/}
             </div>
 
             <div>
               <FTipText type='third' text={'验证支付密码'} />
               <div style={{ height: 5 }} />
-              <FInput
-                placeholder='重复输入支付密码'
-                type='password'
-                className={styles.blockInput}
-                wrapClassName={styles.blockInput}
-                size='middle'
+              <FPaymentPasswordInput
                 value={retrievePayPasswordPage.paymentPassword_Password2Input}
-                errorText={retrievePayPasswordPage.paymentPassword_Password2InputError}
-                onChange={(e) => {
+                onChange={(value) => {
                   dispatch<OnChange_PaymentPassword_Password2Input_Action>({
                     type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password2Input',
                     payload: {
-                      value: e.target.value,
+                      value: value,
                     },
                   });
                 }}
@@ -285,13 +296,36 @@ function RetrievePayPassword({ dispatch, retrievePayPasswordPage }: RetrievePayP
                   });
                 }}
               />
+              <div style={{ color: 'red' }}>{retrievePayPasswordPage.paymentPassword_Password2InputError}</div>
+              {/*<FInput*/}
+              {/*  placeholder='重复输入支付密码'*/}
+              {/*  type='password'*/}
+              {/*  className={styles.blockInput}*/}
+              {/*  wrapClassName={styles.blockInput}*/}
+              {/*  size='middle'*/}
+              {/*  value={retrievePayPasswordPage.paymentPassword_Password2Input}*/}
+              {/*  errorText={retrievePayPasswordPage.paymentPassword_Password2InputError}*/}
+              {/*  onChange={(e) => {*/}
+              {/*    dispatch<OnChange_PaymentPassword_Password2Input_Action>({*/}
+              {/*      type: 'retrievePayPasswordPage/onChange_PaymentPassword_Password2Input',*/}
+              {/*      payload: {*/}
+              {/*        value: e.target.value,*/}
+              {/*      },*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  onBlur={() => {*/}
+              {/*    dispatch<OnBlur_PaymentPassword_Password2Input_Action>({*/}
+              {/*      type: 'retrievePayPasswordPage/onBlur_PaymentPassword_Password2Input',*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*/>*/}
             </div>
           </Space>
           <div style={{ height: 40 }} />
           <FRectBtn
             type='primary'
-            disabled={retrievePayPasswordPage.paymentPassword_Password1Input === '' || retrievePayPasswordPage.paymentPassword_Password1InputError !== ''
-            || retrievePayPasswordPage.paymentPassword_Password2Input === '' || retrievePayPasswordPage.paymentPassword_Password2InputError !== ''}
+            disabled={retrievePayPasswordPage.paymentPassword_Password1Input.length !== 6 || retrievePayPasswordPage.paymentPassword_Password1InputError !== ''
+            || retrievePayPasswordPage.paymentPassword_Password2Input.length !== 6 || retrievePayPasswordPage.paymentPassword_Password2InputError !== ''}
             onClick={() => {
               dispatch<OnClick_PaymentPassword_ConfirmBtn_Action>({
                 type: 'retrievePayPasswordPage/onClick_PaymentPassword_ConfirmBtn',

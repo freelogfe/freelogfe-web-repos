@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { InputHTMLAttributes } from 'react';
 
 interface FPaymentPasswordInputProps {
   value: string;
