@@ -44,6 +44,7 @@ import {
 import { FCheck } from '@/components/FIcons';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FUtil } from '@freelog/tools-lib';
+import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 
 interface WalletProps {
   dispatch: Dispatch;
@@ -511,29 +512,40 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
               >忘记密码？</FTextBtn>
             </div>
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
-              className={styles.blockInput}
-              wrapClassName={styles.blockInput}
-              size='middle'
+            <FPaymentPasswordInput
               value={walletPage.changingPassword_OldPasswordModal_PasswordInput}
-              // errorText={walletPage.changingPasswordPasswordOldError}
-              onChange={(e) => {
+              onChange={(value) => {
                 dispatch<OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action>({
                   type: 'walletPage/onChange_ChangingPassword_OldPasswordModal_PasswordInput',
                   payload: {
-                    value: e.target.value,
+                    value: value,
                   },
                 });
               }}
             />
+            {/*<FInput*/}
+            {/*  type='password'*/}
+            {/*  className={styles.blockInput}*/}
+            {/*  wrapClassName={styles.blockInput}*/}
+            {/*  size='middle'*/}
+            {/*  value={walletPage.changingPassword_OldPasswordModal_PasswordInput}*/}
+            {/*  // errorText={walletPage.changingPasswordPasswordOldError}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<OnChange_ChangingPassword_OldPasswordModal_PasswordInput_Action>({*/}
+            {/*      type: 'walletPage/onChange_ChangingPassword_OldPasswordModal_PasswordInput',*/}
+            {/*      payload: {*/}
+            {/*        value: e.target.value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
         </Space>
 
         <div style={{ height: 40 }} />
         <FRectBtn
           type='primary'
-          disabled={walletPage.changingPassword_OldPasswordModal_PasswordInput === ''}
+          disabled={walletPage.changingPassword_OldPasswordModal_PasswordInput.length !== 6}
           onClick={() => {
             dispatch<OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action>({
               type: 'walletPage/onClick_ChangingPassword_OldPasswordModal_NextBtn',
@@ -560,18 +572,13 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
           <div>
             <FTipText type='third' text={'支付密码'} />
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
-              className={styles.blockInput}
-              wrapClassName={styles.blockInput}
-              size='middle'
+            <FPaymentPasswordInput
               value={walletPage.changingPassword_NewPasswordModal_Password1}
-              errorText={walletPage.changingPassword_NewPasswordModal_Password1Error}
-              onChange={(e) => {
+              onChange={(value) => {
                 dispatch<OnChange_ChangingPassword_NewPasswordModal_Password1_Action>({
                   type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password1Input',
                   payload: {
-                    value: e.target.value,
+                    value: value,
                   },
                 });
               }}
@@ -581,23 +588,39 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                 });
               }}
             />
+            {/*<FInput*/}
+            {/*  type='password'*/}
+            {/*  className={styles.blockInput}*/}
+            {/*  wrapClassName={styles.blockInput}*/}
+            {/*  size='middle'*/}
+            {/*  value={walletPage.changingPassword_NewPasswordModal_Password1}*/}
+            {/*  errorText={walletPage.changingPassword_NewPasswordModal_Password1Error}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<OnChange_ChangingPassword_NewPasswordModal_Password1_Action>({*/}
+            {/*      type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password1Input',*/}
+            {/*      payload: {*/}
+            {/*        value: e.target.value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  onBlur={() => {*/}
+            {/*    dispatch<OnBlur_ChangingPassword_NewPasswordModal_Password1Input_Action>({*/}
+            {/*      type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password1Input',*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
 
           <div>
             <FTipText type='third' text={'验证支付密码'} />
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
-              className={styles.blockInput}
-              wrapClassName={styles.blockInput}
-              size='middle'
+            <FPaymentPasswordInput
               value={walletPage.changingPassword_NewPasswordModal_Password2}
-              errorText={walletPage.changingPassword_NewPasswordModal_Password2Error}
-              onChange={(e) => {
+              onChange={(value) => {
                 dispatch<OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action>({
                   type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password2Input',
                   payload: {
-                    value: e.target.value,
+                    value: value,
                   },
                 });
               }}
@@ -607,6 +630,29 @@ function Wallet({ dispatch, walletPage, user }: WalletProps) {
                 });
               }}
             />
+
+            <div style={{ color: 'red' }}>{walletPage.changingPassword_NewPasswordModal_Password2Error}</div>
+            {/*<FInput*/}
+            {/*  type='password'*/}
+            {/*  className={styles.blockInput}*/}
+            {/*  wrapClassName={styles.blockInput}*/}
+            {/*  size='middle'*/}
+            {/*  value={walletPage.changingPassword_NewPasswordModal_Password2}*/}
+            {/*  errorText={walletPage.changingPassword_NewPasswordModal_Password2Error}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    dispatch<OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action>({*/}
+            {/*      type: 'walletPage/onChange_ChangingPassword_NewPasswordModal_Password2Input',*/}
+            {/*      payload: {*/}
+            {/*        value: e.target.value,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*  onBlur={() => {*/}
+            {/*    dispatch<OnBlur_ChangingPassword_NewPasswordModal_Password2Input_Action>({*/}
+            {/*      type: 'walletPage/onBlur_ChangingPassword_NewPasswordModal_Password2Input',*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
         </Space>
 

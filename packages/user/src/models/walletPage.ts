@@ -675,7 +675,25 @@ const Model: WalletPageModelType = {
         },
       });
     },
-    * onClick_ChangingPassword_OldPasswordModal_NextBtn({}: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, {put}: EffectsCommandMap) {
+    * onClick_ChangingPassword_OldPasswordModal_NextBtn({}: OnClick_ChangingPassword_OldPasswordModal_NextBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { walletPage }: ConnectState = yield select(({ walletPage }: ConnectState) => ({
+        walletPage,
+      }));
+
+      const params: Parameters<typeof FServiceAPI.Transaction.verifyTransactionPassword>[0] = {
+        password: walletPage.changingPassword_OldPasswordModal_PasswordInput,
+      };
+
+      const { data } = yield call(FServiceAPI.Transaction.verifyTransactionPassword, params);
+
+      if (!data) {
+        return fMessage('支付密码不正确', 'error');
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
