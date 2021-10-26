@@ -16,7 +16,7 @@ function FPaymentPasswordInput({ value, onChange }: FPaymentPasswordInputProps) 
 
   return (<div className={styles.styles}>
     <input
-      // type='password'
+      type='password'
       minLength={6}
       maxLength={6}
       ref={inputEl}
