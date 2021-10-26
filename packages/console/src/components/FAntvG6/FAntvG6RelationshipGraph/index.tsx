@@ -329,7 +329,7 @@ export async function handleExhibitRelationGraphData(data: ExhibitRelationTree, 
     ...root,
   }];
   const edges: ExhibitRelationGraphData['edges'] = [];
-  console.log(data, 'data!@#$@!#$@!#$');
+  // console.log(data, 'data!@#$@!#$@!#$');
   traversal(data, root.exhibitId);
 
   return {

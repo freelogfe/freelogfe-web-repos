@@ -188,7 +188,7 @@ const Model: MarketModelType = {
                 return !existentResourceIDs.includes(i.resourceId);
               })
               .map<MarketPageModelState['dataSource'][number]>((i: any) => {
-                console.log(i, 'i#@@#$@#$@#$@#$@#4234098ijosfdlksd');
+                // console.log(i, 'i#@@#$@#$@#$@#$@#4234098ijosfdlksd');
                 return {
                   id: i.resourceId,
                   cover: i.coverImages.length > 0 ? i.coverImages[0] : '',

@@ -9,6 +9,7 @@ import FInput from '../FInput';
 import FCodeFormatter from '../FCodeFormatter';
 import fMessage from '../fMessage';
 import { FDown, FUp } from '../FIcons';
+import FPaymentPasswordInput from '@/components/FPaymentPasswordInput';
 
 interface FContractDisplayProps {
   contractID: string;
@@ -441,6 +442,7 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
       width={600}
       onCancel={() => {
         setModalVisible(false);
+        setModalPassword('');
       }}
     >
       <div className={styles.ModalTitle}>
@@ -482,17 +484,17 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
             </div>
           </div>
 
-          <div>
-            <FInput
-              value={modalPassword}
-              onChange={(e) => {
-                setModalPassword(e.target.value);
-              }}
-              className={styles.paymentPassword}
-              wrapClassName={styles.paymentPassword}
-              type='password'
-              placeholder='输入6位支付密码'
-            />
+          <div className={styles.paymentInfoRow}>
+            <div><FContentText text={'支付密码'} type='normal' /></div>
+            <div>
+              <FPaymentPasswordInput
+                value={modalPassword}
+                onChange={(value) => {
+                  // console.log(value, '@#$@#$@#$@#$');
+                  setModalPassword(value);
+                }}
+              />
+            </div>
           </div>
 
           <div>
