@@ -2,17 +2,17 @@ import * as React from 'react';
 import styles from './index.less';
 import Exhibits from './Exhibits';
 import Themes from './Themes';
-import {withRouter, router} from 'umi';
-import {Dispatch, connect} from 'dva';
+import { withRouter } from 'umi';
+import { Dispatch, connect } from 'dva';
 import {
   ChangeAction,
   FetchExhibitsAction,
   FetchNodeInfoAction,
   FetchThemesAction, nodeManagerInitData,
-  NodeManagerModelState
+  NodeManagerModelState,
 } from '@/models/nodeManagerPage';
-import {ConnectState, NodesModelState} from '@/models/connect';
-import {RouteComponentProps} from "react-router";
+import { ConnectState, NodesModelState } from '@/models/connect';
+import { RouteComponentProps } from 'react-router';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -20,7 +20,7 @@ interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   nodes: NodesModelState;
 }
 
-function NodeManager({dispatch, nodeManagerPage, nodes, match}: NodeManagerProps) {
+function NodeManager({ dispatch, nodeManagerPage, nodes, match }: NodeManagerProps) {
 
   React.useEffect(() => {
 
@@ -56,13 +56,13 @@ function NodeManager({dispatch, nodeManagerPage, nodes, match}: NodeManagerProps
 
   return (<>
     {
-      nodeManagerPage.showTheme ? <Themes/> : <Exhibits/>
+      nodeManagerPage.showPage === 'theme' ? <Themes /> : <Exhibits />
     }
   </>);
 }
 
 
-export default connect(({nodeManagerPage, nodes}: ConnectState) => ({
+export default connect(({ nodeManagerPage, nodes }: ConnectState) => ({
   nodeManagerPage,
   nodes,
 }))(withRouter(NodeManager));

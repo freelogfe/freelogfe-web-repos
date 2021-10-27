@@ -13,14 +13,14 @@ export type NodeManagerModelState = WholeReadonly<{
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showTheme: boolean;
+  showPage: 'exhibit' | 'theme';
 
-  selectedType: string;
-  selectedStatus: string;
-  exhibitInputFilter: string;
-  pageCurrent: number;
-  pageSize: number;
-  exhibitList: {
+  exhibit_SelectedType: string;
+  exhibit_SelectedStatus: string;
+  exhibit_InputFilter: string;
+  // pageCurrent: number;
+  // pageSize: number;
+  exhibit_List: {
     id: string;
     cover: string;
     title: string;
@@ -33,11 +33,13 @@ export type NodeManagerModelState = WholeReadonly<{
     isAuth: boolean;
     authErrorText: string;
   }[];
-  totalNum: number;
-  exhibitDataState: '' | 'noData' | 'noSearchData' | 'loading';
+  // totalNum: number;
+  // exhibit_DataState: '' | 'noData' | 'noSearchData' | 'loading';
+  exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
 
-  themeInputFilter: string;
-  themeList: {
+  theme_InputFilter: string;
+  theme_List: {
     id: string;
     cover: string;
     title: string;
@@ -48,7 +50,9 @@ export type NodeManagerModelState = WholeReadonly<{
     authErrorText: string;
     resourceId: string;
   }[];
-  themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
+  // themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
+  theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  theme_ListMore: 'loading' | 'andMore' | 'noMore';
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -129,20 +133,21 @@ export const nodeManagerInitData: NodeManagerModelState = {
   nodeUrl: '',
   testNodeUrl: '',
   nodeThemeId: '',
-  showTheme: false,
+  showPage: 'exhibit',
 
-  selectedType: '-1',
-  selectedStatus: '2',
-  exhibitInputFilter: '',
-  pageCurrent: 1,
-  pageSize: 10,
-  exhibitList: [],
-  totalNum: -1,
-  exhibitDataState: 'loading',
+  exhibit_SelectedType: '-1',
+  exhibit_SelectedStatus: '2',
+  exhibit_InputFilter: '',
+  // pageCurrent: 1,
+  // pageSize: 10,
+  exhibit_List: [],
+  exhibit_ListState: 'loading',
+  exhibit_ListMore: 'loading',
 
-  themeInputFilter: '',
-  themeList: [],
-  themeDataState: 'loading',
+  theme_InputFilter: '',
+  theme_List: [],
+  theme_ListState: 'loading',
+  theme_ListMore: 'loading',
 };
 
 const Model: NodeManagerModelType = {
@@ -180,27 +185,24 @@ const Model: NodeManagerModelType = {
       });
     },
     * fetchExhibits({ payload = true }: FetchExhibitsAction, { call, select, put }: EffectsCommandMap) {
-      const { nodeManagerPage, user }: ConnectState = yield select(({ nodeManagerPage, user }: ConnectState) => ({
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
         nodeManagerPage,
-        user,
       }));
 
-      const list = payload ? [] : nodeManagerPage.exhibitList;
+      const list: NodeManagerModelState['exhibit_List'] = payload ? [] : nodeManagerPage.exhibit_List;
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
-        limit: FUtil.Predefined.pageSize,
+        // limit: FUtil.Predefined.pageSize,
+        limit: 10,
         skip: list.length,
-        // page: nodeManagerPage.pageCurrent,
-        // pageSize: nodeManagerPage.pageSize,
-        keywords: nodeManagerPage.exhibitInputFilter || undefined,
-        onlineStatus: Number(nodeManagerPage.selectedStatus),
-        resourceType: nodeManagerPage.selectedType === '-1' ? undefined : nodeManagerPage.selectedType,
+        keywords: nodeManagerPage.exhibit_InputFilter || undefined,
+        onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
+        resourceType: nodeManagerPage.exhibit_SelectedType === '-1' ? undefined : nodeManagerPage.exhibit_SelectedType,
         omitResourceType: 'theme',
       };
 
       const { data } = yield call(FServiceAPI.Exhibit.presentables, params);
-
 
       let batchAuthPs: any[] = [];
       if (data.dataList.length > 0) {
@@ -216,32 +218,34 @@ const Model: NodeManagerModelType = {
       }
       // console.log(batchAuthPs, 'batchAuthPs290uopasdf');
       // !i.policies.find((p: any) => p.status === 1)
+      const exhibit_List: NodeManagerModelState['exhibit_List'] = [
+        ...list,
+        ...(data.dataList as any[]).map<NodeManagerModelState['exhibit_List'][number]>((i: any) => {
+          const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
+          return {
+            id: i.presentableId,
+            cover: i.coverImages[0],
+            title: i.presentableTitle,
+            resourceName: i.presentableName,
+            version: i.version,
+            isOnline: i.onlineStatus === 1,
+            type: i.resourceInfo.resourceType,
+            policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+            resourceId: i.resourceInfo.resourceId,
+            isAuth: authInfo.isAuth,
+            authErrorText: authInfo.error,
+          };
+        }),
+      ];
+      const exhibit_ListState: NodeManagerModelState['exhibit_ListState'] = data.totalItem !== 0 ? 'loaded'
+        : (nodeManagerPage.exhibit_SelectedType === '-1' && nodeManagerPage.exhibit_SelectedStatus === '2' && nodeManagerPage.exhibit_InputFilter === '')
+          ? 'noData' : 'noSearchResult';
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitList: [
-            ...list,
-            ...(data.dataList as any[]).map<NodeManagerModelState['exhibitList'][number]>((i: any) => {
-              const authInfo = batchAuthPs.find((bap: any) => bap.presentableId === i.presentableId);
-              return {
-                id: i.presentableId,
-                cover: i.coverImages[0],
-                title: i.presentableTitle,
-                resourceName: i.presentableName,
-                version: i.version,
-                isOnline: i.onlineStatus === 1,
-                type: i.resourceInfo.resourceType,
-                policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
-                resourceId: i.resourceInfo.resourceId,
-                isAuth: authInfo.isAuth,
-                authErrorText: authInfo.error,
-              };
-            }),
-          ],
-          totalNum: data.totalItem,
-          exhibitDataState: data.totalItem !== 0 ? ''
-            : (nodeManagerPage.selectedType === '-1' && nodeManagerPage.selectedStatus === '2' && nodeManagerPage.exhibitInputFilter === '')
-              ? 'noData' : 'noSearchData',
+          exhibit_List: exhibit_List,
+          exhibit_ListState: exhibit_ListState,
+          exhibit_ListMore: data.totalItem > exhibit_List.length ? 'andMore' : 'noMore',
         },
       });
     },
@@ -250,15 +254,15 @@ const Model: NodeManagerModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            pageCurrent: payload.pageCurrent,
+            // pageCurrent: payload.pageCurrent,
           },
         });
       } else {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            ...payload,
-            pageCurrent: 1,
+            // ...payload,
+            // pageCurrent: 1,
           },
         });
       }
@@ -275,7 +279,7 @@ const Model: NodeManagerModelType = {
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: FUtil.Predefined.pageSize,
-        keywords: nodeManagerPage.themeInputFilter || undefined,
+        keywords: nodeManagerPage.theme_InputFilter || undefined,
         onlineStatus: 2,
         resourceType: 'theme',
       };
@@ -295,30 +299,32 @@ const Model: NodeManagerModelType = {
         batchAuthTs = data1;
       }
 
+      const theme_List: NodeManagerModelState['theme_List'] = (data.dataList as any[]).map<NodeManagerModelState['theme_List'][number]>((i: any) => {
+        const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
+        return {
+          id: i.presentableId,
+          cover: i.coverImages[0],
+          title: i.presentableTitle,
+          version: i.version,
+          isOnline: i.onlineStatus === 1,
+          policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
+          isAuth: authInfo.isAuth,
+          authErrorText: authInfo.error,
+          resourceId: i.resourceInfo.resourceId,
+        };
+      }).sort((a, b) => {
+        if (a.isOnline && !b.isOnline) {
+          return -1;
+        }
+        return 0;
+      });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          themeList: (data.dataList as any[]).map<NodeManagerModelState['themeList'][number]>((i: any) => {
-            const authInfo = batchAuthTs.find((bap: any) => bap.presentableId === i.presentableId);
-            return {
-              id: i.presentableId,
-              cover: i.coverImages[0],
-              title: i.presentableTitle,
-              version: i.version,
-              isOnline: i.onlineStatus === 1,
-              policies: (i.policies as any[]).filter((p: any) => p.status === 1).map<string>((p) => p.policyName),
-              isAuth: authInfo.isAuth,
-              authErrorText: authInfo.error,
-              resourceId: i.resourceInfo.resourceId,
-            };
-          }).sort((a, b) => {
-            if (a.isOnline && !b.isOnline) {
-              return -1;
-            }
-            return 0;
-          }),
-          themeDataState: data.totalItem !== 0 ? ''
-            : nodeManagerPage.themeInputFilter === '' ? 'noData' : 'noSearchData',
+          theme_List: theme_List,
+          theme_ListState: data.totalItem !== 0 ? 'loaded'
+            : nodeManagerPage.theme_InputFilter === '' ? 'noData' : 'noSearchResult',
+          theme_ListMore: data.totalItem > theme_List.length ? 'andMore' : 'noMore',
         },
       });
     },
@@ -342,7 +348,7 @@ const Model: NodeManagerModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibitList: nodeManagerPage.exhibitList
+          exhibit_List: nodeManagerPage.exhibit_List
             .map((el) => {
               if (payload.id !== el.id) {
                 return el;
@@ -353,18 +359,18 @@ const Model: NodeManagerModelType = {
               };
             })
             .filter((el) => {
-              if (nodeManagerPage.selectedStatus === '2') {
+              if (nodeManagerPage.exhibit_SelectedStatus === '2') {
                 return true;
               }
-              return el.isOnline === (nodeManagerPage.selectedStatus === '1');
+              return el.isOnline === (nodeManagerPage.exhibit_SelectedStatus === '1');
             }),
         },
       });
     },
     * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-        nodeManagerPage,
-      }));
+      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+      //   nodeManagerPage,
+      // }));
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
         presentableId: payload.id,
@@ -386,7 +392,7 @@ const Model: NodeManagerModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          themeInputFilter: payload.themeInputFilter,
+          theme_InputFilter: payload.themeInputFilter,
         },
       });
       yield put<FetchThemesAction>({

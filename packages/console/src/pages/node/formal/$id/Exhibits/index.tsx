@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FEdit, FExclamation, FFileSearch, FWarning } from '@/components/FIcons';
+import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
 import { FContentText, FTitleText } from '@/components/FText';
@@ -51,16 +51,16 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
   });
 
-  const dataSource: NodeManagerModelState['exhibitList'] = nodeManagerPage.exhibitList.map((i) => ({
+  const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map((i) => ({
     key: i.id,
     ...i,
   }));
 
-  if (nodeManagerPage.exhibitDataState === 'loading') {
+  if (nodeManagerPage.exhibit_ListState === 'loading') {
     return (<FLoadingTip height={'calc(100vh - 70px)'} />);
   }
 
-  const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibitList']>[number]> = [
+  const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
       title: (<FTitleText
         // text={'展品名称｜类型｜展品标题｜策略'}
@@ -176,7 +176,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   ];
 
   return (<FLeftSiderLayout
-    type={nodeManagerPage.exhibitDataState === 'noData' ? 'empty' : 'table'}
+    type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
     sider={<Sider />}
     header={<div className={styles.header}>
       <FTitleText type='h1' text={'展品管理'} />
@@ -193,7 +193,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             })}
           >
             <span
-              style={{ cursor: 'pointer' }}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.selectedType)?.text || ''}<FDown
+              style={{ cursor: 'pointer' }}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
               style={{ marginLeft: 8 }} /></span>
           </FDropdownMenu>
         </div>
@@ -209,7 +209,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             })}
           >
             <span style={{ cursor: 'pointer' }}>{resourceStatusOptions.find((rso) => {
-              return rso.value === nodeManagerPage.selectedStatus.toString();
+              return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
             })?.text}<FDown style={{ marginLeft: 10 }} /></span>
           </FDropdownMenu>
         </div>
@@ -217,7 +217,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           <FInput
             className={styles.input}
             theme='dark'
-            value={nodeManagerPage.exhibitInputFilter}
+            value={nodeManagerPage.exhibit_InputFilter}
             debounce={300}
             onDebounceChange={(value) => dispatch<OnChangeExhibitAction>({
               type: 'nodeManagerPage/onChangeExhibit',
@@ -232,7 +232,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   >
 
     {
-      nodeManagerPage.exhibitDataState === 'noData' ? (<FNoDataTip
+      nodeManagerPage.exhibit_ListState === 'noData' ? (<FNoDataTip
         height={'calc(100vh - 70px)'}
         tipText={FUtil1.I18n.message('manage_exhibits_empty')}
         btnText={FUtil1.I18n.message('btn_go_to_resource_market')}
@@ -247,7 +247,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         }}
       />) : (<>
         {
-          nodeManagerPage.exhibitDataState === 'noSearchData'
+          nodeManagerPage.exhibit_ListState === 'noSearchResult'
             ? (<FNoDataTip
               height={'calc(100vh - 170px)'}
               tipText={'无搜索结果'}
@@ -262,7 +262,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   payload: false,
                 });
               }}
-              hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}
+              // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}
+              hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}
               // hasMore={true}
             >
               <div className={styles.body}>
@@ -275,7 +276,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               </div>
             </InfiniteScroll>)
         }
-        {nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum &&
+        {nodeManagerPage.exhibit_ListMore === 'loading' &&
         <div className={styles.loader} key={0}>Loading ...</div>}
 
       </>)

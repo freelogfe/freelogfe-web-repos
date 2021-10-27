@@ -1,44 +1,44 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText, FContentText} from '@/components/FText';
+import { FTitleText, FContentText } from '@/components/FText';
 import FInput from '@/components/FInput';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import {Space} from 'antd';
-import {FWarning} from '@/components/FIcons';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, NodeManagerModelState} from "@/models/connect";
-import {OnActiveAction, OnChangeThemeAction, OnOnlineOrOfflineAction} from "@/models/nodeManagerPage";
-import {router} from "umi";
-import FNoDataTip from "@/components/FNoDataTip";
-import {ChangeAction as MarketChangeAction} from "@/models/marketPage";
-import FLoadingTip from "@/components/FLoadingTip";
-import FLeftSiderLayout from "@/layouts/FLeftSiderLayout";
-import Sider from "@/pages/node/formal/$id/Sider";
-import FTooltip from "@/components/FTooltip";
-import FLink from "@/components/FLink";
-import fConfirmModal from "@/components/fConfirmModal";
-import FDivider from "@/components/FDivider";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
+import { Space } from 'antd';
+import { FWarning } from '@/components/FIcons';
+import { connect, Dispatch } from 'dva';
+import { ConnectState, NodeManagerModelState } from '@/models/connect';
+import { OnActiveAction, OnChangeThemeAction } from '@/models/nodeManagerPage';
+import { router } from 'umi';
+import FNoDataTip from '@/components/FNoDataTip';
+import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
+import FLoadingTip from '@/components/FLoadingTip';
+import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
+import Sider from '@/pages/node/formal/$id/Sider';
+import FTooltip from '@/components/FTooltip';
+import FLink from '@/components/FLink';
+import fConfirmModal from '@/components/fConfirmModal';
+import FDivider from '@/components/FDivider';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ThemesProps {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
 }
 
-function Themes({dispatch, nodeManagerPage}: ThemesProps) {
+function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
 
-  if (nodeManagerPage.themeDataState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 70px)'}/>);
+  if (nodeManagerPage.theme_ListState === 'loading') {
+    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
   }
 
   return (<FLeftSiderLayout
     // header={''}
-    sider={<Sider/>}
-    type="empty"
+    sider={<Sider />}
+    type='empty'
   >
     {
-      nodeManagerPage.themeDataState === 'noData'
+      nodeManagerPage.theme_ListState === 'noData'
         ? (<FNoDataTip
           height={'calc(100vh - 70px)'}
           tipText={FUtil1.I18n.message('manage_themes_empty')}
@@ -48,17 +48,17 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
               type: 'marketPage/change',
               payload: {
                 resourceType: 'theme',
-              }
+              },
             });
             router.push(FUtil.LinkTo.market());
           }}
         />)
         : (<>
           <div className={styles.header}>
-            <FTitleText type="h1" text={'主题管理'}/>
+            <FTitleText type='h1' text={'主题管理'} />
             <FInput
               className={styles.input}
-              theme="dark"
+              theme='dark'
               debounce={300}
               onDebounceChange={(value) => {
                 dispatch<OnChangeThemeAction>({
@@ -71,14 +71,14 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
             />
           </div>
           {
-            nodeManagerPage.themeDataState === 'noSearchData'
+            nodeManagerPage.theme_ListState === 'noSearchResult'
               ? (<FNoDataTip
                 height={'calc(100vh - 170px)'}
                 tipText={'无搜索结果'}
               />)
               : (<div className={styles.body}>
                 {
-                  nodeManagerPage.themeList.map((i) => {
+                  nodeManagerPage.theme_List.map((i) => {
                     const hasActiveBtn: boolean = !i.isOnline && i.isAuth && i.policies.length > 0;
                     return (<div
                       className={styles.theme}
@@ -91,12 +91,12 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                           }
 
                           {!i.isAuth || i.policies.length === 0 ? <FTooltip title={!i.isAuth ? i.authErrorText : '暂无上线策略'}>
-                            <FWarning/>
+                            <FWarning />
                           </FTooltip> : ''}
                         </Space>
 
                         <img
-                          alt=""
+                          alt=''
                           src={i.cover || imgSrc}
                         />
 
@@ -104,7 +104,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                           className={styles.action}
                           // style={{padding: hasActiveBtn ? '0 20px' : undefined}}
                         >
-                          <div style={{width: 1}}/>
+                          <div style={{ width: 1 }} />
                           {
                             hasActiveBtn && (<>
                               <a
@@ -114,7 +114,7 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                       type: 'nodeManagerPage/onActive',
                                       payload: {
                                         id: i.id,
-                                      }
+                                      },
                                     });
                                     return;
                                   }
@@ -131,40 +131,40 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                                         type: 'nodeManagerPage/onActive',
                                         payload: {
                                           id: i.id,
-                                        }
+                                        },
                                       });
                                     },
                                   });
                                 }}>{FUtil1.I18n.message('btn_activate_theme')}</a>
 
-                              <FDivider/>
+                              <FDivider />
                             </>)
                           }
                           <a
                             onClick={() => {
-                              window.open(FUtil.LinkTo.exhibitManagement({exhibitID: i.id}));
+                              window.open(FUtil.LinkTo.exhibitManagement({ exhibitID: i.id }));
                             }}
                           >{FUtil1.I18n.message('btn_edit_exhibit')}</a>
-                          <FDivider/>
+                          <FDivider />
                           <a
                             onClick={() => {
-                              window.open(FUtil.LinkTo.resourceDetails({resourceID: i.resourceId}));
+                              window.open(FUtil.LinkTo.resourceDetails({ resourceID: i.resourceId }));
                             }}>{FUtil1.I18n.message('btn_check_resource_details')}</a>
-                          <div style={{width: 1}}/>
+                          <div style={{ width: 1 }} />
                         </div>
                       </div>
-                      <div style={{height: 12}}/>
+                      <div style={{ height: 12 }} />
                       <FContentText
                         text={i.title}
                         singleRow
-                        type="highlight"
+                        type='highlight'
                       />
-                      <div style={{height: 6}}/>
+                      <div style={{ height: 6 }} />
                       <FContentText
-                        type="additional1"
+                        type='additional1'
                         text={'展示版本 ' + i.version}
                       />
-                      <div style={{height: 15}}/>
+                      <div style={{ height: 15 }} />
                       <div className={styles.bottom}>
                         <div className={styles.polices}>
                           {
@@ -175,9 +175,9 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
                     </div>);
                   })
                 }
-                <div/>
-                <div/>
-                <div/>
+                <div />
+                <div />
+                <div />
               </div>)
           }
         </>)
@@ -186,6 +186,6 @@ function Themes({dispatch, nodeManagerPage}: ThemesProps) {
   </FLeftSiderLayout>);
 }
 
-export default connect(({nodeManagerPage}: ConnectState) => ({
+export default connect(({ nodeManagerPage }: ConnectState) => ({
   nodeManagerPage,
 }))(Themes);
