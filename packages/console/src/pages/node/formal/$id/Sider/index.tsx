@@ -4,7 +4,7 @@ import { FTitleText } from '@/components/FText';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/nodeManagerPage';
+import { ChangeAction, OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
 import { withRouter } from 'umi';
 import FLink from '@/components/FLink';
 import FUtil1 from '@/utils';
@@ -52,21 +52,25 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div className={styles.navs}>
           <a
             className={nodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
-            onClick={() => dispatch<ChangeAction>({
-              type: 'nodeManagerPage/change',
-              payload: {
-                showPage: 'exhibit',
-              },
-            })}
+            onClick={() => {
+              dispatch<OnChange_ShowPage_Action>({
+                type: 'nodeManagerPage/onChange_ShowPage',
+                payload: {
+                  value: 'exhibit',
+                },
+              });
+            }}
           >{FUtil1.I18n.message('tab_manage_nodes')}</a>
           <a
             className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
-            onClick={() => dispatch<ChangeAction>({
-              type: 'nodeManagerPage/change',
-              payload: {
-                showPage: 'theme',
-              },
-            })}
+            onClick={() => {
+              dispatch<OnChange_ShowPage_Action>({
+                type: 'nodeManagerPage/onChange_ShowPage',
+                payload: {
+                  value: 'theme',
+                },
+              });
+            }}
           >{FUtil1.I18n.message('manage_theme')}</a>
         </div>
       </div>

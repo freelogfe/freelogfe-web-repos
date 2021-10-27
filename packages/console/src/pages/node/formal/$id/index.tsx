@@ -5,63 +5,85 @@ import Themes from './Themes';
 import { withRouter } from 'umi';
 import { Dispatch, connect } from 'dva';
 import {
-  ChangeAction,
-  FetchExhibitsAction,
-  FetchNodeInfoAction,
-  FetchThemesAction, nodeManagerInitData,
-  NodeManagerModelState,
+  OnMount_Page_Action,
+  OnUnmount_Page_Action,
 } from '@/models/nodeManagerPage';
-import { ConnectState, NodesModelState } from '@/models/connect';
+import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
+import FLoadingTip from '@/components/FLoadingTip';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
-  nodes: NodesModelState;
 }
 
-function NodeManager({ dispatch, nodeManagerPage, nodes, match }: NodeManagerProps) {
+function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
 
   AHooks.useMount(() => {
-
+    // dispatch<OnMount_Page_Action>({
+    //   type: 'nodeManagerPage/onMount_Page',
+    //   payload: {
+    //     nodeID: Number(match.params.id),
+    //   },
+    // });
   });
 
   AHooks.useUnmount(() => {
-
+    // dispatch<OnUnmount_Page_Action>({
+    //   type: 'nodeManagerPage/onUnmount_Page',
+    // });
   });
 
-  React.useEffect(() => {
-
-    dispatch<ChangeAction>({
-      type: 'nodeManagerPage/change',
+  React.useEffect( () => {
+    dispatch<OnMount_Page_Action>({
+      type: 'nodeManagerPage/onMount_Page',
       payload: {
-        nodeId: Number(match.params.id),
+        nodeID: Number(match.params.id),
       },
     });
-
-    dispatch<FetchNodeInfoAction>({
-      type: 'nodeManagerPage/fetchNodeInfo',
-    });
-
-    dispatch<FetchExhibitsAction>({
-      type: 'nodeManagerPage/fetchExhibits',
-    });
-
-    dispatch<FetchThemesAction>({
-      type: 'nodeManagerPage/fetchThemes',
-    });
-
+    return () => {
+      dispatch<OnUnmount_Page_Action>({
+        type: 'nodeManagerPage/onUnmount_Page',
+      });
+    }
   }, [match.params.id]);
 
-  React.useEffect(() => {
-    return () => {
-      dispatch<ChangeAction>({
-        type: 'nodeManagerPage/change',
-        payload: nodeManagerInitData,
-      });
-    };
-  }, []);
+  // React.useEffect(() => {
+  //
+  //   dispatch<ChangeAction>({
+  //     type: 'nodeManagerPage/change',
+  //     payload: {
+  //       nodeId: Number(match.params.id),
+  //     },
+  //   });
+  //
+  //   dispatch<FetchNodeInfoAction>({
+  //     type: 'nodeManagerPage/fetchNodeInfo',
+  //   });
+  //
+  //   dispatch<FetchExhibitsAction>({
+  //     type: 'nodeManagerPage/fetchExhibits',
+  //   });
+  //
+  //   dispatch<FetchThemesAction>({
+  //     type: 'nodeManagerPage/fetchThemes',
+  //   });
+  //
+  // }, [match.params.id]);
+
+  // React.useEffect(() => {
+  //   return () => {
+  //     dispatch<ChangeAction>({
+  //       type: 'nodeManagerPage/change',
+  //       payload: nodeManagerInitData,
+  //     });
+  //   };
+  // }, []);
+
+  if (nodeManagerPage.nodeInfoState === 'loading') {
+    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
+  }
 
   return (<>
     {

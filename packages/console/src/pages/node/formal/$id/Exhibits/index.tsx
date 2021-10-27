@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FDown, FEdit, FFileSearch, FWarning } from '@/components/FIcons';
+import { FDown, FEdit, FFileSearch, FLoading, FWarning } from '@/components/FIcons';
 import FTable from '@/components/FTable';
 import * as imgSrc from '@/assets/default-resource-cover.jpg';
-import { FContentText, FTitleText } from '@/components/FText';
+import { FContentText, FTipText, FTitleText } from '@/components/FText';
 import { Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect, Dispatch } from 'dva';
@@ -11,7 +11,15 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import FInput from '@/components/FInput';
 import { router } from 'umi';
 import { ColumnsType } from 'antd/lib/table/interface';
-import { FetchExhibitsAction, OnChangeExhibitAction, OnOnlineOrOfflineAction } from '@/models/nodeManagerPage';
+import {
+  OnChange_Exhibit_InputFilter_Action,
+  OnChange_Exhibit_SelectedStatus_Action,
+  OnChange_Exhibit_SelectedType_Action,
+  OnLoadMore_ExhibitList_Action,
+  OnMount_ExhibitPage_Action,
+  OnOnlineOrOfflineAction,
+  OnUnmount_ExhibitPage_Action,
+} from '@/models/nodeManagerPage';
 import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FDropdownMenu from '@/components/FDropdownMenu';
@@ -23,32 +31,26 @@ import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as AHooks from 'ahooks';
-import { FTextBtn } from '@/components/FButton';
+import { FTextBtn, FRectBtn } from '@/components/FButton';
+import FListFooter from '@/components/FListFooter';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
 }
 
-const resourceTypeOptions = [
-  { text: '全部', value: '-1' },
-  ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
-];
-
-const resourceStatusOptions = [
-  { text: '全部', value: '2' },
-  { text: '已上线', value: '1' },
-  { text: '已下线', value: '0' },
-];
-
 function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMount_ExhibitPage_Action>({
+      type: 'nodeManagerPage/onMount_ExhibitPage',
+    });
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmount_ExhibitPage_Action>({
+      type: 'nodeManagerPage/onUnmount_ExhibitPage',
+    });
   });
 
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map((i) => ({
@@ -56,9 +58,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     ...i,
   }));
 
-  if (nodeManagerPage.exhibit_ListState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
-  }
+  // if (nodeManagerPage.exhibit_ListState === 'loading') {
+  //   return (<FLoadingTip height={'calc(100vh - 70px)'} />);
+  // }
 
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
@@ -184,31 +186,35 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         <div>
           <span>类型：</span>
           <FDropdownMenu
-            options={resourceTypeOptions}
-            onChange={(value) => dispatch<OnChangeExhibitAction>({
-              type: 'nodeManagerPage/onChangeExhibit',
-              payload: {
-                selectedType: value,
-              },
-            })}
+            options={nodeManagerPage.exhibit_ResourceTypeOptions}
+            onChange={(value) => {
+              dispatch<OnChange_Exhibit_SelectedType_Action>({
+                type: 'nodeManagerPage/onChange_Exhibit_SelectedType',
+                payload: {
+                  value: value,
+                },
+              });
+            }}
           >
             <span
-              style={{ cursor: 'pointer' }}>{resourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
+              style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceTypeOptions.find((rto) => rto.value === nodeManagerPage.exhibit_SelectedType)?.text || ''}<FDown
               style={{ marginLeft: 8 }} /></span>
           </FDropdownMenu>
         </div>
         <div>
           <span>状态：</span>
           <FDropdownMenu
-            options={resourceStatusOptions}
-            onChange={(value) => dispatch<OnChangeExhibitAction>({
-              type: 'nodeManagerPage/onChangeExhibit',
-              payload: {
-                selectedStatus: value,
-              },
-            })}
+            options={nodeManagerPage.exhibit_ResourceStateOptions}
+            onChange={(value) => {
+              dispatch<OnChange_Exhibit_SelectedStatus_Action>({
+                type: 'nodeManagerPage/onChange_Exhibit_SelectedStatus',
+                payload: {
+                  value: value,
+                },
+              });
+            }}
           >
-            <span style={{ cursor: 'pointer' }}>{resourceStatusOptions.find((rso) => {
+            <span style={{ cursor: 'pointer' }}>{nodeManagerPage.exhibit_ResourceStateOptions.find((rso) => {
               return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
             })?.text}<FDown style={{ marginLeft: 10 }} /></span>
           </FDropdownMenu>
@@ -219,12 +225,14 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             theme='dark'
             value={nodeManagerPage.exhibit_InputFilter}
             debounce={300}
-            onDebounceChange={(value) => dispatch<OnChangeExhibitAction>({
-              type: 'nodeManagerPage/onChangeExhibit',
-              payload: {
-                exhibitInputFilter: value,
-              },
-            })}
+            onDebounceChange={(value) => {
+              dispatch<OnChange_Exhibit_InputFilter_Action>({
+                type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
+                payload: {
+                  value: value,
+                },
+              });
+            }}
           />
         </div>
       </Space>
@@ -246,38 +254,70 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           router.push(FUtil.LinkTo.market());
         }}
       />) : (<>
+
+        {
+          nodeManagerPage.exhibit_ListState === 'loading' && (<FLoadingTip height={'calc(100vh - 270px)'} />)
+        }
+
         {
           nodeManagerPage.exhibit_ListState === 'noSearchResult'
-            ? (<FNoDataTip
-              height={'calc(100vh - 170px)'}
-              tipText={'无搜索结果'}
-            />)
-            : (<InfiniteScroll
-              pageStart={0}
-              initialLoad={false}
-              loadMore={() => {
-                // console.log('@@@@8888QQQQQQ');
-                dispatch<FetchExhibitsAction>({
-                  type: 'nodeManagerPage/fetchExhibits',
-                  payload: false,
+          && (<FNoDataTip
+            height={'calc(100vh - 270px)'}
+            tipText={'无搜索结果'}
+          />)
+        }
+
+        {
+          nodeManagerPage.exhibit_ListState === 'loaded' && (<div className={styles.body}>
+            <FTable
+              rowClassName={styles.rowClassName}
+              columns={columns}
+              dataSource={dataSource as any}
+              pagination={false}
+            />
+
+            <FListFooter
+              state={nodeManagerPage.exhibit_ListMore}
+              onClickLoadMore={() => {
+                dispatch<OnLoadMore_ExhibitList_Action>({
+                  type: 'nodeManagerPage/onLoadMore_ExhibitList',
                 });
               }}
-              // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}
-              hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}
-              // hasMore={true}
-            >
-              <div className={styles.body}>
-                <FTable
-                  rowClassName={styles.rowClassName}
-                  columns={columns}
-                  dataSource={dataSource as any}
-                  pagination={false}
-                />
-              </div>
-            </InfiniteScroll>)
+            />
+          </div>)
         }
-        {nodeManagerPage.exhibit_ListMore === 'loading' &&
-        <div className={styles.loader} key={0}>Loading ...</div>}
+
+        {/*{*/}
+        {/*  nodeManagerPage.exhibit_ListState === 'loaded' && (<InfiniteScroll*/}
+        {/*    pageStart={0}*/}
+        {/*    initialLoad={false}*/}
+        {/*    loadMore={() => {*/}
+        {/*      // console.log('@@@@8888QQQQQQ');*/}
+        {/*      dispatch<FetchExhibitsAction>({*/}
+        {/*        type: 'nodeManagerPage/fetchExhibits',*/}
+        {/*        payload: false,*/}
+        {/*      });*/}
+        {/*    }}*/}
+        {/*    // hasMore={nodeManagerPage.totalNum !== -1 && nodeManagerPage.exhibitList.length < nodeManagerPage.totalNum}*/}
+        {/*    hasMore={nodeManagerPage.exhibit_ListMore === 'andMore'}*/}
+        {/*    // hasMore={true}*/}
+        {/*  >*/}
+        {/*    <div className={styles.body}>*/}
+        {/*      <FTable*/}
+        {/*        rowClassName={styles.rowClassName}*/}
+        {/*        columns={columns}*/}
+        {/*        dataSource={dataSource as any}*/}
+        {/*        pagination={false}*/}
+        {/*      />*/}
+
+        {/*      {*/}
+        {/*        nodeManagerPage.exhibit_ListMore === 'loading' &&*/}
+        {/*        <div className={styles.loader} key={0}>Loading ...</div>*/}
+        {/*      }*/}
+        {/*    </div>*/}
+        {/*  </InfiniteScroll>)*/}
+        {/*}*/}
+
 
       </>)
     }

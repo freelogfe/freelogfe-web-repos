@@ -7,7 +7,12 @@ import { Space } from 'antd';
 import { FWarning } from '@/components/FIcons';
 import { connect, Dispatch } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
-import { OnActiveAction, OnChangeThemeAction } from '@/models/nodeManagerPage';
+import {
+  OnActiveAction,
+  OnChangeThemeAction,
+  OnMount_ExhibitPage_Action, OnMount_ThemePage_Action,
+  OnUnmount_ExhibitPage_Action, OnUnmount_ThemePage_Action,
+} from '@/models/nodeManagerPage';
 import { router } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
 import { ChangeAction as MarketChangeAction } from '@/models/marketPage';
@@ -30,16 +35,20 @@ interface ThemesProps {
 function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
 
   AHooks.useMount(() => {
-
+    dispatch<OnMount_ThemePage_Action>({
+      type: 'nodeManagerPage/onMount_ThemePage',
+    });
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmount_ThemePage_Action>({
+      type: 'nodeManagerPage/onUnmount_ThemePage',
+    });
   });
 
-  if (nodeManagerPage.theme_ListState === 'loading') {
-    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
-  }
+  // if (nodeManagerPage.theme_ListState === 'loading') {
+  //   return (<FLoadingTip height={'calc(100vh - 70px)'} />);
+  // }
 
   return (<FLeftSiderLayout
     // header={''}
