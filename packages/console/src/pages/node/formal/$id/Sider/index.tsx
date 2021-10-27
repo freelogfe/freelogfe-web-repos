@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FTitleText} from '@/components/FText';
+import { FTitleText } from '@/components/FText';
 import FCopyToClipboard from '@/components/FCopyToClipboard';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, NodeManagerModelState} from "@/models/connect";
-import {ChangeAction} from "@/models/nodeManagerPage";
-import {withRouter} from "umi";
-import FLink from "@/components/FLink";
-import FUtil1 from "@/utils";
-import {FUtil} from '@freelog/tools-lib';
-import {Space} from "antd";
+import { connect, Dispatch } from 'dva';
+import { ConnectState, NodeManagerModelState } from '@/models/connect';
+import { ChangeAction } from '@/models/nodeManagerPage';
+import { withRouter } from 'umi';
+import FLink from '@/components/FLink';
+import FUtil1 from '@/utils';
+import { FUtil } from '@freelog/tools-lib';
+import { Space } from 'antd';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -21,18 +21,18 @@ interface SiderProps {
   };
 }
 
-function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
+function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
 
   return (<div className={styles.styles}>
       <div className={styles.header}>
-        <div style={{height: 30}}/>
+        <div style={{ height: 30 }} />
 
         <div className={styles.title}>
           <FTitleText
-            type="h2"
+            type='h2'
             text={nodeManagerPage.nodeName}
           />
-          <div style={{height: 15}}/>
+          <div style={{ height: 15 }} />
           <Space size={5} className={styles.url}>
             <a
               onClick={() => {
@@ -42,30 +42,30 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
             <FCopyToClipboard
               text={nodeManagerPage.nodeUrl}
               title={'复制节点地址'}
-              iconStyle={{fontSize: 14}}
+              iconStyle={{ fontSize: 14 }}
             />
           </Space>
         </div>
 
-        <div style={{height: 35}}/>
+        <div style={{ height: 35 }} />
 
         <div className={styles.navs}>
           <a
-            className={!nodeManagerPage.showTheme ? styles.activated : ''}
+            className={nodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
             onClick={() => dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
               payload: {
-                showTheme: false,
-              }
+                showPage: 'exhibit',
+              },
             })}
           >{FUtil1.I18n.message('tab_manage_nodes')}</a>
           <a
-            className={nodeManagerPage.showTheme ? styles.activated : ''}
+            className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
             onClick={() => dispatch<ChangeAction>({
               type: 'nodeManagerPage/change',
               payload: {
-                showTheme: true,
-              }
+                showPage: 'theme',
+              },
             })}
           >{FUtil1.I18n.message('manage_theme')}</a>
         </div>
@@ -74,15 +74,16 @@ function Sider({dispatch, nodeManagerPage, match}: SiderProps) {
       <div className={styles.gotoTest}>
         <span>{FUtil1.I18n.message('msg_navigate_to_test_node')}</span>
         <FLink
-          to={FUtil.LinkTo.informNodeManagement({nodeID: Number(match.params.id), showPage: 'exhibit'})}
+          // to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
+          to={FUtil.LinkTo.informNodeManagement({ nodeID: Number(match.params.id), showPage: 'exhibit' })}
         >{FUtil1.I18n.message('btn_navigate_to_test_node')}</FLink>
-        <div style={{height: 40}}/>
+        <div style={{ height: 40 }} />
       </div>
 
     </div>
   );
 }
 
-export default withRouter(connect(({nodeManagerPage}: ConnectState) => ({
-  nodeManagerPage
+export default withRouter(connect(({ nodeManagerPage }: ConnectState) => ({
+  nodeManagerPage,
 }))(Sider));

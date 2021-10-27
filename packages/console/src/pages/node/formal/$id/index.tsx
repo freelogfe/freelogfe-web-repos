@@ -13,6 +13,7 @@ import {
 } from '@/models/nodeManagerPage';
 import { ConnectState, NodesModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
+import * as AHooks from 'ahooks';
 
 interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -21,6 +22,14 @@ interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
 }
 
 function NodeManager({ dispatch, nodeManagerPage, nodes, match }: NodeManagerProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   React.useEffect(() => {
 

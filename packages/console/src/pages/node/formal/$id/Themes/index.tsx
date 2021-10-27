@@ -20,6 +20,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import FDivider from '@/components/FDivider';
 import FUtil1 from '@/utils';
 import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ThemesProps {
   dispatch: Dispatch;
@@ -27,6 +28,14 @@ interface ThemesProps {
 }
 
 function Themes({ dispatch, nodeManagerPage }: ThemesProps) {
+
+  AHooks.useMount(() => {
+
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
 
   if (nodeManagerPage.theme_ListState === 'loading') {
     return (<FLoadingTip height={'calc(100vh - 70px)'} />);
